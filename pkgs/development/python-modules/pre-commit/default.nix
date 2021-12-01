@@ -1,47 +1,47 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, pythonOlder
-, aspy-yaml
-, cached-property
 , cfgv
+, fetchPypi
 , identify
 , importlib-metadata
 , importlib-resources
 , nodeenv
 , python
-, six
+, pythonOlder
+, pyyaml
 , toml
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.15.0";
+  version = "2.16.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "sha256-PCWt1429+2ooplF4DVwxGsQN0X8WDrOVSgxZ2kClBac=";
+    sha256 = "sha256-/piXysgwqnFk29AqTnuQyuSWMEUc6IRkvKc9tIa6n2U=";
   };
 
   patches = [
-    ./hook-tmpl-use-the-hardcoded-path-to-pre-commit.patch
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
   ];
 
   propagatedBuildInputs = [
-    aspy-yaml
-    cached-property
     cfgv
     identify
     nodeenv
-    six
+    pyyaml
     toml
     virtualenv
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata
-    ++ lib.optional (pythonOlder "3.7") importlib-resources;
+  ] ++ lib.optional (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ lib.optional (pythonOlder "3.7") [
+    importlib-resources
+  ];
 
   # slow and impure
   doCheck = false;
@@ -55,7 +55,9 @@ buildPythonPackage rec {
       --subst-var-by nodeenv ${nodeenv}
   '';
 
-  pythonImportsCheck = [ "pre_commit" ];
+  pythonImportsCheck = [
+    "pre_commit"
+  ];
 
   meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";
