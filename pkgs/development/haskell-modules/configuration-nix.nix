@@ -223,6 +223,7 @@ self: super: builtins.intersectAttrs super {
 
   # Nix-specific workaround
   xmonad = appendPatch ./patches/xmonad-nix.patch (dontCheck super.xmonad);
+  xmonad_0_17_0 = appendPatch ./patches/xmonad_0_17_0-nix.patch (super.xmonad_0_17_0);
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
