@@ -13474,8 +13474,6 @@ with pkgs;
 
   ### End of CuboCore
 
-  lush2 = callPackage ../development/interpreters/lush {};
-
   maude = callPackage ../development/interpreters/maude {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
