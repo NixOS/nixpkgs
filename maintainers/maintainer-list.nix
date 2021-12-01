@@ -8923,7 +8923,7 @@
     name = "pasqui23";
   };
   patryk27 = {
-    email = "wychowaniec.patryk@gmail.com";
+    email = "pwychowaniec@pm.me";
     github = "Patryk27";
     githubId = 3395477;
     name = "Patryk Wychowaniec";
