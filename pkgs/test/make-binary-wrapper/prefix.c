@@ -2,32 +2,24 @@
     --prefix PATH : /usr/bin/ \
     --prefix PATH : /usr/local/bin/
 
+#define _GNU_SOURCE         /* See feature_test_macros(7) */
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
 #include <stdio.h>
 
 #define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)
 
-char *concat3(char *x, char *y, char *z) {
-    int xn = strlen(x);
-    int yn = strlen(y);
-    int zn = strlen(z);
-    char *res = malloc(sizeof(*res)*(xn + yn + zn + 1));
-    assert(res != NULL);
-    strncpy(res, x, xn);
-    strncpy(res + xn, y, yn);
-    strncpy(res + xn + yn, z, zn);
-    res[xn + yn + zn] = '\0';
-    return res;
-}
-
-void set_env_prefix(char *env, char *sep, char *val) {
+void set_env_prefix(char *env, char *sep, char *prefix) {
     char *existing = getenv(env);
-    if (existing) val = concat3(val, sep, existing);
-    assert_success(setenv(env, val, 1));
-    if (existing) free(val);
+    if (existing) {
+        char *val;
+        assert_success(asprintf(&val, "%s%s%s", prefix, sep, existing));
+        assert_success(setenv(env, val, 1));
+        free(val);
+    } else {
+        assert_success(setenv(env, prefix, 1));
+    }
 }
 
 int main(int argc, char **argv) {

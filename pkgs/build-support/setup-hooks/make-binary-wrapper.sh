@@ -64,7 +64,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
     local argv0 n params cmd main flagsBefore flags executable params length
-    local uses_prefix uses_suffix uses_assert uses_assert_success uses_concat3
+    local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -80,6 +80,7 @@ makeCWrapper() {
             --set-default)
                 cmd=$(setDefaultEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
+                uses_stdio=1
                 uses_assert_success=1
                 n=$((n + 2))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
@@ -87,6 +88,7 @@ makeCWrapper() {
             --unset)
                 cmd=$(unsetEnv "${params[n + 1]}")
                 main="$main    $cmd"$'\n'
+                uses_stdio=1
                 uses_assert_success=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
@@ -95,7 +97,8 @@ makeCWrapper() {
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main    $cmd"$'\n'
                 uses_prefix=1
-                uses_concat3=1
+                uses_asprintf=1
+                uses_stdio=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -105,7 +108,8 @@ makeCWrapper() {
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main    $cmd"$'\n'
                 uses_suffix=1
-                uses_concat3=1
+                uses_asprintf=1
+                uses_stdio=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -133,15 +137,14 @@ makeCWrapper() {
     main="$main    argv[0] = \"${argv0:-${executable}}\";"$'\n'
     main="$main    return execv(\"${executable}\", argv);"$'\n'
 
+    [ -z "$uses_asprintf" ] || printf '%s\n' "#define _GNU_SOURCE         /* See feature_test_macros(7) */"
     printf '%s\n' "#include <unistd.h>"
     printf '%s\n' "#include <stdlib.h>"
-    [ -z "$uses_concat3" ] || printf '%s\n' "#include <string.h>"
-    [ -z "$uses_assert" ]  || printf '%s\n' "#include <assert.h>"
-    [ -z "$uses_assert_success" ] || printf '%s\n' "#include <stdio.h>"
+    [ -z "$uses_assert" ]   || printf '%s\n' "#include <assert.h>"
+    [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
-    [ -z "$uses_concat3" ] || printf '\n%s\n' "$(concat3Fn)"
-    [ -z "$uses_prefix" ]  || printf '\n%s\n' "$(setEnvPrefixFn)"
-    [ -z "$uses_suffix" ]  || printf '\n%s\n' "$(setEnvSuffixFn)"
+    [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
+    [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     printf '\n%s' "int main(int argc, char **argv) {"
     printf '\n%s' "$main"
     printf '%s\n' "}"
@@ -238,41 +241,34 @@ assertValidEnvName() {
     esac
 }
 
-concat3Fn() {
-    printf '%s' "\
-char *concat3(char *x, char *y, char *z) {
-    int xn = strlen(x);
-    int yn = strlen(y);
-    int zn = strlen(z);
-    char *res = malloc(sizeof(*res)*(xn + yn + zn + 1));
-    assert(res != NULL);
-    strncpy(res, x, xn);
-    strncpy(res + xn, y, yn);
-    strncpy(res + xn + yn, z, zn);
-    res[xn + yn + zn] = '\0';
-    return res;
-}
-"
-}
-
 setEnvPrefixFn() {
     printf '%s' "\
-void set_env_prefix(char *env, char *sep, char *val) {
+void set_env_prefix(char *env, char *sep, char *prefix) {
     char *existing = getenv(env);
-    if (existing) val = concat3(val, sep, existing);
-    assert_success(setenv(env, val, 1));
-    if (existing) free(val);
+    if (existing) {
+        char *val;
+        assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing));
+        assert_success(setenv(env, val, 1));
+        free(val);
+    } else {
+        assert_success(setenv(env, prefix, 1));
+    }
 }
 "
 }
 
 setEnvSuffixFn() {
     printf '%s' "\
-void set_env_suffix(char *env, char *sep, char *val) {
+void set_env_suffix(char *env, char *sep, char *suffix) {
     char *existing = getenv(env);
-    if (existing) val = concat3(existing, sep, val);
-    assert_success(setenv(env, val, 1));
-    if (existing) free(val);
+    if (existing) {
+        char *val;
+        assert_success(asprintf(&val, \"%s%s%s\", existing, sep, suffix));
+        assert_success(setenv(env, val, 1));
+        free(val);
+    } else {
+        assert_success(setenv(env, suffix, 1));
+    }
 }
 "
 }
