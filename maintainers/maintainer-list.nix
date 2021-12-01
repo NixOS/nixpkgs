@@ -6338,6 +6338,12 @@
     githubId = 15692230;
     name = "Muhammad Herdiansyah";
   };
+  koozz = {
+    email = "koozz@linux.com";
+    github = "koozz";
+    githubId = 264372;
+    name = "Jan van den Berg";
+  };
   koral = {
     email = "koral@mailoo.org";
     github = "k0ral";
