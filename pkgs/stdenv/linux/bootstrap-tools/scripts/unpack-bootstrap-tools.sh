@@ -5,6 +5,7 @@ $builder mkdir $out
 
 # Set the ELF interpreter / RPATH in the bootstrap binaries.
 echo Patching the bootstrap tools...
+patchelf_options=""
 
 if test -f $out/lib/ld.so.?; then
    # MIPS case
@@ -12,6 +13,10 @@ if test -f $out/lib/ld.so.?; then
 elif test -f $out/lib/ld64.so.?; then
    # ppc64(le)
    LD_BINARY=$out/lib/ld64.so.?
+elif test -f $out/lib/ld-linux-aarch64.so.?; then
+   # aarch64
+   LD_BINARY=$out/lib/ld-*so.?
+   patchelf_options="$patchelf_options --page-size 65536"
 else
    # i686, x86_64 and armv5tel
    LD_BINARY=$out/lib/ld-*so.?
@@ -26,13 +31,13 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     if [ -z "${i##*/liblto*}" ]; then continue; fi
     echo patching "$i"
     LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-        ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
+        ./patchelf $patchelf_options --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
 for i in $out/lib/librt-*.so $out/lib/libpcre*; do
     if [ -L "$i" ]; then continue; fi
     echo patching "$i"
-    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
+    $out/bin/patchelf $patchelf_options --set-rpath $out/lib --force-rpath "$i"
 done
 
 export PATH=$out/bin
