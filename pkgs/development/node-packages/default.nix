@@ -309,18 +309,18 @@ let
 
     prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      version = "3.4.0";
+      version = "3.5.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-W0AFjVxPOLW5SEnf0ZwbOu4k8ElX98ioFC1E8Gb9Q/nuO2brEwxFJebXglfG+N6zphGbu2bG1I3VAu7aYzR3VA==";
+        sha512 = "sha512-WEYQ+H98O0yigG+lI0gfh4iyBChvnM6QTXPDtY9eFraLXAmyb6tf/T2mUdrUAU1AEvHLVzQA5A+RpONZlQozBg==";
       };
       dependencies = [ rec {
         name = "_at_prisma_slash_engines";
         packageName = "@prisma/engines";
-        version = "3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85";
+        version = "3.5.0-38.78a5df6def6943431f4c022e1428dbc3e833cf8e";
         src = fetchurl {
           url = "https://registry.npmjs.org/@prisma/engines/-/engines-${version}.tgz";
-          sha512 = "sha512-jyCjXhX1ZUbzA7+6Hm0iEdeY+qFfpD/RB7iSwMrMoIhkVYvnncSdCLBgbK0yqxTJR2nglevkDY2ve3QDxFciMA==";
+          sha512 = "sha512-MqZUrxuLlIbjB3wu8LrRJOKcvR4k3dunKoI4Q2bPfAwLQY0XlpsLZ3TRVW1c32ooVk939p6iGNkaCUo63Et36g==";
         };
       }];
       postInstall = with pkgs; ''
@@ -392,6 +392,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
+      nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
     };
 

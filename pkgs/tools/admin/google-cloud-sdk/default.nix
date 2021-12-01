@@ -17,39 +17,15 @@ let
     crcmod
   ] ++ lib.optional (with-gce) google-compute-engine);
 
-  baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
-  sources = name: system: {
-    x86_64-darwin = {
-      url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "19s3nryngzv7zs7piwx92hii5p2y97fs7wngqrd9v8cxvgavp1dc";
-    };
-
-    aarch64-darwin = {
-      url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "1iphpkxrrp0gdan7ikbjbhykdpazcs1fnlcwkfyv2m9baggkd53z";
-    };
-
-    x86_64-linux = {
-      url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1z1ymvij9vi8jc05b004jhd08dqbk133wd03fdxnagd6nfr0bjqm";
-    };
-
-    i686-linux = {
-      url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "17i5pkwjmi38klgr12xqgza7iwkx459cbavlq0x33zaq2a4zanlc";
-    };
-
-    aarch64-linux = {
-      url = "${baseUrl}/${name}-linux-arm.tar.gz";
-      sha256 = "17zjnab4ai5w6p3cbxys9zsg4bdlp0lh6pvmkvdz9hszxxch4yms";
-    };
-  }.${system} or (throw "Unsupported system: ${system}");
+  data = import ./data.nix { };
+  sources = system:
+    data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "362.0.0";
+  inherit (data) version;
 
-  src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
+  src = fetchurl (sources stdenv.hostPlatform.system);
 
   buildInputs = [ python ];
 
@@ -103,6 +79,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/zsh/site-functions
     mv $out/google-cloud-sdk/completion.zsh.inc $out/share/zsh/site-functions/_gcloud
     ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
+    # zsh doesn't load completions from $FPATH without #compdef as the first line
+    sed -i '1 i #compdef gcloud' $out/share/zsh/site-functions/_gcloud
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -133,8 +111,9 @@ in stdenv.mkDerivation rec {
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
+    changelog = "https://cloud.google.com/sdk/docs/release-notes";
     maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };
 }

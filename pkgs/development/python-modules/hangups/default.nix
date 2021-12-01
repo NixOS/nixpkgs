@@ -32,6 +32,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "protobuf>=3.1.0,<3.17" "protobuf" \
+      --replace "async-timeout>=2,<4" "async-timeout" \
       --replace "MechanicalSoup>=0.6.0,<0.13" "MechanicalSoup"
   '';
 

@@ -29,14 +29,14 @@ let
   php80-unit = php80.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.25.0";
+  version = "1.26.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8Xv7YTvwuI0evBO1Te4oI1IoJ0AnK8OVZoZTYtfYKfw=";
+    sha256 = "sha256-nh49Uz9iM5UbAfERUVGpR7ExuwJBgYC/CQk/QwjexqY=";
   };
 
   nativeBuildInputs = [ which ];

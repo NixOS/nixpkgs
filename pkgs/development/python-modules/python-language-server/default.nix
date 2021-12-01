@@ -36,6 +36,7 @@ buildPythonPackage rec {
     # Reading the changelog I don't expect an API break in pycodestyle and pyflakes
     substituteInPlace setup.py \
       --replace "pycodestyle>=2.6.0,<2.7.0" "pycodestyle>=2.6.0,<2.8.0" \
+      --replace "jedi>=0.17.2,<0.18.0" "jedi>=0.17.2,<0.19.0" \
       --replace "pyflakes>=2.2.0,<2.3.0" "pyflakes>=2.2.0,<2.4.0"
   '';
 
@@ -85,5 +86,8 @@ buildPythonPackage rec {
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
     maintainers = [ ];
+    # no longer maintained
+    # see https://github.com/palantir/python-language-server/pull/918#issuecomment-817361554
+    broken = true;
   };
 }

@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zCRM62xwaPaN8+cg+CeaqK/9hKpZmSBBeUOQqAvQGYw=";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-flto" ""
+  '';
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''

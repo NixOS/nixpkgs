@@ -1,0 +1,56 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
+  <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
+  <para>
+    In addition to numerous new and upgraded packages, this release has
+    the following highlights:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Support is planned until the end of December 2022, handing over
+        to 22.11.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <section xml:id="sec-release-22.05-highlights">
+    <title>Highlights</title>
+    <para>
+    </para>
+  </section>
+  <section xml:id="sec-release-22.05-new-services">
+    <title>New Services</title>
+    <para>
+    </para>
+  </section>
+  <section xml:id="sec-release-22.05-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <literal>pkgs.ghc</literal> now refers to
+          <literal>pkgs.targetPackages.haskellPackages.ghc</literal>.
+          This <emphasis>only</emphasis> makes a difference if you are
+          cross-compiling and will ensure that
+          <literal>pkgs.ghc</literal> always runs on the host platform
+          and compiles for the target platform (similar to
+          <literal>pkgs.gcc</literal> for example).
+          <literal>haskellPackages.ghc</literal> still behaves as
+          before, running on the build platform and compiling for the
+          host platform (similar to <literal>stdenv.cc</literal>). This
+          means you don’t have to adjust your derivations if you use
+          <literal>haskellPackages.callPackage</literal>, but when using
+          <literal>pkgs.callPackage</literal> and taking
+          <literal>ghc</literal> as an input, you should now use
+          <literal>buildPackages.ghc</literal> instead to ensure cross
+          compilation keeps working (or switch to
+          <literal>haskellPackages.callPackage</literal>).
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.05-notable-changes">
+    <title>Other Notable Changes</title>
+    <para>
+    </para>
+  </section>
+</section>

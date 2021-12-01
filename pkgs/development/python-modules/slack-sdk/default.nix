@@ -20,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.11.2";
+  version = "3.12.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "v${version}";
-    sha256 = "sha256-jfFNka+PZXXYz6r7gwoxoqK7SX2RRcDNlCSqVG3JPY0=";
+    sha256 = "sha256-1IR0pQOxLjxqmjbq6zmp2rU1rBDabADva1R4YBNw+PA=";
   };
 
   propagatedBuildInputs = [
@@ -66,7 +68,9 @@ buildPythonPackage rec {
     "test_interactions"
   ];
 
-  pythonImportsCheck = [ "slack_sdk" ];
+  pythonImportsCheck = [
+    "slack_sdk"
+  ];
 
   meta = with lib; {
     description = "Slack Developer Kit for Python";

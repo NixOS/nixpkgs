@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
     xmlto
     python3
     docbook_xml_dtd_45
+    docbook_xsl
   ];
 
   buildInputs = [

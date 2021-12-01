@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pipeworld";
-  version = "0.pre+unstable=2021-08-01";
+  version = "0.pre+date=2021-11-26";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = pname;
-    rev = "311cc91946be63faab3b1578bc1d40668dd30f8c";
-    hash = "sha256-iqcdVzEp4ST/f93+9fGSwvJMj7BznNtoEx4F3oMPCYk=";
+    rev = "9f816db154ca5c54af952ad11c2186ccac5bdd2d";
+    hash = "sha256-uwnrRsMP0RLEGr2mEVQ6kEtV/c6t5qSCHY0ynywPzkw=";
   };
 
   installPhase = ''

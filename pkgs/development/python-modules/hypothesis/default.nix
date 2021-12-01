@@ -18,14 +18,14 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   pname = "hypothesis";
-  version = "6.23.2";
+  version = "6.24.5";
 
   # Use github tarballs that includes tests
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "1mdygyq6ra4kysi0y2g3a4bgpqrcb8ci2061117zyms419qwwh4l";
+    sha256 = "+pPnMgbLdYbh0xqPewNOJRaL7VtxeN73wbHHuK0fNYo=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";

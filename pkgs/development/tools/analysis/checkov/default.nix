@@ -39,16 +39,6 @@ let
         doCheck = false;
       });
 
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.2";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          rev = "v${version}";
-          sha256 = "10cmp2aqbnbiyrsq5r9p7ppghqj3zyg612d2dldk6m85li3jr500";
-        };
-      });
-
     };
   };
 in
@@ -56,13 +46,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.582";
+  version = "2.0.614";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-25RT70HyOyfdg2jWLKMnEVgvNdlZuJ0e6eajlU486IQ=";
+    sha256 = "sha256-z1d1Zcq4x2wU/j4yWpaRwJXsUqy95Ai2uM18EHqxze0=";
   };
 
   nativeBuildInputs = with py.pkgs; [

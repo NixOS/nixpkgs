@@ -98,6 +98,30 @@ default-package-overrides:
   - futhark < 0.20.6
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # 2021-11-18: lucid-{alpine, htmx} are not in stackage, so we need to downgrade them
+  - lucid-alpine == 0.1.0.2
+  - lucid-htmx == 0.1.0.2
+  # 2021-11-21: restrict haskell-gi-related packages to match stackage version (0.25)
+  - gi-girepository < 1.0.25
+  - gi-ggit < 1.0.11
+  - gi-gst < 1.0.25
+  - gi-gstaudio < 1.0.24
+  - gi-gstbase < 1.0.25
+  - gi-gstvideo < 1.0.25
+  - gi-gtksource < 3.0.25
+  - gi-ibus < 1.5.4
+  - gi-javascriptcore < 4.0.24
+  - gi-ostree < 1.0.15
+  - gi-notify < 0.7.24
+  - gi-pangocairo < 1.0.26
+  - gi-poppler < 0.18.26
+  - gi-secret < 0.0.14
+  - gi-soup < 2.4.25
+  - gi-vte < 2.91.29
+  - gi-webkit2 < 4.0.28
+  - gi-webkit2webextension < 4.0.27
+  - gi-wnck < 3.0.11
+  # gi-cogl, gi-coglpango, gi-clutter, gi-json, gi-rsvg are only available for haskell-gi >= 0.26
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -130,6 +154,7 @@ extra-packages:
   - ghc-lib == 9.0.1.*                  # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
 
 package-maintainers:
   abbradar:

@@ -9,7 +9,7 @@ let
       sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
     };
   buildInputs = [ gpm freetype fontconfig ncurses ]
-    ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) libx86;
+    ++ lib.optional stdenv.hostPlatform.isx86 libx86;
 in
 stdenv.mkDerivation {
   inherit (s) pname version;

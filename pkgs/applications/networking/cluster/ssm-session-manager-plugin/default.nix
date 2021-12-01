@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage =
       "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ mbaillie ];
   };

@@ -1,2 +1,0 @@
-Microsoft.AspNetCore.App.Runtime.linux-x64 3.1.21
-Microsoft.NetCore.App.Runtime.linux-x64 3.1.21

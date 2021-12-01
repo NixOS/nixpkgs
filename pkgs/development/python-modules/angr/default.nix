@@ -30,27 +30,28 @@
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
+    pname = "unicorn";
+    version = "1.0.2-rc4";
+    src =  fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      rev = version;
+      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
     };
+    doCheck = false;
   });
 in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10576";
+  version = "9.0.10689";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lRoJZX7HPZE6y7v5AuU1C6sjOIXXefv8M/qPiNQtobw=";
+    sha256 = "sha256-UMPJZUtfcUTiL0Ha+p1M09yhLwaCuBLpam4KUgtYvnw=";
   };
 
   propagatedBuildInputs = [

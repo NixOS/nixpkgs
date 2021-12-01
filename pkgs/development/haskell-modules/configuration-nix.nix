@@ -155,6 +155,7 @@ self: super: builtins.intersectAttrs super {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hasql-interpolate = dontCheck super.hasql-interpolate; # wants to connect to postgresql
   hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal (drv: { testTarget = "local"; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
@@ -516,25 +517,30 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = with pkgs;
-    if (!stdenv.isLinux) then
-      let path = lib.makeBinPath [ coreutils ];
-      in overrideCabal (_drv: {
-        # This is an instance of https://github.com/NixOS/nix/pull/1085
-        # Fails with:
-        #   gpg: can't connect to the agent: File name too long
-        postPatch = lib.optionalString stdenv.isDarwin ''
-          substituteInPlace Test.hs \
-            --replace ', testCase "crypto" test_crypto' ""
-        '';
-        # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
-        # binary to ensure it uses Nixpkgs' coreutils.
-        postFixup = ''
-          wrapProgram $out/bin/git-annex \
-            --prefix PATH : "${path}"
-        '';
-      }) (addBuildTool buildPackages.makeWrapper super.git-annex)
-    else super.git-annex;
+  git-annex = let
+    pathForDarwin = pkgs.lib.makeBinPath [ pkgs.coreutils ];
+  in overrideCabal (drv: pkgs.lib.optionalAttrs (!pkgs.stdenv.isLinux) {
+    # This is an instance of https://github.com/NixOS/nix/pull/1085
+    # Fails with:
+    #   gpg: can't connect to the agent: File name too long
+    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      substituteInPlace Test.hs \
+        --replace ', testCase "crypto" test_crypto' ""
+    '' + (drv.postPatch or "");
+    # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
+    # binary to ensure it uses Nixpkgs' coreutils.
+    postFixup = ''
+      wrapProgram $out/bin/git-annex \
+        --prefix PATH : "${pathForDarwin}"
+    '' + (drv.postFixup or "");
+    buildTools = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ (drv.buildTools or []);
+  }) (super.git-annex.override {
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  });
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
@@ -848,6 +854,12 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   }) super.hls-pragmas-plugin;
+  hls-hlint-plugin = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  }) super.hls-hlint-plugin;
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH

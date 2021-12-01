@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, elfutils
 , xorg, patchelf, openssl, libdrm, udev
-, libxcb, libxshmfence, epoxy, perl, zlib
+, libxcb, libxshmfence, libepoxy, perl, zlib
 , ncurses
 , libsOnly ? false, kernel ? null
 }:
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   depLibPath = makeLibraryPath [
     stdenv.cc.cc.lib xorg.libXext xorg.libX11 xorg.libXdamage xorg.libXfixes zlib
-    xorg.libXxf86vm libxcb libxshmfence epoxy openssl libdrm elfutils udev ncurses5
+    xorg.libXxf86vm libxcb libxshmfence libepoxy openssl libdrm elfutils udev ncurses5
   ];
 
   installPhase = ''

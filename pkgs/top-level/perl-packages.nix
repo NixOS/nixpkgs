@@ -6887,6 +6887,10 @@ let
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
     propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/dzil
+    '';
     meta = {
       homepage = "http://dzil.org/";
       description = "Distribution builder; installer not included!";
@@ -8046,6 +8050,11 @@ let
     };
     nativeBuildInputs = [ buildPackages.pkg-config ];
     propagatedBuildInputs = [ pkgs.pkg-config ];
+    postPatch = ''
+      # no pkg-config binary when cross-compiling so the check fails
+      substituteInPlace Makefile.PL \
+        --replace "pkg-config" "$PKG_CONFIG"
+    '';
     doCheck = false; # expects test_glib-2.0.pc in PKG_CONFIG_PATH
     meta = {
       homepage = "http://gtk2-perl.sourceforge.net";
@@ -24561,6 +24570,7 @@ let
       })
     ];
     AUTOMATED_TESTING = false;
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
     NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";

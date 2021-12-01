@@ -417,7 +417,11 @@ in
         network node hostname (uname --nodename) the option
         boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
         the 64 character limit still applies).
+
+        WARNING: Do not use underscores (_) or you may run into unexpected issues.
       '';
+       # warning until the issues in https://github.com/NixOS/nixpkgs/pull/138978
+       # are resolved
     };
 
     networking.fqdn = mkOption {
@@ -1233,6 +1237,8 @@ in
       "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
+      "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
         (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
       // listToAttrs (forEach interfaces

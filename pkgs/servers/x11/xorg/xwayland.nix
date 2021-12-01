@@ -1,5 +1,5 @@
 { egl-wayland
-, epoxy
+, libepoxy
 , fetchurl
 , fontutil
 , lib
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     egl-wayland
-    epoxy
+    libepoxy
     fontutil
     libGL
     libGLU

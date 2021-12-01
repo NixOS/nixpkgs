@@ -21,7 +21,7 @@
 , fribidi
 , harfbuzz
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gnome
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
@@ -216,6 +216,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk";
+      versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
   };

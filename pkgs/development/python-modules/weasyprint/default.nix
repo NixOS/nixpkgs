@@ -1,31 +1,27 @@
-{ buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pytestCheckHook,
-  brotli,
-  cairosvg,
-  fonttools,
-  pydyf,
-  pyphen,
-  cffi,
-  cssselect,
-  lxml,
-  html5lib,
-  tinycss,
-  zopfli,
-  glib,
-  harfbuzz,
-  pango,
-  fontconfig,
-  lib, stdenv,
-  ghostscript,
-  pytest,
-  pytest-runner,
-  pytest-isort,
-  pytest-flake8,
-  pytest-cov,
-  isPy3k,
-  substituteAll
+{ buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pytestCheckHook
+, brotli
+, cairosvg
+, fonttools
+, pydyf
+, pyphen
+, cffi
+, cssselect
+, lxml
+, html5lib
+, tinycss
+, zopfli
+, glib
+, harfbuzz
+, pango
+, fontconfig
+, lib
+, stdenv
+, ghostscript
+, isPy3k
+, substituteAll
 }:
 
 buildPythonPackage rec {
@@ -33,26 +29,25 @@ buildPythonPackage rec {
   version = "53.4";
   disabled = !isPy3k;
 
-  pytestFlagsArray = [
-    # setup.py is auto-generated and doesn't pass the flake8 check
-    "--ignore=setup.py"
-    # ffi.py is patched by us and doesn't pass the flake8 check
-    "--ignore=weasyprint/text/ffi.py"
-  ];
+  src = fetchPypi {
+    inherit version;
+    pname = "weasyprint";
+    sha256 = "sha256-EMyxfVXHMJa98e3T7+WMuFWwfkwwfZutTryaPxP/RYA=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+  '';
 
   disabledTests = [
-    # test_font_stretch needs the Ahem font (fails on macOS)
+    # needs the Ahem font (fails on macOS)
     "test_font_stretch"
   ];
 
   checkInputs = [
     pytestCheckHook
     ghostscript
-    pytest
-    pytest-runner
-    pytest-isort
-    pytest-flake8
-    pytest-cov
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
@@ -82,12 +77,6 @@ buildPythonPackage rec {
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
-
-  src = fetchPypi {
-    inherit version;
-    pname = "weasyprint";
-    sha256 = "sha256-EMyxfVXHMJa98e3T7+WMuFWwfkwwfZutTryaPxP/RYA=";
-  };
 
   meta = with lib; {
     homepage = "https://weasyprint.org/";

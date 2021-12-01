@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = lib.optionals (!stdenv.isi686 && !stdenv.isx86_64) [ "--disable-sse" ];
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng zlib lcms2 ];

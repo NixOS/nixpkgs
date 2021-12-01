@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GDbUlu5tRL5mdT7KrIdmxCbeAtYL1xvZXyZFwiuvKXo=";
+    sha256 = "sha256-oEK9p6OuqGSm2JdgfnJ+N0sJtRq6wCoVCGcU0GNEMLI=";
   };
 
   checkInputs = with python3Packages; [

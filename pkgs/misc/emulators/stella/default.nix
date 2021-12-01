@@ -7,19 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "stella";
-  version = "6.5.3";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = pname;
     rev = version;
-    hash = "sha256-Y9rEh9PZalQNj+d7OXN/8z5P8Hti4R3c2RL1BY+J1y4=";
+    hash = "sha256-+ZvSCnnoKGyToSFqUQOArolFdgUcBBFNjFw8aoVDkYI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    SDL2
+  ];
 
   meta = with lib;{
     homepage = "https://stella-emu.github.io/";

@@ -17,14 +17,14 @@
 
 mkDerivation rec {
   pname = "index";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "index-fm";
     rev = "v${version}";
-    sha256 = "sha256-aY8JBCIh6VyCDOGQIMWhO6asGMo6I6ZTgzpDnnDy9eo=";
+    sha256 = "sha256-Os/5igKGYBeY/FxO6I+7mpFohuk3yHGLd7vE2GewFpU=";
   };
 
   nativeBuildInputs = [

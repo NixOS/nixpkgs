@@ -38,6 +38,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
+, enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
@@ -53,8 +54,8 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "a60b715263d9bbf7e744527fb0c084b693f58043";
-    hash = "sha256-Dz1dCV0m5Y24qzXdVaqrZ7hK3MRSb4GF0PXrjMAsjZU=";
+    rev = "1d8525e109a12a8c67c489eba48715a199609153";
+    hash = "sha256-tesDW/1yRyhZtpLbPvCVEsocs6KtstYofxB5GiSMEFM=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -67,16 +68,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-adJo+egtPr71la0b3IPUywKyDBgZRqaGMfZkXXwfepA=";
+    hash = "sha256-N4az0t+VTQeLPmj5jS5a7Lqj+irM8HXXo6E8GHucUpQ=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ARROW_JEMALLOC_URL = jemalloc.src;
+  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = jemalloc.src;
 
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     # From
@@ -140,7 +141,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags = [
@@ -155,6 +156,7 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
+    "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
@@ -235,5 +237,8 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
+  };
+  passthru = {
+    inherit enableFlight enableJemalloc enableS3 enableGcs;
   };
 }

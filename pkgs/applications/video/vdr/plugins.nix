@@ -62,6 +62,8 @@ in {
 
     postPatch = ''
       substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
+      # https://github.com/rofafor/vdr-plugin-vaapidevice/issues/5
+      substituteInPlace Makefile --replace libva libva-x11
     '';
 
     src = fetchFromGitHub {

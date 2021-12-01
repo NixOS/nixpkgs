@@ -6,7 +6,6 @@
 , harfbuzz
 , libintl
 , libthai
-, gobject-introspection
 , darwin
 , fribidi
 , gnome
@@ -16,12 +15,13 @@
 , meson
 , ninja
 , glib
+, python3
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
+, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
-let
-  withDocs = stdenv.buildPlatform == stdenv.hostPlatform;
-in
 stdenv.mkDerivation rec {
   pname = "pango";
   version = "1.48.10";
@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
     sha256 = "IeH1eYvN/adeq8QoBRSwiWq1b2VtTn5mAwuaJTXs3Jg=";
   };
 
+  strictDeps = !withIntrospection;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ] ++ lib.optionals withDocs [
     gi-docgen
+    python3
   ];
 
   buildInputs = [
@@ -63,10 +72,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withDocs}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ];
 
   # Fontconfig error: Cannot load default config file

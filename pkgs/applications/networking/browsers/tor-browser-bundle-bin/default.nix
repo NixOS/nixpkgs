@@ -23,7 +23,7 @@
 , pango
 
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? false
+, pulseaudioSupport ? mediaSupport
 , libpulseaudio
 , apulse
 

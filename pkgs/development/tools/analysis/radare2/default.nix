@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
     chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
+      install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
+    done
+  '';
+
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
   '';
@@ -59,7 +65,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "GITTAP=${version}"
     "RANLIB=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ranlib"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "HOST_CC=${stdenv.cc.targetPrefix}cc"
   ];
+
   configureFlags = [
     "--with-sysmagic"
     "--with-syszip"
@@ -94,11 +103,11 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
-  meta = {
+  meta = with lib; {
     description = "unix-like reverse engineering framework and commandline tools";
-    homepage = "http://radare.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin makefu mic92 ];
-    platforms = with lib.platforms; linux;
+    homepage = "https://radare.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin makefu mic92 arkivm ];
+    platforms = platforms.unix;
   };
 }

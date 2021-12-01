@@ -34,7 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
-, epoxy
+, libepoxy
 # postPatch:
 , glibc # gconv + locale
 
@@ -150,8 +150,7 @@ let
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
-    ] ++ optionals (chromiumVersionAtLeast "96") [
-      epoxy
+      libepoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -183,7 +182,7 @@ let
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/${lib.optionalString (chromiumVersionAtLeast "96") "run_"}deno
+      chmod -x third_party/webgpu-cts/src/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \

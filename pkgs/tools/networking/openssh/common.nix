@@ -18,10 +18,12 @@
 , libedit
 , pkg-config
 , pam
+, libredirect
 , etcDir ? null
 , withKerberos ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , libkrb5
 , libfido2
+, hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl ? true
@@ -99,6 +101,59 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
+
+  doCheck = true;
+  enableParallelChecking = false;
+  checkInputs = optional (!stdenv.isDarwin) hostname;
+  preCheck = ''
+    # construct a dummy HOME
+    export HOME=$(realpath ../dummy-home)
+    mkdir -p ~/.ssh
+
+    # construct a dummy /etc/passwd file for the sshd under test
+    # to use to look up the connecting user
+    DUMMY_PASSWD=$(realpath ../dummy-passwd)
+    cat > $DUMMY_PASSWD <<EOF
+    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+    EOF
+
+    # we need to NIX_REDIRECTS /etc/passwd both for processes
+    # invoked directly and those invoked by the "remote" session
+    cat > ~/.ssh/environment.base <<EOF
+    NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
+    LD_PRELOAD=${libredirect}/lib/libredirect.so
+    EOF
+
+    # use an ssh environment file to ensure environment is set
+    # up appropriately for build environment even when no shell
+    # is invoked by the ssh session. otherwise the PATH will
+    # only contain default unix paths like /bin which we don't
+    # have in our build environment
+    cat - regress/test-exec.sh > regress/test-exec.sh.new <<EOF
+    cp $HOME/.ssh/environment.base $HOME/.ssh/environment
+    echo "PATH=\$PATH" >> $HOME/.ssh/environment
+    EOF
+    mv regress/test-exec.sh.new regress/test-exec.sh
+
+    # explicitly enable the PermitUserEnvironment feature
+    substituteInPlace regress/test-exec.sh \
+      --replace \
+        'cat << EOF > $OBJ/sshd_config' \
+        $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
+
+    # some tests want to use files under /bin as example files
+    for f in regress/sftp-cmds.sh regress/forwarding.sh; do
+      substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+    done
+
+    # set up NIX_REDIRECTS for direct invocations
+    set -a; source ~/.ssh/environment.base; set +a
+  '';
+  # integration tests hard to get working on darwin with its shaky
+  # sandbox
+  checkTarget = optional (!stdenv.isDarwin) "t-exec"
+    # other tests are less demanding of the environment
+    ++ [ "unit" "file-tests" "interop-tests" ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.

@@ -4,8 +4,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 10.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 9.0.x core libraries.
   array = null;
@@ -92,7 +91,7 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
     sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
   }) (dontCheck super.alex);
-  doctest = dontCheck (doJailbreak super.doctest_0_18_1);
+  doctest = dontCheck (doJailbreak super.doctest_0_18_2);
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
@@ -105,7 +104,7 @@ self: super: {
   base64-bytestring = dontCheck super.base64-bytestring;
 
   # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  lens = super.lens_5_0_1;
+  lens = super.lens_5_1;
 
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
   memory = super.memory_0_16_0;

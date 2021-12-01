@@ -51,7 +51,7 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
@@ -60,9 +60,21 @@ in
         '';
       };
 
+      extraSettingsPlugins = mkOption {
+        type = types.listOf (types.either types.package types.path);
+        default = [ ];
+        description = ''
+          Additional plugins dir used to configure nomad.
+        '';
+        example = literalExpression ''
+          [ "<pluginDir>" "pkgs.<plugins-name>"]
+        '';
+      };
+
+
       settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
@@ -128,7 +140,8 @@ in
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
+            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;

@@ -1,12 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, click
-, click-completion, factory_boy, faker, inquirer, notify-py, pbr, pendulum
-, ptable, pytestCheckHook, pytest-cov, pytest-mock, requests, twine
-, validate-email }:
+{ lib
+, buildPythonPackage
+, click
+, click-completion
+, factory_boy
+, faker
+, fetchPypi
+, inquirer
+, notify-py
+, pbr
+, pendulum
+, ptable
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, twine
+, validate-email
+}:
 
 buildPythonPackage rec {
   pname = "toggl-cli";
   version = "2.4.2";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "togglCli";
@@ -14,13 +31,38 @@ buildPythonPackage rec {
     sha256 = "1wgh231r16jyvaj1ch1pajvl9szflb4srs505pfdwdlqvz7rzww8";
   };
 
+  nativeBuildInputs = [
+    pbr
+    twine
+  ];
+
+  propagatedBuildInputs = [
+    click
+    click-completion
+    inquirer
+    notify-py
+    pbr
+    pendulum
+    ptable
+    requests
+    validate-email
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    faker
+    factory_boy
+  ];
+
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "notify-py==0.3.1" "notify-py>=0.3.1"
+      --replace "notify-py==0.3.1" "notify-py>=0.3.1" \
+      --replace "click==7.1.2" "click>=7.1.2" \
+      --replace "pbr==5.5.1" "pbr>=5.5.1"
+    substituteInPlace pytest.ini \
+      --replace ' --cov toggl -m "not premium"' ""
   '';
-
-  nativeBuildInputs = [ pbr twine ];
-  checkInputs = [ pbr pytestCheckHook pytest-cov pytest-mock faker factory_boy ];
 
   preCheck = ''
     export TOGGL_API_TOKEN=your_api_token
@@ -36,22 +78,14 @@ buildPythonPackage rec {
     "test_now"
   ];
 
-  propagatedBuildInputs = [
-    click
-    click-completion
-    inquirer
-    notify-py
-    pendulum
-    ptable
-    requests
-    pbr
-    validate-email
+  pythonImportsCheck = [
+    "toggl"
   ];
 
   meta = with lib; {
-    homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
+    homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut ];
   };
 }

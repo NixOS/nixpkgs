@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, openssh, pcre2
+, openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [curl openssl zlib expat cpio libiconv]
+  buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
@@ -84,11 +84,12 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
               + lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = [
+    "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
-    "ac_cv_prog_CURL_CONFIG=${curl.dev}/bin/curl-config"
   ];
 
   preBuild = ''
@@ -97,8 +98,10 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "prefix=\${out}"
-    "SHELL_PATH=${stdenv.shell}"
   ]
+  # Git does not allow setting a shell separately for building and run-time.
+  # Therefore lets leave it at the default /bin/sh when cross-compiling
+  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
   ++ lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
@@ -114,6 +117,10 @@ stdenv.mkDerivation {
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
+
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    stdenv.shellPackage
+  ];
 
 
   postBuild = ''

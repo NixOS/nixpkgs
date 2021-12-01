@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, ocamlPackages_4_10, fetchpatch, makeWrapper, coq2html
+, ocamlPackages_4_10, ocamlPackages_4_12, fetchpatch, makeWrapper, coq2html
 }@args:
 let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
@@ -24,13 +24,13 @@ let
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       compcert = callPackage ../development/coq-modules/compcert {
-        ocamlPackages = ocamlPackages_4_05;
         inherit fetchpatch makeWrapper coq2html lib stdenv;
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coqeal = callPackage ../development/coq-modules/coqeal {};
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
@@ -95,7 +95,9 @@ let
       topology = callPackage ../development/coq-modules/topology {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {};
+      VST = callPackage ../development/coq-modules/VST {
+        compcert = self.compcert.override { version = "3.9"; };
+      };
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
@@ -111,7 +113,12 @@ let
       ) (lib.attrNames set)
     );
   mkCoq = version: callPackage ../applications/science/logic/coq {
-    inherit version ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+    inherit version
+      ocamlPackages_4_05
+      ocamlPackages_4_09
+      ocamlPackages_4_10
+      ocamlPackages_4_12
+    ;
   };
 in rec {
 

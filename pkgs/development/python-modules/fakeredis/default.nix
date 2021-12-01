@@ -16,12 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.6.1";
+  version = "1.7.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DQapOE+3nanyFkzpbjTrnU4upGIVBwgF6m/TwXRZC0c=";
+    sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +47,9 @@ buildPythonPackage rec {
     "test/test_aioredis2.py"
   ];
 
-  pythonImportsCheck = [ "fakeredis" ];
+  pythonImportsCheck = [
+    "fakeredis"
+  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

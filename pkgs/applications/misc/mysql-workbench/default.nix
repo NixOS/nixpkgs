@@ -33,7 +33,7 @@
 , proj
 , cairo
 , libxkbcommon
-, epoxy
+, libepoxy
 , wrapGAppsHook
 , at-spi2-core
 , dbus
@@ -126,7 +126,7 @@ in stdenv.mkDerivation rec {
     libpthreadstubs
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
   ];

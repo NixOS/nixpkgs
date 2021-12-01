@@ -218,8 +218,6 @@ with self; with super; {
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
 
-  keyring = callPackage ../development/python-modules/keyring/2.nix { };
-
   koji = callPackage ../development/python-modules/koji { };
 
   konfig = callPackage ../development/python-modules/konfig { };
@@ -425,7 +423,7 @@ with self; with super; {
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
-    inherit (pkgs) meson;
+    inherit (pkgs.buildPackages) meson;
   };
 
   pycangjie = disabled pycangjie;

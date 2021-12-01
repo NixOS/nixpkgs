@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lfqa9admhvdv71f528jmz2wl0i5cv77v6l64px2pm4zqr9ckkjx";
+    sha256 = "sha256-EQBx1KX3z/Wv3QAHOi+s/ihLOjpiupIQBYyE6IPbJto=";
   };
 
   propagatedBuildInputs = [

@@ -15,6 +15,9 @@ with haskellLib;
 
 self: super: {
 
+  # There are numerical tests on random data, that may fail occasionally
+  lapack = dontCheck super.lapack;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
@@ -60,12 +63,12 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc {
+  git-annex = overrideCabal (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1dj93291kh3wm46ardacpbblisarw5pmv683pdiqcngfhlp1m91a";
+      sha256 = "06njg44840na3ps3s29kjhjba0962vdr2zpd12yvqf16rwgf4zmq";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -74,11 +77,7 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-  } super.git-annex).override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
-  };
+  }) super.git-annex;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
@@ -87,6 +86,9 @@ self: super: {
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
+
+  # https://github.com/haskell-game/dear-imgui.hs/issues/116
+  dear-imgui = doJailbreak super.dear-imgui;
 
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
@@ -107,6 +109,10 @@ self: super: {
   qtah-cpp-qt5 = overrideCabal (drv: {
     buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
   }) super.qtah-cpp-qt5;
+
+  # Missing test data
+  # https://github.com/aleksey-makarov/melf/issues/1
+  melf = dontCheck super.melf;
 
   # The Haddock phase fails for one reason or another.
   deepseq-magic = dontHaddock super.deepseq-magic;
@@ -844,7 +850,7 @@ self: super: {
 
   # hledger-lib 1.23 depends on doctest >= 0.18
   hledger-lib_1_23 = super.hledger-lib_1_23.override {
-    doctest = self.doctest_0_18_1;
+    doctest = self.doctest_0_18_2;
   };
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -1338,21 +1344,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
-  hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
-  });
+  hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
+  }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -1427,9 +1433,24 @@ self: super: {
   # 2021-09-14: Tests are broken because of undeterministic variable names
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
-  # 2021-03-21 Test hangs
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
+  hls-explicit-imports-plugin = dontCheck super.hls-explicit-imports-plugin;
+
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+
+  # 2021-11-20: Testsuite hangs.
+  # https://github.com/haskell/haskell-language-server/issues/2375
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+
+  # 2021-11-23: Too strict bounds on ghcide, pending new release
+  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
+    doJailbreak super.hls-rename-plugin;
+
+  # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  ghcide = dontCheck super.ghcide;
+  # 2021-11-13: Too strict upper bound on implicit-hie-cradle
+  ghcide = doJailbreak (dontCheck super.ghcide);
 
   data-tree-print = doJailbreak super.data-tree-print;
 
@@ -2070,20 +2091,28 @@ EOT
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # 2021-11-05: patch to permit our language-docker version
-  # This is based on c931c0a9689cd6dff4d2083fa002414c1f08a586 from
-  # language-docker upstream
-  hadolint = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/hadolint/hadolint/commit/c931c0a9689cd6dff4d2083fa002414c1f08a586.patch";
-    sha256 = "1kv06hfn7lgrcrg56q8lq0pvdffqvmjbshazg3prlhl3kjs541f8";
-    excludes = [ "stack.yaml" "package.yaml" "hadolint.cabal" ];
-  }) (super.hadolint.override {
+  # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
+  hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_3_0;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck self.hspec-discover_2_9_1;
+    colourista = doJailbreak super.colourista;
   });
 
   # These should be updated in lockstep
   hledger_1_23 = super.hledger_1_23.override {
     hledger-lib = self.hledger-lib_1_23;
+  };
+
+  # Needs brick > 0.64
+  nix-tree = super.nix-tree.override {
+    brick = self.brick_0_64_2;
+  };
+
+  # Needs matching xmonad version
+  xmonad-contrib_0_17_0 = super.xmonad-contrib_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
   };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

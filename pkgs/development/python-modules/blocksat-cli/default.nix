@@ -32,14 +32,14 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # disable tests which require being connected to the satellite
-    "--ignore=blocksatcli/test_satip.py"
-    "--ignore=blocksatcli/api/test_listen.py"
-    "--ignore=blocksatcli/api/test_msg.py"
-    "--ignore=blocksatcli/api/test_net.py"
+    "blocksatcli/test_satip.py"
+    "blocksatcli/api/test_listen.py"
+    "blocksatcli/api/test_msg.py"
+    "blocksatcli/api/test_net.py"
     # disable tests which require being online
-    "--ignore=blocksatcli/api/test_order.py"
+    "blocksatcli/api/test_order.py"
   ];
 
   pythonImportsCheck = [ "blocksatcli" ];

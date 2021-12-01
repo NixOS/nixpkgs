@@ -26,7 +26,6 @@ let
         nix.binaryCaches = lib.mkForce [ ];
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
-        virtualisation.memorySize = 1024 /*MiB*/;
         virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet

@@ -1,21 +1,20 @@
 { lib, stdenv, fetchurl
-, withShishi ? !stdenv.isDarwin, shishi ? null
+, withShishi ? !stdenv.isDarwin, shishi
 }:
 
-assert withShishi -> shishi != null;
-
 stdenv.mkDerivation rec {
-  name = "gss-1.0.3";
+  pname = "gss";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnu/gss/${name}.tar.gz";
+    url = "mirror://gnu/gss/${pname}-${version}.tar.gz";
     sha256 = "1syyvh3k659xf1hdv9pilnnhbbhs6vfapayp4xgdcc8mfgf9v4gz";
   };
 
   buildInputs = lib.optional withShishi shishi;
 
   configureFlags = [
-    "--${if withShishi != null then "enable" else "disable"}-kereberos5"
+    "--${if withShishi then "enable" else "disable"}-kerberos5"
   ];
 
   doCheck = true;

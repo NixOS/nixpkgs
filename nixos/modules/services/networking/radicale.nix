@@ -195,6 +195,7 @@ in {
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0027";
+        WorkingDirectory = "/var/lib/radicale";
       };
     };
   };

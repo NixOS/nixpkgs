@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libressl ncurses ];
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://git.causal.agency/catgirl/about/";
     license = licenses.gpl3Plus;
