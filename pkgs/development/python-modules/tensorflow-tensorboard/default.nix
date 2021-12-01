@@ -11,6 +11,7 @@
 , absl-py
 , google-auth-oauthlib
 , setuptools
+, tensorflow
 , tensorboard-data-server
 , tensorboard-plugin-wit
 , tensorboard-plugin-profile
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     numpy
     protobuf
     setuptools
+    tensorflow
     tensorboard-data-server
     tensorboard-plugin-profile
     tensorboard-plugin-wit

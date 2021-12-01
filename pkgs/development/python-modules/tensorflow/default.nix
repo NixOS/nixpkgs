@@ -3,7 +3,7 @@
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard, absl-py
+, numpy, absl-py
 , setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
@@ -19,7 +19,6 @@
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null
 , mklSupport ? false, mkl ? null
-, tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
 # Default from ./configure script
@@ -40,8 +39,6 @@ assert ! (stdenv.isDarwin && cudaSupport);
 assert mklSupport -> mkl != null;
 
 let
-  withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
-
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
     paths = [
@@ -95,7 +92,6 @@ let
       six
       tblib
       tensorflow-estimator
-      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
@@ -301,11 +297,6 @@ let
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
-    '' + lib.optionalString (!withTensorboard) ''
-      # Tensorboard pulls in a bunch of dependencies, some of which may
-      # include security vulnerabilities. So we make it optional.
-      # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
-      sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
     '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
@@ -422,21 +413,14 @@ in buildPythonPackage {
   # Adjust dependency requirements:
   # - Relax gast version requirement that doesn't match what we have packaged
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
-  # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+  # - keras, tensorboard and tensorlow-io-gcs-filesystem will be considered as optional
   postPatch = ''
     sed -i setup.py \
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*',/d" \
+      -e "/'tensorboard[^']*',/d" \
       -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
-  '';
-
-  # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorflow-tensorboard, which causes environment collisions.
-  # Another possibility would be to have tensorboard only in the buildInputs
-  # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
-  postInstall = ''
-    rm $out/bin/tensorboard
   '';
 
   setupPyGlobalFlags = [ "--project_name ${pname}" ];
@@ -461,8 +445,6 @@ in buildPythonPackage {
     termcolor
     typing-extensions
     wrapt
-  ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard
   ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
