@@ -4,8 +4,6 @@
 , nixosTests
 , python3
 , nodejs
-  # needed for the NixOS test
-, dataDir ? "/opt/zigbee2mqtt/data"
 }:
 let
   inherit (lib.importJSON ./package.json) name version;

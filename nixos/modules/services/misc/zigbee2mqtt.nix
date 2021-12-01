@@ -22,14 +22,7 @@ in
 
     package = mkOption {
       description = "Zigbee2mqtt package to use";
-      default = pkgs.zigbee2mqtt.override {
-        dataDir = cfg.dataDir;
-      };
-      defaultText = literalExpression ''
-        pkgs.zigbee2mqtt {
-          dataDir = services.zigbee2mqtt.dataDir
-        }
-      '';
+      default = pkgs.zigbee2mqtt;
       type = types.package;
     };
 
