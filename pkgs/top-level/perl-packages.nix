@@ -8973,6 +8973,8 @@ let
     buildInputs = [ TestPod ];
   };
 
+  findimagedupes = callPackage ../development/perl-modules/findimagedupes { };
+
   FindLib = buildPerlPackage {
     pname = "Find-Lib";
     version = "1.04";
