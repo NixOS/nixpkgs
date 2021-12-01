@@ -888,7 +888,7 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit availableComponents;
+    inherit availableComponents extraComponents;
     python = py;
     tests = {
       inherit (nixosTests) home-assistant;
