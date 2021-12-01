@@ -67,7 +67,7 @@ in
             description = "";
           };
           options.message-level = mkOption {
-            type = types.ints.between 0 2;
+            type = types.ints.between 0 3;
             default = 2;
             description = "Set verbosity of transmission messages.";
           };
