@@ -25862,6 +25862,8 @@ with pkgs;
 
   pass-secret-service = callPackage ../applications/misc/pass-secret-service { };
 
+  passky-desktop = callPackage ../applications/misc/passky-desktop { };
+
   pinboard = with python3Packages; toPythonApplication pinboard;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
