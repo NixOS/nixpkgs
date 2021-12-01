@@ -2,6 +2,7 @@
 , pkgs
 , python3
 , fetchFromGitHub
+, fetchpatch
 , platformio
 , esptool
 , git
@@ -28,7 +29,11 @@ with python.pkgs; buildPythonApplication rec {
 
   patches = [
     # fix missing write permissions on src files before modifing them
-   ./fix-src-permissions.patch
+    ./fix-src-permissions.patch
+    (fetchpatch {
+      url = "https://github.com/esphome/esphome/commit/fbe1bca1b9896ba8c8b754c5a4faf790bffd887b.patch";
+      sha256 = "sha256-Iyc79iL2YkLGD81TbFK3GaCY2L9nTE9mKz6MQSNQWr8=";
+    })
   ];
 
   postPatch = ''
