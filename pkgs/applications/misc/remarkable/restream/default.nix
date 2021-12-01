@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "restream";
-  version = "1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "rien";
     repo = pname;
     rev = version;
-    sha256 = "18z17chl7r5dg12xmr3f9gbgv97nslm8nijigd03iysaj6dhymp3";
+    sha256 = "0vyj0kng8c9inv2rbw1qdr43ic15s5x8fvk9mbw0vpc6g723x99g";
   };
 
   nativeBuildInputs = [ makeWrapper ];
