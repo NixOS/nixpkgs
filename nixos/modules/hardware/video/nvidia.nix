@@ -179,7 +179,7 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
+        assertion = with config.services.xserver.displayManager; (gdm.enable && gdm.nvidiaWayland) -> cfg.modesetting.enable;
         message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
       }
 
@@ -294,7 +294,7 @@ in
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
     environment.systemPackages = [ nvidia_x11.bin ]
-      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
+      ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

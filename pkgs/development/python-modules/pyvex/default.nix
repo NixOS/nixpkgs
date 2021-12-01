@@ -11,16 +11,18 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.0.10534";
+  version = "9.0.10651";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tUjASwLQy/p3Q+XnkbpUQNM6VHk94bIle2BzRd4EYsg=";
+    sha256 = "sha256-GuZqaEI7y/kLNV7RfEMBXQgFsdVuRh1ouweTwlXE6r4=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
   '';
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     archinfo
@@ -45,7 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/angr/pyvex";
     license = with licenses; [ bsd2 gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ fab ];
-    # ERROR: pyvex-X-py3-none-manylinux1_aarch64.whl is not a supported wheel on this platform.
-    broken = stdenv.isAarch64;
   };
 }

@@ -6,13 +6,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7096"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.7105"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "f41687f4c1948e9e111afd70e979e98ea5de52fa";
-    sha256 = "0l0ll0bbqnqr63xlv4j9ir8pqb2ni7xmw52r8mdzw8vxq6xgs70b";
+    rev = "b9d83cc97ee1cb8c60d9b01c162bab742567fe6e";
+    sha256 = "0plchh8f9xhhza1wfw3ys78f0pa1bh3898fqhfhcc0kxb39px9is";
   };
 
   projectFile = "Ryujinx.sln";

@@ -24,6 +24,16 @@
 , orc
 }:
 
+let
+  # This file was mistakenly not included with the 0.15.0 release tarball.
+  # Should be fixed with the next release.
+  # https://gitlab.freedesktop.org/spice/spice/-/issues/56
+  doxygen_sh = fetchurl {
+    url = "https://gitlab.freedesktop.org/spice/spice/-/raw/v0.15.0/doxygen.sh";
+    sha256 = "0g4bx91qclihp1jfhdhyj7wp4hf4289794xxbw32kk58lnd7bzkg";
+  };
+in
+
 stdenv.mkDerivation rec {
   pname = "spice";
   version = "0.15.0";
@@ -34,9 +44,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    install ${doxygen_sh} doxygen.sh
     patchShebangs build-aux
   '';
-
 
   nativeBuildInputs = [
     glib
@@ -74,7 +84,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgstreamer=1.0"
-    "-Dcelt051=disabled"
   ];
 
   postInstall = ''

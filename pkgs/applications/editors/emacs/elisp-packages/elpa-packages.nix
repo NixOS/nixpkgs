@@ -36,14 +36,16 @@ self: let
     inherit (self) emacs;
   };
 
+  # Use custom elpa url fetcher with fallback/uncompress
+  fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+
   generateElpa = lib.makeOverridable ({
     generated ? ./elpa-generated.nix
   }: let
 
     imported = import generated {
       callPackage = pkgs: args: self.callPackage pkgs (args // {
-        # Use custom elpa url fetcher with fallback/uncompress
-        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+        inherit fetchurl;
       });
     };
 
@@ -69,12 +71,7 @@ self: let
         dontUnpack = false;
         srcs = [
           super.ada-mode.src
-          # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
-          # package-requires to find the version to use.
-          (pkgs.fetchurl {
-            url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar.lz";
-            sha256 = "18dwcc0crds7aw466vslqicidlzamf8avn59gqi2g7y2x9k5q0as";
-          })
+          self.wisi.src
         ];
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";

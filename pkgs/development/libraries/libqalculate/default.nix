@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

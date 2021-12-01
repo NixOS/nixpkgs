@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "plan9port";
-  version = "0.pre+date=2021-10-19";
+  version = "2021-10-19";
 
   src =  fetchFromGitHub {
     owner = "9fans";
@@ -101,6 +101,8 @@ stdenv.mkDerivation {
       kovirobi
     ];
     platforms = platforms.unix;
+    # TODO: revisit this when the sdk situation on x86_64-darwin changes
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch

@@ -40,7 +40,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         };
       };
 
-      virtualisation.memorySize = 1024;
     };
 
   testScript = { nodes, ... }: let

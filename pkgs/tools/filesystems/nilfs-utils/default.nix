@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
+, e2fsprogs }:
 
 stdenv.mkDerivation rec {
   pname = "nilfs-utils";
@@ -14,6 +15,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ libuuid libselinux ];
+
+  postPatch = ''
+    # Fix up hardcoded paths.
+    substituteInPlace lib/cleaner_exec.c --replace /sbin/ $out/bin/
+    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${lib.getBin e2fsprogs}/bin/
+  '';
+
+  # According to upstream, libmount should be detected automatically but the
+  # build system fails to do this. This is likely a bug with their build system
+  # hence it is explicitly enabled here.
+  configureFlags = [ "--with-libmount" ];
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"

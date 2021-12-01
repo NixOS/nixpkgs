@@ -32,8 +32,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  # enables `cargo audit fix`
-  cargoBuildFlags = [ "--features fix" ];
+  buildFeatures = [ "fix" ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

@@ -3,7 +3,7 @@
 , acl
 , cyrus_sasl
 , docbook_xsl
-, epoxy
+, libepoxy
 , gettext
 , gobject-introspection
 , gst_all_1
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cyrus_sasl
-    epoxy
+    libepoxy
     gtk3
     json-glib
     libcacard

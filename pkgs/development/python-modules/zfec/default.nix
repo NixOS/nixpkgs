@@ -24,6 +24,8 @@ buildPythonPackage rec {
     sed -i -e '/argparse/d' setup.py
   '';
 
+  pythonImportsCheck = [ "zfec" ];
+
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";
     description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";

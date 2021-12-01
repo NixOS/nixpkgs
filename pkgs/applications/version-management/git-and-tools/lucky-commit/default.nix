@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional withOpenCL (if stdenv.isDarwin then OpenCL else ocl-icd);
 
-  cargoBuildFlags = lib.optional (!withOpenCL) "--no-default-features";
+  buildNoDefaultFeatures = !withOpenCL;
 
   # disable tests that require gpu
   checkNoDefaultFeatures = true;

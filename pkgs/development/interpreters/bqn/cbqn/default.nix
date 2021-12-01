@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
 
      mkdir -p $out/bin/
      cp BQN -t $out/bin/
-     ln -s $out/bin/BQN $out/bin/bqn
-     ln -s $out/bin/BQN $out/bin/cbqn
+     # note guard condition for case-insensitive filesystems
+     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
 
      runHook postInstall
   '';

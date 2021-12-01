@@ -22,13 +22,13 @@
 , features ? ([ "sinks" "sources" "transforms" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ (lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ])
-    ++ (lib.optional stdenv.targetPlatform.isUnix "unix"))
+    ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
+    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
 }:
 
 let
   pname = "vector";
-  version = "0.17.3";
+  version = "0.18.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -37,10 +37,10 @@ rustPlatform.buildRustPackage {
     owner = "timberio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1Z2GtzWkS7cxzCs+RBKMtWbzIIt4aeS1Iy9kMBEeDMw=";
+    sha256 = "sha256-vkiTvJevslXEF2lDTr2IL2vFBQ+dj1N636Livncsso4=";
   };
 
-  cargoSha256 = "sha256-UEGdvyRPPh5Kb9+0qFyv8UBFslOKn5/R/ineawFA91w=";
+  cargoSha256 = "sha256-u7GzqQex5pqU7DuueMfbxMSOpAzd+uLQTZ2laG/aC+4=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -51,24 +51,28 @@ rustPlatform.buildRustPackage {
   RUSTONIG_SYSTEM_LIBONIG = true;
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  cargoBuildFlags = [ "--no-default-features" "--features" (lib.concatStringsSep "," features) ];
+  TZDIR = "${tzdata}/share/zoneinfo";
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = features;
+
   # TODO investigate compilation failure for tests
   # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
   # compilation fails because of a missing http2 include
   doCheck = !stdenv.isDarwin;
-  # healthcheck_grafana_cloud is trying to make a network access
-  # test_stream_errors is flaky on linux-aarch64
-  # tcp_with_tls_intermediate_ca is flaky on linux-x86_64
-  checkPhase = ''
-    TZDIR=${tzdata}/share/zoneinfo cargo test \
-      --no-default-features \
-      --features ${lib.concatStringsSep "," features} \
-      -- --test-threads 1 \
-      --skip=sinks::loki::tests::healthcheck_grafana_cloud \
-      --skip=kubernetes::api_watcher::tests::test_stream_errors \
-      --skip=sources::socket::test::tcp_with_tls_intermediate_ca \
-      --skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics
-  '';
+
+  checkFlags = [
+    # tries to make a network access
+    "--skip=sinks::loki::tests::healthcheck_grafana_cloud"
+
+    # flaky on linux-aarch64
+    "--skip=kubernetes::api_watcher::tests::test_stream_errors"
+
+    # flaky on linux-x86_64
+    "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
+
+    "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
+  ];
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
   # vector.dev during the checkPhase, which obviously isn't going to work.

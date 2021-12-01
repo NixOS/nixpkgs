@@ -21,7 +21,7 @@
 , fribidi
 , harfbuzz
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gnome
@@ -59,7 +59,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.4.0";
+  version = "4.4.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "4KFQj0QWhsOiDf7EivUzsZpLLgF8GOruMdzNt9KSUFs=";
+    sha256 = "D6ramD3GsLxAnLNMFxPB8yZ+Z8CT+GseOxfbYQCj3fQ=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
@@ -216,6 +216,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk";
+      versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
   };

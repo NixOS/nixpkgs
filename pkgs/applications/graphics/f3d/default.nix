@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.1.0";
+  version = "1.1.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.kitware.com";
-    owner = "f3d";
+  src = fetchFromGitHub {
+    owner = "f3d-app";
     repo = "f3d";
     rev = "v${version}";
-    sha256 = "0lj20k5qyw9z85k3wsp05f7dcv7v7asrnppi8i1jm32dzxjm4siw";
+    sha256 = "sha256-ToFP2Q+Oi+MEU9FEe5CNp0pD0bQUBQh34B9guajnqgI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://kitware.github.io/F3D";
+    homepage = "https://f3d-app.github.io/f3d";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;

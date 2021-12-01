@@ -5,7 +5,8 @@
 , meson
 , ninja
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk3
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.0.3";
+  version = "5.2.0";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ah1Rp/o4LPdYm+wj2W5ljjMkCI3PgoAHrlM8yEQP77o=";
+    hash = "sha256-ehcqRlI1d/KWNas36dz+hb7KU1H8wtQHTpg2fz1XdXU=";
   };
 
   outputs = [ "out" "dev" ];

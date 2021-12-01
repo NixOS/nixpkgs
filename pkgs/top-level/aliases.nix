@@ -54,7 +54,8 @@ mapAliases ({
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   angelfish = libsForQt5.plasmaMobileGear.angelfish; # added 2021-10-06
-  antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
+  antimicro = throw "antimicro has been removed as it was broken, see antimicrox instead."; # added 2020-08-06
+  antimicroX = antimicrox; # added 2021-10-31
   arduino_core = arduino-core;  # added 2015-02-04
   ardour_5 = throw "ardour_5 has been removed. see https://github.com/NixOS/nixpkgs/issues/139549"; # added 2021-09-28
   arora = throw "arora has been removed."; # added 2020-09-09
@@ -76,6 +77,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bcat = throw "bcat has been removed because upstream is dead"; # added 2021-08-22
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
+  beret = throw "beret has been removed"; # added 2021-11-16
   bluezFull = bluez; # Added 2019-12-03
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
@@ -184,6 +186,7 @@ mapAliases ({
   deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # added 2018-02-23
   deadpixi-sam = deadpixi-sam-unstable;
   debian_devscripts = debian-devscripts; # added 2016-03-23
+  debugedit-unstable = debugedit; # added 2021-11-22
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
   deltachat-electron = deltachat-desktop; # added 2021-07-18
@@ -226,6 +229,7 @@ mapAliases ({
   emacsPackages = emacs.pkgs; # added 2020-12-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
+  epoxy = libepoxy; # 2021-11-11
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -378,6 +382,7 @@ mapAliases ({
   joseki = apache-jena-fuseki; # added 2016-02-28
   jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   json_glib = json-glib; # added 2018-02-25
+  kafkacat = kcat; # added 2021-10-07
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # added 2021-06-09
@@ -461,7 +466,6 @@ mapAliases ({
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
-  linuxPackages_rt_5_11 = linuxKernel.packages.linux_rt_5_11;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
@@ -489,7 +493,6 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
   linux_5_14 = linuxKernel.kernels.linux_5_14;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
 
@@ -547,6 +550,7 @@ mapAliases ({
   minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   minergate-cli = throw "minergatecli has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   minetime = throw "minetime has been removed from nixpkgs, because it was discontinued 2021-06-22"; # added 2021-10-14
+  monero = monero-cli; # added 2021-11-28
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
@@ -575,6 +579,7 @@ mapAliases ({
   mssys = ms-sys; # added 2015-12-13
   mpv-with-scripts = self.wrapMpv self.mpv-unwrapped { }; # added 2020-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
+  mumsi = throw "mumsi has been removed from nixpkgs, as it's unmaintained and does not build anymore"; # added 2021-11-18
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mx = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   mxisd = throw "mxisd has been removed from nixpkgs as it has reached end of life, see https://github.com/kamax-matrix/mxisd/blob/535e0a5b96ab63cb0ddef90f6f42c5866407df95/EOL.md#end-of-life-notice . ma1sd may be a suitable alternative."; # added 2021-04-15
@@ -780,15 +785,17 @@ mapAliases ({
   # due to it being inside the linuxPackagesFor function.
   rtlwifi_new-firmware = rtw88-firmware; # added 2021-03-14
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
+  residualvm = throw "residualvm was merged to scummvm code in 2018-06-15; consider using scummvm"; # added 2021-11-27
   retroshare06 = retroshare;
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # added 2021-02-15
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
-  ring-daemon = jami-daemon; #added 2021-10-26
+  ring-daemon = jami-daemon; # added 2021-10-26
   radare2-cutter = cutter; # added 2021-03-30
   redkite = throw "redkite was archived by upstream"; # added 2021-04-12
+  retroArchCores = throw "retroArchCores has been removed. Please use overrides instead, e.g.: `retroarch.override { cores = with libretro; [ ... ]; }`"; # added 2021-11-19
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   rpiboot-unstable = rpiboot; # added 2021-07-30
   rtv = throw "rtv was archived by upstream. Consider using tuir, an actively maintained fork"; # added 2021-08-08
@@ -892,6 +899,7 @@ mapAliases ({
   stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   stumpwm-git = throw "stumpwm-git has been broken for a long time and lispPackages.stumpwm follows Quicklisp that is close to git version"; # added 2021-05-09
   surf-webkit2 = surf; # added 2017-04-02
+  svgcleaner = throw "svgcleaner has been removed."; # added 2021-11-17
   swec = throw "swec has been removed; broken and abandoned upstream."; # added 2021-10-14
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
@@ -990,6 +998,7 @@ mapAliases ({
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead."; # added 2019-11-18
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
+  xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers; # added 2021-11-19
   xp-pen-g430 = pentablet-driver; # added 2020-05-03
   xdg_utils = xdg-utils; # added 2021-02-01
   xfceUnstable = xfce4-14; # added 2019-09-17

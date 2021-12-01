@@ -1,7 +1,7 @@
-From 273e706ff561f2164b84c714148346ac92dd8846 Mon Sep 17 00:00:00 2001
+From 4e9b4aa87d299be08cffc77a86d6f473a7a4109a Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Wed, 18 Aug 2021 19:10:08 +0200
-Subject: [PATCH 19/19] core: handle lookup paths being symlinks
+Subject: [PATCH 19/21] core: handle lookup paths being symlinks
 
 With a recent change paths leaving the statically known lookup paths
 would be treated differently then those that remained within those. That

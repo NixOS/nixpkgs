@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
+{ lib, stdenv, fetchpatch, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
 
 let
   # Package does not support configuring the pcsc library.
@@ -13,6 +13,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "05de0579c42b4eb433903aa2fb327d4821ebac262434b6584da18ed72053fd9e";
   };
+
+  patches = [
+    # present in master - remove after 2.0.2
+    (fetchpatch {
+      name = "darwin-typo-test-fix.patch";
+      url = "https://github.com/LudovicRousseau/pyscard/commit/ce842fcc76fd61b8b6948d0b07306d82ad1ec12a.patch";
+      sha256 = "0wsaj87wp9d2vnfzwncfxp2w95m0zhr7zpkmg5jccn06z52ihis3";
+    })
+  ];
 
   postPatch = if withApplePCSC then ''
     substituteInPlace smartcard/scard/winscarddll.c \

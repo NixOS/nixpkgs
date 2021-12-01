@@ -73,7 +73,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ caugner kranzes ];
+    maintainers = with maintainers; [ kranzes ];
     platforms = platforms.linux;
   };
 }

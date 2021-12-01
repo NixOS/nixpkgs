@@ -25,11 +25,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
   };
 
-  cargoBuildFlags = lib.optionals (!stdenv.isLinux) [ "--no-default-features" "--features" "pulse" ];
   cargoSha256 = "1y7m61j07gvqfqz97mda39nc602sv7a826c06m8l22i7z380xfms";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkg-config patchelf python3 ];
+
+  buildNoDefaultFeatures = !stdenv.isLinux;
+  buildFeatures = lib.optional (!stdenv.isLinux) "pulse";
 
   postFixup = lib.optionalString stdenv.isLinux ''
     RPATH="$(patchelf --print-rpath $out/bin/xidlehook)"

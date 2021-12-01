@@ -10,7 +10,7 @@ rec {
   # Check whenever fileSystem is needed for boot.  NOTE: Make sure
   # pathsNeededForBoot is closed under the parent relationship, i.e. if /a/b/c
   # is in the list, put /a and /a/b in as well.
-  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/var/lib/nixos" "/etc" ];
+  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/var/lib/nixos" "/etc" "/usr" ];
   fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
 
   # Check whenever `b` depends on `a` as a fileSystem

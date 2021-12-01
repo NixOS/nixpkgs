@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-eN1tTKNuZMU3qObHaqq70bdkmZeAD6LNAQau9JGSXpE=";
+    sha256 = "sha256-ebIU632dYCKaU1Hh8Q3k6W2SRdZ49kcVx6eTzcKAzQw=";
   };
 
-  cargoSha256 = "sha256-6TZz8b8fALPTDRxzp+7ZWCHjOwVtqRjdSO6aEwZcMnc=";
+  cargoSha256 = "sha256-/AIARaMAxxMgBMMVecp2BXTyCe99pf/eXGJB6O1MyuU=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  cargoBuildFlags = lib.optional withExtraFeatures "--features=extra";
+  buildFeatures = lib.optional withExtraFeatures "extra";
 
   # Since 0.34, nu has an indirect dependency on `zstd-sys` (via `polars` and
   # `parquet`, for dataframe support), which by default has an impure build

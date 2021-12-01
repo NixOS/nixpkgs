@@ -21,6 +21,9 @@
 
 let
   defaultOverrides = [
+    # Remove with Home Assistant 2021.12
+    (mkOverride "PyChromecast" "9.4.0" "sha256-Y8PLrjxZHml7BmklEJ/VXGqkRyneAy+QVA5rusPeBHQ=")
+
     # aiounify 29 breaks integration tests
     (self: super: {
       aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
@@ -152,7 +155,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.11.3";
+  hassVersion = "2021.11.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -169,7 +172,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "sha256-HycMb29niuUp7flRdWgrKSOcnr0l3PqjULCrgrwLrFw=";
+    sha256 = "sha256-5MxArJLzOg9dU4Q2c6BDjvEzR2u7UVumNZjwE84+br8=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -179,10 +182,13 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "async_timeout==3.0.1" "async_timeout" \
+      --replace "awesomeversion==21.10.1" "awesomeversion" \
+      --replace "aiohttp==3.7.4.post0" "aiohttp" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "pyyaml==6.0" "pyyaml" \
-      --replace "yarl==1.6.3" "yarl==1.7.0"
+      --replace "yarl==1.6.3" "yarl"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -520,6 +526,7 @@ in with py.pkgs; buildPythonApplication rec {
     "modbus"
     "mold_indicator"
     "moon"
+    "motion_blinds"
     "motioneye"
     "mqtt"
     "mqtt_eventstream"
@@ -535,8 +542,11 @@ in with py.pkgs; buildPythonApplication rec {
     "nam"
     "namecheapdns"
     "neato"
+    "ness_alarm"
+    "nest"
     "netatmo"
     "nexia"
+    "nightscout"
     "no_ip"
     "notify"
     "notion"
@@ -722,6 +732,7 @@ in with py.pkgs; buildPythonApplication rec {
     "vesync"
     "vilfo"
     "vizio"
+    "vlc_telnet"
     "voicerss"
     "volumio"
     # disabled, becaused AttributeError: <class 'vultr.vultr.Vultr'> does not have the attribute 'server_list'

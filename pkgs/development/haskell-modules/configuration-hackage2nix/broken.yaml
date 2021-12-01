@@ -834,6 +834,7 @@ broken-packages:
   - contstuff-monads-tf
   - contstuff-transformers
   - convert-annotation
+  - copilot-core
   - copilot-sbv
   - copr
   - COrdering
@@ -1134,6 +1135,7 @@ broken-packages:
   - dotfs
   - dot-linker
   - doublify-toolkit
+  - dovetail
   - downloader
   - dozenal
   - dozens
@@ -1327,6 +1329,7 @@ broken-packages:
   - explicit-constraint-lens
   - explicit-determinant
   - explicit-iomodes
+  - exploring-interpreters
   - exposed-containers
   - expression-parser
   - expressions
@@ -1662,15 +1665,19 @@ broken-packages:
   - ghc-usage
   - gh-labeler
   - giak
+  - gi-cogl
   - Gifcurry
   - gi-graphene
   - gi-gsttag
+  - gi-gtk-layer-shell
   - gi-gtkosxapplication
   - gi-gtksheet
   - gi-handy
+  - gi-json
   - ginsu
   - gipeda
   - giphy-api
+  - gi-rsvg
   - gist
   - GiST
   - git
@@ -1841,7 +1848,6 @@ broken-packages:
   - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
-  - hadolint
   - hadoop-formats
   - hadoop-rpc
   - hafar
@@ -2790,7 +2796,7 @@ broken-packages:
   - language-typescript
   - language-vhdl
   - language-webidl
-  - lapack
+  - lapack-hmatrix
   - LargeCardinalHierarchy
   - Lastik
   - latest-npm-version
@@ -2918,10 +2924,8 @@ broken-packages:
   - llsd
   - llvm-base
   - llvm-ffi
-  - llvm-ffi-tools
   - llvm-general-pure
   - llvm-ht
-  - llvm-pkg-config
   - llvm-pretty
   - lmonad
   - load-balancing
@@ -3205,6 +3209,7 @@ broken-packages:
   - morfette
   - morfeusz
   - morpheus-graphql-cli
+  - morpheus-graphql-code-gen
   - morphisms-functors
   - morphisms-objects
   - morte
@@ -3457,6 +3462,7 @@ broken-packages:
   - onama
   - ONC-RPC
   - on-demand-ssh-tunnel
+  - one-line-aeson-text
   - one-liner-instances
   - oneormore
   - onpartitions
@@ -3785,6 +3791,7 @@ broken-packages:
   - polydata-core
   - polynom
   - polynomial
+  - polysemy-mocks
   - polysemy-plugin
   - polysemy-zoo
   - polytypeable
@@ -4034,6 +4041,7 @@ broken-packages:
   - read-bounded
   - read-ctags
   - read-io
+  - readline-in-other-words
   - readline-statevar
   - readme-lhs
   - readshp
@@ -4722,6 +4730,7 @@ broken-packages:
   - stripe-http-streams
   - stripe-signature
   - stripe-tests
+  - stripe-wreq
   - strong-path
   - strongswan-sql
   - structural-traversal
@@ -4792,7 +4801,6 @@ broken-packages:
   - syntax-trees
   - syntax-trees-fork-bairyn
   - synthesizer
-  - synthesizer-alsa
   - Sysmon
   - sys-process
   - system-canonicalpath
@@ -5354,6 +5362,7 @@ broken-packages:
   - web-encodings
   - WeberLogic
   - webfinger-client
+  - webkitgtk3
   - webkit-javascriptcore
   - webmention
   - web-output

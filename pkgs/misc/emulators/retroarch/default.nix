@@ -1,52 +1,106 @@
-{ lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
-, ffmpeg, libGLU, libGL, freetype, libxml2, python3
-, libobjc, AppKit, Foundation
-, alsa-lib ? null
-, libdrm ? null
-, libpulseaudio ? null
-, libv4l ? null
-, libX11 ? null
-, libXdmcp ? null
-, libXext ? null
-, libXxf86vm ? null
-, mesa ? null
-, SDL2 ? null
-, udev ? null
-, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
-, withVulkan ? stdenv.isLinux, vulkan-loader ? null
-, wayland
+{ lib
+, stdenv
+, enableNvidiaCgToolkit ? false
+, withVulkan ? stdenv.isLinux
+, alsa-lib
+, AppKit
+, fetchFromGitHub
+, ffmpeg
+, Foundation
+, freetype
+, libdrm
+, libGL
+, libGLU
+, libobjc
+, libpulseaudio
+, libv4l
+, libX11
+, libXdmcp
+, libXext
 , libxkbcommon
+, libxml2
+, libXxf86vm
+, makeWrapper
+, mesa
+, nvidia_cg_toolkit
+, pkg-config
+, python3
+, SDL2
+, substituteAll
+, udev
+, vulkan-loader
+, wayland
+, which
 }:
 
 with lib;
 
+let
+  mainVersion = "1.9.13";
+  revision = "2";
+  libretroSuperSrc = fetchFromGitHub {
+    owner = "libretro";
+    repo = "libretro-core-info";
+    sha256 = "sha256-jM+iXNSCpJy4wOk1S72G1UjNGBzejyhs5LFFWCFjs2c=";
+    rev = "v${mainVersion}";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.5";
+  version = "${lib.concatStringsSep "." [ mainVersion revision ]}";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
+    sha256 = "sha256-fehHchn+o9QM2wIK6zYamnbFvQda32Gw0rJk8Orx00U=";
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkg-config wayland ]
-                      ++ optional withVulkan makeWrapper;
+  patches = [
+    ./0001-Disable-menu_show_core_updater.patch
+    ./0002-Use-fixed-paths-on-libretro_info_path.patch
+  ];
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
-                ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
-                ++ optional withVulkan vulkan-loader
-                ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsa-lib libdrm libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm mesa udev
-                                              wayland libxkbcommon ];
+  postPatch = ''
+    substituteInPlace "frontend/drivers/platform_unix.c" \
+      --replace "@libretro_directory@" "$out/lib" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
+    substituteInPlace "frontend/drivers/platform_darwin.m" \
+      --replace "@libretro_directory@" "$out/lib" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
+  '';
+
+  nativeBuildInputs = [ pkg-config ] ++
+    optional stdenv.isLinux wayland ++
+    optional withVulkan makeWrapper;
+
+  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
+    optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
+    optional withVulkan vulkan-loader ++
+    optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
+    optionals stdenv.isLinux [
+      alsa-lib
+      libdrm
+      libpulseaudio
+      libv4l
+      libX11
+      libXdmcp
+      libXext
+      libXxf86vm
+      mesa
+      udev
+      wayland
+      libxkbcommon
+    ];
 
   enableParallelBuilding = true;
 
   configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
+    mkdir -p $out/share/libretro/info
+    # TODO: ideally each core should have its own core information
+    cp -r ${libretroSuperSrc}/* $out/share/libretro/info
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
@@ -55,8 +109,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    # FIXME: exits with error on macOS:
+    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
+    broken = stdenv.isDarwin;
   };
 }

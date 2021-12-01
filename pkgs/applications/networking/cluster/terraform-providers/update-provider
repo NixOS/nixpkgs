@@ -165,7 +165,7 @@ if [[ -z "$vendorSha256" ]]; then
     vendorSha256=$(echo "${BASH_REMATCH[1]#sha256:}" | head -n 1)
     # Deal with nix unstable
     if [[ $vendorSha256 = sha256-* ]]; then
-      vendorSha256=$(nix to-base32 "$vendorSha256")
+      vendorSha256=$(nix --extra-experimental-features nix-command hash to-base32 "$vendorSha256")
     fi
   fi
 fi

@@ -12,25 +12,35 @@ let
           sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
         };
       });
+
+      tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
+        version = "1.24.0a2";
+        pname = "tulir-telethon";
+        src = oldAttrs.src.override {
+          inherit pname version;
+          sha256 = "sha256-Qbx164FwC8nhesoY2fkaKvErN8g0Ph8vGcx+Cc1AqRg=";
+        };
+      });
     };
   };
 
   # officially supported database drivers
   dbDrivers = with python.pkgs; [
     psycopg2
+    aiosqlite
     # sqlite driver is already shipped with python by default
   ];
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.10.1";
+  version = "0.10.2";
   disabled = python.pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "tulir";
-    repo = pname;
+    owner = "mautrix";
+    repo = "telegram";
     rev = "v${version}";
-    sha256 = "sha256-1Dmc7WRlT2ivGkdrGDC1b44DE0ovQKfUR0gDiQE4h5c=";
+    sha256 = "sha256-BYsGLyxhdjBVmnZXLC5ZjwDlWcHdUGp+DsNIOXA1/Tc=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
@@ -49,7 +59,7 @@ in python.pkgs.buildPythonPackage rec {
     CommonMark
     ruamel-yaml
     python_magic
-    telethon
+    tulir-telethon
     telethon-session-sqlalchemy
     pillow
     lxml
@@ -87,7 +97,7 @@ in python.pkgs.buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-telegram";
+    homepage = "https://github.com/mautrix/telegram";
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

@@ -22,18 +22,21 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
       inherit swaybg;
     })
+  ] ++ lib.optionals (!isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ] ++ lib.optionals isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
   ];
-
-  postPatch = lib.optionalString isNixOS ''
-    echo -e '\ninclude /etc/sway/config.d/*' >> config.in
-  '';
 
   nativeBuildInputs = [
     meson ninja pkg-config wayland-scanner scdoc
@@ -47,7 +50,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddefault-wallpaper=false"
     "-Dsd-bus-provider=libsystemd"
   ]
     ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"

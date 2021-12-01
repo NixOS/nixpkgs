@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
   # have to pass "--with-appresdir", too.
   configureFlags = [
     "--without-x"
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ] ++ lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
     "gl_cv_func_signbit=yes"
   ];
 
@@ -106,7 +106,6 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 

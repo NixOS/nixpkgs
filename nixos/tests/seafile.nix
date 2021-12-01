@@ -1,7 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }:
   let
     client = { config, pkgs, ... }: {
-      virtualisation.memorySize = 256;
       environment.systemPackages = [ pkgs.seafile-shared pkgs.curl ];
     };
   in {
@@ -12,7 +11,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     nodes = {
       server = { config, pkgs, ... }: {
-        virtualisation.memorySize = 512;
         services.seafile = {
           enable = true;
           ccnetSettings.General.SERVICE_URL = "http://server";

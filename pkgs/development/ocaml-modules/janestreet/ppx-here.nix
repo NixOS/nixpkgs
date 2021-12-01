@@ -2,7 +2,7 @@
  ppx_core, ppx_driver}:
 
 buildOcamlJane {
-  name = "ppx_here";
+  pname = "ppx_here";
   hash = "1mzdgn8k171zkwmbizf1a48l525ny0w3363c7gknpnifcinxniiw";
   propagatedBuildInputs = [ ppx_core ppx_driver ];
 

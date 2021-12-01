@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, curl, libusb1, xorg, libxml2
-, ncurses5, bluez, libmhash, gimxAuth ? "" }:
+, ncurses5, bluez, libmhash, gimxPDP ? false }:
 
 let
   gimx-config = fetchFromGitHub {
@@ -21,15 +21,21 @@ in stdenv.mkDerivation rec {
     sha256 = "0265gg6q7ymg76fb4pjrfdwjd280b3zzry96qy92w0h411slph85";
   };
 
+  patches = [ ./conf.patch ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     curl libusb1 bluez libxml2 ncurses5 libmhash
     xorg.libX11 xorg.libXi xorg.libXext
   ];
 
-  patches = [ ./env.patch ];
-  prePatch = (if gimxAuth == "afterglow" then (import ./variant.nix).afterglow
-              else "");
+  postPatch = lib.optionals gimxPDP ''
+    substituteInPlace ./shared/gimxcontroller/include/x360.h \
+      --replace "0x045e" "0x0e6f" --replace "0x028e" "0x0213"
+    substituteInPlace ./loader/firmware/EMU360.hex \
+      --replace "1B210001" "1B211001" \
+      --replace "09210001" "09211001" \
+      --replace "5E048E021001" "6F0E13020001"
+  '';
 
   makeFlags = "build-core";
   installPhase = ''
@@ -51,19 +57,19 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -r ./loader/firmware $out/share/firmware
     cp -r ${gimx-config}/Linux $out/share/config
+    cp -r ${./custom} $out/share/custom
 
-    makeWrapper $out/bin/gimx $out/bin/gimx-with-confs \
-      --set GIMXCONF $out/share/config
+    makeWrapper $out/bin/gimx $out/bin/gimx-dualshock4 \
+      --set GIMXCONF 1 --add-flags "--nograb" --add-flags "-p /dev/ttyUSB0" \
+      --add-flags "-c $out/share/config/Dualshock4.xml"
 
-    makeWrapper $out/bin/gimx $out/bin/gimx-test-ds4 \
-      --set GIMXCONF $out/share/config \
-      --add-flags "--nograb" --add-flags "--curses" \
-      --add-flags "-p /dev/ttyUSB0" --add-flags "-c Dualshock4.xml"
+    makeWrapper $out/bin/gimx $out/bin/gimx-dualshock4-noff \
+      --set GIMXCONF 1 --add-flags "--nograb" --add-flags "-p /dev/ttyUSB0" \
+      --add-flags "-c $out/share/custom/Dualshock4.xml"
 
-    makeWrapper $out/bin/gimx $out/bin/gimx-test-xone \
-      --set GIMXCONF $out/share/config \
-      --add-flags "--nograb" --add-flags "--curses" \
-      --add-flags "-p /dev/ttyUSB0" --add-flags "-c XOnePadUsb.xml"
+    makeWrapper $out/bin/gimx $out/bin/gimx-xboxonepad \
+      --set GIMXCONF 1 --add-flags "--nograb" --add-flags "-p /dev/ttyUSB0" \
+      --add-flags "-c $out/share/config/XOnePadUsb.xml"
   '';
 
   meta = with lib; {

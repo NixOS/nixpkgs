@@ -9,25 +9,34 @@
 
 buildPythonPackage rec {
   pname = "python-gammu";
-  version = "3.2.3";
+  version = "3.2.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MtFxKRE6CB/LZq9McMyYhjwfs/Rdke9gsNUqbOQdWYQ=";
+    sha256 = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ gammu ];
+  buildInputs = [
+    gammu
+  ];
 
   # Check with the next release if tests could be run with pytest
   # checkInputs = [ pytestCheckHook ];
   # Don't run tests for now
   doCheck = false;
-  pythonImportsCheck = [ "gammu" ];
+
+  pythonImportsCheck = [
+    "gammu"
+  ];
 
   meta = with lib; {
     description = "Python bindings for Gammu";

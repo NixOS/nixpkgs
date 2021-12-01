@@ -1,4 +1,5 @@
 { self
+, fetchpatch
 , lib
 , openssl
 , zstd
@@ -578,6 +579,18 @@ with self;
     propagatedBuildInputs = [ ppxlib ];
   };
 
+  ppx_python = janePackage {
+    pname = "ppx_python";
+    hash = "0gk4nqz4i9v3hwjg5mvgpgwj0dfcgpyc7ikba93cafyhn6fy83zk";
+    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    # Compatibility with ppxlib 0.23
+    patches = fetchpatch {
+      url = "https://github.com/janestreet/ppx_python/commit/b2fe0040cc39fa6164de868f8a20edb38d81170e.patch";
+      sha256 = "sha256:1mrdwp0zw3dqavzx3ffrmzq5cdlninyf67ksavfzxb8gb16w6zpz";
+    };
+    propagatedBuildInputs = [ ppx_base ppxlib pyml ];
+  };
+
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
     version = "0.14.3";
@@ -645,6 +658,13 @@ with self;
     hash = "0lfblv2yqw01bl074ga6vxii0p9mqwlqw1g9b9z7pfdva9wqilrd";
     meta.description = "Protocol versioning";
     propagatedBuildInputs = [ core_kernel ];
+  };
+
+  pythonlib = janePackage {
+    pname = "pythonlib";
+    hash = "0qr0mh9jiv1ham5zlz9i4im23a1vh6x1yp6dp2db2s4icmfph639";
+    meta.description = "A library to help writing wrappers around ocaml code for python";
+    propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
   };
 
   re2 = janePackage {

@@ -119,7 +119,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename;
+      mkAliasOptionModule mkDerivedConfig doRename;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'

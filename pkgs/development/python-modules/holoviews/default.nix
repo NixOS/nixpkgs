@@ -25,16 +25,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorcet
-    param
     numpy
-    pyviz-comms
-    ipython
-    notebook
     pandas
-    matplotlib
-    bokeh
-    scipy
     panel
+    param
+    pyviz-comms
   ];
 
   # tests not fully included with pypi release

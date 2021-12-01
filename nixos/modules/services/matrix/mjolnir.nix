@@ -14,6 +14,8 @@ let
       else
         cfg.homeserverUrl;
 
+    rawHomeserverUrl = cfg.homeserverUrl;
+
     pantalaimon = {
       inherit (cfg.pantalaimon) username;
 

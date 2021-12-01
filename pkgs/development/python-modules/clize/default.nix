@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06p47i6hri006v7xbx7myj02as1a6f34rv88wfa9rb067p13nmyz";
+    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
   };
 
   checkInputs = [

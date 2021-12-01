@@ -37,7 +37,6 @@ import ./make-test-python.nix {
     };
 
     client = { pkgs, lib, ... }: {
-      virtualisation.memorySize = 512;
       environment.systemPackages = let
         testRunner = pkgs.writers.writePython3Bin "test-runner" {
           libraries = [ pkgs.python3Packages.selenium ];

@@ -65,8 +65,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
-    # canberra-gtk-module.c:28:10: fatal error: 'gdk/gdkx.h' file not found
-    # #include <gdk/gdkx.h>
-    broken = stdenv.isDarwin && (gtkSupport == "gtk3");
   };
 }

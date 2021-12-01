@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ erictapen ];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21;
   };

@@ -62,6 +62,8 @@ rec {
       ‘type’: A module system type representing the module set as a submodule,
             to be extended by configuration from the containing module set.
 
+            This is also available as the module argument ‘moduleType’.
+
       ‘extendModules’: A function similar to ‘evalModules’ but building on top
             of the module set. Its arguments, ‘modules’ and ‘specialArgs’ are
             added to the existing values.
@@ -73,6 +75,8 @@ rec {
             ‘evalModules’ invocations, because the new modules' ability to
             override existing configuration fundamentally requires a new
             fixpoint to be constructed.
+
+            This is also available as a module argument.
 
       ‘_module’: A portion of the configuration tree which is elided from
             ‘config’. It contains some values that are mostly internal to the
@@ -146,6 +150,7 @@ rec {
         config = {
           _module.args = {
             inherit extendModules;
+            moduleType = type;
           } // args;
         };
       };
@@ -955,6 +960,26 @@ rec {
     warn = false;
     use = id;
   };
+
+  /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
+
+    Create config definitions with the same priority as the definition of another option.
+    This should be used for option definitions where one option sets the value of another as a convenience.
+    For instance a config file could be set with a `text` or `source` option, where text translates to a `source`
+    value using `mkDerivedConfig options.text (pkgs.writeText "filename.conf")`.
+
+    It takes care of setting the right priority using `mkOverride`.
+  */
+  # TODO: make the module system error message include information about `opt` in
+  # error messages about conflicts. E.g. introduce a variation of `mkOverride` which
+  # adds extra location context to the definition object. This will allow context to be added
+  # to all messages that report option locations "this value was derived from <full option name>
+  # which was defined in <locations>". It can provide a trace of options that contributed
+  # to definitions.
+  mkDerivedConfig = opt: f:
+    mkOverride
+      (opt.highestPrio or defaultPriority)
+      (f opt.value);
 
   doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:

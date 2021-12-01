@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
-    url = "https://golang.org/dl/go${version}.${platform}.tar.gz";
+    url = "https://go.dev/dl/go${version}.${platform}.tar.gz";
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
 

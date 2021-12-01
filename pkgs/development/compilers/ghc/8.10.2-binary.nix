@@ -3,6 +3,8 @@
 , ncurses5
 , ncurses6, gmp, libiconv, numactl
 , llvmPackages
+, coreutils
+, targetPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -140,6 +142,19 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
+
 in
 
 stdenv.mkDerivation rec {
@@ -156,7 +171,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs =
-    lib.optionals useLLVM [ llvmPackages.llvm ]
     # Because musl bindists currently provide no way to tell where
     # libgmp is (see not [musl bindists have no .buildinfo]), we need
     # to propagate `gmp`, otherwise programs built by this ghc will
@@ -177,7 +191,7 @@ stdenv.mkDerivation rec {
     # fixing the above-mentioned release issue,
     # and for GHC >= 9.* it is not clear as of writing whether that switch
     # will be made there too.
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
+    lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -278,6 +292,15 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
+
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
   #     patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
@@ -360,7 +383,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -369,7 +391,9 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    # can't use env -i here because otherwise we don't find -lgmp on musl
+    env ${libEnvVar}= PATH= \
+      $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
@@ -377,6 +401,8 @@ stdenv.mkDerivation rec {
   passthru = {
     targetPrefix = "";
     enableShared = true;
+
+    inherit llvmPackages;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";

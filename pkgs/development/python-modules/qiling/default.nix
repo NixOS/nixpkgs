@@ -1,32 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , capstone
-, unicorn
-, pefile
-, python-registry
-, keystone-engine
-, pyelftools
+, fetchFromGitHub
+, fetchPypi
 , gevent
+, keystone-engine
+, multiprocess
+, pefile
+, pyelftools
+, python-registry
+, unicorn
 }:
+
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.3.0";
+  version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "084ad706f6803d7de2391eab928ecf4cb3e8d892fd2988666d4791a422d6ab9a";
+    sha256 = "sha256-xUoNHMyGN0G2itVcKLsk+7QKxZdguzyh6OZCqCHNB4Y=";
   };
 
   propagatedBuildInputs = [
     capstone
-    unicorn
-    pefile
-    python-registry
-    keystone-engine
-    pyelftools
     gevent
+    keystone-engine
+    multiprocess
+    pefile
+    pyelftools
+    python-registry
+    unicorn
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pefile==2021.5.24" "pefile>=2021.5.24"
+  '';
 
   # Tests are broken (attempt to import a file that tells you not to import it,
   # amongst other things)

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, epoxy
+, libepoxy
 , ffmpeg
 , imagemagick
 , libedit
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
-    epoxy
+    libepoxy
     ffmpeg
     imagemagick
     libedit

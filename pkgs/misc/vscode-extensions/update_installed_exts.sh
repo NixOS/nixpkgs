@@ -1,6 +1,22 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p curl jq unzip
+# shellcheck shell=bash
 set -eu -o pipefail
+
+# can be added to your configuration with the following command and snippet:
+# $ ./pkgs/misc/vscode-extensions/update_installed_exts.sh > extensions.nix
+#
+# packages = with pkgs;
+#   (vscode-with-extensions.override {
+#     vscodeExtensions = map
+#       (extension: vscode-utils.buildVscodeMarketplaceExtension {
+#         mktplcRef = {
+#          inherit (extension) name publisher version sha256;
+#         };
+#       })
+#       (import ./extensions.nix).extensions;
+#   })
+# ]
 
 # Helper to just fail with a message and non-zero exit code.
 function fail() {

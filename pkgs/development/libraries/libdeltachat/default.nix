@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.64.0";
+  version = "1.68.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = version;
-    sha256 = "04a1ncikapx53jjrx0ac1qi907wlj6javylz4aksg4nfbph6y9j4";
+    hash = "sha256-T49E9pGetJqO5qj014efioZtlHM9ZAxH9WzwVmk85XM=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0skrzxn99c1gqil7z0dv0xhg883k98v6mh96nycf7whl2d25965x";
+    hash = "sha256-jAL8siaMonTMYE88kK7E6RQesPahCLr082dHJovmoo0=";
   };
 
   nativeBuildInputs = [

@@ -95,7 +95,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
 
     # YARN cluster
     rm1 = {pkgs, options, ...}: {
-      virtualisation.memorySize = 1024;
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
@@ -103,7 +102,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
       };
     };
     rm2 = {pkgs, options, ...}: {
-      virtualisation.memorySize = 1024;
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;

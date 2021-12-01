@@ -39,11 +39,9 @@ stdenv.mkDerivation rec {
       devtools/sql-rewrite.py
   '';
 
-  configurePhase = ''
-    ./configure --prefix=$out --disable-developer --disable-valgrind
-  '';
+  configureFlags = [ "--disable-developer" "--disable-valgrind" ];
 
-  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
+  makeFlags = [ "VERSION=v${version}" ];
 
   enableParallelBuilding = true;
 

@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ dbus libpulseaudio notmuch openssl ];
 
-  cargoBuildFlags = [
-    "--features=notmuch"
-    "--features=maildir"
-    "--features=pulseaudio"
+  buildFeatures = [
+    "notmuch"
+    "maildir"
+    "pulseaudio"
   ];
 
   prePatch = ''

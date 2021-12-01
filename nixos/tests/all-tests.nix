@@ -228,9 +228,11 @@ in
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
-  lidarr = handleTest ./lidarr.nix {};
+  libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
+  lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   litestream = handleTest ./litestream.nix {};
@@ -341,8 +343,9 @@ in
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   packagekit = handleTest ./packagekit.nix {};
-  pam-oath-login = handleTest ./pam-oath-login.nix {};
-  pam-u2f = handleTest ./pam-u2f.nix {};
+  pam-file-contents = handleTest ./pam/pam-file-contents.nix {};
+  pam-oath-login = handleTest ./pam/pam-oath-login.nix {};
+  pam-u2f = handleTest ./pam/pam-u2f.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless-ng = handleTest ./paperless-ng.nix {};
@@ -484,10 +487,11 @@ in
   vault-postgresql = handleTest ./vault-postgresql.nix {};
   vaultwarden = handleTest ./vaultwarden.nix {};
   vector = handleTest ./vector.nix {};
+  vengi-tools = handleTest ./vengi-tools.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
-  vscodium = handleTest ./vscodium.nix {};
+  vscodium = discoverTests (import ./vscodium.nix);
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};

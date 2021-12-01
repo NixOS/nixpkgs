@@ -11,7 +11,7 @@
 , ncurses
 , readline
 , withGui ? false
-, gtk3 ? null
+, gtk3
 , wrapGAppsHook
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */
@@ -31,7 +31,6 @@
 , udev
 }:
 
-assert withGui -> gtk3 != null && wrapGAppsHook != null;
 assert withTeensyduino -> withGui;
 let
   externalDownloads = import ./downloads.nix {
@@ -76,12 +75,12 @@ let
                         else if stdenv.hostPlatform.isAarch32 then "linuxarm"
                         else throw "${stdenv.hostPlatform.system} is not supported in teensy";
 
-  flavor = (if withTeensyduino then "teensyduino" else "arduino")
+  pname = (if withTeensyduino then "teensyduino" else "arduino")
              + lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
+  inherit pname;
   version = "1.8.16";
-  name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
@@ -103,13 +102,12 @@ stdenv.mkDerivation rec {
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
     url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
-    sha256 =
-      {
-        linux64 = "sha256-VK+Skl2xjqPWYEEKt1CCLwBZRxoyRfYQ3/60Byen9po=";
-        linux32 = "sha256-fjqV4avddmWAdFqMuUNUcDguxv3SI45m5QHFiWP8EKE=";
-        linuxarm = "sha256-Br8vUN7njI7VCH+ZvUh44l8LcgW+61+Q0x2AiXxIhTM=";
-        linuxaarch64 = "sha256-bOizBUUuyINg0/EqEatBq9lECT97JXxKbesCGyCA3YQ=";
-      }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
+    sha256 = {
+      linux64 = "sha256-VK+Skl2xjqPWYEEKt1CCLwBZRxoyRfYQ3/60Byen9po=";
+      linux32 = "sha256-fjqV4avddmWAdFqMuUNUcDguxv3SI45m5QHFiWP8EKE=";
+      linuxarm = "sha256-Br8vUN7njI7VCH+ZvUh44l8LcgW+61+Q0x2AiXxIhTM=";
+      linuxaarch64 = "sha256-bOizBUUuyINg0/EqEatBq9lECT97JXxKbesCGyCA3YQ=";
+    }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
@@ -157,7 +155,7 @@ stdenv.mkDerivation rec {
   javaPath = lib.makeBinPath [ jdk ];
 
   # Everything else will be patched into rpath
-  rpath = (lib.makeLibraryPath [ zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc ]);
+  rpath = lib.makeLibraryPath [ zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc ];
 
   installPhase = ''
     mkdir -p $out/share/arduino

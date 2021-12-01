@@ -98,7 +98,7 @@ let
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "io_uring" "systemd" "syslog" ];
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
@@ -117,13 +117,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.2";
+      version = "0.23.4";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-gn06t8S0hh5xe5V1vnXVHSb0FwxY40onUV+Bt7oL9ic=";
+        sha256 = "sha256-siMFLV1fKdRt8To6AhLXmAAsgqZCA/bbvmlhbb6hLic=";
       };
 
       buildInputs = [

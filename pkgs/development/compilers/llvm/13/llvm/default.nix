@@ -46,7 +46,8 @@ in stdenv.mkDerivation (rec {
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ ncurses ]
+    ++ [ zlib ];
 
   checkInputs = [ which ];
 

@@ -21,13 +21,13 @@ mangleVarListGeneric() {
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gx ${outputVar}+=''
+    declare -gx "$outputVar"+=''
     # For each role we serve, we accumulate the input parameters into our own
     # cc-wrapper-derivation-specific environment variables.
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+$sep}${!inputVar}"
+            export "${outputVar}+=${!outputVar:+$sep}${!inputVar}"
         fi
     done
 }
@@ -42,7 +42,7 @@ mangleVarBool() {
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gxi ${outputVar}+=0
+    declare -gxi "${outputVar}+=0"
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
@@ -131,7 +131,7 @@ expandResponseParams() {
 }
 
 checkLinkType() {
-    local arg mode
+    local arg
     type="dynamic"
     for arg in "$@"; do
         if [[ "$arg" = -static ]]; then
@@ -146,7 +146,7 @@ checkLinkType() {
 # When building static-pie executables we cannot have rpath
 # set. At least glibc requires rpath to be empty
 filterRpathFlags() {
-    local linkType=$1 ret="" i
+    local linkType=$1 ret i
     shift
 
     if [[ "$linkType" == "static-pie" ]]; then
@@ -156,11 +156,11 @@ filterRpathFlags() {
                 # also skip its argument
                 shift
             else
-                ret+="$i "
+                ret+=("$i")
             fi
         done
     else
-        ret=$@
+        ret=("$@")
     fi
-    echo $ret
+    echo "${ret[@]}"
 }

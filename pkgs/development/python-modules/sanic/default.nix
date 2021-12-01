@@ -83,19 +83,16 @@ buildPythonPackage rec {
     "test_create_server_main_convenience"
     "test_debug"
     "test_auto_reload"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # https://github.com/sanic-org/sanic/issues/2298
     "test_no_exceptions_when_cancel_pending_request"
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    "test_ipv6_address_is_not_wrapped"
     # These appear to be very sensitive to output of commands
-    # Output is different on aarch64
-    "test_server_run"
-    "test_host_port"
-    "test_num_workers"
     "test_access_logs"
-    "test_version"
-    # Failing for a different reason than Darwin
+    "test_auto_reload"
+    "test_host_port"
     "test_no_exceptions_when_cancel_pending_request"
+    "test_num_workers"
+    "test_server_run"
+    "test_version"
   ];
 
   # avoid usage of nixpkgs-review in darwin since tests will compete usage

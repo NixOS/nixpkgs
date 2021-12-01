@@ -29,7 +29,6 @@ in {
     environment.systemPackages = with pkgs; [
       signal-desktop file sqlite sqlcipher-signal
     ];
-    virtualisation.memorySize = 1024;
   };
 
   enableOCR = true;

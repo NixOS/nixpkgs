@@ -243,6 +243,11 @@ let
             url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
             sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
           })
+          # Extract common logic from composePackage to a shell function
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
+            sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
+          })
         ];
       };
       postInstall = ''
@@ -304,18 +309,18 @@ let
 
     prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      version = "3.4.0";
+      version = "3.5.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-W0AFjVxPOLW5SEnf0ZwbOu4k8ElX98ioFC1E8Gb9Q/nuO2brEwxFJebXglfG+N6zphGbu2bG1I3VAu7aYzR3VA==";
+        sha512 = "sha512-WEYQ+H98O0yigG+lI0gfh4iyBChvnM6QTXPDtY9eFraLXAmyb6tf/T2mUdrUAU1AEvHLVzQA5A+RpONZlQozBg==";
       };
       dependencies = [ rec {
         name = "_at_prisma_slash_engines";
         packageName = "@prisma/engines";
-        version = "3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85";
+        version = "3.5.0-38.78a5df6def6943431f4c022e1428dbc3e833cf8e";
         src = fetchurl {
           url = "https://registry.npmjs.org/@prisma/engines/-/engines-${version}.tgz";
-          sha512 = "sha512-jyCjXhX1ZUbzA7+6Hm0iEdeY+qFfpD/RB7iSwMrMoIhkVYvnncSdCLBgbK0yqxTJR2nglevkDY2ve3QDxFciMA==";
+          sha512 = "sha512-MqZUrxuLlIbjB3wu8LrRJOKcvR4k3dunKoI4Q2bPfAwLQY0XlpsLZ3TRVW1c32ooVk939p6iGNkaCUo63Et36g==";
         };
       }];
       postInstall = with pkgs; ''
@@ -339,6 +344,19 @@ let
         ]}
       '';
     };
+
+    reveal-md = super.reveal-md.override (
+      lib.optionalAttrs (!stdenv.isDarwin) {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        prePatch = ''
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+        '';
+        postInstall = ''
+          wrapProgram $out/bin/reveal-md \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+        '';
+      }
+    );
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
@@ -374,6 +392,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
+      nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
     };
 

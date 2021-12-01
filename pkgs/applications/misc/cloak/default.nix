@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cloak";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0af38wgwmsamnx63dwfm2nrkd8wmky3ai7zwy0knmifgkn4b7yyj";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     homepage = "https://github.com/evansmurithi/cloak";

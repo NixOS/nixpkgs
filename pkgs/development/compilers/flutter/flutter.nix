@@ -156,7 +156,10 @@ runCommand drvName
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;
-  passthru = { unwrapped = flutter; };
+  passthru = {
+    unwrapped = flutter;
+    inherit dart;
+  };
   meta = with lib; {
     description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
     longDescription = ''
@@ -166,7 +169,7 @@ runCommand drvName
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ babariviere ericdallo thiagokokada ];
+    maintainers = with maintainers; [ babariviere ericdallo ];
   };
 } ''
   mkdir -p $out/bin

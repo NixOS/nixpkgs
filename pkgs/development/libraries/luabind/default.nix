@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "luabind";
     repo = "luabind";
-    rev = version;
+    rev = "v${version}";
     sha256 = "sha256-sK1ca2Oj9yXdmxyXeDO3k8YZ1g+HxIXLhvdTWdPDdag=";
   };
 

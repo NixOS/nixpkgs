@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk3 ] ++ lib.optional withWayland gtk-layer-shell;
 
-  cargoBuildFlags = [ "--bin" "eww" ] ++ lib.optionals withWayland [
-    "--no-default-features"
-    "--features=wayland"
-  ];
+  buildNoDefaultFeatures = withWayland;
+  buildFeatures = lib.optional withWayland "wayland";
+
+  cargoBuildFlags = [ "--bin" "eww" ];
 
   cargoTestFlags = cargoBuildFlags;
 

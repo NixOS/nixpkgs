@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "actionlint";
-  version = "1.6.6";
+  version = "1.6.8";
 
   subPackages = [ "cmd/actionlint" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "rhysd";
     repo = "actionlint";
     rev = "v${version}";
-    sha256 = "17c6952cjdpbl70lnn34pl3njrvpqmdbgnrm1q69kx94bni1slnz";
+    sha256 = "sha256-wjLY40bxpoMk6YIG/4KbjxSWUDVNn3cX5OcsgfEPjzk=";
   };
 
-  vendorSha256 = "1i7442n621jmc974b73pfz1gyqw74ilpg1zz16yxqpfh5c958m7n";
+  vendorSha256 = "sha256-J/DlugisnCvbYpqMQuyISyiKHB0hepHrQKsnzSes2zs=";
 
   nativeBuildInputs = [ ronn installShellFiles ];
 

@@ -1,22 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.20.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ittOVWsM+1IaILCLCJNOeLxRbRHiiMN4qgLTS9gxV0w=";
+    sha256 = "sha256-weLzW1pyv9q9VKvFxno+f/L29wlpvxlVUZJUwx6Gn2A=";
   };
 
-  vendorSha256 = "sha256-HrDj09gUJtkZhQ3nYfoj0K8+T62ib0CWAhhcuvg8cyc=";
+  vendorSha256 = "sha256-1kQ2m8gFBHKznbjNPtYN0BVrRbxyCs2H1f7+XZqgVvc=";
 
   excludedPackages = "misc";
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   doInstallCheck = true;

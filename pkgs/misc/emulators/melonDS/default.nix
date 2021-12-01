@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , mkDerivation
 , cmake
-, epoxy
+, libepoxy
 , libarchive
 , libpcap
 , libslirp
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    epoxy
+    libepoxy
     libarchive
     libslirp
     qtbase

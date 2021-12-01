@@ -1,11 +1,11 @@
 { lib, fetchpatch, fetchzip, yarn2nix-moretea, nodejs, jq, dos2unix }:
 
 yarn2nix-moretea.mkYarnPackage rec {
-  version = "0.8.98";
+  version = "0.9.50";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/meshcentral/-/meshcentral-${version}.tgz";
-    sha256 = "0120csvak07mkgaiq4sxyslcipgfgal0mhd8gwywcij2s71a3n26";
+    sha256 = "0igkl2ip2mas3djg1rmw209xar1kfiqy277r2lzi5zcnn4hh820m";
   };
 
   packageJSON = ./package.json;
@@ -27,6 +27,8 @@ yarn2nix-moretea.mkYarnPackage rec {
   '';
 
   publishBinsFor = [ ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Computer management web app";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
+{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { python3 = python; };
@@ -17,7 +17,11 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
   PYARROW_BUILD_TYPE = "release";
+
+  PYARROW_WITH_DATASET = true;
+  PYARROW_WITH_FLIGHT = _arrow-cpp.enableFlight;
   PYARROW_WITH_PARQUET = true;
+
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
 
@@ -25,9 +29,13 @@ buildPythonPackage rec {
     # ourselves
     "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
+
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _arrow-cpp;
 
+  ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
+
+  doCheck = true;
   dontUseCmakeConfigure = true;
 
   preBuild = ''
@@ -44,6 +52,9 @@ buildPythonPackage rec {
     # Deselect a parquet dataset test because it erroneously fails to find the
     # pyarrow._dataset module.
     "--deselect=pyarrow/tests/parquet/test_dataset.py::test_parquet_dataset_deprecated_properties"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Requires loopback networking
+    "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -59,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ veprbl cpcloud ];
   };
 }

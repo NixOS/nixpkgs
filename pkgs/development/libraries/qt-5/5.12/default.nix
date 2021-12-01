@@ -70,6 +70,17 @@ let
       # Ensure -I${includedir} is added to Cflags in pkg-config files.
       # See https://github.com/NixOS/nixpkgs/issues/52457
       ./qtbase.patch.d/0014-qtbase-pkg-config.patch
+
+      # Make Qt applications work on macOS Big Sur even if they're
+      # built with an older version of the macOS SDK (<10.14). This
+      # issue is fixed in 5.12.11, but it requires macOS SDK 10.13 to
+      # build. See https://bugreports.qt.io/browse/QTBUG-87014 for
+      # more info.
+      (fetchpatch {
+        name = "big_sur_layer_backed_views.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=c5d904639dbd690a36306e2b455610029704d821";
+        sha256 = "0crkw3j1iwdc1pbf5dhar0b4q3h5gs2q1sika8m12y02yk3ns697";
+      })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtlocation = [ ./qtlocation-gcc-9.patch ];

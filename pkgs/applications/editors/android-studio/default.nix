@@ -13,8 +13,8 @@ let
     sha256Hash = "10gpwb130bzp6a9g958cjqcb2gsm0vdgm08nm5xy45xdh54nxjfg";
   };
   betaVersion = {
-    version = "2021.1.1.15"; # "Android Studio Bumblebee (2021.1.1) Beta 2"
-    sha256Hash = "sha256-J+Jw9F8pEE0SMWka//jADOiQ+GSOeRf5GBfp0RDtwqA=";
+    version = "2021.1.1.17"; # "Android Studio Bumblebee (2021.1.1) Beta 4"
+    sha256Hash = "5WLUgCmdrK0PArc4eQQTNbEokq4DReKRwsZOWKb+Td4=";
   };
   latestVersion = { # canary & dev
     version = "2021.2.1.3"; # "Android Studio Chipmunk (2021.2.1) Canary 3"

@@ -6,6 +6,7 @@
 , cxxopts
 , ghc_filesystem
 , pybind11
+, pytestCheckHook
 , pythonOlder
 , psutil
 , setuptools-scm
@@ -13,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "chiapos";
-  version = "1.0.4";
+  version = "1.0.6";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-flI1vwtD0H28UDMcEEELECewkXZ6vf/XEYMqRKy5R6w=";
+    sha256 = "sha256-Zh5AULPgbG0oYPcBZMp/vm94MPyfdtYn4P5V+1LeMqA=";
   };
 
   patches = [
@@ -34,7 +35,11 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [ psutil ];
+  checkInputs = [
+    psutil
+    pytestCheckHook
+  ];
+
 
   # CMake needs to be run by setuptools rather than by its hook
   dontConfigure = true;

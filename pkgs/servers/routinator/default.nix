@@ -20,9 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoBuildFlags = [ "--no-default-features" "--features=socks" ];
-
-  cargoTestFlags = cargoBuildFlags;
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "socks" ];
 
   meta = with lib; {
     description = "An RPKI Validator written in Rust";

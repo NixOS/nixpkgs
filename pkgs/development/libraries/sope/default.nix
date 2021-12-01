@@ -4,13 +4,13 @@ with lib;
 
 gnustep.stdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOPE-${version}";
-    sha256 = "14s9rcnglkwl0nmbmpdxxbiqqnr3m8n7x69idm1crgbbjkj4gi68";
+    sha256 = "0xqa7fsf60acbri5dd9x8nmf1zdkalxnmkm559w4xz7sdi569ssa";
   };
 
   hardeningDisable = [ "format" ];

@@ -58,7 +58,7 @@ let
     setuptools
   ]);
 
-  isx86 = stdenv.isx86_64 || stdenv.isi686;
+  isx86 = stdenv.hostPlatform.isx86;
 
   # Dell isn't supported on Aarch64
   haveDell = isx86;

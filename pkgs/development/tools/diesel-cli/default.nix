@@ -21,9 +21,6 @@ assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysq
 
 let
   inherit (lib) optional optionals optionalString;
-  features = optional sqliteSupport "sqlite"
-    ++ optional postgresqlSupport "postgres"
-    ++ optional mysqlSupport "mysql";
 in
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-mRdDc4fHMkwkszY+2l8z1RSNMEQnrWI5/Y0Y2W+guQE=";
   };
 
-  cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
   cargoSha256 = "sha256-sQ762Ss31sA5qALHzwkvwbfRXo00cCtqzQyoz3/zf6I=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
@@ -47,6 +43,11 @@ rustPlatform.buildRustPackage rec {
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
     ++ optionals mysqlSupport [ mariadb zlib ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = optional sqliteSupport "sqlite"
+    ++ optional postgresqlSupport "postgres"
+    ++ optional mysqlSupport "mysql";
 
   checkPhase = ''
     runHook preCheck

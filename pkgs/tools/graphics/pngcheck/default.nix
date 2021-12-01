@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.unx --replace "gcc" "clang"
+  '';
+
   makefile = "Makefile.unx";
   makeFlags = [ "ZPATH=${zlib.static}/lib" ];
 
@@ -21,10 +25,11 @@ stdenv.mkDerivation rec {
     cp pngcheck $out/bin/pngcheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
-    license = lib.licenses.free;
-    platforms = with lib.platforms; linux;
+    license = licenses.free;
+    platforms = with platforms; [ unix ];
+    maintainers = with maintainers; [ starcraft66 ];
   };
 }

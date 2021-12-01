@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.43.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "python-pinyin";
     rev = "v${version}";
-    sha256 = "0h3lpb8bw9zp8is5sx2zg931wz12x0zfan1kksnbhx16vwv1kgw3";
+    sha256 = "sha256-LYiiZvpM/V3QRyTUXGWGnSnR0AnqWfTW0xJB4Vnw7lI=";
   };
 
   postPatch = ''

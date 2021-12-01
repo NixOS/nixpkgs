@@ -6,7 +6,7 @@
  ppx_sexp_value, ppx_typerep_conv, ppx_variants_conv}:
 
 buildOcamlJane {
-  name = "ppx_jane";
+  pname = "ppx_jane";
   hash  = "1la0rp8fhzfglwb15gqh1pl1ld8ls4cnidaw9mjc5q1hb0yj1qd9";
   propagatedBuildInputs =
     [ ppx_assert ppx_bench ppx_bin_prot ppx_compare ppx_custom_printf
