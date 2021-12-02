@@ -3369,6 +3369,7 @@ with pkgs;
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
+  nix-direnv-flakes = callPackage ../tools/misc/nix-direnv { enableFlakes = true; };
 
   nix-output-monitor = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-output-monitor);
 
@@ -13414,8 +13415,6 @@ with pkgs;
   });
 
   ### End of CuboCore
-
-  lush2 = callPackage ../development/interpreters/lush {};
 
   maude = callPackage ../development/interpreters/maude {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
@@ -27471,6 +27470,10 @@ with pkgs;
     wxGTK = wxGTK30-gtk3;
   };
 
+  jpsxdec = callPackage ../tools/games/jpsxdec {
+    jdk = openjdk8;
+  };
+
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
   pekwm = callPackage ../applications/window-managers/pekwm { };
@@ -28765,6 +28768,10 @@ with pkgs;
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
+
+  vengi-tools = callPackage ../applications/graphics/vengi-tools {
+    inherit (darwin.apple_sdk.frameworks) Carbon OpenCL;
+  };
 
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;
@@ -31498,7 +31505,7 @@ with pkgs;
   cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10 ocamlPackages_4_12;
   }) mkCoqPackages
     coqPackages_8_5  coq_8_5
     coqPackages_8_6  coq_8_6

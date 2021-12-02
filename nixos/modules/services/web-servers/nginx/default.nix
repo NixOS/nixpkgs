@@ -79,6 +79,11 @@ let
       # we use a list of mime types from the mailcap package, which is also
       # used by most other Linux distributions by default.
       include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
+      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # overwrite it because nginx does not allow duplicated settings.
+      types_hash_max_size 4096;
+
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
@@ -113,7 +118,6 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
