@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
+  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
+
   postInstall = ''
     for shell in bash fish zsh; do
       STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell

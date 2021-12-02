@@ -394,6 +394,7 @@ mapAliases ({
   julia_1 = throw "julia_1 has been deprecated in favor of julia_10 as it was ambiguous"; # added 2021-03-13
   julia_11 = throw "julia_11 has been deprecated in favor of the latest stable version"; # added 2020-09-15
   julia_13 = throw "julia_13 has been deprecated in favor of the latest stable version"; # added 2021-03-13
+  julia_10-bin = throw "julia_10-bin has been deprecated in favor of the latest LTS version"; # added 2021-12-02
   kbdKeymaps = throw "kbdKeymaps is not needed anymore since dvp and neo are now part of kbd"; # added 2021-04-11
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
