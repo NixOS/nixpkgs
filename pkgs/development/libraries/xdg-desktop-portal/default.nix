@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nixosTests
-, substituteAll
-, autoreconfHook
-, pkg-config
-, libxml2
-, glib
-, pipewire
-, flatpak
-, gsettings-desktop-schemas
+{ lib
 , acl
+, autoreconfHook
 , dbus
+, fetchFromGitHub
+, fetchpatch
+, flatpak
 , fuse
-, libportal
 , geoclue2
+, glib
+, gsettings-desktop-schemas
 , json-glib
+, libportal
+, libxml2
+, nixosTests
+, pipewire
+, pkg-config
+, stdenv
+, substituteAll
 , wrapGAppsHook
 }:
 
@@ -42,22 +43,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     libxml2
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
-    glib
-    pipewire
-    flatpak
     acl
     dbus
-    geoclue2
+    flatpak
     fuse
-    libportal
+    geoclue2
+    glib
     gsettings-desktop-schemas
     json-glib
+    libportal
+    pipewire
   ];
 
   configureFlags = [
