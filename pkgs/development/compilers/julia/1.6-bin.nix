@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "High-level, high-performance dynamic language for technical computing.";
+    description = "High-level, high-performance, dynamic language for technical computing";
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
