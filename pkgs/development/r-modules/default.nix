@@ -489,6 +489,7 @@ let
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     NanoMethViz = [ pkgs.zlib.dev ];
+    RcppMeCab = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -636,6 +637,7 @@ let
     PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    RcppMeCab = [ pkgs.mecab ];
   };
 
   packagesRequiringX = [
