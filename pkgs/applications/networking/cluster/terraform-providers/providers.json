@@ -708,10 +708,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/nomad",
     "repo": "terraform-provider-nomad",
-    "rev": "v1.4.15",
-    "sha256": "18rrvp7h27f51di8hajl2jb53v7wadqv4241rxdx1d180fas69k1",
-    "vendorSha256": "1y5wpilnqn17zbi88z23159gx2p57a9c10ajb7gn9isbxfdqj9mb",
-    "version": "1.4.15"
+    "rev": "v1.4.16",
+    "sha256": "11pw1ss4rk8hmfk0q9n8nim441ig0cgl1qxsjzcfsznkp5bb11rw",
+    "vendorSha256": "0b813dnkn15sdgvi4lh1l5fppgivzrcv5w56w0yf98vyy8wq7p0j",
+    "version": "1.4.16"
   },
   "ns1": {
     "owner": "terraform-providers",
