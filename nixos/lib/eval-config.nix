@@ -52,6 +52,11 @@ let
     };
   };
 
+  withWarnings = x:
+    lib.warnIf (evalConfigArgs?args) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
+    lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    x;
+
   legacyModules =
     lib.optional (evalConfigArgs?args) {
       config = {
@@ -83,7 +88,7 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-in {
+in withWarnings {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
