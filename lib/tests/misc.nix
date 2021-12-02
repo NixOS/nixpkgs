@@ -781,6 +781,22 @@ runTests {
       "a2-b"
       "_bc'de"
     ];
-    expected = "\".\".foo.\"2\".a2-b._bc'de";
+    expected = ''".".foo."2".a2-b._bc'de'';
+  };
+
+  testGroupBy = {
+    expr = groupBy (n: toString (mod n 5)) (range 0 16);
+    expected = {
+      "0" = [ 0 5 10 15 ];
+      "1" = [ 1 6 11 16 ];
+      "2" = [ 2 7 12 ];
+      "3" = [ 3 8 13 ];
+      "4" = [ 4 9 14 ];
+    };
+  };
+
+  testGroupBy' = {
+    expr = groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ];
+    expected = { false = 3; true = 12; };
   };
 }
