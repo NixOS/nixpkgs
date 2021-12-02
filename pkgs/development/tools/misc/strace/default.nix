@@ -6,11 +6,11 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.14";
+  version = "5.15";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-kBvubbXhfeutRTDdn/tNyalsSmVu2+HDFBt8swexHnM=";
+    sha256 = "sha256-68rCLylzNSlNxlRCXLw84BM0O+zm2iaZ467Iau6Nctw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
