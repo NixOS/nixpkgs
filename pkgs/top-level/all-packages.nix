@@ -9799,7 +9799,9 @@ with pkgs;
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  sks = callPackage ../servers/sks { };
+  sks = callPackage ../servers/sks {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   skydns = callPackage ../servers/skydns { };
 
