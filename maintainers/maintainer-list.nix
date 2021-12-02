@@ -6580,7 +6580,7 @@
     githubId = 4158274;
     name = "Michiel Leenaars";
   };
-  legendofmiracles = {
+  lom = {
     email = "legendofmiracles@protonmail.com";
     matrix = "@legendofmiracles:matrix.org";
     github = "legendofmiracles";
