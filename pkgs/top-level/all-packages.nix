@@ -2652,6 +2652,8 @@ with pkgs;
 
   dabtools = callPackage ../applications/radio/dabtools { };
 
+  daedalus = callPackage ../applications/blockchains/daedalus { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dale = callPackage ../development/compilers/dale { };
