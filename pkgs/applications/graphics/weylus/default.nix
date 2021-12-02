@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
   };
 }

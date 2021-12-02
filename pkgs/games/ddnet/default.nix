@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ddnet.tw";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju legendofmiracles ];
+    maintainers = with maintainers; [ sirseruju lom ];
     mainProgram = "DDNet";
   };
 }

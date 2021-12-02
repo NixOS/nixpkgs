@@ -1996,6 +1996,8 @@ with pkgs;
 
   asmfmt = callPackage ../development/tools/asmfmt { };
 
+  asmrepl = callPackage ../development/interpreters/asmrepl { };
+
   aspcud = callPackage ../tools/misc/aspcud { };
 
   at = callPackage ../tools/system/at { };
