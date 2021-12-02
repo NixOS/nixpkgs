@@ -558,8 +558,8 @@ nvim-telescope/telescope-z.nvim@main
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter-refactor
-nvim-treesitter/nvim-treesitter-textobjects@0.5-compat
-nvim-treesitter/nvim-treesitter@0.5-compat
+nvim-treesitter/nvim-treesitter-textobjects
+nvim-treesitter/nvim-treesitter
 nvim-treesitter/playground
 oberblastmeister/neuron.nvim
 oberblastmeister/termwrapper.nvim
