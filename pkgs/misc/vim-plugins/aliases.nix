@@ -52,6 +52,7 @@ mapAliases (with prev; {
   command_T           = command-t; # backwards compat, added 2014-10-18
   commentary          = vim-commentary;
   committia           = committia-vim;
+  compe-tmux          = cmp-tmux;
   concealedyank       = concealedyank-vim;
   context-filetype    = context_filetype-vim;
   Cosco               = cosco-vim;
