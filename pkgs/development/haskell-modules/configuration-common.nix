@@ -1338,7 +1338,7 @@ self: super: {
   graphql-engine = overrideCabal (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.9";
+    version = "2.0.10";
   }) (super.graphql-engine.overrideScope (self: super: {
     immortal = self.immortal_0_2_2_1;
     resource-pool = self.hasura-resource-pool;
