@@ -597,8 +597,13 @@ class Machine:
                 break
         return "".join(output_buffer)
 
-    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
+    def execute(
+        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+    ) -> Tuple[int, str]:
         self.connect()
+
+        if timeout is not None:
+            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
 
         out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
         assert self.shell
@@ -629,12 +634,12 @@ class Machine:
             pass_fds=[self.shell.fileno()],
         )
 
-    def succeed(self, *commands: str) -> str:
+    def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
         """Execute each command and check that it succeeds."""
         output = ""
         for command in commands:
             with self.nested("must succeed: {}".format(command)):
-                (status, out) = self.execute(command)
+                (status, out) = self.execute(command, timeout=timeout)
                 if status != 0:
                     self.log("output: {}".format(out))
                     raise Exception(
@@ -643,12 +648,12 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str) -> str:
+    def fail(self, *commands: str, timeout: Optional[int] = None) -> str:
         """Execute each command and check that it fails."""
         output = ""
         for command in commands:
             with self.nested("must fail: {}".format(command)):
-                (status, out) = self.execute(command)
+                (status, out) = self.execute(command, timeout=timeout)
                 if status == 0:
                     raise Exception(
                         "command `{}` unexpectedly succeeded".format(command)
@@ -664,14 +669,14 @@ class Machine:
 
         def check_success(_: Any) -> bool:
             nonlocal output
-            status, output = self.execute(command)
+            status, output = self.execute(command, timeout=timeout)
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
             retry(check_success, timeout)
             return output
 
-    def wait_until_fails(self, command: str) -> str:
+    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns failure.
         Throws an exception on timeout.
         """
@@ -679,7 +684,7 @@ class Machine:
 
         def check_failure(_: Any) -> bool:
             nonlocal output
-            status, output = self.execute(command)
+            status, output = self.execute(command, timeout=timeout)
             return status != 0
 
         with self.nested("waiting for failure: {}".format(command)):

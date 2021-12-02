@@ -2,8 +2,8 @@
 { lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "waitron-unstable-${version}";
-  version = "2020-01-24";
+  pname = "waitron";
+  version = "unstable-2020-01-24";
   rev = "c96833619cbb0cf2bc71b1d7b534101e139cc6e6";
 
   goPackagePath = "github.com/ns1/waitron";
