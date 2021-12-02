@@ -4,9 +4,7 @@
 , meson
 , ninja
 , gtk3
-, breeze-icons
-, gnome
-, pantheon
+, adwaita-icon-theme
 , hicolor-icon-theme
 }:
 
@@ -28,9 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
-    gnome.adwaita-icon-theme
-    pantheon.elementary-icon-theme
+    adwaita-icon-theme
     hicolor-icon-theme
   ];
 
