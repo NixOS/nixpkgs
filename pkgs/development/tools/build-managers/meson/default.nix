@@ -54,6 +54,10 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # Meson tries to update ld.so.cache which breaks when the target architecture
+    # differs from the build host's.
+    ./do-not-update-ldconfig-cache.patch
   ];
 
   setupHook = ./setup-hook.sh;
