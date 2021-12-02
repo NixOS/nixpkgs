@@ -22,14 +22,16 @@ let
     };
   };
   tests = {
-    add-flags = makeGoldenTest { name = "add-flags"; filename = ./add-flags.c; };
-    argv0 = makeGoldenTest { name = "argv0"; filename = ./argv0.c; };
     basic = makeGoldenTest { name = "basic"; filename = ./basic.c; };
-    combination = makeGoldenTest { name = "combination"; filename = ./combination.c; };
+    argv0 = makeGoldenTest { name = "argv0"; filename = ./argv0.c; };
+    inherit_argv0 = makeGoldenTest { name = "inherit-argv0"; filename = ./inherit-argv0.c; };
     env = makeGoldenTest { name = "env"; filename = ./env.c; };
+    invalid_env = makeGoldenTest { name = "invalid-env"; filename = ./invalid-env.c; };
     prefix = makeGoldenTest { name = "prefix"; filename = ./prefix.c; };
     suffix = makeGoldenTest { name = "suffix"; filename = ./suffix.c; };
-    invalid-env = makeGoldenTest { name = "invalid-env"; filename = ./invalid-env.c; };
+    add_flags = makeGoldenTest { name = "add-flags"; filename = ./add-flags.c; };
+    chdir = makeGoldenTest { name = "chdir"; filename = ./chdir.c; };
+    combination = makeGoldenTest { name = "combination"; filename = ./combination.c; };
   };
 in runCommand "make-binary-wrapper-test" {
   passthru = tests;
