@@ -119,9 +119,6 @@ let
         '';
       };
 
-      azure-appconfiguration = overrideAzureMgmtPackage super.azure-appconfiguration "1.1.1" "zip"
-        "sha256-uDzSy2PZMiXehOJ6u/wFkhL43id2b0xY3Tq7g53/C+Q=";
-
       azure-batch = overrideAzureMgmtPackage super.azure-batch "11.0.0" "zip"
         "83d7a2b0be42ca456ac2b56fa3dc6ce704c130e888d37d924072c1d3718f32da";
 
@@ -310,6 +307,17 @@ let
 
       azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "0.7.0" "tar.gz"
         "cd4f184be8c9ca8aca969f93ed50dc7fe556d28ca11520440fc182cf876abdf9";
+
+      azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
+        version = "1.1.1";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uDzSy2PZMiXehOJ6u/wFkhL43id2b0xY3Tq7g53/C+Q=";
+          extension = "zip";
+        };
+      });
 
       azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
         version = "0.60.0";

@@ -3398,6 +3398,8 @@ in {
 
   grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
 
+  grpcio-status = callPackage ../development/python-modules/grpcio-status { };
+
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
   gruut = callPackage ../development/python-modules/gruut { };
@@ -3960,6 +3962,8 @@ in {
 
   jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
 
+  jaraco-context = callPackage ../development/python-modules/jaraco-context { };
+
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
   jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
@@ -4035,6 +4039,8 @@ in {
   };
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
+
+  jschema-to-python = callPackage ../development/python-modules/jschema-to-python { };
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
@@ -4266,6 +4272,8 @@ in {
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
+
+  language-data = callPackage ../development/python-modules/language-data { };
 
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
@@ -8460,6 +8468,8 @@ in {
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
+
+  sarif-om = callPackage ../development/python-modules/sarif-om { };
 
   sarge = callPackage ../development/python-modules/sarge { };
 

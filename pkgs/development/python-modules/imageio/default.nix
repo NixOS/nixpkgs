@@ -7,15 +7,16 @@
 , pillow
 , psutil
 , pytestCheckHook
+, tifffile
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.9.0";
+  version = "2.12.0";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "52ddbaeca2dccf53ba2d6dec5676ca7bc3b2403ef8b37f7da78b7654bb3e10f0";
+    sha256 = "c416dd68328ace8536ff333cbb8927954036be56e201fed416e53e8f95e08a6c";
     inherit pname version;
   };
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   checkInputs = [
     psutil
     pytestCheckHook
+    tifffile
   ];
 
   preCheck = ''
@@ -35,6 +37,20 @@ buildPythonPackage rec {
     export IMAGEIO_NO_INTERNET="true"
     export HOME="$(mktemp -d)"
   '';
+
+  disabledTests = [
+    # tries to pull remote resources, even with IMAGEIO_NO_INTERNET
+    "test_png_remote"
+    # needs git history
+    "test_mvolread_out_of_bytes"
+    "test_imiter"
+    "test_memory_size"
+    "test_legacy_write_empty"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_pillow.py"
+  ];
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";

@@ -11,6 +11,7 @@
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
   version = "0.7.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "corrscope";
@@ -18,8 +19,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     rev = version;
     sha256 = "0c9kmrw6pcda68li04b5j2kmsgdw1q463qlc32wn96zn9hl82v6m";
   };
-
-  format = "pyproject";
 
   patches = [
     # Remove when bumping past 0.7.1
@@ -30,11 +29,28 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ] ++ (with python3Packages; [ poetry-core ]);
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ] ++ (with python3Packages; [
+    poetry-core
+  ]);
 
-  buildInputs = [ ffmpeg qtbase ];
+  buildInputs = [
+    ffmpeg
+    qtbase
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel-yaml ];
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    atomicwrites
+    attrs
+    click
+    matplotlib
+    numpy
+    packaging
+    pyqt5
+    ruamel-yaml
+  ];
 
   dontWrapQtApps = true;
 

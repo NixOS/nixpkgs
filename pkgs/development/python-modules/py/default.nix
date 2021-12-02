@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "py";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3";
+    sha256 = "51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719";
   };
 
   # Circular dependency on pytest
