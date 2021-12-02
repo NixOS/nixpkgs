@@ -12956,12 +12956,6 @@
     githubId = 1772064;
     name = "Tim Zook";
   };
-  zoomulator = {
-    email = "zoomulator@gmail.com";
-    github = "zoomulator";
-    githubId = 1069303;
-    name = "Kim Simmons";
-  };
   zopieux = {
     email = "zopieux@gmail.com";
     github = "zopieux";
