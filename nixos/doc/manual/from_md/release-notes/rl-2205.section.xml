@@ -24,7 +24,7 @@
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <literal>pkgs.ghc</literal> now refers to
@@ -44,6 +44,17 @@
           <literal>buildPackages.ghc</literal> instead to ensure cross
           compilation keeps working (or switch to
           <literal>haskellPackages.callPackage</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.emacsPackages.orgPackages</literal> is removed
+          because org elpa is deprecated. The packages in the top level
+          of <literal>pkgs.emacsPackages</literal>, such as org and
+          org-contrib, refer to the ones in
+          <literal>pkgs.emacsPackages.elpaPackages</literal> and
+          <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
+          new versions will release.
         </para>
       </listitem>
     </itemizedlist>
