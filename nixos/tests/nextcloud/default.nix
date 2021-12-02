@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
 }:
 
 with pkgs.lib;
@@ -17,5 +17,5 @@ foldl
       nextcloudVersion = ver;
     };
   })
-  {}
-  [ 21 22 ]
+{ }
+  [ 21 22 23 ]

@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud21" "nextcloud22" ];
+      relatedPackages = [ "nextcloud21" "nextcloud22" "nextcloud23" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -508,7 +508,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 22;
+        latest = 23;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -543,6 +543,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -573,7 +574,8 @@ in {
           # nextcloud20 throws an eval-error because it's dropped).
           else if versionOlder stateVersion "21.03" then nextcloud20
           else if versionOlder stateVersion "21.11" then nextcloud21
-          else nextcloud22
+          else if versionOlder stateVersion "22.05" then nextcloud22
+          else nextcloud23
         );
 
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
