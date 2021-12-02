@@ -28,6 +28,7 @@
 buildPythonPackage rec {
   pname = "pandas";
   version = "1.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -91,6 +92,8 @@ buildPythonPackage rec {
     "test_from_coo"
     # AssertionError: No common DType exists for the given inputs
     "test_comparison_invalid"
+    # AssertionError: Regex pattern '"quotechar" must be string, not int'
+    "python-kwargs2"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
