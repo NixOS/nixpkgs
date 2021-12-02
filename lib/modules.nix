@@ -101,9 +101,26 @@ rec {
                   check ? true
                 }:
     let
+      legacyModules =
+        optional (evalModulesArgs?args) {
+          config = {
+            _module.args = args;
+          };
+        }
+        ++ optional (evalModulesArgs?check) {
+          config = {
+            _module.check = mkDefault check;
+          };
+        };
+      regularModules = modules ++ legacyModules;
+
       # This internal module declare internal options under the `_module'
       # attribute.  These options are fragile, as they are used by the
       # module system to change the interpretation of modules.
+      #
+      # When extended with extendModules or moduleType, a fresh instance of
+      # this module is used, to avoid conflicts and allow chaining of
+      # extendModules.
       internalModule = rec {
         _file = ./modules.nix;
 
@@ -125,7 +142,7 @@ rec {
           _module.check = mkOption {
             type = types.bool;
             internal = true;
-            default = check;
+            default = true;
             description = "Whether to check whether all option definitions have matching declarations.";
           };
 
@@ -151,14 +168,14 @@ rec {
           _module.args = {
             inherit extendModules;
             moduleType = type;
-          } // args;
+          };
         };
       };
 
       merged =
         let collected = collectModules
           (specialArgs.modulesPath or "")
-          (modules ++ [ internalModule ])
+          (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
         in mergeModules prefix (reverseList collected);
 
@@ -222,7 +239,7 @@ rec {
         prefix ? [],
         }:
           evalModules (evalModulesArgs // {
-            modules = evalModulesArgs.modules ++ modules;
+            modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix;
           });
