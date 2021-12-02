@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "13.22.0";
+  version = "13.22.1";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "sha256-jMFTNyGdegdBO+f6Pw36iuhvyzcM8rCbnfSyLSOiEjY=";
+    sha256 = "sha256-uqdKiBZ290mG0JNi17EjimfES6bN3q1hF6LXs3URTZ8=";
   };
 
   buildInputs = [ ruby ];
