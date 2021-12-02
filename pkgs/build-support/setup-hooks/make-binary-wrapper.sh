@@ -14,6 +14,8 @@ assertExecutable() {
 # ARGS:
 # --argv0       NAME    : set name of executed process to NAME
 #                         (otherwise it’s called …-wrapped)
+# --inherit-argv0       : the executable inherits argv0 from the wrapper.
+#                         (use instead of --argv0 '$0')
 # --set         VAR VAL : add VAR with value VAL to the executable’s
 #                         environment
 # --set-default VAR VAL : like --set, but only adds VAR if not already set in
@@ -45,7 +47,7 @@ wrapProgramBinary() {
     mv "$prog" "$hidden"
     # Silence warning about unexpanded $0:
     # shellcheck disable=SC2016
-    makeBinaryWrapper "$hidden" "$prog" --argv0 '$0' "${@:2}"
+    makeBinaryWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 
 # Generate source code for the wrapper in such a way that the wrapper source code
@@ -63,7 +65,7 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
-    local argv0 n params cmd main flagsBefore flags executable params length
+    local argv0 inherit_argv0 n params cmd main flagsBefore flags executable params length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -124,8 +126,13 @@ makeCWrapper() {
             ;;
             --argv0)
                 argv0=$(escapeStringLiteral "${params[n + 1]}")
+                inherit_argv0=
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
+            --inherit-argv0)
+                # Whichever comes last of --argv0 and --inherit-argv0 wins
+                inherit_argv0=1
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
                 main="$main    #error makeCWrapper: Uknown argument ${p}"$'\n'
@@ -134,7 +141,7 @@ makeCWrapper() {
     done
     # shellcheck disable=SC2086
     [ -z "$flagsBefore" ] || main="$main"${main:+$'\n'}$(addFlags $flagsBefore)$'\n'$'\n'
-    main="$main    argv[0] = \"${argv0:-${executable}}\";"$'\n'
+    [ -z "$inherit_argv0" ] && main="$main    argv[0] = \"${argv0:-${executable}}\";"$'\n'
     main="$main    return execv(\"${executable}\", argv);"$'\n'
 
     [ -z "$uses_asprintf" ] || printf '%s\n' "#define _GNU_SOURCE         /* See feature_test_macros(7) */"
