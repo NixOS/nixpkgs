@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -33,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.0.4";
+  version = "6.1.0";
 
   repoName = "files";
 
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-FH6EYtgKADp8jjBoCwsdRdknlKS9v3iOtPiT3CyEc/8=";
+    sha256 = "sha256-aGiFEeSvDV5rPD2Ll/BuDoWclEPhR1UuoCxUSS9CGmw=";
   };
 
   passthru = {
@@ -68,6 +67,7 @@ stdenv.mkDerivation rec {
     bamf
     elementary-dock
     elementary-icon-theme
+    glib
     granite
     gtk3
     libcanberra
@@ -83,16 +83,9 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [
-    ./filechooser-portal-hardcode-gsettings-for-nixos.patch
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace filechooser-portal/LegacyFileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with lib; {

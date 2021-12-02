@@ -361,6 +361,12 @@ in buildPythonPackage {
   # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
   postInstall = ''
     rm $out/bin/tensorboard
+  ''
+  # Workaround https://github.com/tensorflow/tensorflow/issues/44467#issuecomment-720042186
+  + ''
+    substituteInPlace "$out"/${python.sitePackages}/tensorflow/python/keras/saving/hdf5_format.py \
+      --replace ".decode('utf-8')" "" \
+      --replace ".decode('utf8')" ""
   '';
 
   setupPyGlobalFlags = [ "--project_name ${pname}" ];

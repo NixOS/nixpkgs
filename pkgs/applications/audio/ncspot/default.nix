@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "07qqs5q64zaxl3b2091vjihqb35fm0136cm4zibrgpx21akmbvr2";
+    sha256 = "sha256-fZ0yQGLGnEFxt+OiG9J+niYzvttybudfciu5xo104Qo=";
   };
 
-  cargoSha256 = "0sdbba32f56z2q7kha5fxw2f00hikbz9sf4zl4wfl2i9b13j7mj0";
+  cargoSha256 = "sha256-i3/96rVfP8TbIz3pNArTp8w27rfp1aPhohfFMMHgubo=";
 
   nativeBuildInputs = [ pkg-config ];
 

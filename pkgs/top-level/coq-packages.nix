@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, ocamlPackages_4_10, fetchpatch, makeWrapper, coq2html
+, ocamlPackages_4_10, ocamlPackages_4_12, fetchpatch, makeWrapper, coq2html
 }@args:
 let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
@@ -112,7 +112,12 @@ let
       ) (lib.attrNames set)
     );
   mkCoq = version: callPackage ../applications/science/logic/coq {
-    inherit version ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+    inherit version
+      ocamlPackages_4_05
+      ocamlPackages_4_09
+      ocamlPackages_4_10
+      ocamlPackages_4_12
+    ;
   };
 in rec {
 
