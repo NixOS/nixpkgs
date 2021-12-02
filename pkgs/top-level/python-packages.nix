@@ -5400,10 +5400,10 @@ in {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
-  openvino = disabledIf isPy27 (toPythonModule (pkgs.openvino.override {
+  openvino = toPythonModule (pkgs.openvino.override {
     inherit (self) python;
     enablePython = true;
-  }));
+  });
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
@@ -8131,9 +8131,9 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
-  recoll = disabledIf (!isPy3k) (toPythonModule (pkgs.recoll.override {
+  recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
-  }));
+  });
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 

@@ -380,6 +380,8 @@ with self; with super; {
 
   openpyxl = callPackage ../development/python-modules/openpyxl/2.nix { };
 
+  openvino = disabled super.openvino;
+
   openwrt-luci-rpc = disabled super.openwrt-luci-rpc;
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum/2.nix { };
@@ -528,6 +530,8 @@ with self; with super; {
   qserve = callPackage ../development/python-modules/qserve { };
 
   remotecv = callPackage ../development/python-modules/remotecv { };
+
+  recoll = disabled super.recoll;
 
   rhpl = callPackage ../development/python-modules/rhpl { };
 
