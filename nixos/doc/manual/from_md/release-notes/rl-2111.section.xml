@@ -263,14 +263,14 @@
         <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
-          <link xlink:href="options.html#opt-services.kea">services.kea</link>.
+          <link xlink:href="options.html#opt-services.kea.dhcp4">services.kea</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://owncast.online/">owncast</link>,
           self-hosted video live streaming solution. Available at
-          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+          <link xlink:href="options.html#opt-services.owncast.enable">services.owncast</link>.
         </para>
       </listitem>
       <listitem>
@@ -278,7 +278,7 @@
           <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
           developed by Framasoft, is the free and decentralized
           alternative to video platforms. Available at
-          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
+          <link xlink:href="options.html#opt-services.peertube.enable">services.peertube</link>.
         </para>
       </listitem>
       <listitem>
