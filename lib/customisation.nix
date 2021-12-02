@@ -77,6 +77,9 @@ rec {
       overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
       # Change the result of the function call by applying g to it
       overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
+
+      # List of arguments not supplied by origArgs
+      nonOverriddenArgs = builtins.filter (arg: !builtins.hasAttr arg origArgs) (builtins.attrNames (lib.functionArgs f));
     in
       if builtins.isAttrs result then
         result // {
@@ -84,11 +87,15 @@ rec {
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
+
+          inherit nonOverriddenArgs;
         }
       else if lib.isFunction result then
         # Transform the result into a functor while propagating its arguments
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
+
+          inherit nonOverriddenArgs;
         }
       else result;
 
