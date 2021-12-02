@@ -897,6 +897,8 @@ let
     "x13binary"
     "valse"
     "HierO"
+    "HIBAG"
+    "HiveR"
 
     # Impure network access during build
     "waddR"
