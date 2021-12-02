@@ -32303,7 +32303,9 @@ with pkgs;
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
-  abella = callPackage ../applications/science/logic/abella { };
+  abella = callPackage ../applications/science/logic/abella {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   acgtk = callPackage ../applications/science/logic/acgtk {};
 
