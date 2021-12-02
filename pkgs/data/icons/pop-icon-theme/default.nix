@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pop-icon-theme";
-  version = "2020-03-04";
+  version = "2021-11-17";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "icon-theme";
-    rev = "11f18cb48455b47b6535018f1968777100471be1";
-    sha256 = "1s4pjwv2ynw400gnzgzczlxzw3gxh5s8cxxbi9zpxq4wzjg6jqyv";
+    rev = "9998b20b78f3ff65ecbf2253bb863d1e669abe74";
+    sha256 = "0lwdmaxs9xj4bm21ldh64bzyb6iz5d5k1256iwvyjp725l7686cl";
   };
 
   nativeBuildInputs = [
