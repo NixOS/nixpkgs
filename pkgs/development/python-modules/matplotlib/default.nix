@@ -1,7 +1,7 @@
 { lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
 , which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
-, certifi, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive
+, certifi, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
 , enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
@@ -19,6 +19,7 @@ in
 buildPythonPackage rec {
   version = "3.5.0";
   pname = "matplotlib";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -35,16 +36,45 @@ buildPythonPackage rec {
     setuptools-scm-git-archive
   ];
 
-  buildInputs = [ which sphinx ]
-    ++ lib.optional enableGhostscript ghostscript
-    ++ lib.optional stdenv.isDarwin [ Cocoa ];
+  buildInputs = [
+    which
+    sphinx
+  ] ++ lib.optional enableGhostscript [
+    ghostscript
+  ] ++ lib.optional stdenv.isDarwin [
+    Cocoa
+  ];
 
-  propagatedBuildInputs =
-    [ cycler fonttools python-dateutil numpy pyparsing tornado freetype qhull
-      kiwisolver certifi libpng mock pytz pillow ]
-    ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ lib.optionals enableQt [ pyqt5 ];
+  propagatedBuildInputs = [
+    certifi
+    cycler
+    fonttools
+    freetype
+    kiwisolver
+    libpng
+    mock
+    numpy
+    packaging
+    pillow
+    pyparsing
+    python-dateutil
+    pytz
+    qhull
+    tornado
+  ] ++ lib.optionals enableGtk3 [
+    cairo
+    gobject-introspection
+    gtk3
+    pycairo
+    pygobject3
+  ] ++ lib.optionals enableTk [
+    libX11
+    tcl
+    tk
+    tkinter
+  ] ++ lib.optionals enableQt [
+    pyqt5
+  ];
 
   passthru.config = {
     directories = { basedirlist = "."; };
@@ -56,7 +86,9 @@ buildPythonPackage rec {
       enable_lto = false;
     };
   };
+
   setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
+
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
@@ -96,5 +128,4 @@ buildPythonPackage rec {
     license     = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
-
 }
