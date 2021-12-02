@@ -7462,7 +7462,7 @@ with pkgs;
   leatherman = callPackage ../development/libraries/leatherman { };
 
   ledit = callPackage ../tools/misc/ledit {
-    inherit (ocamlPackages) camlp5;
+    inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
   };
 
   ledmon = callPackage ../tools/system/ledmon { };
