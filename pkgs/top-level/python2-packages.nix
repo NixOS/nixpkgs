@@ -12,7 +12,7 @@ with self; with super; {
     inherit (pkgs) antlr4;
   };
 
-  appleseed = toPythonModule (pkgs.appleseed.override { inherit (self) python; });
+  appleseed = disabled super.appleseed;
 
   application = callPackage ../development/python-modules/application { };
 
@@ -624,6 +624,9 @@ with self; with super; {
   };
 
   tarman = callPackage ../development/python-modules/tarman { };
+
+  tensorflow-bin = disabled super.tensorflow-bin;
+  tensorflow-bin_2 = disabled super.tensorflow-bin_2;
 
   thumbor = callPackage ../development/python-modules/thumbor { };
 
