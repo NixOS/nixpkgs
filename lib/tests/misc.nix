@@ -761,4 +761,26 @@ runTests {
       { a = 3; b = 30; c = 300; }
     ];
   };
+
+  # The example from the showAttrPath documentation
+  testShowAttrPathExample = {
+    expr = showAttrPath [ "foo" "10" "bar" ];
+    expected = "foo.\"10\".bar";
+  };
+
+  testShowAttrPathEmpty = {
+    expr = showAttrPath [];
+    expected = "<root attribute path>";
+  };
+
+  testShowAttrPathVarious = {
+    expr = showAttrPath [
+      "."
+      "foo"
+      "2"
+      "a2-b"
+      "_bc'de"
+    ];
+    expected = "\".\".foo.\"2\".a2-b._bc'de";
+  };
 }

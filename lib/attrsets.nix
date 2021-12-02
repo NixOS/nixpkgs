@@ -4,7 +4,7 @@
 let
   inherit (builtins) head tail length;
   inherit (lib.trivial) id;
-  inherit (lib.strings) concatStringsSep sanitizeDerivationName;
+  inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all;
 in
 
@@ -476,6 +476,20 @@ rec {
   */
   overrideExisting = old: new:
     mapAttrs (name: value: new.${name} or value) old;
+
+  /* Turns a list of strings into a human-readable description of those
+    strings represented as an attribute path. The result of this function is
+    not intended to be machine-readable.
+
+    Example:
+      showAttrPath [ "foo" "10" "bar" ]
+      => "foo.\"10\".bar"
+      showAttrPath []
+      => "<root attribute path>"
+  */
+  showAttrPath = path:
+    if path == [] then "<root attribute path>"
+    else concatMapStringsSep "." escapeNixIdentifier path;
 
   /* Get a package output.
      If no output is found, fallback to `.out` and then to the default.
