@@ -15,7 +15,7 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  mkDerive = {mkHomepage, mkUrls, hydraPlatforms ? R.meta.platforms}: args:
+  mkDerive = {mkHomepage, mkUrls, hydraPlatforms ? null}: args:
     let hydraPlatforms' = hydraPlatforms; in
       lib.makeOverridable ({
         name, version, sha256,
@@ -23,7 +23,8 @@ let
         doCheck ? true,
         requireX ? false,
         broken ? false,
-        hydraPlatforms ? hydraPlatforms',
+        platforms ? R.meta.platforms,
+        hydraPlatforms ? if hydraPlatforms' != null then hydraPlatforms' else platforms,
         maintainers ? []
       }: buildRPackage {
     name = "${name}-${version}";
@@ -35,7 +36,7 @@ let
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
     meta.homepage = mkHomepage (args // { inherit name; });
-    meta.platforms = R.meta.platforms;
+    meta.platforms = platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
     meta.maintainers = maintainers;
