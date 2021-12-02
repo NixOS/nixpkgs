@@ -1,15 +1,15 @@
 { stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl }:
 
 let
-  version = "0.0.8";
+  version = "0.0.9";
   assets = {
     x86_64-darwin = {
       asset = "scala-cli-x86_64-apple-darwin.gz";
-      sha256 = "14bf1zwvfq86vh00qlf8jf4sb82p9jakrmwqhnv9p0x13lq56xm5";
+      sha256 = "sha256-1KwJuapqGhMEIMwrJp2LKlpYFtl+OP9DyaMtge9ZedI=";
     };
     x86_64-linux = {
       asset = "scala-cli-x86_64-pc-linux.gz";
-      sha256 = "01dhcj6q9c87aqpz8vy1kwaa1qqq9bh43rkx2sabhnfrzj4vypjr";
+      sha256 = "sha256-IDXO+MgFlnT7VPugcQr/IGLZeD/vWFqJ0D0zVIbTtk4=";
     };
   };
 in
@@ -22,10 +22,10 @@ stdenv.mkDerivation {
     let
       asset = assets."${stdenv.hostPlatform.system}" or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
     in
-      fetchurl {
-        url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
-        sha256 = asset.sha256;
-      };
+    fetchurl {
+      url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
+      sha256 = asset.sha256;
+    };
 
   unpackPhase = ''
     runHook preUnpack
