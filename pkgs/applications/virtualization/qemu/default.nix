@@ -228,8 +228,7 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    cp -- $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
-    chmod a+x -- $out/libexec/emit-kvm-warnings
+    install -m755 -D $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
     if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
       makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
                   $out/bin/qemu-kvm \
