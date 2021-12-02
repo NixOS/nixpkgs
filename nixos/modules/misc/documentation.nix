@@ -1,4 +1,4 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
+{ config, lib, pkgs, extendModules, noUserModules, ... }:
 
 with lib;
 
@@ -6,11 +6,8 @@ let
 
   cfg = config.documentation;
 
-  manualModules =
-    baseModules
-    # Modules for which to show options even when not imported
-    ++ [ ../virtualisation/qemu-vm.nix ]
-    ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+  /* Modules for which to show options even when not imported. */
+  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
 
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
@@ -24,13 +21,10 @@ let
     extraSources = cfg.nixos.extraModuleSources;
     options =
       let
-        scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
-          args = (config._module.args) // { modules = [ ]; };
-          specialArgs = {
-            pkgs = scrubDerivations "pkgs" pkgs;
-            inherit modulesPath;
-          };
+        extendNixOS = if cfg.nixos.includeAllModules then extendModules else noUserModules.extendModules;
+        scrubbedEval = extendNixOS {
+          modules = extraDocModules;
+          specialArgs.pkgs = scrubDerivations "pkgs" pkgs;
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
