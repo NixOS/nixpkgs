@@ -8,21 +8,20 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, yarl
 }:
 
 buildPythonPackage rec {
-  pname = "vehicle";
-  version = "0.2.2";
+  pname = "open-meteo";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
-    repo = "python-vehicle";
+    repo = "python-open-meteo";
     rev = "v${version}";
-    sha256 = "sha256-3DkfS8gx3C1/Vj8+IE7uxZ5i0cKJk0mJpBWQqAgb2Xo=";
+    sha256 = "tuAuY43HRz8zFTOhsm4TxSppP4CYTGPqQndDMxW3URs=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    aresponses
     pydantic
-    yarl
   ];
 
   checkInputs = [
-    aresponses
     pytest-asyncio
     pytestCheckHook
   ];
@@ -45,16 +43,17 @@ buildPythonPackage rec {
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace "--cov" "" \
+      --replace 'aiohttp = "^3.8.1"' 'aiohttp = "^3.8.0"'
   '';
 
   pythonImportsCheck = [
-    "vehicle"
+    "open_meteo"
   ];
 
   meta = with lib; {
-    description = "Python client providing RDW vehicle information";
-    homepage = "https://github.com/frenck/python-vehicle";
+    description = "Python client for the Open-Meteo API";
+    homepage = "https://github.com/frenck/python-open-meteo";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

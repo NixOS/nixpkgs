@@ -137,6 +137,7 @@ stdenv.mkDerivation {
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
                  ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
                  ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
+    maintainers = with maintainers; [ hjones2199 ];
   };
 
   preConfigure = optionalString useMpi ''

@@ -2632,6 +2632,8 @@ with pkgs;
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 
+  csvdiff = callPackage ../tools/text/csvdiff { };
+
   csview = callPackage ../tools/text/csview { };
 
   csvkit = callPackage ../tools/text/csvkit { };
