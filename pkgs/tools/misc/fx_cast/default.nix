@@ -21,7 +21,7 @@
   };
 in
 stdenv.mkDerivation rec {
-  name = "fx_cast_bridge-${version}";
+  pname = "fx_cast_bridge";
   version = "0.1.2";
 
   src = pkgs.fetchFromGitHub {

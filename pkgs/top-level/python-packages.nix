@@ -5364,6 +5364,8 @@ in {
 
   open-garage = callPackage ../development/python-modules/open-garage { };
 
+  open-meteo = callPackage ../development/python-modules/open-meteo { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };

@@ -14,6 +14,7 @@
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
+  "pop-shell@system76.com" = callPackage ./pop-shell { };
   "sound-output-device-chooser@kgshank.net" = callPackage ./sound-output-device-chooser { };
   "system-monitor@paradoxxx.zero.gmail.com" = callPackage ./system-monitor { };
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };

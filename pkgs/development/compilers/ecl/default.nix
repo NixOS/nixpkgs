@@ -28,7 +28,8 @@ let
   ];
 in
 stdenv.mkDerivation {
-  inherit (s) name version;
+  inherit (s) version;
+  pname = s.baseName;
   inherit nativeBuildInputs propagatedBuildInputs;
 
   src = fetchurl {

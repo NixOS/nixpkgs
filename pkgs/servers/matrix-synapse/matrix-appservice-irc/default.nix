@@ -6,6 +6,7 @@ let
     inherit (stdenv.hostPlatform) system;
   };
   version = (lib.importJSON ./package.json).version;
+  srcInfo = lib.importJSON ./src.json;
 in
 ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
@@ -15,7 +16,7 @@ ourNodePackages.package.override {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     rev = version;
-    sha256 = "sha256-EncodJKptrLC54B5XipkiHXFgJ5cD+crcT3SOPOc+7M=";
+    inherit (srcInfo) sha256;
   };
 
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];

@@ -11,7 +11,7 @@ let
 in
 buildDotnetPackage rec {
   baseName = "Pinta";
-  version = "1.6";
+  version = "1.7.1";
 
   outputFiles = [ "bin/*" ];
   buildInputs = [ gtksharp mono-addins gettext ];
@@ -21,7 +21,7 @@ buildDotnetPackage rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    sha256 = "0vgswy981c7ys4q7js5k85sky7bz8v32wsfq3br4j41vg92pw97d";
+    sha256 = "sha256-yRp/dpJ9T4DieqHTj3vhyuASPGe4vjHw0rSXFrTNZVc=";
   };
 
   # Remove version information from nodes <Reference Include="... Version=... ">
@@ -74,6 +74,8 @@ buildDotnetPackage rec {
       --replace _Comment Comment \
       --replace _GenericName GenericName \
       --replace _X-GNOME-FullName X-GNOME-FullName
+    substitute xdg/pinta.appdata.xml.in xdg/pinta.appdata.xml \
+      --replace _p p
 
     xbuild /target:CompileTranslations Pinta.Install.proj
     xbuild /target:Install Pinta.Install.proj

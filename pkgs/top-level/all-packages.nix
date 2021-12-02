@@ -2632,6 +2632,8 @@ with pkgs;
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 
+  csvdiff = callPackage ../tools/text/csvdiff { };
+
   csview = callPackage ../tools/text/csview { };
 
   csvkit = callPackage ../tools/text/csvkit { };
@@ -5630,9 +5632,7 @@ with pkgs;
 
   git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { };
 
-  git-filter-repo = callPackage ../applications/version-management/git-and-tools/git-filter-repo {
-    pythonPackages = python3Packages;
-  };
+  git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
 
   git-gone = callPackage ../applications/version-management/git-and-tools/git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12441,11 +12441,11 @@ with pkgs;
   julia-stable = julia_15;
   julia = julia-stable;
 
-  julia_10-bin = callPackage ../development/compilers/julia/1.0-bin.nix { };
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
+  julia_17-bin = callPackage ../development/compilers/julia/1.7-bin.nix { };
 
-  julia-lts-bin = julia_10-bin;
-  julia-stable-bin = julia_16-bin;
+  julia-lts-bin = julia_16-bin;
+  julia-stable-bin = julia_17-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
@@ -13476,8 +13476,6 @@ with pkgs;
   });
 
   ### End of CuboCore
-
-  lush2 = callPackage ../development/interpreters/lush {};
 
   maude = callPackage ../development/interpreters/maude {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
@@ -21643,7 +21641,9 @@ with pkgs;
 
   syncserver = callPackage ../servers/syncserver { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    buildGoModule = buildGo117Module;
+  };
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
@@ -31618,7 +31618,7 @@ with pkgs;
   cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
+    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10 ocamlPackages_4_12;
   }) mkCoqPackages
     coqPackages_8_5  coq_8_5
     coqPackages_8_6  coq_8_6
@@ -31929,12 +31929,10 @@ with pkgs;
    };
 
   maxima = callPackage ../applications/science/math/maxima {
-    ecl = null;
+    lisp-compiler = sbcl;
   };
   maxima-ecl = maxima.override {
-    inherit ecl;
-    ecl-fasl = true;
-    sbcl = null;
+    lisp-compiler = ecl;
   };
 
   mxnet = callPackage ../applications/science/math/mxnet {

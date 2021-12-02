@@ -15,11 +15,12 @@
 }:
 
 let
-  merlinVersion = "4.3.1";
+  merlinVersion = "4.4";
 
   hashes = {
-    "4.3.1-411" = "0lhxkd1wa8k3fkcnhvzlahx3g519cdi5h7lgs60khqqm8nfvfcr5";
-    "4.3.1-412" = "0ah2zbj1hhrrfxp4nhfh47jsbkvm0b30dr7ikjpmvb13wa8h20sr";
+    "4.4-411" = "sha256:0chx28098mmnjbnaz5wgzsn82rh1w9dhzqmsykb412cq13msl1q4";
+    "4.4-412" = "sha256:18xjpsiz7xbgjdnsxfc52l7yfh22harj0birlph4xm42d14pkn0n";
+    "4.4-413" = "sha256:1ilmh2gqpwgr51w2ba8r0s5zkj75h00wkw4az61ssvivn9jxr7k0";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -37,7 +38,7 @@ buildDunePackage {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
+    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
     sha256 = hashes."${version}";
   };
 
@@ -47,10 +48,12 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
+  ] ++ lib.optional (!lib.versionAtLeast ocaml.version "4.12")
     # This fixes the test-suite on macOS
     # See https://github.com/ocaml/merlin/pull/1399
+    # Fixed in 4.4 for OCaml ≥ 4.12
     ./test.patch
-  ];
+  ;
 
   useDune2 = true;
 
