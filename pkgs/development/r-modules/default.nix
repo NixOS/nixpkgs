@@ -1281,6 +1281,8 @@ let
     rgl = old.rgl.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
     });
+
+    Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
   };
 in
   self
