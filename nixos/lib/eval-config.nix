@@ -81,14 +81,15 @@ let
     };
   };
 
-in rec {
+  nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
+
+in {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  inherit (noUserModules.extendModules { modules = allUserModules; })
-    config options _module type;
+  inherit (nixosWithUserModules) config options _module type;
 
   inherit extraArgs;
 
-  inherit (_module.args) pkgs;
+  inherit (nixosWithUserModules._module.args) pkgs;
 }
