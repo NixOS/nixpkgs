@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
+    ./hook-tmpl.patch
   ];
 
   propagatedBuildInputs = [
