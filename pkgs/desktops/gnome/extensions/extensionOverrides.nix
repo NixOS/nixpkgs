@@ -20,7 +20,7 @@ in
 #
 # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
 # the upstream repository's sources.
-super: lib.trivial.pipe super [
+super: lib.trivial.pipe super (lib.lists.flatten [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
@@ -52,15 +52,16 @@ super: lib.trivial.pipe super [
     '';
   }))
 
-  (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/136112
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
-  }))
+  (lib.lists.forEach [ "gnome-shell-screenshot@ttll.de" "ddterm@amezin.github.com" ] ( extension:
+    patchExtension extension (old: {
+      # Requires gjs
+      # https://github.com/NixOS/nixpkgs/issues/136112
+      postPatch = ''
+        for file in *.js; do
+          substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+        done
+      '';
+  })))
 
   (patchExtension "unite@hardpixel.eu" (old: {
     buildInputs = [ xprop ];
@@ -76,4 +77,4 @@ super: lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
-]
+])
