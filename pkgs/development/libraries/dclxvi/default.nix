@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "dclxvi-2013-01-27";
+  pname = "dclxvi";
+  version = "unstable-2013-01-27";
 
   src = fetchFromGitHub {
     owner = "agl";
