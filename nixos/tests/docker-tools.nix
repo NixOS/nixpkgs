@@ -388,7 +388,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("The image contains store paths referenced by the fakeRootCommands output"):
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/hello"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
         )
 
     with subtest("exportImage produces a valid tarball"):
