@@ -1,6 +1,8 @@
 { lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
 
 let
+  zero_or_one = cond: if cond then 1 else 0;
+
   _arrow-cpp = arrow-cpp.override { python3 = python; };
 in
 
@@ -18,9 +20,9 @@ buildPythonPackage rec {
 
   PYARROW_BUILD_TYPE = "release";
 
-  PYARROW_WITH_DATASET = true;
-  PYARROW_WITH_FLIGHT = _arrow-cpp.enableFlight;
-  PYARROW_WITH_PARQUET = true;
+  PYARROW_WITH_DATASET = zero_or_one true;
+  PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
+  PYARROW_WITH_PARQUET = zero_or_one true;
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
