@@ -490,6 +490,7 @@ let
     themetagenomics = [ pkgs.zlib.dev ];
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
+    HilbertVisGUI = with pkgs; [ pkg-config which ];
   };
 
   packagesWithBuildInputs = {
@@ -641,6 +642,7 @@ let
     PING = [ pkgs.gsl ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+    HilbertVisGUI = [ pkgs.gnome2.gtkmm.dev ];
   };
 
   packagesRequiringX = [
