@@ -638,6 +638,7 @@ let
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
+    PING = [ pkgs.gsl ];
   };
 
   packagesRequiringX = [
