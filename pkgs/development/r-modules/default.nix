@@ -639,6 +639,7 @@ let
     flowWorkspace = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
     PING = [ pkgs.gsl ];
+    RcppAlgos = [ pkgs.gmp.dev ];
   };
 
   packagesRequiringX = [
