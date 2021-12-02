@@ -1129,10 +1129,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
     "repo": "terraform-provider-vault",
-    "rev": "v3.0.0",
-    "sha256": "0k6wwkjxj9ywv16713k6r3ybni9041jx0y0ma7ygcxwk3mciac1z",
+    "rev": "v3.0.1",
+    "sha256": "0ppx8kc4zf0yp09vbkmj875sqvklbx0p8a1ganpzdm3462zskra4",
     "vendorSha256": "03l8bk9jsqf4c7gv0hs1rli7wmlcvpdxmxhra9vndnz6g0jvkvyx",
-    "version": "3.0.0"
+    "version": "3.0.1"
   },
   "vcd": {
     "owner": "terraform-providers",
