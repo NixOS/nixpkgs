@@ -101,6 +101,11 @@ rec {
                   check ? true
                 }:
     let
+      withWarnings = x:
+        lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
+        lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
+        x;
+
       legacyModules =
         optional (evalModulesArgs?args) {
           config = {
@@ -248,7 +253,7 @@ rec {
         inherit modules specialArgs;
       };
 
-      result = {
+      result = withWarnings {
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
