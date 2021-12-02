@@ -640,6 +640,7 @@ let
     RcppMeCab = [ pkgs.mecab ];
     PING = [ pkgs.gsl ];
     RcppAlgos = [ pkgs.gmp.dev ];
+    RcppBigIntAlgos = [ pkgs.gmp.dev ];
   };
 
   packagesRequiringX = [
