@@ -15278,7 +15278,9 @@ with pkgs;
     shards_0_16
     shards;
 
-  shellcheck = callPackage ../development/tools/shellcheck {};
+  shellcheck = callPackage ../development/tools/shellcheck {
+    ShellCheck = haskellPackages.ShellCheck_0_8_0;
+  };
 
   shellharden = callPackage ../development/tools/shellharden {};
 

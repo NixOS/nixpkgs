@@ -54,6 +54,10 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # We can remove this once fakedata version gets to 1.0.1 as the test suite
+  # works fine there.
+  fakedata = dontCheck super.fakedata;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -1338,7 +1342,7 @@ self: super: {
   graphql-engine = overrideCabal (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.9";
+    version = "2.0.10";
   }) (super.graphql-engine.overrideScope (self: super: {
     immortal = self.immortal_0_2_2_1;
     resource-pool = self.hasura-resource-pool;
@@ -2110,9 +2114,7 @@ EOT
     brick = self.brick_0_64_2;
   };
 
-  # Needs matching xmonad version
-  xmonad-contrib_0_17_0 = super.xmonad-contrib_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-  };
+  # build newer version for `pkgs.shellcheck`
+  ShellCheck_0_8_0 = doDistribute super.ShellCheck_0_8_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
