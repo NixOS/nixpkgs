@@ -21,6 +21,7 @@ assertExecutable() {
 # --set-default VAR VAL : like --set, but only adds VAR if not already set in
 #                         the environment
 # --unset       VAR     : remove VAR from the environment
+# --chdir       DIR     : change working directory (use instead of --run "cd DIR")
 # --add-flags   FLAGS   : add FLAGS to invocation of executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
@@ -117,6 +118,14 @@ makeCWrapper() {
                 n=$((n + 3))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
+            --chdir)
+                cmd=$(changeDir "${params[n + 1]}")
+                main="$main    $cmd"$'\n'
+                uses_stdio=1
+                uses_assert_success=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
             --add-flags)
                 flags="${params[n + 1]}"
                 flagsBefore="$flagsBefore $flags"
@@ -174,6 +183,13 @@ addFlags() {
     printf '    %s\n' "}"
     printf '    %s\n' "${var}[$n + argc] = NULL;"
     printf '    %s\n' "argv = $var;"
+}
+
+# chdir DIR
+changeDir() {
+    local dir
+    dir=$(escapeStringLiteral "$1")
+    printf '%s' "assert_success(chdir(\"$dir\"));"
 }
 
 # prefix ENV SEP VAL
