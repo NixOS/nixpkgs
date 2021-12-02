@@ -270,6 +270,7 @@
   },
   "dhall": {
     "owner": "awakesecurity",
+    "provider-source-address": "registry.terraform.io/awakesecurity/dhall",
     "repo": "terraform-provider-dhall",
     "rev": "v0.0.1",
     "sha256": "1cymabpa03a5avf0j6jj2mpnc62ap9b82zmpsgzwdjrb3mf954fa",
