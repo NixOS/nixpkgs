@@ -14,6 +14,7 @@
 , lttng-ust
 , makeWrapper
 , nodejs-12_x
+, nodejs-16_x
 , openssl
 , stdenv
 , zlib
@@ -37,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.284.0";
+  version = "2.285.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    sha256 = "sha256-JR0OzbT5gGhO/dxb/eSjP/d/VxW/aLmTs/oPwN8b8Rc=";
+    hash = "sha256-vlipA1ovVkBrwpZ8B0bMEykBMUwOaYzV+/FxY9kT6Z4=";
   };
 
   nativeBuildInputs = [
@@ -142,6 +143,9 @@ stdenv.mkDerivation rec {
   disabledTests = [
     # Self-updating is patched out, hence this test will fail
     "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
   ] ++ map
     # Online tests
     (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
@@ -189,6 +193,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p _layout/externals
     ln -s ${nodejs-12_x} _layout/externals/node12
+    ln -s ${nodejs-16_x} _layout/externals/node16
 
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
@@ -230,11 +235,12 @@ stdenv.mkDerivation rec {
       --replace './externals' "$out/externals" \
       --replace './bin' "$out/lib"
 
-    # The upstream package includes Node 12 and expects it at the path
-    # externals/node12. As opposed to the official releases, we don't
-    # link the Alpine Node flavor.
+    # The upstream package includes Node {12,16} and expects it at the path
+    # externals/node{12,16}. As opposed to the official releases, we don't
+    # link the Alpine Node flavors.
     mkdir -p $out/externals
     ln -s ${nodejs-12_x} $out/externals/node12
+    ln -s ${nodejs-16_x} $out/externals/node16
 
     runHook postInstall
   '';
