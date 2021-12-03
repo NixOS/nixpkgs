@@ -15282,7 +15282,9 @@ with pkgs;
     shards_0_16
     shards;
 
-  shellcheck = callPackage ../development/tools/shellcheck {};
+  shellcheck = callPackage ../development/tools/shellcheck {
+    ShellCheck = haskellPackages.ShellCheck_0_8_0;
+  };
 
   shellharden = callPackage ../development/tools/shellharden {};
 
@@ -23617,7 +23619,7 @@ with pkgs;
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
+    inherit (gnome) adwaita-icon-theme;
   };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
@@ -33869,6 +33871,8 @@ with pkgs;
   xcolor = callPackage ../tools/graphics/xcolor { };
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
+
+  xsos = callPackage ../os-specific/linux/xsos { };
 
   zesarux = callPackage ../misc/emulators/zesarux { };
 

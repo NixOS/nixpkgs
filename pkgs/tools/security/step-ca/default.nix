@@ -7,6 +7,7 @@
 , PCSC
 , pkg-config
 , hsmSupport ? true
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -45,6 +46,8 @@ buildGoModule rec {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";

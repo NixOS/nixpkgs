@@ -867,13 +867,13 @@ rec {
         };
 
         closureRoots = lib.optionals includeStorePaths /* normally true */ (
-          [ baseJson ] ++ contentsList
+          [ baseJson customisationLayer ]
         );
         overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
 
         # These derivations are only created as implementation details of docker-tools,
         # so they'll be excluded from the created images.
-        unnecessaryDrvs = [ baseJson overallClosure ];
+        unnecessaryDrvs = [ baseJson overallClosure customisationLayer ];
 
         conf = runCommand "${baseName}-conf.json"
           {
