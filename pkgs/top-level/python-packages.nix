@@ -2560,6 +2560,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  esprima = callPackage ../development/python-modules/esprima { };
+
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
