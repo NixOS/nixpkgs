@@ -97,6 +97,9 @@ self: super: {
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
+  genvalidity = self.genvalidity_1_0_0_1;
+  genvalidity-property = self.genvalidity-property_1_0_0_0;
+  genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
   ghc-lib = self.ghc-lib_9_2_1_20211101;
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
@@ -112,8 +115,10 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   network = super.network_3_1_2_5;
+  ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
+  path = doJailbreak super.path_0_9_1;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
   quickcheck-instances = super.quickcheck-instances_0_3_27;
@@ -146,6 +151,19 @@ self: super: {
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
+
+  validity = pkgs.lib.pipe super.validity_0_12_0_0 [
+    # head.hackage patch
+    (appendPatch (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/validity-0.11.0.1.patch";
+      sha256 = "0qs6g1naqvcvklk78cadnpsfqnff1yflryi2ms6im203w75f2fsc";
+    }))
+    # head.hackage ignores test suite
+    dontCheck
+    # 0.12.0.0 disabled CPP in fetched file, breaks haddock
+    (appendConfigureFlag "--ghc-option=-XCPP")
+    dontHaddock
+  ];
 
   # lens >= 5.1 supports 9.2.1
   lens = super.lens_5_1;
