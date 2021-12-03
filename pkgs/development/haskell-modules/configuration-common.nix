@@ -2111,7 +2111,7 @@ EOT
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_64_2;
+    brick = self.brick_0_65;
   };
 
   # build newer version for `pkgs.shellcheck`
