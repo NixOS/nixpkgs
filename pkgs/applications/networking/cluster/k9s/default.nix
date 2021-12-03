@@ -19,6 +19,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-v4cd+f2GSE2ad0wWrW9x6/U6RREhFV83wVNFUMfWaA4=";
 
+  preCheck = "export HOME=$(mktemp -d)";
+
   doCheck = true;
 
   meta = with lib; {
