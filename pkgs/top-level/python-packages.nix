@@ -5845,6 +5845,8 @@ in {
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
+  pysolcast = callPackage ../development/python-modules/pysolcast { };
+
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
