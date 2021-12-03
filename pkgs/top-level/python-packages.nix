@@ -10229,6 +10229,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  yaspin = callPackage ../development/python-modules/yaspin { };
+
   yaswfp = callPackage ../development/python-modules/yaswfp { };
 
   yattag = callPackage ../development/python-modules/yattag { };
