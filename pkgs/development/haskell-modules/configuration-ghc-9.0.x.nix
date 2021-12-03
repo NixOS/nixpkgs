@@ -80,7 +80,7 @@ self: super: {
 
   # Doesn't allow Dhall 1.39.*
   weeder_2_3_0 = super.weeder_2_3_0.override {
-    dhall = self.dhall_1_40_1;
+    dhall = self.dhall_1_40_2;
   };
 
   # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
