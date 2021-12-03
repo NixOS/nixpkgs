@@ -51,6 +51,8 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  dontStrip = stdenv.isDarwin;
+
   meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
