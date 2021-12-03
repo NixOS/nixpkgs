@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     ./fixes.patch
   ];
 
+  preBuild = ''
+    export AR="${stdenv.cc.targetPrefix}gcc-ar"
+  '';
+
   enableParallelBuilding = true;
 
   buildInputs = [
