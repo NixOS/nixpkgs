@@ -4354,6 +4354,18 @@ final: prev:
     meta.homepage = "https://github.com/mfussenegger/nvim-jdtls/";
   };
 
+  nvim-jqx = buildVimPluginFrom2Nix {
+    pname = "nvim-jqx";
+    version = "2021-11-25";
+    src = fetchFromGitHub {
+      owner = "gennaro-tedesco";
+      repo = "nvim-jqx";
+      rev = "433040c73b68796e2ebed049075b8c46d2222ac2";
+      sha256 = "1dh4yb6rr593nx8kbhskpbb50l211b9z47rvhxd1n07d31bc0lmc";
+    };
+    meta.homepage = "https://github.com/gennaro-tedesco/nvim-jqx/";
+  };
+
   nvim-lightbulb = buildVimPluginFrom2Nix {
     pname = "nvim-lightbulb";
     version = "2021-11-13";
@@ -4412,6 +4424,30 @@ final: prev:
       sha256 = "1iag2ynp2yba5xaw4z0hnp9q6hfcrvjmkhl4js9hqhhsrm42c2vh";
     };
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
+  };
+
+  nvim-metals = buildVimPluginFrom2Nix {
+    pname = "nvim-metals";
+    version = "2021-11-29";
+    src = fetchFromGitHub {
+      owner = "scalameta";
+      repo = "nvim-metals";
+      rev = "25d148b6b03c7aeea917f296a5c2a60829810eb3";
+      sha256 = "1b7h5h6n1b2mpqnqpkmha689bpy6k85w40s65c2v7cbj7zn92ycw";
+    };
+    meta.homepage = "https://github.com/scalameta/nvim-metals/";
+  };
+
+  nvim-neoclip-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-neoclip.lua";
+    version = "2021-11-06";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-neoclip.lua";
+      rev = "cb4eff8bb7bb4bbb3d1629178a7dc62322773e05";
+      sha256 = "1szwg804gajq84icl39gsmbqkaxh3yffdb50wh0pcgj86b4w5hda";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-neoclip.lua/";
   };
 
   nvim-nonicons = buildVimPluginFrom2Nix {
@@ -6051,6 +6087,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
   };
 
+  telescope-lsp-handlers-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-lsp-handlers.nvim";
+    version = "2021-09-07";
+    src = fetchFromGitHub {
+      owner = "gbrlsnchs";
+      repo = "telescope-lsp-handlers.nvim";
+      rev = "d6d5983b0131ee2c386ca9e349f6621e12d971cb";
+      sha256 = "1x51mlj1c3cwmcjqssh89049q91423jxm3rv8s25pcw493zb2x6b";
+    };
+    meta.homepage = "https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim/";
+  };
+
   telescope-project-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-project.nvim";
     version = "2021-11-20";
@@ -6073,6 +6121,18 @@ final: prev:
       sha256 = "0jxnalhfgmnllwb38a9dgzrnrhdnxgcbi2p7m4jk5p87260a9gvk";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-symbols.nvim/";
+  };
+
+  telescope-vim-bookmarks-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-vim-bookmarks.nvim";
+    version = "2021-08-12";
+    src = fetchFromGitHub {
+      owner = "tom-anders";
+      repo = "telescope-vim-bookmarks.nvim";
+      rev = "b7a436eba6102c2bc73f49766a12e79d24ab8fb5";
+      sha256 = "0lak83b8y963hv61z2yfi1nyaapvq2hnhpcx7bc6h8v4jzyjis0n";
+    };
+    meta.homepage = "https://github.com/tom-anders/telescope-vim-bookmarks.nvim/";
   };
 
   telescope-z-nvim = buildVimPluginFrom2Nix {
@@ -6446,6 +6506,18 @@ final: prev:
       sha256 = "03vaghwqr3k0nls365wk4qwzmvdvdvq41q02c3l5qv2vsdikmz5i";
     };
     meta.homepage = "https://github.com/KabbAmine/vCoolor.vim/";
+  };
+
+  venn-nvim = buildVimPluginFrom2Nix {
+    pname = "venn.nvim";
+    version = "2021-10-19";
+    src = fetchFromGitHub {
+      owner = "jbyuki";
+      repo = "venn.nvim";
+      rev = "d5a9c73fe7772c11414fc52acbb1d1bdb1ebc70f";
+      sha256 = "1mzxvx1vqnm89yzzy6n3s30y9w7s38lbjhnwdf4diy0kdzyq8x06";
+    };
+    meta.homepage = "https://github.com/jbyuki/venn.nvim/";
   };
 
   verilog_systemverilog-vim = buildVimPluginFrom2Nix {
