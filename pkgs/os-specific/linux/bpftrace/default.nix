@@ -2,23 +2,25 @@
 , cmake, pkg-config, flex, bison
 , llvmPackages, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
+, cereal, asciidoctor
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "sha256-BKWBdFzj0j7rAfG30A0fwyYCpOG/5NFRPODW46EP1u0=";
+    sha256 = "sha256-rlaajNfpoiMtU/4aNAnbQ0VixPz9/302TZMarGzsb58=";
   };
 
   buildInputs = with llvmPackages;
     [ llvm libclang
       elfutils libelf bcc
       libbpf libbfd libopcodes
+      cereal asciidoctor
     ];
 
   nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
@@ -45,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }
