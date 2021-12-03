@@ -66,6 +66,8 @@ in
 
 {
 
+  imports = [ ../build.nix ];
+
   ###### interface
 
   options = {
@@ -188,14 +190,12 @@ in
   config = {
 
     system.build.etc = etc;
-
-    system.activationScripts.etc = stringAfter [ "users" "groups" ]
+    system.build.etcActivationCommands =
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
         ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
       '';
-
   };
 
 }
