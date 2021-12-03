@@ -1,0 +1,30 @@
+From dc40ceee75b46e6809b6a8d10c892b09e71018ce Mon Sep 17 00:00:00 2001
+From: Zane van Iperen <zane@zanevaniperen.com>
+Date: Sat, 4 Dec 2021 03:35:05 +1000
+Subject: [PATCH 3/3] HDA: patch to work with v1.2.5.1
+
+---
+ ucm2/HDA-Intel/HDAudio-DualCodecs.conf | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ucm2/HDA-Intel/HDAudio-DualCodecs.conf b/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
+index db867e1..73a6250 100644
+--- a/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
++++ b/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
+@@ -1,11 +1,11 @@
+-Syntax 2
++Syntax 3
+ Comment "HDAudio with dual HD-audio codecs"
+ SectionUseCase."HiFi" {
+ 	File "HiFi-dual.conf"
+ 	Comment "Default"
+ }
+ 
+-Include.init1.File "/HDA/init.conf"
++Include.init1.File "/HDA-Intel/init.conf"
+ 
+ BootSequence [
+ 	cset "name='Front Playback Volume' 100%"
+-- 
+2.31.1
+

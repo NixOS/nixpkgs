@@ -1,0 +1,248 @@
+From 96832f857fcce0c469316a01db644d8002834eda Mon Sep 17 00:00:00 2001
+From: Jaroslav Kysela <perex@perex.cz>
+Date: Thu, 2 Dec 2021 19:12:05 +0100
+Subject: [PATCH 2/3] HDA: improve support for
+ HDAudio-Gigabyte-ALC1220DualCodecs
+
+BugLink: https://github.com/alsa-project/alsa-ucm-conf/pull/48
+Fixes: https://github.com/alsa-project/alsa-ucm-conf/issues/123
+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+(cherry picked from commit 7dda1e21fff6163abfd681380b054f514b3b43bc)
+---
+ ucm2/HDA-Intel/HDAudio-DualCodecs.conf |   8 +-
+ ucm2/HDA-Intel/HiFi-dual.conf          | 133 ++++++++++++++-----------
+ 2 files changed, 79 insertions(+), 62 deletions(-)
+
+diff --git a/ucm2/HDA-Intel/HDAudio-DualCodecs.conf b/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
+index 6fd7bd1..db867e1 100644
+--- a/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
++++ b/ucm2/HDA-Intel/HDAudio-DualCodecs.conf
+@@ -5,14 +5,12 @@ SectionUseCase."HiFi" {
+ 	Comment "Default"
+ }
+ 
++Include.init1.File "/HDA/init.conf"
++
+ BootSequence [
+-	cset "name='Headphone Playback Volume' 60%"
+-	cset "name='Headphone Playback Switch' off"
+-	cset "name='Speaker Playback Volume' 60%"
+-	cset "name='Speaker Playback Switch' on"
+ 	cset "name='Front Playback Volume' 100%"
+ 	cset "name='Front Playback Switch' on"
+ 	cset "name='Rear-Panel Capture Volume' 100%"
+ 	cset "name='Rear-Panel Capture Switch' on"
+-	cset "name='Input Source' Rear Mic"
++	cset "name='Input Source' 'Rear Mic'"
+ ]
+diff --git a/ucm2/HDA-Intel/HiFi-dual.conf b/ucm2/HDA-Intel/HiFi-dual.conf
+index f2c6915..7dcd6b0 100644
+--- a/ucm2/HDA-Intel/HiFi-dual.conf
++++ b/ucm2/HDA-Intel/HiFi-dual.conf
+@@ -4,42 +4,51 @@ SectionVerb {
+ 	}
+ 
+ 	EnableSequence [
+-		cset "name='Front Playback Volume' 100%"
+-		cset "name='Front Playback Switch' on"
+-		cset "name='Rear-Panel Capture Volume' 100%"
+-		cset "name='Rear-Panel Capture Switch' on"
++		cset "name='Front Playback Switch' off"
++		cset "name='Rear-Panel Capture Switch' off"
+ 		cset "name='Headphone Playback Switch' off"
+-		cset "name='Speaker Playback Switch' off"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Front Playback Volume' 0"
+ 		cset "name='Front Playback Switch' off"
+-		cset "name='Rear-Panel Capture Volume' 0"
++		cset "name='Front-Panel Capture Switch' off"
+ 		cset "name='Rear-Panel Capture Switch' off"
+ 	]
+ }
+ 
+-SectionDevice."Speaker" {
+-	Comment "Speaker"
+-
+-	Value {
+-		PlaybackPriority 100
+-		PlaybackPCM "hw:${CardId},4"
+-		PlaybackMixerElem "Speaker"
++If.speaker {
++	Condition {
++		Type ControlExists
++		Control "name='Speaker Volume Switch'"
+ 	}
++	True {
++		SectionVerb {
++			EnableSequence [
++				cset "name='Speaker Playback Switch' on"
++			]
++			DisableSequence [
++				cset "name='Speaker Playback Switch' off"
++			]
++		}
+ 
+-	EnableSequence [
+-		cset "name='Speaker Playback Switch' on"
+-	]
++		SectionDevice."Speaker" {
++			Comment "Speaker"
+ 
+-	DisableSequence [
+-		cset "name='Speaker Playback Switch' off"
+-	]
++			Value {
++				PlaybackPriority 100
++				PlaybackPCM "hw:${CardId},4"
++				PlaybackMixerElem "Speaker"
++			}
+ 
+-	ConflictingDevice [
+-		"Headphones"
+-	]
++			DisableSequence [
++				cset "name='Speaker Playback Switch' off"
++			]
++
++			ConflictingDevice [
++				"Headphones"
++			]
++		}
++	}
+ }
+ 
+ SectionDevice."Line1" {
+@@ -48,22 +57,31 @@ SectionDevice."Line1" {
+ 	Value {
+ 		PlaybackPriority 200
+ 		PlaybackPCM "hw:${CardId}"
+-		JackControl "Line Out Jack"
+-		JackHWMute "Speaker"
++	}
++
++	If.0 {
++		Condition {
++			Type ControlExists
++			Control "name='Front Playback Switch'"
++		}
++		True {
++			Value {
++				PlaybackMixerElem "Front"
++				JackControl "Line Out Front Jack"
++			}
++		}
++		False {
++			Value {
++				JackControl "Line Out Jack"
++				JackHWMute "Speaker"
++			}
++		}
+ 	}
+ }
+ 
+ SectionDevice."Headphones" {
+ 	Comment "Headphones"
+ 
+-	Value {
+-		PlaybackPriority 300
+-		PlaybackPCM "hw:${CardId},4"
+-		PlaybackMixerElem "Headphone"
+-		JackControl "Front Headphone Jack"
+-		JackHWMute "Speaker"
+-	}
+-
+ 	EnableSequence [
+ 		cset "name='Headphone Playback Switch' on"
+ 	]
+@@ -72,20 +90,26 @@ SectionDevice."Headphones" {
+ 		cset "name='Headphone Playback Switch' off"
+ 	]
+ 
+-	ConflictingDevice [
+-		"Speaker"
+-	]
++	Value {
++		PlaybackPriority 300
++		PlaybackPCM "hw:${CardId},4"
++		PlaybackMixerElem "Headphone"
++		JackControl "Front Headphone Jack"
++	}
++
++	If.speaker {
++		Condition {
++			Type ControlExists
++			Control "name='Speaker Volume Switch'"
++		}
++		True.Value.JackHWMute "Speaker"
++	}
++
+ }
+ 
+ SectionDevice."Line2" {
+ 	Comment "Rear Line In"
+ 
+-	Value {
+-		CapturePriority 200
+-		CapturePCM "hw:${CardId}"
+-		JackControl "Line Jack"
+-	}
+-
+ 	ConflictingDevice [
+ 		"Mic2"
+ 	]
+@@ -94,16 +118,12 @@ SectionDevice."Line2" {
+ 		cset "name='Input Source' Line"
+ 	]
+ 
+-	If.0 {
+-		Condition {
+-			Type ControlExists
+-			Control "name='Line Boost Volume'"
+-		}
+-		True {
+-			EnableSequence [
+-				cset "name='Line Boost Volume' 3"
+-			]
+-		}
++	Value {
++		CapturePriority 200
++		CapturePCM "hw:${CardId}"
++		CaptureMixerElem "Rear-Panel"
++		CaptureMasterElem "Line Boost"
++		JackControl "Line Jack"
+ 	}
+ }
+ 
+@@ -113,16 +133,14 @@ SectionDevice."Mic2" {
+ 	Value {
+ 		CapturePriority 300
+ 		CapturePCM "hw:${CardId}"
++		CaptureMixerElem "Rear-Panel"
++		CaptureMasterElem "Rear Mic Boost"
+ 		JackHWMute "Line2"
+ 		JackControl "Rear Mic Jack"
+ 	}
+ 
+-	ConflictingDevice [
+-		"Line2"
+-	]
+-
+ 	EnableSequence [
+-		cset "name='Input Source' Rear Mic"
++		cset "name='Input Source' 'Rear Mic'"
+ 	]
+ }
+ 
+@@ -133,6 +151,7 @@ SectionDevice."Mic1" {
+ 		CapturePriority 100
+ 		CapturePCM "hw:${CardId},4"
+ 		CaptureMixerElem "Front-Panel"
++		CaptureMasterElem "Front Mic Boost"
+ 		JackControl "Front Mic Jack"
+ 	}
+ }
+-- 
+2.31.1
+

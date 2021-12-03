@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WEGkRBZty/R523UTA9vDVW9oUIWsfgDwyed1VnYZXZc=";
   };
 
+  patches = [
+    ./0001-HDA-improve-init.conf-Capture-volume-switches.patch
+    ./0002-HDA-improve-support-for-HDAudio-Gigabyte-ALC1220Dual.patch
+    ./0003-HDA-patch-to-work-with-v1.2.5.1.patch
+  ];
+
   dontBuild = true;
 
   installPhase = ''
