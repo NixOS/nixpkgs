@@ -92,15 +92,15 @@ stdenv.mkDerivation rec {
     inherit python2 python3;
   };
 
-  php8 = builtins.head (builtins.splitVersion php.version) == "8";
-  php8_no_version = ''sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py'';
-
   postPatch = ''
     for f in uwsgiconfig.py plugins/*/uwsgiplugin.py; do
       substituteInPlace "$f" \
         --replace pkg-config "$PKG_CONFIG"
     done
-  '' + (lib.optionalString php8 php8_no_version);
+    ${lib.optionalString (lib.versionAtLeast php.version "8") ''
+        sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
+    ''}
+  '';
 
   configurePhase = ''
     export pluginDir=$out/lib/uwsgi
