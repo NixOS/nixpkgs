@@ -165,5 +165,8 @@ in stdenv.mkDerivation rec {
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;
     platforms = platforms.all;
+    knownVulnerabilities = [
+      "https://www.mozilla.org/en-US/security/advisories/mfsa2021-51/#CVE-2021-43527"
+    ];
   };
 }
