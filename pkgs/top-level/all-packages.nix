@@ -9916,6 +9916,8 @@ with pkgs;
 
   target-isns = callPackage ../os-specific/linux/target-isns { };
 
+  tarlz = callPackage ../tools/archivers/tarlz { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
@@ -18546,6 +18548,8 @@ with pkgs;
   };
 
   lyra = callPackage ../development/libraries/lyra { };
+
+  lzlib = callPackage ../development/libraries/lzlib { };
 
   lzo = callPackage ../development/libraries/lzo { };
 

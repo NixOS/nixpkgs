@@ -21,9 +21,7 @@ let
     pname = "shellcheck";
     version = bin.version;
 
-    inherit (ShellCheck) src;
-
-    meta = builtins.removeAttrs ShellCheck.meta [ "hydraPlatforms" ];
+    inherit (ShellCheck) meta src;
 
     nativeBuildInputs = [ pandoc ];
 
