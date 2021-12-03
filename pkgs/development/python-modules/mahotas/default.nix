@@ -51,6 +51,12 @@ buildPythonPackage rec {
     "test_ellipse_axes"
     "test_normalize"
     "test_haralick3d"
+    "test_uint16"
+  ];
+
+  pythonImportsCheck = [
+    "mahotas"
+    "mahotas.freeimage"
   ];
 
   pythonImportsCheck = [
