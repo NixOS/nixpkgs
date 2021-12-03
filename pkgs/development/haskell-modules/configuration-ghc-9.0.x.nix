@@ -78,10 +78,10 @@ self: super: {
   # 2021-11-08: Fixed in autoapply-0.4.2
   autoapply = doJailbreak self.autoapply_0_4_1_1;
 
-  # Doesn't allow Dhall 1.39.*
-  weeder_2_3_0 = super.weeder_2_3_0.override {
+  # Doesn't allow Dhall 1.39.*; forbids lens 5.1
+  weeder_2_3_0 = doJailbreak (super.weeder_2_3_0.override {
     dhall = self.dhall_1_40_2;
-  };
+  });
 
   # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
   generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
