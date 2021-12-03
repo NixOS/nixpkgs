@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  version = "1.20";
+  version = "1.22";
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
     rev = "v${version}";
-    sha256 = "11q9dpfi4qj2v8z0nlf8c0079mlv10ljhh0d1yr0j4ds3saacd15";
+    sha256 = "sha256-U1/i9WNlLphPIcNysC476sqil/q9tMYmu+Y6psga8I0=";
     fetchSubmodules = true;
   };
 
