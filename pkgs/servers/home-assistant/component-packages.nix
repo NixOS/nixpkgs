@@ -370,7 +370,7 @@
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors ifaddr zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ homematicip ];
-    "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
+    "homeworks" = ps: with ps; [ pyhomeworks ];
     "honeywell" = ps: with ps; [ somecomfort ];
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
     "hp_ilo" = ps: with ps; [ python-hpilo ];
