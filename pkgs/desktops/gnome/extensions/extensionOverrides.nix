@@ -2,6 +2,7 @@
 , ddcutil
 , gjs
 , xprop
+, touchegg
 }:
 let
   # Helper method to reduce redundancy
@@ -46,5 +47,13 @@ super: lib.trivial.pipe super [
     buildInputs = [ xprop ];
 
     meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+  }))
+
+  (patchExtension "x11gestures@joseexposito.github.io" (old: {
+    # Extension can't find Touchegg
+    # https://github.com/NixOS/nixpkgs/issues/137621
+    postPatch = ''
+      substituteInPlace "src/touchegg/ToucheggConfig.js" --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
+    '';
   }))
 ]
