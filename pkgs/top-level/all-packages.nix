@@ -14372,6 +14372,8 @@ with pkgs;
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
+  datree = callPackage ../development/tools/datree { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
