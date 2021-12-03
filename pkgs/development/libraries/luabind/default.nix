@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "luabind";
     repo = "luabind";
     rev = "v${version}";
-    sha256 = "sha256-sK1ca2Oj9yXdmxyXeDO3k8YZ1g+HxIXLhvdTWdPDdag=";
+    sha256 = "sha256-Dl6tUKB2aNKYiPL6b1MiD5AMiG5GosmcfoZWhC8F/y0=";
   };
 
   patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ];
