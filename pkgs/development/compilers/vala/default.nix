@@ -30,8 +30,6 @@ let
 
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.50" = ./disable-graphviz-0.46.1.patch;
-
         "0.52" = ./disable-graphviz-0.46.1.patch;
 
         "0.54" = ./disable-graphviz-0.46.1.patch;
@@ -108,11 +106,6 @@ in rec {
   vala_0_48 = generic {
     version = "0.48.20";
     sha256 = "sha256-RrHIF/dIUfvMOV/E+eoRlQLPh7kzPMllbhzczAvTN24=";
-  };
-
-  vala_0_50 = generic {
-    version = "0.50.10";
-    sha256 = "sha256-vnIf8/AYHqttM+zKzygfZvMI+qHl5VTwj99nFZpFlRU=";
   };
 
   vala_0_52 = generic {
