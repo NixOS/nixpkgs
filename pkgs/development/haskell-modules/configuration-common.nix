@@ -1842,7 +1842,7 @@ self: super: {
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
 
-  # Tests are flaky on busy machines
+  # Tests are flaky on busy machines, upstream doesn't intend to fix
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
