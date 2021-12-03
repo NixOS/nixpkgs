@@ -322,6 +322,7 @@ in
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
+  nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { };
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
