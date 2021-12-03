@@ -22470,6 +22470,10 @@ with pkgs;
 
   ofono = callPackage ../tools/networking/ofono { };
 
+  okapi = callPackage ../development/libraries/okapi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
