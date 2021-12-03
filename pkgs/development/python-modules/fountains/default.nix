@@ -17,6 +17,11 @@ buildPythonPackage rec {
     bitlist
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "bitlist~=0.5.1" "bitlist>=0.5.1"
+  '';
+
   # Project has no test
   doCheck = false;
 
