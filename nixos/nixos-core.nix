@@ -14,6 +14,8 @@ in {
       imports = [ modules.invokeNixpkgs ];
       nixpkgs.system = builtins.currentSystem;
     };
+
+    etc = ./modules/system/etc/etc.nix;
   };
 
   evalModules = {
