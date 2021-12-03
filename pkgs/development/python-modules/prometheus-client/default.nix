@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
     rev = "v${version}";
-    sha256 = "14swmy4dgpk6cyjsm2advgc2c8api7xaca1sl7swznblh5fyzgzg";
+    sha256 = "1a0kllal5vkkdv325k0mx1mha2l9808mcz4dqx6qrgfskz8c2xjl";
   };
 
   checkInputs = [

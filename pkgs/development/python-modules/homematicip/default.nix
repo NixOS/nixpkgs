@@ -17,6 +17,8 @@
 buildPythonPackage rec {
   pname = "homematicip";
   version = "1.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -41,6 +43,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace homematicip/aio/connection.py \
+      --replace ", loop=self._loop" ""
+  '';
 
   disabledTests = [
     # Assert issues with datetime
@@ -67,7 +74,9 @@ buildPythonPackage rec {
     "test_websocket"
   ];
 
-  pythonImportsCheck = [ "homematicip" ];
+  pythonImportsCheck = [
+    "homematicip"
+  ];
 
   meta = with lib; {
     description = "Python module for the homematicIP REST API";

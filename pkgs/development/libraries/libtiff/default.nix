@@ -8,6 +8,11 @@
 , libjpeg
 , xz
 , zlib
+
+, Cocoa
+, GLUT
+, libGL
+, libGLU
 }:
 
 #FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
@@ -21,8 +26,17 @@ stdenv.mkDerivation rec {
     sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
   };
 
-  # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [
+    # FreeImage needs this patch
+    ./headers.patch
+    # libc++abi 11 has an `#include <version>`, this picks up files name
+    # `version` in the project's include paths
+    ./rename-version.patch
+  ];
+
+  postPatch = ''
+    mv VERSION VERSION.txt
+  '';
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
@@ -38,7 +52,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs = [ libdeflate ] # TODO: move all propagatedBuildInputs to buildInputs.
+    ++ lib.optionals (stdenv.isDarwin) [ Cocoa GLUT libGL libGLU ];
 
   enableParallelBuilding = true;
 

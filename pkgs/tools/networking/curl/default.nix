@@ -43,14 +43,14 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.79.1";
+  version = "7.80.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "0lbq73wz44p4fm2gp05mzrqrzfvhlmvlgfg8c8wkj5lkkamw8qny";
+    sha256 = "170qb2w2p5fga0vqhhnzi417z4h4vy764sz16pzhm5fd9471a3fx";
   };
 
   patches = [
@@ -96,17 +96,17 @@ stdenv.mkDerivation rec {
       # The build fails when using wolfssl with --with-ca-fallback
       (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      (lib.withFeatureAs opensslSupport "openssl" openssl.dev)
-      (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
-      (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
+      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      (lib.withFeatureAs idnSupport "libidn" libidn.dev)
+      (lib.withFeatureAs idnSupport "libidn" (lib.getDev libidn))
       (lib.withFeature brotliSupport "brotli")
     ]
-    ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+    ++ lib.optional wolfsslSupport "--with-wolfssl=${lib.getDev wolfssl}"
     ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+    ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     # Install completions
     make -C scripts install
   '' + lib.optionalString scpSupport ''
-    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+    sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
   '' + lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = "https://curl.haxx.se/";
+    homepage    = "https://curl.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;

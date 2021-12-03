@@ -1,14 +1,15 @@
 {lib, stdenv, fetchurl, jre} :
 
 stdenv.mkDerivation rec {
-  name = "jflex-1.8.2";
+  pname = "jflex";
+  version = "1.8.2";
 
   src = fetchurl {
-    url = "http://jflex.de/release/${name}.tar.gz";
+    url = "http://jflex.de/release/jflex-${version}.tar.gz";
     sha256 = "1ar7g6zb2xjgnws3j4cqcp86jplhc9av8cpcjdmxw08x6igd5q51";
   };
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   installPhase = ''
     runHook preInstall
