@@ -8292,6 +8292,8 @@ in {
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
+  rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
+
   rl-coach = callPackage ../development/python-modules/rl-coach { };
 
   rlp = callPackage ../development/python-modules/rlp { };
