@@ -27512,6 +27512,8 @@ with pkgs;
 
   capture = callPackage ../tools/misc/capture {};
 
+  patchmatrix = callPackage ../applications/audio/patchmatrix { };
+
   pbrt = callPackage ../applications/graphics/pbrt { };
 
   pcloud = callPackage ../applications/networking/pcloud { };
