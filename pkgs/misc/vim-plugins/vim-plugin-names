@@ -17,7 +17,7 @@ alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/compe-tmux@cmp
+andersevenrud/cmp-tmux@cmp
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
