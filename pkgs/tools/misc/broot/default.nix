@@ -73,6 +73,11 @@ rustPlatform.buildRustPackage rec {
     installManPage man/broot.1
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/broot --version | grep "${version}"
+  '';
+
   meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
