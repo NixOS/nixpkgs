@@ -44,6 +44,8 @@ let
     ];
 
     postPatch = ''
+      (cd tools && ln -s ../../clang-tools-extra extra)
+
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp

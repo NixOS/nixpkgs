@@ -1,5 +1,6 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -71,10 +72,6 @@ in buildPythonPackage rec {
   preBuild = ''
     ln -s ${cfg} site.cfg
   '';
-
-  # Workaround flakey compiler feature detection
-  # https://github.com/numpy/numpy/issues/19624
-  hardeningDisable = [ "strictoverflow" ];
 
   enableParallelBuilding = true;
 
