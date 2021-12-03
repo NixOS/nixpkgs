@@ -53,7 +53,8 @@ super: lib.trivial.pipe super [
     # Extension can't find Touchegg
     # https://github.com/NixOS/nixpkgs/issues/137621
     postPatch = ''
-      substituteInPlace "src/touchegg/ToucheggConfig.js" --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
+      substituteInPlace "src/touchegg/ToucheggConfig.js" \
+        --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
 ]
