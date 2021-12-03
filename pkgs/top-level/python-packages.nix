@@ -9297,6 +9297,8 @@ in {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
+
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 
   tess = callPackage ../development/python-modules/tess { };
