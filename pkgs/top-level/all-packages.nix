@@ -2885,6 +2885,8 @@ with pkgs;
 
   elogind = callPackage ../applications/misc/elogind { };
 
+  elpa = callPackage ../development/libraries/elpa { };
+
   enca = callPackage ../tools/text/enca { };
 
   enigma = callPackage ../games/enigma {};
