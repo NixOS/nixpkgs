@@ -342,7 +342,15 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
-    text = _replace_value('sha256', new_sha256, text)
+
+    # fetchers can specify a sha256, or a sri hash
+    try:
+        text = _replace_value('sha256', new_sha256, text)
+    except ValueError:
+        # hashes from pypi are 16-bit encoded sha256's, need translate to an sri hash if used with "hash"
+        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+        text = _replace_value('hash', sri_hash, text)
+
     if fetcher == 'fetchFromGitHub':
         text = _replace_value('rev', f"{prefix}${{version}}", text)
         # incase there's no prefix, just rewrite without interpolation
