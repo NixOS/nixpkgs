@@ -32626,6 +32626,20 @@ with pkgs;
       in
         c.config.system.build // c;
 
+  /*
+    A NixOS module that sets the `pkgs` module argument.
+   */
+  nixosModule = { lib, options, ... }: {
+    config =
+      if options?nixpkgs.pkgs then {
+        # legacy / nixpkgs.nix style
+        nixpkgs.pkgs = pkgs;
+      }
+      else {
+        # minimal
+        _module.args.pkgs = pkgs;
+      };
+  };
 
   /*
    * Run a NixOS VM network test using this evaluation of Nixpkgs.
