@@ -116,7 +116,7 @@ self: super: {
   parallel = doJailbreak super.parallel;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
-  quickcheck-instances = super.quickcheck-instances_0_3_26_1;
+  quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   semialign = super.semialign_1_2_0_1;
