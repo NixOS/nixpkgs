@@ -250,7 +250,7 @@ in {
     inherit (kernel) kernelOlder kernelAtLeast;
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
-    inherit (pkgs) bcc; # added 2021-12
+    inherit (pkgs) bcc bpftrace; # added 2021-12
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -263,8 +263,6 @@ in {
     apfs = callPackage ../os-specific/linux/apfs { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
-
-    bpftrace = callPackage ../os-specific/linux/bpftrace { };
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 

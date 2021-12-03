@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, flex, bison
-, llvmPackages, kernel, elfutils
+, llvmPackages, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
 }:
 
@@ -17,22 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = with llvmPackages;
     [ llvm libclang
-      kernel elfutils libelf bcc
+      elfutils libelf bcc
       libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
-
-  # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
-  # also in theory make this an environment variable around bpftrace, but this works
-  # nicely without wrappers.
-  patchPhase = ''
-    patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/utils.cpp \
-      --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
-  '';
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #

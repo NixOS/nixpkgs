@@ -14153,6 +14153,8 @@ with pkgs;
     python = pkgs.python3;
   };
 
+  bpftrace = callPackage ../os-specific/linux/bpftrace { };
+
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
