@@ -92,7 +92,7 @@ in rec {
         (onFullSupported "nixos.tests.keymap.dvorak")
         (onFullSupported "nixos.tests.keymap.dvorak-programmer")
         (onFullSupported "nixos.tests.keymap.neo")
-        (onFullSupported "nixos.tests.keymap.qwertz")
+        (onSystems ["x86_64-linux"] "nixos.tests.keymap.qwertz")
         (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
