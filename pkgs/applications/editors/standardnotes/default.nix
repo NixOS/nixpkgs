@@ -2,18 +2,18 @@
 , fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.8.18";
+  version = "3.9.5";
   pname = "standardnotes";
   name = "${pname}-${version}";
 
   plat = {
-    i386-linux = "i386";
+    i686-linux = "i386";
     x86_64-linux = "x86_64";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    i386-linux = "1xiypsmvpk8i6kab862pipbdfb0y5d5355hdwjmva7v7g26aa7h7";
-    x86_64-linux = "03qlxlgyypnvcr40jh6i4wriyax2jbfhrb798cq0n7qlc1y4pg8r";
+    i686-linux = "sha256-7Mo8ELFV6roZ3IYWBtB2rRDAzJrq4ht9f1v6uohsauw=";
+    x86_64-linux = "sha256-9VPYII9E8E3yL7UuU0+GmaK3qxWX4bwfACDl7F7sngo=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -61,6 +61,6 @@ in appimageTools.wrapType2 rec {
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mgregoire ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
