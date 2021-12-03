@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     "-DBUILD_SHARED_LIBS=on"
   ];
 
+  enableParallelBuilding = true;
+
   preConfigure = ''
     mkdir bin
     cat > bin/git <<'EOF'
