@@ -1705,6 +1705,8 @@ with pkgs;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
 
+  fspy = callPackage ../applications/misc/fspy { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
