@@ -2097,10 +2097,10 @@ EOT
 
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
-    language-docker = self.language-docker_10_3_0;
-    hspec = dontCheck self.hspec_2_9_1;
-    hspec-core = dontCheck self.hspec-core_2_9_1;
-    hspec-discover = dontCheck self.hspec-discover_2_9_1;
+    language-docker = self.language-docker_10_4_0;
+    hspec = dontCheck self.hspec_2_9_2;
+    hspec-core = dontCheck self.hspec-core_2_9_2;
+    hspec-discover = dontCheck self.hspec-discover_2_9_2;
     colourista = doJailbreak super.colourista;
   });
 
