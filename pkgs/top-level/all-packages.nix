@@ -2547,6 +2547,8 @@ with pkgs;
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
+  wl-mirror = callPackage ../tools/wayland/wl-mirror { };
+
   wlogout = callPackage ../tools/wayland/wlogout { };
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
@@ -20095,6 +20097,8 @@ with pkgs;
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
+  wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
+
   wt = wt4;
   inherit (callPackages ../development/libraries/wt {})
     wt3
@@ -23535,7 +23539,7 @@ with pkgs;
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
+    inherit (gnome) adwaita-icon-theme;
   };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
