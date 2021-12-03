@@ -309,8 +309,8 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname.
-    pname = _get_unique_value('pname', text)
+    # Determine pname. Many files have more than one pname
+    pnames = _get_values('pname', text)
 
     # Determine version.
     version = _get_unique_value('version', text)
@@ -320,7 +320,18 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+    # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
+    successful_fetch = False
+    for pname in pnames:
+        try:
+            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            successful_fetch = True
+            break
+        except ValueError:
+            continue
+
+    if not successful_fetch:
+        raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
