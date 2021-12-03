@@ -119,6 +119,28 @@ let
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
 
+    # PR #145602 broke Home Assistant and many dependencies
+    (mkOverride "async-timeout" "3.0.1"
+      "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
+    (self: super: {
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.7.4.post0";
+        src = old.src.override {
+          inherit version;
+          sha256 = "493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf";
+        };
+        propagatedBuildInputs = with self; [
+          async-timeout
+          attrs
+          chardet
+          multidict
+          typing-extensions
+          yarl
+        ];
+        doCheck = false;
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -182,7 +204,7 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "pyyaml==6.0" "pyyaml" \
-      --replace "yarl==1.6.3" "yarl==1.7.0"
+      --replace "yarl==1.6.3" "yarl"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
