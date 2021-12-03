@@ -716,9 +716,9 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql_9_6;
+                    services.postgresql.package = pkgs.postgresql_10;
 
-                    system.stateVersion = "17.03";
+                    system.stateVersion = "21.05";
                   };
               };
           }

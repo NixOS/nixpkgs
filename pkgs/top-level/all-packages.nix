@@ -21398,7 +21398,6 @@ with pkgs;
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_6
     postgresql_10
     postgresql_11
     postgresql_12
