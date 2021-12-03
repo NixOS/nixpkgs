@@ -157,6 +157,7 @@ extra-packages:
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.1
+  - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.1
 
 package-maintainers:
   abbradar:
