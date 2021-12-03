@@ -1,6 +1,6 @@
 # This module defines global configuration for the xonsh.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -17,7 +17,7 @@ in
     programs.xonsh = {
 
       enable = mkOption {
-        default = false;
+        default = utils.usedAsShell "xonsh" config;
         description = ''
           Whether to configure xonsh as an interactive shell.
         '';

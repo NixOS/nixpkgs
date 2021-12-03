@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -48,7 +48,7 @@ in
     programs.fish = {
 
       enable = mkOption {
-        default = false;
+        default = utils.usedAsShell "fish" config;
         description = ''
           Whether to configure fish as an interactive shell.
         '';

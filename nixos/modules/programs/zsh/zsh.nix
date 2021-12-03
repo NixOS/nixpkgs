@@ -1,6 +1,6 @@
 # This module defines global configuration for the zshell.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -42,7 +42,7 @@ in
     programs.zsh = {
 
       enable = mkOption {
-        default = false;
+        default = utils.usedAsShell "zsh" config;
         description = ''
           Whether to configure zsh as an interactive shell. To enable zsh for
           a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
