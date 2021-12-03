@@ -3524,6 +3524,8 @@ in {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heatzypy = callPackage ../development/python-modules/heatzypy { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };
