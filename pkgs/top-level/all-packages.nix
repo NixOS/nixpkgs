@@ -5510,6 +5510,8 @@ with pkgs;
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  genmap = callPackage ../applications/science/biology/genmap { };
+
   geonkick = callPackage ../applications/audio/geonkick {};
 
   gerrit = callPackage ../applications/version-management/gerrit { };
