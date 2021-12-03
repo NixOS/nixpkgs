@@ -8204,6 +8204,8 @@ in {
 
   quantities = callPackage ../development/python-modules/quantities { };
 
+  quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
