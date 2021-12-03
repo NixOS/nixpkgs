@@ -155,6 +155,7 @@ extra-packages:
   - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
+  - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
 
 package-maintainers:
   abbradar:
