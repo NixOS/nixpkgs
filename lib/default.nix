@@ -34,6 +34,9 @@ let
     options = callLibs ./options.nix;
     types = callLibs ./types.nix;
 
+    # NixOS
+    nixos = callLibs ../nixos/nixos-core.nix;
+
     # constants
     licenses = callLibs ./licenses.nix;
     systems = callLibs ./systems;
