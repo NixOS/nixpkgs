@@ -33245,6 +33245,20 @@ with pkgs;
       in
         c.config.system.build // c;
 
+  /*
+    A NixOS/home-manager/arion/... module that sets the `pkgs` module argument.
+   */
+  pkgsModule = { lib, options, ... }: {
+    config =
+      if options?nixpkgs.pkgs then {
+        # legacy / nixpkgs.nix style
+        nixpkgs.pkgs = pkgs;
+      }
+      else {
+        # minimal
+        _module.args.pkgs = pkgs;
+      };
+  };
 
   /*
    * Run a NixOS VM network test using this evaluation of Nixpkgs.
