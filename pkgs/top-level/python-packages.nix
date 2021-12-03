@@ -10325,6 +10325,8 @@ in {
 
   zetup = callPackage ../development/python-modules/zetup { };
 
+  zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
+
   zfec = callPackage ../development/python-modules/zfec { };
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
