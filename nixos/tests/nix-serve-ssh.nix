@@ -35,7 +35,7 @@ in
 
        client.fail("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
        # Currently due to shared store this is a noop :(
-       client.succeed("nix copy --to ssh-ng://nix-ssh@server $(cat mach-id-path)")
+       client.succeed("nix copy --experimental-features 'nix-command' --to ssh-ng://nix-ssh@server $(cat mach-id-path)")
        client.succeed(
            "nix-store --realise $(cat mach-id-path) --store /root/other-store --substituters ssh-ng://nix-ssh@server"
        )
