@@ -14149,6 +14149,10 @@ with pkgs;
 
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
+  bcc = callPackage ../os-specific/linux/bcc {
+    python = pkgs.python3;
+  };
+
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };

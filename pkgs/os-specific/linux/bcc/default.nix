@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
-, makeWrapper, cmake, llvmPackages, kernel
+, makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -20,9 +20,9 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang kernel
+    llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex bash
+    flex bash
   ];
 
   patches = [
@@ -32,12 +32,10 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
 
   cmakeFlags = [
-    "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
+    "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
