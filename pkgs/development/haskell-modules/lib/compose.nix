@@ -121,7 +121,10 @@ rec {
   /* doDistribute enables the distribution of binaries for the package
      via hydra.
    */
-  doDistribute = overrideCabal (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
+  doDistribute = overrideCabal (drv: {
+    # lib.platforms.all is the default value for platforms (since GHC can cross-compile)
+    hydraPlatforms = drv.platforms or lib.platforms.all;
+  });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
    */

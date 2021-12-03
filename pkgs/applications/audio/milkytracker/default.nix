@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://milkytracker.org";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ zoomulator ];
+    maintainers = with maintainers; [];
   };
 }

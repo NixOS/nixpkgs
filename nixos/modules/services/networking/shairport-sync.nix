@@ -36,6 +36,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open ports in the firewall.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "shairport";
@@ -65,6 +73,12 @@ in
         home = "/var/lib/shairport-sync";
         extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
       };
+
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 5000 ];
+      allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
+    };
 
     systemd.services.shairport-sync =
       {
