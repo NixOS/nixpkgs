@@ -559,6 +559,33 @@ rec {
     includeStorePaths = false;
   };
 
+  etc =
+    let
+      inherit (pkgs) lib;
+      nixosCore = (lib.nixos.core ({ config, modules, ... }: {
+        imports = [ pkgs.nixosModule modules.etc ];
+        environment.etc."hosts" = {
+          text = ''
+            127.0.0.1 localhost
+            ::1 localhost
+          '';
+          mode = "0456";
+        };
+      }));
+    in pkgs.dockerTools.streamLayeredImage {
+      name = "etc";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        mkdir -p /etc
+        ${nixosCore.config.system.build.etcActivationCommands}
+      '';
+      config.Cmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/hosts
+      '';
+    };
+
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
 
