@@ -1,5 +1,15 @@
-{ lib, fetchFromGitHub, python3Packages, makeWrapper }:
+{ lib, fetchFromGitHub, python3Packages, makeWrapper, django-webpack-loader }:
 
+let
+  # Seahub 8.x.x does not support django-webpack-loader >=1.x.x
+  django-webpack-loader' = django-webpack-loader.overridePythonAttrs (old: rec {
+    version = "0.7.0";
+    src = old.src.override {
+      inherit version;
+      sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
+    };
+  });
+in
 python3Packages.buildPythonPackage rec {
   pname = "seahub";
   version = "8.0.7";
@@ -20,7 +30,7 @@ python3Packages.buildPythonPackage rec {
     django
     future
     django-statici18n
-    django-webpack-loader
+    django-webpack-loader'
     django-simple-captcha
     django-picklefield
     django-formtools
