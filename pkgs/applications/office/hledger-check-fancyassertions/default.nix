@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     "hledger-check-fancyassertions"
     {
       libraries = with haskellPackages; [
-        base base-compat base-compat-batteries filepath hledger-lib_1_23
+        base base-compat base-compat-batteries filepath hledger-lib_1_24
         megaparsec microlens optparse-applicative string-qq text time
         transformers
       ];
