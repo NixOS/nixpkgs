@@ -64,6 +64,11 @@ let
 in
 
 {
+  imports = [
+    ./assertions.nix
+    ./meta.nix
+  ];
+
   options.nixpkgs = {
 
     pkgs = mkOption {
