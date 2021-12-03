@@ -31,10 +31,11 @@ stdenv.mkDerivation {
     patchShebangs utils/
   '';
 
+  strictDeps = true;
+
   buildInputs = [
     # IPA and signing
     gnutls
-    openssl
     boost
 
     # gstreamer integration
@@ -46,6 +47,8 @@ stdenv.mkDerivation {
 
     # lttng tracing
     lttng-ust
+
+    gtest
   ];
 
   nativeBuildInputs = [
@@ -57,9 +60,9 @@ stdenv.mkDerivation {
     python3Packages.pyyaml
     python3Packages.ply
     python3Packages.sphinx
-    gtest
     graphviz
     doxygen
+    openssl
   ];
 
   mesonFlags = [ "-Dv4l2=true" "-Dqcam=disabled" ];

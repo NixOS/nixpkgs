@@ -33,7 +33,7 @@ let
       };
   };
 
-  version = "14.5.0";
+  version = "14.5.1";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 in
 
@@ -45,7 +45,7 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-DbyxZKxW+S2u23+F8VQxkDXWp+L1WeISs6OEBb5DavA=";
+    sha256 = "sha256-AWY/jUIytK/8nrCH2EMrzQ9e0dc9VpZFkO7NhrrqoGg=";
   };
 
   vendorSha256 = "sha256-ZLd4E3+e25Hqmd6ZyF3X6BveMEg7OF0FX9IvNBWn3v0=";

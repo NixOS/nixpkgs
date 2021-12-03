@@ -244,7 +244,12 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+               else (
+                 # libcxx >= 13 does not build on gcc9
+                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10"
+                 then pkgs.gcc10Stdenv
+                 else stdenv
+               );
     };
 
     libcxxabi = let

@@ -5972,6 +5972,12 @@
     githubId = 3831860;
     name = "Arnold Krille";
   };
+  kanashimia = {
+    email = "chad@redpilled.dev";
+    github = "kanashimia";
+    githubId = 56224949;
+    name = "Mia Kanashi";
+  };
   karantan = {
     name = "Gasper Vozel";
     email = "karantan@gmail.com";
