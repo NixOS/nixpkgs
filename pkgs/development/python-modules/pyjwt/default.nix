@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.1.0";
+  version = "2.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    sha256 = "sha256-+6ROeJi7yhYKKytQH0koJPyDgkhdOm8Rul0MGTfOYTA=";
+    sha256 = "sha256-uIi01W8G9tzXdyEMM05pxze+dHVdPl6e4/5n3Big7kE=";
   };
 
   propagatedBuildInputs = [
