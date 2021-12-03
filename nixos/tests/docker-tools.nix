@@ -419,5 +419,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi layered-image-with-path",
         )
 
+    with subtest("etc"):
+        docker.succeed("${examples.etc} | docker load")
+        docker.succeed("docker run --rm etc | grep localhost")
+        docker.succeed("docker image rm etc:latest")
+
   '';
 })
