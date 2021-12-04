@@ -12,7 +12,6 @@
 , git
 , libtool
 , nasm
-, ncurses
 , ocaml
 , ocamlPackages
 , openssl
@@ -83,7 +82,6 @@ stdenv.mkDerivation rec {
     cmake
     file
     git
-    ncurses
     ocaml
     ocamlPackages.ocamlbuild
     perl
