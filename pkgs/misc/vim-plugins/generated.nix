@@ -9104,6 +9104,18 @@ final: prev:
     meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
   };
 
+  vim-mustache-handlebars = buildVimPluginFrom2Nix {
+    pname = "vim-mustache-handlebars";
+    version = "2021-11-30";
+    src = fetchFromGitHub {
+      owner = "mustache";
+      repo = "vim-mustache-handlebars";
+      rev = "0153fe03a919add2d6cf2d41b2d5b6e1188bc0e0";
+      sha256 = "0dnafs9bcfm539plx5hq6nzq6k8li3xbkizdhv71cpmfcbw2srln";
+    };
+    meta.homepage = "https://github.com/mustache/vim-mustache-handlebars/";
+  };
+
   vim-nerdtree-syntax-highlight = buildVimPluginFrom2Nix {
     pname = "vim-nerdtree-syntax-highlight";
     version = "2021-01-11";
