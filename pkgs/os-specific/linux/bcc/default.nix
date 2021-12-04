@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, bash, libbpf
+, bash, libbpf, nixosTests
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -68,6 +68,10 @@ python.pkgs.buildPythonApplication rec {
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";

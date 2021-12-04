@@ -3,6 +3,7 @@
 , llvmPackages, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
 , cereal, asciidoctor
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,10 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
 
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
