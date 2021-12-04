@@ -1108,6 +1108,11 @@ let
         export LIB_DIR=${pkgs.v8}/lib
         patchShebangs configure
       '';
+
+      R_MAKEVARS_SITE = lib.optionalString (pkgs.system == "aarch64-linux")
+        (pkgs.writeText "Makevars" ''
+          CXX14PICFLAGS = -fPIC
+        '');
     });
 
     acs = old.acs.overrideDerivation (attrs: {
