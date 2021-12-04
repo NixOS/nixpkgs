@@ -5208,6 +5208,18 @@ final: prev:
     meta.homepage = "https://github.com/rafaqz/ranger.vim/";
   };
 
+  rcshell-vim = buildVimPluginFrom2Nix {
+    pname = "rcshell.vim";
+    version = "2014-12-29";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "rcshell.vim";
+      rev = "6b307c6e6e6948fbb27146b0f41b5fb2ddf8e1a8";
+      sha256 = "0dj6gjq213ljshnncal3ywzv8ply2lzqmvpzaf7vdsd6r6vss3ch";
+    };
+    meta.homepage = "https://github.com/vim-scripts/rcshell.vim/";
+  };
+
   readline-vim = buildVimPluginFrom2Nix {
     pname = "readline.vim";
     version = "2019-12-28";

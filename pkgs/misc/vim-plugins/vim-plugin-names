@@ -882,6 +882,7 @@ vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL
 vim-scripts/prev_indent
 vim-scripts/random.vim
+vim-scripts/rcshell.vim
 vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
 vim-scripts/ShowMultiBase
