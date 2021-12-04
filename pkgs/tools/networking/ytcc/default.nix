@@ -2,27 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "1skhg8ca2bjjfi02pjsi3w7v3f4xhzg7bqyy0cajxsymzqzqp7lm";
+    sha256 = "sha256-nYHfmksZnIZGMSSFDhW7ajvv1F5h3aJo8IXw6yYOEw0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "youtube_dl" "yt_dlp"
-  '';
 
   nativeBuildInputs = [ gettext installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
-    click
-    feedparser
-    lxml
-    sqlalchemy
     yt-dlp
+    click
     wcwidth
   ];
 
