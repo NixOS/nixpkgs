@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rlaajNfpoiMtU/4aNAnbQ0VixPz9/302TZMarGzsb58=";
   };
 
+  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
+  # btf_dump__new() but that's not valid c++.
+  # see https://github.com/iovisor/bpftrace/issues/2068
+  patches = [ ./btf-dump-new-0.6.0.patch ];
+
   buildInputs = with llvmPackages;
     [ llvm libclang
       elfutils libelf bcc
