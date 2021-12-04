@@ -25,6 +25,9 @@
 
 , spaceNavSupport ? stdenv.isLinux
 , libspnav
+
+, waylandSupport ? false
+, dbus, libffi, libxkbcommon, pkg-config, wayland, wayland-protocols
 }:
 
 let
@@ -64,6 +67,9 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.isDarwin [
     llvmPackages.openmp Cocoa CoreGraphics ForceFeedback SDL
     OpenAL OpenGL
+  ]
+  ++ lib.optionals waylandSupport [
+    dbus libffi libxkbcommon pkg-config wayland wayland-protocols
   ]
   ++ lib.optionals jackaudioSupport [ libjack2 ]
   ++ lib.optionals cudaSupport [ cudatoolkit_11 ]
@@ -106,6 +112,7 @@ stdenv.mkDerivation rec {
   # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.cc.isClang [ "-DPYTHON_LINKFLAGS=" ]
   ++ lib.optionals jackaudioSupport [ "-DWITH_JACK=ON" ]
+  ++ lib.optionals waylandSupport [ "-DWITH_GHOST_WAYLAND=ON" ]
   ++ lib.optionals cudaSupport [ "-DWITH_CYCLES_CUDA_BINARIES=ON" ];
 
   # Since some dependencies are built with gcc 6, we need gcc 6's libstdc++
