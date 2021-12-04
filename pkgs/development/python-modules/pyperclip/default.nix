@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/asweigart/pyperclip";
-    license = licenses.bsdOriginal;
+    license = licenses.bsd3;
     description = "Cross-platform clipboard module";
   };
 }
