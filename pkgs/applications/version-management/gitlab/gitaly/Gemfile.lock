@@ -121,7 +121,7 @@ GEM
     parallel (1.19.2)
     parser (2.7.2.0)
       ast (~> 2.4.1)
-    pg_query (2.1.0)
+    pg_query (2.1.1)
       google-protobuf (>= 3.17.1)
     proc_to_ast (0.1.0)
       coderay
@@ -184,7 +184,7 @@ GEM
     rubocop-ast (0.2.0)
       parser (>= 2.7.0.1)
     ruby-progressbar (1.10.1)
-    rugged (1.1.0)
+    rugged (1.2.0)
     sanitize (4.6.6)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
@@ -234,7 +234,7 @@ DEPENDENCIES
   rspec
   rspec-parameterized
   rubocop (~> 0.69)
-  rugged (~> 1.1)
+  rugged (~> 1.2)
   sentry-raven (~> 3.0)
   timecop
 
