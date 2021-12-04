@@ -425,6 +425,8 @@ let
 
   certConfigs = mapAttrs certToConfig cfg.certs;
 
+  mkDefaultText = val: "Inherit from security.acme.defaults, otherwise ${val}" ;
+
   # These options can be specified within
   # security.acme or security.acme.certs.<name>
   inheritableOpts =
@@ -432,12 +434,14 @@ let
       validMinDays = mkOption {
         type = types.int;
         default = if inheritDefaults then defaults.validMinDays else 30;
+        defaultText = mkDefaultText "30";
         description = "Minimum remaining validity before renewal in days.";
       };
 
       renewInterval = mkOption {
         type = types.str;
         default = if inheritDefaults then defaults.renewInterval else "daily";
+        defaultText = mkDefaultText "'daily'";
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -452,6 +456,7 @@ let
       webroot = mkOption {
         type = types.nullOr types.str;
         default = if inheritDefaults then defaults.webroot else null;
+        defaultText = mkDefaultText "null";
         example = "/var/lib/acme/acme-challenge";
         description = ''
           Where the webroot of the HTTP vhost is located.
@@ -465,6 +470,7 @@ let
       server = mkOption {
         type = types.nullOr types.str;
         default = if inheritDefaults then defaults.server else null;
+        defaultText = mkDefaultText "null";
         description = ''
           ACME Directory Resource URI. Defaults to Let's Encrypt's
           production endpoint,
@@ -475,6 +481,7 @@ let
       email = mkOption {
         type = types.str;
         default = if inheritDefaults then defaults.email else null;
+        defaultText = mkDefaultText "null";
         description = ''
           Email address for account creation and correspondence from the CA.
           It is recommended to use the same email for all certs to avoid account
@@ -485,12 +492,14 @@ let
       group = mkOption {
         type = types.str;
         default = if inheritDefaults then defaults.group else "acme";
+        defaultText = mkDefaultText "'acme'";
         description = "Group running the ACME client.";
       };
 
       reloadServices = mkOption {
         type = types.listOf types.str;
         default = if inheritDefaults then defaults.reloadServices else [];
+        defaultText = mkDefaultText "[]";
         description = ''
           The list of systemd services to call <code>systemctl try-reload-or-restart</code>
           on.
@@ -500,6 +509,7 @@ let
       postRun = mkOption {
         type = types.lines;
         default = if inheritDefaults then defaults.postRun else "";
+        defaultText = mkDefaultText "''";
         example = "cp full.pem backup.pem";
         description = ''
           Commands to run after new certificates go live. Note that
@@ -512,6 +522,7 @@ let
       keyType = mkOption {
         type = types.str;
         default = if inheritDefaults then defaults.keyType else "ec256";
+        defaultText = mkDefaultText "'ec256'";
         description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
@@ -522,6 +533,7 @@ let
       dnsProvider = mkOption {
         type = types.nullOr types.str;
         default = if inheritDefaults then defaults.dnsProvider else null;
+        defaultText = mkDefaultText "null";
         example = "route53";
         description = ''
           DNS Challenge provider. For a list of supported providers, see the "code"
@@ -532,6 +544,7 @@ let
       dnsResolver = mkOption {
         type = types.nullOr types.str;
         default = if inheritDefaults then defaults.dnsResolver else null;
+        defaultText = mkDefaultText "null";
         example = "1.1.1.1:53";
         description = ''
           Set the resolver to use for performing recursive DNS queries. Supported:
@@ -543,6 +556,7 @@ let
       credentialsFile = mkOption {
         type = types.path;
         default = if inheritDefaults then defaults.credentialsFile else null;
+        defaultText = mkDefaultText "null";
         description = ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
@@ -555,6 +569,7 @@ let
       dnsPropagationCheck = mkOption {
         type = types.bool;
         default = if inheritDefaults then defaults.dnsPropagationCheck else true;
+        defaultText = mkDefaultText "true";
         description = ''
           Toggles lego DNS propagation check, which is used alongside DNS-01
           challenge to ensure the DNS entries required are available.
@@ -564,6 +579,7 @@ let
       ocspMustStaple = mkOption {
         type = types.bool;
         default = if inheritDefaults then defaults.ocspMustStaple else false;
+        defaultText = mkDefaultText "false";
         description = ''
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
@@ -577,6 +593,7 @@ let
       extraLegoFlags = mkOption {
         type = types.listOf types.str;
         default = if inheritDefaults then defaults.extraLegoFlags else [];
+        defaultText = mkDefaultText "[]";
         description = ''
           Additional global flags to pass to all lego commands.
         '';
@@ -585,6 +602,7 @@ let
       extraLegoRenewFlags = mkOption {
         type = types.listOf types.str;
         default = if inheritDefaults then defaults.extraLegoRenewFlags else [];
+        defaultText = mkDefaultText "[]";
         description = ''
           Additional flags to pass to lego renew.
         '';
@@ -593,14 +611,24 @@ let
       extraLegoRunFlags = mkOption {
         type = types.listOf types.str;
         default = if inheritDefaults then defaults.extraLegoRunFlags else [];
+        defaultText = mkDefaultText "[]";
         description = ''
           Additional flags to pass to lego run.
         '';
       };
     };
 
-  certOpts = { name, ... }: {
-    options = (inheritableOpts { inherit (cfg) defaults; inheritDefaults = cfg.certs."${name}".inheritDefaults; }) // {
+  certOpts = { name, config, ... }: {
+    options = (inheritableOpts {
+      inherit (cfg) defaults;
+      # During doc generation, name = "<name>" and doesn't really
+      # exist as a cert. As such, handle undfined certs.
+      inheritDefaults = (lib.attrByPath
+        [name]
+        { inheritDefaults = false; }
+        cfg.certs
+      ).inheritDefaults;
+    }) // {
       # user option has been removed
       user = mkOption {
         visible = false;
@@ -696,7 +724,7 @@ in {
       };
 
       defaults = mkOption {
-        type = types.submodule ({ ... }: { options = inheritableOpts {}; });
+        type = types.submodule { options = inheritableOpts {}; };
         description = ''
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
