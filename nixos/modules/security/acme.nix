@@ -3,6 +3,7 @@ with lib;
 let
   cfg = config.security.acme;
   opt = options.security.acme;
+  user = if cfg.useRoot then "root" else "acme";
 
   # Used to calculate timer accuracy for coalescing
   numCerts = length (builtins.attrNames cfg.certs);
@@ -23,7 +24,7 @@ let
   # security.acme.certs.<cert>.group on some of the services.
   commonServiceConfig = {
     Type = "oneshot";
-    User = "acme";
+    User = user;
     Group = mkDefault "acme";
     UMask = 0022;
     StateDirectoryMode = 750;
@@ -101,12 +102,12 @@ let
   # is configurable on a per-cert basis.
   userMigrationService = let
     script = with builtins; ''
-      chown -R acme .lego/accounts
+      chown -R ${user} .lego/accounts
     '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
           chmod -R u=rwX,g=rX,o= "$fixpath"
-          chown -R acme:${data.group} "$fixpath"
+          chown -R ${user}:${data.group} "$fixpath"
         fi
       done
     '') certConfigs));
@@ -268,7 +269,7 @@ let
         cat key.pem fullchain.pem > full.pem
 
         # Group might change between runs, re-apply it
-        chown 'acme:${data.group}' *
+        chown '${user}:${data.group}' *
 
         # Default permissions make the files unreadable by group + anon
         # Need to be readable by group
@@ -403,7 +404,7 @@ let
         mv domainhash.txt certificates/
 
         # Group might change between runs, re-apply it
-        chown 'acme:${data.group}' certificates/*
+        chown '${user}:${data.group}' certificates/*
 
         # Copy all certs to the "real" certs directory
         if ! cmp -s 'certificates/${keyName}.crt' out/fullchain.pem; then
@@ -720,6 +721,18 @@ in {
         description = ''
           Accept the CA's terms of service. The default provider is Let's Encrypt,
           you can find their ToS at <link xlink:href="https://letsencrypt.org/repository/"/>.
+        '';
+      };
+
+      useRoot = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to use the root user when generating certs. This is not recommended
+          for security + compatiblity reasons. If a service requires root owned certificates
+          consider following the guide on "Using ACME with services demanding root
+          owned certificates" in the NixOS manual, and only using this as a fallback
+          or for testing.
         '';
       };
 

@@ -232,6 +232,13 @@ in {
           }
         ];
 
+        use-root.configuration = { ... }: lib.mkMerge [
+          webserverBasicConfig
+          {
+            security.acme.useRoot = true;
+          }
+        ];
+
       # Test compatibility with Nginx
       } // (mkServerConfigs {
           server = "nginx";
@@ -449,6 +456,12 @@ in {
           check_issuer(webserver, "slow.example.com", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.com")
+
+      with subtest("Can set useRoot to true and still use certs normally"):
+          switch_to(webserver, "use-root")
+          webserver.wait_for_unit("nginx.service")
+          webserver.succeed("test \"$(stat -c '%U' /var/lib/acme/* | uniq)\" = \"root\"")
+          check_connection(client, "a.example.com")
 
       domains = ["http", "dns", "wildcard"]
       for server, logsrc in [
