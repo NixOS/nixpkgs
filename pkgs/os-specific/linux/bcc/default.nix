@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, bash
+, bash, libbpf
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -14,15 +14,14 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-4zfjr3VLg26uZ4xNKA1wayti7f2tqGvYSbwoZnr+Ygk=";
-    fetchSubmodules = true;
+    sha256 = "sha256-iLVUwJTDQ8Bn38sgHOcIR8TYxIB+gIlfTgr9+gPU0gE=";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
     llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    flex bash
+    flex bash libbpf
   ];
 
   patches = [
@@ -39,6 +38,7 @@ python.pkgs.buildPythonApplication rec {
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''
@@ -73,6 +73,6 @@ python.pkgs.buildPythonApplication rec {
     description = "Dynamic Tracing Tools for Linux";
     homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
   };
 }
