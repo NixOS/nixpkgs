@@ -3316,6 +3316,9 @@ broken-packages:
   - NaturalSort
   - naver-translate
   - nbt
+  # ncurses was not updated since 2016, needs a port to ncurses-6.3
+  # upstream: https://github.com/NixOS/nixpkgs/pull/148629
+  - ncurses
   - neat
   - needle
   - neet
