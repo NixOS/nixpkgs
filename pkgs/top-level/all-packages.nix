@@ -24220,7 +24220,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
-  blender_2_93 = callPackage  ../applications/misc/blender {
+  blender_2_93 = callPackage  ../applications/misc/blender/2.93.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
