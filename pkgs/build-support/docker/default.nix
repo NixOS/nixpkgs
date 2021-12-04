@@ -818,7 +818,8 @@ rec {
       fakeRootCommands ? ""
     , # Whether to run fakeRootCommands in fakechroot as well, so that they
       # appear to run inside the image, but have access to the normal Nix store.
-      enableFakechroot ? pkgs.stdenv.buildPlatform.isLinux
+      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
+      enableFakechroot ? false
     , # We pick 100 to ensure there is plenty of room for extension. I
       # believe the actual maximum is 128.
       maxLayers ? 100

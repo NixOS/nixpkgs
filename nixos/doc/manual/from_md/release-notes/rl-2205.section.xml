@@ -57,14 +57,6 @@
           new versions will release.
         </para>
       </listitem>
-      <listitem>
-        <para>
-          <literal>pkgs.dockerTools.buildLayeredImage</literal>/<literal>streamLayeredImage</literal>
-          enable <literal>enableFakechroot</literal> by default on
-          Linux. This might be unexpected and can be set to
-          <literal>false</literal> if image generation fails.
-        </para>
-      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">

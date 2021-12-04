@@ -566,6 +566,7 @@ rec {
     name = "image-via-fake-chroot";
     tag = "latest";
     config.Cmd = [ "hello" ];
+    enableFakechroot = true;
     # Crucially, instead of a relative path, this creates /bin, which is
     # intercepted by fakechroot.
     # This functionality is not available on darwin as of 2021.
