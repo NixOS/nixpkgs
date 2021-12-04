@@ -9984,6 +9984,8 @@ with pkgs;
 
   telescope = callPackage ../applications/networking/browsers/telescope { };
 
+  termcolor = callPackage ../development/libraries/termcolor { };
+
   termscp = callPackage ../tools/networking/termscp {
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
   };
