@@ -2885,6 +2885,8 @@ with pkgs;
 
   elogind = callPackage ../applications/misc/elogind { };
 
+  elpa = callPackage ../development/libraries/elpa { };
+
   enca = callPackage ../tools/text/enca { };
 
   enigma = callPackage ../games/enigma {};
@@ -4655,6 +4657,9 @@ with pkgs;
   dolphin-emu-beta = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
+  dolphin-emu-primehack = qt5.callPackage ../misc/emulators/dolphin-emu/primehack.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
+  };
 
   domoticz = callPackage ../servers/domoticz { };
 
@@ -5505,6 +5510,8 @@ with pkgs;
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  genmap = callPackage ../applications/science/biology/genmap { };
+
   geonkick = callPackage ../applications/audio/geonkick {};
 
   gerrit = callPackage ../applications/version-management/gerrit { };
@@ -6314,6 +6321,8 @@ with pkgs;
   horst = callPackage ../tools/networking/horst { };
 
   host = bind.host;
+
+  hostess = callPackage ../development/tools/hostess {};
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
@@ -14371,6 +14380,8 @@ with pkgs;
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
+  datree = callPackage ../development/tools/datree { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
@@ -18297,6 +18308,8 @@ with pkgs;
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
   libubox = callPackage ../development/libraries/libubox { };
+
+  libudev-zero = callPackage ../development/libraries/libudev-zero { };
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
@@ -22469,6 +22482,10 @@ with pkgs;
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
 
   ofono = callPackage ../tools/networking/ofono { };
+
+  okapi = callPackage ../development/libraries/okapi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   openpam = callPackage ../development/libraries/openpam { };
 
@@ -27498,6 +27515,8 @@ with pkgs;
   pb_cli = callPackage ../tools/misc/pb_cli {};
 
   capture = callPackage ../tools/misc/capture {};
+
+  patchmatrix = callPackage ../applications/audio/patchmatrix { };
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 

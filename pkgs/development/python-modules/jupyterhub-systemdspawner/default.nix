@@ -8,15 +8,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
-  version = "0.15.0";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "systemdspawner";
-    # Corresponds to 0.15.0
-    # Upstream didn't tag the latest release:
-    # https://github.com/jupyterhub/systemdspawner/issues/89
-    rev = "7d7cf42db76d9cfa5a4bc42fff14943877ac570b";
+    rev = "v${version}";
     sha256 = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
   };
 
