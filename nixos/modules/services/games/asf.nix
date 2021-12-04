@@ -12,7 +12,10 @@ let
     # and nixos takes care of restarting the service
     # is in theory not needed as this is already the default for default builds
     UpdateChannel = 0;
+    Headless = true;
   });
+
+  ipc-config = format.generate "IPC.config" cfg.ipcSettings;
 
   mkBot = n: c:
     format.generate "${n}.json" (c.settings // {
@@ -39,19 +42,19 @@ in
       type = types.submodule {
         options = {
           enable = mkEnableOption
-            "Wheter to start the web-ui. This is the preffered way of configuring things such as the steam guard token";
+            "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token";
 
           package = mkOption {
             type = types.package;
-            default = pkgs.ASF-ui;
+            default = pkgs.ArchiSteamFarm.ui;
             description =
-              "Web ui package to use. Contents must be in lib/dist.";
+              "Web-UI package to use. Contents must be in lib/dist.";
           };
         };
       };
       default = {
         enable = true;
-        package = pkgs.ASF-ui;
+        package = pkgs.ArchiSteamFarm.ui;
       };
       example = {
         enable = false;
@@ -75,7 +78,7 @@ in
     };
 
     settings = mkOption {
-      type = let format = pkgs.formats.json { }; in format.type;
+      type = format.type;
       description = ''
         The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
         Do note that `AutoRestart`  and `UpdateChannel` is always to `false`
@@ -88,6 +91,25 @@ respectively `0` because NixOS takes care of updating everything.
       };
       default = { };
     };
+
+    ipcSettings = mkOption {
+      type = format.type;
+      description = ''
+        Settings to write to IPC.config.
+        All options can be found <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/IPC#custom-configuration">here</link>.
+      '';
+      example = {
+        Kestrel = {
+          Endpoints = {
+            HTTP = {
+              Url = "http://*:1242";
+            };
+          };
+        };
+      };
+      default = { };
+    };
+
     bots = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
@@ -147,8 +169,8 @@ respectively `0` because NixOS takes care of updating everything.
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig = lib.mkMerge [
-          (lib.mkIf (cfg.dataDir == "/var/lib/asf") { StateDirectory = "asf"; })
+        serviceConfig = mkMerge [
+          (mkIf (cfg.dataDir == "/var/lib/asf") { StateDirectory = "asf"; })
           {
             User = "asf";
             Group = "asf";
@@ -181,22 +203,25 @@ respectively `0` because NixOS takes care of updating everything.
         ];
 
         preStart = ''
-          set -x
-          # we remove config to have no complexity when creating the required files/directories
           mkdir -p config
+          rm -f www
+          rm -f config/{*.json,*.config}
 
-          rm -rf config/*.json
-          rm -rf www
           ln -s ${asf-config} config/ASF.json
-          echo -e '${
-            lib.strings.concatStringsSep "\\n"
-            (attrsets.mapAttrsToList mkBot cfg.bots)
-          }' \
-          | while read -r line; do
-              ln -s $line config/$(basename $line)
-          done
 
-          ${lib.strings.optionalString cfg.web-ui.enable ''
+          ${strings.optionalString (cfg.ipcSettings != {}) ''
+            ln -s ${ipc-config} config/IPC.config
+          ''}
+
+          ln -s ${pkgs.runCommandLocal "ASF-bots" {} ''
+            mkdir -p $out/lib/asf/bots
+            for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
+              set -- $i
+              ln -s $2 $out/lib/asf/bots/$1
+            done
+          ''}/lib/asf/bots/* config/
+
+          ${strings.optionalString cfg.web-ui.enable ''
             ln -s ${cfg.web-ui.package}/lib/dist www
           ''}
         '';

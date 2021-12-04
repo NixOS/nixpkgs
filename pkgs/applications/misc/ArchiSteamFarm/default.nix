@@ -5,18 +5,18 @@
 , libkrb5
 , zlib
 , openssl
-, fetchpatch
+, callPackage
 }:
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
-  version = "5.2.0.9";
+  version = "5.2.0.10";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BGd75l/p2rvRR/S8uz25aFws8txBpd60iB0xPbfTngM=";
+    sha256 = "sha256-okI58EpzKPd9IfC0K687inscmhO74vMeq8crEF/Xj3k=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
@@ -34,12 +34,15 @@ buildDotnetModule rec {
   preInstall = ''
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
-      --run "mkdir -p \"~/.config/archisteamfarm/{config,logs,plugins}\""
+      --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru = {
+    updateScript = ./updater.sh;
+    ui = callPackage ./web-ui { };
+  };
 
   meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
