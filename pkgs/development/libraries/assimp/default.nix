@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.0.1";
+  version = "5.1.3";
+  outputs = [ "out" "lib" "dev" ];
 
   src = fetchFromGitHub{
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    sha256 = "00vxzfcrs856qnyk806wqr67nmpjk06mjby0fqmyhm6i1jj2hg1w";
+    hash = "sha256-GNSfaP8O5IsjGwtC3DFaV4OiMMUXIcmHmz+5TCT/HP8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library to import various 3D model formats";
-    homepage = "http://assimp.sourceforge.net/";
+    homepage = "https://www.assimp.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux ++ platforms.darwin;
