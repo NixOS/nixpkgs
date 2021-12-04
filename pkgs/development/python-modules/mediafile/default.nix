@@ -1,26 +1,38 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, flit-core
 , mutagen
-, six
+, pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "mediafile";
   version = "0.9.0";
-  format = "setuptools";
+  format = "flit";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-k8zvP7t9RVSg52idQSNs1WhqLy8XSTCYYiuDRM+D35o=";
+  src = fetchFromGitHub {
+    owner = "beetbox";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-S90BgjKXpE4kAR0mPXgacmr2A+0hrkGpHRMeuvyFNCg=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     mutagen
     six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
