@@ -676,11 +676,5 @@ in
 
   zookeeper = attrs: {
     buildInputs = lib.optionals stdenv.isDarwin [ cctools ];
-    dontBuild = false;
-    postPatch = ''
-      sed -i ext/extconf.rb -e "4a \
-        FileUtils.cp '${./zookeeper-ftbfs-with-gcc-8.patch}', 'patches/zkc-3.4.5-gcc-8.patch'
-      "
-    '';
   };
 }
