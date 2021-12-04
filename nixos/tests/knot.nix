@@ -206,5 +206,7 @@ in {
 
             test(host, "RRSIG", "www.example.com", r"RR set signature is")
             test(host, "DNSKEY", "example.com", r"DNSSEC key is")
+
+    master.log(master.succeed("systemd-analyze security knot.service | grep -v '✓'"))
   '';
 })
