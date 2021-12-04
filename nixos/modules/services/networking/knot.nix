@@ -80,13 +80,13 @@ in {
   };
 
   config = mkIf config.services.knot.enable {
+    users.groups.knot = {};
     users.users.knot = {
       isSystemUser = true;
       group = "knot";
       description = "Knot daemon user";
     };
 
-    users.groups.knot.gid = null;
     systemd.services.knot = {
       unitConfig.Documentation = "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";
       description = cfg.package.meta.description;
@@ -98,17 +98,52 @@ in {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
         ExecReload = "${knot-cli-wrappers}/bin/knotc reload";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
-        NoNewPrivileges = true;
         User = "knot";
+        Group = "knot";
+
+        AmbientCapabilities = [
+          "CAP_NET_BIND_SERVICE"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
+        ];
+        DeviceAllow = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = false; # breaks capability passing
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        Restart = "on-abort";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime =true;
+        RestrictSUIDSGID = true;
         RuntimeDirectory = "knot";
         StateDirectory = "knot";
         StateDirectoryMode = "0700";
-        PrivateDevices = true;
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
         SystemCallArchitectures = "native";
-        Restart = "on-abort";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        UMask = "0077";
       };
     };
 
