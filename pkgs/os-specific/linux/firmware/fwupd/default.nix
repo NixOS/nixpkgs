@@ -112,7 +112,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.1";
+    version = "1.7.2";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -121,7 +121,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-rlbOtEt4byH1TRM6xwvF2cuM1L2gFnM5xmmiKNpn+jw=";
+      sha256 = "sha256-hjLfacO6/Fk4fNy1F8POMaWXoJAm5E9ZB9g4RnG5+DQ=";
     };
 
     patches = [
@@ -142,6 +142,9 @@ let
 
       # Tests detect fwupd is installed when prefix is /usr.
       ./fix-install-detection.patch
+
+      # EFI capsule is located in fwupd-efi now.
+      ./efi-app-path.patch
     ];
 
     nativeBuildInputs = [
