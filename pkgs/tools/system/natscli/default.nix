@@ -5,12 +5,12 @@
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.0.26";
+  version = "0.0.28";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "sha256-w0a2BzfRKf55hFgdaDLsR2YeC5Jqa2uynlRN2oGPX8g=";
   };
 
