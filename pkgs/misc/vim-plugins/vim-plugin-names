@@ -392,6 +392,7 @@ lewis6991/gitsigns.nvim
 lf-lang/lingua-franca.vim
 lfe-support/vim-lfe
 lfilho/cosco.vim
+lifepillar/pgsql.vim
 lifepillar/vim-gruvbox8
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp

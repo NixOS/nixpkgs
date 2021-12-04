@@ -4906,6 +4906,18 @@ final: prev:
     meta.homepage = "https://github.com/andsild/peskcolor.vim/";
   };
 
+  pgsql-vim = buildVimPluginFrom2Nix {
+    pname = "pgsql.vim";
+    version = "2021-12-03";
+    src = fetchFromGitHub {
+      owner = "lifepillar";
+      repo = "pgsql.vim";
+      rev = "b4518baca45a556ab8b1ad6daee78f8d4744f635";
+      sha256 = "0jzzbsg73p6p0fjivix5bn8h6n1rz759bq8z1ilj2m6wz14c1ilm";
+    };
+    meta.homepage = "https://github.com/lifepillar/pgsql.vim/";
+  };
+
   pig-vim = buildVimPluginFrom2Nix {
     pname = "pig.vim";
     version = "2017-06-08";
