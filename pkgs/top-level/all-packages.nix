@@ -793,8 +793,6 @@ with pkgs;
 
   ### TOOLS
 
-  _0x0 = callPackage ../tools/misc/0x0 { };
-
   _3llo = callPackage ../tools/misc/3llo { };
 
   _3mux = callPackage ../tools/misc/3mux { };
