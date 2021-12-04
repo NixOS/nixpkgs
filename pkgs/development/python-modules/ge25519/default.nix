@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "ge25519";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +31,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ge25519" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "bitlist~=0.5.1" "bitlist>=0.5.1" \
+      --replace "parts~=1.1.2" "parts>=1.1.2"
+  '';
+
+  pythonImportsCheck = [
+    "ge25519"
+  ];
 
   meta = with lib; {
     description = "Python implementation of Ed25519 group elements and operations";
