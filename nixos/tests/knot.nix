@@ -45,6 +45,10 @@ in {
   nodes = {
     master = { lib, ... }: {
       imports = [ common ];
+
+      # trigger sched_setaffinity syscall
+      virtualisation.cores = 2;
+
       networking.interfaces.eth1 = {
         ipv4.addresses = lib.mkForce [
           { address = "192.168.0.1"; prefixLength = 24; }
