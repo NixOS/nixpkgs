@@ -142,6 +142,8 @@ stdenv.mkDerivation rec {
     "sdk_install_pkg"
   ];
 
+  enableParallelBuilding = true;
+
   postBuild = ''
     patchShebangs linux/installer/bin/sgx_linux_x64_sdk_${version}.bin
   '';
