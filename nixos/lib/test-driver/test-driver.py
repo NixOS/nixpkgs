@@ -904,6 +904,7 @@ class Machine:
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
+        time.sleep(0.01)
 
     def start(self) -> None:
         if self.booted:
