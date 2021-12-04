@@ -7,6 +7,7 @@
 , file
 , glibc
 , makeWrapper
+, nixosTests
 , protobuf
 , python3
 , sgx-sdk
@@ -174,6 +175,10 @@ stdenv.mkDerivation rec {
       --replace '/usr/sbin/usermod' \
                 '${shadow}/bin/usermod'
   '';
+
+  passthru.tests = {
+    service = nixosTests.aesmd;
+  };
 
   meta = with lib; {
     description = "Intel SGX Architectural Enclave Service Manager";
