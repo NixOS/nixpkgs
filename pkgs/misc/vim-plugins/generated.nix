@@ -6268,6 +6268,18 @@ final: prev:
     meta.homepage = "https://github.com/itchyny/thumbnail.vim/";
   };
 
+  timestamp-vim = buildVimPluginFrom2Nix {
+    pname = "timestamp.vim";
+    version = "2010-11-06";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "timestamp.vim";
+      rev = "0437f9bddd4e699e8e9de176daacec234d42b56c";
+      sha256 = "1dvssbmz7xm4p83jmsqalkshbrk67cacsjvxjpnlw870zf2hqc8p";
+    };
+    meta.homepage = "https://github.com/vim-scripts/timestamp.vim/";
+  };
+
   tlib_vim = buildVimPluginFrom2Nix {
     pname = "tlib_vim";
     version = "2021-07-17";
