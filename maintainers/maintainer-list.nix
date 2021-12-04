@@ -5283,6 +5283,12 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jceb = {
+    name = "jceb";
+    email = "jceb@e-jc.de";
+    github = "jceb";
+    githubId = 101593;
+  };
   jchw = {
     email = "johnwchadwick@gmail.com";
     github = "jchv";
@@ -7052,6 +7058,12 @@
     github = "madjar";
     githubId = 109141;
     name = "Georges Dubus";
+  };
+  Madouura = {
+    email = "madouura@gmail.com";
+    github = "Madouura";
+    githubId = 93990818;
+    name = "Madoura";
   };
   mafo = {
     email = "Marc.Fontaine@gmx.de";
