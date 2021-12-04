@@ -247,6 +247,7 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
+hura/vim-asymptote
 iamcco/coc-spell-checker
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
