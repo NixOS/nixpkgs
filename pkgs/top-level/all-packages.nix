@@ -1480,7 +1480,7 @@ with pkgs;
   bic = callPackage ../development/interpreters/bic { };
 
   binance = callPackage ../applications/misc/binance {
-    electron = electron_12;
+    electron = electron_13;
   };
 
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
@@ -3489,7 +3489,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
@@ -5030,7 +5030,9 @@ with pkgs;
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
-  etcher = callPackage ../tools/misc/etcher { };
+  etcher = callPackage ../tools/misc/etcher {
+    electron = electron_14;
+  };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
@@ -10021,7 +10023,7 @@ with pkgs;
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
 
   thedesk = callPackage ../applications/misc/thedesk {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   theharvester = callPackage ../tools/security/theharvester { };
@@ -29146,7 +29148,7 @@ with pkgs;
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   wio = callPackage ../applications/window-managers/wio { };
@@ -31878,7 +31880,7 @@ with pkgs;
 
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_12;
+    electron = electron_14;
    };
 
   maxima = callPackage ../applications/science/math/maxima {
