@@ -7203,6 +7203,12 @@
     githubId = 623509;
     name = "Martijn Vermaat";
   };
+  martinetd = {
+    email = "f.ktfhrvnznqxacf@noclue.notk.org";
+    github = "martinetd";
+    githubId = 1729331;
+    name = "Dominique Martinet";
+  };
   martingms = {
     email = "martin@mg.am";
     github = "martingms";
