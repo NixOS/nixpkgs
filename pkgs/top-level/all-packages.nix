@@ -14779,6 +14779,8 @@ with pkgs;
 
   kube-aws = callPackage ../development/tools/kube-aws { };
 
+  kubeaudit = callPackage ../tools/security/kubeaudit { };
+
   kubectx = callPackage ../development/tools/kubectx { };
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
