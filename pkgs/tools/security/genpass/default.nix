@@ -7,15 +7,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "genpass";
-  version = "0.4.12";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~cyplo/genpass";
     rev = "v${version}";
-    sha256 = "154kprbqc59f06ciz60il4ax299zapwa0hz8vjn25rl4gr5gzn4l";
+    sha256 = "UyEgOlKtDyneRteN3jHA2BJlu5U1HFL8HA2MTQz5rns=";
   };
 
-  cargoSha256 = "1b9jqkg11d0ih46km063inqqjwfy1nrwb2xb3dagg3hi8hahpqpb";
+  cargoSha256 = "ls3tzZ+gtZQlObmbtwJDq6N/f5nY+Ps7RL5R/fR5Vgg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
 
