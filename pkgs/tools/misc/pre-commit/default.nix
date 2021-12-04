@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, cfgv
-, fetchPypi
-, identify
-, importlib-metadata
-, importlib-resources
-, nodeenv
-, python
-, pythonOlder
-, pyyaml
-, toml
-, virtualenv
-}:
+{ lib, python3Packages }:
 
+with python3Packages;
 buildPythonPackage rec {
   pname = "pre-commit";
   version = "2.16.0";
