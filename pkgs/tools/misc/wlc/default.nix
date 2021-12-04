@@ -1,4 +1,5 @@
 { lib
+, pre-commit
 , python3
 }:
 

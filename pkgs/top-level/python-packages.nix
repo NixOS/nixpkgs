@@ -6074,8 +6074,6 @@ in {
 
   prefixed = callPackage ../development/python-modules/prefixed { };
 
-  pre-commit = callPackage ../development/python-modules/pre-commit { };
-
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
 
   preggy = callPackage ../development/python-modules/preggy { };

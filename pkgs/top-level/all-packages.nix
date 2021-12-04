@@ -8781,7 +8781,7 @@ with pkgs;
 
   pptpd = callPackage ../tools/networking/pptpd {};
 
-  pre-commit = with python3Packages; toPythonApplication pre-commit;
+  pre-commit = callPackage ../tools/misc/pre-commit { };
 
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
