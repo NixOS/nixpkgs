@@ -396,6 +396,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
         )
 
+    with subtest("layered image fakeRootCommands with fakechroot works"):
+        docker.succeed("${examples.imageViaFakeChroot} | docker load")
+        docker.succeed("docker run --rm image-via-fake-chroot | grep -i hello")
+        docker.succeed("docker image rm image-via-fake-chroot:latest")
+
     with subtest("Ensure bare paths in contents are loaded correctly"):
         docker.succeed(
             "docker load --input='${examples.build-image-with-path}'",
