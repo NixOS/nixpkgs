@@ -16,12 +16,12 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2021.4.1";
+  version = "2021.6.0";
 
   src = fetchurl {
     url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-74du6UQB1LfsnYF9tmx41KJNmlEVVL5H2W+YQR720FY=";
+    sha256 = "sha256-YvAzO5oxeq7bnYHzKTXqRVjfJXnwrTr0DNrdWS3yrX4=";
   };
 
   nativeBuildInputs =
