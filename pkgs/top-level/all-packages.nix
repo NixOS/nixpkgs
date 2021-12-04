@@ -25515,6 +25515,8 @@ with pkgs;
 
   lollypop = callPackage ../applications/audio/lollypop { };
 
+  obfuscate = callPackage ../applications/misc/obfuscate { };
+
   losslessaudiochecker = callPackage ../applications/audio/losslessaudiochecker { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
