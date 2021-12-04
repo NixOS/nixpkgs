@@ -12,7 +12,7 @@ let
     buildInputs = [
       sgx-sdk
     ];
-
+    enableParallelBuilding = true;   
     buildFlags = [
       "SGX_MODE=SIM"
     ];
