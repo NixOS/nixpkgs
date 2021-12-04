@@ -1,5 +1,6 @@
 907th/vim-auto-save
 aca/completion-tabnine
+AckslD/nvim-neoclip.lua@main
 AckslD/nvim-whichkey-setup.lua@main
 ackyshake/Spacegray.vim@main
 ahmedkhalf/lsp-rooter.nvim@main
@@ -179,9 +180,11 @@ fruit-in/brainfuck-vim
 fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 garbas/vim-snipmate
+gbrlsnchs/telescope-lsp-handlers.nvim@trunk
 gcmt/taboo.vim
 gcmt/wildfire.vim
 gelguy/wilder.nvim
+gennaro-tedesco/nvim-jqx
 gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
@@ -272,6 +275,7 @@ jaredgorski/SpaceCamp
 jasonccox/vim-wayland-clipboard
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher
+jbyuki/venn.nvim@main
 jc-doyle/cmp-pandoc-references
 jceb/vim-hier
 jceb/vim-orgmode
@@ -680,6 +684,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+scalameta/nvim-metals@main
 sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
@@ -774,6 +779,7 @@ tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
+tom-anders/telescope-vim-bookmarks.nvim@main
 tomasiser/vim-code-dark
 tomasr/molokai
 tomlion/vim-solidity

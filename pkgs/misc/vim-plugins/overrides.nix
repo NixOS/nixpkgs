@@ -483,6 +483,10 @@ self: super: {
     dependencies = with self; [ popfix ];
   });
 
+  nvim-metals = super.nvim-metals.overrideAttrs (old: {
+    dontBuild = true;
+  });
+
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });

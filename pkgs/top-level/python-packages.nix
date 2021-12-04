@@ -437,6 +437,12 @@ in {
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
+  allure-python-commons = callPackage ../development/python-modules/allure-python-commons { };
+
+  allure-python-commons-test = callPackage ../development/python-modules/allure-python-commons-test { };
+
+  allure-pytest = callPackage ../development/python-modules/allure-pytest { };
+
   alot = callPackage ../development/python-modules/alot { };
 
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
@@ -3518,6 +3524,8 @@ in {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heatzypy = callPackage ../development/python-modules/heatzypy { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };
@@ -3947,6 +3955,8 @@ in {
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
+  jaconv = callPackage ../development/python-modules/jaconv { };
+
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
   janus = callPackage ../development/python-modules/janus { };
@@ -4198,6 +4208,8 @@ in {
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
+
+  keyboard = callPackage ../development/python-modules/keyboard { };
 
   keyring = callPackage ../development/python-modules/keyring { };
 
@@ -6647,6 +6659,8 @@ in {
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
+
+  pykakasi = callPackage ../development/python-modules/pykakasi { };
 
   pykdl = callPackage ../development/python-modules/pykdl { };
 
@@ -9297,6 +9311,8 @@ in {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
+
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 
   tess = callPackage ../development/python-modules/tess { };
@@ -10310,6 +10326,8 @@ in {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zetup = callPackage ../development/python-modules/zetup { };
+
+  zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
 
