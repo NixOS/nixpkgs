@@ -14,7 +14,17 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify configuring settings for many certificates at once.
+          This also opens up the the option to use DNS-01 validation
+          when using <literal>enableACME</literal> on web server virtual
+          hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
       <listitem>
         <para>
           PHP 8.1 is now available
@@ -178,6 +188,20 @@
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
           using this default will print a warning when rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.acme</literal> certificates will now
+          correctly check for CA revokation before reaching their
+          minimum age.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Removing domains from
+          <literal>security.acme.certs._name_.extraDomainNames</literal>
+          will now correctly remove those domains during rebuild/renew.
         </para>
       </listitem>
       <listitem>
