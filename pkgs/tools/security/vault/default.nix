@@ -38,7 +38,7 @@ buildGoModule rec {
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  passthru.tests.vault = nixosTests.vault;
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";
