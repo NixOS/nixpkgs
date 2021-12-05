@@ -8501,6 +8501,12 @@
     githubId = 7588406;
     name = "Andrew R. M.";
   };
+  nkalupahana = {
+    email = "hello@nisa.la";
+    github = "nkalupahana";
+    githubId = 7347290;
+    name = "Nisala Kalupahana";
+  };
   nloomans = {
     email = "noah@nixos.noahloomans.com";
     github = "nloomans";
