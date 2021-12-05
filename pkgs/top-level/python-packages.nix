@@ -1693,6 +1693,8 @@ in {
 
   colcon-output = callPackage ../development/python-modules/colcon-output { };
 
+  colcon-package-information = callPackage ../development/python-modules/colcon-package-information { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
