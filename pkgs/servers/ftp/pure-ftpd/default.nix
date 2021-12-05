@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, pam, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "pure-ftpd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08zas1kg5pnckl28gs7q29952pjfyj8rj59bq96hscqbni7gkqmb";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl pam ];
 
   configureFlags = [ "--with-tls" ];
 
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pureftpd.org";
     license = licenses.isc; # with some parts covered by BSD3(?)
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
