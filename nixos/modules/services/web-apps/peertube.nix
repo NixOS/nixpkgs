@@ -1,7 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, options, ... }:
 
 let
   cfg = config.services.peertube;
+  opt = options.services.peertube;
 
   settingsFormat = pkgs.formats.json {};
   configFile = settingsFormat.generate "production.json" cfg.settings;
@@ -212,6 +213,7 @@ in {
       enableUnixSocket = lib.mkOption {
         type = lib.types.bool;
         default = cfg.redis.createLocally;
+        defaultText = lib.literalExpression "config.${opt.redis.createLocally}";
         description = "Use Unix socket.";
       };
     };

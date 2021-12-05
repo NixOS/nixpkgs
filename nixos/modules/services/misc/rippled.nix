@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.rippled;
+  opt = options.services.rippled;
 
   b2i = val: if val then "1" else "0";
 
@@ -165,6 +166,7 @@ let
         description = "Location to store the database.";
         type = types.path;
         default = cfg.databasePath;
+        defaultText = literalExpression "config.${opt.databasePath}";
       };
 
       compression = mkOption {
@@ -177,6 +179,7 @@ let
         description = "Enable automatic purging of older ledger information.";
         type = types.nullOr (types.addCheck types.int (v: v > 256));
         default = cfg.ledgerHistory;
+        defaultText = literalExpression "config.${opt.ledgerHistory}";
       };
 
       advisoryDelete = mkOption {

@@ -1,12 +1,13 @@
 # /etc files related to networking, such as /etc/services.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.networking;
+  opt = options.networking;
 
   localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
 
@@ -78,6 +79,7 @@ in
       httpProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = cfg.proxy.default;
+        defaultText = literalExpression "config.${opt.proxy.default}";
         description = ''
           This option specifies the http_proxy environment variable.
         '';
@@ -87,6 +89,7 @@ in
       httpsProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = cfg.proxy.default;
+        defaultText = literalExpression "config.${opt.proxy.default}";
         description = ''
           This option specifies the https_proxy environment variable.
         '';
@@ -96,6 +99,7 @@ in
       ftpProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = cfg.proxy.default;
+        defaultText = literalExpression "config.${opt.proxy.default}";
         description = ''
           This option specifies the ftp_proxy environment variable.
         '';
@@ -105,6 +109,7 @@ in
       rsyncProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = cfg.proxy.default;
+        defaultText = literalExpression "config.${opt.proxy.default}";
         description = ''
           This option specifies the rsync_proxy environment variable.
         '';
@@ -114,6 +119,7 @@ in
       allProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = cfg.proxy.default;
+        defaultText = literalExpression "config.${opt.proxy.default}";
         description = ''
           This option specifies the all_proxy environment variable.
         '';

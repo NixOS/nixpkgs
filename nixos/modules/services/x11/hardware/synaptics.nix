@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let cfg = config.services.xserver.synaptics;
+    opt = options.services.xserver.synaptics;
     tapConfig = if cfg.tapButtons then enabledTapConfig else disabledTapConfig;
     enabledTapConfig = ''
       Option "MaxTapTime" "180"
@@ -77,24 +78,28 @@ in {
       horizTwoFingerScroll = mkOption {
         type = types.bool;
         default = cfg.twoFingerScroll;
+        defaultText = literalExpression "config.${opt.twoFingerScroll}";
         description = "Whether to enable horizontal two-finger drag-scrolling.";
       };
 
       vertTwoFingerScroll = mkOption {
         type = types.bool;
         default = cfg.twoFingerScroll;
+        defaultText = literalExpression "config.${opt.twoFingerScroll}";
         description = "Whether to enable vertical two-finger drag-scrolling.";
       };
 
       horizEdgeScroll = mkOption {
         type = types.bool;
         default = ! cfg.horizTwoFingerScroll;
+        defaultText = literalExpression "! config.${opt.horizTwoFingerScroll}";
         description = "Whether to enable horizontal edge drag-scrolling.";
       };
 
       vertEdgeScroll = mkOption {
         type = types.bool;
         default = ! cfg.vertTwoFingerScroll;
+        defaultText = literalExpression "! config.${opt.vertTwoFingerScroll}";
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 

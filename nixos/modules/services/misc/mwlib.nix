@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.mwlib;
+  opt = options.services.mwlib;
   pypkgs = pkgs.python27Packages;
 
   inherit (pypkgs) python mwlib;
@@ -96,6 +97,7 @@ in
     nslave = {
       enable = mkOption {
         default = cfg.qserve.enable;
+        defaultText = literalExpression "config.${opt.qserve.enable}";
         type = types.bool;
         description = ''
           Pulls new jobs from exactly one qserve instance

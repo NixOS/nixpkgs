@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.epgstation;
+  opt = options.services.epgstation;
 
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
@@ -80,6 +81,7 @@ in
     clientSocketioPort = mkOption {
       type = types.port;
       default = cfg.socketioPort;
+      defaultText = literalExpression "config.${opt.socketioPort}";
       description = ''
         Socket.io port that the web client is going to connect to. This may be
         different from <option>socketioPort</option> if EPGStation is hidden
