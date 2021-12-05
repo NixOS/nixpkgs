@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+, ncurses ? null, pam, audit, systemd ? null
 , nlsSupport ? true
 }:
 
@@ -48,6 +48,13 @@ stdenv.mkDerivation rec {
        "scanf_cv_type_modifier=ms"
   ;
 
+  # TODO: This is a hack until two things happen:
+  #         1. pam exposes its transitive dependencies via pkg-config
+  #         2. util-linux uses pkg-config to find pam
+  #       Once both of those happen, this (and all other references to audit)
+  #       can be removed.
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isStatic "-laudit";
+
   makeFlags = [
     "usrbin_execdir=${placeholder "bin"}/bin"
     "usrlib_execdir=${placeholder "lib"}/lib"
@@ -57,7 +64,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+    ++ lib.filter (p: p != null) [ ncurses systemd ]
+    ++ lib.optional stdenv.hostPlatform.isStatic audit;
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
