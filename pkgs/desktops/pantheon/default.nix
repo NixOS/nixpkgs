@@ -93,12 +93,16 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
-  extra-elementary-contracts = callPackage ./desktop/extra-elementary-contracts {
-    inherit (gnome) file-roller gnome-bluetooth;
+  file-roller-contract = callPackage ./desktop/file-roller-contract {
+    inherit (gnome) file-roller;
   };
 
   gala = callPackage ./desktop/gala {
     inherit (gnome) gnome-desktop;
+  };
+
+  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
+    inherit (gnome) gnome-bluetooth;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
@@ -216,5 +220,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
 
   elementary-screenshot-tool = elementary-screenshot; # added 2021-07-21
+
+  extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
 })

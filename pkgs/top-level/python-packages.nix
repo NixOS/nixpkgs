@@ -10158,7 +10158,9 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
-  xdot = callPackage ../development/python-modules/xdot { };
+  xdot = callPackage ../development/python-modules/xdot {
+    inherit (pkgs) graphviz;
+  };
 
   xenomapper = callPackage ../applications/science/biology/xenomapper { };
 
