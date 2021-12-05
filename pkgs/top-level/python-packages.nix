@@ -317,6 +317,8 @@ in {
 
   aiobotocore = callPackage ../development/python-modules/aiobotocore { };
 
+  aiobroadlink = callPackage ../development/python-modules/aiobroadlink { };
+
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
