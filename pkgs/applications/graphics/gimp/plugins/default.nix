@@ -170,15 +170,19 @@ in
   };
 
   texturize = pluginDerivation {
-    name = "texturize-2.2.2017-07-28";
+    pname = "texturize";
+    version = "2.2+unstable=2021-12-03";
     src = fetchFromGitHub {
       owner = "lmanul";
       repo = "gimp-texturize";
-      rev = "de4367f71e40fe6d82387eaee68611a80a87e0e1";
-      sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
+      rev = "9ceff0d411cda018108e5477320669b8d00d811e";
+      sha256 = "haYS0K3oAPlHtHB8phOCX5/gtWq9uiVQhG5ZhAFX0t0=";
     };
-    installPhase = "installPlugin src/texturize";
-    meta.broken = true; # https://github.com/lmanul/gimp-texturize/issues/1
+    nativeBuildInputs = with pkgs; [
+      meson
+      ninja
+      gettext
+    ];
   };
 
   waveletSharpen = pluginDerivation {
