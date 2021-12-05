@@ -27,6 +27,21 @@
 , mesa
 , libglvnd
 , libepoxy
+, Cocoa
+, AppKit
+, IOKit
+, IOSurface
+, Foundation
+, AVFoundation
+, CoreMedia
+, VideoToolbox
+, CoreGraphics
+, CoreVideo
+, OpenGL
+, Metal
+, MetalKit
+, CoreFoundation
+, ApplicationServices
 }:
 
 stdenv.mkDerivation {
@@ -41,6 +56,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # let it build with nixpkgs 10.12 sdk
+    ./tg_owt-10.12-sdk.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
@@ -54,6 +74,8 @@ stdenv.mkDerivation {
     openh264
     usrsctp
     libvpx
+    abseil-cpp
+  ] ++ lib.optionals stdenv.isLinux [
     libX11
     libXtst
     libXcomposite
@@ -63,12 +85,30 @@ stdenv.mkDerivation {
     libXrandr
     libXi
     glib
-    abseil-cpp
     pipewire
     mesa
     libepoxy
     libglvnd
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+    AppKit
+    IOKit
+    IOSurface
+    Foundation
+    AVFoundation
+    CoreMedia
+    VideoToolbox
+    CoreGraphics
+    CoreVideo
+    OpenGL
+    Metal
+    MetalKit
+    CoreFoundation
+    ApplicationServices
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/130963
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
 
