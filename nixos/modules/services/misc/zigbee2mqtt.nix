@@ -79,6 +79,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";
+        Group = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
 
