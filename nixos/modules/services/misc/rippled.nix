@@ -401,6 +401,7 @@ in
       config = mkOption {
         internal = true;
         default = pkgs.writeText "rippled.conf" rippledCfg;
+        defaultText = literalDocBook "generated config file";
       };
     };
   };

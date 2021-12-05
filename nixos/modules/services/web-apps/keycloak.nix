@@ -140,6 +140,7 @@ in
           lib.mkOption {
             type = lib.types.port;
             default = dbPorts.${cfg.database.type};
+            defaultText = lib.literalDocBook "default port of selected database";
             description = ''
               Port of the database to connect to.
             '';

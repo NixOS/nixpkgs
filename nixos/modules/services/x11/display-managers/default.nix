@@ -279,6 +279,9 @@ in
             defaultSessionFromLegacyOptions
           else
             null;
+        defaultText = literalDocBook ''
+          Taken from display manager settings or window manager settings, if either is set.
+        '';
         example = "gnome";
         description = ''
           Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.lighttpd.collectd;
+  opt = options.services.lighttpd.collectd;
 
   collectionConf = pkgs.writeText "collection.conf" ''
     datadir: "${config.services.collectd.dataDir}"
@@ -29,6 +30,9 @@ in
     collectionCgi = mkOption {
       type = types.path;
       default = defaultCollectionCgi;
+      defaultText = literalDocBook ''
+        <literal>config.${options.services.collectd.package}</literal> configured for lighttpd
+      '';
       description = ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi
         This option allows to use a customized version

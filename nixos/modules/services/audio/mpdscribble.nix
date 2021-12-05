@@ -128,6 +128,10 @@ in {
           mpdCfg.credentials).passwordFile
       else
         null;
+      defaultText = literalDocBook ''
+        The first password file with read access configured for MPD when using a local instance,
+        otherwise <literal>null</literal>.
+      '';
       type = types.nullOr types.str;
       description = ''
         File containing the password for the mpd daemon.

@@ -403,6 +403,29 @@ in {
             database = cfg.database_name;
           };
         }.${cfg.database_type};
+        defaultText = literalDocBook ''
+          <variablelist>
+            <varlistentry>
+              <term>using sqlite3</term>
+              <listitem>
+                <programlisting>
+                  { database = "''${config.${opt.dataDir}}/homeserver.db"; }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>using psycopg2</term>
+              <listitem>
+                <programlisting>
+                  psycopg2 = {
+                    user = config.${opt.database_user};
+                    database = config.${opt.database_name};
+                  }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        '';
         description = ''
           Arguments to pass to the engine.
         '';
