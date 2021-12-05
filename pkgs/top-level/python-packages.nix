@@ -6203,6 +6203,8 @@ in {
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
 
+  proxy-py = callPackage ../development/python-modules/proxy-py { };
+
   psautohint = callPackage ../development/python-modules/psautohint { };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
