@@ -1699,6 +1699,8 @@ in {
 
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
 
+  colcon-pkg-config = callPackage ../development/python-modules/colcon-pkg-config { };
+
   colcon-powershell = callPackage ../development/python-modules/colcon-powershell { };
 
   colcon-python-setup-py = callPackage ../development/python-modules/colcon-python-setup-py { };
