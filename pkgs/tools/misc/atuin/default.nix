@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
     maintainers = [ maintainers.onsails ];
-    badPlatforms = [ "aarch64-darwin" ];
+    broken = [ "aarch64-darwin" ];
   };
 }
