@@ -532,6 +532,15 @@
           <link linkend="opt-services.ananicy.enable">services.ananicy</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/smartctl_exporter">smartctl_exporter</link>,
+          a Prometheus exporter for
+          <link xlink:href="https://en.wikipedia.org/wiki/S.M.A.R.T.">S.M.A.R.T.</link>
+          data. Available as
+          <link xlink:href="options.html#opt-services.prometheus.exporters.smartctl.enable">services.prometheus.exporters.smartctl</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
