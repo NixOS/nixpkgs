@@ -1,5 +1,4 @@
 { lib
-, pre-commit
 , python3
 }:
 
@@ -19,7 +18,6 @@ buildPythonPackage rec {
     python-dateutil
     requests
     pyxdg
-    pre-commit
     responses
     twine
   ];
