@@ -946,6 +946,12 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
   dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
+  # Too strict lower bound on base64-bytestring
+  # https://github.com/dhall-lang/dhall-haskell/issues/2346
+  dhall-nixpkgs = overrideCabal (drv: {
+    revision = assert !(drv ? revision); "1";
+    editedCabalFile = "0ld4z4d3gw9mxyhm5g2hgw4w68izjnwrcqd6j7yhwhrblhdmqrr4";
+  }) super.dhall-nixpkgs;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
