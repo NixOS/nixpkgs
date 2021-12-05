@@ -3,8 +3,6 @@ let
   package = (import ./node.nix { inherit pkgs; inherit (stdenv.hostPlatform) system; }).package;
 in
 package.override rec {
-  # don't upgrade! Newer versions cause stack overflows and fail trunk-combined
-  # see https://github.com/NixOS/nixpkgs/pull/118400
   version = "1.22.1";
   reconstructLock = true;
 
