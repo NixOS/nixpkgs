@@ -11,7 +11,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
+  pname = "nmap${optionalString graphicalSupport "-graphical"}";
   version = "7.92";
 
   src = fetchurl {
