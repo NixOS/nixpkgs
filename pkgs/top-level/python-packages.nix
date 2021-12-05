@@ -9970,6 +9970,8 @@ in {
 
   wavefile = callPackage ../development/python-modules/wavefile { };
 
+  wavinsentio = callPackage ../development/python-modules/wavinsentio { };
+
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcmatch = callPackage ../development/python-modules/wcmatch { };
