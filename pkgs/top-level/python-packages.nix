@@ -2078,6 +2078,8 @@ in {
 
   dill = callPackage ../development/python-modules/dill { };
 
+  dingz = callPackage ../development/python-modules/dingz { };
+
   diofant = callPackage ../development/python-modules/diofant { };
 
   dipy = callPackage ../development/python-modules/dipy { };
