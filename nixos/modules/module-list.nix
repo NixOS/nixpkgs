@@ -1111,6 +1111,7 @@
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
+  ./system/activation/bootable.nix
   ./system/activation/system-with-activation.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix

@@ -17,37 +17,8 @@ let
       config.specialisation;
 
   systemBuilder =
-    let
-      kernelPath = "${config.boot.kernelPackages.kernel}/" +
-        "${config.system.boot.loader.kernelFile}";
-      initrdPath = "${config.system.build.initialRamdisk}/" +
-        "${config.system.boot.loader.initrdFile}";
-    in ''
+    ''
       mkdir $out
-
-      # Containers don't have their own kernel or initrd.  They boot
-      # directly into stage 2.
-      ${optionalString (!config.boot.isContainer) ''
-        if [ ! -f ${kernelPath} ]; then
-          echo "The bootloader cannot find the proper kernel image."
-          echo "(Expecting ${kernelPath})"
-          false
-        fi
-
-        ln -s ${kernelPath} $out/kernel
-        ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (config.hardware.deviceTree.package != null) ''
-          ln -s ${config.hardware.deviceTree.package} $out/dtbs
-        ''}
-
-        echo -n "$kernelParams" > $out/kernel-params
-
-        ln -s ${initrdPath} $out/initrd
-
-        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
-
-        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
-      ''}
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
@@ -59,7 +30,6 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
       mkdir $out/specialisation
       ${concatStringsSep "\n"
@@ -166,33 +136,6 @@ in
           };
         })
       );
-    };
-
-    system.boot.loader.id = mkOption {
-      internal = true;
-      default = "";
-      description = ''
-        Id string of the used bootloader.
-      '';
-    };
-
-    system.boot.loader.kernelFile = mkOption {
-      internal = true;
-      default = pkgs.stdenv.hostPlatform.linux-kernel.target;
-      defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
-      type = types.str;
-      description = ''
-        Name of the kernel file to be passed to the bootloader.
-      '';
-    };
-
-    system.boot.loader.initrdFile = mkOption {
-      internal = true;
-      default = "initrd";
-      type = types.str;
-      description = ''
-        Name of the initrd file to be passed to the bootloader.
-      '';
     };
 
     system.copySystemConfiguration = mkOption {
