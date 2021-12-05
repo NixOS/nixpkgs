@@ -4854,6 +4854,8 @@ in {
 
   motor = callPackage ../development/python-modules/motor { };
 
+  mouseinfo = callPackage ../development/python-modules/mouseinfo { };
+
   moviepy = callPackage ../development/python-modules/moviepy { };
 
   mox3 = callPackage ../development/python-modules/mox3 { };
@@ -6141,6 +6143,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pyautogui = callPackage ../development/python-modules/pyautogui { };
+
   pyavm = callPackage ../development/python-modules/pyavm { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
@@ -6435,6 +6439,8 @@ in {
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
 
   pygeoip = callPackage ../development/python-modules/pygeoip { };
+
+  pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
@@ -6939,6 +6945,8 @@ in {
     pythonPackages = self;
   });
 
+  pyrect = callPackage ../development/python-modules/pyrect { };
+
   pyregion = callPackage ../development/python-modules/pyregion { };
 
   pyres = callPackage ../development/python-modules/pyres { };
@@ -7008,6 +7016,8 @@ in {
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
+
+  pyscreeze = callPackage ../development/python-modules/pyscreeze { };
 
   py_scrypt = callPackage ../development/python-modules/py_scrypt { };
 
@@ -7737,6 +7747,8 @@ in {
   pytun = callPackage ../development/python-modules/pytun { };
 
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
+
+  pytweening = callPackage ../development/python-modules/pytweening { };
 
   pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
 
