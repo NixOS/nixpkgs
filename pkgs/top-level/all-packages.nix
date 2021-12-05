@@ -33415,9 +33415,7 @@ with pkgs;
 
   xzoom = callPackage ../tools/X11/xzoom {};
 
-  yabai = callPackage ../os-specific/darwin/yabai {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa ScriptingBridge;
-  };
+  yabai = callPackage ../os-specific/darwin/yabai { };
 
   yabause = libsForQt5.callPackage ../misc/emulators/yabause {
     freeglut = null;
