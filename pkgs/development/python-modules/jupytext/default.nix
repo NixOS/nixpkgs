@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.2";
+  version = "1.13.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
+    sha256 = "sha256-HzWAEy7z3qi+lSD3yVBGYclfvKTkG1fTsG29NlKPgQw=";
   };
 
   buildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/mwouts/jupytext/pull/885
     substituteInPlace setup.py \
-      --replace "markdown-it-py[plugins]>=1.0.0b3,<2.0.0" "markdown-it-py[plugins]>=1.0"
+      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
   '';
 
   preCheck = ''
