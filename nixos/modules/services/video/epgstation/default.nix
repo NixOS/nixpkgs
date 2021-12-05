@@ -73,6 +73,7 @@ in
     socketioPort = mkOption {
       type = types.port;
       default = cfg.port + 1;
+      defaultText = literalExpression "config.${opt.port} + 1";
       description = ''
         Socket.io port for EPGStation to listen on.
       '';

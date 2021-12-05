@@ -7,13 +7,14 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.xserver;
+  opt = options.services.xserver;
   xorg = pkgs.xorg;
 
   fontconfig = config.fonts.fontconfig;
@@ -337,11 +338,12 @@ in
 
       # Configuration for automatic login. Common for all DM.
       autoLogin = mkOption {
-        type = types.submodule {
+        type = types.submodule ({ config, options, ... }: {
           options = {
             enable = mkOption {
               type = types.bool;
-              default = cfg.displayManager.autoLogin.user != null;
+              default = config.user != null;
+              defaultText = literalExpression "config.${options.user} != null";
               description = ''
                 Automatically log in as <option>autoLogin.user</option>.
               '';
@@ -355,7 +357,7 @@ in
               '';
             };
           };
-        };
+        });
 
         default = {};
         description = ''

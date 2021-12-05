@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 with lib;
 
 let
   cfg = config.services.kubernetes.addons.dashboard;
+  opt = options.services.kubernetes.addons.dashboard;
 in {
   imports = [
     (mkRenamedOptionModule [ "services" "kubernetes" "addons" "dashboard" "enableRBAC" ] [ "services" "kubernetes" "addons" "dashboard" "rbac" "enable" ])
@@ -28,6 +29,9 @@ in {
             description = "Whether to enable role based access control is enabled for kubernetes dashboard";
             type = types.bool;
             default = elem "RBAC" config.services.kubernetes.apiserver.authorizationMode;
+            defaultText = literalExpression ''
+              elem "RBAC" config.${options.services.kubernetes.apiserver.authorizationMode}
+            '';
           };
 
           clusterAdmin = mkOption {
@@ -54,6 +58,14 @@ in {
         finalImageTag = cfg.version;
         sha256 = "01xrr4pwgr2hcjrjsi3d14ifpzdfbxzqpzxbk2fkbjb9zkv38zxy";
       };
+      defaultText = literalExpression ''
+        {
+          imageName = "k8s.gcr.io/kubernetes-dashboard-amd64";
+          imageDigest = "sha256:0ae6b69432e78069c5ce2bcde0fe409c5c4d6f0f4d9cd50a17974fea38898747";
+          finalImageTag = config.${opt.version};
+          sha256 = "01xrr4pwgr2hcjrjsi3d14ifpzdfbxzqpzxbk2fkbjb9zkv38zxy";
+        };
+      '';
     };
   };
 

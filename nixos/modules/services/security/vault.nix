@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.vault;
+  opt = options.services.vault;
 
   configFile = pkgs.writeText "vault.hcl" ''
     listener "tcp" {
@@ -83,6 +84,11 @@ in
       storagePath = mkOption {
         type = types.nullOr types.path;
         default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        defaultText = literalExpression ''
+          if config.${opt.storageBackend} == "file"
+          then "/var/lib/vault"
+          else null
+        '';
         description = "Data directory for file backend";
       };
 

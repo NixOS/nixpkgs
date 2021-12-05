@@ -154,6 +154,11 @@ in {
       host = lib.mkOption {
         type = lib.types.str;
         default = if cfg.database.createLocally then "/run/postgresql" else null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.database.createLocally}
+          then "/run/postgresql"
+          else null
+        '';
         example = "192.168.15.47";
         description = "Database host address or unix socket.";
       };
@@ -194,12 +199,22 @@ in {
       host = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then "127.0.0.1" else null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket}
+          then "127.0.0.1"
+          else null
+        '';
         description = "Redis host.";
       };
 
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
         default = if cfg.redis.createLocally && cfg.redis.enableUnixSocket then null else 6379;
+        defaultText = lib.literalExpression ''
+          if config.${opt.redis.createLocally} && config.${opt.redis.enableUnixSocket}
+          then null
+          else 6379
+        '';
         description = "Redis port.";
       };
 

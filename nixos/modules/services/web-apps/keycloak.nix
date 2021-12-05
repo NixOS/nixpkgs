@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 let
   cfg = config.services.keycloak;
+  opt = options.services.keycloak;
 in
 {
   options.services.keycloak = {
@@ -147,6 +148,7 @@ in
       useSSL = lib.mkOption {
         type = lib.types.bool;
         default = cfg.database.host != "localhost";
+        defaultText = lib.literalExpression ''config.${opt.database.host} != "localhost"'';
         description = ''
           Whether the database connection should be secured by SSL /
           TLS.

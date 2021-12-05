@@ -310,6 +310,7 @@ in {
       backup.path = mkOption {
         type = types.str;
         default = cfg.statePath + "/backup";
+        defaultText = literalExpression ''config.${opt.statePath} + "/backup"'';
         description = "GitLab path for backups.";
       };
 

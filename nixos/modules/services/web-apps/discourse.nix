@@ -328,6 +328,7 @@ in
         useSSL = lib.mkOption {
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
+          defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
           description = ''
             Connect to Redis with SSL.
           '';
