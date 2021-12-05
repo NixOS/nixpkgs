@@ -152,7 +152,6 @@ let
       serviceConfig = {
         # The service's only task is to ensure that the specified path exists
         Type = "oneshot";
-        WorkingDirectory = cfg.path;
       };
       wantedBy = [ "multi-user.target" ];
     };
