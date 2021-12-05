@@ -277,13 +277,13 @@ in {
       user = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "User account under which ${name} runs.";
+        description = "User account under which the service runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "Group account under which ${name} runs.";
+        description = "Group account under which the service runs.";
       };
 
       port = mkOption {
@@ -340,7 +340,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
+          Allow the service to create and use its own config file inside the <literal>dataDir</literal> as
           configured by <option>services.mediatomb.dataDir</option>.
           Deactivated by default, the service then runs with the configuration generated from this module.
           Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using

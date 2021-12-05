@@ -83,7 +83,7 @@ in {
         default = "${user}.${fqdn}";
         example = "matomo.yourdomain.org";
         description = ''
-          URL of the host, without https prefix. By default, this is ${user}.${fqdn}, but you may want to change it if you
+          URL of the host, without https prefix. You may want to change it if you
           run Matomo on a different URL than matomo.yourdomain.
         '';
       };
