@@ -240,9 +240,9 @@ rec {
       then "${python}/bin/python"
       else "${python.withPackages (ps: libraries)}/bin/python"
     ;
-    check = writeDash "python2check.sh" ''
+    check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
+    '');
   } name;
 
   # writePython2 takes a name an attributeset with libraries and some python2 sourcecode and
