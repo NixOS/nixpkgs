@@ -11649,7 +11649,7 @@ with pkgs;
   flutter = flutterPackages.stable;
 
   fnm = callPackage ../development/tools/fnm {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
   };
 
   fnlfmt = callPackage ../development/tools/fnlfmt { };
