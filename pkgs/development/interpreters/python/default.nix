@@ -238,15 +238,15 @@ in {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pypy37 = callPackage ./pypy {
-    self = pypy37;
+  pypy38 = callPackage ./pypy {
+    self = pypy38;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "5";
+      patch = "7";
     };
-    sha256 = "sha256-2SD+QJqeytnQdKqFaMpfPtNYG+ZvZuXYmIt+xm5tmaI=";
-    pythonVersion = "3.7";
+    sha256 = "sha256-Ia4zn09QFtbKcwAwXz47VUNzg1yzw5qQQf4w5oEcgMY=";
+    pythonVersion = "3.8";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
     inherit passthruFun;
