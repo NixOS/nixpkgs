@@ -1,17 +1,20 @@
-{ mkDerivation
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , callPackage
 , pkg-config
 , cmake
 , ninja
+, clang
 , python3
 , wrapGAppsHook
 , wrapQtAppsHook
+, removeReferencesTo
+, extra-cmake-modules
 , qtbase
 , qtimageformats
-, gtk3
-, libsForQt5
+, qtsvg
+, kwayland
 , lz4
 , xxHash
 , ffmpeg
@@ -25,53 +28,74 @@
 , hunspell
 , glibmm
 , webkitgtk
-  # Transitive dependencies:
-, pcre
-, xorg
-, util-linux
-, libselinux
-, libsepol
-, libepoxy
-, at-spi2-core
-, libXtst
-, libthai
-, libdatrie
+, jemalloc
+, rnnoise
+, abseil-cpp
+, microsoft_gsl
+, wayland
+, withWebKit ? false
 }:
 
 with lib;
 
 let
-  tg_owt = callPackage ./tg_owt.nix { };
+  tg_owt = callPackage ./tg_owt.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "20";
+    };
+  };
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "1.4.1";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
     rev = "k${version}";
-    sha256 = "07z56gz3sk45n5j0gw9p9mxrbwixxsmp7lvqc6lqnxmglz6knc1d";
+    sha256 = "sha256-6bF/6fr8mJyyVg53qUykysL7chuewtJB8E22kVyxjHw=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./shortcuts-binary-path.patch
+  ];
+
   postPatch = ''
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+  '' + optionalString withWebKit ''
+    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
+      --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
-  dontWrapQtApps = true;
+  dontWrapQtApps = withWebKit;
 
-  nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    # to build bundled libdispatch
+    clang
+    python3
+    wrapQtAppsHook
+    removeReferencesTo
+    extra-cmake-modules
+  ] ++ optionals withWebKit [
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     qtbase
     qtimageformats
-    gtk3
-    libsForQt5.kwayland
-    libsForQt5.libdbusmenu
+    qtsvg
+    kwayland
     lz4
     xxHash
     ffmpeg
@@ -84,24 +108,29 @@ mkDerivation rec {
     tl-expected
     hunspell
     glibmm
-    webkitgtk
+    jemalloc
+    rnnoise
     tg_owt
-    # Transitive dependencies:
-    pcre
-    xorg.libXdmcp
-    util-linux
-    libselinux
-    libsepol
-    libepoxy
-    at-spi2-core
-    libXtst
-    libthai
-    libdatrie
+    microsoft_gsl
+    wayland
+  ] ++ optionals withWebKit [
+    webkitgtk
   ];
 
-  cmakeFlags = [ "-DTDESKTOP_API_TEST=ON" ];
+  enableParallelBuilding = true;
 
-  postFixup = ''
+  cmakeFlags = [
+    "-DTDESKTOP_API_TEST=ON"
+    "-DDESKTOP_APP_QT6=OFF"
+  ];
+
+  preFixup = ''
+    remove-references-to -t ${stdenv.cc.cc} $out/bin/kotatogram-desktop
+    remove-references-to -t ${microsoft_gsl} $out/bin/kotatogram-desktop
+    remove-references-to -t ${tg_owt.dev} $out/bin/kotatogram-desktop
+  '';
+
+  postFixup = optionalString withWebKit ''
     # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/kotatogram-desktop \
       "''${gappsWrapperArgs[@]}" \
@@ -122,7 +151,7 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{ver}";
+    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }
