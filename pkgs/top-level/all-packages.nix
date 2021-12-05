@@ -24399,13 +24399,8 @@ with pkgs;
 
   ciscoPacketTracer8 = callPackage ../applications/networking/cisco-packet-tracer/8.nix { };
 
-  claws-mail-gtk2 = callPackage ../applications/networking/mailreaders/claws-mail {
-    inherit (xorg) libSM;
-    useGtk3 = false;
-  };
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
-    useGtk3 = true;
   };
 
   clfswm = callPackage ../applications/window-managers/clfswm { };
