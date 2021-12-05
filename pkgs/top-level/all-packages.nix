@@ -206,6 +206,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  beyond-identity = callPackage ../tools/security/beyond-identity {};
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
@@ -1703,6 +1705,8 @@ with pkgs;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
 
+  fspy = callPackage ../applications/misc/fspy { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
@@ -1842,6 +1846,8 @@ with pkgs;
   lsix = callPackage ../tools/graphics/lsix { };
 
   mdr = callPackage ../tools/misc/mdr { };
+
+  mobilecoin-wallet = callPackage ../applications/misc/mobilecoin-wallet { };
 
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
@@ -2561,6 +2567,8 @@ with pkgs;
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
+  wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
+
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
   wlogout = callPackage ../tools/wayland/wlogout { };
@@ -2675,6 +2683,8 @@ with pkgs;
   dateutils = callPackage ../tools/misc/dateutils { };
 
   datovka = libsForQt5.callPackage ../applications/networking/datovka { };
+
+  dave = callPackage ../servers/http/dave { };
 
   dconf = callPackage ../development/libraries/dconf { };
 
@@ -3143,6 +3153,8 @@ with pkgs;
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal {};
+
+  heroic = callPackage ../games/heroic {};
 
   hexio = callPackage ../development/tools/hexio { };
 
@@ -11644,7 +11656,7 @@ with pkgs;
   flutter = flutterPackages.stable;
 
   fnm = callPackage ../development/tools/fnm {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
   };
 
   fnlfmt = callPackage ../development/tools/fnlfmt { };
@@ -14787,6 +14799,8 @@ with pkgs;
 
   kube-aws = callPackage ../development/tools/kube-aws { };
 
+  kubeaudit = callPackage ../tools/security/kubeaudit { };
+
   kubectx = callPackage ../development/tools/kubectx { };
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
@@ -15405,9 +15419,7 @@ with pkgs;
 
   ttyd = callPackage ../servers/ttyd { };
 
-  turbogit = callPackage ../development/tools/turbogit {
-    libgit2 = libgit2_1_1; # git2go only supports v1.1.x
-  };
+  turbogit = callPackage ../development/tools/turbogit { };
 
   tweak = callPackage ../applications/editors/tweak { };
 
@@ -21407,6 +21419,7 @@ with pkgs;
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
   prometheus-script-exporter = callPackage ../servers/monitoring/prometheus/script-exporter.nix { };
+  prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
@@ -23405,6 +23418,8 @@ with pkgs;
 
   material-icons = callPackage ../data/fonts/material-icons { };
 
+  material-kwin-decoration = libsForQt5.callPackage ../data/themes/material-kwin-decoration { };
+
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   meslo-lgs-nf = callPackage ../data/fonts/meslo-lgs-nf {};
@@ -24875,6 +24890,8 @@ with pkgs;
   helix = callPackage ../applications/editors/helix { };
 
   icesl = callPackage ../applications/misc/icesl { };
+
+  kalendar = libsForQt5.callPackage ../applications/office/kalendar { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
