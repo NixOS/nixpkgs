@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
+  mpdOpt = options.services.mpd;
 
   endpointUrls = {
     "last.fm" = "http://post.audioscrobbler.com";
@@ -108,6 +109,11 @@ in {
         mpdCfg.network.listenAddress
       else
         "localhost");
+      defaultText = literalExpression ''
+        if config.${mpdOpt.network.listenAddress} != "any"
+        then config.${mpdOpt.network.listenAddress}
+        else "localhost"
+      '';
       type = types.str;
       description = ''
         Host for the mpdscribble daemon to search for a mpd daemon on.
@@ -132,6 +138,7 @@ in {
 
     port = mkOption {
       default = mpdCfg.network.port;
+      defaultText = literalExpression "config.${mpdOpt.network.port}";
       type = types.port;
       description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.
