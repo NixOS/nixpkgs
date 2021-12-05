@@ -1701,6 +1701,8 @@ in {
 
   colcon-powershell = callPackage ../development/python-modules/colcon-powershell { };
 
+  colcon-python-setup-py = callPackage ../development/python-modules/colcon-python-setup-py { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
