@@ -1689,6 +1689,8 @@ in {
 
   colcon-metadata = callPackage ../development/python-modules/colcon-metadata { };
 
+  colcon-notification = callPackage ../development/python-modules/colcon-notification { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
