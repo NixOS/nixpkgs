@@ -1843,6 +1843,8 @@ with pkgs;
 
   mdr = callPackage ../tools/misc/mdr { };
 
+  mobilecoin-wallet = callPackage ../applications/misc/mobilecoin-wallet { };
+
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
