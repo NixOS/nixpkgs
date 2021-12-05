@@ -1124,6 +1124,7 @@ broken-packages:
   - docopt
   - docrecords
   - doctest-discover-configurator
+  - doctest-parallel
   - doctest-prop
   - docusign-example
   - docvim
@@ -2647,6 +2648,7 @@ broken-packages:
   - jenga
   - jenkinsPlugins2nix
   - jespresso
+  - jet
   - jet-stream
   - jinquantities
   - jml-web-service
@@ -3563,6 +3565,7 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
+  - pandoc-lua-marshal
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-pyplot

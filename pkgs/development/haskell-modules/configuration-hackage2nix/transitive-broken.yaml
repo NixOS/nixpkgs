@@ -1112,7 +1112,6 @@ dont-distribute-packages:
  - fields
  - filepath-crypto
  - filepath-io-access
- - filepather
  - filesystem-enumerator
  - find-clumpiness
  - findhttp
@@ -1153,7 +1152,6 @@ dont-distribute-packages:
  - fortran-vars
  - foscam-directory
  - foscam-sort
- - fp-ieee
  - fplll
  - fpnla-examples
  - frame-markdown
@@ -2292,7 +2290,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
- - pandoc_2_16_1
+ - pandoc_2_16_2
  - papa
  - papa-base
  - papa-base-implement
@@ -2346,7 +2344,6 @@ dont-distribute-packages:
  - phonetic-languages-simplified-generalized-examples-array
  - phonetic-languages-simplified-lists-examples
  - phooey
- - photoname
  - pianola
  - pier
  - ping
@@ -2641,7 +2638,6 @@ dont-distribute-packages:
  - rose-trie
  - roshask
  - rosmsg-bin
- - rounded-hw
  - roundtrip-xml
  - route-generator
  - route-planning
