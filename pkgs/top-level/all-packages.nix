@@ -3830,6 +3830,8 @@ with pkgs;
 
   blastem = callPackage ../misc/emulators/blastem { };
 
+  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
+
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
   blueman = callPackage ../tools/bluetooth/blueman { };
