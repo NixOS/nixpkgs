@@ -8,7 +8,6 @@
 , importlib-metadata
 , importlib-resources
 , jbig2enc
-, leptonica
 , pdfminer
 , pikepdf
 , pillow
@@ -30,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "12.7.2";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "sha256-+mh7NgAk7R/94FXjRV+SLy478pZwYLLS8HwCazEbMf4=";
+    sha256 = "sha256-W5RFCWKDIRrsgHZL8uSOQWvEltLbqYAweZkgIZZrSIo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -52,7 +51,6 @@ buildPythonPackage rec {
       src = ./paths.patch;
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
-      liblept = "${lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
       tesseract = "${lib.getBin tesseract4}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
