@@ -6218,6 +6218,12 @@
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
   };
+  klden = {
+    name = "Kenzyme Le";
+    email = "kl@kenzymele.com";
+    github = "klDen";
+    githubId = 5478260;
+  };
   klntsky = {
     email = "klntsky@gmail.com";
     name = "Vladimir Kalnitsky";

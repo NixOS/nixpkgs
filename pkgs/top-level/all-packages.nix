@@ -206,6 +206,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  beyond-identity = callPackage ../tools/security/beyond-identity {};
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
