@@ -793,8 +793,6 @@ with pkgs;
 
   ### TOOLS
 
-  _0x0 = callPackage ../tools/misc/0x0 { };
-
   _3llo = callPackage ../tools/misc/3llo { };
 
   _3mux = callPackage ../tools/misc/3mux { };
@@ -1482,7 +1480,7 @@ with pkgs;
   bic = callPackage ../development/interpreters/bic { };
 
   binance = callPackage ../applications/misc/binance {
-    electron = electron_12;
+    electron = electron_13;
   };
 
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
@@ -3294,6 +3292,10 @@ with pkgs;
 
   maigret = callPackage ../tools/security/maigret { };
 
+  maliit-framework = libsForQt5.callPackage ../applications/misc/maliit-framework { };
+
+  maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
+
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
@@ -3491,7 +3493,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
@@ -5032,7 +5034,9 @@ with pkgs;
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
-  etcher = callPackage ../tools/misc/etcher { };
+  etcher = callPackage ../tools/misc/etcher {
+    electron = electron_14;
+  };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
@@ -7918,7 +7922,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud20 nextcloud21 nextcloud22;
+    nextcloud20 nextcloud21 nextcloud22 nextcloud23;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -10023,7 +10027,7 @@ with pkgs;
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
 
   thedesk = callPackage ../applications/misc/thedesk {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   theharvester = callPackage ../tools/security/theharvester { };
@@ -20652,6 +20656,8 @@ with pkgs;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
+  clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
+
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = erlangR22;
   };
@@ -24028,6 +24034,8 @@ with pkgs;
   asuka = callPackage ../applications/networking/browsers/asuka {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  ascii-image-converter = callPackage ../applications/graphics/ascii-image-converter { };
 
   artha = callPackage ../applications/misc/artha { };
 
@@ -29146,7 +29154,7 @@ with pkgs;
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_12;
+    electron = electron_14;
   };
 
   wio = callPackage ../applications/window-managers/wio { };
@@ -31878,7 +31886,7 @@ with pkgs;
 
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_12;
+    electron = electron_14;
    };
 
   maxima = callPackage ../applications/science/math/maxima {

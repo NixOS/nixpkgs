@@ -173,7 +173,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AMDGPU-PRO drivers";
-    homepage =  "http://support.amd.com/en-us/kb-articles/Pages/AMDGPU-PRO-Beta-Driver-for-Vulkan-Release-Notes.aspx";
+    homepage =  "https://www.amd.com/en/support";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];

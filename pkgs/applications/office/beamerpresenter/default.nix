@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    sha256 = "10i5nc5b5syaqvsixam4lmfiz3b5cphbjfgfqavi5jilq769792a";
+    sha256 = "sha256-+ZxllYL2wco4bG2pqInIbL9qfOoqoUJJUReqDyEBRcI=";
   };
 
   nativeBuildInputs = [ qmake installShellFiles wrapQtAppsHook ];

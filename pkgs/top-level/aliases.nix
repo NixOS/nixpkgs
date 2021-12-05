@@ -33,6 +33,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  _0x0 = throw "0x0 upstream is abandoned and no longer exists: https://gitlab.com/somasis/scripts/";
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
@@ -1216,6 +1217,8 @@ mapAliases ({
     qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
+    plasma-phone-components
+    plasma-nano
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus

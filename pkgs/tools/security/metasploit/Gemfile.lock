@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: a517e78b4ff21ff15b7f3ac748476ec8de4d9517
-  ref: refs/tags/6.1.16
+  revision: fc76ef1517b10ab7c84fa47d2cb8528881f29b8b
+  ref: refs/tags/6.1.17
   specs:
-    metasploit-framework (6.1.16)
+    metasploit-framework (6.1.17)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,22 +128,22 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.534.0)
-    aws-sdk-core (3.123.0)
+    aws-partitions (1.539.0)
+    aws-sdk-core (3.124.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.283.0)
+    aws-sdk-ec2 (1.286.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.63.0)
+    aws-sdk-iam (1.64.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.51.0)
+    aws-sdk-kms (1.52.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.107.0)
+    aws-sdk-s3 (1.109.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -375,7 +375,7 @@ GEM
     ruby-macho (2.5.1)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (2.0.11)
+    ruby_smb (2.0.12)
       bindata
       openssl-ccm
       openssl-cmac

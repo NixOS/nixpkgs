@@ -2553,6 +2553,17 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  danth = {
+    name = "Daniel Thwaites";
+    email = "danthwaites30@btinternet.com";
+    matrix = "@danth:matrix.org";
+    github = "danth";
+    githubId = 28959268;
+    keys = [{
+      longkeyid = "rsa3072/0xD8AFC4BF05670F9D";
+      fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D";
+    }];
+  };
   dan4ik605743 = {
     email = "6057430gu@gmail.com";
     github = "dan4ik605743";
