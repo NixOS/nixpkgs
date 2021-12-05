@@ -2123,4 +2123,7 @@ EOT
   # build newer version for `pkgs.shellcheck`
   ShellCheck_0_8_0 = doDistribute super.ShellCheck_0_8_0;
 
+  # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
+  photoname = dontCheck super.photoname;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
