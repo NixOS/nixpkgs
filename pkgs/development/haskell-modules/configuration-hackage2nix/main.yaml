@@ -124,6 +124,8 @@ default-package-overrides:
   # gi-cogl, gi-coglpango, gi-clutter, gi-json, gi-rsvg are only available for haskell-gi >= 0.26
   # 1.2.1.0 needs opaleye >= 0.8 which stackage doesn't provide
   - rel8 < 1.2.1.0
+  # 0.14.0.0 drops support for every GHC < 9.0.1
+  - brittany < 0.14
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.

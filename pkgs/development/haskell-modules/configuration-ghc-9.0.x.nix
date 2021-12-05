@@ -170,6 +170,6 @@ self: super: {
 
     hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
     hls-stylish-haskell-plugin = null; # No upstream support
-    hls-brittany-plugin = null; # No upstream support, needs new brittany release
+    hls-brittany-plugin = null; # Dependencies don't build with 9.0.1
   });
 }
