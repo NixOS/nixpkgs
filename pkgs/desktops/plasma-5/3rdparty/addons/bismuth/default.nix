@@ -12,17 +12,18 @@
 
 mkDerivation rec {
   pname = "bismuth";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Bismuth-Forge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ICpGgFvVi7tiYbMCo3JWQmbA36rdWF4NFYTWIejhxr4=";
+    sha256 = "sha256-ntfLijYPaOHvQToiAxuBZ5ayHPyQyevP9l6++SL0vUw=";
   };
 
-  patches = [
-    ./0001-Avoid-usage-of-npx.patch
+  cmakeFlags = [
+    "-DUSE_TSC=OFF"
+    "-DUSE_NPM=OFF"
   ];
 
   nativeBuildInputs = [
