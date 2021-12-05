@@ -2470,6 +2470,8 @@ in {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
+  empy = callPackage ../development/python-modules/empy { };
+
   emulated-roku = callPackage ../development/python-modules/emulated-roku { };
 
   enaml = callPackage ../development/python-modules/enaml { };
@@ -10143,7 +10145,9 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
-  xdot = callPackage ../development/python-modules/xdot { };
+  xdot = callPackage ../development/python-modules/xdot {
+    inherit (pkgs) graphviz;
+  };
 
   xenomapper = callPackage ../applications/science/biology/xenomapper { };
 

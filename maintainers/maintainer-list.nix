@@ -2092,6 +2092,17 @@
     githubId = 12386805;
     name = "Chua Hou";
   };
+  chuangzhu = {
+    name = "Chuang Zhu";
+    email = "chuang@melty.land";
+    matrix = "@chuangzhu:matrix.org";
+    github = "chuangzhu";
+    githubId = 31200881;
+    keys = [{
+      longkeyid = "rsa4096/E838CED81CFFD3F9";
+      fingerprint = "5D03 A5E6 0754 A3E3 CA57 5037 E838 CED8 1CFF D3F9";
+    }];
+  };
   chvp = {
     email = "nixpkgs@cvpetegem.be";
     matrix = "@charlotte:vanpetegem.me";
@@ -6207,6 +6218,12 @@
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
   };
+  klden = {
+    name = "Kenzyme Le";
+    email = "kl@kenzymele.com";
+    github = "klDen";
+    githubId = 5478260;
+  };
   klntsky = {
     email = "klntsky@gmail.com";
     name = "Vladimir Kalnitsky";
@@ -8483,6 +8500,12 @@
     github = "nixy";
     githubId = 7588406;
     name = "Andrew R. M.";
+  };
+  nkalupahana = {
+    email = "hello@nisa.la";
+    github = "nkalupahana";
+    githubId = 7347290;
+    name = "Nisala Kalupahana";
   };
   nloomans = {
     email = "noah@nixos.noahloomans.com";
