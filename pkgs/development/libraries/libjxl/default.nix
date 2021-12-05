@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub
+, fetchpatch
 , asciidoc
 , brotli
 , cmake
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
+
+  patches = [
+    # present in master, remove after 0.7?
+    (fetchpatch {
+      name = "fix-link-lld-macho.patch";
+      url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
+      sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
+    })
+  ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   # unless we disable highway's tests
