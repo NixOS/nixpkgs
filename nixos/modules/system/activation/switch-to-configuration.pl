@@ -11,7 +11,6 @@ use Cwd 'abs_path';
 
 my $out = "@out@";
 
-# FIXME: maybe we should use /proc/1/exe to get the current systemd.
 my $curSystemd = abs_path("/run/current-system/sw/bin");
 
 # To be robust against interruption, record what units need to be started etc.
@@ -400,7 +399,7 @@ if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
     # Use current version of systemctl binary before daemon is reexeced.
-    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop));
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
