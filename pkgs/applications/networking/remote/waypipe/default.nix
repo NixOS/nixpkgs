@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "waypipe-unstable";
+  pname = "waypipe";
   version = "0.8.2";
 
   src = fetchFromGitLab {
