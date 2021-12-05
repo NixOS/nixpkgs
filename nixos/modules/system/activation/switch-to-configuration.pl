@@ -381,12 +381,12 @@ if ($action eq "dry-activate") {
         split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "");
 
     print STDERR "would restart systemd\n" if $restartSystemd;
+    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
+        if scalar(keys %unitsToReload) > 0;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
         if scalar @unitsToStartFiltered;
-    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
-        if scalar(keys %unitsToReload) > 0;
     unlink($dryRestartByActivationFile);
     unlink($dryReloadByActivationFile);
     exit 0;
