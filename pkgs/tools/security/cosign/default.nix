@@ -1,14 +1,14 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VKlM+bsK2Oj0UB4LF10pHEIJqXv6cAO5rtxnTogpfOk=";
+    sha256 = "sha256-K9ZORbccEH7KV0XHkio/fl/5kvUInRCvzFY4QOqrgfg=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,13 +16,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-idMvvYeP5rAT6r9RPZ9S8K9KTpVYVq06ZKSBPxWA2ms=";
+  vendorSha256 = "sha256-958HDdd9o+paEHVvwWSFJGSIHuY63jf89rTw3QKJzxc=";
 
   excludedPackages = "\\(sample\\|webhook\\|help\\)";
 
-  tags = lib.optionals pivKeySupport [ "pivkey" ];
+  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli/options.GitVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
 
   postInstall = ''
     installShellCompletion --cmd cosign \
