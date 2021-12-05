@@ -104,5 +104,12 @@ in
 
     system.build.bootStage2 = bootStage2;
 
+    system.systemBuilderCommands = ''
+      cp ${config.system.build.bootStage2} $out/init
+      substituteInPlace $out/init --subst-var-by systemConfig $out
+      ln -s "$systemd" $out/systemd
+      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
+    '';
+
   };
 }

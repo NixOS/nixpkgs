@@ -7,15 +7,10 @@ let
     ''
       mkdir $out
 
-      cp ${config.system.build.bootStage2} $out/init
-      substituteInPlace $out/init --subst-var-by systemConfig $out
-
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
-      ln -s "$systemd" $out/systemd
 
       echo -n "$configurationName" > $out/configuration-name
-      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
