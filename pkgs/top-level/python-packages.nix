@@ -1677,6 +1677,8 @@ in {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-bash = callPackage ../development/python-modules/colcon-bash { };
+
   colcon-core = callPackage ../development/python-modules/colcon-core { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
