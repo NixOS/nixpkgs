@@ -1,35 +1,27 @@
-{ stdenv, lib, fetchurl, python3, makeWrapper
-, libtorrent-rasterbar-1_2_x, qt5
+{ stdenv, lib, fetchurl, python3, makeWrapper, libtorrent-rasterbar-1_2_x, qt5
 }:
 
 let
-  libtorrent = (python3.pkgs.toPythonModule (
-    libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
+  libtorrent = (python3.pkgs.toPythonModule
+    (libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
 
-  aiohttp-apispec = python3.pkgs.callPackage 
+  aiohttp-apispec = python3.pkgs.callPackage
     ../../../../development/python-modules/aiohttp-apispec/unstable.nix { };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tribler";
   version = "7.10.0";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
+    url =
+      "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
     sha256 = "1x45z23d1cqf0lai7wg5ki7gi2vba5hqk0swhggzplcjwma4wmh9";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-    makeWrapper
-  ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython makeWrapper ];
 
-  buildInputs = [
-    python3.pkgs.python
-  ];
+  buildInputs = [ python3.pkgs.python ];
 
-  pythonPath = [
-    libtorrent
-  ] ++ (with python3.pkgs; [
+  pythonPath = [ libtorrent ] ++ (with python3.pkgs; [
     twisted
     netifaces
     pycrypto
@@ -87,7 +79,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = with maintainers; [ xvapx viric ];
     homepage = "https://www.tribler.org/";
-    description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
+    description =
+      "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

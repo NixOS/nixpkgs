@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libclang
-, libffi
-, libxml2
-, llvm
-, sphinx
-, zlib
-, withManual ? true
-, withHTML ? true
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libclang, libffi, libxml2, llvm, sphinx
+, zlib, withManual ? true, withHTML ? true }:
 
 stdenv.mkDerivation rec {
   pname = "CastXML";
@@ -23,12 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-MschwCEkZrZmNgr8a1ocdukjXzHbXl2gmkPmygJaA6k=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    llvm.dev
-  ] ++ lib.optionals (withManual || withHTML) [
-    sphinx
-  ];
+  nativeBuildInputs = [ cmake llvm.dev ]
+    ++ lib.optionals (withManual || withHTML) [ sphinx ];
 
   cmakeFlags = [
     "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
@@ -36,16 +21,9 @@ stdenv.mkDerivation rec {
     "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
-  buildInputs = [
-    libffi
-    libxml2
-    zlib
-    libclang
-  ];
+  buildInputs = [ libffi libxml2 zlib libclang ];
 
-  propagatedBuildInputs = [
-    libclang
-  ];
+  propagatedBuildInputs = [ libclang ];
 
   # 97% tests passed, 97 tests failed out of 2881
   # mostly because it checks command line and nix append -isystem and all

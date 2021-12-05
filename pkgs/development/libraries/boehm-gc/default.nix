@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros#L195
+{ lib, stdenv, fetchurl, autoreconfHook, enableLargeConfig ?
+  false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros#L195
 }:
 
 stdenv.mkDerivation rec {
@@ -25,19 +24,18 @@ stdenv.mkDerivation rec {
   # boehm-gc whitelists GCC threading models
   patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
-  configureFlags =
-    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
+  configureFlags = [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  nativeBuildInputs =
-    lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
 
   doCheck = true; # not cross;
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
+    description =
+      "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
 
     longDescription = ''
       The Boehm-Demers-Weiser conservative garbage collector can be used as a

@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, pidgin, glib, json-glib, nss, nspr
-, libsecret
-} :
+, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-opensteamworks";
@@ -20,16 +19,13 @@ stdenv.mkDerivation rec {
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    pidgin glib json-glib nss nspr libsecret
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pidgin glib json-glib nss nspr libsecret ];
 
   meta = with lib; {
     homepage = "https://github.com/EionRobb/pidgin-opensteamworks";
-    description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
+    description =
+      "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];

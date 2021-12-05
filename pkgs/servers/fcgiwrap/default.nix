@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
-  configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
+  configureFlags = [
+    "--with-systemd"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ systemd fcgi ];

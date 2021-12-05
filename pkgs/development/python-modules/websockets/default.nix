@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-, stdenv
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, pythonOlder, stdenv }:
 
 buildPythonPackage rec {
   pname = "websockets";

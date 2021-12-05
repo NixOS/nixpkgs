@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, flask, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "flask-talisman";
@@ -15,17 +9,11 @@ buildPythonPackage rec {
     sha256 = "11gjgqkpj2yqydb0pfhjyx56iy4l9szgz33vg5d7bw8vqp02wl2x";
   };
 
-  buildInputs = [
-    flask
-  ];
+  buildInputs = [ flask ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "HTTP security headers for Flask";

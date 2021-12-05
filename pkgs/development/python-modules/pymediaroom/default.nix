@@ -1,10 +1,5 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
-}:
+{ lib, async-timeout, buildPythonPackage, fetchFromGitHub, pythonOlder
+, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pymediaroom";
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "1klf2dxd8rlq3n4b9m03lzwcsasn9vi6m3hzrjqhqnprhrnp0xmy";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    xmltodict
-  ];
+  propagatedBuildInputs = [ async-timeout xmltodict ];
 
   # Project has no tests
   doCheck = false;

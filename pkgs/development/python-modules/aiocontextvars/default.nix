@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytest
-, pytest-asyncio
-, contextvars
-, sqlalchemy
-, isPy27
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest
+, pytest-asyncio, contextvars, sqlalchemy, isPy27, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiocontextvars";
@@ -22,18 +13,12 @@ buildPythonPackage rec {
     sha256 = "0a2gmrm9csiknc8n3si67sgzffkydplh9d7ga1k87ygk2aj22mmk";
   };
 
-  buildInputs = [
-    pytest-runner
-  ];
+  buildInputs = [ pytest-runner ];
 
-  checkInputs = [
-    pytest
-    pytest-asyncio
-  ];
+  checkInputs = [ pytest pytest-asyncio ];
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
+  propagatedBuildInputs = [ sqlalchemy ]
+    ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   checkPhase = ''
     pytest

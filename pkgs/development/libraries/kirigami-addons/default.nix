@@ -1,14 +1,8 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
+{ lib, mkDerivation, fetchFromGitLab
 
-, cmake
-, extra-cmake-modules
+, cmake, extra-cmake-modules
 
-, ki18n
-, kirigami2
-, qtquickcontrols2
-}:
+, ki18n, kirigami2, qtquickcontrols2 }:
 
 mkDerivation rec {
   pname = "kirigami-addons";
@@ -22,16 +16,9 @@ mkDerivation rec {
     sha256 = "0pwkpag15mvzhd3hvdwx0a8ajwq9j30r6069vsx85bagnag3zanh";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    ki18n
-    kirigami2
-    qtquickcontrols2
-  ];
+  buildInputs = [ ki18n kirigami2 qtquickcontrols2 ];
 
   meta = with lib; {
     description = "Add-ons for the Kirigami framework";

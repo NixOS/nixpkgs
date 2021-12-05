@@ -15,14 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo glib libGLU lv2 pango ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Drum sample player LV2 plugin dedicated to Glen MacArthur's AVLdrums";
+    description =
+      "Drum sample player LV2 plugin dedicated to Glen MacArthur's AVLdrums";
     homepage = "https://x42-plugins.com/x42/x42-avldrums";
     maintainers = with maintainers; [ magnetophon orivej ];
     license = licenses.gpl2Plus;

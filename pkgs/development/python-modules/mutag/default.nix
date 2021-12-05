@@ -1,14 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, isPy3k
-, pyparsing
-}:
+{ lib, buildPythonPackage, fetchgit, isPy3k, pyparsing }:
 
 buildPythonPackage {
   pname = "mutag";
   version = "0.0.2-2ffa0258ca";
-  disabled = ! isPy3k;
+  disabled = !isPy3k;
 
   src = fetchgit {
     url = "https://github.com/aroig/mutag.git";

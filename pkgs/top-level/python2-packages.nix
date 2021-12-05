@@ -4,15 +4,18 @@
 
 self: super:
 
-with self; with super; {
+with self;
+with super; {
 
   affinity = callPackage ../development/python-modules/affinity { };
 
-  antlr4-python2-runtime = callPackage ../development/python-modules/antlr4-python2-runtime {
-    inherit (pkgs) antlr4;
-  };
+  antlr4-python2-runtime =
+    callPackage ../development/python-modules/antlr4-python2-runtime {
+      inherit (pkgs) antlr4;
+    };
 
-  appleseed = toPythonModule (pkgs.appleseed.override { inherit (self) python; });
+  appleseed =
+    toPythonModule (pkgs.appleseed.override { inherit (self) python; });
 
   application = callPackage ../development/python-modules/application { };
 
@@ -36,11 +39,12 @@ with self; with super; {
 
   box2d = callPackage ../development/python-modules/box2d { };
 
-  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix { };
 
-  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix { };
 
-  browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
+  browsermob-proxy =
+    callPackage ../development/python-modules/browsermob-proxy { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi/0_9.nix { };
 
@@ -70,17 +74,22 @@ with self; with super; {
 
   coilmq = callPackage ../development/python-modules/coilmq { };
 
-  configparser = callPackage ../development/python-modules/configparser/4.nix { };
+  configparser =
+    callPackage ../development/python-modules/configparser/4.nix { };
 
-  construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
+  construct =
+    callPackage ../development/python-modules/construct/2.10.54.nix { };
 
   contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
 
-  convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
+  convertdate =
+    callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
-  cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
+  cryptography =
+    callPackage ../development/python-modules/cryptography/3.3.nix { };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors-3.3.nix { };
+  cryptography_vectors =
+    callPackage ../development/python-modules/cryptography/vectors-3.3.nix { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
 
@@ -90,7 +99,8 @@ with self; with super; {
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
-  django_evolution = callPackage ../development/python-modules/django_evolution { };
+  django_evolution =
+    callPackage ../development/python-modules/django_evolution { };
 
   dnspython = callPackage ../development/python-modules/dnspython/1.nix { };
 
@@ -110,11 +120,12 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
-  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
+  filelock = callPackage ../development/python-modules/filelock/3.2.nix { };
 
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
-  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
+  flask_ldap_login =
+    callPackage ../development/python-modules/flask-ldap-login { };
 
   flit = disabled super.flit;
 
@@ -142,13 +153,14 @@ with self; with super; {
   geopy = callPackage ../development/python-modules/geopy/2.nix { };
 
   # Python 2.7 support was deprecated but is still needed by weboob and duplicity
-  google-api-python-client = super.google-api-python-client.overridePythonAttrs (old: rec {
-    version = "1.7.6";
-    src = old.src.override {
-      inherit version;
-      sha256 = "14w5sdrp0bk9n0r2lmpqmrbf2zclpfq6q7giyahnskkfzdkb165z";
-    };
-  });
+  google-api-python-client = super.google-api-python-client.overridePythonAttrs
+    (old: rec {
+      version = "1.7.6";
+      src = old.src.override {
+        inherit version;
+        sha256 = "14w5sdrp0bk9n0r2lmpqmrbf2zclpfq6q7giyahnskkfzdkb165z";
+      };
+    });
 
   gateone = callPackage ../development/python-modules/gateone { };
 
@@ -158,7 +170,8 @@ with self; with super; {
 
   gnutls = callPackage ../development/python-modules/gnutls { };
 
-  google-apputils = callPackage ../development/python-modules/google-apputils { };
+  google-apputils =
+    callPackage ../development/python-modules/google-apputils { };
 
   grib-api = disabledIf (!isPy27) (toPythonModule (pkgs.grib-api.override {
     enablePython = true;
@@ -190,11 +203,14 @@ with self; with super; {
 
   imagecodecs-lite = disabled super.imagecodecs-lite;
 
-  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn/0.4.nix { };
+  imbalanced-learn =
+    callPackage ../development/python-modules/imbalanced-learn/0.4.nix { };
 
-  importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
+  importlib-metadata =
+    callPackage ../development/python-modules/importlib-metadata/2.nix { };
 
-  importlib-resources = callPackage ../development/python-modules/importlib-resources/2.nix { };
+  importlib-resources =
+    callPackage ../development/python-modules/importlib-resources/2.nix { };
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
@@ -204,19 +220,24 @@ with self; with super; {
 
   isort = callPackage ../development/python-modules/isort/4.nix { };
 
-  itsdangerous = callPackage ../development/python-modules/itsdangerous/1.nix { };
+  itsdangerous =
+    callPackage ../development/python-modules/itsdangerous/1.nix { };
 
-  jaraco_functools = callPackage ../development/python-modules/jaraco_functools/2.nix { };
+  jaraco_functools =
+    callPackage ../development/python-modules/jaraco_functools/2.nix { };
 
-  jaraco_stream = callPackage ../development/python-modules/jaraco_stream/2.nix { };
+  jaraco_stream =
+    callPackage ../development/python-modules/jaraco_stream/2.nix { };
 
   jinja2 = callPackage ../development/python-modules/jinja2/2.nix { };
 
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
-  jupyter-client = callPackage ../development/python-modules/jupyter-client/5.nix { };
+  jupyter-client =
+    callPackage ../development/python-modules/jupyter-client/5.nix { };
 
-  jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
+  jupyter_console =
+    callPackage ../development/python-modules/jupyter_console/5.nix { };
 
   koji = callPackage ../development/python-modules/koji { };
 
@@ -246,7 +267,8 @@ with self; with super; {
     inherit python;
   }).py;
 
-  libtorrent-rasterbar = (toPythonModule (pkgs.libtorrent-rasterbar-1_2_x.override { inherit python; })).python;
+  libtorrent-rasterbar = (toPythonModule
+    (pkgs.libtorrent-rasterbar-1_2_x.override { inherit python; })).python;
 
   libvirt = callPackage ../development/python-modules/libvirt/5.9.0.nix {
     libvirt = pkgs.libvirt_5_9_0;
@@ -264,13 +286,14 @@ with self; with super; {
 
   mapsplotlib = callPackage ../development/python-modules/mapsplotlib { };
 
-  marionette-harness = callPackage ../development/python-modules/marionette-harness { };
+  marionette-harness =
+    callPackage ../development/python-modules/marionette-harness { };
 
-  marisa = callPackage ../development/python-modules/marisa {
-    inherit (pkgs) marisa;
-  };
+  marisa =
+    callPackage ../development/python-modules/marisa { inherit (pkgs) marisa; };
 
-  marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix { };
+  marionette_driver = callPackage
+    ../development/python-modules/marionette-harness/marionette_driver.nix { };
 
   markdown = callPackage ../development/python-modules/markdown/3_1.nix { };
 
@@ -298,35 +321,59 @@ with self; with super; {
 
   monosat = disabled super.monosat;
 
-  more-itertools = callPackage ../development/python-modules/more-itertools/2.7.nix { };
+  more-itertools =
+    callPackage ../development/python-modules/more-itertools/2.7.nix { };
 
-  mozcrash = callPackage ../development/python-modules/marionette-harness/mozcrash.nix { };
+  mozcrash =
+    callPackage ../development/python-modules/marionette-harness/mozcrash.nix
+    { };
 
-  mozdevice = callPackage ../development/python-modules/marionette-harness/mozdevice.nix { };
+  mozdevice =
+    callPackage ../development/python-modules/marionette-harness/mozdevice.nix
+    { };
 
-  mozfile = callPackage ../development/python-modules/marionette-harness/mozfile.nix { };
+  mozfile =
+    callPackage ../development/python-modules/marionette-harness/mozfile.nix
+    { };
 
-  mozhttpd = callPackage ../development/python-modules/marionette-harness/mozhttpd.nix { };
+  mozhttpd =
+    callPackage ../development/python-modules/marionette-harness/mozhttpd.nix
+    { };
 
-  mozinfo = callPackage ../development/python-modules/marionette-harness/mozinfo.nix { };
+  mozinfo =
+    callPackage ../development/python-modules/marionette-harness/mozinfo.nix
+    { };
 
-  mozlog = callPackage ../development/python-modules/marionette-harness/mozlog.nix { };
+  mozlog =
+    callPackage ../development/python-modules/marionette-harness/mozlog.nix { };
 
-  moznetwork = callPackage ../development/python-modules/marionette-harness/moznetwork.nix { };
+  moznetwork =
+    callPackage ../development/python-modules/marionette-harness/moznetwork.nix
+    { };
 
-  mozprocess = callPackage ../development/python-modules/marionette-harness/mozprocess.nix { };
+  mozprocess =
+    callPackage ../development/python-modules/marionette-harness/mozprocess.nix
+    { };
 
-  mozprofile = callPackage ../development/python-modules/marionette-harness/mozprofile.nix { };
+  mozprofile =
+    callPackage ../development/python-modules/marionette-harness/mozprofile.nix
+    { };
 
   mozterm = callPackage ../development/python-modules/mozterm { };
 
-  mozrunner = callPackage ../development/python-modules/marionette-harness/mozrunner.nix { };
+  mozrunner =
+    callPackage ../development/python-modules/marionette-harness/mozrunner.nix
+    { };
 
   mozsvc = callPackage ../development/python-modules/mozsvc { };
 
-  moztest = callPackage ../development/python-modules/marionette-harness/moztest.nix { };
+  moztest =
+    callPackage ../development/python-modules/marionette-harness/moztest.nix
+    { };
 
-  mozversion = callPackage ../development/python-modules/marionette-harness/mozversion.nix { };
+  mozversion =
+    callPackage ../development/python-modules/marionette-harness/mozversion.nix
+    { };
 
   mpd = callPackage ../development/python-modules/mpd { };
 
@@ -411,7 +458,8 @@ with self; with super; {
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
-  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
+  prompt-toolkit =
+    callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -444,7 +492,8 @@ with self; with super; {
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
-  pyexiv2 = toPythonModule (callPackage ../development/python-modules/pyexiv2 { });
+  pyexiv2 =
+    toPythonModule (callPackage ../development/python-modules/pyexiv2 { });
 
   pygments = callPackage ../development/python-modules/Pygments/2_5.nix { };
 
@@ -454,11 +503,10 @@ with self; with super; {
 
   pygtk = callPackage ../development/python-modules/pygtk { };
 
-  pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
+  pygtksourceview =
+    callPackage ../development/python-modules/pygtksourceview { };
 
-  pyGtkGlade = self.pygtk.override {
-    inherit (pkgs.gnome2) libglade;
-  };
+  pyGtkGlade = self.pygtk.override { inherit (pkgs.gnome2) libglade; };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
 
@@ -485,15 +533,18 @@ with self; with super; {
 
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
-  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
+  pystringtemplate =
+    callPackage ../development/python-modules/stringtemplate { };
 
   pytest = pytest_4;
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock/2.nix { };
 
-  pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
+  pytest-runner =
+    callPackage ../development/python-modules/pytest-runner/2.nix { };
 
-  pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
+  pytest-xdist =
+    callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };
 
@@ -501,7 +552,8 @@ with self; with super; {
 
   python-sybase = callPackage ../development/python-modules/sybase { };
 
-  python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
+  python2-pythondialog =
+    callPackage ../development/python-modules/python2-pythondialog { };
 
   pythonIRClib = callPackage ../development/python-modules/pythonirclib { };
 
@@ -513,7 +565,8 @@ with self; with super; {
     version = "0.6.1";
     src = oldAttrs.src.override {
       inherit version;
-      sha256 = "b525843f6b51036198b3b87c4773a5093d6dec57d60c18a1f269dd7059aa16e3";
+      sha256 =
+        "b525843f6b51036198b3b87c4773a5093d6dec57d60c18a1f269dd7059aa16e3";
     };
   });
 
@@ -531,11 +584,14 @@ with self; with super; {
 
   rivet = disabled super.rivet;
 
-  robotframework-ride = callPackage ../development/python-modules/robotframework-ride { };
+  robotframework-ride =
+    callPackage ../development/python-modules/robotframework-ride { };
 
-  ruamel-ordereddict = callPackage ../development/python-modules/ruamel-ordereddict { };
+  ruamel-ordereddict =
+    callPackage ../development/python-modules/ruamel-ordereddict { };
 
-  ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
+  ruamel-yaml =
+    callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
 
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
@@ -553,33 +609,40 @@ with self; with super; {
 
   scandir = callPackage ../development/python-modules/scandir { };
 
-  scikit-learn = callPackage ../development/python-modules/scikit-learn/0.20.nix {
-    inherit (pkgs) gfortran glibcLocales;
-  };
+  scikit-learn =
+    callPackage ../development/python-modules/scikit-learn/0.20.nix {
+      inherit (pkgs) gfortran glibcLocales;
+    };
 
   scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
     version = "1.2.2";
     src = oldAttrs.src.override {
       inherit version;
-      sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
+      sha256 =
+        "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
     };
   });
 
   seaborn = callPackage ../development/python-modules/seaborn/0.9.1.nix { };
 
-  secretstorage = callPackage ../development/python-modules/secretstorage/2.nix { };
+  secretstorage =
+    callPackage ../development/python-modules/secretstorage/2.nix { };
 
   semantic = callPackage ../development/python-modules/semantic { };
 
-  serversyncstorage = callPackage ../development/python-modules/serversyncstorage { };
+  serversyncstorage =
+    callPackage ../development/python-modules/serversyncstorage { };
 
   sequoia = disabled super.sequoia;
 
-  setuptools = callPackage ../development/python-modules/setuptools/44.0.nix { };
+  setuptools =
+    callPackage ../development/python-modules/setuptools/44.0.nix { };
 
-  setuptools-scm = callPackage ../development/python-modules/setuptools-scm/2.nix { };
+  setuptools-scm =
+    callPackage ../development/python-modules/setuptools-scm/2.nix { };
 
-  setuptoolsDarcs = callPackage ../development/python-modules/setuptoolsdarcs { };
+  setuptoolsDarcs =
+    callPackage ../development/python-modules/setuptoolsdarcs { };
 
   simpleai = callPackage ../development/python-modules/simpleai { };
 
@@ -599,7 +662,9 @@ with self; with super; {
 
   spambayes = callPackage ../development/python-modules/spambayes { };
 
-  sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport/1_1.nix { };
+  sphinxcontrib-websupport =
+    callPackage ../development/python-modules/sphinxcontrib-websupport/1_1.nix
+    { };
 
   sphinx = callPackage ../development/python-modules/sphinx/2.nix { };
 

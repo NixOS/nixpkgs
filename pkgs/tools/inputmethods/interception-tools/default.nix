@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, libyamlcpp,
-  libevdev, udev, boost }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, libyamlcpp, libevdev, udev
+, boost }:
 
 stdenv.mkDerivation rec {
   pname = "interception-tools";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevdev udev libyamlcpp boost ];
 
   meta = {
-    description = "A minimal composable infrastructure on top of libudev and libevdev";
+    description =
+      "A minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vyp ];

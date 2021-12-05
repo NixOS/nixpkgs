@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, asciidoc, libxslt }:
 
-
 stdenv.mkDerivation rec {
   pname = "patchrom";
 
@@ -20,10 +19,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
-    description = "Patches jumptables into TI calculator ROM files and generates an include file";
-    license     = licenses.mit;
+    homepage = "https://knightos.org/";
+    description =
+      "Patches jumptables into TI calculator ROM files and generates an include file";
+    license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -6,8 +6,9 @@ let
   dataDir = "/var/lib/mx-puppet-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
   cfg = config.services.mx-puppet-discord;
-  settingsFormat = pkgs.formats.json {};
-  settingsFile = settingsFormat.generate "mx-puppet-discord-config.json" cfg.settings;
+  settingsFormat = pkgs.formats.json { };
+  settingsFile =
+    settingsFormat.generate "mx-puppet-discord-config.json" cfg.settings;
 
 in {
   options = {
@@ -66,7 +67,8 @@ in {
       };
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable
+          "matrix-synapse.service";
         description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
@@ -107,7 +109,7 @@ in {
         PrivateTmp = true;
         WorkingDirectory = pkgs.mx-puppet-discord;
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = 27;
 
         ExecStart = ''
           ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord \

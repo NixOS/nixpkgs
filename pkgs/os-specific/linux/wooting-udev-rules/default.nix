@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wooting.helpscoutdocs.com/article/34-linux-udev-rules";
-    description = "udev rules that give NixOS permission to communicate with Wooting keyboards";
+    description =
+      "udev rules that give NixOS permission to communicate with Wooting keyboards";
     platforms = platforms.linux;
     license = "unknown";
     maintainers = with maintainers; [ davidtwco ];

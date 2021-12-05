@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "plugnplay";
   version = "0.5.4";
@@ -14,9 +11,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "plugnplay"
-  ];
+  pythonImportsCheck = [ "plugnplay" ];
 
   meta = with lib; {
     description = "A Generic plug-in system for python applications";

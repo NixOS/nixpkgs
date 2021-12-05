@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, numpy
-, cvxopt
-, python
-, networkx
-}:
+{ lib, buildPythonPackage, fetchFromGitLab, numpy, cvxopt, python, networkx }:
 
 buildPythonPackage rec {
   pname = "picos";
@@ -19,14 +12,9 @@ buildPythonPackage rec {
   };
 
   # Needed only for the tests
-  checkInputs = [
-    networkx
-  ];
+  checkInputs = [ networkx ];
 
-  propagatedBuildInputs = [
-    numpy
-    cvxopt
-  ];
+  propagatedBuildInputs = [ numpy cvxopt ];
 
   checkPhase = ''
     ${python.interpreter} test.py

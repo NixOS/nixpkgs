@@ -1,4 +1,5 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext
+, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
@@ -11,22 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "05w2dfpr5vrydb7ij4nd2gb7c31nxix3j48rb798r4jzl1rakyah";
   };
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
-  buildInputs = [
-    taskwarrior
-  ];
+  buildInputs = [ taskwarrior ];
 
   passthru = {
     extensionUuid = "taskwhisperer-extension@infinicode.de";
     extensionPortalSlug = "taskwhisperer";
   };
 
-  makeFlags = [
-    "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
-  ];
+  makeFlags =
+    [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
 
   patches = [
     (substituteAll {

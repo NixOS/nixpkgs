@@ -13,30 +13,31 @@ let
   # that we don't really know how the CD was built - the Nix
   # expression language doesn't allow us to query the expression being
   # evaluated.  So we'll just hope for the best.
-  dummyConfiguration = pkgs.writeText "configuration.nix"
-    ''
-      { config, pkgs, ... }:
+  dummyConfiguration = pkgs.writeText "configuration.nix" ''
+    { config, pkgs, ... }:
 
-      {
-        # Add your own options below and run "nixos-rebuild switch".
-        # E.g.,
-        #   services.openssh.enable = true;
-      }
-    '';
+    {
+      # Add your own options below and run "nixos-rebuild switch".
+      # E.g.,
+      #   services.openssh.enable = true;
+    }
+  '';
 
-
-  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  pkgs2storeContents = l:
+    map (x: {
+      object = x;
+      symlink = "none";
+    }) l;
 
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:
-      init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+      init=${config.system.build.toplevel}/init ${
+        toString config.boot.kernelParams
+      }
   '';
 
-
-in
-
-{
+in {
   imports = [ ./system-tarball.nix ];
 
   # Disable some other stuff we don't need.
@@ -44,41 +45,41 @@ in
 
   # Include only the en_US locale.  This saves 75 MiB or so compared to
   # the full glibcLocales package.
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "en_US/ISO-8859-1" ];
 
   # Include some utilities that are useful for installing or repairing
   # the system.
-  environment.systemPackages =
-    [ pkgs.w3m # needed for the manual anyway
-      pkgs.ddrescue
-      pkgs.ccrypt
-      pkgs.cryptsetup # needed for dm-crypt volumes
+  environment.systemPackages = [
+    pkgs.w3m # needed for the manual anyway
+    pkgs.ddrescue
+    pkgs.ccrypt
+    pkgs.cryptsetup # needed for dm-crypt volumes
 
-      # Some networking tools.
-      pkgs.sshfs-fuse
-      pkgs.socat
-      pkgs.screen
-      pkgs.wpa_supplicant # !!! should use the wpa module
+    # Some networking tools.
+    pkgs.sshfs-fuse
+    pkgs.socat
+    pkgs.screen
+    pkgs.wpa_supplicant # !!! should use the wpa module
 
-      # Hardware-related tools.
-      pkgs.sdparm
-      pkgs.hdparm
-      pkgs.dmraid
+    # Hardware-related tools.
+    pkgs.sdparm
+    pkgs.hdparm
+    pkgs.dmraid
 
-      # Tools to create / manipulate filesystems.
-      pkgs.btrfs-progs
+    # Tools to create / manipulate filesystems.
+    pkgs.btrfs-progs
 
-      # Some compression/archiver tools.
-      pkgs.unzip
-      pkgs.zip
-      pkgs.xz
-      pkgs.dar # disk archiver
+    # Some compression/archiver tools.
+    pkgs.unzip
+    pkgs.zip
+    pkgs.xz
+    pkgs.dar # disk archiver
 
-      # Some editors.
-      pkgs.nvi
-      pkgs.bvi # binary editor
-      pkgs.joe
-    ];
+    # Some editors.
+    pkgs.nvi
+    pkgs.bvi # binary editor
+    pkgs.joe
+  ];
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
@@ -87,48 +88,46 @@ in
   boot.initrd.availableKernelModules =
     [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
 
-  boot.postBootCommands =
-    ''
-      mkdir -p /mnt
+  boot.postBootCommands = ''
+    mkdir -p /mnt
 
-      cp ${dummyConfiguration} /etc/nixos/configuration.nix
-    '';
+    cp ${dummyConfiguration} /etc/nixos/configuration.nix
+  '';
 
-  boot.initrd.extraUtilsCommands =
-    ''
-      copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
-    '';
+  boot.initrd.extraUtilsCommands = ''
+    copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
+  '';
 
-  boot.initrd.postDeviceCommands =
-    ''
-      hwclock -s
-    '';
+  boot.initrd.postDeviceCommands = ''
+    hwclock -s
+  '';
 
-  boot.kernelParams =
-    [
-      "selinux=0"
-      "console=tty1"
-      # "console=ttyS0,115200n8"  # serial console
-    ];
+  boot.kernelParams = [
+    "selinux=0"
+    "console=tty1"
+    # "console=ttyS0,115200n8"  # serial console
+  ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
 
   boot.supportedFilesystems = [ "reiserfs" ];
 
   /* fake entry, just to have a happy stage-1. Users
-     may boot without having stage-1 though */
-  fileSystems.fake =
-    { mountPoint = "/";
-      device = "/dev/something";
-    };
+     may boot without having stage-1 though
+  */
+  fileSystems.fake = {
+    mountPoint = "/";
+    device = "/dev/something";
+  };
 
   services.getty = {
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${
-        if config.services.xserver.enable then
-          "Type `start xserver' to start\nthe graphical user interface."
-        else ""
+        if config.services.xserver.enable then ''
+          Type `start xserver' to start
+          the graphical user interface.'' else
+          ""
       }
     '';
   };
@@ -146,13 +145,17 @@ in
   # in the Nix store of the tarball.
   tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
   tarball.contents = [
-    { source = kernelParams;
+    {
+      source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+    {
+      source = config.boot.kernelPackages.kernel + "/"
+        + config.system.boot.loader.kernelFile;
       target = "/boot/" + config.system.boot.loader.kernelFile;
     }
-    { source = pkgs.ubootSheevaplug;
+    {
+      source = pkgs.ubootSheevaplug;
       target = "/boot/uboot";
     }
   ];
@@ -161,12 +164,10 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
+  systemd.services.openssh.wantedBy = lib.mkOverride 50 [ ];
 
   # cpufrequtils fails to build on non-pc
   powerManagement.enable = false;
 
-  nixpkgs.config = {
-    platform = pkgs.platforms.sheevaplug;
-  };
+  nixpkgs.config = { platform = pkgs.platforms.sheevaplug; };
 }

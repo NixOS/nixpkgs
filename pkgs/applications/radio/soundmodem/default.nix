@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.20";
 
   src = fetchurl {
-    url = "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
+    url =
+      "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
     sha256 = "156l3wjnh5rcisxb42kcmlf74swf679v4xnj09zy5j74rd4h721z";
   };
 
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     '';
     #homepage = "http://gna.org/projects/soundmodem"; # official, but "Connection refused"
     homepage = "http://soundmodem.vk4msl.id.au/";
-    downloadPage = "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
+    downloadPage =
+      "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ymarkus ];
     platforms = platforms.all;

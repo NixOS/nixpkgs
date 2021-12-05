@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, python }:
 
 buildPythonPackage rec {
   pname = "junitparser";

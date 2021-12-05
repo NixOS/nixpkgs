@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, serpent
-, dill
-, cloudpickle
-, msgpack
-, isPy27
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, serpent, dill, cloudpickle, msgpack
+, isPy27, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Pyro4";
@@ -20,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "e130da06478b813173b959f7013d134865e07fbf58cc5f1a2598f99479cdac5f";
   };
 
-  propagatedBuildInputs = [
-    serpent
-  ];
+  propagatedBuildInputs = [ serpent ];
 
-  buildInputs = [
-    dill
-    cloudpickle
-    msgpack
-  ];
+  buildInputs = [ dill cloudpickle msgpack ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -38,11 +24,7 @@ buildPythonPackage rec {
   # ignore network related tests, which fail in sandbox
   pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
 
-  disabledTests = [
-    "StartNSfunc"
-    "Broadcast"
-    "GetIP"
-  ];
+  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" ];
 
   # otherwise the tests hang the build
   __darwinAllowLocalNetworking = true;

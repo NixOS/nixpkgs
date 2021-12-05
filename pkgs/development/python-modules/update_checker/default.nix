@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, isPy27 }:
 
 buildPythonPackage rec {
   pname = "update_checker";

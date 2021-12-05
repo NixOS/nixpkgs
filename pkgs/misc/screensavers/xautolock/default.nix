@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, xlibsWrapper
-, imake, gccmakedep, libXScrnSaver, xorgproto
-}:
+{ lib, stdenv, fetchFromGitHub, xlibsWrapper, imake, gccmakedep, libXScrnSaver
+, xorgproto }:
 
 stdenv.mkDerivation rec {
   pname = "xautolock";
@@ -18,15 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [ xlibsWrapper libXScrnSaver xorgproto ];
 
-  makeFlags = [
-    "BINDIR=$(out)/bin"
-    "MANPATH=$(out)/share/man"
-  ];
+  makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
 
   installTargets = [ "install" "install.man" ];
 
   meta = with lib; {
-    description = "Launch a given program when your X session has been idle for a given time";
+    description =
+      "Launch a given program when your X session has been idle for a given time";
     homepage = "http://www.ibiblio.org/pub/linux/X11/screensavers";
     maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;

@@ -8,9 +8,7 @@ let
 
   configOptions = {
     data_dir = dataDir;
-    ui_config = {
-      enabled = cfg.webUi;
-    };
+    ui_config = { enabled = cfg.webUi; };
   } // cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
@@ -19,8 +17,7 @@ let
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
   systemdDevices = forEach devices
     (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
-in
-{
+in {
   options = {
 
     services.consul = {
@@ -41,7 +38,6 @@ in
           The package used for the Consul agent and CLI.
         '';
       };
-
 
       webUi = mkOption {
         type = types.bool;
@@ -156,8 +152,8 @@ in
 
   };
 
-  config = mkIf cfg.enable (
-    mkMerge [{
+  config = mkIf cfg.enable (mkMerge [
+    {
 
       users.users.consul = {
         description = "Consul agent daemon user";
@@ -166,7 +162,7 @@ in
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
-      users.groups.consul = {};
+      users.groups.consul = { };
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
@@ -181,10 +177,11 @@ in
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
           ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
+          (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart =
+            "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
           ExecReload = "${cfg.package}/bin/consul reload";
           PermissionsStartOnly = true;
@@ -222,15 +219,13 @@ in
           }
           echo "{" > /etc/consul-addrs.json
           delim=" "
-        ''
-        + concatStrings (flip mapAttrsToList cfg.interface (name: i:
+        '' + concatStrings (flip mapAttrsToList cfg.interface (name: i:
           optionalString (i != null) ''
             echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
             delim=","
-          ''))
-        + ''
-          echo "}" >> /etc/consul-addrs.json
-        '';
+          '')) + ''
+            echo "}" >> /etc/consul-addrs.json
+          '';
       };
     }
 

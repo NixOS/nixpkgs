@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ndms2-client";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "1sc39d10hm1y8xf3gdqzq1akrx94k590l106242j9bvfqyr8lrk9";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ndms2_client" ];
 

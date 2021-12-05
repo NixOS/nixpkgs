@@ -1,4 +1,5 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, knewstuff }:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames
+, knewstuff }:
 
 mkDerivation {
   pname = "kigo";
@@ -9,14 +10,6 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    libkdegames
-    knewstuff
-    kdoctools
-    ki18n
-    kio
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ libkdegames knewstuff kdoctools ki18n kio ];
 }

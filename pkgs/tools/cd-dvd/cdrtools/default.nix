@@ -20,18 +20,25 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [ "GMAKE_NOWARN=true" "INS_BASE=/" "INS_RBASE=/" "DESTDIR=${placeholder "out"}" ];
+  makeFlags = [
+    "GMAKE_NOWARN=true"
+    "INS_BASE=/"
+    "INS_RBASE=/"
+    "DESTDIR=${placeholder "out"}"
+  ];
 
-  enableParallelBuilding = false; # parallel building fails on some linux machines
+  enableParallelBuilding =
+    false; # parallel building fails on some linux machines
 
   meta = with lib; {
     homepage = "http://cdrtools.sourceforge.net/private/cdrecord.html";
-    description = "Highly portable CD/DVD/BluRay command line recording software";
+    description =
+      "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ cddl gpl2 lgpl21 ];
     platforms = with platforms; linux ++ darwin;
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this
     # package in binary form.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

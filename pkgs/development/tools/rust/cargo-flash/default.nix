@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, libusb1
-, pkg-config
-, rustfmt
-, AppKit
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libusb1, pkg-config, rustfmt
+, AppKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";
@@ -27,8 +20,12 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";
     homepage = "https://probe.rs/";
-    changelog = "https://github.com/probe-rs/cargo-flash/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    changelog =
+      "https://github.com/probe-rs/cargo-flash/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ fooker ];
   };
 }

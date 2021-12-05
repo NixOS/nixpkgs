@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys
+}:
 
 mkDerivation rec {
   pname = "corefm";
@@ -11,16 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-PczKIKY9uCD+cAzAC6Gkb+g+cn9KKCQYd3epoZK8bvA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libcprime libcsys ];
 
   meta = with lib; {
     description = "A lightwight filemanager from the C Suite";

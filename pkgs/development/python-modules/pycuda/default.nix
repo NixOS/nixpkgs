@@ -1,26 +1,8 @@
-{ buildPythonPackage
-, addOpenGLRunpath
-, fetchPypi
-, fetchFromGitHub
-, Mako
-, boost
-, numpy
-, pytools
-, pytest
-, decorator
-, appdirs
-, six
-, cudatoolkit
-, python
-, mkDerivation
-, lib
-}:
-let
-  compyte = import ./compyte.nix {
-    inherit mkDerivation fetchFromGitHub;
-  };
-in
-buildPythonPackage rec {
+{ buildPythonPackage, addOpenGLRunpath, fetchPypi, fetchFromGitHub, Mako, boost
+, numpy, pytools, pytest, decorator, appdirs, six, cudatoolkit, python
+, mkDerivation, lib }:
+let compyte = import ./compyte.nix { inherit mkDerivation fetchFromGitHub; };
+in buildPythonPackage rec {
   pname = "pycuda";
   version = "2021.1";
 
@@ -33,7 +15,9 @@ buildPythonPackage rec {
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
-                          --boost-python-libname=boost_python${major python.version}${minor python.version} \
+                          --boost-python-libname=boost_python${
+                            major python.version
+                          }${minor python.version} \
                           --cuda-root=${cudatoolkit}
   '';
 
@@ -55,9 +39,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ addOpenGLRunpath ];
 
   propagatedBuildInputs = [
     numpy

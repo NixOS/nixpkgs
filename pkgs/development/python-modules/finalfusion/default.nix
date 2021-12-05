@@ -1,11 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, isPy3k
-, cython
-, numpy
-, toml
-, pytest
+{ buildPythonPackage, fetchFromGitHub, lib, isPy3k, cython, numpy, toml, pytest
 }:
 
 buildPythonPackage rec {
@@ -21,18 +14,11 @@ buildPythonPackage rec {
     sha256 = "0pwzflamxqvpl1wcz0zbhhd6aa4xn18rmza6rggaic3ckidhyrh4";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    numpy
-    toml
-  ];
+  propagatedBuildInputs = [ numpy toml ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   postPatch = ''
     patchShebangs tests/integration
@@ -47,7 +33,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python module for using finalfusion, word2vec, and fastText word embeddings";
+    description =
+      "Python module for using finalfusion, word2vec, and fastText word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-python/";
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

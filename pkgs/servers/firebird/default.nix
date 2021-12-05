@@ -1,35 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
+{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook, zlib, unzip, libtommath
+, libtomcrypt, icu, superServer ? false }:
 
-let base = {
-  pname = "firebird";
+let
+  base = {
+    pname = "firebird";
 
-  meta = with lib; {
-    description = "SQL relational database management system";
-    homepage = "https://firebirdsql.org/";
-    changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
-    license = [ "IDPL" "Interbase-1.0" ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ marcweber ];
+    meta = with lib; {
+      description = "SQL relational database management system";
+      homepage = "https://firebirdsql.org/";
+      changelog =
+        "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
+      license = [ "IDPL" "Interbase-1.0" ];
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ marcweber ];
+    };
+
+    nativeBuildInputs = [ autoreconfHook ];
+
+    buildInputs = [ libedit icu ];
+
+    LD_LIBRARY_PATH = lib.makeLibraryPath [ icu ];
+
+    configureFlags = [ "--with-system-editline" ]
+      ++ (lib.optional superServer "--enable-superserver");
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r gen/Release/firebird/* $out
+      runHook postInstall
+    '';
+
   };
-
-  nativeBuildInputs = [ autoreconfHook ];
-
-  buildInputs = [ libedit icu ];
-
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ icu ];
-
-  configureFlags = [
-    "--with-system-editline"
-  ] ++ (lib.optional superServer "--enable-superserver");
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -r gen/Release/firebird/* $out
-    runHook postInstall
-  '';
-
-}; in rec {
+in rec {
 
   firebird_2_5 = stdenv.mkDerivation (base // rec {
     version = "2.5.9";

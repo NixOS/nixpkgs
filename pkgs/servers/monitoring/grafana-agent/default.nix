@@ -32,12 +32,15 @@ buildGoModule rec {
   # Add to RUNPATH so it can be found.
   postFixup = ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
+      --set-rpath "${
+        lib.makeLibraryPath [ (lib.getLib systemd) ]
+      }:$(patchelf --print-rpath $out/bin/agent)" \
       $out/bin/agent
   '';
 
   meta = with lib; {
-    description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
+    description =
+      "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
     license = licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
     maintainers = with maintainers; [ flokli ];

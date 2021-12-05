@@ -1,7 +1,4 @@
-{ lib, stdenv
-, makeWrapper
-, mrustc
-}:
+{ lib, stdenv, makeWrapper, mrustc }:
 
 stdenv.mkDerivation rec {
   pname = "mrustc-minicargo";

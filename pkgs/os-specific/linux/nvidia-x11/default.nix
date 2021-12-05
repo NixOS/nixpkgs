@@ -1,30 +1,33 @@
 { lib, callPackage, fetchpatch, fetchurl, stdenv, pkgsi686Linux }:
 
 let
-  generic = args: let
-    imported = import ./generic.nix args;
-  in if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage imported {
-    lib32 = (pkgsi686Linux.callPackage imported {
-      libsOnly = true;
-      kernel = null;
-    }).out;
-  };
+  generic = args:
+    let imported = import ./generic.nix args;
+    in if ((!lib.versionOlder args.version "391") && stdenv.hostPlatform.system
+      != "x86_64-linux") then
+      null
+    else
+      callPackage imported {
+        lib32 = (pkgsi686Linux.callPackage imported {
+          libsOnly = true;
+          kernel = null;
+        }).out;
+      };
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
-in
-rec {
+in rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then
+    generic {
       version = "495.44";
       sha256_64bit = "0j4agxfdswadxkd9hz9j5cq4q3jmhwdnvqclxxkhl5jvh5knm1zi";
       settingsSha256 = "0v8gqbhjsjjsc83cqacikj9bvs10bq6i34ca8l07zvsf8hfr2ziz";
-      persistencedSha256 = "19rv7vskv61q4gh59nyrfyqyqi565wzjbcfddp8wfvng4dcy18ld";
+      persistencedSha256 =
+        "19rv7vskv61q4gh59nyrfyqyqi565wzjbcfddp8wfvng4dcy18ld";
     }
-    else legacy_390;
+  else
+    legacy_390;
 
   # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
   production = legacy_470;
@@ -45,7 +48,9 @@ rec {
     sha256_64bit = "1iv42w3x1vc00bgn6y4w1hnfsvnh6bvj3vcrq8hw47760sqwa4xa";
     settingsSha256 = "09v86y2c8xas9ql0bqr7vrjxx3if6javccwjzyly11dzffm02h7g";
     persistencedSha256 = "13s4b73il0lq2hs81q03176n16mng737bfsp3bxnxgnrv3whrayz";
-    url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+    url = "https://developer.nvidia.com/vulkan-beta-${
+        lib.concatStrings (lib.splitString "." version)
+      }-linux";
   };
 
   # Update note:
@@ -54,10 +59,13 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.86";
-      sha256_64bit = "sha256:0krwcxc0j19vjnk8sv6mx1lin2rm8hcfhc2hg266846jvcws1dsg";
-      settingsSha256 = "sha256:1lnj5hwmfkzs664fxlhljqy323394s1i7qzlpsjyrpm07sa93bky";
-      persistencedSha256 = "sha256:0apj764zc81ayb8nm9bf7cdicfinarv0gfijy2dxynbwz2xdlyvq";
+    version = "470.86";
+    sha256_64bit =
+      "sha256:0krwcxc0j19vjnk8sv6mx1lin2rm8hcfhc2hg266846jvcws1dsg";
+    settingsSha256 =
+      "sha256:1lnj5hwmfkzs664fxlhljqy323394s1i7qzlpsjyrpm07sa93bky";
+    persistencedSha256 =
+      "sha256:0apj764zc81ayb8nm9bf7cdicfinarv0gfijy2dxynbwz2xdlyvq";
   };
 
   # Last one supporting x86

@@ -1,10 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, file
-, installShellFiles
-, asciidoctor
-}:
+{ lib, buildGoModule, fetchFromGitHub, file, installShellFiles, asciidoctor }:
 
 buildGoModule rec {
   pname = "pistol";
@@ -23,13 +17,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pistol" ];
 
-  buildInputs = [
-    file
-  ];
-  nativeBuildInputs = [
-    installShellFiles
-    asciidoctor
-  ];
+  buildInputs = [ file ];
+  nativeBuildInputs = [ installShellFiles asciidoctor ];
   postBuild = ''
     asciidoctor -b manpage -d manpage README.adoc
     installManPage pistol.1
@@ -38,7 +27,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   meta = with lib; {
-    description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
+    description =
+      "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
     homepage = "https://github.com/doronbehar/pistol";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

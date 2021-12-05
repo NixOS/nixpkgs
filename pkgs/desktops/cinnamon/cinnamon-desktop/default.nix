@@ -1,20 +1,6 @@
-{ fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, intltool
-, meson
-, ninja
-, pkg-config
-, pulseaudio
-, python3
-, lib
-, stdenv
-, xkeyboard_config
-, xorg
-, wrapGAppsHook
-, glib
-}:
+{ fetchFromGitHub, gdk-pixbuf, gobject-introspection, gtk3, intltool, meson
+, ninja, pkg-config, pulseaudio, python3, lib, stdenv, xkeyboard_config, xorg
+, wrapGAppsHook, glib }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
@@ -29,11 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [
-    glib
-    gtk3
-    pulseaudio
-  ];
+  propagatedBuildInputs = [ glib gtk3 pulseaudio ];
 
   buildInputs = [
     gdk-pixbuf
@@ -44,14 +26,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    python3
-    wrapGAppsHook
-    intltool
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook intltool pkg-config ];
 
   postPatch = ''
     chmod +x install-scripts/meson_install_schemas.py # patchShebangs requires executable file

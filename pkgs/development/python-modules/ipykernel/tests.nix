@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, flaky
-, ipykernel
-, ipyparallel
-, nose
-, pytestCheckHook
+{ lib, stdenv, buildPythonPackage, pythonOlder, flaky, ipykernel, ipyparallel
+, nose, pytestCheckHook
 
 }:
 
@@ -19,13 +12,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    flaky
-    ipykernel
-    ipyparallel
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ flaky ipykernel ipyparallel nose pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

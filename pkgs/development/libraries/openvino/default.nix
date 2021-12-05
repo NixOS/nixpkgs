@@ -1,20 +1,6 @@
-{ lib
-, addOpenGLRunpath
-, autoPatchelfHook
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, git
-, protobuf
-, tbb
-, opencv
-, unzip
-, shellcheck
-, srcOnly
-, python
-, enablePython ? false
-}:
+{ lib, addOpenGLRunpath, autoPatchelfHook, stdenv, fetchFromGitHub, fetchpatch
+, cmake, git, protobuf, tbb, opencv, unzip, shellcheck, srcOnly, python
+, enablePython ? false }:
 
 let
 
@@ -30,14 +16,14 @@ let
       # Fix build with protobuf 3.18+
       # Remove with onnx 1.9 release
       (fetchpatch {
-        url = "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
+        url =
+          "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
         sha256 = "0vdsrklkzhdjaj8wdsl4icn93q3961g8dx35zvff0nhpr08wjb7y";
       })
     ];
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "openvino";
   version = "2021.2";
 
@@ -68,9 +54,7 @@ stdenv.mkDerivation rec {
     "-DNGRAPH_UNIT_TEST_ENABLE:BOOL=OFF"
     "-DENABLE_SAMPLES:BOOL=OFF"
     "-DENABLE_CPPLINT:BOOL=OFF"
-  ] ++ lib.optional enablePython [
-    "-DENABLE_PYTHON:BOOL=ON"
-  ];
+  ] ++ lib.optional enablePython [ "-DENABLE_PYTHON:BOOL=ON" ];
 
   preConfigure = ''
     # To make install openvino inside /lib instead of /python
@@ -92,24 +76,10 @@ stdenv.mkDerivation rec {
 
   autoPatchelfIgnoreMissingDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    autoPatchelfHook
-    addOpenGLRunpath
-    unzip
-  ];
+  nativeBuildInputs = [ cmake autoPatchelfHook addOpenGLRunpath unzip ];
 
-  buildInputs = [
-    git
-    protobuf
-    opencv
-    python
-    tbb
-    shellcheck
-  ] ++ lib.optional enablePython (with python.pkgs; [
-    cython
-    pybind11
-  ]);
+  buildInputs = [ git protobuf opencv python tbb shellcheck ]
+    ++ lib.optional enablePython (with python.pkgs; [ cython pybind11 ]);
 
   postFixup = ''
     # Link to OpenCL

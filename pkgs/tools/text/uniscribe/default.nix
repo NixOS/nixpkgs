@@ -5,8 +5,7 @@ let
     name = "uniscribe";
     gemdir = ./.;
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "uniscribe";
   version = (import ./gemset.nix).uniscribe.version;
 
@@ -22,7 +21,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = bundlerUpdateScript "uniscribe";
 
   meta = with lib; {
-    description = "Explains Unicode characters/code points: Displays their name, category, and shows compositions";
+    description =
+      "Explains Unicode characters/code points: Displays their name, category, and shows compositions";
     homepage = "https://github.com/janlelis/uniscribe";
     license = licenses.mit;
     maintainers = with maintainers; [ kjeremy ];

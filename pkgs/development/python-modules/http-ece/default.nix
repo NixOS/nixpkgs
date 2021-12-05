@@ -1,6 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
-, coverage, flake8, mock, nose, importlib-metadata
-, cryptography }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, coverage, flake8, mock, nose
+, importlib-metadata, cryptography }:
 
 buildPythonPackage rec {
   pname = "http_ece";

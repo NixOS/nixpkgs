@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, libyamlcpp
-, git
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, git }:
 
 stdenv.mkDerivation rec {
   version = "1.0.20211006";

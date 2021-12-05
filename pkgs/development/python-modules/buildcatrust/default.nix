@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "buildcatrust";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256:0s0m0fy943dakw9cbd40h46qmrhhgrcp292kppyb34m6y27sbagy";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
   disabledTestPaths = [
     # Non-hermetic, needs internet access (e.g. attempts to retrieve NSS store).
     "buildcatrust/tests/test_nonhermetic.py"

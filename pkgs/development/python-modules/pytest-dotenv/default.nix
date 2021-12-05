@@ -15,7 +15,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   meta = with lib; {
-    description = "A pytest plugin that parses environment files before running tests";
+    description =
+      "A pytest plugin that parses environment files before running tests";
     homepage = "https://github.com/quiqua/pytest-dotenv";
     license = licenses.mit;
     maintainers = with maintainers; [ cleeyv ];

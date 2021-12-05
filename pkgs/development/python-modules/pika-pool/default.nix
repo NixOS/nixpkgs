@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pika
-}:
+{ lib, buildPythonPackage, fetchPypi, pika }:
 
 buildPythonPackage rec {
   pname = "pika-pool";

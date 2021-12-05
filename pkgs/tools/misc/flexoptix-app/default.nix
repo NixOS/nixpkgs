@@ -1,11 +1,13 @@
-{ lib, appimageTools, fetchurl, nodePackages }: let
+{ lib, appimageTools, fetchurl, nodePackages }:
+let
   pname = "flexoptix-app";
   version = "5.11.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     name = "${name}.AppImage";
-    url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
+    url =
+      "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
     sha256 = "sha256:1hzdb2fbkwpsf0d3ws4z32blk6549jwhf1lrlqmcxhzqfvkr4gin";
   };
 
@@ -14,25 +16,25 @@
     sha256 = "0mr1bhgvavq1ax4206z1vr2y64s3r676w9jjl9ysziklbrsvk5rr";
   };
 
-  appimageContents = (appimageTools.extract { inherit name src; }).overrideAttrs (oA: {
-    buildCommand = ''
-      ${oA.buildCommand}
+  appimageContents = (appimageTools.extract { inherit name src; }).overrideAttrs
+    (oA: {
+      buildCommand = ''
+        ${oA.buildCommand}
 
-      # Get rid of the autoupdater
-      ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
-      sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
-      ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
-    '';
-  });
+        # Get rid of the autoupdater
+        ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
+        sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
+        ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
+      '';
+    });
 
 in appimageTools.wrapAppImage {
   inherit name;
   src = appimageContents;
 
   multiPkgs = null; # no 32bit needed
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.hidapi
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = { pkgs, ... }@args:
+    [ pkgs.hidapi ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
@@ -50,7 +52,8 @@ in appimageTools.wrapAppImage {
   meta = {
     description = "Configure FLEXOPTIX Universal Transcievers in seconds";
     homepage = "https://www.flexoptix.net";
-    changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
+    changelog =
+      "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ das_j ];
     platforms = [ "x86_64-linux" ];

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry
-, pytest-cov
-, pytest-flakes
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry, pytest-cov, pytest-flakes
+, pytest-mock, pytest-socket, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "url-normalize";
@@ -26,13 +17,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytest-cov
-    pytest-flakes
-    pytest-mock
-    pytest-socket
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ pytest-cov pytest-flakes pytest-mock pytest-socket pytestCheckHook ];
 
   pythonImportsCheck = [ "url_normalize" ];
 

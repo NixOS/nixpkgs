@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
-, chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
-, nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, chameleon, colander, iso8601, peppercorn
+, translationstring, zope_deprecation, nose, coverage, beautifulsoup4, flaky
+, pyramid, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "deform";
@@ -20,14 +20,7 @@ buildPythonPackage rec {
     zope_deprecation
   ];
 
-  checkInputs = [
-    nose
-    coverage
-    beautifulsoup4
-    flaky
-    pyramid
-    pytestCheckHook
-  ];
+  checkInputs = [ nose coverage beautifulsoup4 flaky pyramid pytestCheckHook ];
 
   meta = with lib; {
     description = "Form library with advanced features like nested forms";

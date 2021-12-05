@@ -1,28 +1,7 @@
-{ stdenv
-, lib
-, buildPythonApplication
-, fetchFromGitHub
-, python-dateutil
-, pandas
-, requests
-, lxml
-, openpyxl
-, xlrd
-, h5py
-, odfpy
-, psycopg2
-, pyshp
-, fonttools
-, pyyaml
-, pdfminer
-, vobject
-, tabulate
-, wcwidth
-, zstandard
-, setuptools
-, git
-, withPcap ? true, dpkt, dnslib
-}:
+{ stdenv, lib, buildPythonApplication, fetchFromGitHub, python-dateutil, pandas
+, requests, lxml, openpyxl, xlrd, h5py, odfpy, psycopg2, pyshp, fonttools
+, pyyaml, pdfminer, vobject, tabulate, wcwidth, zstandard, setuptools, git
+, withPcap ? true, dpkt, dnslib }:
 buildPythonApplication rec {
   pname = "visidata";
   version = "2.7.1";
@@ -65,9 +44,7 @@ buildPythonApplication rec {
     setuptools
   ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
-  checkInputs = [
-    git
-  ];
+  checkInputs = [ git ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
@@ -92,6 +69,7 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
-    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

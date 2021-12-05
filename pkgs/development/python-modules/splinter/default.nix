@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, selenium
-, six
-, flask
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, selenium, six, flask
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "splinter";
@@ -18,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-b6zncEAPtKgBPLFRsCSGeBqiD4A/mHEhjQaEIsefc28=";
   };
 
-  propagatedBuildInputs = [
-    selenium
-    six
-  ];
+  propagatedBuildInputs = [ selenium six ];
 
-  checkInputs = [
-    flask
-    pytestCheckHook
-  ];
+  checkInputs = [ flask pytestCheckHook ];
 
   disabledTestPaths = [
     "samples"

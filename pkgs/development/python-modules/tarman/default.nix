@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, unittest2
-, nose
-, mock
-, libarchive
+{ lib, buildPythonPackage, fetchPypi, isPy3k, unittest2, nose, mock, libarchive
 }:
 
 buildPythonPackage rec {

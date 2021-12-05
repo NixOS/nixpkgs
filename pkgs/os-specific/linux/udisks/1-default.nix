@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, sg3_utils
-, udev
-, glib
-, dbus
-, dbus-glib
-, polkit
-, parted
-, lvm2
-, libatasmart
-, intltool
-, libuuid
-, mdadm
-, libxslt
-, docbook_xsl
-, util-linux
-, libgudev
-}:
+{ lib, stdenv, fetchurl, pkg-config, sg3_utils, udev, glib, dbus, dbus-glib
+, polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm, libxslt
+, docbook_xsl, util-linux, libgudev }:
 
 stdenv.mkDerivation rec {
   pname = "udisks";
@@ -31,37 +13,34 @@ stdenv.mkDerivation rec {
 
   patches = [ ./purity.patch ./no-pci-db.patch ./glibc.patch ];
 
-  preConfigure =
-    ''
-      configureFlagsArray+=(--with-systemdsystemunitdir=$out/lib/systemd/system)
-    '';
+  preConfigure = ''
+    configureFlagsArray+=(--with-systemdsystemunitdir=$out/lib/systemd/system)
+  '';
 
-  postPatch =
-    ''
-      sed -e 's,/sbin/mdadm,${mdadm}&,g' -e "s,@slashlibdir@,$out/lib,g" -i data/80-udisks.rules
+  postPatch = ''
+    sed -e 's,/sbin/mdadm,${mdadm}&,g' -e "s,@slashlibdir@,$out/lib,g" -i data/80-udisks.rules
 
-      substituteInPlace src/main.c --replace \
-        "/sbin:/bin:/usr/sbin:/usr/bin" \
-        "${util-linux}/bin:${mdadm}/sbin:/run/current-system/sw/bin:/run/current-system/sw/bin"
-    '';
+    substituteInPlace src/main.c --replace \
+      "/sbin:/bin:/usr/sbin:/usr/bin" \
+      "${util-linux}/bin:${mdadm}/sbin:/run/current-system/sw/bin:/run/current-system/sw/bin"
+  '';
 
-  buildInputs =
-    [
-      sg3_utils
-      udev
-      glib
-      dbus
-      dbus-glib
-      polkit
-      parted
-      libgudev
-      lvm2
-      libatasmart
-      intltool
-      libuuid
-      libxslt
-      docbook_xsl
-    ];
+  buildInputs = [
+    sg3_utils
+    udev
+    glib
+    dbus
+    dbus-glib
+    polkit
+    parted
+    libgudev
+    lvm2
+    libatasmart
+    intltool
+    libuuid
+    libxslt
+    docbook_xsl
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -69,7 +48,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/udisks";
-    description = "A daemon and command-line utility for querying and manipulating storage devices";
+    description =
+      "A daemon and command-line utility for querying and manipulating storage devices";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2Plus ];
     broken = true;

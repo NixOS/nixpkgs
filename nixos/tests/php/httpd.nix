@@ -7,14 +7,10 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
       enable = true;
       adminAddr = "admin@phpfpm";
       virtualHosts."phpfpm" =
-        let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-        in
-        {
+        let testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+        in {
           documentRoot = "${testdir}/web";
-          locations."/" = {
-            index = "index.php index.html";
-          };
+          locations."/" = { index = "index.php index.html"; };
         };
       phpPackage = php;
       enablePHP = true;

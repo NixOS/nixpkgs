@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytest-runner
-, pytestCheckHook
-, pytorch
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytest-runner
+, pytestCheckHook, pytorch }:
 
 buildPythonPackage rec {
   pname = "torchgpipe";
@@ -23,13 +17,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pytorch ];
 
   checkInputs = [ pytest-runner pytestCheckHook ];
-  disabledTests = [
-    "test_inplace_on_requires_grad"
-    "test_input_requiring_grad"
-  ];
+  disabledTests =
+    [ "test_inplace_on_requires_grad" "test_input_requiring_grad" ];
 
   meta = with lib; {
-    description = "GPipe implemented in Pytorch and optimized for CUDA rather than TPU";
+    description =
+      "GPipe implemented in Pytorch and optimized for CUDA rather than TPU";
     homepage = "https://torchgpipe.readthedocs.io";
     license = licenses.asl20;
     maintainers = [ maintainers.bcdarwin ];

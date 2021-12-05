@@ -1,11 +1,5 @@
-{ lib, stdenv, llvm_meta
-, buildLlvmTools
-, fetch
-, cmake
-, libxml2
-, libllvm
-, version
-}:
+{ lib, stdenv, llvm_meta, buildLlvmTools, fetch, cmake, libxml2, libllvm
+, version }:
 
 stdenv.mkDerivation rec {
   pname = "lld";
@@ -13,18 +7,17 @@ stdenv.mkDerivation rec {
 
   src = fetch pname "04afcfq2h7ysyqxxhyhb7ig4p0vdw7mi63kh8mffl74j0rc781p7";
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
-    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-  ];
+    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${
+      lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"
+    }"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen" ];
 
   outputs = [ "out" "lib" "dev" ];
 

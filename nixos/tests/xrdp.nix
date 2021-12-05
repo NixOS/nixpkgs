@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "xrdp";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ volth ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ volth ]; };
 
   nodes = {
     server = { pkgs, ... }: {
@@ -21,27 +19,27 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = { nodes, ... }: let
-    user = nodes.client.config.users.users.alice;
-  in ''
-    start_all()
+  testScript = { nodes, ... }:
+    let user = nodes.client.config.users.users.alice;
+    in ''
+      start_all()
 
-    client.wait_for_x()
-    client.wait_for_file("${user.home}/.Xauthority")
-    client.succeed("xauth merge ${user.home}/.Xauthority")
+      client.wait_for_x()
+      client.wait_for_file("${user.home}/.Xauthority")
+      client.succeed("xauth merge ${user.home}/.Xauthority")
 
-    client.sleep(5)
+      client.sleep(5)
 
-    client.execute("xterm >&2 &")
-    client.sleep(1)
-    client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password}\n")
-    client.sleep(5)
-    client.screenshot("localrdp")
+      client.execute("xterm >&2 &")
+      client.sleep(1)
+      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password}\n")
+      client.sleep(5)
+      client.screenshot("localrdp")
 
-    client.execute("xterm >&2 &")
-    client.sleep(1)
-    client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password}\n")
-    client.sleep(5)
-    client.screenshot("remoterdp")
-  '';
+      client.execute("xterm >&2 &")
+      client.sleep(1)
+      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password}\n")
+      client.sleep(5)
+      client.screenshot("remoterdp")
+    '';
 })

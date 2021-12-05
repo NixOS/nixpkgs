@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, rustPlatform
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, rustPlatform, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
@@ -33,13 +27,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [ cmake ]
+    ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   cmakeFlags = [
     "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"

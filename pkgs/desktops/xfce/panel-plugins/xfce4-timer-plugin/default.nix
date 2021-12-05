@@ -1,30 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel
+, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
 
-let
-  category = "panel-plugins";
-in
+let category = "panel-plugins";
 
-stdenv.mkDerivation rec {
-  pname  = "xfce4-timer-plugin";
+in stdenv.mkDerivation rec {
+  pname = "xfce4-timer-plugin";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-S1LSkRsZSelFlxvmUzFV7mupnHcHjqx/1DsPKuyoJOM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
-  buildInputs = [
-    libxfce4util
-    libxfce4ui
-    xfce4-panel
-    gtk3
-    hicolor-icon-theme
-  ];
+  buildInputs = [ libxfce4util libxfce4ui xfce4-panel gtk3 hicolor-icon-theme ];
 
   hardeningDisable = [ "format" ];
 

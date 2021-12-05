@@ -10,9 +10,11 @@ in {
 
   # Added 2019-08-09
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "evince" "enable" ]
-      [ "programs" "evince" "enable" ])
+    (mkRenamedOptionModule [ "services" "gnome3" "evince" "enable" ] [
+      "programs"
+      "evince"
+      "enable"
+    ])
   ];
 
   ###### interface
@@ -21,8 +23,7 @@ in {
 
     programs.evince = {
 
-      enable = mkEnableOption
-        "Evince, the GNOME document viewer";
+      enable = mkEnableOption "Evince, the GNOME document viewer";
 
       package = mkOption {
         type = types.package;
@@ -34,7 +35,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 

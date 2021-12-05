@@ -1,10 +1,4 @@
-{ lib
-, python3
-, fetchpatch
-, makeDesktopItem
-, qtsvg
-, wrapQtAppsHook
-}:
+{ lib, python3, fetchpatch, makeDesktopItem, qtsvg, wrapQtAppsHook }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
@@ -19,19 +13,16 @@ python3.pkgs.buildPythonApplication rec {
     # https://gitlab.com/pyspread/pyspread/-/merge_requests/34
     (fetchpatch {
       name = "entry-points.patch";
-      url = "https://gitlab.com/pyspread/pyspread/-/commit/3d8da6a7a7d76f7027d77ca95fac103961d729a2.patch";
+      url =
+        "https://gitlab.com/pyspread/pyspread/-/commit/3d8da6a7a7d76f7027d77ca95fac103961d729a2.patch";
       excludes = [ "bin/pyspread" "bin/pyspread.bat" ];
       sha256 = "1l614k7agv339hrin23jj7s1mq576vkdfkdim6wp224k7y37bnil";
     })
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
-  buildInputs = [
-    qtsvg
-  ];
+  buildInputs = [ qtsvg ];
 
   propagatedBuildInputs = with python3.pkgs; [
     python-dateutil

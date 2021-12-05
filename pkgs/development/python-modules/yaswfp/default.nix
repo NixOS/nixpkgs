@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "yaswfp";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "1dxdz89hlycy1rnn269fwl1f0qxgxqarkc0ivs2m77f8xba2qgj9";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yaswfp" ];
 

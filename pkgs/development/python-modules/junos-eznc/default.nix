@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, scp
-, pyserial
-, paramiko
-, netaddr
-, ncclient
-, ntc-templates
-, lxml
-, jinja2
-, pyyaml
-, transitions
-, yamlordereddictloader
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, six, scp, pyserial, paramiko, netaddr
+, ncclient, ntc-templates, lxml, jinja2, pyyaml, transitions
+, yamlordereddictloader, nose }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
@@ -33,7 +19,18 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
+    scp
+    six
+    pyserial
+    paramiko
+    netaddr
+    ncclient
+    ntc-templates
+    lxml
+    jinja2
+    pyyaml
+    transitions
+    yamlordereddictloader
   ];
 
   checkPhase = ''

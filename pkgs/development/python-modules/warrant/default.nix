@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
-, mock
-, boto3, envs, python-jose, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, mock, boto3, envs
+, python-jose, requests }:
 
 buildPythonPackage {
   pname = "warrant";
@@ -8,16 +7,17 @@ buildPythonPackage {
 
   # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
   src = fetchFromGitHub {
-    owner  = "capless";
-    repo   = "warrant";
-    rev    = "ff2e4793d8479e770f2461ef7cbc0c15ee784395";
+    owner = "capless";
+    repo = "warrant";
+    rev = "ff2e4793d8479e770f2461ef7cbc0c15ee784395";
     sha256 = "0gw3crg64p1zx3k5js0wh0x5bldgs7viy4g8hld9xbka8q0374hi";
   };
 
   patches = [
     (fetchpatch {
       name = "fix-pip10-compat.patch";
-      url = "https://github.com/capless/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
+      url =
+        "https://github.com/capless/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
       sha256 = "1lvqi2qfa3kxdz05ab2lc7xnd3piyvvnz9kla2jl4pchi876z17c";
     })
   ];

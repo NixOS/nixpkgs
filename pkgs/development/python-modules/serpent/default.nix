@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy27
-, enum34
-, attrs
-, pytz
-}:
+{ lib, buildPythonPackage, fetchPypi, python, isPy27, enum34, attrs, pytz }:
 
 buildPythonPackage rec {
   pname = "serpent";
@@ -29,5 +21,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/irmen/Serpent";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-    };
+  };
 }

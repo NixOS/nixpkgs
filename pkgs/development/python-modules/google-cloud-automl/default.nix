@@ -1,16 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, libcst
-, google-api-core
-, google-cloud-storage
-, google-cloud-testutils
-, pandas
-, proto-plus
-, pytest-asyncio
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, libcst, google-api-core
+, google-cloud-storage, google-cloud-testutils, pandas, proto-plus
+, pytest-asyncio, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
@@ -21,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "4c759ae99979d9f94ed0bdfe4937f41c81634f934ec11d25eb089430781eafec";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    libcst
-    proto-plus
-  ];
+  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
 
   checkInputs = [
     google-cloud-storage

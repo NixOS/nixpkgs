@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "3.19";
+let version = "3.19";
 in fetchzip {
   name = "inter-${version}";
 
-  url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+  url =
+    "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/opentype

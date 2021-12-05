@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "flatcc";
@@ -16,10 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DFLATCC_INSTALL=on"
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
+  cmakeFlags = [ "-DFLATCC_INSTALL=on" "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = {
     description = "FlatBuffers Compiler and Library in C for C ";

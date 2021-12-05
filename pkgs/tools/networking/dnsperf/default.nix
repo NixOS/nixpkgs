@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, ldns
-, libck
-, nghttp2
-, openssl
-, pkg-config
-}:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, ldns, libck, nghttp2, openssl
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
@@ -20,10 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jemce+ix18IPAusEHh5QWcSQn/QRUOc3HTSk9jGt+SA=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     ldns # optional for DDNS (but cheap anyway)

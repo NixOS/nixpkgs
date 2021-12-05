@@ -16,40 +16,36 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, help2man, makeWrapper
-, glib, libbsd
-, libX11, xorgserver, kmod, xf86videonouveau
-, nvidia_x11, virtualgl, libglvnd
-, automake111x, autoconf
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, help2man, makeWrapper, glib
+, libbsd, libX11, xorgserver, kmod, xf86videonouveau, nvidia_x11, virtualgl
+, libglvnd, automake111x, autoconf
 # The below should only be non-null in a x86_64 system. On a i686
 # system the above nvidia_x11 and virtualgl will be the i686 packages.
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
-, nvidia_x11_i686 ? null
-, libglvnd_i686 ? null
-, useDisplayDevice ? false
-, extraNvidiaDeviceOptions ? ""
-, extraNouveauDeviceOptions ? ""
-, useNvidia ? true
-}:
+, nvidia_x11_i686 ? null, libglvnd_i686 ? null, useDisplayDevice ? false
+, extraNvidiaDeviceOptions ? "", extraNouveauDeviceOptions ? ""
+, useNvidia ? true }:
 
 let
-  nvidia_x11s = [ nvidia_x11 ]
-                ++ lib.optional nvidia_x11.useGLVND libglvnd
-                ++ lib.optionals (nvidia_x11_i686 != null)
-                   ([ nvidia_x11_i686 ] ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686);
+  nvidia_x11s = [ nvidia_x11 ] ++ lib.optional nvidia_x11.useGLVND libglvnd
+    ++ lib.optionals (nvidia_x11_i686 != null) ([ nvidia_x11_i686 ]
+      ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686);
 
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
   bbdPath = lib.makeBinPath [ kmod xorgserver ];
 
-  xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
+  xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules")
+    ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
 
   modprobePatch = fetchpatch {
-    url = "https://github.com/Bumblebee-Project/Bumblebee/commit/1ada79fe5916961fc4e4917f8c63bb184908d986.patch";
+    url =
+      "https://github.com/Bumblebee-Project/Bumblebee/commit/1ada79fe5916961fc4e4917f8c63bb184908d986.patch";
     sha256 = "02vq3vba6nx7gglpjdfchws9vjhs1x02a543yvqrxqpvvdfim2x2";
   };
   libkmodPatch = fetchpatch {
-    url = "https://github.com/Bumblebee-Project/Bumblebee/commit/deceb14cdf2c90ff64ebd1010a674305464587da.patch";
+    url =
+      "https://github.com/Bumblebee-Project/Bumblebee/commit/deceb14cdf2c90ff64ebd1010a674305464587da.patch";
     sha256 = "00c05i5lxz7vdbv445ncxac490vbl5g9w3vy3gd71qw1f0si8vwh";
   };
 
@@ -119,9 +115,7 @@ in stdenv.mkDerivation rec {
     "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
   ];
 
-  CFLAGS = [
-    "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
-  ];
+  CFLAGS = [ ''-DX_MODULE_APPENDS=\"${xmodules}\"'' ];
 
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
@@ -133,7 +127,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
-    description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
+    description =
+      "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, Mako
-, pytest
-, numpy
-, cffi
-, pytools
-, decorator
-, appdirs
-, six
-, opencl-headers
-, ocl-icd
-, pybind11
-, mesa_drivers
-}:
+{ lib, stdenv, fetchPypi, buildPythonPackage, Mako, pytest, numpy, cffi, pytools
+, decorator, appdirs, six, opencl-headers, ocl-icd, pybind11, mesa_drivers }:
 
 let
   os-specific-buildInputs =

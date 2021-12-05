@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, xosd
-, autoreconfHook } :
+{ lib, stdenv, fetchFromGitHub, pidgin, xosd, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-osd";
@@ -25,7 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mbroemme/pidgin-osd";
-    description = "Plugin for Pidgin which implements on-screen display via libxosd";
+    description =
+      "Plugin for Pidgin which implements on-screen display via libxosd";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

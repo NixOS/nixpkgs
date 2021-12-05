@@ -1,19 +1,9 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook
-, installShellFiles
-, python3
-, gobject-introspection
-, gtk3
-, gdk-pixbuf
+{ lib, fetchFromGitHub, wrapGAppsHook, installShellFiles, python3
+, gobject-introspection, gtk3, gdk-pixbuf
 
 # Recommended Dependencies:
-, unrarSupport ? false  # unfree software
-, unrar
-, p7zip
-, lhasa
-, mupdf
-}:
+, unrarSupport ? false # unfree software
+, unrar, p7zip, lhasa, mupdf }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix3";
@@ -21,8 +11,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # no official release on pypi/github and no build system
   src = fetchFromGitHub {
-    repo   = "${pname}";
-    owner  = "multiSnow";
+    repo = "${pname}";
+    owner = "multiSnow";
     rev = "139344e23898c28484328fc29fd0c6659affb12d";
     sha256 = "0q9xgl60ryf7qmy5vgzgfry4rvw5j9rb4d1ilxmpjmvm7dd3fm2k";
   };
@@ -79,7 +69,10 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath ([ p7zip lhasa mupdf ] ++ lib.optional (unrarSupport) unrar)}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath
+        ([ p7zip lhasa mupdf ] ++ lib.optional (unrarSupport) unrar)
+      }"
     )
   '';
 

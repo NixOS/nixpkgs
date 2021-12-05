@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fltk
-, rtmidi
-, libsamplerate
-, libsndfile
-, jack2
-, alsa-lib
-, libpulseaudio
-, libXpm
-, flac
-, libogg
-, libvorbis
-, libopus
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fltk, rtmidi, libsamplerate
+, libsndfile, jack2, alsa-lib, libpulseaudio, libXpm, flac, libogg, libvorbis
+, libopus }:
 
 stdenv.mkDerivation rec {
   pname = "giada";
@@ -30,20 +15,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = [
-    "-w"
-    "-Wno-error"
-  ];
+  NIX_CFLAGS_COMPILE = [ "-w" "-Wno-error" ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_BINDIR=bin" "-DCMAKE_BUILD_TYPE=Release" ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     rtmidi
@@ -73,7 +49,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
+    description =
+      "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ petabyteboy ];

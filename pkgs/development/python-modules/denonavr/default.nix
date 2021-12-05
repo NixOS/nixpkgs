@@ -1,17 +1,6 @@
-{ lib
-, asyncstdlib
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, httpx
-, netifaces
-, pytest-asyncio
-, pytestCheckHook
-, pytest-httpx
-, pytest-timeout
-, pythonOlder
-}:
+{ lib, asyncstdlib, attrs, buildPythonPackage, defusedxml, fetchFromGitHub
+, httpx, netifaces, pytest-asyncio, pytestCheckHook, pytest-httpx
+, pytest-timeout, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "denonavr";
@@ -25,20 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-Y0sFRKnKZAdP95EyE3h1g92AJeT0Xkshjjwfv/vnfW8=";
   };
 
-  propagatedBuildInputs = [
-    asyncstdlib
-    attrs
-    defusedxml
-    httpx
-    netifaces
-  ];
+  propagatedBuildInputs = [ asyncstdlib attrs defusedxml httpx netifaces ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-    pytest-httpx
-    pytest-timeout
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook pytest-httpx pytest-timeout ];
 
   pythonImportsCheck = [ "denonavr" ];
 

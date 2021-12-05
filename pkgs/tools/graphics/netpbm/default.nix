@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchsvn
-, pkg-config
-, libjpeg
-, libpng
-, jbigkit
-, flex
-, zlib
-, perl
-, libxml2
-, makeWrapper
-, libtiff
-, enableX11 ? false
-, libX11
-, buildPackages
-}:
+{ lib, stdenv, fetchsvn, pkg-config, libjpeg, libpng, jbigkit, flex, zlib, perl
+, libxml2, makeWrapper, libtiff, enableX11 ? false, libX11, buildPackages }:
 
 stdenv.mkDerivation {
   # Determine version and revision from:
@@ -30,29 +15,19 @@ stdenv.mkDerivation {
     sha256 = "NK8GXCvCEnbQJWvVngB5UMOVmfsiyU4Fq0JIY9UNSjo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    flex
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config flex makeWrapper ];
 
-  buildInputs = [
-    zlib
-    perl
-    libpng
-    libjpeg
-    libxml2
-    libtiff
-    jbigkit
-  ] ++ lib.optional enableX11 libX11;
-
+  buildInputs = [ zlib perl libpng libjpeg libxml2 libtiff jbigkit ]
+    ++ lib.optional enableX11 libX11;
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
   # Environment variables
-  STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
+  STRIPPROG = "${
+      lib.getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}strip";
 
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
@@ -69,12 +44,16 @@ stdenv.mkDerivation {
     echo "STATICLIB_TOO = N" >> config.mk
 
     # Enable cross-compilation
-    echo 'AR = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar' >> config.mk
+    echo 'AR = ${
+      lib.getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}ar' >> config.mk
     echo 'CC = ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc' >> config.mk
     echo 'CC_FOR_BUILD = ${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc' >> config.mk
     echo 'LD_FOR_BUILD = $(CC_FOR_BUILD)' >> config.mk
     echo 'PKG_CONFIG = ${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' >> config.mk
-    echo 'RANLIB = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
+    echo 'RANLIB = ${
+      lib.getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
 
     # Use libraries from Nixpkgs
     echo "TIFFLIB = libtiff.so" >> config.mk
@@ -120,7 +99,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://netpbm.sourceforge.net/";
     description = "Toolkit for manipulation of graphic images";
-    license = lib.licenses.free; # http://netpbm.svn.code.sourceforge.net/p/netpbm/code/trunk/doc/copyright_summary
+    license =
+      lib.licenses.free; # http://netpbm.svn.code.sourceforge.net/p/netpbm/code/trunk/doc/copyright_summary
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

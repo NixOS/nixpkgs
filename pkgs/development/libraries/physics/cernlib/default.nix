@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gnumake imake makedepend ];
   sourceRoot = ".";
 
-  patches = [ ./patch.patch ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch ];
+  patches = [
+    ./patch.patch
+    ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch
+  ];
 
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \
@@ -43,9 +46,7 @@ stdenv.mkDerivation rec {
     "-fallow-argument-mismatch"
   ];
 
-  makeFlags = [
-    "FORTRANOPTIONS=$(FFLAGS)"
-  ];
+  makeFlags = [ "FORTRANOPTIONS=$(FFLAGS)" ];
 
   buildPhase = ''
     cd $CERN_ROOT
@@ -74,7 +75,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://cernlib.web.cern.ch";
-    description = "Legacy collection of libraries and modules for data analysis in high energy physics";
+    description =
+      "Legacy collection of libraries and modules for data analysis in high energy physics";
     broken = stdenv.isDarwin;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with lib.maintainers; [ veprbl ];

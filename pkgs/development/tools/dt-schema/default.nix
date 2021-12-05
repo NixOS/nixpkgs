@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, git
-, ruamel-yaml
-, jsonschema
-, rfc3987
-, setuptools
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, git, ruamel-yaml, jsonschema, rfc3987
+, setuptools, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "dtschema";
@@ -19,12 +11,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm git ];
-  propagatedBuildInputs = [
-    setuptools
-    ruamel-yaml
-    jsonschema
-    rfc3987
-  ];
+  propagatedBuildInputs = [ setuptools ruamel-yaml jsonschema rfc3987 ];
 
   meta = with lib; {
     description = "Tooling for devicetree validation using YAML and jsonschema";

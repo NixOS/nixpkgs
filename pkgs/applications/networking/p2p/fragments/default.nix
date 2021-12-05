@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, vala
-, ninja
-, pkg-config
-, wrapGAppsHook
-, desktop-file-utils
-, appstream-glib
-, python3
-, glib
-, gtk3
-, libhandy
-, libtransmission
-, libb64
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
-, libevent
-, curl
-, openssl
-, zlib
-}:
+{ lib, stdenv, fetchFromGitLab, meson, vala, ninja, pkg-config, wrapGAppsHook
+, desktop-file-utils, appstream-glib, python3, glib, gtk3, libhandy
+, libtransmission, libb64, libutp, miniupnpc, dht, libnatpmp, libevent, curl
+, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "fragments";

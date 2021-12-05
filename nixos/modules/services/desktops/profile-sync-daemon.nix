@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.psd;
+let cfg = config.services.psd;
 in {
   options.services.psd = with types; {
     enable = mkOption {
@@ -36,15 +35,22 @@ in {
             description = "Profile Sync daemon";
             wants = [ "psd-resync.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
-            unitConfig = {
-              RequiresMountsFor = [ "/home/" ];
-            };
+            path = with pkgs; [
+              rsync
+              kmod
+              gawk
+              nettools
+              util-linux
+              profile-sync-daemon
+            ];
+            unitConfig = { RequiresMountsFor = [ "/home/" ]; };
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = "yes";
-              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon sync";
-              ExecStop = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon unsync";
+              ExecStart =
+                "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon sync";
+              ExecStop =
+                "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon unsync";
             };
           };
 
@@ -55,10 +61,18 @@ in {
             wants = [ "psd-resync.timer" ];
             partOf = [ "psd.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
+            path = with pkgs; [
+              rsync
+              kmod
+              gawk
+              nettools
+              util-linux
+              profile-sync-daemon
+            ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";
+              ExecStart =
+                "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";
             };
           };
         };
@@ -67,9 +81,7 @@ in {
           description = "Timer for profile sync daemon - ${cfg.resyncTimer}";
           partOf = [ "psd-resync.service" "psd.service" ];
 
-          timerConfig = {
-            OnUnitActiveSec = "${cfg.resyncTimer}";
-          };
+          timerConfig = { OnUnitActiveSec = "${cfg.resyncTimer}"; };
         };
       };
     };

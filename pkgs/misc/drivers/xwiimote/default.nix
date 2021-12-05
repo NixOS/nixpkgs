@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2";
 
   src = fetchurl {
-    url = "https://github.com/dvdhrm/xwiimote/releases/download/xwiimote-${version}/xwiimote-${version}.tar.xz";
+    url =
+      "https://github.com/dvdhrm/xwiimote/releases/download/xwiimote-${version}/xwiimote-${version}.tar.xz";
     sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
   };
 
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://dvdhrm.github.io/xwiimote";
-    description = "Userspace utilities to control connected Nintendo Wii Remotes";
+    description =
+      "Userspace utilities to control connected Nintendo Wii Remotes";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };

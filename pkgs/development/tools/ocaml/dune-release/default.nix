@@ -1,9 +1,7 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch
-, curly, fmt, bos, cmdliner, re, rresult, logs, fpath
-, odoc, opam-format, opam-core, opam-state, yojson, astring
-, opam, git, findlib, mercurial, bzip2, gnutar, coreutils
-, alcotest
-}:
+{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch, curly, fmt, bos
+, cmdliner, re, rresult, logs, fpath, odoc, opam-format, opam-core, opam-state
+, yojson, astring, opam, git, findlib, mercurial, bzip2, gnutar, coreutils
+, alcotest }:
 
 # don't include dune as runtime dep, so user can
 # choose between dune and dune_2
@@ -15,13 +13,28 @@ in buildDunePackage rec {
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "1r6bz1zz1al5y762ws3w98d8bnyi5ipffajgczixacmbrxvp3zgx";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson astring fpath ];
+  buildInputs = [
+    curly
+    fmt
+    cmdliner
+    re
+    opam-format
+    opam-state
+    opam-core
+    rresult
+    logs
+    odoc
+    bos
+    yojson
+    astring
+    fpath
+  ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 
@@ -31,7 +44,8 @@ in buildDunePackage rec {
     # add missing git config calls to avoid failing due to the lack of a global git config
     (fetchpatch {
       name = "tests-missing-git-config.patch";
-      url = "https://github.com/ocamllabs/dune-release/commit/87e7ffe2a9c574620d4e2fc0d79eed8772eab973.patch";
+      url =
+        "https://github.com/ocamllabs/dune-release/commit/87e7ffe2a9c574620d4e2fc0d79eed8772eab973.patch";
       sha256 = "0wrzcpzr54dwrdjdc75mijh78xk4bmsmqs1pci06fb2nf03vbd2k";
     })
   ];

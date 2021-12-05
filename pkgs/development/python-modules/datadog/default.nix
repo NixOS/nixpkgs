@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, decorator
-, requests
-, typing ? null
-, configparser
-, click
-, freezegun
-, mock
-, pytestCheckHook
-, pytest-vcr
-, python-dateutil
-, vcrpy
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, decorator, requests
+, typing ? null, configparser, click, freezegun, mock, pytestCheckHook
+, pytest-vcr, python-dateutil, vcrpy }:
 
 buildPythonPackage rec {
   pname = "datadog";
@@ -32,23 +19,12 @@ buildPythonPackage rec {
     ++ lib.optional (pythonOlder "3.5") typing
     ++ lib.optional (pythonOlder "3.0") configparser;
 
-  checkInputs = [
-    click
-    freezegun
-    mock
-    pytestCheckHook
-    pytest-vcr
-    python-dateutil
-    vcrpy
-  ];
+  checkInputs =
+    [ click freezegun mock pytestCheckHook pytest-vcr python-dateutil vcrpy ];
 
-  disabledTestPaths = [
-    "tests/performance"
-  ];
+  disabledTestPaths = [ "tests/performance" ];
 
-  disabledTests = [
-    "test_default_settings_set"
-  ];
+  disabledTests = [ "test_default_settings_set" ];
 
   pythonImportsCheck = [ "datadog" ];
 

@@ -21,7 +21,8 @@ in stdenv.mkDerivation rec {
   name = "${pname}-bin-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%208%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
+    url =
+      "mirror://sourceforge/${pname}/TV-Browser%20Releases%20%28Java%208%20and%20higher%29/${version}/${pname}_${version}_bin.tar.gz";
     sha256 = "0ahsirf6cazs5wykgbwsc6n35w6jprxyphzqmm7d370n37sb07pm";
   };
 

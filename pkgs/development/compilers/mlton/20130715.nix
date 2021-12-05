@@ -6,32 +6,37 @@ let
   usr_prefix = if stdenv.isDarwin then "usr/local" else "usr";
 
   dynamic_linker = stdenv.cc.bintools.dynamicLinker;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mlton";
   inherit version;
 
-  binSrc =
-    if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
+  binSrc = if stdenv.hostPlatform.system == "i686-linux" then
+    (fetchurl {
+      url =
+        "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
       sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
     })
-    else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
-        sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
+    (fetchurl {
+      url =
+        "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
+      sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
     })
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
-        sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    (fetchurl {
+      url =
+        "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
+      sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
     })
-    else throw "Architecture not supported";
+  else
+    throw "Architecture not supported";
 
-  codeSrc =
-    fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}.src.tgz";
-      sha256 = "0v1x2hrh9hiqkvnbq11kf34v4i5a2x0ffxbzqaa8skyl26nmfn11";
-    };
+  codeSrc = fetchurl {
+    url =
+      "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}.src.tgz";
+    sha256 = "0v1x2hrh9hiqkvnbq11kf34v4i5a2x0ffxbzqaa8skyl26nmfn11";
+  };
 
   srcs = [ binSrc codeSrc ];
 
@@ -44,7 +49,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     # Fix paths in the source.
-    find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+    find . -type f | grep -v -e '\.tgz$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
 
     substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
     substituteInPlace bin/mlton-script --replace gcc cc

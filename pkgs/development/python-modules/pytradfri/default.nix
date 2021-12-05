@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiocoap
-, dtlssocket
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiocoap, dtlssocket
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytradfri";
@@ -20,19 +14,15 @@ buildPythonPackage rec {
     sha256 = "sha256-/1K2jBgDuOIUb4WUownoceprZbOwSkQIqeEt07HfZrY=";
   };
 
-  propagatedBuildInputs = [
-    aiocoap
-    dtlssocket
-  ];
+  propagatedBuildInputs = [ aiocoap dtlssocket ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytradfri" ];
 
   meta = with lib; {
-    description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
+    description =
+      "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
     homepage = "https://github.com/home-assistant-libs/pytradfri";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

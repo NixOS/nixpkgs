@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, watchman
-}:
+{ lib, fetchFromGitHub, rustPlatform, makeWrapper, watchman }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rs-git-fsmonitor";
@@ -21,7 +16,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   fixupPhase = ''
-    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}" ;
+    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${
+      lib.makeBinPath [ watchman ]
+    }" ;
   '';
 
   meta = with lib; {

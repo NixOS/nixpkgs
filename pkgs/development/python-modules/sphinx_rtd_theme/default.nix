@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, sphinx
-, readthedocs-sphinx-ext
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, docutils, sphinx, readthedocs-sphinx-ext
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "sphinx_rtd_theme";
@@ -26,15 +20,9 @@ buildPythonPackage rec {
     export CI=1
   '';
 
-  propagatedBuildInputs = [
-    docutils
-    sphinx
-  ];
+  propagatedBuildInputs = [ docutils sphinx ];
 
-  checkInputs = [
-    readthedocs-sphinx-ext
-    pytestCheckHook
-  ];
+  checkInputs = [ readthedocs-sphinx-ext pytestCheckHook ];
 
   meta = with lib; {
     description = "ReadTheDocs.org theme for Sphinx";

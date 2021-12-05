@@ -9,8 +9,7 @@ let
 
   rcfg = config.services.redis;
   drv = pkgs.sourcehut.todosrht;
-in
-{
+in {
   options.services.sourcehut.todo = {
     user = mkOption {
       type = types.str;
@@ -45,117 +44,123 @@ in
     };
   };
 
-  config = with scfg; lib.mkIf (cfg.enable && elem "todo" cfg.services) {
-    users = {
+  config = with scfg;
+    lib.mkIf (cfg.enable && elem "todo" cfg.services) {
       users = {
-        "${user}" = {
-          isSystemUser = true;
-          group = user;
-          extraGroups = [ "postfix" ];
-          description = "todo.sr.ht user";
+        users = {
+          "${user}" = {
+            isSystemUser = true;
+            group = user;
+            extraGroups = [ "postfix" ];
+            description = "todo.sr.ht user";
+          };
         };
+        groups = { "${user}" = { }; };
       };
-      groups = {
-        "${user}" = { };
-      };
-    };
 
-    services.postgresql = {
-      authentication = ''
-        local ${database} ${user} trust
-      '';
-      ensureDatabases = [ database ];
-      ensureUsers = [
-        {
+      services.postgresql = {
+        authentication = ''
+          local ${database} ${user} trust
+        '';
+        ensureDatabases = [ database ];
+        ensureUsers = [{
           name = user;
-          ensurePermissions = { "DATABASE \"${database}\"" = "ALL PRIVILEGES"; };
-        }
-      ];
-    };
+          ensurePermissions = {
+            "DATABASE \"${database}\"" = "ALL PRIVILEGES";
+          };
+        }];
+      };
 
-    systemd = {
-      tmpfiles.rules = [
-        "d ${statePath} 0750 ${user} ${user} -"
-      ];
+      systemd = {
+        tmpfiles.rules = [ "d ${statePath} 0750 ${user} ${user} -" ];
 
-      services = {
-        todosrht = import ./service.nix { inherit config pkgs lib; } scfg drv iniKey {
-          after = [ "postgresql.service" "network.target" ];
-          requires = [ "postgresql.service" ];
-          wantedBy = [ "multi-user.target" ];
+        services = {
+          todosrht =
+            import ./service.nix { inherit config pkgs lib; } scfg drv iniKey {
+              after = [ "postgresql.service" "network.target" ];
+              requires = [ "postgresql.service" ];
+              wantedBy = [ "multi-user.target" ];
 
-          description = "todo.sr.ht website service";
+              description = "todo.sr.ht website service";
 
-          serviceConfig.ExecStart = "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${toString port}";
-        };
+              serviceConfig.ExecStart =
+                "${cfg.python}/bin/gunicorn ${drv.pname}.app:app -b ${cfg.address}:${
+                  toString port
+                }";
+            };
 
-       todosrht-lmtp = {
-         after = [ "postgresql.service" "network.target" ];
-         bindsTo = [ "postgresql.service" ];
-         wantedBy = [ "multi-user.target" ];
+          todosrht-lmtp = {
+            after = [ "postgresql.service" "network.target" ];
+            bindsTo = [ "postgresql.service" ];
+            wantedBy = [ "multi-user.target" ];
 
-         description = "todo.sr.ht process service";
-         serviceConfig = {
-           Type = "simple";
-           User = user;
-           Restart = "always";
-           ExecStart = "${cfg.python}/bin/todosrht-lmtp";
-         };
-       };
-
-        todosrht-webhooks = {
-          after = [ "postgresql.service" "network.target" ];
-          requires = [ "postgresql.service" ];
-          wantedBy = [ "multi-user.target" ];
-
-          description = "todo.sr.ht webhooks service";
-          serviceConfig = {
-            Type = "simple";
-            User = user;
-            Restart = "always";
-            ExecStart = "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
+            description = "todo.sr.ht process service";
+            serviceConfig = {
+              Type = "simple";
+              User = user;
+              Restart = "always";
+              ExecStart = "${cfg.python}/bin/todosrht-lmtp";
+            };
           };
 
+          todosrht-webhooks = {
+            after = [ "postgresql.service" "network.target" ];
+            requires = [ "postgresql.service" ];
+            wantedBy = [ "multi-user.target" ];
+
+            description = "todo.sr.ht webhooks service";
+            serviceConfig = {
+              Type = "simple";
+              User = user;
+              Restart = "always";
+              ExecStart =
+                "${cfg.python}/bin/celery -A ${drv.pname}.webhooks worker --loglevel=info";
+            };
+
+          };
         };
       };
+
+      services.sourcehut.settings = {
+        # URL todo.sr.ht is being served at (protocol://domain)
+        "todo.sr.ht".origin = mkDefault "http://todo.${cfg.originBase}";
+        # Address and port to bind the debug server to
+        "todo.sr.ht".debug-host = mkDefault "0.0.0.0";
+        "todo.sr.ht".debug-port = mkDefault port;
+        # Configures the SQLAlchemy connection string for the database.
+        "todo.sr.ht".connection-string = mkDefault
+          "postgresql:///${database}?user=${user}&host=/var/run/postgresql";
+        # Set to "yes" to automatically run migrations on package upgrade.
+        "todo.sr.ht".migrate-on-upgrade = mkDefault "yes";
+        # todo.sr.ht's OAuth client ID and secret for meta.sr.ht
+        # Register your client at meta.example.org/oauth
+        "todo.sr.ht".oauth-client-id = mkDefault null;
+        "todo.sr.ht".oauth-client-secret = mkDefault null;
+        # Outgoing email for notifications generated by users
+        "todo.sr.ht".notify-from = mkDefault "CHANGEME@example.org";
+        # The redis connection used for the webhooks worker
+        "todo.sr.ht".webhooks =
+          mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/1";
+        # Network-key
+        "todo.sr.ht".network-key = mkDefault null;
+
+        # Path for the lmtp daemon's unix socket. Direct incoming mail to this socket.
+        # Alternatively, specify IP:PORT and an SMTP server will be run instead.
+        "todo.sr.ht::mail".sock = mkDefault "/tmp/todo.sr.ht-lmtp.sock";
+        # The lmtp daemon will make the unix socket group-read/write for users in this
+        # group.
+        "todo.sr.ht::mail".sock-group = mkDefault "postfix";
+
+        "todo.sr.ht::mail".posting-domain = mkDefault "todo.${cfg.originBase}";
+      };
+
+      services.nginx.virtualHosts."todo.${cfg.originBase}" = {
+        forceSSL = true;
+        locations."/".proxyPass = "http://${cfg.address}:${toString port}";
+        locations."/query".proxyPass =
+          "http://${cfg.address}:${toString (port + 100)}";
+        locations."/static".root =
+          "${pkgs.sourcehut.todosrht}/${pkgs.sourcehut.python.sitePackages}/todosrht";
+      };
     };
-
-    services.sourcehut.settings = {
-      # URL todo.sr.ht is being served at (protocol://domain)
-      "todo.sr.ht".origin = mkDefault "http://todo.${cfg.originBase}";
-      # Address and port to bind the debug server to
-      "todo.sr.ht".debug-host = mkDefault "0.0.0.0";
-      "todo.sr.ht".debug-port = mkDefault port;
-      # Configures the SQLAlchemy connection string for the database.
-      "todo.sr.ht".connection-string = mkDefault "postgresql:///${database}?user=${user}&host=/var/run/postgresql";
-      # Set to "yes" to automatically run migrations on package upgrade.
-      "todo.sr.ht".migrate-on-upgrade = mkDefault "yes";
-      # todo.sr.ht's OAuth client ID and secret for meta.sr.ht
-      # Register your client at meta.example.org/oauth
-      "todo.sr.ht".oauth-client-id = mkDefault null;
-      "todo.sr.ht".oauth-client-secret = mkDefault null;
-      # Outgoing email for notifications generated by users
-      "todo.sr.ht".notify-from = mkDefault "CHANGEME@example.org";
-      # The redis connection used for the webhooks worker
-      "todo.sr.ht".webhooks = mkDefault "redis://${rcfg.bind}:${toString rcfg.port}/1";
-      # Network-key
-      "todo.sr.ht".network-key = mkDefault null;
-
-      # Path for the lmtp daemon's unix socket. Direct incoming mail to this socket.
-      # Alternatively, specify IP:PORT and an SMTP server will be run instead.
-      "todo.sr.ht::mail".sock = mkDefault "/tmp/todo.sr.ht-lmtp.sock";
-      # The lmtp daemon will make the unix socket group-read/write for users in this
-      # group.
-      "todo.sr.ht::mail".sock-group = mkDefault "postfix";
-
-      "todo.sr.ht::mail".posting-domain = mkDefault "todo.${cfg.originBase}";
-    };
-
-    services.nginx.virtualHosts."todo.${cfg.originBase}" = {
-      forceSSL = true;
-      locations."/".proxyPass = "http://${cfg.address}:${toString port}";
-      locations."/query".proxyPass = "http://${cfg.address}:${toString (port + 100)}";
-      locations."/static".root = "${pkgs.sourcehut.todosrht}/${pkgs.sourcehut.python.sitePackages}/todosrht";
-    };
-  };
 }

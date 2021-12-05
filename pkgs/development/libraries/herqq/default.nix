@@ -19,7 +19,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://herqq.org";
-    description = "A software library for building UPnP devices and control points";
+    description =
+      "A software library for building UPnP devices and control points";
     platforms = platforms.linux;
     maintainers = [ ];
   };

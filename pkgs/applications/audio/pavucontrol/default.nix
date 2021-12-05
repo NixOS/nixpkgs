@@ -1,24 +1,13 @@
-{ fetchurl
-, fetchpatch
-, lib
-, stdenv
-, pkg-config
-, intltool
-, libpulseaudio
-, gtkmm3
-, libsigcxx
-, libcanberra-gtk3
-, json-glib
-, gnome
-, wrapGAppsHook
-}:
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, intltool, libpulseaudio, gtkmm3
+, libsigcxx, libcanberra-gtk3, json-glib, gnome, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
   version = "5.0";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://freedesktop.org/software/pulseaudio/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-zityw7XxpwrQ3xndgXUPlFW9IIcNHTo20gU2ry6PTno=";
   };
 

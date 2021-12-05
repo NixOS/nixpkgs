@@ -18,10 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ beets ];
 
-  checkInputs = with pythonPackages; [
-    pytestCheckHook
-    mock
-  ];
+  checkInputs = with pythonPackages; [ pytestCheckHook mock ];
 
   meta = with lib; {
     description = "Beets plugin to manage external files";

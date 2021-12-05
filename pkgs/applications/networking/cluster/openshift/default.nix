@@ -1,10 +1,6 @@
 { lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, util-linux
 , coreutils, libkrb5, ncurses, clang, installShellFiles
-, components ? [
-  "cmd/oc"
-  "cmd/openshift"
-  ]
-}:
+, components ? [ "cmd/oc" "cmd/openshift" ] }:
 
 with lib;
 
@@ -68,10 +64,11 @@ in buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Build, deploy, and manage your applications with Docker and Kubernetes";
+    description =
+      "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = "http://www.openshift.org";
-    maintainers = with maintainers; [offline bachp moretea];
+    maintainers = with maintainers; [ offline bachp moretea ];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "optifine";

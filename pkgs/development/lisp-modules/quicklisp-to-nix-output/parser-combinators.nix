@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "parser-combinators";
   version = "cl-20131111-git";
 
@@ -9,13 +8,14 @@ rec {
   deps = [ args."alexandria" args."iterate" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-parser-combinators/2013-11-11/cl-parser-combinators-20131111-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-parser-combinators/2013-11-11/cl-parser-combinators-20131111-git.tgz";
     sha256 = "0wg1a7favbwqcxyqcy2zxi4l11qsp4ar9fvddmx960grf2d72lds";
   };
 
   packageName = "parser-combinators";
 
-  asdFilesToKeep = ["parser-combinators.asd"];
+  asdFilesToKeep = [ "parser-combinators.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM parser-combinators DESCRIPTION
@@ -28,4 +28,5 @@ rec {
     DEPENDENCIES (alexandria iterate) VERSION cl-20131111-git SIBLINGS
     (parser-combinators-cl-ppcre parser-combinators-debug
      parser-combinators-tests)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

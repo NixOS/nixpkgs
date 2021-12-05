@@ -1,69 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perlPackages
-, wrapGAppsHook
-, imagemagick
-, gdk-pixbuf
-, librsvg
-, hicolor-icon-theme
-, procps
-, libwnck
-, libappindicator-gtk3
-, xdg-utils
-}:
+{ lib, stdenv, fetchFromGitHub, perlPackages, wrapGAppsHook, imagemagick
+, gdk-pixbuf, librsvg, hicolor-icon-theme, procps, libwnck, libappindicator-gtk3
+, xdg-utils }:
 
 let
   perlModules = with perlPackages; [
-      # Not sure if these are needed
-      # Gnome2 Gnome2Canvas Gnome2VFS Gtk2AppIndicator Gtk2Unique
-      ImageMagick
-      Cairo
-      FileBaseDir
-      FileWhich
-      FileCopyRecursive
-      XMLSimple
-      XMLTwig
-      XMLParser
-      SortNaturally
-      LocaleGettext
-      ProcProcessTable
-      X11Protocol
-      ProcSimple
-      ImageExifTool
-      JSON
-      JSONMaybeXS
-      NetOAuth
-      PathClass
-      LWP
-      LWPProtocolHttps
-      NetDBus
-      TryTiny
-      WWWMechanize
-      HTTPMessage
-      HTTPDate
-      HTMLForm
-      HTMLParser
-      HTMLTagset
-      HTTPCookies
-      EncodeLocale
-      URI
-      CarpAlways
-      GlibObjectIntrospection
-      NumberBytesHuman
-      CairoGObject
-      Readonly
-      Gtk3ImageView
-      Gtk3
-      Glib
-      Pango
-      GooCanvas2
-      GooCanvas2CairoTypes
-      commonsense
-      TypesSerialiser
-    ];
-in
-stdenv.mkDerivation rec {
+    # Not sure if these are needed
+    # Gnome2 Gnome2Canvas Gnome2VFS Gtk2AppIndicator Gtk2Unique
+    ImageMagick
+    Cairo
+    FileBaseDir
+    FileWhich
+    FileCopyRecursive
+    XMLSimple
+    XMLTwig
+    XMLParser
+    SortNaturally
+    LocaleGettext
+    ProcProcessTable
+    X11Protocol
+    ProcSimple
+    ImageExifTool
+    JSON
+    JSONMaybeXS
+    NetOAuth
+    PathClass
+    LWP
+    LWPProtocolHttps
+    NetDBus
+    TryTiny
+    WWWMechanize
+    HTTPMessage
+    HTTPDate
+    HTMLForm
+    HTMLParser
+    HTMLTagset
+    HTTPCookies
+    EncodeLocale
+    URI
+    CarpAlways
+    GlibObjectIntrospection
+    NumberBytesHuman
+    CairoGObject
+    Readonly
+    Gtk3ImageView
+    Gtk3
+    Glib
+    Pango
+    GooCanvas2
+    GooCanvas2CairoTypes
+    commonsense
+    TypesSerialiser
+  ];
+in stdenv.mkDerivation rec {
   pname = "shutter";
   version = "0.99.2";
 
@@ -85,9 +73,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ] ++ perlModules;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postPatch = ''
     patchShebangs po2mo.sh
@@ -96,7 +82,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --set PERL5LIB ${perlPackages.makePerlPath perlModules} \
-      --prefix PATH : ${lib.makeBinPath [ imagemagick xdg-utils ] }
+      --prefix PATH : ${lib.makeBinPath [ imagemagick xdg-utils ]}
     )
   '';
 

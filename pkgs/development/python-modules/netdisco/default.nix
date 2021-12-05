@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, pytestCheckHook }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "netdisco";
@@ -20,13 +21,11 @@ buildPythonPackage rec {
     "tests/test_xboxone.py"
   ];
 
-  pythonImportsCheck = [
-    "netdisco"
-    "netdisco.discovery"
-  ];
+  pythonImportsCheck = [ "netdisco" "netdisco.discovery" ];
 
   meta = with lib; {
-    description = "Python library to scan local network for services and devices";
+    description =
+      "Python library to scan local network for services and devices";
     homepage = "https://github.com/home-assistant/netdisco";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

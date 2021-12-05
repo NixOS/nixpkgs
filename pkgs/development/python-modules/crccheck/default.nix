@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, nose }:
 
 let
   pname = "crccheck";

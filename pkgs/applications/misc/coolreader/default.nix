@@ -1,5 +1,5 @@
-{ mkDerivation, fetchFromGitHub, cmake, pkg-config, lib,
-  qttools, fribidi, libunibreak }:
+{ mkDerivation, fetchFromGitHub, cmake, pkg-config, lib, qttools, fribidi
+, libunibreak }:
 
 mkDerivation rec {
   pname = "coolreader";
@@ -19,7 +19,8 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
-    license = licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
+    license =
+      licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };

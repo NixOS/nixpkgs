@@ -1,53 +1,12 @@
-{ bcg729
-, bctoolbox
-, bcunit
-, belcard
-, belle-sip
-, belr
-, bzrtp
-, cairo
-, cmake
-, cyrus_sasl
-, fetchFromGitLab
-, fetchurl
-, ffmpeg
-, gdk-pixbuf
-, glib
-, gnused
-, graphviz
-, gtk2
-, intltool
-, lib
-, libexosip
-, liblinphone
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, makeWrapper
-, mbedtls
-, mediastreamer
-, mediastreamer-openh264
-, minizip2
-, mkDerivation
-, openldap
-, ortp
-, pango
-, pkg-config
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, qttranslations
-, readline
-, speex
-, sqlite
+{ bcg729, bctoolbox, bcunit, belcard, belle-sip, belr, bzrtp, cairo, cmake
+, cyrus_sasl, fetchFromGitLab, fetchurl, ffmpeg, gdk-pixbuf, glib, gnused
+, graphviz, gtk2, intltool, lib, libexosip, liblinphone, libmatroska, libnotify
+, libosip, libsoup, libupnp, libX11, libxml2, makeWrapper, mbedtls
+, mediastreamer, mediastreamer-openh264, minizip2, mkDerivation, openldap, ortp
+, pango, pkg-config, qtbase, qtgraphicaleffects, qtquickcontrols2
+, qttranslations, readline, speex, sqlite
 
-, udev
-, zlib
-}:
+, udev, zlib }:
 
 mkDerivation rec {
   pname = "linphone-desktop";
@@ -117,15 +76,8 @@ mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [
-    bcunit
-    cmake
-    gnused
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ bcunit cmake gnused graphviz intltool makeWrapper pkg-config ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
@@ -178,7 +130,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.linphone.org/";
-    description = "Open source SIP phone for voice/video calls and instant messaging";
+    description =
+      "Open source SIP phone for voice/video calls and instant messaging";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

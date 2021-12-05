@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem
+, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "basex";
   version = "9.6.3";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
+    url = "http://files.basex.org/releases/${version}/BaseX${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }.zip";
     hash = "sha256-OlIAyGUQKrl+Zu79p6cahHpx59zLozGkUDAEvykGN6Y=";
   };
 

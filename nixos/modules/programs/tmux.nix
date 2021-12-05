@@ -5,8 +5,8 @@ let
 
   cfg = config.programs.tmux;
 
-  defaultKeyMode  = "emacs";
-  defaultResize   = 5;
+  defaultKeyMode = "emacs";
+  defaultResize = 5;
   defaultShortcut = "b";
   defaultTerminal = "screen";
 
@@ -20,32 +20,35 @@ let
     ${if cfg.newSession then "new-session" else ""}
 
     ${if cfg.reverseSplit then ''
-    bind v split-window -h
-    bind s split-window -v
-    '' else ""}
+      bind v split-window -h
+      bind s split-window -v
+    '' else
+      ""}
 
     set -g status-keys ${cfg.keyMode}
     set -g mode-keys   ${cfg.keyMode}
 
     ${if cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize then ''
-    bind h select-pane -L
-    bind j select-pane -D
-    bind k select-pane -U
-    bind l select-pane -R
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
 
-    bind -r H resize-pane -L ${toString cfg.resizeAmount}
-    bind -r J resize-pane -D ${toString cfg.resizeAmount}
-    bind -r K resize-pane -U ${toString cfg.resizeAmount}
-    bind -r L resize-pane -R ${toString cfg.resizeAmount}
-    '' else ""}
+      bind -r H resize-pane -L ${toString cfg.resizeAmount}
+      bind -r J resize-pane -D ${toString cfg.resizeAmount}
+      bind -r K resize-pane -U ${toString cfg.resizeAmount}
+      bind -r L resize-pane -R ${toString cfg.resizeAmount}
+    '' else
+      ""}
 
     ${if (cfg.shortcut != defaultShortcut) then ''
-    # rebind main key: C-${cfg.shortcut}
-    unbind C-${defaultShortcut}
-    set -g prefix C-${cfg.shortcut}
-    bind ${cfg.shortcut} send-prefix
-    bind C-${cfg.shortcut} last-window
-    '' else ""}
+      # rebind main key: C-${cfg.shortcut}
+      unbind C-${defaultShortcut}
+      set -g prefix C-${cfg.shortcut}
+      bind ${cfg.shortcut} send-prefix
+      bind C-${cfg.shortcut} last-window
+    '' else
+      ""}
 
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
     setw -g clock-mode-style  ${if cfg.clock24 then "24" else "12"}
@@ -64,7 +67,8 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whenever to configure <command>tmux</command> system-wide.";
+        description =
+          "Whenever to configure <command>tmux</command> system-wide.";
         relatedPackages = [ "tmux" ];
       };
 
@@ -92,14 +96,16 @@ in {
       customPaneNavigationAndResize = mkOption {
         default = false;
         type = types.bool;
-        description = "Override the hjkl and HJKL bindings for pane navigation and resizing in VI mode.";
+        description =
+          "Override the hjkl and HJKL bindings for pane navigation and resizing in VI mode.";
       };
 
       escapeTime = mkOption {
         default = 500;
         example = 0;
         type = types.int;
-        description = "Time in milliseconds for which tmux waits after an escape is input.";
+        description =
+          "Time in milliseconds for which tmux waits after an escape is input.";
       };
 
       extraConfig = mkOption {
@@ -127,7 +133,8 @@ in {
       newSession = mkOption {
         default = false;
         type = types.bool;
-        description = "Automatically spawn a session if trying to attach and none are running.";
+        description =
+          "Automatically spawn a session if trying to attach and none are running.";
       };
 
       reverseSplit = mkOption {
@@ -147,7 +154,8 @@ in {
         default = defaultShortcut;
         example = "a";
         type = types.str;
-        description = "Ctrl following by this key is used as the main shortcut.";
+        description =
+          "Ctrl following by this key is used as the main shortcut.";
       };
 
       terminal = mkOption {
@@ -177,12 +185,17 @@ in {
       systemPackages = [ pkgs.tmux ];
 
       variables = {
-        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
+        TMUX_TMPDIR = lib.optional cfg.secureSocket
+          ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
       };
     };
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
+    (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [
+      "programs"
+      "tmux"
+      "extraConfig"
+    ])
   ];
 }

@@ -1,32 +1,15 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchurl
-, autoPatchelfHook
-, dbus
-, fontconfig
-, freetype
-, glib
-, libGLU
-, libglvnd
-, libX11
-, libxcb
-, libXi
-, ncurses
-, qtbase
-, qtdeclarative
-, zlib
-}:
+{ lib, stdenv, makeWrapper, fetchurl, autoPatchelfHook, dbus, fontconfig
+, freetype, glib, libGLU, libglvnd, libX11, libxcb, libXi, ncurses, qtbase
+, qtdeclarative, zlib }:
 
-let
-  buildNum = "2021-06-30-819";
-in
-stdenv.mkDerivation rec {
+let buildNum = "2021-06-30-819";
+in stdenv.mkDerivation rec {
   pname = "rgp";
   version = "1.11";
 
   src = fetchurl {
-    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    url =
+      "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
     sha256 = "ru+e/oY844x4nvSVRBrTGDdnzUOBhwkaIrnftBITyE8=";
   };
 
@@ -67,7 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool from AMD that allows for deep inspection of GPU workloads";
+    description =
+      "A tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

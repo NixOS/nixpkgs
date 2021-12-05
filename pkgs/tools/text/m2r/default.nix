@@ -1,10 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, docutils
-, mistune
-, pygments
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, docutils, mistune, pygments }:
 
 buildPythonApplication rec {
   pname = "m2r";
@@ -17,11 +11,7 @@ buildPythonApplication rec {
     hash = "sha256-JNLPEXMoiISh4RnKP+Afj9/PJp9Lrx9UYHsfuGAL7uI=";
   };
 
-  buildInputs = [
-    docutils
-    mistune
-    pygments
-  ];
+  buildInputs = [ docutils mistune pygments ];
 
   meta = with lib; {
     homepage = "https://github.com/miyakogi/m2r";

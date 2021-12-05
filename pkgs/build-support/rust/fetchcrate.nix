@@ -1,10 +1,6 @@
 { lib, fetchurl, unzip }:
 
-{ crateName ? args.pname
-, pname ? null
-, version
-, sha256
-, ... } @ args:
+{ crateName ? args.pname, pname ? null, version, sha256, ... }@args:
 
 assert pname == null || pname == crateName;
 
@@ -16,23 +12,22 @@ lib.overrideDerivation (fetchurl ({
 
   downloadToTemp = true;
 
-  postFetch =
-    ''
-      export PATH=${unzip}/bin:$PATH
+  postFetch = ''
+    export PATH=${unzip}/bin:$PATH
 
-      unpackDir="$TMPDIR/unpack"
-      mkdir "$unpackDir"
-      cd "$unpackDir"
+    unpackDir="$TMPDIR/unpack"
+    mkdir "$unpackDir"
+    cd "$unpackDir"
 
-      renamed="$TMPDIR/${crateName}-${version}.tar.gz"
-      mv "$downloadedFile" "$renamed"
-      unpackFile "$renamed"
-      fn=$(cd "$unpackDir" && echo *)
-      if [ -f "$unpackDir/$fn" ]; then
-        mkdir $out
-      fi
-      mv "$unpackDir/$fn" "$out"
-    '';
+    renamed="$TMPDIR/${crateName}-${version}.tar.gz"
+    mv "$downloadedFile" "$renamed"
+    unpackFile "$renamed"
+    fn=$(cd "$unpackDir" && echo *)
+    if [ -f "$unpackDir/$fn" ]; then
+      mkdir $out
+    fi
+    mv "$unpackDir/$fn" "$out"
+  '';
 } // removeAttrs args [ "crateName" "pname" "version" ]))
 # Hackety-hack: we actually need unzip hooks, too
-(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
+(x: { nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ]; })

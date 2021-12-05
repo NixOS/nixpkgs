@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, joblib
-, llvmlite
-, numba
-, scikit-learn
-, scipy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, joblib, llvmlite, numba, scikit-learn
+, scipy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pynndescent";
@@ -19,17 +11,9 @@ buildPythonPackage rec {
     sha256 = "7a7df8412b19cfb3596060faf5a8c5d0bf5b3bd504f8efd900fc4e3918c6f882";
   };
 
-  propagatedBuildInputs = [
-    joblib
-    llvmlite
-    numba
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs = [ joblib llvmlite numba scikit-learn scipy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Nearest Neighbor Descent";

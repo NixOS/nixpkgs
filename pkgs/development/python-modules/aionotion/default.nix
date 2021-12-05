@@ -1,15 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, poetry-core
+, pytest-aiohttp, pytest-asyncio, pytest-cov, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aionotion";
@@ -26,17 +16,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytest-aiohttp
-    pytest-asyncio
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aresponses pytest-aiohttp pytest-asyncio pytest-cov pytestCheckHook ];
 
   disabledTestPaths = [ "examples" ];
 

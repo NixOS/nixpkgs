@@ -28,15 +28,16 @@
     networking.firewall.enable = false;
     services.bind.enable = true;
     services.bind.cacheNetworks = lib.mkForce [ "any" ];
-    services.bind.forwarders = lib.mkForce [];
+    services.bind.forwarders = lib.mkForce [ ];
     services.bind.zones = lib.singleton {
       name = ".";
       file = let
         addDot = zone: zone + lib.optionalString (!lib.hasSuffix "." zone) ".";
         mkNsdZoneNames = zones: map addDot (lib.attrNames zones);
         mkBindZoneNames = zones: map (zone: addDot zone.name) zones;
-        getZones = cfg: mkNsdZoneNames cfg.services.nsd.zones
-                     ++ mkBindZoneNames cfg.services.bind.zones;
+        getZones = cfg:
+          mkNsdZoneNames cfg.services.nsd.zones
+          ++ mkBindZoneNames cfg.services.bind.zones;
 
         getZonesForNode = attrs: {
           ip = attrs.config.networking.primaryIPAddress;
@@ -59,45 +60,56 @@
           reIp = "[a-fA-F0-9.:]+";
           reHost = "[a-zA-Z0-9.-]+";
 
-          matchAliases = str: let
-            matched = builtins.match "[ \t]+(${reHost})(.*)" str;
-            continue = lib.singleton (lib.head matched)
-                    ++ matchAliases (lib.last matched);
-          in if matched == null then [] else continue;
+          matchAliases = str:
+            let
+              matched = builtins.match "[ 	]+(${reHost})(.*)" str;
+              continue = lib.singleton (lib.head matched)
+                ++ matchAliases (lib.last matched);
+            in if matched == null then [ ] else continue;
 
-          matchLine = str: let
-            result = builtins.match "[ \t]*(${reIp})[ \t]+(${reHost})(.*)" str;
-          in if result == null then null else {
-            ipAddr = lib.head result;
-            hosts = lib.singleton (lib.elemAt result 1)
-                 ++ matchAliases (lib.last result);
-          };
+          matchLine = str:
+            let
+              result = builtins.match "[ 	]*(${reIp})[ 	]+(${reHost})(.*)" str;
+            in if result == null then
+              null
+            else {
+              ipAddr = lib.head result;
+              hosts = lib.singleton (lib.elemAt result 1)
+                ++ matchAliases (lib.last result);
+            };
 
-          skipLine = str: let
-            rest = builtins.match "[^\n]*\n(.*)" str;
-          in if rest == null then "" else lib.head rest;
+          skipLine = str:
+            let
+              rest = builtins.match ''
+                [^
+                ]*
+                (.*)'' str;
+            in if rest == null then "" else lib.head rest;
 
-          getEntries = str: acc: let
-            result = matchLine str;
-            next = getEntries (skipLine str);
-            newEntry = acc ++ lib.singleton result;
-            continue = if result == null then next acc else next newEntry;
-          in if str == "" then acc else continue;
+          getEntries = str: acc:
+            let
+              result = matchLine str;
+              next = getEntries (skipLine str);
+              newEntry = acc ++ lib.singleton result;
+              continue = if result == null then next acc else next newEntry;
+            in if str == "" then acc else continue;
 
           isIPv6 = str: builtins.match ".*:.*" str != null;
           loopbackIps = [ "127.0.0.1" "::1" ];
           filterLoopback = lib.filter (e: !lib.elem e.ipAddr loopbackIps);
 
-          allEntries = lib.concatMap (entry: map (host: {
-            inherit host;
-            ${if isIPv6 entry.ipAddr then "ipv6" else "ipv4"} = entry.ipAddr;
-          }) entry.hosts) (filterLoopback (getEntries (allHosts + "\n") []));
+          allEntries = lib.concatMap (entry:
+            map (host: {
+              inherit host;
+              ${if isIPv6 entry.ipAddr then "ipv6" else "ipv4"} = entry.ipAddr;
+            }) entry.hosts) (filterLoopback (getEntries (allHosts + "\n") [ ]));
 
-          mkRecords = entry: let
-            records = lib.optional (entry ? ipv6) "AAAA ${entry.ipv6}"
-                   ++ lib.optional (entry ? ipv4) "A ${entry.ipv4}";
-            mkRecord = typeAndData: "${entry.host}. IN ${typeAndData}";
-          in lib.concatMapStringsSep "\n" mkRecord records;
+          mkRecords = entry:
+            let
+              records = lib.optional (entry ? ipv6) "AAAA ${entry.ipv6}"
+                ++ lib.optional (entry ? ipv4) "A ${entry.ipv4}";
+              mkRecord = typeAndData: "${entry.host}. IN ${typeAndData}";
+            in lib.concatMapStringsSep "\n" mkRecord records;
 
         in lib.concatMapStringsSep "\n" mkRecords allEntries;
 
@@ -119,21 +131,22 @@
         in lib.filter (z: lib.any (isSubZoneOf z) allZones) allZones;
 
         # All the zones without 'subZones'.
-        filteredZoneInfo = map (zi: zi // {
-          zones = lib.filter (x: !lib.elem x subZones) zi.zones;
-        }) zoneInfo;
+        filteredZoneInfo = map
+          (zi: zi // { zones = lib.filter (x: !lib.elem x subZones) zi.zones; })
+          zoneInfo;
 
       in pkgs.writeText "fake-root.zone" ''
         $TTL 3600
         . IN SOA ns.fakedns. admin.fakedns. ( 1 3h 1h 1w 1d )
         ns.fakedns. IN A ${config.networking.primaryIPAddress}
         . IN NS ns.fakedns.
-        ${lib.concatImapStrings (num: { ip, zones }: ''
-          ns${toString num}.fakedns. IN A ${ip}
-          ${lib.concatMapStrings (zone: ''
-          ${zone} IN NS ns${toString num}.fakedns.
-          '') zones}
-        '') (lib.filter (zi: zi.zones != []) filteredZoneInfo)}
+        ${lib.concatImapStrings (num:
+          { ip, zones }: ''
+            ns${toString num}.fakedns. IN A ${ip}
+            ${lib.concatMapStrings (zone: ''
+              ${zone} IN NS ns${toString num}.fakedns.
+            '') zones}
+          '') (lib.filter (zi: zi.zones != [ ]) filteredZoneInfo)}
         ${recordsFromExtraHosts}
       '';
     };

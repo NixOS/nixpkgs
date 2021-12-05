@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, DiskArbitration
-, Foundation
-, IOKit
-, installShellFiles
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, DiskArbitration, Foundation, IOKit
+, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
@@ -42,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform graphical process/system monitor with a customizable interface";
+    description =
+      "A cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];

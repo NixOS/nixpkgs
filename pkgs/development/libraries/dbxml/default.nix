@@ -11,18 +11,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  patches = [
-    ./cxx11.patch
-    ./incorrect-optimization.patch
-  ];
+  patches = [ ./cxx11.patch ./incorrect-optimization.patch ];
 
-  buildInputs = [
-    xercesc xqilla
-  ];
+  buildInputs = [ xercesc xqilla ];
 
-  propagatedBuildInputs = [
-    db62
-  ];
+  propagatedBuildInputs = [ db62 ];
 
   configureFlags = [
     "--with-berkeleydb=${db62.out}"

@@ -1,20 +1,5 @@
-{ lib, stdenv, llvm_meta
-, fetch
-, cmake
-, zlib
-, ncurses
-, swig
-, which
-, libedit
-, libxml2
-, libllvm
-, libclang
-, python3
-, version
-, darwin
-, makeWrapper
-, lit
-}:
+{ lib, stdenv, llvm_meta, fetch, cmake, zlib, ncurses, swig, which, libedit
+, libxml2, libllvm, libclang, python3, version, darwin, makeWrapper, lit }:
 
 stdenv.mkDerivation rec {
   pname = "lldb";
@@ -22,27 +7,21 @@ stdenv.mkDerivation rec {
 
   src = fetch pname "02gb3fbz09kyw8n71218v5v77ip559x3gqbcp8y3w6n3jpbryywa";
 
-  patches = [
-    ./procfs.patch
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./procfs.patch ./gnu-install-dirs.patch ];
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
-  ];
+  nativeBuildInputs = [ cmake python3 which swig lit makeWrapper ];
 
-  buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs = [ ncurses zlib libedit libxml2 libllvm ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+      darwin.apple_sdk.libs.xpc
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.bootstrap_cmds
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

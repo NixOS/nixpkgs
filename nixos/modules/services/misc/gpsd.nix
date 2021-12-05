@@ -8,9 +8,7 @@ let
   gid = config.ids.gids.gpsd;
   cfg = config.services.gpsd;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -81,17 +79,16 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    users.users.gpsd =
-      { inherit uid;
-        group = "gpsd";
-        description = "gpsd daemon user";
-        home = "/var/empty";
-      };
+    users.users.gpsd = {
+      inherit uid;
+      group = "gpsd";
+      description = "gpsd daemon user";
+      home = "/var/empty";
+    };
 
     users.groups.gpsd = { inherit gid; };
 

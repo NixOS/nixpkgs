@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
-  django, jinja2, pytz, tox
- }:
+{ lib, buildPythonPackage, fetchPypi, django, jinja2, pytz, tox }:
 
 buildPythonPackage rec {
   pname = "django-jinja";

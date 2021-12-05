@@ -3,8 +3,7 @@
 let
   themeName = "Dracula";
   version = "2.0";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "dracula-theme";
   inherit version;
 
@@ -15,9 +14,7 @@ stdenv.mkDerivation {
     sha256 = "10j706gnhdplhykdisp64vzzxpzgn48b5f1fkndcp340x7hf2mf3";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall

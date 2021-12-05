@@ -1,33 +1,11 @@
-{ lib
-, buildDunePackage
-, ppx_sexp_conv
-, base
-, async
-, async_kernel
-, async_unix
-, cohttp
-, conduit-async
-, uri
-, uri-sexp
-, logs
-, fmt
-, sexplib0
-, ipaddr
-, magic-mime
-, ounit
-, mirage-crypto
-, core
-}:
+{ lib, buildDunePackage, ppx_sexp_conv, base, async, async_kernel, async_unix
+, cohttp, conduit-async, uri, uri-sexp, logs, fmt, sexplib0, ipaddr, magic-mime
+, ounit, mirage-crypto, core }:
 
 buildDunePackage {
   pname = "cohttp-async";
 
-  inherit (cohttp)
-    version
-    src
-    minimumOCamlVersion
-    useDune2
-    ;
+  inherit (cohttp) version src minimumOCamlVersion useDune2;
 
   buildInputs = [ ppx_sexp_conv ];
 
@@ -48,11 +26,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
-    ounit
-    mirage-crypto
-    core
-  ];
+  checkInputs = [ ounit mirage-crypto core ];
 
   meta = cohttp.meta // {
     description = "CoHTTP implementation for the Async concurrency library";

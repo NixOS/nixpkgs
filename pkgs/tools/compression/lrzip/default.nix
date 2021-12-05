@@ -1,9 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm
+, perl }:
 
-let
-  inherit (stdenv.hostPlatform) isx86;
-in
-stdenv.mkDerivation rec {
+let inherit (stdenv.hostPlatform) isx86;
+in stdenv.mkDerivation rec {
   pname = "lrzip";
   version = "0.641";
 
@@ -27,9 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib lzo bzip2 lz4 ];
 
-  configureFlags = lib.optionals (!isx86) [
-    "--disable-asm"
-  ];
+  configureFlags = lib.optionals (!isx86) [ "--disable-asm" ];
 
   meta = with lib; {
     homepage = "http://ck.kolivas.org/apps/lrzip/";

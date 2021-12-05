@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytest
-}:
+{ buildPythonPackage, fetchFromGitHub, lib, pytest }:
 
 buildPythonPackage rec {
   pname = "itanium_demangler";
@@ -22,7 +18,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A pure Python parser for the Itanium C++ ABI symbol mangling language";
+    description =
+      "A pure Python parser for the Itanium C++ ABI symbol mangling language";
     homepage = "https://github.com/whitequark/python-itanium_demangler";
     license = licenses.bsd0;
     maintainers = [ maintainers.pamplemousse ];

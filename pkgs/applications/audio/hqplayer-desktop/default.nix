@@ -1,27 +1,14 @@
-{ mkDerivation
-, alsa-lib
-, autoPatchelfHook
-, fetchurl
-, flac
-, gcc11
-, lib
-, libmicrohttpd
-, llvmPackages_10
-, qtcharts
-, qtdeclarative
-, qtquickcontrols2
-, qtwebengine
-, qtwebview
-, rpmextract
-, wavpack
-}:
+{ mkDerivation, alsa-lib, autoPatchelfHook, fetchurl, flac, gcc11, lib
+, libmicrohttpd, llvmPackages_10, qtcharts, qtdeclarative, qtquickcontrols2
+, qtwebengine, qtwebview, rpmextract, wavpack }:
 
 mkDerivation rec {
   pname = "hqplayer-desktop";
   version = "4.13.1-38";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/hqplayer/fc34/hqplayer4desktop-${version}.fc34.x86_64.rpm";
+    url =
+      "https://www.signalyst.eu/bins/hqplayer/fc34/hqplayer4desktop-${version}.fc34.x86_64.rpm";
     sha256 = "sha256-DEZWEGk5SfhcNQddehCBVbfeTH8KfVCdaxQ+F3MrRe8=";
   };
 

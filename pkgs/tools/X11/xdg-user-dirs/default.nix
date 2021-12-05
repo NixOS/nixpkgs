@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.17";
 
   src = fetchurl {
-    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${version}.tar.gz";
+    url =
+      "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${version}.tar.gz";
     sha256 = "13216b8rfkzak5k6bvpx6jvqv3cnbgpijnjwj8a8d3kq4cl0a1ra";
   };
 
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
-    description = "A tool to help manage well known user directories like the desktop folder and the music folder";
+    description =
+      "A tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

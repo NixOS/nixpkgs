@@ -1,9 +1,6 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.services.clickhouse;
-in
-with lib;
-{
+let cfg = config.services.clickhouse;
+in with lib; {
 
   ###### interface
 
@@ -25,7 +22,6 @@ with lib;
     };
 
   };
-
 
   ###### implementation
 
@@ -54,7 +50,8 @@ with lib;
         AmbientCapabilities = "CAP_SYS_NICE";
         StateDirectory = "clickhouse";
         LogsDirectory = "clickhouse";
-        ExecStart = "${cfg.package}/bin/clickhouse-server --config-file=${cfg.package}/etc/clickhouse-server/config.xml";
+        ExecStart =
+          "${cfg.package}/bin/clickhouse-server --config-file=${cfg.package}/etc/clickhouse-server/config.xml";
       };
     };
 

@@ -1,19 +1,5 @@
-{ buildPythonPackage
-, cython
-, fetchFromGitHub
-, h5py
-, imgaug
-, ipython
-, Keras
-, lib
-, matplotlib
-, numpy
-, opencv3
-, pillow
-, scikitimage
-, scipy
-, tensorflow
-}:
+{ buildPythonPackage, cython, fetchFromGitHub, h5py, imgaug, ipython, Keras, lib
+, matplotlib, numpy, opencv3, pillow, scikitimage, scipy, tensorflow }:
 
 buildPythonPackage rec {
   pname = "mask-rcnn";
@@ -43,7 +29,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mask R-CNN for object detection and instance segmentation on Keras and TensorFlow";
+    description =
+      "Mask R-CNN for object detection and instance segmentation on Keras and TensorFlow";
     homepage = "https://github.com/matterport/Mask_RCNN";
     license = licenses.mit;
     maintainers = with maintainers; [ rakesh4g ];

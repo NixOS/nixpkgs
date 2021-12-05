@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchpatch
-, fetchPypi
-, pari
-, gmp
-, cython
-, cysignals
-}:
+{ lib, buildPythonPackage, python, fetchpatch, fetchPypi, pari, gmp, cython
+, cysignals }:
 
 buildPythonPackage rec {
   pname = "cypari2";
@@ -24,7 +16,8 @@ buildPythonPackage rec {
     # (https://trac.sagemath.org/ticket/27267). depends on Cython patch.
     (fetchpatch {
       name = "use-trashcan-for-gen.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cypari/patches/trashcan.patch?id=b6ea17ef8e4d652de0a85047bac8d41e90b25555";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/cypari/patches/trashcan.patch?id=b6ea17ef8e4d652de0a85047bac8d41e90b25555";
       sha256 = "sha256-w4kktWb9/aR9z4CjrUvAMOxEwRN2WkubaKzQttN8rU8=";
     })
   ];
@@ -40,18 +33,11 @@ buildPythonPackage rec {
     ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install . --no-index --no-warn-script-location --prefix="$out" --no-cache
   '';
 
-  nativeBuildInputs = [
-    pari
-  ];
+  nativeBuildInputs = [ pari ];
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
-  propagatedBuildInputs = [
-    cysignals
-    cython
-  ];
+  propagatedBuildInputs = [ cysignals cython ];
 
   checkPhase = ''
     make check

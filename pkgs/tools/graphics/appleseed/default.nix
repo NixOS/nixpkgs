@@ -1,29 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
-eigen, libpng, python3, libGLU, qt4, openexr, openimageio,
-opencolorio_1, xercesc, ilmbase, osl, seexpr, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile, eigen
+, libpng, python3, libGLU, qt4, openexr, openimageio, opencolorio_1, xercesc
+, ilmbase, osl, seexpr, makeWrapper }:
 
-let boost_static = boost165.override {
-  enableStatic = true;
-  enablePython = true;
-  python = python3;
-};
+let
+  boost_static = boost165.override {
+    enableStatic = true;
+    enablePython = true;
+    python = python3;
+  };
 in stdenv.mkDerivation rec {
 
   pname = "appleseed";
   version = "2.0.5-beta";
 
   src = fetchFromGitHub {
-    owner  = "appleseedhq";
-    repo   = "appleseed";
-    rev    = version;
+    owner = "appleseedhq";
+    repo = "appleseed";
+    rev = version;
     sha256 = "1sq9s0rzjksdn8ayp1g17gdqhp7fqks8v1ddd3i5rsl96b04fqx5";
   };
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
-    boost_static guile eigen libpng python3
-    libGLU qt4 openexr openimageio opencolorio_1 xercesc
-    osl seexpr
+    boost_static
+    guile
+    eigen
+    libpng
+    python3
+    libGLU
+    qt4
+    openexr
+    openimageio
+    opencolorio_1
+    xercesc
+    osl
+    seexpr
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -39,18 +49,26 @@ in stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-      "-DUSE_EXTERNAL_XERCES=ON" "-DUSE_EXTERNAL_OCIO=ON" "-DUSE_EXTERNAL_OIIO=ON"
-      "-DUSE_EXTERNAL_OSL=ON" "-DWITH_CLI=ON" "-DWITH_STUDIO=ON" "-DWITH_TOOLS=ON"
-      "-DUSE_EXTERNAL_PNG=ON" "-DUSE_EXTERNAL_ZLIB=ON"
-      "-DUSE_EXTERNAL_EXR=ON" "-DUSE_EXTERNAL_SEEXPR=ON"
-      "-DWITH_PYTHON=ON"
-      "-DWITH_DISNEY_MATERIAL=ON"
-      "-DUSE_SSE=ON"
-      "-DUSE_SSE42=ON"
+    "-DUSE_EXTERNAL_XERCES=ON"
+    "-DUSE_EXTERNAL_OCIO=ON"
+    "-DUSE_EXTERNAL_OIIO=ON"
+    "-DUSE_EXTERNAL_OSL=ON"
+    "-DWITH_CLI=ON"
+    "-DWITH_STUDIO=ON"
+    "-DWITH_TOOLS=ON"
+    "-DUSE_EXTERNAL_PNG=ON"
+    "-DUSE_EXTERNAL_ZLIB=ON"
+    "-DUSE_EXTERNAL_EXR=ON"
+    "-DUSE_EXTERNAL_SEEXPR=ON"
+    "-DWITH_PYTHON=ON"
+    "-DWITH_DISNEY_MATERIAL=ON"
+    "-DUSE_SSE=ON"
+    "-DUSE_SSE42=ON"
   ];
 
   meta = with lib; {
-    description = "Open source, physically-based global illumination rendering engine";
+    description =
+      "Open source, physically-based global illumination rendering engine";
     homepage = "https://appleseedhq.net/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.mit;

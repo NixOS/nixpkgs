@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
     sed -i 's/CXXFLAGS = -g -O2/CXXFLAGS = -g -O2 -nostartfiles/' Makefile
   '';
 
-  configureFlags = [
-    "--disable-debug"
-  ];
+  configureFlags = [ "--disable-debug" ];
 
   meta = with lib; {
     description = "Database administration tool for Firebird RDBMS";

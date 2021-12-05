@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.molly-brown;
   settingsFormat = pkgs.formats.toml { };
- configFile = settingsFormat.generate "molly-brown.toml" cfg.settings;
+  configFile = settingsFormat.generate "molly-brown.toml" cfg.settings;
 in {
 
   options.services.molly-brown = {

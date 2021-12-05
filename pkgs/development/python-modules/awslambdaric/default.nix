@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, isPy27
-, pytestCheckHook
-, autoconf
-, automake
-, cmake
-, gcc
-, libtool
-, perl
-, simplejson
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, isPy27, pytestCheckHook
+, autoconf, automake, cmake, gcc, libtool, perl, simplejson }:
 
 buildPythonPackage rec {
   pname = "awslambdaric";
@@ -28,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       # https://github.com/aws/aws-lambda-python-runtime-interface-client/pull/58
-      url = "https://github.com/aws/aws-lambda-python-runtime-interface-client/commit/162c3c0051bb9daa92e4a2a4af7e90aea60ee405.patch";
+      url =
+        "https://github.com/aws/aws-lambda-python-runtime-interface-client/commit/162c3c0051bb9daa92e4a2a4af7e90aea60ee405.patch";
       sha256 = "09qqq5x6npc9jw2qbhzifqn5sqiby4smiin1aw30psmlp21fv7j8";
     })
   ];
@@ -52,7 +41,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "AWS Lambda Runtime Interface Client for Python";
-    homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
+    homepage =
+      "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;
     maintainers = with maintainers; [ austinbutler ];
     platforms = platforms.linux;

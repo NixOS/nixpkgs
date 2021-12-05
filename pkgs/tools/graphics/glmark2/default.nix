@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, libjpeg
-, libpng
-, xorg
-, libX11
-, libGL
-, libdrm
-, udev
-, python3
-, wayland
-, wayland-protocols
-, mesa
-, wafHook
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, libjpeg, libpng, xorg
+, libX11, libGL, libdrm, udev, python3, wayland, wayland-protocols, mesa
+, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "glmark2";
@@ -42,7 +27,9 @@ stdenv.mkDerivation rec {
     mesa
   ];
 
-  wafConfigureFlags = [ "--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2" ];
+  wafConfigureFlags = [
+    "--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2"
+  ];
 
   postInstall = ''
     for binary in $out/bin/glmark2*; do

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, git
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, git }:
 
 buildPythonPackage rec {
   pname = "limnoria";

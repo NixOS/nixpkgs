@@ -10,8 +10,7 @@ buildPythonPackage rec {
     sha256 = "2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f";
   };
 
-  buildInputs = [ pytest ]
-    ++ lib.optionals isPy35 [ async_generator ];
+  buildInputs = [ pytest ] ++ lib.optionals isPy35 [ async_generator ];
 
   # No tests in archive
   doCheck = false;

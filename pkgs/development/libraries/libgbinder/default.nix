@@ -13,14 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    glib
-    libglibutil
-  ];
+  buildInputs = [ glib libglibutil ];
 
   makeFlags = [
     "LIBDIR=$(out)/lib"

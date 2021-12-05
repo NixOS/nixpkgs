@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, numpy, pandas, pytz, six
-, pytestCheckHook, flaky, mock, pytest-mock, requests }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, numpy, pandas
+, pytz, six, pytestCheckHook, flaky, mock, pytest-mock, requests }:
 
 buildPythonPackage rec {
   pname = "pvlib";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
   # Support for Python <3.5 dropped in 0.6.3 on June 1, 2019.
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     sha256 = "40708492ed0a41e900d36933b9b9ab7b575c72ebf3eee81293c626e301aa7ea1";
   };
@@ -16,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     # enable later pandas versions, remove next bump
     (fetchpatch {
-      url = "https://github.com/pvlib/pvlib-python/commit/010a2adc9e9ef6fe9f2aea4c02d7e6ede9f96a53.patch";
+      url =
+        "https://github.com/pvlib/pvlib-python/commit/010a2adc9e9ef6fe9f2aea4c02d7e6ede9f96a53.patch";
       sha256 = "0jibn4khixz6hv6racmp86m5mcms0ysz1y5bgpplw1kcvf8sn04x";
       excludes = [
         "pvlib/tests/test_inverter.py"

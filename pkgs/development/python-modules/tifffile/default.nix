@@ -1,15 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy27
-, isPy3k
-, numpy
-, imagecodecs-lite
-, enum34 ? null
-, futures ? null
-, pathlib ? null
-, pytest
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy27, isPy3k, numpy, imagecodecs-lite
+, enum34 ? null, futures ? null, pathlib ? null, pytest }:
 
 buildPythonPackage rec {
   pname = "tifffile";
@@ -26,23 +16,14 @@ buildPythonPackage rec {
   # and test data missing from PyPI tarball
   doCheck = false;
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest
   '';
 
-  propagatedBuildInputs = [
-    numpy
-  ] ++ lib.optionals isPy3k [
-    imagecodecs-lite
-  ] ++ lib.optionals isPy27 [
-    futures
-    enum34
-    pathlib
-  ];
+  propagatedBuildInputs = [ numpy ] ++ lib.optionals isPy3k [ imagecodecs-lite ]
+    ++ lib.optionals isPy27 [ futures enum34 pathlib ];
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files.";

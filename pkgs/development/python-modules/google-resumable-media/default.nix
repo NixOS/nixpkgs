@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-testutils
-, google-crc32c
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, google-auth, google-cloud-testutils
+, google-crc32c, mock, pytestCheckHook, pytest-asyncio, requests }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
@@ -32,14 +23,13 @@ buildPythonPackage rec {
     rm tests/system/requests/test_download.py
   '';
 
-  pythonImportsCheck = [
-    "google._async_resumable_media"
-    "google.resumable_media"
-  ];
+  pythonImportsCheck =
+    [ "google._async_resumable_media" "google.resumable_media" ];
 
   meta = with lib; {
     description = "Utilities for Google Media Downloads and Resumable Uploads";
-    homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
+    homepage =
+      "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

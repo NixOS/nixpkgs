@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "extension-helpers";
@@ -18,12 +14,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "extension_helpers"
-  ];
+  pythonImportsCheck = [ "extension_helpers" ];
 
   meta = with lib; {
-    description = "Utilities for building and installing packages in the Astropy ecosystem";
+    description =
+      "Utilities for building and installing packages in the Astropy ecosystem";
     homepage = "https://github.com/astropy/extension-helpers";
     license = licenses.bsd3;
     maintainers = [ maintainers.rmcgibbo ];

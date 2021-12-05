@@ -1,23 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, SDL2
-, qtbase
-, wrapQtAppsHook
-, qttools
-, ninja
-, gtk3
-, libevdev
-, curl
-, libpulseaudio
-, sndio
-, mesa
-, vulkan-loader
-, wayland
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
+, SDL2, qtbase, wrapQtAppsHook, qttools, ninja, gtk3, libevdev, curl
+, libpulseaudio, sndio, mesa, vulkan-loader, wayland }:
 mkDerivation rec {
   pname = "duckstation";
   version = "unstable-2021-10-29";
@@ -29,7 +12,8 @@ mkDerivation rec {
     sha256 = "sha256-1s7oBdOOkK6a3DKCZ70dAilFzlzrURwhx+MRTmOPWJE=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config extra-cmake-modules wrapQtAppsHook qttools ];
+  nativeBuildInputs =
+    [ cmake ninja pkg-config extra-cmake-modules wrapQtAppsHook qttools ];
 
   buildInputs = [
     SDL2
@@ -80,15 +64,14 @@ mkDerivation rec {
     runHook postCheck
   '';
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib" ];
 
   # TODO:
   # - default sound backend (cubeb) does not work, but SDL does. Strangely, switching to cubeb while a game is running makes it work.
 
   meta = with lib; {
-    description = "PlayStation 1 emulator focusing on playability, speed and long-term maintainability";
+    description =
+      "PlayStation 1 emulator focusing on playability, speed and long-term maintainability";
     homepage = "https://github.com/stenzek/duckstation";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

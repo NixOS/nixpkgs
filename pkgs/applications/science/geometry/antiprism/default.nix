@@ -1,10 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libX11
-, libGL
-, libGLU
-, freeglut }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libX11, libGL, libGLU, freeglut
+}:
 
 stdenv.mkDerivation rec {
   pname = "antiprism";
@@ -22,7 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.antiprism.com";
-    description = "A collection of programs for generating, manipulating, transforming and viewing polyhedra";
+    description =
+      "A collection of programs for generating, manipulating, transforming and viewing polyhedra";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ AndersonTorres ];
   };

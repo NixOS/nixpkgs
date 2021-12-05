@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, opencv
-, openexr
-, graphicsmagick
-, fftw
-, zlib
-, libjpeg
-, libtiff
-, libpng
-}:
+{ lib, stdenv, fetchurl, cmake, ninja, pkg-config, opencv, openexr
+, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "gmic";
@@ -24,22 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GNa7xzGuO02oplasGJR2eTsRGp3Rn3LbIxLwdN983II=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [
-    fftw
-    zlib
-    libjpeg
-    libtiff
-    libpng
-    opencv
-    openexr
-    graphicsmagick
-  ];
+  buildInputs =
+    [ fftw zlib libjpeg libtiff libpng opencv openexr graphicsmagick ];
 
   cmakeFlags = [
     "-DBUILD_LIB_STATIC=OFF"

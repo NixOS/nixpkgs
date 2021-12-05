@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, lm_sensors, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, lm_sensors, cmake, ninja
+, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "corestats";
@@ -11,17 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-/WBetvbd8e4v+j6e2xbGtSLwNMdLlaahSIks6r889B4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    lm_sensors
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase lm_sensors libcprime libcsys ];
 
   meta = with lib; {
     description = "A system resource viewer from the C Suite";

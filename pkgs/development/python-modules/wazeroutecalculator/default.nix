@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
@@ -14,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Ex9yglaJkk0+Uo3Y+xpimb5boXz+4QdbJS2O75U6dUg=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # there are no tests
   doCheck = false;

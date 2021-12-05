@@ -1,14 +1,5 @@
-{ mkDerivation
-, lib
-, pkg-config
-, zlib
-, qtbase
-, qtsvg
-, qttools
-, qtmultimedia
-, qmake
-, fetchurl
-}:
+{ mkDerivation, lib, pkg-config, zlib, qtbase, qtsvg, qttools, qtmultimedia
+, qmake, fetchurl }:
 
 mkDerivation rec {
   pname = "chessx";
@@ -19,18 +10,9 @@ mkDerivation rec {
     sha256 = "sha256-0JpLU0qQnF8aOYxkBlBJov3zBJe8gcy98NlAQSNk0gU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-  ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    zlib
-  ];
+  buildInputs = [ qtbase qtmultimedia qtsvg qttools zlib ];
 
   # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
   enableParallelBuilding = false;

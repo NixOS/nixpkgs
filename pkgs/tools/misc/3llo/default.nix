@@ -11,7 +11,8 @@ bundlerApp {
       dontBuild = false;
       patches = [
         (fetchpatch {
-          url = "https://github.com/qcam/3llo/commit/7667c67fdc975bac315da027a3c69f49e7c06a2e.patch";
+          url =
+            "https://github.com/qcam/3llo/commit/7667c67fdc975bac315da027a3c69f49e7c06a2e.patch";
           sha256 = "0ahp19igj77x23b2j9zk3znlmm7q7nija7mjgsmgqkgfbz2r1y7v";
         })
       ];

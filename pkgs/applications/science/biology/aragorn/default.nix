@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "aragorn";
 
   src = fetchurl {
-    url = "http://mbio-serv2.mbioekol.lu.se/ARAGORN/Downloads/${pname}${version}.tgz";
+    url =
+      "http://mbio-serv2.mbioekol.lu.se/ARAGORN/Downloads/${pname}${version}.tgz";
     sha256 = "09i1rg716smlbnixfm7q1ml2mfpaa2fpn3hwjg625ysmfwwy712b";
   };
 
@@ -19,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
+    description =
+      "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
     homepage = "http://mbio-serv2.mbioekol.lu.se/ARAGORN/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];

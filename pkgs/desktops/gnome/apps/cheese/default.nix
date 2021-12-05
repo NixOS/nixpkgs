@@ -1,36 +1,8 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, wrapGAppsHook
-, gnome-video-effects
-, libcanberra-gtk3
-, pkg-config
-, gtk3
-, glib
-, clutter-gtk
-, clutter-gst
-, gst_all_1
-, itstool
-, vala
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, appstream-glib
-, libxslt
-, gtk-doc
-, adwaita-icon-theme
-, librsvg
-, totem
-, gdk-pixbuf
-, gnome
-, gnome-desktop
-, libxml2
-, meson
-, ninja
-, dbus
-, python3
-, pipewire
-}:
+{ lib, stdenv, gettext, fetchurl, wrapGAppsHook, gnome-video-effects
+, libcanberra-gtk3, pkg-config, gtk3, glib, clutter-gtk, clutter-gst, gst_all_1
+, itstool, vala, docbook_xml_dtd_43, docbook-xsl-nons, appstream-glib, libxslt
+, gtk-doc, adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome, gnome-desktop
+, libxml2, meson, ninja, dbus, python3, pipewire }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
@@ -39,7 +11,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/cheese/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "UilgyihzD/ZkOQcLBEGMngpLtVVg11v+CLIY2ixn5Uc=";
   };
 
@@ -106,7 +80,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Cheese";
-    description = "Take photos and videos with your webcam, with fun graphical effects";
+    description =
+      "Take photos and videos with your webcam, with fun graphical effects";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -9,12 +9,10 @@ mkXfceDerivation {
   sha256 = "sha256-5mwyC3YA1LvdVSvaHN7CXDJh+IXjmdHGLKzhpjtUZkw=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
-  buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
+  buildInputs = [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
-  configureFlags = [
-    "--with-vendor-info='NixOS'"
-  ];
+  configureFlags = [ "--with-vendor-info='NixOS'" ];
 
   meta = with lib; {
     description = "Widgets library for Xfce";

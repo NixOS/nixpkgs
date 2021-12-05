@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cffi
-, pytestCheckHook
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, cffi, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,9 +17,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "miniaudio" ];
 

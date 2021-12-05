@@ -1,7 +1,7 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
-, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
-, libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
+, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool, libuuid
+, libxfs, lvm2, openssl, perl, procps, quota, time, util-linux, which
+, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "xfstests";
@@ -13,12 +13,8 @@ stdenv.mkDerivation {
     sha256 = "1f5cv0vwc1g9difzp69k49rc5nfd08y72vdg318j25nv3rwv7wc9";
   };
 
-  nativeBuildInputs = [
-    autoconf automake libtool
-  ];
-  buildInputs = [
-    acl attr gawk libaio libuuid libxfs openssl perl
-  ];
+  nativeBuildInputs = [ autoconf automake libtool ];
+  buildInputs = [ acl attr gawk libaio libuuid libxfs openssl perl ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
@@ -95,9 +91,26 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
-                                   libcap lvm2 perl procps killall quota
-                                   util-linux which xfsprogs]}:$PATH
+    export PATH=${
+      lib.makeBinPath [
+        acl
+        attr
+        bc
+        e2fsprogs
+        fio
+        gawk
+        keyutils
+        libcap
+        lvm2
+        perl
+        procps
+        killall
+        quota
+        util-linux
+        which
+        xfsprogs
+      ]
+    }:$PATH
     exec ./check "$@"
   '';
 

@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, unzip, zip, libiconv, perl, aspell, dos2unix
-, singleWordlist ? null
-}:
+, singleWordlist ? null }:
 
 stdenv.mkDerivation rec {
   pname = "scowl";
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Spell checker oriented word lists";
     license = lib.licenses.mit;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     homepage = "http://wordlist.aspell.net/";
   };

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy }:
 
 buildPythonPackage rec {
   pname = "pynrrd";

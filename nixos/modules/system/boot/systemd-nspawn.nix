@@ -1,4 +1,4 @@
-{ config, lib , pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 with import ./systemd-unit-options.nix { inherit config lib; };
@@ -9,13 +9,43 @@ let
 
   checkExec = checkUnitConfig "Exec" [
     (assertOnlyFields [
-      "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
-      "PivotRoot" "Capability" "DropCapability" "NoNewPrivileges" "KillSignal"
-      "Personality" "MachineId" "PrivateUsers" "NotifyReady" "SystemCallFilter"
-      "LimitCPU" "LimitFSIZE" "LimitDATA" "LimitSTACK" "LimitCORE" "LimitRSS"
-      "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
-      "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"
-      "OOMScoreAdjust" "CPUAffinity" "Hostname" "ResolvConf" "Timezone"
+      "Boot"
+      "ProcessTwo"
+      "Parameters"
+      "Environment"
+      "User"
+      "WorkingDirectory"
+      "PivotRoot"
+      "Capability"
+      "DropCapability"
+      "NoNewPrivileges"
+      "KillSignal"
+      "Personality"
+      "MachineId"
+      "PrivateUsers"
+      "NotifyReady"
+      "SystemCallFilter"
+      "LimitCPU"
+      "LimitFSIZE"
+      "LimitDATA"
+      "LimitSTACK"
+      "LimitCORE"
+      "LimitRSS"
+      "LimitNOFILE"
+      "LimitAS"
+      "LimitNPROC"
+      "LimitMEMLOCK"
+      "LimitLOCKS"
+      "LimitSIGPENDING"
+      "LimitMSGQUEUE"
+      "LimitNICE"
+      "LimitRTPRIO"
+      "LimitRTTIME"
+      "OOMScoreAdjust"
+      "CPUAffinity"
+      "Hostname"
+      "ResolvConf"
+      "Timezone"
       "LinkJournal"
     ])
     (assertValueOneOf "Boot" boolValues)
@@ -25,8 +55,14 @@ let
 
   checkFiles = checkUnitConfig "Files" [
     (assertOnlyFields [
-      "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystem"
-      "Overlay" "OverlayReadOnly" "PrivateUsersChown"
+      "ReadOnly"
+      "Volatile"
+      "Bind"
+      "BindReadOnly"
+      "TemporaryFileSystem"
+      "Overlay"
+      "OverlayReadOnly"
+      "PrivateUsersChown"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
@@ -35,8 +71,15 @@ let
 
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
-      "Private" "VirtualEthernet" "VirtualEthernetExtra" "Interface" "MACVLAN"
-      "IPVLAN" "Bridge" "Zone" "Port"
+      "Private"
+      "VirtualEthernet"
+      "VirtualEthernetExtra"
+      "Interface"
+      "MACVLAN"
+      "IPVLAN"
+      "Bridge"
+      "Zone"
+      "Port"
     ])
     (assertValueOneOf "Private" boolValues)
     (assertValueOneOf "VirtualEthernet" boolValues)
@@ -45,7 +88,7 @@ let
   instanceOptions = {
     options = sharedOptions // {
       execConfig = mkOption {
-        default = {};
+        default = { };
         example = { Parameters = "/bin/sh"; };
         type = types.addCheck (types.attrsOf unitOption) checkExec;
         description = ''
@@ -57,7 +100,7 @@ let
       };
 
       filesConfig = mkOption {
-        default = {};
+        default = { };
         example = { Bind = [ "/home/alice" ]; };
         type = types.addCheck (types.attrsOf unitOption) checkFiles;
         description = ''
@@ -69,7 +112,7 @@ let
       };
 
       networkConfig = mkOption {
-        default = {};
+        default = { };
         example = { Private = false; };
         type = types.addCheck (types.attrsOf unitOption) checkNetwork;
         description = ''
@@ -84,18 +127,19 @@ let
   };
 
   instanceToUnit = name: def:
-    let base = {
-      text = ''
-        [Exec]
-        ${attrsToSection def.execConfig}
+    let
+      base = {
+        text = ''
+          [Exec]
+          ${attrsToSection def.execConfig}
 
-        [Files]
-        ${attrsToSection def.filesConfig}
+          [Files]
+          ${attrsToSection def.filesConfig}
 
-        [Network]
-        ${attrsToSection def.networkConfig}
-      '';
-    } // def;
+          [Network]
+          ${attrsToSection def.networkConfig}
+        '';
+      } // def;
     in base // { unit = makeUnit name base; };
 
 in {
@@ -103,31 +147,32 @@ in {
   options = {
 
     systemd.nspawn = mkOption {
-      default = {};
+      default = { };
       type = with types; attrsOf (submodule instanceOptions);
       description = "Definition of systemd-nspawn configurations.";
     };
 
   };
 
-  config =
-    let
-      units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
-    in
-      mkMerge [
-        (mkIf (cfg != {}) {
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits' false "nspawn" units [] []);
-        })
-        {
-          systemd.targets.multi-user.wants = [ "machines.target" ];
+  config = let
+    units = mapAttrs' (n: v:
+      let nspawnFile = "${n}.nspawn";
+      in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
+  in mkMerge [
+    (mkIf (cfg != { }) {
+      environment.etc."systemd/nspawn".source =
+        mkIf (cfg != { }) (generateUnits' false "nspawn" units [ ] [ ]);
+    })
+    {
+      systemd.targets.multi-user.wants = [ "machines.target" ];
 
-          # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
-          # Once systemd fixes this upstream, we can re-enable -U
-          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
-            ""  # deliberately empty. signals systemd to override the ExecStart
-            # Only difference between upstream is that we do not pass the -U flag
-            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
-          ];
-        }
+      # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
+      # Once systemd fixes this upstream, we can re-enable -U
+      systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
+        "" # deliberately empty. signals systemd to override the ExecStart
+        # Only difference between upstream is that we do not pass the -U flag
+        "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
       ];
+    }
+  ];
 }

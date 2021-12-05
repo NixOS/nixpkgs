@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "sslscan";

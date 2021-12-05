@@ -1,17 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, oslo-config
-, oslo-context
-, oslo-serialization
-, oslo-utils
-, oslotest
-, pbr
-, pyinotify
-, python-dateutil
-, stestr
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, oslo-config, oslo-context
+, oslo-serialization, oslo-utils, oslotest, pbr, pyinotify, python-dateutil
+, stestr }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
@@ -30,14 +19,9 @@ buildPythonPackage rec {
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [
-    pyinotify
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ pyinotify ];
 
-  checkInputs = [
-    oslotest
-    stestr
-  ];
+  checkInputs = [ oslotest stestr ];
 
   checkPhase = ''
     stestr run

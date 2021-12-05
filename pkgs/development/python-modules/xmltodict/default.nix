@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, coverage, nose }:
 
 buildPythonPackage rec {
   pname = "xmltodict";

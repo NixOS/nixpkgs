@@ -14,15 +14,13 @@ in {
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         example = {
           Peers = [
             "tcp://aa.bb.cc.dd:eeeee"
             "tcp://[aaaa:bbbb:cccc:dddd::eeee]:fffff"
           ];
-          Listen = [
-            "tcp://0.0.0.0:xxxxx"
-          ];
+          Listen = [ "tcp://0.0.0.0:xxxxx" ];
         };
         description = ''
           Configuration for yggdrasil, as a Nix attribute set.
@@ -84,7 +82,7 @@ in {
 
       denyDhcpcdInterfaces = mkOption {
         type = listOf str;
-        default = [];
+        default = [ ];
         example = [ "tap*" ];
         description = ''
           Disable the DHCP client for any interface whose name matches
@@ -184,7 +182,8 @@ in {
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
+        SystemCallFilter =
+          "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
       };
     };
 

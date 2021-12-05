@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.navidrome;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
 in {
   options = {
     services.navidrome = {
@@ -18,9 +18,7 @@ in {
           Address = "127.0.0.1";
           Port = 4533;
         };
-        example = {
-          MusicFolder = "/mnt/music";
-        };
+        example = { MusicFolder = "/mnt/music"; };
         description = ''
           Configuration for Navidrome, see <link xlink:href="https://www.navidrome.org/docs/usage/configuration-options/"/> for supported values.
         '';
@@ -36,7 +34,9 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.navidrome}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+          ${pkgs.navidrome}/bin/navidrome --configfile ${
+            settingsFormat.generate "navidrome.json" cfg.settings
+          }
         '';
         DynamicUser = true;
         StateDirectory = "navidrome";
@@ -44,9 +44,8 @@ in {
         RuntimeDirectory = "navidrome";
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
-        BindReadOnlyPaths = [
-          builtins.storeDir
-        ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
+        BindReadOnlyPaths = [ builtins.storeDir ]
+          ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;

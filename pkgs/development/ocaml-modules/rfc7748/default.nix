@@ -1,11 +1,6 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, ocaml
+{ lib, buildDunePackage, fetchFromGitHub, ocaml
 
-, ounit
-, zarith
-}:
+, ounit, zarith }:
 
 buildDunePackage rec {
   pname = "rfc7748";
@@ -30,7 +25,8 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/burgerdev/ocaml-rfc7748";
-    description = "Elliptic Curve Diffie-Hellman on Edwards Curves (X25519, X448)";
+    description =
+      "Elliptic Curve Diffie-Hellman on Edwards Curves (X25519, X448)";
     longDescription = ''
       This library implements the ECDH functions 'X25519' and 'X448' as specified
       in RFC 7748, 'Elliptic curves for security'. In the spirit of the original

@@ -1,7 +1,6 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
-, asgiref, autobahn, twisted, pytest-runner
-, hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
-}:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, asgiref, autobahn
+, twisted, pytest-runner, hypothesis, pytest, pytest-asyncio, service-identity
+, pyopenssl }:
 buildPythonPackage rec {
   pname = "daphne";
   version = "3.0.2";
@@ -17,7 +16,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [ asgiref autobahn twisted service-identity pyopenssl ];
+  propagatedBuildInputs =
+    [ asgiref autobahn twisted service-identity pyopenssl ];
 
   checkInputs = [ hypothesis pytest pytest-asyncio ];
 

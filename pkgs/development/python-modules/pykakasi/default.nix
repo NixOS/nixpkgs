@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, jaconv
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, deprecated, fetchFromGitHub, importlib-metadata
+, jaconv, pytest-benchmark, pytestCheckHook, pythonOlder, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pykakasi";
@@ -26,21 +17,12 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    jaconv
-    deprecated
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ jaconv deprecated ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytest-benchmark
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-benchmark pytestCheckHook ];
 
   disabledTests = [
     # We don't care about benchmarks
@@ -49,12 +31,11 @@ buildPythonPackage rec {
     "pytest_benchmark_update_json"
   ];
 
-  pythonImportsCheck = [
-    "pykakasi"
-  ];
+  pythonImportsCheck = [ "pykakasi" ];
 
   meta = with lib; {
-    description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
+    description =
+      "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
     homepage = "https://github.com/miurahr/pykakasi";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

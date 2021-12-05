@@ -3,8 +3,7 @@
 let
   pname = "junicode";
   version = "1.003";
-in
-fetchFromGitHub {
+in fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "psb1558";

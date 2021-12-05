@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.3";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "http://0pointer.de/lennart/projects/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1v0s5x81jzwnnl7hr254d4nkyc8qcv983pzr6vqmbr9l9q553a0g";
   };
 

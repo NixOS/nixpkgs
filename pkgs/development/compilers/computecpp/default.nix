@@ -1,18 +1,13 @@
-{ lib, stdenv
-, fetchzip
-, pkg-config
-, autoPatchelfHook
-, installShellFiles
-, ocl-icd
-, zlib
-}:
+{ lib, stdenv, fetchzip, pkg-config, autoPatchelfHook, installShellFiles
+, ocl-icd, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
   version = "2.3.0";
 
   src = fetchzip {
-    url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
+    url =
+      "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
     hash = "sha256-AUHSls4BOX20PVKzDAp3RqpeRDwgbgYzz6CRvRN+kdk=";
     stripRoot = true;
   };
@@ -34,9 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    isClang = true;
-  };
+  passthru = { isClang = true; };
 
   meta = with lib; {
     description =

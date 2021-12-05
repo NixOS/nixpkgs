@@ -1,12 +1,17 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cffi-grovel";
   version = "cffi_0.24.1";
 
   description = "The CFFI Groveller";
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-toolchain" args."trivial-features" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cffi"
+    args."cffi-toolchain"
+    args."trivial-features"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
@@ -15,7 +20,7 @@ rec {
 
   packageName = "cffi-grovel";
 
-  asdFilesToKeep = ["cffi-grovel.asd"];
+  asdFilesToKeep = [ "cffi-grovel.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cffi-grovel DESCRIPTION The CFFI Groveller SHA256
@@ -28,4 +33,5 @@ rec {
     DEPENDENCIES (alexandria babel cffi cffi-toolchain trivial-features)
     VERSION cffi_0.24.1 SIBLINGS
     (cffi-examples cffi-libffi cffi-tests cffi-toolchain cffi-uffi-compat cffi)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

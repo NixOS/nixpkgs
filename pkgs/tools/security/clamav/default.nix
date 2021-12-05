@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config
-, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd, Foundation, json_c, check
+{ lib, stdenv, fetchurl, pkg-config, zlib, bzip2, libiconv, libxml2, openssl
+, ncurses, curl, libmilter, pcre2, libmspack, systemd, Foundation, json_c, check
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "0.103.3";
 
   src = fetchurl {
-    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
+    url =
+      "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
     sha256 = "sha256-n249GESfPRo5kncdaWaFJJ36EnNv4rKSmFjyx9gnauk=";
   };
 
@@ -20,7 +20,18 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
+    zlib
+    bzip2
+    libxml2
+    openssl
+    ncurses
+    curl
+    libiconv
+    libmilter
+    pcre2
+    libmspack
+    json_c
+    check
   ] ++ lib.optional stdenv.isLinux systemd
     ++ lib.optional stdenv.isDarwin Foundation;
 
@@ -51,7 +62,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.clamav.net";
-    description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
+    description =
+      "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];
     platforms = platforms.unix;

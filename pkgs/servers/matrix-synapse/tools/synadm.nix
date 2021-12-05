@@ -1,8 +1,7 @@
-{ lib
-, python3Packages
-}:
+{ lib, python3Packages }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "synadm";
   version = "0.31";
   format = "setuptools";
@@ -17,13 +16,7 @@ with python3Packages; buildPythonApplication rec {
       --replace "Click>=7.0,<8.0" "Click"
   '';
 
-  propagatedBuildInputs = [
-    click
-    click-option-group
-    tabulate
-    pyyaml
-    requests
-  ];
+  propagatedBuildInputs = [ click click-option-group tabulate pyyaml requests ];
 
   checkPhase = ''
     runHook preCheck

@@ -2,10 +2,11 @@
 let
   pname = "vollkorn";
   version = "4.105";
-in
-fetchzip {
+in fetchzip {
   name = "${pname}-${version}";
-  url = "http://vollkorn-typeface.com/download/vollkorn-${builtins.replaceStrings ["."] ["-"] version}.zip";
+  url = "http://vollkorn-typeface.com/download/vollkorn-${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }.zip";
   sha256 = "0srff2nqs7353mqcpmvaq156lamfh621py4h1771n0l9ix2c8mss";
   stripRoot = false;
 

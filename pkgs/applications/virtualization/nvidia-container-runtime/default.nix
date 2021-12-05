@@ -1,29 +1,19 @@
-{ lib
-, glibc
-, fetchFromGitHub
-, makeWrapper
-, buildGoPackage
-, linkFarm
-, writeShellScript
-, containerRuntimePath
-, configTemplate
-}:
+{ lib, glibc, fetchFromGitHub, makeWrapper, buildGoPackage, linkFarm
+, writeShellScript, containerRuntimePath, configTemplate }:
 let
-  isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
-    {
-      name = "runc";
-      path = containerRuntimePath;
-    }
-  ];
-  warnIfXdgConfigHomeIsSet = writeShellScript "warn_if_xdg_config_home_is_set" ''
-    set -eo pipefail
+  isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [{
+    name = "runc";
+    path = containerRuntimePath;
+  }];
+  warnIfXdgConfigHomeIsSet =
+    writeShellScript "warn_if_xdg_config_home_is_set" ''
+      set -eo pipefail
 
-    if [ -n "$XDG_CONFIG_HOME" ]; then
-      echo >&2 "$(tput setaf 3)warning: \$XDG_CONFIG_HOME=$XDG_CONFIG_HOME$(tput sgr 0)"
-    fi
-  '';
-in
-buildGoPackage rec {
+      if [ -n "$XDG_CONFIG_HOME" ]; then
+        echo >&2 "$(tput setaf 3)warning: \$XDG_CONFIG_HOME=$XDG_CONFIG_HOME$(tput sgr 0)"
+      fi
+    '';
+in buildGoPackage rec {
   pname = "nvidia-container-runtime";
   version = "3.5.0";
 

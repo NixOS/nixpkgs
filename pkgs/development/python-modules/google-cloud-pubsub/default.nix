@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core
+, google-cloud-testutils, grpc-google-iam-v1, libcst, mock, proto-plus
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
@@ -20,19 +11,10 @@ buildPythonPackage rec {
     sha256 = "2b3d9336afab0e5df67201234976519a28da3ccb7c9a0e463be28e2827a9fdaa";
   };
 
-  propagatedBuildInputs = [
-    grpc-google-iam-v1
-    google-api-core
-    libcst
-    proto-plus
-  ];
+  propagatedBuildInputs =
+    [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
 
-  checkInputs = [
-    google-cloud-testutils
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports

@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "wiki-js";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ ma27 ]; };
 
   machine = { pkgs, ... }: {
     virtualisation.memorySize = 2048;
@@ -15,11 +13,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     services.postgresql = {
       enable = true;
       ensureDatabases = [ "wiki" ];
-      ensureUsers = [
-        { name = "wiki-js";
-          ensurePermissions."DATABASE wiki" = "ALL PRIVILEGES";
-        }
-      ];
+      ensureUsers = [{
+        name = "wiki-js";
+        ensurePermissions."DATABASE wiki" = "ALL PRIVILEGES";
+      }];
     };
     systemd.services.wiki-js = {
       requires = [ "postgresql.service" ];
@@ -38,7 +35,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     });
     payloads.login = pkgs.writeText "login.json" (builtins.toJSON [{
       operationName = null;
-      extensions = {};
+      extensions = { };
       query = ''
         mutation ($username: String!, $password: String!, $strategy: String!) {
           authentication {
@@ -70,7 +67,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       };
     }]);
     payloads.content = pkgs.writeText "content.json" (builtins.toJSON [{
-      extensions = {};
+      extensions = { };
       operationName = null;
       query = ''
         mutation ($content: String!, $description: String!, $editor: String!, $isPrivate: Boolean!, $isPublished: Boolean!, $locale: String!, $path: String!, $publishEndDate: Date, $publishStartDate: Date, $scriptCss: String, $scriptJs: String, $tags: [String]!, $title: String!) {
@@ -95,7 +92,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         }
       '';
       variables = {
-        content = "# Header\n\nHello world!";
+        content = ''
+          # Header
+
+          Hello world!'';
         description = "";
         editor = "markdown";
         isPrivate = false;
@@ -106,7 +106,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         publishStartDate = "";
         scriptCss = "";
         scriptJs = "";
-        tags = [];
+        tags = [ ];
         title = "Hello world";
       };
     }]);

@@ -1,33 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, name ? "luajit-${version}"
-, isStable
-, sha256
-, rev
-, version
-, extraMeta ? { }
-, callPackage
-, self
-, packageOverrides ? (final: prev: {})
-, enableFFI ? true
-, enableJIT ? true
-, enableJITDebugModule ? enableJIT
-, enableGC64 ? true
-, enable52Compat ? false
-, enableValgrindSupport ? false
-, valgrind ? null
-, enableGDBJITSupport ? false
-, enableAPICheck ? false
-, enableVMAssertions ? false
-, useSystemMalloc ? false
-}:
+{ lib, stdenv, fetchFromGitHub, buildPackages, name ? "luajit-${version}"
+, isStable, sha256, rev, version, extraMeta ? { }, callPackage, self
+, packageOverrides ? (final: prev: { }), enableFFI ? true, enableJIT ? true
+, enableJITDebugModule ? enableJIT, enableGC64 ? true, enable52Compat ? false
+, enableValgrindSupport ? false, valgrind ? null, enableGDBJITSupport ? false
+, enableAPICheck ? false, enableVMAssertions ? false, useSystemMalloc ? false }:
 assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;
 assert enableValgrindSupport -> valgrind != null;
 let
-  luaPackages = callPackage ../../lua-modules { lua = self; overrides = packageOverrides; };
+  luaPackages = callPackage ../../lua-modules {
+    lua = self;
+    overrides = packageOverrides;
+  };
 
   XCFLAGS = with lib;
     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
@@ -38,10 +22,8 @@ let
     ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
-  ;
-in
-stdenv.mkDerivation rec {
+    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT";
+in stdenv.mkDerivation rec {
   inherit name version;
   src = fetchFromGitHub {
     owner = "LuaJIT";
@@ -93,26 +75,35 @@ stdenv.mkDerivation rec {
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths = luaPackages.lib.luaPathList;
+  LuaCPathSearchPaths = luaPackages.lib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList luaPackages.lib.luaCPathList;
+  setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList
+    luaPackages.lib.luaCPathList;
 
   passthru = rec {
     buildEnv = callPackage ../lua-5/wrapper.nix {
       lua = self;
       inherit (luaPackages) requiredLuaModules;
     };
-    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages; };
+    withPackages =
+      import ../lua-5/with-packages.nix { inherit buildEnv luaPackages; };
     pkgs = luaPackages;
     interpreter = "${self}/bin/lua";
   };
 
-  meta = with lib; {
-    description = "High-performance JIT compiler for Lua 5.1";
-    homepage = "http://luajit.org";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir lblasc ];
-  } // extraMeta;
+  meta = with lib;
+    {
+      description = "High-performance JIT compiler for Lua 5.1";
+      homepage = "http://luajit.org";
+      license = licenses.mit;
+      platforms = platforms.linux ++ platforms.darwin;
+      maintainers = with maintainers; [
+        thoughtpolice
+        smironov
+        vcunat
+        andir
+        lblasc
+      ];
+    } // extraMeta;
 }

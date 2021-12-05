@@ -1,8 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, openssl
-, pandoc
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, openssl, pandoc, which }:
 
 stdenv.mkDerivation rec {
   pname = "bdsync";

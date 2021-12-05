@@ -1,4 +1,5 @@
-{ runtimeShell, lib, writeScript, bundix, bundler, bundler-audit, coreutils, git, nix }:
+{ runtimeShell, lib, writeScript, bundix, bundler, bundler-audit, coreutils, git
+, nix }:
 
 attrPath:
 

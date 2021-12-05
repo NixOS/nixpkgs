@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   preConfigure = ''
     substituteInPlace Makefile --replace /bin/gzip ${gzip}/bin/gzip
@@ -25,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
+    description =
+      "A daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     homepage = "https://github.com/DanielAdolfsson/ndppd";
     license = licenses.gpl3;
     platforms = platforms.linux;

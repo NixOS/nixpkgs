@@ -4,10 +4,5 @@ buildDunePackage {
   pname = "ezresto-directory";
   inherit (resto) src version meta useDune2 doCheck;
 
-  propagatedBuildInputs = [
-    ezresto
-    resto-directory
-    resto
-    lwt
-  ];
+  propagatedBuildInputs = [ ezresto resto-directory resto lwt ];
 }

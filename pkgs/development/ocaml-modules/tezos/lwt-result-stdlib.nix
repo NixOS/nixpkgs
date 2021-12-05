@@ -1,35 +1,23 @@
-{ lib
-, buildDunePackage
-, ocaml
-, tezos-stdlib
-, lwt
-, alcotest
-, alcotest-lwt
-, tezos-test-helpers
-}:
+{ lib, buildDunePackage, ocaml, tezos-stdlib, lwt, alcotest, alcotest-lwt
+, tezos-test-helpers }:
 
 if lib.versionAtLeast ocaml.version "4.12" then
-  throw "tezos-lwt-result-stdlib-${tezos-stdlib.version} is not available for OCaml > 4.10"
+  throw
+  "tezos-lwt-result-stdlib-${tezos-stdlib.version} is not available for OCaml > 4.10"
 else
 
-buildDunePackage {
-  pname = "tezos-lwt-result-stdlib";
-  inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/lib_lwt_result_stdlib";
+  buildDunePackage {
+    pname = "tezos-lwt-result-stdlib";
+    inherit (tezos-stdlib) version useDune2;
+    src = "${tezos-stdlib.base_src}/src/lib_lwt_result_stdlib";
 
-  propagatedBuildInputs = [
-    lwt
-  ];
+    propagatedBuildInputs = [ lwt ];
 
-  checkInputs = [
-    alcotest
-    alcotest-lwt
-    tezos-test-helpers
-  ];
+    checkInputs = [ alcotest alcotest-lwt tezos-test-helpers ];
 
-  doCheck = true;
+    doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: error-aware stdlib replacement";
-  };
-}
+    meta = tezos-stdlib.meta // {
+      description = "Tezos: error-aware stdlib replacement";
+    };
+  }

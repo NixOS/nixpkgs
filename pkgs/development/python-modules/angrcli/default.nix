@@ -1,13 +1,5 @@
-{ lib
-, angr
-, buildPythonPackage
-, cmd2
-, coreutils
-, fetchFromGitHub
-, pygments
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, angr, buildPythonPackage, cmd2, coreutils, fetchFromGitHub, pygments
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "angrcli";
@@ -23,16 +15,9 @@ buildPythonPackage rec {
     sha256 = "0mz3yzsw08xwpj6188rxmr7darilh4ismcnh8nhp9945wjyzl4kr";
   };
 
-  propagatedBuildInputs = [
-    angr
-    cmd2
-    pygments
-  ];
+  propagatedBuildInputs = [ angr cmd2 pygments ];
 
-  checkInputs = [
-    coreutils
-    pytestCheckHook
-  ];
+  checkInputs = [ coreutils pytestCheckHook ];
 
   postPatch = ''
     # Version mismatch, https://github.com/fmagin/angr-cli/pull/11
@@ -42,13 +27,9 @@ buildPythonPackage rec {
       --replace "/bin/ls" "${coreutils}/bin/ls"
   '';
 
-  disabledTests = [
-    "test_sims"
-  ];
+  disabledTests = [ "test_sims" ];
 
-  pythonImportsCheck = [
-    "angrcli"
-  ];
+  pythonImportsCheck = [ "angrcli" ];
 
   meta = with lib; {
     description = "Python modules to allow easier interactive use of angr";

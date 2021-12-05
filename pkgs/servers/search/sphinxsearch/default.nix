@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, expat, libmysqlclient,
-  enableXmlpipe2 ? false,
-  enableMysql ? true
-}:
+{ lib, stdenv, fetchurl, pkg-config, expat, libmysqlclient
+, enableXmlpipe2 ? false, enableMysql ? true }:
 
 stdenv.mkDerivation rec {
   pname = "sphinxsearch";
@@ -14,36 +12,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--program-prefix=sphinxsearch-"
-    "--enable-id64"
-  ] ++ lib.optionals (!enableMysql) [
-    "--without-mysql"
-  ];
+  configureFlags = [ "--program-prefix=sphinxsearch-" "--enable-id64" ]
+    ++ lib.optionals (!enableMysql) [ "--without-mysql" ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals enableMysql [
-    libmysqlclient
-  ] ++ lib.optionals enableXmlpipe2 [
-    expat
-  ];
+  buildInputs = lib.optionals enableMysql [ libmysqlclient ]
+    ++ lib.optionals enableXmlpipe2 [ expat ];
 
-  CXXFLAGS = with lib; concatStringsSep " " (optionals stdenv.isDarwin [
-    # see upstream bug: http://sphinxsearch.com/bugs/view.php?id=2578
-    # workaround for "error: invalid suffix on literal
-    "-Wno-reserved-user-defined-literal"
-    # workaround for "error: non-constant-expression cannot be narrowed from type 'long' to 'int'"
-    "-Wno-c++11-narrowing"
-  ]);
+  CXXFLAGS = with lib;
+    concatStringsSep " " (optionals stdenv.isDarwin [
+      # see upstream bug: http://sphinxsearch.com/bugs/view.php?id=2578
+      # workaround for "error: invalid suffix on literal
+      "-Wno-reserved-user-defined-literal"
+      # workaround for "error: non-constant-expression cannot be narrowed from type 'long' to 'int'"
+      "-Wno-c++11-narrowing"
+    ]);
 
   meta = {
     description = "An open source full text search server";
-    homepage    = "http://sphinxsearch.com";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.all;
+    homepage = "http://sphinxsearch.com";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ederoyd46 valodim ];
   };
 }

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "pdunehd";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "06p0k82nf89rsakr8d2hdb19dp1wqp9bsf54lwb0qma47iakljjh";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;

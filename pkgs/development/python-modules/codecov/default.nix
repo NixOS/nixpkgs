@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, coverage
-, ddt
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-}:
+{ lib, buildPythonPackage, coverage, ddt, fetchFromGitHub, mock, pytestCheckHook
+, requests }:
 
 buildPythonPackage rec {
   pname = "codecov";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "0bdk1cp3hxydpx9knqfv88ywwzw7yqhywi0inxjd6x53qh75prqy";
   };
 
-  propagatedBuildInputs = [
-    requests
-    coverage
-  ];
+  propagatedBuildInputs = [ requests coverage ];
 
-  checkInputs = [
-    ddt
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ ddt mock pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/test.py" ];
 

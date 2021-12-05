@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, prettytable
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, prettytable, requests }:
 
 buildPythonPackage rec {
   pname = "somecomfort";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "56e60e4e9f76c12c0c9dd1016e9f1334be6800409e0762f5f143f9069d7292d3";
   };
 
-  propagatedBuildInputs = [
-    requests
-    prettytable
-  ];
+  propagatedBuildInputs = [ requests prettytable ];
 
   # tests require network access
   doCheck = false;

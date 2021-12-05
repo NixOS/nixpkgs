@@ -1,7 +1,4 @@
-{
-  stdenv, lib, fetchurl,
-  cmake, perl,
-}:
+{ stdenv, lib, fetchurl, cmake, perl, }:
 
 stdenv.mkDerivation rec {
   pname = "rinutils";
@@ -13,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "1q09aihm5m42xiq2prpa9mf0srwiirzgzblkp5nl74i7zg6pg5hx";
   };
 

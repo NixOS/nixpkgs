@@ -1,15 +1,18 @@
 { stdenv, lib, fetchFromGitiles, glibc, libcap, qemu }:
 
 let
-  dumpConstants =
-    if stdenv.buildPlatform == stdenv.hostPlatform then "./dump_constants"
-    else if stdenv.hostPlatform.isAarch32 then "qemu-arm dump_constants"
-    else if stdenv.hostPlatform.isAarch64 then "qemu-aarch64 dump_constants"
-    else if stdenv.hostPlatform.isx86_64 then "qemu-x86_64 dump_constants"
-    else throw "Unsupported host platform";
-in
+  dumpConstants = if stdenv.buildPlatform == stdenv.hostPlatform then
+    "./dump_constants"
+  else if stdenv.hostPlatform.isAarch32 then
+    "qemu-arm dump_constants"
+  else if stdenv.hostPlatform.isAarch64 then
+    "qemu-aarch64 dump_constants"
+  else if stdenv.hostPlatform.isx86_64 then
+    "qemu-x86_64 dump_constants"
+  else
+    throw "Unsupported host platform";
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "minijail";
   version = "17";
 
@@ -54,7 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://android.googlesource.com/platform/external/minijail/";
-    description = "Sandboxing library and application using Linux namespaces and capabilities";
+    description =
+      "Sandboxing library and application using Linux namespaces and capabilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pcarrier qyliss ];
     platforms = platforms.linux;

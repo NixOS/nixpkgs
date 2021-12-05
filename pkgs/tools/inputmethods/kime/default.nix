@@ -1,20 +1,15 @@
-{ lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules, llvmPackages
-, withWayland ? true
-, withIndicator ? true, dbus, libdbusmenu
-, withXim ? true, xorg, cairo
-, withGtk2 ? true, gtk2
-, withGtk3 ? true, gtk3
-, withQt5 ? true, qt5
-}:
+{ lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake
+, extra-cmake-modules, llvmPackages, withWayland ? true, withIndicator ? true
+, dbus, libdbusmenu, withXim ? true, xorg, cairo, withGtk2 ? true, gtk2
+, withGtk3 ? true, gtk3, withQt5 ? true, qt5 }:
 
 let
-  cmake_args = lib.optionals withGtk2 ["-DENABLE_GTK2=ON"]
-  ++ lib.optionals withGtk3 ["-DENABLE_GTK3=ON"]
-  ++ lib.optionals withQt5 ["-DENABLE_QT5=ON"];
+  cmake_args = lib.optionals withGtk2 [ "-DENABLE_GTK2=ON" ]
+    ++ lib.optionals withGtk3 [ "-DENABLE_GTK3=ON" ]
+    ++ lib.optionals withQt5 [ "-DENABLE_QT5=ON" ];
 
   optFlag = w: (if w then "1" else "0");
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "kime";
   version = "2.5.5";
 
@@ -83,10 +78,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals withIndicator [ dbus libdbusmenu ]
-  ++ lib.optionals withXim [ xorg.libxcb cairo ]
-  ++ lib.optionals withGtk2 [ gtk2 ]
-  ++ lib.optionals withGtk3 [ gtk3 ]
-  ++ lib.optionals withQt5 [ qt5.qtbase ];
+    ++ lib.optionals withXim [ xorg.libxcb cairo ]
+    ++ lib.optionals withGtk2 [ gtk2 ] ++ lib.optionals withGtk3 [ gtk3 ]
+    ++ lib.optionals withQt5 [ qt5.qtbase ];
 
   nativeBuildInputs = [
     pkg-config

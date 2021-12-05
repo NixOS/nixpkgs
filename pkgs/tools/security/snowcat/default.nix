@@ -16,7 +16,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/praetorian-inc/snowcat";
-    changelog = "https://github.com/praetorian-inc/snowcat/releases/tag/v${version}";
+    changelog =
+      "https://github.com/praetorian-inc/snowcat/releases/tag/v${version}";
     description = "A tool to audit the istio service mesh";
     longDescription = ''
       Snowcat gathers and analyzes the configuration of an Istio cluster and

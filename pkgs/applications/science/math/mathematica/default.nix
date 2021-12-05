@@ -1,38 +1,14 @@
-{ lib, stdenv
-, coreutils
-, patchelf
-, requireFile
-, callPackage
-, makeWrapper
-, alsa-lib
-, dbus
-, fontconfig
-, freetype
-, gcc
-, glib
-, libssh2
-, ncurses
-, opencv4
-, openssl
-, unixODBC
-, xkeyboard_config
-, xorg
-, zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
-}:
+{ lib, stdenv, coreutils, patchelf, requireFile, callPackage, makeWrapper
+, alsa-lib, dbus, fontconfig, freetype, gcc, glib, libssh2, ncurses, opencv4
+, openssl, unixODBC, xkeyboard_config, xorg, zlib, libxml2, libuuid, lang ? "en"
+, libGL, libGLU }:
 
 let
-  l10n =
-    import ./l10ns.nix {
-      lib = lib;
-      inherit requireFile lang;
-    };
-in
-stdenv.mkDerivation rec {
+  l10n = import ./l10ns.nix {
+    lib = lib;
+    inherit requireFile lang;
+  };
+in stdenv.mkDerivation rec {
   inherit (l10n) version name src;
 
   buildInputs = [
@@ -76,7 +52,7 @@ stdenv.mkDerivation rec {
 
   ldpath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+    (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="

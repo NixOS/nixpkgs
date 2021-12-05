@@ -1,18 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, vala
-, gettext
-, libxml2
-, pkg-config
-, glib
-, gtk3
-, libgee
-, meson
-, ninja
-, gobject-introspection
-, gsettings-desktop-schemas
-, pantheon
-, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, vala, gettext, libxml2, pkg-config, glib, gtk3
+, libgee, meson, ninja, gobject-introspection, gsettings-desktop-schemas
+, pantheon, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "regextester";
@@ -50,7 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A desktop application to test regular expressions interactively";
+    description =
+      "A desktop application to test regular expressions interactively";
     homepage = "https://github.com/artemanufrij/regextester";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

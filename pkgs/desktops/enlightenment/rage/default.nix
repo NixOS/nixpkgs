@@ -1,21 +1,17 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl, gst_all_1, pcre, mesa, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl, gst_all_1, pcre, mesa
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rage";
   version = "0.3.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
     sha256 = "04fdk23bbgvni212zrfy4ndg7vmshbsjgicrhckdvhay87pk9i75";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    mesa.dev
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config mesa.dev wrapGAppsHook ];
 
   buildInputs = [
     efl

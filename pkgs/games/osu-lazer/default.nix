@@ -1,12 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem
+, linkFarmFromDrvs, dotnetCorePackages, dotnetPackages, cacert, ffmpeg_4
+, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins }:
 
 let
-  runtimeDeps = [
-    ffmpeg_4 alsa-lib SDL2 lttng-ust numactl
-  ];
+  runtimeDeps = [ ffmpeg_4 alsa-lib SDL2 lttng-ust numactl ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
   dotnet-runtime = dotnetCorePackages.runtime_5_0;
@@ -26,17 +23,20 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    dotnet-sdk dotnetPackages.Nuget makeWrapper
+    dotnet-sdk
+    dotnetPackages.Nuget
+    makeWrapper
     # FIXME: Without `cacert`, we will suffer from https://github.com/NuGet/Announcements/issues/49
     cacert
   ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
+    fetchNuGet = { name, version, sha256 }:
+      fetchurl {
+        name = "nuget-${name}-${version}.nupkg";
+        url = "https://www.nuget.org/api/v2/package/${name}/${version}";
+        inherit sha256;
+      };
   });
 
   configurePhase = ''
@@ -84,15 +84,17 @@ in stdenv.mkDerivation rec {
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
     done
-    cp -r ${makeDesktopItem {
-      desktopName = "osu!";
-      name = "osu";
-      exec = "osu!";
-      icon = "osu!";
-      comment = meta.description;
-      type = "Application";
-      categories = "Game;";
-    }}/share/applications $out/share
+    cp -r ${
+      makeDesktopItem {
+        desktopName = "osu!";
+        name = "osu";
+        exec = "osu!";
+        icon = "osu!";
+        comment = meta.description;
+        type = "Application";
+        categories = "Game;";
+      }
+    }/share/applications $out/share
 
     runHook postInstall
   '';

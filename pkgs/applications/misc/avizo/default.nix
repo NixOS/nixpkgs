@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, vala
-, gtk3, glib, gtk-layer-shell
-, dbus, dbus-glib, librsvg
-, gobject-introspection, gdk-pixbuf, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, vala, gtk3, glib
+, gtk-layer-shell, dbus, dbus-glib, librsvg, gobject-introspection, gdk-pixbuf
+, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   pname = "avizo";
@@ -16,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-ixAdiAH22Nh19uK5GoAXtAZJeAfCGSWTcGbrvCczWYc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
 
   buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg ];
 

@@ -6,16 +6,12 @@ stdenv.mkDerivation rec {
   version = "4.4.6";
 
   src = fetchurl {
-    url = "https://github.com/h3poteto/whalebird-desktop/releases/download/${version}/Whalebird-${version}-linux-x64.deb";
+    url =
+      "https://github.com/h3poteto/whalebird-desktop/releases/download/${version}/Whalebird-${version}-linux-x64.deb";
     sha256 = "sha256-Q67y6VO7U8EatMNWyJo4f9IHKylQSX7bNR0DH4bnH+A=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-    nodePackages.asar
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper nodePackages.asar ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
 
@@ -52,7 +48,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Electron based Mastodon, Pleroma and Misskey client for Windows, Mac and Linux";
+    description =
+      "Electron based Mastodon, Pleroma and Misskey client for Windows, Mac and Linux";
     homepage = "https://whalebird.social";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];

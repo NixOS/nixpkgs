@@ -11,17 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0ijfbfv1F6mnt1uFH/A4yOADJoAFrPMa3yAOFJW53ek=";
   };
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
-    ocl-icd
-    opencl-headers
-  ] ++ lib.optionals stdenv.isDarwin [
-    OpenCL
-  ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ocl-icd opencl-headers ]
+    ++ lib.optionals stdenv.isDarwin [ OpenCL ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "Print all known information about all available OpenCL platforms and devices in the system";
+    description =
+      "Print all known information about all available OpenCL platforms and devices in the system";
     homepage = "https://github.com/Oblomov/clinfo";
     license = licenses.cc0;
     maintainers = with maintainers; [ athas r-burns ];

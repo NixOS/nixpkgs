@@ -1,19 +1,6 @@
-{ writeTextFile
-, pari_data
-, pari
-, singular
-, maxima
-, conway_polynomials
-, graphs
-, elliptic_curves
-, polytopes_db
-, gap
-, combinatorial_designs
-, jmol
-, mathjax
-, three
-, cysignals
-}:
+{ writeTextFile, pari_data, pari, singular, maxima, conway_polynomials, graphs
+, elliptic_curves, polytopes_db, gap, combinatorial_designs, jmol, mathjax
+, three, cysignals }:
 
 # A bash script setting various environment variables to tell sage where
 # the files its looking fore are located. Also see `sage-env`.

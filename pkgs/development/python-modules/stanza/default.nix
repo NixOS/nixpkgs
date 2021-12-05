@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, emoji
-, numpy
-, protobuf
-, requests
-, six
-, pytorch
-, tqdm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, emoji, numpy, protobuf
+, requests, six, pytorch, tqdm }:
 
 buildPythonPackage rec {
   pname = "stanza";
@@ -24,15 +14,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [
-    emoji
-    numpy
-    protobuf
-    requests
-    six
-    pytorch
-    tqdm
-  ];
+  propagatedBuildInputs = [ emoji numpy protobuf requests six pytorch tqdm ];
 
   # disabled, because the tests try to connect to the internet which
   # is forbidden in the sandbox
@@ -41,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stanza" ];
 
   meta = with lib; {
-    description = "Official Stanford NLP Python Library for Many Human Languages";
+    description =
+      "Official Stanford NLP Python Library for Many Human Languages";
     homepage = "https://github.com/stanfordnlp/stanza/";
     license = licenses.asl20;
     maintainers = with maintainers; [ riotbib ];

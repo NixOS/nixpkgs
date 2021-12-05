@@ -1,7 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, qmake, cmake, pkg-config, miniupnpc, bzip2
 , speex, libmicrohttpd, libxml2, libxslt, sqlcipher, rapidjson, libXScrnSaver
-, qtbase, qtx11extras, qtmultimedia, libgnome-keyring3
-}:
+, qtbase, qtx11extras, qtmultimedia, libgnome-keyring3 }:
 
 mkDerivation rec {
   pname = "retroshare";
@@ -23,8 +22,19 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake cmake ];
   buildInputs = [
-    speex miniupnpc qtmultimedia qtx11extras qtbase libgnome-keyring3
-    bzip2 libXScrnSaver libxml2 libxslt sqlcipher libmicrohttpd rapidjson
+    speex
+    miniupnpc
+    qtmultimedia
+    qtx11extras
+    qtbase
+    libgnome-keyring3
+    bzip2
+    libXScrnSaver
+    libxml2
+    libxslt
+    sqlcipher
+    libmicrohttpd
+    rapidjson
   ];
 
   qmakeFlags = [

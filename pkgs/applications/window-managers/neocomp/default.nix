@@ -1,25 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, asciidoc
-, docbook_xml_dtd_45
-, docbook_xsl
-, freetype
-, judy
-, libGL
-, libconfig
-, libdrm
-, libxml2
-, libxslt
-, libXcomposite
-, libXdamage
-, libXext
-, libXinerama
-, libXrandr
-, libXrender
-, libXres
-, pcre
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, asciidoc, docbook_xml_dtd_45, docbook_xsl
+, freetype, judy, libGL, libconfig, libdrm, libxml2, libxslt, libXcomposite
+, libXdamage, libXext, libXinerama, libXrandr, libXrender, libXres, pcre
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "neocomp";
@@ -32,12 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tLLEwpAGNVTC+N41bM7pfskIli4Yvc95wH2/NT0OZ+8=";
   };
 
-  nativeBuildInputs = [
-    asciidoc
-    docbook_xml_dtd_45
-    docbook_xsl
-    pkg-config
-  ];
+  nativeBuildInputs = [ asciidoc docbook_xml_dtd_45 docbook_xsl pkg-config ];
 
   buildInputs = [
     freetype
@@ -74,11 +51,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage        = "https://github.com/DelusionalLogic/NeoComp";
-    license         = licenses.gpl3Only;
-    maintainers     = with maintainers; [ twey fortuneteller2k ];
-    platforms       = platforms.linux;
-    description     = "A fork of Compton, a compositor for X11";
+    homepage = "https://github.com/DelusionalLogic/NeoComp";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ twey fortuneteller2k ];
+    platforms = platforms.linux;
+    description = "A fork of Compton, a compositor for X11";
     longDescription = ''
       NeoComp is a (hopefully) fast and (hopefully) simple compositor
       for X11, focused on delivering frames from the window to the

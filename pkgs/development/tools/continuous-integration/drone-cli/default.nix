@@ -9,9 +9,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   src = fetchFromGitHub {
     owner = "drone";
@@ -24,6 +22,7 @@ buildGoModule rec {
     mainProgram = "drone";
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
-    description = "Command line client for the Drone continuous integration server";
+    description =
+      "Command line client for the Drone continuous integration server";
   };
 }

@@ -31,7 +31,9 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
     server.wait_for_unit("minecraft-server")
     server.wait_for_open_port(${toString rcon-port})
     assert "${seed}" in server.succeed(
-        "mcrcon -H localhost -P ${toString rcon-port} -p '${rcon-pass}' -c 'seed'"
+        "mcrcon -H localhost -P ${
+          toString rcon-port
+        } -p '${rcon-pass}' -c 'seed'"
     )
   '';
 })

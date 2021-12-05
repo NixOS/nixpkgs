@@ -1,13 +1,5 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, requests
-}:
+{ lib, arrow, buildPythonPackage, fetchFromGitHub, pytest-datafiles, pytest-vcr
+, pytestCheckHook, python-box, requests }:
 
 buildPythonPackage rec {
   pname = "restfly";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-T5NfG+Vuguh6xZ/Rdx3a1vMDgXPcl/OYhOkxb76yEXg=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    arrow
-    python-box
-  ];
+  propagatedBuildInputs = [ requests arrow python-box ];
 
-  checkInputs = [
-    pytest-datafiles
-    pytest-vcr
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-datafiles pytest-vcr pytestCheckHook ];
 
   disabledTests = [
     # Test requires network access

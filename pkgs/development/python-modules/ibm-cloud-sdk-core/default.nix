@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, requests
-, responses
-, tox
-}:
+{ lib, buildPythonPackage, fetchPypi, pyjwt, pytestCheckHook, python-dateutil
+, requests, responses, tox }:
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
@@ -18,17 +10,9 @@ buildPythonPackage rec {
     sha256 = "b27aec03e8c666b3e36c68b2331871f37a0c6c0467fe0f73462fda7300d3c19f";
   };
 
-  propagatedBuildInputs = [
-    pyjwt
-    python-dateutil
-    requests
-  ];
+  propagatedBuildInputs = [ pyjwt python-dateutil requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-    tox
-  ];
+  checkInputs = [ pytestCheckHook responses tox ];
 
   disabledTests = [
     # Various tests try to access credential files which are not included with the source distribution
@@ -47,9 +31,7 @@ buildPythonPackage rec {
     "test_http_client"
   ];
 
-  disabledTestPaths = [
-    "test/test_container_token_manager.py"
-  ];
+  disabledTestPaths = [ "test/test_container_token_manager.py" ];
 
   meta = with lib; {
     description = "Client library for the IBM Cloud services";

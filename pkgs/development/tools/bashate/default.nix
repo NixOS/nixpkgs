@@ -1,14 +1,5 @@
-{ lib
-, Babel
-, buildPythonApplication
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools
-}:
+{ lib, Babel, buildPythonApplication, fetchPypi, fixtures, mock, pbr
+, pytestCheckHook, pythonOlder, setuptools }:
 
 buildPythonApplication rec {
   pname = "bashate";
@@ -20,17 +11,9 @@ buildPythonApplication rec {
     sha256 = "a0df143639715dc2fb6cf9aa6907e4a372d6f0a43afeffc55c5fb3ecfe3523c8";
   };
 
-  propagatedBuildInputs = [
-    Babel
-    pbr
-    setuptools
-  ];
+  propagatedBuildInputs = [ Babel pbr setuptools ];
 
-  checkInputs = [
-    fixtures
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ fixtures mock pytestCheckHook ];
 
   pythonImportsCheck = [ "bashate" ];
 

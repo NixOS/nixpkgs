@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let
-  inherit (lib) optionals;
-in
-stdenv.mkDerivation {
+let inherit (lib) optionals;
+in stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
   version = "2021-07-05";
 
@@ -14,9 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1ysdl4qldy6ldf8cm1igxjisi14xl3s2pi6cnqzpxb38sgihb1vy";
   };
 
-  NIX_CFLAGS_COMPILE = [
-    "-march=armv8-a+crc"
-  ];
+  NIX_CFLAGS_COMPILE = [ "-march=armv8-a+crc" ];
 
   preConfigure = ''
     cd armstubs
@@ -31,10 +27,12 @@ stdenv.mkDerivation {
     "LD7=${stdenv.cc.targetPrefix}ld"
     "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
     "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
-  ]
-  ++ optionals (stdenv.isAarch64) [ "armstub8.bin" "armstub8-gic.bin" ]
-  ++ optionals (stdenv.isAarch32) [ "armstub7.bin" "armstub8-32.bin" "armstub8-32-gic.bin" ]
-  ;
+  ] ++ optionals (stdenv.isAarch64) [ "armstub8.bin" "armstub8-gic.bin" ]
+    ++ optionals (stdenv.isAarch32) [
+      "armstub7.bin"
+      "armstub8-32.bin"
+      "armstub8-32-gic.bin"
+    ];
 
   installPhase = ''
     runHook preInstall

@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, libpng, libtiff, lcms2, jpylyzer
-, mj2Support ? true # MJ2 executables
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, libpng, libtiff
+, lcms2, jpylyzer, mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl ? null, fcgi ? null # JPIP Server
-#, opjViewerSupport ? false, wxGTK ? null # OPJViewer executable
+  #, opjViewerSupport ? false, wxGTK ? null # OPJViewer executable
 , openjpegJarSupport ? false # Openjpeg jar (Java)
 , jp3dSupport ? true # # JP3D comp
-, thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
-, testsSupport ? true
-, jdk ? null
-}:
+, thirdPartySupport ?
+  false # Third party libraries - OFF: only build when found, ON: always build
+, testsSupport ? true, jdk ? null }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
 #assert opjViewerSupport -> (wxGTK != null);
@@ -19,9 +17,8 @@ assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
 let
   inherit (lib) optional optionals;
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "openjpeg";
   version = "2.4.0"; # don't forget to change passthru.incDir
 
@@ -35,7 +32,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-cmake-config-includedir.patch
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/uclouvain/openjpeg/pull/1321.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/uclouvain/openjpeg/pull/1321.patch";
       sha256 = "1cjpr76nf9g65nqkfnxnjzi3bv7ifbxpc74kxxibh58pzjlp6al8";
     })
   ];
@@ -56,15 +54,19 @@ stdenv.mkDerivation rec {
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
-    "-DOPENJPEG_INSTALL_INCLUDE_DIR=${placeholder "dev"}/include/${passthru.incDir}"
+    "-DOPENJPEG_INSTALL_INCLUDE_DIR=${
+      placeholder "dev"
+    }/include/${passthru.incDir}"
     "-DOPENJPEG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/${passthru.incDir}"
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ ]
-    ++ optionals jpipServerSupport [ curl fcgi ]
-    #++ optional opjViewerSupport wxGTK
+  buildInputs = [ ] ++ optionals jpipServerSupport [
+    curl
+    fcgi
+  ]
+  #++ optional opjViewerSupport wxGTK
     ++ optional (openjpegJarSupport || jpipLibSupport) jdk;
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
@@ -76,9 +78,7 @@ stdenv.mkDerivation rec {
     OPJ_SOURCE_DIR=.. ctest -S ../tools/ctest_scripts/travis-ci.cmake
   '';
 
-  passthru = {
-    incDir = "openjpeg-2.4";
-  };
+  passthru = { incDir = "openjpeg-2.4"; };
 
   meta = with lib; {
     description = "Open-source JPEG 2000 codec written in C language";

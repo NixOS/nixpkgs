@@ -1,27 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
-, makeWrapper
-, cppcheck
-, boost16x
-, SDL2
-, python3
-, freetype
-, openal
-, libogg
-, libvorbis
-, zlib
-, libpng
-, libtiff
-, libjpeg
-, libGLU
-, libGL
-, glew
-, libxslt
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper, cppcheck
+, boost16x, SDL2, python3, freetype, openal, libogg, libvorbis, zlib, libpng
+, libtiff, libjpeg, libGLU, libGL, glew, libxslt }:
 
 stdenv.mkDerivation rec {
   version = "0.4.10.2";
@@ -35,7 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (boost16x.override { enablePython = true; python = python3; })
+    (boost16x.override {
+      enablePython = true;
+      python = python3;
+    })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype
@@ -51,13 +33,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [
-    cmake
-    cppcheck
-    doxygen
-    graphviz
-    makeWrapper
-  ];
+  nativeBuildInputs = [ cmake cppcheck doxygen graphviz makeWrapper ];
 
   # as of 0.4.10.2 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
   cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=LEGACY" ];
@@ -80,7 +56,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
+    description =
+      "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "http://www.freeorion.org";
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;

@@ -1,15 +1,5 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, ffmpeg
-, yt-dlp
-, electron
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, yarn2nix-moretea
-, chromium
-}:
+{ stdenvNoCC, lib, fetchFromGitHub, ffmpeg, yt-dlp, electron, makeWrapper
+, makeDesktopItem, copyDesktopItems, yarn2nix-moretea, chromium }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
@@ -22,17 +12,15 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-0moxrRxydH/g3J5cQmaFSDhTZh9OnUi8ncPVw7q1JC0=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-  ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   desktopItems = [
     (makeDesktopItem {
       name = "Sharedown";
       exec = "Sharedown";
       icon = "Sharedown";
-      comment = "An Application to save your Sharepoint videos for offline usage.";
+      comment =
+        "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
       categories = "Network;Archiving";
     })
@@ -40,55 +28,47 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase =
-    let
-      binPath = lib.makeBinPath ([
-        ffmpeg
-        yt-dlp
-      ]);
+  installPhase = let
+    binPath = lib.makeBinPath ([ ffmpeg yt-dlp ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
-        name = "${pname}-modules-${version}";
-        inherit pname version;
+    modules = yarn2nix-moretea.mkYarnModules {
+      name = "${pname}-modules-${version}";
+      inherit pname version;
 
-        yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
-          "--production"
-        ];
+      yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [ "--production" ];
 
-        packageJSON = "${src}/package.json";
-        yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
-      };
-    in
-    ''
-      runHook preInstall
+      packageJSON = "${src}/package.json";
+      yarnLock = ./yarn.lock;
+      yarnNix = ./yarndeps.nix;
+    };
+  in ''
+    runHook preInstall
 
-      mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+    mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
 
-      # Electron app
-      cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
+    # Electron app
+    cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
 
-      # Desktop Launcher
-      cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
+    # Desktop Launcher
+    cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
 
-      # Install electron wrapper script
-      makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
-        --add-flags "$out/share/Sharedown" \
-        --prefix PATH : "${binPath}" \
-        --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
+    # Install electron wrapper script
+    makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
+      --add-flags "$out/share/Sharedown" \
+      --prefix PATH : "${binPath}" \
+      --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Application to save your Sharepoint videos for offline usage";
+    description =
+      "Application to save your Sharepoint videos for offline usage";
     homepage = "https://github.com/kylon/Sharedown";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      jtojnar
-    ];
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
 }

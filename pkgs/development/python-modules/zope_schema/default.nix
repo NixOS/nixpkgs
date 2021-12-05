@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_location
-, zope_event
-, zope_interface
-, zope_testing
-}:
+{ lib, buildPythonPackage, fetchPypi, zope_location, zope_event, zope_interface
+, zope_testing }:
 
 buildPythonPackage rec {
   pname = "zope.schema";
@@ -16,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "9fa04d95e8e7e9056091eed9819da6e65dde68de39c2b93617d361d1eb8a7c0c";
   };
 
-  propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ];
+  propagatedBuildInputs =
+    [ zope_location zope_event zope_interface zope_testing ];
 
   # ImportError: No module named 'zope.event'
   # even though zope_event has been included.

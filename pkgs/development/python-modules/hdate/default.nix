@@ -1,12 +1,5 @@
-{ lib
-, astral
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
-}:
+{ lib, astral, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook
+, pythonOlder, pytz }:
 
 buildPythonPackage rec {
   pname = "hdate";
@@ -21,26 +14,17 @@ buildPythonPackage rec {
     sha256 = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    astral
-    pytz
-  ];
+  propagatedBuildInputs = [ astral pytz ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace "^2020.5" ">=2020.5"
   '';
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];
 

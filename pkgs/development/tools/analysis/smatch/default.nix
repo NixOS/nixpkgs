@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchgit, sqlite, pkg-config, perl
-, buildllvmsparse ? true
-, buildc2xml ? true
-, llvm, libxml2
-}:
+{ lib, stdenv, fetchgit, sqlite, pkg-config, perl, buildllvmsparse ? true
+, buildc2xml ? true, llvm, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "smatch";
@@ -15,9 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ sqlite perl ]
-   ++ lib.optional buildllvmsparse llvm
-   ++ lib.optional buildc2xml libxml2;
+  buildInputs = [ sqlite perl ] ++ lib.optional buildllvmsparse llvm
+    ++ lib.optional buildc2xml libxml2;
 
   preBuild = ''
     sed -i Makefile \
@@ -27,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A semantic analysis tool for C";
     homepage = "http://smatch.sourceforge.net/";
-    maintainers = with maintainers; [];
-    license = licenses.free; /* OSL, see http://www.opensource.org */
+    maintainers = with maintainers; [ ];
+    license = licenses.free; # OSL, see http://www.opensource.org
     platforms = platforms.linux;
   };
 }

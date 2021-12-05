@@ -1,11 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "suckit";
@@ -28,9 +21,13 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip=test_download_url" ];
 
   meta = with lib; {
-    description = "Recursively visit and download a website's content to your disk";
+    description =
+      "Recursively visit and download a website's content to your disk";
     homepage = "https://github.com/skallwar/suckit";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

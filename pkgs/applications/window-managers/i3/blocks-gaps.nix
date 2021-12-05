@@ -1,17 +1,23 @@
-{ fetchFromGitHub, lib, stdenv, perl, makeWrapper
-, iproute2, acpi, sysstat, alsa-utils
-, scripts ? [ "bandwidth" "battery" "cpu_usage" "disk" "iface"
-              "load_average" "memory" "volume" "wifi" ]
-}:
+{ fetchFromGitHub, lib, stdenv, perl, makeWrapper, iproute2, acpi, sysstat
+, alsa-utils, scripts ? [
+  "bandwidth"
+  "battery"
+  "cpu_usage"
+  "disk"
+  "iface"
+  "load_average"
+  "memory"
+  "volume"
+  "wifi"
+] }:
 
 with lib;
 
 let
   perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];
-  contains_any = l1: l2: 0 < length( intersectLists l1 l2 );
+  contains_any = l1: l2: 0 < length (intersectLists l1 l2);
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "i3blocks-gaps";
   version = "1.4";
 
@@ -30,19 +36,26 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/libexec/i3blocks/bandwidth \
-      --prefix PATH : ${makeBinPath (optional (elem "bandwidth" scripts) iproute2)}
+      --prefix PATH : ${
+        makeBinPath (optional (elem "bandwidth" scripts) iproute2)
+      }
     wrapProgram $out/libexec/i3blocks/battery \
       --prefix PATH : ${makeBinPath (optional (elem "battery" scripts) acpi)}
     wrapProgram $out/libexec/i3blocks/cpu_usage \
-      --prefix PATH : ${makeBinPath (optional (elem "cpu_usage" scripts) sysstat)}
+      --prefix PATH : ${
+        makeBinPath (optional (elem "cpu_usage" scripts) sysstat)
+      }
     wrapProgram $out/libexec/i3blocks/iface \
       --prefix PATH : ${makeBinPath (optional (elem "iface" scripts) iproute2)}
     wrapProgram $out/libexec/i3blocks/volume \
-      --prefix PATH : ${makeBinPath (optional (elem "volume" scripts) alsa-utils)}
+      --prefix PATH : ${
+        makeBinPath (optional (elem "volume" scripts) alsa-utils)
+      }
   '';
 
   meta = with lib; {
-    description = "A flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
+    description =
+      "A flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
     homepage = "https://github.com/Airblader/i3blocks-gaps";
     license = licenses.gpl3;
     maintainers = with maintainers; [ carlsverre ];

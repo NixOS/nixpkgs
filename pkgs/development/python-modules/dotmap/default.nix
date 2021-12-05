@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dotmap";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-wOJjGlMUjTYj2af8I8dg1LfehCL2u4gYuEfkYHKrTPA=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "dotmap/test.py" ];
 

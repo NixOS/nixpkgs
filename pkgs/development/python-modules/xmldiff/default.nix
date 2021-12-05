@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, setuptools
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, lxml, setuptools, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "xmldiff";

@@ -1,17 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, pkg-config
-, AudioUnit
-, AudioToolbox
-, CoreAudio
-, CoreServices
-, Carbon }:
+{ lib, stdenv, fetchurl, alsa-lib, pkg-config, AudioUnit, AudioToolbox
+, CoreAudio, CoreServices, Carbon }:
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
-  version =  "190700_20210406";
+  version = "190700_20210406";
 
   src = fetchurl {
     url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
@@ -27,7 +19,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-Werror" ""
   '';
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+    AudioUnit
+    AudioToolbox
+    CoreAudio
+    CoreServices
+    Carbon
+  ];
 
   # Disable parallel build as it fails as:
   #   make: *** No rule to make target '../../../lib/libportaudio.la',
@@ -48,14 +46,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = "http://www.portaudio.com/";
+    homepage = "http://www.portaudio.com/";
     # Not exactly a bsd license, but alike
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
-  passthru = {
-    api_version = 19;
-  };
+  passthru = { api_version = 19; };
 }

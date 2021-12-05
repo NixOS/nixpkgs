@@ -17,7 +17,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-YcAKl4keizkbgQLAZGiCG3CGpNTNad8EvOJEXLX2s0s=";
 
-  ldflags = [ "-s" "-w" "-X github.com/zyedidia/micro/v2/internal/util.Version=${version}" "-X github.com/zyedidia/micro/v2/internal/util.CommitHash=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/zyedidia/micro/v2/internal/util.Version=${version}"
+    "-X github.com/zyedidia/micro/v2/internal/util.CommitHash=${src.rev}"
+  ];
 
   postInstall = ''
     installManPage assets/packaging/micro.1

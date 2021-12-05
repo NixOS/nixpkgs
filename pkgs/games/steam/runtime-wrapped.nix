@@ -1,6 +1,4 @@
-{ stdenv, steamArch, lib, perl, pkgs, steam-runtime
-, runtimeOnly ? false
-}:
+{ stdenv, steamArch, lib, perl, pkgs, steam-runtime, runtimeOnly ? false }:
 
 let
   overridePkgs = lib.optionals (!runtimeOnly) (with pkgs; [
@@ -19,9 +17,12 @@ let
 
   allPkgs = overridePkgs ++ [ steam-runtime ];
 
-  gnuArch = if steamArch == "amd64" then "x86_64-linux-gnu"
-            else if steamArch == "i386" then "i386-linux-gnu"
-            else abort "Unsupported architecture";
+  gnuArch = if steamArch == "amd64" then
+    "x86_64-linux-gnu"
+  else if steamArch == "i386" then
+    "i386-linux-gnu"
+  else
+    abort "Unsupported architecture";
 
   libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
   bins = [ "bin" "usr/bin" ];

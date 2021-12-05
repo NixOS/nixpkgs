@@ -9,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "3ef13ff90291ba2a4a7a4ff9a979b63ffdd00a464dbe04acf0ea6471517a4c2b";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   # Tests not included in PyPI tarball
   doCheck = false;

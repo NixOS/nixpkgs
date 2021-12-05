@@ -1,21 +1,5 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qttools
-, cmake
-, clang_8
-, grpc
-, protobuf
-, openssl
-, pkg-config
-, c-ares
-, abseil-cpp
-, libGL
-, zlib
-, curl
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qttools, cmake, clang_8
+, grpc, protobuf, openssl, pkg-config, c-ares, abseil-cpp, libGL, zlib, curl }:
 
 mkDerivation rec {
   pname = "qv2ray";
@@ -45,15 +29,7 @@ mkDerivation rec {
     export _QV2RAY_BUILD_EXTRA_INFO_="(Nixpkgs build) nixpkgs"
   '';
 
-  buildInputs = [
-    libGL
-    zlib
-    grpc
-    protobuf
-    openssl
-    abseil-cpp
-    c-ares
-  ];
+  buildInputs = [ libGL zlib grpc protobuf openssl abseil-cpp c-ares ];
 
   nativeBuildInputs = [
     cmake

@@ -1,30 +1,21 @@
-{stdenv, lib, coreutils, unzip, jq, zip, fetchurl,writeScript,  ...}:
+{ stdenv, lib, coreutils, unzip, jq, zip, fetchurl, writeScript, ... }:
 
-{
-  name
-, url ? null
-, md5 ? ""
-, sha1 ? ""
-, sha256 ? ""
-, sha512 ? ""
-, fixedExtid ? null
-, hash ? ""
-, src ? ""
-}:
+{ name, url ? null, md5 ? "", sha1 ? "", sha256 ? "", sha512 ? ""
+, fixedExtid ? null, hash ? "", src ? "" }:
 
 let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
-  source = if url == null then src else fetchurl {
-    url = url;
-    inherit md5 sha1 sha256 sha512 hash;
-  };
-in
-stdenv.mkDerivation {
+  source = if url == null then
+    src
+  else
+    fetchurl {
+      url = url;
+      inherit md5 sha1 sha256 sha512 hash;
+    };
+in stdenv.mkDerivation {
   inherit name;
 
-  passthru = {
-    inherit extid;
-  };
+  passthru = { inherit extid; };
 
   builder = writeScript "xpibuilder" ''
     source $stdenv/setup
@@ -40,5 +31,5 @@ stdenv.mkDerivation {
     zip -r -q -FS "$out/$UUID.xpi" *
     rm -r "$out/$UUID"
   '';
-  nativeBuildInputs = [ coreutils unzip zip jq  ];
+  nativeBuildInputs = [ coreutils unzip zip jq ];
 }

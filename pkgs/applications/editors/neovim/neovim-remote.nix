@@ -1,12 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, neovim
-}:
+{ lib, fetchFromGitHub, python3, neovim }:
 
 with lib;
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.4.0";
 
@@ -17,16 +14,9 @@ with python3.pkgs; buildPythonApplication rec {
     sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
   };
 
-  propagatedBuildInputs = [
-    pynvim
-    psutil
-    setuptools
-  ];
+  propagatedBuildInputs = [ pynvim psutil setuptools ];
 
-  checkInputs = [
-    neovim
-    pytestCheckHook
-  ];
+  checkInputs = [ neovim pytestCheckHook ];
 
   disabledTests = [
     # these tests get stuck and never return
@@ -36,7 +26,8 @@ with python3.pkgs; buildPythonApplication rec {
   ];
 
   meta = {
-    description = "A tool that helps controlling nvim processes from a terminal";
+    description =
+      "A tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];

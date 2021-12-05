@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-}:
+{ lib, buildPythonPackage, fetchPypi, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-httpdomain";

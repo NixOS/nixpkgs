@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, archinfo
-, bitstring
-, buildPythonPackage
-, cffi
-, fetchPypi
-, future
-, pycparser
-}:
+{ lib, stdenv, archinfo, bitstring, buildPythonPackage, cffi, fetchPypi, future
+, pycparser }:
 
 buildPythonPackage rec {
   pname = "pyvex";
@@ -24,13 +16,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
-  propagatedBuildInputs = [
-    archinfo
-    bitstring
-    cffi
-    future
-    pycparser
-  ];
+  propagatedBuildInputs = [ archinfo bitstring cffi future pycparser ];
 
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc

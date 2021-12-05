@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.1.1";
+let version = "1.1.1";
 in fetchzip {
   name = "stix-otf-${version}";
 
-  url = "http://ftp.fi.muni.cz/pub/linux/gentoo/distfiles/STIXv${version}-word.zip";
+  url =
+    "http://ftp.fi.muni.cz/pub/linux/gentoo/distfiles/STIXv${version}-word.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -19,6 +19,6 @@ in fetchzip {
     description = "Fonts for Scientific and Technical Information eXchange";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

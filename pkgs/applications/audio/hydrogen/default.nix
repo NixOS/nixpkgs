@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
-, alsa-lib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
-, qtbase, qttools, qtxmlpatterns
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, alsa-lib
+, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
+, qtbase, qttools, qtxmlpatterns }:
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
@@ -16,13 +15,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    alsa-lib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
-    qtbase qttools qtxmlpatterns
+    alsa-lib
+    ladspa-sdk
+    lash
+    libarchive
+    libjack2
+    liblo
+    libpulseaudio
+    libsndfile
+    lrdf
+    qtbase
+    qttools
+    qtxmlpatterns
   ];
 
-  cmakeFlags = [
-    "-DWANT_DEBUG=OFF"
-  ];
+  cmakeFlags = [ "-DWANT_DEBUG=OFF" ];
 
   meta = with lib; {
     description = "Advanced drum machine";

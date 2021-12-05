@@ -1,51 +1,15 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchpatch
-, makeWrapper
-, nixosTests
-, pkg-config
-, file
-, linuxHeaders
-, openssl
-, pcre
-, perlPackages
-, python3
-, xz
-, zlib
+{ lib, stdenv, fetchzip, fetchpatch, makeWrapper, nixosTests, pkg-config, file
+, linuxHeaders, openssl, pcre, perlPackages, python3, xz, zlib
 # recommended dependencies
-, withHwloc ? true
-, hwloc
-, withCurl ? true
-, curl
-, withCurses ? true
-, ncurses
-, withCap ? stdenv.isLinux
-, libcap
-, withUnwind ? stdenv.isLinux
-, libunwind
+, withHwloc ? true, hwloc, withCurl ? true, curl, withCurses ? true, ncurses
+, withCap ? stdenv.isLinux, libcap, withUnwind ? stdenv.isLinux, libunwind
 # optional dependencies
-, withBrotli ? false
-, brotli
-, withCjose ? false
-, cjose
-, withGeoIP ? false
-, geoip
-, withHiredis ? false
-, hiredis
-, withImageMagick ? false
-, imagemagick
-, withJansson ? false
-, jansson
-, withKyotoCabinet ? false
-, kyotocabinet
-, withLuaJIT ? false
-, luajit
-, withMaxmindDB ? false
-, libmaxminddb
+, withBrotli ? false, brotli, withCjose ? false, cjose, withGeoIP ? false, geoip
+, withHiredis ? false, hiredis, withImageMagick ? false, imagemagick
+, withJansson ? false, jansson, withKyotoCabinet ? false, kyotocabinet
+, withLuaJIT ? false, luajit, withMaxmindDB ? false, libmaxminddb
 # optional features
-, enableWCCP ? false
-}:
+, enableWCCP ? false }:
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
@@ -60,14 +24,16 @@ stdenv.mkDerivation rec {
     # Adds support for NixOS
     # https://github.com/apache/trafficserver/pull/7697
     (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
+      url =
+        "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
 
     # Fix build against ncurses-6.3:
     #  https://github.com/apache/trafficserver/pull/8437
     (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/66c86c6b082903a92b9db33c60e3ed947e77d540.patch";
+      url =
+        "https://github.com/apache/trafficserver/commit/66c86c6b082903a92b9db33c60e3ed947e77d540.patch";
       sha256 = "1hgpp80xnnjr4k5i6gcllrb7dw4q4xcdrkwxpc1xk2np5cbyxd16";
     })
   ];
@@ -84,24 +50,16 @@ stdenv.mkDerivation rec {
     ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
     ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
 
-  buildInputs = [
-    openssl
-    pcre
-    perlPackages.perl
-  ] ++ lib.optional withBrotli brotli
-  ++ lib.optional withCap libcap
-  ++ lib.optional withCjose cjose
-  ++ lib.optional withCurl curl
-  ++ lib.optional withGeoIP geoip
-  ++ lib.optional withHiredis hiredis
-  ++ lib.optional withHwloc hwloc
-  ++ lib.optional withImageMagick imagemagick
-  ++ lib.optional withJansson jansson
-  ++ lib.optional withKyotoCabinet kyotocabinet
-  ++ lib.optional withCurses ncurses
-  ++ lib.optional withLuaJIT luajit
-  ++ lib.optional withUnwind libunwind
-  ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs = [ openssl pcre perlPackages.perl ]
+    ++ lib.optional withBrotli brotli ++ lib.optional withCap libcap
+    ++ lib.optional withCjose cjose ++ lib.optional withCurl curl
+    ++ lib.optional withGeoIP geoip ++ lib.optional withHiredis hiredis
+    ++ lib.optional withHwloc hwloc ++ lib.optional withImageMagick imagemagick
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withKyotoCabinet kyotocabinet
+    ++ lib.optional withCurses ncurses ++ lib.optional withLuaJIT luajit
+    ++ lib.optional withUnwind libunwind
+    ++ lib.optional withMaxmindDB libmaxminddb;
 
   outputs = [ "out" "man" ];
 
@@ -189,7 +147,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://trafficserver.apache.org";
-    changelog = "https://raw.githubusercontent.com/apache/trafficserver/${version}/CHANGELOG-${version}";
+    changelog =
+      "https://raw.githubusercontent.com/apache/trafficserver/${version}/CHANGELOG-${version}";
     description = "Fast, scalable, and extensible HTTP caching proxy server";
     longDescription = ''
       Apache Traffic Server is a high-performance web proxy cache that improves

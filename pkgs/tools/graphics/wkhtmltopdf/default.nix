@@ -1,22 +1,30 @@
-{ mkDerivation, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
-, fontconfig, freetype, libpng, zlib, libjpeg
-, openssl, libX11, libXext, libXrender }:
+{ mkDerivation, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns, fontconfig
+, freetype, libpng, zlib, libjpeg, openssl, libX11, libXext, libXrender }:
 
 mkDerivation rec {
   version = "0.12.6";
   pname = "wkhtmltopdf";
 
   src = fetchFromGitHub {
-    owner  = "wkhtmltopdf";
-    repo   = "wkhtmltopdf";
-    rev    = version;
+    owner = "wkhtmltopdf";
+    repo = "wkhtmltopdf";
+    rev = version;
     sha256 = "0m2zy986kzcpg0g3bvvm815ap9n5ann5f6bdy7pfj6jv482bm5mg";
   };
 
   buildInputs = [
-    fontconfig freetype libpng zlib libjpeg openssl
-    libX11 libXext libXrender
-    qtwebkit qtsvg qtxmlpatterns
+    fontconfig
+    freetype
+    libpng
+    zlib
+    libjpeg
+    openssl
+    libX11
+    libXext
+    libXrender
+    qtwebkit
+    qtsvg
+    qtxmlpatterns
   ];
 
   prePatch = ''

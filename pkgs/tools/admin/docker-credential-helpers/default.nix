@@ -17,30 +17,25 @@ buildGoPackage rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ libsecret ];
 
-  buildPhase =
-    if stdenv.isDarwin
-    then ''
-      cd go/src/${goPackagePath}
-      go build -ldflags -s -o bin/docker-credential-osxkeychain osxkeychain/cmd/main_darwin.go
-    ''
-    else ''
-      cd go/src/${goPackagePath}
-      go build -o bin/docker-credential-secretservice secretservice/cmd/main_linux.go
-      go build -o bin/docker-credential-pass pass/cmd/main_linux.go
-    '';
+  buildPhase = if stdenv.isDarwin then ''
+    cd go/src/${goPackagePath}
+    go build -ldflags -s -o bin/docker-credential-osxkeychain osxkeychain/cmd/main_darwin.go
+  '' else ''
+    cd go/src/${goPackagePath}
+    go build -o bin/docker-credential-secretservice secretservice/cmd/main_linux.go
+    go build -o bin/docker-credential-pass pass/cmd/main_linux.go
+  '';
 
-  installPhase =
-    if stdenv.isDarwin
-    then ''
-      install -Dm755 -t $out/bin bin/docker-credential-osxkeychain
-    ''
-    else ''
-      install -Dm755 -t $out/bin bin/docker-credential-pass
-      install -Dm755 -t $out/bin bin/docker-credential-secretservice
-    '';
+  installPhase = if stdenv.isDarwin then ''
+    install -Dm755 -t $out/bin bin/docker-credential-osxkeychain
+  '' else ''
+    install -Dm755 -t $out/bin bin/docker-credential-pass
+    install -Dm755 -t $out/bin bin/docker-credential-secretservice
+  '';
 
   meta = with lib; {
-    description = "Suite of programs to use native stores to keep Docker credentials safe";
+    description =
+      "Suite of programs to use native stores to keep Docker credentials safe";
     homepage = "https://github.com/docker/docker-credential-helpers";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, sigtools
-, six
-, attrs
-, od
-, docutils
-, repeated_test
-, pygments
-, unittest2
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, sigtools, six, attrs, od
+, docutils, repeated_test, pygments, unittest2, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "clize";
@@ -22,21 +10,10 @@ buildPythonPackage rec {
     sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    python-dateutil
-    pygments
-    repeated_test
-    unittest2
-  ];
+  checkInputs =
+    [ pytestCheckHook python-dateutil pygments repeated_test unittest2 ];
 
-  propagatedBuildInputs = [
-    attrs
-    docutils
-    od
-    sigtools
-    six
-  ];
+  propagatedBuildInputs = [ attrs docutils od sigtools six ];
 
   pythonImportsCheck = [ "clize" ];
 

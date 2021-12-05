@@ -1,15 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, llvm
-, clang-tools-extra_src ? null
-, lld
+{ stdenv, lib, fetchFromGitHub, cmake, python3, llvm
+, clang-tools-extra_src ? null, lld
 
-, version
-, src
-}:
+, version, src }:
 
 stdenv.mkDerivation rec {
   inherit version src;
@@ -63,7 +55,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
+    description =
+      "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
     homepage = "https://llvm.org/";
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ acowley lovesegfault ];

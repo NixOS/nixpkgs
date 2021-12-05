@@ -1,10 +1,10 @@
-{lib, stdenv, python2, wordnet, writeScript}:
+{ lib, stdenv, python2, wordnet, writeScript }:
 
 stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
 
-  buildInputs = [python2 wordnet];
+  buildInputs = [ python2 wordnet ];
   convert = ./wordnet_structures.py;
 
   builder = writeScript "builder.sh" ''
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "dictd-compatible version of WordNet";
 
-    longDescription =
-      '' WordNet® is a large lexical database of English. This package makes
-         the wordnet data available to dictd and by extension for lookup with
-         the dict command. '';
+    longDescription = ''
+      WordNet® is a large lexical database of English. This package makes
+              the wordnet data available to dictd and by extension for lookup with
+              the dict command. '';
 
     homepage = "https://wordnet.princeton.edu/";
 

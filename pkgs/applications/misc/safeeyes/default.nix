@@ -1,5 +1,6 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
-}:
+{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify
+, gtk3, gnome, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info
+, librsvg }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi croniter;
 
@@ -20,9 +21,7 @@ in buildPythonApplication rec {
     gnome.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     Babel
@@ -66,7 +65,8 @@ in buildPythonApplication rec {
 
   meta = {
     homepage = "http://slgobinath.github.io/SafeEyes";
-    description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
+    description =
+      "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ srghma ];
     platforms = lib.platforms.all;

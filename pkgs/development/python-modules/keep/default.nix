@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, PyGithub
-, terminaltables
-, click
-, requests
+{ lib, buildPythonPackage, fetchPypi, PyGithub, terminaltables, click, requests
 }:
 
 buildPythonPackage rec {
@@ -16,12 +10,7 @@ buildPythonPackage rec {
     sha256 = "3abbe445347711cecd9cbb80dab4a0777418972fc14a14e9387d0d2ae4b6adb7";
   };
 
-  propagatedBuildInputs = [
-    click
-    requests
-    terminaltables
-    PyGithub
-  ];
+  propagatedBuildInputs = [ click requests terminaltables PyGithub ];
 
   # no tests
   doCheck = false;
@@ -29,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
-    description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
+    description =
+      "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
     platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];

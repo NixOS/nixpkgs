@@ -1,14 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, mercurial
+{ lib, buildPythonApplication, fetchPypi, mercurial
 # build inputs
-, distro
-, glean-sdk
-, python-hglib
-, sentry-sdk
-, setuptools
-}:
+, distro, glean-sdk, python-hglib, sentry-sdk, setuptools }:
 
 buildPythonApplication rec {
   pname = "moz-phab";
@@ -27,29 +19,24 @@ buildPythonApplication rec {
       --replace "==" ">="
   '';
 
-  propagatedBuildInputs = [
-    distro
-    glean-sdk
-    python-hglib
-    sentry-sdk
-    setuptools
-  ];
-  checkInputs = [
-    mercurial
-  ];
+  propagatedBuildInputs =
+    [ distro glean-sdk python-hglib sentry-sdk setuptools ];
+  checkInputs = [ mercurial ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
-    description = "Phabricator CLI from Mozilla to support submission of a series of commits";
+    description =
+      "Phabricator CLI from Mozilla to support submission of a series of commits";
     longDescription = ''
       moz-phab is a custom command-line tool, which communicates to
       Phabricator’s API, providing several conveniences, including support for
       submitting series of commits.
     '';
-    homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
+    homepage =
+      "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
     maintainers = [ maintainers.kvark ];
     platforms = platforms.unix;

@@ -1,26 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, fontconfig
-, libevdev
-, libinput
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, nixosTests
-, pango
-, pixman
-, pkg-config
-, scdoc
-, systemd
-, wayland
-, wayland-protocols
-, withXwayland ? true , xwayland
-, wlroots
-}:
+{ lib, stdenv, fetchFromGitHub, cairo, fontconfig, libevdev, libinput
+, libxkbcommon, makeWrapper, mesa, meson, ninja, nixosTests, pango, pixman
+, pkg-config, scdoc, systemd, wayland, wayland-protocols, withXwayland ? true
+, xwayland, wlroots }:
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
@@ -33,14 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-YaLGRlvppTUCSHFlt3sEfHgN3pYHuc5oGt3dt0DDw3I=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-    scdoc
-    wayland
-  ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config scdoc wayland ];
 
   buildInputs = [
     cairo

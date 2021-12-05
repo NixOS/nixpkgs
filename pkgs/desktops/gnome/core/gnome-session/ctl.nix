@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, glib
-, systemd
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session-ctl";
@@ -20,17 +12,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-gvBmLx8Qoj1vPsOwaZsd9+pTDvU5D7uUts7ZT1pXwNo=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    systemd
-  ];
+  buildInputs = [ glib systemd ];
 
   meta = with lib; {
     description = "gnome-session-ctl extracted from gnome-session for nixpkgs";

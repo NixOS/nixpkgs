@@ -5,22 +5,23 @@
 with lib;
 
 {
-  imports =
-    [ ../../../modules/installer/cd-dvd/channel.nix
-      ../../../modules/virtualisation/openstack-config.nix
-    ];
+  imports = [
+    ../../../modules/installer/cd-dvd/channel.nix
+    ../../../modules/virtualisation/openstack-config.nix
+  ];
 
   system.build.openstackImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
     additionalSpace = "1024M";
-    pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
+    pkgs = import ../../../.. {
+      inherit (pkgs) system;
+    }; # ensure we use the regular qemu-kvm package
     format = "qcow2";
-    configFile = pkgs.writeText "configuration.nix"
-      ''
-        {
-          imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];
-        }
-      '';
+    configFile = pkgs.writeText "configuration.nix" ''
+      {
+        imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];
+      }
+    '';
   };
 
 }

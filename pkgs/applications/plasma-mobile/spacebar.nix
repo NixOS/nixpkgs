@@ -1,27 +1,14 @@
-{ lib
-, mkDerivation
+{ lib, mkDerivation
 
-, cmake
-, extra-cmake-modules
+, cmake, extra-cmake-modules
 
-, kcontacts
-, ki18n
-, kirigami2
-, knotifications
-, kpeople
-, libphonenumber
-, libqofono
-, protobuf
-, telepathy
-}:
+, kcontacts, ki18n, kirigami2, knotifications, kpeople, libphonenumber
+, libqofono, protobuf, telepathy }:
 
 mkDerivation rec {
   pname = "spacebar";
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     kcontacts

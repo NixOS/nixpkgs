@@ -1,86 +1,104 @@
-{ stdenv, lib, fetchurl, fetchsvn,
-  jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  util-linux, dmidecode, libuuid, newt,
-  lua, speex,
-  srtp, wget, curl, iksemel, pkg-config
-}:
+{ stdenv, lib, fetchurl, fetchsvn, jansson, libedit, libxml2, libxslt, ncurses
+, openssl, sqlite, util-linux, dmidecode, libuuid, newt, lua, speex, srtp, wget
+, curl, iksemel, pkg-config }:
 
 let
-  common = {version, sha256, externals}: stdenv.mkDerivation {
-    inherit version;
-    pname = "asterisk";
+  common = { version, sha256, externals }:
+    stdenv.mkDerivation {
+      inherit version;
+      pname = "asterisk";
 
-    buildInputs = [ jansson libedit libxml2 libxslt ncurses openssl sqlite
-                    dmidecode libuuid newt
-                    lua speex
-                    srtp wget curl iksemel ];
-    nativeBuildInputs = [ util-linux pkg-config ];
+      buildInputs = [
+        jansson
+        libedit
+        libxml2
+        libxslt
+        ncurses
+        openssl
+        sqlite
+        dmidecode
+        libuuid
+        newt
+        lua
+        speex
+        srtp
+        wget
+        curl
+        iksemel
+      ];
+      nativeBuildInputs = [ util-linux pkg-config ];
 
-    patches = [
-      # We want the Makefile to install the default /var skeleton
-      # under ${out}/var but we also want to use /var at runtime.
-      # This patch changes the runtime behavior to look for state
-      # directories in /var rather than ${out}/var.
-      ./runtime-vardirs.patch
-    ];
+      patches = [
+        # We want the Makefile to install the default /var skeleton
+        # under ${out}/var but we also want to use /var at runtime.
+        # This patch changes the runtime behavior to look for state
+        # directories in /var rather than ${out}/var.
+        ./runtime-vardirs.patch
+      ];
 
-    postPatch = ''
-      echo "PJPROJECT_CONFIG_OPTS += --prefix=$out" >> third-party/pjproject/Makefile.rules
-    '';
+      postPatch = ''
+        echo "PJPROJECT_CONFIG_OPTS += --prefix=$out" >> third-party/pjproject/Makefile.rules
+      '';
 
-    src = fetchurl {
-      url = "https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
-      inherit sha256;
+      src = fetchurl {
+        url =
+          "https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
+        inherit sha256;
+      };
+
+      # The default libdir is $PREFIX/usr/lib, which causes problems when paths
+      # compiled into Asterisk expect ${out}/usr/lib rather than ${out}/lib.
+
+      # Copy in externals to avoid them being downloaded;
+      # they have to be copied, because the modification date is checked.
+      # If you are getting a permission denied error on this dir,
+      # you're likely missing an automatically downloaded dependency
+      preConfigure = ''
+        mkdir externals_cache
+
+        ${lib.concatStringsSep "\n"
+        (lib.mapAttrsToList (dst: src: "cp -r --no-preserve=mode ${src} ${dst}")
+          externals)}
+
+        ${lib.optionalString (externals ? "addons/mp3")
+        "bash contrib/scripts/get_mp3_source.sh || true"}
+
+        chmod -w externals_cache
+      '';
+
+      configureFlags = [
+        "--libdir=\${out}/lib"
+        "--with-lua=${lua}/lib"
+        "--with-pjproject-bundled"
+        "--with-externals-cache=$(PWD)/externals_cache"
+      ];
+
+      preBuild = ''
+        make menuselect.makeopts
+        ${lib.optionalString (externals ? "addons/mp3") ''
+          substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
+        ''}
+      '';
+
+      postInstall = ''
+        # Install sample configuration files for this version of Asterisk
+        make samples
+        ${lib.optionalString (lib.versionAtLeast version "17.0.0")
+        "make install-headers"}
+      '';
+
+      meta = with lib; {
+        description =
+          "Software implementation of a telephone private branch exchange (PBX)";
+        homepage = "https://www.asterisk.org/";
+        license = licenses.gpl2Only;
+        maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
+      };
     };
-
-    # The default libdir is $PREFIX/usr/lib, which causes problems when paths
-    # compiled into Asterisk expect ${out}/usr/lib rather than ${out}/lib.
-
-    # Copy in externals to avoid them being downloaded;
-    # they have to be copied, because the modification date is checked.
-    # If you are getting a permission denied error on this dir,
-    # you're likely missing an automatically downloaded dependency
-    preConfigure = ''
-      mkdir externals_cache
-
-      ${lib.concatStringsSep "\n"
-        (lib.mapAttrsToList (dst: src: "cp -r --no-preserve=mode ${src} ${dst}") externals)}
-
-      ${lib.optionalString (externals ? "addons/mp3") "bash contrib/scripts/get_mp3_source.sh || true"}
-
-      chmod -w externals_cache
-    '';
-
-    configureFlags = [
-      "--libdir=\${out}/lib"
-      "--with-lua=${lua}/lib"
-      "--with-pjproject-bundled"
-      "--with-externals-cache=$(PWD)/externals_cache"
-    ];
-
-    preBuild = ''
-      make menuselect.makeopts
-      ${lib.optionalString (externals ? "addons/mp3") ''
-        substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
-      ''}
-    '';
-
-    postInstall = ''
-      # Install sample configuration files for this version of Asterisk
-      make samples
-      ${lib.optionalString (lib.versionAtLeast version "17.0.0") "make install-headers"}
-    '';
-
-    meta = with lib; {
-      description = "Software implementation of a telephone private branch exchange (PBX)";
-      homepage = "https://www.asterisk.org/";
-      license = licenses.gpl2Only;
-      maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
-    };
-  };
 
   pjproject_2_10 = fetchurl {
-    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.10/pjproject-2.10.tar.bz2";
+    url =
+      "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.10/pjproject-2.10.tar.bz2";
     sha256 = "14qmddinm4bv51rl0wwg5133r64x5bd6inwbx27ahb2n0151m2if";
   };
 
@@ -91,13 +109,15 @@ let
   };
 
   # auto-generated by update.py
-  versions = lib.mapAttrs (_: {version, sha256}: common {
-    inherit version sha256;
-    externals = {
-      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
-      "addons/mp3" = mp3-202;
-    };
-  }) (lib.importJSON ./versions.json);
+  versions = lib.mapAttrs (_:
+    { version, sha256 }:
+    common {
+      inherit version sha256;
+      externals = {
+        "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
+        "addons/mp3" = mp3-202;
+      };
+    }) (lib.importJSON ./versions.json);
 
 in {
   # Supported releases (as of 2020-10-26).

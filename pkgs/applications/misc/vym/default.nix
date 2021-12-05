@@ -5,7 +5,8 @@ mkDerivation rec {
   version = "2.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/vym/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/project/vym/${version}/${pname}-${version}.tar.bz2";
     sha256 = "0lyf0m4y5kn5s47z4sg10215f3jsn3k1bl389jfbh2f5v4srav4g";
   };
 

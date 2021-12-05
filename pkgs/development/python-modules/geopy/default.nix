@@ -1,11 +1,5 @@
-{ lib
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, geographiclib
-, isPy3k
-, pytestCheckHook
-}:
+{ lib, async_generator, buildPythonPackage, fetchFromGitHub, geographiclib
+, isPy3k, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "geopy";
@@ -21,10 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ geographiclib ];
 
-  checkInputs = [
-    async_generator
-    pytestCheckHook
-  ];
+  checkInputs = [ async_generator pytestCheckHook ];
 
   # Exclude tests which perform API calls
   pytestFlagsArray = [ "--ignore test/geocoders/" ];

@@ -1,30 +1,7 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
-, aiofiles
-, cbor2
-, ddt
-, gunicorn
-, httpx
-, hypercorn
-, jsonschema
-, msgpack
-, mujson
-, nose
-, orjson
-, pecan
-, pytest-asyncio
-, python-mimeparse
-, pyyaml
-, rapidjson
-, requests
-, testtools
-, ujson
-, uvicorn
-, websockets
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytestCheckHook, aiofiles
+, cbor2, ddt, gunicorn, httpx, hypercorn, jsonschema, msgpack, mujson, nose
+, orjson, pecan, pytest-asyncio, python-mimeparse, pyyaml, rapidjson, requests
+, testtools, ujson, uvicorn, websockets }:
 
 buildPythonPackage rec {
   pname = "falcon";

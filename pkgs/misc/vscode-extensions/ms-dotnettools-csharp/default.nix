@@ -1,14 +1,5 @@
-{ lib
-, fetchurl
-, vscode-utils
-, unzip
-, patchelf
-, makeWrapper
-, icu
-, stdenv
-, openssl
-, mono
-}:
+{ lib, fetchurl, vscode-utils, unzip, patchelf, makeWrapper, icu, stdenv
+, openssl, mono }:
 
 let
   # Get as close as possible as the `package.json` required version.
@@ -16,23 +7,20 @@ let
   rtDepsSrcsFromJson = lib.importJSON ./rt-deps-bin-srcs.json;
 
   rtDepsBinSrcs = builtins.mapAttrs (k: v:
-      let
-        # E.g: "OmniSharp-x86_64-linux"
-        kSplit = builtins.split "(__)" k;
-        name = builtins.elemAt kSplit 0;
-        system = builtins.elemAt kSplit 2;
-      in
-      {
-        inherit name system;
-        installPath = v.installPath;
-        binaries = v.binaries;
-        bin-src = fetchurl {
-          urls = v.urls;
-          inherit (v) sha256;
-        };
-      }
-    )
-    rtDepsSrcsFromJson;
+    let
+      # E.g: "OmniSharp-x86_64-linux"
+      kSplit = builtins.split "(__)" k;
+      name = builtins.elemAt kSplit 0;
+      system = builtins.elemAt kSplit 2;
+    in {
+      inherit name system;
+      installPath = v.installPath;
+      binaries = v.binaries;
+      bin-src = fetchurl {
+        urls = v.urls;
+        inherit (v) sha256;
+      };
+    }) rtDepsSrcsFromJson;
 
   rtDepBinSrcByName = bSrcName:
     rtDepsBinSrcs."${bSrcName}__${stdenv.targetPlatform.system}";
@@ -40,9 +28,8 @@ let
   omnisharp = rtDepBinSrcByName "OmniSharp";
   vsdbg = rtDepBinSrcByName "Debugger";
   razor = rtDepBinSrcByName "Razor";
-in
 
-vscode-utils.buildVscodeMarketplaceExtension {
+in vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
@@ -50,11 +37,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     sha256 = "0b74jr45zl7lzirjgj8s2lbf3viy9pbwlgjh055rcwmy77wcml1x";
   };
 
-  nativeBuildInputs = [
-    unzip
-    patchelf
-    makeWrapper
-  ];
+  nativeBuildInputs = [ unzip patchelf makeWrapper ];
 
   postPatch = ''
     declare ext_unique_id
@@ -88,7 +71,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     patchelf_add_icu_as_needed() {
       declare elf="''${1?}"
       declare icu_major_v="${
-        with builtins; head (splitVersion (parseDrvName icu.name).version)}"
+        with builtins;
+        head (splitVersion (parseDrvName icu.name).version)
+      }"
 
       for icu_lib in icui18n icuuc icudata; do
         patchelf --add-needed "lib''${icu_lib}.so.$icu_major_v" "$elf"
@@ -101,7 +86,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
       patchelf_add_icu_as_needed "$elf"
       patchelf --add-needed "libssl.so" "$elf"
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc openssl.out icu.out ]}:\$ORIGIN" \
+        --set-rpath "${
+          lib.makeLibraryPath [ stdenv.cc.cc openssl.out icu.out ]
+        }:\$ORIGIN" \
         "$elf"
     }
 

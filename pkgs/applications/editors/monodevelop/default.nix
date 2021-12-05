@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchurl
-, autoconf, automake, pkg-config, shared-mime-info, intltool
-, glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
-, dotnetPackages
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, pkg-config, shared-mime-info
+, intltool, glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
+, dotnetPackages }:
 
 stdenv.mkDerivation rec {
   version = "5.9.4.5";
@@ -10,12 +8,14 @@ stdenv.mkDerivation rec {
   pname = "monodevelop";
 
   src = fetchurl {
-    url = "https://download.mono-project.com/sources/monodevelop/${pname}-${version}.tar.bz2";
+    url =
+      "https://download.mono-project.com/sources/monodevelop/${pname}-${version}.tar.bz2";
     sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 
   nunit2510 = fetchurl {
-    url = "https://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
+    url =
+      "https://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
     sha256 = "0k5h5bz1p2v3d0w0hpkpbpvdkcszgp8sr9ik498r1bs72w5qlwnc";
   };
 
@@ -36,8 +36,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    autoconf automake shared-mime-info intltool
-    mono gtk-sharp-2_0 gnome-sharp
+    autoconf
+    automake
+    shared-mime-info
+    intltool
+    mono
+    gtk-sharp-2_0
+    gnome-sharp
     dotnetPackages.NUnit
     dotnetPackages.NUnitRunners
     dotnetPackages.Nuget
@@ -59,7 +64,16 @@ stdenv.mkDerivation rec {
     2a3,5
     > export MONO_GAC_PREFIX=${gnome-sharp}:${gtk-sharp-2_0}:\$MONO_GAC_PREFIX
     > export PATH=${mono}/bin:\$PATH
-    > export LD_LIBRARY_PATH=${lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
+    > export LD_LIBRARY_PATH=${
+      lib.makeLibraryPath [
+        glib
+        gnome2.libgnomeui
+        gnome2.gnome_vfs
+        gnome-sharp
+        gtk-sharp-2_0
+        gtk-sharp-2_0.gtk
+      ]
+    }:\$LD_LIBRARY_PATH
     >
     EOF
     done

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, dataclasses-json
-, fetchFromGitHub
-, limiter
-, pythonOlder
-, requests
-, responses
-}:
+{ lib, buildPythonPackage, dataclasses-json, fetchFromGitHub, limiter
+, pythonOlder, requests, responses }:
 
 buildPythonPackage rec {
   pname = "spyse-python";
@@ -21,12 +14,7 @@ buildPythonPackage rec {
     sha256 = "041k0037anwaxp2mh7mdk8rdsw9hdr3arigyyqfxfn35x8j41c3k";
   };
 
-  propagatedBuildInputs = [
-    requests
-    dataclasses-json
-    responses
-    limiter
-  ];
+  propagatedBuildInputs = [ requests dataclasses-json responses limiter ];
 
   # Tests requires an API token
   doCheck = false;
@@ -37,9 +25,7 @@ buildPythonPackage rec {
       --replace "responses~=0.13.3" "responses>=0.13.3"
   '';
 
-  pythonImportsCheck = [
-    "spyse"
-  ];
+  pythonImportsCheck = [ "spyse" ];
 
   meta = with lib; {
     description = "Python module for spyse.com API";

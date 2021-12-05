@@ -4,15 +4,15 @@ stdenv.mkDerivation rec {
   pname = "adguardhome";
   version = "0.106.3";
 
-  src = (import ./bins.nix { inherit fetchurl fetchzip; }).${stdenv.hostPlatform.system};
+  src = (import ./bins.nix {
+    inherit fetchurl fetchzip;
+  }).${stdenv.hostPlatform.system};
 
   installPhase = ''
     install -m755 -D ./AdGuardHome $out/bin/adguardhome
   '';
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru = { updateScript = ./update.sh; };
 
   meta = with lib; {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";

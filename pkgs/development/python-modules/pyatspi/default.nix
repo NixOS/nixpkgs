@@ -1,4 +1,5 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core
+, pygobject3, gnome }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
@@ -6,16 +7,15 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0lc1p6p296c9q3lffi03v902jlsj34i7yyl3rcyaq94wwbljg7z4";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    at-spi2-core
-    pygobject3
-  ];
+  buildInputs = [ at-spi2-core pygobject3 ];
 
   disabled = !isPy3k;
 

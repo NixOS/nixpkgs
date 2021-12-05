@@ -1,4 +1,4 @@
-{lib, nimPackages, fetchFromGitHub, pcre}:
+{ lib, nimPackages, fetchFromGitHub, pcre }:
 
 nimPackages.buildNimPackage rec {
   pname = "mosdepth";
@@ -15,7 +15,8 @@ nimPackages.buildNimPackage rec {
   buildInputs = with nimPackages; [ docopt hts-nim pcre ];
 
   meta = with lib; {
-    description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
+    description =
+      "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
     license = licenses.mit;
     homepage = "https://github.com/brentp/mosdepth";
     maintainers = with maintainers; [ jbedo ];

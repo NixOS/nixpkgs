@@ -1,15 +1,11 @@
-{ lib, fetchFromGitHub, makeWrapper, gawk
-, makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
-, stdenv, shortenPerlShebang
-}:
+{ lib, fetchFromGitHub, makeWrapper, gawk, makeFontsConf, freefont_ttf, gnuplot
+, perl, perlPackages, stdenv, shortenPerlShebang }:
 
 let
 
   fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
-in
-
-perlPackages.buildPerlPackage rec {
+in perlPackages.buildPerlPackage rec {
   pname = "feedgnuplot";
   version = "1.58";
 
@@ -22,7 +18,8 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ makeWrapper gawk ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper gawk ]
+    ++ lib.optional stdenv.isDarwin shortenPerlShebang;
 
   buildInputs = [ gnuplot perl ]
     ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);

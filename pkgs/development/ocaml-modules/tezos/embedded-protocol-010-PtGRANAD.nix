@@ -1,10 +1,5 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-010-PtGRANAD
-, tezos-protocol-updater
-, tezos-protocol-compiler
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-protocol-010-PtGRANAD
+, tezos-protocol-updater, tezos-protocol-compiler }:
 
 buildDunePackage {
   pname = "tezos-embedded-protocol-010-PtGRANAD";
@@ -13,18 +8,15 @@ buildDunePackage {
 
   preBuild = tezos-protocol-010-PtGRANAD.preBuild;
 
-  propagatedBuildInputs = [
-    tezos-protocol-010-PtGRANAD
-    tezos-protocol-updater
-  ];
+  propagatedBuildInputs =
+    [ tezos-protocol-010-PtGRANAD tezos-protocol-updater ];
 
-  buildInputs = [
-    tezos-protocol-compiler
-  ];
+  buildInputs = [ tezos-protocol-compiler ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: economic-protocol definition, embedded in `tezos-node`";
+    description =
+      "Tezos/Protocol: economic-protocol definition, embedded in `tezos-node`";
   };
 }

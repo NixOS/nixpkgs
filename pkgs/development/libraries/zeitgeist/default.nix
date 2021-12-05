@@ -1,22 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, pkg-config
-, glib
-, sqlite
-, gobject-introspection
-, vala
-, autoconf
-, automake
-, libtool
-, gettext
-, dbus
-, gtk3
-, json-glib
-, librdf_raptor2
-, pythonSupport ? true
-, python3
-}:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, glib, sqlite
+, gobject-introspection, vala, autoconf, automake, libtool, gettext, dbus, gtk3
+, json-glib, librdf_raptor2, pythonSupport ? true, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "zeitgeist";
@@ -35,7 +19,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix build with Vala 0.52
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/64ac3a6f94cd299e5e14945dc31b48f009dec152.patch";
+      url =
+        "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/64ac3a6f94cd299e5e14945dc31b48f009dec152.patch";
       sha256 = "Dw1kNE3JoFdmgcQ0eFoFLYvmxlPjXNj56Jkn2meINz4=";
     })
   ];
@@ -51,19 +36,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    glib
-    sqlite
-    dbus
-    gtk3
-    json-glib
-    librdf_raptor2
-    python3.pkgs.rdflib
-  ];
+  buildInputs =
+    [ glib sqlite dbus gtk3 json-glib librdf_raptor2 python3.pkgs.rdflib ];
 
-  configureFlags = [
-    "--disable-telepathy"
-  ];
+  configureFlags = [ "--disable-telepathy" ];
 
   enableParallelBuilding = true;
 

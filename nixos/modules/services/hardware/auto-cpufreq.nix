@@ -1,12 +1,9 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  cfg = config.services.auto-cpufreq;
+let cfg = config.services.auto-cpufreq;
 in {
   options = {
-    services.auto-cpufreq = {
-      enable = mkEnableOption "auto-cpufreq daemon";
-    };
+    services.auto-cpufreq = { enable = mkEnableOption "auto-cpufreq daemon"; };
   };
 
   config = mkIf cfg.enable {

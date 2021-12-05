@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, popt, libuuid, liburcu, lttng-ust, kmod, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, popt, libuuid, liburcu, lttng-ust, kmod
+, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-tools";

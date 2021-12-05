@@ -6,7 +6,8 @@ let
 
 in fetchzip {
   name = "${pname}-${version}";
-  url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
+  url =
+    "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts

@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, python3
-, ninja
-}:
+{ lib, stdenv, fetchFromGitLab, meson, python3, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "bzip2-unstable";
@@ -20,17 +15,11 @@ stdenv.mkDerivation rec {
     patchShebangs install_links.py
   '';
 
-  nativeBuildInputs = [
-    meson
-    python3
-    ninja
-  ];
+  nativeBuildInputs = [ meson python3 ninja ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  mesonFlags = [
-    "-Ddocs=disabled"
-  ];
+  mesonFlags = [ "-Ddocs=disabled" ];
 
   strictDeps = true;
 
@@ -38,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

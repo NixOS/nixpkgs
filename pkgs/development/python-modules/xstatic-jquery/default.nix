@@ -1,7 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-}:
+{ buildPythonPackage, lib, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "XStatic-jQuery";
@@ -15,8 +12,8 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib;{
-    homepage =  "https://jquery.org";
+  meta = with lib; {
+    homepage = "https://jquery.org";
     description = "jquery packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

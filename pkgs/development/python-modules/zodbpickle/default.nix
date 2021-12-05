@@ -1,7 +1,4 @@
-{ buildPythonPackage
-, isPyPy
-, fetchPypi
-}:
+{ buildPythonPackage, isPyPy, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "zodbpickle";
@@ -16,7 +13,5 @@ buildPythonPackage rec {
   # fails..
   doCheck = false;
 
-  meta = {
-    homepage = "https://pypi.python.org/pypi/zodbpickle";
-  };
+  meta = { homepage = "https://pypi.python.org/pypi/zodbpickle"; };
 }

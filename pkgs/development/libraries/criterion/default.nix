@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
-, dyncall , nanomsg, python3Packages }:
+, dyncall, nanomsg, python3Packages }:
 
 stdenv.mkDerivation rec {
   version = "2.3.3";
@@ -15,13 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    boxfort.dev
-    dyncall
-    gettext
-    libcsptr
-    nanomsg
-  ];
+  buildInputs = [ boxfort.dev dyncall gettext libcsptr nanomsg ];
 
   checkInputs = with python3Packages; [ cram ];
 
@@ -35,13 +29,11 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   meta = with lib; {
-    description = "A cross-platform C and C++ unit testing framework for the 21th century";
+    description =
+      "A cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      thesola10
-      Yumasi
-    ];
+    maintainers = with maintainers; [ thesola10 Yumasi ];
     platforms = platforms.unix;
   };
 }

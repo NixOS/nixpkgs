@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL2 libpng ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  configureFlags = [
-    "--with-tests"
-  ];
+  configureFlags = [ "--with-tests" ];
 
   doCheck = true;
 

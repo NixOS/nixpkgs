@@ -11,7 +11,10 @@ let
   enabled = elem "amdgpu-pro" drivers;
 
   package = config.boot.kernelPackages.amdgpu-pro;
-  package32 = pkgs.pkgsi686Linux.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
+  package32 = pkgs.pkgsi686Linux.linuxPackages.amdgpu-pro.override {
+    libsOnly = true;
+    kernel = null;
+  };
 
   opengl = config.hardware.opengl;
 
@@ -21,16 +24,17 @@ let
     '';
   };
 
-in
-
-{
+in {
 
   config = mkIf enabled {
 
     nixpkgs.config.xorg.abiCompat = "1.19";
 
-    services.xserver.drivers = singleton
-      { name = "amdgpu"; modules = [ package ]; display = true; };
+    services.xserver.drivers = singleton {
+      name = "amdgpu";
+      modules = [ package ];
+      display = true;
+    };
 
     hardware.opengl.package = package;
     hardware.opengl.package32 = package32;
@@ -38,8 +42,7 @@ in
 
     boot.extraModulePackages = [ package ];
 
-    boot.kernelPackages =
-      pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
+    boot.kernelPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
 
     boot.blacklistedKernelModules = [ "radeon" ];
 
@@ -53,9 +56,8 @@ in
       ln -sfn ${package32}/lib ${package32.libCompatDir}
     '';
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "KALLSYMS_ALL")
-    ];
+    system.requiredKernelConfig = with config.lib.kernelConfig;
+      [ (isYes "KALLSYMS_ALL") ];
 
     environment.etc = {
       "amd/amdrc".source = package + "/etc/amd/amdrc";

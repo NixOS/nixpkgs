@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, twisted
-}:
+{ lib, buildPythonPackage, fetchPypi, twisted }:
 
 buildPythonPackage rec {
   pname = "txAMQP";
@@ -17,9 +13,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/txamqp/txamqp";
-    description = "Library for communicating with AMQP peers and brokers using Twisted";
+    description =
+      "Library for communicating with AMQP peers and brokers using Twisted";
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = [ ];
   };
 
 }

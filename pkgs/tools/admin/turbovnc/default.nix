@@ -1,24 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
+{ lib, stdenv, fetchFromGitHub, nixosTests
 
 # Dependencies
-, cmake
-, libjpeg_turbo
-, makeWrapper
+, cmake, libjpeg_turbo, makeWrapper
 , mesa # for built-in 3D software rendering using swrast
 , openjdk # for the client with Java GUI
 , openjdk_headless # for the server
-, openssh
-, openssl
-, pam
-, perl
-, which
-, xkbcomp
-, xkeyboard_config
-, xorg
-}:
+, openssh, openssl, pam, perl, which, xkbcomp, xkeyboard_config, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
@@ -43,24 +30,10 @@ stdenv.mkDerivation rec {
   #   so that the server can be built without openjdk dependency.
   # * Perhaps allow to build the client on non-Linux platforms.
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    openjdk_headless
-  ];
+  nativeBuildInputs = [ cmake makeWrapper openjdk_headless ];
 
-  buildInputs = [
-    libjpeg_turbo
-    openssl
-    pam
-    perl
-  ] ++ (with xorg; [
-    libSM
-    libX11
-    libXext
-    libXi
-    xorgproto
-  ]);
+  buildInputs = [ libjpeg_turbo openssl pam perl ]
+    ++ (with xorg; [ libSM libX11 libXext libXi xorgproto ]);
 
   cmakeFlags = [
     # For the 3D software rendering built into TurboVNC, pass the path

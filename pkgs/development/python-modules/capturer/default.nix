@@ -1,4 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "capturer";
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Easily capture stdout/stderr of the current process and subprocesses";
+    description =
+      "Easily capture stdout/stderr of the current process and subprocesses";
     homepage = "https://github.com/xolox/python-capturer";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
+    url =
+      "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
     sha256 = "1rvgpkvi4h9zhc4fwb4knhsa789yjcx4a14fi4vqfdyybhvg5sh9";
   };
 
@@ -29,8 +30,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.free;
     downloadPage = "http://tangramgames.dk/games/duckmarines";
   };

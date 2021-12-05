@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU, libGL, libpng, graphicsmagick }:
+{ stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU, libGL
+, libpng, graphicsmagick }:
 
 stdenv.mkDerivation rec {
   pname = "dosbox";
@@ -28,11 +29,11 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp ${desktopItem}/share/applications/* $out/share/applications
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
 
-     mkdir -p $out/share/icons/hicolor/256x256/apps
-     gm convert src/dosbox.ico $out/share/icons/hicolor/256x256/apps/dosbox.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    gm convert src/dosbox.ico $out/share/icons/hicolor/256x256/apps/dosbox.png
   '';
 
   enableParallelBuilding = true;

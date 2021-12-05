@@ -1,15 +1,5 @@
-{ buildPythonPackage, lib, fetchPypi, isPy27
-, odfpy
-, openpyxl
-, pandas
-, setuptools-scm
-, pytest
-, pytest-cov
-, pyyaml
-, unicodecsv
-, xlrd
-, xlwt
-}:
+{ buildPythonPackage, lib, fetchPypi, isPy27, odfpy, openpyxl, pandas
+, setuptools-scm, pytest, pytest-cov, pyyaml, unicodecsv, xlrd, xlwt }:
 
 buildPythonPackage rec {
   pname = "tablib";

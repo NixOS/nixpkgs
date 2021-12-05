@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, flake8
-, pytestCheckHook
-, fetchPypi
-}:
+{ lib, buildPythonPackage, pythonOlder, flake8, pytestCheckHook, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "flake8-length";
@@ -16,13 +10,9 @@ buildPythonPackage rec {
     sha256 = "15frvccm1qx783jlx8fw811ks9jszln3agbb58lg4dhbmjaf2cxw";
   };
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
-  pythonImportsCheck = [
-    "flake8_length"
-  ];
+  pythonImportsCheck = [ "flake8_length" ];
 
   checkInputs = [ pytestCheckHook ];
 

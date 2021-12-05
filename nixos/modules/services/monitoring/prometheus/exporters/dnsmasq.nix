@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.dnsmasq;
-in
-{
+let cfg = config.services.prometheus.exporters.dnsmasq;
+in {
   port = 9153;
   extraOpts = {
     dnsmasqListenAddress = mkOption {

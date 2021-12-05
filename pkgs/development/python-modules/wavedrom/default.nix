@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrdict
-, cairosvg
-, pillow
-, pytestCheckHook
-, setuptools-scm
-, six
-, svgwrite
-, xmldiff
-}:
+{ lib, buildPythonPackage, fetchPypi, attrdict, cairosvg, pillow
+, pytestCheckHook, setuptools-scm, six, svgwrite, xmldiff }:
 
 buildPythonPackage rec {
   pname = "wavedrom";
@@ -21,25 +11,14 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    attrdict
-    svgwrite
-    six
-  ];
+  propagatedBuildInputs = [ attrdict svgwrite six ];
 
-  checkInputs = [
-    pytestCheckHook
-    xmldiff
-    pillow
-    cairosvg
-  ];
+  checkInputs = [ pytestCheckHook xmldiff pillow cairosvg ];
 
   disabledTests = [
-    "test_upstream"  # requires to clone a full git repository
+    "test_upstream" # requires to clone a full git repository
   ];
 
   pythonImportsCheck = [ "wavedrom" ];

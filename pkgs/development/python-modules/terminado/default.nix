@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ptyprocess
-, tornado
-}:
+{ lib, buildPythonPackage, fetchPypi, ptyprocess, tornado }:
 
 buildPythonPackage rec {
   pname = "terminado";

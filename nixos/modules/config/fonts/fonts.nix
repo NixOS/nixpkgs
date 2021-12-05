@@ -15,42 +15,39 @@ let
       # Note: the XLFD font size is in decipoints.
       size = 2.39583 * config.services.xserver.dpi;
       sizeString = builtins.head (builtins.split "\\." (toString size));
-    in
-    {
+    in {
       postInstall = ''
         alias='cursor -xfree86-cursor-medium-r-normal--0-${sizeString}-0-0-p-0-adobe-fontspecific'
         echo "$alias" > $out/lib/X11/fonts/Type1/fonts.alias
       '';
     });
 
-  hasHidpi =
-    config.hardware.video.hidpi.enable &&
-    config.services.xserver.dpi != null;
+  hasHidpi = config.hardware.video.hidpi.enable && config.services.xserver.dpi
+    != null;
 
-  defaultFonts =
-    [ pkgs.dejavu_fonts
-      pkgs.freefont_ttf
-      pkgs.gyre-fonts # TrueType substitutes for standard PostScript fonts
-      pkgs.liberation_ttf
-      pkgs.unifont
-      pkgs.noto-fonts-emoji
-    ];
+  defaultFonts = [
+    pkgs.dejavu_fonts
+    pkgs.freefont_ttf
+    pkgs.gyre-fonts # TrueType substitutes for standard PostScript fonts
+    pkgs.liberation_ttf
+    pkgs.unifont
+    pkgs.noto-fonts-emoji
+  ];
 
-  defaultXFonts =
-    [ (if hasHidpi then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
-      pkgs.xorg.fontmiscmisc
-    ] ++ optionals (config.nixpkgs.config.allowUnfree or false)
-    [ # these are unfree, and will make usage with xserver fail
+  defaultXFonts = [
+    (if hasHidpi then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
+    pkgs.xorg.fontmiscmisc
+  ] ++ optionals
+    (config.nixpkgs.config.allowUnfree or false) [ # these are unfree, and will make usage with xserver fail
       pkgs.xorg.fontbhlucidatypewriter100dpi
       pkgs.xorg.fontbhlucidatypewriter75dpi
       pkgs.xorg.fontbh100dpi
     ];
 
-in
-
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
+    (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ]
+      "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
   ];
 
   options = {
@@ -60,7 +57,7 @@ in
       # TODO: find another name for it.
       fonts = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
       };

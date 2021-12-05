@@ -1,8 +1,4 @@
-{ lib, stdenv
-, cmake
-, gettext
-, src
-}:
+{ lib, stdenv, cmake, gettext, src }:
 
 stdenv.mkDerivation {
   inherit src;

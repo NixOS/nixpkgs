@@ -1,38 +1,23 @@
-{ lib, stdenv, llvm_meta
-, pkgsBuildBuild
-, fetch
-, fetchpatch
-, cmake
-, python3
-, libffi
-, libbfd
-, libxml2
-, ncurses
-, version
-, release_version
-, zlib
-, buildLlvmTools
-, debugVersion ? false
-, enableManpages ? false
-, enableSharedLibraries ? !enableManpages
-, enablePolly ? false
-}:
+{ lib, stdenv, llvm_meta, pkgsBuildBuild, fetch, fetchpatch, cmake, python3
+, libffi, libbfd, libxml2, ncurses, version, release_version, zlib
+, buildLlvmTools, debugVersion ? false, enableManpages ? false
+, enableSharedLibraries ? !enableManpages, enablePolly ? false }:
 
 let
   inherit (lib) optional optionals optionalString;
 
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with lib;
-    let parts = splitVersion release_version; in
-    imap (i: _: concatStringsSep "." (take i parts)) parts;
-in
+    let parts = splitVersion release_version;
+    in imap (i: _: concatStringsSep "." (take i parts)) parts;
 
-stdenv.mkDerivation ({
+in stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
 
   src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
-  polly_src = fetch "polly" "1f4i1qsw7ywx25v262p8syz339zcbvfkx295xz26hmqrn944xa6x";
+  polly_src =
+    fetch "polly" "1f4i1qsw7ywx25v262p8syz339zcbvfkx295xz26hmqrn944xa6x";
 
   unpackPhase = ''
     unpackFile $src
@@ -70,7 +55,8 @@ stdenv.mkDerivation ({
     # Fix invalid std::string(nullptr) for GCC 12
     (fetchpatch {
       name = "nvptx-gcc-12.patch";
-      url = "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
+      url =
+        "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
       sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
       stripLen = 1;
     })
@@ -81,26 +67,26 @@ stdenv.mkDerivation ({
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}" ''${extra_libdir})' ""
   ''
-  # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + optionalString (enableSharedLibraries) ''
-    substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
-    patch -p1 < ./outputs.patch
-  '' + ''
-    # FileSystem permissions tests fail with various special bits
-    substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
-    rm unittests/Support/Path.cpp
+    # Patch llvm-config to return correct library path based on --link-{shared,static}.
+    + optionalString (enableSharedLibraries) ''
+      substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
+      patch -p1 < ./outputs.patch
+    '' + ''
+      # FileSystem permissions tests fail with various special bits
+      substituteInPlace unittests/Support/CMakeLists.txt \
+        --replace "Path.cpp" ""
+      rm unittests/Support/Path.cpp
 
-    # llvm-5 does not support dwarf-5 style info, fails on gcc-11.
-    rm test/tools/llvm-symbolizer/print_context.c
-  '' + optionalString stdenv.isAarch64 ''
-    patch -p0 < ${../../aarch64.patch}
-  '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
-    substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "add_subdirectory(DynamicLibrary)" ""
-    rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-  '';
+      # llvm-5 does not support dwarf-5 style info, fails on gcc-11.
+      rm test/tools/llvm-symbolizer/print_context.c
+    '' + optionalString stdenv.isAarch64 ''
+      patch -p0 < ${../../aarch64.patch}
+    '' + optionalString stdenv.hostPlatform.isMusl ''
+      patch -p1 -i ${../../TLI-musl.patch}
+      substituteInPlace unittests/Support/CMakeLists.txt \
+        --replace "add_subdirectory(DynamicLibrary)" ""
+      rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    '';
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
@@ -108,37 +94,33 @@ stdenv.mkDerivation ({
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
+  cmakeFlags = with stdenv;
+    [
+      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
+      "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
+      "-DLLVM_BUILD_TESTS=ON"
+      "-DLLVM_ENABLE_FFI=ON"
+      "-DLLVM_ENABLE_RTTI=ON"
 
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
-  ]
-  ++ lib.optional enableSharedLibraries
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ lib.optionals enableManpages [
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ lib.optionals (isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-    (
-      let
+      "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+      "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+      "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    ] ++ lib.optional enableSharedLibraries "-DLLVM_LINK_LLVM_DYLIB=ON"
+    ++ lib.optionals enableManpages [
+      "-DLLVM_BUILD_DOCS=ON"
+      "-DLLVM_ENABLE_SPHINX=ON"
+      "-DSPHINX_OUTPUT_MAN=ON"
+      "-DSPHINX_OUTPUT_HTML=OFF"
+      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    ] ++ lib.optional (!isDarwin) "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
+    ++ lib.optionals (isDarwin) [
+      "-DLLVM_ENABLE_LIBCXX=ON"
+      "-DCAN_TARGET_i386=false"
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DCMAKE_CROSSCOMPILING=True"
+      "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+      (let
         nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
         nativeBintools = nativeCC.bintools.bintools;
         nativeToolchainFlags = [
@@ -148,9 +130,10 @@ stdenv.mkDerivation ({
           "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
           "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
-    )
-  ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${
+        lib.concatStringsSep ";" nativeToolchainFlags
+      }")
+    ];
 
   postBuild = ''
     rm -fR $out
@@ -164,18 +147,18 @@ stdenv.mkDerivation ({
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
     moveToOutput "bin/llvm-config*" "$dev"
-    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${
+      if debugVersion then "debug" else "release"
+    }.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-  ''
-  + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  '' + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
-  ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
@@ -186,7 +169,8 @@ stdenv.mkDerivation ({
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
     homepage = "https://llvm.org/";
-    description = "A collection of modular and reusable compiler and toolchain technologies";
+    description =
+      "A collection of modular and reusable compiler and toolchain technologies";
     longDescription = ''
       The LLVM Project is a collection of modular and reusable compiler and
       toolchain technologies. Despite its name, LLVM has little to do with
@@ -209,7 +193,7 @@ stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install
@@ -219,7 +203,5 @@ stdenv.mkDerivation ({
 
   doCheck = false;
 
-  meta = llvm_meta // {
-    description = "man pages for LLVM ${version}";
-  };
+  meta = llvm_meta // { description = "man pages for LLVM ${version}"; };
 })

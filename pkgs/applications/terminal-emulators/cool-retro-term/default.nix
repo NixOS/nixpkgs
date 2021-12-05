@@ -16,7 +16,8 @@ mkDerivation rec {
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
+  buildInputs =
+    [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
   nativeBuildInputs = [ qmake ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];

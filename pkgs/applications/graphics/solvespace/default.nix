@@ -12,13 +12,21 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config cmake wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook ];
   buildInputs = [
-    zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew libGLU
-    xorg.libpthreadstubs xorg.libXdmcp pcre
+    zlib
+    libpng
+    cairo
+    freetype
+    json_c
+    fontconfig
+    gtkmm3
+    pangomm
+    glew
+    libGLU
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    pcre
   ];
 
   preConfigure = ''

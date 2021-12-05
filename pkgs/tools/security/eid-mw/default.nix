@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, makeWrapper
-, curl
-, gtk3
-, libassuan
-, libbsd
-, libproxy
-, libxml2
-, openssl
-, p11-kit
-, pcsclite
-, nssTools
-, substituteAll
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
+, makeWrapper, curl, gtk3, libassuan, libbsd, libproxy, libxml2, openssl
+, p11-kit, pcsclite, nssTools, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
@@ -30,8 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "rrrzw8i271ZZkwY3L6aRw2Nlz+GmDr/1ahYYlUBvtzo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
-  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+  nativeBuildInputs =
+    [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
+  buildInputs =
+    [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
   preConfigure = ''
     mkdir openssl
     ln -s ${openssl.out}/lib openssl
@@ -48,22 +34,20 @@ stdenv.mkDerivation rec {
     sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
   '';
 
-  postInstall =
-    let
-      eid-nssdb-in = substituteAll {
-        inherit (stdenv) shell;
-        isExecutable = true;
-        src = ./eid-nssdb.in;
-      };
-    in
-    ''
-      install -D ${eid-nssdb-in} $out/bin/eid-nssdb
-      substituteInPlace $out/bin/eid-nssdb \
-        --replace "modutil" "${nssTools}/bin/modutil"
+  postInstall = let
+    eid-nssdb-in = substituteAll {
+      inherit (stdenv) shell;
+      isExecutable = true;
+      src = ./eid-nssdb.in;
+    };
+  in ''
+    install -D ${eid-nssdb-in} $out/bin/eid-nssdb
+    substituteInPlace $out/bin/eid-nssdb \
+      --replace "modutil" "${nssTools}/bin/modutil"
 
-      rm $out/bin/about-eid-mw
-      wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
-    '';
+    rm $out/bin/about-eid-mw
+    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
+  '';
 
   enableParallelBuilding = true;
 
@@ -71,7 +55,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
-    homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
+    homepage =
+      "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
     license = licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.

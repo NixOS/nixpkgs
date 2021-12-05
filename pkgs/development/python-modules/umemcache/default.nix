@@ -13,7 +13,8 @@ buildPythonPackage rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
+    description =
+      "Ultra fast memcache client written in highly optimized C++ with Python bindings";
     homepage = "https://github.com/esnme/ultramemcache";
     license = licenses.bsdOriginal;
   };

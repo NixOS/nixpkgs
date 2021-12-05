@@ -12,19 +12,37 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn =
-    let
-      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
-     in join config.networking.hostName config.networking.domain;
+  fqdn = let
+    join = hostName: domain:
+      hostName + optionalString (domain != null) ".${domain}";
+  in join config.networking.hostName config.networking.domain;
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
-    (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
-    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
-    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
-    (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
-    (mkRenamedOptionModule [ "services" "matomo" "periodicArchiveProcessingUrl" ] [ "services" "matomo" "hostname" ])
+    (mkRenamedOptionModule [ "services" "piwik" "enable" ] [
+      "services"
+      "matomo"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [
+      "services"
+      "matomo"
+      "webServerUser"
+    ])
+    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ]
+      "Use services.phpfpm.pools.<name>.settings")
+    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ]
+      "Use services.phpfpm.pools.<name>.settings")
+    (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [
+      "services"
+      "matomo"
+      "nginx"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "matomo"
+      "periodicArchiveProcessingUrl"
+    ] [ "services" "matomo" "hostname" ])
   ];
 
   options = {
@@ -89,17 +107,15 @@ in {
       };
 
       nginx = mkOption {
-        type = types.nullOr (types.submodule (
-          recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-            {
-              # enable encryption by default,
-              # as sensitive login and Matomo data should not be transmitted in clear text.
-              options.forceSSL.default = true;
-              options.enableACME.default = true;
-            }
-        )
-        );
+        type = types.nullOr (types.submodule (recursiveUpdate
+          (import ../web-servers/nginx/vhost-options.nix {
+            inherit config lib;
+          }) {
+            # enable encryption by default,
+            # as sensitive login and Matomo data should not be transmitted in clear text.
+            options.forceSSL.default = true;
+            options.enableACME.default = true;
+          }));
         default = null;
         example = literalExpression ''
           {
@@ -111,13 +127,13 @@ in {
           }
         '';
         description = ''
-            With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
-            Either this option or the webServerUser option is mandatory.
-            Set this to {} to just enable the virtualHost if you don't need any customization.
-            If enabled, then by default, the <option>serverName</option> is
-            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
-            SSL is active, and certificates are acquired via ACME.
-            If this is set to null (the default), no nginx virtualHost will be configured.
+          With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
+          Either this option or the webServerUser option is mandatory.
+          Set this to {} to just enable the virtualHost if you don't need any customization.
+          If enabled, then by default, the <option>serverName</option> is
+          <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
+          SSL is active, and certificates are acquired via ACME.
+          If this is set to null (the default), no nginx virtualHost will be configured.
         '';
       };
     };
@@ -128,18 +144,19 @@ in {
       "If services.matomo.nginx is set, services.matomo.nginx.webServerUser is ignored and should be removed."
     ];
 
-    assertions = [ {
-        assertion = cfg.nginx != null || cfg.webServerUser != null;
-        message = "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
+    assertions = [{
+      assertion = cfg.nginx != null || cfg.webServerUser != null;
+      message =
+        "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
     }];
 
     users.users.${user} = {
       isSystemUser = true;
       createHome = true;
       home = dataDir;
-      group  = user;
+      group = user;
     };
-    users.groups.${user} = {};
+    users.groups.${user} = { };
 
     systemd.services.matomo-setup-update = {
       # everything needs to set up and up to date before Matomo php files are executed
@@ -184,19 +201,19 @@ in {
           rm -rf ${dataDir}/tmp
         fi
         ln -sfT ${cfg.package} ${dataDir}/current-package
-        '';
+      '';
       script = ''
-            # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
-            # Copy config folder
-            chmod g+s "${dataDir}"
-            cp -r "${cfg.package}/share/config" "${dataDir}/"
-            chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
+        # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
+        # Copy config folder
+        chmod g+s "${dataDir}"
+        cp -r "${cfg.package}/share/config" "${dataDir}/"
+        chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
-            # check whether user setup has already been done
-            if test -f "${dataDir}/config/config.ini.php"; then
-              # then execute possibly pending database upgrade
-              matomo-console core:update --yes
-            fi
+        # check whether user setup has already been done
+        if test -f "${dataDir}/config/config.ini.php"; then
+          # then execute possibly pending database upgrade
+          matomo-console core:update --yes
+        fi
       '';
     };
 
@@ -216,20 +233,22 @@ in {
         UMask = "0007";
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
-        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.hostname}";
+        ExecStart =
+          "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.hostname}";
       };
     };
 
-    systemd.timers.matomo-archive-processing = mkIf cfg.periodicArchiveProcessing {
-      description = "Automatically archive Matomo reports every hour";
+    systemd.timers.matomo-archive-processing =
+      mkIf cfg.periodicArchiveProcessing {
+        description = "Automatically archive Matomo reports every hour";
 
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "hourly";
-        Persistent = "yes";
-        AccuracySec = "10m";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "hourly";
+          Persistent = "yes";
+          AccuracySec = "10m";
+        };
       };
-    };
 
     systemd.services.${phpExecutionUnit} = {
       # stop phpfpm on package upgrade, do database upgrade via matomo-setup-update, and then restart
@@ -242,8 +261,12 @@ in {
       # workaround for when both are null and need to generate a string,
       # which is illegal, but as assertions apparently are being triggered *after* config generation,
       # we have to avoid already throwing errors at this previous stage.
-      socketOwner = if (cfg.nginx != null) then config.services.nginx.user
-      else if (cfg.webServerUser != null) then cfg.webServerUser else "";
+      socketOwner = if (cfg.nginx != null) then
+        config.services.nginx.user
+      else if (cfg.webServerUser != null) then
+        cfg.webServerUser
+      else
+        "";
     in {
       ${pool} = {
         inherit user;
@@ -267,61 +290,61 @@ in {
       };
     };
 
-
     services.nginx.virtualHosts = mkIf (cfg.nginx != null) {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      "${cfg.hostname}" = mkMerge [ cfg.nginx {
-        # don't allow to override the root easily, as it will almost certainly break Matomo.
-        # disadvantage: not shown as default in docs.
-        root = mkForce "${cfg.package}/share";
+      "${cfg.hostname}" = mkMerge [
+        cfg.nginx
+        {
+          # don't allow to override the root easily, as it will almost certainly break Matomo.
+          # disadvantage: not shown as default in docs.
+          root = mkForce "${cfg.package}/share";
 
-        # define locations here instead of as the submodule option's default
-        # so that they can easily be extended with additional locations if required
-        # without needing to redefine the Matomo ones.
-        # disadvantage: not shown as default in docs.
-        locations."/" = {
-          index = "index.php";
-        };
-        # allow index.php for webinterface
-        locations."= /index.php".extraConfig = ''
-          fastcgi_pass unix:${fpm.socket};
-        '';
-        # allow matomo.php for tracking
-        locations."= /matomo.php".extraConfig = ''
-          fastcgi_pass unix:${fpm.socket};
-        '';
-        # allow piwik.php for tracking (deprecated name)
-        locations."= /piwik.php".extraConfig = ''
-          fastcgi_pass unix:${fpm.socket};
-        '';
-        # Any other attempt to access any php files is forbidden
-        locations."~* ^.+\\.php$".extraConfig = ''
-          return 403;
-        '';
-        # Disallow access to unneeded directories
-        # config and tmp are already removed
-        locations."~ ^/(?:core|lang|misc)/".extraConfig = ''
-          return 403;
-        '';
-        # Disallow access to several helper files
-        locations."~* \\.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
-          return 403;
-        '';
-        # No crawling of this site for bots that obey robots.txt - no useful information here.
-        locations."= /robots.txt".extraConfig = ''
-          return 200 "User-agent: *\nDisallow: /\n";
-        '';
-        # let browsers cache matomo.js
-        locations."= /matomo.js".extraConfig = ''
-          expires 1M;
-        '';
-        # let browsers cache piwik.js (deprecated name)
-        locations."= /piwik.js".extraConfig = ''
-          expires 1M;
-        '';
-      }];
+          # define locations here instead of as the submodule option's default
+          # so that they can easily be extended with additional locations if required
+          # without needing to redefine the Matomo ones.
+          # disadvantage: not shown as default in docs.
+          locations."/" = { index = "index.php"; };
+          # allow index.php for webinterface
+          locations."= /index.php".extraConfig = ''
+            fastcgi_pass unix:${fpm.socket};
+          '';
+          # allow matomo.php for tracking
+          locations."= /matomo.php".extraConfig = ''
+            fastcgi_pass unix:${fpm.socket};
+          '';
+          # allow piwik.php for tracking (deprecated name)
+          locations."= /piwik.php".extraConfig = ''
+            fastcgi_pass unix:${fpm.socket};
+          '';
+          # Any other attempt to access any php files is forbidden
+          locations."~* ^.+\\.php$".extraConfig = ''
+            return 403;
+          '';
+          # Disallow access to unneeded directories
+          # config and tmp are already removed
+          locations."~ ^/(?:core|lang|misc)/".extraConfig = ''
+            return 403;
+          '';
+          # Disallow access to several helper files
+          locations."~* \\.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
+            return 403;
+          '';
+          # No crawling of this site for bots that obey robots.txt - no useful information here.
+          locations."= /robots.txt".extraConfig = ''
+            return 200 "User-agent: *\nDisallow: /\n";
+          '';
+          # let browsers cache matomo.js
+          locations."= /matomo.js".extraConfig = ''
+            expires 1M;
+          '';
+          # let browsers cache piwik.js (deprecated name)
+          locations."= /piwik.js".extraConfig = ''
+            expires 1M;
+          '';
+        }
+      ];
     };
   };
 

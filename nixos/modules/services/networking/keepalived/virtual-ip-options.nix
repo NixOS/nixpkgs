@@ -1,7 +1,6 @@
-{ lib } :
+{ lib }:
 
-with lib;
-{
+with lib; {
   options = {
 
     addr = mkOption {

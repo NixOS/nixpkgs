@@ -1,17 +1,8 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
+{ buildPythonApplication, fetchFromGitHub, lib
 
-, waylandSupport ? true
-, x11Support ? true
+, waylandSupport ? true, x11Support ? true
 
-, configargparse
-, rofi
-, wl-clipboard
-, wtype
-, xdotool
-, xsel
-}:
+, configargparse, rofi, wl-clipboard, wtype, xdotool, xsel }:
 
 buildPythonApplication rec {
   pname = "rofimoji";
@@ -26,8 +17,8 @@ buildPythonApplication rec {
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = with lib; [ configargparse rofi ]
-    ++ optionals waylandSupport [ wl-clipboard wtype ]
+  propagatedBuildInputs = with lib;
+    [ configargparse rofi ] ++ optionals waylandSupport [ wl-clipboard wtype ]
     ++ optionals x11Support [ xdotool xsel ];
 
   # The 'extractors' sub-module is used for development

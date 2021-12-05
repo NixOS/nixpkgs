@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       # patch upstream bug https://sylpheed.sraoss.jp/redmine/issues/306
       name = "patch-libsylph_ssl_c.patch";
-      url = "https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/ports/mail/sylpheed/patches/patch-libsylph_ssl_c?rev=1.4&content-type=text/plain";
+      url =
+        "https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/ports/mail/sylpheed/patches/patch-libsylph_ssl_c?rev=1.4&content-type=text/plain";
       sha256 = "sha256-k9OwPtHrEjaxXdH0trNqXgJMhR8kjgtei9pi6OFvILk=";
     })
   ];
@@ -28,8 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk2 ]
-    ++ optionals gpgSupport [ gpgme ]
+  buildInputs = [ gtk2 ] ++ optionals gpgSupport [ gpgme ]
     ++ optionals sslSupport [ openssl ];
 
   configureFlags = optional gpgSupport "--enable-gpgme"

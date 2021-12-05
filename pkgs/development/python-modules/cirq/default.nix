@@ -1,14 +1,7 @@
-{ buildPythonPackage
-, cirq-aqt
-, cirq-core
-, cirq-google
-, cirq-ionq
-, cirq-pasqal
-, cirq-rigetti
-, cirq-web
-  # test inputs
-, pytestCheckHook
-}:
+{ buildPythonPackage, cirq-aqt, cirq-core, cirq-google, cirq-ionq, cirq-pasqal
+, cirq-rigetti, cirq-web
+# test inputs
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cirq";

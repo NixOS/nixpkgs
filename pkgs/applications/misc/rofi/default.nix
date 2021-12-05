@@ -1,24 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libxkbcommon
-, pango
-, which
-, git
-, cairo
-, libxcb
-, xcbutil
-, xcbutilwm
-, xcbutilxrm
-, xcb-util-cursor
-, libstartup_notification
-, bison
-, flex
-, librsvg
-, check
-}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, libxkbcommon, pango
+, which, git, cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, xcb-util-cursor
+, libstartup_notification, bison, flex, librsvg, check }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";

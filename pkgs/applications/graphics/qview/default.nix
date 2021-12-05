@@ -1,11 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, qtimageformats
-, qtsvg
-}:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtimageformats, qtsvg }:
 
 mkDerivation rec {
   pname = "qview";
@@ -20,11 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
-  ];
+  buildInputs = [ qtbase qtimageformats qtsvg ];
 
   patchPhase = ''
     sed "s|/usr/|$out/|g" -i qView.pro

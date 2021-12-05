@@ -1,17 +1,7 @@
-{ lib
-, fetchgit
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, gzip
-, makeWrapper
-, notmuch
-  # Build with support for notmuch backend
-, withNotmuch ? true
-}:
+{ lib, fetchgit, rustPlatform, pkg-config, openssl, dbus, sqlite, file, gzip
+, makeWrapper, notmuch
+# Build with support for notmuch backend
+, withNotmuch ? true }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
@@ -49,7 +39,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
+    description =
+      "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];

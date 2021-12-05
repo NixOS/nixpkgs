@@ -25,10 +25,7 @@ buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = [
-    parameterized
-    pytest
-  ];
+  checkInputs = [ parameterized pytest ];
 
   postPatch = ''
     sed -i 's/^requests.*$/requests>=2.2/' requirements.txt

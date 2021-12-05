@@ -1,5 +1,3 @@
 { lib, callPackage }:
 
-lib.recurseIntoAttrs {
-  buildDhallUrl = callPackage ./buildDhallUrl { };
-}
+lib.recurseIntoAttrs { buildDhallUrl = callPackage ./buildDhallUrl { }; }

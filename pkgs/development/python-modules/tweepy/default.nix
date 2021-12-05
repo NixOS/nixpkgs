@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, requests
-, pythonOlder
-, vcrpy
-, pytestCheckHook
-, requests_oauthlib
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, oauthlib, requests
+, pythonOlder, vcrpy, pytestCheckHook, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "tweepy";
@@ -24,21 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-GUo8uvShyIOWWcO5T1JvV7DMC1W70YILx/hvHIGQg0o=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    oauthlib
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ aiohttp oauthlib requests requests_oauthlib ];
 
-  checkInputs = [
-    pytestCheckHook
-    vcrpy
-  ];
+  checkInputs = [ pytestCheckHook vcrpy ];
 
-  pythonImportsCheck = [
-    "tweepy"
-  ];
+  pythonImportsCheck = [ "tweepy" ];
 
   meta = with lib; {
     homepage = "https://github.com/tweepy/tweepy";

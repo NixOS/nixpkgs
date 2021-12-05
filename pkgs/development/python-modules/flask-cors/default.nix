@@ -1,5 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, flask, six, packaging }:
+{ lib, fetchPypi, buildPythonPackage, nose, flask, six, packaging }:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";

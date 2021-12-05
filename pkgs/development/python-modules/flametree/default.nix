@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fontconfig
-, matplotlib
-, pandas
-, pytestCheckHook
-, weasyprint
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fontconfig, matplotlib, pandas
+, pytestCheckHook, weasyprint }:
 
 buildPythonPackage rec {
   pname = "flametree";
@@ -19,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "1ynrk1ivl1vjiga0ayl8k89vs5il7i0pf9jz2ycn771c47szwk4x";
   };
 
-  checkInputs = [
-    matplotlib
-    pandas
-    pytestCheckHook
-    weasyprint
-  ];
+  checkInputs = [ matplotlib pandas pytestCheckHook weasyprint ];
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf

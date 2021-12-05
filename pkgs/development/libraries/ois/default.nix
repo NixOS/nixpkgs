@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libX11 ] ++ lib.optionals stdenv.isDarwin [ Cocoa IOKit Kernel ];
+  buildInputs = [ libX11 ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa IOKit Kernel ];
 
   meta = with lib; {
     description = "Object-oriented C++ input system";

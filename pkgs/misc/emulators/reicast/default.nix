@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, curl
-, alsa-lib
-, libGLU
-, libX11
-, libevdev
-, udev
-, libpulseaudio
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, alsa-lib, libGLU
+, libX11, libevdev, udev, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "reicast";
@@ -23,15 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    curl
-    alsa-lib
-    libGLU
-    libX11
-    libevdev
-    udev
-    libpulseaudio
-  ];
+  buildInputs = [ curl alsa-lib libGLU libX11 libevdev udev libpulseaudio ];
 
   # No rule to make target 'install'
   installPhase = ''
@@ -46,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://reicast.com/";
     description = "A multi-platform Sega Dreamcast emulator";
     license = with licenses; [ bsd3 gpl2Only lgpl2Only ];
-    platforms = ["x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.ivar ];
   };
 }

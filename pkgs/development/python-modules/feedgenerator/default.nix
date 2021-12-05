@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, pytestCheckHook, pythonOlder
+, pytz, six }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
@@ -18,20 +11,13 @@ buildPythonPackage rec {
     sha256 = "sha256-sG1pQej9aiyecXkQeehsvno3iMciRKzAbwWTtJzaN5s=";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [
-    pytz
-    six
-  ];
+  propagatedBuildInputs = [ pytz six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "feedgenerator" ];
 

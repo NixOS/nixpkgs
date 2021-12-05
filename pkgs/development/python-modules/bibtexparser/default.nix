@@ -1,8 +1,5 @@
-{ lib
-, buildPythonPackage, fetchFromGitHub
-, future, pyparsing
-, glibcLocales, nose, unittest2
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, pyparsing, glibcLocales
+, nose, unittest2 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";

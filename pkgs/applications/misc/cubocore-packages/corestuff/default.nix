@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg
+, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "corestuff";
@@ -11,19 +12,10 @@ mkDerivation rec {
     sha256 = "sha256-/mmCIHZXn/Jpjr37neI6owWuU1VO6o7wmRj6ZH8tUbo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    qtx11extras
-    kglobalaccel
-    xorg.libXcomposite
-    libcprime
-    libcsys
-  ];
+  buildInputs =
+    [ qtbase qtx11extras kglobalaccel xorg.libXcomposite libcprime libcsys ];
 
   meta = with lib; {
     description = "An activity viewer from the C Suite";

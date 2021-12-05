@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libuv
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, libuv }:
 
 buildPythonPackage rec {
   pname = "pyuv";

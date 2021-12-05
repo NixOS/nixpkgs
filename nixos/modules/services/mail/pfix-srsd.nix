@@ -12,7 +12,8 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to run the postfix sender rewriting scheme daemon.";
+        description =
+          "Whether to run the postfix sender rewriting scheme daemon.";
       };
 
       domain = mkOption {
@@ -36,9 +37,7 @@ with lib;
   ###### implementation
 
   config = mkIf config.services.pfix-srsd.enable {
-    environment = {
-      systemPackages = [ pkgs.pfixtools ];
-    };
+    environment = { systemPackages = [ pkgs.pfixtools ]; };
 
     systemd.services.pfix-srsd = {
       description = "Postfix sender rewriting scheme daemon";
@@ -49,7 +48,8 @@ with lib;
       serviceConfig = {
         Type = "forking";
         PIDFile = "/run/pfix-srsd.pid";
-        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
+        ExecStart =
+          "${pkgs.pfixtools}/bin/pfix-srsd -p /run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
       };
     };
   };

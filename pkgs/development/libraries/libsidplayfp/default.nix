@@ -1,18 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, autoreconfHook
-, pkg-config
-, perl
-, unittest-cpp
-, xa
-, libgcrypt
-, libexsid
-, docSupport ? true
-, doxygen
-, graphviz
-}:
+{ stdenv, lib, fetchFromGitHub, nix-update-script, autoreconfHook, pkg-config
+, perl, unittest-cpp, xa, libgcrypt, libexsid, docSupport ? true, doxygen
+, graphviz }:
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
@@ -41,32 +29,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installTargets = [ "install" ]
-    ++ lib.optionals docSupport [ "doc" ];
+  installTargets = [ "install" ] ++ lib.optionals docSupport [ "doc" ];
 
-  outputs = [ "out" ]
-    ++ lib.optionals docSupport [ "doc" ];
+  outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
 
-  configureFlags = [
-    "--enable-hardsid"
-    "--with-gcrypt"
-    "--with-exsid"
-  ]
-  ++ lib.optional doCheck "--enable-tests";
+  configureFlags = [ "--enable-hardsid" "--with-gcrypt" "--with-exsid" ]
+    ++ lib.optional doCheck "--enable-tests";
 
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "A library to play Commodore 64 music derived from libsidplay2";
+    description =
+      "A library to play Commodore 64 music derived from libsidplay2";
     longDescription = ''
       libsidplayfp is a C64 music player library which integrates
       the reSID SID chip emulation into a cycle-based emulator

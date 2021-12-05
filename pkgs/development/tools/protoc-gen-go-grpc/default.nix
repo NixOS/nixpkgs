@@ -1,7 +1,4 @@
-{ buildGoPackage
-, fetchFromGitHub
-, lib
-}:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
 buildGoPackage rec {
   pname = "protoc-gen-go-grpc";

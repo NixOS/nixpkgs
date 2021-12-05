@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "gmailctl";
@@ -15,9 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-1gOixuOvPHEjnnDNNda9sktnhffovOfeG4XDrLRRMlE=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd gmailctl \

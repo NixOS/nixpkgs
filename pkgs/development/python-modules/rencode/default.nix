@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, cython
-}:
+{ lib, buildPythonPackage, fetchgit, cython }:
 
 buildPythonPackage {
   pname = "rencode";

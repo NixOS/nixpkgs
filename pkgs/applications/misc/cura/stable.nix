@@ -2,8 +2,7 @@
 let
   py = python27Packages;
   version = "15.04";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cura";
   inherit version;
 
@@ -22,7 +21,14 @@ stdenv.mkDerivation rec {
     categories = "GNOME;GTK;Utility;";
   };
 
-  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
+  python_deps = with py; [
+    pyopengl
+    pyserial
+    numpy
+    wxPython30
+    power
+    setuptools
+  ];
 
   pythonPath = python_deps;
 

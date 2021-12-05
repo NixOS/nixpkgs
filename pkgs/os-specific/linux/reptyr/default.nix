@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix tests hanging
     (fetchpatch {
-      url = "https://github.com/nelhage/reptyr/commit/bca3070ac0f3888b5d37ee162505be81b3b496ff.patch";
+      url =
+        "https://github.com/nelhage/reptyr/commit/bca3070ac0f3888b5d37ee162505be81b3b496ff.patch";
       sha256 = "0w6rpv9k4a80q0ijzdq5hlpr37ncr284piqjv5agy8diniwlilab";
     })
   ];
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
       "armv7l-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [raskin];
+    maintainers = with lib.maintainers; [ raskin ];
     license = lib.licenses.mit;
     description = "Reparent a running program to a new terminal";
     homepage = "https://github.com/nelhage/reptyr";

@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc
-, makeWrapper, jansson, jose, cryptsetup, curl, libpwquality, luksmeta
-, coreutils, tpm2-tools
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc, makeWrapper
+, jansson, jose, cryptsetup, curl, libpwquality, luksmeta, coreutils, tpm2-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ meson ninja pkg-config asciidoc makeWrapper ];
-  buildInputs = [ jansson jose cryptsetup curl libpwquality luksmeta tpm2-tools ];
+  buildInputs =
+    [ jansson jose cryptsetup curl libpwquality luksmeta tpm2-tools ];
 
   outputs = [ "out" "man" ];
 

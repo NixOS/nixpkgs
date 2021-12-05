@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-}:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "reg";
@@ -18,7 +15,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Docker registry v2 command line client and repo listing generator with security checks";
+    description =
+      "Docker registry v2 command line client and repo listing generator with security checks";
     homepage = "https://github.com/genuinetools/reg";
     license = licenses.mit;
     maintainers = with maintainers; [ ereslibre ];

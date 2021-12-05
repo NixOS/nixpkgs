@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, itsdangerous, click, werkzeug, jinja2, pytest }:
+{ lib, buildPythonPackage, fetchPypi, itsdangerous, click, werkzeug, jinja2
+, pytest }:
 
 buildPythonPackage rec {
   version = "1.1.2";
@@ -22,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://flask.pocoo.org/";
-    description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+    description =
+      "A microframework based on Werkzeug, Jinja 2, and good intentions";
     license = licenses.bsd3;
   };
 }

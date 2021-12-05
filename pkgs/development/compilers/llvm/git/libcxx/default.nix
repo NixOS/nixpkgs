@@ -1,6 +1,5 @@
 { lib, stdenv, llvm_meta, src, cmake, python3, fixDarwinDylibNames, version
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "libcxx";
@@ -11,11 +10,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl
+    [ ../../libcxx-0001-musl-hacks.patch ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
@@ -24,18 +21,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  cmakeFlags = [
-  ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional stdenv.hostPlatform.isWasm [
+  cmakeFlags = [ ]
+    ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi)
+    "-DLIBCXX_HAS_MUSL_LIBC=1"
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false)
+    "-DLIBCXX_USE_COMPILER_RT=ON" ++ lib.optional stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
-  passthru = {
-    isLLVM = true;
-  };
+  passthru = { isLLVM = true; };
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

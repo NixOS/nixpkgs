@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "caddy";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ xfix Br1ght0ne ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ xfix Br1ght0ne ]; };
 
   nodes = {
     webserver = { pkgs, lib, ... }: {
@@ -13,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
           file_server
           root * ${
-            pkgs.runCommand "testdir" {} ''
+            pkgs.runCommand "testdir" { } ''
               mkdir "$out"
               echo hello world > "$out/example.html"
             ''
@@ -28,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
             file_server
             root * ${
-              pkgs.runCommand "testdir2" {} ''
+              pkgs.runCommand "testdir2" { } ''
                 mkdir "$out"
                 echo changed > "$out/example.html"
               ''
@@ -54,11 +52,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
-      etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etag";
-      justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/config-reload";
-      multipleConfigs = "${nodes.webserver.config.system.build.toplevel}/specialisation/multiple-configs";
-    in
-    ''
+      etagSystem =
+        "${nodes.webserver.config.system.build.toplevel}/specialisation/etag";
+      justReloadSystem =
+        "${nodes.webserver.config.system.build.toplevel}/specialisation/config-reload";
+      multipleConfigs =
+        "${nodes.webserver.config.system.build.toplevel}/specialisation/multiple-configs";
+    in ''
       url = "http://localhost/example.html"
       webserver.wait_for_unit("caddy")
       webserver.wait_for_open_port("80")

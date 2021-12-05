@@ -16,7 +16,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A high performance csv viewer with cjk/emoji support";
     homepage = "https://github.com/wfxr/csview";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

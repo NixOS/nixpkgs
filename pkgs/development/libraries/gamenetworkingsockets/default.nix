@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-G Ninja" ];
 
   # tmp home for go
-  preBuild = "export HOME=\"$TMPDIR\"";
+  preBuild = ''export HOME="$TMPDIR"'';
 
   buildInputs = [ protobuf ];
   propagatedBuildInputs = [ openssl ];

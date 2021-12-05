@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, ounit, ocaml_extlib, num }:
+{ lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, ounit, ocaml_extlib
+, num }:
 
 buildOasisPackage rec {
   pname = "tcslib";
@@ -7,9 +8,9 @@ buildOasisPackage rec {
   minimumOCamlVersion = "4.03.0";
 
   src = fetchFromGitHub {
-    owner  = "tcsprojects";
-    repo   = "tcslib";
-    rev    = "v${version}";
+    owner = "tcsprojects";
+    repo = "tcslib";
+    rev = "v${version}";
     sha256 = "05g6m82blsccq8wx8knxv6a5fzww7hi624jx91f9h87nk2fsplhi";
   };
 

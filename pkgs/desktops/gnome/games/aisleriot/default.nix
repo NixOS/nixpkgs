@@ -1,21 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, nix-update-script
-, pkg-config
-, itstool
-, gtk3
-, wrapGAppsHook
-, meson
-, librsvg
-, libxml2
-, desktop-file-utils
-, pysolfc
-, guile
-, libcanberra-gtk3
-, ninja
-, appstream-glib
-, yelp-tools
-}:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, pkg-config, itstool, gtk3
+, wrapGAppsHook, meson, librsvg, libxml2, desktop-file-utils, pysolfc, guile
+, libcanberra-gtk3, ninja, appstream-glib, yelp-tools }:
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
@@ -41,13 +26,7 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    librsvg
-    guile
-    libcanberra-gtk3
-    pysolfc
-  ];
+  buildInputs = [ gtk3 librsvg guile libcanberra-gtk3 pysolfc ];
 
   prePatch = ''
     patchShebangs cards/meson_svgz.sh
@@ -56,14 +35,10 @@ stdenv.mkDerivation rec {
     patchShebangs src/lib/meson_compileschemas.py
   '';
 
-  mesonFlags = [
-    "-Dtheme_kde=false"
-  ];
+  mesonFlags = [ "-Dtheme_kde=false" ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "gnome.${pname}"; };
   };
 
   meta = with lib; {

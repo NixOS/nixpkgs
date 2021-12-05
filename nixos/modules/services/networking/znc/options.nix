@@ -52,7 +52,7 @@ let
 
       channels = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "nixos" ];
         description = ''
           IRC channels to join.
@@ -87,9 +87,7 @@ let
     };
   };
 
-in
-
-{
+in {
 
   options = {
     services.znc = {
@@ -250,10 +248,15 @@ in
         LoadModule = mkDefault c.userModules;
         Network = mapAttrs (name: net: {
           LoadModule = mkDefault net.modules;
-          Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-          Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault {}; } //
-            listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
-          extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
+          Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${
+              toString net.port
+            } ${net.password}";
+          Chan = optionalAttrs net.hasBitlbeeControlChannel {
+            "&bitlbee" = mkDefault { };
+          } // listToAttrs
+            (map (n: nameValuePair "#${n}" (mkDefault { })) net.channels);
+          extraConfig =
+            if net.extraConf == "" then mkDefault null else net.extraConf;
         }) c.networks;
         extraConfig = [ c.passBlock ];
       };
@@ -262,7 +265,7 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "znc" "zncConf"] ''
+    (mkRemovedOptionModule [ "services" "znc" "zncConf" ] ''
       Instead of `services.znc.zncConf = "... foo ...";`, use
       `services.znc.configFile = pkgs.writeText "znc.conf" "... foo ...";`.
     '')

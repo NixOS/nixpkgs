@@ -1,10 +1,6 @@
-{ buildGoPackage
-, libtool
-, fetchFromGitHub
-, lib
-}:
+{ buildGoPackage, libtool, fetchFromGitHub, lib }:
 
-buildGoPackage rec{
+buildGoPackage rec {
 
   pname = "boulder";
   version = "release-2019-10-13";

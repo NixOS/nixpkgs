@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "4.1";
 
   src = fetchurl {
-    url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup-${version}.tgz";
+    url =
+      "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup-${version}.tgz";
     sha256 = "0aahrkaq7n0z986fpqz66yz946nxardfi6dh8calzcfjpvqiraji";
   };
 

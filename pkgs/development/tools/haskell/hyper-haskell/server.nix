@@ -1,7 +1,8 @@
 { stdenv, ghcWithPackages, makeWrapper, packages }:
 
 let
-hyperHaskellEnv = ghcWithPackages (self: [ self.hyper-haskell-server ] ++ packages self);
+  hyperHaskellEnv =
+    ghcWithPackages (self: [ self.hyper-haskell-server ] ++ packages self);
 in stdenv.mkDerivation {
   name = "hyper-haskell-server-with-packages-${hyperHaskellEnv.version}";
 

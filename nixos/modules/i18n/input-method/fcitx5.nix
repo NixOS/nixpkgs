@@ -11,7 +11,7 @@ in {
     i18n.inputMethod.fcitx5 = {
       addons = mkOption {
         type = with types; listOf package;
-        default = [];
+        default = [ ];
         example = literalExpression "with pkgs; [ fcitx5-rime ]";
         description = ''
           Enabled Fcitx5 addons.

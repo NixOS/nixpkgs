@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
@@ -19,9 +14,7 @@ buildPythonPackage rec {
   # svgwrite requires Python 3.6 or newer
   disabled = pythonOlder "3.6";
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   # embed_google_web_font test tried to pull font from internet
   checkPhase = ''

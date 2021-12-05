@@ -7,8 +7,7 @@ let
   defaultrecordingsDir = "${cfg.stateDir}/recordings";
   defaultgroupsDir = "${cfg.stateDir}/groups";
   defaultdataDir = "${cfg.stateDir}/data";
-in
-{
+in {
   options = {
     services.galene = {
       enable = mkEnableOption "Galene Service.";
@@ -118,15 +117,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
-        message = ''
-          Galene needs both certFile and keyFile defined for encryption, or
-          the insecure flag.
-        '';
-      }
-    ];
+    assertions = [{
+      assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
+      message = ''
+        Galene needs both certFile and keyFile defined for encryption, or
+        the insecure flag.
+      '';
+    }];
 
     systemd.services.galene = {
       description = "galene";
@@ -135,47 +132,44 @@ in
 
       preStart = ''
         ${optionalString (cfg.insecure != true) ''
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
         ''}
       '';
 
-      serviceConfig = mkMerge [
-        {
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
-          WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
-          ${optionalString (cfg.insecure) "-insecure"} \
-          -data ${cfg.dataDir} \
-          -groups ${cfg.groupsDir} \
-          -recordings ${cfg.recordingsDir} \
-          -static ${cfg.staticDir}'';
-          Restart = "always";
-          # Upstream Requirements
-          LimitNOFILE = 65536;
-          StateDirectory = [ ] ++
-            optional (cfg.stateDir == defaultstateDir) "galene" ++
-            optional (cfg.dataDir == defaultdataDir) "galene/data" ++
-            optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
-            optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
-        }
-      ];
+      serviceConfig = mkMerge [{
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
+        WorkingDirectory = cfg.stateDir;
+        ExecStart = ''
+          ${cfg.package}/bin/galene \
+                    ${optionalString (cfg.insecure) "-insecure"} \
+                    -data ${cfg.dataDir} \
+                    -groups ${cfg.groupsDir} \
+                    -recordings ${cfg.recordingsDir} \
+                    -static ${cfg.staticDir}'';
+        Restart = "always";
+        # Upstream Requirements
+        LimitNOFILE = 65536;
+        StateDirectory = [ ]
+          ++ optional (cfg.stateDir == defaultstateDir) "galene"
+          ++ optional (cfg.dataDir == defaultdataDir) "galene/data"
+          ++ optional (cfg.groupsDir == defaultgroupsDir) "galene/groups"
+          ++ optional (cfg.recordingsDir == defaultrecordingsDir)
+          "galene/recordings";
+      }];
     };
 
-    users.users = mkIf (cfg.user == "galene")
-      {
-        galene = {
-          description = "galene Service";
-          group = cfg.group;
-          isSystemUser = true;
-        };
+    users.users = mkIf (cfg.user == "galene") {
+      galene = {
+        description = "galene Service";
+        group = cfg.group;
+        isSystemUser = true;
       };
-
-    users.groups = mkIf (cfg.group == "galene") {
-      galene = { };
     };
+
+    users.groups = mkIf (cfg.group == "galene") { galene = { }; };
   };
   meta.maintainers = with lib.maintainers; [ rgrunbla ];
 }

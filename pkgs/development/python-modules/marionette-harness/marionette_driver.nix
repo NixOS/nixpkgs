@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, mozversion
-, mozrunner
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mozversion, mozrunner }:
 
 buildPythonPackage rec {
   pname = "marionette_driver";

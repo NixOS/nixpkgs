@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, elkhound
-, ocaml-ng
-, perl
-, which
-}:
+{ stdenv, lib, fetchFromGitHub, elkhound, ocaml-ng, perl, which }:
 
 let
   # 1. Needs ocaml >= 4.04 and <= 4.11
@@ -18,8 +11,7 @@ let
     ];
   });
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "weidu";
   version = "247.00";
 

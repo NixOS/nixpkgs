@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "20180201";
 
   src = fetchzip {
-    url = "https://github.com/libinotify-kqueue/libinotify-kqueue/archive/${version}.tar.gz";
+    url =
+      "https://github.com/libinotify-kqueue/libinotify-kqueue/archive/${version}.tar.gz";
     sha256 = "0dkh6n0ghhcl7cjkjmpin118h7al6i4vlkmw57vip5f6ngr6q3pl";
   };
 

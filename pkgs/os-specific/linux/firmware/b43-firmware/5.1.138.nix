@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, b43FirmwareCutter }:
 
-let version = "5.100.138"; in
+let version = "5.100.138";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "b43-firmware";
   inherit version;
 

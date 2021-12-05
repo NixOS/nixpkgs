@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glslang
-, meson
-, ninja
-, pkg-config
-, libX11
-, spirv-headers
-, vulkan-headers
-, vkBasalt32
-}:
+{ lib, stdenv, fetchFromGitHub, glslang, meson, ninja, pkg-config, libX11
+, spirv-headers, vulkan-headers, vkBasalt32 }:
 
 stdenv.mkDerivation rec {
   pname = "vkBasalt";
@@ -27,10 +17,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dappend_libdir_vkbasalt=true" ];
 
   # Include 32bit layer in 64bit build
-  postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    ln -s ${vkBasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
-      "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
-  '';
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+      ln -s ${vkBasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
+        "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
+    '';
 
   meta = with lib; {
     description = "A Vulkan post processing layer for Linux";

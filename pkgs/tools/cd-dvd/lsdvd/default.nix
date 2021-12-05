@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/lsdvd/";
-    description = "Display information about audio, video, and subtitle tracks on a DVD";
+    description =
+      "Display information about audio, video, and subtitle tracks on a DVD";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

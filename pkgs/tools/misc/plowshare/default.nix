@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     make PREFIX="$out" install
 
     for fn in plow{del,down,list,mod,probe,up}; do
-      wrapProgram "$out/bin/$fn" --prefix PATH : "${lib.makeBinPath [ curl recode spidermonkey_78 ]}"
+      wrapProgram "$out/bin/$fn" --prefix PATH : "${
+        lib.makeBinPath [ curl recode spidermonkey_78 ]
+      }"
     done
   '';
 

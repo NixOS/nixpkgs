@@ -6,14 +6,17 @@ stdenv.mkDerivation rec {
 
   src = {
     "x86_64-linux" = fetchurl {
-      url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
+      url =
+        "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
       sha256 = "1qghc5380h4b2pczksmky3kcffz5wn9shw033w4f969wl96p31fz";
     };
     "i686-linux" = fetchurl {
-      url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
+      url =
+        "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
       sha256 = "034iwqxpqhnm6i292fakva7vkwrrzamwcvbm7xyccpd54adj0grn";
     };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  }.${stdenv.system} or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ autoPatchelfHook rpmextract ];
   buildInputs = [ libX11 libXext ];

@@ -18,7 +18,8 @@ buildGoPackage rec {
   postBuild = "mv go/bin/terraform-provider-ansible{,_v${version}}";
 
   meta = with lib; {
-    description = "A Terraform provider serving as an interop layer for an Ansible dynamic inventory script.";
+    description =
+      "A Terraform provider serving as an interop layer for an Ansible dynamic inventory script.";
     homepage = "https://github.com/nbering/terraform-provider-ansible";
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik ];

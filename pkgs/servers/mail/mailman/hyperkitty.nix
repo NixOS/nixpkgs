@@ -1,32 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 
 # dependencies
-, defusedxml
-, django
-, django-gravatar2
-, django-haystack
-, django-mailman3
-, django-paintstore
-, django-q
-, django_compressor
-, django_extensions
-, djangorestframework
-, flufl_lock
-, mistune_2_0
-, networkx
-, psycopg2
-, python-dateutil
-, robot-detection
+, defusedxml, django, django-gravatar2, django-haystack, django-mailman3
+, django-paintstore, django-q, django_compressor, django_extensions
+, djangorestframework, flufl_lock, mistune_2_0, networkx, psycopg2
+, python-dateutil, robot-detection
 
 # tests
-, beautifulsoup4
-, elasticsearch
-, mock
-, whoosh
-}:
+, beautifulsoup4, elasticsearch, mock, whoosh }:
 
 buildPythonPackage rec {
   pname = "HyperKitty";
@@ -66,12 +47,7 @@ buildPythonPackage rec {
   # listed as dependencies in setup.py.  To use these, they should be
   # dependencies of the Django Python environment, but not of
   # HyperKitty so they're not included for people who don't need them.
-  checkInputs = [
-    beautifulsoup4
-    elasticsearch
-    mock
-    whoosh
-  ];
+  checkInputs = [ beautifulsoup4 elasticsearch mock whoosh ];
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

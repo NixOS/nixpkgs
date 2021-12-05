@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, pkce
-, pythonOlder
-}:
+{ lib, aiohttp, beautifulsoup4, buildPythonPackage, fetchFromGitHub, pkce
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pymyq";
@@ -19,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-B8CnyM0nQr8HWnD5toMd8A57j/UtnQ2aWys0netOAtA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    beautifulsoup4
-    pkce
-  ];
+  propagatedBuildInputs = [ aiohttp beautifulsoup4 pkce ];
 
   # Project has no tests
   doCheck = false;

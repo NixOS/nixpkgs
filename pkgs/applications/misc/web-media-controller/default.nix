@@ -14,14 +14,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib pcre json-glib ];
   cmakeFlags = [
-    "-DCHROMIUM_MANIFEST_DESTINATION=${placeholder "out"}/etc/chromium/native-messaging-hosts"
-    "-DCHROME_MANIFEST_DESTINATION=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
-    "-DFIREFOX_MANIFEST_DESTINATION=${placeholder "out"}/lib/mozilla/native-messaging-hosts"
+    "-DCHROMIUM_MANIFEST_DESTINATION=${
+      placeholder "out"
+    }/etc/chromium/native-messaging-hosts"
+    "-DCHROME_MANIFEST_DESTINATION=${
+      placeholder "out"
+    }/etc/opt/chrome/native-messaging-hosts"
+    "-DFIREFOX_MANIFEST_DESTINATION=${
+      placeholder "out"
+    }/lib/mozilla/native-messaging-hosts"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/f1u77y/wmc-mpris";
-    description = "MPRIS proxy for usage with 'Web Media Controller' web extension";
+    description =
+      "MPRIS proxy for usage with 'Web Media Controller' web extension";
     license = licenses.unlicense;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;

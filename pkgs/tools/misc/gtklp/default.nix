@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchurl
-, autoreconfHook, libtool, pkg-config
-, gtk2, glib, cups, gettext, openssl
-}:
+{ stdenv, lib, fetchurl, autoreconfHook, libtool, pkg-config, gtk2, glib, cups
+, gettext, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "gtklp";
@@ -12,24 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1arvnnvar22ipgnzqqq8xh0kkwyf71q2sfsf0crajpsr8a8601xy";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = [
-    cups
-    gettext
-    glib
-    gtk2
-    libtool
-    openssl
-  ];
+  buildInputs = [ cups gettext glib gtk2 libtool openssl ];
 
-  patches = [
-    ./patches/mdv-fix-str-fmt.patch
-    ./patches/autoconf.patch
-  ];
+  patches = [ ./patches/mdv-fix-str-fmt.patch ./patches/autoconf.patch ];
 
   preConfigure = ''
     substituteInPlace include/defaults.h --replace "netscape" "firefox"

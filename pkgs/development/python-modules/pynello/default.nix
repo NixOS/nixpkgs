@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
-, requests_oauthlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python-dateutil, pythonOlder
+, requests, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "pynello";
@@ -21,11 +15,7 @@ buildPythonPackage rec {
     sha256 = "015rlccsn2vff9if82rjj2fza3bjbmawqhamc22wq40gq7pbfk5i";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ python-dateutil requests requests_oauthlib ];
 
   # Project has no tests
   doCheck = false;

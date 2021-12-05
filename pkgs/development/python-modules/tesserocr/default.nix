@@ -1,15 +1,8 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  # build dependencies
-  cython,
-  leptonica,
-  pkg-config,
-  tesseract,
-  # extra python packages
-  pillow
-}:
+{ buildPythonPackage, fetchPypi, lib,
+# build dependencies
+cython, leptonica, pkg-config, tesseract,
+# extra python packages
+pillow }:
 
 buildPythonPackage rec {
   pname = "tesserocr";
@@ -25,7 +18,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow ];
 
   meta = with lib; {
-    description = "A simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
+    description =
+      "A simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
     license = licenses.mit;
     maintainers = with maintainers; [ mtrsk ];

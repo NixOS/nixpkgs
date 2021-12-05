@@ -1,8 +1,7 @@
-{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
-, quartz-wm, fontconfig, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf
-, shell ? "${bashInteractive}/bin/bash"
-}:
+{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg
+, bashInteractive, xterm, makeWrapper, ruby, quartz-wm, fontconfig, xlsfonts
+, xfontsel, ttf_bitstream_vera, freefont_ttf, liberation_ttf
+, shell ? "${bashInteractive}/bin/bash" }:
 
 # ------------
 # Installation
@@ -70,28 +69,68 @@ let
     xorg.fontcursormisc
   ];
   fontsConf = makeFontsConf {
-    fontDirectories = fontDirs ++ [
-      "/Library/Fonts"
-      "~/Library/Fonts"
-    ];
+    fontDirectories = fontDirs ++ [ "/Library/Fonts" "~/Library/Fonts" ];
   };
-  fonts = import ./system-fonts.nix {
-    inherit stdenv xorg fontDirs;
-  };
+  fonts = import ./system-fonts.nix { inherit stdenv xorg fontDirs; };
   # any X related programs expected to be available via $PATH
   env = buildEnv {
     name = "xquartz-env";
     pathsToLink = [ "/bin" ];
     paths = with xorg; [
       # non-xorg
-      quartz-wm xterm fontconfig
+      quartz-wm
+      xterm
+      fontconfig
       # xorg
-      xlsfonts xfontsel
-      bdftopcf fontutil iceauth libXpm lndir luit makedepend mkfontdir
-      mkfontscale sessreg setxkbmap smproxy twm x11perf xauth xbacklight xclock
-      xcmsdb xcursorgen xdm xdpyinfo xdriinfo xev xeyes xfs xgamma xhost
-      xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap
-      xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud
+      xlsfonts
+      xfontsel
+      bdftopcf
+      fontutil
+      iceauth
+      libXpm
+      lndir
+      luit
+      makedepend
+      mkfontdir
+      mkfontscale
+      sessreg
+      setxkbmap
+      smproxy
+      twm
+      x11perf
+      xauth
+      xbacklight
+      xclock
+      xcmsdb
+      xcursorgen
+      xdm
+      xdpyinfo
+      xdriinfo
+      xev
+      xeyes
+      xfs
+      xgamma
+      xhost
+      xinput
+      xkbcomp
+      xkbevd
+      xkbutils
+      xkill
+      xlsatoms
+      xlsclients
+      xmessage
+      xmodmap
+      xpr
+      xprop
+      xrandr
+      xrdb
+      xrefresh
+      xset
+      xsetroot
+      xvinfo
+      xwd
+      xwininfo
+      xwud
     ];
   };
 in stdenv.mkDerivation {
@@ -136,12 +175,14 @@ in stdenv.mkDerivation {
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${lib.escapeShellArg (builtins.toXML {
-        XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
-        XQUARTZ_DEFAULT_SHELL  = shell;
-        XQUARTZ_DEFAULT_STARTX = "@STARTX@";
-        FONTCONFIG_FILE        = "@FONTCONFIG_FILE@";
-      })} \
+      ${
+        lib.escapeShellArg (builtins.toXML {
+          XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
+          XQUARTZ_DEFAULT_SHELL = shell;
+          XQUARTZ_DEFAULT_STARTX = "@STARTX@";
+          FONTCONFIG_FILE = "@FONTCONFIG_FILE@";
+        })
+      } \
       $out/Applications/XQuartz.app/Contents/Info.plist
     substituteInPlace $out/Applications/XQuartz.app/Contents/Info.plist \
       --replace "@STARTX@"          "$defaultStartX" \
@@ -186,8 +227,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    platforms   = platforms.darwin;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];
-    license     = licenses.mit;
+    license = licenses.mit;
   };
 }

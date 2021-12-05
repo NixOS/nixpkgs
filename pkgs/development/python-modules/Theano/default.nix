@@ -1,19 +1,6 @@
-{ lib, stdenv
-, runCommandCC
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, pythonOlder
-, isPy3k
-, nose
-, numpy
-, scipy
-, setuptools
-, six
-, libgpuarray
-, cudaSupport ? false, cudatoolkit
-, cudnnSupport ? false, cudnn
-}:
+{ lib, stdenv, runCommandCC, fetchPypi, buildPythonPackage, isPyPy, pythonOlder
+, isPy3k, nose, numpy, scipy, setuptools, six, libgpuarray, cudaSupport ? false
+, cudatoolkit, cudnnSupport ? false, cudnn }:
 
 assert cudnnSupport -> cudaSupport;
 
@@ -31,13 +18,14 @@ let
     '';
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
-  cxx_compiler_name =
-    if stdenv.cc.isGNU then "g++" else
-    if stdenv.cc.isClang then "clang++" else
+  cxx_compiler_name = if stdenv.cc.isGNU then
+    "g++"
+  else if stdenv.cc.isClang then
+    "clang++"
+  else
     throw "Unknown C++ compiler";
   cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    lib.optional cudaSupport libgpuarray_
-      ++ lib.optional cudnnSupport cudnn );
+    (lib.optional cudaSupport libgpuarray_ ++ lib.optional cudnnSupport cudnn);
 
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
@@ -78,14 +66,8 @@ in buildPythonPackage rec {
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
   # setuptools needed for cuda support
-  propagatedBuildInputs = [
-    libgpuarray_
-    numpy
-    numpy.blas
-    scipy
-    setuptools
-    six
-  ];
+  propagatedBuildInputs =
+    [ libgpuarray_ numpy numpy.blas scipy setuptools six ];
 
   pythonImportsCheck = [ "theano" ];
 

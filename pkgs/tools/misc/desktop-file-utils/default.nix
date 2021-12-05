@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "0.24";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
     sha256 = "1nc3bwjdrpcrkbdmzvhckq0yngbcxspwj2n1r7jr3gmx1jk5vpm1";
   };
 

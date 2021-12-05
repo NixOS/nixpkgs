@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, gi-docgen
-, gtk-doc
-, libxml2
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, gobject-introspection
-, fribidi
-, glib
-, gtk4
-, gnome
-, gsettings-desktop-schemas
-, xvfb-run
-}:
+{ lib, stdenv, fetchFromGitLab, docbook-xsl-nons, gi-docgen, gtk-doc, libxml2
+, meson, ninja, pkg-config, sassc, vala, gobject-introspection, fribidi, glib
+, gtk4, gnome, gsettings-desktop-schemas, xvfb-run }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
@@ -46,20 +29,11 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
-  buildInputs = [
-    fribidi
-    gobject-introspection
-    gtk4
-  ];
+  buildInputs = [ fribidi gobject-introspection gtk4 ];
 
-  checkInputs = [
-    gnome.adwaita-icon-theme
-    xvfb-run
-  ];
+  checkInputs = [ gnome.adwaita-icon-theme xvfb-run ];
 
   doCheck = true;
 
@@ -89,7 +63,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Library to help with developing UI for mobile devices using GTK/GNOME";
+    description =
+      "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ dotlambda ];

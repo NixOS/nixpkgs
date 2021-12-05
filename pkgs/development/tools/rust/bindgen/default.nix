@@ -1,7 +1,5 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
-, runtimeShell
-, bash
-}:
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt
+, writeTextFile, runtimeShell, bash }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
@@ -37,8 +35,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
-  checkInputs =
-    let fakeRustup = writeTextFile {
+  checkInputs = let
+    fakeRustup = writeTextFile {
       name = "fake-rustup";
       executable = true;
       destination = "/bin/rustup";
@@ -60,7 +58,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
+    description =
+      "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.

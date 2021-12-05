@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     # "Array sys_siglist[] never was part of the public interface. Replace it with calls to psiginfo()."
     (fetchpatch {
       name = "sys_siglist.patch";
-      url = "https://github.com/jcbeaudoin/MKCL/commit/0777dd08254c88676f4f101117b10786b22111d6.patch";
+      url =
+        "https://github.com/jcbeaudoin/MKCL/commit/0777dd08254c88676f4f101117b10786b22111d6.patch";
       sha256 = "1dnr1jzha77nrxs22mclrcqyqvxxn6q1sfn35qjs77fi3jcinjsc";
     })
   ];
@@ -26,20 +27,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [
-    "GMP_CFLAGS=-I${lib.getDev gmp}/include"
-    "GMP_LDFLAGS=-L${gmp.out}/lib"
-  ];
+  configureFlags =
+    [ "GMP_CFLAGS=-I${lib.getDev gmp}/include" "GMP_LDFLAGS=-L${gmp.out}/lib" ];
 
   # tinycc configure flags copied from the tinycc derivation.
-  postConfigure = ''(
-    cd contrib/tinycc
-    ./configure --cc=cc \
-      --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
-      --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
-      --libpaths=${lib.getLib stdenv.cc.libc}/lib
-  )'';
+  postConfigure = ''
+    (
+        cd contrib/tinycc
+        ./configure --cc=cc \
+          --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
+          --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
+          --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+          --libpaths=${lib.getLib stdenv.cc.libc}/lib
+      )'';
 
   postInstall = ''
     wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"

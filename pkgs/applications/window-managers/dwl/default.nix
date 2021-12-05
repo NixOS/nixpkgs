@@ -1,26 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, libinput
-, libxcb
-, libxkbcommon
-, pixman
-, wayland
-, wayland-protocols
-, wlroots
-, enable-xwayland ? true, xwayland, libX11
-, patches ? [ ]
-, conf ? null
-, writeText
-, fetchpatch
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, libinput, libxcb, libxkbcommon
+, pixman, wayland, wayland-protocols, wlroots, enable-xwayland ? true, xwayland
+, libX11, patches ? [ ], conf ? null, writeText, fetchpatch }:
 
-let
-  totalPatches = patches ++ [ ];
-in
+let totalPatches = patches ++ [ ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dwl";
   version = "0.2.1";
 
@@ -32,18 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libinput
-    libxcb
-    libxkbcommon
-    pixman
-    wayland
-    wayland-protocols
-    wlroots
-  ] ++ lib.optionals enable-xwayland [
-    libX11
-    xwayland
-  ];
+  buildInputs =
+    [ libinput libxcb libxkbcommon pixman wayland wayland-protocols wlroots ]
+    ++ lib.optionals enable-xwayland [ libX11 xwayland ];
 
   # Allow users to set their own list of patches
   patches = totalPatches;
@@ -55,9 +30,10 @@ stdenv.mkDerivation rec {
 
   # Allow users to set an alternative config.def.h
   postPatch = let
-    configFile = if lib.isDerivation conf || builtins.isPath conf
-                 then conf
-                 else writeText "config.def.h" conf;
+    configFile = if lib.isDerivation conf || builtins.isPath conf then
+      conf
+    else
+      writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   dontConfigure = true;

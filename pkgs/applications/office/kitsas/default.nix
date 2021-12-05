@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, poppler, libzip
+, pkg-config, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   # QList::swapItemsAt was introduced in Qt 5.13
-  patches = lib.optional (lib.versionOlder qtbase.version "5.13") ./qt-512.patch;
+  patches =
+    lib.optional (lib.versionOlder qtbase.version "5.13") ./qt-512.patch;
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
 
@@ -38,7 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/artoh/kitupiikki";
-    description = "An accounting tool suitable for Finnish associations and small business";
+    description =
+      "An accounting tool suitable for Finnish associations and small business";
     maintainers = with maintainers; [ gspia ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

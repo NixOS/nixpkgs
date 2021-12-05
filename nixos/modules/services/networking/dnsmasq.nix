@@ -19,9 +19,7 @@ let
     ${cfg.extraConfig}
   '';
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -48,7 +46,7 @@ in
 
       servers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''
           The DNS servers which dnsmasq should query.
@@ -76,13 +74,11 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    networking.nameservers =
-      optional cfg.resolveLocalQueries "127.0.0.1";
+    networking.nameservers = optional cfg.resolveLocalQueries "127.0.0.1";
 
     services.dbus.packages = [ dnsmasq ];
 
@@ -91,7 +87,7 @@ in
       group = "dnsmasq";
       description = "Dnsmasq daemon user";
     };
-    users.groups.dnsmasq = {};
+    users.groups.dnsmasq = { };
 
     networking.resolvconf = mkIf cfg.resolveLocalQueries {
       useLocalResolver = mkDefault true;
@@ -103,28 +99,29 @@ in
     };
 
     systemd.services.dnsmasq = {
-        description = "Dnsmasq Daemon";
-        after = [ "network.target" "systemd-resolved.service" ];
-        wantedBy = [ "multi-user.target" ];
-        path = [ dnsmasq ];
-        preStart = ''
-          mkdir -m 755 -p ${stateDir}
-          touch ${stateDir}/dnsmasq.leases
-          chown -R dnsmasq ${stateDir}
-          touch /etc/dnsmasq-{conf,resolv}.conf
-          dnsmasq --test
-        '';
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "uk.org.thekelleys.dnsmasq";
-          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          PrivateTmp = true;
-          ProtectSystem = true;
-          ProtectHome = true;
-          Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
-        };
-        restartTriggers = [ config.environment.etc.hosts.source ];
+      description = "Dnsmasq Daemon";
+      after = [ "network.target" "systemd-resolved.service" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ dnsmasq ];
+      preStart = ''
+        mkdir -m 755 -p ${stateDir}
+        touch ${stateDir}/dnsmasq.leases
+        chown -R dnsmasq ${stateDir}
+        touch /etc/dnsmasq-{conf,resolv}.conf
+        dnsmasq --test
+      '';
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "uk.org.thekelleys.dnsmasq";
+        ExecStart =
+          "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        PrivateTmp = true;
+        ProtectSystem = true;
+        ProtectHome = true;
+        Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
+      };
+      restartTriggers = [ config.environment.etc.hosts.source ];
     };
   };
 }

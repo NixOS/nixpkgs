@@ -25,14 +25,14 @@ let
       runHook postBuild
     '';
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
+    installPhase =
+      "find $out/.m2 -type f -regex '.+\\(\\.lastUpdated\\|resolver-status\\.properties\\|_remote\\.repositories\\)' -delete";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "sha256:12w1iw9c5j7y9hhaip07j3aszjiiakkww1v3zszlj15fj8jgqyf2";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "plantuml-server";
   inherit version;
   inherit src;

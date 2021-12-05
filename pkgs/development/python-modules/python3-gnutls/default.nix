@@ -21,7 +21,7 @@ buildPythonPackage rec {
       src = ./libgnutls-path.patch;
       gnutlslib = "${lib.getLib gnutls}/lib";
     })
-   ];
+  ];
 
   pythonImportsCheck = [ "gnutls" ];
 

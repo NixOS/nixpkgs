@@ -1,10 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiohttp-wsgi";
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-lQ0mAUqsOmozUIMd6nwRATaq8C5SUFGoyQu1v0RBnas=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # makes http request to another server

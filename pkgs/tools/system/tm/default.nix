@@ -1,7 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "tm";
@@ -19,7 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Terminal mixer - multiplexer for the i/o of terminal applications";
+    description =
+      "Terminal mixer - multiplexer for the i/o of terminal applications";
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];

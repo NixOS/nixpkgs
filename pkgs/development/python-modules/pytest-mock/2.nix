@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytest
-, mock
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
@@ -18,22 +11,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
 
-  nativeBuildInputs = [
-   setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest
   '';
 
   meta = with lib; {
-    description = "Thin-wrapper around the mock package for easier use with py.test.";
-    homepage    = "https://github.com/pytest-dev/pytest-mock";
-    license     = licenses.mit;
+    description =
+      "Thin-wrapper around the mock package for easier use with py.test.";
+    homepage = "https://github.com/pytest-dev/pytest-mock";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }

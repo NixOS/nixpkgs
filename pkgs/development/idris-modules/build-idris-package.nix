@@ -1,33 +1,27 @@
 # Build an idris package
 { stdenv, lib, gmp, prelude, base, with-packages, idris }:
-  { idrisDeps ? []
-  , noPrelude ? false
-  , noBase ? false
-  , name
-  , version
-  , ipkgName ? name
-  , extraBuildInputs ? []
-  , idrisBuildOptions ? []
-  , idrisTestOptions ? []
-  , idrisInstallOptions ? []
-  , idrisDocOptions ? []
-  , ...
-  }@attrs:
+{ idrisDeps ? [ ], noPrelude ? false, noBase ? false, name, version
+, ipkgName ? name, extraBuildInputs ? [ ], idrisBuildOptions ? [ ]
+, idrisTestOptions ? [ ], idrisInstallOptions ? [ ], idrisDocOptions ? [ ], ...
+}@attrs:
 let
-  allIdrisDeps = idrisDeps
-    ++ lib.optional (!noPrelude) prelude
+  allIdrisDeps = idrisDeps ++ lib.optional (!noPrelude) prelude
     ++ lib.optional (!noBase) base;
   idris-with-packages = with-packages allIdrisDeps;
   newAttrs = builtins.removeAttrs attrs [
-    "idrisDeps" "noPrelude" "noBase"
-    "name" "version" "ipkgName" "extraBuildInputs"
+    "idrisDeps"
+    "noPrelude"
+    "noBase"
+    "name"
+    "version"
+    "ipkgName"
+    "extraBuildInputs"
   ] // {
     meta = attrs.meta // {
       platforms = attrs.meta.platforms or idris.meta.platforms;
     };
   };
-in
-stdenv.mkDerivation ({
+in stdenv.mkDerivation ({
   name = "idris-${name}-${version}";
 
   buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
@@ -59,9 +53,13 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    idris --install ${ipkgName}.ipkg --ibcsubdir $out/libs ${lib.escapeShellArgs idrisInstallOptions}
+    idris --install ${ipkgName}.ipkg --ibcsubdir $out/libs ${
+      lib.escapeShellArgs idrisInstallOptions
+    }
 
-    IDRIS_DOC_PATH=$out/doc idris --installdoc ${ipkgName}.ipkg ${lib.escapeShellArgs idrisDocOptions} || true
+    IDRIS_DOC_PATH=$out/doc idris --installdoc ${ipkgName}.ipkg ${
+      lib.escapeShellArgs idrisDocOptions
+    } || true
 
     # If the ipkg file defines an executable, install that
     executable=$(grep -Po '^executable = \K.*' ${ipkgName}.ipkg || true)

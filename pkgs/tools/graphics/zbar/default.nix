@@ -1,27 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, imagemagickBig
-, pkg-config
-, libX11
-, libv4l
-, qtbase
-, qtx11extras
-, wrapQtAppsHook
-, wrapGAppsHook
-, gtk3
-, xmlto
-, docbook_xsl
-, autoreconfHook
-, dbus
-, enableVideo ? stdenv.isLinux
+{ stdenv, lib, fetchFromGitHub, imagemagickBig, pkg-config, libX11, libv4l
+, qtbase, qtx11extras, wrapQtAppsHook, wrapGAppsHook, gtk3, xmlto, docbook_xsl
+, autoreconfHook, dbus, enableVideo ? stdenv.isLinux
   # The implementation is buggy and produces an error like
   # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
   # for every scanned code.
   # see https://github.com/mchehab/zbar/issues/104
-, enableDbus ? false
-, libintl
-}:
+, enableDbus ? false, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "zbar";
@@ -45,35 +29,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    imagemagickBig
-    libX11
-    libintl
-  ] ++ lib.optionals enableDbus [
-    dbus
-  ] ++ lib.optionals enableVideo [
-    libv4l
-    gtk3
-    qtbase
-    qtx11extras
-  ];
+  buildInputs = [ imagemagickBig libX11 libintl ]
+    ++ lib.optionals enableDbus [ dbus ]
+    ++ lib.optionals enableVideo [ libv4l gtk3 qtbase qtx11extras ];
 
   # Disable assertions which include -dev QtBase file paths.
   NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
-  configureFlags = [
-    "--without-python"
-  ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/share"
-  ] else [
-    "--without-dbus"
-  ]) ++ (if enableVideo then [
-    "--with-gtk=gtk3"
-  ] else [
-    "--disable-video"
-    "--without-gtk"
-    "--without-qt"
-  ]);
+  configureFlags = [ "--without-python" ] ++ (if enableDbus then
+    [ "--with-dbusconfdir=${placeholder "out"}/share" ]
+  else
+    [ "--without-dbus" ]) ++ (if enableVideo then
+      [ "--with-gtk=gtk3" ]
+    else [
+      "--disable-video"
+      "--without-gtk"
+      "--without-qt"
+    ]);
 
   dontWrapQtApps = true;
   dontWrapGApps = true;

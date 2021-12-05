@@ -3,8 +3,7 @@
 let
   baseVersion = "0.4.2";
   commit = "722200c4adbd6d1e5d847dfbbd9dec07aa4ca38d";
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "smokeping_prober";
   version = "${baseVersion}-g${commit}";
 
@@ -15,10 +14,10 @@ buildGoModule rec {
       Branch = commit;
       BuildUser = "nix";
     };
-    varFlags = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-X github.com/prometheus/common/version.${name}=${value}") setVars);
-  in [
-    "${varFlags}" "-s" "-w"
-  ];
+    varFlags = lib.concatStringsSep " " (lib.mapAttrsToList
+      (name: value: "-X github.com/prometheus/common/version.${name}=${value}")
+      setVars);
+  in [ "${varFlags}" "-s" "-w" ];
 
   src = fetchFromGitHub {
     rev = commit;

@@ -1,13 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkg-config, xorg
-, enableAlsaUtils ? true, alsa-utils, coreutils
+{ lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper
+, pkg-config, xorg, enableAlsaUtils ? true, alsa-utils, coreutils
 , enableNetwork ? true, dnsutils, iproute2, wirelesstools }:
 
 let
   bins = lib.optionals enableAlsaUtils [ alsa-utils coreutils ]
     ++ lib.optionals enableNetwork [ dnsutils iproute2 wirelesstools ];
-in
 
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "dwm-status";
   version = "1.7.2";
 
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-8/vzJXZjSQmefHMo5BXKTRiLy2F3wfIn8VgPMJxtIvY=";
 
-  postInstall = lib.optionalString (bins != [])  ''
+  postInstall = lib.optionalString (bins != [ ]) ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
   '';
 

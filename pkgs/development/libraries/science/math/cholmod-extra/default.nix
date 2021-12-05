@@ -13,14 +13,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
   buildInputs = [ suitesparse blas lapack ];
 
-  makeFlags = [
-    "BLAS=-lcblas"
-  ];
+  makeFlags = [ "BLAS=-lcblas" ];
 
-  installFlags = [
-    "INSTALL_LIB=$(out)/lib"
-    "INSTALL_INCLUDE=$(out)/include"
-  ];
+  installFlags = [ "INSTALL_LIB=$(out)/lib" "INSTALL_INCLUDE=$(out)/include" ];
 
   doCheck = true;
 

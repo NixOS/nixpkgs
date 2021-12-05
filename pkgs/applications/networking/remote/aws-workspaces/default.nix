@@ -1,7 +1,6 @@
-{ stdenv, lib
-, makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
-}:
+{ stdenv, lib, makeWrapper, dpkg, fetchurl, autoPatchelfHook, curl, libkrb5
+, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg
+, gdk-pixbuf, libsoup, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
@@ -16,10 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "208e67a544be5be7ff25218d68b4eb2ea9e65abfed444c99a0f7a6738d69ab9a";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   # Crashes at startup when stripping:
   # "Failed to create CoreCLR, HRESULT: 0x80004005"
@@ -63,7 +59,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Client for Amazon WorkSpaces, a managed, secure Desktop-as-a-Service (DaaS) solution";
+    description =
+      "Client for Amazon WorkSpaces, a managed, secure Desktop-as-a-Service (DaaS) solution";
     homepage = "https://clients.amazonworkspaces.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ]; # TODO Mac support

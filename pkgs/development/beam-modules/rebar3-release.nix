@@ -1,51 +1,33 @@
-{ stdenv
-, erlang
-, rebar3WithPlugins
-, openssl
-, lib
-}:
+{ stdenv, erlang, rebar3WithPlugins, openssl, lib }:
 
-{ pname
-, version
-, src
-, beamDeps ? [ ]
-, buildPlugins ? [ ]
-, checkouts ? null
-, releaseType
-, buildInputs ? [ ]
-, setupHook ? null
-, profile ? "default"
-, installPhase ? null
-, buildPhase ? null
-, configurePhase ? null
-, meta ? { }
-, ...
+{ pname, version, src, beamDeps ? [ ], buildPlugins ? [ ], checkouts ? null
+, releaseType, buildInputs ? [ ], setupHook ? null, profile ? "default"
+, installPhase ? null, buildPhase ? null, configurePhase ? null, meta ? { }, ...
 }@attrs:
 
 with lib;
 
 let
-  shell = drv: stdenv.mkDerivation {
-    name = "interactive-shell-${drv.pname}";
-    buildInputs = [ drv ];
-  };
+  shell = drv:
+    stdenv.mkDerivation {
+      name = "interactive-shell-${drv.pname}";
+      buildInputs = [ drv ];
+    };
 
-  customPhases = filterAttrs
-    (_: v: v != null)
-    { inherit setupHook configurePhase buildPhase installPhase; };
+  customPhases = filterAttrs (_: v: v != null) {
+    inherit setupHook configurePhase buildPhase installPhase;
+  };
 
   # When using the `beamDeps` argument, it is important that we use
   # `rebar3WithPlugins` here even when there are no plugins. The vanilla
   # `rebar3` package is an escript archive with bundled dependencies which can
   # interfere with those in the app we are trying to build. `rebar3WithPlugins`
   # doesn't have this issue since it puts its own deps last on the code path.
-  rebar3 = rebar3WithPlugins {
-    plugins = buildPlugins;
-  };
+  rebar3 = rebar3WithPlugins { plugins = buildPlugins; };
 
-  pkg =
-    assert beamDeps != [ ] -> checkouts == null;
-    self: stdenv.mkDerivation (attrs // {
+  pkg = assert beamDeps != [ ] -> checkouts == null;
+    self:
+    stdenv.mkDerivation (attrs // {
 
       name = "${pname}-${version}";
       inherit version pname;
@@ -68,21 +50,19 @@ let
 
       buildPhase = ''
         runHook preBuild
-        HOME=. DEBUG=1 rebar3 as ${profile} ${if releaseType == "escript"
-                                              then "escriptize"
-                                              else "release"}
+        HOME=. DEBUG=1 rebar3 as ${profile} ${
+          if releaseType == "escript" then "escriptize" else "release"
+        }
         runHook postBuild
       '';
 
       installPhase = ''
         runHook preInstall
-        dir=${if releaseType == "escript"
-              then "bin"
-              else "rel"}
+        dir=${if releaseType == "escript" then "bin" else "rel"}
         mkdir -p "$out/$dir" "$out/bin"
         cp -R --preserve=mode "_build/${profile}/$dir" "$out"
         ${lib.optionalString (releaseType == "release")
-          "find $out/rel/*/bin -type f -executable -exec ln -s -t $out/bin {} \\;"}
+        "find $out/rel/*/bin -type f -executable -exec ln -s -t $out/bin {} \\;"}
         runHook postInstall
       '';
 
@@ -95,14 +75,11 @@ let
         done
       '';
 
-      meta = {
-        inherit (erlang.meta) platforms;
-      } // meta;
+      meta = { inherit (erlang.meta) platforms; } // meta;
 
       passthru = ({
         packageName = pname;
         env = shell self;
       } // (if attrs ? passthru then attrs.passthru else { }));
     } // customPhases);
-in
-fix pkg
+in fix pkg

@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlr-protocols
-, libGL
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wayland, wayland-protocols
+, wayland-scanner, wlr-protocols, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
@@ -28,12 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
-  buildInputs = [
-    libGL
-    wayland
-    wayland-protocols
-    wlr-protocols
-  ];
+  buildInputs = [ libGL wayland wayland-protocols wlr-protocols ];
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";

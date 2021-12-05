@@ -1,10 +1,4 @@
-{ clang
-, fetchFromGitHub
-, lib
-, llvmPackages
-, protobuf
-, rustPlatform
-}:
+{ clang, fetchFromGitHub, lib, llvmPackages, protobuf, rustPlatform }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
   version = "0.9.12-1";
@@ -36,7 +30,13 @@ rustPlatform.buildRustPackage rec {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
+    maintainers = with maintainers; [
+      akru
+      andresilva
+      asymmetric
+      FlorianFranzen
+      RaghavSood
+    ];
     platforms = platforms.linux;
   };
 }

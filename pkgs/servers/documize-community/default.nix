@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs
+, nixosTests }:
 
 buildGoModule rec {
   pname = "documize-community";
@@ -31,7 +32,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
+    description =
+      "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
     license = licenses.agpl3;
     maintainers = with maintainers; [ ma27 elseym ];
     homepage = "https://www.documize.com/";

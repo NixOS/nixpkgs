@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0q27p2hyw6c1fh5x8kwsrw8a1hk6z90z0z3w86ga8ryz53xg4vdi";
 
   meta = with lib; {
-    description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
+    description =
+      "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
     homepage = "https://github.com/NilsIrl/MozWire";
     license = licenses.gpl3;
     maintainers = with maintainers; [ siraben nilsirl ];

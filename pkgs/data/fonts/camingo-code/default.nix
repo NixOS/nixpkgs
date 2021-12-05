@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.0";
+let version = "1.0";
 in fetchzip rec {
   name = "camingo-code-${version}";
 
-  url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
+  url =
+    "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
   postFetch = ''
     unzip $downloadedFile
     install -m444 -Dt $out/share/fonts/truetype fonts/camingo-code/*.ttf

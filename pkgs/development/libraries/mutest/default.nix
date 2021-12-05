@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation {
   pname = "mutest";
@@ -17,10 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0gdqwq6fvk06wld4rhnw5752hahrvhd69zrci045x25rwx90x26q";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ meson ninja ];
 
   doCheck = true;
 

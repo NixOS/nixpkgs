@@ -1,31 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 # install_requires
-, attrs
-, charset-normalizer
-, multidict
-, async-timeout
-, yarl
-, frozenlist
-, aiosignal
-, aiodns
-, brotli
-, cchardet
-, asynctest
-, typing-extensions
-, idna-ssl
+, attrs, charset-normalizer, multidict, async-timeout, yarl, frozenlist
+, aiosignal, aiodns, brotli, cchardet, asynctest, typing-extensions, idna-ssl
 # tests_require
-, async_generator
-, freezegun
-, gunicorn
-, pytest-mock
-, pytestCheckHook
-, re-assert
-, trustme
-}:
+, async_generator, freezegun, gunicorn, pytest-mock, pytestCheckHook, re-assert
+, trustme }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
@@ -53,12 +32,8 @@ buildPythonPackage rec {
     aiodns
     brotli
     cchardet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    idna-ssl
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ asynctest typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl ];
 
   checkInputs = [
     async_generator
@@ -75,12 +50,11 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
-  ] ++ lib.optionals stdenv.is32bit [
-    "test_cookiejar"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
-    "test_close"
-  ];
+  ] ++ lib.optionals stdenv.is32bit [ "test_cookiejar" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+      "test_close"
+    ];
 
   disabledTestPaths = [
     "test_proxy_functional.py" # FIXME package proxy.py

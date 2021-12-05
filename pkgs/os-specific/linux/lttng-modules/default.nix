@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.13.0";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
+    url =
+      "https://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
     sha256 = "0mikc3fdjd0w6rrcyksjzmv0czvgba6yk8dfmz4a3cr8s4y2pgsy";
   };
 

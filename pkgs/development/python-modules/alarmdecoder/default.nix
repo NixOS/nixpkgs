@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyftdi
-, pyopenssl
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyusb
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pyftdi, pyopenssl, pyserial
+, pytestCheckHook, pythonOlder, pyusb }:
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
   };
 
-  propagatedBuildInputs = [
-    pyftdi
-    pyopenssl
-    pyserial
-    pyusb
-  ];
+  propagatedBuildInputs = [ pyftdi pyopenssl pyserial pyusb ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   disabledTests = [
     # Socket issue, https://github.com/nutechsoftware/alarmdecoder/issues/45
@@ -43,7 +26,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "alarmdecoder" ];
 
   meta = with lib; {
-    description = "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
+    description =
+      "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

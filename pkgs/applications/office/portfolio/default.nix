@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, autoPatchelfHook
-, fetchurl
-, glibc
-, gcc-unwrapped
-, gtk3
-, jre
-, libsecret
-, makeDesktopItem
-, webkitgtk
-, wrapGAppsHook
-}:
+{ lib, stdenv, autoPatchelfHook, fetchurl, glibc, gcc-unwrapped, gtk3, jre
+, libsecret, makeDesktopItem, webkitgtk, wrapGAppsHook }:
 let
   desktopItem = makeDesktopItem {
     name = "Portfolio";
@@ -22,26 +11,19 @@ let
   };
 
   runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
   version = "0.55.0";
 
   src = fetchurl {
-    url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
+    url =
+      "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
     sha256 = "0s7qb7z2wiypiahw1y1lz9pbhxcacj5myzy0qcqjrpnaq7ymvs05";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
-  buildInputs = [
-    glibc
-    gcc-unwrapped
-    libsecret
-  ];
+  buildInputs = [ glibc gcc-unwrapped libsecret ];
 
   installPhase = ''
     mkdir -p $out/portfolio
@@ -59,7 +41,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple tool to calculate the overall performance of an investment portfolio";
+    description =
+      "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren ];

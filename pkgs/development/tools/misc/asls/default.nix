@@ -1,14 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, erlangR22
-}:
+{ lib, stdenv, fetchurl, erlangR22 }:
 
 stdenv.mkDerivation rec {
   pname = "asls";
   version = "0.5.1";
 
   src = fetchurl {
-    url = "https://github.com/saulecabrera/asls/releases/download/v${version}/bin.tar.gz";
+    url =
+      "https://github.com/saulecabrera/asls/releases/download/v${version}/bin.tar.gz";
     sha256 = "05kp44p4q4sdykfw0b4k9j3qdp0qvwgjbs48ncmnd0ass0xrmi3s";
   };
 

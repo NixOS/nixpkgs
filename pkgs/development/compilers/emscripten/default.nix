@@ -1,9 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
-, jre, binaryen
-, llvmPackages
-, symlinkJoin, makeWrapper, substituteAll
-, mkYarnModules
-}:
+{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler, jre, binaryen
+, llvmPackages, symlinkJoin, makeWrapper, substituteAll, mkYarnModules }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";

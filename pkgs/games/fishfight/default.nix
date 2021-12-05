@@ -1,18 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, alsa-lib
-, libGL
-, libX11
-, libXi
-, AudioToolbox
-, Cocoa
-, CoreAudio
-, CoreFoundation
-, IOKit
-, OpenGL
-}:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, alsa-lib, libGL, libX11, libXi
+, AudioToolbox, Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fishfight";
@@ -27,19 +14,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-fZXqJ6a2erAQSgAZRwmkor94eMryjiq3gbY102pJb9Q=";
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-    libGL
-    libX11
-    libXi
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioToolbox
-    Cocoa
-    CoreAudio
-    CoreFoundation
-    IOKit
-    OpenGL
-  ];
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib libGL libX11 libXi ]
+    ++ lib.optionals stdenv.isDarwin [
+      AudioToolbox
+      Cocoa
+      CoreAudio
+      CoreFoundation
+      IOKit
+      OpenGL
+    ];
 
   postPatch = ''
     substituteInPlace assets/levels/levels.toml --replace assets $out/share/assets
@@ -53,9 +36,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tactical 2D shooter played by up to 4 players online or on a shared screen";
+    description =
+      "A tactical 2D shooter played by up to 4 players online or on a shared screen";
     homepage = "https://fishfight.org/";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "fishgame";
   };

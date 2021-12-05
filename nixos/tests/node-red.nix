@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nodered";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ matthewcroughan ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ matthewcroughan ]; };
 
   nodes = {
     client = { config, pkgs, ... }: {

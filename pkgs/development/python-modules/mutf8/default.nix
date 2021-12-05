@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mutf8";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "0blp6gb7q3f7if326xard8zlfg2rcmb3a7mxvaxgkvxigipjb9af";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # Using pytestCheckHook results in test failures

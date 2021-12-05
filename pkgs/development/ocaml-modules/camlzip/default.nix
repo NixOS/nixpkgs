@@ -1,30 +1,28 @@
-{lib, stdenv, fetchurl, zlib, ocaml, findlib}:
+{ lib, stdenv, fetchurl, zlib, ocaml, findlib }:
 
 let
-  param =
-    if lib.versionAtLeast ocaml.version "4.02"
-    then {
-      version = "1.10";
-      url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
-      sha256 = "X0YcczaQ3lFeJEiTIgjSSZ1zi32KFMtmZsP0FFpyfbI=";
-      patches = [];
-      postPatchInit = ''
-        cp META-zip META-camlzip
-        echo 'directory="../zip"' >> META-camlzip
-      '';
-    } else {
-      version = "1.05";
-      download_id = "1037";
-      url = "http://forge.ocamlcore.org/frs/download.php/${param.download_id}/camlzip-${param.version}.tar.gz";
-      sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
-      patches = [./makefile_1_05.patch];
-      postPatchInit = ''
-        substitute ${./META} META --subst-var-by VERSION "${param.version}"
-      '';
-    };
-in
+  param = if lib.versionAtLeast ocaml.version "4.02" then {
+    version = "1.10";
+    url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
+    sha256 = "X0YcczaQ3lFeJEiTIgjSSZ1zi32KFMtmZsP0FFpyfbI=";
+    patches = [ ];
+    postPatchInit = ''
+      cp META-zip META-camlzip
+      echo 'directory="../zip"' >> META-camlzip
+    '';
+  } else {
+    version = "1.05";
+    download_id = "1037";
+    url =
+      "http://forge.ocamlcore.org/frs/download.php/${param.download_id}/camlzip-${param.version}.tar.gz";
+    sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
+    patches = [ ./makefile_1_05.patch ];
+    postPatchInit = ''
+      substitute ${./META} META --subst-var-by VERSION "${param.version}"
+    '';
+  };
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "camlzip";
   version = param.version;
 
@@ -35,7 +33,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ];
 
-  propagatedBuildInputs = [zlib];
+  propagatedBuildInputs = [ zlib ];
 
   inherit (param) patches;
 
@@ -62,7 +60,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [ maggesi ];
   };
 }

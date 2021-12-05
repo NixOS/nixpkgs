@@ -1,4 +1,5 @@
-{ fetchurl, makeWrapper, patchelf, lib, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
+{ fetchurl, makeWrapper, patchelf, lib, stdenv, libXft, libX11, freetype
+, fontconfig, libXrender, libXScrnSaver, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "gorilla-bin";
@@ -18,8 +19,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = let
-    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = lib.makeLibraryPath [ libXft libX11 freetype fontconfig libXrender libXScrnSaver libXext ];
+    interpreter = ''$(< "$NIX_CC/nix-support/dynamic-linker")'';
+    libPath = lib.makeLibraryPath [
+      libXft
+      libX11
+      freetype
+      fontconfig
+      libXrender
+      libXScrnSaver
+      libXext
+    ];
   in ''
     mkdir -p $out/opt/password-gorilla
     mkdir -p $out/bin

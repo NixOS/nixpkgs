@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys
+}:
 
 mkDerivation rec {
   pname = "corepaint";
@@ -11,16 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-nATraYm7FZEXoNWgXt1G86KdrAvRgM358F+YdfWcnkg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libcprime libcsys ];
 
   meta = with lib; {
     description = "A paint app from the C Suite";

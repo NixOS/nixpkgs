@@ -1,11 +1,4 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, nodejs
-, pkgs
-}:
+{ lib, nixosTests, stdenv, fetchFromGitHub, makeWrapper, nodejs, pkgs }:
 
 stdenv.mkDerivation rec {
   pname = "mjolnir";
@@ -18,31 +11,26 @@ stdenv.mkDerivation rec {
     sha256 = "4c9LyQb5SZ1IoBayiP0C0ho4hwJDv49DhsuoQIv9bTs=";
   };
 
-  nativeBuildInputs = [
-    nodejs
-    makeWrapper
-  ];
+  nativeBuildInputs = [ nodejs makeWrapper ];
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
+  buildPhase = let
+    nodeDependencies = ((import ./node-composition.nix {
+      inherit pkgs nodejs;
+      inherit (stdenv.hostPlatform) system;
+    }).nodeDependencies.override (old: {
+      # access to path '/nix/store/...-source' is forbidden in restricted mode
+      src = src;
+      dontNpmInstall = true;
+    }));
+  in ''
+    runHook preBuild
 
-      ln -s ${nodeDependencies}/lib/node_modules .
-      export PATH="${nodeDependencies}/bin:$PATH"
-      npm run build
+    ln -s ${nodeDependencies}/lib/node_modules .
+    export PATH="${nodeDependencies}/bin:$PATH"
+    npm run build
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -57,9 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) mjolnir;
-    };
+    tests = { inherit (nixosTests) mjolnir; };
     updateScript = ./update.sh;
   };
 

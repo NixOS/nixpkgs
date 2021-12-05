@@ -8,7 +8,8 @@ with lib;
     canTouchEfiVariables = mkOption {
       default = false;
       type = types.bool;
-      description = "Whether the installation process is allowed to modify EFI boot variables.";
+      description =
+        "Whether the installation process is allowed to modify EFI boot variables.";
     };
 
     efiSysMountPoint = mkOption {

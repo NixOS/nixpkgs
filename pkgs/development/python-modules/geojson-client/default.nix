@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, haversine
-, pytz
-, requests
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, geojson, haversine, pytz, requests
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "geojson-client";
@@ -19,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8eSLimCgFRn3cHTz5TE9fAUAbwFO72b23C0lg6fVOLQ=";
   };
 
-  propagatedBuildInputs = [
-    geojson
-    haversine
-    pytz
-    requests
-  ];
+  propagatedBuildInputs = [ geojson haversine pytz requests ];
 
   checkInputs = [ pytestCheckHook ];
 

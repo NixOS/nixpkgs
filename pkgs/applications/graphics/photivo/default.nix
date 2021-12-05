@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchhg
-, fetchpatch
-, cmake
-, qt4
-, fftw
-, graphicsmagick_q16
-, lcms2
-, lensfun
-, pkg-config
-, libjpeg
-, exiv2
-, liblqr1
-}:
+{ lib, stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16, lcms2
+, lensfun, pkg-config, libjpeg, exiv2, liblqr1 }:
 
 stdenv.mkDerivation {
   pname = "photivo";
@@ -28,23 +15,26 @@ stdenv.mkDerivation {
     # Patch fixing build with lensfun >= 0.3, taken from
     # https://www.linuxquestions.org/questions/slackware-14/photivo-4175530230/#post5296578
     (fetchpatch {
-      url = "https://www.linuxquestions.org/questions/attachment.php?attachmentid=17287&d=1420577220";
+      url =
+        "https://www.linuxquestions.org/questions/attachment.php?attachmentid=17287&d=1420577220";
       name = "lensfun-0.3.patch";
       sha256 = "0ys45x4r4bjjlx0zpd5d56rgjz7k8gxili4r4k8zx3zfka4a3zwv";
     })
     ./gcc6.patch
   ];
 
-  postPatch = '' # kinda icky
-    sed -e '/("@INSTALL@")/d' \
-        -e s,@INSTALL@,$out/share/photivo, \
-        -i Sources/ptSettings.cpp
-    sed '1i#include <math.h>' -i Sources/filters/ptFilter_StdCurve.cpp
-  '';
+  postPatch = ''
+    # kinda icky
+       sed -e '/("@INSTALL@")/d' \
+           -e s,@INSTALL@,$out/share/photivo, \
+           -i Sources/ptSettings.cpp
+       sed '1i#include <math.h>' -i Sources/filters/ptFilter_StdCurve.cpp
+     '';
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
+  buildInputs =
+    [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
 
   meta = with lib; {
     platforms = platforms.linux;

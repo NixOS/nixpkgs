@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "CVE-2017-18926.patch";
-      url = "https://github.com/dajobe/raptor/commit/590681e546cd9aa18d57dc2ea1858cb734a3863f.patch";
+      url =
+        "https://github.com/dajobe/raptor/commit/590681e546cd9aa18d57dc2ea1858cb734a3863f.patch";
       sha256 = "1qlpb5rm3j2yi0x6zgdi5apymg5zlvwq3g1zl417gkjrlvxmndgp";
     })
   ];

@@ -1,23 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aws-sam-translator
-, importlib-metadata
-, importlib-resources
-, jsonpatch
-, jsonschema
-, junit-xml
-, networkx
-, pathlib2
-, pyyaml
-, requests
-, setuptools
-, six
-, mock
-, pydot
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aws-sam-translator
+, importlib-metadata, importlib-resources, jsonpatch, jsonschema, junit-xml
+, networkx, pathlib2, pyyaml, requests, setuptools, six, mock, pydot
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
@@ -46,13 +30,12 @@ buildPythonPackage rec {
     requests
     setuptools
     six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
-
-  checkInputs = [
-    mock
-    pydot
-    pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    importlib-resources
   ];
+
+  checkInputs = [ mock pydot pytestCheckHook ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -89,9 +72,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Checks cloudformation for practices and behaviour that could potentially be improved";
+    description =
+      "Checks cloudformation for practices and behaviour that could potentially be improved";
     homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
-    changelog = "https://github.com/aws-cloudformation/cfn-python-lint/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/aws-cloudformation/cfn-python-lint/blob/master/CHANGELOG.md";
     license = licenses.mit;
   };
 }

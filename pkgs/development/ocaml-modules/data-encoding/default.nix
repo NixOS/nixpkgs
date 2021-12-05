@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, ezjsonm
-, zarith
-, hex
-, json-data-encoding
-, json-data-encoding-bson
-, alcotest
-, crowbar
-}:
+{ lib, fetchFromGitLab, buildDunePackage, ezjsonm, zarith, hex
+, json-data-encoding, json-data-encoding-bson, alcotest, crowbar }:
 
 buildDunePackage {
   pname = "data-encoding";
@@ -22,18 +13,10 @@ buildDunePackage {
   };
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    ezjsonm
-    zarith
-    hex
-    json-data-encoding
-    json-data-encoding-bson
-  ];
+  propagatedBuildInputs =
+    [ ezjsonm zarith hex json-data-encoding json-data-encoding-bson ];
 
-  checkInputs = [
-    alcotest
-    crowbar
-  ];
+  checkInputs = [ alcotest crowbar ];
 
   doCheck = true;
 

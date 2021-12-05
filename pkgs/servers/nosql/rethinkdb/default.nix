@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl, which, m4
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
-, python2Packages, makeWrapper
-}:
+{ lib, stdenv, fetchurl, which, m4, protobuf, boost, zlib, curl, openssl, icu
+, jemalloc, libtool, python2Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
   version = "2.4.1";
 
   src = fetchurl {
-    url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
+    url =
+      "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
     sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
   };
 
@@ -52,9 +51,9 @@ stdenv.mkDerivation rec {
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = "http://www.rethinkdb.com";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.linux;
+    homepage = "http://www.rethinkdb.com";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
   };
 }

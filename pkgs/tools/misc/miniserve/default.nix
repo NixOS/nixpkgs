@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, zlib
-, libiconv
-, Security
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, pkg-config
+, zlib, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
@@ -25,10 +17,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config zlib ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlags = [
-    "--skip=bind_ipv4_ipv6::case_2"
-    "--skip=cant_navigate_up_the_root"
-  ];
+  checkFlags =
+    [ "--skip=bind_ipv4_ipv6::case_2" "--skip=cant_navigate_up_the_root" ];
 
   postInstall = ''
     installShellCompletion --cmd miniserve \
@@ -38,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+    description =
+      "For when you really just want to serve some files over HTTP right now!";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ zowoq ];

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, cmake
-, pkg-config
-, libdrm
-, fmt
-, libevdev
-, withPython ? false
-, python3Packages
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, cmake, pkg-config, libdrm, fmt
+, libevdev, withPython ? false, python3Packages }:
 
 stdenv.mkDerivation {
   pname = "kmsxx";
@@ -25,7 +14,8 @@ stdenv.mkDerivation {
   };
 
   # Didn't detect pybind11 without cmake
-  nativeBuildInputs = [ meson ninja pkg-config ] ++ lib.optionals withPython [ cmake ];
+  nativeBuildInputs = [ meson ninja pkg-config ]
+    ++ lib.optionals withPython [ cmake ];
   buildInputs = [ libdrm fmt libevdev ]
     ++ lib.optionals withPython (with python3Packages; [ python pybind11 ]);
 
@@ -34,7 +24,8 @@ stdenv.mkDerivation {
   mesonFlags = lib.optional (!withPython) "-Dpykms=disabled";
 
   meta = with lib; {
-    description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
+    description =
+      "C++11 library, utilities and python bindings for Linux kernel mode setting";
     homepage = "https://github.com/tomba/kmsxx";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];

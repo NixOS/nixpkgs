@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchurl
-, cmake
-, pkg-config
-, polkit
-, glib
-, pcre
-, libselinux
-, libsepol
-, util-linux
-}:
+{ stdenv, lib, mkDerivation, fetchurl, cmake, pkg-config, polkit, glib, pcre
+, libselinux, libsepol, util-linux }:
 
 mkDerivation rec {
   pname = "polkit-qt-1";
@@ -23,11 +12,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    glib
-    pcre
-    polkit
-  ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
+  buildInputs = [ glib pcre polkit ]
+    ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
 
   meta = with lib; {
     description = "A Qt wrapper around PolKit";

@@ -6,12 +6,10 @@ let
   cfg = config.xdg.portal.wlr;
   package = pkgs.xdg-desktop-portal-wlr;
   settingsFormat = pkgs.formats.ini { };
-  configFile = settingsFormat.generate "xdg-desktop-portal-wlr.ini" cfg.settings;
-in
-{
-  meta = {
-    maintainers = with maintainers; [ minijackson ];
-  };
+  configFile =
+    settingsFormat.generate "xdg-desktop-portal-wlr.ini" cfg.settings;
+in {
+  meta = { maintainers = with maintainers; [ minijackson ]; };
 
   options.xdg.portal.wlr = {
     enable = mkEnableOption ''
@@ -30,9 +28,7 @@ in
         values.
       '';
 
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
+      type = types.submodule { freeformType = settingsFormat.type; };
 
       default = { };
 

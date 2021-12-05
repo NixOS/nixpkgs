@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.snmp;
-in
-{
+let cfg = config.services.prometheus.exporters.snmp;
+in {
   port = 9116;
   extraOpts = {
     configurationPath = mkOption {
@@ -26,15 +24,13 @@ in
       example = {
         "default" = {
           "version" = 2;
-          "auth" = {
-            "community" = "public";
-          };
+          "auth" = { "community" = "public"; };
         };
       };
     };
 
     logFormat = mkOption {
-      type = types.enum ["logfmt" "json"];
+      type = types.enum [ "logfmt" "json" ];
       default = "logfmt";
       description = ''
         Output format of log messages.
@@ -42,7 +38,7 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error"];
+      type = types.enum [ "debug" "info" "warn" "error" ];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
@@ -50,10 +46,12 @@ in
     };
   };
   serviceOpts = let
-    configFile = if cfg.configurationPath != null
-                 then cfg.configurationPath
-                 else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
-    in {
+    configFile = if cfg.configurationPath != null then
+      cfg.configurationPath
+    else
+      "${pkgs.writeText "snmp-exporter-conf.yml"
+      (builtins.toJSON cfg.configuration)}";
+  in {
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \

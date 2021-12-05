@@ -14,10 +14,8 @@ mkDerivation rec {
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  patches = [
-    ./grantlee-nix-profiles.patch
-    ./grantlee-no-canonicalize-filepath.patch
-  ];
+  patches =
+    [ ./grantlee-nix-profiles.patch ./grantlee-no-canonicalize-filepath.patch ];
 
   outputs = [ "out" "dev" ];
   postFixup =

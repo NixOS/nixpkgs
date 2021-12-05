@@ -1,20 +1,6 @@
-{ lib, stdenv
-, coreutils
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, cmake
-, llvm
-, emscripten
-, openssl
-, libsndfile
-, libmicrohttpd
-, gnutls
-, libtasn1
-, p11-kit
-, vim
-, which
-}:
+{ lib, stdenv, coreutils, fetchFromGitHub, makeWrapper, pkg-config, cmake, llvm
+, emscripten, openssl, libsndfile, libmicrohttpd, gnutls, libtasn1, p11-kit, vim
+, which }:
 
 with lib.strings;
 
@@ -46,13 +32,18 @@ let
     inherit src;
 
     nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
-    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
+    buildInputs = [
+      llvm
+      emscripten
+      openssl
+      libsndfile
+      libmicrohttpd
+      gnutls
+      libtasn1
+      p11-kit
+    ];
 
-
-    passthru = {
-      inherit wrap wrapWithBuildEnv;
-    };
-
+    passthru = { inherit wrap wrapWithBuildEnv; };
 
     preConfigure = ''
       cd build
@@ -83,7 +74,8 @@ let
     '';
 
     meta = meta // {
-      description = "A functional programming language for realtime audio signal processing";
+      description =
+        "A functional programming language for realtime audio signal processing";
       longDescription = ''
         FAUST (Functional Audio Stream) is a functional programming
         language specifically designed for real-time signal processing
@@ -106,11 +98,7 @@ let
 
   # Default values for faust2appl.
   faust2ApplBase =
-    { baseName
-    , dir ? "tools/faust2appls"
-    , scripts ? [ baseName ]
-    , ...
-    }@args:
+    { baseName, dir ? "tools/faust2appls", scripts ? [ baseName ], ... }@args:
 
     args // {
       name = "${baseName}-${version}";
@@ -140,7 +128,8 @@ let
       '';
 
       meta = meta // {
-        description = "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
+        description =
+          "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
       };
     };
 
@@ -160,11 +149,7 @@ let
   #
   # The build input 'faust' is automatically added to the
   # propagatedBuildInputs.
-  wrapWithBuildEnv =
-    { baseName
-    , propagatedBuildInputs ? [ ]
-    , ...
-    }@args:
+  wrapWithBuildEnv = { baseName, propagatedBuildInputs ? [ ], ... }@args:
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
@@ -204,15 +189,12 @@ let
   # simply need to be wrapped with some dependencies on PATH.
   #
   # The build input 'faust' is automatically added to the PATH.
-  wrap =
-    { baseName
-    , runtimeInputs ? [ ]
-    , ...
-    }@args:
+  wrap = { baseName, runtimeInputs ? [ ], ... }@args:
 
     let
 
-      runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
+      runtimePath =
+        concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 

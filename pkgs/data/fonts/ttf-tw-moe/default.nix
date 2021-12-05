@@ -1,8 +1,6 @@
 { lib, fetchzip }:
-let
-  version = "2020-11-14";
-in
-fetchzip {
+let version = "2020-11-14";
+in fetchzip {
   name = "ttf-tw-moe";
 
   url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
@@ -16,7 +14,8 @@ fetchzip {
 
   meta = with lib; {
     homepage = "http://www.moe.gov.tw/";
-    description = "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
+    description =
+      "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
     version = version;
     longDescription = ''
       Installs 2 TTF fonts: MOESongUN and TW-MOE-Std-Kai.

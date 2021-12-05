@@ -4,8 +4,7 @@
 
 with lib;
 
-let
-  cfg = config.services.urxvtd;
+let cfg = config.services.urxvtd;
 in {
   options.services.urxvtd = {
     enable = mkOption {

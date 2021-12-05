@@ -1,16 +1,5 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wine
-, boost
-, libxcb
-, pkgsi686Linux
-}:
+{ lib, multiStdenv, fetchFromGitHub, fetchpatch, substituteAll, meson, ninja
+, pkg-config, wine, boost, libxcb, pkgsi686Linux }:
 
 let
   # Derived from subprojects/bitsery.wrap
@@ -70,15 +59,16 @@ in multiStdenv.mkDerivation rec {
   };
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    cp -R --no-preserve=mode,ownership ${bitsery.src} bitsery-${bitsery.version}
-    tar -xf bitsery-patch-${bitsery.version}.tar.xz
-    cp -R --no-preserve=mode,ownership ${function2.src} function2-${function2.version}
-    tar -xf function2-patch-${function2.version}.tar.xz
-    cp -R --no-preserve=mode,ownership ${tomlplusplus.src} tomlplusplus
-    cp -R --no-preserve=mode,ownership ${vst3.src} vst3
-  )'';
+  postUnpack = ''
+    (
+        cd "$sourceRoot/subprojects"
+        cp -R --no-preserve=mode,ownership ${bitsery.src} bitsery-${bitsery.version}
+        tar -xf bitsery-patch-${bitsery.version}.tar.xz
+        cp -R --no-preserve=mode,ownership ${function2.src} function2-${function2.version}
+        tar -xf function2-patch-${function2.version}.tar.xz
+        cp -R --no-preserve=mode,ownership ${tomlplusplus.src} tomlplusplus
+        cp -R --no-preserve=mode,ownership ${vst3.src} vst3
+      )'';
 
   patches = [
     # Hard code wine path so wine version is correct in logs
@@ -89,7 +79,8 @@ in multiStdenv.mkDerivation rec {
     # Remove with next yabridge update
     (fetchpatch {
       name = "fix-for-wine-6.20.patch";
-      url = "https://github.com/robbert-vdh/yabridge/commit/5be149cb525a638f7fc3adf84918c8239ee50ecf.patch";
+      url =
+        "https://github.com/robbert-vdh/yabridge/commit/5be149cb525a638f7fc3adf84918c8239ee50ecf.patch";
       sha256 = "sha256-x/gfn4mKZIGQ4M0o/0LlZF8i8wZDx/bkwf8wp0BGDBo=";
     })
   ];
@@ -98,17 +89,9 @@ in multiStdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wine
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wine ];
 
-  buildInputs = [
-    boost
-    libxcb
-  ];
+  buildInputs = [ boost libxcb ];
 
   # Meson is no longer able to pick up Boost automatically.
   # https://github.com/NixOS/nixpkgs/issues/86131
@@ -116,7 +99,8 @@ in multiStdenv.mkDerivation rec {
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary
@@ -128,7 +112,9 @@ in multiStdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    sed -i "221s|xcb.*|xcb_32bit_dep = winegcc.find_library('xcb', dirs: [ '${lib.getLib pkgsi686Linux.xorg.libxcb}/lib', ])|" meson.build
+    sed -i "221s|xcb.*|xcb_32bit_dep = winegcc.find_library('xcb', dirs: [ '${
+      lib.getLib pkgsi686Linux.xorg.libxcb
+    }/lib', ])|" meson.build
     sed -i "199 i '${lib.getLib pkgsi686Linux.boost}/lib'," meson.build
   '';
 
@@ -151,7 +137,8 @@ in multiStdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
+    description =
+      "Yet Another VST bridge, run Windows VST2 plugins under Linux";
     homepage = "https://github.com/robbert-vdh/yabridge";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];

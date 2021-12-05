@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubescape";
@@ -15,9 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-hx11RCLEUW/2MKNIXz51wOyKC7zv0M3Wvblam/E3rdQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   vendorSha256 = "sha256-GrQmWHdCk8Yl/ryS2zLQU8XCkjfS20qjlEScU8AQT0o=";
 

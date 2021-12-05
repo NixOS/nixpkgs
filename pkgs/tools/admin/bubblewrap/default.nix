@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/containers/bubblewrap/releases/download/v${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/containers/bubblewrap/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-Fv2vM3mdYxBONH4BM/kJGW/pDQxQUV0BC8tCLrWgCBg=";
   };
 

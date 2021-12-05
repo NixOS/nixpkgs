@@ -1,8 +1,7 @@
 # urserver service
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.services.urserver;
+let cfg = config.services.urserver;
 in {
 
   options.services.urserver.enable = lib.mkEnableOption "urserver";
@@ -14,7 +13,7 @@ in {
       allowedUDPPorts = [ 9511 9512 ];
     };
 
-    systemd.user.services.urserver =  {
+    systemd.user.services.urserver = {
       description = ''
         Server for Unified Remote: The one-and-only remote for your computer.
       '';

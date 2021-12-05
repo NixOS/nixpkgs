@@ -1,10 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, libX11, cairo
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm
+, xorgproto, libX11, cairo, libGLSupported ?
+  lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true,
-}:
+, libGLU ? null, libGL ? null, compat24 ? false, compat26 ? true, unicode ? true
+, }:
 
 assert withMesa -> libGLU != null && libGL != null;
 
@@ -39,25 +38,19 @@ stdenv.mkDerivation rec {
   # These variables are used by configure to find some dependencies.
   SEARCH_INCLUDE =
     "${libXinerama.dev}/include ${libSM.dev}/include ${libXxf86vm.dev}/include";
-  SEARCH_LIB =
-    "${libXinerama.out}/lib ${libSM.out}/lib ${libXxf86vm.out}/lib "
+  SEARCH_LIB = "${libXinerama.out}/lib ${libSM.out}/lib ${libXxf86vm.out}/lib "
     + optionalString withMesa "${libGLU.out}/lib ${libGL.out}/lib ";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1 -lX11 -lcairo -Wno-narrowing";
 
-  preConfigure = "
-    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
-    substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
-    substituteInPlace configure --replace /usr /no-such-path
-  ";
+  preConfigure =
+    "\n    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='\n    substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='\n    substituteInPlace configure --replace /usr /no-such-path\n  ";
 
   postBuild = "(cd contrib/src && make)";
 
-  postInstall = "
-    (cd contrib/src && make install)
-    (cd $out/include && ln -s wx-*/* .)
-  ";
+  postInstall =
+    "\n    (cd contrib/src && make install)\n    (cd $out/include && ln -s wx-*/* .)\n  ";
 
   passthru = {
     inherit compat24 compat26 unicode;
@@ -70,7 +63,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.wxWindows;
     homepage = "https://www.wxwidgets.org/";
-    description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
-    longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
+    description =
+      "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
+    longDescription =
+      "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
   };
 }

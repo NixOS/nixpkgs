@@ -73,7 +73,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Converts a Darcs repository into a Git repository";
-    homepage = "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
+    homepage =
+      "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

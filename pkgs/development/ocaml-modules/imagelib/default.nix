@@ -1,6 +1,4 @@
-{ lib, fetchurl, buildDunePackage
-, decompress, stdlib-shims, alcotest
-}:
+{ lib, fetchurl, buildDunePackage, decompress, stdlib-shims, alcotest }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.07";
@@ -10,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
+    url =
+      "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
     sha256 = "1cb94ea3731dc994c205940c9434543ce3f2470cdcb2e93a3e02ed793e80d480";
   };
 

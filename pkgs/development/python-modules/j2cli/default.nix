@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, pyyaml
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, jinja2, pyyaml, setuptools }:
 
 buildPythonPackage rec {
   pname = "j2cli";

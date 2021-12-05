@@ -1,20 +1,6 @@
-{ lib
-, fetchurl
-, fetchFromGitLab
-, python3
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk3
-, libxml2
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gobject-introspection
-, libhandy
-, librsvg
-}:
+{ lib, fetchurl, fetchFromGitLab, python3, appstream-glib, desktop-file-utils
+, glib, gtk3, libxml2, meson, ninja, pkg-config, wrapGAppsHook
+, gobject-introspection, libhandy, librsvg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
@@ -44,12 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    gobject-introspection
-    gtk3
-    libhandy
-    librsvg
-  ];
+  buildInputs = [ gobject-introspection gtk3 libhandy librsvg ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cryptography

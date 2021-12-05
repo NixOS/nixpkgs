@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gst-plugins-base
-, gettext
-, libav
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, python3, gst-plugins-base
+, gettext, libav }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
 # https://gstreamer.freedesktop.org/releases/1.6/ for more info.
@@ -18,24 +9,16 @@ stdenv.mkDerivation rec {
   version = "1.18.4";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "15n3x3vhshqa3icw93g4vqmqd46122anzqvfxwn6q8famlxlcjil";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ meson ninja gettext pkg-config python3 ];
 
-  buildInputs = [
-    gst-plugins-base
-    libav
-  ];
+  buildInputs = [ gst-plugins-base libav ];
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing

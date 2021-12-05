@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.12";
 
   src = fetchurl {
-    url = "https://github.com/Serranya/deadbeef-mpris2-plugin/releases/download/v${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/Serranya/deadbeef-mpris2-plugin/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "0s3y4ka4qf38cypc0xspy79q0g5y1kqx6ldad7yr6a45nw6j95jh";
   };
 

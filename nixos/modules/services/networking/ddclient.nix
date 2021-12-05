@@ -17,7 +17,7 @@ let
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
     ipv6=${boolToStr cfg.ipv6}
@@ -30,7 +30,8 @@ let
 
   preStart = ''
     install --mode=0400 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
+    ${lib.optionalString (cfg.configFile == null)
+    (if (cfg.passwordFile != null) then ''
       password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
       sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
     '' else ''
@@ -38,19 +39,21 @@ let
     '')}
   '';
 
-in
-
-with lib;
+in with lib;
 
 {
 
   imports = [
-    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
-      (config:
-        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [
+      "services"
+      "ddclient"
+      "domains"
+    ] (config:
+      let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+      in if value != "" then [ value ] else [ ]))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
-    (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
+    (mkRemovedOptionModule [ "services" "ddclient" "password" ]
+      "Use services.ddclient.passwordFile instead.")
   ];
 
   ###### interface
@@ -151,7 +154,6 @@ with lib;
         '';
       };
 
-
       quiet = mkOption {
         default = false;
         type = bool;
@@ -169,7 +171,8 @@ with lib;
       };
 
       use = mkOption {
-        default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
+        default =
+          "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
         type = str;
         description = ''
           Method to determine the IP address to send to the dynamic DNS provider.
@@ -202,7 +205,6 @@ with lib;
     };
   };
 
-
   ###### implementation
 
   config = mkIf config.services.ddclient.enable {
@@ -219,7 +221,9 @@ with lib;
         inherit StateDirectory;
         Type = "oneshot";
         ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
-        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStart = "${
+            lib.getBin cfg.package
+          }/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
 

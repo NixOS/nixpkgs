@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ffmpeg
-, rtmpdump
-, phantomjs2
-, atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, phantomjsSupport ? false
-, hlsEncryptedSupport ? true
+{ lib, buildPythonPackage, fetchPypi, ffmpeg, rtmpdump, phantomjs2
+, atomicparsley, pycryptodomex, websockets, mutagen, ffmpegSupport ? true
+, rtmpSupport ? true, phantomjsSupport ? false, hlsEncryptedSupport ? true
 , withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
@@ -35,29 +24,25 @@ buildPythonPackage rec {
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
-  makeWrapperArgs =
-    let
-      packagesToBinPath = [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
-    in
-    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+  makeWrapperArgs = let
+    packagesToBinPath = [ atomicparsley ] ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optional rtmpSupport rtmpdump
+      ++ lib.optional phantomjsSupport phantomjs2;
+  in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
-  setupPyBuildFlags = [
-    "build_lazy_extractors"
-  ];
+  setupPyBuildFlags = [ "build_lazy_extractors" ];
 
   # Requires network
   doCheck = false;
 
   postInstall = lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
-    description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    description =
+      "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
     changelog = "https://github.com/yt-dlp/yt-dlp/raw/${version}/Changelog.md";
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.

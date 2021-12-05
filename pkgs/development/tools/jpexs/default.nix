@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "11.3.0";
 
   src = fetchzip {
-    url = "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
+    url =
+      "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
     sha256 = "0d1xmq21vdpn0glwfzr00s62ic8jynmgmgxl0m1834xqf3ma0ihv";
     stripRoot = false;
   };

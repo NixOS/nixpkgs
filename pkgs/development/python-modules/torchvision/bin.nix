@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchurl
-, isPy37
-, isPy38
-, isPy39
-, patchelf
-, pillow
-, python
-, pytorch-bin
-}:
+{ lib, stdenv, buildPythonPackage, fetchurl, isPy37, isPy38, isPy39, patchelf
+, pillow, python, pytorch-bin }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
@@ -27,22 +17,16 @@ in buildPythonPackage {
 
   disabled = !(isPy37 || isPy38 || isPy39);
 
-  nativeBuildInputs = [
-    patchelf
-  ];
+  nativeBuildInputs = [ patchelf ];
 
-  propagatedBuildInputs = [
-    pillow
-    pytorch-bin
-  ];
+  propagatedBuildInputs = [ pillow pytorch-bin ];
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;
 
   pythonImportsCheck = [ "torchvision" ];
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+  postFixup = let rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     # Note: after patchelf'ing, libcudart can still not be found. However, this should
     #       not be an issue, because PyTorch is loaded before torchvision and brings

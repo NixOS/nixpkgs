@@ -1,13 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, meson, gtk3, at-spi2-core, dbus, gst_all_1, sphinxbase, pocketsphinx, ninja, gettext, appstream-glib, python3, glib, gobject-introspection, gsettings-desktop-schemas, itstool, wrapGAppsHook, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, gtk3, at-spi2-core, dbus
+, gst_all_1, sphinxbase, pocketsphinx, ninja, gettext, appstream-glib, python3
+, glib, gobject-introspection, gsettings-desktop-schemas, itstool, wrapGAppsHook
+, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
   version = "2.1";
 
   src = fetchFromGitHub {
-    owner  = "gkarsay";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "gkarsay";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1k53q0kbwpnbgyr0lmfzf5sm4f93d8nbjrzdz9pdhzpxgihndg25";
   };
 

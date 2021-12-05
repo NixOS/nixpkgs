@@ -3,7 +3,8 @@
 fetchzip {
   name = "fira-code-symbols-20160811";
 
-  url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
+  url =
+    "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -21,6 +22,7 @@ fetchzip {
     '';
     license = licenses.ofl;
     maintainers = [ maintainers.Profpatsch ];
-    homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
+    homepage =
+      "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

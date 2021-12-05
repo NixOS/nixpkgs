@@ -1,15 +1,13 @@
-{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
-, dbus, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib
-, libappindicator-gtk3, libdbusmenu-gtk3, libuuid, makeWrapper
-, nspr, nss, pango, squashfsTools, stdenv, systemd, xorg
-}:
+{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups, dbus
+, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib, libappindicator-gtk3
+, libdbusmenu-gtk3, libuuid, makeWrapper, nspr, nss, pango, squashfsTools
+, stdenv, systemd, xorg }:
 
 let
   # Currently only works with electron 9
   electron = electron_9;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "authy";
   version = "1.9.0";
   rev = "7";
@@ -49,7 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
+    url =
+      "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
     sha256 = "10az47cc3lgsdi0ixmmna08nqf9xm7gsl1ph00wfwrxzsi05ygx3";
   };
 

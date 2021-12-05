@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
-}:
+{ lib, stdenv, fetchurl, attr, judy, keyutils, libaio, libapparmor, libbsd
+, libcap, libgcrypt, lksctp-tools, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
   version = "0.13.03";
 
   src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-PmDWBeN42GqFkaMNblV77XCdgqWxlhY3gALNj/ADeos=";
   };
 
@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
   # All platforms inputs then Linux-only ones
   buildInputs = [ judy libbsd libgcrypt zlib ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools
+      attr
+      keyutils
+      libaio
+      libapparmor
+      libcap
+      lksctp-tools
     ];
 
   makeFlags = [
@@ -28,7 +33,8 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent
@@ -64,7 +70,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://kernel.ubuntu.com/~cking/stress-ng/";
     downloadPage = "https://kernel.ubuntu.com/~cking/tarballs/stress-ng/";
-    changelog = "https://kernel.ubuntu.com/git/cking/stress-ng.git/plain/debian/changelog?h=V${version}";
+    changelog =
+      "https://kernel.ubuntu.com/git/cking/stress-ng.git/plain/debian/changelog?h=V${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.unix;

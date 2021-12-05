@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "wakeonlan";
@@ -19,21 +14,13 @@ buildPythonPackage rec {
     sha256 = "sha256-5ri4bXc0EMNntzmcUZYpRIfaXoex4s5M6psf/9ta17Y=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test_wakeonlan.py"
-  ];
+  pytestFlagsArray = [ "test_wakeonlan.py" ];
 
-  pythonImportsCheck = [
-    "wakeonlan"
-  ];
+  pythonImportsCheck = [ "wakeonlan" ];
 
   meta = with lib; {
     description = "Python module for wake on lan";

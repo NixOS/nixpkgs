@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fastnumbers
-, fetchPypi
-, glibcLocales
-, hypothesis
-, PyICU
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fastnumbers, fetchPypi, glibcLocales, hypothesis
+, PyICU, pytest-mock, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "natsort";
@@ -22,21 +13,11 @@ buildPythonPackage rec {
     sha256 = "00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403";
   };
 
-  propagatedBuildInputs = [
-    fastnumbers
-    PyICU
-  ];
+  propagatedBuildInputs = [ fastnumbers PyICU ];
 
-  checkInputs = [
-    glibcLocales
-    hypothesis
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ glibcLocales hypothesis pytest-mock pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "natsort"
-  ];
+  pythonImportsCheck = [ "natsort" ];
 
   meta = with lib; {
     description = "Natural sorting for Python";

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, google-cloud-core
+, google-cloud-testutils, mock, proto-plus, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
@@ -29,11 +20,8 @@ buildPythonPackage rec {
     "test_list_traces"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.trace"
-    "google.cloud.trace_v1"
-    "google.cloud.trace_v2"
-  ];
+  pythonImportsCheck =
+    [ "google.cloud.trace" "google.cloud.trace_v1" "google.cloud.trace_v2" ];
 
   meta = with lib; {
     description = "Cloud Trace API client library";

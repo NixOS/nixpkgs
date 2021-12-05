@@ -16,12 +16,13 @@ buildDunePackage rec {
   propagatedBuildInputs = [ easy-format ];
 
   postPatch = ''
-   patchShebangs .
+    patchShebangs .
   '';
 
   meta = {
     inherit (src.meta) homepage;
-    description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
+    description =
+      "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;
   };

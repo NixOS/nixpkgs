@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libbtbb, libpcap , libusb1, bluez
-, udevGroup ? "ubertooth"
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libbtbb, libpcap, libusb1
+, bluez, udevGroup ? "ubertooth" }:
 
 stdenv.mkDerivation rec {
   pname = "ubertooth";
@@ -25,7 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Open source wireless development platform suitable for Bluetooth experimentation";
+    description =
+      "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";
     license = licenses.gpl2;
     maintainers = with maintainers; [ oxzi ];

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyserial
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyserial }:
 
 buildPythonPackage rec {
   pname = "pyserial-asyncio";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-tgMpI+BenXXsF6WvmphCnEbSg5rfr4BgTVLg+qzXoy8=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
-  pythonImportsCheck = [
-    "serial_asyncio"
-  ];
+  pythonImportsCheck = [ "serial_asyncio" ];
 
   meta = with lib; {
     description = "Asyncio extension package for pyserial";

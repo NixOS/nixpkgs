@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "0p37pc7l2malmjfkdlh4q2cfa6dqpsk1rah2j2xil0pj57ai6bks";
   };
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "radiotherm" ];
 

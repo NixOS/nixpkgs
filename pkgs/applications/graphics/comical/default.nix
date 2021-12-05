@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -pv $out/bin";
 
   meta = {
-    description = "Viewer of CBR and CBZ files, often used to store scanned comics";
+    description =
+      "Viewer of CBR and CBZ files, often used to store scanned comics";
     homepage = "http://comical.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ viric ];

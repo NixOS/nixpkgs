@@ -15,22 +15,22 @@ let
   icons = cfg.iconTheme.package;
   cursors = cfg.cursorTheme.package;
 
-  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
-    ''
+  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf" ''
     [greeter]
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
     cursor-theme-name = ${cfg.cursorTheme.name}
     cursor-theme-size = ${toString cfg.cursorTheme.size}
     background = ${ldmcfg.background}
-    ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
-    ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
+    ${optionalString (cfg.clock-format != null)
+    "clock-format = ${cfg.clock-format}"}
+    ${optionalString (cfg.indicators != null)
+    "indicators = ${concatStringsSep ";" cfg.indicators}"}
     ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
     ${cfg.extraConfig}
-    '';
+  '';
 
-in
-{
+in {
   options = {
 
     services.xserver.displayManager.lightdm.greeters.gtk = {
@@ -128,7 +128,16 @@ in
       indicators = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        example = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power" ];
+        example = [
+          "~host"
+          "~spacer"
+          "~clock"
+          "~spacer"
+          "~session"
+          "~language"
+          "~a11y"
+          "~power"
+        ];
         description = ''
           List of allowed indicator modules to use for the lightdm gtk
           greeter panel.
@@ -162,11 +171,7 @@ in
       name = "lightdm-gtk-greeter";
     };
 
-    environment.systemPackages = [
-      cursors
-      icons
-      theme
-    ];
+    environment.systemPackages = [ cursors icons theme ];
 
     environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
 

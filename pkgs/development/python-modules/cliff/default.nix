@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autopage
-, cmd2
-, pbr
-, prettytable
-, pyparsing
-, pyyaml
-, stevedore
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, autopage, cmd2, pbr, prettytable
+, pyparsing, pyyaml, stevedore, callPackage }:
 
 buildPythonPackage rec {
   pname = "cliff";
@@ -26,24 +16,15 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    autopage
-    cmd2
-    pbr
-    prettytable
-    pyparsing
-    pyyaml
-    stevedore
-  ];
+  propagatedBuildInputs =
+    [ autopage cmd2 pbr prettytable pyparsing pyyaml stevedore ];
 
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
 
   pythonImportsCheck = [ "cliff" ];
 
-  passthru.tests = {
-    pytest = callPackage ./tests.nix { };
-  };
+  passthru.tests = { pytest = callPackage ./tests.nix { }; };
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";

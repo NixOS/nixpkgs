@@ -7,7 +7,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/joe-pll/minio-exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "joe-pll";
     repo = "minio-exporter";
@@ -18,7 +18,8 @@ buildGoPackage rec {
   # TODO: Remove on update to 0.3.0
   patches = [
     (fetchpatch {
-      url = "https://github.com/joe-pll/minio-exporter/commit/50ab89d42322dc3e2696326a9ae4d3f951f646de.patch";
+      url =
+        "https://github.com/joe-pll/minio-exporter/commit/50ab89d42322dc3e2696326a9ae4d3f951f646de.patch";
       sha256 = "0aiixhvb4x8c8abrlf1i4hmca9i6xd6b638a5vfkvawx0q7gxl97";
     })
   ];

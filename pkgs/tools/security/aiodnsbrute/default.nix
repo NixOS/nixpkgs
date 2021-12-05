@@ -1,11 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, aiodns
-, click
-, tqdm
-, uvloop
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, aiodns, click, tqdm, uvloop }:
 
 buildPythonApplication rec {
   pname = "aiodnsbrute";
@@ -23,12 +16,7 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace " 'asyncio', " ""
   '';
 
-  propagatedBuildInputs = [
-     aiodns
-     click
-     tqdm
-     uvloop
-  ];
+  propagatedBuildInputs = [ aiodns click tqdm uvloop ];
 
   # no tests present
   doCheck = false;

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, docutils
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, docutils }:
 
 buildPythonPackage rec {
   pname = "Pygments";
@@ -17,9 +12,10 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "CVE-2021-27291.patch";
-      url = "https://github.com/pygments/pygments/commit/2e7e8c4a7b318f4032493773732754e418279a14.patch";
+      url =
+        "https://github.com/pygments/pygments/commit/2e7e8c4a7b318f4032493773732754e418279a14.patch";
       sha256 = "0ap7jgkmvkkzijabsgnfrwl376cjsxa4jmzvqysrkwpjq3q4rxpa";
-      excludes = ["CHANGES"];
+      excludes = [ "CHANGES" ];
     })
   ];
 

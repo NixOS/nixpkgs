@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "TopGit manages large amount of interdependent topic branches";
+    description =
+      "TopGit manages large amount of interdependent topic branches";
     homepage = "https://github.com/mackyle/topgit";
     license = licenses.gpl2;
     platforms = platforms.unix;

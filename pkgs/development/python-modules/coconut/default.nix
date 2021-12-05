@@ -1,16 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, cpyparsing
-, ipykernel
-, mypy
-, pexpect
-, pygments
-, pytestCheckHook
-, prompt-toolkit
-, tkinter
-, watchdog
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, cpyparsing, ipykernel, mypy
+, pexpect, pygments, pytestCheckHook, prompt-toolkit, tkinter, watchdog }:
 
 buildPythonApplication rec {
   pname = "coconut";
@@ -23,14 +12,13 @@ buildPythonApplication rec {
     sha256 = "/397YGV6QWWmKfqr5hSvqRoPOu7Hx1Pak6rVPR3etzw=";
   };
 
-  propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
+  propagatedBuildInputs =
+    [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
 
   checkInputs = [ pexpect pytestCheckHook tkinter ];
 
   # Currently most tests have performance issues
-  pytestFlagsArray = [
-    "tests/constants_test.py"
-  ];
+  pytestFlagsArray = [ "tests/constants_test.py" ];
 
   pythonImportsCheck = [ "coconut" ];
 

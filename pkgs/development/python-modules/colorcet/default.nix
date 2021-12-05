@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, param
-, pyct
-, pytest-mpl
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, param, pyct, pytest-mpl, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "efa44b6f4078261e62d0039c76aba17ac8d3ebaf0bc2291a111aee3905313433";
   };
 
-  propagatedBuildInputs = [
-    param
-    pyct
-  ];
+  propagatedBuildInputs = [ param pyct ];
 
-  checkInputs = [
-    pytest-mpl
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mpl pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -33,13 +21,9 @@ buildPythonPackage rec {
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
   '';
 
-  disabledTests = [
-    "matplotlib_default_colormap_plot"
-  ];
+  disabledTests = [ "matplotlib_default_colormap_plot" ];
 
-  pythonImportsCheck = [
-    "colorcet"
-  ];
+  pythonImportsCheck = [ "colorcet" ];
 
   meta = with lib; {
     description = "Collection of perceptually uniform colormaps";

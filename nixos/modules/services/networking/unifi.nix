@@ -5,12 +5,17 @@ let
   stateDir = "/var/lib/unifi";
   cmd = ''
     @${cfg.jrePackage}/bin/java java \
-        ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
-        ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
+        ${
+          optionalString (cfg.initialJavaHeapSize != null)
+          "-Xms${(toString cfg.initialJavaHeapSize)}m"
+        } \
+        ${
+          optionalString (cfg.maximumJavaHeapSize != null)
+          "-Xmx${(toString cfg.maximumJavaHeapSize)}m"
+        } \
         -jar ${stateDir}/lib/ace.jar
   '';
-in
-{
+in {
 
   options = {
 
@@ -91,18 +96,18 @@ in
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
-    users.groups.unifi = {};
+    users.groups.unifi = { };
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
+        3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
     };
@@ -162,7 +167,7 @@ in
         StateDirectory = "unifi";
         RuntimeDirectory = "unifi";
         LogsDirectory = "unifi";
-        CacheDirectory= "unifi";
+        CacheDirectory = "unifi";
 
         TemporaryFileSystem = [
           # required as we want to create bind mounts below
@@ -172,7 +177,7 @@ in
         # We must create the binary directories as bind mounts instead of symlinks
         # This is because the controller resolves all symlinks to absolute paths
         # to be used as the working directory.
-        BindPaths =  [
+        BindPaths = [
           "/var/log/unifi:${stateDir}/logs"
           "/run/unifi:${stateDir}/run"
           "${cfg.unifiPackage}/dl:${stateDir}/dl"
@@ -190,7 +195,8 @@ in
 
   };
   imports = [
-    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ]
+      "You should move contents of dataDir to /var/lib/unifi/data")
   ];
 
   meta.maintainers = with lib.maintainers; [ erictapen pennae ];

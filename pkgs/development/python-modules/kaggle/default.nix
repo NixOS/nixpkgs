@@ -1,14 +1,5 @@
-{ buildPythonPackage
-, certifi
-, fetchPypi
-, lib
-, python-dateutil
-, python-slugify
-, six
-, requests
-, tqdm
-, urllib3
-}:
+{ buildPythonPackage, certifi, fetchPypi, lib, python-dateutil, python-slugify
+, six, requests, tqdm, urllib3 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
@@ -25,17 +16,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
       --replace " 'slugify'," " "
-    '';
+  '';
 
-  propagatedBuildInputs = [
-    certifi
-    python-dateutil
-    python-slugify
-    requests
-    six
-    tqdm
-    urllib3
-  ];
+  propagatedBuildInputs =
+    [ certifi python-dateutil python-slugify requests six tqdm urllib3 ];
 
   # Tests try to access the network.
   checkPhase = ''
@@ -47,7 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kaggle" ];
 
   meta = with lib; {
-    description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
+    description =
+      "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
     maintainers = with maintainers; [ cdepillabout ];

@@ -13,32 +13,32 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool gettext ];
 
   prePatch = ''
-    #ignore unfamiliar flags
-    substituteInPlace configure \
-      --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
-    #same for packages using bsdbuild
-    substituteInPlace mkconfigure.pl \
-      --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
-    #insert header for missing NULL macro
-    for f in db4.pm sdl_ttf.pm mysql.pm uim.pm strlcpy.pm getpwuid.pm \
-      getaddrinfo.pm strtoll.pm free_null.pm getpwnam_r.pm \
-      gettimeofday.pm gethostbyname.pm xinerama.pm strsep.pm \
-      fontconfig.pm gettext.pm pthreads.pm strlcat.pm kqueue.pm wgl.pm \
-      alsa.pm crypt.pm cracklib.pm freesg-rg.pm edacious.pm mmap.pm \
-      agar.pm x11.pm x11.pm execvp.pm agar-core.pm dyld.pm getopt.pm \
-      strtold.pm sdl_image.pm shl_load.pm glx.pm percgi.pm timerfd.pm \
-      glob.pm dlopen.pm freesg.pm csidl.pm perl.pm select.pm \
-      portaudio.pm etubestore.pm;
-    do
-ed -s -v BSDBuild/$f << EOF
-/#include
-i
-#include <stddef.h>
-.
-w
-EOF
-    done
-  '';
+        #ignore unfamiliar flags
+        substituteInPlace configure \
+          --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
+        #same for packages using bsdbuild
+        substituteInPlace mkconfigure.pl \
+          --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
+        #insert header for missing NULL macro
+        for f in db4.pm sdl_ttf.pm mysql.pm uim.pm strlcpy.pm getpwuid.pm \
+          getaddrinfo.pm strtoll.pm free_null.pm getpwnam_r.pm \
+          gettimeofday.pm gethostbyname.pm xinerama.pm strsep.pm \
+          fontconfig.pm gettext.pm pthreads.pm strlcat.pm kqueue.pm wgl.pm \
+          alsa.pm crypt.pm cracklib.pm freesg-rg.pm edacious.pm mmap.pm \
+          agar.pm x11.pm x11.pm execvp.pm agar-core.pm dyld.pm getopt.pm \
+          strtold.pm sdl_image.pm shl_load.pm glx.pm percgi.pm timerfd.pm \
+          glob.pm dlopen.pm freesg.pm csidl.pm perl.pm select.pm \
+          portaudio.pm etubestore.pm;
+        do
+    ed -s -v BSDBuild/$f << EOF
+    /#include
+    i
+    #include <stddef.h>
+    .
+    w
+    EOF
+        done
+      '';
 
   configureFlags = [
     "--with-libtool=${libtool}/bin/libtool"

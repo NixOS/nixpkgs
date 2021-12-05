@@ -12,11 +12,16 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "r2qbgD9PAalbypt+vjp2YcYggUGPQMEG2FDxMtohqG4=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ libreoffice lpod lxml mistune pillow pygments ];
-
-  checkInputs = with pythonPackages; [
-    nose
+  propagatedBuildInputs = with pythonPackages; [
+    libreoffice
+    lpod
+    lxml
+    mistune
+    pillow
+    pygments
   ];
+
+  checkInputs = with pythonPackages; [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/thorstenb/odpdown";

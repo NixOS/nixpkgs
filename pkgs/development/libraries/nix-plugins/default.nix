@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ nix boost ];
 
   meta = {
-    description = "Collection of miscellaneous plugins for the nix expression language";
+    description =
+      "Collection of miscellaneous plugins for the nix expression language";
     homepage = "https://github.com/shlevy/nix-plugins";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

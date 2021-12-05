@@ -9,9 +9,10 @@ let
       return EXIT_SUCCESS;
     }
   '';
-in
-  runCommand "${sparse.pname}-tests" { buildInputs = [ gcc sparse ]; meta.timeout = 3; }
-''
+in runCommand "${sparse.pname}-tests" {
+  buildInputs = [ gcc sparse ];
+  meta.timeout = 3;
+} ''
   set -eu
   ${sparse}/bin/cgcc ${src} > output 2>&1 || ret=$?
   if [[ -z $(<output) ]]; then

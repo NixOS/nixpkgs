@@ -1,33 +1,8 @@
-{ lib
-, meson
-, ninja
-, gettext
-, fetchurl
-, gdk-pixbuf
-, tracker
-, libxml2
-, python3
-, libnotify
-, wrapGAppsHook
-, libmediaart
-, gobject-introspection
-, gnome-online-accounts
-, grilo
-, grilo-plugins
-, pkg-config
-, gtk3
-, pango
-, glib
-, desktop-file-utils
-, appstream-glib
-, itstool
-, gnome
-, gst_all_1
-, libdazzle
-, libsoup
-, libhandy
-, gsettings-desktop-schemas
-}:
+{ lib, meson, ninja, gettext, fetchurl, gdk-pixbuf, tracker, libxml2, python3
+, libnotify, wrapGAppsHook, libmediaart, gobject-introspection
+, gnome-online-accounts, grilo, grilo-plugins, pkg-config, gtk3, pango, glib
+, desktop-file-utils, appstream-glib, itstool, gnome, gst_all_1, libdazzle
+, libsoup, libhandy, gsettings-desktop-schemas }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
@@ -36,7 +11,9 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1llz2aqa3n3ivwl7i09pgylsbgrfzb872vcj1k7pvivxm1kkbcb9";
   };
 
@@ -79,11 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  pythonPath = with python3.pkgs; [
-    pycairo
-    dbus-python
-    pygobject3
-  ];
+  pythonPath = with python3.pkgs; [ pycairo dbus-python pygobject3 ];
 
   postPatch = ''
     for f in meson_post_conf.py meson_post_install.py; do
@@ -113,7 +86,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Music";
-    description = "Music player and management application for the GNOME desktop environment";
+    description =
+      "Music player and management application for the GNOME desktop environment";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

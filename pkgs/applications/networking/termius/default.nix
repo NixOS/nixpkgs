@@ -1,14 +1,5 @@
-{ atomEnv
-, autoPatchelfHook
-, squashfsTools
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, udev
-, wrapGAppsHook
-}:
+{ atomEnv, autoPatchelfHook, squashfsTools, fetchurl, makeDesktopItem
+, makeWrapper, stdenv, lib, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
@@ -19,7 +10,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.version'
     # and the url with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_81.snap";
+    url =
+      "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_81.snap";
     sha256 = "sha256-jNwWQTjUy8nJ8gHlbP9WgDlARWOhTQAA7KAcQNXKhNg=";
   };
 
@@ -38,7 +30,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs =
+    [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
   buildInputs = atomEnv.packages;
 

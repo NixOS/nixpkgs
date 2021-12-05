@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, fetchurl
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl }:
 
 let
   nnueFile = "nn-6762d36ad265.nnue";
@@ -11,8 +6,7 @@ let
     url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
     sha256 = "0727dsxfpns9fkyir95fybibqmigk5h45k154b2c5rk5s9md6qk7";
   };
-in
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "fishnet";
   version = "2.4.0";
 

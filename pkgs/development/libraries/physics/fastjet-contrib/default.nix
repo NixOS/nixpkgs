@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.046";
 
   src = fetchurl {
-    url = "http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
+    url =
+      "http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
     sha256 = "sha256-cgavrH/rIHXZn7sDa7NRPTKy2sOvMDQQJjmGNUeT7s8=";
   };
 

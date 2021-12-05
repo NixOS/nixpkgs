@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, httpx
-, pytest-asyncio
-, sanic
-, websockets
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, httpx
+, pytest-asyncio, sanic, websockets }:
 
 buildPythonPackage rec {
   pname = "sanic-testing";
@@ -26,16 +19,9 @@ buildPythonPackage rec {
       --replace "httpx==0.18.*" "httpx"
   '';
 
-  propagatedBuildInputs = [
-    httpx
-    sanic
-    websockets
-  ];
+  propagatedBuildInputs = [ httpx sanic websockets ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   # `sanic` is explicitly set to null when building `sanic` itself
   # to prevent infinite recursion.  In that case we skip running

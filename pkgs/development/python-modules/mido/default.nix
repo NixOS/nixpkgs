@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, portmidi
-, pygame
-, python-rtmidi
-, rtmidi-python
-, pytestCheckHook
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, portmidi, pygame
+, python-rtmidi, rtmidi-python, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "mido";
@@ -22,23 +13,16 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./libportmidi-cdll.patch;
-      libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.targetPlatform.extensions.sharedLibrary}";
+      libportmidi =
+        "${portmidi.out}/lib/libportmidi${stdenv.targetPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  propagatedBuildInputs = [
-    pygame
-    python-rtmidi
-    rtmidi-python
-  ];
+  propagatedBuildInputs = [ pygame python-rtmidi rtmidi-python ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mido"
-  ];
+  pythonImportsCheck = [ "mido" ];
 
   meta = with lib; {
     description = "MIDI Objects for Python";

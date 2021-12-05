@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, python-dateutil
-, ipython_genutils
-, decorator
-, pyzmq
-, ipython
-, jupyter-client
-, ipykernel
-, tornado
-, isPy3k
-, futures ? null
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, python-dateutil, ipython_genutils
+, decorator, pyzmq, ipython, jupyter-client, ipykernel, tornado, isPy3k
+, futures ? null }:
 
 buildPythonPackage rec {
   pname = "ipyparallel";
@@ -25,7 +13,15 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  propagatedBuildInputs = [ python-dateutil ipython_genutils decorator pyzmq ipython jupyter-client ipykernel tornado
+  propagatedBuildInputs = [
+    python-dateutil
+    ipython_genutils
+    decorator
+    pyzmq
+    ipython
+    jupyter-client
+    ipykernel
+    tornado
   ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # Requires access to cluster

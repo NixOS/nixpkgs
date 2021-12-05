@@ -1,13 +1,5 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
-, pytz
-, requests
-, setuptools-scm
-}:
+{ lib, beautifulsoup4, buildPythonPackage, fetchFromGitHub, lxml, pythonOlder
+, pytz, requests, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "snscrape";
@@ -24,17 +16,10 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    lxml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 lxml requests ]
+    ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   # There are no tests; make sure the executable works.
   checkPhase = ''

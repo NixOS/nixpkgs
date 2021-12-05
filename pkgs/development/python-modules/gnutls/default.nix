@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pkgs }:
 
 buildPythonPackage rec {
   pname = "python-gnutls";

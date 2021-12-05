@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel ? null
-, libelf
-, nasm
-, python3
-, withDriver ? false
-}:
+{ lib, stdenv, fetchFromGitHub, kernel ? null, libelf, nasm, python3
+, withDriver ? false }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
@@ -22,17 +15,12 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
 
-  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  KSRC = lib.optionalString withDriver
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  nativeBuildInputs = [
-    libelf
-    nasm
-  ];
+  nativeBuildInputs = [ libelf nasm ];
 
-  checkInputs = [
-    python3.pkgs.distro
-    python3.pkgs.pytestCheckHook
-  ];
+  checkInputs = [ python3.pkgs.distro python3.pkgs.pytestCheckHook ];
 
   preBuild = lib.optionalString withDriver ''
     export CHIPSEC_BUILD_LIB=$(mktemp -d)
@@ -46,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   setupPyBuildFlags = [ "--build-lib=$CHIPSEC_BUILD_LIB" ]
-                   ++ lib.optional (!withDriver) "--skip-driver";
+    ++ lib.optional (!withDriver) "--skip-driver";
 
   pythonImportsCheck = [ "chipsec" ];
 

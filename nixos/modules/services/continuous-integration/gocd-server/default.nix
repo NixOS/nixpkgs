@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.gocd-server;
+let cfg = config.services.gocd-server;
 in {
   options = {
     services.gocd-server = {
@@ -68,8 +67,15 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
-        defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        default = [
+          pkgs.stdenv
+          pkgs.jre
+          pkgs.git
+          config.programs.ssh.package
+          pkgs.nix
+        ];
+        defaultText = literalExpression
+          "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
@@ -167,22 +173,19 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment =
-        let
-          selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
-              config.environment.sessionVariables;
-        in
-          selectedSessionVars //
-            { NIX_REMOTE = "daemon";
-            } //
-            cfg.environment;
+      environment = let
+        selectedSessionVars =
+          lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
+          config.environment.sessionVariables;
+      in selectedSessionVars // { NIX_REMOTE = "daemon"; } // cfg.environment;
 
       path = cfg.packages;
 
       script = ''
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
+        ${pkgs.jre}/bin/java -server ${
+          concatStringsSep " " cfg.startupOptions
+        } \
                                ${concatStringsSep " " cfg.extraOptions}  \
                               -jar ${pkgs.gocd-server}/go-server/go.jar
       '';

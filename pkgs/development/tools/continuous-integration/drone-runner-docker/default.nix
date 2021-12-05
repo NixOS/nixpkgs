@@ -17,6 +17,7 @@ buildGoModule rec {
     maintainers = with maintainers; [ endocrimes ];
     license = licenses.unfreeRedistributable;
     homepage = "https://github.com/drone-runners/drone-runner-docker";
-    description = "Drone pipeline runner that executes builds inside Docker containers";
+    description =
+      "Drone pipeline runner that executes builds inside Docker containers";
   };
 }

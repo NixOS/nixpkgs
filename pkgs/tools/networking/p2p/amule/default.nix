@@ -2,22 +2,8 @@
 , enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchFromGitHub
-, stdenv
-, lib
-, cmake
-, zlib
-, wxGTK
-, perl
-, cryptopp
-, libupnp
-, gettext
-, libpng
-, autoreconfHook
-, pkg-config
-, makeWrapper
-, libX11
-}:
+, fetchFromGitHub, stdenv, lib, cmake, zlib, wxGTK, perl, cryptopp, libupnp
+, gettext, libpng, autoreconfHook, pkg-config, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "amule";
@@ -32,10 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
-  buildInputs = [
-    zlib wxGTK perl cryptopp.dev libupnp
-  ] ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  buildInputs = [ zlib wxGTK perl cryptopp.dev libupnp ]
+    ++ lib.optional httpServer libpng ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

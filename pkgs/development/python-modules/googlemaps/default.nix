@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-cov, pytestCheckHook
+, pythonOlder, requests, responses }:
 
 buildPythonPackage rec {
   pname = "googlemaps";
@@ -22,11 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook responses ];
 
   disabledTests = [
     # touches network

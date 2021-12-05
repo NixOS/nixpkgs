@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "riak";
-  meta = with lib.maintainers; {
-    maintainers = [ Br1ght0ne ];
-  };
+  meta = with lib.maintainers; { maintainers = [ Br1ght0ne ]; };
 
   machine = {
     services.riak.enable = true;

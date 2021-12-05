@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, pandoc
-}:
+{ lib, fetchFromGitHub, installShellFiles, python3Packages, pandoc }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
@@ -16,10 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1y77dg27dn6bajwp3w6qvw1ls5wfhd1j1788l3fjhxg7j4qjki4g";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    pandoc
-  ];
+  nativeBuildInputs = [ installShellFiles pandoc ];
 
   propagatedBuildInputs = with python3Packages; [
     charset-normalizer
@@ -50,10 +42,7 @@ python3Packages.buildPythonApplication rec {
     installManPage docs/http.1
   '';
 
-  pytestFlagsArray = [
-    "httpie"
-    "tests"
-  ];
+  pytestFlagsArray = [ "httpie" "tests" ];
 
   disabledTests = [
     "test_chunked"
@@ -67,7 +56,8 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "httpie" ];
 
   meta = with lib; {
-    description = "A command line HTTP client whose goal is to make CLI human-friendly";
+    description =
+      "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];

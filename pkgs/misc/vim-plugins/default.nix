@@ -3,25 +3,23 @@
 
 let
 
-  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix vimGenDocHook;
+  inherit (vimUtils.override { inherit vim; })
+    buildVimPluginFrom2Nix vimGenDocHook;
 
   inherit (lib) extends;
 
   initialPackages = self: {
     # Convert derivation to a vim plugin.
     toVimPlugin = drv:
-      drv.overrideAttrs(oldAttrs: {
+      drv.overrideAttrs (oldAttrs: {
 
-        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ vimGenDocHook ];
-        passthru = (oldAttrs.passthru or {}) // {
-          vimPlugin = true;
-        };
+        nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ]
+          ++ [ vimGenDocHook ];
+        passthru = (oldAttrs.passthru or { }) // { vimPlugin = true; };
       });
   };
 
-  plugins = callPackage ./generated.nix {
-    inherit buildVimPluginFrom2Nix;
-  };
+  plugins = callPackage ./generated.nix { inherit buildVimPluginFrom2Nix; };
 
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
@@ -35,13 +33,11 @@ let
     inherit llvmPackages luaPackages;
   };
 
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};
+  aliases = if (config.allowAliases or true) then
+    (import ./aliases.nix lib)
+  else
+    final: prev: { };
 
   extensible-self = lib.makeExtensible
-    (extends aliases
-      (extends overrides
-        (extends plugins initialPackages)
-      )
-    );
-in
-  extensible-self
+    (extends aliases (extends overrides (extends plugins initialPackages)));
+in extensible-self

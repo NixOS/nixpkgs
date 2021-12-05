@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, vala
-, libcap_ng
-, libvirt
-, libxml2
-}:
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config
+, gobject-introspection, gettext, gtk-doc, docbook-xsl-nons, vala, libcap_ng
+, libvirt, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "libvirt-glib";
@@ -29,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix build with GLib 2.70
     (fetchpatch {
-      url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/9a34c4ea55e0246c34896e48b8ecd637bc559ac7.patch";
+      url =
+        "https://gitlab.com/libvirt/libvirt-glib/-/commit/9a34c4ea55e0246c34896e48b8ecd637bc559ac7.patch";
       sha256 = "UU70uTi55EzPMuLYVKRzpVcd3WogeAtWAWEC2hWlR7k=";
     })
   ];
@@ -45,12 +33,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libcap_ng
-    libvirt
-    libxml2
-    gobject-introspection
-  ];
+  buildInputs = [ libcap_ng libvirt libxml2 gobject-introspection ];
 
   strictDeps = true;
 

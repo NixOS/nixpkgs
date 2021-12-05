@@ -1,46 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, libxml2
-, flex
-, bison
-, vips
-, gtk2
-, fftw
-, gsl
-, goffice
-, libgsf
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, flex, bison, vips, gtk2
+, fftw, gsl, goffice, libgsf, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "nip2";
   version = "8.7.1";
 
   src = fetchurl {
-    url = "https://github.com/libvips/nip2/releases/download/v${version}/nip2-${version}.tar.gz";
+    url =
+      "https://github.com/libvips/nip2/releases/download/v${version}/nip2-${version}.tar.gz";
     sha256 = "0l7n427njif53npqn02gfjjly8y3khbrkzqxp10j5vp9h97psgiw";
   };
 
-  nativeBuildInputs = [
-    bison
-    flex
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ bison flex pkg-config makeWrapper ];
 
-  buildInputs = [
-    glib
-    libxml2
-    vips
-    gtk2
-    fftw
-    gsl
-    goffice
-    libgsf
-  ];
+  buildInputs = [ glib libxml2 vips gtk2 fftw gsl goffice libgsf ];
 
   postFixup = ''
     wrapProgram $out/bin/nip2 --set VIPSHOME "$out"

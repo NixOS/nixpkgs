@@ -1,51 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, python3
-, pkg-config
-, gnome
-, gtk3
-, gobject-introspection
-, gdk-pixbuf
-, librest
-, librsvg
-, libgweather
-, geoclue2
-, wrapGAppsHook
-, folks
-, libchamplain
-, libsoup
-, gsettings-desktop-schemas
-, webkitgtk
-, gjs
-, libgee
-, libhandy
-, geocode-glib
-, evolution-data-server
-, gnome-online-accounts
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, python3, pkg-config, gnome, gtk3
+, gobject-introspection, gdk-pixbuf, librest, librsvg, libgweather, geoclue2
+, wrapGAppsHook, folks, libchamplain, libsoup, gsettings-desktop-schemas
+, webkitgtk, gjs, libgee, libhandy, geocode-glib, evolution-data-server
+, gnome-online-accounts }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-XtyUpXlHDO1HztKSxUq6Z8vnBIGOF0BsCQwB1Dlb4a0=";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext meson ninja pkg-config python3 wrapGAppsHook ];
 
   buildInputs = [
     evolution-data-server

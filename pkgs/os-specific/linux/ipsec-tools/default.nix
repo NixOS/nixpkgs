@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, linuxHeaders, readline, openssl, flex, libkrb5, pam }:
+{ lib, stdenv, fetchurl, fetchpatch, linuxHeaders, readline, openssl, flex
+, libkrb5, pam }:
 
 # TODO: These tools are supposed to work under NetBSD and FreeBSD as
 # well, so I guess it's not appropriate to place this expression in
@@ -42,7 +43,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://ipsec-tools.sourceforge.net/";
-    description = "Port of KAME's IPsec utilities to the Linux-2.6 IPsec implementation";
+    description =
+      "Port of KAME's IPsec utilities to the Linux-2.6 IPsec implementation";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

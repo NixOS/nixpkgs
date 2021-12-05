@@ -1,8 +1,4 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-compiler
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-protocol-compiler }:
 
 buildDunePackage {
   pname = "tezos-protocol-010-PtGRANAD";
@@ -15,9 +11,7 @@ buildDunePackage {
     sed -i.back -e s/-nostdlib//g dune.inc
   '';
 
-  buildInputs = [
-    tezos-protocol-compiler
-  ];
+  buildInputs = [ tezos-protocol-compiler ];
 
   doCheck = true;
 

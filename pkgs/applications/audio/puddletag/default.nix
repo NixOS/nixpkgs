@@ -15,12 +15,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [ chromaprint ] ++ (with python3Packages; [
-    configobj
-    mutagen
-    pyparsing
-    pyqt5
-  ]);
+  propagatedBuildInputs = [ chromaprint ]
+    ++ (with python3Packages; [ configobj mutagen pyparsing pyqt5 ]);
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

@@ -1,22 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, bison
-, flex
-, geoip
-, geolite-legacy
-, libcli
-, libnet
-, libnetfilter_conntrack
-, libnl
-, libpcap
-, libsodium
-, liburcu
-, ncurses
-, pkg-config
-, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
+, libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu
+, ncurses, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
@@ -29,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
   };
 
-  nativeBuildInputs = [
-    bison
-    flex
-    makeWrapper
-    pkg-config
-  ];
+  nativeBuildInputs = [ bison flex makeWrapper pkg-config ];
 
   buildInputs = [
     geoip

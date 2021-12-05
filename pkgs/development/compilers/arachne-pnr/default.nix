@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  makeFlags = [
-    "PREFIX=$(out)"
-    "ICEBOX=${icestorm}/share/icebox"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "ICEBOX=${icestorm}/share/icebox" ];
 
   postPatch = ''
     substituteInPlace ./Makefile \

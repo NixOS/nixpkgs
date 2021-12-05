@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, autoconf
-, automake
-, libtool
-, libpcap
-, json_c
-, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
+, json_c, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ndpi";
@@ -23,10 +15,7 @@ stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
 
   nativeBuildInputs = [ which autoconf automake libtool pkg-config ];
-  buildInputs = [
-    libpcap
-    json_c
-  ];
+  buildInputs = [ libpcap json_c ];
 
   meta = with lib; {
     description = "A library for deep-packet inspection";

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "beautifultable";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "12ci6jy8qmbphsvzvj98466nlhclfzs0a0pmbsv3mf5bfcdwvbh7";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test.py" ];
 

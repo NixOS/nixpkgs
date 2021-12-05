@@ -1,49 +1,18 @@
-{ lib, stdenv
-, meson
-, ninja
-, gettext
-, fetchurl
-, fetchpatch
-, pkg-config
-, gtk3
-, glib
-, icu
-, wrapGAppsHook
-, gnome
-, pantheon
-, libportal
-, libxml2
-, libxslt
-, itstool
-, webkitgtk
-, libsoup
-, glib-networking
-, libsecret
-, gnome-desktop
-, libnotify
-, libarchive
-, p11-kit
-, sqlite
-, gcr
-, isocodes
-, desktop-file-utils
-, python3
-, nettle
-, gdk-pixbuf
-, gst_all_1
-, json-glib
-, libdazzle
-, libhandy
-, buildPackages
-, withPantheon ? false
-}:
+{ lib, stdenv, meson, ninja, gettext, fetchurl, fetchpatch, pkg-config, gtk3
+, glib, icu, wrapGAppsHook, gnome, pantheon, libportal, libxml2, libxslt
+, itstool, webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop
+, libnotify, libarchive, p11-kit, sqlite, gcr, isocodes, desktop-file-utils
+, python3, nettle, gdk-pixbuf, gst_all_1, json-glib, libdazzle, libhandy
+, buildPackages, withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "s50YJUkllbC3TF1qZoaoV/lBnfpMAvgBPCl7yHDibdA=";
   };
 
@@ -51,7 +20,8 @@ stdenv.mkDerivation rec {
     # tab-view: Update close button position on startup
     # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1025
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/6e9d6d3cf7fa7ddf21a70e9816a5cd4767a79523.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/epiphany/-/commit/6e9d6d3cf7fa7ddf21a70e9816a5cd4767a79523.patch";
       sha256 = "sha256-lBVliGCIKwTvsYnWjAcmJxhTg1HS/2x4wlOh+4sx/xQ=";
     })
   ] ++ lib.optionals withPantheon [
@@ -62,13 +32,15 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/browser/pull/21
     # https://github.com/elementary/browser/pull/41
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/dark-style.patch";
+      url =
+        "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/dark-style.patch";
       sha256 = "sha256-RzMUc9P51UN3tRFefzRtMniXR9duOOmLj5eu5gL2TEQ=";
     })
     # Patch to unlink nav buttons
     # https://github.com/elementary/browser/pull/18
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/navigation-buttons.patch";
+      url =
+        "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/navigation-buttons.patch";
       sha256 = "sha256-G1/JUjn/8DyO9sgL/5Kq205KbTOs4EMi4Vf3cJ8FHXU=";
     })
   ];
@@ -116,25 +88,17 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
-  ] ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  ] ++ lib.optionals withPantheon [ pantheon.granite ];
 
   # Tests need an X display
-  mesonFlags = [
-    "-Dunit_tests=disabled"
-  ];
+  mesonFlags = [ "-Dunit_tests=disabled" ];
 
   postPatch = ''
     chmod +x post_install.py # patchShebangs requires executable file
     patchShebangs post_install.py
   '';
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";

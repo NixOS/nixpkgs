@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "source/src";
 
-  makeFlags = [
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags =
+    [ "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -m644 -b -D akvcam.ko $out/lib/modules/${kernel.modDirVersion}/akvcam.ko

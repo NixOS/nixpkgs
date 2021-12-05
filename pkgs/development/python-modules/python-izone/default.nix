@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, aiohttp
-, netifaces
-, asynctest
-, pytest-aiohttp
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, fetchpatch, aiohttp
+, netifaces, asynctest, pytest-aiohttp, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "python-izone";
@@ -24,29 +15,21 @@ buildPythonPackage rec {
     sha256 = "sha256-zgE1ccEPSa9nX0SEMN02VEGfnHexk/+jCJe7ugUL5UA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    netifaces
-  ];
+  propagatedBuildInputs = [ aiohttp netifaces ];
 
-  checkInputs = [
-    asynctest
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytest-aiohttp pytestCheckHook ];
 
   patches = [
     # async_timeout 4.0.0 removes current_task, https://github.com/Swamp-Ig/pizone/pull/15
     (fetchpatch {
       name = "remove-current-task.patch";
-      url = "https://github.com/Swamp-Ig/pizone/commit/988998cf009a39938e4ee37079337b0c187977f2.patch";
+      url =
+        "https://github.com/Swamp-Ig/pizone/commit/988998cf009a39938e4ee37079337b0c187977f2.patch";
       sha256 = "nVCQBMc4ZE7CQsYC986wqvPPyA7zJ/g278jJrpaiAIw=";
     })
   ];
 
-  pythonImportsCheck = [
-    "pizone"
-  ];
+  pythonImportsCheck = [ "pizone" ];
 
   meta = with lib; {
     description = "Python interface to the iZone airconditioner controller";

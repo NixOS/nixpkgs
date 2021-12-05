@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, six
-, websocket-client
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, requests, six
+, websocket-client }:
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-nSLUa9/jAT6XrHo77kV5HYBxPO/lhcWKqPfpES7ul9A=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
-    websocket-client
-  ];
+  propagatedBuildInputs = [ requests six websocket-client ];
 
   doCheck = false; # no tests
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];

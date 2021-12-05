@@ -1,10 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, runCommand
-, ran
-, curl
-}:
+{ buildGoModule, fetchFromGitHub, lib, runCommand, ran, curl }:
 
 buildGoModule rec {
   pname = "ran";
@@ -20,10 +14,7 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [
-    "-X" "main._version_=v${version}"
-    "-X" "main._branch_=master"
-  ];
+  ldflags = [ "-X" "main._version_=v${version}" "-X" "main._branch_=master" ];
 
   passthru.tests = {
     simple = runCommand "ran-test" { } ''

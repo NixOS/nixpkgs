@@ -4,10 +4,11 @@ with lib;
 
 let
   cfg = config.services.ethminer;
-  poolUrl = escapeShellArg "stratum1+tcp://${cfg.wallet}@${cfg.pool}:${toString cfg.stratumPort}/${cfg.rig}/${cfg.registerMail}";
-in
+  poolUrl = escapeShellArg "stratum1+tcp://${cfg.wallet}@${cfg.pool}:${
+      toString cfg.stratumPort
+    }/${cfg.rig}/${cfg.registerMail}";
 
-{
+in {
 
   ###### interface
 
@@ -36,7 +37,8 @@ in
       apiPort = mkOption {
         type = types.int;
         default = -3333;
-        description = "Ethminer api port. minus sign puts api in read-only mode.";
+        description =
+          "Ethminer api port. minus sign puts api in read-only mode.";
       };
 
       wallet = mkOption {
@@ -79,7 +81,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -93,7 +94,9 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStartPre = "${pkgs.ethminer}/bin/.ethminer-wrapped --list-devices";
-        ExecStartPost = optional (cfg.toolkit == "cuda") "+${getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -pl ${toString cfg.maxPower}";
+        ExecStartPost = optional (cfg.toolkit == "cuda") "+${
+            getBin config.boot.kernelPackages.nvidia_x11
+          }/bin/nvidia-smi -pl ${toString cfg.maxPower}";
         Restart = "always";
       };
 

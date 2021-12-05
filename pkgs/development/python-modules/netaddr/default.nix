@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, glibcLocales
-, importlib-resources
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, glibcLocales
+, importlib-resources, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "netaddr";
@@ -18,7 +12,8 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   checkInputs = [ glibcLocales pytestCheckHook ];
 

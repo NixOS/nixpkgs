@@ -1,33 +1,30 @@
 { lib, stdenv, crossStageStatic, langD ? false, libcCross, threadsCross }:
 
-let
-  inherit (stdenv) hostPlatform targetPlatform;
-in
+let inherit (stdenv) hostPlatform targetPlatform;
 
-{
+in {
   # For non-cross builds these flags are currently assigned in builder.sh.
   # It would be good to consolidate the generation of makeFlags
   # ({C,CXX,LD}FLAGS_FOR_{BUILD,TARGET}, etc...) at some point.
   EXTRA_FLAGS_FOR_TARGET = let
-      mkFlags = dep: langD: lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) ([
-        "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
-      ] ++ lib.optionals (! crossStageStatic) [
-        "-B${lib.getLib dep}${dep.libdir or "/lib"}"
-      ]);
-    in mkFlags libcCross langD
-    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross langD)
-    ;
+    mkFlags = dep: langD:
+      lib.optionals (targetPlatform != hostPlatform && dep != null && !langD)
+      ([ "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}" ]
+        ++ lib.optionals (!crossStageStatic)
+        [ "-B${lib.getLib dep}${dep.libdir or "/lib"}" ]);
+  in mkFlags libcCross langD
+  ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross langD);
 
   EXTRA_LDFLAGS_FOR_TARGET = let
-      mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
-        "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
-      ] ++ (if crossStageStatic then [
-          "-B${lib.getLib dep}${dep.libdir or "/lib"}"
-        ] else [
+    mkFlags = dep:
+      lib.optionals (targetPlatform != hostPlatform && dep != null)
+      ([ "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}" ]
+        ++ (if crossStageStatic then
+          [ "-B${lib.getLib dep}${dep.libdir or "/lib"}" ]
+        else [
           "-Wl,-rpath,${lib.getLib dep}${dep.libdir or "/lib"}"
           "-Wl,-rpath-link,${lib.getLib dep}${dep.libdir or "/lib"}"
-      ]));
-    in mkFlags libcCross
-    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
-    ;
+        ]));
+  in mkFlags libcCross
+  ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross);
 }

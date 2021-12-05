@@ -1,23 +1,6 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, makeWrapper
-, qemu
-, gnugrep
-, lsb-release
-, jq
-, procps
-, python3
-, cdrtools
-, usbutils
-, util-linux
-, spicy
-, swtpm
-, wget
-, xdg-user-dirs
-, xrandr
-, zsync
-}:
+{ lib, fetchFromGitHub, stdenv, makeWrapper, qemu, gnugrep, lsb-release, jq
+, procps, python3, cdrtools, usbutils, util-linux, spicy, swtpm, wget
+, xdg-user-dirs, xrandr, zsync }:
 let
   runtimePaths = [
     qemu
@@ -36,9 +19,8 @@ let
     xrandr
     zsync
   ];
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "quickemu";
   version = "2.2.7";
 
@@ -52,19 +34,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    runHook preInstall
+     runHook preInstall
 
-    install -Dm755 -t "$out/bin" quickemu quickget macrecovery
+     install -Dm755 -t "$out/bin" quickemu quickget macrecovery
 
-   for f in quickget macrecovery quickemu; do
-    wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
-   done
+    for f in quickget macrecovery quickemu; do
+     wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
+    done
 
-    runHook postInstall
+     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
+    description =
+      "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
     homepage = "https://github.com/wimpysworld/quickemu";
     license = licenses.mit;
     maintainers = with maintainers; [ fedx-sudo ];

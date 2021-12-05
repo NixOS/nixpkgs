@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
-, curl, git, unzip, gnutar, coreutils, sqlite }:
+{ lib, stdenv, fetchurl, makeWrapper, haskellPackages, haskell, which, swiProlog
+, rlwrap, tk, curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
   pname = "pakcs";
@@ -10,7 +8,8 @@ let
   # Don't switch to "Current release" without a reason, because its
   # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
-    url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
+    url =
+      "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
     sha256 = "1jyg29j8r8pgcin7ixdya6c3zzfjdi66rghpwrfnkk133fz4iz7s";
   };
 
@@ -19,11 +18,11 @@ let
       curry-base = haskell.lib.compose.overrideCabal (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-base";
-      }) (super.callPackage ./curry-base.nix {});
+      }) (super.callPackage ./curry-base.nix { });
       curry-frontend = haskell.lib.compose.overrideCabal (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-frontend";
-      }) (super.callPackage ./curry-frontend.nix {});
+      }) (super.callPackage ./curry-frontend.nix { });
     };
   }).curry-frontend;
 in stdenv.mkDerivation {
@@ -51,7 +50,7 @@ in stdenv.mkDerivation {
                 examples/test.sh testsuite/test.sh lib/test.sh; do
         substituteInPlace $file --replace "/bin/rm" "rm"
     done
-  '' ;
+  '';
 
   # cypm new: EXISTENCE ERROR: source_sink
   # "/tmp/nix-build-pakcs-2.0.2.drv-0/pakcs-2.0.2/currytools/cpm/templates/LICENSE"
@@ -74,12 +73,15 @@ in stdenv.mkDerivation {
 
     # List of dependencies from currytools/cpm/src/CPM/Main.curry
     wrapProgram $out/pakcs/bin/cypm \
-      --prefix PATH ":" "${lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]
+      }"
   '';
 
   meta = with lib; {
     homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
-    description = "An implementation of the multi-paradigm declarative language Curry";
+    description =
+      "An implementation of the multi-paradigm declarative language Curry";
     license = licenses.bsd3;
 
     longDescription = ''

@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Linux kernel drivers for Intel Ethernet adapters and LOMs (LAN On Motherboard)";
+    description =
+      "Linux kernel drivers for Intel Ethernet adapters and LOMs (LAN On Motherboard)";
     homepage = "http://e1000.sf.net/";
     license = lib.licenses.gpl2;
   };

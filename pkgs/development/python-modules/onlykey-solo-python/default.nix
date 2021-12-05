@@ -1,14 +1,5 @@
-{ buildPythonPackage
-, click
-, ecdsa
-, fetchPypi
-, fido2
-, intelhex
-, lib
-, pyserial
-, pyusb
-, requests
-}:
+{ buildPythonPackage, click, ecdsa, fetchPypi, fido2, intelhex, lib, pyserial
+, pyusb, requests }:
 
 buildPythonPackage rec {
   pname = "onlykey-solo-python";
@@ -19,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "sha256-Mbi5So2OgeXjg4Fzg7v2gAJuh1Y7ZCYu8Lrha/7PQfY=";
   };
 
-  propagatedBuildInputs = [ click ecdsa fido2 intelhex pyserial pyusb requests ];
+  propagatedBuildInputs =
+    [ click ecdsa fido2 intelhex pyserial pyusb requests ];
 
   # no tests
   doCheck = false;

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, distributed
-, mpi4py
-}:
+{ lib, buildPythonPackage, fetchPypi, dask, distributed, mpi4py }:
 
 buildPythonPackage rec {
   version = "2.21.0";

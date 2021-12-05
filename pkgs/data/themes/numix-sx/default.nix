@@ -5,7 +5,8 @@ stdenv.mkDerivation {
   pname = "numix-sx-gtk-theme";
 
   src = fetchurl {
-    url = "https://dl.opendesktop.org/api/files/download/id/1493077417/Numix-SX.tar.xz";
+    url =
+      "https://dl.opendesktop.org/api/files/download/id/1493077417/Numix-SX.tar.xz";
     sha256 = "7e1983924b2d90e89eddb3da8f4c43dc1326fe138fd191c8212c7904dcd618b0";
   };
 

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2
+, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "libLAS-1.8.1";
@@ -8,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost gdal libgeotiff libtiff LASzip2 ];
 
   cmakeFlags = [

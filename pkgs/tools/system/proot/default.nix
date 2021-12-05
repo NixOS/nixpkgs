@@ -1,10 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, talloc
-, pkg-config
-, libarchive
-, git
-, ncurses
-, docutils, swig, python3, coreutils, enablePython ? true }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, talloc, pkg-config, libarchive, git
+, ncurses, docutils, swig, python3, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "proot";
@@ -24,13 +19,14 @@ stdenv.mkDerivation rec {
     sed -i /CROSS_COMPILE/d src/GNUmakefile
   '';
 
-  buildInputs = [ ncurses libarchive talloc ] ++ lib.optional enablePython python3;
+  buildInputs = [ ncurses libarchive talloc ]
+    ++ lib.optional enablePython python3;
   nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig;
   patches = [
     # without this patch the package does not build with python>3.7
     (fetchpatch {
       url = "https://github.com/proot-me/proot/pull/285.patch";
-      sha256= "1vncq36pr4v0h63fijga6zrwlsb0vb4pj25zxf1ni15ndxv63pxj";
+      sha256 = "1vncq36pr4v0h63fijga6zrwlsb0vb4pj25zxf1ni15ndxv63pxj";
     })
   ];
 
@@ -53,7 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://proot-me.github.io";
-    description = "User-space implementation of chroot, mount --bind and binfmt_misc";
+    description =
+      "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ianwookim makefu veprbl dtzWill ];

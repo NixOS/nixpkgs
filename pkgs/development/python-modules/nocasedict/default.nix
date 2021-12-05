@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
@@ -11,13 +9,9 @@ buildPythonPackage rec {
     sha256 = "86e2dae49e34de7c31b65b486c8f9aa58b66dc2e8ee9b34c390c6c58885c85a0";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
-  pythonImportsCheck = [
-    "nocasedict"
-  ];
+  pythonImportsCheck = [ "nocasedict" ];
 
   meta = with lib; {
     description = "A case-insensitive ordered dictionary for Python";

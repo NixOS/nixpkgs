@@ -1,7 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-}:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snallygaster";
@@ -20,9 +17,7 @@ python3Packages.buildPythonApplication rec {
     dnspython
   ];
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # we are not interested in linting the project

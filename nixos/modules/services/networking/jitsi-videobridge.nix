@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.jitsi-videobridge;
-  attrsToArgs = a: concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") a);
+  attrsToArgs = a:
+    concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") a);
 
   # HOCON is a JSON superset that videobridge2 uses for configuration.
   # It can substitute environment variables which we use for passwords here.
@@ -12,14 +13,23 @@ let
   #
   # Substitution for environment variable FOO is represented as attribute set
   # { __hocon_envvar = "FOO"; }
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  toHOCON = x:
+    if isAttrs x && x ? __hocon_envvar then
+      ("\${" + x.__hocon_envvar + "}")
+    else if isAttrs x then
+      "{${
+        concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x)
+      }}"
+    else if isList x then
+      "[${concatMapStringsSep "," toHOCON x}]"
+    else
+      builtins.toJSON x;
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
-  toVarName = s: "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+  toVarName = s:
+    "XMPP_PASSWORD_" + stringAsChars
+    (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
 
   defaultJvbConfig = {
     videobridge = {
@@ -32,26 +42,28 @@ let
       };
       stats = {
         enabled = true;
-        transports = [ { type = "muc"; } ];
+        transports = [{ type = "muc"; }];
       };
-      apis.xmpp-client.configs = flip mapAttrs cfg.xmppConfigs (name: xmppConfig: {
-        hostname = xmppConfig.hostName;
-        domain = xmppConfig.domain;
-        username = xmppConfig.userName;
-        password = { __hocon_envvar = toVarName name; };
-        muc_jids = xmppConfig.mucJids;
-        muc_nickname = xmppConfig.mucNickname;
-        disable_certificate_verification = xmppConfig.disableCertificateVerification;
-      });
+      apis.xmpp-client.configs = flip mapAttrs cfg.xmppConfigs
+        (name: xmppConfig: {
+          hostname = xmppConfig.hostName;
+          domain = xmppConfig.domain;
+          username = xmppConfig.userName;
+          password = { __hocon_envvar = toVarName name; };
+          muc_jids = xmppConfig.mucJids;
+          muc_nickname = xmppConfig.mucNickname;
+          disable_certificate_verification =
+            xmppConfig.disableCertificateVerification;
+        });
     };
   };
 
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
   jvbConfig = recursiveUpdate defaultJvbConfig cfg.config;
-in
-{
+in {
   options.services.jitsi-videobridge = with types; {
-    enable = mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
+    enable =
+      mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
 
     config = mkOption {
       type = attrs;
@@ -149,9 +161,10 @@ in
         };
         config = {
           hostName = mkDefault name;
-          mucNickname = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-            config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
-          ));
+          mucNickname = mkDefault (builtins.replaceStrings [ "." ] [ "-" ]
+            (config.networking.hostName
+              + optionalString (config.networking.domain != null)
+              ".${config.networking.domain}"));
         };
       }));
     };
@@ -198,28 +211,31 @@ in
         What is passed as --apis= parameter. If this is empty, "none" is passed.
         Needed for monitoring jitsi.
       '';
-      default = [];
-      example = literalExpression "[ \"colibri\" \"rest\" ]";
+      default = [ ];
+      example = literalExpression ''[ "colibri" "rest" ]'';
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
 
-    services.jitsi-videobridge.extraProperties = optionalAttrs (cfg.nat.localAddress != null) {
-      "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
-      "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
-    };
+    services.jitsi-videobridge.extraProperties =
+      optionalAttrs (cfg.nat.localAddress != null) {
+        "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" =
+          cfg.nat.localAddress;
+        "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" =
+          cfg.nat.publicAddress;
+      };
 
     systemd.services.jitsi-videobridge2 = let
       jvbProps = {
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
-        "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
+        "-Djava.util.logging.config.file" =
+          "/etc/jitsi/videobridge/logging.properties";
         "-Dconfig.file" = pkgs.writeText "jvb.conf" (toHOCON jvbConfig);
       } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);
-    in
-    {
+    in {
       aliases = [ "jitsi-videobridge.service" ];
       description = "Jitsi Videobridge";
       after = [ "network.target" ];
@@ -227,11 +243,12 @@ in
 
       environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
 
-      script = (concatStrings (mapAttrsToList (name: xmppConfig:
-        "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
-      ) cfg.xmppConfigs))
-      + ''
-        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
+      script = (concatStrings (mapAttrsToList (name: xmppConfig: ''
+        export ${toVarName name}=$(cat ${xmppConfig.passwordFile})
+      '') cfg.xmppConfigs)) + ''
+        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${
+          if (cfg.apis == [ ]) then "none" else concatStringsSep "," cfg.apis
+        }
       '';
 
       serviceConfig = {
@@ -263,22 +280,23 @@ in
       };
     };
 
-    environment.etc."jitsi/videobridge/logging.properties".source =
-      mkDefault "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";
+    environment.etc."jitsi/videobridge/logging.properties".source = mkDefault
+      "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";
 
     # (from videobridge2 .deb)
     # this sets the max, so that we can bump the JVB UDP single port buffer size.
     boot.kernel.sysctl."net.core.rmem_max" = mkDefault 10485760;
     boot.kernel.sysctl."net.core.netdev_max_backlog" = mkDefault 100000;
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall
-      [ jvbConfig.videobridge.ice.tcp.port ];
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall
-      [ jvbConfig.videobridge.ice.udp.port ];
+    networking.firewall.allowedTCPPorts =
+      mkIf cfg.openFirewall [ jvbConfig.videobridge.ice.tcp.port ];
+    networking.firewall.allowedUDPPorts =
+      mkIf cfg.openFirewall [ jvbConfig.videobridge.ice.udp.port ];
 
     assertions = [{
       message = "publicAddress must be set if and only if localAddress is set";
-      assertion = (cfg.nat.publicAddress == null) == (cfg.nat.localAddress == null);
+      assertion = (cfg.nat.publicAddress == null)
+        == (cfg.nat.localAddress == null);
     }];
   };
 

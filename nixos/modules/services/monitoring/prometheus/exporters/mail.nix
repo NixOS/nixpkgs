@@ -5,17 +5,17 @@ with lib;
 let
   cfg = config.services.prometheus.exporters.mail;
 
-  configurationFile = pkgs.writeText "prometheus-mail-exporter.conf" (builtins.toJSON (
-    # removes the _module attribute, null values and converts attrNames to lowercase
-    mapAttrs' (name: value:
-      if name == "servers"
-      then nameValuePair (toLower name)
-        ((map (srv: (mapAttrs' (n: v: nameValuePair (toLower n) v)
-          (filterAttrs (n: v: !(n == "_module" || v == null)) srv)
-        ))) value)
-      else nameValuePair (toLower name) value
-    ) (filterAttrs (n: _: !(n == "_module")) cfg.configuration)
-  ));
+  configurationFile = pkgs.writeText "prometheus-mail-exporter.conf"
+    (builtins.toJSON (
+      # removes the _module attribute, null values and converts attrNames to lowercase
+      mapAttrs' (name: value:
+        if name == "servers" then
+          nameValuePair (toLower name) ((map (srv:
+            (mapAttrs' (n: v: nameValuePair (toLower n) v)
+              (filterAttrs (n: v: !(n == "_module" || v == null)) srv)))) value)
+        else
+          nameValuePair (toLower name) value)
+      (filterAttrs (n: _: !(n == "_module")) cfg.configuration)));
 
   serverOptions.options = {
     name = mkOption {
@@ -99,7 +99,7 @@ let
     };
     servers = mkOption {
       type = types.listOf (types.submodule serverOptions);
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ {
           name = "testserver";
@@ -133,8 +133,7 @@ let
       '';
     };
   };
-in
-{
+in {
   port = 9225;
   extraOpts = {
     configFile = mkOption {
@@ -167,7 +166,10 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --config.file ${
-            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
+            if cfg.configuration != null then
+              configurationFile
+            else
+              (escapeShellArg cfg.configFile)
           } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

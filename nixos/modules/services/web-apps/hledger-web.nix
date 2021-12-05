@@ -1,13 +1,13 @@
 { lib, pkgs, config, ... }:
 with lib;
-let
-  cfg = config.services.hledger-web;
+let cfg = config.services.hledger-web;
 in {
   options.services.hledger-web = {
 
     enable = mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption "Serve only the JSON web API, without the web UI.";
+    serveApi =
+      mkEnableOption "Serve only the JSON web API, without the web UI.";
 
     host = mkOption {
       type = types.str;
@@ -80,7 +80,7 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "--forecast" ];
       description = ''
         Extra command line arguments to pass to hledger-web.
@@ -99,23 +99,22 @@ in {
       useDefaultShell = true;
     };
 
-    users.groups.hledger = {};
+    users.groups.hledger = { };
 
     systemd.services.hledger-web = let
-      capabilityString = with cfg.capabilities; concatStringsSep "," (
-        (optional view "view")
-        ++ (optional add "add")
-        ++ (optional manage "manage")
-      );
-      serverArgs = with cfg; escapeShellArgs ([
-        "--serve"
-        "--host=${host}"
-        "--port=${toString port}"
-        "--capabilities=${capabilityString}"
-        (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
-        (optionalString (cfg.serveApi) "--serve-api")
-      ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
-        ++ extraOptions);
+      capabilityString = with cfg.capabilities;
+        concatStringsSep "," ((optional view "view") ++ (optional add "add")
+          ++ (optional manage "manage"));
+      serverArgs = with cfg;
+        escapeShellArgs ([
+          "--serve"
+          "--host=${host}"
+          "--port=${toString port}"
+          "--capabilities=${capabilityString}"
+          (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
+          (optionalString (cfg.serveApi) "--serve-api")
+        ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
+          ++ extraOptions);
     in {
       description = "hledger-web - web-app for the hledger accounting tool.";
       documentation = [ "https://hledger.org/hledger-web.html" ];

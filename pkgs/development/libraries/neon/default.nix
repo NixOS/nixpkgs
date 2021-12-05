@@ -1,19 +1,15 @@
-{ lib, stdenv, fetchurl, libxml2, pkg-config
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, static ? stdenv.hostPlatform.isStatic
-, shared ? !stdenv.hostPlatform.isStatic
+{ lib, stdenv, fetchurl, libxml2, pkg-config, compressionSupport ? true
+, zlib ? null, sslSupport ? true, openssl ? null
+, static ? stdenv.hostPlatform.isStatic, shared ? !stdenv.hostPlatform.isStatic
 }:
 
 assert compressionSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert static || shared;
 
-let
-   inherit (lib) optionals;
-in
+let inherit (lib) optionals;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "0.31.2";
   pname = "neon";
 
@@ -25,8 +21,7 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libxml2 openssl]
-    ++ lib.optional compressionSupport zlib;
+  buildInputs = [ libxml2 openssl ] ++ lib.optional compressionSupport zlib;
 
   configureFlags = [
     (lib.enableFeature shared "shared")
@@ -35,7 +30,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature sslSupport "ssl")
   ];
 
-  passthru = {inherit compressionSupport sslSupport;};
+  passthru = { inherit compressionSupport sslSupport; };
 
   meta = with lib; {
     description = "An HTTP and WebDAV client library";

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, git
-, lxml
-, rnc2rng
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, git, lxml, rnc2rng }:
 
 buildPythonPackage rec {
   pname = "citeproc-py";
@@ -22,7 +15,8 @@ buildPythonPackage rec {
 
   checkInputs = [ nose git ];
   checkPhase = "nosetests tests";
-  doCheck = false;  # seems to want a Git repository, but fetchgit with leaveDotGit also fails
+  doCheck =
+    false; # seems to want a Git repository, but fetchgit with leaveDotGit also fails
   pythonImportsCheck = [ "citeproc" ];
 
   meta = with lib; {

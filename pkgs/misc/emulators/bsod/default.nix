@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ncurses}:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "bsod";
@@ -18,11 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Blue Screen Of Death emulator for Unix";
-    longDescription = "
-      This program will let you UNIX user experience the authentic
-      microsoft windows experience.  Bsod displays the famous windows xp
-      blue screen of death on the console.  Errors and drivers causing the
-      error are selected randomly from a large set of examples.";
+    longDescription =
+      "\n      This program will let you UNIX user experience the authentic\n      microsoft windows experience.  Bsod displays the famous windows xp\n      blue screen of death on the console.  Errors and drivers causing the\n      error are selected randomly from a large set of examples.";
     homepage = "http://www.vanheusden.com/bsod/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;

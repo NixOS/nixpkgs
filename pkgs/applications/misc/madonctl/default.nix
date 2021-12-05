@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "McKael";
     repo = "madonctl";
-    rev  = "v${version}";
+    rev = "v${version}";
     sha256 = "1dnc1xaafhwhhf5afhb0wc2wbqq0s1r7qzj5k0xzc58my541gadc";
   };
 

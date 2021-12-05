@@ -1,28 +1,7 @@
-{ lib
-, buildPythonPackage
-, python
-, pythonAtLeast
-, fetchFromGitHub
-, fetchpatch
-, django
-, pygments
-, simplejson
-, python-dateutil
-, requests
-, setuptools-scm
-, sqlparse
-, jinja2
-, autopep8
-, pytz
-, pillow
-, mock
-, gprof2dot
-, freezegun
-, contextlib2
-, networkx
-, pydot
-, factory_boy
-}:
+{ lib, buildPythonPackage, python, pythonAtLeast, fetchFromGitHub, fetchpatch
+, django, pygments, simplejson, python-dateutil, requests, setuptools-scm
+, sqlparse, jinja2, autopep8, pytz, pillow, mock, gprof2dot, freezegun
+, contextlib2, networkx, pydot, factory_boy }:
 
 buildPythonPackage rec {
   pname = "django-silk";
@@ -39,7 +18,8 @@ buildPythonPackage rec {
   patches = lib.optional (pythonAtLeast "3.9") (fetchpatch {
     # should be able to remove after 4.1.1
     name = "python-3.9-support.patch";
-    url = "https://github.com/jazzband/django-silk/commit/134089e4cad7bd3b76fb0f70c423082cb7d2b34a.patch";
+    url =
+      "https://github.com/jazzband/django-silk/commit/134089e4cad7bd3b76fb0f70c423082cb7d2b34a.patch";
     sha256 = "09c1xd9y33h3ibiv5w9af9d79c909rgc1g5sxpd4y232h5id3c8r";
   });
 
@@ -56,8 +36,17 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ mock ];
   propagatedBuildInputs = [
-    django pygments simplejson python-dateutil requests
-    sqlparse jinja2 autopep8 pytz pillow gprof2dot
+    django
+    pygments
+    simplejson
+    python-dateutil
+    requests
+    sqlparse
+    jinja2
+    autopep8
+    pytz
+    pillow
+    gprof2dot
   ];
 
   checkInputs = [ freezegun contextlib2 networkx pydot factory_boy ];

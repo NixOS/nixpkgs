@@ -21,15 +21,15 @@ let
     else if isList opt then
       "[" + concatMapStringsSep "," convertOption opt + "]"
     else if isAttrs opt then
-      "{" + concatStringsSep "," (mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt) + "}"
+      "{" + concatStringsSep "," (mapAttrsToList
+        (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt) + "}"
     else
       throw "Invalid option type";
 
-  configFile = pkgs.writeText "config.py" (concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts));
+  configFile = pkgs.writeText "config.py" (concatStringsSep "\n"
+    (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts));
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -78,10 +78,8 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
-        example = {
-          STATS_PRINT_PERIOD = 600;
-        };
+        default = { };
+        example = { STATS_PRINT_PERIOD = 600; };
         description = ''
           Extra configuration options for mtprotoproxy.
         '';
@@ -90,7 +88,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

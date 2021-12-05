@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "multi_key_dict";

@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, ply
-, lib
-}:
+{ buildPythonPackage, fetchPypi, ply, lib }:
 
 buildPythonPackage rec {
   pname = "CppHeaderParser";
@@ -18,7 +14,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "CppHeaderParser" ];
 
   meta = with lib; {
-    description = "Parse C++ header files using ply.lex to generate navigable class tree representing the class structure";
+    description =
+      "Parse C++ header files using ply.lex to generate navigable class tree representing the class structure";
     homepage = "https://sourceforge.net/projects/cppheaderparser/";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ pamplemousse ];

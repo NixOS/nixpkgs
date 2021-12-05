@@ -1,6 +1,5 @@
 { lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
-, pycryptodome
-}:
+, pycryptodome }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
@@ -13,11 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    pysha3
-    pycrypto
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ pysha3 pycrypto pycryptodome ];
 
   pipInstallFlags = [
     # Circular dependency on eth-utils

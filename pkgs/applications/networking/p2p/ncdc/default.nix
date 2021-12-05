@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config, glib, gnutls }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config
+, glib, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "ncdc";
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
     # Upstream fix for ncurses-6.3 support:
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://g.blicky.net/ncdc.git/patch/?id=4126dd51e90deb9e22dfd139cc4518a7812fcad6";
+      url =
+        "https://g.blicky.net/ncdc.git/patch/?id=4126dd51e90deb9e22dfd139cc4518a7812fcad6";
       sha256 = "13hqkmhmbazj6cllb5b2ccgf51vsn5lri7jqkqc5xwivgcisfrij";
     })
   ];
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls ];
 
   meta = with lib; {
-    description = "Modern and lightweight direct connect client with a friendly ncurses interface";
+    description =
+      "Modern and lightweight direct connect client with a friendly ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdc";
     license = licenses.mit;
     platforms = platforms.linux; # arbitrary

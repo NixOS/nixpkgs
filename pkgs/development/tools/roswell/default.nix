@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ sbcl curl ];
 
   meta = with lib; {
-    description = "Roswell is a Lisp implementation installer/manager, launcher, and much more";
+    description =
+      "Roswell is a Lisp implementation installer/manager, launcher, and much more";
     license = licenses.mit;
     maintainers = with maintainers; [ hiro98 ];
     platforms = platforms.linux;

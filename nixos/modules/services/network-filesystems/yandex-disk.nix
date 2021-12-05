@@ -10,9 +10,7 @@ let
 
   u = if cfg.user != null then cfg.user else "yandexdisk";
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -23,9 +21,8 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable Yandex-disk client. See https://disk.yandex.ru/
-        ";
+        description =
+          "\n          Whether to enable Yandex-disk client. See https://disk.yandex.ru/\n        ";
       };
 
       username = mkOption {
@@ -71,17 +68,16 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    users.users = mkIf (cfg.user == null) [ {
+    users.users = mkIf (cfg.user == null) [{
       name = u;
       uid = config.ids.uids.yandexdisk;
       group = "nogroup";
       home = dir;
-    } ];
+    }];
 
     systemd.services.yandex-disk = {
       description = "Yandex-disk server";

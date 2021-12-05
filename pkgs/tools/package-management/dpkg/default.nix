@@ -52,18 +52,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl zlib bzip2 xz ];
   nativeBuildInputs = [ makeWrapper perl ];
 
-  postInstall =
-    ''
-      for i in $out/bin/*; do
-        if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
-        fi
-      done
+  postInstall = ''
+    for i in $out/bin/*; do
+      if head -n 1 $i | grep -q perl; then
+        substituteInPlace $i --replace \
+          "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      fi
+    done
 
-      mkdir -p $out/etc/dpkg
-      cp -r scripts/t/origins $out/etc/dpkg
-    '';
+    mkdir -p $out/etc/dpkg
+    cp -r scripts/t/origins $out/etc/dpkg
+  '';
 
   meta = with lib; {
     description = "The Debian package manager";

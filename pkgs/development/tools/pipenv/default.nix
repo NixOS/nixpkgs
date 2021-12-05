@@ -1,18 +1,17 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 with python3.pkgs;
 
 let
 
-  runtimeDeps = ps: with ps; [
-    certifi
-    setuptools
-    pip
-    virtualenv
-    virtualenv-clone
-  ];
+  runtimeDeps = ps:
+    with ps; [
+      certifi
+      setuptools
+      pip
+      virtualenv
+      virtualenv-clone
+    ];
 
   pythonEnv = python3.withPackages runtimeDeps;
 

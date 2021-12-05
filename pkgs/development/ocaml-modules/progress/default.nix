@@ -1,5 +1,4 @@
-{ lib, buildDunePackage, fetchurl
-, mtime, terminal_size, alcotest, astring, fmt
+{ lib, buildDunePackage, fetchurl, mtime, terminal_size, alcotest, astring, fmt
 }:
 
 buildDunePackage rec {
@@ -10,7 +9,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/CraigFe/progress/releases/download/${version}/progress-${version}.tbz";
+    url =
+      "https://github.com/CraigFe/progress/releases/download/${version}/progress-${version}.tbz";
     sha256 = "90c6bec19d014a4c6b0b67006f08bdfcf36981d2176769bebe0ccd75d6785a32";
   };
 

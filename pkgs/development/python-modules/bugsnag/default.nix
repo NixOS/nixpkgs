@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, six
-, webob
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, six, webob }:
 
 buildPythonPackage rec {
   pname = "bugsnag";

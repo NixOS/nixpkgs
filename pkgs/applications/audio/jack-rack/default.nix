@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, ladspaH, gtk2, alsa-lib, libxml2, lrdf }:
+{ lib, stdenv, fetchurl, pkg-config, libjack2, ladspaH, gtk2, alsa-lib, libxml2
+, lrdf }:
 stdenv.mkDerivation rec {
   pname = "jack-rack";
   version = "1.4.7";

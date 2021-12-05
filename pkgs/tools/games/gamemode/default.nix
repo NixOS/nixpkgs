@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libgamemode32
-, meson
-, ninja
-, pkg-config
-, dbus
-, inih
-, systemd
-, appstream
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, libgamemode32, meson, ninja
+, pkg-config, dbus, inih, systemd, appstream }:
 
 stdenv.mkDerivation rec {
   pname = "gamemode";
@@ -29,14 +18,16 @@ stdenv.mkDerivation rec {
     # Run executables from PATH instead of /usr/bin
     # See https://github.com/FeralInteractive/gamemode/pull/323
     (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/be44b7091baa33be6dda60392e4c06c2f398ee72.patch";
+      url =
+        "https://github.com/FeralInteractive/gamemode/commit/be44b7091baa33be6dda60392e4c06c2f398ee72.patch";
       sha256 = "TlDUETs4+N3pvrVd0FQGlGmC+6ByhJ2E7gKXa7suBtE=";
     })
 
     # Fix loading shipped config when using a prefix other than /usr
     # See https://github.com/FeralInteractive/gamemode/pull/324
     (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/b29aa903ce5acc9141cfd3960c98ccb047eca872.patch";
+      url =
+        "https://github.com/FeralInteractive/gamemode/commit/b29aa903ce5acc9141cfd3960c98ccb047eca872.patch";
       sha256 = "LwBzBJQ7dfm2mFVSOSPjJP+skgV5N6h77i66L1Sq+ZM=";
     })
 
@@ -46,25 +37,18 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/gamemoderun \
-      --subst-var-by libraryPath ${lib.makeLibraryPath ([
-        (placeholder "lib")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-        # Support wrapping 32bit applications on a 64bit linux system
-        libgamemode32
-      ])}
+      --subst-var-by libraryPath ${
+        lib.makeLibraryPath ([ (placeholder "lib") ]
+          ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+            # Support wrapping 32bit applications on a 64bit linux system
+            libgamemode32
+          ])
+      }
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    dbus
-    inih
-    systemd
-  ];
+  buildInputs = [ dbus inih systemd ];
 
   mesonFlags = [
     # libexec is just a way to package binaries without including them
@@ -76,9 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [
-    appstream
-  ];
+  checkInputs = [ appstream ];
 
   # Move static libraries to $static so $lib only contains dynamic libraries.
   postInstall = ''

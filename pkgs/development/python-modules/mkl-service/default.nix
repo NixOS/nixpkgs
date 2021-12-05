@@ -18,7 +18,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ mkl six ];
 
   meta = with lib; {
-    description = "Python hooks for Intel(R) Math Kernel Library runtime control settings";
+    description =
+      "Python hooks for Intel(R) Math Kernel Library runtime control settings";
     homepage = "https://github.com/IntelPython/mkl-service";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bhipple ];

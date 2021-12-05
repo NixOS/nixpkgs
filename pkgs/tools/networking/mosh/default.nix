@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     ./utempter_path.patch
     # Fix w/c++17, ::bind vs std::bind
     (fetchpatch {
-      url = "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
+      url =
+        "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
       sha256 = "15518rb0r5w1zn4s6981bf1sz6ins6gpn2saizfzhmr13hw4gmhm";
     })
     # Fix build with bash-completion 2.10
@@ -35,10 +36,13 @@ stdenv.mkDerivation rec {
     # Fix build with Xcode 12.5 toolchain/case-insensitive filesystems
     # Backport of https://github.com/mobile-shell/mosh/commit/12199114fe4234f791ef4c306163901643b40538;
     # remove on next upstream release.
-    patch -p0 < ${fetchpatch {
-      url = "https://raw.githubusercontent.com/macports/macports-ports/70ca3f65e622c17582fd938602d800157ed951c3/net/mosh/files/patch-version-subdir.diff";
-      sha256 = "1yyh6d07y9zbdx4fb0r56zkq9nd9knwzj22v4dfi55k4k42qxapd";
-    }}
+    patch -p0 < ${
+      fetchpatch {
+        url =
+          "https://raw.githubusercontent.com/macports/macports-ports/70ca3f65e622c17582fd938602d800157ed951c3/net/mosh/files/patch-version-subdir.diff";
+        sha256 = "1yyh6d07y9zbdx4fb0r56zkq9nd9knwzj22v4dfi55k4k42qxapd";
+      }
+    }
 
     substituteInPlace scripts/mosh.pl \
       --subst-var-by ssh "${openssh}/bin/ssh" \
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
-      wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";

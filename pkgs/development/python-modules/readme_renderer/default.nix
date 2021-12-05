@@ -1,15 +1,5 @@
-{ lib
-, bleach
-, buildPythonPackage
-, cmarkgfm
-, docutils
-, fetchPypi
-, future
-, mock
-, pygments
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, bleach, buildPythonPackage, cmarkgfm, docutils, fetchPypi, future, mock
+, pygments, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "readme_renderer";
@@ -21,18 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-gplwDXqRDDBAcqdgHq+tpnEqWwEaIBOUF+Gx6fBGRdg=";
   };
 
-  propagatedBuildInputs = [
-    bleach
-    cmarkgfm
-    docutils
-    future
-    pygments
-  ];
+  propagatedBuildInputs = [ bleach cmarkgfm docutils future pygments ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "readme_renderer" ];
 

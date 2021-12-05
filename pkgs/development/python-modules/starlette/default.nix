@@ -1,25 +1,7 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, anyio
-, contextlib2
-, graphene
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, aiosqlite
-, databases
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, trio
-, typing-extensions
-, ApplicationServices
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, aiofiles, anyio, contextlib2
+, graphene, itsdangerous, jinja2, python-multipart, pyyaml, requests, aiosqlite
+, databases, pytest-asyncio, pytestCheckHook, pythonOlder, trio
+, typing-extensions, ApplicationServices }:
 
 buildPythonPackage rec {
   pname = "starlette";
@@ -47,13 +29,9 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
-    ApplicationServices
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.7") [ contextlib2 ]
+    ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
     aiosqlite

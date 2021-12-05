@@ -1,62 +1,18 @@
-{ stdenv
-, lib
-, boehmgc
-, boost
-, cairo
-, cmake
-, fetchurl
-, fetchpatch
-, gettext
-, ghostscript
-, glib
-, glib-networking
-, glibmm
-, gsl
-, gspell
-, gtk-mac-integration
-, gtkmm3
-, gdk-pixbuf
-, imagemagick
-, lcms
-, lib2geom
-, libcdr
-, libexif
-, libpng
-, librevenge
-, librsvg
-, libsigcxx
-, libsoup
-, libvisio
-, libwpg
-, libXft
-, libxml2
-, libxslt
-, ninja
-, perlPackages
-, pkg-config
-, poppler
-, popt
-, potrace
-, python3
-, substituteAll
-, wrapGAppsHook
-, zlib
-}:
+{ stdenv, lib, boehmgc, boost, cairo, cmake, fetchurl, fetchpatch, gettext
+, ghostscript, glib, glib-networking, glibmm, gsl, gspell, gtk-mac-integration
+, gtkmm3, gdk-pixbuf, imagemagick, lcms, lib2geom, libcdr, libexif, libpng
+, librevenge, librsvg, libsigcxx, libsoup, libvisio, libwpg, libXft, libxml2
+, libxslt, ninja, perlPackages, pkg-config, poppler, popt, potrace, python3
+, substituteAll, wrapGAppsHook, zlib }:
 let
-  python3Env = python3.withPackages
-    (ps: with ps; [
-      numpy
-      lxml
-      pillow
-      scour
-    ]);
-in
-stdenv.mkDerivation rec {
+  python3Env = python3.withPackages (ps: with ps; [ numpy lxml pillow scour ]);
+in stdenv.mkDerivation rec {
   pname = "inkscape";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
+    url =
+      "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
     sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
   };
 
@@ -77,7 +33,8 @@ stdenv.mkDerivation rec {
     # Fix parsing paths by Python extensions.
     # https://gitlab.com/inkscape/extensions/-/merge_requests/342
     (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
+      url =
+        "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
       sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
       stripLen = 1;
       extraPrefix = "share/extensions/";
@@ -108,10 +65,7 @@ stdenv.mkDerivation rec {
     glib # for setup hook
     gdk-pixbuf # for setup hook
     wrapGAppsHook
-  ] ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]);
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   buildInputs = [
     boehmgc
@@ -143,12 +97,8 @@ stdenv.mkDerivation rec {
     potrace
     python3Env
     zlib
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    gspell
-  ] ++ lib.optionals stdenv.isDarwin [
-    cairo
-    gtk-mac-integration
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ gspell ]
+    ++ lib.optionals stdenv.isDarwin [ cairo gtk-mac-integration ];
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.isDarwin ''

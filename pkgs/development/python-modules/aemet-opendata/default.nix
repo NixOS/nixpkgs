@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, geopy
-, requests
-, urllib3
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, geopy, requests
+, urllib3 }:
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
@@ -20,11 +14,7 @@ buildPythonPackage rec {
     sha256 = "0jl1897m3qmr48n469mq7d66k1j0rn7hlbcahm0ylf5i3ma03aiw";
   };
 
-  propagatedBuildInputs = [
-    geopy
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs = [ geopy requests urllib3 ];
 
   # no tests implemented
   doCheck = false;

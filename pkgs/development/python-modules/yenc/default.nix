@@ -1,10 +1,4 @@
-{ fetchurl
-, lib
-, buildPythonPackage
-, python
-, isPyPy
-, isPy3k
-}:
+{ fetchurl, lib, buildPythonPackage, python, isPyPy, isPy3k }:
 
 buildPythonPackage rec {
   pname = "yenc";

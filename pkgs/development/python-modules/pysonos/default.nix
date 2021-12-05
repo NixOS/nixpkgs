@@ -1,16 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, xmltodict
-, ifaddr
-, requests
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, xmltodict, ifaddr, requests
 
-  # Test dependencies
-, pytestCheckHook
-, mock
-, requests-mock
-}:
+# Test dependencies
+, pytestCheckHook, mock, requests-mock }:
 
 buildPythonPackage rec {
   pname = "pysonos";
@@ -26,17 +17,9 @@ buildPythonPackage rec {
     sha256 = "sha256-gBOknYHL5nQWFVhCbLN0Ah+1fovcNY4P2myryZnUadk=";
   };
 
-  propagatedBuildInputs = [
-    ifaddr
-    requests
-    xmltodict
-  ];
+  propagatedBuildInputs = [ ifaddr requests xmltodict ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    requests-mock
-  ];
+  checkInputs = [ pytestCheckHook mock requests-mock ];
 
   disabledTests = [
     "test_desc_from_uri" # test requires network access

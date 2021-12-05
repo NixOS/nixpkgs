@@ -1,17 +1,7 @@
-{ lib
-, mkDerivation
-, fetchurl
-, autoPatchelfHook
-, pkg-config
-, curl
-, ffmpeg
-, openssl
-, qtbase
-, zlib
+{ lib, mkDerivation, fetchurl, autoPatchelfHook, pkg-config, curl, ffmpeg
+, openssl, qtbase, zlib
 
-, withJava ? true
-, jre_headless
-}:
+, withJava ? true, jre_headless }:
 
 let
   version = "1.16.5";
@@ -45,12 +35,8 @@ in mkDerivation {
 
   runtimeDependencies = [ (lib.getLib curl) ];
 
-  qtWrapperArgs =
-    let
-      binPath = lib.makeBinPath [ jre_headless ];
-    in lib.optionals withJava [
-      "--prefix PATH : ${binPath}"
-    ];
+  qtWrapperArgs = let binPath = lib.makeBinPath [ jre_headless ];
+  in lib.optionals withJava [ "--prefix PATH : ${binPath}" ];
 
   installPhase = ''
     runHook preInstall

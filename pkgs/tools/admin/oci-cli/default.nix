@@ -19,9 +19,8 @@ let
     # https://github.com/pallets/click/issues/823
     doCheck = false;
   });
-in
 
-python3Packages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   pname = "oci-cli";
   version = "2.23.0";
 
@@ -33,8 +32,20 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    oci arrow certifi pinned_click configparser cryptography jmespath python-dateutil
-    pytz retrying six terminaltables pyopenssl pyyaml
+    oci
+    arrow
+    certifi
+    pinned_click
+    configparser
+    cryptography
+    jmespath
+    python-dateutil
+    pytz
+    retrying
+    six
+    terminaltables
+    pyopenssl
+    pyyaml
   ];
 
   # https://github.com/oracle/oci-cli/issues/187
@@ -52,7 +63,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
-    homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    homepage =
+      "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
     maintainers = with maintainers; [ ilian ];
     license = with licenses; [ asl20 upl ];
   };

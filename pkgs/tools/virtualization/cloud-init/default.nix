@@ -1,12 +1,5 @@
-{ lib
-, buildPythonApplication
-, cloud-utils
-, dmidecode
-, fetchFromGitHub
-, openssh
-, python3
-, shadow
-}:
+{ lib, buildPythonApplication, cloud-utils, dmidecode, fetchFromGitHub, openssh
+, python3, shadow }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
@@ -104,9 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     export TMPDIR=/tmp
   '';
 
-  pythonImportsCheck = [
-    "cloudinit"
-  ];
+  pythonImportsCheck = [ "cloudinit" ];
 
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";

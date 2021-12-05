@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pytest-runner
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "1ad779f1bc0808d280ec1026c9de74f424de535568e21debd12830b5b0fa097e";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-runner
-  ];
+  checkInputs = [ pytestCheckHook pytest-runner ];
 
   meta = with lib; {
     description = "MWParserFromHell is a parser for MediaWiki wikicode";

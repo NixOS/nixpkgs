@@ -1,12 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
-, pipInstallHook, writeText
-, blessed
-, docutils
-, libcxx
-, llvm
-, pytestCheckHook
-, typesentry
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, pipInstallHook
+, writeText, blessed, docutils, libcxx, llvm, pytestCheckHook, typesentry }:
 
 buildPythonPackage rec {
   pname = "datatable";
@@ -42,7 +35,8 @@ buildPythonPackage rec {
   checkInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+    "-isystem ${lib.getDev libcxx}/include/c++/v1";
 
   pytestFlagsArray = let
     # ini file (not included in tarball) required to change python_files setting,
@@ -50,9 +44,7 @@ buildPythonPackage rec {
       [pytest]
       python_files = test_*.py test-*.py
     '';
-  in [
-    "-c ${pytestIni}"
-  ];
+  in [ "-c ${pytestIni}" ];
   disabledTests = [
     # skip tests which are irrelevant to our installation or use way too much memory
     "test_xfunction_paths"

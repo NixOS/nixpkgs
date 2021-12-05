@@ -1,16 +1,8 @@
-{ substituteAll
-, runtimeShell
-, coreutils
-, gnused
-, gnugrep
-, jq
-, nix
-, lib
-}:
+{ substituteAll, runtimeShell, coreutils, gnused, gnugrep, jq, nix, lib }:
 let
-  fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
-in
-substituteAll {
+  fallback =
+    import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
+in substituteAll {
   name = "nixos-rebuild";
   src = ./nixos-rebuild.sh;
   dir = "bin";

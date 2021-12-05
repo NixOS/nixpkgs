@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix build https://github.com/google/s2geometry/issues/165
     (fetchpatch {
-      url = "https://github.com/google/s2geometry/commit/a4dddf40647c68cd0104eafc31e9c8fb247a6308.patch";
+      url =
+        "https://github.com/google/s2geometry/commit/a4dddf40647c68cd0104eafc31e9c8fb247a6308.patch";
       sha256 = "0fp3w4bg7pgf5vv4vacp9g06rbqzhxc2fg6i5appp93q6phiinvi";
     })
   ];

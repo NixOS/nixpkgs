@@ -6,10 +6,7 @@ let
 
   cfg = config.services.haveged;
 
-in
-
-
-{
+in {
 
   ###### interface
 
@@ -39,28 +36,29 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    systemd.services.haveged =
-      { description = "Entropy Harvesting Daemon";
-        unitConfig.Documentation = "man:haveged(8)";
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.haveged = {
+      description = "Entropy Harvesting Daemon";
+      unitConfig.Documentation = "man:haveged(8)";
+      wantedBy = [ "multi-user.target" ];
 
-        path = [ pkgs.haveged ];
+      path = [ pkgs.haveged ];
 
-        serviceConfig = {
-          ExecStart = "${pkgs.haveged}/bin/haveged -F -w ${toString cfg.refill_threshold} -v 1";
-          SuccessExitStatus = 143;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          PrivateNetwork = true;
-          ProtectSystem = "full";
-          ProtectHome = true;
-        };
+      serviceConfig = {
+        ExecStart = "${pkgs.haveged}/bin/haveged -F -w ${
+            toString cfg.refill_threshold
+          } -v 1";
+        SuccessExitStatus = 143;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateNetwork = true;
+        ProtectSystem = "full";
+        ProtectHome = true;
       };
+    };
 
   };
 

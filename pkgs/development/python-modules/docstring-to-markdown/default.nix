@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
@@ -20,13 +16,9 @@ buildPythonPackage rec {
     ./remove-coverage-tests.patch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "docstring_to_markdown"
-  ];
+  pythonImportsCheck = [ "docstring_to_markdown" ];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";

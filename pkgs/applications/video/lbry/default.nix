@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools}:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "lbry-desktop";
@@ -10,16 +10,16 @@ in appimageTools.wrapAppImage rec {
   src = appimageTools.extract {
     inherit name;
     src = fetchurl {
-      url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
+      url =
+        "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
-      sha512 = "br6HvVRz+ybmAhmQh3vOC5wgLmOCVrGHDn59ueWk6rFoKOCbm8WdmdadOZvHeN1ld2nlvPzEy+KXMOEfF1LeQg==";
+      sha512 =
+        "br6HvVRz+ybmAhmQh3vOC5wgLmOCVrGHDn59ueWk6rFoKOCbm8WdmdadOZvHeN1ld2nlvPzEy+KXMOEfF1LeQg==";
     };
   };
 
   # At runtime, Lbry likes to have access to Ffmpeg
-  extraPkgs = pkgs: with pkgs; [
-    ffmpeg
-  ];
+  extraPkgs = pkgs: with pkgs; [ ffmpeg ];
 
   # General fixup
   extraInstallCommands = ''
@@ -34,7 +34,8 @@ in appimageTools.wrapAppImage rec {
   '';
 
   meta = with lib; {
-    description = "A browser and wallet for LBRY, the decentralized, user-controlled content marketplace";
+    description =
+      "A browser and wallet for LBRY, the decentralized, user-controlled content marketplace";
     longDescription = ''
       The LBRY app is a graphical browser for the decentralized content marketplace provided by the LBRY protocol.
       It is essentially the lbry daemon bundled with a UI using Electron.
@@ -42,7 +43,8 @@ in appimageTools.wrapAppImage rec {
     license = licenses.mit;
     homepage = "https://lbry.com/";
     downloadPage = "https://lbry.com/get/";
-    changelog = "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ enderger ];
     platforms = [ "x86_64-linux" ];
   };

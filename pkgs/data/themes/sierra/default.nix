@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine
+}:
 
 stdenv.mkDerivation rec {
   pname = "sierra-gtk-theme";

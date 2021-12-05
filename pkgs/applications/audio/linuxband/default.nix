@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, MMA, libjack2, libsmf, python2Packages }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, MMA, libjack2, libsmf
+, python2Packages }:
 
-let
-  inherit (python2Packages) pyGtkGlade pygtksourceview python;
+let inherit (python2Packages) pyGtkGlade pygtksourceview python;
 in stdenv.mkDerivation rec {
   version = "12.02.1";
   pname = "linuxband";
@@ -28,7 +28,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A GUI front-end for MMA: Type in the chords, choose the groove and it will play an accompaniment";
+    description =
+      "A GUI front-end for MMA: Type in the chords, choose the groove and it will play an accompaniment";
     homepage = "https://linuxband.org/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];

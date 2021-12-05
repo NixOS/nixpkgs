@@ -1,8 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27
-, awkward0, backports_lzma ? null, cachetools, lz4, pandas
-, pytestCheckHook, pkgconfig, mock
-, numpy, requests, uproot3-methods, xxhash, zstandard
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy27, awkward0
+, backports_lzma ? null, cachetools, lz4, pandas, pytestCheckHook, pkgconfig
+, mock, numpy, requests, uproot3-methods, xxhash, zstandard }:
 
 buildPythonPackage rec {
   pname = "uproot3";
@@ -20,23 +18,12 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
-    awkward0
-    cachetools
-    lz4
-    numpy
-    uproot3-methods
-    xxhash
-    zstandard
-  ] ++ lib.optional isPy27 backports_lzma;
+  propagatedBuildInputs =
+    [ awkward0 cachetools lz4 numpy uproot3-methods xxhash zstandard ]
+    ++ lib.optional isPy27 backports_lzma;
 
-  checkInputs = [
-    mock
-    pandas
-    pkgconfig
-    pytestCheckHook
-    requests
-  ] ++ lib.optional isPy27 backports_lzma;
+  checkInputs = [ mock pandas pkgconfig pytestCheckHook requests ]
+    ++ lib.optional isPy27 backports_lzma;
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/uproot3";

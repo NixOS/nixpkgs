@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, autoreconfHook
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, guile, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "scheme-bytestructures";
@@ -22,12 +16,8 @@ stdenv.mkDerivation rec {
     sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config
-  ];
-  buildInputs = [
-    guile
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ guile ];
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

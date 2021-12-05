@@ -19,7 +19,8 @@ buildGoModule rec {
     make assets
   '';
 
-  ldflags = [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
 
   tags = [ "sqlite" ];
 

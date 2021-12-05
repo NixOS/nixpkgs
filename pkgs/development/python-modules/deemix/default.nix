@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spotipy
-, click
-, pycryptodomex
-, mutagen
-, requests
-, deezer-py
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, spotipy, click, pycryptodomex, mutagen
+, requests, deezer-py, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "deemix";
@@ -20,25 +11,13 @@ buildPythonPackage rec {
     sha256 = "sha256-qattUKdGr9P2al5cibG0CPJNmVCJjgE+hucOtl7pAhE=";
   };
 
-  propagatedBuildInputs = [
-    spotipy
-    click
-    pycryptodomex
-    mutagen
-    requests
-    deezer-py
-  ];
+  propagatedBuildInputs =
+    [ spotipy click pycryptodomex mutagen requests deezer-py ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [
-    "spotipy"
-    "click"
-    "Cryptodome"
-    "mutagen"
-    "requests"
-    "deezer"
-  ];
+  pythonImportsCheck =
+    [ "spotipy" "click" "Cryptodome" "mutagen" "requests" "deezer" ];
 
   meta = with lib; {
     homepage = "https://git.freezer.life/RemixDev/deemix-py";

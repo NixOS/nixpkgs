@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "heatzypy";
@@ -20,16 +15,12 @@ buildPythonPackage rec {
     sha256 = "nENuH2u9RtWq86TW/sDFFeYS8GTWGj7qfcFS8AHFRGk=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "heatzypy"
-  ];
+  pythonImportsCheck = [ "heatzypy" ];
 
   meta = with lib; {
     description = "Python module to interact with Heatzy devices";

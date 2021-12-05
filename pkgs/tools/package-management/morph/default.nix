@@ -15,9 +15,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-bindata ];
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   postPatch = ''
     go-bindata -pkg assets -o assets/assets.go data/
@@ -35,7 +33,7 @@ buildGoModule rec {
     description = "A NixOS host manager written in Golang";
     license = licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
-    maintainers = with maintainers; [adamt johanot];
+    maintainers = with maintainers; [ adamt johanot ];
     platforms = platforms.unix;
   };
 }

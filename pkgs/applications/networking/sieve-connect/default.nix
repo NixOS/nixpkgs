@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     echo "$(date +%Y-%m-%d)" > datefile
   '';
 
-  buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
+  buildFlags = [
+    "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}"
+    "bin"
+    "man"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,9 +34,19 @@ stdenv.mkDerivation rec {
     installManPage sieve-connect.1
 
     wrapProgram $out/bin/sieve-connect \
-      --prefix PERL5LIB : "${with perlPackages; makePerlPath [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
-        TermReadKey TermReadLineGnu ]}"
+      --prefix PERL5LIB : "${
+        with perlPackages;
+        makePerlPath [
+          AuthenSASL
+          Socket6
+          IOSocketInet6
+          IOSocketSSL
+          NetSSLeay
+          NetDNS
+          TermReadKey
+          TermReadLineGnu
+        ]
+      }"
   '';
 
   meta = with lib; {

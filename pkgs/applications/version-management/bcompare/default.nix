@@ -1,6 +1,5 @@
-{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
-, stdenv, runtimeShell, unzip
-}:
+{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc
+, pango, gtk2, kcoreaddons, ki18n, kio, kservice, stdenv, runtimeShell, unzip }:
 
 let
   pname = "bcompare";
@@ -79,7 +78,8 @@ let
   };
 
   meta = with lib; {
-    description = "GUI application that allows to quickly and easily compare files and folders";
+    description =
+      "GUI application that allows to quickly and easily compare files and folders";
     longDescription = ''
       Beyond Compare is focused. Beyond Compare allows you to quickly and easily compare your files and folders.
       By using simple, powerful commands you can focus on the differences you're interested in and ignore those you're not.
@@ -90,7 +90,4 @@ let
     maintainers = with maintainers; [ ktor arkivm ];
     platforms = builtins.attrNames srcs;
   };
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

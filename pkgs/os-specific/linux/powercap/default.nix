@@ -13,12 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=On"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=On" ];
 
   meta = with lib; {
-    description = "Tools and library to read/write to the Linux power capping framework (sysfs interface)";
+    description =
+      "Tools and library to read/write to the Linux power capping framework (sysfs interface)";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rowanG077 ];

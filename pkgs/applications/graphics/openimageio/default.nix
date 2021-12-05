@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
-, opencolorio_1, openexr, unzip
-}:
+, opencolorio_1, openexr, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
@@ -16,14 +15,9 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake unzip ];
-  buildInputs = [
-    boost ilmbase libjpeg libpng
-    libtiff opencolorio_1 openexr
-  ];
+  buildInputs = [ boost ilmbase libjpeg libpng libtiff opencolorio_1 openexr ];
 
-  cmakeFlags = [
-    "-DUSE_PYTHON=OFF"
-  ];
+  cmakeFlags = [ "-DUSE_PYTHON=OFF" ];
 
   makeFlags = [
     "ILMBASE_HOME=${ilmbase.dev}"

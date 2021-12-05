@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
-    url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
+    url =
+      "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
     sha256 = "1c1n8n7mp0amsd6vkz32n8zj3vnsckv308bb7na0dg0r8969rap1";
   };
 

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib
+, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
@@ -10,8 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
-  buildInputs = [ python ]
-    ++ (with python.pkgs; [ numpy matplotlib ])
+  buildInputs = [ python ] ++ (with python.pkgs; [ numpy matplotlib ])
     ++ lib.optional withRootSupport root;
   propagatedBuildInputs = [ zlib ];
 
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check";
 
   meta = {
-    description = "Provides small set of data analysis (specifically histogramming) classes";
+    description =
+      "Provides small set of data analysis (specifically histogramming) classes";
     license = lib.licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
     platforms = lib.platforms.unix;

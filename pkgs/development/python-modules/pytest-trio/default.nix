@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, trio, async_generator, hypothesis, outcome, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, trio, async_generator
+, hypothesis, outcome, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-trio";
@@ -15,16 +15,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    trio
-    async_generator
-    outcome
-  ];
+  propagatedBuildInputs = [ trio async_generator outcome ];
 
-  checkInputs = [
-    pytest
-    hypothesis
-  ];
+  checkInputs = [ pytest hypothesis ];
 
   # broken with pytest 5 and 6
   doCheck = false;

@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security
+, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
@@ -13,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   cargoSha256 = "sha256-zjb+ERikMwC+ulfx6EW+FXLweZACwKNw4HEIc9dH3+4=";
 

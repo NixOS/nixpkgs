@@ -1,11 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, contrib
-, lightyear
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, effects, contrib, lightyear, lib }:
+build-idris-package {
   name = "tlhydra";
   version = "2017-13-26";
 

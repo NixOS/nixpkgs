@@ -1,23 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, pkg-config
-, boost
-, botan2
-, libmysqlclient
-, log4cplus
-, postgresql
-, python3
-, nixosTests
-}:
+{ stdenv, lib, fetchurl, autoreconfHook, pkg-config, boost, botan2
+, libmysqlclient, log4cplus, postgresql, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "kea";
   version = "2.0.0"; # only even minor versions are stable
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-BYVODDhxtFLtrOGOzMarYYlA4CSfvnwjKjbQauWb9B0=";
   };
 
@@ -35,24 +25,13 @@ stdenv.mkDerivation rec {
     "--with-pgsql=${postgresql}/bin/pg_config"
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    boost
-    botan2
-    libmysqlclient
-    log4cplus
-    python3
-  ];
+  buildInputs = [ boost botan2 libmysqlclient log4cplus python3 ];
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (nixosTests) kea;
-  };
+  passthru.tests = { inherit (nixosTests) kea; };
 
   meta = with lib; {
     homepage = "https://kea.isc.org/";

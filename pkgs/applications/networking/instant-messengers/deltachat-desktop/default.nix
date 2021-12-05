@@ -1,18 +1,6 @@
-{ lib
-, copyDesktopItems
-, electron
-, esbuild
-, fetchFromGitHub
-, fetchpatch
-, libdeltachat
-, makeDesktopItem
-, makeWrapper
-, nodePackages
-, pkg-config
-, rustPlatform
-, stdenv
-, CoreServices
-}:
+{ lib, copyDesktopItems, electron, esbuild, fetchFromGitHub, fetchpatch
+, libdeltachat, makeDesktopItem, makeWrapper, nodePackages, pkg-config
+, rustPlatform, stdenv, CoreServices }:
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
@@ -31,13 +19,15 @@ let
     patches = [
       # https://github.com/deltachat/deltachat-core-rust/pull/2589
       (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
+        url =
+          "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
         sha256 = "1j2ywaazglgl6370js34acrg0wrh0b7krqg05dfjf65n527lzn59";
       })
       ./no-static-lib.patch
       # https://github.com/deltachat/deltachat-core-rust/pull/2660
       (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/8fb5e038a97d8ae68564c885d61b93127a68366d.patch";
+        url =
+          "https://github.com/deltachat/deltachat-core-rust/commit/8fb5e038a97d8ae68564c885d61b93127a68366d.patch";
         sha256 = "088pzfrrkgfi4646dc72404s3kykcpni7hgkppalwlzg0p4is41x";
       })
     ];
@@ -57,19 +47,11 @@ in nodePackages.deltachat-desktop.override rec {
     sha256 = "0in6w2vl4ypgjb9gfhyh77vg05ni5p3z24lah7wvvhywcpv1jp2n";
   };
 
-  nativeBuildInputs = [
-    esbuild
-    makeWrapper
-    pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ esbuild makeWrapper pkg-config ]
+    ++ lib.optionals stdenv.isLinux [ copyDesktopItems ];
 
-  buildInputs = [
-    libdeltachat'
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
+  buildInputs = [ libdeltachat' ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   USE_SYSTEM_LIBDELTACHAT = "true";
@@ -77,8 +59,14 @@ in nodePackages.deltachat-desktop.override rec {
 
   postInstall = let
     keep = lib.concatMapStringsSep " " (file: "! -name ${file}") [
-      "_locales" "build" "html-dist" "images" "index.js"
-      "node_modules" "themes" "tsc-dist"
+      "_locales"
+      "build"
+      "html-dist"
+      "images"
+      "index.js"
+      "node_modules"
+      "themes"
+      "tsc-dist"
     ];
   in ''
     rm -r node_modules/deltachat-node/{deltachat-core-rust,prebuilds,src}

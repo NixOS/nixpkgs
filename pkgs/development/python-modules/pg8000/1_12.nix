@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pytz, six }:
 
 buildPythonPackage rec {
   pname = "pg8000";

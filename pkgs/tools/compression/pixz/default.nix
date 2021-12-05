@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, asciidoc
-, libxslt
-, libxml2
-, docbook_xml_dtd_45
-, docbook_xsl
-, libarchive
-, xz
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
+, asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, libarchive, xz }:
 
 stdenv.mkDerivation rec {
   pname = "pixz";

@@ -1,28 +1,7 @@
-{ lib
-, arrow
-, buildPythonPackage
-, colour
-, email_validator
-, enum34
-, fetchPypi
-, flask
-, flask_sqlalchemy
-, flask-babelex
-, flask-mongoengine
-, geoalchemy2
-, isPy27
-, mongoengine
-, pillow
-, psycopg2
-, pymongo
-, pytestCheckHook
-, shapely
-, sqlalchemy
-, sqlalchemy-citext
-, sqlalchemy-utils
-, wtf-peewee
-, wtforms
-}:
+{ lib, arrow, buildPythonPackage, colour, email_validator, enum34, fetchPypi
+, flask, flask_sqlalchemy, flask-babelex, flask-mongoengine, geoalchemy2, isPy27
+, mongoengine, pillow, psycopg2, pymongo, pytestCheckHook, shapely, sqlalchemy
+, sqlalchemy-citext, sqlalchemy-utils, wtf-peewee, wtforms }:
 
 buildPythonPackage rec {
   pname = "flask-admin";
@@ -35,12 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-6wah8xuYiB3uU6VcZPrr0ZkNaqw4gmNksoDfCyZ5/3Q=";
   };
 
-  propagatedBuildInputs = [
-    flask
-    wtforms
-  ] ++ lib.optionals isPy27 [
-    enum34
-  ];
+  propagatedBuildInputs = [ flask wtforms ] ++ lib.optionals isPy27 [ enum34 ];
 
   checkInputs = [
     arrow
@@ -73,9 +47,7 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_translation.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_admin"
-  ];
+  pythonImportsCheck = [ "flask_admin" ];
 
   meta = with lib; {
     description = "Simple and extensible admin interface framework for Flask";

@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, doxygen, perl, valgrind
-, curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, doxygen, perl
+, valgrind, curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";

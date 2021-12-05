@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, dicttoxml
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
-}:
+{ lib, buildPythonPackage, dicttoxml, fetchFromGitHub, pythonOlder, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pyialarm";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-mvi8cd9uVFvG1Jc3OeuEwuLjbuMjPRrNRHFUVe3g/NM=";
   };
 
-  propagatedBuildInputs = [
-    dicttoxml
-    xmltodict
-  ];
+  propagatedBuildInputs = [ dicttoxml xmltodict ];
 
   # Project has no tests
   doCheck = false;
@@ -29,7 +20,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyialarm" ];
 
   meta = with lib; {
-    description = "Python library to interface with Antifurto365 iAlarm systems";
+    description =
+      "Python library to interface with Antifurto365 iAlarm systems";
     homepage = "https://github.com/RyuzakiKK/pyialarm";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

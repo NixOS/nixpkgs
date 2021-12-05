@@ -5,12 +5,13 @@ stdenv.mkDerivation rec {
   version = "2020-07-25";
 
   src = fetchurl {
-    url = "https://www.sanslogic.co.uk/fswebcam/files/fswebcam-${lib.replaceStrings ["."] [""] version}.tar.gz";
+    url = "https://www.sanslogic.co.uk/fswebcam/files/fswebcam-${
+        lib.replaceStrings [ "." ] [ "" ] version
+      }.tar.gz";
     sha256 = "1dazsrcaw9s30zz3jpxamk9lkff5dkmflp1s0jjjvdbwa0k6k6ii";
   };
 
-  buildInputs =
-    [ libv4l gd ];
+  buildInputs = [ libv4l gd ];
 
   meta = {
     description = "Neat and simple webcam app";

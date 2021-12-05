@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, jsonschema
-, pyee
-, tornado
-, zeroconf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, ifaddr, jsonschema, pyee, tornado
+, zeroconf }:
 
 buildPythonPackage rec {
   pname = "webthing";
@@ -19,13 +12,7 @@ buildPythonPackage rec {
     sha256 = "06264rwchy4qmbn7lv7m00qg864y7aw3rngcqqcr9nvaqz4rb0fg";
   };
 
-  propagatedBuildInputs = [
-    ifaddr
-    jsonschema
-    pyee
-    tornado
-    zeroconf
-  ];
+  propagatedBuildInputs = [ ifaddr jsonschema pyee tornado zeroconf ];
 
   # no tests are present
   doCheck = false;

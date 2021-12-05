@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libbladeRF, soapysdr
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libbladeRF, soapysdr }:
 
-let
-  version = "0.4.1";
+let version = "0.4.1";
 
 in stdenv.mkDerivation {
   pname = "soapybladerf";
@@ -20,7 +17,6 @@ in stdenv.mkDerivation {
   buildInputs = [ libbladeRF soapysdr ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
-
 
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapyBladeRF";

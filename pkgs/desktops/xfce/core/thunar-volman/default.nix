@@ -12,6 +12,7 @@ mkXfceDerivation {
   odd-unstable = false;
 
   meta = {
-    description = "Thunar extension for automatic management of removable drives and media";
+    description =
+      "Thunar extension for automatic management of removable drives and media";
   };
 }

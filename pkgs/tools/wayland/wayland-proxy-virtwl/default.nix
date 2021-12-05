@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, ocamlPackages
-}:
+{ lib, fetchFromGitHub, ocamlPackages }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
@@ -22,11 +19,7 @@ ocamlPackages.buildDunePackage rec {
   useDune2 = true;
   minimumOCamlVersion = "4.08";
 
-  buildInputs = with ocamlPackages; [
-    wayland
-    cmdliner
-    logs
-  ];
+  buildInputs = with ocamlPackages; [ wayland cmdliner logs ];
 
   meta = {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";

@@ -1,25 +1,10 @@
-{ version
-, src
-, jami-meta
-, mkDerivation
-, lib
-, pkg-config
-, cmake
+{ version, src, jami-meta, mkDerivation, lib, pkg-config, cmake
 , networkmanager # for libnm
-, python3
-, qttools # for translations
-, wrapQtAppsHook
-, libnotify
-, qrencode
-, qtwebengine
-, qtdeclarative
-, qtquickcontrols2
-, qtmultimedia
-, qtsvg
-, qtwebchannel
+, python3, qttools # for translations
+, wrapQtAppsHook, libnotify, qrencode, qtwebengine, qtdeclarative
+, qtquickcontrols2, qtmultimedia, qtsvg, qtwebchannel
 , qtgraphicaleffects # no gui without this
-, jami-libclient
-}:
+, jami-libclient }:
 
 mkDerivation {
   pname = "jami-client-qt";
@@ -32,12 +17,7 @@ mkDerivation {
     echo 'const char VERSION_STRING[] = "${version}";' > src/version.h
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    python3
-    qttools
-  ];
+  nativeBuildInputs = [ pkg-config cmake python3 qttools ];
 
   buildInputs = [
     jami-libclient

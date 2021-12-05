@@ -1,22 +1,53 @@
-{ stdenv, lib, fetchurl, makeWrapper, file, getopt
-, gtk2, gtk3, gdk-pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
-, alsa-lib, GConf, cups, libcap, fontconfig, freetype, pango
-, cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
-, libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
+{ stdenv, lib, fetchurl, makeWrapper, file, getopt, gtk2, gtk3, gdk-pixbuf, glib
+, libGL, libGLU, nss, nspr, udev, tbb, alsa-lib, GConf, cups, libcap, fontconfig
+, freetype, pango, cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc
+, gcc_32bit, libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb, chromium
-, libpqxx, libselinux, pciutils, libpulseaudio
-}:
+, libpqxx, libselinux, pciutils, libpulseaudio }:
 
 let
   libPath64 = lib.makeLibraryPath [
-    gcc.cc gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsa-lib GConf cups libcap fontconfig freetype pango
-    cairo dbus expat zlib libpng12 udev tbb
-    libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb
-    libpqxx gtk3
+    gcc.cc
+    gtk2
+    gdk-pixbuf
+    glib
+    libGL
+    libGLU
+    nss
+    nspr
+    alsa-lib
+    GConf
+    cups
+    libcap
+    fontconfig
+    freetype
+    pango
+    cairo
+    dbus
+    expat
+    zlib
+    libpng12
+    udev
+    tbb
+    libX11
+    libXcursor
+    libXdamage
+    libXfixes
+    libXrender
+    libXi
+    libXcomposite
+    libXext
+    libXrandr
+    libXtst
+    libSM
+    libICE
+    libxcb
+    libpqxx
+    gtk3
 
-    libselinux pciutils libpulseaudio
+    libselinux
+    pciutils
+    libpulseaudio
   ];
   libPath32 = lib.makeLibraryPath [ gcc_32bit.cc ];
   binPath = lib.makeBinPath [ nodejs gnutar ];
@@ -29,7 +60,8 @@ in stdenv.mkDerivation {
   version = "${ver}x${build}";
 
   src = fetchurl {
-    url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
+    url =
+      "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
     sha256 = "10gppnqacs1qzahj077nkcgbfz2lryd0dxnfcmvyc64xpxnj9nlk";
   };
 

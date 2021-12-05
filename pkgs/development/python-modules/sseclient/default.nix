@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, requests, six
+{ lib, buildPythonPackage, fetchPypi, isPy27, requests, six
 , backports_unittest-mock, pytestCheckHook, pytest-runner }:
 
 buildPythonPackage rec {

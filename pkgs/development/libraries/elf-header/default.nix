@@ -1,17 +1,13 @@
 { stdenvNoCC, lib, glibc, musl }:
 
 let
-   libc =
-     if stdenvNoCC.targetPlatform.isMusl
-     then musl
-     else glibc;
-   headerPath =
-     if stdenvNoCC.targetPlatform.isMusl
-     then "musl-${libc.version}/include/elf.h"
-     else "glibc-${libc.version}/elf/elf.h";
-in
+  libc = if stdenvNoCC.targetPlatform.isMusl then musl else glibc;
+  headerPath = if stdenvNoCC.targetPlatform.isMusl then
+    "musl-${libc.version}/include/elf.h"
+  else
+    "glibc-${libc.version}/elf/elf.h";
 
-stdenvNoCC.mkDerivation {
+in stdenvNoCC.mkDerivation {
   pname = "elf-header";
   inherit (libc) version;
 
@@ -33,7 +29,8 @@ stdenvNoCC.mkDerivation {
 
   meta = libc.meta // {
     outputsToInstall = [ "out" ];
-    description = "The datastructures of ELF according to the target platform's libc";
+    description =
+      "The datastructures of ELF according to the target platform's libc";
     longDescription = ''
       The Executable and Linkable Format (ELF, formerly named Extensible Linking
       Format), is usually defined in a header like this.

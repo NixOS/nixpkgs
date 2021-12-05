@@ -1,5 +1,4 @@
-{ mkDerivation, lib, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
-}:
+{ mkDerivation, lib, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "photoflare";
@@ -20,7 +19,8 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${graphicsmagick}/include/GraphicsMagick";
 
   meta = with lib; {
-    description = "A cross-platform image editor with a powerful features and a very friendly graphical user interface";
+    description =
+      "A cross-platform image editor with a powerful features and a very friendly graphical user interface";
     homepage = "https://photoflare.io";
     maintainers = [ maintainers.omgbebebe ];
     license = licenses.gpl3Plus;

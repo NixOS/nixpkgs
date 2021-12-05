@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, clikit }:
+{ lib, buildPythonPackage, fetchPypi, clikit }:
 
 buildPythonPackage rec {
   pname = "cleo";
@@ -10,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "3d0e22d30117851b45970b6c14aca4ab0b18b1b53c8af57bed13208147e4069f";
   };
 
-  propagatedBuildInputs = [
-    clikit
-  ];
+  propagatedBuildInputs = [ clikit ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't
   # buildable until we bootstrap poetry, see
@@ -21,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/cleo";
-    description = "Allows you to create beautiful and testable command-line interfaces";
+    description =
+      "Allows you to create beautiful and testable command-line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

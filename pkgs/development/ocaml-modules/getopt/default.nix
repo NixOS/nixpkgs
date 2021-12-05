@@ -5,15 +5,12 @@ stdenv.mkDerivation rec {
   version = "20120615";
 
   src = fetchzip {
-    url = "https://download.ocamlcore.org/ocaml-getopt/ocaml-getopt/${version}/ocaml-getopt-${version}.tar.gz";
+    url =
+      "https://download.ocamlcore.org/ocaml-getopt/ocaml-getopt/${version}/ocaml-getopt-${version}.tar.gz";
     sha256 = "0bng2mmdixpmj23xn8krlnaq66k22iclwz46r8zjrsrq3wcn1xgn";
   };
 
-  buildInputs = [
-    ocaml
-    findlib
-    ocamlbuild
-  ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   doCheck = true;
   createFindlibDestdir = true;
@@ -21,7 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit (ocaml.meta) platforms;
     homepage = "https://github.com/gildor478/ocaml-getopt";
-    description = "Parsing of command line arguments (similar to GNU GetOpt) for OCaml";
+    description =
+      "Parsing of command line arguments (similar to GNU GetOpt) for OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

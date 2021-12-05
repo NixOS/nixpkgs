@@ -1,15 +1,5 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, fetchFromGitHub
-, jaxlib
-, numpy
-, opt-einsum
-, pytestCheckHook
-, pythonOlder
-, scipy
-, typing-extensions
-}:
+{ lib, absl-py, buildPythonPackage, fetchFromGitHub, jaxlib, numpy, opt-einsum
+, pytestCheckHook, pythonOlder, scipy, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "jax";
@@ -29,31 +19,17 @@ buildPythonPackage rec {
   # different versions of jaxlib depending on the desired target hardware. The
   # JAX project ships separate wheels for CPU, GPU, and TPU. Currently only the
   # CPU wheel is packaged.
-  propagatedBuildInputs = [
-    absl-py
-    numpy
-    opt-einsum
-    scipy
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ absl-py numpy opt-einsum scipy typing-extensions ];
 
-  checkInputs = [
-    jaxlib
-    pytestCheckHook
-  ];
+  checkInputs = [ jaxlib pytestCheckHook ];
 
   # NOTE: Don't run the tests in the expiremental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
-  pytestFlagsArray = [
-    "-W ignore::DeprecationWarning"
-    "tests/"
-  ];
+  pytestFlagsArray = [ "-W ignore::DeprecationWarning" "tests/" ];
 
-  pythonImportsCheck = [
-    "jax"
-  ];
+  pythonImportsCheck = [ "jax" ];
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

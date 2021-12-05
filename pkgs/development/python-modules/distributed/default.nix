@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, cloudpickle
-, dask
-, msgpack
-, psutil
-, sortedcontainers
-, tblib
-, toolz
-, tornado
-, zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, click, cloudpickle, dask, msgpack, psutil
+, sortedcontainers, tblib, toolz, tornado, zict, pyyaml, mpi4py, bokeh
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "distributed";

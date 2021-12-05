@@ -1,9 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, fonttools, lxml
+, fs # for fonttools extras
+, setuptools-scm, pytestCheckHook, pytest-cov, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "psautohint";
@@ -29,11 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools lxml fs ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-xdist
-  ];
+  checkInputs = [ pytestCheckHook pytest-cov pytest-xdist ];
   disabledTests = [
     # Test that fails on pytest >= v6
     # https://github.com/adobe-type-tools/psautohint/issues/284#issuecomment-742800965

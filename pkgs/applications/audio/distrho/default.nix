@@ -1,24 +1,8 @@
-{ lib
-, stdenv
-, alsa-lib
-, fetchFromGitHub
-, fftwFloat
-, freetype
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXrender
-, meson
-, ninja
-, pkg-config
-}:
+{ lib, stdenv, alsa-lib, fetchFromGitHub, fftwFloat, freetype, libGL, libX11
+, libXcursor, libXext, libXrender, meson, ninja, pkg-config }:
 
-let rpathLibs = [
-  fftwFloat
-];
-in
-stdenv.mkDerivation rec {
+let rpathLibs = [ fftwFloat ];
+in stdenv.mkDerivation rec {
   pname = "distrho-ports";
   version = "2021-03-15";
 
@@ -31,15 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja ];
 
-  buildInputs = rpathLibs ++ [
-    alsa-lib
-    freetype
-    libGL
-    libX11
-    libXcursor
-    libXext
-    libXrender
-  ];
+  buildInputs = rpathLibs
+    ++ [ alsa-lib freetype libGL libX11 libXcursor libXext libXrender ];
 
   postFixup = ''
     for file in \
@@ -47,7 +24,9 @@ stdenv.mkDerivation rec {
       $out/lib/vst/vitalium.so \
       $out/lib/vst3/vitalium.vst3/Contents/x86_64-linux/vitalium.so
     do
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $file)" $file
+      patchelf --set-rpath "${
+        lib.makeLibraryPath rpathLibs
+      }:$(patchelf --print-rpath $file)" $file
     done
   '';
 
@@ -91,7 +70,14 @@ stdenv.mkDerivation rec {
         vitalium
         wolpertinger
     '';
-    license = with licenses; [ gpl2Only gpl3Only gpl2Plus lgpl2Plus lgpl3Only mit ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+      gpl2Plus
+      lgpl2Plus
+      lgpl3Only
+      mit
+    ];
     maintainers = [ maintainers.goibhniu ];
     platforms = [ "x86_64-linux" ];
   };

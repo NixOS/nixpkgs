@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytest-cov
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "venusian";

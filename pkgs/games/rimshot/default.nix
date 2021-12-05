@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     unzip -j $src
   '';
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 

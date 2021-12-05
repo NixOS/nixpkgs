@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, nassl
-, cryptography
-, typing-extensions
-, faker
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, nassl, cryptography
+, typing-extensions, faker, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "sslyze";
@@ -40,9 +32,7 @@ buildPythonPackage rec {
     "tests/plugins_tests/certificate_info/test_certificate_utils.py"
   ];
 
-  disabledTests = [
-    "test_error_client_certificate_needed"
-  ];
+  disabledTests = [ "test_error_client_certificate_needed" ];
 
   pythonImportsCheck = [ "sslyze" ];
 

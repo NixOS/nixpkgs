@@ -1,25 +1,8 @@
-{ stdenv
-, alsa-lib
-, addOpenGLRunpath
-, autoPatchelfHook
-, cairo
-, fetchurl
-, flac
-, gcc11
-, gnome
-, gssdp
-, lib
-, libgmpris
-, llvmPackages_10
-, mpg123
-, rpmextract
+{ stdenv, alsa-lib, addOpenGLRunpath, autoPatchelfHook, cairo, fetchurl, flac
+, gcc11, gnome, gssdp, lib, libgmpris, llvmPackages_10, mpg123, rpmextract
 , wavpack
 
-, gupnp
-, gupnp-av
-, meson
-, ninja
-}:
+, gupnp, gupnp-av, meson, ninja }:
 let
   # hqplayerd relies on some package versions available for the fc34 release,
   # which has out-of-date pkgs compared to nixpkgs. The following drvs
@@ -28,7 +11,9 @@ let
     pname = "gupnp";
     version = "1.2.7";
     src = fetchurl {
-      url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/gupnp/${
+          lib.versions.majorMinor version
+        }/${pname}-${version}.tar.xz";
       sha256 = "sha256-hEEnbxr9AXbm9ZUCajpQfu0YCav6BAJrrT8hYis1I+w=";
     };
   });
@@ -37,18 +22,20 @@ let
     pname = "gupnp-av";
     version = "0.12.11";
     src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${
+          lib.versions.majorMinor version
+        }/${pname}-${version}.tar.xz";
       sha256 = "sha256-aJ3PFJKriZHa6ikTZaMlSKd9GiKU2FszYitVzKnOb9w=";
     };
     nativeBuildInputs = lib.subtractLists [ meson ninja ] old.nativeBuildInputs;
   });
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "hqplayerd";
   version = "4.27.2-72";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
+    url =
+      "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
     sha256 = "sha256-oCZS68n9R6Hm6lltcL6zQhPaU9FRqtB59DrstRNjnH8=";
   };
 
@@ -126,7 +113,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
-    description = "High-end upsampling multichannel software embedded HD-audio player";
+    description =
+      "High-end upsampling multichannel software embedded HD-audio player";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
   };

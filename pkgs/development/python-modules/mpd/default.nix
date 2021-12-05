@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "python-mpd";
@@ -15,7 +11,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "An MPD (Music Player Daemon) client library written in pure Python";
+    description =
+      "An MPD (Music Player Daemon) client library written in pure Python";
     homepage = "http://jatreuman.indefero.net/p/python-mpd/";
     license = licenses.gpl3;
   };

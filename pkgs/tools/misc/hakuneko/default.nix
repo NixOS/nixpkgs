@@ -1,14 +1,5 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, udev
-, stdenv
-, lib
-, wrapGAppsHook
-}:
+{ atomEnv, autoPatchelfHook, dpkg, fetchurl, makeDesktopItem, makeWrapper, udev
+, stdenv, lib, wrapGAppsHook }:
 let
   desktopItem = makeDesktopItem {
     desktopName = "HakuNeko Desktop";
@@ -19,19 +10,22 @@ let
     name = "hakuneko-desktop";
     type = "Application";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "hakuneko";
   version = "6.1.7";
 
   src = {
     "x86_64-linux" = fetchurl {
-      url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_amd64.deb";
-      sha256 = "06bb17d7a06bb0601053eaaf423f9176f06ff3636cc43ffc024438e1962dcd02";
+      url =
+        "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_amd64.deb";
+      sha256 =
+        "06bb17d7a06bb0601053eaaf423f9176f06ff3636cc43ffc024438e1962dcd02";
     };
     "i686-linux" = fetchurl {
-      url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
-      sha256 = "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
+      url =
+        "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
+      sha256 =
+        "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
     };
   }."${stdenv.hostPlatform.system}";
 
@@ -40,12 +34,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    makeWrapper
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
 
   buildInputs = atomEnv.packages;
 
@@ -61,9 +50,7 @@ stdenv.mkDerivation rec {
        "$out/share/applications/hakuneko-desktop.desktop"
   '';
 
-  runtimeDependencies = [
-    (lib.getLib udev)
-  ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
     makeWrapper $out/lib/hakuneko-desktop/hakuneko $out/bin/hakuneko \
@@ -74,12 +61,7 @@ stdenv.mkDerivation rec {
     description = "Manga & Anime Downloader";
     homepage = "https://sourceforge.net/projects/hakuneko/";
     license = licenses.unlicense;
-    maintainers = with maintainers; [
-      nloomans
-    ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with maintainers; [ nloomans ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

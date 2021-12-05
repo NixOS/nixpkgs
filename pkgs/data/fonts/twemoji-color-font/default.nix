@@ -1,7 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "twemoji-color-font";
@@ -10,7 +7,8 @@ stdenv.mkDerivation rec {
   # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
   src = fetchurl {
-    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${version}/TwitterColorEmoji-SVGinOT-Linux-${version}.tar.gz";
+    url =
+      "https://github.com/eosrei/twemoji-color-font/releases/download/v${version}/TwitterColorEmoji-SVGinOT-Linux-${version}.tar.gz";
     sha256 = "sha256-V8DWUUAK+HLDPcq3izPs174PfUnaSeLByDpZwhUIX5Q=";
   };
 
@@ -22,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
+    description =
+      "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
       Everyone artwork with support for ZWJ, skin tone diversity and country

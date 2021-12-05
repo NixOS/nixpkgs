@@ -1,8 +1,5 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll,
-  isPy3k,
-  geos, gdal, pytz, sqlparse,
-  withGdal ? false
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, isPy3k, geos, gdal
+, pytz, sqlparse, withGdal ? false }:
 
 buildPythonPackage rec {
   pname = "Django";
@@ -15,14 +12,12 @@ buildPythonPackage rec {
     sha256 = "1dvx3x85lggm91x7mpvaf9nmpxyz7r97pbpnmr2k1qfy0c7gyf9k";
   };
 
-  patches = lib.optional withGdal
-    (substituteAll {
-      src = ./1.10-gis-libs.template.patch;
-      geos = geos;
-      gdal = gdal;
-      extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    })
-  ;
+  patches = lib.optional withGdal (substituteAll {
+    src = ./1.10-gis-libs.template.patch;
+    geos = geos;
+    gdal = gdal;
+    extension = stdenv.hostPlatform.extensions.sharedLibrary;
+  });
 
   propagatedBuildInputs = [ pytz sqlparse ];
 

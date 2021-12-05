@@ -1,11 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, sqlite }: let
+{ lib, rustPlatform, fetchFromGitHub, sqlite }:
+let
 
-manifest = {
-  description = "Bukubrow extension host application";
-  name = "com.samhh.bukubrow";
-  path = "@out@/bin/bukubrow";
-  type = "stdio";
-};
+  manifest = {
+    description = "Bukubrow extension host application";
+    name = "com.samhh.bukubrow";
+    path = "@out@/bin/bukubrow";
+    type = "stdio";
+  };
 
 in rustPlatform.buildRustPackage rec {
   pname = "bukubrow-host";
@@ -23,11 +24,11 @@ in rustPlatform.buildRustPackage rec {
   buildInputs = [ sqlite ];
 
   passAsFile = [ "firefoxManifest" "chromeManifest" ];
-  firefoxManifest = builtins.toJSON (manifest // {
-    allowed_extensions = [ "bukubrow@samhh.com" ];
-  });
+  firefoxManifest = builtins.toJSON
+    (manifest // { allowed_extensions = [ "bukubrow@samhh.com" ]; });
   chromeManifest = builtins.toJSON (manifest // {
-    allowed_origins = [ "chrome-extension://ghniladkapjacfajiooekgkfopkjblpn/" ];
+    allowed_origins =
+      [ "chrome-extension://ghniladkapjacfajiooekgkfopkjblpn/" ];
   });
   postBuild = ''
     substituteAll $firefoxManifestPath firefox.json

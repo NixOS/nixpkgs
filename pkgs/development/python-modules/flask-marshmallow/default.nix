@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
-  flask, six, marshmallow
-}:
+{ lib, buildPythonPackage, fetchPypi, flask, six, marshmallow }:
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";

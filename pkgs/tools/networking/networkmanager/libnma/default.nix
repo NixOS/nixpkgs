@@ -1,26 +1,7 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, gtk-doc
-, pkg-config
-, vala
-, networkmanager
-, gnome
-, isocodes
-, libxml2
-, docbook_xsl
-, docbook_xml_dtd_43
-, mobile-broadband-provider-info
-, gobject-introspection
-, gtk3
-, withGnome ? true
-, gcr
-, glib
-, substituteAll
-, lib
-}:
+{ stdenv, fetchurl, meson, ninja, gettext, gtk-doc, pkg-config, vala
+, networkmanager, gnome, isocodes, libxml2, docbook_xsl, docbook_xml_dtd_43
+, mobile-broadband-provider-info, gobject-introspection, gtk3, withGnome ? true
+, gcr, glib, substituteAll, lib }:
 
 stdenv.mkDerivation rec {
   pname = "libnma";
@@ -29,7 +10,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "Cle5Oi+tQ6zHY/Mg3Tp6k8QpsOMRjfpUnWeCTN3E6QU=";
   };
 
@@ -51,19 +34,13 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    gtk3
-    networkmanager
-    isocodes
-    mobile-broadband-provider-info
-  ] ++ lib.optionals withGnome [
-    # advanced certificate chooser
-    gcr
-  ];
+  buildInputs = [ gtk3 networkmanager isocodes mobile-broadband-provider-info ]
+    ++ lib.optionals withGnome [
+      # advanced certificate chooser
+      gcr
+    ];
 
-  mesonFlags = [
-    "-Dgcr=${lib.boolToString withGnome}"
-  ];
+  mesonFlags = [ "-Dgcr=${lib.boolToString withGnome}" ];
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \

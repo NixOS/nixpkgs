@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PostgreSQL extension for signing and verifying ed25519 signatures";
+    description =
+      "PostgreSQL extension for signing and verifying ed25519 signatures";
     homepage = "https://gitlab.com/dwagin/pg_ed25519";
     maintainers = [ maintainers.renzo ];
     platforms = postgresql.meta.platforms;

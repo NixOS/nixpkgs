@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, libpcap
-, openssl
-, bash
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, libpcap, openssl, bash }:
 
 stdenv.mkDerivation rec {
   version = "2.4.9";
@@ -29,11 +22,7 @@ stdenv.mkDerivation rec {
     ./nonpriv.patch
   ];
 
-  buildInputs = [
-    libpcap
-    openssl
-    bash
-  ];
+  buildInputs = [ libpcap openssl bash ];
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do
@@ -44,9 +33,7 @@ stdenv.mkDerivation rec {
       scripts/{pon,poff,plog}
   '';
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -62,13 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ppp.samba.org";
-    description = "Point-to-point implementation to provide Internet connections over serial lines";
-    license = with licenses; [
-      bsdOriginal
-      publicDomain
-      gpl2
-      lgpl2
-    ];
+    description =
+      "Point-to-point implementation to provide Internet connections over serial lines";
+    license = with licenses; [ bsdOriginal publicDomain gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ ];
   };

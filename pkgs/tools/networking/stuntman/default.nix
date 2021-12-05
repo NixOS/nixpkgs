@@ -11,10 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1gcx4zj44f0viddnn5klkmq0dgd29av5p06iyf9f1va4a3lk0cbg";
   };
 
-  buildInputs = [
-    boost
-    openssl
-  ];
+  buildInputs = [ boost openssl ];
 
   installPhase = ''
     runHook preInstall

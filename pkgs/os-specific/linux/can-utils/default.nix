@@ -22,7 +22,8 @@ stdenv.mkDerivation {
   preConfigure = ''makeFlagsArray+=(PREFIX="$out")'';
 
   meta = with lib; {
-    description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
+    description =
+      "CAN userspace utilities and tools (for use with Linux SocketCAN)";
     homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

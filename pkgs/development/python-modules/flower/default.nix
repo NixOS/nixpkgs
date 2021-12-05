@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, celery
-, humanize
-, mock
-, pytz
-, tornado
-, prometheus-client
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, celery, humanize, mock, pytz, tornado
+, prometheus-client, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "flower";
@@ -26,18 +17,9 @@ buildPythonPackage rec {
     rm tests/load.py
   '';
 
-  propagatedBuildInputs = [
-    celery
-    humanize
-    prometheus-client
-    pytz
-    tornado
-  ];
+  propagatedBuildInputs = [ celery humanize prometheus-client pytz tornado ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   disabledTests = [
     # AssertionError as the celery release can't be detected
@@ -45,9 +27,7 @@ buildPythonPackage rec {
     "test_with_app"
   ];
 
-  pythonImportsCheck = [
-    "flower"
-  ];
+  pythonImportsCheck = [ "flower" ];
 
   meta = with lib; {
     description = "Celery Flower";

@@ -1,11 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
-, procps, libcap_ng, openssl, python2, perl
-, automake, autoconf, libtool, kernel ? null }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which, procps
+, libcap_ng, openssl, python2, perl, automake, autoconf, libtool, kernel ? null
+}:
 
 with lib;
 
-let
-  _kernel = kernel;
+let _kernel = kernel;
 in stdenv.mkDerivation rec {
   version = "2.5.12";
   pname = "openvswitch";
@@ -24,11 +23,9 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "./boot.sh";
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sharedstatedir=/var"
-    "--sbindir=$(out)/bin"
-  ] ++ (optionals (_kernel != null) ["--with-linux"]);
+  configureFlags =
+    [ "--localstatedir=/var" "--sharedstatedir=/var" "--sbindir=$(out)/bin" ]
+    ++ (optionals (_kernel != null) [ "--with-linux" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -44,7 +41,8 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  doCheck = false; # bash-completion test fails with "compgen: command not found"
+  doCheck =
+    false; # bash-completion test fails with "compgen: command not found"
 
   postInstall = ''
     cp debian/ovs-monitor-ipsec $out/share/openvswitch/scripts
@@ -63,8 +61,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
-    longDescription =
-      ''
+    longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
       licensed under the open source Apache 2.0 license. It is
       designed to enable massive network automation through
@@ -73,7 +70,7 @@ in stdenv.mkDerivation rec {
       RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
-      '';
+    '';
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];

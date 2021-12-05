@@ -1,13 +1,7 @@
-{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib
-, perl, flex, bison, readline, libexif
-, x11Support ? true, SDL
-, svgSupport ? true, inkscape
-, asciiArtSupport ? true, aalib
-, gifSupport ? true, giflib
-, tiffSupport ? true, libtiff
-, jpegSupport ? true, libjpeg
-, pngSupport ? true, libpng
-}:
+{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib, perl, flex, bison
+, readline, libexif, x11Support ? true, SDL, svgSupport ? true, inkscape
+, asciiArtSupport ? true, aalib, gifSupport ? true, giflib, tiffSupport ? true
+, libtiff, jpegSupport ? true, libjpeg, pngSupport ? true, libpng }:
 
 gcc9Stdenv.mkDerivation rec {
   pname = "fim";
@@ -19,26 +13,23 @@ gcc9Stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-   substituteInPlace doc/vim2html.pl \
-     --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace doc/vim2html.pl \
+      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
   buildInputs = with lib;
-    [ perl flex bison readline libexif ]
-    ++ optional x11Support SDL
-    ++ optional svgSupport inkscape
-    ++ optional asciiArtSupport aalib
-    ++ optional gifSupport giflib
-    ++ optional tiffSupport libtiff
-    ++ optional jpegSupport libjpeg
-    ++ optional pngSupport libpng;
+    [ perl flex bison readline libexif ] ++ optional x11Support SDL
+    ++ optional svgSupport inkscape ++ optional asciiArtSupport aalib
+    ++ optional gifSupport giflib ++ optional tiffSupport libtiff
+    ++ optional jpegSupport libjpeg ++ optional pngSupport libpng;
 
   NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
   meta = with lib; {
-    description = "A lightweight, highly customizable and scriptable image viewer";
+    description =
+      "A lightweight, highly customizable and scriptable image viewer";
     longDescription = ''
       FIM (Fbi IMproved) is a lightweight, console based image viewer that aims
       to be a highly customizable and scriptable for users who are comfortable

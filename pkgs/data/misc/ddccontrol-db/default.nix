@@ -1,10 +1,4 @@
-{ lib, stdenv
-, autoconf
-, automake
-, libtool
-, intltool
-, fetchFromGitHub
-}:
+{ lib, stdenv, autoconf, automake, libtool, intltool, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol-db";
@@ -21,13 +15,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  buildInputs =
-    [
-      autoconf
-      automake
-      libtool
-      intltool
-    ];
+  buildInputs = [ autoconf automake libtool intltool ];
 
   meta = with lib; {
     description = "Monitor database for DDCcontrol";

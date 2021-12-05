@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, fetchpatch, meson, ninja
+, pkg-config, vala, libgee, granite, gtk3, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
@@ -28,30 +16,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard-plug-sharing/pull/55
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-sharing/commit/5219839738b79e3c5f039a811d96a40eb2644eab.patch";
+      url =
+        "https://github.com/elementary/switchboard-plug-sharing/commit/5219839738b79e3c5f039a811d96a40eb2644eab.patch";
       sha256 = "020w746q7gzmic0pdnbxs792sx15wlsqaf2x770r5xwbyfmqr7bs";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    switchboard
-  ];
+  buildInputs = [ granite gtk3 libgee switchboard ];
 
   meta = with lib; {
     description = "Switchboard Sharing Plug";

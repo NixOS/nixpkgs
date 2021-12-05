@@ -37,11 +37,8 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [
-          "-label kbfs"
-          "-mount-type normal"
-        ];
+        default = [ ];
+        example = [ "-label kbfs" "-mount-type normal" ];
         description = ''
           Additional flags to pass to the Keybase filesystem on launch.
         '';
@@ -61,23 +58,25 @@ in {
         # Note that the "Requires" directive will cause a unit to be restarted whenever its dependency is restarted.
         # Do not issue a hard dependency on keybase, because kbfs can reconnect to a restarted service.
         # Do not issue a hard dependency on keybase-redirector, because it's ok if it fails (e.g., if it is disabled).
-        wants = [ "keybase.service" ] ++ optional cfg.enableRedirector "keybase-redirector.service";
+        wants = [ "keybase.service" ]
+          ++ optional cfg.enableRedirector "keybase-redirector.service";
         path = [ "/run/wrappers" ];
         unitConfig.ConditionUser = "!@system";
 
         serviceConfig = {
           Type = "notify";
           # Keybase notifies from a forked process
-          EnvironmentFile = [
-            "-%E/keybase/keybase.autogen.env"
-            "-%E/keybase/keybase.env"
-          ];
+          EnvironmentFile =
+            [ "-%E/keybase/keybase.autogen.env" "-%E/keybase/keybase.env" ];
           ExecStartPre = [
-            "${pkgs.coreutils}/bin/mkdir -p \"${cfg.mountPoint}\""
-            "-${wrapperDir}/fusermount -uz \"${cfg.mountPoint}\""
+            ''${pkgs.coreutils}/bin/mkdir -p "${cfg.mountPoint}"''
+            ''-${wrapperDir}/fusermount -uz "${cfg.mountPoint}"''
           ];
-          ExecStart = "${pkgs.kbfs}/bin/kbfsfuse ${toString cfg.extraFlags} \"${cfg.mountPoint}\"";
-          ExecStop = "${wrapperDir}/fusermount -uz \"${cfg.mountPoint}\"";
+          ExecStart = ''
+            ${pkgs.kbfs}/bin/kbfsfuse ${
+              toString cfg.extraFlags
+            } "${cfg.mountPoint}"'';
+          ExecStop = ''${wrapperDir}/fusermount -uz "${cfg.mountPoint}"'';
           Restart = "on-failure";
           PrivateTmp = true;
         };
@@ -90,7 +89,8 @@ in {
     }
 
     (mkIf cfg.enableRedirector {
-      security.wrappers."keybase-redirector".source = "${pkgs.kbfs}/bin/redirector";
+      security.wrappers."keybase-redirector".source =
+        "${pkgs.kbfs}/bin/redirector";
 
       systemd.tmpfiles.rules = [ "d /keybase 0755 root root 0" ];
 
@@ -101,10 +101,8 @@ in {
         unitConfig.ConditionUser = "!@system";
 
         serviceConfig = {
-          EnvironmentFile = [
-            "-%E/keybase/keybase.autogen.env"
-            "-%E/keybase/keybase.env"
-          ];
+          EnvironmentFile =
+            [ "-%E/keybase/keybase.autogen.env" "-%E/keybase/keybase.env" ];
           # Note: The /keybase mount point is not currently configurable upstream.
           ExecStart = "${wrapperDir}/keybase-redirector /keybase";
           Restart = "on-failure";

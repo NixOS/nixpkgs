@@ -23,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A library for automatically generating command line interfaces";
+    description =
+      "A library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
       interfaces (CLIs) from absolutely any Python object.

@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite
+, installShellFiles, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
@@ -12,12 +13,9 @@ rustPlatform.buildRustPackage rec {
   };
   cargoSha256 = "18xpwav48xv7xm7r3w9qplmv2i18cg09pkahyvs5l4akdjgxyw10";
 
-  nativeBuildInputs = with llvmPackages; [
-    llvm
-    clang
-    installShellFiles
-  ];
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  nativeBuildInputs = with llvmPackages; [ llvm clang installShellFiles ];
+  buildInputs = [ sqlite ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 

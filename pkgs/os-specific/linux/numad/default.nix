@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  patches = [
-    ./numad-linker-flags.patch
-  ];
+  patches = [ ./numad-linker-flags.patch ];
   postPatch = ''
     substituteInPlace Makefile --replace "install -m" "install -Dm"
   '';
@@ -22,7 +20,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
-    description = "A user-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";
+    description =
+      "A user-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";
     homepage = "https://fedoraproject.org/wiki/Features/numad";
     license = licenses.lgpl21;
     platforms = platforms.linux;

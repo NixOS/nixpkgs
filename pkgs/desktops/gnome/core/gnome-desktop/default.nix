@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, pkg-config
-, libxslt
-, ninja
-, gnome
-, gtk3
-, glib
-, gettext
-, libxml2
-, xkeyboard_config
-, libxkbcommon
-, isocodes
-, meson
-, wayland
-, libseccomp
-, systemd
-, bubblewrap
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, libxslt, ninja, gnome, gtk3
+, glib, gettext, libxml2, xkeyboard_config, libxkbcommon, isocodes, meson
+, wayland, libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc
+, docbook-xsl-nons, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
@@ -31,7 +10,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-desktop/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-voqvpk17ov0xB57tY505/aHqd+9301pnjwGcTZHUc8I=";
   };
 
@@ -68,14 +49,9 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = [
-    gsettings-desktop-schemas
-  ];
+  propagatedBuildInputs = [ gsettings-desktop-schemas ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Ddesktop_docs=false"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" "-Ddesktop_docs=false" ];
 
   separateDebugInfo = stdenv.isLinux;
 

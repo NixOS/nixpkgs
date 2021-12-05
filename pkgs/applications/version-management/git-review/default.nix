@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitea
-, buildPythonApplication
-, pbr
-, requests
-, setuptools
-, genericUpdater
-, common-updater-scripts
-}:
+{ lib, fetchFromGitea, buildPythonApplication, pbr, requests, setuptools
+, genericUpdater, common-updater-scripts }:
 
 buildPythonApplication rec {
   pname = "git-review";
@@ -26,9 +19,7 @@ buildPythonApplication rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     requests
@@ -44,7 +35,8 @@ buildPythonApplication rec {
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
   meta = with lib; {

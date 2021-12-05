@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, coreutils
-, pythonOlder
-, astunparse
-, jq
-, bc
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, coreutils
+, pythonOlder, astunparse, jq, bc }:
 
 buildPythonPackage rec {
   pname = "pyp";
@@ -23,29 +15,21 @@ buildPythonPackage rec {
     sha256 = "09k7y77h7g4dg0x6lg9pn2ga9z7xiy4vlj15fj0991ffsi4ydqgm";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    astunparse
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ astunparse ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    coreutils
-    jq
-    bc
-  ];
+  checkInputs = [ pytestCheckHook coreutils jq bc ];
 
-  pythonImportsCheck = [
-    "pyp"
-  ];
+  pythonImportsCheck = [ "pyp" ];
 
   meta = with lib; {
-    description = "Easily run Python at the shell! Magical, but never mysterious";
+    description =
+      "Easily run Python at the shell! Magical, but never mysterious";
     homepage = "https://github.com/hauntsaninja/pyp";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo ];
-   };
+  };
 }

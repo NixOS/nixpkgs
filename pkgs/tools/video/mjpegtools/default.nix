@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL, SDL_gfx
-, withMinimal ? true
-}:
+{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL
+, SDL_gfx, withMinimal ? true }:
 
 # TODO:
 # - make dependencies optional
@@ -20,9 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libdv libjpeg libpng ]
-              ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
+    ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure

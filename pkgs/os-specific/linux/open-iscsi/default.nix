@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf
-}:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext, util-linux
+, open-isns, openssl, kmod, perl, systemd, pkgconf }:
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
@@ -25,10 +24,7 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr|/|' Makefile
   '';
 
-  installFlags = [
-    "install"
-    "install_systemd"
-  ];
+  installFlags = [ "install" "install_systemd" ];
 
   postInstall = ''
     cp usr/iscsistart $out/sbin/
@@ -43,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high performance, transport independent, multi-platform implementation of RFC3720";
+    description =
+      "A high performance, transport independent, multi-platform implementation of RFC3720";
     license = licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";
     platforms = platforms.linux;

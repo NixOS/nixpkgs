@@ -1,6 +1,4 @@
-{ yarn2nix-moretea
-, fetchFromGitHub, applyPatches
-}:
+{ yarn2nix-moretea, fetchFromGitHub, applyPatches }:
 
 yarn2nix-moretea.mkYarnPackage rec {
   pname = "gotify-ui";

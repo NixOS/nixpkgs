@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, glib
-, cairo
-, sqlite
-, libsoup
-, gtk4
-, xvfb-run
-, unstableGitUpdater
-}:
+{ lib, stdenv, fetchFromGitLab, gi-docgen, meson, ninja, pkg-config, vala
+, gobject-introspection, glib, cairo, sqlite, libsoup, gtk4, xvfb-run
+, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
@@ -31,30 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "df8ZHn/wmkzaYH0L3E6ULUtqxqU71EqL0jSgKhWqlT8=";
   };
 
-  nativeBuildInputs = [
-    gi-docgen
-    meson
-    ninja
-    pkg-config
-    vala
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [ gi-docgen meson ninja pkg-config vala gobject-introspection ];
 
-  buildInputs = [
-    glib
-    cairo
-    sqlite
-    libsoup
-    gtk4
-  ];
+  buildInputs = [ glib cairo sqlite libsoup gtk4 ];
 
-  checkInputs = [
-    xvfb-run
-  ];
+  checkInputs = [ xvfb-run ];
 
-  mesonFlags = [
-    "-Ddemos=true"
-  ];
+  mesonFlags = [ "-Ddemos=true" ];
 
   doCheck = true;
 
@@ -71,9 +41,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/doc/libshumate-0.0 "$devdoc"
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = meta.homepage;
-  };
+  passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
 
   meta = with lib; {
     description = "GTK toolkit providing widgets for embedded maps";

@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, alsa-lib, gtk2, libjack2, libuuid, libxml2
-, makeWrapper, pkg-config, readline }:
+{ lib, stdenv, fetchurl, alsa-lib, gtk2, libjack2, libuuid, libxml2, makeWrapper
+, pkg-config, readline }:
 
 assert libuuid != null;
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "lash";
   version = "0.5.4";
 

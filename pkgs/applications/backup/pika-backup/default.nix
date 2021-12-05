@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, substituteAll
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, borgbackup
-, dbus
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
-}:
+{ lib, stdenv, fetchFromGitLab, rustPlatform, substituteAll, desktop-file-utils
+, meson, ninja, pkg-config, python3, wrapGAppsHook, borgbackup, dbus, gdk-pixbuf
+, glib, gtk3, libhandy }:
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
@@ -46,31 +31,17 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
   '';
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 wrapGAppsHook ]
+    ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
-  buildInputs = [
-    dbus
-    gdk-pixbuf
-    glib
-    gtk3
-    libhandy
-  ];
+  buildInputs = [ dbus gdk-pixbuf glib gtk3 libhandy ];
 
   meta = with lib; {
     description = "Simple backups based on borg";
     homepage = "https://wiki.gnome.org/Apps/PikaBackup";
-    changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

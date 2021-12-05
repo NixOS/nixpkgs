@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchurl, munge, lua,
-  libcap, perl, ncurses
-}:
+{ lib, stdenv, fetchurl, munge, lua, libcap, perl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "diod";
   version = "1.0.24";
 
   src = fetchurl {
-    url = "https://github.com/chaos/diod/releases/download/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/chaos/diod/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "17wckwfsqj61yixz53nwkc35z66arb1x3napahpi64m7q68jn7gl";
   };
 
@@ -19,9 +18,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ munge lua libcap perl ncurses ];
 
   meta = with lib; {
-    description = "An I/O forwarding server that implements a variant of the 9P protocol";
+    description =
+      "An I/O forwarding server that implements a variant of the 9P protocol";
     maintainers = with maintainers; [ rnhmjoj ];
-    platforms   = platforms.linux;
-    license     = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,10 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyfronius";
@@ -19,13 +14,9 @@ buildPythonPackage rec {
     sha256 = "1jp9vsllvzfnrkzmln2sp1ggr4pwaj47744n2ijz1wsf8v38nw2j";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyfronius" ];
 

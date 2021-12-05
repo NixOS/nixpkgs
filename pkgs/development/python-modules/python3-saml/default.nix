@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k,
-isodate, lxml, xmlsec, freezegun }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, isodate, lxml, xmlsec
+, freezegun }:
 
 buildPythonPackage rec {
   pname = "python3-saml";
@@ -13,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-VPUsjuo4FIes8ti0tkR0kT3J3RdUt1wtl4QEahVsc2c=";
   };
 
-  propagatedBuildInputs = [
-    isodate lxml xmlsec
-  ];
+  propagatedBuildInputs = [ isodate lxml xmlsec ];
 
   checkInputs = [ freezegun ];
   pythonImportsCheck = [ "onelogin.saml2" ];

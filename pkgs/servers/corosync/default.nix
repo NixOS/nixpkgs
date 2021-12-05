@@ -1,10 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
-, dbus, rdma-core, libstatgrab, net-snmp
-, enableDbus ? false
-, enableInfiniBandRdma ? false
-, enableMonitoring ? false
-, enableSnmp ? false
-}:
+, dbus, rdma-core, libstatgrab, net-snmp, enableDbus ? false
+, enableInfiniBandRdma ? false, enableMonitoring ? false, enableSnmp ? false }:
 
 with lib;
 
@@ -13,18 +9,16 @@ stdenv.mkDerivation rec {
   version = "3.1.5";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
+    url =
+      "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-O7o+PtgasrCAcRsu4kEC+7530GCwXUvi2jEAgghPC7w=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  buildInputs = [
-    kronosnet nss nspr libqb
-  ] ++ optional enableDbus dbus
+  buildInputs = [ kronosnet nss nspr libqb ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
-    ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net-snmp;
+    ++ optional enableMonitoring libstatgrab ++ optional enableSnmp net-snmp;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -65,7 +59,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://corosync.org/";
-    description = "A Group Communication System with features for implementing high availability within applications";
+    description =
+      "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ montag451 ryantm ];

@@ -1,14 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, qtx11extras
-, libxcb
-, libXdmcp
-, qtbase
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules, fcitx5
+, qtx11extras, libxcb, libXdmcp, qtbase }:
 
 mkDerivation rec {
   pname = "fcitx5-qt";
@@ -26,22 +17,11 @@ mkDerivation rec {
       --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
   '';
 
-  cmakeFlags = [
-    "-DENABLE_QT4=0"
-    "-DENABLE_QT6=0"
-  ];
+  cmakeFlags = [ "-DENABLE_QT4=0" "-DENABLE_QT6=0" ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    fcitx5
-    qtx11extras
-    libxcb
-    libXdmcp
-  ];
+  buildInputs = [ fcitx5 qtx11extras libxcb libXdmcp ];
 
   meta = with lib; {
     description = "Fcitx5 Qt Library";

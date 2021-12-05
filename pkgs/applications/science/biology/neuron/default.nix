@@ -1,28 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, automake
-, autoconf
-, libtool
-, ncurses
-, readline
-, which
-, python ? null
-, useMpi ? false
-, mpi
-, iv
-}:
+{ lib, stdenv, fetchurl, pkg-config, automake, autoconf, libtool, ncurses
+, readline, which, python ? null, useMpi ? false, mpi, iv }:
 
 stdenv.mkDerivation rec {
   pname = "neuron";
   version = "7.5";
 
   nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
-  buildInputs = [ ncurses readline python iv ]
-    ++ lib.optional useMpi mpi;
+  buildInputs = [ ncurses readline python iv ] ++ lib.optional useMpi mpi;
 
   src = fetchurl {
-    url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
+    url =
+      "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
@@ -54,11 +42,13 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = with lib;
-                    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
-                    ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
-                    ++ (if useMpi then ["--with-mpi" "--with-paranrn"]
-                        else ["--without-mpi"]);
-
+    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
+    ++ optionals (python != null) [ "--with-nrnpython=${python.interpreter}" ]
+    ++ (if useMpi then [
+      "--with-mpi"
+      "--with-paranrn"
+    ] else
+      [ "--without-mpi" ]);
 
   postInstall = lib.optionalString (python != null) ''
     ## standardise python neuron install dir if any
@@ -71,18 +61,20 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ readline ncurses which libtool ];
 
   meta = with lib; {
-    description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
+    description =
+      "Simulation environment for empirically-based simulations of neurons and networks of neurons";
 
-    longDescription = "NEURON is a simulation environment for developing and exercising models of
-                neurons and networks of neurons. It is particularly well-suited to problems where
-                cable properties of cells play an important role, possibly including extracellular
-                potential close to the membrane), and where cell membrane properties are complex,
-                involving many ion-specific channels, ion accumulation, and second messengers";
+    longDescription = ''
+      NEURON is a simulation environment for developing and exercising models of
+                      neurons and networks of neurons. It is particularly well-suited to problems where
+                      cable properties of cells play an important role, possibly including extracellular
+                      potential close to the membrane), and where cell membrane properties are complex,
+                      involving many ion-specific channels, ion accumulation, and second messengers'';
 
-    license     = licenses.bsd3;
-    homepage    = "http://www.neuron.yale.edu/neuron";
+    license = licenses.bsd3;
+    homepage = "http://www.neuron.yale.edu/neuron";
     maintainers = [ maintainers.adev ];
     # source claims it's only tested for x86 and powerpc
-    platforms   = platforms.x86_64 ++ platforms.i686;
+    platforms = platforms.x86_64 ++ platforms.i686;
   };
 }

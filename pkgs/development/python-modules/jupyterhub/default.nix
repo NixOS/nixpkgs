@@ -1,65 +1,34 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchzip
-, alembic
-, async_generator
-, certipy
-, python-dateutil
-, entrypoints
-, jinja2
-, jupyter-telemetry
-, oauthlib
-, pamela
-, prometheus-client
-, requests
-, sqlalchemy
-, tornado
-, traitlets
-, nodePackages
-, beautifulsoup4
-, cryptography
-, notebook
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
-, virtualenv
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, fetchzip, alembic
+, async_generator, certipy, python-dateutil, entrypoints, jinja2
+, jupyter-telemetry, oauthlib, pamela, prometheus-client, requests, sqlalchemy
+, tornado, traitlets, nodePackages, beautifulsoup4, cryptography, notebook
+, pytest-asyncio, pytestCheckHook, requests-mock, virtualenv }:
 
 let
   # js/css assets that setup.py tries to fetch via `npm install` when building
   # from source. https://github.com/jupyterhub/jupyterhub/blob/master/package.json
-  bootstrap =
-    fetchzip {
-      url = "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz";
-      sha256 = "1ywmxqdccg0mgx0xknrn1hlrfnhcwphc12y9l91zizx26fqfmzgc";
-    };
-  font-awesome =
-    fetchzip {
-      url = "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz";
-      sha256 = "1xnxbdlfdd60z5ix152m8r2kk9dkwlqwpypky1mm3dv64ajnzdbk";
-    };
-  jquery =
-    fetchzip {
-      url = "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz";
-      sha256 = "0yi9ql493din1qa1s923nd5zvd0klk1sx00xj1wx2yambmq86vm9";
-    };
-  moment =
-    fetchzip {
-      url = "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz";
-      sha256 = "0ifzzla4zffw23g3xvhwx3fj3jny6cjzxfzl1x0317q8wa0c7w5i";
-    };
-  requirejs =
-    fetchzip {
-      url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.6.tgz";
-      sha256 = "165hkli3qcd59cjqvli9r5f92i0h7czkmhcg1cgwamw2d0b7xibz";
-    };
+  bootstrap = fetchzip {
+    url = "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz";
+    sha256 = "1ywmxqdccg0mgx0xknrn1hlrfnhcwphc12y9l91zizx26fqfmzgc";
+  };
+  font-awesome = fetchzip {
+    url = "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz";
+    sha256 = "1xnxbdlfdd60z5ix152m8r2kk9dkwlqwpypky1mm3dv64ajnzdbk";
+  };
+  jquery = fetchzip {
+    url = "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz";
+    sha256 = "0yi9ql493din1qa1s923nd5zvd0klk1sx00xj1wx2yambmq86vm9";
+  };
+  moment = fetchzip {
+    url = "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz";
+    sha256 = "0ifzzla4zffw23g3xvhwx3fj3jny6cjzxfzl1x0317q8wa0c7w5i";
+  };
+  requirejs = fetchzip {
+    url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.6.tgz";
+    sha256 = "165hkli3qcd59cjqvli9r5f92i0h7czkmhcg1cgwamw2d0b7xibz";
+  };
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "jupyterhub";
   version = "1.3.0";
   disabled = pythonOlder "3.6";

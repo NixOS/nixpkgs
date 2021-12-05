@@ -1,30 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, pkg-config
-, libusb-compat-0_1
-, readline
-, libewf
-, perl
-, zlib
-, openssl
-, libuv
-, file
-, libzip
-, xxHash
-, gtk2
-, vte
-, gtkdialog
-, python3
-, ruby
-, lua
-, capstone
-, useX11 ? false
-, rubyBindings ? false
-, pythonBindings ? false
-, luaBindings ? false
-}:
+{ lib, stdenv, fetchFromGitHub, buildPackages, pkg-config, libusb-compat-0_1
+, readline, libewf, perl, zlib, openssl, libuv, file, libzip, xxHash, gtk2, vte
+, gtkdialog, python3, ruby, lua, capstone, useX11 ? false, rubyBindings ? false
+, pythonBindings ? false, luaBindings ? false }:
 
 let
   # FIXME: Compare revision with https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L20
@@ -34,8 +11,7 @@ let
     rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
     sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "radare2";
   version = "5.4.2";
 
@@ -81,17 +57,9 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    capstone
-    file
-    readline
-    libusb-compat-0_1
-    libewf
-    perl
-    zlib
-    openssl
-    libuv
-  ] ++ lib.optional useX11 [ gtkdialog vte gtk2 ]
+  buildInputs =
+    [ capstone file readline libusb-compat-0_1 libewf perl zlib openssl libuv ]
+    ++ lib.optional useX11 [ gtkdialog vte gtk2 ]
     ++ lib.optional rubyBindings [ ruby ]
     ++ lib.optional pythonBindings [ python3 ]
     ++ lib.optional luaBindings [ lua ];
@@ -104,7 +72,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "unix-like reverse engineering framework and commandline tools";
+    description =
+      "unix-like reverse engineering framework and commandline tools";
     homepage = "https://radare.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin makefu mic92 arkivm ];

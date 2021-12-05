@@ -1,21 +1,30 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-xmlspam";
   version = "20101006-http";
 
   description = "Streaming pattern matching for XML";
 
-  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."puri" args."trivial-features" args."trivial-gray-streams" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cl-ppcre"
+    args."closure-common"
+    args."cxml"
+    args."puri"
+    args."trivial-features"
+    args."trivial-gray-streams"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-xmlspam/2010-10-06/cl-xmlspam-20101006-http.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-xmlspam/2010-10-06/cl-xmlspam-20101006-http.tgz";
     sha256 = "1mx1a6ab4irncrx5pamh7zng35m4c5wh0pw68avaz7fbz81s953h";
   };
 
   packageName = "cl-xmlspam";
 
-  asdFilesToKeep = ["cl-xmlspam.asd"];
+  asdFilesToKeep = [ "cl-xmlspam.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-xmlspam DESCRIPTION Streaming pattern matching for XML SHA256
@@ -32,4 +41,5 @@ rec {
     DEPENDENCIES
     (alexandria babel cl-ppcre closure-common cxml puri trivial-features
      trivial-gray-streams)
-    VERSION 20101006-http SIBLINGS NIL PARASITES NIL) */
+    VERSION 20101006-http SIBLINGS NIL PARASITES NIL)
+*/

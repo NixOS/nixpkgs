@@ -1,18 +1,5 @@
-{ stdenv
-, buildGoModule
-, fetchFromGitHub
-, lib
-, go
-, pkg-config
-, libX11
-, libXcursor
-, libXrandr
-, libXinerama
-, libXi
-, libXext
-, libXxf86vm
-, libGL
-}:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, go, pkg-config, libX11
+, libXcursor, libXrandr, libXinerama, libXi, libXext, libXxf86vm, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "darktile";
@@ -27,16 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ go pkg-config ];
 
-  buildInputs = [
-    libX11
-    libXcursor
-    libXrandr
-    libXinerama
-    libXi
-    libXext
-    libXxf86vm
-    libGL
-  ];
+  buildInputs =
+    [ libX11 libXcursor libXrandr libXinerama libXi libXext libXxf86vm libGL ];
 
   postPatch = ''
     substituteInPlace scripts/build.sh \
@@ -58,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GPU rendered terminal emulator designed for tiling window managers";
+    description =
+      "A GPU rendered terminal emulator designed for tiling window managers";
     homepage = "https://github.com/liamg/darktile";
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";

@@ -1,15 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "geth";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [bachp ];
-  };
+  meta = with pkgs.lib; { maintainers = with maintainers; [ bachp ]; };
 
   machine = { ... }: {
     services.geth."mainnet" = {
       enable = true;
-      http = {
-        enable = true;
-      };
+      http = { enable = true; };
     };
     services.geth."testnet" = {
       enable = true;

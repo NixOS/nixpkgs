@@ -1,12 +1,12 @@
 { lib, fetchzip, mkfontscale, mkfontdir }:
 
-let
-  version = "0.2.20080216.2";
+let version = "0.2.20080216.2";
 in {
   arphic-ukai = fetchzip {
     name = "arphic-ukai-${version}";
 
-    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
+    url =
+      "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
 
     postFetch = ''
       tar -xjvf $downloadedFile --strip-components=1
@@ -31,7 +31,8 @@ in {
   arphic-uming = fetchzip {
     name = "arphic-uming-${version}";
 
-    url = "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
+    url =
+      "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
 
     postFetch = ''
       tar -xjvf $downloadedFile --strip-components=1

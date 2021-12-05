@@ -11,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0n6hjg2wgd06m561zc3ib5w2m3pwpf74njv2b2w4sqqh5md2ymfr";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installTargets = [
-    "install_bin"
-  ];
+  installTargets = [ "install_bin" ];
 
   meta = with lib; {
     description = "A command line program which concatenates MP3 files";

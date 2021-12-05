@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libharu";
     repo = pname;
-    rev = "RELEASE_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "RELEASE_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "15s9hswnl3qqi7yh29jyrg0hma2n99haxznvcywmsp8kjqlyg75q";
   };
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libpng ];
 
   meta = {
-    description = "Cross platform, open source library for generating PDF files";
+    description =
+      "Cross platform, open source library for generating PDF files";
     homepage = "http://libharu.org/";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.marcweber ];

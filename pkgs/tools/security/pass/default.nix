@@ -1,15 +1,13 @@
-{ stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+{ stdenv, lib, pkgs, fetchurl, buildEnv, coreutils, findutils, gnugrep, gnused
+, getopt, git, tree, gnupg, openssl, which, procps, qrencode, makeWrapper, pass
+, symlinkJoin
 
-, xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
-, waylandSupport ? false, wl-clipboard ? null
-, ydotool ? null, dmenu-wayland ? null
+, xclip ? null, xdotool ? null, dmenu ? null, x11Support ? !stdenv.isDarwin
+, dmenuSupport ? (x11Support || waylandSupport), waylandSupport ? false
+, wl-clipboard ? null, ydotool ? null, dmenu-wayland ? null
 
-# For backwards-compatibility
-, tombPluginSupport ? false
-}:
+  # For backwards-compatibility
+, tombPluginSupport ? false }:
 
 with lib;
 
@@ -17,11 +15,9 @@ assert x11Support -> xclip != null;
 assert waylandSupport -> wl-clipboard != null;
 
 assert dmenuSupport -> x11Support || waylandSupport;
-assert dmenuSupport && x11Support
-  -> dmenu != null && xdotool != null;
-assert dmenuSupport && waylandSupport
-  -> dmenu-wayland != null && ydotool != null;
-
+assert dmenuSupport && x11Support -> dmenu != null && xdotool != null;
+assert dmenuSupport && waylandSupport -> dmenu-wayland != null && ydotool
+  != null;
 
 let
   passExtensions = import ./extensions { inherit pkgs; };
@@ -52,21 +48,19 @@ let
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
     };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "1.7.4";
   pname = "password-store";
 
   src = fetchurl {
-    url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
+    url =
+      "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
     sha256 = "1h4k6w7g8pr169p5w9n6mkdhxl3pw51zphx7www6pvgjb7vgmafg";
   };
 
-  patches = [
-    ./set-correct-program-name-for-sleep.patch
-    ./extension-dir.patch
-  ] ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+  patches = [ ./set-correct-program-name-for-sleep.patch ./extension-dir.patch ]
+    ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -81,24 +75,23 @@ stdenv.mkDerivation rec {
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
-  wrapperPath = with lib; makeBinPath ([
-    coreutils
-    findutils
-    getopt
-    git
-    gnugrep
-    gnupg
-    gnused
-    tree
-    which
-    qrencode
-    procps
-  ] ++ optional stdenv.isDarwin openssl
-    ++ optional x11Support xclip
-    ++ optional waylandSupport wl-clipboard
-    ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
-    ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
-  );
+  wrapperPath = with lib;
+    makeBinPath ([
+      coreutils
+      findutils
+      getopt
+      git
+      gnugrep
+      gnupg
+      gnused
+      tree
+      which
+      qrencode
+      procps
+    ] ++ optional stdenv.isDarwin openssl ++ optional x11Support xclip
+      ++ optional waylandSupport wl-clipboard
+      ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
+      ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]);
 
   postFixup = ''
     # Fix program name in --help
@@ -124,8 +117,8 @@ stdenv.mkDerivation rec {
       --replace "@out@" "$out"
 
     # the turning
-    sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
-           -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+    sed -i -e 's@^PASS=.*$@PASS=$out/bin/pass@' \
+           -e 's@^GPGS=.*$@GPG=${gnupg}/bin/gpg2@' \
            -e '/which gpg/ d' \
       tests/setup.sh
   '' + lib.optionalString stdenv.isDarwin ''
@@ -151,11 +144,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = "https://www.passwordstore.org/";
-    license     = licenses.gpl2Plus;
+    description =
+      "Stores, retrieves, generates, and synchronizes passwords securely";
+    homepage = "https://www.passwordstore.org/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       pass is a very simple password store that keeps passwords inside gpg2

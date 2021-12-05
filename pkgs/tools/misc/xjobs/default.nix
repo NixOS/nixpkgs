@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, flex, installShellFiles, ncurses, which
-}:
+{ lib, stdenv, fetchurl, flex, installShellFiles, ncurses, which }:
 
 stdenv.mkDerivation rec {
   pname = "xjobs";
@@ -11,14 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ay6gn43pnm7r1jamwgpycl67bjg5n87ncl27jb01w2x6x70z0i3";
   };
 
-  nativeBuildInputs = [
-    flex
-    installShellFiles
-    which
-  ];
-  buildInputs = [
-    ncurses
-  ];
+  nativeBuildInputs = [ flex installShellFiles which ];
+  buildInputs = [ ncurses ];
 
   checkPhase = ''
     runHook preCheck
@@ -36,7 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program which reads job descriptions line by line and executes them in parallel";
+    description =
+      "A program which reads job descriptions line by line and executes them in parallel";
     homepage = "https://www.maier-komor.de/xjobs.html";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

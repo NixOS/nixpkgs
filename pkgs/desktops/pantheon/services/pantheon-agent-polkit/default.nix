@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, libgee
-, granite
-, polkit
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, gtk3, libgee, granite, polkit, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
@@ -25,25 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala wrapGAppsHook ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    polkit
-  ];
+  buildInputs = [ granite gtk3 libgee polkit ];
 
   meta = with lib; {
     description = "Polkit Agent for the Pantheon Desktop";

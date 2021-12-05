@@ -1,19 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
-, libX11
-, libpng
-, gd
-, freetype
-}:
+{ lib, stdenv, fetchurl, zlib, libX11, libpng, gd, freetype }:
 
 stdenv.mkDerivation rec {
   pname = "ploticus";
   version = "2.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${
+        lib.replaceStrings [ "." ] [ "" ] version
+      }_src.tar.gz";
     sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
@@ -30,13 +24,7 @@ stdenv.mkDerivation rec {
     ./use-gd-package.patch
   ];
 
-  buildInputs = [
-    zlib
-    libX11
-    libpng
-    gd
-    freetype
-  ];
+  buildInputs = [ zlib libX11 libpng gd freetype ];
 
   hardeningDisable = [ "format" ];
 
@@ -60,7 +48,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A non-interactive software package for producing plots and charts";
+    description =
+      "A non-interactive software package for producing plots and charts";
     longDescription = ''
       Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from

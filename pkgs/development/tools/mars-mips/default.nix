@@ -1,11 +1,14 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem, unzip, imagemagick, jre }:
+{ lib, stdenvNoCC, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem
+, unzip, imagemagick, jre }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mars-mips";
   version = "4.5";
 
   src = fetchurl {
-    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${lib.replaceStrings ["."] ["_"] version}_Aug2014/Mars${lib.replaceStrings ["."] ["_"] version}.jar";
+    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }_Aug2014/Mars${lib.replaceStrings [ "." ] [ "_" ] version}.jar";
     sha256 = "15kh1fahkkbbf4wvb6ijzny4fi5dh4pycxyzp5325dm2ddkhnd5c";
   };
 
@@ -40,7 +43,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An IDE for programming in MIPS assembly language intended for educational-level use";
+    description =
+      "An IDE for programming in MIPS assembly language intended for educational-level use";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
     license = licenses.mit;
     maintainers = with maintainers; [ angustrau ];

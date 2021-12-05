@@ -31,15 +31,12 @@ python3Packages.buildPythonApplication rec {
   checkInputs = [ python3Packages.pytestCheckHook ];
 
   # disable test that fail (networking, etc)
-  disabledTests = [
-    "network"
-    "e2e"
-    "test_utils.py"
-  ];
+  disabledTests = [ "network" "e2e" "test_utils.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/jkwill87/mnamer";
-    description = "An intelligent and highly configurable media organization utility";
+    description =
+      "An intelligent and highly configurable media organization utility";
     license = licenses.mit;
     maintainers = with maintainers; [ urlordjames ];
   };

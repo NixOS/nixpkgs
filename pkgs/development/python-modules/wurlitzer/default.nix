@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, mock
-, pytest
-, selectors2
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pytest, selectors2 }:
 
 buildPythonPackage rec {
   pname = "wurlitzer";

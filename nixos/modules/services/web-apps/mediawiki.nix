@@ -3,7 +3,9 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
+  inherit (lib)
+    concatStringsSep literalExpression mapAttrsToList optional optionals
+    optionalString types;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -29,7 +31,9 @@ let
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
+        ln -s ${
+          if v != null then v else "$src/share/mediawiki/extensions/${k}"
+        } $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
   };
@@ -64,7 +68,13 @@ let
       $wgScriptPath = "";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${
+        if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL
+        || cfg.virtualHost.onlySSL then
+          "https"
+        else
+          "http"
+      }://${cfg.virtualHost.hostName}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
@@ -78,7 +88,12 @@ let
       $wgEnableEmail = true;
       $wgEnableUserEmail = true; # UPO
 
-      $wgEmergencyContact = "${if cfg.virtualHost.adminAddr != null then cfg.virtualHost.adminAddr else config.services.httpd.adminAddr}";
+      $wgEmergencyContact = "${
+        if cfg.virtualHost.adminAddr != null then
+          cfg.virtualHost.adminAddr
+        else
+          config.services.httpd.adminAddr
+      }";
       $wgPasswordSender = $wgEmergencyContact;
 
       $wgEnotifUserTalk = false; # UPO
@@ -87,29 +102,44 @@ let
 
       ## Database settings
       $wgDBtype = "${cfg.database.type}";
-      $wgDBserver = "${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}";
+      $wgDBserver = "${cfg.database.host}:${
+        if cfg.database.socket != null then
+          cfg.database.socket
+        else
+          toString cfg.database.port
+      }";
       $wgDBname = "${cfg.database.name}";
       $wgDBuser = "${cfg.database.user}";
-      ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
+      ${
+        optionalString (cfg.database.passwordFile != null)
+        ''$wgDBpassword = file_get_contents("${cfg.database.passwordFile}");''
+      }
 
-      ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
-        # MySQL specific settings
-        $wgDBprefix = "${cfg.database.tablePrefix}";
-      ''}
+      ${
+        optionalString
+        (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+          # MySQL specific settings
+          $wgDBprefix = "${cfg.database.tablePrefix}";
+        ''
+      }
 
-      ${optionalString (cfg.database.type == "mysql") ''
-        # MySQL table options to use during installation or update
-        $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-      ''}
+      ${
+        optionalString (cfg.database.type == "mysql") ''
+          # MySQL table options to use during installation or update
+          $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+        ''
+      }
 
       ## Shared memory settings
       $wgMainCacheType = CACHE_NONE;
       $wgMemCachedServers = [];
 
-      ${optionalString (cfg.uploadsDir != null) ''
-        $wgEnableUploads = true;
-        $wgUploadDirectory = "${cfg.uploadsDir}";
-      ''}
+      ${
+        optionalString (cfg.uploadsDir != null) ''
+          $wgEnableUploads = true;
+          $wgUploadDirectory = "${cfg.uploadsDir}";
+        ''
+      }
 
       $wgUseImageMagick = true;
       $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
@@ -153,10 +183,16 @@ let
       $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
 
       # Enabled skins.
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
+      ${
+        concatStringsSep "\n"
+        (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)
+      }
 
       # Enabled extensions.
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
+      ${
+        concatStringsSep "\n"
+        (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)
+      }
 
 
       # End of automatically generated settings.
@@ -165,8 +201,7 @@ let
       ${cfg.extraConfig}
   '';
 
-in
-{
+in {
   # interface
   options = {
     services.mediawiki = {
@@ -198,12 +233,13 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = "A file containing the initial password for the admin user.";
+        description =
+          "A file containing the initial password for the admin user.";
         example = "/run/keys/mediawiki-password";
       };
 
       skins = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.path;
         description = ''
           Attribute set of paths whose content is copied to the <filename>skins</filename>
@@ -212,7 +248,7 @@ in
       };
 
       extensions = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.nullOr types.path);
         description = ''
           Attribute set of paths whose content is copied to the <filename>extensions</filename>
@@ -235,7 +271,8 @@ in
         type = mkOption {
           type = types.enum [ "mysql" "postgres" "sqlite" "mssql" "oracle" ];
           default = "mysql";
-          description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
+          description =
+            "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
@@ -286,9 +323,13 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
+          default = if cfg.database.createLocally then
+            "/run/mysqld/mysqld.sock"
+          else
+            null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
-          description = "Path to the unix socket file to use for authentication.";
+          description =
+            "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
@@ -303,7 +344,8 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        type = types.submodule
+          (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
             hostName = "mediawiki.example.org";
@@ -354,17 +396,26 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
-        message = "services.mediawiki.createLocally is currently only supported for database type 'mysql'";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
+        message =
+          "services.mediawiki.createLocally is currently only supported for database type 'mysql'";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
+        message =
+          "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
-        message = "services.mediawiki.database.socket must be set if services.mediawiki.database.createLocally is set to true";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
+        message =
+          "services.mediawiki.database.socket must be set if services.mediawiki.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
-        message = "a password cannot be specified if services.mediawiki.database.createLocally is set to true";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile
+          == null;
+        message =
+          "a password cannot be specified if services.mediawiki.database.createLocally is set to true";
       }
     ];
 
@@ -378,11 +429,10 @@ in
       enable = true;
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
+      ensureUsers = [{
+        name = cfg.database.user;
+        ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+      }];
     };
 
     services.phpfpm.pools.mediawiki = {
@@ -397,27 +447,30 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/mediawiki";
-        extraConfig = ''
-          <Directory "${pkg}/share/mediawiki">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${pkg}/share/mediawiki";
+          extraConfig = ''
+            <Directory "${pkg}/share/mediawiki">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            Require all granted
-            DirectoryIndex index.php
-            AllowOverride All
-          </Directory>
-        '' + optionalString (cfg.uploadsDir != null) ''
-          Alias "/images" "${cfg.uploadsDir}"
-          <Directory "${cfg.uploadsDir}">
-            Require all granted
-          </Directory>
-        '';
-      } ];
+              Require all granted
+              DirectoryIndex index.php
+              AllowOverride All
+            </Directory>
+          '' + optionalString (cfg.uploadsDir != null) ''
+            Alias "/images" "${cfg.uploadsDir}"
+            <Directory "${cfg.uploadsDir}">
+              Require all granted
+            </Directory>
+          '';
+        }
+      ];
     };
 
     systemd.tmpfiles.rules = [
@@ -442,12 +495,21 @@ in
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
-          --dbserver ${cfg.database.host}${optionalString (cfg.database.socket != null) ":${cfg.database.socket}"} \
+          --dbserver ${cfg.database.host}${
+            optionalString (cfg.database.socket != null)
+            ":${cfg.database.socket}"
+          } \
           --dbport ${toString cfg.database.port} \
           --dbname ${cfg.database.name} \
-          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${cfg.database.tablePrefix}"} \
+          ${
+            optionalString (cfg.database.tablePrefix != null)
+            "--dbprefix ${cfg.database.tablePrefix}"
+          } \
           --dbuser ${cfg.database.user} \
-          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${cfg.database.passwordFile}"} \
+          ${
+            optionalString (cfg.database.passwordFile != null)
+            "--dbpassfile ${cfg.database.passwordFile}"
+          } \
           --passfile ${cfg.passwordFile} \
           ${cfg.name} \
           admin
@@ -463,7 +525,9 @@ in
       };
     };
 
-    systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service";
+    systemd.services.httpd.after =
+      optional (cfg.database.createLocally && cfg.database.type == "mysql")
+      "mysql.service";
 
     users.users.${user} = {
       group = group;

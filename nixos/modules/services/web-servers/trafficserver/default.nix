@@ -7,7 +7,8 @@ let
   user = config.users.users.trafficserver.name;
   group = config.users.groups.trafficserver.name;
 
-  getManualUrl = name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
+  getManualUrl = name:
+    "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
 
   yaml = pkgs.formats.yaml { };
 
@@ -28,10 +29,11 @@ let
     else
       "CONFIG ${concatStringsSep "." path} STRING ${toString value}";
 
-  mkRecordsConfig = cfg: concatStringsSep "\n" (flatten (mkRecordLines [ ] cfg));
-  mkPluginConfig = cfg: concatStringsSep "\n" (map (p: "${p.path} ${p.arg}") cfg);
-in
-{
+  mkRecordsConfig = cfg:
+    concatStringsSep "\n" (flatten (mkRecordLines [ ] cfg));
+  mkPluginConfig = cfg:
+    concatStringsSep "\n" (map (p: "${p.path} ${p.arg}") cfg);
+in {
   options.services.trafficserver = {
     enable = mkEnableOption "Apache Traffic Server";
 
@@ -141,11 +143,11 @@ in
 
     records = mkOption {
       type = with types;
-        let valueType = (attrsOf (oneOf [ int float str valueType ])) // {
-          description = "Traffic Server records value";
-        };
-        in
-        valueType;
+        let
+          valueType = (attrsOf (oneOf [ int float str valueType ])) // {
+            description = "Traffic Server records value";
+          };
+        in valueType;
       default = { };
       example = { proxy.config.proxy_name = "my_server"; };
       description = ''
@@ -267,9 +269,8 @@ in
       "trafficserver/storage.config".text = cfg.storage;
       "trafficserver/volume.config".text = cfg.volume;
     } // (mkYamlConf "ip_allow" cfg.ipAllow)
-    // (mkYamlConf "logging" cfg.logging)
-    // (mkYamlConf "sni" cfg.sni)
-    // (mkYamlConf "strategies" cfg.strategies);
+      // (mkYamlConf "logging" cfg.logging) // (mkYamlConf "sni" cfg.sni)
+      // (mkYamlConf "strategies" cfg.strategies);
 
     environment.systemPackages = [ pkgs.trafficserver ];
     systemd.packages = [ pkgs.trafficserver ];

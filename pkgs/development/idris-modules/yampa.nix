@@ -1,9 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, bifunctors
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, bifunctors, lib }:
+build-idris-package {
   name = "yampa";
   version = "2016-07-05";
 
@@ -18,7 +14,8 @@ build-idris-package  {
   };
 
   meta = {
-    description = "Idris implementation of Yampa FRP library as described in Reactive Programming through Dependent Types";
+    description =
+      "Idris implementation of Yampa FRP library as described in Reactive Programming through Dependent Types";
     homepage = "https://github.com/BartAdv/idris-yampa";
     maintainers = [ lib.maintainers.brainrape ];
   };

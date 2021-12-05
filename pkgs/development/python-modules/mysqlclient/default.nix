@@ -4,13 +4,9 @@ buildPythonPackage rec {
   pname = "mysqlclient";
   version = "2.0.3";
 
-  nativeBuildInputs = [
-    libmysqlclient
-  ];
+  nativeBuildInputs = [ libmysqlclient ];
 
-  buildInputs = [
-    libmysqlclient
-  ];
+  buildInputs = [ libmysqlclient ];
 
   # Tests need a MySQL database
   doCheck = false;

@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "zydis";
@@ -16,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FB7hGQ9vI3ZE376iROEpdtZm91IiccBhtAFa94JgnUY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     homepage = "https://zydis.re/";

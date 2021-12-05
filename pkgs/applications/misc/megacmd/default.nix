@@ -1,27 +1,9 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, fetchFromGitHub
-  # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
-  # to be re-enabled when patch available
-  # , ffmpeg
-, freeimage
-, gcc-unwrapped
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, pcre-cpp
-, pkg-config
-, readline
-, sqlite
-}:
+{ lib, stdenv, autoconf, automake, c-ares, cryptopp, curl, fetchFromGitHub
+# build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
+# to be re-enabled when patch available
+# , ffmpeg
+, freeimage, gcc-unwrapped, libmediainfo, libraw, libsodium, libtool, libuv
+, libzen, pcre-cpp, pkg-config, readline, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
@@ -35,12 +17,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   buildInputs = [
     c-ares

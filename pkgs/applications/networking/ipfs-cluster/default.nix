@@ -14,7 +14,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
+    description =
+      "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://cluster.ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -1,13 +1,8 @@
 { lib, stdenv, fetchurl, buildPackages, linuxHeaders, perl }:
 
-let
-  commonMakeFlags = [
-    "prefix=$(out)"
-    "SHLIBDIR=$(out)/lib"
-  ];
-in
+let commonMakeFlags = [ "prefix=$(out)" "SHLIBDIR=$(out)/lib" ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "klibc";
   version = "2.0.9";
 
@@ -28,9 +23,10 @@ stdenv.mkDerivation rec {
     "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"
   ] # TODO(@Ericson2314): We now can get the ABI from
-    # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
+  # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?
     ++ lib.optional (stdenv.hostPlatform.linuxArch == "arm") "CONFIG_AEABI=y"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   # Install static binaries as well.
   postInstall = ''

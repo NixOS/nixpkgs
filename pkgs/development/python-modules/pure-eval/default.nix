@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, setuptools-scm
-, toml
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, setuptools-scm, toml
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pure_eval";
@@ -22,17 +16,11 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    toml
-  ];
+  propagatedBuildInputs = [ toml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pure_eval" ];
 

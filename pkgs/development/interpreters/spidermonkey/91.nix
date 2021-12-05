@@ -1,29 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, perl
-, python3
-, zip
-, buildPackages
-, which
-, readline
-, zlib
-, icu69
-, cargo
-, rustc
-, rust-cbindgen
-, yasm
-, llvmPackages_latest
-, nspr
-, m4
-}:
+{ lib, stdenv, fetchurl, pkg-config, perl, python3, zip, buildPackages, which
+, readline, zlib, icu69, cargo, rustc, rust-cbindgen, yasm, llvmPackages_latest
+, nspr, m4 }:
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "91.3.0";
 
   src = fetchurl {
-    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+    url =
+      "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
     sha256 = "0v79c435vfbhsx7pqyq4jm5rv8iysig69wwqhvys1n0jy54m72qj";
   };
 
@@ -44,12 +29,7 @@ stdenv.mkDerivation rec {
     m4
   ];
 
-  buildInputs = [
-    icu69
-    nspr
-    readline
-    zlib
-  ];
+  buildInputs = [ icu69 nspr readline zlib ];
 
   preConfigure = ''
     export LIBXUL_DIST=$out

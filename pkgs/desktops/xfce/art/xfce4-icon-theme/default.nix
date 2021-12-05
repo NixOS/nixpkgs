@@ -1,23 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme
+, tango-icon-theme, hicolor-icon-theme, xfce }:
 
-let
-  category = "art";
-in
+let category = "art";
 
-stdenv.mkDerivation rec {
-  pname  = "xfce4-icon-theme";
+in stdenv.mkDerivation rec {
+  pname = "xfce4-icon-theme";
   version = "4.4.3";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-1HhmktVrilY/ZqXyYPHxOt4R6Gx4y8slqfml/EfPZvo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-    gtk3
-  ];
+  nativeBuildInputs = [ pkg-config intltool gtk3 ];
 
   buildInputs = [
     gnome-icon-theme

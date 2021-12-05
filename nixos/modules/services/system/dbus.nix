@@ -16,9 +16,7 @@ let
     serviceDirectories = cfg.packages;
   };
 
-in
-
-{
+in {
   ###### interface
 
   options = {
@@ -80,14 +78,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    warnings = optional (cfg.socketActivated != null) (
-      let
-        files = showFiles options.services.dbus.socketActivated.files;
-      in
-        "The option 'services.dbus.socketActivated' in ${files} no longer has"
-        + " any effect and can be safely removed: the user D-Bus session is"
-        + " now always socket activated."
-    );
+    warnings = optional (cfg.socketActivated != null)
+      (let files = showFiles options.services.dbus.socketActivated.files;
+      in "The option 'services.dbus.socketActivated' in ${files} no longer has"
+      + " any effect and can be safely removed: the user D-Bus session is"
+      + " now always socket activated.");
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
@@ -113,10 +108,7 @@ in
       permissions = "u+rx,g+rx,o-rx";
     };
 
-    services.dbus.packages = [
-      pkgs.dbus.out
-      config.system.path
-    ];
+    services.dbus.packages = [ pkgs.dbus.out config.system.path ];
 
     systemd.services.dbus = {
       # Don't restart dbus-daemon. Bad things tend to happen if we do.

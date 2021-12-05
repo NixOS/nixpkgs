@@ -1,6 +1,4 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, lwt, mirage-device
-}:
+{ lib, fetchurl, buildDunePackage, cstruct, lwt, mirage-device }:
 
 buildDunePackage rec {
   pname = "mirage-block";
@@ -9,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-block/releases/download/v${version}/mirage-block-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-block/releases/download/v${version}/mirage-block-v${version}.tbz";
     sha256 = "1wp8wmixaz9i2sbvq6nkx903lbnpdgb2w404pz1wk8kcg9p3ilcc";
   };
 

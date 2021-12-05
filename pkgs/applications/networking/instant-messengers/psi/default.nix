@@ -1,7 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca-qt5, libXScrnSaver, hunspell
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtmultimedia, qtx11extras
+, qttools, qtwebengine, libidn, qca-qt5, libXScrnSaver, hunspell }:
 
 mkDerivation rec {
   pname = "psi";
@@ -13,13 +11,17 @@ mkDerivation rec {
     sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
     fetchSubmodules = true;
   };
-  patches = [
-    ./fix-cmake-hunspell-1.7.patch
-  ];
+  patches = [ ./fix-cmake-hunspell-1.7.patch ];
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qtwebengine
-    libidn qca-qt5 libXScrnSaver hunspell
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebengine
+    libidn
+    qca-qt5
+    libXScrnSaver
+    hunspell
   ];
 
   meta = with lib; {

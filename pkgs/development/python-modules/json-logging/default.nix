@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, wheel
-, flask
-, sanic
-, fastapi
-, uvicorn
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pytestCheckHook, wheel
+, flask, sanic, fastapi, uvicorn, requests }:
 
 buildPythonPackage rec {
   pname = "json-logging";
@@ -24,13 +14,22 @@ buildPythonPackage rec {
   patches = [
     # Fix tests picking up test modules instead of real packages.
     (fetchpatch {
-      url = "https://github.com/bobbui/json-logging-python/commit/6fdb64deb42fe48b0b12bda0442fd5ac5f03107f.patch";
+      url =
+        "https://github.com/bobbui/json-logging-python/commit/6fdb64deb42fe48b0b12bda0442fd5ac5f03107f.patch";
       sha256 = "sha256-BLfARsw2FdvY22NCaFfdFgL9wTmEZyVIi3CQpB5qU0Y=";
     })
   ];
 
   # - Quart is not packaged for Nixpkgs.
-  checkInputs = [ wheel flask /*quart*/ sanic fastapi uvicorn requests pytestCheckHook ];
+  checkInputs = [
+    wheel
+    flask # quart
+    sanic
+    fastapi
+    uvicorn
+    requests
+    pytestCheckHook
+  ];
   disabledTests = [ "quart" ];
   # Tests spawn servers and try to connect to them.
   __darwinAllowLocalNetworking = true;

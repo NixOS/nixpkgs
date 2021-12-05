@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.22.2-k3s2" }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles
+, k3sVersion ? "1.22.2-k3s2" }:
 
 buildGoModule rec {
   pname = "kube3d";
@@ -17,9 +18,13 @@ buildGoModule rec {
 
   excludedPackages = "\\(tools\\|docgen\\)";
 
-  ldflags =
-    let t = "github.com/rancher/k3d/v5/version"; in
-    [ "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.K3sVersion=v${k3sVersion}" ];
+  ldflags = let t = "github.com/rancher/k3d/v5/version";
+  in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=v${version}"
+    "-X ${t}.K3sVersion=v${k3sVersion}"
+  ];
 
   doCheck = false;
 
@@ -41,7 +46,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/rancher/k3d";
     changelog = "https://github.com/rancher/k3d/blob/v${version}/CHANGELOG.md";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
+    description =
+      "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
     longDescription = ''
       k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
 

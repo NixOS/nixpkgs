@@ -1,6 +1,4 @@
-{lib, stdenv, fetchurl, fetchFromGitLab
-, yodl, icmake, flexcpp, bobcat
-}:
+{ lib, stdenv, fetchurl, fetchFromGitLab, yodl, icmake, flexcpp, bobcat }:
 stdenv.mkDerivation rec {
   pname = "bisonc++";
   version = "6.04.00";

@@ -1,11 +1,5 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, six
-, pytestCheckHook
-, mock
-, pytest-asyncio
-}:
+{ buildPythonPackage, fetchFromGitHub, lib, six, pytestCheckHook, mock
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "promise";
@@ -18,26 +12,16 @@ buildPythonPackage rec {
     sha256 = "17mq1bm78xfl0x1g50ng502m5ldq6421rzz35hlqafsj0cq8dkp6";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    pytest-asyncio
-  ];
+  checkInputs = [ pytestCheckHook mock pytest-asyncio ];
 
-  disabledTestPaths = [
-    "tests/test_benchmark.py"
-  ];
+  disabledTestPaths = [ "tests/test_benchmark.py" ];
 
   meta = with lib; {
     description = "Ultra-performant Promise implementation in Python";
     homepage = "https://github.com/syrusakbary/promise";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

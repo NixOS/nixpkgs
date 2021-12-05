@@ -1,33 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxml2, libsoup, upower,
-  libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxml2, libsoup, upower
+, libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, xfce }:
 
-let
-  category = "panel-plugins";
-in
+let category = "panel-plugins";
 
-stdenv.mkDerivation rec {
-  pname  = "xfce4-weather-plugin";
+in stdenv.mkDerivation rec {
+  pname = "xfce4-weather-plugin";
   version = "0.11.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-4yQuqVHVG8D97R0CpPH2Yr7Bah+xDIVfcb2mVBoRU/w=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
-  buildInputs = [
-    libxml2
-    libsoup
-    upower
-    libxfce4ui
-    xfce4-panel
-    xfconf
-    hicolor-icon-theme
-  ];
+  buildInputs =
+    [ libxml2 libsoup upower libxfce4ui xfce4-panel xfconf hicolor-icon-theme ];
 
   enableParallelBuilding = true;
 

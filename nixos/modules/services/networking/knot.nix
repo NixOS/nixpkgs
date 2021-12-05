@@ -7,9 +7,9 @@ let
 
   configFile = pkgs.writeTextFile {
     name = "knot.conf";
-    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
-           cfg.extraConfig;
-    checkPhase = lib.optionalString (cfg.keyFiles == []) ''
+    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles)
+      + "\n" + cfg.extraConfig;
+    checkPhase = lib.optionalString (cfg.keyFiles == [ ]) ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
   };
@@ -41,7 +41,7 @@ in {
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of additional command line paramters for knotd
         '';
@@ -49,7 +49,7 @@ in {
 
       keyFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of files containing additional configuration
           to be included using the include directive. This option
@@ -80,7 +80,7 @@ in {
   };
 
   config = mkIf config.services.knot.enable {
-    users.groups.knot = {};
+    users.groups.knot = { };
     users.users.knot = {
       isSystemUser = true;
       group = "knot";
@@ -88,25 +88,25 @@ in {
     };
 
     systemd.services.knot = {
-      unitConfig.Documentation = "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";
+      unitConfig.Documentation =
+        "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";
       description = cfg.package.meta.description;
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
-      after = ["network.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
+        ExecStart =
+          "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${
+            concatStringsSep " " cfg.extraArgs
+          }";
         ExecReload = "${knot-cli-wrappers}/bin/knotc reload";
         User = "knot";
         Group = "knot";
 
-        AmbientCapabilities = [
-          "CAP_NET_BIND_SERVICE"
-        ];
-        CapabilityBoundingSet = [
-          "CAP_NET_BIND_SERVICE"
-        ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = "";
         DevicePolicy = "closed";
         LockPersonality = true;
@@ -127,22 +127,15 @@ in {
         ProtectSystem = "strict";
         RemoveIPC = true;
         Restart = "on-abort";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
-        RestrictRealtime =true;
+        RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RuntimeDirectory = "knot";
         StateDirectory = "knot";
         StateDirectoryMode = "0700";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-        ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
     };

@@ -1,12 +1,13 @@
-{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools-scm, six }:
+{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython
+, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config
+, setuptools-scm, six }:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
 
   _arrow-cpp = arrow-cpp.override { python3 = python; };
-in
 
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyarrow";
   disabled = !isPy3k;
 

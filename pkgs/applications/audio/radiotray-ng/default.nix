@@ -1,21 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 # Transport
 , curl
 # Libraries
-, boost
-, jsoncpp
-, libbsd
-, pcre
+, boost, jsoncpp, libbsd, pcre
 # GUI/Desktop
-, dbus
-, glibmm
-, gsettings-desktop-schemas
-, hicolor-icon-theme
-, libappindicator-gtk3
-, libnotify
-, libxdg_basedir
-, wxGTK
+, dbus, glibmm, gsettings-desktop-schemas, hicolor-icon-theme
+, libappindicator-gtk3, libnotify, libxdg_basedir, wxGTK
 # GStreamer
 , gst_all_1
 # User-agent info
@@ -25,20 +15,20 @@
 # Testing
 , gtest
 # Fixup
-, wrapGAppsHook
-, makeWrapper
-}:
+, wrapGAppsHook, makeWrapper }:
 
 let
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
-    gst-plugins-good gst-plugins-bad gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
   pythonInputs = with python3.pkgs; [ python lxml ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "radiotray-ng";
   version = "0.2.8";
 
@@ -53,13 +43,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
+    boost
+    jsoncpp
+    libbsd
+    pcre
+    glibmm
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libappindicator-gtk3
+    libnotify
     libxdg_basedir
     lsb-release
     wxGTK
-  ] ++ gstInputs
-    ++ pythonInputs;
+  ] ++ gstInputs ++ pythonInputs;
 
   patches = [ ./no-dl-googletest.patch ];
 
@@ -76,9 +72,7 @@ stdenv.mkDerivation rec {
       --replace radiotray-ng-notification radiotray-ng-on
   '';
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}" ];
 
   checkInputs = [ gtest ];
   doCheck = !stdenv.isAarch64; # single failure that I can't explain

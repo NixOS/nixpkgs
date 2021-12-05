@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gevent
-}:
+{ lib, buildPythonPackage, fetchPypi, gevent }:
 
 buildPythonPackage rec {
   pname = "gipc";

@@ -1,10 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libtiff
-, fltk, gtk
-, libICE, libSM
-, dbus
-, fetchpatch
-}:
+{ lib, stdenv, fetchurl, pkg-config, libtiff, fltk, gtk, libICE, libSM, dbus
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
 
@@ -19,7 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
+      url =
+        "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
       sha256 = "1vipy2lzzd2gqrsqk85pwgcdhargy815fxlbn57hsm45zglc3lj4";
     })
 
@@ -27,7 +23,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/afterstep/afterstep/pull/7
     (fetchpatch {
       name = "binutils-2.36.patch";
-      url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
+      url =
+        "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
       sha256 = "1kk97max05r2p1a71pvpaza79ff0klz32rggik342p7ki3516qv8";
     })
   ];
@@ -45,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   meta = with lib; {

@@ -1,6 +1,5 @@
 { coreutils, fetchFromGitHub, fetchpatch, file, gawk, gnugrep, gnused
-, installShellFiles, less, lib, libiconv, makeWrapper, nano, stdenv, ruby
-}:
+, installShellFiles, less, lib, libiconv, makeWrapper, nano, stdenv, ruby }:
 
 stdenv.mkDerivation rec {
   pname = "mblaze";
@@ -38,15 +37,16 @@ stdenv.mkDerivation rec {
       makeWrapper $out/wrapped/$x $out/bin/$x \
         --argv0 $out/bin/$x \
         --prefix PATH : $out/bin \
-        --prefix PATH : ${lib.makeBinPath [
-          coreutils file gawk gnugrep gnused
-        ]}
+        --prefix PATH : ${
+          lib.makeBinPath [ coreutils file gawk gnugrep gnused ]
+        }
     done
   '';
 
   meta = with lib; {
     homepage = "https://github.com/leahneukirchen/mblaze";
-    description = "Unix utilities for processing and interacting with mail messages which are stored in maildir folders";
+    description =
+      "Unix utilities for processing and interacting with mail messages which are stored in maildir folders";
     license = licenses.cc0;
     platforms = platforms.all;
     maintainers = [ maintainers.ajgrf ];

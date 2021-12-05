@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchgit, pkg-config, autoreconfHook
-, libX11, pam, libgcrypt, libXrender, imlib2 }:
+{ lib, stdenv, fetchgit, pkg-config, autoreconfHook, libX11, pam, libgcrypt
+, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
   date = "20170720";
@@ -13,18 +13,11 @@ stdenv.mkDerivation rec {
 
   PAM_DEFAULT_SERVICE = "login";
 
-  configureFlags = [
-    "--enable-pam"
-    "--enable-hash"
-    "--enable-xrender"
-    "--enable-imlib2"
-  ];
+  configureFlags =
+    [ "--enable-pam" "--enable-hash" "--enable-xrender" "--enable-imlib2" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    autoreconfHook libX11
-    pam libgcrypt libXrender imlib2
-  ];
+  buildInputs = [ autoreconfHook libX11 pam libgcrypt libXrender imlib2 ];
 
   meta = with lib; {
     homepage = "https://github.com/Arkq/alock";

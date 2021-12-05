@@ -1,9 +1,4 @@
-{ bcunit
-, cmake
-, fetchFromGitLab
-, mbedtls
-, lib, stdenv
-}:
+{ bcunit, cmake, fetchFromGitLab, mbedtls, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";

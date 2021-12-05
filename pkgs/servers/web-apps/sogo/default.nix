@@ -1,5 +1,6 @@
 { gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests }:
+, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip
+, pkg-config, nixosTests }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.3.0";
@@ -12,13 +13,23 @@ gnustep.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config ]
-    ++ lib.optional (openldap != null) openldap;
+  buildInputs = [
+    gnustep.base
+    sope
+    openssl
+    libmemcached
+    curl
+    libsodium
+    libytnef
+    libzip
+    pkg-config
+  ] ++ lib.optional (openldap != null) openldap;
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
     (fetchpatch {
-      url = "https://salsa.debian.org/debian/sogo/-/raw/120ac6390602c811908c7fcb212a79acbc7f7f28/debian/patches/0005-Remove-build-date.patch";
+      url =
+        "https://salsa.debian.org/debian/sogo/-/raw/120ac6390602c811908c7fcb212a79acbc7f7f28/debian/patches/0005-Remove-build-date.patch";
       sha256 = "151i8504kwdlcirgd0pbif7cxnb1q6jsp5j7dbh9p6zw2xgwkp25";
     })
   ];
@@ -69,7 +80,8 @@ gnustep.stdenv.mkDerivation rec {
   passthru.tests.sogo = nixosTests.sogo;
 
   meta = with lib; {
-    description = "A very fast and scalable modern collaboration suite (groupware)";
+    description =
+      "A very fast and scalable modern collaboration suite (groupware)";
     license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;

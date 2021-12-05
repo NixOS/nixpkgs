@@ -9,16 +9,12 @@ buildPythonPackage rec {
     sha256 = "sha256-N0XU6j/9qY16A0Njx4ets3qrd72rQAlKTZNzks1NroI=";
   };
 
-  propagatedBuildInputs = [
-    pysocks requests stem
-  ];
+  propagatedBuildInputs = [ pysocks requests stem ];
 
   # This package does not contain any tests.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "torrequest"
-  ];
+  pythonImportsCheck = [ "torrequest" ];
 
   meta = with lib; {
     homepage = "https://github.com/erdiaker/torrequest";

@@ -1,12 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 
-, cmake
-, ninja
-, perl # Project uses Perl for scripting and testing
+, cmake, ninja, perl # Project uses Perl for scripting and testing
 , python3
 
-, enableThreading ? true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
+, enableThreading ?
+  true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tls.mbed.org/";
-    description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
+    description =
+      "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

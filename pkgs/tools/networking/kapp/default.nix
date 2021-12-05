@@ -14,9 +14,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kapp" ];
 
-  ldflags = [
-    "-X github.com/k14s/kapp/pkg/kapp/version.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/k14s/kapp/pkg/kapp/version.Version=${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +26,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
+    description =
+      "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
     homepage = "https://get-kapp.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes ];

@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "safety";
@@ -14,10 +15,7 @@ buildPythonPackage rec {
   # Disable tests depending on online services
   checkInputs = [ pytestCheckHook ];
   dontUseSetuptoolsCheck = true;
-  disabledTests = [
-    "test_check_live"
-    "test_check_live_cached"
-  ];
+  disabledTests = [ "test_check_live" "test_check_live_cached" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

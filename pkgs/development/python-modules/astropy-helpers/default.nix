@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "astropy-helpers";
@@ -18,7 +14,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Utilities for building and installing Astropy, Astropy affiliated packages, and their respective documentation";
+    description =
+      "Utilities for building and installing Astropy, Astropy affiliated packages, and their respective documentation";
     homepage = "https://github.com/astropy/astropy-helpers";
     license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];

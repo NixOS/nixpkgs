@@ -17,10 +17,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  cmakeFlags = [
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_TESTS=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" "-DBUILD_TESTS=OFF" ];
 
   meta = with lib; {
     description = "OpenCL Host API C++ bindings";

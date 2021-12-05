@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, requests
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cryptography, requests
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "requests-http-signature";
@@ -18,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "1jsplqrxadjsc86f0kb6dgpblgwplxrpi0ql1a714w8pbbz4z3h7";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    requests
-  ];
+  propagatedBuildInputs = [ cryptography requests ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test/test.py" ];
 

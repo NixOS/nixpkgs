@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, guile, curl, substituteAll }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, guile, curl
+, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "akku";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
     # substitute libcurl path
     (substituteAll {
       src = ./hardcode-libcurl.patch;
-      libcurl = "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libcurl =
+        "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

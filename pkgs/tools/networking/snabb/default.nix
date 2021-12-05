@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools
-,supportOpenstack ? true
-}:
+{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils
+, which, coreutils, procps, nettools, supportOpenstack ? true }:
 
 with lib;
 
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
   # "Fatal error: can't create obj/arch/sse2_c.o: No such file or directory".
   enableParallelBuilding = false;
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''

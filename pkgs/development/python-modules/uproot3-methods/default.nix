@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, awkward0
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, awkward0 }:
 
 buildPythonPackage rec {
   version = "0.10.1";

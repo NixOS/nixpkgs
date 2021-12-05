@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, qtbase
-, glib
-, perl
-, lxqtUpdateScript
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, pcre, qtbase
+, glib, perl, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
@@ -29,17 +19,9 @@ mkDerivation rec {
       --replace AppleClang Clang
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    setupHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config setupHook ];
 
-  buildInputs = [
-    qtbase
-    glib
-    pcre
-  ];
+  buildInputs = [ qtbase glib pcre ];
 
   propagatedBuildInputs = [
     perl # needed by LXQtTranslateDesktop.cmake
@@ -51,7 +33,9 @@ mkDerivation rec {
   # But we have the setup-hook to set the values.
   postInstall = ''
     rm $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
-    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
+    cp ${
+      ./LXQtConfigVars.cmake
+    } $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

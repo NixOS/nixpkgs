@@ -11,12 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "170cpvvivb6y2kwsqj9ppx5brgds9gkn8mixrnvj8z9c15xhvplm";
   };
 
-  installPhase =
-    ''
-      mkdir -p $out/{bin,share}
-      mv redsocks $out/bin
-      mv doc $out/share
-    '';
+  installPhase = ''
+    mkdir -p $out/{bin,share}
+    mv redsocks $out/bin
+    mv doc $out/share
+  '';
 
   buildInputs = [ libevent ];
 

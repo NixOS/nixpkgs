@@ -1,9 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, io
-, statistics
-}:
+{ buildOctavePackage, lib, fetchurl, io, statistics }:
 
 buildOctavePackage rec {
   pname = "financial";
@@ -18,6 +13,7 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/financial/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Monte Carlo simulation, options pricing routines, financial manipulation, plotting functions and additional date manipulation tools";
+    description =
+      "Monte Carlo simulation, options pricing routines, financial manipulation, plotting functions and additional date manipulation tools";
   };
 }

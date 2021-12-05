@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config, avahi, dbus
+, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python
 , v4l-utils, which, zlib }:
 
 let
@@ -22,20 +22,32 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchFromGitHub {
-    owner  = "tvheadend";
-    repo   = "tvheadend";
-    rev    = "v${version}";
+    owner = "tvheadend";
+    repo = "tvheadend";
+    rev = "v${version}";
     sha256 = "1xq059r2bplaa0nd0wkhw80jfwd962x0h5hgd7fz2yp6largw34m";
   };
 
   buildInputs = [
-    avahi dbus gettext git gnutar gzip bzip2 ffmpeg_4 libiconv openssl python
-    which zlib
+    avahi
+    dbus
+    gettext
+    git
+    gnutar
+    gzip
+    bzip2
+    ffmpeg_4
+    libiconv
+    openssl
+    python
+    which
+    zlib
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
+  NIX_CFLAGS_COMPILE =
+    [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.  We now include the dtv-scan-tables ourselves
@@ -71,9 +83,9 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "TV streaming server";
     longDescription = ''
-        Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
-        supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.
-        Tvheadend offers the HTTP (VLC, MPlayer), HTSP (Kodi, Movian) and SAT>IP streaming.'';
+      Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
+      supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.
+      Tvheadend offers the HTTP (VLC, MPlayer), HTSP (Kodi, Movian) and SAT>IP streaming.'';
     homepage = "https://tvheadend.org";
     license = licenses.gpl3;
     platforms = platforms.unix;

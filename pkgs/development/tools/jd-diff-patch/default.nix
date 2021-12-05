@@ -5,9 +5,9 @@ buildGoModule rec {
   version = "1.4.0";
 
   src = fetchFromGitHub {
-    owner  = "josephburnett";
-    repo   = "jd";
-    rev    = "v${version}";
+    owner = "josephburnett";
+    repo = "jd";
+    rev = "v${version}";
     sha256 = "sha256-OAy4IS2JZYYPeJITNHZKiYEapzGqqYPDBCLflLYetzg=";
   };
 
@@ -19,7 +19,8 @@ buildGoModule rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Commandline utility and Go library for diffing and patching JSON values";
+    description =
+      "Commandline utility and Go library for diffing and patching JSON values";
     homepage = "https://github.com/josephburnett/jd";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 blaggacao ];

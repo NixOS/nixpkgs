@@ -1,8 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pyxeoma";

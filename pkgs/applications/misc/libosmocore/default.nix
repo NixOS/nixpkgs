@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, pcsclite, talloc, python2, gnutls
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, pcsclite, talloc
+, python2, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
@@ -13,17 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1535y6r4csvslrxcki80ya6zhhc5jw2nvy9bymb55ln77pf853vg";
   };
 
-  propagatedBuildInputs = [
-    talloc
-  ];
+  propagatedBuildInputs = [ talloc ];
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    pcsclite python2 gnutls
-  ];
+  buildInputs = [ pcsclite python2 gnutls ];
 
   enableParallelBuilding = true;
 

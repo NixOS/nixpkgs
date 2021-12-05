@@ -1,20 +1,6 @@
-{ mkDerivation
-, lib
-, fetchurl
-, fetchpatch
-, extra-cmake-modules
-, qtbase
-, boost
-, akonadi-calendar
-, akonadi-notes
-, akonadi-search
-, kidentitymanagement
-, kontactinterface
-, kldap
-, krunner
-, kwallet
-, kcalendarcore
-}:
+{ mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, qtbase, boost
+, akonadi-calendar, akonadi-notes, akonadi-search, kidentitymanagement
+, kontactinterface, kldap, krunner, kwallet, kcalendarcore }:
 
 mkDerivation rec {
   pname = "zanshin";
@@ -29,14 +15,13 @@ mkDerivation rec {
     # Build with kontactinterface >= 5.14.42.
     # Remove after next release.
     (fetchpatch {
-      url = "https://invent.kde.org/pim/zanshin/-/commit/4850c08998b33b37af99c3312d193b063b3e8174.diff";
+      url =
+        "https://invent.kde.org/pim/zanshin/-/commit/4850c08998b33b37af99c3312d193b063b3e8174.diff";
       sha256 = "sha256:0lh0a035alhmws3zyfnkb814drq5cqxvzpwl4g1g5d435gy8k4ps";
     })
   ];
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [
     qtbase
@@ -53,7 +38,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
+    description =
+      "A powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = "https://zanshin.kde.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;

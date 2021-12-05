@@ -1,8 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, groff
-, ncurses
-, makeWrapper
-} :
+{ lib, stdenv, fetchFromGitHub, groff, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "jove";
@@ -16,10 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    groff
-    ncurses
-  ];
+  buildInputs = [ groff ncurses ];
 
   dontConfigure = true;
 

@@ -14,16 +14,19 @@ stdenv.mkDerivation rec {
     sha256 = "1s6vmqpx19hxzsi30jvp3h7p56rqnxfhfddpcls4nz8sqca1cz5y";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/whitequark/ocaml-inotify/commit/716c8002cc1652f58eb0c400ae92e04003cba8c9.patch";
-    sha256 = "04lfxrrsmk2mc704kaln8jqx93jc4bkxhijmfy2d4cmk1cim7r6k";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url =
+        "https://github.com/whitequark/ocaml-inotify/commit/716c8002cc1652f58eb0c400ae92e04003cba8c9.patch";
+      sha256 = "04lfxrrsmk2mc704kaln8jqx93jc4bkxhijmfy2d4cmk1cim7r6k";
+    })
+  ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_lwt ];
   checkInputs = [ ounit fileutils ];
 
-  configureFlags = [ "--enable-lwt"
-    (lib.optionalString doCheck "--enable-tests") ];
+  configureFlags =
+    [ "--enable-lwt" (lib.optionalString doCheck "--enable-tests") ];
 
   postConfigure = lib.optionalString doCheck ''
     echo '<lib_test/test_inotify_lwt.*>: pkg_threads' | tee -a _tags
@@ -35,7 +38,8 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    description = "Bindings for Linux’s filesystem monitoring interface, inotify";
+    description =
+      "Bindings for Linux’s filesystem monitoring interface, inotify";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;

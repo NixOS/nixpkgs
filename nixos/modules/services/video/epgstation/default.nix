@@ -8,7 +8,7 @@ let
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
 
-  settingsFmt = pkgs.formats.json {};
+  settingsFmt = pkgs.formats.json { };
   settingsTemplate = settingsFmt.generate "config.json" cfg.settings;
   preStartScript = pkgs.writeScript "epgstation-prestart" ''
     #!${pkgs.runtimeShell}
@@ -37,16 +37,29 @@ let
   logConfig = {
     appenders.stdout.type = "stdout";
     categories = {
-      default = { appenders = [ "stdout" ]; level = "info"; };
-      system = { appenders = [ "stdout" ]; level = "info"; };
-      access = { appenders = [ "stdout" ]; level = "info"; };
-      stream = { appenders = [ "stdout" ]; level = "info"; };
+      default = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      system = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      access = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      stream = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
     };
   };
 
-  defaultPassword = "INSECURE_GO_CHECK_CONFIGURATION_NIX\n";
-in
-{
+  defaultPassword = ''
+    INSECURE_GO_CHECK_CONFIGURATION_NIX
+  '';
+in {
   options.services.epgstation = {
     enable = mkEnableOption pkgs.epgstation.meta.description;
 
@@ -126,7 +139,8 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-password" defaultPassword;
-        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
+        defaultText = literalDocBook
+          "a file containing <literal>${defaultPassword}</literal>";
         example = "/run/keys/epgstation-password";
         description = ''
           A file containing the password for <option>basicAuth.user</option>.
@@ -134,7 +148,7 @@ in
       };
     };
 
-    database =  {
+    database = {
       name = mkOption {
         type = types.str;
         default = "epgstation";
@@ -146,7 +160,8 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-db-password" defaultPassword;
-        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
+        defaultText = literalDocBook
+          "a file containing <literal>${defaultPassword}</literal>";
         example = "/run/keys/epgstation-db-password";
         description = ''
           A file containing the password for the database named
@@ -163,7 +178,7 @@ in
         <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/doc/conf-manual.md"/>
       '';
 
-      default = {};
+      default = { };
       example = {
         recPriority = 20;
         conflictPriority = 10;
@@ -178,14 +193,15 @@ in
           description = "Don't reload configuration files at runtime.";
         };
 
-        options.mirakurunPath = mkOption (let
-          sockPath = config.services.mirakurun.unixSocket;
-        in {
-          type = types.str;
-          default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
-          example = "http://localhost:40772";
-          description = "URL to connect to Mirakurun.";
-        });
+        options.mirakurunPath = mkOption
+          (let sockPath = config.services.mirakurun.unixSocket;
+          in {
+            type = types.str;
+            default =
+              "http+unix://${replaceStrings [ "/" ] [ "%2F" ] sockPath}";
+            example = "http://localhost:40772";
+            description = "URL to connect to Mirakurun.";
+          });
 
         options.encode = mkOption {
           type = with types; listOf attrs;
@@ -239,7 +255,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.epgstation = {};
+    users.groups.epgstation = { };
 
     services.mirakurun.enable = mkDefault true;
 
@@ -282,8 +298,7 @@ in
         maxEncode = mkDefault 2;
         maxStreaming = mkDefault 2;
       };
-    in
-    mkMerge [
+    in mkMerge [
       defaultSettings
       (mkIf cfg.usePreconfiguredStreaming streamingConfig)
     ];
@@ -297,9 +312,8 @@ in
     systemd.services.epgstation = {
       description = pkgs.epgstation.meta.description;
       wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-      ] ++ optional config.services.mirakurun.enable "mirakurun.service"
+      after = [ "network.target" ]
+        ++ optional config.services.mirakurun.enable "mirakurun.service"
         ++ optional config.services.mysql.enable "mysql.service";
 
       serviceConfig = {

@@ -1,19 +1,6 @@
-{ lib
-, botocore
-, buildPythonPackage
-, click
-, configparser
-, fetchPypi
-, fido2
-, glibcLocales
-, isPy27
-, lxml
-, mock
-, pyopenssl
-, pytestCheckHook
-, requests
-, requests-kerberos
-}:
+{ lib, botocore, buildPythonPackage, click, configparser, fetchPypi, fido2
+, glibcLocales, isPy27, lxml, mock, pyopenssl, pytestCheckHook, requests
+, requests-kerberos }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
@@ -36,11 +23,7 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  checkInputs = [
-    glibcLocales
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ glibcLocales mock pytestCheckHook ];
 
   # Relax version constraint
   postPatch = ''
@@ -58,7 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aws_adfs" ];
 
   meta = with lib; {
-    description = "Command line tool to ease aws cli authentication against ADFS";
+    description =
+      "Command line tool to ease aws cli authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];

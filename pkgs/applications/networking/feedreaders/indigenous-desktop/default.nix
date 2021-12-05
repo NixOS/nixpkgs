@@ -1,20 +1,17 @@
-{ stdenv, lib, fetchurl, unzip, makeDesktopItem, copyDesktopItems
-, makeWrapper, electron }:
+{ stdenv, lib, fetchurl, unzip, makeDesktopItem, copyDesktopItems, makeWrapper
+, electron }:
 
 stdenv.mkDerivation rec {
   pname = "indigenous-desktop";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/marksuth/indigenous-desktop/releases/download/v${version}/indigenous-linux-x64-${version}.zip";
+    url =
+      "https://github.com/marksuth/indigenous-desktop/releases/download/v${version}/indigenous-linux-x64-${version}.zip";
     sha256 = "sha256-1nqj9N5RQE0PogJSULu75CTVLHeQsHIimtFXSCP6SPA=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-    unzip
-  ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -45,7 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "IndieWeb app with extensions for sharing to/reading from micropub endpoints";
+    description =
+      "IndieWeb app with extensions for sharing to/reading from micropub endpoints";
     homepage = "https://indigenous.realize.be/indigenous-desktop";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

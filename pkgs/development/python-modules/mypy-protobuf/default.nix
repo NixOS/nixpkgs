@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonApplication, protobuf, types-protobuf, grpcio-tools, pythonOlder }:
+{ lib, fetchPypi, buildPythonApplication, protobuf, types-protobuf, grpcio-tools
+, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";

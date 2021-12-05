@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchgit, pkg-config, pidgin } :
+{ lib, stdenv, fetchgit, pkg-config, pidgin }:
 
-let
-  version = "54b2992";
-in
-stdenv.mkDerivation {
+let version = "54b2992";
+in stdenv.mkDerivation {
   pname = "pidgin-mra";
   inherit version;
 

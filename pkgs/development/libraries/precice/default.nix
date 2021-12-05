@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3
+, petsc }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
@@ -24,12 +25,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];
 
   meta = {
-    description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    description =
+      "preCICE stands for Precise Code Interaction Coupling Environment";
     license = with lib.licenses; [ gpl3 ];
     homepage = "https://www.precice.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }
-
 

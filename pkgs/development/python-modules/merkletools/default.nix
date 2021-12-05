@@ -12,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pysha3 ];
 
   meta = with lib; {
-    description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";
+    description =
+      "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";
     homepage = "https://github.com/Tierion/pymerkletools";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];

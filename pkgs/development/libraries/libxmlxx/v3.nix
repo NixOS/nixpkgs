@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libxml++/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "19kik79fmg61nv0by0a5f9wchrcfjwzvih4v2waw01hqflhqvp0r";
   };
 

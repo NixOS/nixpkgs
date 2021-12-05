@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which
-, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
-}:
+{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which, AppKit
+, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel }:
 
 stdenv.mkDerivation rec {
   version = "1.4.1.0";
@@ -13,14 +12,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison which ];
 
-  buildInputs = [ libsndfile ]
-    ++ lib.optional (!stdenv.isDarwin) alsa-lib
-    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
+  buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.isDarwin) alsa-lib
+    ++ lib.optional stdenv.isDarwin [
+      AppKit
+      Carbon
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Kernel
+    ];
 
   patches = [ ./darwin-limits.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS =
+    lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
 
   postPatch = ''
     substituteInPlace src/core/makefile.x/makefile.osx \
@@ -32,7 +39,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ (if stdenv.isDarwin then "osx" else "linux-alsa") ];
 
   meta = with lib; {
-    description = "Programming language for real-time sound synthesis and music creation";
+    description =
+      "Programming language for real-time sound synthesis and music creation";
     homepage = "http://chuck.cs.princeton.edu";
     license = licenses.gpl2;
     platforms = platforms.unix;

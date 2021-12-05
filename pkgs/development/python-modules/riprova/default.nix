@@ -1,10 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "riprova";
   version = "0.2.7";
 
@@ -22,7 +18,8 @@ buildPythonPackage rec{
 
   meta = with lib; {
     homepage = "https://github.com/h2non/riprova";
-    description = "Small and versatile library to retry failed operations using different backoff strategies";
+    description =
+      "Small and versatile library to retry failed operations using different backoff strategies";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];
   };

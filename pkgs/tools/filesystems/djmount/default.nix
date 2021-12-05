@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse];
+  buildInputs = [ fuse ];
 
   meta = {
     homepage = "http://djmount.sourceforge.net/";
-    description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
+    description =
+      "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jagajaga ];
     license = lib.licenses.gpl2;

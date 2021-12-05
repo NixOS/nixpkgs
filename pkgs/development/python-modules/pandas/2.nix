@@ -1,31 +1,9 @@
 # Python 2 expression
 
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, stdenv
-, pytest
-, glibcLocales
-, cython
-, python-dateutil
-, scipy
-, moto
-, numexpr
-, pytz
-, xlrd
-, bottleneck
-, sqlalchemy
-, lxml
-, html5lib
-, beautifulsoup4
-, hypothesis
-, openpyxl
-, tables
-, xlwt
-, runtimeShell
-, libcxx ? null
-}:
+{ lib, buildPythonPackage, fetchPypi, python, stdenv, pytest, glibcLocales
+, cython, python-dateutil, scipy, moto, numexpr, pytz, xlrd, bottleneck
+, sqlalchemy, lxml, html5lib, beautifulsoup4, hypothesis, openpyxl, tables, xlwt
+, runtimeShell, libcxx ? null }:
 
 buildPythonPackage rec {
   pname = "pandas";
@@ -66,7 +44,6 @@ buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-
   disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) ([
     # since python-dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
@@ -83,28 +60,25 @@ buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_locale"
-    "test_clipboard"
-  ]);
+  ] ++ lib.optionals stdenv.isDarwin [ "test_locale" "test_clipboard" ]);
 
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   checkPhase = ''
     runHook preCheck
   ''
-  # TODO: Get locale and clipboard support working on darwin.
-  #       Until then we disable the tests.
-  + lib.optionalString stdenv.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!${runtimeShell}" > pbcopy
-    echo "#!${runtimeShell}" > pbpaste
-    chmod a+x pbcopy pbpaste
-    export PATH=$(pwd):$PATH
-  '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
-    runHook postCheck
-  '';
+    # TODO: Get locale and clipboard support working on darwin.
+    #       Until then we disable the tests.
+    + lib.optionalString stdenv.isDarwin ''
+      # Fake the impure dependencies pbpaste and pbcopy
+      echo "#!${runtimeShell}" > pbcopy
+      echo "#!${runtimeShell}" > pbpaste
+      chmod a+x pbcopy pbpaste
+      export PATH=$(pwd):$PATH
+    '' + ''
+      LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
+      runHook postCheck
+    '';
 
   meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866

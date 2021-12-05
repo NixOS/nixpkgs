@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, numpy
-, pkgs
-}:
+{ lib, buildPythonPackage, numpy, pkgs }:
 
 buildPythonPackage {
   pname = "scikits.samplerate";
@@ -14,22 +10,23 @@ buildPythonPackage {
     sha256 = "0mgic7bs5zv5ji05vr527jlxxlb70f9dg93hy1lzyz2plm1kf7gg";
   };
 
-  buildInputs =  [ pkgs.libsamplerate ];
+  buildInputs = [ pkgs.libsamplerate ];
   propagatedBuildInputs = [ numpy ];
 
   preConfigure = ''
-     cat > site.cfg << END
-     [samplerate]
-     library_dirs=${pkgs.libsamplerate.out}/lib
-     include_dirs=${pkgs.libsamplerate.dev}/include
-     END
+    cat > site.cfg << END
+    [samplerate]
+    library_dirs=${pkgs.libsamplerate.out}/lib
+    include_dirs=${pkgs.libsamplerate.dev}/include
+    END
   '';
 
   doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/cournape/samplerate";
-    description = "High quality sampling rate convertion from audio data in numpy arrays";
+    description =
+      "High quality sampling rate convertion from audio data in numpy arrays";
     license = licenses.gpl2;
   };
 

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, mock
-, pyopenssl
-, urllib3
-, dnspython
+{ lib, buildPythonPackage, fetchPypi, nose, mock, pyopenssl, urllib3, dnspython
 }:
 
 buildPythonPackage rec {

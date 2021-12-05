@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ifaddr
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, ifaddr, requests }:
 
 buildPythonPackage rec {
   pname = "pywilight";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-PLahGx75oEp4NIZB9PVRdA3cLBxhQsHTsnquy7WSEC8=";
   };
 
-  propagatedBuildInputs = [
-    ifaddr
-    requests
-  ];
+  propagatedBuildInputs = [ ifaddr requests ];
 
   # no tests are present
   doCheck = false;

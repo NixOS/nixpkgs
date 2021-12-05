@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/alberthdev/spasm-ng";
-    description = "Z80 assembler with extra features to support development for TI calculators";
-    license     = licenses.gpl2Plus;
+    homepage = "https://github.com/alberthdev/spasm-ng";
+    description =
+      "Z80 assembler with extra features to support development for TI calculators";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

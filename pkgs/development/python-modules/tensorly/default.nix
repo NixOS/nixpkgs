@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, nose
-, isPy27
-, numpy
-, scipy
-, sparse
-, pytorch
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, nose, isPy27, numpy, scipy
+, sparse, pytorch }:
 
 buildPythonPackage rec {
   pname = "tensorly";
@@ -22,8 +13,8 @@ buildPythonPackage rec {
     sha256 = "1ml91yaxwx4msisxbm92yf22qfrscvk58f3z2r1jhi96pw2k4i7x";
   };
 
-  propagatedBuildInputs = [ numpy scipy sparse ]
-    ++ lib.optionals (!doCheck) [ nose ]; # upstream added nose to install_requires
+  propagatedBuildInputs = [ numpy scipy sparse ] ++ lib.optionals (!doCheck)
+    [ nose ]; # upstream added nose to install_requires
 
   checkInputs = [ pytest nose pytorch ];
   # also has a cupy backend, but the tests are currently broken

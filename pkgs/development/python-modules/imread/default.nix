@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pkg-config
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pkg-config, libjpeg, libpng, libtiff
+, libwebp, numpy }:
 
 buildPythonPackage rec {
   pname = "python-imread";
@@ -19,7 +10,6 @@ buildPythonPackage rec {
     pname = "imread";
     sha256 = "0kvlpy62vc16i0mysv1b2gv746in41q75hb815q6h8d227psv1q4";
   };
-
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nose libjpeg libpng libtiff libwebp ];

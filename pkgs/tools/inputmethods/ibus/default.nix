@@ -1,38 +1,10 @@
-{ lib, stdenv
-, substituteAll
-, fetchurl
-, fetchFromGitHub
-, autoreconfHook
-, gettext
-, makeWrapper
-, pkg-config
-, vala
-, wrapGAppsHook
-, dbus
-, dconf ? null
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, gtk2
-, gtk3
-, gtk-doc
-, runCommand
-, isocodes
-, cldr-emoji-annotation
-, unicode-character-database
-, unicode-emoji
-, python3
-, json-glib
-, libnotify ? null
-, enablePython2Library ? false
-, enableUI ? true
-, withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
-, buildPackages
-, runtimeShell
-, nixosTests
-}:
+{ lib, stdenv, substituteAll, fetchurl, fetchFromGitHub, autoreconfHook, gettext
+, makeWrapper, pkg-config, vala, wrapGAppsHook, dbus, dconf ? null, glib
+, gdk-pixbuf, gobject-introspection, gtk2, gtk3, gtk-doc, runCommand, isocodes
+, cldr-emoji-annotation, unicode-character-database, unicode-emoji, python3
+, json-glib, libnotify ? null, enablePython2Library ? false, enableUI ? true
+, withWayland ? false, libxkbcommon ? null, wayland ? null, buildPackages
+, runtimeShell, nixosTests }:
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
@@ -50,15 +22,13 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
+  dbus-launch =
+    runCommand "sandbox-dbus-launch" { nativeBuildInputs = [ makeWrapper ]; } ''
       makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
         --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
-  '';
-in
+    '';
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "ibus";
   version = "1.5.24";
 
@@ -92,7 +62,8 @@ stdenv.mkDerivation rec {
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
     (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
+    (enableFeature enablePython2Library
+      "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
@@ -117,9 +88,7 @@ stdenv.mkDerivation rec {
     dbus-launch
   ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   buildInputs = [
     dbus
@@ -132,10 +101,7 @@ stdenv.mkDerivation rec {
     isocodes
     json-glib
     libnotify
-  ] ++ optionals withWayland [
-    libxkbcommon
-    wayland
-  ];
+  ] ++ optionals withWayland [ libxkbcommon wayland ];
 
   enableParallelBuilding = true;
 
@@ -159,9 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = {
-      installed-tests = nixosTests.installed-tests.ibus;
-    };
+    tests = { installed-tests = nixosTests.installed-tests.ibus; };
   };
 
   meta = {

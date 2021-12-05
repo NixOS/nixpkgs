@@ -1,4 +1,4 @@
-{ lib, newScope } :
+{ lib, newScope }:
 let
   callPackage = newScope self;
 

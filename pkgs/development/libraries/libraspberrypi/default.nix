@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libraspberrypi";
@@ -19,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # https://github.com/raspberrypi/userland/pull/670
-      url = "https://github.com/raspberrypi/userland/commit/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
+      url =
+        "https://github.com/raspberrypi/userland/commit/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
       sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
     })
   ];
@@ -31,10 +27,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Userland tools & libraries for interfacing with Raspberry Pi hardware";
+    description =
+      "Userland tools & libraries for interfacing with Raspberry Pi hardware";
     homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
+    platforms =
+      [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ dezgeg tkerber ];
   };
 }

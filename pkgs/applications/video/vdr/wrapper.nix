@@ -1,10 +1,11 @@
-{ symlinkJoin, lib, makeWrapper, vdr
-, plugins ? []
-}: let
+{ symlinkJoin, lib, makeWrapper, vdr, plugins ? [ ] }:
+let
 
-  makeXinePluginPath = l: lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);
+  makeXinePluginPath = l:
+    lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);
 
-  requiredXinePlugins = lib.flatten (map (p: p.passthru.requiredXinePlugins or []) plugins);
+  requiredXinePlugins =
+    lib.flatten (map (p: p.passthru.requiredXinePlugins or [ ]) plugins);
 
 in symlinkJoin {
 
@@ -22,9 +23,7 @@ in symlinkJoin {
 
   meta = with vdr.meta; {
     inherit license homepage;
-    description = description
-    + " (with plugins: "
-    + lib.concatStringsSep ", " (map (x: ""+x.name) plugins)
-    + ")";
+    description = description + " (with plugins: "
+      + lib.concatStringsSep ", " (map (x: "" + x.name) plugins) + ")";
   };
 }

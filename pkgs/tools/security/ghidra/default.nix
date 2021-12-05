@@ -1,13 +1,5 @@
-{ stdenv
-, fetchzip
-, lib
-, makeWrapper
-, autoPatchelfHook
-, openjdk11
-, pam
-, makeDesktopItem
-, icoutils
-}:
+{ stdenv, fetchzip, lib, makeWrapper, autoPatchelfHook, openjdk11, pam
+, makeDesktopItem, icoutils }:
 
 let
 
@@ -28,20 +20,15 @@ in stdenv.mkDerivation rec {
   versiondate = "20210928";
 
   src = fetchzip {
-    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    url =
+      "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
     hash = "sha256-nc+5Aqid3hGzbcKMCCaQ9E9AGOB3JyNkJn+3Yz8ewhM=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    icoutils
-  ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper icoutils ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    pam
-  ];
+  buildInputs = [ stdenv.cc.cc.lib pam ];
 
   dontStrip = true;
 
@@ -69,7 +56,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    description =
+      "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.asl20;

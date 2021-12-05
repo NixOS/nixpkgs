@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
+    url =
+      "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
     sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 

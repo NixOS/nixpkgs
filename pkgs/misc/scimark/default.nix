@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "scimark";
@@ -13,9 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-kcg5vKYp0B7+bC/CmFMO/tMwxf9q6nvuFv0vRSy3MbE=";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   dontConfigure = true;
 
@@ -26,7 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://math.nist.gov/scimark2/index.html";
-    description = "Scientific and numerical computing benchmark (ANSI C version)";
+    description =
+      "Scientific and numerical computing benchmark (ANSI C version)";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;

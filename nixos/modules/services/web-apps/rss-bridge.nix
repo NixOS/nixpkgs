@@ -7,8 +7,7 @@ let
 
   whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
     (concatStringsSep "\n" cfg.whitelist);
-in
-{
+in {
   options = {
     services.rss-bridge = {
       enable = mkEnableOption "rss-bridge";
@@ -58,7 +57,7 @@ in
 
       whitelist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = options.literalExpression ''
           [
             "Facebook"
@@ -95,7 +94,8 @@ in
     };
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
-      (mkIf (cfg.whitelist != []) "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
+      (mkIf (cfg.whitelist != [ ])
+        "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
       "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
@@ -105,15 +105,15 @@ in
         ${cfg.virtualHost} = {
           root = "${pkgs.rss-bridge}";
 
-          locations."/" = {
-            tryFiles = "$uri /index.php$is_args$args";
-          };
+          locations."/" = { tryFiles = "$uri /index.php$is_args$args"; };
 
           locations."~ ^/index.php(/|$)" = {
             extraConfig = ''
               include ${pkgs.nginx}/conf/fastcgi_params;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
+              fastcgi_pass unix:${
+                config.services.phpfpm.pools.${cfg.pool}.socket
+              };
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
             '';

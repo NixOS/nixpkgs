@@ -16,11 +16,7 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace build.sh --replace "gksu " ""
   '';
 
-  nativeBuildInputs  = [
-    gnome-themes-extra
-    inkscape
-    xcursorgen
-  ];
+  nativeBuildInputs = [ gnome-themes-extra inkscape xcursorgen ];
 
   buildPhase = ''
     HOME="$NIX_BUILD_ROOT" ./build.sh

@@ -1,5 +1,6 @@
 { mkDerivation, lib, cmake, xorg, plasma-framework, fetchurl
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff }:
+, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff
+}:
 
 mkDerivation rec {
   pname = "latte-dock";
@@ -11,14 +12,20 @@ mkDerivation rec {
     name = "${pname}-${version}.tar.xz";
   };
 
-  buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
+  buildInputs =
+    [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
 
-  nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
-    qtx11extras kcrash knewstuff ];
-
-  patches = [
-    ./0001-close-user-autostart.patch
+  nativeBuildInputs = [
+    extra-cmake-modules
+    cmake
+    karchive
+    kwindowsystem
+    qtx11extras
+    kcrash
+    knewstuff
   ];
+
+  patches = [ ./0001-close-user-autostart.patch ];
   fixupPhase = ''
     mkdir -p $out/etc/xdg/autostart
     cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
@@ -31,6 +38,5 @@ mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.benley maintainers.ysndr ];
   };
-
 
 }

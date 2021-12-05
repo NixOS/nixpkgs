@@ -1,36 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, glib
-, exo
-, libXtst
-, xorgproto
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, gtk3
-, hicolor-icon-theme
-, xfce
+{ lib, stdenv, fetchurl, pkg-config, intltool, glib, exo, libXtst, xorgproto
+, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, hicolor-icon-theme, xfce
 }:
 
-let
-  category = "panel-plugins";
+let category = "panel-plugins";
 in stdenv.mkDerivation rec {
-  pname  = "xfce4-cpugraph-plugin";
+  pname = "xfce4-cpugraph-plugin";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-wvbb1/g8ebY7g8mCMsedBQ4YZA6CRkueyNNkOpLDobA=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   buildInputs = [
     glib

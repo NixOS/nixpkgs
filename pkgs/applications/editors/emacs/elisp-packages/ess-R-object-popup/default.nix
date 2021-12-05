@@ -1,8 +1,4 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
-}:
+{ lib, trivialBuild, fetchFromGitHub, emacs }:
 
 trivialBuild rec {
   pname = "ess-R-object-popup";

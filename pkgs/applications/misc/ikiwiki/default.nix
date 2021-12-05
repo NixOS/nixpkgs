@@ -1,13 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
-, gitSupport ? false, git
-, docutilsSupport ? false, python, docutils
-, monotoneSupport ? false, monotone
-, bazaarSupport ? false, breezy
-, cvsSupport ? false, cvs, cvsps
-, subversionSupport ? false, subversion
-, mercurialSupport ? false, mercurial
-, extraUtils ? []
-}:
+{ lib, stdenv, fetchurl, fetchpatch, perlPackages, gettext, makeWrapper
+, ImageMagick, which, highlight, gitSupport ? false, git
+, docutilsSupport ? false, python, docutils, monotoneSupport ? false, monotone
+, bazaarSupport ? false, breezy, cvsSupport ? false, cvs, cvsps
+, subversionSupport ? false, subversion, mercurialSupport ? false, mercurial
+, extraUtils ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "ikiwiki";
@@ -18,21 +14,39 @@ stdenv.mkDerivation rec {
     sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
-  buildInputs = [ which highlight ]
-    ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-      TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
-      NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
-    ++ lib.optionals docutilsSupport [
-         (python.withPackages (pp: with pp; [ pygments ]))
-         docutils
-       ]
-    ++ lib.optionals gitSupport [git]
-    ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [breezy]
-    ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
-    ++ lib.optionals subversionSupport [subversion]
-    ++ lib.optionals mercurialSupport [mercurial];
+  buildInputs = [ which highlight ] ++ (with perlPackages; [
+    perl
+    TextMarkdown
+    URI
+    HTMLParser
+    HTMLScrubber
+    HTMLTemplate
+    TimeDate
+    gettext
+    makeWrapper
+    DBFile
+    CGISession
+    CGIFormBuilder
+    LocaleGettext
+    RpcXML
+    XMLSimple
+    ImageMagick
+    YAML
+    YAMLLibYAML
+    HTMLTree
+    AuthenPassphrase
+    NetOpenIDConsumer
+    LWPxParanoidAgent
+    CryptSSLeay
+  ]) ++ lib.optionals docutilsSupport [
+    (python.withPackages (pp: with pp; [ pygments ]))
+    docutils
+  ] ++ lib.optionals gitSupport [ git ]
+    ++ lib.optionals monotoneSupport [ monotone ]
+    ++ lib.optionals bazaarSupport [ breezy ]
+    ++ lib.optionals cvsSupport [ cvs cvsps perlPackages.Filechdir ]
+    ++ lib.optionals subversionSupport [ subversion ]
+    ++ lib.optionals mercurialSupport [ mercurial ];
 
   patches = [
     # A few markdown tests fail, but this is expected when using Text::Markdown
@@ -41,7 +55,8 @@ stdenv.mkDerivation rec {
 
     (fetchpatch {
       name = "Catch-up-to-highlight-4.0-API-change";
-      url = "http://source.ikiwiki.branchable.com/?p=source.git;a=patch;h=9ea3f9dfe7c0341f4e002b48728b8139293e19d0";
+      url =
+        "http://source.ikiwiki.branchable.com/?p=source.git;a=patch;h=9ea3f9dfe7c0341f4e002b48728b8139293e19d0";
       sha256 = "16s4wvsfclx0a5cm2awr69dvw2vsi8lpm0d7kyl5w0kjlmzfc7h9";
     })
   ];
@@ -68,9 +83,17 @@ stdenv.mkDerivation rec {
       ${lib.optionalString bazaarSupport "--prefix PATH : ${breezy}/bin "} \
       ${lib.optionalString cvsSupport "--prefix PATH : ${cvs}/bin "} \
       ${lib.optionalString cvsSupport "--prefix PATH : ${cvsps}/bin "} \
-      ${lib.optionalString subversionSupport "--prefix PATH : ${subversion.out}/bin "} \
-      ${lib.optionalString mercurialSupport "--prefix PATH : ${mercurial}/bin "} \
-      ${lib.optionalString docutilsSupport ''--prefix PYTHONPATH : "$(toPythonPath ${docutils})" ''} \
+      ${
+        lib.optionalString subversionSupport
+        "--prefix PATH : ${subversion.out}/bin "
+      } \
+      ${
+        lib.optionalString mercurialSupport "--prefix PATH : ${mercurial}/bin "
+      } \
+      ${
+        lib.optionalString docutilsSupport
+        ''--prefix PYTHONPATH : "$(toPythonPath ${docutils})" ''
+      } \
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
     done
   '';

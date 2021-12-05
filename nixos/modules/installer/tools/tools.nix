@@ -6,10 +6,11 @@
 with lib;
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
-    isExecutable = true;
-  });
+  makeProg = args:
+    pkgs.substituteAll (args // {
+      dir = "bin";
+      isExecutable = true;
+    });
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
@@ -22,10 +23,7 @@ let
     src = ./nixos-install.sh;
     inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
-    path = makeBinPath [
-      pkgs.jq
-      nixos-enter
-    ];
+    path = makeBinPath [ pkgs.jq nixos-enter ];
   };
 
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
@@ -33,16 +31,19 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
+    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems)
+      [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    inherit (config.system.nixos-generate-config)
+      configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre" then
+      null
+    else
+      pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -65,9 +66,7 @@ let
     inherit (pkgs) runtimeShell;
   };
 
-in
-
-{
+in {
 
   options.system.nixos-generate-config = {
     configuration = mkOption {
@@ -89,7 +88,7 @@ in
     desktopConfiguration = mkOption {
       internal = true;
       type = types.listOf types.lines;
-      default = [];
+      default = [ ];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
@@ -211,17 +210,18 @@ in
       }
     '';
 
-    environment.systemPackages =
-      [ nixos-build-vms
-        nixos-install
-        nixos-rebuild
-        nixos-generate-config
-        nixos-version
-        nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+    environment.systemPackages = [
+      nixos-build-vms
+      nixos-install
+      nixos-rebuild
+      nixos-generate-config
+      nixos-version
+      nixos-enter
+    ] ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild
+        nixos-enter;
     };
 
   };

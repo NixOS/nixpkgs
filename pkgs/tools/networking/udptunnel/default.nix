@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "19";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/udptunnel/udptunnel-r${version}.tar.gz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/udptunnel/udptunnel-r${version}.tar.gz";
     sha256 = "1hkrn153rdyrp9g15z4d5dq44cqlnby2bfplp6z0g3862lnv7m3l";
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.google.com/archive/p/udptunnel/";
     description = "Tunnels TCP over UDP packets";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

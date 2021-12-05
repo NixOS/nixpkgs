@@ -20,8 +20,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://speedcrunch.org";
-    license     = licenses.gpl2Plus;
+    homepage = "http://speedcrunch.org";
+    license = licenses.gpl2Plus;
     description = "A fast power user calculator";
     longDescription = ''
       SpeedCrunch is a fast, high precision and powerful desktop calculator.

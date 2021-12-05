@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
-, zlib, libGL, libGLU, xorg, opencascade-occt }:
+{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg, zlib
+, libGL, libGLU, xorg, opencascade-occt }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -12,9 +12,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dg29wHLqo8gtBmxbo7BurN0zBOsqlzc/5K2pUJ8Las4=";
   };
 
-  buildInputs = [ blas lapack gmm fltk libjpeg zlib libGLU libGL
-    libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
-    xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
+  buildInputs = [
+    blas
+    lapack
+    gmm
+    fltk
+    libjpeg
+    zlib
+    libGLU
+    libGL
+    libGLU
+    xorg.libXrender
+    xorg.libXcursor
+    xorg.libXfixes
+    xorg.libXext
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libX11
+    xorg.libSM
+    xorg.libICE
     opencascade-occt
   ];
 

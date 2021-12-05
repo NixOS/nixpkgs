@@ -1,26 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, decorator
-, packaging
-, pynput
-, regex
-, lark-parser
-, enum34
-, pyperclip
-, six
-, requests
-, psutil
-, json-rpc
-, werkzeug
-, kaldi-active-grammar
-, sounddevice
-, webrtcvad
-, setuptools
-, xdotool
-, wmctrl
-, xorg
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, decorator, packaging, pynput, regex
+, lark-parser, enum34, pyperclip, six, requests, psutil, json-rpc, werkzeug
+, kaldi-active-grammar, sounddevice, webrtcvad, setuptools, xdotool, wmctrl
+, xorg }:
 
 buildPythonPackage rec {
   pname = "dragonfly";
@@ -38,7 +19,9 @@ buildPythonPackage rec {
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
       --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
-      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
+      --replace 'xdotool = "xdotool"'${
+        " "
+      }'xdotool = "${xdotool}/bin/xdotool"' \
       --replace 'xprop = "xprop"'${" "}'xprop = "${xorg.xprop}/bin/xprop"' \
       --replace 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
   '';
@@ -69,7 +52,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dragonfly" ];
 
   meta = with lib; {
-    description = "Speech recognition framework allowing powerful Python-based scripting";
+    description =
+      "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ckie ];

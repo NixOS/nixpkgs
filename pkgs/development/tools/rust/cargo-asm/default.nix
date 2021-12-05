@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Display the assembly or LLVM-IR generated for Rust source code";
+    description =
+      "Display the assembly or LLVM-IR generated for Rust source code";
     homepage = "https://github.com/gnzlbg/cargo-asm";
     license = licenses.mit;
     maintainers = [ ];

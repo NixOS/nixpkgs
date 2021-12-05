@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "imap-tools";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-d9caVmXV/yynimXYZNspGar4BXXXec/d8kw2DDEgvpY=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests require a network connection

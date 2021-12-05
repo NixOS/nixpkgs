@@ -1,25 +1,7 @@
-{ lib
-, stdenv
-, bokeh
-, buildPythonPackage
-, cloudpickle
-, distributed
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, jinja2
-, numpy
-, packaging
-, pandas
-, partd
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toolz
-, withExtraComplete ? false
-}:
+{ lib, stdenv, bokeh, buildPythonPackage, cloudpickle, distributed
+, fetchFromGitHub, fetchpatch, fsspec, jinja2, numpy, packaging, pandas, partd
+, pytest-rerunfailures, pytest-xdist, pytestCheckHook, pythonOlder, pyyaml
+, toolz, withExtraComplete ? false }:
 
 buildPythonPackage rec {
   pname = "dask";
@@ -39,7 +21,8 @@ buildPythonPackage rec {
     # remove with next bump
     (fetchpatch {
       name = "fix-tests-against-distributed-2021.10.0.patch";
-      url = "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
+      url =
+        "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
       includes = [ "dask/tests/test_distributed.py" ];
       sha256 = "1i4i4k1lzxcydq9l80jyifq21ny0j3i47rviq07ai488pvx1r2al";
     })
@@ -63,11 +46,7 @@ buildPythonPackage rec {
 
   doCheck = true;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-rerunfailures
-    pytest-xdist
-  ];
+  checkInputs = [ pytestCheckHook pytest-rerunfailures pytest-xdist ];
 
   dontUseSetuptoolsCheck = true;
 

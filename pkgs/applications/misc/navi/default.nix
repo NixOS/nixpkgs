@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, fzf, lib, makeWrapper, rustPlatform, wget, libiconv }:
+{ stdenv, fetchFromGitHub, fzf, lib, makeWrapper, rustPlatform, wget, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
@@ -26,10 +27,11 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
     "--skip=test_parse_variable_line"
-   ];
+  ];
 
   meta = with lib; {
-    description = "An interactive cheatsheet tool for the command-line and application launchers";
+    description =
+      "An interactive cheatsheet tool for the command-line and application launchers";
     homepage = "https://github.com/denisidoro/navi";
     license = licenses.asl20;
     platforms = platforms.unix;

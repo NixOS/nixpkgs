@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager;
-in
+let cfg = config.services.xserver.windowManager;
 
-{
+in {
   imports = [
     ./2bwm.nix
     ./afterstep.nix
@@ -44,7 +42,8 @@ in
     ./xmonad.nix
     ./yeahwm.nix
     ./qtile.nix
-    ./none.nix ];
+    ./none.nix
+  ];
 
   options = {
 
@@ -52,7 +51,7 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
+        default = [ ];
         example = [{
           name = "wmii";
           start = "...";
@@ -62,9 +61,7 @@ in
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = map (d: d // {
-          manage = "window";
-        });
+        apply = map (d: d // { manage = "window"; });
       };
 
       default = mkOption {
@@ -82,7 +79,5 @@ in
 
   };
 
-  config = {
-    services.xserver.displayManager.session = cfg.session;
-  };
+  config = { services.xserver.displayManager.session = cfg.session; };
 }

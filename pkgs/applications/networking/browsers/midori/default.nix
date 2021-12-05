@@ -1,40 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, intltool
-, vala
-, wrapGAppsHook
-, gcr
-, libpeas
-, gtk3
-, webkitgtk
-, sqlite
-, gsettings-desktop-schemas
-, libsoup
-, glib-networking
-, json-glib
-, libarchive
-}:
+{ lib, stdenv, fetchurl, cmake, ninja, pkg-config, intltool, vala, wrapGAppsHook
+, gcr, libpeas, gtk3, webkitgtk, sqlite, gsettings-desktop-schemas, libsoup
+, glib-networking, json-glib, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "midori";
   version = "9.0";
 
   src = fetchurl {
-    url = "https://github.com/midori-browser/core/releases/download/v${version}/midori-v${version}.tar.gz";
+    url =
+      "https://github.com/midori-browser/core/releases/download/v${version}/midori-v${version}.tar.gz";
     sha256 = "05i04qa83dnarmgkx4xsk6fga5lw1lmslh4rb3vhyyy4ala562jy";
   };
 
-  nativeBuildInputs = [
-    cmake
-    intltool
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake intltool ninja pkg-config vala wrapGAppsHook ];
 
   buildInputs = [
     (libsoup.override { gnomeSupport = true; })
@@ -49,9 +27,7 @@ stdenv.mkDerivation rec {
     libarchive
   ];
 
-  passthru = {
-    inherit gtk3;
-  };
+  passthru = { inherit gtk3; };
 
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";

@@ -1,28 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, dmidecode
-, ethtool
-, pciutils
-, multipath-tools
-, iproute2
-, sysvinit
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, dmidecode
+, ethtool, pciutils, multipath-tools, iproute2, sysvinit }:
 let
-  binPath = [
-    iproute2
-    dmidecode
-    ethtool
-    pciutils
-    multipath-tools
-    iproute2
-    sysvinit
-  ];
-in
+  binPath =
+    [ iproute2 dmidecode ethtool pciutils multipath-tools iproute2 sysvinit ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "xsos";
   version = "0.7.19";
 

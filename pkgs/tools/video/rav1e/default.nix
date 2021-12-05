@@ -1,7 +1,6 @@
 { lib, rust, stdenv, rustPlatform, fetchCrate, nasm, cargo-c, libiconv }:
 
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+let rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.4.1";
@@ -17,11 +16,15 @@ in rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cbuild --release --frozen --prefix=${
+      placeholder "out"
+    } --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cinstall --release --frozen --prefix=${
+      placeholder "out"
+    } --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {

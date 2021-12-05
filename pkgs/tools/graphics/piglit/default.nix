@@ -1,22 +1,6 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, cmake
-, freeglut
-, libGL
-, libGLU
-, libglvnd
-, makeWrapper
-, ninja
-, pkg-config
-, python3
-, waffle
-, wayland
-, libX11
-, libXrender
-, libxcb
-, libxkbcommon
-}:
+{ stdenv, fetchFromGitLab, lib, cmake, freeglut, libGL, libGLU, libglvnd
+, makeWrapper, ninja, pkg-config, python3, waffle, wayland, libX11, libXrender
+, libxcb, libxkbcommon }:
 
 stdenv.mkDerivation rec {
   pname = "piglit";
@@ -39,20 +23,12 @@ stdenv.mkDerivation rec {
     libXrender
     libxcb
     libxkbcommon
-    (python3.withPackages (ps: with ps; [
-      Mako
-      numpy
-    ]))
+    (python3.withPackages (ps: with ps; [ Mako numpy ]))
     waffle
     wayland
   ];
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake makeWrapper ninja pkg-config ];
 
   # Find data dir: piglit searches for the data directory in some places, however as it is wrapped,
   # it search in ../lib/.piglit-wrapped, we just replace the script name with "piglit" again.

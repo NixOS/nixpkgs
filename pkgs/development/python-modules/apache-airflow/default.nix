@@ -1,67 +1,14 @@
-{ lib
-, stdenv
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, alembic
-, argcomplete
-, attrs
-, blinker
-, cached-property
-, cattrs
-, clickclick
-, colorlog
-, croniter
-, cryptography
-, dill
-, flask
-, flask-appbuilder
-, flask-caching
-, flask_login
-, flask_wtf
-, GitPython
-, graphviz
-, gunicorn
-, httpx
-, iso8601
-, importlib-resources
-, importlib-metadata
-, inflection
-, itsdangerous
-, jinja2
-, jsonschema
-, lazy-object-proxy
-, lockfile
-, markdown
-, markupsafe
-, marshmallow-oneofschema
-, numpy
-, openapi-spec-validator
-, pandas
-, pendulum
-, psutil
-, pygments
-, pyjwt
-, python-daemon
-, python-dateutil
-, python-nvd3
-, python-slugify
-, python3-openid
-, pyyaml
-, rich
-, setproctitle
-, sqlalchemy
-, sqlalchemy-jsonfield
-, swagger-ui-bundle
-, tabulate
-, tenacity
-, termcolor
-, unicodecsv
-, werkzeug
-, pytestCheckHook
-, freezegun
-, mkYarnPackage
-}:
+{ lib, stdenv, python, buildPythonPackage, fetchFromGitHub, alembic, argcomplete
+, attrs, blinker, cached-property, cattrs, clickclick, colorlog, croniter
+, cryptography, dill, flask, flask-appbuilder, flask-caching, flask_login
+, flask_wtf, GitPython, graphviz, gunicorn, httpx, iso8601, importlib-resources
+, importlib-metadata, inflection, itsdangerous, jinja2, jsonschema
+, lazy-object-proxy, lockfile, markdown, markupsafe, marshmallow-oneofschema
+, numpy, openapi-spec-validator, pandas, pendulum, psutil, pygments, pyjwt
+, python-daemon, python-dateutil, python-nvd3, python-slugify, python3-openid
+, pyyaml, rich, setproctitle, sqlalchemy, sqlalchemy-jsonfield
+, swagger-ui-bundle, tabulate, tenacity, termcolor, unicodecsv, werkzeug
+, pytestCheckHook, freezegun, mkYarnPackage }:
 let
 
   version = "2.1.4";
@@ -101,8 +48,7 @@ let
     '';
   };
 
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "apache-airflow";
   inherit version;
   src = airflow-src;
@@ -165,14 +111,9 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  buildInputs = [
-    airflow-frontend
-  ];
+  buildInputs = [ airflow-frontend ];
 
-  checkInputs = [
-    freezegun
-    pytestCheckHook
-  ];
+  checkInputs = [ freezegun pytestCheckHook ];
 
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
@@ -209,23 +150,21 @@ buildPythonPackage rec {
   makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
 
   preCheck = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
 
-   airflow version
-   airflow db init
-   airflow db reset -y
+    airflow version
+    airflow db init
+    airflow db reset -y
   '';
 
-  pytestFlagsArray = [
-    "tests/core/test_core.py"
-  ];
+  pytestFlagsArray = [ "tests/core/test_core.py" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    "bash_operator_kill"  # psutil.AccessDenied
+    "bash_operator_kill" # psutil.AccessDenied
   ];
 
   postInstall = ''
@@ -233,7 +172,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Programmatically author, schedule and monitor data pipelines";
+    description =
+      "Programmatically author, schedule and monitor data pipelines";
     homepage = "http://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];

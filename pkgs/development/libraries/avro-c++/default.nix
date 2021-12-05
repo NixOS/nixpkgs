@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, boost, python2}:
+{ lib, stdenv, fetchurl, cmake, boost, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "avro-c++";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A C++ library which implements parts of the Avro Specification";
+    description =
+      "A C++ library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rasendubi ];

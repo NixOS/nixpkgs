@@ -1,20 +1,6 @@
-{ lib
-, python3
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, appstream
-, appstream-glib
-, wrapGAppsHook
-, desktop-file-utils
-, gobject-introspection
-, gtksourceview4
-, gspell
-, poppler_gi
-, webkitgtk
-, librsvg
-}:
+{ lib, python3, fetchFromGitHub, meson, ninja, gettext, appstream
+, appstream-glib, wrapGAppsHook, desktop-file-utils, gobject-introspection
+, gtksourceview4, gspell, poppler_gi, webkitgtk, librsvg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";

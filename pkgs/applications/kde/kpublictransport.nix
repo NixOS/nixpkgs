@@ -1,7 +1,4 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-}:
+{ mkDerivation, lib, extra-cmake-modules }:
 
 mkDerivation {
   pname = "kpublictransport";

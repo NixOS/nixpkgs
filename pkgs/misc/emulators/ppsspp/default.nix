@@ -1,19 +1,5 @@
-{ mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, cmake
-, ffmpeg
-, glew
-, lib
-, libzip
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, snappy
-, zlib
-}:
+{ mkDerivation, fetchFromGitHub, fetchpatch, SDL2, cmake, ffmpeg, glew, lib
+, libzip, pkg-config, python3, qtbase, qtmultimedia, snappy, zlib }:
 
 mkDerivation rec {
   pname = "ppsspp";
@@ -28,10 +14,11 @@ mkDerivation rec {
   };
 
   patches = [
-     # fix compability with ffmpeg 4.4, remove on next release after 1.11
+    # fix compability with ffmpeg 4.4, remove on next release after 1.11
     (fetchpatch {
       name = "fix_ffmpeg_4.4.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";
       sha256 = "sha256-ecDoOydaLfL6+eFpahcO1TnRl866mZZVHlr6Qrib1mo=";
     })
   ];
@@ -43,16 +30,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config python3 ];
 
-  buildInputs = [
-    SDL2
-    ffmpeg
-    glew
-    libzip
-    qtbase
-    qtmultimedia
-    snappy
-    zlib
-  ];
+  buildInputs = [ SDL2 ffmpeg glew libzip qtbase qtmultimedia snappy zlib ];
 
   cmakeFlags = [
     "-DHEADLESS=OFF"

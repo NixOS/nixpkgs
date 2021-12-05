@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   version = "2.0.5";
@@ -21,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://pydispatcher.sourceforge.net/";
-    description = "Signal-registration and routing infrastructure for use in multiple contexts";
+    description =
+      "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
   };
 

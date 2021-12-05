@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, zope_interface
-, cryptography
-, application
-, gmpy2
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, zope_interface, cryptography
+, application, gmpy2 }:
 
 buildPythonPackage rec {
   pname = "python-otr";

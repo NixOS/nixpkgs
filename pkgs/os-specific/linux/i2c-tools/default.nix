@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchgit
-, perl
-, read-edid
-}:
+{ lib, stdenv, fetchgit, perl, read-edid }:
 
 stdenv.mkDerivation rec {
   pname = "i2c-tools";

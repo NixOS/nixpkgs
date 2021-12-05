@@ -8,10 +8,10 @@
 let
   stdenv = stdenvNoCC;
 
-  darwinCodeSign = stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64;
-in
+  darwinCodeSign = stdenv.targetPlatform.isDarwin
+    && stdenv.targetPlatform.isAarch64;
 
-stdenvNoCC.mkDerivation {
+in stdenvNoCC.mkDerivation {
   name = "nuke-references";
 
   dontUnpack = true;

@@ -6,12 +6,15 @@ stdenv.mkDerivation rec {
   version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atomix/${lib.versions.majorMinor version}/atomix-${version}.tar.xz";
+    url = "mirror://gnome/sources/atomix/${
+        lib.versions.majorMinor version
+      }/atomix-${version}.tar.xz";
     sha256 = "0h909a4mccf160hi0aimyicqhq2b0gk1dmqp7qwf87qghfrw6m00";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk-pixbuf libgnome-games-support gnome.adwaita-icon-theme ];
+  buildInputs =
+    [ glib gtk3 gdk-pixbuf libgnome-games-support gnome.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

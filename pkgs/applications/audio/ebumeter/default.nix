@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchurl
-, libX11, libXft, libclthreads, libclxclient, libjack2, libpng, libsndfile, zita-resampler
-}:
+{ lib, stdenv, fetchurl, libX11, libXft, libclthreads, libclxclient, libjack2
+, libpng, libsndfile, zita-resampler }:
 
 stdenv.mkDerivation rec {
   pname = "ebumeter";
   version = "0.4.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url =
+      "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1wm9j1phmpicrp7jdsvdbc3mghdd92l61yl9qbps0brq2ljjyd5s";
   };
 
   buildInputs = [
-    libX11 libXft libclthreads libclxclient libjack2 libpng libsndfile zita-resampler
+    libX11
+    libXft
+    libclthreads
+    libclxclient
+    libjack2
+    libpng
+    libsndfile
+    zita-resampler
   ];
 
   preConfigure = ''

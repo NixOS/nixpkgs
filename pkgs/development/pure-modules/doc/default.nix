@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
 
   meta = {
-    description = "A simple utility for literate programming and documenting source code written in the Pure programming language";
+    description =
+      "A simple utility for literate programming and documenting source code written in the Pure programming language";
     homepage = "http://puredocs.bitbucket.org/pure-doc.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flit-core, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mdurl";
@@ -20,17 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-AVklWFc4o5R9OzS9BYauuOaxm89P/Ih5l3Vrb2P0El4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mdurl"
-  ];
+  pythonImportsCheck = [ "mdurl" ];
 
   meta = with lib; {
     description = "URL utilities for markdown-it";

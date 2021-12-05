@@ -1,11 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitea
-, cmake
-, libsecret
-, qtkeychain
-, restic
-}:
+{ lib, mkDerivation, fetchFromGitea, cmake, libsecret, qtkeychain, restic }:
 
 mkDerivation rec {
   pname = "restique";
@@ -19,18 +12,11 @@ mkDerivation rec {
     sha256 = "0j1qihv7hd90xkfm4ksv74q6m7cq781fbdnc3l4spcd7h2p8lh0z";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libsecret
-    qtkeychain
-  ];
+  buildInputs = [ libsecret qtkeychain ];
 
-  qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ restic ])
-  ];
+  qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ restic ]) ];
 
   meta = with lib; {
     description = "Restic GUI for Desktop/Laptop Backups";

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "policyuniverse";
@@ -20,7 +16,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "policyuniverse" ];
 
   meta = with lib; {
-    description = "Parse and Process AWS IAM Policies, Statements, ARNs and wildcards";
+    description =
+      "Parse and Process AWS IAM Policies, Statements, ARNs and wildcards";
     homepage = "https://github.com/Netflix-Skunkworks/policyuniverse";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

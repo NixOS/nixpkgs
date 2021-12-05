@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.4";
 
   src = fetchurl {
-    url = "http://www.citi.umich.edu/projects/nfsv4/linux/libgssglue/${pname}-${version}.tar.gz";
+    url =
+      "http://www.citi.umich.edu/projects/nfsv4/linux/libgssglue/${pname}-${version}.tar.gz";
     sha256 = "0fh475kxzlabwz30wz3bf7i8kfqiqzhfahayx3jj79rba1sily9z";
   };
 
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.citi.umich.edu/projects/nfsv4/linux/";
-    description = "Exports a gssapi interface which calls other random gssapi libraries";
+    description =
+      "Exports a gssapi interface which calls other random gssapi libraries";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];

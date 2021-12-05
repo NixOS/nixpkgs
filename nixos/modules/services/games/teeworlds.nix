@@ -12,12 +12,12 @@ let
     ${optionalString (cfg.name != null) "sv_name ${cfg.name}"}
     ${optionalString (cfg.motd != null) "sv_motd ${cfg.motd}"}
     ${optionalString (cfg.password != null) "password ${cfg.password}"}
-    ${optionalString (cfg.rconPassword != null) "sv_rcon_password ${cfg.rconPassword}"}
+    ${optionalString (cfg.rconPassword != null)
+    "sv_rcon_password ${cfg.rconPassword}"}
     ${concatStringsSep "\n" cfg.extraOptions}
   '';
 
-in
-{
+in {
   options = {
     services.teeworlds = {
       enable = mkEnableOption "Teeworlds Server";
@@ -79,7 +79,7 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra configuration lines for the <filename>teeworlds.cfg</filename>. See <link xlink:href="https://www.teeworlds.com/?page=docs&amp;wiki=server_settings">Teeworlds Documentation</link>.
         '';
@@ -89,9 +89,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openPorts {
-      allowedUDPPorts = [ cfg.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openPorts { allowedUDPPorts = [ cfg.port ]; };
 
     systemd.services.teeworlds = {
       description = "Teeworlds Server";

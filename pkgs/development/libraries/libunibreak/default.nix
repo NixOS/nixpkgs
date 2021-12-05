@@ -4,8 +4,7 @@ stdenv.mkDerivation rec {
   pname = "libunibreak";
   version = "4.3";
 
-  src = let
-      rev_version = lib.replaceStrings ["."] ["_"] version;
+  src = let rev_version = lib.replaceStrings [ "." ] [ "_" ] version;
   in fetchFromGitHub {
     owner = "adah1972";
     repo = pname;
@@ -17,7 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/adah1972/libunibreak";
-    description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
+    description =
+      "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = [ maintainers.coroa ];

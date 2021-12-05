@@ -1,15 +1,5 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, ronn
-, openssl
-, stdenv
-, libiconv
-, Security
-}:
+{ lib, rustPlatform, fetchCrate, installShellFiles, makeWrapper, pkg-config
+, ronn, openssl, stdenv, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
@@ -23,17 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-9gnKVZ3HQs3kNj4i1cgC+Jl3dhjx7QRaHSih1HOB3nI=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-    pkg-config
-    ronn
-  ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ronn ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   cargoBuildFlags = [ "--bin" "httplz" ];
 

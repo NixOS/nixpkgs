@@ -1,28 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, pixman
-, alsa-lib
-, openssl
-, libXrandr
-, libXfixes
-, libXext
-, libXrender
-, libXinerama
-, libjpeg
-, zlib
-, spice-protocol
-, python3
-, glib
-, cyrus_sasl
-, libcacard
-, lz4
-, libopus
-, gst_all_1
-, orc
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, pixman, alsa-lib, openssl
+, libXrandr, libXfixes, libXext, libXrender, libXinerama, libjpeg, zlib
+, spice-protocol, python3, glib, cyrus_sasl, libcacard, lz4, libopus, gst_all_1
+, orc }:
 
 let
   # This file was mistakenly not included with the 0.15.0 release tarball.
@@ -32,14 +11,14 @@ let
     url = "https://gitlab.freedesktop.org/spice/spice/-/raw/v0.15.0/doxygen.sh";
     sha256 = "0g4bx91qclihp1jfhdhyj7wp4hf4289794xxbw32kk58lnd7bzkg";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "spice";
   version = "0.15.0";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
+    url =
+      "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
     sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
   };
 
@@ -82,16 +61,15 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  mesonFlags = [
-    "-Dgstreamer=1.0"
-  ];
+  mesonFlags = [ "-Dgstreamer=1.0" ];
 
   postInstall = ''
     ln -s spice-server $out/include/spice
   '';
 
   meta = with lib; {
-    description = "Complete open source solution for interaction with virtualized desktop devices";
+    description =
+      "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
       with virtualized desktop devices.The Spice project deals with both the virtualized

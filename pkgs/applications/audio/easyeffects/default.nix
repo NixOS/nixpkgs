@@ -1,35 +1,8 @@
-{ lib
-, stdenv
-, desktop-file-utils
-, fetchFromGitHub
-, calf
-, fftwFloat
-, glib
-, glibmm
-, gtk4
-, gtkmm4
-, itstool
-, libbs2b
-, libebur128
-, libsamplerate
-, libsndfile
-, lilv
-, lsp-plugins
-, lv2
-, mda_lv2
-, meson
-, ninja
-, nlohmann_json
-, pipewire
-, pkg-config
-, python3
-, rnnoise
-, rubberband
-, speexdsp
-, wrapGAppsHook4
-, zam-plugins
-, zita-convolver
-}:
+{ lib, stdenv, desktop-file-utils, fetchFromGitHub, calf, fftwFloat, glib
+, glibmm, gtk4, gtkmm4, itstool, libbs2b, libebur128, libsamplerate, libsndfile
+, lilv, lsp-plugins, lv2, mda_lv2, meson, ninja, nlohmann_json, pipewire
+, pkg-config, python3, rnnoise, rubberband, speexdsp, wrapGAppsHook4
+, zam-plugins, zita-convolver }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
@@ -79,24 +52,22 @@ stdenv.mkDerivation rec {
     substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
-  preFixup =
-    let
-      lv2Plugins = [
-        calf # compressor exciter, bass enhancer and others
-        lsp-plugins # delay, limiter, multiband compressor
-        mda_lv2 # loudness
-        zam-plugins # maximizer
-      ];
-      ladspaPlugins = [
-        rubberband # pitch shifting
-      ];
-    in
-    ''
-      gappsWrapperArgs+=(
-        --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
-        --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
-      )
-    '';
+  preFixup = let
+    lv2Plugins = [
+      calf # compressor exciter, bass enhancer and others
+      lsp-plugins # delay, limiter, multiband compressor
+      mda_lv2 # loudness
+      zam-plugins # maximizer
+    ];
+    ladspaPlugins = [
+      rubberband # pitch shifting
+    ];
+  in ''
+    gappsWrapperArgs+=(
+      --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+      --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+    )
+  '';
 
   separateDebugInfo = true;
 

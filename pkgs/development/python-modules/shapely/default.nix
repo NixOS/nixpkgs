@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, pythonOlder
-, geos
-, pytestCheckHook
-, cython
-, numpy
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder, geos
+, pytestCheckHook, cython, numpy }:
 
 buildPythonPackage rec {
   pname = "Shapely";
@@ -25,33 +16,29 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # Environment variable used in shapely/_buildcfg.py
-  GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
+  GEOS_LIBRARY_PATH =
+    "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   patches = [
     # Patch to search form GOES .so/.dylib files in a Nix-aware way
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+      libc = lib.optionalString (!stdenv.isDarwin)
+        "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
- ];
+  ];
 
   preCheck = ''
     rm -r shapely # prevent import of local shapely
   '';
 
-  disabledTests = [
-    "test_collection"
-  ];
+  disabledTests = [ "test_collection" ];
 
   pythonImportsCheck = [ "shapely" ];
 

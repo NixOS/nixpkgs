@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "opsdroid_get_image_size";
@@ -16,7 +15,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "get_image_size" ];
 
   meta = with lib; {
-    description = "Get image width and height given a file path using minimal dependencies";
+    description =
+      "Get image width and height given a file path using minimal dependencies";
     license = licenses.mit;
     homepage = "https://github.com/opsdroid/image_size";
     maintainers = with maintainers; [ globin ];

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, wayland-scanner
-, libGL
-, libX11
-, mesa
-, wayland
-, wayland-protocols
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, wayland-scanner, libGL
+, libX11, mesa, wayland, wayland-protocols }:
 
 let
   eglexternalplatform = stdenv.mkDerivation {
@@ -35,9 +24,7 @@ let
       cp eglexternalplatform.pc "$out/share/pkgconfig/"
     '';
 
-    meta = with lib; {
-      license = licenses.mit;
-    };
+    meta = with lib; { license = licenses.mit; };
   };
 
 in stdenv.mkDerivation rec {
@@ -53,25 +40,12 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-rcmGVEcOtKTR8sVkHV7Xb+8NuKWUapYn+/Fswi4z6Mc=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
-  buildInputs = [
-    eglexternalplatform
-    libGL
-    libX11
-    mesa
-    wayland
-    wayland-protocols
-  ];
+  buildInputs =
+    [ eglexternalplatform libGL libX11 mesa wayland wayland-protocols ];
 
   postFixup = ''
     # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path

@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang, openssl
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
+, shortenPerlShebang, openssl, nixosTests }:
 
 with lib;
 
@@ -19,11 +18,24 @@ perlPackages.buildPerlPackage rec {
     ++ optional stdenv.isDarwin [ shortenPerlShebang ];
 
   buildInputs = with perlPackages; [
-    CryptEksblowfish FileHomeDir FileReadBackwards HTTPAcceptLanguage
-    IOSocketSSL IRCUtils JSONValidator LinkEmbedder ModuleInstall
-    Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginWebpack
-    ParseIRC TextMarkdown TimePiece UnicodeUTF8
-    CpanelJSONXS EV
+    CryptEksblowfish
+    FileHomeDir
+    FileReadBackwards
+    HTTPAcceptLanguage
+    IOSocketSSL
+    IRCUtils
+    JSONValidator
+    LinkEmbedder
+    ModuleInstall
+    Mojolicious
+    MojoliciousPluginOpenAPI
+    MojoliciousPluginWebpack
+    ParseIRC
+    TextMarkdown
+    TimePiece
+    UnicodeUTF8
+    CpanelJSONXS
+    EV
   ];
 
   propagatedBuildInputs = [ openssl ];

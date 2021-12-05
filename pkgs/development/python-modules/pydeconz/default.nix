@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub
+, pytest-aiohttp, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pydeconz";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-6GTMG3BfHcfLMoyabFbhsJFVDHmEICuzf32603+jyZ4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aioresponses
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytest-aiohttp pytestCheckHook ];
 
   pythonImportsCheck = [ "pydeconz" ];
 

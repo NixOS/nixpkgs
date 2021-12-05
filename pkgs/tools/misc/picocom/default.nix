@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, lrzsz
-, IOKit
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, lrzsz, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "picocom";

@@ -1,12 +1,12 @@
 { lib, fetchzip }:
 
-let
-  version = "6.0.0";
+let version = "6.0.0";
 
 in fetchzip {
   name = "ibm-plex-${version}";
 
-  url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
+  url =
+    "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts

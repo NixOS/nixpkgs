@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libmilter, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libmilter, perl, perlPackages
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "opendmarc";
@@ -21,18 +22,20 @@ stdenv.mkDerivation rec {
     patchShebangs contrib reports
   '';
 
-  configureFlags = [
-    "--with-milter=${libmilter}"
-  ];
+  configureFlags = [ "--with-milter=${libmilter}" ];
 
   postFixup = ''
     for b in $bin/bin/opendmarc-{expire,import,params,reports}; do
-      wrapProgram $b --set PERL5LIB ${perlPackages.makeFullPerlPath (with perlPackages; [ Switch DBI DBDmysql HTTPMessage ])}
+      wrapProgram $b --set PERL5LIB ${
+        perlPackages.makeFullPerlPath
+        (with perlPackages; [ Switch DBI DBDmysql HTTPMessage ])
+      }
     done
   '';
 
   meta = with lib; {
-    description = "A free open source software implementation of the DMARC specification";
+    description =
+      "A free open source software implementation of the DMARC specification";
     homepage = "http://www.trusteddomain.org/opendmarc/";
     license = with licenses; [ bsd3 sendmail ];
     maintainers = with maintainers; [ ajs124 das_j ];

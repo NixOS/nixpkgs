@@ -1,19 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, memcached
-, txamqp
-, django_tagging
-, gunicorn
-, pytz
-, pyparsing
-, cairocffi
-, whisper
-, whitenoise
-, urllib3
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, django, memcached, txamqp, django_tagging
+, gunicorn, pytz, pyparsing, cairocffi, whisper, whitenoise, urllib3, six }:
 
 buildPythonPackage rec {
   pname = "graphite-web";
@@ -24,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "54240b0f1e069b53e2ce92d4e534e21b195fb0ebd64b6ad8a49c44284e3eb0b1";
   };
 
-  patches = [
-    ./update-django-tagging.patch
-  ];
+  patches = [ ./update-django-tagging.patch ];
 
   postPatch = ''
     # https://github.com/graphite-project/graphite-web/pull/2701
@@ -51,7 +35,7 @@ buildPythonPackage rec {
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular python module.
-  GRAPHITE_NO_PREFIX="True";
+  GRAPHITE_NO_PREFIX = "True";
 
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \

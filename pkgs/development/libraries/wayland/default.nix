@@ -1,34 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, substituteAll
-, meson
-, pkg-config
-, ninja
-, wayland-scanner
-, expat
-, libxml2
-, withLibraries ? stdenv.isLinux
-, libffi
-, withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
-, graphviz-nox
-, doxygen
-, libxslt
-, xmlto
-, python3
-, docbook_xsl
-, docbook_xml_dtd_45
-, docbook_xml_dtd_42
-}:
+{ lib, stdenv, fetchurl, fetchpatch, substituteAll, meson, pkg-config, ninja
+, wayland-scanner, expat, libxml2, withLibraries ? stdenv.isLinux, libffi
+, withDocumentation ? withLibraries && stdenv.hostPlatform
+  == stdenv.buildPlatform, graphviz-nox, doxygen, libxslt, xmlto, python3
+, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42 }:
 
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
-let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-in
-stdenv.mkDerivation rec {
+let isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+in stdenv.mkDerivation rec {
   pname = "wayland";
   version = "1.19.0";
 
@@ -40,7 +20,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Picked from upstream 'main' branch for Darwin support.
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/f452e41264387dee4fd737cbf1af58b34b53941b.patch";
+      url =
+        "https://gitlab.freedesktop.org/wayland/wayland/-/commit/f452e41264387dee4fd737cbf1af58b34b53941b.patch";
       sha256 = "00mk32a01vgn31sm3wk4p8mfwvqv3xv02rxvdj1ygnzgb1ac62r7";
     })
     (substituteAll {
@@ -53,7 +34,8 @@ stdenv.mkDerivation rec {
     patchShebangs doc/doxygen/gen-doxygen.py
   '';
 
-  outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  outputs = [ "out" "bin" "dev" ]
+    ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
   mesonFlags = [
@@ -61,36 +43,26 @@ stdenv.mkDerivation rec {
     "-Ddocumentation=${lib.boolToString withDocumentation}"
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    pkg-config
-    ninja
-  ] ++ lib.optionals isCross [
-    wayland-scanner
-  ] ++ lib.optionals withDocumentation [
-    (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-    doxygen
-    libxslt
-    xmlto
-    python3
-    docbook_xml_dtd_45
-    docbook_xsl
-  ];
+  nativeBuildInputs = [ meson pkg-config ninja ]
+    ++ lib.optionals isCross [ wayland-scanner ]
+    ++ lib.optionals withDocumentation [
+      (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
+      doxygen
+      libxslt
+      xmlto
+      python3
+      docbook_xml_dtd_45
+      docbook_xsl
+    ];
 
-  buildInputs = [
-    expat
-    libxml2
-  ] ++ lib.optionals withLibraries [
-    libffi
-  ] ++ lib.optionals withDocumentation [
-    docbook_xsl
-    docbook_xml_dtd_45
-    docbook_xml_dtd_42
-  ];
+  buildInputs = [ expat libxml2 ] ++ lib.optionals withLibraries [ libffi ]
+    ++ lib.optionals withDocumentation [
+      docbook_xsl
+      docbook_xml_dtd_45
+      docbook_xml_dtd_42
+    ];
 
   postFixup = ''
     # The pkg-config file is required for cross-compilation:

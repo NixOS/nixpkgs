@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "emoji";
@@ -15,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "0x18l8jgbki9yqx994w97dagfaqrbxi3sy2l2101is1dfjr0kib6";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_emojize_name_only"
-  ];
+  disabledTests = [ "test_emojize_name_only" ];
 
   pythonImportsCheck = [ "emoji" ];
 

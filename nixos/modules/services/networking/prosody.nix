@@ -21,7 +21,7 @@ let
 
       extraOptions = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra SSL configuration options.";
       };
 
@@ -36,7 +36,8 @@ let
       };
       description = mkOption {
         type = types.str;
-        description = "A short description of the endpoint you want to advertise";
+        description =
+          "A short description of the endpoint you want to advertise";
       };
     };
   };
@@ -52,7 +53,8 @@ let
     saslauth = mkOption {
       type = types.bool;
       default = true;
-      description = "Authentication for clients and servers. Recommended if you want to log in.";
+      description =
+        "Authentication for clients and servers. Recommended if you want to log in.";
     };
 
     tls = mkOption {
@@ -83,19 +85,22 @@ let
     csi = mkOption {
       type = types.bool;
       default = true;
-      description = "Implements the CSI protocol that allows clients to report their active/inactive state to the server";
+      description =
+        "Implements the CSI protocol that allows clients to report their active/inactive state to the server";
     };
 
     cloud_notify = mkOption {
       type = types.bool;
       default = true;
-      description = "Push notifications to inform users of new messages or other pertinent information even when they have no XMPP clients online";
+      description =
+        "Push notifications to inform users of new messages or other pertinent information even when they have no XMPP clients online";
     };
 
     pep = mkOption {
       type = types.bool;
       default = true;
-      description = "Enables users to publish their mood, activity, playing music and more";
+      description =
+        "Enables users to publish their mood, activity, playing music and more";
     };
 
     private = mkOption {
@@ -119,13 +124,15 @@ let
     vcard_legacy = mkOption {
       type = types.bool;
       default = true;
-      description = "Converts users profiles and Avatars between old and new formats";
+      description =
+        "Converts users profiles and Avatars between old and new formats";
     };
 
     bookmarks = mkOption {
       type = types.bool;
       default = true;
-      description = "Allows interop between older clients that use XEP-0048: Bookmarks in its 1.0 version and recent clients which use it in PEP";
+      description =
+        "Allows interop between older clients that use XEP-0048: Bookmarks in its 1.0 version and recent clients which use it in PEP";
     };
 
     # Nice to have
@@ -156,7 +163,8 @@ let
     register = mkOption {
       type = types.bool;
       default = true;
-      description = "Allow users to register on this server using a client and change passwords";
+      description =
+        "Allow users to register on this server using a client and change passwords";
     };
 
     mam = mkOption {
@@ -168,14 +176,16 @@ let
     smacks = mkOption {
       type = types.bool;
       default = true;
-      description = "Allow a client to resume a disconnected session, and prevent message loss";
+      description =
+        "Allow a client to resume a disconnected session, and prevent message loss";
     };
 
     # Admin interfaces
     admin_adhoc = mkOption {
       type = types.bool;
       default = true;
-      description = "Allows administration via an XMPP client that supports ad-hoc commands";
+      description =
+        "Allows administration via an XMPP client that supports ad-hoc commands";
     };
 
     http_files = mkOption {
@@ -187,7 +197,8 @@ let
     proxy65 = mkOption {
       type = types.bool;
       default = true;
-      description = "Enables a file transfer proxy service which clients behind NAT can use";
+      description =
+        "Enables a file transfer proxy service which clients behind NAT can use";
     };
 
     admin_telnet = mkOption {
@@ -255,23 +266,33 @@ let
     legacyauth = mkOption {
       type = types.bool;
       default = false;
-      description = "Legacy authentication. Only used by some old clients and bots";
+      description =
+        "Legacy authentication. Only used by some old clients and bots";
     };
   };
 
   toLua = x:
-    if builtins.isString x then ''"${x}"''
-    else if builtins.isBool x then boolToString x
-    else if builtins.isInt x then toString x
-    else if builtins.isList x then ''{ ${lib.concatStringsSep ", " (map (n: toLua n) x) } }''
-    else throw "Invalid Lua value";
+    if builtins.isString x then
+      ''"${x}"''
+    else if builtins.isBool x then
+      boolToString x
+    else if builtins.isInt x then
+      toString x
+    else if builtins.isList x then
+      "{ ${lib.concatStringsSep ", " (map (n: toLua n) x)} }"
+    else
+      throw "Invalid Lua value";
 
   createSSLOptsStr = o: ''
     ssl = {
       cafile = "/etc/ssl/certs/ca-bundle.crt";
       key = "${o.key}";
       certificate = "${o.cert}";
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
+      ${
+        concatStringsSep "\n"
+        (mapAttrsToList (name: value: "${name} = ${toLua value};")
+          o.extraOptions)
+      }
     };
   '';
 
@@ -283,7 +304,8 @@ let
       };
       name = mkOption {
         type = types.str;
-        description = "The name to return in service discovery responses for the MUC service itself";
+        description =
+          "The name to return in service discovery responses for the MUC service itself";
         default = "Prosody Chatrooms";
       };
       restrictRoomCreation = mkOption {
@@ -294,7 +316,8 @@ let
       maxHistoryMessages = mkOption {
         type = types.int;
         default = 20;
-        description = "Specifies a limit on what each room can be configured to keep";
+        description =
+          "Specifies a limit on what each room can be configured to keep";
       };
       roomLocking = mkOption {
         type = types.bool;
@@ -311,7 +334,7 @@ let
         description = ''
           Timout after which the room is destroyed or unlocked if not
           configured, in seconds
-       '';
+        '';
       };
       tombstones = mkOption {
         type = types.bool;
@@ -339,7 +362,7 @@ let
       vcard_muc = mkOption {
         type = types.bool;
         default = true;
-      description = "Adds the ability to set vCard for Multi User Chat rooms";
+        description = "Adds the ability to set vCard for Multi User Chat rooms";
       };
 
       # Extra parameters. Defaulting to prosody default values.
@@ -355,7 +378,8 @@ let
       roomDefaultMembersOnly = mkOption {
         type = types.bool;
         default = false;
-        description = "If set, the MUC rooms will only be accessible to the members by default.";
+        description =
+          "If set, the MUC rooms will only be accessible to the members by default.";
       };
       roomDefaultModerated = mkOption {
         type = types.bool;
@@ -365,17 +389,20 @@ let
       roomDefaultPublicJids = mkOption {
         type = types.bool;
         default = false;
-        description = "If set, the MUC rooms will display the public JIDs by default.";
+        description =
+          "If set, the MUC rooms will display the public JIDs by default.";
       };
       roomDefaultChangeSubject = mkOption {
         type = types.bool;
         default = false;
-        description = "If set, the rooms will display the public JIDs by default.";
+        description =
+          "If set, the rooms will display the public JIDs by default.";
       };
       roomDefaultHistoryLength = mkOption {
         type = types.int;
         default = 20;
-        description = "Number of history message sent to participants by default.";
+        description =
+          "Number of history message sent to participants by default.";
       };
       roomDefaultLanguage = mkOption {
         type = types.str;
@@ -459,9 +486,7 @@ let
 
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -517,7 +542,7 @@ in
 
       disco_items = mkOption {
         type = types.listOf (types.submodule discoOpts);
-        default = [];
+        default = [ ];
         description = "List of discoverable items you want to advertise.";
       };
 
@@ -596,7 +621,7 @@ in
 
       s2sInsecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "insecure.example.com" ];
         description = ''
           Some servers have invalid or self-signed certificates. You can list
@@ -608,7 +633,7 @@ in
 
       s2sSecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "jabber.org" ];
         description = ''
           Even if you leave s2s_secure_auth disabled, you can still require valid
@@ -616,18 +641,17 @@ in
         '';
       };
 
-
       modules = moduleOpts;
 
       extraModules = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Enable custom modules";
       };
 
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "Addtional path in which to look find plugins/modules";
       };
 
@@ -637,17 +661,13 @@ in
         '';
         type = types.nullOr (types.submodule uploadHttpOpts);
         default = null;
-        example = {
-          domain = "uploads.my-xmpp-example-host.org";
-        };
+        example = { domain = "uploads.my-xmpp-example-host.org"; };
       };
 
       muc = mkOption {
         type = types.listOf (types.submodule mucOpts);
         default = [ ];
-        example = [ {
-          domain = "conference.my-xmpp-example-host.org";
-        } ];
+        example = [{ domain = "conference.my-xmpp-example-host.org"; }];
         description = "Multi User Chat (MUC) configuration";
       };
 
@@ -681,13 +701,14 @@ in
 
       admins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "admin1@example.com" "admin2@example.com" ];
         description = "List of administrators of the current host";
       };
 
       authentication = mkOption {
-        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        type =
+          types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
         default = "internal_hashed";
         example = "internal_plain";
         description = "Authentication mechanism used for logins.";
@@ -702,7 +723,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -710,41 +730,47 @@ in
     assertions = let
       genericErrMsg = ''
 
-          Having a server not XEP-0423-compliant might make your XMPP
-          experience terrible. See the NixOS manual for further
-          informations.
+        Having a server not XEP-0423-compliant might make your XMPP
+        experience terrible. See the NixOS manual for further
+        informations.
 
-          If you know what you're doing, you can disable this warning by
-          setting config.services.prosody.xmppComplianceSuite to false.
+        If you know what you're doing, you can disable this warning by
+        setting config.services.prosody.xmppComplianceSuite to false.
       '';
       errors = [
-        { assertion = (builtins.length cfg.muc > 0) || !cfg.xmppComplianceSuite;
+        {
+          assertion = (builtins.length cfg.muc > 0) || !cfg.xmppComplianceSuite;
           message = ''
             You need to setup at least a MUC domain to comply with
             XEP-0423.
-          '' + genericErrMsg;}
-        { assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
+          '' + genericErrMsg;
+        }
+        {
+          assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
           message = ''
             You need to setup the uploadHttp module through
             config.services.prosody.uploadHttp to comply with
             XEP-0423.
-          '' + genericErrMsg;}
+          '' + genericErrMsg;
+        }
       ];
     in errors;
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc."prosody/prosody.cfg.lua".text =
-      let
-        httpDiscoItems = if (cfg.uploadHttp != null)
-            then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}]
-            else [];
-        mucDiscoItems = builtins.foldl'
-            (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
-            []
-            cfg.muc;
-        discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
-      in ''
+    environment.etc."prosody/prosody.cfg.lua".text = let
+      httpDiscoItems = if (cfg.uploadHttp != null) then [{
+        url = cfg.uploadHttp.domain;
+        description = "HTTP upload endpoint";
+      }] else
+        [ ];
+      mucDiscoItems = builtins.foldl' (acc: muc:
+        [{
+          url = muc.domain;
+          description = "${muc.domain} MUC endpoint";
+        }] ++ acc) [ ] cfg.muc;
+      discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
+    in ''
 
       pidfile = "/run/prosody/prosody.pid"
 
@@ -752,10 +778,10 @@ in
 
       data_path = "${cfg.dataDir}"
       plugin_paths = {
-        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
+        ${lib.concatStringsSep ", " (map (n: ''"${n}"'') cfg.extraPluginPaths)}
       }
 
-      ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
+      ${optionalString (cfg.ssl != null) (createSSLOptsStr cfg.ssl)}
 
       admins = ${toLua cfg.admins}
 
@@ -764,15 +790,21 @@ in
 
       modules_enabled = {
 
-        ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
-          (name: val: optionalString val "${toLua name};")
-        cfg.modules) }
-        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
-        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
+        ${
+          lib.concatStringsSep "\n  "
+          (lib.mapAttrsToList (name: val: optionalString val "${toLua name};")
+            cfg.modules)
+        }
+        ${
+          lib.concatStringsSep "\n"
+          (map (x: "${toLua x};") cfg.package.communityModules)
+        }
+        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
       disco_items = {
-      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
+      ${lib.concatStringsSep "\n"
+      (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
       };
 
       allow_registration = ${toLua cfg.allowRegistration}
@@ -797,11 +829,13 @@ in
 
       https_ports = ${toLua cfg.httpsPorts}
 
-      ${ cfg.extraConfig }
+      ${cfg.extraConfig}
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";'' } }
+            modules_enabled = { "muc_mam"; ${
+              optionalString muc.vcard_muc ''"vcard_muc";''
+            } }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
@@ -813,26 +847,33 @@ in
             muc_room_default_members_only = ${toLua muc.roomDefaultMembersOnly}
             muc_room_default_moderated = ${toLua muc.roomDefaultModerated}
             muc_room_default_public_jids = ${toLua muc.roomDefaultPublicJids}
-            muc_room_default_change_subject = ${toLua muc.roomDefaultChangeSubject}
-            muc_room_default_history_length = ${toLua muc.roomDefaultHistoryLength}
+            muc_room_default_change_subject = ${
+              toLua muc.roomDefaultChangeSubject
+            }
+            muc_room_default_history_length = ${
+              toLua muc.roomDefaultHistoryLength
+            }
             muc_room_default_language = ${toLua muc.roomDefaultLanguage}
-            ${ muc.extraConfig }
-        '') cfg.muc}
+            ${muc.extraConfig}
+      '') cfg.muc}
 
-      ${ lib.optionalString (cfg.uploadHttp != null) ''
+      ${lib.optionalString (cfg.uploadHttp != null) ''
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
             http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
             http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
-            ${lib.optionalString (cfg.uploadHttp.userQuota != null) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
+            ${
+              lib.optionalString (cfg.uploadHttp.userQuota != null)
+              "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"
+            }
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
       ''}
 
-      ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
           enabled = ${boolToString v.enabled};
-          ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
-          ${ v.extraConfig }
-        '') cfg.virtualHosts) }
+          ${optionalString (v.ssl != null) (createSSLOptsStr v.ssl)}
+          ${v.extraConfig}
+      '') cfg.virtualHosts)}
     '';
 
     users.users.prosody = mkIf (cfg.user == "prosody") {
@@ -843,16 +884,16 @@ in
       home = "${cfg.dataDir}";
     };
 
-    users.groups.prosody = mkIf (cfg.group == "prosody") {
-      gid = config.ids.gids.prosody;
-    };
+    users.groups.prosody =
+      mkIf (cfg.group == "prosody") { gid = config.ids.gids.prosody; };
 
     systemd.services.prosody = {
       description = "Prosody XMPP server";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
+      restartTriggers =
+        [ config.environment.etc."prosody/prosody.cfg.lua".source ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

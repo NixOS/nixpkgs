@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
-, systemd }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, doxygen, fontconfig, graphviz-nox
+, libxml2, pkg-config, which, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "openzwave";
@@ -16,19 +15,22 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-strncat-build-failure.patch";
-      url = "https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105.patch";
+      url =
+        "https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105.patch";
       sha256 = "1n1k5arwk1dyc12xz6xl4n8yw28vghzhv27j65z1nca4zqsxgza1";
     })
     (fetchpatch {
       name = "fix-text-uninitialized.patch";
-      url = "https://github.com/OpenZWave/open-zwave/commit/3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f.patch";
+      url =
+        "https://github.com/OpenZWave/open-zwave/commit/3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f.patch";
       sha256 = "183mrzjh1zx2b2wzkj4jisiw8br7g7bbs167afls4li0fm01d638";
     })
   ];
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkg-config which ];
+  nativeBuildInputs =
+    [ doxygen fontconfig graphviz-nox libxml2 pkg-config which ];
 
   buildInputs = [ systemd ];
 
@@ -36,12 +38,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
-  FONTCONFIG_PATH="${fontconfig.out}/etc/fonts/";
+  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
+    description =
+      "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
     homepage = "http://www.openzwave.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ etu ];

@@ -3,63 +3,63 @@
 let
   dataDir = "/var/lib/sympa";
   runtimeDir = "/run/sympa";
-  perlEnv = perl.withPackages (p: with p; [
-    ArchiveZip
-    CGI
-    CGIFast
-    ClassSingleton
-    DateTime
-    DBI
-    DateTimeFormatMail
-    DateTimeTimeZone
-    Encode
-    FCGI
-    FileCopyRecursive
-    FileNFSLock
-    FilePath
-    HTMLParser
-    HTMLFormatter
-    HTMLTree
-    HTMLStripScriptsParser
-    IO
-    IOStringy
-    LWP
-    libintl-perl
+  perlEnv = perl.withPackages (p:
+    with p; [
+      ArchiveZip
+      CGI
+      CGIFast
+      ClassSingleton
+      DateTime
+      DBI
+      DateTimeFormatMail
+      DateTimeTimeZone
+      Encode
+      FCGI
+      FileCopyRecursive
+      FileNFSLock
+      FilePath
+      HTMLParser
+      HTMLFormatter
+      HTMLTree
+      HTMLStripScriptsParser
+      IO
+      IOStringy
+      LWP
+      libintl-perl
 
-    MHonArc
-    MIMECharset
-    MIMETools
-    MIMEEncWords
-    MIMELiteHTML
-    MailTools
-    NetCIDR
-    ScalarListUtils
-    SysSyslog
-    TermProgressBar
-    TemplateToolkit
-    URI
-    UnicodeLineBreak
-    XMLLibXML
+      MHonArc
+      MIMECharset
+      MIMETools
+      MIMEEncWords
+      MIMELiteHTML
+      MailTools
+      NetCIDR
+      ScalarListUtils
+      SysSyslog
+      TermProgressBar
+      TemplateToolkit
+      URI
+      UnicodeLineBreak
+      XMLLibXML
 
-    ### Features
-    Clone
-    CryptEksblowfish
+      ### Features
+      Clone
+      CryptEksblowfish
 
-    DBDPg
-    DBDSQLite
-    DBDmysql
+      DBDPg
+      DBDSQLite
+      DBDmysql
 
-    DataPassword
-    EncodeLocale
-    IOSocketSSL
-    MailDKIM
-    NetDNS
-    perlldap
-    libnet
-    SOAPLite
-  ]);
-in
-stdenv.mkDerivation rec {
+      DataPassword
+      EncodeLocale
+      IOSocketSSL
+      MailDKIM
+      NetDNS
+      perlldap
+      libnet
+      SOAPLite
+    ]);
+in stdenv.mkDerivation rec {
   pname = "sympa";
   version = "6.2.66";
 
@@ -104,9 +104,7 @@ stdenv.mkDerivation rec {
     rm -rf "$TMP/bin"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) sympa;
-  };
+  passthru.tests = { inherit (nixosTests) sympa; };
 
   meta = with lib; {
     description = "Open source mailing list manager";

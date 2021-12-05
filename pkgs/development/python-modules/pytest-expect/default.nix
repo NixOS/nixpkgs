@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, pytest
-, u-msgpack-python
-, six
-}:
+{ buildPythonPackage, lib, fetchPypi, pytest, u-msgpack-python, six }:
 
 buildPythonPackage rec {
   pname = "pytest-expect";
@@ -22,7 +16,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "py.test plugin to store test expectations and mark tests based on them";
+    description =
+      "py.test plugin to store test expectations and mark tests based on them";
     homepage = "https://github.com/gsnedders/pytest-expect";
     license = lib.licenses.mit;
   };

@@ -19,7 +19,8 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Compute Resource Usage Analysis and Monitoring of Container Clusters";
+    description =
+      "Compute Resource Usage Analysis and Monitoring of Container Clusters";
     license = licenses.asl20;
     homepage = "https://github.com/kubernetes/heapster";
     maintainers = with maintainers; [ offline ];

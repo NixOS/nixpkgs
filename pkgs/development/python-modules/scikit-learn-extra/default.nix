@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, cython
-, scipy
-, scikit-learn
-, matplotlib
-, pytestCheckHook
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, numpy, cython, scipy, scikit-learn
+, matplotlib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "scikit-learn-extra";
@@ -31,13 +23,9 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [ "--pyargs sklearn_extra" ];
-  disabledTestPaths = [
-    "benchmarks"
-    "examples"
-    "doc"
-  ];
+  disabledTestPaths = [ "benchmarks" "examples" "doc" ];
   disabledTests = [
-    "build"   # needs network connection
+    "build" # needs network connection
   ];
 
   # Check packages with cythonized modules

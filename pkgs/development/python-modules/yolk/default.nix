@@ -14,9 +14,10 @@ buildPythonApplication rec {
   buildInputs = with pythonPackages; [ nose ];
 
   meta = {
-    description = "Command-line tool for querying PyPI and Python packages installed on your system";
+    description =
+      "Command-line tool for querying PyPI and Python packages installed on your system";
     homepage = "https://github.com/cakebread/yolk";
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

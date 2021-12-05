@@ -1,7 +1,5 @@
-{lib, stdenv, fetchgit
-, wxGTK, perl, python2, zlib, libGLU, libGL, libX11
-, automake, autoconf
-}:
+{ lib, stdenv, fetchgit, wxGTK, perl, python2, zlib, libGLU, libGL, libX11
+, automake, autoconf }:
 
 stdenv.mkDerivation rec {
   pname = "golly";
@@ -20,18 +18,14 @@ stdenv.mkDerivation rec {
     export sourceRoot="$(echo */gui-wx/configure)"
   '';
 
-  nativeBuildInputs = [autoconf automake];
+  nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [
-    wxGTK perl python2 zlib libGLU libGL libX11
-  ];
+  buildInputs = [ wxGTK perl python2 zlib libGLU libGL libX11 ];
 
   # Link against Python explicitly as it is needed for scripts
-  makeFlags=[
-    "AM_LDFLAGS="
-  ];
-  NIX_LDFLAGS="-l${python2.libPrefix} -lperl -ldl -lGL";
-  preConfigure=''
+  makeFlags = [ "AM_LDFLAGS=" ];
+  NIX_LDFLAGS = "-l${python2.libPrefix} -lperl -ldl -lGL";
+  preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
       -DPYTHON_SHLIB=$(basename "$(
@@ -43,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cellular automata simulation program";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };

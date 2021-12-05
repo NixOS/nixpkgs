@@ -1,20 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, pythonOlder
-, curl
-, openssl
-, bottle
-, pytestCheckHook
-, nose
-, flaky
-}:
+{ lib, buildPythonPackage, isPyPy, fetchPypi, pythonOlder, curl, openssl, bottle
+, pytestCheckHook, nose, flaky }:
 
 buildPythonPackage rec {
   pname = "pycurl";
   version = "7.44.1";
-  disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
+  disabled = isPyPy
+    || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
@@ -26,21 +17,11 @@ buildPythonPackage rec {
     export PYCURL_SSL_LIBRARY=openssl
   '';
 
-  buildInputs = [
-    curl
-    openssl.out
-  ];
+  buildInputs = [ curl openssl.out ];
 
-  nativeBuildInputs = [
-    curl
-  ];
+  nativeBuildInputs = [ curl ];
 
-  checkInputs = [
-    bottle
-    pytestCheckHook
-    nose
-    flaky
-  ];
+  checkInputs = [ bottle pytestCheckHook nose flaky ];
 
   pytestFlagsArray = [
     # don't pick up the tests directory below examples/
@@ -79,6 +60,6 @@ buildPythonPackage rec {
     homepage = "http://pycurl.sourceforge.net/";
     description = "Python wrapper for libcurl";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

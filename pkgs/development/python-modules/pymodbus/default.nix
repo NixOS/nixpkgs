@@ -1,20 +1,6 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, prompt-toolkit
-, pygments
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
-, redis
-, sqlalchemy
-, tornado
-, twisted
-}:
+{ lib, aiohttp, asynctest, buildPythonPackage, click, fetchFromGitHub, mock
+, prompt-toolkit, pygments, pyserial, pyserial-asyncio, pytestCheckHook, redis
+, sqlalchemy, tornado, twisted }:
 
 buildPythonPackage rec {
   pname = "pymodbus";
@@ -28,24 +14,10 @@ buildPythonPackage rec {
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    prompt-toolkit
-    pygments
-    pyserial
-    pyserial-asyncio
-    tornado
-  ];
+  propagatedBuildInputs =
+    [ aiohttp click prompt-toolkit pygments pyserial pyserial-asyncio tornado ];
 
-  checkInputs = [
-    asynctest
-    mock
-    pytestCheckHook
-    redis
-    sqlalchemy
-    twisted
-  ];
+  checkInputs = [ asynctest mock pytestCheckHook redis sqlalchemy twisted ];
 
   pythonImportsCheck = [ "pymodbus" ];
 

@@ -1,5 +1,5 @@
-{ mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
-, libxfce4ui, libxfce4util, upower, xfconf, xfce4-panel }:
+{ mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify, libxfce4ui
+, libxfce4util, upower, xfconf, xfce4-panel }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -9,7 +9,8 @@ mkXfceDerivation {
   sha256 = "sha256-Qk++1db+agiU99p+QW8/WNnNqFVejV/BcnmgvfoB3OU=";
 
   nativeBuildInputs = [ automakeAddFlags exo ];
-  buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf xfce4-panel ];
+  buildInputs =
+    [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf xfce4-panel ];
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
@@ -17,7 +18,5 @@ mkXfceDerivation {
     automakeAddFlags settings/Makefile.am xfce4_power_manager_settings_CFLAGS GIO_CFLAGS
   '';
 
-  meta = {
-    description = "A power manager for the Xfce Desktop Environment";
-  };
+  meta = { description = "A power manager for the Xfce Desktop Environment"; };
 }

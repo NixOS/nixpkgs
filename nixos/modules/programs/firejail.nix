@@ -5,30 +5,32 @@ with lib;
 let
   cfg = config.programs.firejail;
 
-  wrappedBins = pkgs.runCommand "firejail-wrapped-binaries"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ''
-      mkdir -p $out/bin
-      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (command: value:
+  wrappedBins = pkgs.runCommand "firejail-wrapped-binaries" {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  } ''
+    mkdir -p $out/bin
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (command: value:
       let
-        opts = if builtins.isAttrs value
-        then value
-        else { executable = value; profile = null; extraArgs = []; };
-        args = lib.escapeShellArgs (
-          (optional (opts.profile != null) "--profile=${toString opts.profile}")
-          ++ opts.extraArgs
-          );
-      in
-      ''
+        opts = if builtins.isAttrs value then
+          value
+        else {
+          executable = value;
+          profile = null;
+          extraArgs = [ ];
+        };
+        args = lib.escapeShellArgs ((optional (opts.profile != null)
+          "--profile=${toString opts.profile}") ++ opts.extraArgs);
+      in ''
         cat <<_EOF >$out/bin/${command}
         #! ${pkgs.runtimeShell} -e
-        exec /run/wrappers/bin/firejail ${args} -- ${toString opts.executable} "\$@"
+        exec /run/wrappers/bin/firejail ${args} -- ${
+          toString opts.executable
+        } "\$@"
         _EOF
         chmod 0755 $out/bin/${command}
       '') cfg.wrappedBinaries)}
-    '';
+  '';
 
 in {
   options.programs.firejail = {
@@ -40,23 +42,25 @@ in {
           executable = mkOption {
             type = types.path;
             description = "Executable to run sandboxed";
-            example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
+            example =
+              literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
             description = "Profile to use";
-            example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
+            example = literalExpression
+              ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             description = "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
       }));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           firefox = {
@@ -81,12 +85,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${lib.getBin pkgs.firejail}/bin/firejail";
-      };
+    security.wrappers.firejail = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    };
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };

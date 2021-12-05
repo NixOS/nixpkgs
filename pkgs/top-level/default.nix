@@ -14,33 +14,33 @@
 
    Use `impure.nix` to also infer the `system` based on the one on which
    evaluation is taking place, and the configuration from environment variables
-   or dot-files. */
+   or dot-files.
+*/
 
 { # The system packages will be built on. See the manual for the
-  # subtle division of labor between these two `*System`s and the three
-  # `*Platform`s.
-  localSystem
+# subtle division of labor between these two `*System`s and the three
+# `*Platform`s.
+localSystem
 
 , # The system packages will ultimately be run on.
-  crossSystem ? localSystem
+crossSystem ? localSystem
 
 , # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
+config ? { }
 
 , # List of overlays layers used to extend Nixpkgs.
-  overlays ? []
+overlays ? [ ]
 
 , # List of overlays to apply to target packages only.
-  crossOverlays ? []
+crossOverlays ? [ ]
 
 , # A function booting the final package set for a specific standard
-  # environment. See below for the arguments given to that function, the type of
-  # list it returns.
-  stdenvStages ? import ../stdenv
+# environment. See below for the arguments given to that function, the type of
+# list it returns.
+stdenvStages ? import ../stdenv
 
 , # Ignore unexpected args.
-  ...
-} @ args:
+... }@args:
 
 let # Rename the function arguments
   config0 = config;
@@ -52,18 +52,16 @@ in let
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
-  crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
-    then localSystem
-    else lib.systems.elaborate crossSystem0;
+  crossSystem = if crossSystem0 == null || crossSystem0 == args.localSystem then
+    localSystem
+  else
+    lib.systems.elaborate crossSystem0;
 
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
   config1 =
-    if lib.isFunction config0
-    then config0 { inherit pkgs; }
-    else config0;
+    if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
@@ -109,9 +107,8 @@ in let
 
   # Partially apply some arguments for building bootstraping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
-  allPackages = newArgs: import ./stage.nix ({
-    inherit lib nixpkgsFun;
-  } // newArgs);
+  allPackages = newArgs:
+    import ./stage.nix ({ inherit lib nixpkgsFun; } // newArgs);
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 

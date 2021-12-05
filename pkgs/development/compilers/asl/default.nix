@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchzip
-, buildDocs ? false, tex
-}:
+{ lib, stdenv, fetchzip, buildDocs ? false, tex }:
 
 stdenv.mkDerivation rec {
   pname = "asl";
@@ -10,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     name = "${pname}-${version}";
-    url = "http://john.ccac.rwth-aachen.de:8000/ftp/as/source/c_version/asl-current-${version}.tar.bz2";
+    url =
+      "http://john.ccac.rwth-aachen.de:8000/ftp/as/source/c_version/asl-current-${version}.tar.bz2";
     hash = "sha256-Sbm16JX7kC/7Ws7YgNBUXNqOCl6u+RXgfNjTODhCzSM=";
   };
 

@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
     substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
   '';
 
-  preInstall = "
-    substituteInPlace Makefile --replace '-o root -g root' ''
-  ";
+  preInstall =
+    "\n    substituteInPlace Makefile --replace '-o root -g root' ''\n  ";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ pam openldap ];

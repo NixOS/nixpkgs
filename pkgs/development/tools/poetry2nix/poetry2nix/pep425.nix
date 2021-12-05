@@ -7,13 +7,11 @@ let
   #
   # e.g "2.7.17" -> "cp27"
   #     "3.5.9"  -> "cp35"
-  pythonTag =
-    let
-      ver = builtins.splitVersion python.version;
-      major = builtins.elemAt ver 0;
-      minor = builtins.elemAt ver 1;
-    in
-    "cp${major}${minor}";
+  pythonTag = let
+    ver = builtins.splitVersion python.version;
+    major = builtins.elemAt ver 0;
+    minor = builtins.elemAt ver 1;
+  in "cp${major}${minor}";
   abiTag = "${pythonTag}m";
 
   #
@@ -25,8 +23,7 @@ let
       # Hack: Remove version "suffixes" like 2.11.4-1
       entries = builtins.filter (x: builtins.match "[0-9]" x == null) entries';
       p = removeSuffix ".whl" (builtins.elemAt entries 4);
-    in
-    {
+    in {
       pkgName = builtins.elemAt entries 0;
       pkgVer = builtins.elemAt entries 1;
       pyVer = builtins.elemAt entries 2;
@@ -43,69 +40,59 @@ let
     let
       v = lib.lists.head versions;
       vs = lib.lists.tail versions;
-    in
-    if (builtins.length versions == 0)
-    then [ ]
-    else (builtins.filter (x: hasInfix v x.file) candidates) ++ (findBestMatches vs candidates);
+    in if (builtins.length versions == 0) then
+      [ ]
+    else
+      (builtins.filter (x: hasInfix v x.file) candidates)
+      ++ (findBestMatches vs candidates);
 
   # pyver = "cpXX"
   # x     = "cpXX" | "py2" | "py3" | "py2.py3"
   isPyVersionCompatible = pyver: x:
     let
-      normalize = y: ''cp${lib.strings.removePrefix "cp" (lib.strings.removePrefix "py" y)}'';
+      normalize = y:
+        "cp${lib.strings.removePrefix "cp" (lib.strings.removePrefix "py" y)}";
       isCompat = p: x: lib.strings.hasPrefix (normalize x) p;
-    in
-    lib.lists.any (isCompat pyver) (lib.strings.splitString "." x);
+    in lib.lists.any (isCompat pyver) (lib.strings.splitString "." x);
 
   #
   # Selects the best matching wheel file from a list of files
   #
   selectWheel = files:
     let
-      filesWithoutSources = (builtins.filter (x: hasSuffix ".whl" x.file) files);
-      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || lib.hasPrefix x pyabi || (
-        # The CPython stable ABI is abi3 as in the shared library suffix.
-        python.passthru.implementation == "cpython" &&
-          builtins.elemAt (lib.splitString "." python.version) 0 == "3" &&
-          x == "abi3"
-      );
-      withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
-      withPlatform =
-        if isLinux
-        then
-          if targetMachine != null
-          then
-            (
-              x: x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
-                "manylinux1_${targetMachine}"
-                "manylinux2010_${targetMachine}"
-                "manylinux2014_${targetMachine}"
-              ]
-            )
-          else
-            (x: x.platform == "any")
-        else (x: hasInfix "macosx" x.platform || x.platform == "any");
+      filesWithoutSources =
+        (builtins.filter (x: hasSuffix ".whl" x.file) files);
+      isPyAbiCompatible = pyabi: x:
+        x == "none" || lib.hasPrefix pyabi x || lib.hasPrefix x pyabi || (
+          # The CPython stable ABI is abi3 as in the shared library suffix.
+          python.passthru.implementation == "cpython"
+          && builtins.elemAt (lib.splitString "." python.version) 0 == "3" && x
+          == "abi3");
+      withPython = ver: abi: x:
+        (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
+      withPlatform = if isLinux then
+        if targetMachine != null then
+          (x:
+            x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
+              "manylinux1_${targetMachine}"
+              "manylinux2010_${targetMachine}"
+              "manylinux2014_${targetMachine}"
+            ])
+        else
+          (x: x.platform == "any")
+      else
+        (x: hasInfix "macosx" x.platform || x.platform == "any");
       filterWheel = x:
-        let
-          f = toWheelAttrs x.file;
-        in
-        (withPython pythonTag abiTag f) && (withPlatform f);
+        let f = toWheelAttrs x.file;
+        in (withPython pythonTag abiTag f) && (withPlatform f);
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
           osxMatches = [ "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
-          linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "any" ];
+          linuxMatches =
+            [ "manylinux1_" "manylinux2010_" "manylinux2014_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);
-        in
-        if isLinux
-        then chooseLinux files
-        else chooseOSX files;
-    in
-    if (builtins.length filtered == 0)
-    then [ ]
-    else choose (filtered);
-in
-{
-  inherit selectWheel toWheelAttrs isPyVersionCompatible;
-}
+        in if isLinux then chooseLinux files else chooseOSX files;
+    in if (builtins.length filtered == 0) then [ ] else choose (filtered);
+in { inherit selectWheel toWheelAttrs isPyVersionCompatible; }

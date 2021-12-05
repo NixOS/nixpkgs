@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, tinycss2
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, tinycss2, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cssselect2";

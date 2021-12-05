@@ -19,8 +19,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ] ++ lib.optional (!static) "lib";
   separateDebugInfo = true;
   makeFlags =
-    [ "prefix=$(out)" "CC=${cc}" "AR=${ar}" "RANLIB=${ranlib}" "static"
-  ] ++ lib.optional (!static) "shared";
+    [ "prefix=$(out)" "CC=${cc}" "AR=${ar}" "RANLIB=${ranlib}" "static" ]
+    ++ lib.optional (!static) "shared";
   postInstall = ''
     mkdir -p $dev/lib $out/bin
     mv $out/lib/libcdb.a $dev/lib

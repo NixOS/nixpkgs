@@ -1,8 +1,6 @@
-{ stdenv, lib, config, fetchFromGitHub, autoconf, automake, pcre
-, libtool, pkg-config, openssl
-, confFile ? config.watchman.confFile or null
-, withApple ? stdenv.isDarwin, CoreServices
-}:
+{ stdenv, lib, config, fetchFromGitHub, autoconf, automake, pcre, libtool
+, pkg-config, openssl, confFile ? config.watchman.confFile or null
+, withApple ? stdenv.isDarwin, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "watchman";
@@ -16,8 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf automake pkg-config libtool ];
-  buildInputs = [ pcre openssl ]
-    ++ lib.optionals withApple [ CoreServices ];
+  buildInputs = [ pcre openssl ] ++ lib.optionals withApple [ CoreServices ];
 
   configureFlags = [
     "--enable-lenient"
@@ -39,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Watches files and takes action when they change";
-    homepage    = "https://facebook.github.io/watchman";
+    homepage = "https://facebook.github.io/watchman";
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; linux ++ darwin;
-    license     = licenses.asl20;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.asl20;
   };
 }

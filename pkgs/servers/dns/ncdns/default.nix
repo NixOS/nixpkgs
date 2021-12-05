@@ -1,9 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, libcap
-}:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, libcap }:
 
 let
 
@@ -27,9 +22,7 @@ let
     '';
   };
 
-in
-
-buildGoModule {
+in buildGoModule {
   pname = "ncdns";
   version = "unstable-2020-07-18";
 

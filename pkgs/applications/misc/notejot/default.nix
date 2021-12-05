@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk4
-, hicolor-icon-theme
-, json-glib
-, libadwaita
-, libgee
-, meson
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook4
-}:
+{ lib, stdenv, fetchFromGitHub, gtk4, hicolor-icon-theme, json-glib, libadwaita
+, libgee, meson, ninja, nix-update-script, pkg-config, python3, vala
+, wrapGAppsHook4 }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
@@ -32,37 +19,23 @@ stdenv.mkDerivation rec {
     ./use-gtk4-update-icon-cache.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook4
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 vala wrapGAppsHook4 ];
 
-  buildInputs = [
-    gtk4
-    hicolor-icon-theme
-    json-glib
-    libadwaita
-    libgee
-  ];
+  buildInputs = [ gtk4 hicolor-icon-theme json-glib libadwaita libgee ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     homepage = "https://github.com/lainsce/notejot";
     description = "Stupidly-simple sticky notes applet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    maintainers = with maintainers;
+      [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.github.lainsce.Notejot";
   };

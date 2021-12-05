@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, alsa-lib, pkg-config, qtbase, qtscript, qmake
-}:
+{ mkDerivation, lib, fetchFromGitHub, alsa-lib, pkg-config, qtbase, qtscript
+, qmake }:
 
 mkDerivation rec {
   pname = "iannix";

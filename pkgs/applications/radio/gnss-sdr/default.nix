@@ -1,24 +1,6 @@
-{ lib
-, fetchFromGitHub
-, armadillo
-, cmake
-, gmp
-, glog
-, gtest
-, openssl
-, gflags
-, gnuradio3_8
-, thrift
-, libpcap
-, orc
-, pkg-config
-, uhd
-, log4cpp
-, blas, lapack
-, matio
-, pugixml
-, protobuf
-}:
+{ lib, fetchFromGitHub, armadillo, cmake, gmp, glog, gtest, openssl, gflags
+, gnuradio3_8, thrift, libpcap, orc, pkg-config, uhd, log4cpp, blas, lapack
+, matio, pugixml, protobuf }:
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
@@ -53,7 +35,8 @@ gnuradio3_8.pkgs.mkDerivation rec {
     # nothing to be gained by leaving it out.
     gnuradio3_8.unwrapped.uhd
     log4cpp
-    blas lapack
+    blas
+    lapack
     matio
     pugixml
     protobuf
@@ -82,7 +65,8 @@ gnuradio3_8.pkgs.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An open source Global Navigation Satellite Systems software-defined receiver";
+    description =
+      "An open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

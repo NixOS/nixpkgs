@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "2016-08-30";
+let version = "2016-08-30";
 in fetchFromGitHub {
   name = "raleway-${version}";
 

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "20210224";
 
   src = fetchurl {
-    url = "https://download.silicondust.com/hdhomerun/hdhomerun_config_gui_${version}.tgz";
+    url =
+      "https://download.silicondust.com/hdhomerun/hdhomerun_config_gui_${version}.tgz";
     sha256 = "sha256-vzrSk742Ca2I8Uk0uGo44SxpEoVY1QBn62Ahwz8E7p8=";
   };
 

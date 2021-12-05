@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, cairo
-, giflib
-, glib
-, gtk2-x11
-, libjpeg
-, libpcap
-, libpng
-, libwebsockets
-, pkg-config
-, libuv
-, openssl
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, cairo, giflib, glib
+, gtk2-x11, libjpeg, libpcap, libpng, libwebsockets, pkg-config, libuv, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +18,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-darwin-build";
-      url = "https://github.com/deiv/driftnet/pull/33/commits/bef5f3509ab5710161e9e21ea960a997eada534f.patch";
+      url =
+        "https://github.com/deiv/driftnet/pull/33/commits/bef5f3509ab5710161e9e21ea960a997eada534f.patch";
       sha256 = "1b7p9fkgp7dxv965l7q7y632s80h3nnrkaqnak2h0hakwv0i4pvm";
     })
   ];
@@ -55,7 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
+    description =
+      "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux ++ platforms.darwin;

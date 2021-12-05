@@ -1,10 +1,5 @@
-{ stdenv, lib, python3
-, fetchFromGitHub
-, fetchPypi
-, git
-, spdx-license-list-data
-, version, src
-}:
+{ stdenv, lib, python3, fetchFromGitHub, fetchPypi, git, spdx-license-list-data
+, version, src }:
 
 let
   python = python3.override {
@@ -37,7 +32,7 @@ let
           rev = version;
           sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
         };
-        disabledTestPaths = [];
+        disabledTestPaths = [ ];
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
@@ -61,8 +56,8 @@ let
       });
     };
   };
-in
-with python.pkgs; buildPythonApplication rec {
+in with python.pkgs;
+buildPythonApplication rec {
   pname = "platformio";
   inherit version src;
 
@@ -89,11 +84,7 @@ with python.pkgs; buildPythonApplication rec {
 
   HOME = "/tmp";
 
-  checkInputs = [
-    jsondiff
-    pytestCheckHook
-    tox
-  ];
+  checkInputs = [ jsondiff pytestCheckHook tox ];
 
   pytestFlagsArray = (map (e: "--deselect tests/${e}") [
     "commands/test_ci.py::test_ci_boards"
@@ -159,9 +150,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_update.py"
     "test_maintenance.py"
     "test_ino2cpp.py"
-  ]) ++ [
-    "tests"
-  ];
+  ]) ++ [ "tests" ];
 
   patches = [
     ./fix-searchpath.patch

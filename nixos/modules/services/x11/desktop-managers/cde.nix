@@ -12,7 +12,16 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs.xorg; [
-        xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+        xclock
+        bitmap
+        xlsfonts
+        xfd
+        xrefresh
+        xload
+        xwininfo
+        xdpyinfo
+        xwd
+        xwud
       ];
       defaultText = literalExpression ''
         with pkgs.xorg; [
@@ -31,22 +40,20 @@ in {
     services.rpcbind.enable = true;
 
     services.xinetd.enable = true;
-    services.xinetd.services = [
-      {
-        name = "cmsd";
-        protocol = "udp";
-        user = "root";
-        server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
-        extraConfig = ''
-          type  = RPC UNLISTED
-          rpc_number  = 100068
-          rpc_version = 2-5
-          only_from   = 127.0.0.1/0
-        '';
-      }
-    ];
+    services.xinetd.services = [{
+      name = "cmsd";
+      protocol = "udp";
+      user = "root";
+      server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
+      extraConfig = ''
+        type  = RPC UNLISTED
+        rpc_number  = 100068
+        rpc_version = 2-5
+        only_from   = 127.0.0.1/0
+      '';
+    }];
 
-    users.groups.mail = {};
+    users.groups.mail = { };
     security.wrappers = {
       dtmail = {
         setgid = true;
@@ -61,8 +68,8 @@ in {
       chmod a+w+t /var/dt/{tmp,appconfig/appmanager}
     '';
 
-    services.xserver.desktopManager.session = [
-    { name = "CDE";
+    services.xserver.desktopManager.session = [{
+      name = "CDE";
       start = ''
         exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
       '';

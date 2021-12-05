@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
     make lib
   '';
 
-  installPhase = let
-    libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
+  installPhase = let libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
   in ''
     install -D libsvm.so.2 $out/lib/libsvm.2${libSuff}
     ln -s $out/lib/libsvm.2${libSuff} $out/lib/libsvm${libSuff}

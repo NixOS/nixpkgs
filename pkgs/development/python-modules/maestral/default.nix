@@ -1,12 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
-, importlib-metadata
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python, click
+, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging
+, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, importlib-metadata, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "maestral";
@@ -35,19 +30,23 @@ buildPythonPackage rec {
     sdnotify
     survey
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${lib.concatStringsSep ":"
+    (map (p: p + "/lib/${python.libPrefix}/site-packages")
+      (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/lib/${python.libPrefix}/site-packages"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # We don't want to benchmark

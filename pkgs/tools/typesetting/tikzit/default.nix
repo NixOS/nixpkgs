@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qttools, qtbase, poppler, flex, bison }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qttools, qtbase, poppler, flex
+, bison }:
 
 mkDerivation {
   pname = "tikzit";
@@ -18,7 +19,8 @@ mkDerivation {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
+    description =
+      "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
     longDescription = ''
       TikZiT is a simple GUI editor for graphs and string diagrams.
       Its native file format is a subset of PGF/TikZ, which means TikZiT files

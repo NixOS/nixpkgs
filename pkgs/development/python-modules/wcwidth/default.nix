@@ -1,8 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
-, isPy3k
-, backports_functools_lru_cache
-, setuptools
-}:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, isPy3k
+, backports_functools_lru_cache, setuptools }:
 
 buildPythonPackage rec {
   pname = "wcwidth";
@@ -15,15 +12,15 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
-    backports_functools_lru_cache
-  ];
+  propagatedBuildInputs = [ setuptools ]
+    ++ lib.optionals (!isPy3k) [ backports_functools_lru_cache ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;
 
   meta = with lib; {
-    description = "Measures number of Terminal column cells of wide-character codes";
+    description =
+      "Measures number of Terminal column cells of wide-character codes";
     longDescription = ''
       This API is mainly for Terminal Emulator implementors -- any Python
       program that attempts to determine the printable width of a string on

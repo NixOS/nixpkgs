@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, git
-, gitdb
-, ddt
-, pythonOlder
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, substituteAll, git, gitdb, ddt
+, pythonOlder, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "gitpython";
@@ -28,12 +20,8 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    gitdb
-    ddt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ gitdb ddt ]
+    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   # Tests require a git repo
   doCheck = false;

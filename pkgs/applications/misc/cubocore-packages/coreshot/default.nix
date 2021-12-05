@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, cmake, ninja
+, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "coreshot";
@@ -11,17 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-HKgGeuM3CKGXwnFwSw6a0AB0klZKY5YS9C4q2UT6TN8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    qtx11extras
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase qtx11extras libcprime libcsys ];
 
   meta = with lib; {
     description = "A screen capture utility from the C Suite";

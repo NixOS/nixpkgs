@@ -1,15 +1,5 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules
-, kdoctools
-, kauth
-, kcmutils
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kwallet
-, kxmlgui
-}:
+{ lib, mkDerivation, extra-cmake-modules, kdoctools, kauth, kcmutils
+, kconfigwidgets, kcoreaddons, kdbusaddons, kwallet, kxmlgui }:
 
 mkDerivation {
   pname = "kwalletmanager";
@@ -21,8 +11,6 @@ mkDerivation {
     maintainers = with lib.maintainers; [ fridh ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [
-    kauth kcmutils kconfigwidgets kcoreaddons kdbusaddons
-    kwallet kxmlgui
-  ];
+  buildInputs =
+    [ kauth kcmutils kconfigwidgets kcoreaddons kdbusaddons kwallet kxmlgui ];
 }

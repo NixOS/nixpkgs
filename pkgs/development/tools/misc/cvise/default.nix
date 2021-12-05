@@ -1,7 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
-, libclang, llvm, unifdef
-, chardet, pebble, psutil, pytestCheckHook, pytest-flake8
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex, libclang
+, llvm, unifdef, chardet, pebble, psutil, pytestCheckHook, pytest-flake8 }:
 
 buildPythonApplication rec {
   pname = "cvise";

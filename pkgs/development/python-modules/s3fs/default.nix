@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, aiobotocore
-, fsspec
-}:
+{ lib, buildPythonPackage, fetchPypi, docutils, aiobotocore, fsspec }:
 
 buildPythonPackage rec {
   pname = "s3fs";
@@ -15,14 +9,9 @@ buildPythonPackage rec {
     sha256 = "sha256-STriUFPlJiVSokep8cOiyPvNIPWQf85jp0kSa6WP4F4=";
   };
 
-  buildInputs = [
-    docutils
-  ];
+  buildInputs = [ docutils ];
 
-  propagatedBuildInputs = [
-    aiobotocore
-    fsspec
-  ];
+  propagatedBuildInputs = [ aiobotocore fsspec ];
 
   # Depends on `moto` which has a long dependency chain with exact
   # version requirements that can't be made to work with current

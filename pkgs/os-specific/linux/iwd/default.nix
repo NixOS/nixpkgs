@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, ell
-, coreutils
-, docutils
-, readline
-, openssl
-, python3Packages
-}:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, ell, coreutils, docutils
+, readline, openssl, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
@@ -23,18 +14,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docutils
-    pkg-config
-    python3Packages.wrapPython
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook docutils pkg-config python3Packages.wrapPython ];
 
-  buildInputs = [
-    ell
-    python3Packages.python
-    readline
-  ];
+  buildInputs = [ ell python3Packages.python readline ];
 
   checkInputs = [ openssl ];
 

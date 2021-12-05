@@ -17,15 +17,14 @@ buildGoModule rec {
 
   subPackages = [ "fly" ];
 
-  ldflags = [
-    "-X github.com/concourse/concourse.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/concourse/concourse.Version=${version}" ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}
-    $out/bin/fly completion --shell bash > $out/share/bash-completion/completions/fly
-    $out/bin/fly completion --shell zsh > $out/share/zsh/site-functions/_fly
-  '';
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}
+      $out/bin/fly completion --shell bash > $out/share/bash-completion/completions/fly
+      $out/bin/fly completion --shell zsh > $out/share/zsh/site-functions/_fly
+    '';
 
   meta = with lib; {
     description = "A command line interface to Concourse CI";

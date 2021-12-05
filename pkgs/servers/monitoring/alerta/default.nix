@@ -1,6 +1,4 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
@@ -29,7 +27,8 @@ python3.pkgs.buildPythonApplication rec {
     sentry-sdk
   ];
 
-  doCheck = false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+  doCheck =
+    false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
 
   disabled = python3.pythonOlder "3.6";
 

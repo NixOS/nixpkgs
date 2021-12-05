@@ -1,24 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pbr
-, six
-, simplegeneric
-, netaddr
-, pytz
-, webob
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pbr, six, simplegeneric
+, netaddr, pytz, webob
 # Test inputs
-, cherrypy
-, flask
-, flask-restful
-, glibcLocales
-, nose
-, pecan
-, sphinx
-, transaction
-, webtest
-}:
+, cherrypy, flask, flask-restful, glibcLocales, nose, pecan, sphinx, transaction
+, webtest }:
 
 buildPythonPackage rec {
   pname = "WSME";
@@ -33,13 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    netaddr
-    pytz
-    simplegeneric
-    six
-    webob
-  ];
+  propagatedBuildInputs = [ netaddr pytz simplegeneric six webob ];
 
   checkInputs = [
     nose
@@ -59,7 +37,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Simplify the writing of REST APIs, and extend them with additional protocols";
+    description =
+      "Simplify the writing of REST APIs, and extend them with additional protocols";
     homepage = "https://pythonhosted.org/WSME/";
     changelog = "https://pythonhosted.org/WSME/changes.html";
     license = licenses.mit;

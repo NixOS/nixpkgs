@@ -13,12 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0789wq4d9cynyadvlwahs4586gc3p78gdpv5wf733lpv1h5rjbv3";
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X"
-    "main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X" "main.version=${version}" ];
 
   meta = with lib; {
     description = "A modern watch command";

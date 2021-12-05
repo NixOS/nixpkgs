@@ -1,16 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, json-glib
-, libfm-qt
-, qtbase
-, qttools
-, qtx11extras
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, lxqt-build-tools
+, json-glib, libfm-qt, qtbase, qttools, qtx11extras, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-archiver";
@@ -23,19 +12,9 @@ mkDerivation rec {
     sha256 = "033lq7n34a5qk2zv8kr1633p5x2cjimv4w4n86w33xmcwya4yiji";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
-  buildInputs = [
-    json-glib
-    libfm-qt
-    qtbase
-    qttools
-    qtx11extras
-  ];
+  buildInputs = [ json-glib libfm-qt qtbase qttools qtx11extras ];
 
   hardeningDisable = [ "format" ];
 

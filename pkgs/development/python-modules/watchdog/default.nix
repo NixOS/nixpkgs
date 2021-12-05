@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pathtools
-, pyyaml
-, flaky
-, pytest-timeout
-, pytestCheckHook
-, CoreServices
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pathtools, pyyaml, flaky
+, pytest-timeout, pytestCheckHook, CoreServices }:
 
 buildPythonPackage rec {
   pname = "watchdog";
@@ -21,16 +12,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  propagatedBuildInputs = [
-    pathtools
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pathtools pyyaml ];
 
-  checkInputs = [
-    flaky
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ flaky pytest-timeout pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -41,7 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "watchdog" ];
 
   meta = with lib; {
-    description = "Python API and shell utilities to monitor file system events";
+    description =
+      "Python API and shell utilities to monitor file system events";
     homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];

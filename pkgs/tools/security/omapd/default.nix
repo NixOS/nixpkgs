@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.9.2";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/omapd/${pname}-${version}.tgz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/omapd/${pname}-${version}.tgz";
     sha256 = "0d7lgv957jhbsav60j50jhdy3rpcqgql74qsniwnnpm3yqj9p0xc";
   };
 
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://code.google.com/archive/p/omapd/";
-    description = "IF-MAP Server that implements the IF-MAP v1.1 and v2.0 specifications published by the Trusted Computing Group (TCG)";
+    description =
+      "IF-MAP Server that implements the IF-MAP v1.1 and v2.0 specifications published by the Trusted Computing Group (TCG)";
     license = licenses.gpl3;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

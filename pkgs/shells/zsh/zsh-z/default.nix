@@ -19,7 +19,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Jump quickly to directories that you have visited frequently in the past, or recently";
+    description =
+      "Jump quickly to directories that you have visited frequently in the past, or recently";
     homepage = "https://github.com/agkozak/zsh-z";
     license = licenses.mit;
     platforms = platforms.unix;

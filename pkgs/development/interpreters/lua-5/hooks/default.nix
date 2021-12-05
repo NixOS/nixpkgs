@@ -1,10 +1,5 @@
 # Hooks for building lua packages.
-{ lua
-, lib
-, makeSetupHook
-, findutils
-, runCommand
-}:
+{ lua, lib, makeSetupHook, findutils, runCommand }:
 
 let
   callPackage = lua.pkgs.callPackage;
@@ -12,12 +7,11 @@ let
 in {
 
   lua-setup-hook = LuaPathSearchPaths: LuaCPathSearchPaths:
-    let
-      hook = ./setup-hook.sh;
+    let hook = ./setup-hook.sh;
     in runCommand "lua-setup-hook.sh" {
       # hum doesn't seem to like caps !! BUG ?
-      luapathsearchpaths=lib.escapeShellArgs LuaPathSearchPaths;
-      luacpathsearchpaths=lib.escapeShellArgs LuaCPathSearchPaths;
+      luapathsearchpaths = lib.escapeShellArgs LuaPathSearchPaths;
+      luacpathsearchpaths = lib.escapeShellArgs LuaCPathSearchPaths;
     } ''
       cp ${hook} hook.sh
       substituteAllInPlace hook.sh

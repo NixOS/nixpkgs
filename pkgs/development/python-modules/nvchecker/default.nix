@@ -1,22 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, packaging
-, toml
-, structlog
-, appdirs
-, pytest-asyncio
-, flaky
-, tornado
-, pycurl
-, aiohttp
-, pytest-httpbin
-, docutils
-, installShellFiles
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, setuptools, packaging, toml, structlog, appdirs, pytest-asyncio, flaky
+, tornado, pycurl, aiohttp, pytest-httpbin, docutils, installShellFiles }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
@@ -31,7 +15,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools packaging toml structlog appdirs tornado pycurl aiohttp ];
+  propagatedBuildInputs =
+    [ setuptools packaging toml structlog appdirs tornado pycurl aiohttp ];
   checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
   disabled = pythonOlder "3.7";

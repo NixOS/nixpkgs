@@ -10,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-jlHFBD76lddRSBtRYHGgBvh8KkBZlhqaxD7COJFd4J8=";
   };
 
-  propagatedBuildInputs = [
-    pikepdf
-    pillow
-  ];
+  propagatedBuildInputs = [ pikepdf pillow ];
 
   # no tests exectuted
   doCheck = false;

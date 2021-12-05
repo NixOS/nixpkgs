@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.22";
@@ -17,9 +14,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [
-    autoreconfHook
-  ];
+  buildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://users.aalto.fi/~pat/cliquer.html";

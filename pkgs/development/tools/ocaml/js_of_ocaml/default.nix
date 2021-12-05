@@ -1,6 +1,4 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ppxlib, uchar
-}:
+{ buildDunePackage, js_of_ocaml-compiler, ppxlib, uchar }:
 
 buildDunePackage {
   pname = "js_of_ocaml";

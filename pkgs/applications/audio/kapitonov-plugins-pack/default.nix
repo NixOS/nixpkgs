@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, gnome, ladspa-sdk, libxcb, lv2, xcbutilwm
-, zita-convolver, zita-resampler
- }:
+{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config, boost, cairo
+, fftw, gnome, ladspa-sdk, libxcb, lv2, xcbutilwm, zita-convolver
+, zita-resampler }:
 
 stdenv.mkDerivation rec {
   pname = "kapitonov-plugins-pack";
@@ -14,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mxi7b1vrzg25x85lqk8c77iziqrqyz18mqkfjlz09sxp5wfs9w4";
   };
 
-  nativeBuildInputs = [
-    faust
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ faust meson ninja pkg-config ];
 
   buildInputs = [
     boost

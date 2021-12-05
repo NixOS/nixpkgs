@@ -1,13 +1,5 @@
-{ lib
-, bleak
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, bleak, buildPythonPackage, click, fetchFromGitHub, pytest-asyncio
+, pytest-mock, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pykulersky";
@@ -23,23 +15,15 @@ buildPythonPackage rec {
     sha256 = "sha256-l3obfs5zo5DqArsDml8EZ+/uzab35Jjsuzw6U1XFJ3k=";
   };
 
-  propagatedBuildInputs = [
-    bleak
-    click
-  ];
+  propagatedBuildInputs = [ bleak click ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-mock pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pykulersky"
-  ];
+  pythonImportsCheck = [ "pykulersky" ];
 
   meta = with lib; {
-    description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
+    description =
+      "Python module to control Brightech Kuler Sky Bluetooth LED devices";
     homepage = "https://github.com/emlove/pykulersky";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

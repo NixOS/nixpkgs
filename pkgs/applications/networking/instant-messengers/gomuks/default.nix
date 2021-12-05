@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, substituteAll
-, buildGoModule
-, fetchFromGitHub
-, makeDesktopItem
-, makeWrapper
-, libnotify
-, olm
-, pulseaudio
-, sound-theme-freedesktop
-}:
+{ lib, stdenv, substituteAll, buildGoModule, fetchFromGitHub, makeDesktopItem
+, makeWrapper, libnotify, olm, pulseaudio, sound-theme-freedesktop }:
 
 buildGoModule rec {
   pname = "gomuks";
@@ -49,7 +39,9 @@ buildGoModule rec {
     }/* $out/
     substituteAllInPlace $out/share/applications/*
     wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
+      --prefix PATH : "${
+        lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])
+      }"
   '';
 
   meta = with lib; {

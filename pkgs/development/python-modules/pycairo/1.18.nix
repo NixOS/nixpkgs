@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, meson
-, ninja
-, buildPythonPackage
-, pytestCheckHook
-, pkg-config
-, cairo
-, python
-}:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytestCheckHook
+, pkg-config, cairo, python }:
 
 buildPythonPackage rec {
   pname = "pycairo";
@@ -22,19 +14,11 @@ buildPythonPackage rec {
     sha256 = "142145a2whvlk92jijrbf3i2bqrzmspwpysj0bfypw0krzi0aa6j";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    cairo
-  ];
+  buildInputs = [ cairo ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   mesonFlags = [
     # This is only used for figuring out what version of Python is in

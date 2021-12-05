@@ -1,13 +1,5 @@
-{ stdenv
-, buildPythonPackage
-, uvicorn
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pytest-mock
-, requests
-, trustme
-}:
+{ stdenv, buildPythonPackage, uvicorn, httpx, pytest-asyncio, pytestCheckHook
+, pytest-mock, requests, trustme }:
 
 buildPythonPackage rec {
   pname = "uvicorn-tests";
@@ -32,9 +24,6 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    "test_supported_upgrade_request"
-    "test_invalid_upgrade"
-  ];
+  disabledTests = [ "test_supported_upgrade_request" "test_invalid_upgrade" ];
 }
 

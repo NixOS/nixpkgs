@@ -1,8 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools-scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools, pythonOlder
-, pytest-flake8, pytest-cov, pytest-black, pytest-mypy
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest, pytest-freezegun
+, freezegun, backports_unittest-mock, six, pytz, jaraco_functools, pythonOlder
+, pytest-flake8, pytest-cov, pytest-black, pytest-mypy }:
 
 buildPythonPackage rec {
   pname = "tempora";
@@ -20,8 +18,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 
   checkInputs = [
-    pytest-freezegun pytest freezegun backports_unittest-mock
-    pytest-flake8 pytest-cov pytest-black pytest-mypy
+    pytest-freezegun
+    pytest
+    freezegun
+    backports_unittest-mock
+    pytest-flake8
+    pytest-cov
+    pytest-black
+    pytest-mypy
   ];
 
   checkPhase = ''

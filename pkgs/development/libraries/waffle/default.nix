@@ -1,18 +1,6 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, cmake
-, meson
-, ninja
-, bash-completion
-, libGL
-, libglvnd
-, makeWrapper
-, pkg-config
-, python3
-, x11Support ? true, libxcb, libX11
-, waylandSupport ? true, wayland, wayland-protocols
-, useGbm ? true, mesa, udev
+{ stdenv, fetchFromGitLab, lib, cmake, meson, ninja, bash-completion, libGL
+, libglvnd, makeWrapper, pkg-config, python3, x11Support ? true, libxcb, libX11
+, waylandSupport ? true, wayland, wayland-protocols, useGbm ? true, mesa, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -27,34 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "iY+dAgXutD/uDFocwd9QXjq502IOsk+3RQMA2S/CMV4=";
   };
 
-  buildInputs = [
-    bash-completion
-    libGL
-  ] ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
-    libglvnd
-  ] ++ lib.optionals x11Support [
-    libX11
-    libxcb
-  ] ++ lib.optionals waylandSupport [
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals useGbm [
-    udev
-    mesa
-  ];
+  buildInputs = [ bash-completion libGL ]
+    ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin)
+    [ libglvnd ] ++ lib.optionals x11Support [ libX11 libxcb ]
+    ++ lib.optionals waylandSupport [ wayland wayland-protocols ]
+    ++ lib.optionals useGbm [ udev mesa ];
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake makeWrapper meson ninja pkg-config python3 ];
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR =
+    "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
@@ -62,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
+    description =
+      "A cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
     homepage = "http://www.waffle-gl.org/";
     license = licenses.bsd2;
     platforms = platforms.mesaPlatforms;

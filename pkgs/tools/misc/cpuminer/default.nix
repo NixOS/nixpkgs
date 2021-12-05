@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, curl
-, jansson
-, perl
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, curl, jansson, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "cpuminer";
@@ -17,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
   };
 
-  patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
+  patchPhase =
+    if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
   buildInputs = [ curl jansson autoreconfHook ];
 

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.15";
 
   src = fetchurl {
-    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
+    url =
+      "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
     sha256 = "1im484iz08j3gmzpw07v16brwq46pxxj65i996kkp2vivcfhmn5q";
   };
 
@@ -15,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A JSON implementation in C";
-    homepage    = "https://github.com/json-c/json-c/wiki";
+    homepage = "https://github.com/json-c/json-c/wiki";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = licenses.mit;
 
     longDescription = ''

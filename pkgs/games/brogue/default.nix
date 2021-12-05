@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.7.5";
 
   src = fetchurl {
-    url = "https://sites.google.com/site/broguegame/brogue-${version}-linux-amd64.tbz2";
+    url =
+      "https://sites.google.com/site/broguegame/brogue-${version}-linux-amd64.tbz2";
     sha256 = "0i042zb3axjf0cpgpdh8hvfn66dbfizidyvw0iymjk2n760z2kx7";
   };
 

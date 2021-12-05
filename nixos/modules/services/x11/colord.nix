@@ -34,7 +34,7 @@ in {
       group = "colord";
     };
 
-    users.groups.colord = {};
+    users.groups.colord = { };
 
   };
 

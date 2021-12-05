@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango, atk
+, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus
+, at-spi2-atk, cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core
+, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
   version = "21.10.25";
 
   src = fetchurl {
-    url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
+    url =
+      "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
     sha256 = "a85ddda4e73dfadddbb77cf9bc84c30fc6b893ead46367d702976bbf4da5afa4";
   };
 
   sourceRoot = ".";
   unpackCmd = ''
-      ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+    ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
   '';
 
   installPhase = ''
@@ -75,7 +77,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.exodus.io/";
-    description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    description =
+      "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mmahut rople380 ];

@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.smallwm;
-in
-{
+let cfg = config.services.xserver.windowManager.smallwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.smallwm.enable = mkEnableOption "smallwm";

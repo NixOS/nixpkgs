@@ -1,4 +1,5 @@
-{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
+{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection
+, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication {
   pname = "connman-notify";

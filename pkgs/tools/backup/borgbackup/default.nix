@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, acl
-, e2fsprogs
-, libb2
-, lz4
-, openssh
-, openssl
-, python3
-, zstd
-, nixosTests
-}:
+{ lib, stdenv, acl, e2fsprogs, libb2, lz4, openssh, openssl, python3, zstd
+, nixosTests }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
@@ -33,22 +23,11 @@ python3.pkgs.buildPythonApplication rec {
     guzzle_sphinx_theme
   ];
 
-  buildInputs = [
-    libb2
-    lz4
-    zstd
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-  ];
+  buildInputs = [ libb2 lz4 zstd openssl ]
+    ++ lib.optionals stdenv.isLinux [ acl ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    cython
-    llfuse
-    packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [ cython llfuse packaging ] ++ lib.optionals (!stdenv.isDarwin) [ pyfuse3 ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -57,9 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     export BORG_LIBZSTD_PREFIX="${zstd.dev}"
   '';
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${openssh}/bin"''
-  ];
+  makeWrapperArgs = [ ''--prefix PATH ':' "${openssh}/bin"'' ];
 
   postInstall = ''
     make -C docs singlehtml
@@ -87,11 +64,8 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--numprocesses" "auto"
-    "--benchmark-skip"
-    "--pyargs" "borg.testsuite"
-  ];
+  pytestFlagsArray =
+    [ "--numprocesses" "auto" "--benchmark-skip" "--pyargs" "borg.testsuite" ];
 
   disabledTests = [
     # fuse: device not found, try 'modprobe fuse' first
@@ -112,9 +86,7 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$TEMP
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) borgbackup;
-  };
+  passthru.tests = { inherit (nixosTests) borgbackup; };
 
   outputs = [ "out" "doc" ];
 

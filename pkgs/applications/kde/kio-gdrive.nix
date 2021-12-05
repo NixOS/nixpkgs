@@ -1,15 +1,5 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, kio
-, libkgapi
-, kcalendarcore
-, kcontacts
-, qtkeychain
-, libsecret
-, kaccounts-integration
-}:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, kio, libkgapi
+, kcalendarcore, kcontacts, qtkeychain, libsecret, kaccounts-integration }:
 
 mkDerivation {
   pname = "kio-gdrive";
@@ -20,10 +10,7 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcalendarcore
     kcontacts

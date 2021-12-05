@@ -1,11 +1,4 @@
-{ trivialBuild
-, lib
-, fetchFromGitHub
-, curl
-, plz
-, cl-lib
-, ts
-}:
+{ trivialBuild, lib, fetchFromGitHub, curl, plz, cl-lib, ts }:
 
 trivialBuild {
   pname = "ement";
@@ -18,15 +11,9 @@ trivialBuild {
     sha256 = "sha256-kYVb2NrHYC87mY/hFUMAjb4TLJ9A2L2RrHoiAXvRaGg=";
   };
 
-  packageRequires = [
-    plz
-    cl-lib
-    ts
-  ];
+  packageRequires = [ plz cl-lib ts ];
 
-  patches = [
-    ./handle-nil-images.patch
-  ];
+  patches = [ ./handle-nil-images.patch ];
 
   meta = {
     description = "Ement.el is a Matrix client for Emacs";

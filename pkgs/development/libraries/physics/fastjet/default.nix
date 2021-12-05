@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, python
-, withPython ? false
-}:
+{ lib, stdenv, fetchurl, python, withPython ? false }:
 
 stdenv.mkDerivation rec {
   pname = "fastjet";
@@ -16,17 +11,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional withPython python;
 
-  configureFlags = [
-    "--enable-allcxxplugins"
-  ] ++ lib.optional withPython "--enable-pyext";
+  configureFlags = [ "--enable-allcxxplugins" ]
+    ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "A software package for jet finding in pp and e+e− collisions";
-    license     = lib.licenses.gpl2Plus;
-    homepage    = "http://fastjet.fr/";
-    platforms   = lib.platforms.unix;
+    description =
+      "A software package for jet finding in pp and e+e− collisions";
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://fastjet.fr/";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

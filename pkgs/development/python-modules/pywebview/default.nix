@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-resources
-, pyqtwebengine
-, pytest
-, pythonOlder
-, qt5
-, xvfb-run
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, importlib-resources, pyqtwebengine
+, pytest, pythonOlder, qt5, xvfb-run }:
 
 buildPythonPackage rec {
   pname = "pywebview";
@@ -21,18 +13,12 @@ buildPythonPackage rec {
     sha256 = "sha256-3JHwtw8oReolEl4k8cdt7GCVGNkfWWJN6EnZYHxzDO8=";
   };
 
-  nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
-    pyqtwebengine
-  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  propagatedBuildInputs = [ pyqtwebengine ]
+    ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
-  checkInputs = [
-    pytest
-    xvfb-run
-  ];
+  checkInputs = [ pytest xvfb-run ];
 
   checkPhase = ''
     # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED

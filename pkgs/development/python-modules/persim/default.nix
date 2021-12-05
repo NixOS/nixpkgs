@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, hopcroftkarp
-, joblib
-, matplotlib
-, numpy
-, scikit-learn
-, scipy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, deprecated, hopcroftkarp, joblib
+, matplotlib, numpy, scikit-learn, scipy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "persim";
@@ -20,19 +10,10 @@ buildPythonPackage rec {
     sha256 = "ef0f0a247adcf6104ecac14117db0b24581710ea8a8d964816805395700b4975";
   };
 
-  propagatedBuildInputs = [
-    deprecated
-    hopcroftkarp
-    joblib
-    matplotlib
-    numpy
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs =
+    [ deprecated hopcroftkarp joblib matplotlib numpy scikit-learn scipy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # specifically needed for darwin

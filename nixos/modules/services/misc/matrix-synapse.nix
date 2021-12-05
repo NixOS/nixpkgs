@@ -7,117 +7,153 @@ let
   pg = config.services.postgresql;
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
-  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
-  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
-  pluginsEnv = cfg.package.python.buildEnv.override {
-    extraLibs = cfg.plugins;
-  };
+  mkResource = r:
+    "{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}";
+  mkListener = l:
+    ''
+      {port: ${
+        toString l.port
+      }, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${
+        boolToString l.tls
+      }, x_forwarded: ${boolToString l.x_forwarded}, resources: [${
+        concatStringsSep "," (map mkResource l.resources)
+      }]}'';
+  pluginsEnv =
+    cfg.package.python.buildEnv.override { extraLibs = cfg.plugins; };
   configFile = pkgs.writeText "homeserver.yaml" ''
-${optionalString (cfg.tls_certificate_path != null) ''
-tls_certificate_path: "${cfg.tls_certificate_path}"
-''}
-${optionalString (cfg.tls_private_key_path != null) ''
-tls_private_key_path: "${cfg.tls_private_key_path}"
-''}
-${optionalString (cfg.tls_dh_params_path != null) ''
-tls_dh_params_path: "${cfg.tls_dh_params_path}"
-''}
-no_tls: ${boolToString cfg.no_tls}
-${optionalString (cfg.bind_port != null) ''
-bind_port: ${toString cfg.bind_port}
-''}
-${optionalString (cfg.unsecure_port != null) ''
-unsecure_port: ${toString cfg.unsecure_port}
-''}
-${optionalString (cfg.bind_host != null) ''
-bind_host: "${cfg.bind_host}"
-''}
-server_name: "${cfg.server_name}"
-pid_file: "/run/matrix-synapse.pid"
-${optionalString (cfg.public_baseurl != null) ''
-public_baseurl: "${cfg.public_baseurl}"
-''}
-listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
-database: {
-  name: "${cfg.database_type}",
-  args: {
-    ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
-    )}
-  }
-}
-event_cache_size: "${cfg.event_cache_size}"
-verbose: ${cfg.verbose}
-log_config: "${logConfigFile}"
-rc_messages_per_second: ${cfg.rc_messages_per_second}
-rc_message_burst_count: ${cfg.rc_message_burst_count}
-federation_rc_window_size: ${cfg.federation_rc_window_size}
-federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
-federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
-federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
-federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "${cfg.dataDir}/media"
-uploads_path: "${cfg.dataDir}/uploads"
-max_upload_size: "${cfg.max_upload_size}"
-max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
-url_preview_enabled: ${boolToString cfg.url_preview_enabled}
-${optionalString (cfg.url_preview_enabled == true) ''
-url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
-url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
-url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
-''}
-recaptcha_private_key: "${cfg.recaptcha_private_key}"
-recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
-turn_uris: ${builtins.toJSON cfg.turn_uris}
-turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${boolToString cfg.enable_registration}
-${optionalString (cfg.registration_shared_secret != null) ''
-registration_shared_secret: "${cfg.registration_shared_secret}"
-''}
-recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
-turn_user_lifetime: "${cfg.turn_user_lifetime}"
-user_creation_max_duration: ${cfg.user_creation_max_duration}
-bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: ${boolToString cfg.allow_guest_access}
-
-account_threepid_delegates:
-  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
-  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
-
-room_prejoin_state:
-  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
-  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
-${optionalString (cfg.macaroon_secret_key != null) ''
-  macaroon_secret_key: "${cfg.macaroon_secret_key}"
-''}
-expire_access_token: ${boolToString cfg.expire_access_token}
-enable_metrics: ${boolToString cfg.enable_metrics}
-report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
-key_refresh_interval: "${cfg.key_refresh_interval}"
-perspectives:
-  servers: {
-    ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-    "${n}": {
-      "verify_keys": {
-        ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-        "${n}": {
-          "key": "${v}"
-        }'') v)}
+    ${optionalString (cfg.tls_certificate_path != null) ''
+      tls_certificate_path: "${cfg.tls_certificate_path}"
+    ''}
+    ${optionalString (cfg.tls_private_key_path != null) ''
+      tls_private_key_path: "${cfg.tls_private_key_path}"
+    ''}
+    ${optionalString (cfg.tls_dh_params_path != null) ''
+      tls_dh_params_path: "${cfg.tls_dh_params_path}"
+    ''}
+    no_tls: ${boolToString cfg.no_tls}
+    ${optionalString (cfg.bind_port != null) ''
+      bind_port: ${toString cfg.bind_port}
+    ''}
+    ${optionalString (cfg.unsecure_port != null) ''
+      unsecure_port: ${toString cfg.unsecure_port}
+    ''}
+    ${optionalString (cfg.bind_host != null) ''
+      bind_host: "${cfg.bind_host}"
+    ''}
+    server_name: "${cfg.server_name}"
+    pid_file: "/run/matrix-synapse.pid"
+    ${optionalString (cfg.public_baseurl != null) ''
+      public_baseurl: "${cfg.public_baseurl}"
+    ''}
+    listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
+    database: {
+      name: "${cfg.database_type}",
+      args: {
+        ${
+          concatStringsSep ''
+            ,
+                '' (mapAttrsToList (n: v: ''"${n}": ${builtins.toJSON v}'')
+              cfg.database_args)
+        }
       }
-    '') cfg.servers)}
     }
-  }
-redaction_retention_period: ${toString cfg.redaction_retention_period}
-app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
+    event_cache_size: "${cfg.event_cache_size}"
+    verbose: ${cfg.verbose}
+    log_config: "${logConfigFile}"
+    rc_messages_per_second: ${cfg.rc_messages_per_second}
+    rc_message_burst_count: ${cfg.rc_message_burst_count}
+    federation_rc_window_size: ${cfg.federation_rc_window_size}
+    federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
+    federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
+    federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
+    federation_rc_concurrent: ${cfg.federation_rc_concurrent}
+    media_store_path: "${cfg.dataDir}/media"
+    uploads_path: "${cfg.dataDir}/uploads"
+    max_upload_size: "${cfg.max_upload_size}"
+    max_image_pixels: "${cfg.max_image_pixels}"
+    dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
+    url_preview_enabled: ${boolToString cfg.url_preview_enabled}
+    ${optionalString (cfg.url_preview_enabled == true) ''
+      url_preview_ip_range_blacklist: ${
+        builtins.toJSON cfg.url_preview_ip_range_blacklist
+      }
+      url_preview_ip_range_whitelist: ${
+        builtins.toJSON cfg.url_preview_ip_range_whitelist
+      }
+      url_preview_url_blacklist: ${
+        builtins.toJSON cfg.url_preview_url_blacklist
+      }
+    ''}
+    recaptcha_private_key: "${cfg.recaptcha_private_key}"
+    recaptcha_public_key: "${cfg.recaptcha_public_key}"
+    enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
+    turn_uris: ${builtins.toJSON cfg.turn_uris}
+    turn_shared_secret: "${cfg.turn_shared_secret}"
+    enable_registration: ${boolToString cfg.enable_registration}
+    ${optionalString (cfg.registration_shared_secret != null) ''
+      registration_shared_secret: "${cfg.registration_shared_secret}"
+    ''}
+    recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
+    turn_user_lifetime: "${cfg.turn_user_lifetime}"
+    user_creation_max_duration: ${cfg.user_creation_max_duration}
+    bcrypt_rounds: ${cfg.bcrypt_rounds}
+    allow_guest_access: ${boolToString cfg.allow_guest_access}
 
-${cfg.extraConfig}
-'';
+    account_threepid_delegates:
+      ${
+        optionalString (cfg.account_threepid_delegates.email != null)
+        "email: ${cfg.account_threepid_delegates.email}"
+      }
+      ${
+        optionalString (cfg.account_threepid_delegates.msisdn != null)
+        "msisdn: ${cfg.account_threepid_delegates.msisdn}"
+      }
 
-  hasLocalPostgresDB = let args = cfg.database_args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    room_prejoin_state:
+      disable_default_event_types: ${
+        boolToString cfg.room_prejoin_state.disable_default_event_types
+      }
+      additional_event_types: ${
+        builtins.toJSON cfg.room_prejoin_state.additional_event_types
+      }
+    ${optionalString (cfg.macaroon_secret_key != null) ''
+      macaroon_secret_key: "${cfg.macaroon_secret_key}"
+    ''}
+    expire_access_token: ${boolToString cfg.expire_access_token}
+    enable_metrics: ${boolToString cfg.enable_metrics}
+    report_stats: ${boolToString cfg.report_stats}
+    signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
+    key_refresh_interval: "${cfg.key_refresh_interval}"
+    perspectives:
+      servers: {
+        ${
+          concatStringsSep ''
+            },
+          '' (mapAttrsToList (n: v: ''
+            "${n}": {
+              "verify_keys": {
+                ${
+                  concatStringsSep ''
+                    },
+                  '' (mapAttrsToList (n: v: ''
+                    "${n}": {
+                      "key": "${v}"
+                    }'') v)
+                }
+              }
+          '') cfg.servers)
+        }
+        }
+      }
+    redaction_retention_period: ${toString cfg.redaction_retention_period}
+    app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
+
+    ${cfg.extraConfig}
+  '';
+
+  hasLocalPostgresDB = let args = cfg.database_args;
+  in usePostgresql
+  && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
 in {
   options = {
     services.matrix-synapse = {
@@ -292,7 +328,7 @@ in {
                     description = ''
                       List of resources to host on this listener.
                     '';
-                    example = ["client" "webclient" "federation"];
+                    example = [ "client" "webclient" "federation" ];
                   };
                   compress = mkOption {
                     type = types.bool;
@@ -317,8 +353,14 @@ in {
           tls = true;
           x_forwarded = false;
           resources = [
-            { names = ["client" "webclient"]; compress = true; }
-            { names = ["federation"]; compress = false; }
+            {
+              names = [ "client" "webclient" ];
+              compress = true;
+            }
+            {
+              names = [ "federation" ];
+              compress = false;
+            }
           ];
         }];
         description = ''
@@ -338,7 +380,8 @@ in {
       rc_message_burst_count = mkOption {
         type = types.str;
         default = "10.0";
-        description = "Number of message a client can send before being throttled";
+        description =
+          "Number of message a client can send before being throttled";
       };
       federation_rc_window_size = mkOption {
         type = types.str;
@@ -372,13 +415,15 @@ in {
       federation_rc_concurrent = mkOption {
         type = types.str;
         default = "3";
-        description = "The number of federation requests to concurrently process from a single server";
+        description =
+          "The number of federation requests to concurrently process from a single server";
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.stateVersion "18.03"
-          then "psycopg2"
-          else "sqlite3";
+        default = if versionAtLeast config.system.stateVersion "18.03" then
+          "psycopg2"
+        else
+          "sqlite3";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
@@ -440,7 +485,7 @@ in {
       };
       url_preview_ip_range_whitelist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of IP address CIDR ranges that the URL preview spider is allowed
           to access even if they are specified in
@@ -449,7 +494,7 @@ in {
       };
       url_preview_url_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Optional list of URL matches that the URL preview spider is
           denied from accessing.
@@ -480,7 +525,7 @@ in {
       };
       turn_uris = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           The public URIs of the TURN server to give to clients
         '';
@@ -596,7 +641,7 @@ in {
         '';
       };
       room_prejoin_state.additional_event_types = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Additional events to share with users who received an invite.
@@ -666,7 +711,7 @@ in {
       };
       extraConfigFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Extra config files to include.
 
@@ -695,24 +740,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
-        message = ''
-          Cannot deploy matrix-synapse with a configuration for a local postgresql database
-            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
-            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
-            further reference).
+    assertions = [{
+      assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+      message = ''
+        Cannot deploy matrix-synapse with a configuration for a local postgresql database
+          and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
+          database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
+          further reference).
 
-            If you
-            - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
-            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
-              to your configuration.
+          If you
+          - try to deploy a fresh synapse, you need to configure the database yourself. An example
+            for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+          - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
+            to your configuration.
 
-          For further information about this update, please read the release-notes of 20.03 carefully.
-        '';
-      }
-    ];
+        For further information about this update, please read the release-notes of 20.03 carefully.
+      '';
+    }];
 
     services.matrix-synapse.configFile = "${configFile}";
 
@@ -724,13 +768,12 @@ in {
       uid = config.ids.uids.matrix-synapse;
     };
 
-    users.groups.matrix-synapse = {
-      gid = config.ids.gids.matrix-synapse;
-    };
+    users.groups.matrix-synapse = { gid = config.ids.gids.matrix-synapse; };
 
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      after = [ "network.target" ]
+        ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
@@ -739,7 +782,8 @@ in {
           --generate-keys
       '';
       environment = {
-        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages
+          [ pluginsEnv ];
       } // optionalAttrs (cfg.withJemalloc) {
         LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
       };
@@ -748,13 +792,18 @@ in {
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
-          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
-        '')) ];
+        ExecStartPre = [
+          ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+            chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+            chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+          ''))
+        ];
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
-            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            ${
+              concatMapStringsSep "\n  " (x: "--config-path ${x} \\")
+              ([ configFile ] ++ cfg.extraConfigFiles)
+            }
             --keys-directory ${cfg.dataDir}
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
@@ -765,16 +814,28 @@ in {
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+    (mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "trusted_third_party_id_servers"
+    ] ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+    (mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "create_local_database"
+    ] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+    (mkRemovedOptionModule [
+      "services"
+      "matrix-synapse"
+      "room_invite_state_types"
+    ] ''
       You may add additional event types via
       `services.matrix-synapse.room_prejoin_state.additional_event_types` and
       disable the default events via

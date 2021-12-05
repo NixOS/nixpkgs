@@ -1,9 +1,7 @@
 # Test whether `houndd` indexes nixpkgs
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "hound";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ grahamc ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ grahamc ]; };
   machine = { pkgs, ... }: {
     services.hound = {
       enable = true;

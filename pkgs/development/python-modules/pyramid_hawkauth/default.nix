@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyramid
-, hawkauthlib
-, tokenlib
-, webtest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyramid, hawkauthlib, tokenlib
+, webtest }:
 
 buildPythonPackage rec {
   pname = "pyramid_hawkauth";

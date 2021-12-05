@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchgit
-, xorg
-}:
+{ stdenv, lib, fetchgit, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "drawterm";
@@ -14,10 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09v2vk5s23q0islfz273pqy696zhzh3gqi25hadr54lif0511wsl";
   };
 
-  buildInputs = [
-    xorg.libX11
-    xorg.libXt
-  ];
+  buildInputs = [ xorg.libX11 xorg.libXt ];
 
   # TODO: macos
   makeFlags = [ "CONF=unix" ];

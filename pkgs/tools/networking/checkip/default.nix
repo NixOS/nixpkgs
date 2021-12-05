@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "checkip";
@@ -25,7 +22,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "CLI tool that checks an IP address using various public services";
+    description =
+      "CLI tool that checks an IP address using various public services";
     homepage = "https://github.com/jreisinger/checkip";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

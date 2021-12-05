@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiofiles";
@@ -22,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "0vvk9j8cfdqvq8hw2qc6ajfzsy8x1afabf83mxafffq92rwknd4y";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_sendfile_file"
-  ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_sendfile_file" ];
 
   pythonImportsCheck = [ "aiofiles" ];
 

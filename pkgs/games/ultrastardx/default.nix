@@ -1,32 +1,25 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, lua
-, fpc
-, pcre
-, portaudio
-, freetype
-, libpng
-, SDL2
-, SDL2_image
-, SDL2_gfx
-, SDL2_mixer
-, SDL2_net, SDL2_ttf
-, ffmpeg
-, sqlite
-, zlib
-, libX11
-, libGLU
-, libGL
-}:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch, pkg-config, lua, fpc
+, pcre, portaudio, freetype, libpng, SDL2, SDL2_image, SDL2_gfx, SDL2_mixer
+, SDL2_net, SDL2_ttf, ffmpeg, sqlite, zlib, libX11, libGLU, libGL }:
 
 let
   sharedLibs = [
-    pcre portaudio freetype
-    SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg
+    pcre
+    portaudio
+    freetype
+    SDL2
+    SDL2_image
+    SDL2_gfx
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    sqlite
+    lua
+    zlib
+    libX11
+    libGLU
+    libGL
+    ffmpeg
   ];
 
 in stdenv.mkDerivation rec {
@@ -69,7 +62,8 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = with lib;
-    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+    let
+      items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';

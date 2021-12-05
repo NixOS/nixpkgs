@@ -1,21 +1,33 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "dbd-sqlite3";
   version = "cl-dbi-20211020-git";
 
   description = "Database driver for SQLite3.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."closer-mop" args."dbi" args."iterate" args."split-sequence" args."sqlite" args."trivial-features" args."trivial-garbage" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."closer-mop"
+    args."dbi"
+    args."iterate"
+    args."split-sequence"
+    args."sqlite"
+    args."trivial-features"
+    args."trivial-garbage"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-dbi/2021-10-20/cl-dbi-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-dbi/2021-10-20/cl-dbi-20211020-git.tgz";
     sha256 = "1khvf4b2pa9wv8blcwb77byi5nyb8g8bnaq4ml20g674iwgvvvmr";
   };
 
   packageName = "dbd-sqlite3";
 
-  asdFilesToKeep = ["dbd-sqlite3.asd"];
+  asdFilesToKeep = [ "dbd-sqlite3.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbd-sqlite3 DESCRIPTION Database driver for SQLite3. SHA256
@@ -35,4 +47,5 @@ rec {
     (alexandria babel bordeaux-threads cffi closer-mop dbi iterate
      split-sequence sqlite trivial-features trivial-garbage)
     VERSION cl-dbi-20211020-git SIBLINGS
-    (cl-dbi dbd-mysql dbd-postgres dbi-test dbi) PARASITES NIL) */
+    (cl-dbi dbd-mysql dbd-postgres dbi-test dbi) PARASITES NIL)
+*/

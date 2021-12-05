@@ -1,9 +1,5 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ lib, stdenv, build2, fetchurl, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? !enableShared }:
 stdenv.mkDerivation rec {
   pname = "libodb";
   version = "2.5.0-b.21";
@@ -16,9 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ build2 ];
-  build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
-  ];
+  build2ConfigureFlags =
+    [ "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}" ];
 
   doCheck = true;
 

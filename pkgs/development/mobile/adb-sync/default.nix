@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
-, socat, go-mtpfs, adbfs-rootless
-}:
+{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper, socat
+, go-mtpfs, adbfs-rootless }:
 
 stdenv.mkDerivation {
   pname = "adb-sync-unstable";
@@ -19,7 +18,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = let
-    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
+    dependencies =
+      lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
   in ''
     runHook preInstall
 
@@ -33,11 +33,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
+    description =
+      "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;
     platforms = platforms.unix;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ scolobb ma27 ];
   };
 }

@@ -6,9 +6,7 @@ let
 
   cfg = config.services.xserver.wacom;
 
-in
-
-{
+in {
 
   options = {
 
@@ -32,7 +30,6 @@ in
 
   };
 
-
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.xf86_input_wacom ]; # provides xsetwacom
@@ -41,7 +38,8 @@ in
 
     services.udev.packages = [ pkgs.xf86_input_wacom ];
 
-    environment.etc."X11/xorg.conf.d/70-wacom.conf".source = "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
+    environment.etc."X11/xorg.conf.d/70-wacom.conf".source =
+      "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
 
   };
 

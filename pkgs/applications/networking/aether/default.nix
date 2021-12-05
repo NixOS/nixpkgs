@@ -1,22 +1,20 @@
-{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
+{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook, alsa-lib
+, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype
+, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-, fetchurl, fetchFromGitHub, imagemagick, copyDesktopItems
-}:
+, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa
+, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu, fetchurl
+, fetchFromGitHub, imagemagick, copyDesktopItems }:
 
-let
-  binaryName = "AetherP2P";
-in
-stdenv.mkDerivation rec {
+let binaryName = "AetherP2P";
+in stdenv.mkDerivation rec {
   pname = "aether";
   version = "2.0.0-dev.15";
 
   srcs = [
     (fetchurl {
-      url = "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
+      url =
+        "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
       sha256 = "1hi8w83zal3ciyzg2m62shkbyh6hj7gwsidg3dn88mhfy68himf7";
       # % in the url / canonical filename causes an error
       name = "aether-tarball.tar.gz";
@@ -53,12 +51,8 @@ stdenv.mkDerivation rec {
     nss
   ];
 
-  nativeBuildInputs = [
-    imagemagick
-    autoPatchelfHook
-    wrapGAppsHook
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [ imagemagick autoPatchelfHook wrapGAppsHook copyDesktopItems ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -72,18 +66,49 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installPhase =
-  let
+  installPhase = let
     libPath = lib.makeLibraryPath [
-      libcxx systemd libpulseaudio libdrm mesa
-      stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-      gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-      libXtst nspr nss libxcb pango systemd libXScrnSaver
-      libappindicator-gtk3 libdbusmenu
+      libcxx
+      systemd
+      libpulseaudio
+      libdrm
+      mesa
+      stdenv.cc.cc
+      alsa-lib
+      atk
+      at-spi2-atk
+      at-spi2-core
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk3
+      libnotify
+      libX11
+      libXcomposite
+      libuuid
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      nspr
+      nss
+      libxcb
+      pango
+      systemd
+      libXScrnSaver
+      libappindicator-gtk3
+      libdbusmenu
     ];
-  in
-  ''
+  in ''
     mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/512x512/apps}
     mv * $out/opt/${binaryName}
 

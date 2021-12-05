@@ -1,39 +1,7 @@
-{ lib
-, stdenv
-, cmake
-, fetchurl
-, gnumake
-, makeWrapper
-, pkg-config
-, fetchpatch
-, autopanosiftc
-, boost
-, cairo
-, enblend-enfuse
-, exiv2
-, fftw
-, flann
-, gettext
-, glew
-, ilmbase
-, lcms2
-, lensfun
-, libjpeg
-, libpng
-, libtiff
-, libX11
-, libXi
-, libXmu
-, libGLU
-, libGL
-, openexr
-, panotools
-, perlPackages
-, sqlite
-, vigra
-, wxGTK
-, zlib
-}:
+{ lib, stdenv, cmake, fetchurl, gnumake, makeWrapper, pkg-config, fetchpatch
+, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext, glew
+, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi, libXmu
+, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "hugin";
@@ -47,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes build with exiv2 0.27.1
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/0467d8ba362b9c196e4c1dc4be7de0c1b336335b/hugin/trunk/hugin-exiv2-0.27.1.patch";
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-community/0467d8ba362b9c196e4c1dc4be7de0c1b336335b/hugin/trunk/hugin-exiv2-0.27.1.patch";
       sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
     })
   ];
@@ -98,7 +67,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://hugin.sourceforge.net/";
-    description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
+    description =
+      "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.linux;

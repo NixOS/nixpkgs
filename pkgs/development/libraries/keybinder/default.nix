@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config, gnome
-, gtk-doc, gtk2, python2Packages, lua, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config, gnome, gtk-doc
+, gtk2, python2Packages, lua, gobject-introspection }:
 
-let
-  inherit (python2Packages) python pygtk;
+let inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
   pname = "keybinder";
   version = "0.3.0";
@@ -16,8 +14,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoconf automake libtool gnome.gnome-common gtk-doc gtk2
-    python pygtk lua gobject-introspection
+    autoconf
+    automake
+    libtool
+    gnome.gnome-common
+    gtk-doc
+    gtk2
+    python
+    pygtk
+    lua
+    gobject-introspection
   ];
 
   preConfigure = ''

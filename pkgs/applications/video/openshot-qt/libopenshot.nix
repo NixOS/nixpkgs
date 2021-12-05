@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
-}:
+{ lib, stdenv, fetchFromGitHub, alsa-lib, cmake, cppzmq, doxygen, ffmpeg
+, imagemagick, jsoncpp, libopenshot-audio, llvmPackages, pkg-config, python3
+, qtbase, qtmultimedia, swig, zeromq }:
 
 stdenv.mkDerivation rec {
   pname = "libopenshot";
@@ -35,13 +19,7 @@ stdenv.mkDerivation rec {
     export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
   '';
 
-  nativeBuildInputs = [
-    alsa-lib
-    cmake
-    doxygen
-    pkg-config
-    swig
-  ];
+  nativeBuildInputs = [ alsa-lib cmake doxygen pkg-config swig ];
 
   buildInputs = [
     cppzmq
@@ -53,9 +31,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
 
   dontWrapQtApps = true;
 
@@ -76,7 +52,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  passthru = {
-    inherit libopenshot-audio;
-  };
+  passthru = { inherit libopenshot-audio; };
 }

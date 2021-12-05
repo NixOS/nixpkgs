@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, nix-update-script, Security }:
+{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv
+, nix-update-script, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
@@ -17,9 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-tJhbIsmh4zw1Dhvc2jE0N1cTE4//DOe3rDzDVNiTigA=";
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";

@@ -1,17 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, requests
-, mypy-extensions
-, django_3
-, django_extensions
-, dateparser
-, youtube-dl
-, python-crontab
-, croniter
-, w3lib
-, ipython
-}:
+{ lib, buildPythonApplication, fetchPypi, requests, mypy-extensions, django_3
+, django_extensions, dateparser, youtube-dl, python-crontab, croniter, w3lib
+, ipython }:
 
 let
   django_3' = django_3.overridePythonAttrs (old: rec {
@@ -22,9 +11,8 @@ let
       sha256 = "sha256-Ms55Lum2oMu+w0ASPiKayfdl3/jCpK6SR6FLK6OjZac=";
     };
   });
-in
 
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "archivebox";
   version = "0.6.2";
 

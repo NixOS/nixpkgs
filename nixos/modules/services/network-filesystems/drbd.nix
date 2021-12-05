@@ -4,9 +4,9 @@
 
 with lib;
 
-let cfg = config.services.drbd; in
+let cfg = config.services.drbd;
 
-{
+in {
 
   ###### interface
 
@@ -31,7 +31,6 @@ let cfg = config.services.drbd; in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -42,13 +41,13 @@ let cfg = config.services.drbd; in
 
     boot.kernelModules = [ "drbd" ];
 
-    boot.extraModprobeConfig =
-      ''
-        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
-      '';
+    boot.extraModprobeConfig = ''
+      options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
+    '';
 
-    environment.etc.drbd.conf =
-      { source = pkgs.writeText "drbd.conf" cfg.config; };
+    environment.etc.drbd.conf = {
+      source = pkgs.writeText "drbd.conf" cfg.config;
+    };
 
     systemd.services.drbd = {
       after = [ "systemd-udev.settle.service" "network.target" ];

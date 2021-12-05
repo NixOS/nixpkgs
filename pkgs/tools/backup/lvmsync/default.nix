@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     env = bundlerEnv {
       name = "${pname}-${version}-gems";
       ruby = ruby;
-      gemfile  = ./Gemfile;
+      gemfile = ./Gemfile;
       lockfile = ./Gemfile.lock;
-      gemset   = ./gemset.nix;
+      gemset = ./gemset.nix;
     };
   in ''
     mkdir -p $out/bin

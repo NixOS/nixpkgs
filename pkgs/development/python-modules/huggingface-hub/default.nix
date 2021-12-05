@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, filelock
-, importlib-metadata
-, packaging
-, requests
-, ruamel-yaml
-, tqdm
-, typing-extensions
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, filelock
+, importlib-metadata, packaging, requests, ruamel-yaml, tqdm, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -24,22 +15,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ packaging ];
 
-  propagatedBuildInputs = [
-    filelock
-    requests
-    ruamel-yaml
-    tqdm
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs =
+    [ filelock requests ruamel-yaml tqdm typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require network access.
   doCheck = false;
   pythonImportsCheck = [ "huggingface_hub" ];
 
-   meta = with lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/huggingface_hub";
-    description = "Download and publish models and other files on the huggingface.co hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";
+    description =
+      "Download and publish models and other files on the huggingface.co hub";
+    changelog =
+      "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

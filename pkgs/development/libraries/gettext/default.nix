@@ -13,48 +13,45 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
     sha256 = "04kbg1sx0ncfrsbr85ggjslqkzzb243fcw9nyh3rrv1a22ihszf7";
   };
-  patches = [
-    ./absolute-paths.diff
-  ];
+  patches = [ ./absolute-paths.diff ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
+  LDFLAGS = if stdenv.isSunOS then
+    "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec"
+  else
+    "";
 
-  configureFlags = [
-     "--disable-csharp" "--with-xz"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # On cross building, gettext supposes that the wchar.h from libc
-    # does not fulfill gettext needs, so it tries to work with its
-    # own wchar.h file, which does not cope well with the system's
-    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-    "gl_cv_func_wcwidth_works=yes"
-  ];
+  configureFlags = [ "--disable-csharp" "--with-xz" ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # On cross building, gettext supposes that the wchar.h from libc
+      # does not fulfill gettext needs, so it tries to work with its
+      # own wchar.h file, which does not cope well with the system's
+      # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+      "gl_cv_func_wcwidth_works=yes"
+    ];
 
   postPatch = ''
-   substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+    substituteAllInPlace gettext-runtime/src/gettext.sh.in
+    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
-  nativeBuildInputs = [
-    xz
-    xz.bin
-  ];
+  nativeBuildInputs = [ xz xz.bin ];
   # HACK, see #10874 (and 14664)
-  buildInputs = lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
+  buildInputs =
+    lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
-  setupHooks = [
-    ../../../build-support/setup-hooks/role.bash
-    ./gettext-setup-hook.sh
-  ];
-  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+  setupHooks =
+    [ ../../../build-support/setup-hooks/role.bash ./gettext-setup-hook.sh ];
+  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc"
+    && !stdenv.hostPlatform.isMusl;
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes

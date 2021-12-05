@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, netifaces, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aioshelly";
@@ -20,22 +14,18 @@ buildPythonPackage rec {
     sha256 = "sha256-AaEnVMup/sGR3ENtN6NF/CzG05P4Er5LI8mG5LNVzAo=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    netifaces
-  ];
+  propagatedBuildInputs = [ aiohttp netifaces ];
 
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioshelly"
-  ];
+  pythonImportsCheck = [ "aioshelly" ];
 
   meta = with lib; {
     description = "Python library to control Shelly";
     homepage = "https://github.com/home-assistant-libs/aioshelly";
-    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
+    changelog =
+      "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

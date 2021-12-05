@@ -1,15 +1,5 @@
-{ lib, stdenv
-, openblas
-, blas
-, lapack
-, openfst
-, icu
-, cmake
-, pkg-config
-, fetchFromGitHub
-, git
-, python3
-}:
+{ lib, stdenv, openblas, blas, lapack, openfst, icu, cmake, pkg-config
+, fetchFromGitHub, git, python3 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 let
@@ -20,8 +10,7 @@ let
     rev = "0bca6e76d24647427356dc242b0adbf3b5f1a8d9";
     sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "kaldi";
   version = "2020-12-26";
 
@@ -32,10 +21,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-lTqXTG5ZTPmhCgt+BVzOwjKEIj+bLGUa+IxJq+XtHUg=";
   };
 
-  cmakeFlags = [
-    "-DKALDI_BUILD_TEST=off"
-    "-DBUILD_SHARED_LIBS=on"
-  ];
+  cmakeFlags = [ "-DKALDI_BUILD_TEST=off" "-DBUILD_SHARED_LIBS=on" ];
 
   preConfigure = ''
     mkdir bin
@@ -64,17 +50,9 @@ stdenv.mkDerivation {
     export PATH=$(pwd)/bin:$PATH
   '';
 
-  buildInputs = [
-    openblas
-    openfst
-    icu
-  ];
+  buildInputs = [ openblas openfst icu ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   postInstall = ''
     mkdir -p $out/share/kaldi

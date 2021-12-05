@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? { } }:
 
 let
   pinData = lib.importJSON ./pin.json;
   noPhoningHome = {
-    disable_guests = true; # disable automatic guest account registration at matrix.org
+    disable_guests =
+      true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics
   };
-  configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
+  configOverrides = writeText "element-config-overrides.json"
+    (builtins.toJSON (noPhoningHome // conf));
 
 in stdenv.mkDerivation rec {
   pname = "element-web";
   inherit (pinData) version;
 
   src = fetchurl {
-    url = "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
+    url =
+      "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
     sha256 = pinData.webHash;
   };
 
@@ -30,10 +33,11 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

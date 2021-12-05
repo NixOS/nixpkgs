@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Set of simple command line tools which allow access to
-      hardware device registers";
+    description = ''
+      Set of simple command line tools which allow access to
+            hardware device registers'';
     longDescription = ''
       Provides a set of simple command line tools which allow access to
       hardware device registers. Supported register interfaces include PCI,

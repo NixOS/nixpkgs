@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.target;
-in
-{
+let cfg = config.services.target;
+in {
   ###### interface
   options = {
     services.target = with types; {
@@ -13,7 +11,7 @@ in
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         description = ''
           Content of /etc/target/saveconfig.json
           This file is normally read and written by targetcli
@@ -46,8 +44,6 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /etc/target 0700 root root - -"
-    ];
+    systemd.tmpfiles.rules = [ "d /etc/target 0700 root root - -" ];
   };
 }

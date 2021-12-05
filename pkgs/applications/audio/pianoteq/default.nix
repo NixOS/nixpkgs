@@ -1,6 +1,7 @@
-{ lib, stdenv, curl, gnugrep, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib, stdenv, curl, gnugrep, jq, xorg, alsa-lib, freetype, p7zip
+, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
 let
-  versionForFile = v: builtins.replaceStrings ["."] [""] v;
+  versionForFile = v: builtins.replaceStrings [ "." ] [ "" ] v;
 
   mkPianoteq = { name, src, version, archdir, ... }:
     stdenv.mkDerivation rec {
@@ -12,17 +13,14 @@ let
         ${p7zip}/bin/7z x $src
       '';
 
-      nativeBuildInputs = [
-        autoPatchelfHook
-        makeWrapper
-      ];
+      nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
       buildInputs = [
         stdenv.cc.cc.lib
-        xorg.libX11      # libX11.so.6
-        xorg.libXext     # libXext.so.6
-        alsa-lib          # libasound.so.2
-        freetype         # libfreetype.so.6
+        xorg.libX11 # libX11.so.6
+        xorg.libXext # libXext.so.6
+        alsa-lib # libasound.so.2
+        freetype # libfreetype.so.6
       ];
 
       installPhase = ''
@@ -45,14 +43,16 @@ let
 
       meta = with lib; {
         homepage = "https://www.modartt.com/pianoteq";
-        description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
+        description =
+          "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
-        platforms = [ "x86_64-linux" ]; # TODO extract binary according to each platform?
+        platforms =
+          [ "x86_64-linux" ]; # TODO extract binary according to each platform?
         maintainers = [ maintainers.mausch ];
       };
     };
 
-  fetchWithCurlScript = { name, sha256, script, impureEnvVars ? [] }:
+  fetchWithCurlScript = { name, sha256, script, impureEnvVars ? [ ] }:
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -93,26 +93,26 @@ let
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
+        "''${curl[@]}" --silent --request POST \
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url"}' \
+          https://www.modartt.com/json/download -o /dev/null
+        json=$(
           "''${curl[@]}" --silent --request POST \
-            --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download -o /dev/null
-          json=$(
-            "''${curl[@]}" --silent --request POST \
-            --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download
-          )
-          url=$(echo $json | ${jq}/bin/jq -r .url)
-          "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url"}' \
+          https://www.modartt.com/json/download
+        )
+        url=$(echo $json | ${jq}/bin/jq -r .url)
+        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
 

@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, poetry, pytest-aiohttp
+, pytest-asyncio, pytest-cov, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "aioeafm";
@@ -25,12 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-asyncio
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytest-asyncio pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "aioeafm" ];
 

@@ -11,16 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1l9yjf9say0mcqnnjkyj4z3f6y83bnx4jsycd1h10p3m8afbh8my";
   };
 
-  propagatedBuildInputs = [
-    i3lock
-    imagemagick
-    scrot
-    playerctl
-  ];
+  propagatedBuildInputs = [ i3lock imagemagick scrot playerctl ];
 
-  makeFlags = [
-    "PREFIX=$(out)/bin"
-  ];
+  makeFlags = [ "PREFIX=$(out)/bin" ];
 
   patchPhase = ''
     substituteInPlace i3lock-pixeled \
@@ -31,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Simple i3lock helper which pixels a screenshot by scaling it down and up to get a pixeled version of the screen when the lock is active";
+    description =
+      "Simple i3lock helper which pixels a screenshot by scaling it down and up to get a pixeled version of the screen when the lock is active";
     homepage = "https://gitlab.com/Ma27/i3lock-pixeled";
     license = licenses.mit;
     platforms = platforms.linux;

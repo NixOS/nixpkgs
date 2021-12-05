@@ -1,9 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nix
-, git
-}:
+{ lib, python3, fetchFromGitHub, nix, git }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
@@ -16,9 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-6vKMaCTilPXd8K3AuLqtYInVyyFhdun0o9cX1WRMmWo=";
   };
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
-  ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}" ];
 
   doCheck = false;
 

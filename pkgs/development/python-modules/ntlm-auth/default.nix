@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, six
-}:
+{ lib, buildPythonPackage, cryptography, fetchFromGitHub, mock, pytestCheckHook
+, requests, six }:
 
 buildPythonPackage rec {
   pname = "ntlm-auth";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "00dpf5bfsy07frsjihv1k10zmwcyq4bvkilbxha7h6nlwpcm2409";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    six
-  ];
+  propagatedBuildInputs = [ cryptography six ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    requests
-  ];
+  checkInputs = [ mock pytestCheckHook requests ];
 
   pythonImportsCheck = [ "ntlm_auth" ];
 

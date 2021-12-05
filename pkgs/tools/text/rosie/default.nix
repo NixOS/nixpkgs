@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchgit
-, libbsd
-, readline
-}:
+{ stdenv, lib, fetchgit, libbsd, readline }:
 
 stdenv.mkDerivation rec {
   pname = "rosie";

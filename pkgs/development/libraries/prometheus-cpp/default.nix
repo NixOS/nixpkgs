@@ -1,11 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gbenchmark
-, gtest
-, civetweb
-, zlib
-, curl
+{ lib, stdenv, fetchFromGitHub, cmake, gbenchmark, gtest, civetweb, zlib, curl
 }:
 
 stdenv.mkDerivation rec {

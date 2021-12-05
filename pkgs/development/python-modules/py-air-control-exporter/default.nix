@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, flask
-, isPy27
-, nixosTests
-, prometheus-client
-, py-air-control
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, click, fetchPypi, flask, isPy27, nixosTests
+, prometheus-client, py-air-control, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "py-air-control-exporter";
@@ -20,20 +11,15 @@ buildPythonPackage rec {
     sha256 = "0cwhcyyjzc6wlj7jp5h7fcj1hl03wzrz1if3sg205kh2hfrzzlqq";
   };
 
-  propagatedBuildInputs = [
-    click
-    flask
-    prometheus-client
-    py-air-control
-  ];
+  propagatedBuildInputs = [ click flask prometheus-client py-air-control ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "py_air_control_exporter" ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) py-air-control;
+  };
 
   meta = with lib; {
     description = "Exports Air Quality Metrics to Prometheus";

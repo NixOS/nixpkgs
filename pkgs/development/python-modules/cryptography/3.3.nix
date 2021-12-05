@@ -1,22 +1,6 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, ipaddress
-, openssl
-, cryptography_vectors
-, darwin
-, packaging
-, six
-, isPyPy
-, cffi
-, pytest
-, pretend
-, iso8601
-, pytz
-, hypothesis
-, enum34
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, ipaddress, openssl
+, cryptography_vectors, darwin, packaging, six, isPyPy, cffi, pytest, pretend
+, iso8601, pytz, hypothesis, enum34 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
@@ -31,29 +15,14 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ];
+  nativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [ openssl ]
-             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
-  propagatedBuildInputs = [
-    packaging
-    six
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ] ++ lib.optionals isPy27 [
-    ipaddress enum34
-  ];
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  propagatedBuildInputs = [ packaging six ] ++ lib.optionals (!isPyPy) [ cffi ]
+    ++ lib.optionals isPy27 [ ipaddress enum34 ];
 
-  checkInputs = [
-    cryptography_vectors
-    hypothesis
-    iso8601
-    pretend
-    pytest
-    pytz
-  ];
+  checkInputs = [ cryptography_vectors hypothesis iso8601 pretend pytest pytz ];
 
   checkPhase = ''
     py.test --disable-pytest-warnings tests
@@ -64,7 +33,8 @@ buildPythonPackage rec {
   __impureHostDeps = [ "/usr/lib" ];
 
   meta = with lib; {
-    description = "A package which provides cryptographic recipes and primitives";
+    description =
+      "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message

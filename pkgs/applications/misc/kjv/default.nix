@@ -12,9 +12,8 @@ let
     url = patchPrefix + "50a83256ee45430fb06b7aea1945dd91c6813bc3.patch";
     sha256 = "0bv9yma67jdj496a6vn6y007c9gwjpg3rzld1i9m9y9xmlzq4yzv";
   };
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "kjv";
   version = "unstable-2021-03-11";
 

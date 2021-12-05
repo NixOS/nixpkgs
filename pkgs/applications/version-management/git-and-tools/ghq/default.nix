@@ -15,9 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [
-    "-X=main.Version=${version}"
-  ];
+  ldflags = [ "-X=main.Version=${version}" ];
 
   postInstall = ''
     install -m 444 -D ${src}/misc/zsh/_ghq $out/share/zsh/site-functions/_ghq

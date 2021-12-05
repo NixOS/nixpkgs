@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work.";
+    description =
+      "A driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work.";
     longDescription = ''
       A driver for MacBook models 2018 and newer, implementing the VHCI (required for mouse/keyboard/etc.) and audio functionality.
     '';

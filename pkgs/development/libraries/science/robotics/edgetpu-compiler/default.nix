@@ -1,27 +1,17 @@
-{ autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, libcxx
-, stdenv
-}:
+{ autoPatchelfHook, dpkg, fetchurl, lib, libcxx, stdenv }:
 stdenv.mkDerivation rec {
   pname = "edgetpu-compiler";
   version = "15.0";
 
   src = fetchurl rec {
-    url = "https://packages.cloud.google.com/apt/pool/${pname}_${version}_amd64_${sha256}.deb";
+    url =
+      "https://packages.cloud.google.com/apt/pool/${pname}_${version}_amd64_${sha256}.deb";
     sha256 = "ce03822053c2bddbb8640eaa988396ae66f9bc6b9d6d671914acd1727c2b445a";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
-  buildInputs = [
-    libcxx
-  ];
+  buildInputs = [ libcxx ];
 
   unpackPhase = ''
     mkdir bin pkg
@@ -49,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool that compiles a TensorFlow Lite model into an Edge TPU compatible file.";
+    description =
+      "A command line tool that compiles a TensorFlow Lite model into an Edge TPU compatible file.";
     homepage = "https://coral.ai/docs/edgetpu/compiler";
     license = licenses.asl20;
     maintainers = with maintainers; [ cpcloud ];

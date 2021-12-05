@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, numpy
-, python-dateutil
-, pytz
-, requests
-, retrying
-, scipy
-, six
-, tornado
-, tweepy
-, ws4py
-}:
+{ lib, buildPythonPackage, fetchPypi, matplotlib, numpy, python-dateutil, pytz
+, requests, retrying, scipy, six, tornado, tweepy, ws4py }:
 
 buildPythonPackage rec {
   pname = "pyalgotrade";
@@ -25,8 +12,17 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    matplotlib numpy python-dateutil pytz requests
-    retrying scipy six tornado tweepy ws4py
+    matplotlib
+    numpy
+    python-dateutil
+    pytz
+    requests
+    retrying
+    scipy
+    six
+    tornado
+    tweepy
+    ws4py
   ];
 
   # no tests in PyPI tarball

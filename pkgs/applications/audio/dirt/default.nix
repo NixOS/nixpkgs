@@ -14,14 +14,15 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i "s|./samples|$out/share/dirt/samples|" dirt.c
   '';
-  makeFlags = ["PREFIX=$(out)"];
+  makeFlags = [ "PREFIX=$(out)" ];
   postInstall = ''
     mkdir -p $out/share/dirt/
     cp -r samples $out/share/dirt/
   '';
 
   meta = with lib; {
-    description = "An unimpressive thingie for playing bits of samples with some level of accuracy";
+    description =
+      "An unimpressive thingie for playing bits of samples with some level of accuracy";
     homepage = "https://github.com/tidalcycles/Dirt";
     license = licenses.gpl3;
     maintainers = with maintainers; [ anderspapitto ];

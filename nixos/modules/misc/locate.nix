@@ -8,8 +8,13 @@ let
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [
+      "services"
+      "locate"
+      "interval"
+    ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ]
+      "Use services.locate.prunePaths")
   ];
 
   options.services.locate = with types; {
@@ -163,7 +168,16 @@ in {
 
     prunePaths = mkOption {
       type = listOf path;
-      default = [ "/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store" "/nix/var/log/nix" ];
+      default = [
+        "/tmp"
+        "/var/tmp"
+        "/var/cache"
+        "/var/lock"
+        "/var/run"
+        "/var/spool"
+        "/nix/store"
+        "/nix/var/log/nix"
+      ];
       description = ''
         Which paths to exclude from indexing
       '';
@@ -188,7 +202,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = { }; };
 
     security.wrappers = mkIf isMLocate {
       locate = {
@@ -205,9 +219,7 @@ in {
 
     environment.systemPackages = [ cfg.locate ];
 
-    environment.variables = mkIf (!isMLocate)
-      { LOCATE_PATH = cfg.output;
-      };
+    environment.variables = mkIf (!isMLocate) { LOCATE_PATH = cfg.output; };
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
@@ -221,57 +233,65 @@ in {
       };
     };
 
-    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
-            ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
-            ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
+    warnings = optional (isMLocate && cfg.localuser != null)
+      "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
+      ++ optional (isFindutils && cfg.pruneNames != [ ])
+      "findutils locate does not support pruning by directory component"
+      ++ optional (isFindutils && cfg.pruneBindMounts)
+      "findutils locate does not support skipping bind mounts";
 
-    systemd.services.update-locatedb =
-      { description = "Update Locate Database";
-        path = mkIf (!isMLocate) [ pkgs.su ];
+    systemd.services.update-locatedb = {
+      description = "Update Locate Database";
+      path = mkIf (!isMLocate) [ pkgs.su ];
 
-        # mlocate's updatedb takes flags via a configuration file or
-        # on the command line, but not by environment variable.
-        script =
-          if isMLocate
-          then let toFlags = x: optional (cfg.${x} != [])
-                                         "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-                   args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
-               in ''
-            exec ${cfg.locate}/bin/updatedb \
-              --output ${toString cfg.output} ${concatStringsSep " " args} \
-              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
-              ${concatStringsSep " " cfg.extraFlags}
-          ''
-          else ''
-            exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
-              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
-          '';
-        environment = optionalAttrs (!isMLocate) {
-          PRUNEFS = concatStringsSep " " cfg.pruneFS;
-          PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
-          PRUNENAMES = concatStringsSep " " cfg.pruneNames;
-          PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
-        };
-        serviceConfig.Nice = 19;
-        serviceConfig.IOSchedulingClass = "idle";
-        serviceConfig.PrivateTmp = "yes";
-        serviceConfig.PrivateNetwork = "yes";
-        serviceConfig.NoNewPrivileges = "yes";
-        serviceConfig.ReadOnlyPaths = "/";
-        # Use dirOf cfg.output because mlocate creates temporary files next to
-        # the actual database. We could specify and create them as well,
-        # but that would make this quite brittle when they change something.
-        # NOTE: If /var/cache does not exist, this leads to the misleading error message:
-        # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
-        serviceConfig.ReadWritePaths = dirOf cfg.output;
+      # mlocate's updatedb takes flags via a configuration file or
+      # on the command line, but not by environment variable.
+      script = if isMLocate then
+        let
+          toFlags = x:
+            optional (cfg.${x} != [ ])
+            "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+          args =
+            concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+        in ''
+          exec ${cfg.locate}/bin/updatedb \
+            --output ${toString cfg.output} ${concatStringsSep " " args} \
+            --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+            ${concatStringsSep " " cfg.extraFlags}
+        ''
+      else ''
+        exec ${cfg.locate}/bin/updatedb \
+          ${
+            optionalString (cfg.localuser != null && !isMLocate)
+            "--localuser=${cfg.localuser}"
+          } \
+          --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+      '';
+      environment = optionalAttrs (!isMLocate) {
+        PRUNEFS = concatStringsSep " " cfg.pruneFS;
+        PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
+        PRUNENAMES = concatStringsSep " " cfg.pruneNames;
+        PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
       };
+      serviceConfig.Nice = 19;
+      serviceConfig.IOSchedulingClass = "idle";
+      serviceConfig.PrivateTmp = "yes";
+      serviceConfig.PrivateNetwork = "yes";
+      serviceConfig.NoNewPrivileges = "yes";
+      serviceConfig.ReadOnlyPaths = "/";
+      # Use dirOf cfg.output because mlocate creates temporary files next to
+      # the actual database. We could specify and create them as well,
+      # but that would make this quite brittle when they change something.
+      # NOTE: If /var/cache does not exist, this leads to the misleading error message:
+      # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
+      serviceConfig.ReadWritePaths = dirOf cfg.output;
+    };
 
-    systemd.timers.update-locatedb = mkIf (cfg.interval != "never")
-      { description = "Update timer for locate database";
-        partOf      = [ "update-locatedb.service" ];
-        wantedBy    = [ "timers.target" ];
-        timerConfig.OnCalendar = cfg.interval;
-      };
+    systemd.timers.update-locatedb = mkIf (cfg.interval != "never") {
+      description = "Update timer for locate database";
+      partOf = [ "update-locatedb.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.interval;
+    };
   };
 }

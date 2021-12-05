@@ -20,7 +20,7 @@ let
 
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
-    url    = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    url = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
@@ -29,7 +29,8 @@ let
     version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      url =
+        "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
       inherit (dist) sha256;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
@@ -68,12 +69,12 @@ let
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
     postFixup = ''
-      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+      ln -nsf ../zulu-${
+        lib.versions.major version
+      }.jdk/Contents/Home/man $out/share/man
     '';
 
-    passthru = {
-      home = jdk;
-    };
+    passthru = { home = jdk; };
 
     meta = import ./meta.nix lib;
   };

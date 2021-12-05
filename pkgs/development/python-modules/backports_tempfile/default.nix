@@ -1,9 +1,4 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, backports_weakref
+{ lib, python, buildPythonPackage, fetchPypi, setuptools-scm, backports_weakref
 }:
 
 buildPythonPackage rec {

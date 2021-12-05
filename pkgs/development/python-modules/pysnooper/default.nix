@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, isPy27 }:
 
 buildPythonPackage rec {
   version = "0.4.1";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
   # test dependency python-toolbox fails with py27
   doCheck = !isPy27;
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   meta = with lib; {
     description = "A poor man's debugger for Python";

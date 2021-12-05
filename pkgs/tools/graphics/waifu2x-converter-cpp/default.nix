@@ -1,6 +1,5 @@
-{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers, OpenCL
-, cudaSupport ? false, cudatoolkit ? null
-}:
+{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd
+, opencl-headers, OpenCL, cudaSupport ? false, cudatoolkit ? null }:
 
 stdenv.mkDerivation rec {
   pname = "waifu2x-converter-cpp";
@@ -18,9 +17,7 @@ stdenv.mkDerivation rec {
     ./waifu2x_darwin_build.diff
   ];
 
-  buildInputs = [
-    opencv3
-  ] ++ lib.optional cudaSupport cudatoolkit
+  buildInputs = [ opencv3 ] ++ lib.optional cudaSupport cudatoolkit
     ++ lib.optional stdenv.isDarwin OpenCL
     ++ lib.optionals stdenv.isLinux [ ocl-icd opencl-headers ];
 

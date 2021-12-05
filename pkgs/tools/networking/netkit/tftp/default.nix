@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "netkit-tftp";
@@ -13,15 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0kfibbjmy85r3k92cdchha78nzb6silkgn1zaq9g8qaf1l0w0hrs";
   };
 
-  preInstall = "
-    mkdir -p $out/man/man{1,8} $out/sbin $out/bin
-  ";
+  preInstall = "\n    mkdir -p $out/man/man{1,8} $out/sbin $out/bin\n  ";
 
   meta = {
     description = "Netkit TFTP client and server";
     homepage = "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

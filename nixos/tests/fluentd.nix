@@ -29,9 +29,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   testScript = let
     testMessage = "an example log message";
 
-    payload = pkgs.writeText "test-message.json" (builtins.toJSON {
-      inherit testMessage;
-    });
+    payload = pkgs.writeText "test-message.json"
+      (builtins.toJSON { inherit testMessage; });
   in ''
     machine.start()
     machine.wait_for_unit("fluentd.service")

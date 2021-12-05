@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools-scm
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, setuptools-scm
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pygmars";
@@ -21,17 +16,11 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pygmars"
-  ];
+  pythonImportsCheck = [ "pygmars" ];
 
   meta = with lib; {
     description = "Python lexing and parsing library";

@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, base58
-, py-multibase
-, py-multicodec
-, morphys
-, py-multihash
-, hypothesis
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook, base58
+, py-multibase, py-multicodec, morphys, py-multihash, hypothesis }:
 
 buildPythonPackage rec {
   pname = "py-cid";
@@ -30,23 +20,16 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
-    base58
-    py-multibase
-    py-multicodec
-    morphys
-    py-multihash
-  ];
+  propagatedBuildInputs =
+    [ base58 py-multibase py-multicodec morphys py-multihash ];
 
-  checkInputs = [
-    pytestCheckHook
-    hypothesis
-  ];
+  checkInputs = [ pytestCheckHook hypothesis ];
 
   pythonImportsCheck = [ "cid" ];
 
   meta = with lib; {
-    description = "Self-describing content-addressed identifiers for distributed systems implementation in Python";
+    description =
+      "Self-describing content-addressed identifiers for distributed systems implementation in Python";
     homepage = "https://github.com/ipld/py-cid";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

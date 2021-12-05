@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, libcst
+, mock, proto-plus, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";

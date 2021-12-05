@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, attrs
-, click
-, colorama
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, attrs, click, colorama
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
@@ -26,11 +19,7 @@ buildPythonPackage rec {
       --replace "click>=7,<8" "click"
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    click
-    colorama
-  ];
+  propagatedBuildInputs = [ attrs click colorama ];
 
   checkInputs = [ pytestCheckHook ];
 

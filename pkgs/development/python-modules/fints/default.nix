@@ -1,11 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, bleach
-, mt-940
-, requests
-, sepaxml
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, bleach, mt-940, requests
+, sepaxml, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   version = "3.0.1";

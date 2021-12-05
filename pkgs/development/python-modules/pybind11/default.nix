@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, eigen
-, python
-, catch
-, numpy
-, pytest
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, cmake, eigen, python, catch
+, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "pybind11";
@@ -25,12 +16,10 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
-  cmakeFlags = [
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
-  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-    "-DPYBIND11_CXX_STANDARD=-std=c++17"
-  ];
+  cmakeFlags =
+    [ "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3" "-DBUILD_TESTING=on" ]
+    ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang)
+    [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
 
   postBuild = ''
     # build tests
@@ -44,11 +33,7 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
-    catch
-    numpy
-    pytest
-  ];
+  checkInputs = [ catch numpy pytest ];
 
   checkPhase = ''
     runHook preCheck

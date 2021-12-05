@@ -11,11 +11,7 @@ buildPythonApplication rec {
     sha256 = "1228plh55id03qywsw0ai88ypdpbh9iz18jfcyhn21pci7mj77fv";
   };
 
-  checkInputs = [
-    git
-    mercurial
-    pytest
-  ];
+  checkInputs = [ git mercurial pytest ];
 
   checkPhase = ''
     export GIT_COMMITTER_NAME=nixbld

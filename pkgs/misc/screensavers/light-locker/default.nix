@@ -1,21 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, intltool
-, dbus-glib
-, libX11
-, libXScrnSaver
-, libXxf86vm
-, libXext
-, systemd
-, pantheon
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config
+, gtk3, glib, intltool, dbus-glib, libX11, libXScrnSaver, libXxf86vm, libXext
+, systemd, pantheon, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "light-locker";
@@ -30,24 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
 
-  nativeBuildInputs = [
-    intltool
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ intltool meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    dbus-glib
-    glib
-    gtk3
-    libX11
-    libXScrnSaver
-    libXext
-    libXxf86vm
-    systemd
-  ];
+  buildInputs =
+    [ dbus-glib glib gtk3 libX11 libXScrnSaver libXext libXxf86vm systemd ];
 
   mesonFlags = [
     "-Dmit-ext=true"
@@ -65,11 +36,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     homepage = "https://github.com/the-cavalry/light-locker";

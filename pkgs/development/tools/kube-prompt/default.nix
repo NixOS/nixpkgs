@@ -14,11 +14,12 @@ buildGoPackage rec {
     sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 
-  subPackages = ["."];
+  subPackages = [ "." ];
   goDeps = ./deps.nix;
 
   meta = {
-  description = "An interactive kubernetes client featuring auto-complete using go-prompt";
+    description =
+      "An interactive kubernetes client featuring auto-complete using go-prompt";
     license = lib.licenses.mit;
     homepage = "https://github.com/c-bata/kube-prompt";
     maintainers = [ lib.maintainers.vdemeester ];

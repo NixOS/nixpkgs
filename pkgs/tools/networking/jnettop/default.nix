@@ -1,4 +1,5 @@
-{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
+{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config
+, glib }:
 
 stdenv.mkDerivation rec {
   pname = "jnettop";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-dns-resolution.patch
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/j/jnettop/0.13.0-1/debian/patches/0001-Use-64-bit-integers-for-byte-totals-support-bigger-u.patch";
+      url =
+        "https://sources.debian.net/data/main/j/jnettop/0.13.0-1/debian/patches/0001-Use-64-bit-integers-for-byte-totals-support-bigger-u.patch";
       sha256 = "1b0alc12sj8pzcb66f8xslbqlbsvq28kz34v6jfhbb1q25hyr7jg";
     })
 
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
     #  https://sourceforge.net/p/jnettop/patches/5/
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://sourceforge.net/p/jnettop/patches/5/attachment/jnettop-0.13.0-ncurses-6.3.patch";
+      url =
+        "https://sourceforge.net/p/jnettop/patches/5/attachment/jnettop-0.13.0-ncurses-6.3.patch";
       sha256 = "1a0g3bal6f2fh1sq9q5kfwljrnskfvrhdzhjadcds34gzsr26v7x";
     })
   ];

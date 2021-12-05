@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub, pythonPackages }:
 
-with pythonPackages; buildPythonApplication rec {
+with pythonPackages;
+buildPythonApplication rec {
   pname = "greg";
   version = "0.4.7";
 

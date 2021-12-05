@@ -27,7 +27,8 @@ python3Packages.buildPythonApplication rec {
   checkInputs = [ python3Packages.pytestCheckHook ];
 
   meta = with lib; {
-    description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
+    description =
+      "Nagios / Icinga monitoring plugin to check systemd for failed units";
     inherit (src.meta) homepage;
     changelog = "https://github.com/Josef-Friedrich/check_systemd/releases";
     maintainers = with maintainers; [ symphorien ];

@@ -1,41 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, cairo
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, glib
-, nv-codec-headers-11
-, pipewire
-, systemd
-, libvncserver
-, libsecret
-, libnotify
-, libxkbcommon
-, gdk-pixbuf
-, freerdp
-, fuse3
-, gnome
-}:
+{ lib, stdenv, fetchurl, cairo, meson, ninja, pkg-config, python3, wrapGAppsHook
+, glib, nv-codec-headers-11, pipewire, systemd, libvncserver, libsecret
+, libnotify, libxkbcommon, gdk-pixbuf, freerdp, fuse3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     hash = "sha256-wOiJsO2BGxGAm777FzOElNj1L/USC+bj/9O65angX98=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wrapGAppsHook ];
 
   buildInputs = [
     cairo
@@ -57,9 +35,8 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  mesonFlags = [
-    "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
-  ];
+  mesonFlags =
+    [ "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user" ];
 
   passthru = {
     updateScript = gnome.updateScript {

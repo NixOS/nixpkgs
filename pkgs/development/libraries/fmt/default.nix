@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 let
   generic = { version, sha256, patches ? [ ] }:
@@ -41,8 +40,7 @@ let
         platforms = platforms.all;
       };
     };
-in
-{
+in {
   fmt_7 = generic {
     version = "7.1.3";
     sha256 = "08hyv73qp2ndbs0isk8pspsphdzz5qh8czl3wgyxy3mmif9xdg29";

@@ -1,4 +1,4 @@
-{ lib, python3Packages, withTwitter ? false}:
+{ lib, python3Packages, withTwitter ? false }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";
@@ -9,9 +9,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1brrik70jyagxa9l0cfmlxvqpilwj1q655bphxnvjxyganxf4c00";
   };
 
-  propagatedBuildInputs = with python3Packages; [ python-dateutil future requests beautifulsoup4 ]
-    ++ lib.optional withTwitter python3Packages.twitter
-  ;
+  propagatedBuildInputs = with python3Packages;
+    [ python-dateutil future requests beautifulsoup4 ]
+    ++ lib.optional withTwitter python3Packages.twitter;
 
   # No tests in Pypi Tarball
   doCheck = false;

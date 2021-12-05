@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, cliff
-, docutils
-, stestr
-, testscenarios
-}:
+{ buildPythonPackage, cliff, docutils, stestr, testscenarios }:
 
 buildPythonPackage rec {
   pname = "cliff";
@@ -20,12 +15,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    cliff
-    docutils
-    stestr
-    testscenarios
-  ];
+  checkInputs = [ cliff docutils stestr testscenarios ];
 
   checkPhase = ''
     stestr run

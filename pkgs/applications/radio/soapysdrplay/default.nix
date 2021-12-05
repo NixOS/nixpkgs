@@ -15,9 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ soapysdr sdrplay ];
 
-  cmakeFlags = [
-    "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/"
-  ];
+  cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
   meta = with lib; {
     description = "Soapy SDR module for SDRplay";

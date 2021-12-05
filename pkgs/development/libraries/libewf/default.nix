@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "libewf";
 
   src = fetchurl {
-    url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
+    url =
+      "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
     sha256 = "sha256-10r4jPzsA30nHQzjdg/VkwTG1PwOskwv8Bra34ZPMgc=";
   };
 
@@ -14,10 +15,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ bzip2 ];
 
   meta = {
-    description = "Library for support of the Expert Witness Compression Format";
+    description =
+      "Library for support of the Expert Witness Compression Format";
     homepage = "https://sourceforge.net/projects/libewf/";
     license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.raskin ] ;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

@@ -5,7 +5,8 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/BetterDiscord/Installer/releases/download/v${version}/Betterdiscord-Linux.AppImage";
+    url =
+      "https://github.com/BetterDiscord/Installer/releases/download/v${version}/Betterdiscord-Linux.AppImage";
     sha256 = "103acb11qmvjmf6g9lgsfm5jyahfwfdqw0x9w6lmv1hzwbs26dsr";
   };
 

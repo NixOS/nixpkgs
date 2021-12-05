@@ -1,13 +1,8 @@
-{ stdenv, lib, callPackage, fetchFromGitHub
-, cmake, pkg-config, makeWrapper
-, zlib, bzip2, libpng
-, dialog, python3, cdparanoia
-}:
+{ stdenv, lib, callPackage, fetchFromGitHub, cmake, pkg-config, makeWrapper
+, zlib, bzip2, libpng, dialog, python3, cdparanoia }:
 
-let
-  stratagus = callPackage ./stratagus.nix {};
-in
-stdenv.mkDerivation rec {
+let stratagus = callPackage ./stratagus.nix { };
+in stdenv.mkDerivation rec {
   pname = "wargus";
   inherit (stratagus) version;
 
@@ -30,7 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Importer and scripts for Warcraft II: Tides of Darkness, the expansion Beyond the Dark Portal, and Aleonas Tales";
+    description =
+      "Importer and scripts for Warcraft II: Tides of Darkness, the expansion Beyond the Dark Portal, and Aleonas Tales";
     homepage = "https://wargus.github.io/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.astro ];

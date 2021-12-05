@@ -1,18 +1,6 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, click
-, dateparser
-, fetchFromGitHub
-, marshmallow-dataclass
-, poetry-core
-, pyjwt
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, tabulate
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, click, dateparser
+, fetchFromGitHub, marshmallow-dataclass, poetry-core, pyjwt, pythonOlder
+, pytest-asyncio, pytestCheckHook, tabulate }:
 
 buildPythonPackage rec {
   pname = "renault-api";
@@ -28,24 +16,12 @@ buildPythonPackage rec {
     sha256 = "sha256-b3oHpERUqeIw0yOxZytQuRE4jVUcahWlMQ+7ZBX0KL8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    dateparser
-    marshmallow-dataclass
-    pyjwt
-    tabulate
-  ];
+  propagatedBuildInputs =
+    [ aiohttp click dateparser marshmallow-dataclass pyjwt tabulate ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "renault_api" ];
 

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "stdlib-list";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "17vdn4q0sdlndc2fr9svapxx6366hnrhkn0fswp1xmr0jxqh7rd1";
   };
 
-  pythonImportsCheck = [
-    "stdlib_list"
-  ];
+  pythonImportsCheck = [ "stdlib_list" ];
 
   # tests see mismatches to our standard library
   doCheck = false;

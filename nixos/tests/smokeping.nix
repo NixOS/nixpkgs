@@ -1,25 +1,21 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "smokeping";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ cransom ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ cransom ]; };
 
   nodes = {
-    sm =
-      { ... }:
-      {
-        networking.domain = "example.com"; # FQDN: sm.example.com
-        services.smokeping = {
-          enable = true;
-          port = 8081;
-          mailHost = "127.0.0.2";
-          probeConfig = ''
-            + FPing
-            binary = /run/wrappers/bin/fping
-            offset = 0%
-          '';
-        };
+    sm = { ... }: {
+      networking.domain = "example.com"; # FQDN: sm.example.com
+      services.smokeping = {
+        enable = true;
+        port = 8081;
+        mailHost = "127.0.0.2";
+        probeConfig = ''
+          + FPing
+          binary = /run/wrappers/bin/fping
+          offset = 0%
+        '';
       };
+    };
   };
 
   testScript = ''

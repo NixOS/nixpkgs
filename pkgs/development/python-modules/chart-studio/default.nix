@@ -1,12 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, mock
-, nose
-, plotly
-, pytest
-, requests
-, retrying
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, nose, plotly, pytest, requests
+, retrying, six }:
 
 buildPythonPackage rec {
   pname = "chart-studio";
@@ -22,12 +15,7 @@ buildPythonPackage rec {
 
   sourceRoot = "source/packages/python/chart-studio";
 
-  propagatedBuildInputs = [
-    plotly
-    requests
-    retrying
-    six
-  ];
+  propagatedBuildInputs = [ plotly requests retrying six ];
 
   checkInputs = [ mock nose pytest ];
   # most tests talk to a service
@@ -36,8 +24,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Utilities for interfacing with Plotly's Chart Studio service";
-    homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
+    description =
+      "Utilities for interfacing with Plotly's Chart Studio service";
+    homepage =
+      "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ jonringer ];
   };

@@ -2,10 +2,9 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
-    (concatStringsSep " "
-      (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
-    );
+  ppdOptionsString = options:
+    optionalString (options != { }) (concatStringsSep " "
+      (mapAttrsToList (name: value: "-o '${name}'='${value}'") options));
   ensurePrinter = p: ''
     ${pkgs.cups}/bin/lpadmin -p '${p.name}' -E \
       ${optionalString (p.location != null) "-L '${p.location}'"} \
@@ -20,9 +19,10 @@ let
 
   # "graph but not # or /" can't be implemented as regex alone due to missing lookahead support
   noInvalidChars = str: all (c: c != "#" && c != "/") (stringToCharacters str);
-  printerName = (types.addCheck (types.strMatching "[[:graph:]]+") noInvalidChars)
-    // { description = "printable string without spaces, # and /"; };
-
+  printerName =
+    (types.addCheck (types.strMatching "[[:graph:]]+") noInvalidChars) // {
+      description = "printable string without spaces, # and /";
+    };
 
 in {
   options = {
@@ -43,7 +43,7 @@ in {
           and remove printers with <command>lpadmin -x &lt;printer-name&gt;</command>.
           Printers not listed here can still be manually configured.
         '';
-        default = [];
+        default = [ ];
         type = types.listOf (types.submodule {
           options = {
             name = mkOption {
@@ -97,7 +97,7 @@ in {
                 PageSize = "A4";
                 Duplex = "DuplexNoTumble";
               };
-              default = {};
+              default = { };
               description = ''
                 Sets PPD options for the printer.
                 <command>lpoptions [-p printername] -l</command> shows suported PPD options for the given printer.
@@ -109,9 +109,12 @@ in {
     };
   };
 
-  config = mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
+  config = mkIf (cfg.ensurePrinters != [ ] && config.services.printing.enable) {
     systemd.services.ensure-printers = let
-      cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
+      cupsUnit = if config.services.printing.startWhenNeeded then
+        "cups.socket"
+      else
+        "cups.service";
     in {
       description = "Ensure NixOS-configured CUPS printers";
       wantedBy = [ "multi-user.target" ];
@@ -124,7 +127,8 @@ in {
       };
 
       script = concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters
-        + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
+        + optionalString (cfg.ensureDefaultPrinter != null)
+        (ensureDefaultPrinter cfg.ensureDefaultPrinter);
     };
   };
 }

@@ -1,9 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, libv4l
-, fltk
-}:
+{ buildOctavePackage, lib, fetchurl, libv4l, fltk }:
 
 buildOctavePackage rec {
   pname = "image-acquisition";
@@ -14,10 +9,7 @@ buildOctavePackage rec {
     sha256 = "1amp6npkddnnz2i5rm6gvn65qrbn0nxzl2cja3dvc2xqg396wrhh";
   };
 
-  buildInputs = [
-    libv4l
-    fltk
-  ];
+  buildInputs = [ libv4l fltk ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/image-acquisition/index.html";

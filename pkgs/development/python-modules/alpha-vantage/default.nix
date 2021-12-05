@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, pytestCheckHook
-, requests
-, requests-mock
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub, pandas
+, pytestCheckHook, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "alpha-vantage";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "0cyw6zw7c7r076rmhnmg905ihwb9r7g511n6gdlph06v74pdls8d";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    requests
-  ];
+  propagatedBuildInputs = [ aiohttp requests ];
 
-  checkInputs = [
-    aioresponses
-    requests-mock
-    pandas
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses requests-mock pandas pytestCheckHook ];
 
   disabledTestPaths = [
     # Tests require network access

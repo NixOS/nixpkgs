@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
 let
-  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw88";
-in
-stdenv.mkDerivation {
+  modDestDir =
+    "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw88";
+in stdenv.mkDerivation {
   pname = "rtw88";
   version = "unstable-2021-04-19";
 
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
     hash = "sha256-PRzWXC1lre8gt1GfVdnaG836f5YK57P9a8tG20yef0w=";
   };
 
-  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags =
+    [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 

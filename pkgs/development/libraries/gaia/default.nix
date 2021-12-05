@@ -1,21 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libyaml
-, swig
-, eigen
-, pkg-config
-, python2
-, wafHook
-, makeWrapper
-, qt4
-, pythonPackages ? null
-, pythonSupport ? false
-# Default to false since it breaks the build, see https://github.com/MTG/gaia/issues/11
-, stlfacadeSupport ? false
-, assertsSupport ? true
-, cyclopsSupport ? true
-}:
+{ stdenv, lib, fetchFromGitHub, libyaml, swig, eigen, pkg-config, python2
+, wafHook, makeWrapper, qt4, pythonPackages ? null, pythonSupport ? false
+  # Default to false since it breaks the build, see https://github.com/MTG/gaia/issues/11
+, stlfacadeSupport ? false, assertsSupport ? true, cyclopsSupport ? true }:
 
 assert pythonSupport -> pythonPackages != null;
 
@@ -43,39 +29,27 @@ stdenv.mkDerivation rec {
     swig
     wafHook
   ]
-    # The gaiafusion binary inside $out/bin needs a shebangs patch, and
-    # wrapping with the appropriate $PYTHONPATH
-    ++ lib.optionals (pythonSupport) [
-      pythonPackages.wrapPython
-    ]
-  ;
+  # The gaiafusion binary inside $out/bin needs a shebangs patch, and
+  # wrapping with the appropriate $PYTHONPATH
+    ++ lib.optionals (pythonSupport) [ pythonPackages.wrapPython ];
 
-  buildInputs = [
-    libyaml
-    eigen
-    qt4
+  buildInputs = [ libyaml eigen qt4 ];
+
+  propagatedBuildInputs = [ ] ++ lib.optionals (pythonSupport) [
+    # This is not exactly specified in upstream's README but it's needed by the
+    # resulting $out/bin/gaiafusion script
+    pythonPackages.pyyaml
   ];
 
-  propagatedBuildInputs = []
-    ++ lib.optionals (pythonSupport) [
-      # This is not exactly specified in upstream's README but it's needed by the
-      # resulting $out/bin/gaiafusion script
-      pythonPackages.pyyaml
-    ]
-  ;
-
-  wafConfigureFlags = []
+  wafConfigureFlags = [ ]
     ++ lib.optionals (pythonSupport) [ "--with-python-bindings" ]
     ++ lib.optionals (stlfacadeSupport) [ "--with-stlfacade" ]
     ++ lib.optionals (assertsSupport) [ "--with-asserts" ]
-    ++ lib.optionals (cyclopsSupport) [ "--with-cyclops" ]
-  ;
+    ++ lib.optionals (cyclopsSupport) [ "--with-cyclops" ];
 
-  postFixup = ""
-    + lib.optionalString pythonSupport ''
-      wrapPythonPrograms
-    ''
-  ;
+  postFixup = "" + lib.optionalString pythonSupport ''
+    wrapPythonPrograms
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/MTG/gaia";

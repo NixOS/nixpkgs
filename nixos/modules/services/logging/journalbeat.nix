@@ -11,13 +11,13 @@ let
     name: ${cfg.name}
     tags: ${builtins.toJSON cfg.tags}
 
-    ${optionalString lt6 "journalbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
+    ${optionalString lt6
+    "journalbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
 
     ${cfg.extraConfig}
   '';
 
-in
-{
+in {
   options = {
 
     services.journalbeat = {
@@ -42,7 +42,7 @@ in
 
       tags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 
@@ -77,14 +77,12 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      {
-        assertion = !hasPrefix "/" cfg.stateDir;
-        message =
-          "The option services.journalbeat.stateDir shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib/.";
-      }
-    ];
+    assertions = [{
+      assertion = !hasPrefix "/" cfg.stateDir;
+      message =
+        "The option services.journalbeat.stateDir shouldn't be an absolute directory."
+        + " It should be a directory relative to /var/lib/.";
+    }];
 
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";

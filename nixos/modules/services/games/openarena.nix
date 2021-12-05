@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.openarena;
-in
-{
+let cfg = config.services.openarena;
+in {
   options = {
     services.openarena = {
       enable = mkEnableOption "OpenArena";
@@ -18,7 +16,7 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Extra flags to pass to <command>oa_ded</command>";
         example = [
           "+set dedicated 2"
@@ -31,9 +29,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openPorts {
-      allowedUDPPorts = [ 27960 ];
-    };
+    networking.firewall = mkIf cfg.openPorts { allowedUDPPorts = [ 27960 ]; };
 
     systemd.services.openarena = {
       description = "OpenArena";
@@ -43,7 +39,10 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "openarena";
-        ExecStart = "${pkgs.openarena}/bin/oa_ded +set fs_basepath ${pkgs.openarena}/openarena-0.8.8 +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart =
+          "${pkgs.openarena}/bin/oa_ded +set fs_basepath ${pkgs.openarena}/openarena-0.8.8 +set fs_homepath /var/lib/openarena ${
+            concatStringsSep " " cfg.extraFlags
+          }";
         Restart = "on-failure";
 
         # Hardening

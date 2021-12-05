@@ -16,19 +16,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ util-linux flex bison ];
 
-  configureFlags = [ "--enable-curses-graphics"
-                     "--disable-tty-graphics"
-                     "--with-owner=no"
-                     "--with-group=no"
-                     "--with-gamesdir=/tmp/unnethack"
-                   ];
+  configureFlags = [
+    "--enable-curses-graphics"
+    "--disable-tty-graphics"
+    "--with-owner=no"
+    "--with-group=no"
+    "--with-gamesdir=/tmp/unnethack"
+  ];
 
   makeFlags = [ "GAMEPERM=744" ];
   patches = [
     # fix regression with bison, merged in master
     (fetchpatch {
       name = "fix-bison.patch";
-      url = "https://github.com/UnNetHack/UnNetHack/commit/04f0a3a850a94eb8837ddcef31303968240d1c31.patch";
+      url =
+        "https://github.com/UnNetHack/UnNetHack/commit/04f0a3a850a94eb8837ddcef31303968240d1c31.patch";
       sha256 = "1zblbwqqz9nx16k6n31wi2hdvz775lvzmkjblmrx18nbm4ylj0n9";
     })
   ];

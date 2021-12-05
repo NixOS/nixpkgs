@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, text-unidecode
-, unidecode
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+, text-unidecode, unidecode }:
 
 buildPythonPackage rec {
   pname = "python-slugify";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-8TODoLn8vmSaGJK5yOtPjqsdbYS4S7emJDF6+pgVnKs=";
   };
 
-  propagatedBuildInputs = [
-    text-unidecode
-    unidecode
-  ];
+  propagatedBuildInputs = [ text-unidecode unidecode ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test.py" ];
 

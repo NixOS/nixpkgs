@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "nuclei";
@@ -17,9 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-lC88sV/WGZuiFZhXNdmMhDyrBdCxbspvpl8JPBS4in4=";
 
   modRoot = "./v2";
-  subPackages = [
-    "cmd/nuclei/"
-  ];
+  subPackages = [ "cmd/nuclei/" ];
 
   # Test files are not part of the release tarball
   doCheck = false;

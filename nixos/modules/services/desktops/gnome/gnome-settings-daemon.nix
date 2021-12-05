@@ -8,24 +8,25 @@ let
 
   cfg = config.services.gnome.gnome-settings-daemon;
 
-in
+in {
 
-{
-
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   imports = [
-    (mkRemovedOptionModule
-      ["services" "gnome3" "gnome-settings-daemon" "package"]
-      "")
+    (mkRemovedOptionModule [
+      "services"
+      "gnome3"
+      "gnome-settings-daemon"
+      "package"
+    ] "")
 
     # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-settings-daemon" "enable" ]
-      [ "services" "gnome" "gnome-settings-daemon" "enable" ]
-    )
+    (mkRenamedOptionModule [
+      "services"
+      "gnome3"
+      "gnome-settings-daemon"
+      "enable"
+    ] [ "services" "gnome" "gnome-settings-daemon" "enable" ])
   ];
 
   ###### interface
@@ -40,22 +41,15 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [
-      pkgs.gnome.gnome-settings-daemon
-    ];
+    environment.systemPackages = [ pkgs.gnome.gnome-settings-daemon ];
 
-    services.udev.packages = [
-      pkgs.gnome.gnome-settings-daemon
-    ];
+    services.udev.packages = [ pkgs.gnome.gnome-settings-daemon ];
 
-    systemd.packages = [
-      pkgs.gnome.gnome-settings-daemon
-    ];
+    systemd.packages = [ pkgs.gnome.gnome-settings-daemon ];
 
     systemd.user.targets."gnome-session-initialized".wants = [
       "gsd-color.target"
@@ -75,9 +69,8 @@ in
       "gsd-power.target"
     ];
 
-    systemd.user.targets."gnome-session-x11-services".wants = [
-      "gsd-xsettings.target"
-    ];
+    systemd.user.targets."gnome-session-x11-services".wants =
+      [ "gsd-xsettings.target" ];
 
   };
 

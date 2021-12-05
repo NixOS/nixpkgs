@@ -1,7 +1,5 @@
-{ beam, callPackage, wxGTK30, buildPackages, stdenv
-, wxSupport ? true
-, systemdSupport ? stdenv.isLinux
-}:
+{ beam, callPackage, wxGTK30, buildPackages, stdenv, wxSupport ? true
+, systemdSupport ? stdenv.isLinux }:
 
 with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
@@ -91,7 +89,8 @@ with beam; {
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR23.elixir`.
     inherit (packages.erlang)
-      elixir elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_ls;
+      elixir elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8
+      elixir_1_7 elixir_ls;
 
     inherit (packages.erlang) lfe lfe_1_3;
   };

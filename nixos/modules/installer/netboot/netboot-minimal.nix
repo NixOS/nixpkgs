@@ -3,8 +3,5 @@
 { ... }:
 
 {
-  imports =
-    [ ./netboot-base.nix
-      ../../profiles/minimal.nix
-    ];
+  imports = [ ./netboot-base.nix ../../profiles/minimal.nix ];
 }

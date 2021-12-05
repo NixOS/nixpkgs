@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.4";
 
   src = fetchurl {
-    url = "https://bitbucket.org/dsimbiriatin/deadbeef-infobar/downloads/deadbeef-infobar-${version}.tar.gz";
+    url =
+      "https://bitbucket.org/dsimbiriatin/deadbeef-infobar/downloads/deadbeef-infobar-${version}.tar.gz";
     sha256 = "0c9wh3wh1hdww7v96i8cy797la06mylhfi0880k8vwh88079aapf";
   };
 
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = true; # crashes DeaDBeeF and is abandoned (https://bitbucket.org/dsimbiriatin/deadbeef-infobar/issues/38/infobar-causes-deadbeef-180-to-crash)
+    broken =
+      true; # crashes DeaDBeeF and is abandoned (https://bitbucket.org/dsimbiriatin/deadbeef-infobar/issues/38/infobar-causes-deadbeef-180-to-crash)
     description = "DeaDBeeF Infobar Plugin";
     homepage = "https://bitbucket.org/dsimbiriatin/deadbeef-infobar";
     license = licenses.gpl2Plus;

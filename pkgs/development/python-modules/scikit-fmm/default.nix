@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, python }:
 
 buildPythonPackage rec {
   pname = "scikit-fmm";
@@ -14,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "799f36e918a2b64ed8434d6c4fef3a1a47757055955c240fba0d4aadccca26b2";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     mkdir testdir; cd testdir
@@ -24,7 +17,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Python extension module which implements the fast marching method";
+    description =
+      "A Python extension module which implements the fast marching method";
     homepage = "https://github.com/scikit-fmm/scikit-fmm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

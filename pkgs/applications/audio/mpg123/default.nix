@@ -1,20 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, pkg-config
-, perl
-, withAlsa ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, withPulse ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, withCoreAudio ? stdenv.hostPlatform.isDarwin
-, AudioUnit
-, AudioToolbox
-, withJack ? stdenv.hostPlatform.isUnix
-, jack
-, withConplay ? !stdenv.hostPlatform.isWindows
-}:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, perl
+, withAlsa ? stdenv.hostPlatform.isLinux, alsa-lib
+, withPulse ? stdenv.hostPlatform.isLinux, libpulseaudio
+, withCoreAudio ? stdenv.hostPlatform.isDarwin, AudioUnit, AudioToolbox
+, withJack ? stdenv.hostPlatform.isUnix, jack
+, withConplay ? !stdenv.hostPlatform.isWindows }:
 
 stdenv.mkDerivation rec {
   pname = "mpg123";
@@ -37,14 +26,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withJack [ jack ];
 
   configureFlags = [
-    "--with-audio=${lib.strings.concatStringsSep "," (
-      lib.optional withJack "jack"
-      ++ lib.optional withPulse "pulse"
-      ++ lib.optional withAlsa "alsa"
-      ++ lib.optional withCoreAudio "coreaudio"
-      ++ [ "dummy" ]
-    )}"
-  ] ++ lib.optional (stdenv.hostPlatform ? mpg123) "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
+    "--with-audio=${
+      lib.strings.concatStringsSep "," (lib.optional withJack "jack"
+        ++ lib.optional withPulse "pulse" ++ lib.optional withAlsa "alsa"
+        ++ lib.optional withCoreAudio "coreaudio" ++ [ "dummy" ])
+    }"
+  ] ++ lib.optional (stdenv.hostPlatform ? mpg123)
+    "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
 
   enableParallelBuilding = true;
 

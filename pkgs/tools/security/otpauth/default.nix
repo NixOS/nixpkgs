@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-}:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "otpauth";

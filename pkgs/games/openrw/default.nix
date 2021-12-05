@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, sfml
-, libGLU
-, libGL
-, bullet
-, glm
-, libmad
-, xlibsWrapper
-, openal
-, SDL2
-, boost
-, ffmpeg
-, Cocoa
-, OpenAL }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libGLU, libGL, bullet, glm, libmad
+, xlibsWrapper, openal, SDL2, boost, ffmpeg, Cocoa, OpenAL }:
 
 stdenv.mkDerivation {
   version = "unstable-2021-10-14";
@@ -31,11 +16,22 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml
+    libGLU
+    libGL
+    bullet
+    glm
+    libmad
+    xlibsWrapper
+    openal
+    SDL2
+    boost
+    ffmpeg
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {
-    description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
+    description =
+      "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
     homepage = "https://github.com/rwengine/openrw";
     license = licenses.gpl3;
     longDescription = ''

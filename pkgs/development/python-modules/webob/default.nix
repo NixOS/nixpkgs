@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pytest }:
 
 buildPythonPackage rec {
   pname = "WebOb";

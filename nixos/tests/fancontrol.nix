@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "fancontrol";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ evils ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ evils ]; };
 
   machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
@@ -18,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       MINSTART=hwmon1/device/pwm1=150
       MINSTOP=hwmon1/device/pwm1=0
     '';
-    };
+  };
 
   # This configuration cannot be valid for the test VM, so it's expected to get an 'outdated' error.
   testScript = ''

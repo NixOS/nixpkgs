@@ -1,20 +1,5 @@
-{ stdenv
-, lib
-, fetchRepoProject
-, cmake
-, ninja
-, patchelf
-, perl
-, pkg-config
-, python3
-, expat
-, libdrm
-, ncurses
-, openssl
-, wayland
-, xorg
-, zlib
-}:
+{ stdenv, lib, fetchRepoProject, cmake, ninja, patchelf, perl, pkg-config
+, python3, expat, libdrm, ncurses, openssl, wayland, xorg, zlib }:
 let
 
   suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
@@ -45,14 +30,7 @@ in stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    patchelf
-    perl
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake ninja patchelf perl pkg-config python3 ];
 
   rpath = lib.makeLibraryPath [
     libdrm
@@ -79,7 +57,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
-    changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
+    changelog =
+      "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ Flakebi ];

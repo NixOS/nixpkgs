@@ -1,21 +1,36 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-cffi-gtk-gdk";
   version = "cl-cffi-gtk-20201220-git";
 
   description = "A Lisp binding to GDK 3";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk-cairo" args."cl-cffi-gtk-gdk-pixbuf" args."cl-cffi-gtk-gio" args."cl-cffi-gtk-glib" args."cl-cffi-gtk-gobject" args."cl-cffi-gtk-pango" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cl-cffi-gtk-cairo"
+    args."cl-cffi-gtk-gdk-pixbuf"
+    args."cl-cffi-gtk-gio"
+    args."cl-cffi-gtk-glib"
+    args."cl-cffi-gtk-gobject"
+    args."cl-cffi-gtk-pango"
+    args."closer-mop"
+    args."iterate"
+    args."trivial-features"
+    args."trivial-garbage"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-12-20/cl-cffi-gtk-20201220-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-12-20/cl-cffi-gtk-20201220-git.tgz";
     sha256 = "15vc0d7nirh0m6rkvzby2zb7qcpyvsxzs5yw5h6h3madyl8qm9b1";
   };
 
   packageName = "cl-cffi-gtk-gdk";
 
-  asdFilesToKeep = ["cl-cffi-gtk-gdk.asd"];
+  asdFilesToKeep = [ "cl-cffi-gtk-gdk.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-cffi-gtk-gdk DESCRIPTION A Lisp binding to GDK 3 SHA256
@@ -45,4 +60,5 @@ rec {
      cl-cffi-gtk-demo-gobject cl-cffi-gtk-example-gtk cl-cffi-gtk-opengl-demo
      cl-cffi-gtk-gdk-pixbuf cl-cffi-gtk-gio cl-cffi-gtk-glib
      cl-cffi-gtk-gobject cl-cffi-gtk cl-cffi-gtk-pango)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

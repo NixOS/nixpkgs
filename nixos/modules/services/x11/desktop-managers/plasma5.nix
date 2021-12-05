@@ -8,31 +8,25 @@ let
   # This is not exactly user-friendly.
   kdeConfigurationType = with types;
     let
-      valueTypes = (oneOf [
-        bool
-        float
-        int
-        str
-      ]) // {
+      valueTypes = (oneOf [ bool float int str ]) // {
         description = "KDE Configuration value";
         emptyValue.value = "";
       };
       set = (nullOr (lazyAttrsOf valueTypes)) // {
         description = "KDE Configuration set";
-        emptyValue.value = {};
+        emptyValue.value = { };
       };
     in (lazyAttrsOf set) // {
-        description = "KDE Configuration file";
-        emptyValue.value = {};
-      };
+      description = "KDE Configuration file";
+      emptyValue.value = { };
+    };
 
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
   inherit (lib)
-    getBin optionalString
-    mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption types;
+    getBin optionalString mkRemovedOptionModule mkRenamedOptionModule mkDefault
+    mkIf mkMerge mkOption types;
 
   ini = pkgs.formats.ini { };
 
@@ -98,7 +92,9 @@ let
     # Qt from doing this wackiness in the first place.
     trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
-      ${getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+      ${
+        getBin pkgs.gnused
+      }/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
     fi
 
     # Remove the kbuildsyscoca5 cache. It will be regenerated
@@ -125,7 +121,9 @@ let
   '' + optionalString config.hardware.pulseaudio.enable ''
     # Load PulseAudio module for routing support.
     # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-      ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+      ${
+        getBin config.hardware.pulseaudio.package
+      }/bin/pactl load-module module-device-manager "do_routing=1"
   '' + ''
     ${activationScript}
 
@@ -150,9 +148,7 @@ let
     fi
   '';
 
-in
-
-{
+in {
   options.services.xserver.desktopManager.plasma5 = {
     enable = mkOption {
       type = types.bool;
@@ -195,14 +191,14 @@ in
     # Internally allows configuring kdeglobals globally
     kdeglobals = mkOption {
       internal = true;
-      default = {};
+      default = { };
       type = kdeConfigurationType;
     };
 
     # Internally allows configuring kwin globally
     kwinrc = mkOption {
       internal = true;
-      default = {};
+      default = { };
       type = kdeConfigurationType;
     };
 
@@ -225,8 +221,19 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "plasma5"
+      "enableQt4Support"
+    ] "Phonon no longer supports Qt 4.")
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [
+      "services"
+      "xserver"
+      "desktopManager"
+      "plasma5"
+    ])
   ];
 
   config = mkMerge [
@@ -260,9 +267,10 @@ in
         KERNEL=="i2c-[0-9]*", TAG+="uaccess"
       '';
 
-      environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
+      environment.systemPackages = with libsForQt5;
+        with plasma5;
+        with kdeGear;
+        with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -348,19 +356,28 @@ in
         ]
 
         # Phonon audio backend
-        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+        ++ lib.optional (cfg.phononBackend == "gstreamer")
+        libsForQt5.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "vlc")
+        libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
-        ++ lib.optional config.networking.networkmanager.enable plasma-nm
+        ++ lib.optionals config.hardware.bluetooth.enable [
+          bluedevil
+          bluez-qt
+          pkgs.openobex
+          pkgs.obexftp
+        ] ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
-        ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
-        ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
+        ++ lib.optional config.services.hardware.bolt.enable
+        pkgs.plasma5Packages.plasma-thunderbolt
+        ++ lib.optionals config.services.samba.enable [
+          kdenetwork-filesharing
+          pkgs.samba
+        ] ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -369,7 +386,8 @@ in
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
 
-      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+      environment.sessionVariables.PLASMA_USE_QT_SCALING =
+        mkIf cfg.useQtScaling "1";
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
@@ -381,7 +399,8 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
+      programs.ssh.askPassword =
+        mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
@@ -389,18 +408,14 @@ in
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+      services.system-config-printer.enable =
+        mkIf config.services.printing.enable (mkDefault true);
       services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
-      services.udev.packages = [
-        pkgs.libmtp
-        pkgs.media-player-info
-      ];
+      services.udev.packages = [ pkgs.libmtp pkgs.media-player-info ];
 
-      services.xserver.displayManager.sddm = {
-        theme = mkDefault "breeze";
-      };
+      services.xserver.displayManager.sddm = { theme = mkDefault "breeze"; };
 
       security.pam.services.kde = { allowNullPassword = true; };
 
@@ -430,8 +445,8 @@ in
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
       environment.etc = {
-        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
-        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+        "xdg/kwinrc".text = lib.generators.toINI { } cfg.kwinrc;
+        "xdg/kdeglobals".text = lib.generators.toINI { } cfg.kdeglobals;
       };
     })
 
@@ -439,24 +454,23 @@ in
     (mkIf cfg.enable {
 
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [
-        ''
-          # Enable the Plasma 5 Desktop Environment.
-          services.xserver.displayManager.sddm.enable = true;
-          services.xserver.desktopManager.plasma5.enable = true;
-        ''
-      ];
+      system.nixos-generate-config.desktopConfiguration = [''
+        # Enable the Plasma 5 Desktop Environment.
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
+      ''];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
+      services.xserver.displayManager.sessionPackages =
+        [ pkgs.libsForQt5.plasma5.plasma-workspace ];
       # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
       # many tiny bugs.
       # See: https://github.com/NixOS/nixpkgs/issues/143272
       services.xserver.displayManager.defaultSession = mkDefault "plasma";
 
-      environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
-        [
+      environment.systemPackages = with libsForQt5;
+        with plasma5;
+        with kdeGear;
+        with kdeFrameworks; [
           ksystemstats
           kinfocenter
           kmenuedit
@@ -475,8 +489,7 @@ in
           elisa
           gwenview
           okular
-        ]
-      ;
+        ];
 
       systemd.user.services = {
         plasma-run-with-systemd = {
@@ -487,7 +500,9 @@ in
             ${set_XDG_CONFIG_HOME}
 
             ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
-              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
+              --file startkderc --group General --key systemdBoot ${
+                lib.boolToString cfg.runUsingSystemd
+              }
           '';
         };
       };
@@ -513,17 +528,18 @@ in
         }
       ];
 
-      environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeApplications; with kdeFrameworks;
+      environment.systemPackages = with libsForQt5;
+        with plasma5;
+        with kdeApplications;
+        with kdeFrameworks;
         [
           # Basic packages without which Plasma Mobile fails to work properly.
           plasma-phone-components
           plasma-nano
           pkgs.maliit-framework
           pkgs.maliit-keyboard
-        ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+        ] ++ lib.optionals (cfg.mobile.installRecommendedSoftware)
+        (with libsForQt5.plasmaMobileGear; [
           # Additional software made for Plasma Mobile.
           alligator
           angelfish
@@ -541,8 +557,7 @@ in
           plasma-phonebook
           plasma-settings
           spacebar
-        ])
-      ;
+        ]);
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
@@ -572,7 +587,8 @@ in
         };
       };
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-phone-components ];
+      services.xserver.displayManager.sessionPackages =
+        [ pkgs.libsForQt5.plasma5.plasma-phone-components ];
     })
   ];
 }

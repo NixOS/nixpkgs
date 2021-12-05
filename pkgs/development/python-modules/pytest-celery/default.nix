@@ -14,7 +14,8 @@ buildPythonPackage rec {
   doCheck = false; # This package has nothing to test or import.
 
   meta = with lib; {
-    description = "pytest plugin for unittest subTest() support and subtests fixture";
+    description =
+      "pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
     license = licenses.mit;
     maintainers = [ ];

@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, wrapGAppsHook
-, autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkg-config
-, libICE, libSM, libXScrnSaver, libXtst, cheetah
-, gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
-, cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
+{ lib, stdenv, fetchFromGitHub, wrapGAppsHook, autoconf, autoconf-archive
+, automake, gettext, intltool, libtool, pkg-config, libICE, libSM, libXScrnSaver
+, libXtst, cheetah, gobject-introspection, glib, glibmm, gtkmm3, atk, pango
+, pangomm, cairo, cairomm, dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
 , gst-plugins-good, libsigcxx }:
 
 stdenv.mkDerivation rec {
@@ -11,19 +10,43 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "0v2mx2idaxlsyv5w66b7pknlill9j9i2gqcs3vq54gak7ix9fj1p";
-    rev = with lib;
-      "v" + concatStringsSep "_" (splitVersion version);
+    rev = with lib; "v" + concatStringsSep "_" (splitVersion version);
     repo = "workrave";
     owner = "rcaelers";
   };
 
   nativeBuildInputs = [
-    autoconf autoconf-archive automake gettext intltool libtool pkg-config wrapGAppsHook
+    autoconf
+    autoconf-archive
+    automake
+    gettext
+    intltool
+    libtool
+    pkg-config
+    wrapGAppsHook
   ];
   buildInputs = [
-    libICE libSM libXScrnSaver libXtst cheetah
-    gobject-introspection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
-    dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
+    libICE
+    libSM
+    libXScrnSaver
+    libXtst
+    cheetah
+    gobject-introspection
+    glib
+    glibmm
+    gtkmm3
+    atk
+    pango
+    pangomm
+    cairo
+    cairomm
+    dbus
+    dbus-glib
+    gdome2
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    libsigcxx
   ];
 
   preConfigure = "./autogen.sh";

@@ -1,28 +1,14 @@
-{ lib, stdenv
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, fetchFromGitHub
-, gradle_6
-, jdk
-, perl
+{ lib, stdenv, makeWrapper, makeDesktopItem, copyDesktopItems, fetchFromGitHub
+, gradle_6, jdk, perl
 
 # for arc
-, SDL2
-, pkg-config
-, stb
-, ant
-, alsa-lib
-, glew
+, SDL2, pkg-config, stb, ant, alsa-lib, glew
 
 # Make the build version easily overridable.
 # Server and client build versions must match, and an empty build version means
 # any build is allowed, so this parameter acts as a simple whitelist.
 # Takes the package version and returns the build version.
-, makeBuildVersion ? (v: v)
-, enableClient ? true
-, enableServer ? true
-}:
+, makeBuildVersion ? (v: v), enableClient ? true, enableServer ? true }:
 
 let
   pname = "mindustry";
@@ -52,9 +38,7 @@ let
     sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
   };
 
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-  ];
+  patches = [ ./0001-fix-include-path-for-SDL2-on-linux.patch ];
 
   unpackPhase = ''
     cp -r ${Mindustry} Mindustry
@@ -116,8 +100,7 @@ let
     outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
   };
 
-in
-assert lib.assertMsg (enableClient || enableServer)
+in assert lib.assertMsg (enableClient || enableServer)
   "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
 stdenv.mkDerivation rec {
   inherit pname version unpackPhase patches;
@@ -133,64 +116,53 @@ stdenv.mkDerivation rec {
   # and will assume that it's not actually needed.
   # This can cause issues.
   # See https://github.com/NixOS/nixpkgs/issues/109798.
-  propagatedBuildInputs = lib.optionals enableClient [
-    glew.out
-  ];
+  propagatedBuildInputs = lib.optionals enableClient [ glew.out ];
 
-  buildInputs = lib.optionals enableClient [
-    SDL2
-    glew
-    alsa-lib
-  ];
-  nativeBuildInputs = [
-    pkg-config
-    gradle
-    makeWrapper
-    jdk
-  ] ++ lib.optionals enableClient [
-    ant
-    copyDesktopItems
-  ];
+  buildInputs = lib.optionals enableClient [ SDL2 glew alsa-lib ];
+  nativeBuildInputs = [ pkg-config gradle makeWrapper jdk ]
+    ++ lib.optionals enableClient [ ant copyDesktopItems ];
 
   desktopItems = lib.optional enableClient desktopItem;
 
-  buildPhase = with lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
+  buildPhase = with lib;
+    ''
+      export GRADLE_USER_HOME=$(mktemp -d)
 
-    # point to offline repo
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
-    sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
+      # point to offline repo
+      sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
+      sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
 
-    pushd Mindustry
-  '' + optionalString enableClient ''
-    gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed $glewlib \
-      --add-needed $sdllib
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-  '' + optionalString enableServer ''
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
-  '';
+      pushd Mindustry
+    '' + optionalString enableClient ''
+      gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
+      gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+      glewlib=${lib.getLib glew}/lib/libGLEW.so
+      sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+      patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+        --add-needed $glewlib \
+        --add-needed $sdllib
+      gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
+    '' + optionalString enableServer ''
+      gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+    '';
 
-  installPhase = with lib; ''
-    runHook preInstall
-  '' + optionalString enableClient ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar"
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-  '' + optionalString enableServer ''
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase = with lib;
+    ''
+      runHook preInstall
+    '' + optionalString enableClient ''
+      install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+        --add-flags "-jar $out/share/mindustry.jar"
+      install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    '' + optionalString enableServer ''
+      install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+        --add-flags "-jar $out/share/mindustry-server.jar"
+    '' + ''
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";

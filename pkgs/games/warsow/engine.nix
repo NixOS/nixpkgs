@@ -1,6 +1,5 @@
-{ stdenv, lib, substituteAll, fetchurl, cmake, libogg, libvorbis, libtheora, curl, freetype
-, libjpeg, libpng, SDL2, libGL, openal, zlib
-}:
+{ stdenv, lib, substituteAll, fetchurl, cmake, libogg, libvorbis, libtheora
+, curl, freetype, libjpeg, libpng, SDL2, libGL, openal, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "warsow-engine";
@@ -21,7 +20,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    libogg libvorbis libtheora curl freetype libjpeg SDL2 libGL openal zlib
+    libogg
+    libvorbis
+    libtheora
+    curl
+    freetype
+    libjpeg
+    SDL2
+    libGL
+    openal
+    zlib
     libpng
   ];
 
@@ -44,7 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Multiplayer FPS game designed for competitive gaming (engine only)";
+    description =
+      "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl abbradar ];

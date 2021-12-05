@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, hypothesis
-, pandas
-, numpy
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pytestCheckHook
+, hypothesis, pandas, numpy }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-DjMUI5JBomv0f2AC1Nvb3DeqWn65AvZJWhWus4AZk7w=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
-    pytestCheckHook
-    hypothesis
-    pandas
-  ];
+  checkInputs = [ pytestCheckHook hypothesis pandas ];
 
   disabledTests = [
     "test_levenshtein_block" # hypothesis data generation too slow

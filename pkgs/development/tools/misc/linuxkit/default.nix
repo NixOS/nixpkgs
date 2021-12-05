@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname   = "linuxkit";
+  pname = "linuxkit";
   version = "0.8";
 
   goPackagePath = "github.com/linuxkit/linuxkit";
@@ -15,10 +15,16 @@ buildGoPackage rec {
 
   subPackages = [ "src/cmd/linuxkit" ];
 
-  ldflags = [ "-s" "-w" "-X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev}" "-X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev}"
+    "-X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}"
+  ];
 
   meta = with lib; {
-    description = "A toolkit for building secure, portable and lean operating systems for containers";
+    description =
+      "A toolkit for building secure, portable and lean operating systems for containers";
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = [ maintainers.nicknovitski ];

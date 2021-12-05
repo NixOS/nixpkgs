@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp, yarl
+, aresponses, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "twentemilieu";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "1ff35sh73m2s7fh4d8p2pjwdbfljswr8b8lpcjybz8nsh0286xph";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "twentemilieu" ];
 

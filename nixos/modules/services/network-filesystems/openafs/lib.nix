@@ -1,15 +1,17 @@
-{ config, lib, ...}:
+{ config, lib, ... }:
 
-let
-  inherit (lib) concatStringsSep mkOption types;
+let inherit (lib) concatStringsSep mkOption types;
 
 in {
 
-  mkCellServDB = cellName: db: ''
-    >${cellName}
-  '' + (concatStringsSep "\n" (map (dbm: if (dbm.ip != "" && dbm.dnsname != "") then dbm.ip + " #" + dbm.dnsname else "")
-                                   db))
-     + "\n";
+  mkCellServDB = cellName: db:
+    ''
+      >${cellName}
+    '' + (concatStringsSep "\n" (map (dbm:
+      if (dbm.ip != "" && dbm.dnsname != "") then
+        dbm.ip + " #" + dbm.dnsname
+      else
+        "") db)) + "\n";
 
   # CellServDB configuration type
   cellServDBConfig = {

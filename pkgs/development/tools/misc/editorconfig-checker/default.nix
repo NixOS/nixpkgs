@@ -24,7 +24,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to verify that your files are in harmony with your .editorconfig";
+    description =
+      "A tool to verify that your files are in harmony with your .editorconfig";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ uri-canva zowoq ];

@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, CoreServices
-, cmake
-, libiconv
-, useMimalloc ? false
-, doCheck ? true
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, CoreServices, cmake
+, libiconv, useMimalloc ? false, doCheck ? true }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
@@ -33,22 +24,26 @@ rustPlatform.buildRustPackage rec {
   # They change Cargo.toml so go `cargoPatches`.
   cargoPatches = [
     (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/f0ad6fa68bf98d317518bb75da01b7bb7abe98d3.patch";
+      url =
+        "https://github.com/rust-analyzer/rust-analyzer/commit/f0ad6fa68bf98d317518bb75da01b7bb7abe98d3.patch";
       revert = true;
       sha256 = "sha256-ksX2j1Pgtd+M+FmXTEljm1nUxJwcY8GDQ9784Lb1uM4=";
     })
     (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/8457ae34bdbca117b2ef73787b214161440e21f9.patch";
+      url =
+        "https://github.com/rust-analyzer/rust-analyzer/commit/8457ae34bdbca117b2ef73787b214161440e21f9.patch";
       revert = true;
       sha256 = "sha256-w1Py1bvZ2/tDQDZVMNmPRo6i6uA4H3YYZY4rXlo0iqg=";
     })
     (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/ca44b6892e3e66765355d4e645f74df3d184c03b.patch";
+      url =
+        "https://github.com/rust-analyzer/rust-analyzer/commit/ca44b6892e3e66765355d4e645f74df3d184c03b.patch";
       revert = true;
       sha256 = "sha256-N1TWlLxEg6oxFkns1ieVVvLAkrHq2WOr1tbkNvZvDFg=";
     })
     (fetchpatch {
-      url = "https://github.com/rust-analyzer/rust-analyzer/commit/1294bfce865c556184c9327af4a8953ca940aec8.patch";
+      url =
+        "https://github.com/rust-analyzer/rust-analyzer/commit/1294bfce865c556184c9327af4a8953ca940aec8.patch";
       revert = true;
       sha256 = "sha256-65eZxAjsuUln6lzSihIP26x15PELLDL4yk9wiVzJ0hE=";
     })
@@ -58,10 +53,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
@@ -84,7 +76,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
+    description =
+      "An experimental modular compiler frontend for the Rust language";
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];

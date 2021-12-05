@@ -1,61 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, removeReferencesTo
-, python3
-, meson
-, ninja
-, systemd
-, pkg-config
-, docutils
-, doxygen
-, graphviz
-, valgrind
-, glib
-, dbus
-, alsa-lib
-, libjack2
-, libusb1
-, udev
-, libva
-, libsndfile
-, SDL2
-, vulkan-headers
-, vulkan-loader
-, webrtc-audio-processing
-, ncurses
+{ stdenv, lib, fetchFromGitLab, removeReferencesTo, python3, meson, ninja
+, systemd, pkg-config, docutils, doxygen, graphviz, valgrind, glib, dbus
+, alsa-lib, libjack2, libusb1, udev, libva, libsndfile, SDL2, vulkan-headers
+, vulkan-loader, webrtc-audio-processing, ncurses
 , readline81 # meson can't find <7 as those versions don't have a .pc file
-, makeFontsConf
-, callPackage
-, nixosTests
-, withMediaSession ? true
-, libcameraSupport ? true
-, libcamera
-, libdrm
-, gstreamerSupport ? true
-, gst_all_1 ? null
-, ffmpegSupport ? true
-, ffmpeg ? null
-, bluezSupport ? true
-, bluez ? null
-, sbc ? null
-, libfreeaptx ? null
-, ldacbt ? null
-, fdk_aac ? null
-, nativeHspSupport ? true
-, nativeHfpSupport ? true
-, ofonoSupport ? true
-, hsphfpdSupport ? true
-, pulseTunnelSupport ? true
-, libpulseaudio ? null
-, zeroconfSupport ? true
-, avahi ? null
-}:
+, makeFontsConf, callPackage, nixosTests, withMediaSession ? true
+, libcameraSupport ? true, libcamera, libdrm, gstreamerSupport ? true
+, gst_all_1 ? null, ffmpegSupport ? true, ffmpeg ? null, bluezSupport ? true
+, bluez ? null, sbc ? null, libfreeaptx ? null, ldacbt ? null, fdk_aac ? null
+, nativeHspSupport ? true, nativeHfpSupport ? true, ofonoSupport ? true
+, hsphfpdSupport ? true, pulseTunnelSupport ? true, libpulseaudio ? null
+, zeroconfSupport ? true, avahi ? null }:
 
 let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ ];
-  };
+  fontsConf = makeFontsConf { fontDirectories = [ ]; };
 
   mesonEnable = b: if b then "enabled" else "disabled";
   mesonList = l: "[" + lib.concatStringsSep "," l + "]";
@@ -64,16 +21,7 @@ let
     pname = "pipewire";
     version = "0.3.40";
 
-    outputs = [
-      "out"
-      "lib"
-      "pulse"
-      "jack"
-      "dev"
-      "doc"
-      "man"
-      "installedTests"
-    ];
+    outputs = [ "out" "lib" "pulse" "jack" "dev" "doc" "man" "installedTests" ];
 
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
@@ -98,15 +46,8 @@ let
       ./0095-spa-data-dir.patch
     ];
 
-    nativeBuildInputs = [
-      docutils
-      doxygen
-      graphviz
-      meson
-      ninja
-      pkg-config
-      python3
-    ];
+    nativeBuildInputs =
+      [ docutils doxygen graphviz meson ninja pkg-config python3 ];
 
     buildInputs = [
       alsa-lib
@@ -124,12 +65,14 @@ let
       valgrind
       SDL2
       systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
-    ++ lib.optionals libcameraSupport [ libcamera libdrm ]
-    ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
-    ++ lib.optional pulseTunnelSupport libpulseaudio
-    ++ lib.optional zeroconfSupport avahi;
+    ] ++ lib.optionals gstreamerSupport [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+    ] ++ lib.optionals libcameraSupport [ libcamera libdrm ]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
+      ++ lib.optional pulseTunnelSupport libpulseaudio
+      ++ lib.optional zeroconfSupport avahi;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -155,7 +98,8 @@ let
       "-Dvulkan=enabled"
     ];
 
-    FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+    FONTCONFIG_FILE =
+      fontsConf; # Fontconfig error: Cannot load default config file
 
     doCheck = true;
 
@@ -204,7 +148,8 @@ let
     };
 
     meta = with lib; {
-      description = "Server and user space API to deal with multimedia pipelines";
+      description =
+        "Server and user space API to deal with multimedia pipelines";
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
@@ -212,5 +157,4 @@ let
     };
   };
 
-in
-self
+in self

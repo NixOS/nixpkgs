@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -41,8 +38,7 @@ let
 
     };
   };
-in
-with py.pkgs;
+in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
@@ -55,9 +51,7 @@ buildPythonApplication rec {
     sha256 = "sha256-fPx1TvPx16ciaDR0gYQknLCQVRfwFNo0T/P5gY419VY=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with py.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with py.pkgs; [
     aiodns
@@ -116,9 +110,7 @@ buildPythonApplication rec {
     "performance_tests/test_checkov_performance.py"
   ];
 
-  pythonImportsCheck = [
-    "checkov"
-  ];
+  pythonImportsCheck = [ "checkov" ];
 
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";

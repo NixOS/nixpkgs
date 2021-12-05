@@ -1,13 +1,14 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, iptables, nixosTests }:
 
-let
-  inherit (lib.versions) majorMinor;
+let inherit (lib.versions) majorMinor;
 in stdenv.mkDerivation rec {
   version = "2.6";
   pname = "ferm";
 
   src = fetchurl {
-    url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
+    url = "http://ferm.foo-projects.org/download/${
+        majorMinor version
+      }/ferm-${version}.tar.xz";
     sha256 = "sha256-aJVBRl58Bzy9YEyc0Y8RPDHAtBuxJhRyalmxfkQFiIU=";
   };
 
@@ -15,10 +16,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [ perl ];
 
-  makeFlags = [
-    "PERL=perl"
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PERL=perl" "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     rm -r $out/lib/systemd
@@ -40,7 +38,7 @@ in stdenv.mkDerivation rec {
       language, which can contain levels and lists.
     '';
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [mic92];
+    maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
 }

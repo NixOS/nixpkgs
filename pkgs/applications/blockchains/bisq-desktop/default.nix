@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, openjdk11
-, dpkg
-, writeScript
-, bash
-, tor
-, gnutar
-, zip
-, xz
-}:
+{ stdenv, lib, makeWrapper, fetchurl, makeDesktopItem, copyDesktopItems
+, imagemagick, openjdk11, dpkg, writeScript, bash, tor, gnutar, zip, xz }:
 
 let
   bisq-launcher = writeScript "bisq-launcher" ''
@@ -32,17 +18,18 @@ let
 
     exec ${tor}/bin/tor "$@"
   '';
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "bisq-desktop";
   version = "1.7.5";
 
   src = fetchurl {
-    url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
+    url =
+      "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
     sha256 = "0mwlmya53xaps8x8c5cvk9zxy0ddijkrba8x3jp2glql34wac3ri";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
+  nativeBuildInputs =
+    [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
 
   desktopItems = [
     (makeDesktopItem {

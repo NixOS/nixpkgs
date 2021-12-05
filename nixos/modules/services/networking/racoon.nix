@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.racoon;
+let cfg = config.services.racoon;
 in {
   options.services.racoon = {
     enable = mkEnableOption "racoon";
@@ -28,9 +27,11 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.ipsecTools}/bin/racoon -f ${
-          if (cfg.config != "") then pkgs.writeText "racoon.conf" cfg.config
-          else cfg.configPath
-        }";
+            if (cfg.config != "") then
+              pkgs.writeText "racoon.conf" cfg.config
+            else
+              cfg.configPath
+          }";
         ExecReload = "${pkgs.ipsecTools}/bin/racoonctl reload-config";
         PIDFile = "/run/racoon.pid";
         Type = "forking";

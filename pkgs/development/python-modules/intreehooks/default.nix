@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytoml
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytoml, pytest }:
 
 buildPythonPackage rec {
   pname = "intreehooks";

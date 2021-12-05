@@ -1,24 +1,6 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, intervaltree
-, pyflakes
-, requests
-, lxml
-, google-i18n-address
-, pycountry
-, html5lib
-, six
-, kitchen
-, pypdf2
-, dict2xml
-, weasyprint
-, pyyaml
-, jinja2
-, configargparse
-, appdirs
-}:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, intervaltree, pyflakes
+, requests, lxml, google-i18n-address, pycountry, html5lib, six, kitchen, pypdf2
+, dict2xml, weasyprint, pyyaml, jinja2, configargparse, appdirs }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";

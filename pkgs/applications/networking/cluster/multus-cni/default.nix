@@ -27,7 +27,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Multus CNI is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods";
+    description =
+      "Multus CNI is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods";
     homepage = "https://github.com/k8snetworkplumbingwg/multus-cni";
     license = licenses.asl20;
     platforms = platforms.linux;

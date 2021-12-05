@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, msgpack
-, greenlet
-, pythonOlder
-, isPyPy
-, pytest-runner
-}:
+{ buildPythonPackage, fetchPypi, lib, msgpack, greenlet, pythonOlder, isPyPy
+, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "pynvim";
@@ -18,16 +11,13 @@ buildPythonPackage rec {
     sha256 = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pytest-runner ];
 
   # Tests require pkgs.neovim,
   # which we cannot add because of circular dependency.
   doCheck = false;
 
-  propagatedBuildInputs = [ msgpack ]
-    ++ lib.optional (!isPyPy) greenlet;
+  propagatedBuildInputs = [ msgpack ] ++ lib.optional (!isPyPy) greenlet;
 
   meta = {
     description = "Python client for Neovim";

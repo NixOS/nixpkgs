@@ -1,9 +1,4 @@
-{ lib
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, gopass
-}:
+{ lib, makeWrapper, buildGoModule, fetchFromGitHub, gopass }:
 
 buildGoModule rec {
   pname = "git-credential-gopass";
@@ -22,12 +17,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   postFixup = ''
-    wrapProgram $out/bin/git-credential-gopass --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/git-credential-gopass --prefix PATH : "${
+      lib.makeBinPath [ gopass ]
+    }"
   '';
 
   meta = with lib; {

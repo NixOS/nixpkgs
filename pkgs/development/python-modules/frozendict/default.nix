@@ -1,14 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytestCheckHook, python }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.0.7";  # 2.0.6 breaks canonicaljson
+  version = "2.0.7"; # 2.0.6 breaks canonicaljson
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -18,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "a68f609d1af67da80b45519fdcfca2d60249c0a8c96e68279c1b6ddd92128204";
   };
 
-  pythonImportsCheck = [
-    "frozendict"
-  ];
+  pythonImportsCheck = [ "frozendict" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -r frozendict

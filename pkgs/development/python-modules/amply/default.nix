@@ -1,11 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, docutils
-, pyparsing
-, pytestCheckHook
-}:
+{ lib, fetchPypi, buildPythonPackage, setuptools-scm, docutils, pyparsing
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "amply";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
-    docutils
-    pyparsing
-  ];
+  propagatedBuildInputs = [ docutils pyparsing ];
   checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "amply" ];

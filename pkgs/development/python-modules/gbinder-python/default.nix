@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, pkg-config
-, libgbinder
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, cython, pkg-config, libgbinder }:
 
 buildPythonPackage rec {
   pname = "gbinder-python";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "0jgblzakjgsy0cj93bmh5gr7qnl2xgsrm0wzc6xjvzry9lrbs360";
   };
 
-  buildInputs = [
-    libgbinder
-  ];
+  buildInputs = [ libgbinder ];
 
-  nativeBuildInputs = [
-    cython
-    pkg-config
-  ];
+  nativeBuildInputs = [ cython pkg-config ];
 
   setupPyGlobalFlags = [ "--cython" ];
 

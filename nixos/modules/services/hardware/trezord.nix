@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.services.trezord;
+let cfg = config.services.trezord;
 in {
 
   ### docs
 
-  meta = {
-    doc = ./trezord.xml;
-  };
+  meta = { doc = ./trezord.xml; };
 
   ### interface
 
@@ -28,15 +25,15 @@ in {
         default = false;
         description = ''
           Enable Trezor emulator support.
-          '';
-       };
+        '';
+      };
 
       emulator.port = mkOption {
         type = types.port;
         default = 21324;
         description = ''
           Listening port for the Trezor emulator.
-          '';
+        '';
       };
     };
   };
@@ -50,10 +47,13 @@ in {
       description = "Trezor Bridge";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [];
+      path = [ ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord-go ${optionalString cfg.emulator.enable "-e ${builtins.toString cfg.emulator.port}"}";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go ${
+            optionalString cfg.emulator.enable
+            "-e ${builtins.toString cfg.emulator.port}"
+          }";
         User = "trezord";
       };
     };
@@ -64,7 +64,7 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.trezord = {};
+    users.groups.trezord = { };
   };
 }
 

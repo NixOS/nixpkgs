@@ -1,15 +1,13 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kcrash, kinit
-}:
+{ mkDerivation, fetchurl, lib, extra-cmake-modules, kdoctools, wrapGAppsHook
+, kconfig, kcrash, kinit }:
 
 mkDerivation rec {
   pname = "kronometer";
   version = "2.2.3";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "05hs8729a3aqjpwmn2xdf2sriacrll4sj4ax3lm4s1ravj09n9bm";
   };
 

@@ -1,8 +1,6 @@
 { lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
-, buildPythonApplication, pycairo, pygobject3
-, gobject-introspection, gtk3, librsvg
-, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
-}:
+, buildPythonApplication, pycairo, pygobject3, gobject-introspection, gtk3
+, librsvg, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond }:
 
 buildPythonApplication rec {
   pname = "solfege";
@@ -13,12 +11,7 @@ buildPythonApplication rec {
     sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
   };
 
-  patches = [
-    ./css.patch
-    ./menubar.patch
-    ./texinfo.patch
-    ./webbrowser.patch
-  ];
+  patches = [ ./css.patch ./menubar.patch ./texinfo.patch ./webbrowser.patch ];
 
   nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
   buildInputs = [ gobject-introspection gtk3 librsvg ];

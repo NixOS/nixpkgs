@@ -1,28 +1,12 @@
-{ lib, stdenv, fetchurl, makeFontsConf
-, cacert
-, cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp
-, gtk3
-, libedit, libffi
-, libiconv
-, libGL
-, libGLU
-, libjpeg
-, xorg
-, ncurses
-, libpng, libtool, mpfr, openssl, pango, poppler
-, readline, sqlite
-, disableDocs ? false
-, CoreFoundation
-, gsettings-desktop-schemas
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, makeFontsConf, cacert, cairo, coreutils, fontconfig
+, freefont_ttf, glib, gmp, gtk3, libedit, libffi, libiconv, libGL, libGLU
+, libjpeg, xorg, ncurses, libpng, libtool, mpfr, openssl, pango, poppler
+, readline, sqlite, disableDocs ? false, CoreFoundation
+, gsettings-desktop-schemas, wrapGAppsHook }:
 
 let
 
-  fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
   libPath = lib.makeLibraryPath [
     cairo
@@ -44,32 +28,31 @@ let
     sqlite
   ];
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "racket";
   version = "8.3"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
-      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+      url =
+        "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
       inherit sha256;
-    }
-  )) {
-    name = "${pname}-${version}";
-    sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
-  };
+    })) {
+      name = "${pname}-${version}";
+      sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
+    };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
-    (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
+    (lib.optionalString (stdenv.cc.isGNU && !stdenv.isDarwin) "-lgcc_s")
     (lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
-  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
+  buildInputs =
+    [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
 
   patches = [
@@ -96,9 +79,9 @@ stdenv.mkDerivation rec {
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ lib.optional disableDocs [ "--disable-docs" ]
-                   ++ lib.optional stdenv.isDarwin [ "--enable-xonx" ];
+  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+    ++ lib.optional disableDocs [ "--disable-docs" ]
+    ++ lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -116,7 +99,10 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
   };

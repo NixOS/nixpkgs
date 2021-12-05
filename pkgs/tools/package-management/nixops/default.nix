@@ -1,19 +1,20 @@
-{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert, nixopsAzurePackages ? []
-, fetchurl, fetchpatch
-}:
+{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert
+, nixopsAzurePackages ? [ ], fetchurl, fetchpatch }:
 
 python2Packages.buildPythonApplication rec {
   pname = "nixops";
   version = "1.7";
 
   src = fetchurl {
-    url = "https://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
+    url =
+      "https://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
     sha256 = "091c0b5bca57d4aa20be20e826ec161efe3aec9c788fbbcf3806a734a517f0f3";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/NixOS/nixops/commit/fb6d4665e8efd858a215bbaaf079ec3f5ebc49b8.patch";
+      url =
+        "https://github.com/NixOS/nixops/commit/fb6d4665e8efd858a215bbaaf079ec3f5ebc49b8.patch";
       sha256 = "1hbhykl811zsqlaj3y5m9d8lfsal6ps6n5p16ah6lqy2s18ap9d0";
     })
     ./optional-virtd.patch
@@ -22,7 +23,8 @@ python2Packages.buildPythonApplication rec {
   buildInputs = [ libxslt ];
 
   pythonPath = with python2Packages;
-    [ prettytable
+    [
+      prettytable
       boto
       boto3
       hetzner
@@ -33,17 +35,16 @@ python2Packages.buildPythonApplication rec {
       datadog
       digital-ocean
       typing
-      ]
-      ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
-      ++ nixopsAzurePackages;
+    ] ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
+    ++ nixopsAzurePackages;
 
   checkPhase =
-  # Ensure, that there are no (python) import errors
-  ''
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt \
-    HOME=$(pwd) \
-      $out/bin/nixops --version
-  '';
+    # Ensure, that there are no (python) import errors
+    ''
+      SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt \
+      HOME=$(pwd) \
+        $out/bin/nixops --version
+    '';
 
   postInstall = ''
     make -C doc/manual install nixops.1 docbookxsl=${docbook_xsl_ns}/xml/xsl/docbook \

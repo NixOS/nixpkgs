@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix cross-compilation
     (fetchpatch {
-      url = "https://github.com/omar-polo/gmid/commit/eb77afa8d308a2f4f422df2ff19f023b5b2cc591.patch";
+      url =
+        "https://github.com/omar-polo/gmid/commit/eb77afa8d308a2f4f422df2ff19f023b5b2cc591.patch";
       sha256 = "sha256-rTTZUpfXOg7X0Ad0Y9evyU7k+aVYpJ0t9SEkNA/sSdk=";
     })
   ];

@@ -1,12 +1,4 @@
-{ lib
-, blas
-, lapack
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, nose
-, numpy
-}:
+{ lib, blas, lapack, buildPythonPackage, cffi, fetchFromGitHub, nose, numpy }:
 
 buildPythonPackage {
   pname = "prox-tv";
@@ -19,14 +11,9 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
-  propagatedBuildInputs = [
-    numpy
-    cffi
-  ];
+  propagatedBuildInputs = [ numpy cffi ];
 
   propagatedNativeBuildInputs = [ cffi ];
 

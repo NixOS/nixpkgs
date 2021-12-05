@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, doxygen
-, check
-, jansson
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, doxygen, check
+, jansson, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cjose";
@@ -24,10 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jansson openssl ];
   checkInputs = [ check ];
 
-  configureFlags = [
-    "--with-jansson=${jansson}"
-    "--with-openssl=${openssl.dev}"
-  ];
+  configureFlags =
+    [ "--with-jansson=${jansson}" "--with-openssl=${openssl.dev}" ];
 
   meta = with lib; {
     homepage = "https://github.com/cisco/cjose";

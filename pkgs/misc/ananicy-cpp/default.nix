@@ -1,12 +1,5 @@
-{ lib
-, gcc11Stdenv
-, fetchFromGitLab
-, makeWrapper
-, cmake
-, spdlog
-, nlohmann_json
-, systemd
-}:
+{ lib, gcc11Stdenv, fetchFromGitLab, makeWrapper, cmake, spdlog, nlohmann_json
+, systemd }:
 
 gcc11Stdenv.mkDerivation rec {
   pname = "ananicy-cpp";
@@ -19,16 +12,9 @@ gcc11Stdenv.mkDerivation rec {
     sha256 = "sha256-V0QPXC17ZD2c4MK3DAkzoPgKOU5V5BjfQKUk7I6f8WM=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    cmake
-  ];
+  nativeBuildInputs = [ makeWrapper cmake ];
 
-  buildInputs = [
-    spdlog
-    nlohmann_json
-    systemd
-  ];
+  buildInputs = [ spdlog nlohmann_json systemd ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_JSON=yON"

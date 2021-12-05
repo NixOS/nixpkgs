@@ -1,8 +1,7 @@
-{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
-, kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
-, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
-, ckbcomp, xkeyboard_config, mkDerivation
-}:
+{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kservice
+, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
+, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata, ckbcomp
+, xkeyboard_config, mkDerivation }:
 
 mkDerivation rec {
   pname = "calamares";
@@ -10,15 +9,29 @@ mkDerivation rec {
 
   # release including submodule
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-p3ctULrzXPt9dNs8Ckb7cqdOBpp4qOmEwu0dEVq8lEw=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    boost kparts.dev kpmcore.out kservice.dev
-    libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
-    qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
+    boost
+    kparts.dev
+    kpmcore.out
+    kservice.dev
+    libatasmart
+    libxcb
+    libyamlcpp
+    parted
+    polkit-qt
+    python
+    qtbase
+    qtquickcontrols
+    qtsvg
+    qttools
+    qtwebengine.dev
+    util-linux
   ];
 
   cmakeFlags = [

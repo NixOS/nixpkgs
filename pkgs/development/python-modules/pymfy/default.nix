@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests_oauthlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, httpretty, poetry-core
+, pytestCheckHook, pythonOlder, requests, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "pymfy";
@@ -24,15 +16,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ requests requests_oauthlib ];
 
-  checkInputs = [
-    httpretty
-    pytestCheckHook
-  ];
+  checkInputs = [ httpretty pytestCheckHook ];
 
   pythonImportsCheck = [ "pymfy" ];
 

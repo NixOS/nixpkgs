@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dot-http";
@@ -15,9 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "Text-based scriptable HTTP client";

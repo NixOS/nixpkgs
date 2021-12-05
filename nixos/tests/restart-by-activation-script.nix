@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "restart-by-activation-script";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ das_j ]; };
 
   machine = { pkgs, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
@@ -43,31 +41,32 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = /* python */ ''
-    machine.wait_for_unit("multi-user.target")
+  testScript = # python
+    ''
+      machine.wait_for_unit("multi-user.target")
 
-    with subtest("nothing happens when the activation script does nothing"):
-        out = machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate 2>&1")
-        assert 'restart' not in out
-        assert 'reload' not in out
-        out = machine.succeed("/run/current-system/bin/switch-to-configuration test")
-        assert 'restart' not in out
-        assert 'reload' not in out
+      with subtest("nothing happens when the activation script does nothing"):
+          out = machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate 2>&1")
+          assert 'restart' not in out
+          assert 'reload' not in out
+          out = machine.succeed("/run/current-system/bin/switch-to-configuration test")
+          assert 'restart' not in out
+          assert 'reload' not in out
 
-    machine.succeed("touch /test-the-activation-script")
+      machine.succeed("touch /test-the-activation-script")
 
-    with subtest("dry activation"):
-        out = machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate 2>&1")
-        assert 'would restart the following units: restart-me.service' in out
-        assert 'would reload the following units: reload-me.service' in out
-        machine.fail("test -f /run/nixos/dry-activation-restart-list")
-        machine.fail("test -f /run/nixos/dry-activation-reload-list")
+      with subtest("dry activation"):
+          out = machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate 2>&1")
+          assert 'would restart the following units: restart-me.service' in out
+          assert 'would reload the following units: reload-me.service' in out
+          machine.fail("test -f /run/nixos/dry-activation-restart-list")
+          machine.fail("test -f /run/nixos/dry-activation-reload-list")
 
-    with subtest("real activation"):
-        out = machine.succeed("/run/current-system/bin/switch-to-configuration test 2>&1")
-        assert 'restarting the following units: restart-me.service' in out
-        assert 'reloading the following units: reload-me.service' in out
-        machine.fail("test -f /run/nixos/activation-restart-list")
-        machine.fail("test -f /run/nixos/activation-reload-list")
-  '';
+      with subtest("real activation"):
+          out = machine.succeed("/run/current-system/bin/switch-to-configuration test 2>&1")
+          assert 'restarting the following units: restart-me.service' in out
+          assert 'reloading the following units: reload-me.service' in out
+          machine.fail("test -f /run/nixos/activation-restart-list")
+          machine.fail("test -f /run/nixos/activation-reload-list")
+    '';
 })

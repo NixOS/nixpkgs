@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, fontconfig, libX11, libXext, libXft, ncurses
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "mcaimi-st";
@@ -20,16 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-xyVEvD8s1J9Wj9NB4Gg+0ldvde7M8IVpzCOTttC1IY0=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    fontconfig
-    libX11
-    libXext
-    libXft
-    ncurses
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ fontconfig libX11 libXext libXft ncurses ];
 
   installPhase = ''
     runHook preInstall

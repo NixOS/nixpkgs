@@ -1,17 +1,11 @@
-{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
-, libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd
-, freetype, fontconfig, libXft, libXrender, libxcb, expat
-, libuuid
-, libxml2
-, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
-, libdrm, mesa
-, nss, nspr
-, patchelf, makeWrapper
-, isSnapshot ? false
-, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
-, enableWidevine ? false, vivaldi-widevine ? null
-}:
+{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon
+, libxshmfence, libXfixes, libXt, libXi, libXcursor, libXScrnSaver
+, libXcomposite, libXdamage, libXtst, libXrandr, alsa-lib, dbus, cups, libexif
+, ffmpeg, systemd, freetype, fontconfig, libXft, libXrender, libxcb, expat
+, libuuid, libxml2, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk
+, at-spi2-core, gnome2, libdrm, mesa, nss, nspr, patchelf, makeWrapper
+, isSnapshot ? false, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
+, enableWidevine ? false, vivaldi-widevine ? null }:
 
 let
   branch = if isSnapshot then "snapshot" else "stable";
@@ -21,7 +15,8 @@ in stdenv.mkDerivation rec {
   version = "4.3.2439.44-1";
 
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
+    url =
+      "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
     sha256 = "1bsx8axs438f4p019mdq66pmpimf575r31rv6cibpgv85366xhh9";
   };
 
@@ -33,17 +28,56 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf makeWrapper ];
 
   buildInputs = [
-    stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
-    libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
-    freetype fontconfig libXrender libuuid expat glib nss nspr
-    libxml2 pango cairo gnome2.GConf
-    libdrm mesa
+    stdenv.cc.cc
+    stdenv.cc.libc
+    zlib
+    libX11
+    libXt
+    libXext
+    libSM
+    libICE
+    libxcb
+    libxkbcommon
+    libxshmfence
+    libXi
+    libXft
+    libXcursor
+    libXfixes
+    libXScrnSaver
+    libXcomposite
+    libXdamage
+    libXtst
+    libXrandr
+    atk
+    at-spi2-atk
+    at-spi2-core
+    alsa-lib
+    dbus
+    cups
+    gtk3
+    gdk-pixbuf
+    libexif
+    ffmpeg
+    systemd
+    freetype
+    fontconfig
+    libXrender
+    libuuid
+    expat
+    glib
+    nss
+    nspr
+    libxml2
+    pango
+    cairo
+    gnome2.GConf
+    libdrm
+    mesa
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
+    (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
     + ":$out/opt/${vivaldiName}/lib";
 
   buildPhase = ''
@@ -63,7 +97,7 @@ in stdenv.mkDerivation rec {
   '';
 
   dontPatchELF = true;
-  dontStrip    = true;
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
@@ -86,7 +120,10 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
-      ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
+      ${
+        lib.optionalString enableWidevine
+        "--suffix LD_LIBRARY_PATH : ${libPath}"
+      }
   '' + lib.optionalString enableWidevine ''
     ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '' + ''
@@ -95,9 +132,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Browser for our Friends, powerful and personal";
-    homepage    = "https://vivaldi.com";
-    license     = licenses.unfree;
+    homepage = "https://vivaldi.com";
+    license = licenses.unfree;
     maintainers = with maintainers; [ otwieracz badmutex ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

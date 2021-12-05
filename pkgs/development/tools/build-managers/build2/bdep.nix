@@ -1,13 +1,5 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ lib, stdenv, build2, fetchurl, libbpkg, libbutl, libodb, libodb-sqlite
+, enableShared ? !stdenv.hostPlatform.isStatic, enableStatic ? !enableShared }:
 
 stdenv.mkDerivation rec {
   pname = "bdep";
@@ -20,19 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    build2
-  ];
-  buildInputs = [
-    libbpkg
-    libbutl
-    libodb
-    libodb-sqlite
-  ];
+  nativeBuildInputs = [ build2 ];
+  buildInputs = [ libbpkg libbutl libodb libodb-sqlite ];
 
-  build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
-  ];
+  build2ConfigureFlags =
+    [ "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}" ];
 
   meta = with lib; {
     description = "build2 project dependency manager";

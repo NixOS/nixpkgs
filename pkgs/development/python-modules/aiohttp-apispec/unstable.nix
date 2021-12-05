@@ -1,12 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, aiohttp, webargs, fetchFromGitHub, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, aiohttp, webargs
+, fetchFromGitHub, callPackage }:
 
 let
-  apispec3 = callPackage ../apispec/3.nix {};
-  jinja2 = callPackage ../jinja2/2.nix {};
-in
-buildPythonPackage rec {
+  apispec3 = callPackage ../apispec/3.nix { };
+  jinja2 = callPackage ../jinja2/2.nix { };
+in buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "unstable-2021-21-08";
 
@@ -21,9 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp webargs apispec3 jinja2 ];
 
-  pythonImportsCheck = [
-    "aiohttp_apispec"
-  ];
+  pythonImportsCheck = [ "aiohttp_apispec" ];
 
   # Requires pytest-sanic, currently broken in nixpkgs
   doCheck = false;

@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, vfs-libarchive  }:
+{ lib, buildKodiAddon, fetchFromGitHub, requests, vfs-libarchive }:
 
 buildKodiAddon rec {
   pname = "a4ksubtitles";
@@ -12,10 +12,7 @@ buildKodiAddon rec {
     sha256 = "0fg5mcvxdc3hqybp1spy7d1nnqirwhcvrblbwksikym9m3qgw2m5";
   };
 
-  propagatedBuildInputs = [
-    requests
-    vfs-libarchive
-  ];
+  propagatedBuildInputs = [ requests vfs-libarchive ];
 
   meta = with lib; {
     homepage = "https://a4k-openproject.github.io/a4kSubtitles/";

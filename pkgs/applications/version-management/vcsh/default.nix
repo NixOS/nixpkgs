@@ -1,29 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
-, pkg-config
-, git
-, perlPackages
-}:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, git, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "vcsh";
   version = "2.0.4";
 
   src = fetchurl {
-    url = "https://github.com/RichiH/vcsh/releases/download/v${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/RichiH/vcsh/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-W/Ql2J9HTDQPu0el34mHVzqe85KGWLPph2sHyuEzPPI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ git ];
 
-  checkInputs = []
-    ++ (with perlPackages; [ perl ShellCommand TestMost ]);
+  checkInputs = [ ] ++ (with perlPackages; [ perl ShellCommand TestMost ]);
 
   outputs = [ "out" "doc" "man" ];
 

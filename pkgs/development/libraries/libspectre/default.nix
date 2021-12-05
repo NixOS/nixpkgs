@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.2.7";
 
   src = fetchurl {
-    url = "https://libspectre.freedesktop.org/releases/${pname}-${version}.tar.gz";
+    url =
+      "https://libspectre.freedesktop.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
 
@@ -13,7 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Need `libgs.so'.
-    pkg-config ghostscript cairo /*for tests*/
+    pkg-config
+    ghostscript
+    cairo # for tests
   ];
 
   doCheck = true;

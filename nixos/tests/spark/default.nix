@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ ... }: {
   name = "spark";
 
   nodes = {

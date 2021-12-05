@@ -20,44 +20,49 @@ let
     aarch64-darwin = "13l6ymz7v18s7ikxbwvkwb0f5ff2j82j5pfj04yy75kq9b5gh0vx";
     armv7l-linux = "129wffj9cidk9ysjpq3p0ddn6liwkmrkxhxgz7bqzj8sdhwyq8pz";
   }.${system};
-in
-  callPackage ./generic.nix rec {
-    # Please backport all compatible updates to the stable release.
-    # This is important for the extension ecosystem.
-    version = "1.62.3";
-    pname = "vscode";
+in callPackage ./generic.nix rec {
+  # Please backport all compatible updates to the stable release.
+  # This is important for the extension ecosystem.
+  version = "1.62.3";
+  pname = "vscode";
 
-    executableName = "code" + lib.optionalString isInsiders "-insiders";
-    longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
-    shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+  executableName = "code" + lib.optionalString isInsiders "-insiders";
+  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
+  shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
-    src = fetchurl {
-      name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-      inherit sha256;
-    };
+  src = fetchurl {
+    name = "VSCode_${version}_${plat}.${archive_fmt}";
+    url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
+    inherit sha256;
+  };
 
-    sourceRoot = "";
+  sourceRoot = "";
 
-    updateScript = ./update-vscode.sh;
+  updateScript = ./update-vscode.sh;
 
-    meta = with lib; {
-      description = ''
-        Open source source code editor developed by Microsoft for Windows,
-        Linux and macOS
-      '';
-      mainProgram = "code";
-      longDescription = ''
-        Open source source code editor developed by Microsoft for Windows,
-        Linux and macOS. It includes support for debugging, embedded Git
-        control, syntax highlighting, intelligent code completion, snippets,
-        and code refactoring. It is also customizable, so users can change the
-        editor's theme, keyboard shortcuts, and preferences
-      '';
-      homepage = "https://code.visualstudio.com/";
-      downloadPage = "https://code.visualstudio.com/Updates";
-      license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = ''
+      Open source source code editor developed by Microsoft for Windows,
+      Linux and macOS
+    '';
+    mainProgram = "code";
+    longDescription = ''
+      Open source source code editor developed by Microsoft for Windows,
+      Linux and macOS. It includes support for debugging, embedded Git
+      control, syntax highlighting, intelligent code completion, snippets,
+      and code refactoring. It is also customizable, so users can change the
+      editor's theme, keyboard shortcuts, and preferences
+    '';
+    homepage = "https://code.visualstudio.com/";
+    downloadPage = "https://code.visualstudio.com/Updates";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
+  };
+}

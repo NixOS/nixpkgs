@@ -1,21 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, jq
-, python3
-, spirv-headers
-, spirv-tools
-, argSpirv-tools ? null
-, argSpirv-headers ? null
-}:
+{ lib, stdenv, fetchFromGitHub, bison, cmake, jq, python3, spirv-headers
+, spirv-tools, argSpirv-tools ? null, argSpirv-headers ? null }:
 # glslang requires custom versions of spirv-tools and spirb-headers.
 # The exact versions are taken from:
 # https://github.com/KhronosGroup/glslang/blob/${version}/known_good.json
 
 let
-  localSpirv-tools = if argSpirv-tools == null
-    then spirv-tools.overrideAttrs (_: {
+  localSpirv-tools = if argSpirv-tools == null then
+    spirv-tools.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
@@ -23,10 +14,11 @@ let
         sha256 = "0v26ws6qx23jn4dcpsq6rqmdxgyxpl5pcvfm90wb3nz6iqbqx294";
       };
     })
-    else argSpirv-tools;
+  else
+    argSpirv-tools;
 
-  localSpirv-headers = if argSpirv-headers == null
-    then spirv-headers.overrideAttrs (_: {
+  localSpirv-headers = if argSpirv-headers == null then
+    spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Headers";
@@ -34,10 +26,10 @@ let
         sha256 = "12gp2mqcar6jj57jw9isfr62yn72kmvdcl0zga4gvrlyfhnf582q";
       };
     })
-    else argSpirv-headers;
-in
+  else
+    argSpirv-headers;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "glslang";
   version = "11.1.0";
 

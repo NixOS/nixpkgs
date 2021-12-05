@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ] ++ lib.optionals doCheck [ strace which ];
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optionals doCheck [ strace which ];
 
   # while we can *build* in parallel, the tests also run in parallel which does
   # not work with v105. Later versions (unreleased) have a fix for that. The

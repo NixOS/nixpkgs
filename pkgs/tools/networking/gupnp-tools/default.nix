@@ -1,36 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gupnp
-, gssdp
-, pkg-config
-, gtk3
-, libuuid
-, gettext
-, gupnp-av
-, gtksourceview4
-, gnome
-, wrapGAppsHook
-}:
+{ stdenv, lib, fetchurl, meson, ninja, gupnp, gssdp, pkg-config, gtk3, libuuid
+, gettext, gupnp-av, gtksourceview4, gnome, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
   version = "0.10.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "beSe9LN1uKFk90t2YWixGE4NKBlrawek9TQfCN/YXWw=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook ];
 
   buildInputs = [
     gupnp

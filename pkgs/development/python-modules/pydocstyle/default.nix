@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, mock
-, pytest
-, snowballstemmer
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, mock, pytest
+, snowballstemmer }:
 
 buildPythonPackage rec {
   pname = "pydocstyle";

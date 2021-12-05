@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mitogen
-, pyroute2-core
-, pyroute2-ethtool
-, pyroute2-ipdb
-, pyroute2-ipset
-, pyroute2-ndb
-, pyroute2-nftables
-, pyroute2-nslink
-}:
+{ lib, buildPythonPackage, fetchPypi, mitogen, pyroute2-core, pyroute2-ethtool
+, pyroute2-ipdb, pyroute2-ipset, pyroute2-ndb, pyroute2-nftables
+, pyroute2-nslink }:
 
 buildPythonPackage rec {
   pname = "pyroute2";

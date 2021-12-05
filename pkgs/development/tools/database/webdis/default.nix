@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, hiredis, http-parser, jansson, libevent, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, hiredis, http-parser, jansson, libevent
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "webdis";

@@ -1,17 +1,6 @@
-{ lib
-, aiohttp
-, aiosqlite
-, asynctest
-, buildPythonPackage
-, crccheck
-, fetchFromGitHub
-, pycryptodome
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
-}:
+{ lib, aiohttp, aiosqlite, asynctest, buildPythonPackage, crccheck
+, fetchFromGitHub, pycryptodome, pytest-aiohttp, pytest-timeout, pytestCheckHook
+, pythonOlder, voluptuous }:
 
 buildPythonPackage rec {
   pname = "zigpy";
@@ -27,21 +16,11 @@ buildPythonPackage rec {
     sha256 = "sha256-6B5JquShUhW2EudkhCD1s5eJLJU1q1HmX7C/avoI7vU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    aiosqlite
-    crccheck
-    pycryptodome
-    voluptuous
-  ];
+  propagatedBuildInputs =
+    [ aiohttp aiosqlite crccheck pycryptodome voluptuous ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-timeout
-    pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-  ];
+  checkInputs = [ pytest-aiohttp pytest-timeout pytestCheckHook ]
+    ++ lib.optionals (pythonOlder "3.8") [ asynctest ];
 
   disabledTests = [
     # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited

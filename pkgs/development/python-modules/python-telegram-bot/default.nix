@@ -1,15 +1,5 @@
-{ lib
-, APScheduler
-, buildPythonPackage
-, cachetools
-, certifi
-, decorator
-, fetchPypi
-, future
-, tornado
-, urllib3
-, pythonOlder
-}:
+{ lib, APScheduler, buildPythonPackage, cachetools, certifi, decorator
+, fetchPypi, future, tornado, urllib3, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
@@ -23,15 +13,8 @@ buildPythonPackage rec {
     sha256 = "sha256-sGaR5Vw1lDJn7mNtmqcCs1eRVdLzLg4tbX8R8LXnJ/A=";
   };
 
-  propagatedBuildInputs = [
-    APScheduler
-    cachetools
-    certifi
-    decorator
-    future
-    tornado
-    urllib3
-  ];
+  propagatedBuildInputs =
+    [ APScheduler cachetools certifi decorator future tornado urllib3 ];
 
   # --with-upstream-urllib3 is not working properly
   postPatch = ''
@@ -47,9 +30,7 @@ buildPythonPackage rec {
   # tests not included with release
   doCheck = false;
 
-  pythonImportsCheck = [
-    "telegram"
-  ];
+  pythonImportsCheck = [ "telegram" ];
 
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";

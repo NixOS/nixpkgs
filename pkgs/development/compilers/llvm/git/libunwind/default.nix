@@ -1,6 +1,5 @@
 { lib, stdenv, llvm_meta, version, src, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -9,9 +8,7 @@ stdenv.mkDerivation rec {
   inherit src;
   sourceRoot = "source/${pname}";
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   outputs = [ "out" "dev" ];
 

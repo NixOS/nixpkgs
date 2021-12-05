@@ -1,17 +1,13 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 makeTest {
   name = "tigervnc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lheckemann ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ lheckemann ]; };
 
   nodes = {
-    server = { pkgs, ...}: {
+    server = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         tigervnc # for Xvnc
         xorg.xwininfo

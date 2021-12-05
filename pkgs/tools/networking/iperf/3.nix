@@ -10,15 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
-  configureFlags = [
-    "--with-openssl=${openssl.dev}"
-  ];
+  configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
   outputs = [ "out" "man" ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=7f979fc51ae31d5c695d8481ba84a4afc5080efb";
+      url =
+        "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=7f979fc51ae31d5c695d8481ba84a4afc5080efb";
       name = "remove-pg-flags.patch";
       sha256 = "0z3zsmf7ln08rg1mmzl8s8jm5gp8x62f5cxiqcmi8dcs2nsxwgbi";
     })

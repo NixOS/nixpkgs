@@ -1,20 +1,12 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, gawk, gnused, gnugrep, coreutils, which
-, perlPackages
-, withMySQL ? false, zlib, mysql57
-, withPgSQL ? false, postgresql
-, withSQLite ? false, sqlite
-, withDB ? false, db
-}:
+{ stdenv, lib, fetchurl, makeWrapper, gawk, gnused, gnugrep, coreutils, which
+, perlPackages, withMySQL ? false, zlib, mysql57, withPgSQL ? false, postgresql
+, withSQLite ? false, sqlite, withDB ? false, db }:
 
 let
-  drivers = lib.concatStringsSep ","
-            ([ "hash_drv" ]
-             ++ lib.optional withMySQL "mysql_drv"
-             ++ lib.optional withPgSQL "pgsql_drv"
-             ++ lib.optional withSQLite "sqlite3_drv"
-             ++ lib.optional withDB "libdb4_drv"
-            );
+  drivers = lib.concatStringsSep "," ([ "hash_drv" ]
+    ++ lib.optional withMySQL "mysql_drv" ++ lib.optional withPgSQL "pgsql_drv"
+    ++ lib.optional withSQLite "sqlite3_drv"
+    ++ lib.optional withDB "libdb4_drv");
   maintenancePath = lib.makeBinPath [ gawk gnused gnugrep coreutils which ];
 
 in stdenv.mkDerivation rec {
@@ -22,15 +14,15 @@ in stdenv.mkDerivation rec {
   version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
 
   buildInputs = [ perlPackages.perl ]
-                ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
-                ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withSQLite sqlite
-                ++ lib.optional withDB db;
+    ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
+    ++ lib.optional withPgSQL postgresql ++ lib.optional withSQLite sqlite
+    ++ lib.optional withDB db;
   nativeBuildInputs = [ makeWrapper ];
 
   configureFlags = [
@@ -50,7 +42,8 @@ in stdenv.mkDerivation rec {
     "--enable-preferences-extension"
     "--enable-long-usernames"
     "--enable-external-lookup"
-  ] ++ lib.optional withMySQL "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
+  ] ++ lib.optional withMySQL
+    "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"

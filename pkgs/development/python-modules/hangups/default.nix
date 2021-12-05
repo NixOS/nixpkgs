@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, configargparse
-, aiohttp
-, async-timeout
-, appdirs
-, readlike
-, requests
-, reparser
-, protobuf
-, urwid
-, mechanicalsoup
-, httpretty
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, configargparse, aiohttp
+, async-timeout, appdirs, readlike, requests, reparser, protobuf, urwid
+, mechanicalsoup, httpretty, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "hangups";
@@ -49,10 +35,7 @@ buildPythonPackage rec {
     mechanicalsoup
   ];
 
-  checkInputs = [
-    httpretty
-    pytestCheckHook
-  ];
+  checkInputs = [ httpretty pytestCheckHook ];
 
   pythonImportsCheck = [
     "hangups"
@@ -63,7 +46,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The first third-party instant messaging client for Google Hangouts";
+    description =
+      "The first third-party instant messaging client for Google Hangouts";
     homepage = "https://github.com/tdryer/hangups";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

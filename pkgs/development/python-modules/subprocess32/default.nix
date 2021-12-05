@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
-, bash
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isPyPy, bash, python }:
 
 buildPythonPackage rec {
   pname = "subprocess32";
@@ -31,7 +24,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://pypi.python.org/pypi/subprocess32";
-    description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x";
+    description =
+      "Backport of the subprocess module from Python 3.2.5 for use on 2.x";
     maintainers = with lib.maintainers; [ ];
   };
 }

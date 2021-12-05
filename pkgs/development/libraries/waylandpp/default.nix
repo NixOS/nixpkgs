@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pugixml
-, wayland
-, libGL
-, libffi
-, buildPackages
-, docSupport ? true
-, doxygen ? null
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, pugixml, wayland, libGL
+, libffi, buildPackages, docSupport ? true, doxygen ? null }:
 
 assert docSupport -> doxygen != null;
 
@@ -25,16 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "1kxiqab48p0n97pwg8c2zx56wqq32m3rcq7qd2pjj33ipcanb3qq";
   };
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}" ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++" ];
 
   nativeBuildInputs = [ cmake pkg-config ] ++ optional docSupport doxygen;
   buildInputs = [ pugixml wayland libGL libffi ];
 
-  outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
+  outputs = [ "bin" "dev" "lib" "out" ]
+    ++ optionals docSupport [ "doc" "devman" ];
 
   meta = with lib; {
     description = "Wayland C++ binding";

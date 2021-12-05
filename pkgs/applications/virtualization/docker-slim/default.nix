@@ -1,8 +1,4 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, makeWrapper
-}:
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 buildGoPackage rec {
   pname = "docker-slim";
@@ -19,12 +15,11 @@ buildGoPackage rec {
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
     "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
   ];
@@ -38,7 +33,8 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Minify and secure Docker containers";
     homepage = "https://dockersl.im/";
-    changelog = "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
   };

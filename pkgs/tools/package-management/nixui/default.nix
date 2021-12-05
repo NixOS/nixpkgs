@@ -1,5 +1,4 @@
-{ lib, stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
-, writeScript }:
+{ lib, stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem, writeScript }:
 let
   version = "0.2.1";
   src = fetchgit {
@@ -23,8 +22,7 @@ let
     desktopName = "NixUI";
     genericName = "NixUI";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "nixui";
   inherit version src;
   installPhase = ''

@@ -1,8 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, addOpenGLRunpath
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn
-}:
+{ lib, stdenv, fetchurl, addOpenGLRunpath, cudaSupport ? false, symlinkJoin
+, cudatoolkit, cudnn }:
 
 with lib;
 let
@@ -10,30 +7,25 @@ let
 
   tfType = if cudaSupport then "gpu" else "cpu";
 
-  system =
-    if stdenv.isLinux then "linux"
-    else "darwin";
+  system = if stdenv.isLinux then "linux" else "darwin";
 
-  platform =  "x86_64";
+  platform = "x86_64";
 
-  rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib]
-                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn ]);
+  rpath = makeLibraryPath ([ stdenv.cc.libc stdenv.cc.cc.lib ]
+    ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn ]);
 
   packages = import ./binary-hashes.nix;
 
-  patchLibs =
-    if stdenv.isDarwin
-    then ''
-      install_name_tool -id $out/lib/libtensorflow.dylib $out/lib/libtensorflow.dylib
-      install_name_tool -id $out/lib/libtensorflow_framework.dylib $out/lib/libtensorflow_framework.dylib
-    ''
-    else ''
-      patchelf --set-rpath "${rpath}:$out/lib" $out/lib/libtensorflow.so
-      patchelf --set-rpath "${rpath}" $out/lib/libtensorflow_framework.so
-      ${optionalString cudaSupport ''
-        addOpenGLRunpath $out/lib/libtensorflow.so $out/lib/libtensorflow_framework.so
-      ''}
-    '';
+  patchLibs = if stdenv.isDarwin then ''
+    install_name_tool -id $out/lib/libtensorflow.dylib $out/lib/libtensorflow.dylib
+    install_name_tool -id $out/lib/libtensorflow_framework.dylib $out/lib/libtensorflow_framework.dylib
+  '' else ''
+    patchelf --set-rpath "${rpath}:$out/lib" $out/lib/libtensorflow.so
+    patchelf --set-rpath "${rpath}" $out/lib/libtensorflow_framework.so
+    ${optionalString cudaSupport ''
+      addOpenGLRunpath $out/lib/libtensorflow.so $out/lib/libtensorflow_framework.so
+    ''}
+  '';
 
 in stdenv.mkDerivation rec {
   pname = "libtensorflow";

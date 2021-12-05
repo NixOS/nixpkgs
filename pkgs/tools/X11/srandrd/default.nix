@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libX11
-, libXrandr
-, libXinerama
-}:
+{ lib, stdenv, fetchFromGitHub, libX11, libXrandr, libXinerama }:
 
 stdenv.mkDerivation rec {
   pname = "srandrd";

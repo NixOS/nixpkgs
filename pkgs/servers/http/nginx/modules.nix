@@ -11,14 +11,10 @@ let
       sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
     };
 
-    patches = [
-      "${src}/patch/${patchName}.patch"
-    ];
+    patches = [ "${src}/patch/${patchName}.patch" ];
   };
 
-in
-
-{
+in {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
@@ -44,13 +40,15 @@ in
   };
 
   brotli = {
-    src = let gitsrc = pkgs.fetchFromGitHub {
-      name = "brotli";
-      owner = "google";
-      repo = "ngx_brotli";
-      rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
-      sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommand "ngx_brotli-src" {} ''
+    src = let
+      gitsrc = pkgs.fetchFromGitHub {
+        name = "brotli";
+        owner = "google";
+        repo = "ngx_brotli";
+        rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
+        sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
+      };
+    in pkgs.runCommand "ngx_brotli-src" { } ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -61,9 +59,9 @@ in
   cache-purge = {
     src = fetchFromGitHub {
       name = "cache-purge";
-      owner  = "nginx-modules";
-      repo   = "ngx_cache_purge";
-      rev    = "2.5.1";
+      owner = "nginx-modules";
+      repo = "ngx_cache_purge";
+      rev = "2.5.1";
       sha256 = "0va4jz36mxj76nmq05n3fgnpdad30cslg7c10vnlhdmmic9vqncd";
     };
   };
@@ -71,9 +69,9 @@ in
   coolkit = {
     src = fetchFromGitHub {
       name = "coolkit";
-      owner  = "FRiCKLE";
-      repo   = "ngx_coolkit";
-      rev    = "0.2";
+      owner = "FRiCKLE";
+      repo = "ngx_coolkit";
+      rev = "0.2";
       sha256 = "1idj0cqmfsdqawjcqpr1fsq670fdki51ksqk2lslfpcs3yrfjpqh";
     };
   };
@@ -129,13 +127,19 @@ in
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
-  };
+  http_proxy_connect_module_v18 =
+    http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
+      supports = with lib.versions;
+        version:
+        major version == "1" && minor version == "18";
+    };
 
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
-  };
+  http_proxy_connect_module_v19 =
+    http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
+      supports = with lib.versions;
+        version:
+        major version == "1" && minor version == "19";
+    };
 
   ipscrub = {
     src = fetchFromGitHub {
@@ -158,7 +162,7 @@ in
     };
   };
 
-  live ={
+  live = {
     src = fetchFromGitHub {
       name = "live";
       owner = "arut";
@@ -212,7 +216,14 @@ in
       rev = "v1.0.1";
       sha256 = "0cbb3g3g4v6q5zc6an212ia5kjjad62bidnkm8b70i4qv1615pzf";
     };
-    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    inputs = [
+      pkgs.curl
+      pkgs.geoip
+      pkgs.libmodsecurity
+      pkgs.libxml2
+      pkgs.lmdb
+      pkgs.yajl
+    ];
   };
 
   moreheaders = {
@@ -225,7 +236,7 @@ in
     };
   };
 
-  mpeg-ts ={
+  mpeg-ts = {
     src = fetchFromGitHub {
       name = "mpeg-ts";
       owner = "arut";
@@ -235,7 +246,7 @@ in
     };
   };
 
-  naxsi ={
+  naxsi = {
     src = fetchFromGitHub {
       name = "naxsi";
       owner = "nbs-system";
@@ -246,49 +257,45 @@ in
   };
 
   opentracing = {
-    src =
-      let src' = fetchFromGitHub {
+    src = let
+      src' = fetchFromGitHub {
         name = "opentracing";
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
         rev = "v0.10.0";
         sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
-      in "${src'}/opentracing";
+    in "${src'}/opentracing";
     inputs = [ pkgs.opentracing-cpp ];
   };
 
-  pagespeed =
-    let
-      version = pkgs.psol.version;
+  pagespeed = let
+    version = pkgs.psol.version;
 
-      moduleSrc = fetchFromGitHub {
-        name   = "pagespeed";
-        owner  = "pagespeed";
-        repo   = "ngx_pagespeed";
-        rev    = "v${version}-stable";
-        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
-      };
-
-      ngx_pagespeed = pkgs.runCommand
-        "ngx_pagespeed"
-        {
-          meta = {
-            description = "PageSpeed module for Nginx";
-            homepage    = "https://developers.google.com/speed/pagespeed/module/";
-            license     = pkgs.lib.licenses.asl20;
-          };
-        }
-        ''
-          cp -r "${moduleSrc}" "$out"
-          chmod -R +w "$out"
-          ln -s "${pkgs.psol}" "$out/psol"
-        '';
-    in {
-      src = ngx_pagespeed;
-      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
-      allowMemoryWriteExecute = true;
+    moduleSrc = fetchFromGitHub {
+      name = "pagespeed";
+      owner = "pagespeed";
+      repo = "ngx_pagespeed";
+      rev = "v${version}-stable";
+      sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
     };
+
+    ngx_pagespeed = pkgs.runCommand "ngx_pagespeed" {
+      meta = {
+        description = "PageSpeed module for Nginx";
+        homepage = "https://developers.google.com/speed/pagespeed/module/";
+        license = pkgs.lib.licenses.asl20;
+      };
+    } ''
+      cp -r "${moduleSrc}" "$out"
+      chmod -R +w "$out"
+      ln -s "${pkgs.psol}" "$out/psol"
+    '';
+  in {
+    src = ngx_pagespeed;
+    inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
+    allowMemoryWriteExecute = true;
+  };
 
   pam = {
     src = fetchFromGitHub {
@@ -311,7 +318,7 @@ in
     };
   };
 
-  push-stream ={
+  push-stream = {
     src = fetchFromGitHub {
       name = "push-stream";
       owner = "wandenberg";
@@ -375,9 +382,9 @@ in
   slowfs-cache = {
     src = fetchFromGitHub {
       name = "slowfs-cache";
-      owner  = "FRiCKLE";
-      repo   = "ngx_slowfs_cache";
-      rev    = "1.10";
+      owner = "FRiCKLE";
+      repo = "ngx_slowfs_cache";
+      rev = "1.10";
       sha256 = "1gyza02pcws3zqm1phv3ag50db5gnapxyjwy8skjmvawz7p5bmxr";
     };
   };

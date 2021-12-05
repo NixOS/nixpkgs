@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libuuid
-, openssl
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, libuuid, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -21,22 +14,17 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/openwrt/telephony/5ced7ea4fc9bd746273d564bf3c102f253d2182e/libs/libks/patches/01-find-libm.patch";
+      url =
+        "https://raw.githubusercontent.com/openwrt/telephony/5ced7ea4fc9bd746273d564bf3c102f253d2182e/libs/libks/patches/01-find-libm.patch";
       sha256 = "1hyrsdxg69d08qzvf3mbrx2363lw52jcybw8i3ynzqcl228gcg8a";
     })
   ];
 
   dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    libuuid
-    openssl
-  ];
+  buildInputs = [ libuuid openssl ];
 
   meta = with lib; {
     description = "Foundational support for signalwire C products";

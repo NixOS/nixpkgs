@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/econnman/${pname}-${version}.tar.gz";
+    url =
+      "http://download.enlightenment.org/rel/apps/econnman/${pname}-${version}.tar.gz";
     sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
   };
 

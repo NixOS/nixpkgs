@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub
-, gettext, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, gettext, libpng, SDL2, SDL2_image, SDL2_mixer
+, SDL2_ttf, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
@@ -15,10 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
 
-  makeFlags = [
-    "FHEROES2_STRICT_COMPILATION=1"
-    "RELEASE=1"
-  ];
+  makeFlags = [ "FHEROES2_STRICT_COMPILATION=1" "RELEASE=1" ];
 
   enableParallelBuilding = true;
 
@@ -32,11 +28,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ihhub/fheroes2";
-    description = "Free implementation of Heroes of Might and Magic II game engine";
+    description =
+      "Free implementation of Heroes of Might and Magic II game engine";
     longDescription = ''
-        In order to play this game, an original game data is required.
-        Please refer to README of the project for instructions.
-        On linux, the data can be placed in ~/.local/share/fheroes2 folder.
+      In order to play this game, an original game data is required.
+      Please refer to README of the project for instructions.
+      On linux, the data can be placed in ~/.local/share/fheroes2 folder.
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.karolchmist ];

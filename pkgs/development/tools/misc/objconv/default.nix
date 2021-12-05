@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Object and executable file converter, modifier and disassembler";
+    description =
+      "Object and executable file converter, modifier and disassembler";
     homepage = "https://www.agner.org/optimize/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ orivej vrthra ];

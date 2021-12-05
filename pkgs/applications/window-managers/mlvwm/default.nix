@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, gccmakedep, libX11, libXext, libXpm, imake, installShellFiles, ... }:
+{ lib, stdenv, fetchFromGitHub, gccmakedep, libX11, libXext, libXpm, imake
+, installShellFiles, ... }:
 
 stdenv.mkDerivation rec {
   pname = "mlvwm";

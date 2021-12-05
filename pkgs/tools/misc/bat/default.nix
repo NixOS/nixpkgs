@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, less
-, Security
-, libiconv
-, installShellFiles
-, makeWrapper
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, less, Security
+, libiconv, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
@@ -57,7 +48,10 @@ rustPlatform.buildRustPackage rec {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

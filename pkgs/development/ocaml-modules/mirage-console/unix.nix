@@ -5,11 +5,7 @@ buildDunePackage {
 
   inherit (mirage-console) version src useDune2 minimumOCamlVersion;
 
-  propagatedBuildInputs = [
-    mirage-console
-    cstruct
-    cstruct-lwt
-  ];
+  propagatedBuildInputs = [ mirage-console cstruct cstruct-lwt ];
 
   meta = mirage-console.meta // {
     description = "Implementation of Mirage consoles for Unix";

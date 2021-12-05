@@ -1,4 +1,5 @@
-{ config, lib, pkgs, ... }: with lib;
+{ config, lib, pkgs, ... }:
+with lib;
 
 # See http://christophe.varoqui.free.fr/usage.html and
 # https://github.com/opensvc/multipath-tools/blob/master/multipath/multipath.conf.5
@@ -6,14 +7,14 @@
 let
   cfg = config.services.multipath;
 
-  indentLines = n: str: concatStringsSep "\n" (
-    map (line: "${fixedWidthString n " " " "}${line}") (
-      filter ( x: x != "" ) ( splitString "\n" str )
-    )
-  );
+  indentLines = n: str:
+    concatStringsSep "\n" (map (line: "${fixedWidthString n " " " "}${line}")
+      (filter (x: x != "") (splitString "\n" str)));
 
-  addCheckDesc = desc: elemType: check: types.addCheck elemType check
-    // { description = "${elemType.description} (with check: ${desc})"; };
+  addCheckDesc = desc: elemType: check:
+    types.addCheck elemType check // {
+      description = "${elemType.description} (with check: ${desc})";
+    };
   hexChars = stringToCharacters "0123456789abcdef";
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
   hexStr = addCheckDesc "hexadecimal string" types.str isHexString;
@@ -72,19 +73,22 @@ in {
           product_blacklist = mkOption {
             type = nullOr str;
             default = null;
-            description = "Products with the given vendor matching this string are blacklisted";
+            description =
+              "Products with the given vendor matching this string are blacklisted";
           };
 
           alias_prefix = mkOption {
             type = nullOr str;
             default = null;
-            description = "The user_friendly_names prefix to use for this device type, instead of the default mpath";
+            description =
+              "The user_friendly_names prefix to use for this device type, instead of the default mpath";
           };
 
           vpd_vendor = mkOption {
             type = nullOr str;
             default = null;
-            description = "The vendor specific vpd page information, using the vpd page abbreviation";
+            description =
+              "The vendor specific vpd page information, using the vpd page abbreviation";
           };
 
           hardware_handler = mkOption {
@@ -95,15 +99,23 @@ in {
 
           # Optional arguments
           path_grouping_policy = mkOption {
-            type = nullOr (enum [ "failover" "multibus" "group_by_serial" "group_by_prio" "group_by_node_name" ]);
+            type = nullOr (enum [
+              "failover"
+              "multibus"
+              "group_by_serial"
+              "group_by_prio"
+              "group_by_node_name"
+            ]);
             default = null; # real default: "failover"
-            description = "The default path grouping policy to apply to unspecified multipaths";
+            description =
+              "The default path grouping policy to apply to unspecified multipaths";
           };
 
           uid_attribute = mkOption {
             type = nullOr str;
             default = null;
-            description = "The udev attribute providing a unique path identifier (WWID)";
+            description =
+              "The udev attribute providing a unique path identifier (WWID)";
           };
 
           getuid_callout = mkOption {
@@ -123,19 +135,43 @@ in {
               ''"historical-service-time 0"''
             ]);
             default = null; # real default: "service-time 0"
-            description = "The default path selector algorithm to use; they are offered by the kernel multipath target";
+            description =
+              "The default path selector algorithm to use; they are offered by the kernel multipath target";
           };
 
           path_checker = mkOption {
-            type = enum [ "readsector0" "tur" "emc_clariion" "hp_sw" "rdac" "directio" "cciss_tur" "none" ];
+            type = enum [
+              "readsector0"
+              "tur"
+              "emc_clariion"
+              "hp_sw"
+              "rdac"
+              "directio"
+              "cciss_tur"
+              "none"
+            ];
             default = "tur";
-            description = "The default method used to determine the paths state";
+            description =
+              "The default method used to determine the paths state";
           };
 
           prio = mkOption {
             type = nullOr (enum [
-              "none" "const" "sysfs" "emc" "alua" "ontap" "rdac" "hp_sw" "hds"
-              "random" "weightedpath" "path_latency" "ana" "datacore" "iet"
+              "none"
+              "const"
+              "sysfs"
+              "emc"
+              "alua"
+              "ontap"
+              "rdac"
+              "hp_sw"
+              "hds"
+              "random"
+              "weightedpath"
+              "path_latency"
+              "ana"
+              "datacore"
+              "iet"
             ]);
             default = null; # real default: "const"
             description = "The name of the path priority routine";
@@ -156,7 +192,8 @@ in {
           failback = mkOption {
             type = nullOr str;
             default = null; # real default: "manual"
-            description = "Tell multipathd how to manage path group failback. Quote integers as strings";
+            description =
+              "Tell multipathd how to manage path group failback. Quote integers as strings";
           };
 
           rr_weight = mkOption {
@@ -171,7 +208,8 @@ in {
           no_path_retry = mkOption {
             type = nullOr str;
             default = null; # real default: "fail"
-            description = "Specify what to do when all paths are down. Quote integers as strings";
+            description =
+              "Specify what to do when all paths are down. Quote integers as strings";
           };
 
           rr_min_io = mkOption {
@@ -331,7 +369,8 @@ in {
           marginal_path_err_sample_time = mkOption {
             type = nullOr int;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description =
+              "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           marginal_path_err_rate_threshold = mkOption {
@@ -343,49 +382,57 @@ in {
           marginal_path_err_recheck_gap_time = mkOption {
             type = nullOr str;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description =
+              "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           marginal_path_double_failed_time = mkOption {
             type = nullOr str;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description =
+              "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           delay_watch_checks = mkOption {
             type = nullOr str;
             default = null;
-            description = "This option is deprecated, and mapped to san_path_err_forget_rate";
+            description =
+              "This option is deprecated, and mapped to san_path_err_forget_rate";
           };
 
           delay_wait_checks = mkOption {
             type = nullOr str;
             default = null;
-            description = "This option is deprecated, and mapped to san_path_err_recovery_time";
+            description =
+              "This option is deprecated, and mapped to san_path_err_recovery_time";
           };
 
           skip_kpartx = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "no"
-            description = "If set to yes, kpartx will not automatically create partitions on the device";
+            description =
+              "If set to yes, kpartx will not automatically create partitions on the device";
           };
 
           max_sectors_kb = mkOption {
             type = nullOr int;
             default = null;
-            description = "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
+            description =
+              "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
           };
 
           ghost_delay = mkOption {
             type = nullOr int;
             default = null;
-            description = "Sets the number of seconds that multipath will wait after creating a device with only ghost paths before marking it ready for use in systemd";
+            description =
+              "Sets the number of seconds that multipath will wait after creating a device with only ghost paths before marking it ready for use in systemd";
           };
 
           all_tg_pt = mkOption {
             type = nullOr str;
             default = null;
-            description = "Set the 'all targets ports' flag when registering keys with mpathpersist";
+            description =
+              "Set the 'all targets ports' flag when registering keys with mpathpersist";
           };
 
         };
@@ -439,7 +486,8 @@ in {
     extraConfigFile = mkOption {
       type = nullOr str;
       default = null;
-      description = "Append an additional file's contents to /etc/multipath.conf";
+      description =
+        "Append an additional file's contents to /etc/multipath.conf";
     };
 
     pathGroups = mkOption {
@@ -501,58 +549,60 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.etc."multipath.conf".text =
-      let
-        inherit (cfg) defaults blacklist blacklist_exceptions overrides;
+    environment.etc."multipath.conf".text = let
+      inherit (cfg) defaults blacklist blacklist_exceptions overrides;
 
-        mkDeviceBlock = cfg: let
+      mkDeviceBlock = cfg:
+        let
           nonNullCfg = lib.filterAttrs (k: v: v != null) cfg;
-          attrs = lib.mapAttrsToList (name: value: "  ${name} ${toString value}") nonNullCfg;
+          attrs =
+            lib.mapAttrsToList (name: value: "  ${name} ${toString value}")
+            nonNullCfg;
         in ''
           device {
           ${lib.concatStringsSep "\n" attrs}
           }
         '';
-        devices = lib.concatMapStringsSep "\n" mkDeviceBlock cfg.devices;
+      devices = lib.concatMapStringsSep "\n" mkDeviceBlock cfg.devices;
 
-        mkMultipathBlock = m: ''
-          multipath {
-            wwid ${m.wwid}
-            alias ${toString m.alias}
-          }
-        '';
-        multipaths = lib.concatMapStringsSep "\n" mkMultipathBlock cfg.pathGroups;
-
-      in ''
-        devices {
-        ${indentLines 2 devices}
-        }
-
-        ${optionalString (!isNull defaults) ''
-          defaults {
-          ${indentLines 2 defaults}
-            multipath_dir ${cfg.package}/lib/multipath
-          }
-        ''}
-        ${optionalString (!isNull blacklist) ''
-          blacklist {
-          ${indentLines 2 blacklist}
-          }
-        ''}
-        ${optionalString (!isNull blacklist_exceptions) ''
-          blacklist_exceptions {
-          ${indentLines 2 blacklist_exceptions}
-          }
-        ''}
-        ${optionalString (!isNull overrides) ''
-          overrides {
-          ${indentLines 2 overrides}
-          }
-        ''}
-        multipaths {
-        ${indentLines 2 multipaths}
+      mkMultipathBlock = m: ''
+        multipath {
+          wwid ${m.wwid}
+          alias ${toString m.alias}
         }
       '';
+      multipaths = lib.concatMapStringsSep "\n" mkMultipathBlock cfg.pathGroups;
+
+    in ''
+      devices {
+      ${indentLines 2 devices}
+      }
+
+      ${optionalString (!isNull defaults) ''
+        defaults {
+        ${indentLines 2 defaults}
+          multipath_dir ${cfg.package}/lib/multipath
+        }
+      ''}
+      ${optionalString (!isNull blacklist) ''
+        blacklist {
+        ${indentLines 2 blacklist}
+        }
+      ''}
+      ${optionalString (!isNull blacklist_exceptions) ''
+        blacklist_exceptions {
+        ${indentLines 2 blacklist_exceptions}
+        }
+      ''}
+      ${optionalString (!isNull overrides) ''
+        overrides {
+        ${indentLines 2 overrides}
+        }
+      ''}
+      multipaths {
+      ${indentLines 2 multipaths}
+      }
+    '';
 
     systemd.packages = [ cfg.package ];
 

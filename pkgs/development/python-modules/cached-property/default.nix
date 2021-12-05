@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, freezegun
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, freezegun }:
 
 buildPythonPackage rec {
   pname = "cached-property";

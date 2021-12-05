@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, python-dateutil
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, python-dateutil
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "freezegun";

@@ -3,8 +3,7 @@
 let
   pname = "TT2020";
   version = "2020-01-05";
-in
-fetchFromGitHub {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "ctrlcctrlv";
   repo = pname;
@@ -18,7 +17,8 @@ fetchFromGitHub {
   '';
 
   meta = with lib; {
-    description = "An advanced, open source, hyperrealistic, multilingual typewriter font for a new decade";
+    description =
+      "An advanced, open source, hyperrealistic, multilingual typewriter font for a new decade";
     homepage = "https://ctrlcctrlv.github.io/TT2020";
     license = licenses.ofl;
     maintainers = with maintainers; [ sikmir ];

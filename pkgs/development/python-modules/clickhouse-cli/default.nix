@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, prompt-toolkit
-, pygments
-, requests
-, sqlparse
-}:
+{ lib, buildPythonPackage, fetchPypi, click, prompt-toolkit, pygments, requests
+, sqlparse }:
 
 buildPythonPackage rec {
   pname = "clickhouse-cli";
@@ -17,13 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-fDvUdL6LzgCv6LDmB0R0M7v6BbnbL68p9pHMebP58h8=";
   };
 
-  propagatedBuildInputs = [
-    click
-    prompt-toolkit
-    pygments
-    requests
-    sqlparse
-  ];
+  propagatedBuildInputs = [ click prompt-toolkit pygments requests sqlparse ];
 
   pythonImportsCheck = [ "clickhouse_cli" ];
 

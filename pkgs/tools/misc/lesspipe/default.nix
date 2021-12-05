@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build configure
   '';
   configureFlags = [ "--shell=${bash}/bin/bash" "--yes" ];
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   dontBuild = true;
 
   src = fetchFromGitHub {

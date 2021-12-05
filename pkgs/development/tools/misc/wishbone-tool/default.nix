@@ -8,8 +8,7 @@ let
     rev = "v${version}";
     sha256 = "0gq359ybxnqvcp93cn154bs9kwlai62gnm71yvl2nhzjdlcr3fhp";
   };
-in
-rustPlatform.buildRustPackage {
+in rustPlatform.buildRustPackage {
   pname = "wishbone-tool";
   inherit version;
 

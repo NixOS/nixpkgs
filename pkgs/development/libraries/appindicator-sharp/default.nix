@@ -1,13 +1,5 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  lib,
-  libappindicator,
-  mono,
-  gtk-sharp-3_0,
-  pkg-config,
-  stdenv,
-}:
+{ autoreconfHook, fetchFromGitHub, lib, libappindicator, mono, gtk-sharp-3_0
+, pkg-config, stdenv, }:
 
 stdenv.mkDerivation rec {
   pname = "appindicator-sharp";
@@ -20,19 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1i0vqbp05l29f5v9ygp7flm4s05pcnn5ivl578mxmhb51s7ncw6l";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    mono
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook mono pkg-config ];
 
-  buildInputs = [
-    gtk-sharp-3_0
-    libappindicator
-  ];
+  buildInputs = [ gtk-sharp-3_0 libappindicator ];
 
   ac_cv_path_MDOC = "no";
-  installFlagsArray = ["GAPIXMLDIR=/tmp/gapixml"];
+  installFlagsArray = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
   meta = {
     description = "Bindings for appindicator using gobject-introspection";

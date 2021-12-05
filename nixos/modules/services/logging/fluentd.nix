@@ -33,7 +33,7 @@ in {
 
       plugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of plugin paths to pass into fluentd. It will make plugins defined in ruby files
           there available in your config.
@@ -42,7 +42,6 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -50,7 +49,9 @@ in {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config} ${pluginArgs}";
+        ExecStart = "${cfg.package}/bin/fluentd -c ${
+            pkgs.writeText "fluentd.conf" cfg.config
+          } ${pluginArgs}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

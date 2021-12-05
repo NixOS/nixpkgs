@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, python
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, python, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "async-dns";
@@ -19,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "0vn7hxvpzikd7q61a27fwzal4lwsra2063awyr6fjpy6lh3cjdwf";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   checkPhase = ''
     export HOME=$TMPDIR

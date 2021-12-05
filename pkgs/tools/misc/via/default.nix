@@ -6,7 +6,8 @@ let
   name = "${pname}-${version}";
   nameExecutable = pname;
   src = fetchurl {
-    url = "https://github.com/the-via/releases/releases/download/v${version}/via-${version}-linux.AppImage";
+    url =
+      "https://github.com/the-via/releases/releases/download/v${version}/via-${version}-linux.AppImage";
     name = "via-${version}-linux.AppImage";
     sha256 = "d2cd73d280a265149fedb24161ec7c575523596c4d30898ad6b5875e09b3f34a";
   };

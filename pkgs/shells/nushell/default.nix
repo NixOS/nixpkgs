@@ -1,20 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, libiconv
-, AppKit
-, Security
-, nghttp2
-, libgit2
-, withExtraFeatures ? true
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, openssl, zlib, zstd, pkg-config
+, python3, xorg, libiconv, AppKit, Security, nghttp2, libgit2
+, withExtraFeatures ? true }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
@@ -35,7 +21,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [
+      AppKit
+      nghttp2
+      libgit2
+    ];
 
   buildFeatures = lib.optional withExtraFeatures "extra";
 
@@ -55,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  doCheck = ! stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -72,7 +62,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nu";
   };
 
-  passthru = {
-    shellPath = "/bin/nu";
-  };
+  passthru = { shellPath = "/bin/nu"; };
 }

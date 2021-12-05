@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, llvmPackages
-, pkg-config
-, pcsclite
-, nettle
-, requests
-, vcrpy
-, numpy
-, pytestCheckHook
-, pythonOlder
-, PCSC
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, rustPlatform, llvmPackages
+, pkg-config, pcsclite, nettle, requests, vcrpy, numpy, pytestCheckHook
+, pythonOlder, PCSC, libiconv }:
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
@@ -40,35 +26,19 @@ buildPythonPackage rec {
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  propagatedBuildInputs = [
-    requests
-    vcrpy
-  ];
+  propagatedBuildInputs = [ requests vcrpy ];
 
-  nativeBuildInputs = [
-    llvmPackages.clang
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs = [ llvmPackages.clang pkg-config ]
+    ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
-  buildInputs = [
-    pcsclite
-    nettle
-  ] ++ lib.optionals stdenv.isDarwin [
-    PCSC
-    libiconv
-  ];
+  buildInputs = [ pcsclite nettle ]
+    ++ lib.optionals stdenv.isDarwin [ PCSC libiconv ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
   doInstallCheck = true;
 
-  installCheckInputs = [
-    pytestCheckHook
-    numpy
-  ];
+  installCheckInputs = [ pytestCheckHook numpy ];
 
   # Remove with the next release after 0.5.0. This change is required
   # for compatibility with maturin 0.9.0.

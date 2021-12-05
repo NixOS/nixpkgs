@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre
+}:
 
 mkDerivation rec {
   pname = "contour";
@@ -19,7 +20,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Modern C++ Terminal Emulator";
     homepage = "https://github.com/christianparpart/contour";
-    changelog = "https://github.com/christianparpart/contour/blob/HEAD/Changelog.md";
+    changelog =
+      "https://github.com/christianparpart/contour/blob/HEAD/Changelog.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fortuneteller2k ];
     platforms = platforms.unix;

@@ -1,22 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, dbus-glib, libxklavier,
-  libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, dbus-glib, libxklavier
+, libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate
+, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
+, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0hbdwqagxh1mdpxfdqr1ps3yqvk0v0c5zm0bwk56y6l1zwbs0ymp";
   };
 
-  nativeBuildInputs = [
-    gettext
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext pkg-config wrapGAppsHook ];
 
   buildInputs = [
     dbus-glib

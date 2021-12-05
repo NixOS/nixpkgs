@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, requests
-, psutil
-, pytest
-, setuptools-scm
-, subprocess32 ? null
-, toml
-, zc_lockfile
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, requests, psutil, pytest
+, setuptools-scm, subprocess32 ? null, toml, zc_lockfile }:
 
 buildPythonPackage rec {
   pname = "pytest-services";
@@ -20,18 +10,12 @@ buildPythonPackage rec {
     sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    toml
-  ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    requests
-    psutil
-    zc_lockfile
-  ] ++ lib.optional (!isPy3k) subprocess32;
+  propagatedBuildInputs = [ requests psutil zc_lockfile ]
+    ++ lib.optional (!isPy3k) subprocess32;
 
   # no tests in PyPI tarball
   doCheck = false;

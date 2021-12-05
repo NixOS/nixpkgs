@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, six
-, astropy
-, pytestCheckHook
-, pytest-doctestplus
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, pandas, six, astropy
+, pytestCheckHook, pytest-doctestplus, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "drms";
@@ -21,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-Id8rPK8qq71gHn5DKnEi7Lp081GFbcFtGU+v89Vlt9o=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    pandas
-    six
-  ];
+  propagatedBuildInputs = [ numpy pandas six ];
 
-  checkInputs = [
-    astropy
-    pytestCheckHook
-    pytest-doctestplus
-  ];
+  checkInputs = [ astropy pytestCheckHook pytest-doctestplus ];
 
   pythonImportsCheck = [ "drms" ];
 

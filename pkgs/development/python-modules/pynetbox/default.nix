@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, requests
-, six
-, pytestCheckHook
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools-scm, requests, six
+, pytestCheckHook, pyyaml }:
 
 buildPythonPackage rec {
   pname = "pynetbox";
@@ -21,19 +14,11 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [
-    pytestCheckHook
-    pyyaml
-  ];
+  checkInputs = [ pytestCheckHook pyyaml ];
 
   disabledTestPaths = [
     # requires docker for integration test

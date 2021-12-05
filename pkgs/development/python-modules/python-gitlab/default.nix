@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, argcomplete
-, requests
-, requests-toolbelt
-, pyyaml
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, argcomplete, requests
+, requests-toolbelt, pyyaml }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
@@ -18,19 +11,12 @@ buildPythonPackage rec {
     sha256 = "7afa7d7c062fa62c173190452265a30feefb844428efc58ea5244f3b9fc0d40f";
   };
 
-  propagatedBuildInputs = [
-    argcomplete
-    pyyaml
-    requests
-    requests-toolbelt
-  ];
+  propagatedBuildInputs = [ argcomplete pyyaml requests requests-toolbelt ];
 
   # tests rely on a gitlab instance on a local docker setup
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitlab"
-  ];
+  pythonImportsCheck = [ "gitlab" ];
 
   meta = with lib; {
     description = "Interact with GitLab API";

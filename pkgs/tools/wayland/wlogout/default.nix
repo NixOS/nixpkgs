@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, scdoc
-, gtk3
-, libxkbcommon
-, wayland
-, wayland-protocols
-, gtk-layer-shell
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, scdoc, gtk3
+, libxkbcommon, wayland, wayland-protocols, gtk-layer-shell }:
 
 stdenv.mkDerivation rec {
   pname = "wlogout";
@@ -24,13 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
-  buildInputs = [
-    gtk3
-    libxkbcommon
-    wayland
-    wayland-protocols
-    gtk-layer-shell
-  ];
+  buildInputs = [ gtk3 libxkbcommon wayland wayland-protocols gtk-layer-shell ];
 
   postPatch = ''
     substituteInPlace style.css \

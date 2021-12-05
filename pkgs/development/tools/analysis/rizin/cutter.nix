@@ -4,10 +4,7 @@
 # Qt
 , qtbase, qtsvg, qtwebengine, qttools
 # buildInputs
-, rizin
-, python3
-, wrapQtAppsHook
-}:
+, rizin, python3, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "cutter";
@@ -36,7 +33,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Free and Open Source Reverse Engineering Platform powered by rizin";
+    description =
+      "Free and Open Source Reverse Engineering Platform powered by rizin";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     maintainers = with maintainers; [ mic92 dtzWill ];

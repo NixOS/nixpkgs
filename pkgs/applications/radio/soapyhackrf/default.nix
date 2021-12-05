@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, hackrf, soapysdr
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, hackrf, soapysdr }:
 
-let
-  version = "0.3.3";
+let version = "0.3.3";
 
 in stdenv.mkDerivation {
   pname = "soapyhackrf";

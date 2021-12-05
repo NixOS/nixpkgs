@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -20,17 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-iJ7HcJhpTceFpHTUdNZOYDuxUWZGWPmZ9lxD3CyGvk8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "opengarage"
-  ];
+  pythonImportsCheck = [ "opengarage" ];
 
   meta = with lib; {
     description = "Python module to communicate with opengarage.io";

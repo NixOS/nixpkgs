@@ -1,17 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, libngspice
-, numpy
-, ply
-, scipy
-, pyyaml
-, cffi
-, requests
-, matplotlib
-, setuptools
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, libngspice, numpy
+, ply, scipy, pyyaml, cffi, requests, matplotlib, setuptools }:
 
 buildPythonPackage rec {
   pname = "PySpice";
@@ -23,17 +11,8 @@ buildPythonPackage rec {
     sha256 = "d28448accad98959e0f5932af8736e90a1f3f9ff965121c6881d24cdfca23d22";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-    requests
-    pyyaml
-    cffi
-    matplotlib
-    numpy
-    ply
-    scipy
-    libngspice
-  ];
+  propagatedBuildInputs =
+    [ setuptools requests pyyaml cffi matplotlib numpy ply scipy libngspice ];
 
   doCheck = false;
   pythonImportsCheck = [ "PySpice" ];
@@ -45,7 +24,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Simulate electronic circuit using Python and the Ngspice / Xyce simulators";
+    description =
+      "Simulate electronic circuit using Python and the Ngspice / Xyce simulators";
     homepage = "https://github.com/FabriceSalvaire/PySpice";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ matthuszagh ];

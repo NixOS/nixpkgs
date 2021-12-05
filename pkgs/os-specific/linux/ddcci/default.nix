@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/bf9d79852cbd0aa5c2e288ce51b8280f74a1f5d2.patch";
+      url =
+        "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/bf9d79852cbd0aa5c2e288ce51b8280f74a1f5d2.patch";
       sha256 = "sha256-ShqVzkoRnlX4Y5ARY11YVYatFI1K7bAtLulP3/8/nwg=";
     })
   ];

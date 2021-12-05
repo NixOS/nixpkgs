@@ -5,28 +5,27 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let self =
-stdenv.mkDerivation rec {
-  pname = "c-ares";
-  version = "1.17.2";
+let
+  self = stdenv.mkDerivation rec {
+    pname = "c-ares";
+    version = "1.17.2";
 
-  src = fetchurl {
-    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SAPIRM4gzlEO8OuD+OpB+iTsqunSgMRoxYLSuyWzkT0=";
-  };
+    src = fetchurl {
+      url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
+      sha256 = "sha256-SAPIRM4gzlEO8OuD+OpB+iTsqunSgMRoxYLSuyWzkT0=";
+    };
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "A C library for asynchronous DNS requests";
-    homepage = "https://c-ares.haxx.se";
-    license = licenses.mit;
-    platforms = platforms.all;
-  };
+    meta = with lib; {
+      description = "A C library for asynchronous DNS requests";
+      homepage = "https://c-ares.haxx.se";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
 
-  # Adapted from running a cmake build
-  passthru.cmake-config = writeTextDir "c-ares-config.cmake"
-    ''
+    # Adapted from running a cmake build
+    passthru.cmake-config = writeTextDir "c-ares-config.cmake" ''
       set(c-ares_INCLUDE_DIR "${self}/include")
 
       set(c-ares_LIBRARY c-ares::cares)
@@ -35,7 +34,10 @@ stdenv.mkDerivation rec {
 
       set_target_properties(c-ares::cares PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${self}/include"
-        ${lib.optionalString stdenv.isLinux ''INTERFACE_LINK_LIBRARIES "nsl;rt"''}
+        ${
+          lib.optionalString stdenv.isLinux
+          ''INTERFACE_LINK_LIBRARIES "nsl;rt"''
+        }
       )
       set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
       set_target_properties(c-ares::cares PROPERTIES
@@ -47,4 +49,5 @@ stdenv.mkDerivation rec {
       set(c-ares_SHARED_LIBRARY c-ares::cares_shared)
     '';
 
-}; in self
+  };
+in self

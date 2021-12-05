@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, PyGithub, GitPython, toml, click, tqdm,
-  networkx, pydot, pyyaml, atomicwrites }:
+{ lib, buildPythonPackage, fetchPypi, PyGithub, GitPython, toml, click, tqdm
+, networkx, pydot, pyyaml, atomicwrites }:
 
 buildPythonPackage rec {
   pname = "mathlibtools";
@@ -10,9 +10,8 @@ buildPythonPackage rec {
     sha256 = "789f070f35424e89e4f2e2c007382250133cc48877627e37c5c463bcf4a1b58a";
   };
 
-  propagatedBuildInputs = [
-    PyGithub GitPython toml click tqdm networkx pydot pyyaml atomicwrites
-  ];
+  propagatedBuildInputs =
+    [ PyGithub GitPython toml click tqdm networkx pydot pyyaml atomicwrites ];
 
   # requires internet access
   doCheck = false;

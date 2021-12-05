@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-ethtool";
@@ -14,16 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-yvgBS2dlIRNcR2DXLPWu72q7x/onUhD36VMzBzzHcVo=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.ethtool"
-  ];
+  pythonImportsCheck = [ "pr2modules.ethtool" ];
 
   meta = with lib; {
     description = "Ethtool module for pyroute2";

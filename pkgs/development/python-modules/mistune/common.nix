@@ -4,9 +4,7 @@ buildPythonPackage rec {
   inherit version;
   pname = "mistune";
 
-  src = fetchPypi {
-    inherit pname version sha256;
-  };
+  src = fetchPypi { inherit pname version sha256; };
 
   buildInputs = [ nose ];
   pythonImportsCheck = [ "mistune" ];

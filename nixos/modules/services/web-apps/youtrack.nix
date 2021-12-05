@@ -5,20 +5,20 @@ with lib;
 let
   cfg = config.services.youtrack;
 
-  extraAttr = concatStringsSep " " (mapAttrsToList (k: v: "-D${k}=${v}") (stdParams // cfg.extraParams));
-  mergeAttrList = lib.foldl' lib.mergeAttrs {};
+  extraAttr = concatStringsSep " "
+    (mapAttrsToList (k: v: "-D${k}=${v}") (stdParams // cfg.extraParams));
+  mergeAttrList = lib.foldl' lib.mergeAttrs { };
 
   stdParams = mergeAttrList [
     (optionalAttrs (cfg.baseUrl != null) {
       "jetbrains.youtrack.baseUrl" = cfg.baseUrl;
     })
     {
-    "java.aws.headless" = "true";
-    "jetbrains.youtrack.disableBrowser" = "true";
+      "java.aws.headless" = "true";
+      "jetbrains.youtrack.disableBrowser" = "true";
     }
   ];
-in
-{
+in {
   options.services.youtrack = {
 
     enable = mkEnableOption "YouTrack service";
@@ -40,7 +40,7 @@ in
     };
 
     extraParams = mkOption {
-      default = {};
+      default = { };
       description = ''
         Extra parameters to pass to youtrack. See
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
@@ -128,7 +128,10 @@ in
         Type = "simple";
         User = "youtrack";
         Group = "youtrack";
-        ExecStart = ''${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${toString cfg.port}'';
+        ExecStart =
+          "${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${
+            toString cfg.port
+          }";
       };
     };
 
@@ -140,10 +143,10 @@ in
       group = "youtrack";
     };
 
-    users.groups.youtrack = {};
+    users.groups.youtrack = { };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
-      upstreams.youtrack.servers."${cfg.address}:${toString cfg.port}" = {};
+      upstreams.youtrack.servers."${cfg.address}:${toString cfg.port}" = { };
       virtualHosts.${cfg.virtualHost}.locations = {
         "/" = {
           proxyPass = "http://youtrack";

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterhub
-, tornado
-, bash
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, jupyterhub, tornado, bash }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
   };
 
-  propagatedBuildInputs = [
-    jupyterhub
-    tornado
-  ];
+  propagatedBuildInputs = [ jupyterhub tornado ];
 
   buildInputs = [ bash ];
 

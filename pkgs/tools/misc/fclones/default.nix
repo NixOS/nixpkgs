@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libiconv
-, rustPlatform
-, AppKit
-}:
+{ lib, stdenv, fetchFromGitHub, libiconv, rustPlatform, AppKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
@@ -19,10 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-CtQ4grQqgMUYzPDw2Qankl8jmqwwCrawNCmaY97JPkQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    AppKit
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit libiconv ];
 
   # device::test_physical_device_name test fails on Darwin
   doCheck = !stdenv.isDarwin;

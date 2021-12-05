@@ -1,19 +1,8 @@
-{ lib
-, stdenv
-, python27Packages
-, callPackage
-, fetchFromGitHub
-, makeWrapper
+{ lib, stdenv, python27Packages, callPackage, fetchFromGitHub, makeWrapper
 , # re2c deps
-  autoreconfHook
-, # py-yajl deps
-  git
-, # oil deps
-  readline
-, cmark
-, file
-, glibcLocales
-}:
+autoreconfHook, # py-yajl deps
+git, # oil deps
+readline, cmark, file, glibcLocales }:
 
 rec {
   re2c = stdenv.mkDerivation rec {
@@ -46,10 +35,9 @@ rec {
     nativeBuildInputs = [ git ];
   };
 
-  /*
-    Upstream isn't interested in packaging this as a library
-    (or accepting all of the patches we need to do so).
-    This creates one without disturbing upstream too much.
+  /* Upstream isn't interested in packaging this as a library
+     (or accepting all of the patches we need to do so).
+     This creates one without disturbing upstream too much.
   */
   oildev = python27Packages.buildPythonPackage rec {
     pname = "oildev-unstable";
@@ -62,13 +50,12 @@ rec {
       rev = "799c0703d1da86cb80d1f5b163edf9369ad77cf1";
       hash = "sha256-QNSISr719ycZ1Z0quxHWzCb3IvHGj9TpogaYz20hDM4=";
 
-      /*
-        It's not critical to drop most of these; the primary target is
-        the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
-        files, dozens of which get interpreter script patches in fixup.
+      /* It's not critical to drop most of these; the primary target is
+         the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
+         files, dozens of which get interpreter script patches in fixup.
 
-        Note: -f is necessary to keep it from being a pain to update
-        hash on rev updates. Command will fail w/o and not print hash.
+         Note: -f is necessary to keep it from being a pain to update
+         hash on rev updates. Command will fail w/o and not print hash.
       */
       extraPostFetch = ''
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
@@ -106,16 +93,17 @@ rec {
       patchShebangs asdl build core doctools frontend native oil_lang
     '';
 
-    /*
-    We did convince oil to upstream an env for specifying
-    this to support a shell.nix. Would need a patch if they
-    later drop this support. See:
-    https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
+    /* We did convince oil to upstream an env for specifying
+       this to support a shell.nix. Would need a patch if they
+       later drop this support. See:
+       https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
     */
-    _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
+    _NIX_SHELL_LIBCMARK =
+      "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales TODO: verify needed?
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc")
+      "${glibcLocales}/lib/locale/locale-archive";
 
     # not exhaustive; just a spot-check for now
     pythonImportsCheck = [ "oil" "oil._devbuild" ];

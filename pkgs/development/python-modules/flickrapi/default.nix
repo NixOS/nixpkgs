@@ -1,17 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, requests-toolbelt
-, requests_oauthlib
-, pytest
-, pytest-runner
-, pytest-cov
-, responses
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, requests-toolbelt
+, requests_oauthlib, pytest, pytest-runner, pytest-cov, responses }:
 
 buildPythonPackage rec {
-  pname   = "flickrapi";
+  pname = "flickrapi";
   version = "2.4.0";
 
   src = fetchPypi {
@@ -28,8 +19,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python interface to the Flickr API";
-    homepage    = "https://stuvel.eu/flickrapi";
-    license     = lib.licenses.psfl;
+    homepage = "https://stuvel.eu/flickrapi";
+    license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ obadz ];
   };
 }

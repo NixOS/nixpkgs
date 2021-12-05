@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, enum34
-, gfortran
-, isPy27
-, isPy3k
-, numpy
-, pytest
-, python
-, scipy
-, sundials
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, enum34, gfortran, isPy27, isPy3k
+, numpy, pytest, python, scipy, sundials }:
 
 buildPythonPackage rec {
   pname = "scikits.odes";
@@ -24,16 +12,10 @@ buildPythonPackage rec {
     sha256 = "267d8bfa1e18d075d574158053d887562381e88176ebab856516b52b14860983";
   };
 
-  nativeBuildInputs = [
-    gfortran
-    cython
-  ];
+  nativeBuildInputs = [ gfortran cython ];
 
-  propagatedBuildInputs = [
-    numpy
-    sundials
-    scipy
-  ] ++ lib.optionals (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [ numpy sundials scipy ]
+    ++ lib.optionals (!isPy3k) [ enum34 ];
 
   doCheck = true;
   checkInputs = [ pytest ];
@@ -44,7 +26,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
+    description =
+      "A scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
     homepage = "https://github.com/bmcage/odes";
     license = licenses.bsd3;
     maintainers = with maintainers; [ idontgetoutmuch ];

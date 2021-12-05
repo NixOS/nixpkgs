@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, pytz
-, requests
-, setuptools
-, vincenty
-, xmltodict
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, docopt, pytz, requests
+, setuptools, vincenty, xmltodict, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "buienradar";
@@ -24,18 +14,10 @@ buildPythonPackage rec {
     sha256 = "1s0m5x7wdvzzsm797lh6531k614ybh7z0cikxjxqw377mivpz4wq";
   };
 
-  propagatedBuildInputs = [
-    docopt
-    pytz
-    requests
-    setuptools
-    vincenty
-    xmltodict
-  ];
+  propagatedBuildInputs =
+    [ docopt pytz requests setuptools vincenty xmltodict ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require network connection
@@ -44,10 +26,7 @@ buildPythonPackage rec {
     "test_xml_data"
   ];
 
-  pythonImportsCheck = [
-    "buienradar.buienradar"
-    "buienradar.constants"
-  ];
+  pythonImportsCheck = [ "buienradar.buienradar" "buienradar.constants" ];
 
   meta = with lib; {
     description = "Library and CLI tools for interacting with buienradar";

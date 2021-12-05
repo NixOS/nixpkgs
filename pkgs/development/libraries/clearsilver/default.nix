@@ -26,11 +26,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/c/clearsilver/0.10.5-1.6/debian/patches/clang-gcc5.patch";
+      url =
+        "https://sources.debian.net/data/main/c/clearsilver/0.10.5-1.6/debian/patches/clang-gcc5.patch";
       sha256 = "0d44v9jx0b6k8nvrhknd958i9rs59kdh73z0lb4f1mzi8if16c38";
     })
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/c/clearsilver/0.10.5-1.6/debian/patches/CVE-2011-4357.diff";
+      url =
+        "https://sources.debian.net/data/main/c/clearsilver/0.10.5-1.6/debian/patches/CVE-2011-4357.diff";
       sha256 = "1lfncavxdqckrz03gv97lcliygbpi9lnih944vmdbn9zw6fwcipi";
     })
   ];

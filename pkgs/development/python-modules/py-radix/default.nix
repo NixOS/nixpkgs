@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coverage
-, nose
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, coverage, nose }:
 
 buildPythonPackage rec {
   pname = "py-radix";

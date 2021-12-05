@@ -1,29 +1,7 @@
-{ lib
-, appdirs
-, bokeh
-, buildPythonPackage
-, dask
-, entrypoints
-, fetchFromGitHub
-, fsspec
-, holoviews
-, hvplot
-, intake-parquet
-, jinja2
-, msgpack
-, msgpack-numpy
-, numpy
-, pandas
-, panel
-, pyarrow
-, pytestCheckHook
-, python-snappy
-, pythonOlder
-, pyyaml
-, requests
-, stdenv
-, tornado
-}:
+{ lib, appdirs, bokeh, buildPythonPackage, dask, entrypoints, fetchFromGitHub
+, fsspec, holoviews, hvplot, intake-parquet, jinja2, msgpack, msgpack-numpy
+, numpy, pandas, panel, pyarrow, pytestCheckHook, python-snappy, pythonOlder
+, pyyaml, requests, stdenv, tornado }:
 
 buildPythonPackage rec {
   pname = "intake";
@@ -59,10 +37,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
-    intake-parquet
-    pytestCheckHook
-  ];
+  checkInputs = [ intake-parquet pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -88,14 +63,13 @@ buildPythonPackage rec {
     "test_flatten_flag"
     # Timing-based, flaky on darwin and possibly others
     "TestServerV1Source.test_idle_timer"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-    "test_second_load_timestamp"
-  ];
+  ] ++ lib.optionals (stdenv.isDarwin
+    && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+      # Flaky with older low-res mtime on darwin < 10.13 (#143987)
+      "test_second_load_timestamp"
+    ];
 
-  pythonImportsCheck = [
-    "intake"
-  ];
+  pythonImportsCheck = [ "intake" ];
 
   meta = with lib; {
     description = "Data load and catalog system";

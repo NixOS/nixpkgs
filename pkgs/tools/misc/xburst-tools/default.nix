@@ -1,11 +1,8 @@
-{ lib, stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake, libconfuse, pkg-config
-, gccCross ? null
-}:
+{ lib, stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake
+, libconfuse, pkg-config, gccCross ? null }:
 
-let
-  version = "2011-12-26";
-in
-stdenv.mkDerivation {
+let version = "2011-12-26";
+in stdenv.mkDerivation {
   pname = "xburst-tools";
   inherit version;
 
@@ -30,14 +27,14 @@ stdenv.mkDerivation {
   dontCrossStrip = true;
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
-  buildInputs = [ libusb-compat-0_1 libusb1 libconfuse ] ++
-    lib.optional (gccCross != null) gccCross;
+  buildInputs = [ libusb-compat-0_1 libusb1 libconfuse ]
+    ++ lib.optional (gccCross != null) gccCross;
 
   meta = {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
     license = lib.licenses.gpl3;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = lib.platforms.x86_64;
   };
 }

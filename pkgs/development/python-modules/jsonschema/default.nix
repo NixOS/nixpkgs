@@ -1,15 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, attrs
-, functools32
-, importlib-metadata
-, mock
-, nose
-, pyperf
-, pyrsistent
-, setuptools-scm
-, twisted
-, vcversioner
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, attrs, functools32
+, importlib-metadata, mock, nose, pyperf, pyrsistent, setuptools-scm, twisted
+, vcversioner }:
 
 buildPythonPackage rec {
   pname = "jsonschema";

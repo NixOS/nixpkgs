@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, geographiclib
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, geographiclib }:
 
 buildPythonPackage rec {
   pname = "geopy";
@@ -23,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;
-    maintainers = with maintainers; [GuillaumeDesforges];
+    maintainers = with maintainers; [ GuillaumeDesforges ];
   };
 }

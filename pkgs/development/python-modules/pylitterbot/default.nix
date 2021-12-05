@@ -1,13 +1,5 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-}:
+{ lib, authlib, buildPythonPackage, fetchFromGitHub, httpx, pytest-asyncio
+, pytestCheckHook, pythonOlder, pytz }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
@@ -23,20 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-HdIxi6RfdXBYEYFEcv/f9wAqKZg/MsEZd6mDYwE45to=";
   };
 
-  propagatedBuildInputs = [
-    authlib
-    httpx
-    pytz
-  ];
+  propagatedBuildInputs = [ authlib httpx pytz ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pylitterbot"
-  ];
+  pythonImportsCheck = [ "pylitterbot" ];
 
   meta = with lib; {
     description = "Python package for controlling a Litter-Robot";

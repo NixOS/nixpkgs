@@ -9,11 +9,14 @@ let
   socket = "/run/thd.socket";
 
   configFile = pkgs.writeText "triggerhappy.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, event, cmd, ... }:
-        ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
-      )
-      cfg.bindings}
+    ${concatMapStringsSep "\n" ({ keys, event, cmd, ... }:
+      "${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${
+        toString {
+          press = 1;
+          hold = 2;
+          release = 0;
+        }.${event}
+      } ${cmd}") cfg.bindings}
     ${cfg.extraConfig}
   '';
 
@@ -22,11 +25,12 @@ let
 
       keys = mkOption {
         type = types.listOf types.str;
-        description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
+        description =
+          "List of keys to match.  Key names as defined in linux/input-event-codes.h";
       };
 
       event = mkOption {
-        type = types.enum ["press" "hold" "release"];
+        type = types.enum [ "press" "hold" "release" ];
         default = "press";
         description = "Event to match.";
       };
@@ -39,9 +43,7 @@ let
     };
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -68,7 +70,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
         '';
@@ -89,7 +91,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -104,7 +105,9 @@ in
       wantedBy = [ "multi-user.target" ];
       description = "Global hotkey daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
+        ExecStart = "${pkgs.triggerhappy}/bin/thd ${
+            optionalString (cfg.user != "root") "--user ${cfg.user}"
+          } --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
       };
     };
 

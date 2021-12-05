@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, i2c-tools
-}:
+{ lib, buildPythonPackage, i2c-tools }:
 
 buildPythonPackage rec {
   inherit (i2c-tools) pname version src;

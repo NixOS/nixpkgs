@@ -1,17 +1,5 @@
-{ stdenv
-, autoPatchelfHook
-, curl
-, dpkg
-, fetchurl
-, gcc
-, lib
-, libGLU
-, libcork
-, makeDesktopItem
-, qt5
-, quazip
-, zlib
-}:
+{ stdenv, autoPatchelfHook, curl, dpkg, fetchurl, gcc, lib, libGLU, libcork
+, makeDesktopItem, qt5, quazip, zlib }:
 stdenv.mkDerivation rec {
   pname = "ideamaker";
   version = "4.0.1";
@@ -23,21 +11,14 @@ stdenv.mkDerivation rec {
     # and just handwrite the correct values in the following URL, hopefully
     # avoiding surprises for the next person that comes to update this
     # package.
-    url = "https://download.raise3d.com/ideamaker/release/4.0.1/ideaMaker_4.0.1.4802-ubuntu_amd64.deb";
+    url =
+      "https://download.raise3d.com/ideamaker/release/4.0.1/ideaMaker_4.0.1.4802-ubuntu_amd64.deb";
     sha256 = "0a1jcakdglcr4kz0kyq692dbjk6aq2yqcp3i6gzni91k791h49hp";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg qt5.wrapQtAppsHook ];
-  buildInputs = [
-    curl
-    gcc.cc.lib
-    libGLU
-    libcork
-    qt5.qtbase
-    qt5.qtserialport
-    quazip
-    zlib
-  ];
+  buildInputs =
+    [ curl gcc.cc.lib libGLU libcork qt5.qtbase qt5.qtserialport quazip zlib ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -73,6 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];
-    broken = true;  # Segfaults on startup.
+    broken = true; # Segfaults on startup.
   };
 }

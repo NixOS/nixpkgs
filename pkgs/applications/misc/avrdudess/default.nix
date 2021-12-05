@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
     cat >> "$out/bin/avrdudess" << __EOF__
     #!${runtimeShell}
-    export LD_LIBRARY_PATH="${lib.makeLibraryPath [gtk2 mono]}"
+    export LD_LIBRARY_PATH="${lib.makeLibraryPath [ gtk2 mono ]}"
     # We need PATH from user env for xdg-open to find its tools, which
     # typically depend on the currently running desktop environment.
     export PATH="${lib.makeBinPath [ avrdude xdg-utils ]}:\$PATH"

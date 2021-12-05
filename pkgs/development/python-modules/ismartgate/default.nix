@@ -1,19 +1,6 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, click
-, defusedxml
-, dicttoxml
-, fetchFromGitHub
-, httpx
-, pycryptodome
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, pythonOlder
-, respx
-, typing-extensions
-}:
+{ lib, asynctest, buildPythonPackage, click, defusedxml, dicttoxml
+, fetchFromGitHub, httpx, pycryptodome, pytest-asyncio, pytest-raises
+, pytestCheckHook, pythonOlder, respx, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "ismartgate";
@@ -27,22 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
   };
 
-  propagatedBuildInputs = [
-    click
-    defusedxml
-    dicttoxml
-    httpx
-    pycryptodome
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [ click defusedxml dicttoxml httpx pycryptodome typing-extensions ];
 
-  checkInputs = [
-    asynctest
-    pytest-asyncio
-    pytest-raises
-    pytestCheckHook
-    respx
-  ];
+  checkInputs =
+    [ asynctest pytest-asyncio pytest-raises pytestCheckHook respx ];
 
   postPatch = ''
     substituteInPlace setup.py \

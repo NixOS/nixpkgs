@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-core
-, msrest
+{ lib, buildPythonPackage, fetchPypi, isPy27, azure-common, azure-core, msrest
 }:
 
 buildPythonPackage rec {
@@ -15,11 +12,7 @@ buildPythonPackage rec {
     sha256 = "26279ba3a6c727deba1fb61f549496867baddffbf062bd579d6fd2bc04e95276";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-core
-    msrest
-  ];
+  propagatedBuildInputs = [ azure-common azure-core msrest ];
 
   pythonNamespaces = [ "azure.keyvault" ];
 

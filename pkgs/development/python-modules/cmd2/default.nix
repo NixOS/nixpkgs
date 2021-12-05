@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, attrs
-, buildPythonPackage
-, colorama
-, fetchPypi
-, glibcLocales
-, importlib-metadata
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
-, vim
-, wcwidth
-}:
+{ lib, stdenv, attrs, buildPythonPackage, colorama, fetchPypi, glibcLocales
+, importlib-metadata, pyperclip, pytest-mock, pytestCheckHook, pythonOlder
+, setuptools-scm, typing-extensions, vim, wcwidth }:
 
 buildPythonPackage rec {
   pname = "cmd2";
@@ -29,26 +15,15 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    attrs
-    colorama
-    pyperclip
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ attrs colorama pyperclip wcwidth ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
-  checkInputs = [
-    pytestCheckHook
-    glibcLocales
-    pytest-mock
-    vim
-  ];
+  checkInputs = [ pytestCheckHook glibcLocales pytest-mock vim ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg

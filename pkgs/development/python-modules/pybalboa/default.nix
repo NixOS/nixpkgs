@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pybalboa";
@@ -21,9 +17,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pybalboa"
-  ];
+  pythonImportsCheck = [ "pybalboa" ];
 
   meta = with lib; {
     description = " Python module to interface with a Balboa Spa";

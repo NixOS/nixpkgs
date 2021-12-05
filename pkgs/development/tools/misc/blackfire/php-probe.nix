@@ -1,34 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, php
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
-}:
+{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, php, writeShellScript, curl, jq
+, common-updater-scripts }:
 
 let
   soFile = {
     "7.3" = "blackfire-20180731";
     "7.4" = "blackfire-20190902";
     "8.0" = "blackfire-20200930";
-  }.${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
+  }.${lib.versions.majorMinor php.version} or (throw
+    "Unsupported PHP version.");
 in stdenv.mkDerivation rec {
   pname = "php-blackfire";
   version = "1.69.0";
 
   src = fetchurl {
-    url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-php_${version}_amd64.deb";
+    url =
+      "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-php_${version}_amd64.deb";
     sha256 = "5wE6yCl4N6PJiL2up9y/me/Sg2hZ4HnIKsbuhDzyFco=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -42,7 +32,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D usr/lib/blackfire-php/amd64/${soFile}${lib.optionalString php.ztsSupport "-zts"}.so $out/lib/php/extensions/blackfire.so
+    install -D usr/lib/blackfire-php/amd64/${soFile}${
+      lib.optionalString php.ztsSupport "-zts"
+    }.so $out/lib/php/extensions/blackfire.so
 
     runHook postInstall
   '';

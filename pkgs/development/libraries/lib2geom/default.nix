@@ -1,16 +1,5 @@
-{ stdenv
-, fetchFromGitLab
-, cmake
-, ninja
-, pkg-config
-, boost
-, glib
-, gsl
-, cairo
-, double-conversion
-, gtest
-, lib
-}:
+{ stdenv, fetchFromGitLab, cmake, ninja, pkg-config, boost, glib, gsl, cairo
+, double-conversion, gtest, lib }:
 
 stdenv.mkDerivation rec {
   pname = "lib2geom";
@@ -25,23 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u9pbpwVzAXzrM2/tQnd1B6Jo9Fzg6UZBr9AtUsNMfQ0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [
-    boost
-    glib
-    gsl
-    cairo
-    double-conversion
-  ];
+  buildInputs = [ boost glib gsl cairo double-conversion ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests

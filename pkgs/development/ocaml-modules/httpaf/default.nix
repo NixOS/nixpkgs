@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
-, angstrom, faraday, alcotest
-}:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, angstrom, faraday
+, alcotest }:
 
 buildDunePackage rec {
   pname = "httpaf";
@@ -18,7 +17,8 @@ buildDunePackage rec {
   patches = [
     # Fix tests with angstrom ≥ 0.14
     (fetchpatch {
-      url = "https://github.com/inhabitedtype/httpaf/commit/fc0de5f2f1bd8df953ae4d4c9a61032392436c84.patch";
+      url =
+        "https://github.com/inhabitedtype/httpaf/commit/fc0de5f2f1bd8df953ae4d4c9a61032392436c84.patch";
       sha256 = "1a8ca76ifbgyaq1bqfyq18mmxinjjparzkrr7ljbj0y1z1rl748z";
     })
   ];
@@ -28,7 +28,8 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A high-performance, memory-efficient, and scalable web server for OCaml";
+    description =
+      "A high-performance, memory-efficient, and scalable web server for OCaml";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;

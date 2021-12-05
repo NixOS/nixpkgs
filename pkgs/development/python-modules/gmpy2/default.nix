@@ -1,18 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPyPy
-, gmp
-, mpfr
-, libmpc
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPyPy, gmp, mpfr, libmpc }:
 
 let
   pname = "gmpy2";
   version = "2.1.0b5";
-in
 
-buildPythonPackage {
+in buildPythonPackage {
   inherit pname version;
 
   disabled = isPyPy;

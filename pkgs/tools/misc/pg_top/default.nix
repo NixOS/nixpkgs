@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://pgfoundry.org/frs/download.php/1781/pg_top-${version}.tar.gz";
+    url =
+      "https://pgfoundry.org/frs/download.php/1781/pg_top-${version}.tar.gz";
     sha256 = "17xrv0l58rv3an06gkajzw0gg6v810xx6vl137an1iykmhvfh7h2";
   };
 

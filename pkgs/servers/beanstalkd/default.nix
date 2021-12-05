@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     installManPage doc/beanstalkd.1
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.beanstalkd;
-  };
+  passthru.tests = { smoke-test = nixosTests.beanstalkd; };
 
   meta = with lib; {
     homepage = "http://kr.github.io/beanstalkd/";

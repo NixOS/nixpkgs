@@ -9,13 +9,11 @@ buildPythonPackage rec {
     sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
   };
 
-  propagatedBuildInputs = [
-    logilab_common six
-  ];
-
+  propagatedBuildInputs = [ logilab_common six ];
 
   meta = with lib; {
-    description = "logilab-database provides some classes to make unified access to different";
+    description =
+      "logilab-database provides some classes to make unified access to different";
     homepage = "https://www.logilab.org/project/logilab-database";
   };
 }

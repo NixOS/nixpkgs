@@ -1,8 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, lib }:
+build-idris-package {
   name = "permutations";
   version = "2018-01-19";
 

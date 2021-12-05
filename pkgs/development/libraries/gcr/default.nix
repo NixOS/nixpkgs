@@ -1,27 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk3
-, pango
-, libsecret
-, openssh
-, systemd
-, gobject-introspection
-, makeWrapper
-, libxslt
-, vala
-, gnome
-, python3
-, shared-mime-info
-}:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gettext, gnupg, p11-kit, glib
+, libgcrypt, libtasn1, gtk3, pango, libsecret, openssh, systemd
+, gobject-introspection, makeWrapper, libxslt, vala, gnome, python3
+, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
@@ -30,7 +10,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "CQn8SeqK1IMtJ1ZP8v0dxmZpbioHxzlBxIgp5gVy2gE=";
   };
 
@@ -47,25 +29,11 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  buildInputs = [
-    gnupg
-    libgcrypt
-    libtasn1
-    pango
-    libsecret
-    openssh
-    systemd
-  ];
+  buildInputs = [ gnupg libgcrypt libtasn1 pango libsecret openssh systemd ];
 
-  propagatedBuildInputs = [
-    glib
-    gtk3
-    p11-kit
-  ];
+  propagatedBuildInputs = [ glib gtk3 p11-kit ];
 
-  checkInputs = [
-    python3
-  ];
+  checkInputs = [ python3 ];
 
   mesonFlags = [
     "-Dgtk_doc=false"
@@ -76,7 +44,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR =
+    "${placeholder "out"}/lib/systemd/user";
 
   postPatch = ''
     patchShebangs build/ gcr/fixtures/
@@ -90,11 +59,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     platforms = platforms.unix;

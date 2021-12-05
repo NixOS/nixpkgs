@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, perl
-, pkg-config
-, python3
-, xmlto
-, zip
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, perl, pkg-config, python3
+, xmlto, zip, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
@@ -25,30 +15,24 @@ stdenv.mkDerivation rec {
   patches = [
     # apply https://github.com/gdraheim/zziplib/pull/113
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/82a7773cd17828a3b0a4f5f552ae80c1cc8777c7.diff";
+      url =
+        "https://github.com/gdraheim/zziplib/commit/82a7773cd17828a3b0a4f5f552ae80c1cc8777c7.diff";
       sha256 = "0ifqdzxwb5d19mziy9j6lhl8wj95jpxzm0d2c6y3bgwa931avd3y";
     })
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/1cd611514c5f9559eb9dfc191d678dfc991f66db.diff";
+      url =
+        "https://github.com/gdraheim/zziplib/commit/1cd611514c5f9559eb9dfc191d678dfc991f66db.diff";
       sha256 = "11w9qa46xq49l113k266dnv8izzdk1fq4y54yy5w8zps8zd3xfny";
     })
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/e47b1e1da952a92f917db6fb19485b8a0b1a42f3.diff";
+      url =
+        "https://github.com/gdraheim/zziplib/commit/e47b1e1da952a92f917db6fb19485b8a0b1a42f3.diff";
       sha256 = "0d032hkmi3s3db12z2zbppl2swa3gdpbj0c6w13ylv2g2ixglrwg";
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-    python3
-    xmlto
-    zip
-  ];
-  buildInputs = [
-    zlib
-  ];
+  nativeBuildInputs = [ cmake perl pkg-config python3 xmlto zip ];
+  buildInputs = [ zlib ];
 
   # test/zziptests.py requires network access
   # (https://github.com/gdraheim/zziplib/issues/24)

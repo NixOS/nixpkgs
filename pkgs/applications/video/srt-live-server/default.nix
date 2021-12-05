@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, srt
-, zlib
-}:
+{ lib, fetchFromGitHub, stdenv, srt, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "srt-live-server";
@@ -23,9 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ srt zlib ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "srt live server for low latency";

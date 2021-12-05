@@ -30,9 +30,7 @@ mkDerivation {
     lrelease *.ts coretool/*.ts
   '';
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ gpsbabel ]}"
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ gpsbabel ]}" ];
 
   postInstall = ''
     install -Dm755 objects/gpsbabelfe -t $out/bin

@@ -1,17 +1,6 @@
-{ lib
-, fetchPypi
-, setuptools-scm
-, buildPythonPackage
-, isPy3k
-, cython
-, jinja2
-, numpy
-, pytest
-, pytest-astropy
-, astropy-helpers
-, astropy-extension-helpers
-, pyerfa
-}:
+{ lib, fetchPypi, setuptools-scm, buildPythonPackage, isPy3k, cython, jinja2
+, numpy, pytest, pytest-astropy, astropy-helpers, astropy-extension-helpers
+, pyerfa }:
 
 buildPythonPackage rec {
   pname = "astropy";
@@ -25,7 +14,8 @@ buildPythonPackage rec {
     sha256 = "sha256-LTlRIjtOt/No/K2Mg0DSc3TF2OO2NaY2J1rNs481zVE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm astropy-helpers astropy-extension-helpers cython jinja2 ];
+  nativeBuildInputs =
+    [ setuptools-scm astropy-helpers astropy-extension-helpers cython jinja2 ];
   propagatedBuildInputs = [ numpy pyerfa ];
   checkInputs = [ pytest pytest-astropy ];
 

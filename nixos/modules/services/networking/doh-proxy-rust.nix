@@ -14,7 +14,7 @@ in {
 
     flags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "--server-address=9.9.9.9:53" ];
       description = ''
         A list of command-line flags to pass to doh-proxy. For details on the
@@ -30,7 +30,8 @@ in {
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${escapeShellArgs cfg.flags}";
+        ExecStart =
+          "${pkgs.doh-proxy-rust}/bin/doh-proxy ${escapeShellArgs cfg.flags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;

@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 ];
 
   meta = with lib; {
-    description = "Implementation of the VISA standard (for instrument control)";
+    description =
+      "Implementation of the VISA standard (for instrument control)";
     longDescription = ''
       LibreVISA aims to be a compliant implementation of the VISA standard in a
       free software library.

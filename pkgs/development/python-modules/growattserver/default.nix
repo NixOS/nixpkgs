@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "growattserver";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Vooy+czqhrsWVw35zJb5paC5G0WwOlI5hF8PXxJG0cY=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   postPatch = ''
     # https://github.com/indykoning/PyPi_GrowattServer/issues/2

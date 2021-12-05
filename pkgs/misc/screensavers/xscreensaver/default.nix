@@ -1,12 +1,7 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, pkg-config, intltool
-, perl, gettext, libX11, libXext, libXi, libXt
-, libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
-, gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
-, systemd, coreutils
-, forceInstallAllHacks ? false
-, withSystemd ? stdenv.isLinux
-}:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, intltool, perl, gettext
+, libX11, libXext, libXi, libXt, libXft, libXinerama, libXrandr, libXxf86vm
+, libGL, libGLU, gle, gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam, systemd
+, coreutils, forceInstallAllHacks ? false, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
   version = "6.02";
@@ -17,14 +12,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Xm1ssJAzrVYs/m1Gv5MS5EUfeUa+2KRnGqk0TfkZMYQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config intltool makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config intltool makeWrapper ];
 
   buildInputs = [
-    perl gettext libX11 libXext libXi libXt
-    libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
-    gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
+    perl
+    gettext
+    libX11
+    libXext
+    libXi
+    libXt
+    libXft
+    libXinerama
+    libXrandr
+    libXxf86vm
+    libGL
+    libGLU
+    gle
+    gtk2
+    gdk-pixbuf
+    gdk-pixbuf-xlib
+    libxml2
+    pam
   ] ++ lib.optional withSystemd systemd;
 
   preConfigure = ''
@@ -38,7 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   # "marbling" has NEON code that mixes signed and unsigned vector types
-  NIX_CFLAGS_COMPILE = lib.optional (with stdenv.hostPlatform; isAarch64 || isAarch32) "-flax-vector-conversions";
+  NIX_CFLAGS_COMPILE =
+    lib.optional (with stdenv.hostPlatform; isAarch64 || isAarch32)
+    "-flax-vector-conversions";
 
   postInstall = ''
     for bin in $out/bin/*; do

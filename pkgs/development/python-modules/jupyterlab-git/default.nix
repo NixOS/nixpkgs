@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, git
-, jupyter_server
-, jupyter-packaging
-, jupyterlab
-, nbdime
-, nbformat
-, pexpect
-, pytest-asyncio
-, pytest-tornasync
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, git, jupyter_server
+, jupyter-packaging, jupyterlab, nbdime, nbformat, pexpect, pytest-asyncio
+, pytest-tornasync, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
@@ -27,24 +14,11 @@ buildPythonPackage rec {
     sha256 = "0rbl472k66asfq9n9xqd2zpw8z7yrk6ka411vhvlvvszzb7g6w13";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
-  propagatedBuildInputs = [
-    jupyter_server
-    nbdime
-    git
-    nbformat
-    pexpect
-  ];
+  propagatedBuildInputs = [ jupyter_server nbdime git nbformat pexpect ];
 
-  checkInputs = [
-    jupyterlab
-    pytest-asyncio
-    pytest-tornasync
-    pytestCheckHook
-  ];
+  checkInputs = [ jupyterlab pytest-asyncio pytest-tornasync pytestCheckHook ];
 
   # All Tests on darwin fail or are skipped due to sandbox
   doCheck = !stdenv.isDarwin;
@@ -58,14 +32,9 @@ buildPythonPackage rec {
     "jupyterlab_git/tests/test_settings.py"
   ];
 
-  disabledTests = [
-    "test_Git_get_nbdiff_file"
-    "test_Git_get_nbdiff_dict"
-  ];
+  disabledTests = [ "test_Git_get_nbdiff_file" "test_Git_get_nbdiff_dict" ];
 
-  pythonImportsCheck = [
-    "jupyterlab_git"
-  ];
+  pythonImportsCheck = [ "jupyterlab_git" ];
 
   meta = with lib; {
     description = "Jupyter lab extension for version control with Git";

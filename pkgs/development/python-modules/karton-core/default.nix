@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, minio
-, python
-, redis
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, minio, python, redis }:
 
 buildPythonPackage rec {
   pname = "karton-core";

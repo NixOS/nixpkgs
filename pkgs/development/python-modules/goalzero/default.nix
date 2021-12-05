@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "goalzero";
@@ -17,16 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-PveHE317p5fGSxgx7LQkpRYF55HwdzpZFY8/F8s3CBQ=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "goalzero"
-  ];
+  pythonImportsCheck = [ "goalzero" ];
 
   meta = with lib; {
     description = "Goal Zero Yeti REST Api Library";

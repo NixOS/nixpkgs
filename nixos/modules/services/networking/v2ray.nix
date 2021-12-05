@@ -47,9 +47,7 @@ with lib;
             listen = "127.0.0.1";
             protocol = "http";
           }];
-          outbounds = [{
-            protocol = "freedom";
-          }];
+          outbounds = [{ protocol = "freedom"; }];
         };
         description = ''
           The configuration object.
@@ -65,9 +63,10 @@ with lib;
 
   config = let
     cfg = config.services.v2ray;
-    configFile = if cfg.configFile != null
-      then cfg.configFile
-      else pkgs.writeTextFile {
+    configFile = if cfg.configFile != null then
+      cfg.configFile
+    else
+      pkgs.writeTextFile {
         name = "v2ray.json";
         text = builtins.toJSON cfg.config;
         checkPhase = ''
@@ -76,12 +75,11 @@ with lib;
       };
 
   in mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (cfg.configFile == null) != (cfg.config == null);
-        message = "Either but not both `configFile` and `config` should be specified for v2ray.";
-      }
-    ];
+    assertions = [{
+      assertion = (cfg.configFile == null) != (cfg.config == null);
+      message =
+        "Either but not both `configFile` and `config` should be specified for v2ray.";
+    }];
 
     systemd.services.v2ray = {
       description = "v2ray Daemon";

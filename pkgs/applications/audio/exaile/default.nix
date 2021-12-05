@@ -1,25 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, gobject-introspection, makeWrapper, wrapGAppsHook
-, gtk3, gst_all_1, python3
-, gettext, gnome, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
-, iconTheme ? gnome.adwaita-icon-theme
-, deviceDetectionSupport ? true
-, documentationSupport ? true
-, notificationSupport ? true
-, scalableIconSupport ? true
-, translationSupport ? true
-, bpmCounterSupport ? false
-, ipythonSupport ? false
-, lastfmSupport ? false
-, lyricsManiaSupport ? false
-, lyricsWikiSupport ? false
-, multimediaKeySupport ? false
-, musicBrainzSupport ? false
-, podcastSupport ? false
-, streamripperSupport ? false
-, wikipediaSupport ? false
-, fetchpatch
-}:
+{ stdenv, lib, fetchFromGitHub, gobject-introspection, makeWrapper
+, wrapGAppsHook, gtk3, gst_all_1, python3, gettext, gnome, help2man, keybinder3
+, libnotify, librsvg, streamripper, udisks, webkitgtk
+, iconTheme ? gnome.adwaita-icon-theme, deviceDetectionSupport ? true
+, documentationSupport ? true, notificationSupport ? true
+, scalableIconSupport ? true, translationSupport ? true
+, bpmCounterSupport ? false, ipythonSupport ? false, lastfmSupport ? false
+, lyricsManiaSupport ? false, lyricsWikiSupport ? false
+, multimediaKeySupport ? false, musicBrainzSupport ? false
+, podcastSupport ? false, streamripperSupport ? false, wikipediaSupport ? false
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "exaile";
@@ -38,51 +27,38 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    makeWrapper
-    wrapGAppsHook
-  ] ++ lib.optionals documentationSupport [
-    help2man
-    python3.pkgs.sphinx
-    python3.pkgs.sphinx_rtd_theme
-  ] ++ lib.optional translationSupport gettext;
+  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook ]
+    ++ lib.optionals documentationSupport [
+      help2man
+      python3.pkgs.sphinx
+      python3.pkgs.sphinx_rtd_theme
+    ] ++ lib.optional translationSupport gettext;
 
-  buildInputs = [
-    iconTheme
-    gtk3
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]) ++ (with python3.pkgs; [
-    bsddb3
-    dbus-python
-    mutagen
-    pygobject3
-    pycairo
-    gst-python
-  ]) ++ lib.optional deviceDetectionSupport udisks
-  ++ lib.optional notificationSupport libnotify
-  ++ lib.optional scalableIconSupport librsvg
-  ++ lib.optional bpmCounterSupport gst_all_1.gst-plugins-bad
-  ++ lib.optional ipythonSupport python3.pkgs.ipython
-  ++ lib.optional lastfmSupport python3.pkgs.pylast
-  ++ lib.optional (lyricsManiaSupport || lyricsWikiSupport) python3.pkgs.lxml
-  ++ lib.optional lyricsWikiSupport python3.pkgs.beautifulsoup4
-  ++ lib.optional multimediaKeySupport keybinder3
-  ++ lib.optional musicBrainzSupport python3.pkgs.musicbrainzngs
-  ++ lib.optional podcastSupport python3.pkgs.feedparser
-  ++ lib.optional wikipediaSupport webkitgtk;
+  buildInputs = [ iconTheme gtk3 ]
+    ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
+    ++ (with python3.pkgs; [
+      bsddb3
+      dbus-python
+      mutagen
+      pygobject3
+      pycairo
+      gst-python
+    ]) ++ lib.optional deviceDetectionSupport udisks
+    ++ lib.optional notificationSupport libnotify
+    ++ lib.optional scalableIconSupport librsvg
+    ++ lib.optional bpmCounterSupport gst_all_1.gst-plugins-bad
+    ++ lib.optional ipythonSupport python3.pkgs.ipython
+    ++ lib.optional lastfmSupport python3.pkgs.pylast
+    ++ lib.optional (lyricsManiaSupport || lyricsWikiSupport) python3.pkgs.lxml
+    ++ lib.optional lyricsWikiSupport python3.pkgs.beautifulsoup4
+    ++ lib.optional multimediaKeySupport keybinder3
+    ++ lib.optional musicBrainzSupport python3.pkgs.musicbrainzngs
+    ++ lib.optional podcastSupport python3.pkgs.feedparser
+    ++ lib.optional wikipediaSupport webkitgtk;
 
-  checkInputs = with python3.pkgs; [
-    mox3
-    pytest
-  ];
+  checkInputs = with python3.pkgs; [ mox3 pytest ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
   preCheck = ''
@@ -94,12 +70,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/exaile \
       --set PYTHONPATH $PYTHONPATH \
-      ${lib.optionalString streamripperSupport "--prefix PATH : ${lib.makeBinPath [ streamripper ]}"}
+      ${
+        lib.optionalString streamripperSupport
+        "--prefix PATH : ${lib.makeBinPath [ streamripper ]}"
+      }
   '';
 
   meta = with lib; {
     homepage = "https://www.exaile.org/";
-    description = "A music player with a simple interface and powerful music management capabilities";
+    description =
+      "A music player with a simple interface and powerful music management capabilities";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ryneeverett ];
     platforms = platforms.all;

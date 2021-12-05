@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, pep8, coverage, logilab_common, requests }:
+{ lib, buildPythonPackage, fetchPypi, pep8, coverage, logilab_common, requests
+}:
 
 buildPythonPackage rec {
   pname = "bugzilla";

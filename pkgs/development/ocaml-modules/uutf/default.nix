@@ -1,10 +1,9 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner, topkg, uchar }:
 let
   pname = "uutf";
   webpage = "https://erratique.ch/software/${pname}";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
   version = "1.0.2";
 
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

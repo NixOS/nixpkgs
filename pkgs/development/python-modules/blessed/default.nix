@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six
-, wcwidth, pytest, mock, glibcLocales
+{ lib, buildPythonPackage, fetchPypi, six, wcwidth, pytest, mock, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -23,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/jquast/blessed";
-    description = "A thin, practical wrapper around terminal capabilities in Python.";
+    description =
+      "A thin, practical wrapper around terminal capabilities in Python.";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.mit;
   };

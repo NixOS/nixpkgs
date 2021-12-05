@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, gcc-unwrapped
-, dpkg
-, util-linux
-, bash
-, makeWrapper
-, electron
-}:
+{ lib, stdenv, fetchurl, gcc-unwrapped, dpkg, util-linux, bash, makeWrapper
+, electron }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -23,14 +16,13 @@ let
     "i686-linux" = "i386";
   }."${system}" or throwSystem;
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "etcher";
   version = "1.6.0";
 
   src = fetchurl {
-    url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
+    url =
+      "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
     inherit sha256;
   };
 
@@ -74,7 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Flash OS images to SD cards and USB drives, safely and easily";
+    description =
+      "Flash OS images to SD cards and USB drives, safely and easily";
     homepage = "https://etcher.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];

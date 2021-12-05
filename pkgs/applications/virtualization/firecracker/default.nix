@@ -6,17 +6,19 @@ let
   suffix = {
     x86_64-linux = "x86_64";
     aarch64-linux = "aarch64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  }."${stdenv.hostPlatform.system}" or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
+  baseurl =
+    "https://github.com/firecracker-microvm/firecracker/releases/download";
 
-  dlbin = sha256: fetchurl {
-    url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
-  };
+  dlbin = sha256:
+    fetchurl {
+      url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
+      sha256 = sha256."${stdenv.hostPlatform.system}";
+    };
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "firecracker";
   inherit version;
 

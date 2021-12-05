@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wxGTK
-, sfml
-, fluidsynth
-, curl
-, freeimage
-, ftgl
-, glew
-, zip
-, lua
-, fmt
-, mpg123
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wxGTK, sfml, fluidsynth, curl
+, freeimage, ftgl, glew, zip, lua, fmt, mpg123 }:
 
 stdenv.mkDerivation {
   pname = "slade";
@@ -33,7 +18,8 @@ stdenv.mkDerivation {
     "-DNO_WEBVIEW=1"
   ];
   nativeBuildInputs = [ cmake pkg-config zip ];
-  buildInputs = [ wxGTK wxGTK.gtk sfml fluidsynth curl freeimage ftgl glew lua fmt mpg123 ];
+  buildInputs =
+    [ wxGTK wxGTK.gtk sfml fluidsynth curl freeimage ftgl glew lua fmt mpg123 ];
 
   meta = with lib; {
     description = "Doom editor";

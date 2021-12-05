@@ -6,14 +6,17 @@ let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
-  settingsFormat = pkgs.formats.json {};
-  settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
+  settingsFormat = pkgs.formats.json { };
+  settingsFileUnsubstituted =
+    settingsFormat.generate "mautrix-telegram-config-unsubstituted.json"
+    cfg.settings;
   settingsFile = "${dataDir}/config.json";
 
 in {
   options = {
     services.mautrix-telegram = {
-      enable = mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
+      enable = mkEnableOption
+        "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
 
       settings = mkOption rec {
         apply = recursiveUpdate default;
@@ -21,7 +24,7 @@ in {
         default = {
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
-            database_opts = {};
+            database_opts = { };
             hostname = "0.0.0.0";
             port = 8080;
             address = "http://localhost:${toString port}";
@@ -30,8 +33,8 @@ in {
           bridge = {
             permissions."*" = "relaybot";
             relaybot.whitelist = [ ];
-            double_puppet_server_map = {};
-            login_shared_secret_map = {};
+            double_puppet_server_map = { };
+            login_shared_secret_map = { };
           };
 
           logging = {
@@ -107,7 +110,8 @@ in {
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable
+          "matrix-synapse.service";
         description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
@@ -117,7 +121,8 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.mautrix-telegram = {
-      description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
+      description =
+        "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
@@ -159,9 +164,10 @@ in {
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = pkgs.mautrix-telegram; # necessary for the database migration scripts to be found
+        WorkingDirectory =
+          pkgs.mautrix-telegram; # necessary for the database migration scripts to be found
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = 27;
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''

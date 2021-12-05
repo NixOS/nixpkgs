@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click, pytest, glibcLocales
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, click, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "cligj";
@@ -13,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-0f9+I6ozX93Vn0l7+WR0mpddDZymJQ3+Krovt6co22Y=";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   checkInputs = [ pytest glibcLocales ];
 

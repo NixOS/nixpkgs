@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, isPy3k
-, simplejson
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, isPy3k, simplejson }:
 
 buildPythonPackage rec {
   pname = "meliae";

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
+{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv
+, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "recode";
@@ -6,11 +7,13 @@ stdenv.mkDerivation rec {
 
   # Use official tarball, avoid need to bootstrap/generate build system
   src = fetchurl {
-    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-5DIKaw9c2DfNtFT7WFQBjd+pcJEWCOHwHMLGX2M2csQ=";
   };
 
-  nativeBuildInputs = [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];
+  nativeBuildInputs =
+    [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];
   buildInputs = [ libintl ];
 
   doCheck = true;

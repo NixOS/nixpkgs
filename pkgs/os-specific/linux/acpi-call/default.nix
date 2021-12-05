@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags =
+    [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -D acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc/acpi_call.ko
@@ -29,7 +28,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin mic92 ];
     homepage = "https://github.com/nix-community/acpi_call";
     platforms = platforms.linux;
-    description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
+    description =
+      "A module allowing arbitrary ACPI calls; use case: hybrid video";
     license = licenses.gpl3Plus;
   };
 }

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, nose
-, testtools
-}:
+{ lib, buildPythonPackage, fetchPypi, docutils, nose, testtools }:
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";

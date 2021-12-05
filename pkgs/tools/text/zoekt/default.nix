@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-}:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 buildGoModule {
   pname = "zoekt";
   version = "unstable-2021-03-17";
@@ -16,9 +12,7 @@ buildGoModule {
 
   vendorSha256 = "d+Xvl6fleMO0frP9qr5tZgkzsnH5lPELwmEQEspD22M=";
 
-  checkInputs = [
-    git
-  ];
+  checkInputs = [ git ];
 
   meta = with lib; {
     description = "Fast trigram based code search";

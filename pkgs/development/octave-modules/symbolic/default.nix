@@ -1,11 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{ buildOctavePackage, lib, fetchurl
 # Octave's Python (Python 3)
 , python
 # Needed only to get the correct version of sympy needed
-, python2Packages
-}:
+, python2Packages }:
 
 let
   # Need to use sympy 1.5.1 for https://github.com/cbm755/octsympy/issues/1023
@@ -13,18 +10,18 @@ let
   # In the meantime, we create a Python environment with Python 3, its mpmath
   # version and sympy 1.5 from python2Packages.
   pythonEnv = (let
-      overridenPython = let
-        packageOverrides = self: super: {
-          sympy = super.sympy.overridePythonAttrs (old: rec {
-            version = python2Packages.sympy.version;
-            src = python2Packages.sympy.src;
-          });
-        };
-      in python.override {inherit packageOverrides; self = overridenPython; };
-    in overridenPython.withPackages (ps: [
-      ps.sympy
-      ps.mpmath
-    ]));
+    overridenPython = let
+      packageOverrides = self: super: {
+        sympy = super.sympy.overridePythonAttrs (old: rec {
+          version = python2Packages.sympy.version;
+          src = python2Packages.sympy.src;
+        });
+      };
+    in python.override {
+      inherit packageOverrides;
+      self = overridenPython;
+    };
+  in overridenPython.withPackages (ps: [ ps.sympy ps.mpmath ]));
 
 in buildOctavePackage rec {
   pname = "symbolic";

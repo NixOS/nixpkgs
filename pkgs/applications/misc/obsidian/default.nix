@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, makeWrapper, electron_13, makeDesktopItem, graphicsmagick
-, writeScript }:
+{ stdenv, fetchurl, lib, makeWrapper, electron_13, makeDesktopItem
+, graphicsmagick, writeScript }:
 
 let
   electron = electron_13;
@@ -34,7 +34,8 @@ in stdenv.mkDerivation rec {
   version = "0.12.19";
 
   src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+    url =
+      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
     sha256 = "sha256-M9U67+mCL/CziTprCAhfrZTWl6i7HRfH24l/xqUqkIg=";
   };
 

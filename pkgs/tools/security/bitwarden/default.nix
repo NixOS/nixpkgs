@@ -1,23 +1,13 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, libsecret
-, libxshmfence
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, udev
-, wrapGAppsHook
-}:
+{ atomEnv, autoPatchelfHook, dpkg, fetchurl, lib, libsecret, libxshmfence
+, makeDesktopItem, makeWrapper, stdenv, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "bitwarden";
   version = "1.29.1";
 
   src = fetchurl {
-    url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}-amd64.deb";
+    url =
+      "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}-amd64.deb";
     sha256 = "0rxy19bazi7a6m2bpx6wadg5d9p0k324h369vgr5ppmxb69d6zp8";
   };
 
@@ -52,13 +42,13 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  runtimeDependencies = [
-    (lib.getLib udev)
-  ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
     makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [ libsecret stdenv.cc.cc ]
+      }" \
       "''${gappsWrapperArgs[@]}"
   '';
 

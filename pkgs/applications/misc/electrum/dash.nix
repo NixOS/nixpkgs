@@ -5,7 +5,8 @@ python2Packages.buildPythonApplication rec {
   pname = "electrum-dash";
 
   src = fetchurl {
-    url = "https://github.com/akhavr/electrum-dash/releases/download/${version}/Electrum-DASH-${version}.tar.gz";
+    url =
+      "https://github.com/akhavr/electrum-dash/releases/download/${version}/Electrum-DASH-${version}.tar.gz";
     #"https://github.com/dashpay/electrum-dash/releases/download/v${version}/Electrum-DASH-${version}.tar.gz";
     sha256 = "9b7ac205f63fd4bfb15d77a34a4451ef82caecf096f31048a7603bd276dfc33e";
   };

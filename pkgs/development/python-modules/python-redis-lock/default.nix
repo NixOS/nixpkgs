@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, redis
-, pytestCheckHook
-, process-tests
-, pkgs
-, withDjango ? false, django-redis
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, redis, pytestCheckHook
+, process-tests, pkgs, withDjango ? false, django-redis }:
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
@@ -18,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374";
   };
 
-  propagatedBuildInputs = [
-    redis
-  ] ++ lib.optional withDjango django-redis;
+  propagatedBuildInputs = [ redis ] ++ lib.optional withDjango django-redis;
 
-  checkInputs = [
-    pytestCheckHook
-    process-tests
-    pkgs.redis
-  ];
+  checkInputs = [ pytestCheckHook process-tests pkgs.redis ];
 
   disabledTests = [
     # https://github.com/ionelmc/python-redis-lock/issues/86

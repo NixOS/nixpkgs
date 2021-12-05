@@ -1,4 +1,5 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg
+}:
 
 let
   pname = "joplin-desktop";
@@ -14,19 +15,19 @@ let
   }.${system} or throwSystem;
 
   src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
+    url =
+      "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
       x86_64-linux = "sha256-/S/paqMKVerSQFjA4wQ9fLV0WaqKm4CzQfy+0OdH7c8=";
       x86_64-darwin = "sha256-5eKTfZRpW7IYwFt8TeJiytrwEpiHBgN4k9kth+Lh0Bo=";
     }.${system} or throwSystem;
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 
   meta = with lib; {
-    description = "An open source note taking and to-do application with synchronisation capabilities";
+    description =
+      "An open source note taking and to-do application with synchronisation capabilities";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
       handle a large number of notes organised into notebooks. The notes are
@@ -72,7 +73,4 @@ let
       cp -R . $out/Applications/Joplin.app
     '';
   };
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

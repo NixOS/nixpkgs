@@ -1,31 +1,7 @@
-{ lib
-, fetchgit
-, fetchNodeModules
-, buildPythonPackage
-, pgpy
-, flask
-, bleach
-, misaka
-, humanize
-, html5lib
-, markdown
-, psycopg2
-, pygments
-, requests
-, sqlalchemy
-, cryptography
-, beautifulsoup4
-, sqlalchemy-utils
-, prometheus-client
-, celery
-, alembic
-, importlib-metadata
-, mistletoe
-, minio
-, sassc
-, nodejs
-, redis
-, writeText
+{ lib, fetchgit, fetchNodeModules, buildPythonPackage, pgpy, flask, bleach
+, misaka, humanize, html5lib, markdown, psycopg2, pygments, requests, sqlalchemy
+, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus-client, celery
+, alembic, importlib-metadata, mistletoe, minio, sassc, nodejs, redis, writeText
 }:
 
 buildPythonPackage rec {
@@ -45,14 +21,9 @@ buildPythonPackage rec {
     sha256 = "sha256-IWKahdWv3qJ5DNyb1GB9JWYkZxghn6wzZe68clYXij8=";
   };
 
-  patches = [
-    ./disable-npm-install.patch
-  ];
+  patches = [ ./disable-npm-install.patch ];
 
-  nativeBuildInputs = [
-    sassc
-    nodejs
-  ];
+  nativeBuildInputs = [ sassc nodejs ];
 
   propagatedBuildInputs = [
     pgpy

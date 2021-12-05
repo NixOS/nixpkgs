@@ -1,7 +1,8 @@
-{ lib, mkCoqDerivation, coq, hydra-battles, gaia,
-  mathcomp-zify, mathcomp, version ? null }:
+{ lib, mkCoqDerivation, coq, hydra-battles, gaia, mathcomp-zify, mathcomp
+, version ? null }:
 
-with lib; mkCoqDerivation rec {
+with lib;
+mkCoqDerivation rec {
   pname = "gaia-hydras";
   repo = "hydra-battles";
 
@@ -9,15 +10,13 @@ with lib; mkCoqDerivation rec {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with versions; switch [coq.coq-version mathcomp.version] [
-    { cases = [ (range "8.13" "8.14") (isGe "1.12.0") ]; out = "0.5"; }
-  ] null;
+  defaultVersion = with versions;
+    switch [ coq.coq-version mathcomp.version ] [{
+      cases = [ (range "8.13" "8.14") (isGe "1.12.0") ];
+      out = "0.5";
+    }] null;
 
-  propagatedBuildInputs = [
-    hydra-battles
-    gaia
-    mathcomp-zify
-  ];
+  propagatedBuildInputs = [ hydra-battles gaia mathcomp-zify ];
 
   useDune2 = true;
 

@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-common
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, aws-c-common, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-sdkutils";
@@ -15,18 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jYeyNEoJsF67XQAkmC7oegnIRBRD3FXKf5wF/NCVb4o=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    aws-c-common
-  ];
+  buildInputs = [ aws-c-common ];
 
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" "-DBUILD_SHARED_LIBS=ON" ];
 
   doCheck = true;
 

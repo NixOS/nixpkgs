@@ -1,12 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, lib
+{ buildPythonPackage, fetchFromGitHub, isPy27, lib
 
 # pythonPackages
-, astroid
-, pytest
-}:
+, astroid, pytest }:
 
 buildPythonPackage rec {
   pname = "requirements-detector";
@@ -20,24 +15,19 @@ buildPythonPackage rec {
     sha256 = "sha256-DdPNqbTsL2+GUp8vppqUSa0mUVMxk73MCcpwo8u51tU=";
   };
 
-  propagatedBuildInputs = [
-    astroid
-  ];
+  propagatedBuildInputs = [ astroid ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest
   '';
 
   meta = {
-    description = "Python tool to find and list requirements of a Python project";
+    description =
+      "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

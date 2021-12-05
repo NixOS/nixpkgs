@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, semver
-, asynctest
-, deepmerge
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, semver, asynctest
+, deepmerge, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
@@ -25,17 +17,9 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-    semver
-  ];
+  propagatedBuildInputs = [ aiohttp semver ];
 
-  checkInputs = [
-    asynctest
-    deepmerge
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest deepmerge pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "blebox_uniapi" ];
 

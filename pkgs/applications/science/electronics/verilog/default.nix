@@ -1,32 +1,21 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoconf
-, bison
-, bzip2
-, flex
-, gperf
-, ncurses
-, perl
-, readline
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, bison, bzip2, flex, gperf, ncurses
+, perl, readline, zlib }:
 
 let
   iverilog-test = fetchFromGitHub {
-    owner  = "steveicarus";
-    repo   = "ivtest";
-    rev    = "253609b89576355b3bef2f91e90db62223ecf2be";
+    owner = "steveicarus";
+    repo = "ivtest";
+    rev = "253609b89576355b3bef2f91e90db62223ecf2be";
     sha256 = "18i7jlr2csp7mplcrwjhllwvb6w3v7x7mnx7vdw48nd3g5scrydx";
   };
-in
-stdenv.mkDerivation rec {
-  pname   = "iverilog";
+in stdenv.mkDerivation rec {
+  pname = "iverilog";
   version = "11.0";
 
   src = fetchFromGitHub {
-    owner  = "steveicarus";
-    repo   = pname;
-    rev    = "v${lib.replaceStrings ["."] ["_"] version}";
+    owner = "steveicarus";
+    repo = pname;
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
   };
 
@@ -62,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Icarus Verilog compiler";
-    homepage    = "http://iverilog.icarus.com/";  # https does not work
-    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    homepage = "http://iverilog.icarus.com/"; # https does not work
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ winden thoughtpolice ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

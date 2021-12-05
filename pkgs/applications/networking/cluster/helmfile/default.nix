@@ -17,7 +17,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}"
+  ];
 
   meta = {
     description = "Deploy Kubernetes Helm charts";

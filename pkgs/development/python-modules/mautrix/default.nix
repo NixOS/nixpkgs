@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel-yaml, CommonMark, lxml
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder, sqlalchemy
+, ruamel-yaml, CommonMark, lxml }:
 
 buildPythonPackage rec {
   pname = "mautrix";

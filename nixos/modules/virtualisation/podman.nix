@@ -9,19 +9,20 @@ let
   podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
 
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
-    outputs = [ "out" "man" ];
-    inherit (podmanPackage) meta;
-  } ''
-    mkdir -p $out/bin
-    ln -s ${podmanPackage}/bin/podman $out/bin/docker
+  dockerCompat = pkgs.runCommand
+    "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
+      outputs = [ "out" "man" ];
+      inherit (podmanPackage) meta;
+    } ''
+      mkdir -p $out/bin
+      ln -s ${podmanPackage}/bin/podman $out/bin/docker
 
-    mkdir -p $man/share/man/man1
-    for f in ${podmanPackage.man}/share/man/man1/*; do
-      basename=$(basename $f | sed s/podman/docker/g)
-      ln -s $f $man/share/man/man1/$basename
-    done
-  '';
+      mkdir -p $man/share/man/man1
+      for f in ${podmanPackage.man}/share/man/man1/*; do
+        basename=$(basename $f | sed s/podman/docker/g)
+        ln -s $f $man/share/man/man1/$basename
+      done
+    '';
 
   net-conflist = pkgs.runCommand "87-podman-bridge.conflist" {
     nativeBuildInputs = [ pkgs.jq ];
@@ -36,31 +37,31 @@ let
       >$out
   '';
 
-in
-{
+in {
   imports = [
     ./podman-dnsname.nix
     ./podman-network-socket.nix
-    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
+    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [
+      "virtualisation"
+      "containers"
+      "containersConf"
+    ])
   ];
 
-  meta = {
-    maintainers = lib.teams.podman.members;
-  };
+  meta = { maintainers = lib.teams.podman.members; };
 
   options.virtualisation.podman = {
 
-    enable =
-      mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          This option enables Podman, a daemonless container engine for
-          developing, managing, and running OCI Containers on your Linux System.
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        This option enables Podman, a daemonless container engine for
+        developing, managing, and running OCI Containers on your Linux System.
 
-          It is a drop-in replacement for the <command>docker</command> command.
-        '';
-      };
+        It is a drop-in replacement for the <command>docker</command> command.
+      '';
+    };
 
     dockerSocket.enable = mkOption {
       type = types.bool;
@@ -116,7 +117,7 @@ in
 
     defaultNetwork.extraPlugins = lib.mkOption {
       type = types.listOf json.type;
-      default = [];
+      default = [ ];
       description = ''
         Extra CNI plugin configurations to add to podman's default network.
       '';
@@ -124,61 +125,61 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      environment.systemPackages = [ cfg.package ]
-        ++ lib.optional cfg.dockerCompat dockerCompat;
+  config = lib.mkIf cfg.enable (lib.mkMerge [{
+    environment.systemPackages = [ cfg.package ]
+      ++ lib.optional cfg.dockerCompat dockerCompat;
 
-      environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
+    environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
 
-      virtualisation.containers = {
-        enable = true; # Enable common /etc/containers configuration
-        containersConf.settings = lib.optionalAttrs cfg.enableNvidia {
-          engine = {
-            conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
-            runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
-          };
+    virtualisation.containers = {
+      enable = true; # Enable common /etc/containers configuration
+      containersConf.settings = lib.optionalAttrs cfg.enableNvidia {
+        engine = {
+          conmon_env_vars =
+            [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
+          runtimes.nvidia =
+            [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
         };
       };
+    };
 
-      systemd.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
-      systemd.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
+    systemd.services.podman.serviceConfig = {
+      ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+    };
 
-      systemd.sockets.podman.wantedBy = [ "sockets.target" ];
-      systemd.sockets.podman.socketConfig.SocketGroup = "podman";
+    systemd.sockets.podman.wantedBy = [ "sockets.target" ];
+    systemd.sockets.podman.socketConfig.SocketGroup = "podman";
 
-      systemd.tmpfiles.packages = [
-        # The /run/podman rule interferes with our podman group, so we remove
-        # it and let the systemd socket logic take care of it.
-        (pkgs.runCommand "podman-tmpfiles-nixos" { package = cfg.package; } ''
-          mkdir -p $out/lib/tmpfiles.d/
-          grep -v 'D! /run/podman 0700 root root' \
-            <$package/lib/tmpfiles.d/podman.conf \
-            >$out/lib/tmpfiles.d/podman.conf
-        '') ];
+    systemd.tmpfiles.packages = [
+      # The /run/podman rule interferes with our podman group, so we remove
+      # it and let the systemd socket logic take care of it.
+      (pkgs.runCommand "podman-tmpfiles-nixos" { package = cfg.package; } ''
+        mkdir -p $out/lib/tmpfiles.d/
+        grep -v 'D! /run/podman 0700 root root' \
+          <$package/lib/tmpfiles.d/podman.conf \
+          >$out/lib/tmpfiles.d/podman.conf
+      '')
+    ];
 
-      systemd.tmpfiles.rules =
-        lib.optionals cfg.dockerSocket.enable [
-          "L! /run/docker.sock - - - - /run/podman/podman.sock"
-        ];
+    systemd.tmpfiles.rules = lib.optionals cfg.dockerSocket.enable
+      [ "L! /run/docker.sock - - - - /run/podman/podman.sock" ];
 
-      users.groups.podman = {};
+    users.groups.podman = { };
 
-      assertions = [
-        {
-          assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
-          message = "Option dockerCompat conflicts with docker";
-        }
-        {
-          assertion = cfg.dockerSocket.enable -> !config.virtualisation.docker.enable;
-          message = ''
-            The options virtualisation.podman.dockerSocket.enable and virtualisation.docker.enable conflict, because only one can serve the socket.
-          '';
-        }
-      ];
-    }
-  ]);
+    assertions = [
+      {
+        assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
+        message = "Option dockerCompat conflicts with docker";
+      }
+      {
+        assertion = cfg.dockerSocket.enable
+          -> !config.virtualisation.docker.enable;
+        message = ''
+          The options virtualisation.podman.dockerSocket.enable and virtualisation.docker.enable conflict, because only one can serve the socket.
+        '';
+      }
+    ];
+  }]);
 }

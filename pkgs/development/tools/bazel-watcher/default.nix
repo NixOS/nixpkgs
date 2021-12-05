@@ -1,17 +1,7 @@
-{ buildBazelPackage
-, fetchFromGitHub
-, git
-, go
-, python3
-, lib, stdenv
-}:
+{ buildBazelPackage, fetchFromGitHub, git, go, python3, lib, stdenv }:
 
-let
-  patches = [
-    ./use-go-in-path.patch
-  ];
-in
-buildBazelPackage rec {
+let patches = [ ./use-go-in-path.patch ];
+in buildBazelPackage rec {
   name = "bazel-watcher-${version}";
   version = "0.14.0";
 

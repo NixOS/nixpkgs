@@ -1,13 +1,13 @@
 { lib, buildPackages, fetchzip }:
 
-let
-  version = "0.701";
+let version = "0.701";
 in fetchzip {
   name = "vegur-font-${version}";
 
   # Upstream doesn't version their URLs.
   # http://dotcolon.net/font/vegur/ → http://dotcolon.net/DL/font/vegur.zip
-  url = "http://download.opensuse.org/repositories/M17N:/fonts/SLE_12_SP3/src/dotcolon-vegur-fonts-0.701-1.4.src.rpm";
+  url =
+    "http://download.opensuse.org/repositories/M17N:/fonts/SLE_12_SP3/src/dotcolon-vegur-fonts-0.701-1.4.src.rpm";
 
   postFetch = ''
     ${buildPackages.rpmextract}/bin/rpmextract $downloadedFile

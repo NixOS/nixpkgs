@@ -1,7 +1,6 @@
 { lib, stdenv, fetchsvn, pkg-config, mono, dotnetPackages }:
 
-let
-  newtonsoft-json = dotnetPackages.NewtonsoftJson;
+let newtonsoft-json = dotnetPackages.NewtonsoftJson;
 in stdenv.mkDerivation {
   pname = "gdata-sharp";
   version = "2.2.0.0";

@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsepol ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
-  ];
+  makeFlags =
+    [ "PREFIX=$(out)" "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a" ];
 
   meta = with lib; {
     description = "SELinux policy core utilities (packaging additions)";

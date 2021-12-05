@@ -8,9 +8,12 @@ let
   ulimitNofile = cfg.maxclients + 32;
 
   mkValueString = value:
-    if value == true then "yes"
-    else if value == false then "no"
-    else generators.mkValueStringDefault { } value;
+    if value == true then
+      "yes"
+    else if value == false then
+      "no"
+    else
+      generators.mkValueStringDefault { } value;
 
   redisConfig = pkgs.writeText "redis.conf" (generators.toKeyValue {
     listsAsDuplicateKeys = true;
@@ -19,12 +22,18 @@ let
 
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
-    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
-    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
-    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
-    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
-    (mkRemovedOptionModule [ "services" "redis" "extraConfig" ] "Use services.redis.settings instead.")
+    (mkRemovedOptionModule [ "services" "redis" "user" ]
+      "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ]
+      "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ]
+      "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ]
+      "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ]
+      "This option was removed.")
+    (mkRemovedOptionModule [ "services" "redis" "extraConfig" ]
+      "Use services.redis.settings instead.")
   ];
 
   ###### interface
@@ -101,13 +110,15 @@ in {
         type = types.str;
         default = "notice"; # debug, verbose, notice, warning
         example = "debug";
-        description = "Specify the server verbosity level, options: debug, verbose, notice, warning.";
+        description =
+          "Specify the server verbosity level, options: debug, verbose, notice, warning.";
       };
 
       logfile = mkOption {
         type = types.str;
         default = "/dev/null";
-        description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
+        description =
+          "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
         example = "/var/log/redis.log";
       };
 
@@ -126,44 +137,52 @@ in {
       maxclients = mkOption {
         type = types.int;
         default = 10000;
-        description = "Set the max number of connected clients at the same time.";
+        description =
+          "Set the max number of connected clients at the same time.";
       };
 
       save = mkOption {
         type = with types; listOf (listOf int);
-        default = [ [900 1] [300 10] [60 10000] ];
-        description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
+        default = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
+        description =
+          "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
       };
 
       slaveOf = mkOption {
-        type = with types; nullOr (submodule ({ ... }: {
-          options = {
-            ip = mkOption {
-              type = str;
-              description = "IP of the Redis master";
-              example = "192.168.1.100";
-            };
+        type = with types;
+          nullOr (submodule ({ ... }: {
+            options = {
+              ip = mkOption {
+                type = str;
+                description = "IP of the Redis master";
+                example = "192.168.1.100";
+              };
 
-            port = mkOption {
-              type = port;
-              description = "port of the Redis master";
-              default = 6379;
+              port = mkOption {
+                type = port;
+                description = "port of the Redis master";
+                default = 6379;
+              };
             };
-          };
-        }));
+          }));
 
         default = null;
-        description = "IP and port to which this redis instance acts as a slave.";
-        example = { ip = "192.168.1.100"; port = 6379; };
+        description =
+          "IP and port to which this redis instance acts as a slave.";
+        example = {
+          ip = "192.168.1.100";
+          port = 6379;
+        };
       };
 
       masterAuth = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''If the master is password protected (using the requirePass configuration)
-        it is possible to tell the slave to authenticate before starting the replication synchronization
-        process, otherwise the master will refuse the slave request.
-        (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
+        description = ''
+          If the master is password protected (using the requirePass configuration)
+                  it is possible to tell the slave to authenticate before starting the replication synchronization
+                  process, otherwise the master will refuse the slave request.
+                  (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
       };
 
       requirePass = mkOption {
@@ -186,19 +205,22 @@ in {
       appendOnly = mkOption {
         type = types.bool;
         default = false;
-        description = "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
+        description =
+          "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
       };
 
       appendFsync = mkOption {
         type = types.str;
         default = "everysec"; # no, always, everysec
-        description = "How often to fsync the append-only log, options: no, always, everysec.";
+        description =
+          "How often to fsync the append-only log, options: no, always, everysec.";
       };
 
       slowLogLogSlowerThan = mkOption {
         type = types.int;
         default = 10000;
-        description = "Log queries whose execution take longer than X in milliseconds.";
+        description =
+          "Log queries whose execution take longer than X in milliseconds.";
         example = 1000;
       };
 
@@ -210,7 +232,7 @@ in {
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           Redis configuration. Refer to
           <link xlink:href="https://redis.io/topics/config"/>
@@ -226,29 +248,28 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.redis.enable {
     assertions = [{
       assertion = cfg.requirePass != null -> cfg.requirePassFile == null;
-      message = "You can only set one services.redis.requirePass or services.redis.requirePassFile";
+      message =
+        "You can only set one services.redis.requirePass or services.redis.requirePassFile";
     }];
     boot.kernel.sysctl = (mkMerge [
       { "vm.nr_hugepages" = "0"; }
-      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
+      (mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; })
     ]);
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     users.users.redis = {
       description = "Redis database user";
       group = "redis";
       isSystemUser = true;
     };
-    users.groups.redis = {};
+    users.groups.redis = { };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -262,7 +283,9 @@ in {
         syslog-enabled = cfg.syslog;
         databases = cfg.databases;
         maxclients = cfg.maxclients;
-        save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") cfg.save;
+        save = map (d:
+          "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+          cfg.save;
         dbfilename = "dump.rdb";
         dir = "/var/lib/redis";
         appendOnly = cfg.appendOnly;
@@ -271,8 +294,13 @@ in {
         slowlog-max-len = cfg.slowLogMaxLen;
       }
       (mkIf (cfg.bind != null) { bind = cfg.bind; })
-      (mkIf (cfg.unixSocket != null) { unixsocket = cfg.unixSocket; unixsocketperm = "${toString cfg.unixSocketPerm}"; })
-      (mkIf (cfg.slaveOf != null) { slaveof = "${cfg.slaveOf.ip} ${toString cfg.slaveOf.port}"; })
+      (mkIf (cfg.unixSocket != null) {
+        unixsocket = cfg.unixSocket;
+        unixsocketperm = "${toString cfg.unixSocketPerm}";
+      })
+      (mkIf (cfg.slaveOf != null) {
+        slaveof = "${cfg.slaveOf.ip} ${toString cfg.slaveOf.port}";
+      })
       (mkIf (cfg.masterAuth != null) { masterauth = cfg.masterAuth; })
       (mkIf (cfg.requirePass != null) { requirepass = cfg.requirePass; })
     ];
@@ -331,7 +359,8 @@ in {
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
+        SystemCallFilter =
+          "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
       };
     };
   };

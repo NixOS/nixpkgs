@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsndfile rapidjson libjack2 lv2 libX11 cairo ];
 
   # https://github.com/iurie-sw/geonkick/issues/120
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/iurie-sw/geonkick";

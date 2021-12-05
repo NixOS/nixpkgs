@@ -13,14 +13,8 @@ buildPythonApplication rec {
     sha256 = "0b3dz137lpbvpjvfy42ibqvj3yk526x4bpn819fd11lagn77w69r";
   };
 
-  propagatedBuildInputs = [
-    arrow
-    icalendar
-    glibcLocales
-    prompt-toolkit
-    urwid
-    watchdog
-  ];
+  propagatedBuildInputs =
+    [ arrow icalendar glibcLocales prompt-toolkit urwid watchdog ];
 
   checkInputs = [ mock freezegun pylint ];
 
@@ -31,7 +25,7 @@ buildPythonApplication rec {
     python -m unittest discover
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "A cli todo application compatible with the todo.txt format";

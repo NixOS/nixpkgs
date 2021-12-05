@@ -3,9 +3,12 @@
 with lib;
 let
   mergeFalseByDefault = locs: defs:
-    if defs == [] then abort "This case should never happen."
-    else if any (x: x == false) (getValues defs) then false
-    else true;
+    if defs == [ ] then
+      abort "This case should never happen."
+    else if any (x: x == false) (getValues defs) then
+      false
+    else
+      true;
 
   kernelItem = types.submodule {
     options = {
@@ -20,9 +23,7 @@ let
       };
 
       freeform = mkOption {
-        type = types.nullOr types.str // {
-          merge = mergeEqualOption;
-        };
+        type = types.nullOr types.str // { merge = mergeEqualOption; };
         default = null;
         example = ''MMC_BLOCK_MINORS.freeform = "32";'';
         description = ''
@@ -41,17 +42,20 @@ let
     };
   };
 
-  mkValue = with lib; val:
-  let
-    isNumber = c: elem c ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"];
+  mkValue = with lib;
+    val:
+    let isNumber = c: elem c [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" ];
 
-  in
-    if (val == "") then "\"\""
-    else if val == "y" || val == "m" || val == "n" then val
-    else if all isNumber (stringToCharacters val) then val
-    else if substring 0 2 val == "0x" then val
-    else val; # FIXME: fix quoting one day
-
+    in if (val == "") then
+      ''""''
+    else if val == "y" || val == "m" || val == "n" then
+      val
+    else if all isNumber (stringToCharacters val) then
+      val
+    else if substring 0 2 val == "0x" then
+      val
+    else
+      val; # FIXME: fix quoting one day
 
   # generate nix intermediate kernel config file of the form
   #
@@ -65,22 +69,22 @@ let
   # Use mkValuePreprocess to preprocess option values, aka mark 'modules' as 'yes' or vice-versa
   # use the identity if you don't want to override the configured values
   generateNixKConf = exprs:
-  let
-    mkConfigLine = key: item:
-      let
-        val = if item.freeform != null then item.freeform else item.tristate;
-      in
-        if val == null
-          then ""
-          else if (item.optional)
-            then "${key}? ${mkValue val}\n"
-            else "${key} ${mkValue val}\n";
+    let
+      mkConfigLine = key: item:
+        let
+          val = if item.freeform != null then item.freeform else item.tristate;
+        in if val == null then
+          ""
+        else if (item.optional) then ''
+          ${key}? ${mkValue val}
+        '' else ''
+          ${key} ${mkValue val}
+        '';
 
-    mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
-  in mkConf exprs;
+      mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
+    in mkConf exprs;
 
-in
-{
+in {
 
   options = {
 
@@ -100,18 +104,17 @@ in
 
     settings = mkOption {
       type = types.attrsOf kernelItem;
-      example = literalExpression '' with lib.kernel; {
-        "9P_NET" = yes;
-        USB = option yes;
-        MMC_BLOCK_MINORS = freeform "32";
-      }'';
+      example = literalExpression ''
+        with lib.kernel; {
+               "9P_NET" = yes;
+               USB = option yes;
+               MMC_BLOCK_MINORS = freeform "32";
+             }'';
       description = ''
         Structured kernel configuration.
       '';
     };
   };
 
-  config = {
-    intermediateNixConfig = generateNixKConf config.settings;
-  };
+  config = { intermediateNixConfig = generateNixKConf config.settings; };
 }

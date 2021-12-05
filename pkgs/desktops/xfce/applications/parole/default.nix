@@ -1,6 +1,5 @@
-{ mkXfceDerivation, dbus, dbus-glib
-, gst_all_1, gtk3, libnotify, libxfce4ui, libxfce4util
-, taglib, xfconf }:
+{ mkXfceDerivation, dbus, dbus-glib, gst_all_1, gtk3, libnotify, libxfce4ui
+, libxfce4util, taglib, xfconf }:
 
 # Doesn't seem to find H.264 codec even though built with gst-plugins-bad.
 
@@ -31,7 +30,5 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
-    description = "Modern simple media player";
-  };
+  meta = { description = "Modern simple media player"; };
 }

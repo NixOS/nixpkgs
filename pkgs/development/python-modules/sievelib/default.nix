@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, pytestCheckHook, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "sievelib";
@@ -16,18 +10,11 @@ buildPythonPackage rec {
     sha256 = "sha256-7cubQWqYWjzFt9f01+wBPjcuv5DmTJ2eAOIDEpmvOP0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sievelib"
-  ];
+  pythonImportsCheck = [ "sievelib" ];
 
   meta = with lib; {
     description = "Client-side Sieve and Managesieve library written in Python";

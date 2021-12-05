@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-{
+with lib; {
   options = {
     gtk.iconCache.enable = mkOption {
       type = types.bool;

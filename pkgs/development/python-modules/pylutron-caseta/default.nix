@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, cryptography, fetchFromGitHub, pytest-asyncio
+, pytest-sugar, pytest-timeout, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-2w8kRSZK9Bq3O6r6i0CJgxEXGo8KsWah9bMLlDNzMGk=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-sugar
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-sugar pytest-timeout pytestCheckHook ];
 
   pythonImportsCheck = [ "pylutron_caseta" ];
 

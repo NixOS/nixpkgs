@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, vcversioner
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, twisted
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, vcversioner, mock, pytestCheckHook
+, pytest-asyncio, pytest-trio, twisted, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyee";
@@ -21,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-XH5g+N+VcQ2+F1UOFs4BU/g5kMAO90SEG0Pzce1T6+o=";
   };
 
-  buildInputs = [
-    vcversioner
-  ];
+  buildInputs = [ vcversioner ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytest-trio
-    pytestCheckHook
-    twisted
-  ];
+  checkInputs = [ mock pytest-asyncio pytest-trio pytestCheckHook twisted ];
 
   pythonImportsCheck = [ "pyee" ];
 

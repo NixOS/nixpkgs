@@ -1,6 +1,5 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml
-, jsooSupport ? true
-}:
+, jsooSupport ? true }:
 
 stdenv.mkDerivation rec {
   version = "0.8.5";
@@ -12,12 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg ]
-    ++ lib.optional jsooSupport js_of_ocaml;
+  buildInputs = [ findlib topkg ] ++ lib.optional jsooSupport js_of_ocaml;
 
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
+  buildPhase =
+    "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 

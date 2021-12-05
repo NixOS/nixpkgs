@@ -1,19 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ocaml
+{ lib, buildDunePackage, fetchurl, ocaml
 
-, alcotest
-, cstruct
-, mirage-crypto
-}:
+, alcotest, cstruct, mirage-crypto }:
 
 buildDunePackage rec {
   pname = "chacha";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/abeaumont/ocaml-chacha/releases/download/${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/abeaumont/ocaml-chacha/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "sha256-t8dOMQQDpje0QbuOhjSIa3xnXuXcxMVTLENa/rwdgA4=";
   };
 
@@ -29,7 +24,8 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/abeaumont/ocaml-chacha";
-    description = "ChaCha20, ChaCha12 and ChaCha8 encryption functions, in OCaml";
+    description =
+      "ChaCha20, ChaCha12 and ChaCha8 encryption functions, in OCaml";
     longDescription = ''
       An OCaml implementation of ChaCha functions, both ChaCha20 and the reduced
       ChaCha8 and ChaCha12 functions. The hot loop is implemented in C for efficiency

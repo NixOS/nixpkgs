@@ -1,11 +1,4 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, pytest
-, python
-, cython
-, cssutils
-, isPyPy
+{ pkgs, buildPythonPackage, fetchPypi, pytest, python, cython, cssutils, isPyPy
 }:
 
 buildPythonPackage rec {
@@ -19,9 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ cssutils ];
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   preBuild = ''
     # Force cython to re-generate this file. If it is present, cython will

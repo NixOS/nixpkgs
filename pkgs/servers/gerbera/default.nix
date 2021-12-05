@@ -1,68 +1,81 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-  # required
-, libiconv
-, libupnp
-, libuuid
-, pugixml
-, spdlog
-, sqlite
-, zlib
-  # options
-, enableMysql ? false
-, libmysqlclient
-, enableDuktape ? true
-, duktape
-, enableCurl ? true
-, curl
-, enableTaglib ? true
-, taglib
-, enableLibmagic ? true
-, file
-, enableLibmatroska ? true
-, libmatroska
-, libebml
-, enableAvcodec ? false
-, ffmpeg
-, enableLibexif ? true
-, libexif
-, enableExiv2 ? false
-, exiv2
-, enableFFmpegThumbnailer ? false
-, ffmpegthumbnailer
-, enableInotifyTools ? true
-, inotify-tools
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+# required
+, libiconv, libupnp, libuuid, pugixml, spdlog, sqlite, zlib
+# options
+, enableMysql ? false, libmysqlclient, enableDuktape ? true, duktape
+, enableCurl ? true, curl, enableTaglib ? true, taglib, enableLibmagic ? true
+, file, enableLibmatroska ? true, libmatroska, libebml, enableAvcodec ? false
+, ffmpeg, enableLibexif ? true, libexif, enableExiv2 ? false, exiv2
+, enableFFmpegThumbnailer ? false, ffmpegthumbnailer, enableInotifyTools ? true
+, inotify-tools }:
 
 let
   libupnp' = libupnp.overrideAttrs (super: rec {
-    cmakeFlags = super.cmakeFlags or [ ] ++ [
-      "-Dblocking_tcp_connections=OFF"
-      "-Dreuseaddr=ON"
-    ];
+    cmakeFlags = super.cmakeFlags or [ ]
+      ++ [ "-Dblocking_tcp_connections=OFF" "-Dreuseaddr=ON" ];
   });
 
   options = [
-    { name = "AVCODEC"; enable = enableAvcodec; packages = [ ffmpeg ]; }
-    { name = "CURL"; enable = enableCurl; packages = [ curl ]; }
-    { name = "EXIF"; enable = enableLibexif; packages = [ libexif ]; }
-    { name = "EXIV2"; enable = enableExiv2; packages = [ exiv2 ]; }
-    { name = "FFMPEGTHUMBNAILER"; enable = enableFFmpegThumbnailer; packages = [ ffmpegthumbnailer ]; }
-    { name = "INOTIFY"; enable = enableInotifyTools; packages = [ inotify-tools ]; }
-    { name = "JS"; enable = enableDuktape; packages = [ duktape ]; }
-    { name = "MAGIC"; enable = enableLibmagic; packages = [ file ]; }
-    { name = "MATROSKA"; enable = enableLibmatroska; packages = [ libmatroska libebml ]; }
-    { name = "MYSQL"; enable = enableMysql; packages = [ libmysqlclient ]; }
-    { name = "TAGLIB"; enable = enableTaglib; packages = [ taglib ]; }
+    {
+      name = "AVCODEC";
+      enable = enableAvcodec;
+      packages = [ ffmpeg ];
+    }
+    {
+      name = "CURL";
+      enable = enableCurl;
+      packages = [ curl ];
+    }
+    {
+      name = "EXIF";
+      enable = enableLibexif;
+      packages = [ libexif ];
+    }
+    {
+      name = "EXIV2";
+      enable = enableExiv2;
+      packages = [ exiv2 ];
+    }
+    {
+      name = "FFMPEGTHUMBNAILER";
+      enable = enableFFmpegThumbnailer;
+      packages = [ ffmpegthumbnailer ];
+    }
+    {
+      name = "INOTIFY";
+      enable = enableInotifyTools;
+      packages = [ inotify-tools ];
+    }
+    {
+      name = "JS";
+      enable = enableDuktape;
+      packages = [ duktape ];
+    }
+    {
+      name = "MAGIC";
+      enable = enableLibmagic;
+      packages = [ file ];
+    }
+    {
+      name = "MATROSKA";
+      enable = enableLibmatroska;
+      packages = [ libmatroska libebml ];
+    }
+    {
+      name = "MYSQL";
+      enable = enableMysql;
+      packages = [ libmysqlclient ];
+    }
+    {
+      name = "TAGLIB";
+      enable = enableTaglib;
+      packages = [ taglib ];
+    }
   ];
 
   inherit (lib) flatten optionals;
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gerbera";
   version = "1.9.2";
 
@@ -75,7 +88,9 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \
-      --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
+      --replace /usr/include/mysql ${
+        lib.getDev libmysqlclient
+      }/include/mariadb \
       --replace /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
   '';
 
@@ -86,15 +101,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    libiconv
-    libupnp'
-    libuuid
-    pugixml
-    spdlog
-    sqlite
-    zlib
-  ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+  buildInputs = [ libiconv libupnp' libuuid pugixml spdlog sqlite zlib ]
+    ++ flatten
+    (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

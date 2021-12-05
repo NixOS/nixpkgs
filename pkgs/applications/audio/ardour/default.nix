@@ -1,59 +1,10 @@
-{ lib, stdenv
-, fetchgit
-, alsa-lib
-, aubio
-, boost
-, cairomm
-, cppunit
-, curl
-, dbus
-, doxygen
-, ffmpeg
-, fftw
-, fftwSinglePrec
-, flac
-, glibc
-, glibmm
-, graphviz
-, gtkmm2
-, harvid
-, itstool
-, libarchive
-, libjack2
-, liblo
-, libogg
-, libpulseaudio
-, librdf_raptor
-, librdf_rasqal
-, libsamplerate
-, libsigcxx
-, libsndfile
-, libusb1
-, libuv
-, libwebsockets
-, libxml2
-, libxslt
-, lilv
-, lrdf
-, lv2
-, makeWrapper
-, pango
-, perl
-, pkg-config
-, python3
-, readline
-, rubberband
-, serd
-, sord
-, soundtouch
-, sratom
-, suil
-, taglib
-, vamp-plugin-sdk
-, wafHook
-, xjadeo
-, videoSupport ? true
-}:
+{ lib, stdenv, fetchgit, alsa-lib, aubio, boost, cairomm, cppunit, curl, dbus
+, doxygen, ffmpeg, fftw, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2
+, harvid, itstool, libarchive, libjack2, liblo, libogg, libpulseaudio
+, librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile, libusb1
+, libuv, libwebsockets, libxml2, libxslt, lilv, lrdf, lv2, makeWrapper, pango
+, perl, pkg-config, python3, readline, rubberband, serd, sord, soundtouch
+, sratom, suil, taglib, vamp-plugin-sdk, wafHook, xjadeo, videoSupport ? true }:
 stdenv.mkDerivation rec {
   pname = "ardour";
   version = "6.9";

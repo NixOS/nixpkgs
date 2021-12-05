@@ -2,14 +2,13 @@
 
 with lib;
 
-let
-  enable = config.programs.bash.enableCompletion;
-in
-{
+let enable = config.programs.bash.enableCompletion;
+in {
   options = {
-    programs.bash.enableCompletion = mkEnableOption "Bash completion for all interactive bash shells" // {
-      default = true;
-    };
+    programs.bash.enableCompletion =
+      mkEnableOption "Bash completion for all interactive bash shells" // {
+        default = true;
+      };
   };
 
   config = mkIf enable {

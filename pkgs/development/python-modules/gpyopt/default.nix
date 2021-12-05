@@ -1,20 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, setuptools
-, numpy, scipy, gpy, emcee, nose, cython }:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, numpy, scipy, gpy, emcee
+, nose, cython }:
 
 buildPythonPackage rec {
   pname = "GPyOpt";
   version = "1.2.6";
 
   src = fetchFromGitHub {
-    repo   = pname;
-    owner  = "SheffieldML";
-    rev    = "v${version}";
+    repo = pname;
+    owner = "SheffieldML";
+    rev = "v${version}";
     sha256 = "1sv13svaks67i9z560746hz4hslakdna0zd3gxj828il1cv7cslm";
   };
 
   nativeBuildInputs = [ cython ];
 
-  doCheck = false;  # requires several packages not available in Nix
+  doCheck = false; # requires several packages not available in Nix
 
   checkInputs = [ nose ];
 

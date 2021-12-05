@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, pytestCheckHook
-, hypothesis
-, readme_renderer
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, hypothesis
+, readme_renderer }:
 
 buildPythonPackage rec {
   pname = "marisa-trie";
@@ -16,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "bbeafb7d92839dc221365340e79d012cb50ee48a1f3f30dd916eb35a8b93db00";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  checkInputs = [
-    pytestCheckHook
-    readme_renderer
-    hypothesis
-  ];
+  checkInputs = [ pytestCheckHook readme_renderer hypothesis ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -49,17 +37,16 @@ buildPythonPackage rec {
     "test_mmap"
   ];
 
-  pythonImportsCheck = [
-    "marisa_trie"
-  ];
+  pythonImportsCheck = [ "marisa_trie" ];
 
   meta = with lib; {
-    description = "Static memory-efficient Trie-like structures for Python based on marisa-trie C++ library";
+    description =
+      "Static memory-efficient Trie-like structures for Python based on marisa-trie C++ library";
     longDescription = ''
       There are official SWIG-based Python bindings included in C++ library distribution.
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
-    homepage =  "https://github.com/kmike/marisa-trie";
+    homepage = "https://github.com/kmike/marisa-trie";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

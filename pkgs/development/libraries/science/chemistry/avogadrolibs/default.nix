@@ -35,10 +35,7 @@ in stdenv.mkDerivation rec {
     cp -r ${crystalsRepo} crystals
   '';
 
-  nativeBuildInputs = [
-    cmake
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
   buildInputs = [
     eigen

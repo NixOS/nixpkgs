@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "clearlooks-phenix";
 
   src = fetchzip {
-    url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
+    url =
+      "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
     sha256 = "1b6y4l3rf3c5r4v72fyj3ppvnvw13kvr2a1dyl63ni1jxnlk50kd";
   };
 

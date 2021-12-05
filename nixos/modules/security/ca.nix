@@ -13,16 +13,15 @@ let
   };
   caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
 
-in
-
-{
+in {
 
   options = {
 
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
-      default = [];
-      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+      default = [ ];
+      example = literalExpression
+        ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -34,7 +33,7 @@ in
 
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ '''
             NixOS.org
@@ -54,9 +53,10 @@ in
 
     security.pki.caCertificateBlacklist = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
-        "WoSign" "WoSign China"
+        "WoSign"
+        "WoSign China"
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
@@ -82,7 +82,8 @@ in
     environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
     # P11-Kit trust source.
-    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
+    environment.etc."ssl/trust-source".source =
+      "${cacertPackage.p11kit}/etc/ssl/trust-source";
 
   };
 

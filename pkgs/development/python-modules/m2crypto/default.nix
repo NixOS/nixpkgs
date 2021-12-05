@@ -1,13 +1,5 @@
-{ lib
-, fetchpatch
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, swig2
-, openssl
-, typing
-}:
-
+{ lib, fetchpatch, buildPythonPackage, fetchPypi, pythonOlder, swig2, openssl
+, typing }:
 
 buildPythonPackage rec {
   version = "0.36.0";
@@ -20,7 +12,8 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/void-linux/void-packages/raw/7946d12eb3d815e5ecd4578f1a6133d948694370/srcpkgs/python-M2Crypto/patches/libressl.patch";
+      url =
+        "https://github.com/void-linux/void-packages/raw/7946d12eb3d815e5ecd4578f1a6133d948694370/srcpkgs/python-M2Crypto/patches/libressl.patch";
       sha256 = "0z5qnkndg6ma5f5qqrid5m95i9kybsr000v3fdy1ab562kf65a27";
     })
   ];

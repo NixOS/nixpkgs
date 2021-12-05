@@ -1,7 +1,6 @@
-{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
-, perl, installShellFiles
-, doCheck ? true
-}: stdenv.mkDerivation rec {
+{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils, perl
+, installShellFiles, doCheck ? true }:
+stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
   version = "0.42c";
@@ -43,10 +42,7 @@
 
   outputs = [ "out" "man" ];
 
-  installFlags = [
-    "PREFIX=$(out)"
-    "DESTDIR=/"
-  ];
+  installFlags = [ "PREFIX=$(out)" "DESTDIR=/" ];
 
   nativeBuildInputs = [
     python3
@@ -61,12 +57,10 @@
   '';
 
   meta = with lib; {
-    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
+    description =
+      "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
-    maintainers = with maintainers; [
-      andrewchambers
-      ck3d
-    ];
+    maintainers = with maintainers; [ andrewchambers ck3d ];
     license = licenses.asl20;
     platforms = python3.meta.platforms;
   };

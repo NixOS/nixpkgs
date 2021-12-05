@@ -1,5 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
-, pytest, requests }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, pytest, requests }:
 
 buildPythonPackage rec {
   pname = "zm-py";

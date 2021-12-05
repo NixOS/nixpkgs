@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
+    url =
+      "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
     sha256 = "0mxpdyhjf4w83q8ssmvpxm95hw4x7lfkh48vvdablccfndh82x2i";
   };
 

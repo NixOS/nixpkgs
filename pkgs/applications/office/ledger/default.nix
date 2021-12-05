@@ -6,17 +6,24 @@ stdenv.mkDerivation rec {
   version = "3.2.1";
 
   src = fetchFromGitHub {
-    owner  = "ledger";
-    repo   = "ledger";
-    rev    = "v${version}";
+    owner = "ledger";
+    repo = "ledger";
+    rev = "v${version}";
     sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [
-    (boost.override { enablePython = usePython; python = python3; })
-    gmp mpfr libedit python3 gnused
+    (boost.override {
+      enablePython = usePython;
+      python = python3;
+    })
+    gmp
+    mpfr
+    libedit
+    python3
+    gnused
   ];
 
   nativeBuildInputs = [ cmake texinfo ];
@@ -38,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ledger-cli.org/";
-    description = "A double-entry accounting system with a command-line reporting interface";
+    description =
+      "A double-entry accounting system with a command-line reporting interface";
     license = licenses.bsd3;
 
     longDescription = ''

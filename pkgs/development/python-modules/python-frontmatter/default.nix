@@ -20,9 +20,7 @@ buildPythonPackage rec {
   # tries to import test.test, which conflicts with module
   # exported by python interpreter
   doCheck = false;
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   pythonImportsCheck = [ "frontmatter" ];
 

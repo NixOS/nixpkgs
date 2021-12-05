@@ -1,6 +1,6 @@
-{ mkDerivation, lib, fetchurl, pkg-config, qttools, sconsPackages
-, GConf, avahi, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2
-, lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
+{ mkDerivation, lib, fetchurl, pkg-config, qttools, sconsPackages, GConf, avahi
+, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2, lua
+, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
 }:
 
 mkDerivation rec {
@@ -8,7 +8,8 @@ mkDerivation rec {
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
+    url =
+      "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
@@ -17,8 +18,24 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qttools sconsPackages.scons_3_1_2 ];
 
   buildInputs = [
-    GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2
-    lua miniupnpc openssl qtbase qtmultimedia qtsvg qtwebkit qtx11extras zlib
+    GConf
+    avahi
+    boost
+    hunspell
+    libXScrnSaver
+    libedit
+    libidn
+    libnatpmp
+    libxml2
+    lua
+    miniupnpc
+    openssl
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtwebkit
+    qtx11extras
+    zlib
   ];
 
   propagatedUserEnvPkgs = [ GConf ];

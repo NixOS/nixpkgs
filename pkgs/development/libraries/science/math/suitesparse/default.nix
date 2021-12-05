@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gfortran
-, blas, lapack
-, metis
-, fixDarwinDylibNames
-, gmp
-, mpfr
-, enableCuda ? false
-, cudatoolkit
-}:
+{ lib, stdenv, fetchFromGitHub, gfortran, blas, lapack, metis
+, fixDarwinDylibNames, gmp, mpfr, enableCuda ? false, cudatoolkit }:
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
@@ -23,17 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ifuoXgVQp2vHR/reC/Hjbt3vqaKpql3Nfxdb/Cgv/aU=";
   };
 
-  nativeBuildInputs = [
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   # Use compatible indexing for lapack and blas used
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    blas lapack
-    metis
-    gfortran.cc.lib
-    gmp
-    mpfr
-  ] ++ lib.optional enableCuda cudatoolkit;
+  buildInputs = assert (blas.isILP64 == lapack.isILP64);
+    [ blas lapack metis gfortran.cc.lib gmp mpfr ]
+    ++ lib.optional enableCuda cudatoolkit;
 
   preConfigure = ''
     # Mongoose and GraphBLAS are packaged separately
@@ -45,19 +31,17 @@ stdenv.mkDerivation rec {
     "INSTALL_INCLUDE=${placeholder "dev"}/include"
     "JOBS=$(NIX_BUILD_CORES)"
     "MY_METIS_LIB=-lmetis"
-  ] ++ lib.optionals blas.isILP64 [
-    "CFLAGS=-DBLAS64"
-  ] ++ lib.optionals enableCuda [
-    "CUDA_PATH=${cudatoolkit}"
-    "CUDART_LIB=${cudatoolkit.lib}/lib/libcudart.so"
-    "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.10.1/SuiteSparse_config/SuiteSparse_config.mk#L368
-    "BLAS=-lblas"
-    "LAPACK=-llapack"
-  ]
-  ;
+  ] ++ lib.optionals blas.isILP64 [ "CFLAGS=-DBLAS64" ]
+    ++ lib.optionals enableCuda [
+      "CUDA_PATH=${cudatoolkit}"
+      "CUDART_LIB=${cudatoolkit.lib}/lib/libcudart.so"
+      "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
+      # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.10.1/SuiteSparse_config/SuiteSparse_config.mk#L368
+      "BLAS=-lblas"
+      "LAPACK=-llapack"
+    ];
 
   buildFlags = [
     # Build individual shared libraries, not demos

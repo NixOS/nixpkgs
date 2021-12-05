@@ -1,9 +1,6 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.services.mstpd;
-in
-with lib;
-{
+let cfg = config.services.mstpd;
+in with lib; {
   options.services.mstpd = {
 
     enable = mkOption {

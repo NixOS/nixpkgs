@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mozlog
-, moznetwork
-, mozprocess
-}:
+{ lib, buildPythonPackage, fetchPypi, mozlog, moznetwork, mozprocess }:
 
 buildPythonPackage rec {
   pname = "mozdevice";

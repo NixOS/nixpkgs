@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, nose
-, pytz
-, setuptools-scm
-, six
-, sqlalchemy
-}:
+{ lib, buildPythonPackage, docopt, fetchPypi, nose, pytz, setuptools-scm, six
+, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "pygtfs";
@@ -18,20 +10,11 @@ buildPythonPackage rec {
     sha256 = "0nx2idgza07kmvj7pcgpj3pqhw53v5rq63paw2ly51cjas2fv5pr";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    docopt
-    pytz
-    six
-    sqlalchemy
-  ];
+  propagatedBuildInputs = [ docopt pytz six sqlalchemy ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   pythonImportsCheck = [ "pygtfs" ];
 

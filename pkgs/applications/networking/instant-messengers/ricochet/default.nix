@@ -1,17 +1,5 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, pkg-config
-, makeDesktopItem
-, qtbase
-, qttools
-, qtmultimedia
-, qtquick1
-, qtquickcontrols
-, openssl
-, protobuf
-, qmake
-}:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, makeDesktopItem, qtbase
+, qttools, qtmultimedia, qtquick1, qtquickcontrols, openssl, protobuf, qmake }:
 
 mkDerivation rec {
   pname = "ricochet";
@@ -34,15 +22,8 @@ mkDerivation rec {
     categories = "Office;Email;";
   };
 
-  buildInputs = [
-    qtbase
-    qttools
-    qtmultimedia
-    qtquick1
-    qtquickcontrols
-    openssl
-    protobuf
-  ];
+  buildInputs =
+    [ qtbase qttools qtmultimedia qtquick1 qtquickcontrols openssl protobuf ];
 
   nativeBuildInputs = [ pkg-config qmake ];
 

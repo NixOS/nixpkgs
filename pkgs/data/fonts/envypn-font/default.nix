@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, libfaketime
-, fonttosfnt, mkfontscale
-}:
+{ lib, stdenv, fetchurl, libfaketime, fonttosfnt, mkfontscale }:
 
 stdenv.mkDerivation {
   name = "envypn-font-1.7.1";

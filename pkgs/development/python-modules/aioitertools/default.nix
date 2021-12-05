@@ -1,13 +1,7 @@
 { lib
 
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, typing-extensions
-, coverage
-, python
-, toml
-}:
+, buildPythonPackage, fetchPypi, pythonOlder, typing-extensions, coverage
+, python, toml }:
 
 buildPythonPackage rec {
   pname = "aioitertools";
@@ -27,7 +21,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables.";
+    description =
+      "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables.";
     license = licenses.mit;
     homepage = "https://pypi.org/project/aioitertools/";
     maintainers = with maintainers; [ teh ];

@@ -1,19 +1,17 @@
-{ config, lib, stdenv, fetchurl, pkg-config, libtool
-, zip, libffi, libsigsegv, readline, gmp
-, gnutls, gtk2, cairo, SDL, sqlite
+{ config, lib, stdenv, fetchurl, pkg-config, libtool, zip, libffi, libsigsegv
+, readline, gmp, gnutls, gtk2, cairo, SDL, sqlite
 , emacsSupport ? config.emacsSupport or false, emacs ? null }:
 
 assert emacsSupport -> (emacs != null);
 
 let # The gnu-smalltalk project has a dependency to the libsigsegv library.
-    # The project ships with sources for this library, but deprecated this option.
-    # Using the vanilla libsigsegv library results in error: "cannot relocate [...]"
-    # Adding --enable-static=libsigsegv to the gnu-smalltalk configuration flags
-    # does not help, the error still occurs. The only solution is to build a
-    # shared version of libsigsegv.
-    libsigsegv-shared = lib.overrideDerivation libsigsegv (oldAttrs: {
-      configureFlags = [ "--enable-shared" ];
-    });
+  # The project ships with sources for this library, but deprecated this option.
+  # Using the vanilla libsigsegv library results in error: "cannot relocate [...]"
+  # Adding --enable-static=libsigsegv to the gnu-smalltalk configuration flags
+  # does not help, the error still occurs. The only solution is to build a
+  # shared version of libsigsegv.
+  libsigsegv-shared = lib.overrideDerivation libsigsegv
+    (oldAttrs: { configureFlags = [ "--enable-shared" ]; });
 
 in stdenv.mkDerivation rec {
 
@@ -29,16 +27,25 @@ in stdenv.mkDerivation rec {
   # http://smalltalk.gnu.org/download
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libtool zip libffi libsigsegv-shared readline gmp gnutls gtk2
-    cairo SDL sqlite
-  ]
-  ++ lib.optional emacsSupport emacs;
+    libtool
+    zip
+    libffi
+    libsigsegv-shared
+    readline
+    gmp
+    gnutls
+    gtk2
+    cairo
+    SDL
+    sqlite
+  ] ++ lib.optional emacsSupport emacs;
 
   configureFlags = lib.optional (!emacsSupport) "--without-emacs";
 
   hardeningDisable = [ "format" ];
 
-  installFlags = lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
+  installFlags =
+    lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if
   # executed within nix-shell --pure.

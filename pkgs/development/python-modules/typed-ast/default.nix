@@ -12,16 +12,10 @@ buildPythonPackage rec {
     sha256 = "sha256-z3l5gMG1Jp6EI7SnGn5ABVXVBi+bK///iJBqEWn4d+s=";
   };
 
-  pythonImportsCheck = [
-    "typed_ast"
-    "typed_ast.ast27"
-    "typed_ast.ast3"
-    "typed_ast.conversions"
-  ];
+  pythonImportsCheck =
+    [ "typed_ast" "typed_ast.ast27" "typed_ast.ast3" "typed_ast.conversions" ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     runHook preCheck

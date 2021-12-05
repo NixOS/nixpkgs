@@ -6,9 +6,7 @@ let
 
   cfg = config.security.polkit;
 
-in
-
-{
+in {
 
   options = {
 
@@ -21,40 +19,36 @@ in
     security.polkit.extraConfig = mkOption {
       type = types.lines;
       default = "";
-      example =
-        ''
-          /* Log authorization checks. */
-          polkit.addRule(function(action, subject) {
-            polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
-          });
+      example = ''
+        /* Log authorization checks. */
+        polkit.addRule(function(action, subject) {
+          polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+        });
 
-          /* Allow any local user to do anything (dangerous!). */
-          polkit.addRule(function(action, subject) {
-            if (subject.local) return "yes";
-          });
-        '';
-      description =
-        ''
-          Any polkit rules to be added to config (in JavaScript ;-). See:
-          http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
-        '';
+        /* Allow any local user to do anything (dangerous!). */
+        polkit.addRule(function(action, subject) {
+          if (subject.local) return "yes";
+        });
+      '';
+      description = ''
+        Any polkit rules to be added to config (in JavaScript ;-). See:
+        http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
+      '';
     };
 
     security.polkit.adminIdentities = mkOption {
       type = types.listOf types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
-      description =
-        ''
-          Specifies which users are considered “administrators”, for those
-          actions that require the user to authenticate as an
-          administrator (i.e. have an <literal>auth_admin</literal>
-          value).  By default, this is all users in the <literal>wheel</literal> group.
-        '';
+      description = ''
+        Specifies which users are considered “administrators”, for those
+        actions that require the user to authenticate as an
+        administrator (i.e. have an <literal>auth_admin</literal>
+        value).  By default, this is all users in the <literal>wheel</literal> group.
+      '';
     };
 
   };
-
 
   config = mkIf cfg.enable {
 
@@ -69,32 +63,33 @@ in
     environment.pathsToLink = [ "/share/polkit-1" ];
 
     # PolKit rules for NixOS.
-    environment.etc."polkit-1/rules.d/10-nixos.rules".text =
-      ''
-        polkit.addAdminRule(function(action, subject) {
-          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
-        });
+    environment.etc."polkit-1/rules.d/10-nixos.rules".text = ''
+      polkit.addAdminRule(function(action, subject) {
+        return [${
+          concatStringsSep ", " (map (i: ''"${i}"'') cfg.adminIdentities)
+        }];
+      });
 
-        ${cfg.extraConfig}
-      ''; #TODO: validation on compilation (at least against typos)
+      ${cfg.extraConfig}
+    ''; # TODO: validation on compilation (at least against typos)
 
     services.dbus.packages = [ pkgs.polkit.out ];
 
-    security.pam.services.polkit-1 = {};
+    security.pam.services.polkit-1 = { };
 
     security.wrappers = {
-      pkexec =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.polkit.bin}/bin/pkexec";
-        };
-      polkit-agent-helper-1 =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
-        };
+      pkexec = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.polkit.bin}/bin/pkexec";
+      };
+      polkit-agent-helper-1 = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+      };
     };
 
     systemd.tmpfiles.rules = [
@@ -109,7 +104,7 @@ in
       group = "polkituser";
     };
 
-    users.groups.polkituser = {};
+    users.groups.polkituser = { };
   };
 
 }

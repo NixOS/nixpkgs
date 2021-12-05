@@ -1,22 +1,20 @@
-{ lib
-, fetchurl
-, symlinkJoin
-}:
+{ lib, fetchurl, symlinkJoin }:
 
 let
   version = "12.1";
 
-  fetchData = { file, sha256 }: fetchurl {
-    url = "https://www.unicode.org/Public/emoji/${version}/${file}";
-    inherit sha256;
-    downloadToTemp = true;
-    recursiveHash = true;
-    postFetch = ''
-      installDir="$out/share/unicode/emoji"
-      mkdir -p "$installDir"
-      mv "$downloadedFile" "$installDir/${file}"
-    '';
-  };
+  fetchData = { file, sha256 }:
+    fetchurl {
+      url = "https://www.unicode.org/Public/emoji/${version}/${file}";
+      inherit sha256;
+      downloadToTemp = true;
+      recursiveHash = true;
+      postFetch = ''
+        installDir="$out/share/unicode/emoji"
+        mkdir -p "$installDir"
+        mv "$downloadedFile" "$installDir/${file}"
+      '';
+    };
 
   srcs = {
     emoji-data = fetchData {
@@ -40,9 +38,8 @@ let
       sha256 = "0s2mvy1nr2v1x0rr1fxlsv8ly1vyf9978rb4hwry5vnr678ls522";
     };
   };
-in
 
-symlinkJoin rec {
+in symlinkJoin rec {
   name = "unicode-emoji-${version}";
 
   paths = lib.attrValues srcs;

@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-X main.version=${version}"  "-X main.distribution=nix" ];
+  ldflags = [ "-X main.version=${version}" "-X main.distribution=nix" ];
 
   subPackages = [ "." ];
 
@@ -33,7 +33,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Virtual microphone device with noise supression for PulseAudio";
+    description =
+      "Virtual microphone device with noise supression for PulseAudio";
     homepage = "https://github.com/lawl/NoiseTorch";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

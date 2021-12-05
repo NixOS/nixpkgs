@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, frozenlist
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, frozenlist, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiosignal";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "1pamfc2l95s1q86jvmbp17chjy129gk01kwy8xm88d2ijy8s1caq";
   };
 
-  propagatedBuildInputs = [
-    frozenlist
-  ];
+  propagatedBuildInputs = [ frozenlist ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

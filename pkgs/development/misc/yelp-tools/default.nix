@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, libxml2
-, libxslt
-, itstool
-, gnome
-, pkg-config
-, meson
-, ninja
-, python3
-}:
+{ lib, stdenv, fetchurl, libxml2, libxslt, itstool, gnome, pkg-config, meson
+, ninja, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
@@ -18,15 +8,13 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/yelp-tools/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "N/GswCvL5ooxuG4HwSmoOb0yduZW3Inrf8CpJ0bv8nI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   propagatedBuildInputs = [
     libxml2 # xmllint required by yelp-check.
@@ -38,23 +26,19 @@ python3.pkgs.buildPythonApplication rec {
     gnome.yelp-xsl
   ];
 
-  pythonPath = [
-    python3.pkgs.lxml
-  ];
+  pythonPath = [ python3.pkgs.lxml ];
 
-  strictDeps = false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
+  strictDeps =
+    false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
 
   doCheck = true;
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
-    description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
+    description =
+      "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
     maintainers = teams.gnome.members ++ (with maintainers; [ domenkozar ]);
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

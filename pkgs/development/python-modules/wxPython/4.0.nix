@@ -1,26 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, which
-, cairo
-, pango
-, python
-, doxygen
-, ncurses
-, libintl
-, wxGTK
-, wxmac
-, IOKit
-, Carbon
-, Cocoa
-, AudioToolbox
-, OpenGL
-, CoreFoundation
-, pillow
-, numpy
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pkg-config, which, cairo, pango
+, python, doxygen, ncurses, libintl, wxGTK, wxmac, IOKit, Carbon, Cocoa
+, AudioToolbox, OpenGL, CoreFoundation, pillow, numpy }:
 
 buildPythonPackage rec {
   pname = "wxPython";
@@ -34,15 +14,17 @@ buildPythonPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config which doxygen ]
-  ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
+    ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
 
-  buildInputs = [ ncurses libintl ]
-  ++ (if stdenv.isDarwin
-  then
-    [ AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL ]
-  else
-    [ wxGTK.gtk ]
-  );
+  buildInputs = [ ncurses libintl ] ++ (if stdenv.isDarwin then [
+    AudioToolbox
+    Carbon
+    Cocoa
+    CoreFoundation
+    IOKit
+    OpenGL
+  ] else
+    [ wxGTK.gtk ]);
 
   propagatedBuildInputs = [ pillow numpy ];
 
@@ -68,7 +50,6 @@ buildPythonPackage rec {
   '';
 
   passthru = { wxWidgets = if stdenv.isDarwin then wxmac else wxGTK; };
-
 
   meta = {
     description = "Cross platform GUI toolkit for Python, Phoenix version";

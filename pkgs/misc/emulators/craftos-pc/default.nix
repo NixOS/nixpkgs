@@ -7,9 +7,8 @@ let
     rev = "v2.4.4";
     sha256 = "1q63ki4sxx8bxaa6ag3xj153p7a8a12ivm0k33k935p41k6y2k64";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "craftos-pc";
   version = "2.4.5";
 
@@ -34,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An implementation of the CraftOS-PC API written in C++ using SDL";
+    description =
+      "An implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
     license = licenses.mit;
     platforms = platforms.linux;

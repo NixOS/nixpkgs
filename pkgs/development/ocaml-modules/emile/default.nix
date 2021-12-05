@@ -1,7 +1,5 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, angstrom, ipaddr, base64, pecu, uutf
-, alcotest, cmdliner
-}:
+{ lib, buildDunePackage, fetchurl, ocaml, angstrom, ipaddr, base64, pecu, uutf
+, alcotest, cmdliner }:
 
 buildDunePackage rec {
   pname = "emile";
@@ -10,19 +8,14 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/emile/releases/download/v${version}/emile-v${version}.tbz";
+    url =
+      "https://github.com/dinosaure/emile/releases/download/v${version}/emile-v${version}.tbz";
     sha256 = "0r1141makr0b900aby1gn0fccjv1qcqgyxib3bzq8fxmjqwjan8p";
   };
 
   buildInputs = [ cmdliner ];
 
-  propagatedBuildInputs = [
-    angstrom
-    ipaddr
-    base64
-    pecu
-    uutf
-  ];
+  propagatedBuildInputs = [ angstrom ipaddr base64 pecu uutf ];
 
   # technically emile is available for ocaml >= 4.03, but alcotest
   # and angstrom (fmt) are only available for >= 4.05. Disabling

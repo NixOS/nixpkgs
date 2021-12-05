@@ -1,36 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, nixosTests
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook
-, gobject-introspection
+{ lib, stdenv, fetchurl, nixosTests, copyDesktopItems, makeDesktopItem
+, makeWrapper, wrapGAppsHook, gobject-introspection
 , jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
-, xorg
-, zlib
-, nss
-, nspr
-, fontconfig
-, pango
-, cairo
-, expat
-, alsa-lib
-, cups
-, dbus
-, atk
-, gtk3-x11
-, gtk2-x11
-, gdk-pixbuf
-, glib
-, curl
-, freetype
-, libpulseaudio
-, libuuid
-, systemd
-, flite ? null
-, libXxf86vm ? null
-}:
+, xorg, zlib, nss, nspr, fontconfig, pango, cairo, expat, alsa-lib, cups, dbus
+, atk, gtk3-x11, gtk2-x11, gdk-pixbuf, glib, curl, freetype, libpulseaudio
+, libuuid, systemd, flite ? null, libXxf86vm ? null }:
 let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
@@ -69,8 +42,7 @@ let
     stdenv.cc.cc
     zlib
     libuuid
-  ] ++
-  (with xorg; [
+  ] ++ (with xorg; [
     libX11
     libxcb
     libXcomposite
@@ -84,14 +56,14 @@ let
     libXtst
     libXScrnSaver
   ]));
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
   version = "2.2.1441";
 
   src = fetchurl {
-    url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
+    url =
+      "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
     sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
   };
 

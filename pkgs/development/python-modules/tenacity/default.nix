@@ -1,7 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools-scm
-, pytest, sphinx, tornado, typeguard
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k, pbr, six, futures ? null
+, monotonic ? null, typing ? null, setuptools-scm, pytest, sphinx, tornado
+, typeguard }:
 
 buildPythonPackage rec {
   pname = "tenacity";
@@ -16,8 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ]
     ++ lib.optionals isPy27 [ futures monotonic typing ];
 
-  checkInputs = [ pytest sphinx tornado ]
-    ++ lib.optionals isPy3k [ typeguard ];
+  checkInputs = [ pytest sphinx tornado ] ++ lib.optionals isPy3k [ typeguard ];
   checkPhase = if isPy27 then ''
     pytest --ignore='tenacity/tests/test_asyncio.py'
   '' else ''

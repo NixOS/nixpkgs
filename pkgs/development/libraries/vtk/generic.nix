@@ -1,12 +1,11 @@
-{ majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
-, fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
-, enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
-# Darwin support
+{ majorVersion, minorVersion, sourceSha256, patchesToFetch ? [ ] }:
+{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng
+, libtiff, fetchpatch, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras
+, qttools, enablePython ? false, pythonInterpreter ? throw
+  "vtk: Python support requested, but no python interpreter was given."
+  # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
-}:
+, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc }:
 
 let
   inherit (lib) optionalString optionals optional;
@@ -18,7 +17,8 @@ in stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {
-    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
+    url =
+      "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = sourceSha256;
   };
 
@@ -26,13 +26,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libtiff ]
     ++ optionals enableQt [ qtbase qtx11extras qttools ]
-    ++ optionals stdenv.isLinux [
-      libGLU
-      libGL
-      libX11
-      xorgproto
-      libXt
-    ] ++ optionals stdenv.isDarwin [
+    ++ optionals stdenv.isLinux [ libGLU libGL libX11 xorgproto libXt ]
+    ++ optionals stdenv.isDarwin [
       xpc
       Cocoa
       CoreServices
@@ -46,9 +41,7 @@ in stdenv.mkDerivation rec {
       ImageIO
       OpenGL
       GLUT
-    ] ++ optional enablePython [
-      pythonInterpreter
-    ];
+    ] ++ optional enablePython [ pythonInterpreter ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
 
   patches = map fetchpatch patchesToFetch;
@@ -67,18 +60,32 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS=-fPIC"
     "-DCMAKE_CXX_FLAGS=-fPIC"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_PNG" else "VTK_MODULE_USE_EXTERNAL_vtkpng"}=ON"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_TIFF" else "VTK_MODULE_USE_EXTERNAL_vtktiff"}=1"
+    "-D${
+      if lib.versionOlder version "9.0" then
+        "VTK_USE_SYSTEM_PNG"
+      else
+        "VTK_MODULE_USE_EXTERNAL_vtkpng"
+    }=ON"
+    "-D${
+      if lib.versionOlder version "9.0" then
+        "VTK_USE_SYSTEM_TIFF"
+      else
+        "VTK_MODULE_USE_EXTERNAL_vtktiff"
+    }=1"
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
   ] ++ optionals enableQt [
-    "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
-  ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
-    "-DVTK_QT_VERSION=5"
-  ]
-    ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
+    "-D${
+      if lib.versionOlder version "9.0" then
+        "VTK_Group_Qt:BOOL=ON"
+      else
+        "VTK_GROUP_ENABLE_Qt:STRING=YES"
+    }"
+  ] ++ optionals (enableQt && lib.versionOlder version "8.0")
+    [ "-DVTK_QT_VERSION=5" ] ++ optionals stdenv.isDarwin
+    [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
@@ -91,12 +98,14 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Open source libraries for 3D computer graphics, image processing and visualization";
+    description =
+      "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
     # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7"
+      || lib.versions.major majorVersion == "8");
   };
 }

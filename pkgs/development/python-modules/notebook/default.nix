@@ -1,29 +1,8 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, argon2_cffi
-, nose
-, nose_warnings_filters
-, glibcLocales
-, isPy3k
-, mock
-, jinja2
-, tornado
-, ipython_genutils
-, traitlets
-, jupyter_core
-, jupyter-client
-, nbformat
-, nbconvert
-, ipykernel
-, terminado
-, requests
-, send2trash
-, pexpect
-, prometheus-client
-, pytestCheckHook
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, argon2_cffi, nose
+, nose_warnings_filters, glibcLocales, isPy3k, mock, jinja2, tornado
+, ipython_genutils, traitlets, jupyter_core, jupyter-client, nbformat, nbconvert
+, ipykernel, terminado, requests, send2trash, pexpect, prometheus-client
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "notebook";
@@ -41,9 +20,21 @@ buildPythonPackage rec {
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2_cffi
+    jinja2
+    tornado
+    ipython_genutils
+    traitlets
+    jupyter_core
+    send2trash
+    jupyter-client
+    nbformat
+    nbconvert
+    ipykernel
+    terminado
+    requests
+    pexpect
+    prometheus-client
+    argon2_cffi
   ];
 
   # disable warning_filters
@@ -83,7 +74,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
+    description =
+      "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];

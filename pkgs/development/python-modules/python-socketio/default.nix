@@ -1,16 +1,5 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, msgpack
-, pytestCheckHook
-, python-engineio
-, pythonOlder
-, requests
-, websocket-client
-}:
+{ lib, aiohttp, bidict, buildPythonPackage, fetchFromGitHub, mock, msgpack
+, pytestCheckHook, python-engineio, pythonOlder, requests, websocket-client }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
@@ -26,23 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-K5rs3UEGN1BvWDDfJE9/dPDLsZ4EGSsEf6PXodvc2Bg=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    bidict
-    python-engineio
-    requests
-    websocket-client
-  ];
+  propagatedBuildInputs =
+    [ aiohttp bidict python-engineio requests websocket-client ];
 
-  checkInputs = [
-    mock
-    msgpack
-    pytestCheckHook
-  ];
+  checkInputs = [ mock msgpack pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "socketio"
-  ];
+  pythonImportsCheck = [ "socketio" ];
 
   meta = with lib; {
     description = "Python Socket.IO server and client";

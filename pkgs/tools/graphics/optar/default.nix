@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "20150210";
 
   src = fetchurl {
-    url    = "http://ronja.twibright.com/optar.tgz";
+    url = "http://ronja.twibright.com/optar.tgz";
     sha256 = "10lr31k3xfcpa6vxkbl3abph7j3gks2210489khnnzmhmfdnm1a4";
   };
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     homepage = "http://ronja.twibright.com/optar/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux; # possibly others, but only tested on Linux
+    platforms = with platforms;
+      linux; # possibly others, but only tested on Linux
   };
 }

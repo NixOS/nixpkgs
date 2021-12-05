@@ -1,19 +1,11 @@
-{ lib
-, trivialBuild
-, urweb
-, cl-lib
-, flycheck
-}:
+{ lib, trivialBuild, urweb, cl-lib, flycheck }:
 
 trivialBuild {
   pname = "urweb-mode";
 
   inherit (urweb) src version;
 
-  packageRequires = [
-    cl-lib
-    flycheck
-  ];
+  packageRequires = [ cl-lib flycheck ];
 
   postUnpack = ''
     sourceRoot=$sourceRoot/src/elisp

@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1spj5fg2l8p5bk81xsv6hqn1kcrdiy54w19jsfb7g5i94vcb1pcx";
   };
 
-  buildInputs = [ dos2unix which qt ]
-    ++ lib.optional stdenv.isDarwin Carbon;
+  buildInputs = [ dos2unix which qt ] ++ lib.optional stdenv.isDarwin Carbon;
 
   # Remove carriage returns that cause /bin/sh to abort
   preConfigure = ''

@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1wbbgdvhadd3qs3afv6i777argdpcyxkwz4yv6aqp223n8ki6dm8";
   };
 
-  buildInputs = lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
+  buildInputs =
+    lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
@@ -20,7 +21,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Benchmark to measure the performance of many different types of networking";
+    description =
+      "Benchmark to measure the performance of many different types of networking";
     homepage = "http://www.netperf.org/netperf/";
     license = "Hewlett-Packard BSD-like license";
 

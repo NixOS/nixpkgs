@@ -1,5 +1,5 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
-, lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
+{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python, lib
+, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
   src = fetchFromGitHub {
@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/xtreemfs/xtreemfs/commit/ebfdc2fff56c09f310159d92026883941e42a953.patch";
+      url =
+        "https://github.com/xtreemfs/xtreemfs/commit/ebfdc2fff56c09f310159d92026883941e42a953.patch";
       sha256 = "075w00ad88qm6xpm5679m0gfzkrc53w17sk7ycybf4hzxjs29ygy";
       name = "xtreemfs-fix-for-openssl_1_1";
     })

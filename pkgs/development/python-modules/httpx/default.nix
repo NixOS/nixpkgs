@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, brotlicffi
-, certifi
-, charset-normalizer
-, h2
-, httpcore
-, rfc3986
-, sniffio
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, typing-extensions
-, trustme
-, uvicorn
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, brotlicffi, certifi
+, charset-normalizer, h2, httpcore, rfc3986, sniffio, pytestCheckHook
+, pytest-asyncio, pytest-trio, typing-extensions, trustme, uvicorn }:
 
 buildPythonPackage rec {
   pname = "httpx";
@@ -29,15 +14,8 @@ buildPythonPackage rec {
     sha256 = "sha256-bUxxeUYqOHBmSL2gPQG5cIq6k5QY4Kyhj9ToA5yZXPA=";
   };
 
-  propagatedBuildInputs = [
-    brotlicffi
-    certifi
-    charset-normalizer
-    h2
-    httpcore
-    rfc3986
-    sniffio
-  ];
+  propagatedBuildInputs =
+    [ brotlicffi certifi charset-normalizer h2 httpcore rfc3986 sniffio ];
 
   checkInputs = [
     pytestCheckHook

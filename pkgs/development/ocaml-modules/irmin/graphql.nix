@@ -1,6 +1,5 @@
 { lib, buildDunePackage, cohttp-lwt, graphql-cohttp, graphql-lwt, irmin
-, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix, cacert
-}:
+, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix, cacert }:
 
 buildDunePackage rec {
 
@@ -13,20 +12,9 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cohttp-lwt graphql-cohttp graphql-lwt irmin ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-    alcotest-lwt
-    logs
-    cohttp-lwt-unix
-    yojson
-    cacert
-  ];
+  checkInputs = [ alcotest alcotest-lwt logs cohttp-lwt-unix yojson cacert ];
 
-  meta = irmin.meta // {
-    description = "GraphQL server for Irmin";
-  };
+  meta = irmin.meta // { description = "GraphQL server for Irmin"; };
 
 }
-
-
 

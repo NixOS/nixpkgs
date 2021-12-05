@@ -1,26 +1,18 @@
-{ config, lib, stdenv
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
+{ config, lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper
 
-, alsa-lib
-, gtk3
-, lame
-, ffmpeg
-, vlc
-, xdg-utils
-, which
+, alsa-lib, gtk3, lame, ffmpeg, vlc, xdg-utils, which
 
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
-}:
+, jackSupport ? true, libjack2, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "reaper";
   version = "6.38";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
+    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
     hash = {
       x86_64-linux = "sha256-K5EnrmzP8pyW9dR1fbMzkPzpS6aHm8JF1+m3afnH4rU=";
       aarch64-linux = "sha256-6wNWDXjQNyfU2l9Xi9JtmAuoKtHuIY5cvNMjYkwh2Sk=";
@@ -42,9 +34,8 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     gtk3 # libSwell needs libgdk-3.so.0
-  ]
-  ++ lib.optional jackSupport libjack2
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optional jackSupport libjack2
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
 

@@ -1,32 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3Packages
-, sox
-, flac
-, lame
-, wrapQtAppsHook
-, ffmpeg
-, vorbis-tools
-, pulseaudio
-, nodejs
-, youtube-dl
-, opusTools
-, gst_all_1
-}:
-let packages = [
-  vorbis-tools
-  sox
-  flac
-  lame
-  opusTools
-  gst_all_1.gstreamer
-  nodejs
-  ffmpeg
-  youtube-dl
-] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
+{ lib, stdenv, fetchFromGitHub, python3Packages, sox, flac, lame, wrapQtAppsHook
+, ffmpeg, vorbis-tools, pulseaudio, nodejs, youtube-dl, opusTools, gst_all_1 }:
+let
+  packages = [
+    vorbis-tools
+    sox
+    flac
+    lame
+    opusTools
+    gst_all_1.gstreamer
+    nodejs
+    ffmpeg
+    youtube-dl
+  ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
-in
-python3Packages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   pname = "mkchromecast-unstable";
   version = "2020-10-17";
 
@@ -61,14 +48,14 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath packages}"
-  ];
+  makeWrapperArgs =
+    [ "\${qtWrapperArgs[@]}" "--prefix PATH : ${lib.makeBinPath packages}" ];
 
   postInstall = ''
     substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/video.py \
-      --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
+      --replace '/usr/share/mkchromecast/nodejs/' '${
+        placeholder "out"
+      }/share/mkchromecast/nodejs/'
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
     substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/audio_devices.py \
@@ -77,7 +64,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://mkchromecast.com/";
-    description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
+    description =
+      "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
     license = licenses.mit;
     maintainers = with maintainers; [ shou ];
   };

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   version = "20210624";
 
   src = fetchurl {
-    url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
+    url =
+      "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
     sha256 = "sha256-3q9GO7zD7vpy+XGZ77YhP3sOLI6R8bPSy/UgVqhxXRU=";
   };
 
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
+    description =
+      "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;

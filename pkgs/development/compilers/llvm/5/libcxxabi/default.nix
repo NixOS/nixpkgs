@@ -4,7 +4,8 @@ stdenv.mkDerivation {
   pname = "libcxxabi";
   inherit version;
 
-  src = fetch "libcxxabi" "12lp799rskr4fc2xr64qn4jfkjnfd8b1aymvsxyn4k9ar7r9pgqv";
+  src =
+    fetch "libcxxabi" "12lp799rskr4fc2xr64qn4jfkjnfd8b1aymvsxyn4k9ar7r9pgqv";
 
   outputs = [ "out" "dev" ];
 
@@ -18,34 +19,30 @@ stdenv.mkDerivation {
     patch -p1 -d $(ls -d libcxx-*) -i ${../../libcxx-0001-musl-hacks.patch}
   '';
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
-  installPhase = if stdenv.isDarwin
-    then ''
-      for file in lib/*.dylib; do
-        # this should be done in CMake, but having trouble figuring out
-        # the magic combination of necessary CMake variables
-        # if you fancy a try, take a look at
-        # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        install_name_tool -id $out/$file $file
-      done
-      make install
-      install -d 755 $out/include
-      install -m 644 ../include/*.h $out/include
-    ''
-    else ''
-      install -d -m 755 $out/include $out/lib
-      install -m 644 lib/libc++abi.a $out/lib
-      install -m 644 lib/libc++abi.so.1.0 $out/lib
-      install -m 644 ../include/cxxabi.h $out/include
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
-    '';
+  installPhase = if stdenv.isDarwin then ''
+    for file in lib/*.dylib; do
+      # this should be done in CMake, but having trouble figuring out
+      # the magic combination of necessary CMake variables
+      # if you fancy a try, take a look at
+      # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
+      install_name_tool -id $out/$file $file
+    done
+    make install
+    install -d 755 $out/include
+    install -m 644 ../include/*.h $out/include
+  '' else ''
+    install -d -m 755 $out/include $out/lib
+    install -m 644 lib/libc++abi.a $out/lib
+    install -m 644 lib/libc++abi.so.1.0 $out/lib
+    install -m 644 ../include/cxxabi.h $out/include
+    ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
+    ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
+  '';
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

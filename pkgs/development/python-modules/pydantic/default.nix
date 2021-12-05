@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, email_validator
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, typing-extensions
-, ujson
-}:
+{ lib, buildPythonPackage, email_validator, fetchFromGitHub, pytest-mock
+, pytestCheckHook, python-dotenv, pythonOlder, typing-extensions, ujson }:
 
 buildPythonPackage rec {
   pname = "pydantic";
@@ -22,17 +13,10 @@ buildPythonPackage rec {
     sha256 = "06162dss6mvi7wiy2lzxwvzajwxgy8b2fyym7qipaj7zibcqalq2";
   };
 
-  propagatedBuildInputs = [
-    email_validator
-    python-dotenv
-    typing-extensions
-    ujson
-  ];
+  propagatedBuildInputs =
+    [ email_validator python-dotenv typing-extensions ujson ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -42,7 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/samuelcolvin/pydantic";
-    description = "Data validation and settings management using Python type hinting";
+    description =
+      "Data validation and settings management using Python type hinting";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

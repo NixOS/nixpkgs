@@ -1,7 +1,4 @@
-{ lib
-, python3
-, glibcLocales
-}:
+{ lib, python3, glibcLocales }:
 
 with python3.pkgs;
 

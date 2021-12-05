@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pantheon
-, pkg-config
-, vala
-, cmake
-, ninja
-, gtk3
-, gtksourceview3
-, webkitgtk
-, gtkspell3
-, glib
-, libgee
-, pcre
-, sqlite
-, discount
-, wrapGAppsHook
-, withPantheon ? false
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, pkg-config, vala
+, cmake, ninja, gtk3, gtksourceview3, webkitgtk, gtkspell3, glib, libgee, pcre
+, sqlite, discount, wrapGAppsHook, withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
@@ -31,13 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lKOM9+s34xYB9bF9pgip9DFu+6AaxSE4HjFVhoWtttk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    vala
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake ninja vala pkg-config wrapGAppsHook ];
 
   buildInputs = [
     discount
@@ -55,11 +31,7 @@ stdenv.mkDerivation rec {
   # Whether to build with contractor support (Pantheon specific)
   cmakeFlags = lib.optional (!withPantheon) "-Dnoele=yes";
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Markdown notes editor and manager designed for elementary OS"

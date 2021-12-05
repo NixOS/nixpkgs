@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, alsa-lib
-, python
-, SDL
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsa-lib, python, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
@@ -28,7 +21,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Music tracker application, free reimplementation of Impulse Tracker";
+    description =
+      "Music tracker application, free reimplementation of Impulse Tracker";
     homepage = "http://schismtracker.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

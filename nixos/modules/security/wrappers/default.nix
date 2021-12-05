@@ -5,123 +5,103 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  securityWrapper = pkgs.callPackage ./wrapper.nix {
-    inherit parentWrapperDir;
-  };
+  securityWrapper =
+    pkgs.callPackage ./wrapper.nix { inherit parentWrapperDir; };
 
-  fileModeType =
-    let
-      # taken from the chmod(1) man page
-      symbolic = "[ugoa]*([-+=]([rwxXst]*|[ugo]))+|[-+=][0-7]+";
-      numeric = "[-+=]?[0-7]{0,4}";
-      mode = "((${symbolic})(,${symbolic})*)|(${numeric})";
-    in
-     lib.types.strMatching mode
-     // { description = "file mode string"; };
+  fileModeType = let
+    # taken from the chmod(1) man page
+    symbolic = "[ugoa]*([-+=]([rwxXst]*|[ugo]))+|[-+=][0-7]+";
+    numeric = "[-+=]?[0-7]{0,4}";
+    mode = "((${symbolic})(,${symbolic})*)|(${numeric})";
+  in lib.types.strMatching mode // { description = "file mode string"; };
 
   wrapperType = lib.types.submodule ({ name, config, ... }: {
-    options.source = lib.mkOption
-      { type = lib.types.path;
-        description = "The absolute path to the program to be wrapped.";
-      };
-    options.program = lib.mkOption
-      { type = with lib.types; nullOr str;
-        default = name;
-        description = ''
-          The name of the wrapper program. Defaults to the attribute name.
-        '';
-      };
-    options.owner = lib.mkOption
-      { type = lib.types.str;
-        description = "The owner of the wrapper program.";
-      };
-    options.group = lib.mkOption
-      { type = lib.types.str;
-        description = "The group of the wrapper program.";
-      };
-    options.permissions = lib.mkOption
-      { type = fileModeType;
-        default  = "u+rx,g+x,o+x";
-        example = "a+rx";
-        description = ''
-          The permissions of the wrapper program. The format is that of a
-          symbolic or numeric file mode understood by <command>chmod</command>.
-        '';
-      };
-    options.capabilities = lib.mkOption
-      { type = lib.types.commas;
-        default = "";
-        description = ''
-          A comma-separated list of capabilities to be given to the wrapper
-          program. For capabilities supported by the system check the
-          <citerefentry>
-            <refentrytitle>capabilities</refentrytitle>
-            <manvolnum>7</manvolnum>
-          </citerefentry>
-          manual page.
+    options.source = lib.mkOption {
+      type = lib.types.path;
+      description = "The absolute path to the program to be wrapped.";
+    };
+    options.program = lib.mkOption {
+      type = with lib.types; nullOr str;
+      default = name;
+      description = ''
+        The name of the wrapper program. Defaults to the attribute name.
+      '';
+    };
+    options.owner = lib.mkOption {
+      type = lib.types.str;
+      description = "The owner of the wrapper program.";
+    };
+    options.group = lib.mkOption {
+      type = lib.types.str;
+      description = "The group of the wrapper program.";
+    };
+    options.permissions = lib.mkOption {
+      type = fileModeType;
+      default = "u+rx,g+x,o+x";
+      example = "a+rx";
+      description = ''
+        The permissions of the wrapper program. The format is that of a
+        symbolic or numeric file mode understood by <command>chmod</command>.
+      '';
+    };
+    options.capabilities = lib.mkOption {
+      type = lib.types.commas;
+      default = "";
+      description = ''
+        A comma-separated list of capabilities to be given to the wrapper
+        program. For capabilities supported by the system check the
+        <citerefentry>
+          <refentrytitle>capabilities</refentrytitle>
+          <manvolnum>7</manvolnum>
+        </citerefentry>
+        manual page.
 
-          <note><para>
-            <literal>cap_setpcap</literal>, which is required for the wrapper
-            program to be able to raise caps into the Ambient set is NOT raised
-            to the Ambient set so that the real program cannot modify its own
-            capabilities!! This may be too restrictive for cases in which the
-            real program needs cap_setpcap but it at least leans on the side
-            security paranoid vs. too relaxed.
-          </para></note>
-        '';
-      };
-    options.setuid = lib.mkOption
-      { type = lib.types.bool;
-        default = false;
-        description = "Whether to add the setuid bit the wrapper program.";
-      };
-    options.setgid = lib.mkOption
-      { type = lib.types.bool;
-        default = false;
-        description = "Whether to add the setgid bit the wrapper program.";
-      };
+        <note><para>
+          <literal>cap_setpcap</literal>, which is required for the wrapper
+          program to be able to raise caps into the Ambient set is NOT raised
+          to the Ambient set so that the real program cannot modify its own
+          capabilities!! This may be too restrictive for cases in which the
+          real program needs cap_setpcap but it at least leans on the side
+          security paranoid vs. too relaxed.
+        </para></note>
+      '';
+    };
+    options.setuid = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to add the setuid bit the wrapper program.";
+    };
+    options.setgid = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to add the setgid bit the wrapper program.";
+    };
   });
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
-    { program
-    , capabilities
-    , source
-    , owner
-    , group
-    , permissions
-    , ...
-    }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
-    ''
-      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
-      echo -n "${source}" > "$wrapperDir/${program}.real"
+    { program, capabilities, source, owner, group, permissions, ... }:
+    assert (lib.versionAtLeast
+      (lib.getVersion config.boot.kernelPackages.kernel) "4.3"); ''
+        cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+        echo -n "${source}" > "$wrapperDir/${program}.real"
 
-      # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+        # Prevent races
+        chmod 0000 "$wrapperDir/${program}"
+        chown ${owner}.${group} "$wrapperDir/${program}"
 
-      # Set desired capabilities on the file plus cap_setpcap so
-      # the wrapper program can elevate the capabilities set on
-      # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+        # Set desired capabilities on the file plus cap_setpcap so
+        # the wrapper program can elevate the capabilities set on
+        # its file into the Ambient set.
+        ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
 
-      # Set the executable bit
-      chmod ${permissions} "$wrapperDir/${program}"
-    '';
+        # Set the executable bit
+        chmod ${permissions} "$wrapperDir/${program}"
+      '';
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
-    { program
-    , source
-    , owner
-    , group
-    , setuid
-    , setgid
-    , permissions
-    , ...
-    }:
-    ''
+    { program, source, owner, group, setuid, setgid, permissions, ... }: ''
       cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
       echo -n "${source}" > "$wrapperDir/${program}.real"
 
@@ -129,21 +109,22 @@ let
       chmod 0000 "$wrapperDir/${program}"
       chown ${owner}.${group} "$wrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
+      chmod "u${if setuid then "+" else "-"}s,g${
+        if setgid then "+" else "-"
+      }s,${permissions}" "$wrapperDir/${program}"
     '';
 
-  mkWrappedPrograms =
-    builtins.map
-      (opts:
-        if opts.capabilities != ""
-        then mkSetcapProgram opts
-        else mkSetuidProgram opts
-      ) (lib.attrValues wrappers);
-in
-{
+  mkWrappedPrograms = builtins.map (opts:
+    if opts.capabilities != "" then
+      mkSetcapProgram opts
+    else
+      mkSetuidProgram opts) (lib.attrValues wrappers);
+in {
   imports = [
-    (lib.mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
-    (lib.mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
+    (lib.mkRemovedOptionModule [ "security" "setuidOwners" ]
+      "Use security.wrappers instead")
+    (lib.mkRemovedOptionModule [ "security" "setuidPrograms" ]
+      "Use security.wrappers instead")
   ];
 
   ###### interface
@@ -151,35 +132,34 @@ in
   options = {
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
-      default = {};
-      example = lib.literalExpression
-        ''
-          {
-            # a setuid root program
-            doas =
-              { setuid = true;
-                owner = "root";
-                group = "root";
-                source = "''${pkgs.doas}/bin/doas";
-              };
+      default = { };
+      example = lib.literalExpression ''
+        {
+          # a setuid root program
+          doas =
+            { setuid = true;
+              owner = "root";
+              group = "root";
+              source = "''${pkgs.doas}/bin/doas";
+            };
 
-            # a setgid program
-            locate =
-              { setgid = true;
-                owner = "root";
-                group = "mlocate";
-                source = "''${pkgs.locate}/bin/locate";
-              };
+          # a setgid program
+          locate =
+            { setgid = true;
+              owner = "root";
+              group = "mlocate";
+              source = "''${pkgs.locate}/bin/locate";
+            };
 
-            # a program with the CAP_NET_RAW capability
-            ping =
-              { owner = "root";
-                group = "root";
-                capabilities = "cap_net_raw+ep";
-                source = "''${pkgs.iputils.out}/bin/ping";
-              };
-          }
-        '';
+          # a program with the CAP_NET_RAW capability
+          ping =
+            { owner = "root";
+              group = "root";
+              capabilities = "cap_net_raw+ep";
+              source = "''${pkgs.iputils.out}/bin/ping";
+            };
+        }
+      '';
       description = ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
@@ -190,9 +170,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
@@ -203,31 +183,27 @@ in
   ###### implementation
   config = {
 
-    assertions = lib.mapAttrsToList
-      (name: opts:
-        { assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
-          message = ''
-            The security.wrappers.${name} wrapper is not valid:
-                setuid/setgid and capabilities are mutually exclusive.
-          '';
-        }
-      ) wrappers;
+    assertions = lib.mapAttrsToList (name: opts: {
+      assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+      message = ''
+        The security.wrappers.${name} wrapper is not valid:
+            setuid/setgid and capabilities are mutually exclusive.
+      '';
+    }) wrappers;
 
-    security.wrappers =
-      let
-        mkSetuidRoot = source:
-          { setuid = true;
-            owner = "root";
-            group = "root";
-            inherit source;
-          };
-      in
-      { # These are mount related wrappers that require the +s permission.
-        fusermount  = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
-        mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
-        umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
+    security.wrappers = let
+      mkSetuidRoot = source: {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        inherit source;
       };
+    in { # These are mount related wrappers that require the +s permission.
+      fusermount = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
+      fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
+      mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
+      umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
+    };
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
@@ -242,53 +218,53 @@ in
     '';
 
     security.apparmor.includes."nixos/security.wrappers" = ''
-      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
-        securityWrapper
-        pkgs.stdenv.cc.cc
-        pkgs.stdenv.cc.libc
-      ]}"
+      include "${
+        pkgs.apparmorRulesFromClosure { name = "security.wrappers"; } [
+          securityWrapper
+          pkgs.stdenv.cc.cc
+          pkgs.stdenv.cc.libc
+        ]
+      }"
     '';
 
     ###### wrappers activation script
     system.activationScripts.wrappers =
-      lib.stringAfter [ "specialfs" "users" ]
-        ''
-          chmod 755 "${parentWrapperDir}"
+      lib.stringAfter [ "specialfs" "users" ] ''
+        chmod 755 "${parentWrapperDir}"
 
-          # We want to place the tmpdirs for the wrappers to the parent dir.
-          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx "$wrapperDir"
+        # We want to place the tmpdirs for the wrappers to the parent dir.
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        chmod a+rx "$wrapperDir"
 
-          ${lib.concatStringsSep "\n" mkWrappedPrograms}
+        ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-          if [ -L ${wrapperDir} ]; then
-            # Atomically replace the symlink
-            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink -f ${wrapperDir})
-            if [ -e "${wrapperDir}-tmp" ]; then
-              rm --force --recursive "${wrapperDir}-tmp"
-            fi
-            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-            rm --force --recursive "$old"
-          else
-            # For initial setup
-            ln --symbolic "$wrapperDir" "${wrapperDir}"
+        if [ -L ${wrapperDir} ]; then
+          # Atomically replace the symlink
+          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+          old=$(readlink -f ${wrapperDir})
+          if [ -e "${wrapperDir}-tmp" ]; then
+            rm --force --recursive "${wrapperDir}-tmp"
           fi
-        '';
+          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+          rm --force --recursive "$old"
+        else
+          # For initial setup
+          ln --symbolic "$wrapperDir" "${wrapperDir}"
+        fi
+      '';
 
     ###### wrappers consistency checks
-    system.extraDependencies = lib.singleton (pkgs.runCommandLocal
-      "ensure-all-wrappers-paths-exist" { }
-      ''
+    system.extraDependencies = lib.singleton
+      (pkgs.runCommandLocal "ensure-all-wrappers-paths-exist" { } ''
         # make sure we produce output
         mkdir -p $out
 
         echo -n "Checking that Nix store paths of all wrapped programs exist... "
 
         declare -A wrappers
-        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v:
-          "wrappers['${n}']='${v.source}'") wrappers)}
+        ${lib.concatStringsSep "\n"
+        (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
 
         for name in "''${!wrappers[@]}"; do
           path="''${wrappers[$name]}"

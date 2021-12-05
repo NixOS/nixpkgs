@@ -1,14 +1,5 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, schema
-}:
+{ lib, beautifulsoup4, buildPythonPackage, click, fetchFromGitHub
+, pytestCheckHook, pythonOlder, pyyaml, requests, schema }:
 
 buildPythonPackage rec {
   pname = "policy-sentry";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-1wpy4WofqrPusOI2BHRqSHfXlRpbuLOx97egzSAbB8E=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    click
-    requests
-    pyyaml
-    schema
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 click requests pyyaml schema ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "policy_sentry" ];
 

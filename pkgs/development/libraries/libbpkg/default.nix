@@ -1,10 +1,5 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libbutl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ lib, stdenv, build2, fetchurl, libbutl
+, enableShared ? !stdenv.hostPlatform.isStatic, enableStatic ? !enableShared }:
 
 stdenv.mkDerivation rec {
   pname = "libbpkg";
@@ -16,16 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K5KkhJa4qsh3AMDtCV4eA7bh3oU5DYEYMAacLmDoulU=";
   };
 
-  nativeBuildInputs = [
-    build2
-  ];
-  buildInputs = [
-    libbutl
-  ];
+  nativeBuildInputs = [ build2 ];
+  buildInputs = [ libbutl ];
 
-  build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
-  ];
+  build2ConfigureFlags =
+    [ "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}" ];
 
   strictDeps = true;
 

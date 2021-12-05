@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, autoconf
-, automake
-, libtool
-, makeWrapper
-, cups
-, ghostscript
-, pkgsi686Linux
-, zlib
-}:
+{ lib, stdenv, fetchurl, unzip, autoconf, automake, libtool, makeWrapper, cups
+, ghostscript, pkgsi686Linux, zlib }:
 
 let
 
@@ -23,14 +12,12 @@ let
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-07.tar.gz";
+    url =
+      "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-07.tar.gz";
     sha256 = "01nxpg3h1c64p5skxv904fg5c4sblmif486vkij2v62wwn6l65pz";
   };
 
-in
-
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
@@ -140,7 +127,9 @@ stdenv.mkDerivation {
     # into $out.
     mkdir -p $out/libexec
     preload32=$out/libexec/libpreload32.so
-    ${i686_NIX_GCC}/bin/gcc -shared ${./preload.c} -o $preload32 -ldl -DOUT=\"$out\" -fPIC
+    ${i686_NIX_GCC}/bin/gcc -shared ${
+      ./preload.c
+    } -o $preload32 -ldl -DOUT=\"$out\" -fPIC
     wrapProgram "$out/bin/c3pldrv" \
       --set PRELOAD_DEBUG 1 \
       --set LD_PRELOAD $preload32 \
@@ -232,8 +221,6 @@ stdenv.mkDerivation {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [
-      kylesferrazza
-    ];
+    maintainers = with maintainers; [ kylesferrazza ];
   };
 }

@@ -5,11 +5,9 @@
 
 with lib;
 
-let
-  cfg = config.programs.java;
-in
+let cfg = config.programs.java;
 
-{
+in {
 
   options = {
 

@@ -15,14 +15,17 @@ with lib;
 let
   version = "1003.1-2008";
 
-  singleBinary = cmd: providers: let
-      provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
+  singleBinary = cmd: providers:
+    let
+      provider =
+        providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
     in runCommand "${cmd}-${provider.name}" {
       meta = {
         priority = 10;
-        platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
+        platforms =
+          lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
       };
       passthru = { inherit provider; };
       preferLocalBuild = true;
@@ -43,7 +46,7 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${pkgs.less.name}" {} ''
+  more_compat = runCommand "more-${pkgs.less.name}" { } ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';
@@ -62,17 +65,19 @@ let
       linux = pkgs.util-linux;
       darwin = pkgs.netbsd.column;
     };
-    eject = {
-      linux = pkgs.util-linux;
-    };
+    eject = { linux = pkgs.util-linux; };
     getconf = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
-              else pkgs.netbsd.getconf;
+      linux = if stdenv.hostPlatform.libc == "glibc" then
+        pkgs.stdenv.cc.libc
+      else
+        pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
-              else pkgs.netbsd.getent;
+      linux = if stdenv.hostPlatform.libc == "glibc" then
+        pkgs.stdenv.cc.libc
+      else
+        pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
     getopt = {
@@ -107,9 +112,7 @@ let
       linux = pkgs.glibc;
       darwin = pkgs.netbsd.locale;
     };
-    logger = {
-      linux = pkgs.util-linux;
-    };
+    logger = { linux = pkgs.util-linux; };
     more = {
       linux = pkgs.util-linux;
       darwin = more_compat;
@@ -158,15 +161,13 @@ let
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.shell_cmds;
     };
-    wall = {
-      linux = pkgs.util-linux;
-    };
+    wall = { linux = pkgs.util-linux; };
     watch = {
       linux = pkgs.procps;
 
       # watch is the only command from procps that builds currently on
       # Darwin. Unfortunately no other implementations exist currently!
-      darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      darwin = pkgs.callPackage ../os-specific/linux/procps-ng { };
     };
     write = {
       linux = pkgs.util-linux;
@@ -186,10 +187,22 @@ let
 
   # Compatibility derivations
   # Provided for old usage of these commands.
-  compat = with bins; lib.mapAttrs makeCompat {
-    procps = [ ps sysctl top watch ];
-    util-linux = [ fsck fdisk getopt hexdump mount
-                  script umount whereis write col column ];
-    nettools = [ arp hostname ifconfig netstat route ];
-  };
+  compat = with bins;
+    lib.mapAttrs makeCompat {
+      procps = [ ps sysctl top watch ];
+      util-linux = [
+        fsck
+        fdisk
+        getopt
+        hexdump
+        mount
+        script
+        umount
+        whereis
+        write
+        col
+        column
+      ];
+      nettools = [ arp hostname ifconfig netstat route ];
+    };
 in bins // compat

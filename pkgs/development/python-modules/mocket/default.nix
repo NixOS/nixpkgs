@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy3k
-, decorator
-, http-parser
-, python_magic
-, urllib3
-, pytestCheckHook
-, pytest-mock
-, aiohttp
-, gevent
-, redis
-, requests
-, sure
-, pook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, decorator
+, http-parser, python_magic, urllib3, pytestCheckHook, pytest-mock, aiohttp
+, gevent, redis, requests, sure, pook }:
 
 buildPythonPackage rec {
   pname = "mocket";
@@ -27,23 +12,10 @@ buildPythonPackage rec {
     sha256 = "1fcb4203ae257145b97c865135b3a064b47f20f42dde88c8579f43d88f1a7dfb";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    http-parser
-    python_magic
-    urllib3
-  ];
+  propagatedBuildInputs = [ decorator http-parser python_magic urllib3 ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-    aiohttp
-    gevent
-    redis
-    requests
-    sure
-    pook
-  ];
+  checkInputs =
+    [ pytestCheckHook pytest-mock aiohttp gevent redis requests sure pook ];
 
   pytestFlagsArray = [
     # Requires a live Redis instance
@@ -70,7 +42,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mocket" ];
 
   meta = with lib; {
-    description = "A socket mock framework - for all kinds of socket animals, web-clients included";
+    description =
+      "A socket mock framework - for all kinds of socket animals, web-clients included";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];

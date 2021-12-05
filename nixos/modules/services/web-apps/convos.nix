@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.convos;
-in
-{
+let cfg = config.services.convos;
+in {
   options.services.convos = {
     enable = mkEnableOption "Convos";
     listenPort = mkOption {
@@ -40,7 +38,8 @@ in
       environment = {
         CONVOS_HOME = "%S/convos";
         CONVOS_REVERSE_PROXY = if cfg.reverseProxy then "1" else "0";
-        MOJO_LISTEN = "http://${toString cfg.listenAddress}:${toString cfg.listenPort}";
+        MOJO_LISTEN =
+          "http://${toString cfg.listenAddress}:${toString cfg.listenPort}";
       };
       serviceConfig = {
         ExecStart = "${pkgs.convos}/bin/convos daemon";
@@ -62,7 +61,7 @@ in
         LockPersonality = true;
         RestrictRealtime = true;
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6"];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         SystemCallFilter = "@system-service";
         SystemCallArchitectures = "native";
         CapabilityBoundingSet = "";

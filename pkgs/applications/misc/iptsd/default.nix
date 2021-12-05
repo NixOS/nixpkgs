@@ -21,11 +21,8 @@ stdenv.mkDerivation rec {
       --replace "install_dir: unitdir" "install_dir: datadir" \
       --replace "install_dir: rulesdir" "install_dir: datadir" \
   '';
-  mesonFlags = [
-    "-Dsystemd=true"
-    "-Dsample_config=false"
-    "-Ddebug_tool=false"
-  ];
+  mesonFlags =
+    [ "-Dsystemd=true" "-Dsample_config=false" "-Ddebug_tool=false" ];
 
   meta = with lib; {
     description = "Userspace daemon for Intel Precise Touch & Stylus";

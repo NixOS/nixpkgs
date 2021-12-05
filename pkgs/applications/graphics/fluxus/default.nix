@@ -1,26 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, alsa-lib
-, bzip2
-, fftw
-, freeglut
-, freetype
-, glew
-, libjack2
-, libGL
-, libGLU
-, libjpeg
-, liblo
-, libpng
-, libsndfile
-, libtiff
-, ode
-, openal
-, openssl
-, racket_7_9
-, sconsPackages
-, zlib
-}:
+{ lib, stdenv, fetchFromGitLab, alsa-lib, bzip2, fftw, freeglut, freetype, glew
+, libjack2, libGL, libGLU, libjpeg, liblo, libpng, libsndfile, libtiff, ode
+, openal, openssl, racket_7_9, sconsPackages, zlib }:
 let
   libs = [
     alsa-lib
@@ -43,8 +23,7 @@ let
     zlib
   ];
   racket = racket_7_9;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "fluxus";
   version = "0.19";
   src = fetchFromGitLab {

@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, alsa-lib, udev, qtbase, qtsvg, qttools }:
+{ mkDerivation, lib, fetchFromGitLab, cmake, alsa-lib, udev, qtbase, qtsvg
+, qttools }:
 
 mkDerivation rec {
   pname = "qastools";

@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, funcsigs
-, six
-, pbr
-, python
-, pytest
+{ lib, buildPythonPackage, fetchPypi, isPy27, funcsigs, six, pbr, python, pytest
 }:
 
 buildPythonPackage rec {
@@ -31,9 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   meta = with lib; {
     description = "Mock objects for Python";

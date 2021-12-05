@@ -6,9 +6,8 @@ let
   inherit (pkgs) htpdate;
 
   cfg = config.services.htpdate;
-in
 
-{
+in {
 
   ###### interface
 

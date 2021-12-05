@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Enables to "make SCRIPTS_DIR=... install" https://github.com/hoyon/mpv-mpris/pull/38
     (fetchpatch {
-      url = "https://github.com/hoyon/mpv-mpris/commit/f1482350868bf20e4575f923943ec998469b255e.patch";
+      url =
+        "https://github.com/hoyon/mpv-mpris/commit/f1482350868bf20e4575f923943ec998469b255e.patch";
       sha256 = "1lqy867wpmj6hv3zgi6g679a7x3dv5skpw24hwd05b28galnyd4l";
     })
   ];

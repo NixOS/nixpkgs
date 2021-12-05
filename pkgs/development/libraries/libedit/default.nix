@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses ];
 
   postInstall = ''
-    find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \
+    find $out/lib -type f | grep '\.\(la\|pc\)$' | xargs sed -i \
       -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
   '';
 

@@ -1,32 +1,7 @@
-{ stdenv
-, lib
-, fetchurl
-, gettext
-, meson
-, ninja
-, pkg-config
-, asciidoc
-, gobject-introspection
-, python3
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxml2
-, glib
-, wrapGAppsNoGuiHook
-, vala
-, sqlite
-, libxslt
-, libstemmer
-, gnome
-, icu
-, libuuid
-, libsoup
-, libsoup_3
-, json-glib
-, systemd
-, dbus
-, substituteAll
-}:
+{ stdenv, lib, fetchurl, gettext, meson, ninja, pkg-config, asciidoc
+, gobject-introspection, python3, docbook-xsl-nons, docbook_xml_dtd_45, libxml2
+, glib, wrapGAppsNoGuiHook, vala, sqlite, libxslt, libstemmer, gnome, icu
+, libuuid, libsoup, libsoup_3, json-glib, systemd, dbus, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
@@ -35,7 +10,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "GEfgiznm5h2EhzWqH5f32WwDggFlP6DXy56Bs365wDo=";
   };
 
@@ -63,26 +40,12 @@ stdenv.mkDerivation rec {
     dbus # used for checks and pkg-config to install dbus service/s
   ];
 
-  buildInputs = [
-    glib
-    libxml2
-    sqlite
-    icu
-    libsoup
-    libsoup_3
-    libuuid
-    json-glib
-    libstemmer
-  ];
+  buildInputs =
+    [ glib libxml2 sqlite icu libsoup libsoup_3 libuuid json-glib libstemmer ];
 
-  checkInputs = with python3.pkgs; [
-    pygobject3
-    tappy
-  ];
+  checkInputs = with python3.pkgs; [ pygobject3 tappy ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-  ];
+  mesonFlags = [ "-Ddocs=true" ];
 
   doCheck = true;
 
@@ -130,7 +93,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
-    description = "Desktop-neutral user information store, search tool and indexer";
+    description =
+      "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

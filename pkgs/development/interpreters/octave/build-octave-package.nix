@@ -4,14 +4,8 @@
 # additional configuration provided, and the namePrefix to use (based on the
 # pname and version of Octave), the octave package, etc.
 
-{ lib
-, stdenv
-, config
-, octave
-, texinfo
-, computeRequiredOctavePackages
-, writeRequiredOctavePackagesHook
-}:
+{ lib, stdenv, config, octave, texinfo, computeRequiredOctavePackages
+, writeRequiredOctavePackagesHook }:
 
 # The inner function contains information required to build the individual
 # libraries.
@@ -19,48 +13,44 @@
 
 , src
 
-, dontPatch ? false
-, patches ? []
-, patchPhase ? ""
+, dontPatch ? false, patches ? [ ], patchPhase ? ""
 
 , enableParallelBuilding ? true
-# Build-time dependencies for the package, which were compiled for the system compiling this.
-, nativeBuildInputs ? []
+  # Build-time dependencies for the package, which were compiled for the system compiling this.
+, nativeBuildInputs ? [ ]
 
-# Build-time dependencies for the package, which may not have been compiled for the system compiling this.
-, buildInputs ? []
+  # Build-time dependencies for the package, which may not have been compiled for the system compiling this.
+, buildInputs ? [ ]
 
-# Propagate build dependencies so in case we have A -> B -> C,
-# C can import package A propagated by B
-# Run-time dependencies for the package.
-, propagatedBuildInputs ? []
+  # Propagate build dependencies so in case we have A -> B -> C,
+  # C can import package A propagated by B
+  # Run-time dependencies for the package.
+, propagatedBuildInputs ? [ ]
 
-# Octave packages that are required at runtime for this one.
-# These behave similarly to propagatedBuildInputs, where if
-# package A is needed by B, and C needs B, then C also requires A.
-# The main difference between these and propagatedBuildInputs is
-# during the package's installation into octave, where all
-# requiredOctavePackages are ALSO installed into octave.
-, requiredOctavePackages ? []
+  # Octave packages that are required at runtime for this one.
+  # These behave similarly to propagatedBuildInputs, where if
+  # package A is needed by B, and C needs B, then C also requires A.
+  # The main difference between these and propagatedBuildInputs is
+  # during the package's installation into octave, where all
+  # requiredOctavePackages are ALSO installed into octave.
+, requiredOctavePackages ? [ ]
 
 , preBuild ? ""
 
-, meta ? {}
+, meta ? { }
 
-, passthru ? {}
+, passthru ? { }
 
-, ... } @ attrs:
+, ... }@attrs:
 
 let
-  requiredOctavePackages' = computeRequiredOctavePackages requiredOctavePackages;
+  requiredOctavePackages' =
+    computeRequiredOctavePackages requiredOctavePackages;
 
   # Must use attrs.nativeBuildInputs before they are removed by the removeAttrs
   # below, or everything fails.
-  nativeBuildInputs' = [
-    octave
-    writeRequiredOctavePackagesHook
-  ]
-  ++ nativeBuildInputs;
+  nativeBuildInputs' = [ octave writeRequiredOctavePackagesHook ]
+    ++ nativeBuildInputs;
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
@@ -99,14 +89,12 @@ in stdenv.mkDerivation ({
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ texinfo ];
 
-  preBuild = if preBuild == "" then
-    ''
-      # This trickery is needed because Octave expects a single directory inside
-      # at the top-most level of the tarball.
-      tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
-    ''
-             else
-               preBuild;
+  preBuild = if preBuild == "" then ''
+    # This trickery is needed because Octave expects a single directory inside
+    # at the top-most level of the tarball.
+    tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
+  '' else
+    preBuild;
 
   buildPhase = ''
     runHook preBuild

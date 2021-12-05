@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libiconv, bison, ncurses, perl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libiconv, bison, ncurses
+, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "lifelines";
@@ -16,17 +17,13 @@ stdenv.mkDerivation rec {
     #  https://github.com/lifelines/lifelines/pull/437
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/lifelines/lifelines/commit/e04ce2794d458c440787c191877fbbc0784447bd.patch";
+      url =
+        "https://github.com/lifelines/lifelines/commit/e04ce2794d458c440787c191877fbbc0784447bd.patch";
       sha256 = "1smnz4z5hfjas79bfvlnpw9x8199a5g0p9cvhf17zpcnz1432kg7";
     })
   ];
 
-  buildInputs = [
-    gettext
-    libiconv
-    ncurses
-    perl
-  ];
+  buildInputs = [ gettext libiconv ncurses perl ];
   nativeBuildInputs = [ autoreconfHook bison ];
 
   meta = with lib; {

@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
-, sdcc
-, nmigen
-, fx2
-, libusb1
-, aiohttp
-, pyvcd
-, bitarray
-, crcmod
-, yosys
-, icestorm
-, nextpnr
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, setuptools-scm
+, pythonOlder, sdcc, nmigen, fx2, libusb1, aiohttp, pyvcd, bitarray, crcmod
+, yosys, icestorm, nextpnr }:
 
 buildPythonPackage rec {
   pname = "glasgow";
@@ -33,16 +18,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm sdcc ];
 
-  propagatedBuildInputs = [
-    setuptools
-    nmigen
-    fx2
-    libusb1
-    aiohttp
-    pyvcd
-    bitarray
-    crcmod
-  ];
+  propagatedBuildInputs =
+    [ setuptools nmigen fx2 libusb1 aiohttp pyvcd bitarray crcmod ];
 
   checkInputs = [ yosys icestorm nextpnr ];
 
@@ -63,9 +40,15 @@ buildPythonPackage rec {
   '';
 
   makeWrapperArgs = [
-    "--set" "YOSYS" "${yosys}/bin/yosys"
-    "--set" "ICEPACK" "${icestorm}/bin/icepack"
-    "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
+    "--set"
+    "YOSYS"
+    "${yosys}/bin/yosys"
+    "--set"
+    "ICEPACK"
+    "${icestorm}/bin/icepack"
+    "--set"
+    "NEXTPNR_ICE40"
+    "${nextpnr}/bin/nextpnr-ice40"
   ];
 
   meta = with lib; {

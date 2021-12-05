@@ -1,4 +1,5 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, kdnssd }:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames
+, kdnssd }:
 
 mkDerivation {
   pname = "knavalbattle";
@@ -9,14 +10,6 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    libkdegames
-    kdoctools
-    ki18n
-    kio
-    kdnssd
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ libkdegames kdoctools ki18n kio kdnssd ];
 }

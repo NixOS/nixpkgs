@@ -1,16 +1,15 @@
 { lib, ... }: {
   options.submodule = lib.mkOption {
     inherit (lib.evalModules {
-      modules = [
-        {
-          options.inner = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-          };
-        }
-      ];
-    }) type;
-    default = {};
+      modules = [{
+        options.inner = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        };
+      }];
+    })
+      type;
+    default = { };
   };
 
   config.submodule = lib.mkMerge [

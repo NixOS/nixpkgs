@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
@@ -15,29 +12,25 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-0FlXHUjoeZ7XfmOSlY30b13i2t/4vyWwhDKXquXKaJE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    cached-property
-    click
-    colorama
-    configparser
-    diff-cover
-    jinja2
-    oyaml
-    pathspec
-    pytest
-    tblib
-    toml
-    tqdm
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      appdirs
+      cached-property
+      click
+      colorama
+      configparser
+      diff-cover
+      jinja2
+      oyaml
+      pathspec
+      pytest
+      tblib
+      toml
+      tqdm
+      typing-extensions
+    ] ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
-  checkInputs = with python3.pkgs; [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ hypothesis pytestCheckHook ];
 
   disabledTestPaths = [
     # Don't run the plugin related tests

@@ -6,20 +6,19 @@ stdenv.mkDerivation {
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = ''
     mv src $out
-    rm -rf $out/{${lib.concatStringsSep "," ([
-      "ci"
-      "doc"
-      "etc"
-      "grammar"
-      "llvm-project"
-      "llvm-emscripten"
-      "rtstartup"
-      "rustllvm"
-      "test"
-      "vendor"
-    ] ++ lib.optionals minimalContent [
-      "tools"
-      "stdarch"
-    ])}}
+    rm -rf $out/{${
+      lib.concatStringsSep "," ([
+        "ci"
+        "doc"
+        "etc"
+        "grammar"
+        "llvm-project"
+        "llvm-emscripten"
+        "rtstartup"
+        "rustllvm"
+        "test"
+        "vendor"
+      ] ++ lib.optionals minimalContent [ "tools" "stdarch" ])
+    }}
   '';
 }

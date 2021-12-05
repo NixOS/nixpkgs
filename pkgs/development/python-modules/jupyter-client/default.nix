@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, entrypoints
-, jupyter_core
-, nest-asyncio
-, python-dateutil
-, pyzmq
-, tornado
-, traitlets
-, isPyPy
-, py
-}:
+{ lib, buildPythonPackage, fetchPypi, entrypoints, jupyter_core, nest-asyncio
+, python-dateutil, pyzmq, tornado, traitlets, isPyPy, py }:
 
 buildPythonPackage rec {
   pname = "jupyter_client";

@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, xxd
-, cairo
-, fluidsynth
-, libX11
-, libjack2
-, alsa-lib
-, liblo
-, libsigcxx
-, libsmf
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, xxd, cairo, fluidsynth, libX11
+, libjack2, alsa-lib, liblo, libsigcxx, libsmf }:
 
 stdenv.mkDerivation rec {
   pname = "mamba";
@@ -25,7 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config xxd ];
-  buildInputs = [ cairo fluidsynth libX11 libjack2 alsa-lib liblo libsigcxx libsmf ];
+  buildInputs =
+    [ cairo fluidsynth libX11 libjack2 alsa-lib liblo libsigcxx libsmf ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

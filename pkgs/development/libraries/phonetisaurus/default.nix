@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, openfst
-, pkg-config
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, openfst, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "phonetisaurus";
@@ -23,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 openfst ];
 
   meta = with lib; {
-    description = "Framework for Grapheme-to-phoneme models for speech recognition using the OpenFst framework";
+    description =
+      "Framework for Grapheme-to-phoneme models for speech recognition using the OpenFst framework";
     inherit (src.meta) homepage;
     license = licenses.bsd3;
     maintainers = with maintainers; [ mic92 ];

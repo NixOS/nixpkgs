@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-}:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "rtsp-simple-server";
@@ -27,8 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description =
-      "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams"
-    ;
+      "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams";
     inherit (src.meta) homepage;
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

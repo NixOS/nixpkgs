@@ -1,5 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub
-, standard-library }:
+{ lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
   pname = "agdarsec";

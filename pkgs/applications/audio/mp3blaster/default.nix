@@ -16,21 +16,17 @@ stdenv.mkDerivation rec {
     #  https://github.com/stragulus/mp3blaster/pull/8
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/stragulus/mp3blaster/commit/62168cba5eaba6ffe56943552837cf033cfa96ed.patch";
+      url =
+        "https://github.com/stragulus/mp3blaster/commit/62168cba5eaba6ffe56943552837cf033cfa96ed.patch";
       sha256 = "088l27kl1l58lwxfnw5x2n64sdjy925ycphni3icwag7zvpj0xz1";
     })
   ];
 
-  buildInputs = [
-    ncurses
-    libvorbis
-  ] ++ lib.optional stdenv.isDarwin SDL;
+  buildInputs = [ ncurses libvorbis ] ++ lib.optional stdenv.isDarwin SDL;
 
-  NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-narrowing"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-reserved-user-defined-literal"
-  ]);
+  NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
+    ++ lib.optionals stdenv.cc.isClang
+    [ "-Wno-reserved-user-defined-literal" ]);
 
   meta = with lib; {
     description = "An audio player for the text console";

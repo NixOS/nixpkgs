@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-typesetting";
   version = "20210531-git";
 
@@ -9,13 +8,14 @@ rec {
   deps = [ args."cl-pdf" args."iterate" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-typesetting/2021-05-31/cl-typesetting-20210531-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-typesetting/2021-05-31/cl-typesetting-20210531-git.tgz";
     sha256 = "1gv21dsfghf8y2d7f5w5m8fn0q5l7xb8z7qw11wnnnd7msk11dd5";
   };
 
   packageName = "cl-typesetting";
 
-  asdFilesToKeep = ["cl-typesetting.asd"];
+  asdFilesToKeep = [ "cl-typesetting.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-typesetting DESCRIPTION Common Lisp Typesetting system SHA256
@@ -26,4 +26,5 @@ rec {
     ((NAME cl-pdf FILENAME cl-pdf) (NAME iterate FILENAME iterate)
      (NAME zpb-ttf FILENAME zpb-ttf))
     DEPENDENCIES (cl-pdf iterate zpb-ttf) VERSION 20210531-git SIBLINGS
-    (xml-render cl-pdf-doc) PARASITES NIL) */
+    (xml-render cl-pdf-doc) PARASITES NIL)
+*/

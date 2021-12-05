@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core
+, google-cloud-core, google-cloud-testutils, libcst, mock, proto-plus
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
@@ -20,19 +11,10 @@ buildPythonPackage rec {
     sha256 = "38772cc60ef4315d25a7dbeef5ddab9e75674722cb4500bc69b295e5d0af6a97";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    google-cloud-core
-    libcst
-    proto-plus
-  ];
+  propagatedBuildInputs =
+    [ google-api-core google-cloud-core libcst proto-plus ];
 
-  checkInputs = [
-    google-cloud-testutils
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # prevent shadowing imports

@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, autoreconfHook}:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "CUnit";
   version = "2.1-3";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool];
+  buildInputs = [ autoconf automake libtool ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/cunit/CUnit/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/cunit/CUnit/${version}/${pname}-${version}.tar.bz2";
     sha256 = "057j82da9vv4li4z5ri3227ybd18nzyq81f6gsvhifs5z0vr3cpm";
   };
 

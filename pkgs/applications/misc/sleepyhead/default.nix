@@ -1,4 +1,5 @@
-{ lib, stdenv, mkDerivation, fetchgit, zlib, libGLU, libX11, qtbase, qtwebkit, qtserialport, wrapQtAppsHook }:
+{ lib, stdenv, mkDerivation, fetchgit, zlib, libGLU, libX11, qtbase, qtwebkit
+, qtserialport, wrapQtAppsHook }:
 
 let
   name = "sleepyhead-${version}";
@@ -12,12 +13,7 @@ in mkDerivation {
     sha256 = "0448z8gyaxpgpnksg34lzmffj36jdpm0ir4xxa5gvzagkx0wk07h";
   };
 
-  buildInputs = [
-    qtbase qtwebkit qtserialport
-    zlib
-    libGLU
-    libX11
-  ];
+  buildInputs = [ qtbase qtwebkit qtserialport zlib libGLU libX11 ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
@@ -35,7 +31,8 @@ in mkDerivation {
 
   meta = with lib; {
     homepage = "https://sleepyhead.jedimark.net/";
-    description = "Review and explore data produced by CPAP and related machines";
+    description =
+      "Review and explore data produced by CPAP and related machines";
     longDescription = ''
       SleepyHead is cross platform, opensource sleep tracking program for reviewing CPAP and Oximetry data, which are devices used in the treatment of Sleep Disorders like Obstructive Sleep Apnea.
     '';

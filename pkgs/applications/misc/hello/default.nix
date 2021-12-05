@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, testVersion
-, hello
-}:
+{ lib, stdenv, fetchurl, testVersion, hello }:
 
 stdenv.mkDerivation rec {
   pname = "hello";
@@ -16,8 +11,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.version =
-    testVersion { package = hello; };
+  passthru.tests.version = testVersion { package = hello; };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
@@ -26,7 +20,8 @@ stdenv.mkDerivation rec {
       It is fully customizable.
     '';
     homepage = "https://www.gnu.org/software/hello/manual/";
-    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}";
+    changelog =
+      "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;

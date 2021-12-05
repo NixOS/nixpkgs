@@ -1,32 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, libhandy
-, libxkbcommon
-, libgudev
-, callaudiod
-, pulseaudio
-, glib
-, gtk3
-, gnome
-, gcr
-, pam
-, systemd
-, upower
-, wayland
-, dbus
-, xvfb-run
-, phoc
-, feedbackd
-, networkmanager
-, polkit
-, libsecret
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, python3, wrapGAppsHook
+, libhandy, libxkbcommon, libgudev, callaudiod, pulseaudio, glib, gtk3, gnome
+, gcr, pam, systemd, upower, wayland, dbus, xvfb-run, phoc, feedbackd
+, networkmanager, polkit, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
@@ -38,17 +13,12 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    fetchSubmodules =
+      true; # including gvc and libcall-ui which are designated as subprojects
     sha256 = "sha256-pN2IWJDsQoTSOUki5gKhIucFYlYchzrqKHQYq6o4EkI=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wrapGAppsHook ];
 
   buildInputs = [
     phoc
@@ -73,10 +43,7 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
-    dbus
-    xvfb-run
-  ];
+  checkInputs = [ dbus xvfb-run ];
 
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
@@ -112,11 +79,7 @@ stdenv.mkDerivation rec {
     rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
-  passthru = {
-    providedSessions = [
-     "sm.puri.Phosh"
-    ];
-  };
+  passthru = { providedSessions = [ "sm.puri.Phosh" ]; };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";

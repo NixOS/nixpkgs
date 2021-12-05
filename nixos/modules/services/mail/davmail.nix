@@ -8,92 +8,95 @@ let
 
   configType = with types;
     oneOf [ (attrsOf configType) str int bool ] // {
-      description = "davmail config type (str, int, bool or attribute set thereof)";
+      description =
+        "davmail config type (str, int, bool or attribute set thereof)";
     };
 
   toStr = val: if isBool val then boolToString val else toString val;
 
-  linesForAttrs = attrs: concatMap (name: let value = attrs.${name}; in
-    if isAttrs value
-      then map (line: name + "." + line) (linesForAttrs value)
-      else [ "${name}=${toStr value}" ]
-  ) (attrNames attrs);
+  linesForAttrs = attrs:
+    concatMap (name:
+      let value = attrs.${name};
+      in if isAttrs value then
+        map (line: name + "." + line) (linesForAttrs value)
+      else
+        [ "${name}=${toStr value}" ]) (attrNames attrs);
 
-  configFile = pkgs.writeText "davmail.properties" (concatStringsSep "\n" (linesForAttrs cfg.config));
+  configFile = pkgs.writeText "davmail.properties"
+    (concatStringsSep "\n" (linesForAttrs cfg.config));
 
-in
+in {
+  options.services.davmail = {
+    enable = mkEnableOption "davmail, an MS Exchange gateway";
 
-  {
-    options.services.davmail = {
-      enable = mkEnableOption "davmail, an MS Exchange gateway";
+    url = mkOption {
+      type = types.str;
+      description =
+        "Outlook Web Access URL to access the exchange server, i.e. the base webmail URL.";
+      example = "https://outlook.office365.com/EWS/Exchange.asmx";
+    };
 
-      url = mkOption {
-        type = types.str;
-        description = "Outlook Web Access URL to access the exchange server, i.e. the base webmail URL.";
-        example = "https://outlook.office365.com/EWS/Exchange.asmx";
+    config = mkOption {
+      type = configType;
+      default = { };
+      description = ''
+        Davmail configuration. Refer to
+        <link xlink:href="http://davmail.sourceforge.net/serversetup.html"/>
+        and <link xlink:href="http://davmail.sourceforge.net/advanced.html"/>
+        for details on supported values.
+      '';
+      example = literalExpression ''
+        {
+          davmail.allowRemote = true;
+          davmail.imapPort = 55555;
+          davmail.bindAddress = "10.0.1.2";
+          davmail.smtpSaveInSent = true;
+          davmail.folderSizeLimit = 10;
+          davmail.caldavAutoSchedule = false;
+          log4j.logger.rootLogger = "DEBUG";
+        }
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
+
+    services.davmail.config = {
+      davmail = mapAttrs (name: mkDefault) {
+        server = true;
+        disableUpdateCheck = true;
+        logFilePath = "/var/log/davmail/davmail.log";
+        logFileSize = "1MB";
+        mode = "auto";
+        url = cfg.url;
+        caldavPort = 1080;
+        imapPort = 1143;
+        ldapPort = 1389;
+        popPort = 1110;
+        smtpPort = 1025;
       };
-
-      config = mkOption {
-        type = configType;
-        default = {};
-        description = ''
-          Davmail configuration. Refer to
-          <link xlink:href="http://davmail.sourceforge.net/serversetup.html"/>
-          and <link xlink:href="http://davmail.sourceforge.net/advanced.html"/>
-          for details on supported values.
-        '';
-        example = literalExpression ''
-          {
-            davmail.allowRemote = true;
-            davmail.imapPort = 55555;
-            davmail.bindAddress = "10.0.1.2";
-            davmail.smtpSaveInSent = true;
-            davmail.folderSizeLimit = 10;
-            davmail.caldavAutoSchedule = false;
-            log4j.logger.rootLogger = "DEBUG";
-          }
-        '';
+      log4j = {
+        logger.davmail = mkDefault "WARN";
+        logger.httpclient.wire = mkDefault "WARN";
+        logger.org.apache.commons.httpclient = mkDefault "WARN";
+        rootLogger = mkDefault "WARN";
       };
     };
 
-    config = mkIf cfg.enable {
+    systemd.services.davmail = {
+      description = "DavMail POP/IMAP/SMTP Exchange Gateway";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-      services.davmail.config = {
-        davmail = mapAttrs (name: mkDefault) {
-          server = true;
-          disableUpdateCheck = true;
-          logFilePath = "/var/log/davmail/davmail.log";
-          logFileSize = "1MB";
-          mode = "auto";
-          url = cfg.url;
-          caldavPort = 1080;
-          imapPort = 1143;
-          ldapPort = 1389;
-          popPort = 1110;
-          smtpPort = 1025;
-        };
-        log4j = {
-          logger.davmail = mkDefault "WARN";
-          logger.httpclient.wire = mkDefault "WARN";
-          logger.org.apache.commons.httpclient = mkDefault "WARN";
-          rootLogger = mkDefault "WARN";
-        };
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.davmail}/bin/davmail ${configFile}";
+        Restart = "on-failure";
+        DynamicUser = "yes";
+        LogsDirectory = "davmail";
       };
-
-      systemd.services.davmail = {
-        description = "DavMail POP/IMAP/SMTP Exchange Gateway";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${pkgs.davmail}/bin/davmail ${configFile}";
-          Restart = "on-failure";
-          DynamicUser = "yes";
-          LogsDirectory = "davmail";
-        };
-      };
-
-      environment.systemPackages = [ pkgs.davmail ];
     };
-  }
+
+    environment.systemPackages = [ pkgs.davmail ];
+  };
+}

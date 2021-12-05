@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, six
-, pycrypto
-}:
+{ lib, buildPythonPackage, fetchPypi, django, six, pycrypto }:
 
 buildPythonPackage rec {
   pname = "libthumbor";

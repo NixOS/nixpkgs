@@ -6,9 +6,7 @@ let
 
   cfg = config.services.ocserv;
 
-in
-
-{
+in {
   options.services.ocserv = {
     enable = mkEnableOption "ocserv";
 
@@ -80,7 +78,7 @@ in
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
-    security.pam.services.ocserv = {};
+    security.pam.services.ocserv = { };
 
     systemd.services.ocserv = {
       description = "OpenConnect SSL VPN server";
@@ -91,7 +89,8 @@ in
       serviceConfig = {
         PrivateTmp = true;
         PIDFile = "/run/ocserv.pid";
-        ExecStart = "${pkgs.ocserv}/bin/ocserv --foreground --pid-file /run/ocesrv.pid --config /etc/ocserv/ocserv.conf";
+        ExecStart =
+          "${pkgs.ocserv}/bin/ocserv --foreground --pid-file /run/ocesrv.pid --config /etc/ocserv/ocserv.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

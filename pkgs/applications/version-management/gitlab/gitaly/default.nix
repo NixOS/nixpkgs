@@ -1,5 +1,5 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
+{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby, bundlerEnv
+, pkg-config
 # libgit2 + dependencies
 , libgit2, openssl, zlib, pcre, http-parser }:
 
@@ -21,23 +21,22 @@ let
     inherit ruby;
     copyGemFiles = true;
     gemdir = ./.;
-    gemset =
-      let x = import (gemdir + "/gemset.nix");
-      in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ../fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
+    gemset = let x = import (gemdir + "/gemset.nix");
+    in x // {
+      # grpc expects the AR environment variable to contain `ar rpc`. See the
+      # discussion in nixpkgs #63056.
+      grpc = x.grpc // {
+        patches = [ ../fix-grpc-ar.patch ];
+        dontBuild = false;
       };
+    };
   };
 
   version = "14.5.1";
-  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
-in
+  gitaly_package =
+    "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 
-buildGoModule {
+in buildGoModule {
   pname = "gitaly";
   inherit version;
 
@@ -50,15 +49,15 @@ buildGoModule {
 
   vendorSha256 = "sha256-ZLd4E3+e25Hqmd6ZyF3X6BveMEg7OF0FX9IvNBWn3v0=";
 
-  passthru = {
-    inherit rubyEnv;
-  };
+  passthru = { inherit rubyEnv; };
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+  ldflags =
+    "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
 
   tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser ];
+  buildInputs =
+    [ rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser ];
   doCheck = false;
 
   postInstall = ''
@@ -71,7 +70,8 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
-    description = "A Git RPC service for handling all the git calls made by GitLab";
+    description =
+      "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz talyz ];
     license = licenses.mit;

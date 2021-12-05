@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "1p0r15ihmnmrybf12cycbav80sdj2dv2kry66f4hjfjn6k8zb0dc";
 
   meta = with lib; {
-    description = "Hierarchical Deterministic Key Derivation for the Internet Computer";
+    description =
+      "Hierarchical Deterministic Key Derivation for the Internet Computer";
     homepage = "https://github.com/dfinity/keysmith";
     license = licenses.mit;
     maintainers = with maintainers; [ imalison ];

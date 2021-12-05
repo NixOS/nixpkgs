@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, procps }:
+{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2
+, procps }:
 
 stdenv.mkDerivation rec {
   pname = "fancy-motd";
@@ -37,7 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fancy, colorful MOTD written in bash. Server status at a glance.";
+    description =
+      "Fancy, colorful MOTD written in bash. Server status at a glance.";
     homepage = "https://github.com/bcyran/fancy-motd";
     license = licenses.mit;
     maintainers = with maintainers; [ rhoriguchi ];

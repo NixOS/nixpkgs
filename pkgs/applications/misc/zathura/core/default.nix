@@ -1,10 +1,6 @@
-{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
-, appstream-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2, check
-, sqlite, glib, texlive, libintl, libseccomp
-, file, librsvg
-, gtk-mac-integration
-}:
+{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config, appstream-glib
+, desktop-file-utils, python3, gtk, girara, gettext, libxml2, check, sqlite
+, glib, texlive, libintl, libseccomp, file, librsvg, gtk-mac-integration }:
 
 with lib;
 
@@ -13,7 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.4.8";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    url =
+      "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
     sha256 = "1nr0ym1mi2afk4ycdf1ppmkcv7i7hyzwn4p3r4m0j2qm3nvaiami";
   };
 
@@ -32,14 +29,20 @@ stdenv.mkDerivation rec {
   ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 check appstream-glib
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    python3.pkgs.sphinx
+    gettext
+    wrapGAppsHook
+    libxml2
+    check
+    appstream-glib
   ];
 
-  buildInputs = [
-    gtk girara libintl sqlite glib file librsvg
-    texlive.bin.core
-  ] ++ optional stdenv.isLinux libseccomp
+  buildInputs = [ gtk girara libintl sqlite glib file librsvg texlive.bin.core ]
+    ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;

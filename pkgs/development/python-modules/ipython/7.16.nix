@@ -1,23 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 # Build dependencies
 , glibcLocales
 # Test dependencies
-, nose
-, pygments
+, nose, pygments
 # Runtime dependencies
-, jedi
-, decorator
-, pickleshare
-, traitlets
-, prompt-toolkit
-, pexpect
-, appnope
-, backcall
-}:
+, jedi, decorator, pickleshare, traitlets, prompt-toolkit, pexpect, appnope
+, backcall }:
 
 buildPythonPackage rec {
   pname = "ipython";
@@ -46,9 +34,9 @@ buildPythonPackage rec {
     pygments
     pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 
@@ -56,9 +44,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  pythonImportsCheck = [
-    "IPython"
-  ];
+  pythonImportsCheck = [ "IPython" ];
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";

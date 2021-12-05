@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, cmake
-, fetchPypi
-, isPy27
-, nbval
-, numpy
-, protobuf
-, pytestCheckHook
-, six
-, tabulate
-, typing-extensions
-}:
+{ lib, buildPythonPackage, cmake, fetchPypi, isPy27, nbval, numpy, protobuf
+, pytestCheckHook, six, tabulate, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "onnx";
@@ -24,22 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-JNc8p9/X5sczmUT4lVS0AQcZiZM3kk/KFEfY8bXbUNY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
-    protobuf
-    numpy
-    six
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ protobuf numpy six typing-extensions ];
 
-  checkInputs = [
-    nbval
-    pytestCheckHook
-    tabulate
-  ];
+  checkInputs = [ nbval pytestCheckHook tabulate ];
 
   postPatch = ''
     chmod +x tools/protoc-gen-mypy.sh.in
@@ -61,9 +39,7 @@ buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "onnx"
-  ];
+  pythonImportsCheck = [ "onnx" ];
 
   meta = with lib; {
     description = "Open Neural Network Exchange";

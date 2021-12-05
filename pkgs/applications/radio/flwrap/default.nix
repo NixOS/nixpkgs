@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, pkg-config
-}:
+{ lib, stdenv, fetchurl, fltk13, libjpeg, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.3.5";
@@ -15,14 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qqivqkkravcg7j45740xfky2q3k7czqpkj6y364qff424q2pppg";
   };
 
-  buildInputs = [
-    fltk13
-    libjpeg
-  ];
+  buildInputs = [ fltk13 libjpeg ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = {
     description = "Digital modem file transfer program";

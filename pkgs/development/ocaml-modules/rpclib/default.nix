@@ -1,7 +1,5 @@
-{ lib, fetchurl, buildDunePackage
-, alcotest
-, base64, cmdliner, rresult, xmlm, yojson
-}:
+{ lib, fetchurl, buildDunePackage, alcotest, base64, cmdliner, rresult, xmlm
+, yojson }:
 
 buildDunePackage rec {
   pname = "rpclib";
@@ -10,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-rpc/releases/download/v${version}/rpclib-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-rpc/releases/download/v${version}/rpclib-v${version}.tbz";
     sha256 = "0fbajg8wq8hjhkvvfnq68br0m0pa8zf2qzadhfgi2nnr9713rada";
   };
 

@@ -16,7 +16,8 @@ buildGoModule rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
   meta = with lib; {
-    description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
+    description =
+      "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://github.com/davidnewhall/unpackerr";
     maintainers = with maintainers; [ nullx76 ];
     license = licenses.mit;

@@ -1,25 +1,15 @@
-{ lib
-, fetchPypi
-, python
-, buildPythonPackage
-, gfortran
-, pytest
-, blas
-, lapack
-, writeTextFile
-, isPyPy
-, cython
-, setuptoolsBuildHook
- }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, lapack
+, writeTextFile, isPyPy, cython, setuptoolsBuildHook }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   cfg = writeTextFile {
     name = "site.cfg";
-    text = (lib.generators.toINI {} {
+    text = (lib.generators.toINI { } {
       ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        include_dirs =
+          "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
         runtime_library_dirs = "${blas}/lib:${lapack}/lib";
         libraries = "lapack,lapacke,blas,cblas";
@@ -69,7 +59,8 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+  doCheck =
+    !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkPhase = ''
     runHook preCheck
@@ -88,7 +79,7 @@ in buildPythonPackage rec {
 
   # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
+  NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

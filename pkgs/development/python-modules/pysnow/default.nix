@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry
-, brotli
-, ijson
-, nose
-, httpretty
-, requests_oauthlib
-, python_magic
-, pytz
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry, brotli, ijson, nose
+, httpretty, requests_oauthlib, python_magic, pytz }:
 
 buildPythonPackage rec {
   pname = "pysnow";
@@ -32,13 +22,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [
-    brotli
-    ijson
-    python_magic
-    pytz
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ brotli ijson python_magic pytz requests_oauthlib ];
 
   checkInputs = [ nose httpretty ];
   checkPhase = ''

@@ -1,20 +1,8 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-  # Python Inputs
-, decorator
-, docplex
-, networkx
-, numpy
-, qiskit-terra
-, scipy
-  # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
-, qiskit-aer
-}:
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub
+# Python Inputs
+, decorator, docplex, networkx, numpy, qiskit-terra, scipy
+# Check Inputs
+, pytestCheckHook, ddt, pylatexenc, qiskit-aer }:
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
@@ -33,21 +21,10 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "networkx>=2.2,<2.6" "networkx"
   '';
 
-  propagatedBuildInputs = [
-    docplex
-    decorator
-    networkx
-    numpy
-    qiskit-terra
-    scipy
-  ];
+  propagatedBuildInputs =
+    [ docplex decorator networkx numpy qiskit-terra scipy ];
 
-  checkInputs = [
-    pytestCheckHook
-    ddt
-    pylatexenc
-    qiskit-aer
-  ];
+  checkInputs = [ pytestCheckHook ddt pylatexenc qiskit-aer ];
 
   pythonImportsCheck = [ "qiskit_optimization" ];
   pytestFlagsArray = [ "--durations=10" ];

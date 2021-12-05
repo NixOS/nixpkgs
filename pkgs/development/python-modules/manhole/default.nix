@@ -1,10 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, requests
-, process-tests
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, requests, process-tests }:
 
 buildPythonPackage rec {
   pname = "manhole";

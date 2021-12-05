@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "1.4.3";
@@ -29,7 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
+    description =
+      "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jansol ];

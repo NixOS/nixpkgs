@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pkgs }:
 
 buildPythonPackage {
   pname = "python-lxc-unstable";

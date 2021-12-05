@@ -1,21 +1,18 @@
 { lib, stdenv, fetchurl, pkg-config
 
-, abiVersion ? "6"
-, mouseSupport ? false
-, unicode ? true
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !enableStatic
+, abiVersion ? "6", mouseSupport ? false, unicode ? true
+, enableStatic ? stdenv.hostPlatform.isStatic, enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
 
-, buildPackages
-}:
+, buildPackages }:
 
 stdenv.mkDerivation rec {
   # Note the revision needs to be adjusted.
   version = "6.2";
-  name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
+  name = "ncurses-${version}"
+    + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   # We cannot use fetchFromGitHub (which calls fetchzip)
   # because we need to be able to use fetchurlBoot.
@@ -50,11 +47,9 @@ stdenv.mkDerivation rec {
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    buildPackages.ncurses
-  ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ buildPackages.ncurses ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
@@ -67,8 +62,7 @@ stdenv.mkDerivation rec {
       "--mandir=$man/share/man"
       "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
     )
-  ''
-  + lib.optionalString stdenv.isSunOS ''
+  '' + lib.optionalString stdenv.isSunOS ''
     sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
@@ -83,8 +77,11 @@ stdenv.mkDerivation rec {
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postFixup = let
-    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
-  ''
+    abiVersion-extension = if stdenv.isDarwin then
+      "${abiVersion}.$dylibtype"
+    else
+      "$dylibtype.${abiVersion}";
+  in ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
@@ -143,9 +140,10 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/infocmp" "$out"
   '';
 
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
-    rm "$out"/lib/*.a
-  '';
+  preFixup =
+    lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
+      rm "$out"/lib/*.a
+    '';
 
   meta = {
     description = "Free software emulation of curses in SVR4 and more";

@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Steam Locomotive runs across your terminal when you type 'sl'";
+    description =
+      "Steam Locomotive runs across your terminal when you type 'sl'";
     homepage = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html";
     license = rec {
       shortName = "Toyoda Masashi's free software license";

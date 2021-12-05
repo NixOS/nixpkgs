@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";
+    url =
+      "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";
     sha256 = "1akw1x84jj2m9z60cvlvmz21qwlaywmw18pl7lgp3bj5nw6250p6";
   };
 

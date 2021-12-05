@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, stdenv
-, packaging
-, importlib-resources
-, dbus-next
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, stdenv, packaging
+, importlib-resources, dbus-next }:
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
@@ -20,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-h7an/Fm9pNnThCHXg9PAKG822dqXE/CUuW8lDJlwMfw=";
   };
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus-next
-  ];
+  propagatedBuildInputs = [ packaging ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
+    ++ lib.optionals stdenv.isLinux [ dbus-next ];
 
   # no tests available, do the imports check instead
   doCheck = false;

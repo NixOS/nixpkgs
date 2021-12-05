@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 let
   lark-parser = buildPythonPackage rec {
@@ -16,8 +12,7 @@ let
 
     doCheck = true;
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.3.24";
 
@@ -27,20 +22,14 @@ buildPythonPackage rec {
   };
 
   # Nose is required during build process, so can not use `checkInputs`.
-  buildInputs = [
-    nose
-  ];
+  buildInputs = [ nose ];
 
-  propagatedBuildInputs = [
-    lark-parser
-  ];
+  propagatedBuildInputs = [ lark-parser ];
 
   # This fork of python-hcl2 doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hcl2"
-  ];
+  pythonImportsCheck = [ "hcl2" ];
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";

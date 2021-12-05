@@ -1,27 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config
-, ncurses, db , popt, libtool
+{ lib, stdenv, fetchurl, pkg-config, ncurses, db, popt, libtool
 # Sound sub-systems
-, alsaSupport ? true, alsa-lib
-, pulseSupport ? true, libpulseaudio, autoreconfHook
-, jackSupport ? true, libjack2
-, ossSupport ? true
-# Audio formats
-, aacSupport ? true, faad2, libid3tag
-, flacSupport ? true, flac
-, midiSupport ? true, timidity
-, modplugSupport ? true, libmodplug
-, mp3Support ? true, libmad
-, musepackSupport ? true, libmpc, libmpcdec, taglib
-, vorbisSupport ? true, libvorbis
-, speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg
-, sndfileSupport ? true, libsndfile
+, alsaSupport ? true, alsa-lib, pulseSupport ? true, libpulseaudio
+, autoreconfHook, jackSupport ? true, libjack2, ossSupport ? true
+  # Audio formats
+, aacSupport ? true, faad2, libid3tag, flacSupport ? true, flac
+, midiSupport ? true, timidity, modplugSupport ? true, libmodplug
+, mp3Support ? true, libmad, musepackSupport ? true, libmpc, libmpcdec, taglib
+, vorbisSupport ? true, libvorbis, speexSupport ? true, speex
+, ffmpegSupport ? true, ffmpeg, sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
-, curlSupport ? true, curl
-, samplerateSupport ? true, libsamplerate
-, withDebug ? false
-}:
+, curlSupport ? true, curl, samplerateSupport ? true, libsamplerate
+, withDebug ? false }:
 
 let
   opt = lib.optional;
@@ -37,34 +27,30 @@ in stdenv.mkDerivation rec {
     sha256 = "026v977kwb0wbmlmf6mnik328plxg8wykfx9ryvqhirac0aq39pk";
   };
 
-  patches = []
-    ++ opt ffmpegSupport ./moc-ffmpeg4.patch
+  patches = [ ] ++ opt ffmpegSupport ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ opt pulseSupport autoreconfHook;
+  nativeBuildInputs = [ pkg-config ] ++ opt pulseSupport autoreconfHook;
 
-  buildInputs = [ ncurses db popt libtool ]
-    # Sound sub-systems
-    ++ opt alsaSupport alsa-lib
-    ++ opt pulseSupport libpulseaudio
+  buildInputs = [
+    ncurses
+    db
+    popt
+    libtool
+  ]
+  # Sound sub-systems
+    ++ opt alsaSupport alsa-lib ++ opt pulseSupport libpulseaudio
     ++ opt jackSupport libjack2
     # Audio formats
-    ++ opt (aacSupport || mp3Support) libid3tag
-    ++ opt aacSupport faad2
-    ++ opt flacSupport flac
-    ++ opt midiSupport timidity
-    ++ opt modplugSupport libmodplug
-    ++ opt mp3Support libmad
+    ++ opt (aacSupport || mp3Support) libid3tag ++ opt aacSupport faad2
+    ++ opt flacSupport flac ++ opt midiSupport timidity
+    ++ opt modplugSupport libmodplug ++ opt mp3Support libmad
     ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
-    ++ opt vorbisSupport libvorbis
-    ++ opt speexSupport speex
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt sndfileSupport libsndfile
+    ++ opt vorbisSupport libvorbis ++ opt speexSupport speex
+    ++ opt ffmpegSupport ffmpeg ++ opt sndfileSupport libsndfile
     ++ opt wavpackSupport wavpack
     # Misc
-    ++ opt curlSupport curl
-    ++ opt samplerateSupport libsamplerate;
+    ++ opt curlSupport curl ++ opt samplerateSupport libsamplerate;
 
   configureFlags = [
     # Sound sub-systems
@@ -93,7 +79,8 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An ncurses console audio player designed to be powerful and easy to use";
+    description =
+      "An ncurses console audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];

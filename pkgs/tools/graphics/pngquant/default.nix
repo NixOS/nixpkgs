@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
+  configureFlags =
+    lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng zlib lcms2 ];
@@ -23,8 +24,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pngquant.org/";
-    description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
-    changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
+    description =
+      "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
+    changelog =
+      "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
     platforms = platforms.unix;
     license = with licenses; [ gpl3Plus hpnd bsd2 ];
     maintainers = [ maintainers.volth ];

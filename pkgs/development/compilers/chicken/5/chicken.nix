@@ -2,40 +2,41 @@
 
 let
   platform = with stdenv;
-    if isDarwin then "macosx"
-    else if isCygwin then "cygwin"
-    else if (isFreeBSD || isOpenBSD) then "bsd"
-    else if isSunOS then "solaris"
-    else "linux"; # Should be a sane default
-in
-stdenv.mkDerivation rec {
+    if isDarwin then
+      "macosx"
+    else if isCygwin then
+      "cygwin"
+    else if (isFreeBSD || isOpenBSD) then
+      "bsd"
+    else if isSunOS then
+      "solaris"
+    else
+      "linux"; # Should be a sane default
+in stdenv.mkDerivation rec {
   pname = "chicken";
   version = "5.2.0";
 
   binaryVersion = 11;
 
   src = fetchurl {
-    url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
+    url =
+      "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
     sha256 = "1yl0hxm9cirgcp8jgxp6vv29lpswfvaw3zfkh6rsj0vkrv44k4c1";
   };
 
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
-  makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
-  ] ++ (lib.optionals stdenv.isDarwin [
-    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
-    "C_COMPILER=$(CC)"
-  ]);
+  makeFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" ]
+    ++ (lib.optionals stdenv.isDarwin [
+      "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+      "C_COMPILER=$(CC)"
+    ]);
 
-  buildInputs = [
-    makeWrapper
-  ] ++ (lib.optionals (bootstrap-chicken != null) [
-    bootstrap-chicken
-  ]);
+  buildInputs = [ makeWrapper ]
+    ++ (lib.optionals (bootstrap-chicken != null) [ bootstrap-chicken ]);
 
   postInstall = ''
     for f in $out/bin/*
@@ -48,7 +49,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
-       -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+       -p "(assert (equal? \"${
+         toString binaryVersion
+       }\" (pathname-file (car (repository-path)))))"
   '';
 
   meta = {

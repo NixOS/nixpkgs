@@ -11,7 +11,8 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/wolever/pprintpp/commit/873217674cc824b4c1cfdad4867c560c60e8d806.patch";
+      url =
+        "https://github.com/wolever/pprintpp/commit/873217674cc824b4c1cfdad4867c560c60e8d806.patch";
       sha256 = "0rqxzxawr83215s84mfzh1gnjwjm2xv399ywwcl4q7h395av5vb3";
     })
   ];

@@ -16,10 +16,11 @@ let
     };
 
     meta = {
-      description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
-      homepage    = "https://github.com/pfn/keepasshttp";
-      platforms   = with lib.platforms; linux;
-      license     = lib.licenses.gpl3;
+      description =
+        "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
+      homepage = "https://github.com/pfn/keepasshttp";
+      platforms = with lib.platforms; linux;
+      license = lib.licenses.gpl3;
     };
 
     pluginFilename = "KeePassHttp.plgx";
@@ -29,6 +30,8 @@ let
       cp $pluginFilename $out/lib/dotnet/keepass/$pluginFilename
     '';
   };
-in
   # Mono is required to compile plugin at runtime, after loading.
-  buildEnv { name = drv.name; paths = [ mono drv ]; }
+in buildEnv {
+  name = drv.name;
+  paths = [ mono drv ];
+}

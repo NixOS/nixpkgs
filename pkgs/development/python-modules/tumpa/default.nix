@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyside2
-, johnnycanencrypt
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, pyside2
+, johnnycanencrypt, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "tumpa";
@@ -19,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "1wvs64s0jxn4p8zr643d2hcczw3a175r6ib3481gdhjx38kgxjbq";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-    johnnycanencrypt
-    pyside2
-  ];
+  propagatedBuildInputs = [ setuptools johnnycanencrypt pyside2 ];
 
   doCheck = false;
 

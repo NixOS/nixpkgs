@@ -3,11 +3,11 @@
 let
   apache-24-patch = fetchurl {
     name = "compile-against-apache24.diff";
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/compile-against-apache24.diff?h=packages/mod_fastcgi&id=81c7cb99d15682df3bdb1edcaeea5259e9e43a42";
+    url =
+      "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/compile-against-apache24.diff?h=packages/mod_fastcgi&id=81c7cb99d15682df3bdb1edcaeea5259e9e43a42";
     sha256 = "000qvrf5jb979i37rimrdivcgjijcffgrpkx38c0rn62z9jz61g4";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mod_fastcgi";
   version = "2.4.7.1";
 

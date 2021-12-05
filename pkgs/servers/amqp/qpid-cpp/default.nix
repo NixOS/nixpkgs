@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
+{ lib, stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv
+, buildPythonPackage, qpid-python }:
 
 let
   pname = "qpid-cpp";
@@ -41,9 +42,7 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
-    ] ++ lib.optionals stdenv.cc.isGNU [
-      "-Wno-error=deprecated-copy"
-    ]);
+    ] ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" ]);
   };
 
   python-frontend = buildPythonPackage {

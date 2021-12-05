@@ -1,41 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
+{ lib, stdenv, fetchFromGitHub, fetchurl
 
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
+, cmake, pkg-config, ninja, python3, makeWrapper
 
-, glm
-, lua5_4
-, SDL2
-, SDL2_mixer
-, enet
-, libuv
-, libuuid
-, wayland-protocols
-, Carbon
+, glm, lua5_4, SDL2, SDL2_mixer, enet, libuv, libuuid, wayland-protocols, Carbon
 # optionals
-, opencl-headers
-, OpenCL
+, opencl-headers, OpenCL
 
-, callPackage
-, nixosTests
-}:
+, callPackage, nixosTests }:
 
 # cmake 3.21 inserts invalid `ldd` and `-Wl,--no-as-needed` calls, apparently
 # related to
 # https://cmake.org/cmake/help/v3.21/prop_tgt/LINK_WHAT_YOU_USE.html
-let cmake3_22 = cmake.overrideAttrs (old: {
-  version = "3.22.0";
-  src = fetchurl {
-    url = "https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz";
-    sha256 = "sha256-mYx7o0d40t/bPfimlUaeJLEeK/oh++QbNho/ReHJNF4=";
-  };
-});
+let
+  cmake3_22 = cmake.overrideAttrs (old: {
+    version = "3.22.0";
+    src = fetchurl {
+      url = "https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz";
+      sha256 = "sha256-mYx7o0d40t/bPfimlUaeJLEeK/oh++QbNho/ReHJNF4=";
+    };
+  });
 
 in stdenv.mkDerivation rec {
   pname = "vengi-tools";
@@ -48,13 +31,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-v82hKskTSwM0NDgLVHpHZNRQW6tWug4pPIt91MrUwUo=";
   };
 
-  nativeBuildInputs = [
-    cmake3_22
-    pkg-config
-    ninja
-    python3
-    makeWrapper
-  ];
+  nativeBuildInputs = [ cmake3_22 pkg-config ninja python3 makeWrapper ];
 
   buildInputs = [
     glm
@@ -97,12 +74,13 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 
   meta = with lib; {
-    description = "Tools from the vengi voxel engine, including a thumbnailer, a converter, and the VoxEdit voxel editor";
+    description =
+      "Tools from the vengi voxel engine, including a thumbnailer, a converter, and the VoxEdit voxel editor";
     longDescription = ''
       Tools from the vengi C++ voxel game engine. It includes a voxel editor
       with character animation support and loading/saving into a lot of voxel

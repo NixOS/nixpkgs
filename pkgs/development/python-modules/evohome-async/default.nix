@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "evohome-async";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-/dZRlcTcea26FEpw/XDItKh4ncr/eEFQcdfIE2KIMo8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

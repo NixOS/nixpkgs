@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.1.0";
 
   src = fetchurl {
-    url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "008537ns659pw2aag15imwjrxj73j26aqq90h285is6kz8gmv06v";
   };
 
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  makeFlags = [
-    "DOC_DIR=${placeholder "doc"}/share/doc/most"
-  ];
+  makeFlags = [ "DOC_DIR=${placeholder "doc"}/share/doc/most" ];
 
   preConfigure = ''
     sed -i -e "s|-ltermcap|-lncurses|" configure

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, rpm}:
+{ lib, stdenv, fetchFromGitHub, rpm }:
 
 stdenv.mkDerivation rec {
   pname = "epm";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The ESP Package Manager generates distribution archives for a variety of platforms";
+    description =
+      "The ESP Package Manager generates distribution archives for a variety of platforms";
     homepage = "https://www.msweet.org/projects.php?Z2";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

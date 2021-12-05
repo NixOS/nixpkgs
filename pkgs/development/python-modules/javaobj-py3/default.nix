@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
-, lib
-, numpy
-}:
+{ buildPythonPackage, fetchPypi, isPy27, lib, numpy }:
 
 buildPythonPackage rec {
   pname = "javaobj-py3";

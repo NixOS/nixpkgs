@@ -13,9 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-Lgd1vGXlZw0s4dVC0TlGEYoGOLrJPc/bZ75Mzke4rrg=";
 
-  subPackages = [
-    "cmd/stripe"
-  ];
+  subPackages = [ "cmd/stripe" ];
 
   meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "param";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "02zmd4bwyn8b4q1l9jgddc70ii1i7bmynacanl1cvbr6la4v9b2c";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # Version is not set properly
@@ -25,9 +19,7 @@ buildPythonPackage rec {
       --replace 'version=get_setup_version("param"),' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "param"
-  ];
+  pythonImportsCheck = [ "param" ];
 
   meta = with lib; {
     description = "Declarative Python programming using Parameters";

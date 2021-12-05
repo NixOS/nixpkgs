@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, fixDarwinDylibNames
-, wafHook
-}:
+{ lib, stdenv, fetchurl, python3, pkg-config, readline, libxslt
+, docbook-xsl-nons, docbook_xml_dtd_42, fixDarwinDylibNames, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "talloc";
@@ -28,11 +19,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
   ];
 
-  buildInputs = [
-    python3
-    readline
-    libxslt
-  ];
+  buildInputs = [ python3 readline libxslt ];
 
   wafPath = "buildtools/bin/waf";
 

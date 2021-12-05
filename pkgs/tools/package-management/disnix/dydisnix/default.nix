@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib
-, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix
-}:
+, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix }:
 
 stdenv.mkDerivation rec {
   version = "unstable-2020-11-02";
@@ -21,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A toolset enabling self-adaptive redeployment on top of Disnix";
+    description =
+      "A toolset enabling self-adaptive redeployment on top of Disnix";
     longDescription = ''
       Dynamic Disnix is a (very experimental!) prototype extension framework for Disnix supporting dynamic (re)deployment of service-oriented systems.
     '';

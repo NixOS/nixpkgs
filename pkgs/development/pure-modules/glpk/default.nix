@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl,
-  pkg-config, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
+{ lib, stdenv, fetchurl, pkg-config, pure, glpk, gmp, libtool, libmysqlclient
+, libiodbc }:
 
 stdenv.mkDerivation rec {
   baseName = "glpk";
@@ -20,10 +20,8 @@ stdenv.mkDerivation rec {
       substituteInPlace configure \
         --replace /usr/include/mysql ${libmysqlclient}/include/mysql
     '';
-    configureFlags = [ "--enable-dl"
-                       "--enable-odbc"
-                       "--enable-mysql"
-                       "--with-gmp=yes" ];
+    configureFlags =
+      [ "--enable-dl" "--enable-odbc" "--enable-mysql" "--with-gmp=yes" ];
   });
 
   nativeBuildInputs = [ pkg-config ];

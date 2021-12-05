@@ -1,26 +1,19 @@
-{ fetchgit
-, lib
-, makeDesktopItem
-, node_webkit
-, pkgs
-, runCommand
-, stdenv
-, writeShellScript
-}:
+{ fetchgit, lib, makeDesktopItem, node_webkit, pkgs, runCommand, stdenv
+, writeShellScript }:
 
 let
   # parse the version from package.json
-  version =
-    let
-      packageJson = lib.importJSON ./package.json;
-      splits = builtins.split "^.*#v(.*)$" (builtins.getAttr "onlykey" (builtins.head packageJson));
-      matches = builtins.elemAt splits 1;
-      elem = builtins.head matches;
-    in
-    elem;
+  version = let
+    packageJson = lib.importJSON ./package.json;
+    splits = builtins.split "^.*#v(.*)$"
+      (builtins.getAttr "onlykey" (builtins.head packageJson));
+    matches = builtins.elemAt splits 1;
+    elem = builtins.head matches;
+  in elem;
 
   # this must be updated anytime this package is updated.
-  onlykeyPkg = "onlykey-git://github.com/trustcrypto/OnlyKey-App.git#v${version}";
+  onlykeyPkg =
+    "onlykey-git://github.com/trustcrypto/OnlyKey-App.git#v${version}";
 
   # define a shortcut to get to onlykey.
   onlykey = self."${onlykeyPkg}";
@@ -45,19 +38,20 @@ let
     });
   };
 
-  script = writeShellScript "${onlykey.packageName}-starter-${onlykey.version}" ''
-    ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
-  '';
+  script =
+    writeShellScript "${onlykey.packageName}-starter-${onlykey.version}" ''
+      ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
+    '';
 
   desktop = makeDesktopItem {
     name = onlykey.packageName;
     exec = script;
-    icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
+    icon =
+      "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
     desktopName = onlykey.packageName;
     genericName = onlykey.packageName;
   };
-in
-runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
+in runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
   mkdir -p $out/bin
   ln -s ${script} $out/bin/onlykey
 ''

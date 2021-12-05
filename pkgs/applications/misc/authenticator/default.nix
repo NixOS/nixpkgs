@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, wrapGAppsHook
-, gdk-pixbuf
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, openssl
-, sqlite
-, wayland
-, zbar
-}:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, appstream-glib, desktop-file-utils
+, meson, ninja, pkg-config, python3, rustPlatform, wrapGAppsHook, gdk-pixbuf
+, glib, gst_all_1, gtk4, libadwaita, openssl, sqlite, wayland, zbar }:
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
@@ -51,11 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   buildInputs = [
     gdk-pixbuf
@@ -68,17 +45,10 @@ stdenv.mkDerivation rec {
     # We copy the way it is built from the Flatpak:
     # https://gitlab.gnome.org/World/Authenticator/-/blob/master/build-aux/com.belmoussaoui.Authenticator.Devel.json
     (gst_all_1.gst-plugins-good.overrideAttrs (old: {
-      patches = old.patches or [ ] ++ [
-        "${src}/build-aux/767.patch"
-      ];
-      mesonFlags = old.mesonFlags ++ [
-        "-Dgtk3=disabled"
-        "-Dgtk4=enabled"
-        "-Dgtk4-experiments=true"
-      ];
-      buildInputs = old.buildInputs ++ [
-        gtk4
-      ];
+      patches = old.patches or [ ] ++ [ "${src}/build-aux/767.patch" ];
+      mesonFlags = old.mesonFlags
+        ++ [ "-Dgtk3=disabled" "-Dgtk4=enabled" "-Dgtk4-experiments=true" ];
+      buildInputs = old.buildInputs ++ [ gtk4 ];
     }))
 
     (gst_all_1.gst-plugins-bad.override { enableZbar = true; })

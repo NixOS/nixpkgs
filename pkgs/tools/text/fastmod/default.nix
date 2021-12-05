@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fastmod";
@@ -21,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = "A utility that makes sweeping changes to large, shared code bases";
+    description =
+      "A utility that makes sweeping changes to large, shared code bases";
     homepage = "https://github.com/facebookincubator/fastmod";
     license = licenses.asl20;
     maintainers = with maintainers; [ jduan ];

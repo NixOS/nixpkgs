@@ -1,11 +1,5 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, asn1crypto, buildPythonPackage, fetchFromGitHub, pytest-mock
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "scramp";
@@ -20,14 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-HEt2QxNHX9Oqx+o0++ZtS61SVHra3nLAqv7NbQWVV+E=";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ];
+  propagatedBuildInputs = [ asn1crypto ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "scramp" ];
 

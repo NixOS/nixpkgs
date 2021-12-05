@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, debtcollector
-, netaddr
-, oslo-i18n
-, pbr
-, pyyaml
-, requests
-, rfc3986
-, stevedore
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, debtcollector, netaddr, oslo-i18n, pbr
+, pyyaml, requests, rfc3986, stevedore, callPackage }:
 
 buildPythonPackage rec {
   pname = "oslo-config";
@@ -28,23 +17,13 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    debtcollector
-    netaddr
-    oslo-i18n
-    pbr
-    pyyaml
-    requests
-    rfc3986
-    stevedore
-  ];
+  propagatedBuildInputs =
+    [ debtcollector netaddr oslo-i18n pbr pyyaml requests rfc3986 stevedore ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
 
-  passthru.tests = {
-    tests = callPackage ./tests.nix {};
-  };
+  passthru.tests = { tests = callPackage ./tests.nix { }; };
 
   pythonImportsCheck = [ "oslo_config" ];
 

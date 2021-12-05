@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, parameterized
-, pytestCheckHook
-, python-dateutil
-, pytz
-, regex
-, tzlocal
-, convertdate
-, umalqurra
-, jdatetime
-, ruamel-yaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, parameterized, pytestCheckHook
+, python-dateutil, pytz, regex, tzlocal, convertdate, umalqurra, jdatetime
+, ruamel-yaml }:
 
 buildPythonPackage rec {
   pname = "dateparser";
@@ -25,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "0j3sm4hlx7z0ci5fnjq5n9i02vvlfz0wxa889ydryfknjhy5apqw";
   };
 
-  checkInputs = [
-    mock
-    parameterized
-    pytestCheckHook
-  ];
+  checkInputs = [ mock parameterized pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
 
@@ -39,15 +23,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    python-dateutil pytz regex tzlocal
+    python-dateutil
+    pytz
+    regex
+    tzlocal
     # extra_requires
-    convertdate umalqurra jdatetime ruamel-yaml
+    convertdate
+    umalqurra
+    jdatetime
+    ruamel-yaml
   ];
 
   pythonImportsCheck = [ "dateparser" ];
 
   meta = with lib; {
-    description = "Date parsing library designed to parse dates from HTML pages";
+    description =
+      "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

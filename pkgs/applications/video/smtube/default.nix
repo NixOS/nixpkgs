@@ -5,13 +5,12 @@ mkDerivation rec {
   pname = "smtube";
 
   src = fetchurl {
-    url = "mirror://sourceforge/smtube/SMTube/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/smtube/SMTube/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-d+R3eM2BPdrsY7XX+6IWpz6cKIy/L2x0iLZH0mTgfcc=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   dontUseQmakeConfigure = true;
 

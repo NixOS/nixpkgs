@@ -9,11 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1prh5sxzipkqglpsh53iblbr7rxi54wbijxdjiahzjmrijqa40y3";
   };
 
-  configureFlags = [
-    "--with-openssl"
-    "--with-xerces"
-    "--with-xalan"
-  ];
+  configureFlags = [ "--with-openssl" "--with-xerces" "--with-xalan" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xalanc xercesc openssl ];

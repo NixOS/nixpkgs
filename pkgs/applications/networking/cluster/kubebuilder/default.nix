@@ -1,11 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, go
-, gnumake
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, git, go, gnumake }:
 
 buildGoModule rec {
   pname = "kubebuilder";
@@ -19,7 +12,7 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-bTCLuAo5xXNoafjGpjKLKlKVKB29PEFwdPu9+qjvufs=";
 
-  subPackages = ["cmd"];
+  subPackages = [ "cmd" ];
 
   ldflags = [
     "-X main.kubeBuilderVersion=v${version}"

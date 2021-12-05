@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyemby";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EpmXdyKtfb/M8rTv6YrfNCpDmKei2AD5DBcdVvqCVWw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # Project has no tests
   doCheck = false;

@@ -1,16 +1,5 @@
-{ aiocontextvars
-, blinker
-, buildPythonPackage
-, fetchPypi
-, httpx
-, lib
-, mock
-, pytestCheckHook
-, requests
-, six
-, unittest2
-, webob
-}:
+{ aiocontextvars, blinker, buildPythonPackage, fetchPypi, httpx, lib, mock
+, pytestCheckHook, requests, six, unittest2, webob }:
 
 buildPythonPackage rec {
   pname = "rollbar";
@@ -21,20 +10,10 @@ buildPythonPackage rec {
     sha256 = "aa3b570062dd8dfb0e11537ba858f9e1633a604680e062a525434b8245540f87";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [
-    webob
-    blinker
-    unittest2
-    mock
-    httpx
-    aiocontextvars
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ webob blinker unittest2 mock httpx aiocontextvars pytestCheckHook ];
 
   pythonImportsCheck = [ "rollbar" ];
 

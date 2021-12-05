@@ -1,17 +1,5 @@
-{ lib
-, boost
-, fetchFromGitHub
-, installShellFiles
-, mkDerivationWith
-, muparser
-, pkg-config
-, qmake
-, qtbase
-, qtsvg
-, qttools
-, runtimeShell
-, stdenv
-}:
+{ lib, boost, fetchFromGitHub, installShellFiles, mkDerivationWith, muparser
+, pkg-config, qmake, qtbase, qtsvg, qttools, runtimeShell, stdenv }:
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "librecad";
@@ -35,10 +23,7 @@ mkDerivationWith stdenv.mkDerivation rec {
       --replace __DATE__ 0
   '';
 
-  qmakeFlags = [
-    "MUPARSER_DIR=${muparser}"
-    "BOOST_DIR=${boost.dev}"
-  ];
+  qmakeFlags = [ "MUPARSER_DIR=${muparser}" "BOOST_DIR=${boost.dev}" ];
 
   installPhase = ''
     runHook preInstall
@@ -57,19 +42,9 @@ mkDerivationWith stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [
-    boost
-    muparser
-    qtbase
-    qtsvg
-  ];
+  buildInputs = [ boost muparser qtbase qtsvg ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-    qmake
-    qttools
-  ];
+  nativeBuildInputs = [ installShellFiles pkg-config qmake qttools ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";

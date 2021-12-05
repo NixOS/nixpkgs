@@ -1,23 +1,7 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, gobject-introspection
-, bison
-, flex
-, python3
-, glib
-, makeWrapper
-, libcap
-, libunwind
-, darwin
+{ stdenv, fetchurl, meson, ninja, pkg-config, gettext, gobject-introspection
+, bison, flex, python3, glib, makeWrapper, libcap, libunwind, darwin
 , elfutils # for libdw
-, bash-completion
-, lib
-, CoreServices
-}:
+, bash-completion, lib, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
@@ -33,13 +17,12 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1igv9l4hm21kp1jmlwlagzs7ly1vaxv1sbda29q8247372dwkvls";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
+  patches = [ ./fix_pkgconfig_includedir.patch ];
 
   nativeBuildInputs = [
     meson
@@ -58,31 +41,22 @@ stdenv.mkDerivation rec {
     # TODO add hotdoc here
   ];
 
-  buildInputs = [
-    bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
-    libcap
-    libunwind
-    elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
+  buildInputs = [ bash-completion ]
+    ++ lib.optionals stdenv.isLinux [ libcap libunwind elfutils ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "-Dintrospection=disabled" ] ++ lib.optionals stdenv.isDarwin [
+      # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
+      "-Dlibunwind=disabled"
+      "-Dlibdw=disabled"
+    ];
 
   postPatch = ''
     patchShebangs \
@@ -106,7 +80,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib ;{
+  meta = with lib; {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;

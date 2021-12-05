@@ -1,14 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, python
+{ lib, buildPythonPackage, fetchPypi, requests, python
 
 # For tests/setup.py
-, pytest
-, pytest-runner
-, requests-mock
-}:
+, pytest, pytest-runner, requests-mock }:
 
 buildPythonPackage rec {
   pname = "packet-python";
@@ -19,11 +12,7 @@ buildPythonPackage rec {
   };
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];
-  checkInputs = [
-    pytest
-    pytest-runner
-    requests-mock
-  ];
+  checkInputs = [ pytest pytest-runner requests-mock ];
 
   checkPhase = ''
     ${python.interpreter} setup.py test
@@ -31,8 +20,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python client for the Packet API.";
-    homepage    = "https://github.com/packethost/packet-python";
-    license     = lib.licenses.lgpl3;
+    homepage = "https://github.com/packethost/packet-python";
+    license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ dipinhora ];
   };
 }

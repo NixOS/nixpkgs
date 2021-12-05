@@ -1,7 +1,5 @@
-{ lib, bundlerApp, ruby
-, writeShellScriptBin, makeWrapper
-, withOptionalDependencies ? false
-}:
+{ lib, bundlerApp, ruby, writeShellScriptBin, makeWrapper
+, withOptionalDependencies ? false }:
 
 let
   rubyWrapper = writeShellScriptBin "ruby" ''
@@ -26,9 +24,7 @@ in bundlerApp {
   exes = [ "jekyll" ];
 
   inherit ruby;
-  gemdir = if withOptionalDependencies
-    then ./full
-    else ./basic;
+  gemdir = if withOptionalDependencies then ./full else ./basic;
 
   buildInputs = [ makeWrapper ];
 
@@ -46,10 +42,10 @@ in bundlerApp {
       web server. Jekyll is the engine behind GitHub Pages, which you can use to
       host sites right from your GitHub repositories.
     '';
-    homepage    = "https://jekyllrb.com/";
+    homepage = "https://jekyllrb.com/";
     #changelog   = "https://raw.githubusercontent.com/jekyll/jekyll/v${version}/History.markdown";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

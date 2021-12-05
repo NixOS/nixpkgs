@@ -1,6 +1,5 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
-, sassc, hyperkitty, postorius, whoosh, setuptools-scm
-}:
+{ buildPythonPackage, lib, fetchPypi, pythonOlder, sassc, hyperkitty, postorius
+, whoosh, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "mailman-web";
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Tries to check runtime configuration.
   doCheck = false;
 
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
-  ];
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ sassc ]}" ];
 
   meta = with lib; {
     description = "Django project for Mailman 3 web interface";

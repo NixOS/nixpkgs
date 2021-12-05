@@ -1,31 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, qtbase
-, qtmultimedia
-, qscintilla
-, bison
-, flex
-, eigen
-, boost
-, libGLU, libGL
-, glew
-, opencsg
-, cgal
-, mpfr
-, gmp
-, glib
-, pkg-config
-, harfbuzz
-, gettext
-, freetype
-, fontconfig
-, double-conversion
-, lib3mf
-, libzip
-, mkDerivation
-, qtmacextras
-, qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
+{ lib, stdenv, fetchFromGitHub, qtbase, qtmultimedia, qscintilla, bison, flex
+, eigen, boost, libGLU, libGL, glew, opencsg, cgal, mpfr, gmp, glib, pkg-config
+, harfbuzz, gettext, freetype, fontconfig, double-conversion, lib3mf, libzip
+, mkDerivation, qtmacextras, qmake, spacenavSupport ? stdenv.isLinux, libspnav
 }:
 
 mkDerivation rec {
@@ -42,20 +18,32 @@ mkDerivation rec {
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
-    eigen boost glew opencsg cgal mpfr gmp glib
-    harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla
+    eigen
+    boost
+    glew
+    opencsg
+    cgal
+    mpfr
+    gmp
+    glib
+    harfbuzz
+    lib3mf
+    libzip
+    double-conversion
+    freetype
+    fontconfig
+    qtbase
+    qtmultimedia
+    qscintilla
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
     ++ lib.optional stdenv.isDarwin qtmacextras
-    ++ lib.optional spacenavSupport libspnav
-  ;
+    ++ lib.optional spacenavSupport libspnav;
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
-    lib.optionals spacenavSupport [
-      "ENABLE_SPNAV=1"
-      "SPNAV_INCLUDEPATH=${libspnav}/include"
-      "SPNAV_LIBPATH=${libspnav}/lib"
-    ];
+  qmakeFlags = [ "VERSION=${version}" ] ++ lib.optionals spacenavSupport [
+    "ENABLE_SPNAV=1"
+    "SPNAV_INCLUDEPATH=${libspnav}/include"
+    "SPNAV_LIBPATH=${libspnav}/lib"
+  ];
 
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake

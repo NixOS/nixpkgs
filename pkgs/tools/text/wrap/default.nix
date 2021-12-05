@@ -18,7 +18,8 @@ buildGoModule rec {
   patches = [
     (fetchpatch {
       name = "courier-prime-variants.patch";
-      url = "https://github.com/Wraparound/wrap/commit/b72c280b6eddba9ec7b3507c1f143eb28a85c9c1.patch";
+      url =
+        "https://github.com/Wraparound/wrap/commit/b72c280b6eddba9ec7b3507c1f143eb28a85c9c1.patch";
       sha256 = "1d9v0agfd7mgd17k4a8l6vr2kyswyfsyq3933dz56pgs5d3jric5";
     })
   ];

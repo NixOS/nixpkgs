@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A package that implements a pre-document language and tools to process it";
+    description =
+      "A package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];

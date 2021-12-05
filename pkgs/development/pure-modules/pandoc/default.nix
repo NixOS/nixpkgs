@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Converts Sphinx-formatted Pure documentation files to Markdown and other formats using Pandoc";
+    description =
+      "Converts Sphinx-formatted Pure documentation files to Markdown and other formats using Pandoc";
     homepage = "http://puredocs.bitbucket.org/pure-pandoc.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, mistune
-, pygments
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, jinja2, mistune, pygments, setuptools }:
 
 buildPythonPackage rec {
   pname = "mrkd";
@@ -21,7 +14,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mrkd" ];
 
   meta = with lib; {
-    description = "Write man pages using Markdown, and convert them to Roff or HTML";
+    description =
+      "Write man pages using Markdown, and convert them to Roff or HTML";
     homepage = "https://github.com/refi64/mrkd";
     license = licenses.bsd2;
   };

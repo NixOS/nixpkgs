@@ -1,40 +1,20 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, wxGTK30-gtk3
-, wxmac
-, ffmpeg
-, proj_7
-, perl532
-, unscii
-, python
-, libGL
-, libGLU
-, xlibsWrapper
-, docbook2x
-, docbook5
-, Carbon
-, Cocoa
-}:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, wxGTK30-gtk3, wxmac, ffmpeg
+, proj_7, perl532, unscii, python, libGL, libGLU, xlibsWrapper, docbook2x
+, docbook5, Carbon, Cocoa }:
 
 let
-  perlenv = perl532.withPackages (perlPackages: with perlPackages; [ LocalePO ] );
-in
-stdenv.mkDerivation rec {
+  perlenv =
+    perl532.withPackages (perlPackages: with perlPackages; [ LocalePO ]);
+in stdenv.mkDerivation rec {
   pname = "survex";
   version = "1.2.44";
 
-  nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
+  nativeBuildInputs =
+    [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
 
-  buildInputs = [
-    libGL libGLU ffmpeg proj_7
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    wxmac Carbon Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    wxGTK30-gtk3 xlibsWrapper
-  ];
+  buildInputs = [ libGL libGLU ffmpeg proj_7 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ wxmac Carbon Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wxGTK30-gtk3 xlibsWrapper ];
 
   src = fetchgit {
     url = "git://git.survex.com/survex";
@@ -64,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Free Software/Open Source software package for mapping caves";
+    description =
+      "Free Software/Open Source software package for mapping caves";
     longDescription = ''
       Survex is a Free Software/Open Source software package for mapping caves,
       licensed under the GPL. It is designed to be portable and can be run on a

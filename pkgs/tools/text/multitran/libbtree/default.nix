@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl} :
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libbtree";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://multitran.sourceforge.net/";
-    description = "Multitran lib: library for reading Multitran's BTREE database format";
+    description =
+      "Multitran lib: library for reading Multitran's BTREE database format";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };

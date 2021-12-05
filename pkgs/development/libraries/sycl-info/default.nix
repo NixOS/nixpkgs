@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, cmake
-, ninja
-, ocl-icd
-, opencl-headers
-, lyra
-, nlohmann_json
-, ronn
-, doctest
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, cmake, ninja, ocl-icd
+, opencl-headers, lyra, nlohmann_json, ronn, doctest }:
 
 stdenv.mkDerivation rec {
   pname = "sycl-info";
@@ -22,19 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fy0y1rcfb11p3vijd8wym6xkaicav49pv2bv2l18rma929n1m1m";
   };
 
-  buildInputs = [
-    nlohmann_json
-    ronn
-    opencl-headers
-    ocl-icd
-    doctest
-    lyra
-  ];
+  buildInputs = [ nlohmann_json ronn opencl-headers ocl-icd doctest lyra ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
@@ -46,12 +26,12 @@ stdenv.mkDerivation rec {
   # Required for ronn to compile the manpage.
   RUBYOPT = "-KU -E utf-8:utf-8";
 
-  meta = with lib;
-    {
-      homepage = "https://github.com/codeplaysoftware/sycl-info";
-      description = "Tool to show information about available SYCL implementations";
-      platforms = platforms.linux;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ davidtwco ];
-    };
+  meta = with lib; {
+    homepage = "https://github.com/codeplaysoftware/sycl-info";
+    description =
+      "Tool to show information about available SYCL implementations";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ davidtwco ];
+  };
 }

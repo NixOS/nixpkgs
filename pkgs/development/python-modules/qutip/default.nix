@@ -21,18 +21,9 @@ buildPythonPackage rec {
   # Disabling OpenMP support on Darwin.
   setupPyGlobalFlags = lib.optional (!stdenv.isDarwin) "--with-openmp";
 
-  propagatedBuildInputs = [
-    packaging
-    numpy
-    cython
-    scipy
-    matplotlib
-  ];
+  propagatedBuildInputs = [ packaging numpy cython scipy matplotlib ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-rerunfailures
-  ];
+  checkInputs = [ pytestCheckHook pytest-rerunfailures ];
 
   # - QuTiP tries to access the home directory to create an rc file for us.
   # This of course fails and therefore, we provide a writable temp dir as HOME.
@@ -49,7 +40,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Open-source software for simulating the dynamics of closed and open quantum systems";
+    description =
+      "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.fabiangd ];

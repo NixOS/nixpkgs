@@ -1,20 +1,5 @@
-{ stdenv
-, lib
-, pkg-config
-, makeWrapper
-, texinfo
-, fetchurl
-, autoreconfHook
-, guile
-, flex
-, gtk2
-, glib
-, gtkextra
-, gettext
-, gawk
-, shared-mime-info
-, groff
-, libstroke
+{ stdenv, lib, pkg-config, makeWrapper, texinfo, fetchurl, autoreconfHook, guile
+, flex, gtk2, glib, gtkextra, gettext, gawk, shared-mime-info, groff, libstroke
 }:
 
 stdenv.mkDerivation rec {
@@ -22,21 +7,31 @@ stdenv.mkDerivation rec {
   version = "1.9.16-20210731";
 
   src = fetchurl {
-    url = "https://github.com/lepton-eda/lepton-eda/releases/download/${version}/lepton-eda-${builtins.head (lib.splitString "-" version)}.tar.gz";
+    url =
+      "https://github.com/lepton-eda/lepton-eda/releases/download/${version}/lepton-eda-${
+        builtins.head (lib.splitString "-" version)
+      }.tar.gz";
     sha256 = "sha256-xdJ11M4RXNF6ePZD6Y+/DUdO21AFLbydZcq9nWg0+Yk=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper texinfo autoreconfHook ];
 
-  propagatedBuildInputs = [ guile flex gtk2 glib gtkextra gettext gawk shared-mime-info groff libstroke ];
-
-  configureFlags = [
-    "--disable-update-xdg-database"
+  propagatedBuildInputs = [
+    guile
+    flex
+    gtk2
+    glib
+    gtkextra
+    gettext
+    gawk
+    shared-mime-info
+    groff
+    libstroke
   ];
 
-  CFLAGS = [
-    "-DSCM_DEBUG_TYPING_STRICTNESS=2"
-  ];
+  configureFlags = [ "--disable-update-xdg-database" ];
+
+  CFLAGS = [ "-DSCM_DEBUG_TYPING_STRICTNESS=2" ];
 
   postInstall = ''
     libs="${lib.makeLibraryPath propagatedBuildInputs}"

@@ -1,8 +1,4 @@
-{ lib, stdenv
-, cmake
-, gettext
-, libSrc
-}:
+{ lib, stdenv, cmake, gettext, libSrc }:
 let
   mkLib = name:
     stdenv.mkDerivation {
@@ -21,8 +17,7 @@ let
         hydraPlatforms = if (name == "packages3d") then [ ] else platforms;
       };
     };
-in
-{
+in {
   symbols = mkLib "symbols";
   templates = mkLib "templates";
   footprints = mkLib "footprints";

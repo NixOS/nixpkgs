@@ -1,19 +1,8 @@
-{ lib
-, fetchFromGitLab
-, gobject-introspection
-, python3Packages
-, gtk3
-, wrapGAppsHook
-, glib
-, cairo
-, desktop-file-utils
-, xdg-utils
-, xdg-user-dirs
-, wine
-, winetricks
-}:
+{ lib, fetchFromGitLab, gobject-introspection, python3Packages, gtk3
+, wrapGAppsHook, glib, cairo, desktop-file-utils, xdg-utils, xdg-user-dirs, wine
+, winetricks }:
 
-python3Packages.buildPythonApplication rec  {
+python3Packages.buildPythonApplication rec {
   pname = "grapejuice";
   version = "3.64.16";
 
@@ -24,17 +13,10 @@ python3Packages.buildPythonApplication rec  {
     sha256 = "sha256-3+5LWn+UBgLAX683MPHRHQMpW+gC5hGIwTtRVJHRWeE=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    desktop-file-utils
-    glib
-    gtk3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection desktop-file-utils glib gtk3 wrapGAppsHook ];
 
-  buildInputs = [
-    cairo
-  ];
+  buildInputs = [ cairo ];
 
   propagatedBuildInputs = with python3Packages; [
     requests
@@ -49,7 +31,9 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks ]
+    }"
   ];
 
   postPatch = ''

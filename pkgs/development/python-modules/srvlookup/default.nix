@@ -1,7 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
-, dnspython
-, mock, nose
-}:
+{ lib, fetchPypi, buildPythonPackage, dnspython, mock, nose }:
 
 buildPythonPackage rec {
   pname = "srvlookup";
@@ -18,7 +15,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/gmr/srvlookup";
     license = [ licenses.bsd3 ];
-    description = "A small wrapper for dnspython to return SRV records for a given host, protocol, and domain name as a list of namedtuples.";
+    description =
+      "A small wrapper for dnspython to return SRV records for a given host, protocol, and domain name as a list of namedtuples.";
     maintainers = [ maintainers.mmlb ];
   };
 }

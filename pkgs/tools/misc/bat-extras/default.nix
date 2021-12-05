@@ -1,33 +1,29 @@
 { lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
-, coreutils
-, getconf
-, less
+, coreutils, getconf, less
 # batgrep
 , ripgrep
 # prettybat
 , withShFmt ? shfmt != null, shfmt ? null
-, withPrettier ? nodePackages?prettier, nodePackages ? null
+, withPrettier ? nodePackages ? prettier, nodePackages ? null
 , withClangTools ? clang-tools != null, clang-tools ? null
 , withRustFmt ? rustfmt != null, rustfmt ? null
-# batwatch
+  # batwatch
 , withEntr ? entr != null, entr ? null
-# batdiff
-, gitMinimal
-, withDelta ? delta != null, delta ? null
-}:
+  # batdiff
+, gitMinimal, withDelta ? delta != null, delta ? null }:
 
 let
   # Core derivation that all the others are based on.
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
-    pname   = "bat-extras";
+    pname = "bat-extras";
     version = "2021.04.06";
 
     src = fetchFromGitHub {
-      owner  = "eth-p";
-      repo   = pname;
-      rev    = "v${version}";
+      owner = "eth-p";
+      repo = pname;
+      rev = "v${version}";
       sha256 = "sha256-MphI2n+oHZrw8bPohNGeGdST5LS1c6s/rKqtpcR9cLo=";
       fetchSubmodules = true;
     };
@@ -77,15 +73,15 @@ let
     dontPatchShebangs = true;
 
     meta = with lib; {
-      description = "Bash scripts that integrate bat with various command line tools";
-      homepage    = "https://github.com/eth-p/bat-extras";
-      license     = with licenses; [ mit ];
+      description =
+        "Bash scripts that integrate bat with various command line tools";
+      homepage = "https://github.com/eth-p/bat-extras";
+      license = with licenses; [ mit ];
       maintainers = with maintainers; [ bbigras lilyball ];
-      platforms   = platforms.all;
+      platforms = platforms.all;
     };
   };
-  script =
-    name: # the name of the script
+  script = name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
       pname = "${core.pname}-${name}";
@@ -117,7 +113,7 @@ let
         runHook preInstall
         mkdir -p $out/bin
         cp -p bin/${name} $out/bin/${name}
-      '' + lib.optionalString (dependencies != []) ''
+      '' + lib.optionalString (dependencies != [ ]) ''
         wrapProgram $out/bin/${name} \
           --prefix PATH : ${lib.makeBinPath dependencies}
       '' + ''
@@ -129,17 +125,15 @@ let
 
       inherit (core) meta;
     };
-  optionalDep = cond: dep:
-    assert cond -> dep != null;
-    lib.optional cond dep;
-in
-{
-  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
+  optionalDep = cond: dep: assert cond -> dep != null; lib.optional cond dep;
+in {
+  batdiff = script "batdiff"
+    ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
-  batman = script "batman" [];
-  batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
-  prettybat = script "prettybat" ([]
-    ++ optionalDep withShFmt shfmt
+  batman = script "batman" [ ];
+  batwatch =
+    script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
+  prettybat = script "prettybat" ([ ] ++ optionalDep withShFmt shfmt
     ++ optionalDep withPrettier nodePackages.prettier
     ++ optionalDep withClangTools clang-tools
     ++ optionalDep withRustFmt rustfmt);

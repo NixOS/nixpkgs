@@ -1,16 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, substituteAll
-, six
-, withGraphviz ? true
-, graphviz
-, fontconfig
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, substituteAll, six
+, withGraphviz ? true, graphviz, fontconfig
 # Tests
-, pytestCheckHook
-, nose
-}:
+, pytestCheckHook, nose }:
 
 buildPythonPackage rec {
   pname = "anytree";
@@ -28,9 +19,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   # tests print “Fontconfig error: Cannot load default config file”
   preCheck = lib.optionalString withGraphviz ''

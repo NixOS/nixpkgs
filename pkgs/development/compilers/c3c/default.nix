@@ -1,9 +1,4 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-}:
+{ llvmPackages, lib, fetchFromGitHub, cmake, python3 }:
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "c3c";
@@ -18,10 +13,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.lld
-  ];
+  buildInputs = [ llvmPackages.llvm llvmPackages.lld ];
 
   checkInputs = [ python3 ];
 

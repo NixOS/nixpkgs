@@ -1,19 +1,17 @@
 { lib, stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
-, docbook_xsl, diffutils, coreutils, gnugrep, gnused
-}:
+, docbook_xsl, diffutils, coreutils, gnugrep, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "autorevision";
   version = "1.22";
 
   src = fetchurl {
-    url = "https://github.com/Autorevision/autorevision/releases/download/v%2F${version}/autorevision-${version}.tgz";
+    url =
+      "https://github.com/Autorevision/autorevision/releases/download/v%2F${version}/autorevision-${version}.tgz";
     sha256 = "sha256-3ktLVC73m2xddq5BhxVKw/FJd6pZ5RVb7fv29dxUoRE=";
   };
 
-  buildInputs = [
-    asciidoc libxml2 docbook_xml_dtd_45 libxslt docbook_xsl
-  ];
+  buildInputs = [ asciidoc libxml2 docbook_xml_dtd_45 libxslt docbook_xsl ];
 
   installFlags = [ "prefix=$(out)" ];
 

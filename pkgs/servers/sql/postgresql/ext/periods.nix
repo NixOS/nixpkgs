@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
+    description =
+      "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
     homepage = "https://github.com/xocolatl/periods";
     maintainers = with maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;

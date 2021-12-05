@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ncurses}:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "iptraf";
@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
     cp iptraf $out/bin
   '';
 
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
 
   meta = {
     homepage = "http://iptraf.seul.org/";
     license = lib.licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
     platforms = lib.platforms.linux;
-    broken = true; # required isdn headers have been removed from the linux kernel
+    broken =
+      true; # required isdn headers have been removed from the linux kernel
   };
 }

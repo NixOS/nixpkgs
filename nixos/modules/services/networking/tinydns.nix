@@ -16,7 +16,8 @@ with lib;
       data = mkOption {
         type = types.lines;
         default = "";
-        description = "The DNS data to serve, in the format described by tinydns-data(8)";
+        description =
+          "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
       ip = mkOption {
@@ -36,7 +37,7 @@ with lib;
       isSystemUser = true;
       group = "tinydns";
     };
-    users.groups.tinydns = {};
+    users.groups.tinydns = { };
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
@@ -47,7 +48,9 @@ with lib;
         rm -rf /var/lib/tinydns
         tinydns-conf tinydns tinydns /var/lib/tinydns ${config.services.tinydns.ip}
         cd /var/lib/tinydns/root/
-        ln -sf ${pkgs.writeText "tinydns-data" config.services.tinydns.data} data
+        ln -sf ${
+          pkgs.writeText "tinydns-data" config.services.tinydns.data
+        } data
         tinydns-data
       '';
       script = ''

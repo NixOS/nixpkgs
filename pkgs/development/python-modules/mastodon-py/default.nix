@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blurhash
-, cryptography
-, decorator
-, http-ece
-, python-dateutil
-, python_magic
-, pytz
-, requests
-, six
-, pytestCheckHook
-, pytest-mock
-, pytest-vcr
-, requests-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, blurhash, cryptography, decorator
+, http-ece, python-dateutil, python_magic, pytz, requests, six, pytestCheckHook
+, pytest-mock, pytest-vcr, requests-mock }:
 
 buildPythonPackage rec {
   pname = "mastodon-py";
@@ -43,12 +29,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-    pytest-vcr
-    requests-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock pytest-vcr requests-mock ];
 
   pythonImportsCheck = [ "mastodon" ];
 

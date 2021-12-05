@@ -1,21 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, coreutils
-, accountsservice
-, dbus
-, pam
-, polkit
-, glib-testing
-, python3
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, meson, ninja, pkg-config
+, gobject-introspection, wrapGAppsHook, glib, coreutils, accountsservice, dbus
+, pam, polkit, glib-testing, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
@@ -39,13 +24,8 @@ stdenv.mkDerivation rec {
     ./better-separation.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config gobject-introspection wrapGAppsHook ];
 
   buildInputs = [
     accountsservice
@@ -53,14 +33,10 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
+    (python3.withPackages (pp: with pp; [ pygobject3 ]))
   ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dinstalled_tests=true"
@@ -85,9 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.malcontent;
-    };
+    tests = { installedTests = nixosTests.installed-tests.malcontent; };
   };
 
   meta = with lib; {

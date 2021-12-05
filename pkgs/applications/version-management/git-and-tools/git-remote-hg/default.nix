@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, python3Packages
-, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
-}:
+{ lib, fetchFromGitHub, python3Packages, asciidoc, xmlto, docbook_xsl
+, docbook_xml_dtd_45, libxslt, libxml2 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-hg";
@@ -13,9 +12,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1crgq13v2p9wmw1yhckmyzybh8h1nz3839qhqvzh48vxqkailzmn";
   };
 
-  nativeBuildInputs = [
-    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
-  ];
+  nativeBuildInputs =
+    [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2 ];
   propagatedBuildInputs = with python3Packages; [ mercurial ];
 
   postInstall = ''

@@ -1,12 +1,5 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi
-, appdirs
-, black
-, importlib-metadata
-, isPy3k
-, jedi
-, prompt-toolkit
-, pygments
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, appdirs, black
+, importlib-metadata, isPy3k, jedi, prompt-toolkit, pygments }:
 
 buildPythonPackage rec {
   pname = "ptpython";

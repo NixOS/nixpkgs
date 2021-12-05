@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, olm
-, cffi, future, typing }:
+{ lib, buildPythonPackage, isPy3k, olm, cffi, future, typing }:
 
 buildPythonPackage {
   pname = "python-olm";
@@ -12,14 +11,9 @@ buildPythonPackage {
     make include/olm/olm.h
   '';
 
-  propagatedBuildInputs = [
-    cffi
-    future
-  ] ++ lib.optionals (!isPy3k) [ typing ];
+  propagatedBuildInputs = [ cffi future ] ++ lib.optionals (!isPy3k) [ typing ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
   # Some required libraries for testing are not packaged yet.
   doCheck = false;

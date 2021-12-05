@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, bison, flex, readline, ncurses, gnused}:
+{ lib, stdenv, fetchurl, bison, flex, readline, ncurses, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "cdecl";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANDIR=$out/man1 CATDIR=$out/cat1 CC=$CC";
     mkdir -p $out/bin;
   '';
-  buildInputs = [bison flex readline ncurses];
+  buildInputs = [ bison flex readline ncurses ];
 
   meta = {
     description = "Translator English -- C/C++ declarations";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [joelteon];
+    maintainers = with lib.maintainers; [ joelteon ];
     platforms = lib.platforms.unix;
   };
 }

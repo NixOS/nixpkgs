@@ -1,24 +1,7 @@
-{ stdenv
-, lib
-, fetchurl
-, alsa-lib
-, dbus
-, ell
-, glib
-, json_c
-, libical
-, docutils
-, pkg-config
-, python3
-, readline
-, systemd
-, udev
-}: let
-  pythonPath = with python3.pkgs; [
-    dbus-python
-    pygobject3
-    recursivePthLoader
-  ];
+{ stdenv, lib, fetchurl, alsa-lib, dbus, ell, glib, json_c, libical, docutils
+, pkg-config, python3, readline, systemd, udev }:
+let
+  pythonPath = with python3.pkgs; [ dbus-python pygobject3 recursivePthLoader ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
   version = "5.62";
@@ -28,23 +11,9 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-OAkKW3UOF/wI0+UheO2NMlTF9L0sSIMNXBlVuI47wMI=";
   };
 
-  buildInputs = [
-    alsa-lib
-    dbus
-    ell
-    glib
-    json_c
-    libical
-    python3
-    readline
-    udev
-  ];
+  buildInputs = [ alsa-lib dbus ell glib json_c libical python3 readline udev ];
 
-  nativeBuildInputs = [
-    docutils
-    pkg-config
-    python3.pkgs.wrapPython
-  ];
+  nativeBuildInputs = [ docutils pkg-config python3.pkgs.wrapPython ];
 
   outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
 

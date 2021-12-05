@@ -1,38 +1,8 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, boost
-, chromaprint
-, fftw
-, gnutls
-, libcdio
-, libmtp
-, libpthreadstubs
-, libtasn1
-, libXdmcp
-, ninja
-, pcre
-, protobuf
-, sqlite
-, taglib
-, libpulseaudio
-, libselinux
-, libsepol
-, p11-kit
-, util-linux
-, qtbase
-, qtx11extras
-, qttools
-, withGstreamer ? true
-, glib-networking
-, gst_all_1
-, withVlc ? true
-, libvlc
-}:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, boost
+, chromaprint, fftw, gnutls, libcdio, libmtp, libpthreadstubs, libtasn1
+, libXdmcp, ninja, pcre, protobuf, sqlite, taglib, libpulseaudio, libselinux
+, libsepol, p11-kit, util-linux, qtbase, qtx11extras, qttools
+, withGstreamer ? true, glib-networking, gst_all_1, withVlc ? true, libvlc }:
 
 mkDerivation rec {
   pname = "strawberry";
@@ -75,14 +45,8 @@ mkDerivation rec {
     gst-plugins-ugly
   ]) ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    qttools
-  ] ++ lib.optionals stdenv.isLinux [
-    util-linux
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ]
+    ++ lib.optionals stdenv.isLinux [ util-linux ];
 
   postInstall = lib.optionalString withGstreamer ''
     qtWrapperArgs+=(
@@ -94,7 +58,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
-    changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
+    changelog =
+      "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6

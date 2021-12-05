@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pytestCheckHook
-, mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "imapclient";

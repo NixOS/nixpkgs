@@ -1,46 +1,20 @@
 { version, rev, sha256 }:
 
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, zlib
-, libjpeg
-, libpng
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXinerama
-, libXfixes
-, libXcursor
-, libXft
-, libXrender
-, ApplicationServices
-, Carbon
-, Cocoa
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, zlib, libjpeg, libpng
+, fontconfig, freetype, libX11, libXext, libXinerama, libXfixes, libXcursor
+, libXft, libXrender, ApplicationServices, Carbon, Cocoa
 
-, withGL ? true
-, libGL
-, libGLU
-, glew
-, OpenGL
+, withGL ? true, libGL, libGLU, glew, OpenGL
 
-, withCairo ? true
-, cairo
+, withCairo ? true, cairo
 
-, withPango ? (lib.strings.versionAtLeast version "1.4" && stdenv.hostPlatform.isLinux)
+, withPango ?
+  (lib.strings.versionAtLeast version "1.4" && stdenv.hostPlatform.isLinux)
 , pango
 
-, withDocs ? true
-, doxygen
-, graphviz
-, texlive
+, withDocs ? true, doxygen, graphviz, texlive
 
-, withExamples ? true
-, withShared ? true
-}:
+, withExamples ? true, withShared ? true }:
 
 let
   onOff = value: if value then "ON" else "OFF";
@@ -49,8 +23,7 @@ let
       scheme-medium varwidth multirow hanging adjustbox collectbox stackengine
       sectsty tocloft newunicodechar etoc;
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "fltk";
   inherit version;
 
@@ -60,63 +33,40 @@ stdenv.mkDerivation rec {
     inherit rev sha256;
   };
 
-  outputs = [ "out" ]
-    ++ lib.optional withExamples "bin"
+  outputs = [ "out" ] ++ lib.optional withExamples "bin"
     ++ lib.optional withDocs "doc";
 
   # Manually move example & test binaries to $bin to avoid cyclic dependencies on dev binaries
   outputBin = lib.optionalString withExamples "out";
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./nsosv.patch
-  ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./nsosv.patch ];
 
   postPatch = ''
     patchShebangs documentation/make_*
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals withDocs [
-    doxygen
-    graphviz
-    tex
-  ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optionals withDocs [ doxygen graphviz tex ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
-    Carbon
-  ] ++ lib.optionals (withGL && !stdenv.hostPlatform.isDarwin) [
-    libGL
-    libGLU
-  ] ++ lib.optionals (withExamples && withGL) [
-    glew
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Carbon ]
+    ++ lib.optionals (withGL && !stdenv.hostPlatform.isDarwin) [ libGL libGLU ]
+    ++ lib.optionals (withExamples && withGL) [ glew ];
 
-  propagatedBuildInputs = [
-    zlib
-    libjpeg
-    libpng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    freetype
-    fontconfig
-    libX11
-    libXext
-    libXinerama
-    libXfixes
-    libXcursor
-    libXft
-    libXrender
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ] ++ lib.optionals (withGL && stdenv.hostPlatform.isDarwin) [
-    OpenGL
-  ] ++ lib.optionals withCairo [
-    cairo
-  ] ++ lib.optionals withPango [
-    pango
-  ];
+  propagatedBuildInputs = [ zlib libjpeg libpng ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      freetype
+      fontconfig
+      libX11
+      libXext
+      libXinerama
+      libXfixes
+      libXcursor
+      libXft
+      libXrender
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
+    ++ lib.optionals (withGL && stdenv.hostPlatform.isDarwin) [ OpenGL ]
+    ++ lib.optionals withCairo [ cairo ] ++ lib.optionals withPango [ pango ];
 
   cmakeFlags = [
     # Common
@@ -155,10 +105,11 @@ stdenv.mkDerivation rec {
     "-DOPTION_INCLUDE_DRIVER_DOCUMENTATION=${onOff withDocs}"
   ];
 
-  preBuild = lib.optionalString (withCairo && withShared && stdenv.hostPlatform.isDarwin) ''
-    # unresolved symbols in cairo dylib without this: https://github.com/fltk/fltk/issues/250
-    export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
-  '';
+  preBuild = lib.optionalString
+    (withCairo && withShared && stdenv.hostPlatform.isDarwin) ''
+      # unresolved symbols in cairo dylib without this: https://github.com/fltk/fltk/issues/250
+      export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
+    '';
 
   postBuild = lib.optionalString withDocs ''
     make docs
@@ -184,7 +135,9 @@ stdenv.mkDerivation rec {
     }
 
     rm $out/bin/fluid.icns
-    for app in $out/bin/*.app ${lib.optionalString withExamples "$bin/bin/*.app"}; do
+    for app in $out/bin/*.app ${
+      lib.optionalString withExamples "$bin/bin/*.app"
+    }; do
       moveAppBundles "$app"
     done
   '';

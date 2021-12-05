@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, respx
-}:
+{ lib, buildPythonPackage, envoy-utils, fetchFromGitHub, httpx, pytest-asyncio
+, pytest-raises, pytestCheckHook, respx }:
 
 buildPythonPackage rec {
   pname = "envoy-reader";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-nPB1Fvb1qwLHeFkXP2jXixD2ZGA09MtS1qXRhYGt0fM=";
   };
 
-  propagatedBuildInputs = [
-    envoy-utils
-    httpx
-  ];
+  propagatedBuildInputs = [ envoy-utils httpx ];
 
-  checkInputs = [
-    pytest-raises
-    pytest-asyncio
-    pytestCheckHook
-    respx
-  ];
+  checkInputs = [ pytest-raises pytest-asyncio pytestCheckHook respx ];
 
   postPatch = ''
     substituteInPlace setup.py \

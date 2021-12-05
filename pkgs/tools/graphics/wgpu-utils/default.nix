@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-SSEG8JApQrgP7RWlXqb+xuy482oQZ5frE2IaVMruuG0=";
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;
@@ -27,9 +24,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API.";
+    description =
+      "Safe and portable GPU abstraction in Rust, implementing WebGPU API.";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };

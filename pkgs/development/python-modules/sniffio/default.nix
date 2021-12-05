@@ -1,6 +1,5 @@
 { buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
-, pythonOlder, pytest, curio
-}:
+, pythonOlder, pytest, curio }:
 
 buildPythonPackage rec {
   pname = "sniffio";

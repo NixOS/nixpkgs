@@ -1,9 +1,4 @@
-{ lib, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, pkg-config
-}:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "mypaint-brushes";
@@ -16,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c95l1vfz7sbrdlzrbz7h1p6s1k113kyjfd9wfnxlm0p6562cz3j";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
 
   preConfigure = "./autogen.sh";
 

@@ -1,18 +1,6 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, eventlet
-, fetchFromGitHub
-, iana-etc
-, libredirect
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, tornado
-, websocket-client
-}:
+{ lib, stdenv, aiohttp, buildPythonPackage, eventlet, fetchFromGitHub, iana-etc
+, libredirect, mock, pytestCheckHook, pythonOlder, requests, tornado
+, websocket-client }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
@@ -28,15 +16,8 @@ buildPythonPackage rec {
     sha256 = "sha256-ohNRtceh0bHBlnGSFUckG5KzoLY8Q1jvpFee7T78Vto=";
   };
 
-  checkInputs = [
-    aiohttp
-    eventlet
-    mock
-    requests
-    tornado
-    websocket-client
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aiohttp eventlet mock requests tornado websocket-client pytestCheckHook ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -51,13 +32,9 @@ buildPythonPackage rec {
   '';
 
   # somehow effective log level does not change?
-  disabledTests = [
-    "test_logger"
-  ];
+  disabledTests = [ "test_logger" ];
 
-  pythonImportsCheck = [
-    "engineio"
-  ];
+  pythonImportsCheck = [ "engineio" ];
 
   meta = with lib; {
     description = "Python based Engine.IO client and server";

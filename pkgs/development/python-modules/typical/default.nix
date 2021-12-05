@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, inflection
-, pendulum
-, fastjsonschema
-, typing-extensions
-, orjson
-, future-typing
-, poetry-core
-, pydantic
-, sqlalchemy
-, pandas
-, mypy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, inflection
+, pendulum, fastjsonschema, typing-extensions, orjson, future-typing
+, poetry-core, pydantic, sqlalchemy, pandas, mypy }:
 
 buildPythonPackage rec {
   pname = "typical";
@@ -27,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ITIsSM92zftnvqLiVGFl//IbBb8N3ffkkqohzOx2JO4=";
   };
 
-  patches = [
-    ./use-poetry-core.patch
-  ];
+  patches = [ ./use-poetry-core.patch ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -42,21 +27,13 @@ buildPythonPackage rec {
     future-typing
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    mypy
-    pydantic
-    sqlalchemy
-    pandas
-  ];
+  checkInputs = [ pytestCheckHook mypy pydantic sqlalchemy pandas ];
 
   disabledTests = [
     "test_ujson" # We use orjson
   ];
 
-  disabledTestPaths = [
-    "benchmark/"
-  ];
+  disabledTestPaths = [ "benchmark/" ];
 
   pythonImportsCheck = [ "typic" ];
 

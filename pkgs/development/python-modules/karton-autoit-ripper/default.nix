@@ -1,11 +1,5 @@
-{ lib
-, autoit-ripper
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, malduck
-, regex
-}:
+{ lib, autoit-ripper, buildPythonPackage, fetchFromGitHub, karton-core, malduck
+, regex }:
 
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
@@ -18,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "1bsqpf9w6d9fjysmnafaglg2w41gsafs2xz4dzcgc7n92shpcs8w";
   };
 
-  propagatedBuildInputs = [
-    autoit-ripper
-    karton-core
-    malduck
-    regex
-  ];
+  propagatedBuildInputs = [ autoit-ripper karton-core malduck regex ];
 
   postPatch = ''
     substituteInPlace requirements.txt \

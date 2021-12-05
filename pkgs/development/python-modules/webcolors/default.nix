@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, python
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, python, six }:
 
 buildPythonPackage rec {
   pname = "webcolors";
@@ -23,7 +17,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Library for working with color names/values defined by the HTML and CSS specifications";
+    description =
+      "Library for working with color names/values defined by the HTML and CSS specifications";
     homepage = "https://bitbucket.org/ubernostrum/webcolors/overview/";
     license = lib.licenses.bsd3;
   };

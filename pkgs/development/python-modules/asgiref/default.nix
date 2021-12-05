@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, stdenv, async-timeout, buildPythonPackage, fetchFromGitHub
+, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   version = "3.4.1";
@@ -21,18 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-aXD46qH5sTTmp0rlzQGLAN+MfIz1u6obCwtfqoIYgBA=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  propagatedBuildInputs = [ async-timeout ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ pytestCheckHook pytest-asyncio ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_multiprocessing"
-  ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   pythonImportsCheck = [ "asgiref" ];
 

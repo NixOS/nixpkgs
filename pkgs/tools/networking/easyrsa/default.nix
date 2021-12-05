@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, openssl, runtimeShell }:
 
-let
-  version = "3.0.8";
+let version = "3.0.8";
 in stdenv.mkDerivation {
   pname = "easyrsa";
   inherit version;

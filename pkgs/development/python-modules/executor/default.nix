@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, coloredlogs, property-manager, fasteners, pytestCheckHook, mock, virtualenv }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, coloredlogs
+, property-manager, fasteners, pytestCheckHook, mock, virtualenv }:
 
 buildPythonPackage rec {
   pname = "executor";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     "ssh"
     "foreach"
     "local_context"
-    "release"  # meant to be ran on ubuntu to succeed
+    "release" # meant to be ran on ubuntu to succeed
   ];
 
   meta = with lib; {

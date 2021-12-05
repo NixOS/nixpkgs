@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, libcanberra
-, elementary-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, python3, desktop-file-utils, gtk3, granite, libgee, libhandy
+, libcanberra, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
@@ -31,29 +16,14 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 vala wrapGAppsHook ];
 
-  buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
-    libcanberra
-    libgee
-    libhandy
-  ];
+  buildInputs =
+    [ elementary-icon-theme granite gtk3 libcanberra libgee libhandy ];
 
   postPatch = ''
     chmod +x meson/post_install.py

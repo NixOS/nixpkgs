@@ -1,8 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nodePackages
-}:
+{ lib, python3Packages, fetchFromGitHub, nodePackages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zerobin";
@@ -17,11 +13,8 @@ python3Packages.buildPythonApplication rec {
 
   disabled = python3Packages.pythonOlder "3.7";
 
-  nativeBuildInputs = [
-    python3Packages.doit
-    python3Packages.pyscss
-    nodePackages.uglify-js
-  ];
+  nativeBuildInputs =
+    [ python3Packages.doit python3Packages.pyscss nodePackages.uglify-js ];
 
   propagatedBuildInputs = with python3Packages; [
     appdirs

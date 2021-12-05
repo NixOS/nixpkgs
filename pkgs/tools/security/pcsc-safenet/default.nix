@@ -1,12 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, gtk2
-, openssl
-, pcsclite
-}:
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, gtk2, openssl, pcsclite }:
 
 stdenv.mkDerivation rec {
   pname = "pcsc-safenet";
@@ -14,7 +6,8 @@ stdenv.mkDerivation rec {
 
   # https://aur.archlinux.org/packages/sac-core/
   src = fetchurl {
-    url = "https://storage.spidlas.cz/public/soft/safenet/SafenetAuthenticationClient-core-${version}_amd64.deb";
+    url =
+      "https://storage.spidlas.cz/public/soft/safenet/SafenetAuthenticationClient-core-${version}_amd64.deb";
     sha256 = "1r9739bhal7ramj1rpawaqvik45xbs1c756l1da96din638gzy5l";
   };
 
@@ -25,20 +18,11 @@ stdenv.mkDerivation rec {
     dpkg-deb -x $src .
   '';
 
-  buildInputs = [
-    gtk2
-    openssl
-    pcsclite
-  ];
+  buildInputs = [ gtk2 openssl pcsclite ];
 
-  runtimeDependencies = [
-    openssl
-  ];
+  runtimeDependencies = [ openssl ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
   installPhase = ''
     # Set up for pcsc drivers
@@ -87,7 +71,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://safenet.gemalto.com/multi-factor-authentication/security-applications/authentication-client-token-management";
+    homepage =
+      "https://safenet.gemalto.com/multi-factor-authentication/security-applications/authentication-client-token-management";
     description = "Safenet Authentication Client";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

@@ -22,18 +22,17 @@ stdenv.mkDerivation {
     xcbutilwm
   ];
 
-  sourceRoot = let
-    subdir = if stdenv.isDarwin then "osx" else "linux";
+  sourceRoot = let subdir = if stdenv.isDarwin then "osx" else "linux";
   in "source/${subdir}";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A tiling window manager";
-    homepage    = "https://github.com/conformal/spectrwm";
+    homepage = "https://github.com/conformal/spectrwm";
     maintainers = with maintainers; [ christianharke ];
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    license = licenses.isc;
+    platforms = platforms.all;
 
     longDescription = ''
       spectrwm is a small dynamic tiling window manager for X11. It

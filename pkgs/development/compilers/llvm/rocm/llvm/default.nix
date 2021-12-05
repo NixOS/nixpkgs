@@ -1,34 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, writeScript
-, cmake
-, python3
-, libxml2
-, libffi
-, libbfd
-, ncurses
-, zlib
-, debugVersion ? false
-, enableManpages ? false
+{ stdenv, lib, fetchFromGitHub, writeScript, cmake, python3, libxml2, libffi
+, libbfd, ncurses, zlib, debugVersion ? false, enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 
-, version
-, src
-}:
+, version, src }:
 
 let
-  llvmNativeTarget =
-    if stdenv.isx86_64 then "X86"
-    else if stdenv.isAarch64 then "AArch64"
-    else throw "Unsupported ROCm LLVM platform";
+  llvmNativeTarget = if stdenv.isx86_64 then
+    "X86"
+  else if stdenv.isAarch64 then
+    "AArch64"
+  else
+    throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation rec {
   inherit src version;
 
   pname = "rocm-llvm";
 
-  outputs = [ "out" "python" ]
-    ++ lib.optional enableSharedLibraries "lib";
+  outputs = [ "out" "python" ] ++ lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python3 ];
 
@@ -36,27 +24,24 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
-    "-DLLVM_BUILD_TESTS=OFF"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
-    "-DLLVM_ENABLE_DUMP=ON"
-    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-  ]
-  ++
-  lib.optional
-    enableSharedLibraries
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ lib.optionals enableManpages [
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ];
+  cmakeFlags = with stdenv;
+    [
+      "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
+      "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
+      "-DLLVM_BUILD_TESTS=OFF"
+      "-DLLVM_ENABLE_FFI=ON"
+      "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_ENABLE_DUMP=ON"
+      "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+    ] ++ lib.optional enableSharedLibraries "-DLLVM_LINK_LLVM_DYLIB=ON"
+    ++ lib.optionals enableManpages [
+      "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
+      "-DLLVM_BUILD_DOCS=ON"
+      "-DLLVM_ENABLE_SPHINX=ON"
+      "-DSPHINX_OUTPUT_MAN=ON"
+      "-DSPHINX_OUTPUT_HTML=OFF"
+      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    ];
 
   postPatch = ''
     substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
@@ -79,11 +64,12 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput share/opt-viewer "$python"
-  ''
-  + lib.optionalString enableSharedLibraries ''
+  '' + lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${
+      if debugVersion then "debug" else "release"
+    }.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   '';
 

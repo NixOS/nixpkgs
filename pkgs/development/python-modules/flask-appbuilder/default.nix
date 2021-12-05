@@ -1,27 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, apispec
-, colorama
-, click
-, email_validator
-, flask
-, flask-babel
-, flask_login
-, flask-openid
-, flask_sqlalchemy
-, flask_wtf
-, flask-jwt-extended
-, jsonschema
-, marshmallow
-, marshmallow-enum
-, marshmallow-sqlalchemy
-, python-dateutil
-, prison
-, pyjwt
-, pyyaml
-, sqlalchemy-utils
-}:
+{ lib, buildPythonPackage, fetchPypi, apispec, colorama, click, email_validator
+, flask, flask-babel, flask_login, flask-openid, flask_sqlalchemy, flask_wtf
+, flask-jwt-extended, jsonschema, marshmallow, marshmallow-enum
+, marshmallow-sqlalchemy, python-dateutil, prison, pyjwt, pyyaml
+, sqlalchemy-utils }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
@@ -81,7 +62,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_appbuilder" ];
 
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description =
+      "Simple and rapid application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

@@ -1,11 +1,12 @@
- { lib, stdenv, fetchurl, pkg-config, freetype, gtk }:
+{ lib, stdenv, fetchurl, pkg-config, freetype, gtk }:
 
 stdenv.mkDerivation rec {
   version = "1.6";
   pname = "gbdfed";
 
   src = fetchurl {
-    url = "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/${pname}-${version}.tar.bz2";
+    url =
+      "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/${pname}-${version}.tar.bz2";
     sha256 = "0g09k6wim58hngxncq2brr7mwjm92j3famp0vs4b3p48wr65vcjx";
   };
 

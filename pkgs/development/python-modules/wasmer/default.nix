@@ -1,25 +1,10 @@
-{ stdenv
-, lib
-, rustPlatform
-, callPackage
-, fetchFromGitHub
-, buildPythonPackage
-, libiconv
-, llvm_11
-, libffi
-, libxml2
-, ncurses
-, zlib
-}:
+{ stdenv, lib, rustPlatform, callPackage, fetchFromGitHub, buildPythonPackage
+, libiconv, llvm_11, libffi, libxml2, ncurses, zlib }:
 
 let
-  common =
-    { pname
-    , buildAndTestSubdir
-    , cargoHash
-    , extraNativeBuildInputs ? [ ]
-    , extraBuildInputs ? [ ]
-    }: buildPythonPackage rec {
+  common = { pname, buildAndTestSubdir, cargoHash, extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ] }:
+    buildPythonPackage rec {
       inherit pname;
       version = "1.0.0";
       format = "pyproject";
@@ -39,7 +24,8 @@ let
         sha256 = cargoHash;
       };
 
-      nativeBuildInputs = (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
+      nativeBuildInputs =
+        (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
         ++ extraNativeBuildInputs;
 
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
@@ -59,7 +45,7 @@ let
         pytest = callPackage ./tests.nix { };
       };
 
-      pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
+      pythonImportsCheck = [ "${lib.replaceStrings [ "-" ] [ "_" ] pname}" ];
 
       meta = with lib; {
         description = "Python extension to run WebAssembly binaries";
@@ -69,8 +55,7 @@ let
         maintainers = with maintainers; [ SuperSandro2000 ];
       };
     };
-in
-rec {
+in rec {
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";

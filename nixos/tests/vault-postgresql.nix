@@ -4,13 +4,10 @@
       as is required for security (required because while confidentiality is
       always covered, availability isn't)
     - the postgres integration works
- */
-import ./make-test-python.nix ({ pkgs, ... }:
-{
+*/
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "vault-postgresql";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 roberth ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ lnl7 roberth ]; };
   machine = { lib, pkgs, ... }: {
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
@@ -18,9 +15,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     services.vault.extraSettingsPaths = [ "/run/vault.hcl" ];
 
     systemd.services.vault = {
-      after = [
-        "postgresql.service"
-      ];
+      after = [ "postgresql.service" ];
       # Try for about 10 minutes rather than the default of 5 attempts.
       serviceConfig.RestartSec = 1;
       serviceConfig.StartLimitBurst = 600;
@@ -46,24 +41,23 @@ import ./make-test-python.nix ({ pkgs, ... }:
     '';
   };
 
-  testScript =
-    ''
-      secretConfig = """
-          storage "postgresql" {
-            connection_url = "postgres://vaultuser:thisisthepass@localhost/postgres?sslmode=disable"
-          }
-          """
+  testScript = ''
+    secretConfig = """
+        storage "postgresql" {
+          connection_url = "postgres://vaultuser:thisisthepass@localhost/postgres?sslmode=disable"
+        }
+        """
 
-      start_all()
+    start_all()
 
-      machine.wait_for_unit("multi-user.target")
-      machine.succeed("cat >/root/vault.hcl <<EOF\n%s\nEOF\n" % secretConfig)
-      machine.succeed(
-          "install --owner vault --mode 0400 /root/vault.hcl /run/vault.hcl; rm /root/vault.hcl"
-      )
-      machine.wait_for_unit("vault.service")
-      machine.wait_for_open_port(8200)
-      machine.succeed("vault operator init")
-      machine.succeed("vault status || test $? -eq 2")
-    '';
+    machine.wait_for_unit("multi-user.target")
+    machine.succeed("cat >/root/vault.hcl <<EOF\n%s\nEOF\n" % secretConfig)
+    machine.succeed(
+        "install --owner vault --mode 0400 /root/vault.hcl /run/vault.hcl; rm /root/vault.hcl"
+    )
+    machine.wait_for_unit("vault.service")
+    machine.wait_for_open_port(8200)
+    machine.succeed("vault operator init")
+    machine.succeed("vault status || test $? -eq 2")
+  '';
 })

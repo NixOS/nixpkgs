@@ -5,7 +5,8 @@ buildDunePackage rec {
   version = "0.19.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
+    url =
+      "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
     sha256 = "sha256-YvxGqujwpKM85/jXcm1xCb/2Fepvy1DRSC8h0g7lD0Y=";
   };
 

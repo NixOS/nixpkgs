@@ -1,7 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-}:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "zd1211-firmware";

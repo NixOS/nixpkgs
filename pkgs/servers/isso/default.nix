@@ -10,10 +10,9 @@ let
     inherit nodeEnv;
   };
 
-  nodeDependencies = (nodePackages.shell.override (old: {
-  })).nodeDependencies;
-in
-with python3Packages; buildPythonApplication rec {
+  nodeDependencies = (nodePackages.shell.override (old: { })).nodeDependencies;
+in with python3Packages;
+buildPythonApplication rec {
 
   pname = "isso";
   version = "0.12.5";
@@ -25,20 +24,10 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "12ccfba2kwbfm9h4zhlxrcigi98akbdm4qi89iglr4z53ygzpay5";
   };
 
-  propagatedBuildInputs = [
-    itsdangerous
-    jinja2
-    misaka
-    html5lib
-    werkzeug
-    bleach
-    flask-caching
-  ];
+  propagatedBuildInputs =
+    [ itsdangerous jinja2 misaka html5lib werkzeug bleach flask-caching ];
 
-  nativeBuildInputs = [
-    cffi
-    nodejs
-  ];
+  nativeBuildInputs = [ cffi nodejs ];
 
   preBuild = ''
     ln -s ${nodeDependencies}/lib/node_modules ./node_modules

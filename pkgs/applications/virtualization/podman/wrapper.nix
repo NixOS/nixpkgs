@@ -1,8 +1,4 @@
-{ podman-unwrapped
-, runCommand
-, makeWrapper
-, lib
-, extraPackages ? []
+{ podman-unwrapped, runCommand, makeWrapper, lib, extraPackages ? [ ]
 , podman # Docker compat
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
@@ -11,9 +7,7 @@
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , util-linux # nsenter
 , cni-plugins # not added to path
-, iptables
-, iproute2
-}:
+, iptables, iproute2 }:
 
 let
   podman = podman-unwrapped;
@@ -37,14 +31,9 @@ in runCommand podman.name {
 
   meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
 } ''
   ln -s ${podman.man} $man

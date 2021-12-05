@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0b0c7gzx1d5kgbsfj1lbrqsirc5g5br6v8w2njaj1ys03kj669cx";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;

@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland
-, libepoxy
-, glib
-, libwpe
-, libxkbcommon
-, libGL
-, libX11 }:
+{ stdenv, lib, fetchurl, meson, pkg-config, ninja, wayland, libepoxy, glib
+, libwpe, libxkbcommon, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
@@ -21,26 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uJ39NQCk3scREyzXv/clmeZ9VqQZ0ABzDhS7mVR1Ccw=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    wayland
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja wayland ];
 
-  buildInputs = [
-    wayland
-    libepoxy
-    glib
-    libwpe
-    libxkbcommon
-    libGL
-    libX11
-  ];
+  buildInputs = [ wayland libepoxy glib libwpe libxkbcommon libGL libX11 ];
 
   meta = with lib; {
     description = "Freedesktop.org backend for WPE WebKit";

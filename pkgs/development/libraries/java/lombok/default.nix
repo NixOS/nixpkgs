@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A library that can write a lot of boilerplate for your Java project";
+    description =
+      "A library that can write a lot of boilerplate for your Java project";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     homepage = "https://projectlombok.org/";

@@ -26,7 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/zopieux/pycmarkgfm";
-    description = "Bindings to GitHub's Flavored Markdown (cmark-gfm), with enhanced support for task lists";
+    description =
+      "Bindings to GitHub's Flavored Markdown (cmark-gfm), with enhanced support for task lists";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zopieux ];

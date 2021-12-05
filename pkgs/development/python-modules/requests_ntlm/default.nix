@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ntlm-auth
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, ntlm-auth, requests }:
 
 buildPythonPackage rec {
   pname = "requests_ntlm";

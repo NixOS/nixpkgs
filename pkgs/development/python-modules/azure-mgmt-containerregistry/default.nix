@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, azure-common, azure-mgmt-core
+, msrest, msrestazure }:
 
 buildPythonPackage rec {
   version = "8.2.0";
@@ -24,7 +20,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "azure.common" "azure.mgmt.containerregistry" ];
 
   meta = with lib; {
-    description = "Microsoft Azure Container Registry Client Library for Python";
+    description =
+      "Microsoft Azure Container Registry Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

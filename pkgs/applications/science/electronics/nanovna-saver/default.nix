@@ -1,8 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-}:
+{ lib, python3, fetchFromGitHub, wrapQtAppsHook }:
 
 let
   python = python3.override {

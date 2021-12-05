@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     # TODO: Remove when https://github.com/google/glog/pull/733 is merged and available.
     (fetchpatch {
       name = "glog-cmake-Fix-incorrect-relative-path-concatenation.patch";
-      url = "https://github.com/google/glog/pull/733/commits/57c636c02784f909e4b5d3c2f0ecbdbb47097266.patch";
+      url =
+        "https://github.com/google/glog/pull/733/commits/57c636c02784f909e4b5d3c2f0ecbdbb47097266.patch";
       sha256 = "1py93gkzmcyi2ypcwyj3nri210z8fmlaif51yflzmrrv507zd7bi";
     })
   ];

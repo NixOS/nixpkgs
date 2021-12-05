@@ -1,17 +1,11 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-base }:
 
 buildDunePackage {
   pname = "tezos-version";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_version";
 
-  propagatedBuildInputs = [
-    tezos-base
-  ];
+  propagatedBuildInputs = [ tezos-base ];
 
   doCheck = true;
 

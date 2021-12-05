@@ -1,17 +1,6 @@
-{ lib
-, aiohttp
-, aresponses
-, aiocache
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, msgpack
-, ujson
-}:
+{ lib, aiohttp, aresponses, aiocache, buildPythonPackage, fetchFromGitHub
+, poetry-core, pytest-asyncio, pytest-aiohttp, pytestCheckHook, pythonOlder
+, msgpack, ujson }:
 
 buildPythonPackage rec {
   pname = "pyflunearyou";
@@ -27,35 +16,22 @@ buildPythonPackage rec {
     sha256 = "sha256-Q65OSE4qckpvaIvZULBR434i7hwuVM97eSq1Blb1oIU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    aiocache
-    msgpack
-    ujson
-  ];
+  propagatedBuildInputs = [ aiohttp aiocache msgpack ujson ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytest-aiohttp pytestCheckHook ];
 
   disabledTestPaths = [
     # Ignore the examples directory as the files are prefixed with test_.
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyflunearyou"
-  ];
+  pythonImportsCheck = [ "pyflunearyou" ];
 
   meta = with lib; {
-    description = "Python library for retrieving UV-related information from Flu Near You";
+    description =
+      "Python library for retrieving UV-related information from Flu Near You";
     homepage = "https://github.com/bachya/pyflunearyou";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

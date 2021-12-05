@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex, bison, gperf,
-  libxml2, perl, perlPackages, gd }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex, bison, gperf, libxml2
+, perl, perlPackages, gd }:
 
 stdenv.mkDerivation rec {
   version = "2.3.7";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "automatic device model synthesizer";
     homepage = "https://github.com/Qucs/adms";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [disassembler];
+    maintainers = with lib.maintainers; [ disassembler ];
     platforms = with lib.platforms; linux;
   };
 }

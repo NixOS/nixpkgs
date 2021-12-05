@@ -1,21 +1,54 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "serapeum";
   version = "20211020-git";
 
   description = "Utilities beyond Alexandria.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."closer-mop" args."fare-quasiquote" args."fare-quasiquote-extras" args."fare-quasiquote-optima" args."fare-quasiquote-readtable" args."fare-utils" args."global-vars" args."introspect-environment" args."iterate" args."lisp-namespace" args."named-readtables" args."parse-declarations-1_dot_0" args."parse-number" args."split-sequence" args."string-case" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" args."trivial-features" args."trivial-file-size" args."trivial-garbage" args."trivial-macroexpand-all" args."type-i" args."uiop" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."closer-mop"
+    args."fare-quasiquote"
+    args."fare-quasiquote-extras"
+    args."fare-quasiquote-optima"
+    args."fare-quasiquote-readtable"
+    args."fare-utils"
+    args."global-vars"
+    args."introspect-environment"
+    args."iterate"
+    args."lisp-namespace"
+    args."named-readtables"
+    args."parse-declarations-1_dot_0"
+    args."parse-number"
+    args."split-sequence"
+    args."string-case"
+    args."trivia"
+    args."trivia_dot_balland2006"
+    args."trivia_dot_level0"
+    args."trivia_dot_level1"
+    args."trivia_dot_level2"
+    args."trivia_dot_quasiquote"
+    args."trivia_dot_trivial"
+    args."trivial-cltl2"
+    args."trivial-features"
+    args."trivial-file-size"
+    args."trivial-garbage"
+    args."trivial-macroexpand-all"
+    args."type-i"
+    args."uiop"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/serapeum/2021-10-20/serapeum-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/serapeum/2021-10-20/serapeum-20211020-git.tgz";
     sha256 = "1lax10p8apgsm09wcnmxn1p52hgngwp8j6dsk5y8r2dj7h73529v";
   };
 
   packageName = "serapeum";
 
-  asdFilesToKeep = ["serapeum.asd"];
+  asdFilesToKeep = [ "serapeum.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM serapeum DESCRIPTION Utilities beyond Alexandria. SHA256
@@ -60,4 +93,5 @@ rec {
      trivia.level2 trivia.quasiquote trivia.trivial trivial-cltl2
      trivial-features trivial-file-size trivial-garbage trivial-macroexpand-all
      type-i uiop)
-    VERSION 20211020-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20211020-git SIBLINGS NIL PARASITES NIL)
+*/

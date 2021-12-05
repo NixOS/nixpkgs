@@ -1,21 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bleach
-, bokeh
-, param
-, pyviz-comms
-, markdown
-, pyct
-, testpath
-, tqdm
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, bleach, bokeh, param, pyviz-comms
+, markdown, pyct, testpath, tqdm, callPackage }:
 
-let
-  node = callPackage ./node { };
-in
-buildPythonPackage rec {
+let node = callPackage ./node { };
+in buildPythonPackage rec {
   pname = "panel";
   version = "0.12.1";
 
@@ -43,16 +30,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  propagatedBuildInputs = [
-    bleach
-    bokeh
-    param
-    pyviz-comms
-    markdown
-    pyct
-    testpath
-    tqdm
-  ];
+  propagatedBuildInputs =
+    [ bleach bokeh param pyviz-comms markdown pyct testpath tqdm ];
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
@@ -62,7 +41,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A high level dashboarding library for python visualization libraries";
+    description =
+      "A high level dashboarding library for python visualization libraries";
     homepage = "https://pyviz.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

@@ -1,24 +1,6 @@
-{ stdenv
-, lib
-, makeWrapper
-, socat
-, iptables
-, iproute2
-, bridge-utils
-, conntrack-tools
-, buildGoPackage
-, runc
-, kmod
-, libseccomp
-, pkg-config
-, ethtool
-, util-linux
-, fetchFromGitHub
-, fetchurl
-, fetchzip
-, fetchgit
-, zstd
-}:
+{ stdenv, lib, makeWrapper, socat, iptables, iproute2, bridge-utils
+, conntrack-tools, buildGoPackage, runc, kmod, libseccomp, pkg-config, ethtool
+, util-linux, fetchFromGitHub, fetchurl, fetchzip, fetchgit, zstd }:
 
 with lib;
 
@@ -42,17 +24,20 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.22.3+k3s1";     # k3s git tag
-  k3sCommit = "61a2aab25eeb97c26fa3f2b177e4355a7654c991"; # k3s git commit at the above version
+  k3sVersion = "1.22.3+k3s1"; # k3s git tag
+  k3sCommit =
+    "61a2aab25eeb97c26fa3f2b177e4355a7654c991"; # k3s git commit at the above version
   k3sRepoSha256 = "0lz5hr3c86gxm9w5jy3g26n6a26m8k0y559hv6220rsi709j7ma9";
 
-  traefikChartVersion = "10.3.0"; # taken from ./manifests/traefik.yaml at spec.version
+  traefikChartVersion =
+    "10.3.0"; # taken from ./manifests/traefik.yaml at spec.version
   traefikChartSha256 = "0y6wr64xp7bgx24kqil0x6myr3pnfrg8rw0d1h5zd2n5a8nfd73f";
 
-  k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
+  k3sRootVersion = "0.9.1"; # taken from ./scripts/download at ROOT_VERSION
   k3sRootSha256 = "0r2cj4l50cxkrvszpzxfk36lvbjf9vcmp6d5lvxg8qsah8lki3x8";
 
-  k3sCNIVersion = "0.9.1-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
+  k3sCNIVersion =
+    "0.9.1-k3s1"; # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
   k3sCNISha256 = "1327vmfph7b8i14q05c2xdfzk60caflg1zhycx0mrf3d59f4zsz5";
 
   baseMeta = {
@@ -79,7 +64,8 @@ let
   # k3s binary.
   k3sRoot = fetchzip {
     # Note: marked as apache 2.0 license
-    url = "https://github.com/k3s-io/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
+    url =
+      "https://github.com/k3s-io/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
     sha256 = k3sRootSha256;
     stripRoot = false;
   };
@@ -171,7 +157,8 @@ let
     '';
 
     meta = baseMeta // {
-      description = "The various binaries that get packaged into the final k3s binary";
+      description =
+        "The various binaries that get packaged into the final k3s binary";
     };
   };
   k3sBin = buildGoPackage rec {
@@ -191,10 +178,12 @@ let
     propagatedBuildInputs = [ k3sPlugins k3sBuildStage1 runc ];
 
     # k3s appends a suffix to the final distribution binary for some arches
-    archSuffix =
-      if stdenv.hostPlatform.system == "x86_64-linux" then ""
-      else if stdenv.hostPlatform.system == "aarch64-linux" then "-arm64"
-      else throw "k3s isn't being built for ${stdenv.hostPlatform.system} yet.";
+    archSuffix = if stdenv.hostPlatform.system == "x86_64-linux" then
+      ""
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "-arm64"
+    else
+      throw "k3s isn't being built for ${stdenv.hostPlatform.system} yet.";
 
     DRONE_TAG = "v${version}";
     DRONE_COMMIT = k3sCommit;
@@ -234,11 +223,11 @@ let
     '';
 
     meta = baseMeta // {
-      description = "The k3s go binary which is used by the final wrapped output below";
+      description =
+        "The k3s go binary which is used by the final wrapped output below";
     };
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "k3s";
   version = k3sVersion;
 
@@ -259,9 +248,7 @@ stdenv.mkDerivation rec {
     conntrack-tools
   ];
 
-  buildInputs = [
-    k3sBin
-  ] ++ k3sRuntimeDeps;
+  buildInputs = [ k3sBin ] ++ k3sRuntimeDeps;
 
   nativeBuildInputs = [ makeWrapper ];
 

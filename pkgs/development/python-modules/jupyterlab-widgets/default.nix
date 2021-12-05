@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, jupyter-packaging
-}:
+{ lib, buildPythonPackage, fetchPypi, jupyter-packaging }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
@@ -12,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "0y7vhhas3qndiypcpcfnhrj9n92v2w4hdc86nn620s9h9nl2j6jw";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
   # has no tests
   doCheck = false;

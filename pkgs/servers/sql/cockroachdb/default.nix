@@ -1,19 +1,14 @@
-{ lib, stdenv, buildGoPackage, fetchurl
-, cmake, xz, which, autoconf
-, ncurses6, libedit, libunwind
-, installShellFiles
-, removeReferencesTo, go
-}:
+{ lib, stdenv, buildGoPackage, fetchurl, cmake, xz, which, autoconf, ncurses6
+, libedit, libunwind, installShellFiles, removeReferencesTo, go }:
 
 let
   darwinDeps = [ libunwind libedit ];
-  linuxDeps  = [ ncurses6 ];
+  linuxDeps = [ ncurses6 ];
 
   buildInputs = if stdenv.isDarwin then darwinDeps else linuxDeps;
   nativeBuildInputs = [ installShellFiles cmake xz which autoconf ];
 
-in
-buildGoPackage rec {
+in buildGoPackage rec {
   pname = "cockroach";
   version = "20.1.8";
 
@@ -24,7 +19,11 @@ buildGoPackage rec {
     sha256 = "0mm3hfr778c7djza8gr1clwa8wca4d3ldh9hlg80avw4x664y5zi";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=deprecated-copy"
+    "-Wno-error=redundant-move"
+    "-Wno-error=pessimizing-move"
+  ];
 
   inherit nativeBuildInputs buildInputs;
 
@@ -61,10 +60,10 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://www.cockroachlabs.com";
+    homepage = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    license = licenses.bsl11;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice ];
   };
 }

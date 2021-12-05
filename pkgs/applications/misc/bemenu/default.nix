@@ -1,12 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkg-config
-, ncursesSupport ? true, ncurses ? null
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon, pango, fribidi
+, harfbuzz, pcre, pkg-config, ncursesSupport ? true, ncurses ? null
 , waylandSupport ? true, wayland ? null, wayland-protocols ? null
-, x11Support ? true, xorg ? null
-}:
+, x11Support ? true, xorg ? null }:
 
 assert ncursesSupport -> ncurses != null;
-assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
+assert waylandSupport -> !lib.elem null [ wayland wayland-protocols ];
 assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
@@ -24,31 +22,30 @@ stdenv.mkDerivation rec {
     # Pull upstream fix for build against ncurses-6.3
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/Cloudef/bemenu/commit/d31164db756989579468946aba62969e42c7ed28.patch";
+      url =
+        "https://github.com/Cloudef/bemenu/commit/d31164db756989579468946aba62969e42c7ed28.patch";
       sha256 = "sha256-oyndQI7SaR8cK0IO5wIIxMpmakhfUzwUqLIKRbPkEdw=";
     })
   ];
 
   nativeBuildInputs = [ pkg-config pcre ];
 
-  makeFlags = ["PREFIX=$(out)"];
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags = ["clients"]
-    ++ lib.optional ncursesSupport "curses"
-    ++ lib.optional waylandSupport "wayland"
-    ++ lib.optional x11Support "x11";
+  buildFlags = [ "clients" ] ++ lib.optional ncursesSupport "curses"
+    ++ lib.optional waylandSupport "wayland" ++ lib.optional x11Support "x11";
 
-  buildInputs = with lib; [
-    cairo
-    fribidi
-    harfbuzz
-    libxkbcommon
-    pango
-  ] ++ optional ncursesSupport ncurses
+  buildInputs = with lib;
+    [ cairo fribidi harfbuzz libxkbcommon pango ]
+    ++ optional ncursesSupport ncurses
     ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optionals x11Support [
-      xorg.libX11 xorg.libXinerama xorg.libXft
-      xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
+      xorg.libX11
+      xorg.libXinerama
+      xorg.libXft
+      xorg.libXdmcp
+      xorg.libpthreadstubs
+      xorg.libxcb
     ];
 
   meta = with lib; {

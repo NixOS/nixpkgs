@@ -1,17 +1,11 @@
 # This test runs simple etcd node
 
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "etcd";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ offline ]; };
 
-  nodes = {
-    node = { ... }: {
-      services.etcd.enable = true;
-    };
-  };
+  nodes = { node = { ... }: { services.etcd.enable = true; }; };
 
   testScript = ''
     with subtest("should start etcd node"):

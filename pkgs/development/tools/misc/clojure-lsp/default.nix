@@ -1,4 +1,5 @@
-{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
+{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub
+, clojure, writeScript }:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
@@ -12,7 +13,8 @@ buildGraalvmNativeImage rec {
   };
 
   jar = fetchurl {
-    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
+    url =
+      "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
     sha256 = "sha256-k0mzibcLAspklCPE6f2qsUm9bwSvcJRgWecMBq7mpF0=";
   };
 

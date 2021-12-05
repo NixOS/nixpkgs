@@ -1,33 +1,26 @@
-{ glib
-, haskellPackages
-, lib
-, nodePackages
-, perlPackages
-, python2Packages
-, python3Packages
-, runCommand
-, writers
-, writeText
-}:
+{ glib, haskellPackages, lib, nodePackages, perlPackages, python2Packages
+, python3Packages, runCommand, writers, writeText }:
 with writers;
 let
 
   bin = {
     bash = writeBashBin "test-writers-bash-bin" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
+      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
     dash = writeDashBin "test-writers-dash-bin" ''
-     test '~' = '~' && echo 'success'
+      test '~' = '~' && echo 'success'
     '';
 
-    rust = writeRustBin "test-writers-rust-bin" {} ''
+    rust = writeRustBin "test-writers-rust-bin" { } ''
       fn main(){
         println!("success")
       }
     '';
 
-    haskell = writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
+    haskell = writeHaskellBin "test-writers-haskell-bin" {
+      libraries = [ haskellPackages.acme-default ];
+    } ''
       import Data.Default
 
       int :: Int
@@ -39,7 +32,9 @@ let
         _ -> print "fail"
     '';
 
-    js = writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
+    js = writeJSBin "test-writers-js-bin" {
+      libraries = [ nodePackages.semver ];
+    } ''
       var semver = require('semver');
 
       if (semver.valid('1.2.3')) {
@@ -49,12 +44,16 @@ let
       }
     '';
 
-    perl = writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
+    perl = writePerlBin "test-writers-perl-bin" {
+      libraries = [ perlPackages.boolean ];
+    } ''
       use boolean;
       print "success\n" if true;
     '';
 
-    python2 = writePython2Bin "test-writers-python2-bin" { libraries = [ python2Packages.enum ]; } ''
+    python2 = writePython2Bin "test-writers-python2-bin" {
+      libraries = [ python2Packages.enum ];
+    } ''
       from enum import Enum
 
 
@@ -65,7 +64,9 @@ let
       print Test.a
     '';
 
-    python3 = writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
+    python3 = writePython3Bin "test-writers-python3-bin" {
+      libraries = [ python3Packages.pyyaml ];
+    } ''
       import yaml
 
       y = yaml.load("""
@@ -77,14 +78,16 @@ let
 
   simple = {
     bash = writeBash "test-writers-bash" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
+      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
     dash = writeDash "test-writers-dash" ''
-     test '~' = '~' && echo 'success'
+      test '~' = '~' && echo 'success'
     '';
 
-    haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
+    haskell = writeHaskell "test-writers-haskell" {
+      libraries = [ haskellPackages.acme-default ];
+    } ''
       import Data.Default
 
       int :: Int
@@ -106,12 +109,15 @@ let
       }
     '';
 
-    perl = writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
-      use boolean;
-      print "success\n" if true;
-    '';
+    perl =
+      writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
+        use boolean;
+        print "success\n" if true;
+      '';
 
-    python2 = writePython2 "test-writers-python2" { libraries = [ python2Packages.enum ]; } ''
+    python2 = writePython2 "test-writers-python2" {
+      libraries = [ python2Packages.enum ];
+    } ''
       from enum import Enum
 
 
@@ -122,7 +128,9 @@ let
       print Test.a
     '';
 
-    python3 = writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
+    python3 = writePython3 "test-writers-python3" {
+      libraries = [ python3Packages.pyyaml ];
+    } ''
       import yaml
 
       y = yaml.load("""
@@ -131,21 +139,22 @@ let
       print(y[0]['test'])
     '';
 
-    python2NoLibs = writePython2 "test-writers-python2-no-libs" {} ''
+    python2NoLibs = writePython2 "test-writers-python2-no-libs" { } ''
       print("success")
     '';
 
-    python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
+    python3NoLibs = writePython3 "test-writers-python3-no-libs" { } ''
       print("success")
     '';
   };
-
 
   path = {
     bash = writeBash "test-writers-bash-path" (writeText "test" ''
       if [[ "test" == "test" ]]; then echo "success"; fi
     '');
-    haskell = writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
+    haskell = writeHaskell "test-writers-haskell-path" {
+      libraries = [ haskellPackages.acme-default ];
+    } (writeText "test" ''
       import Data.Default
 
       int :: Int
@@ -170,9 +179,13 @@ in runCommand "test-writers" {
   passthru = { inherit writeTest bin simple path; };
   meta.platforms = lib.platforms.all;
 } ''
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name "${test}/bin/${test.name}") (lib.attrValues bin)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues simple)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues path)}
+  ${lib.concatMapStringsSep "\n"
+  (test: writeTest "success" test.name "${test}/bin/${test.name}")
+  (lib.attrValues bin)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test)
+  (lib.attrValues simple)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test)
+  (lib.attrValues path)}
 
   echo 'nix-writers successfully tested' >&2
   touch $out

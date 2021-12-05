@@ -11,17 +11,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0y7v9ikrmy5dbjlpbpacp08gy838i8z54m8m4ps7ldk1j6kyia3n";
   };
 
-  propagatedBuildInputs = (with python3Packages; [
-      requests
-      docopt
-      setuptools
-      jinja2
-      pythondialog
-    ]) ++ [
-      dialog
-      openvpn
-      iptables
-    ];
+  propagatedBuildInputs =
+    (with python3Packages; [ requests docopt setuptools jinja2 pythondialog ])
+    ++ [ dialog openvpn iptables ];
 
   # No tests
   doCheck = false;

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aiohttp }:
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "1m0bc3bzb83apprk412s7k5r2g6p5br2hrak2a976lh9ifk1d8hj";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # The only test requires network access
   doCheck = false;

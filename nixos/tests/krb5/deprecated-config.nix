@@ -1,25 +1,22 @@
 # Verifies that the configuration suggested in deprecated example values
 # will result in the expected output.
 
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "krb5-with-deprecated-config";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eqyiel ];
+  meta = with pkgs.lib.maintainers; { maintainers = [ eqyiel ]; };
+
+  machine = { ... }: {
+    krb5 = {
+      enable = true;
+      defaultRealm = "ATHENA.MIT.EDU";
+      domainRealm = "athena.mit.edu";
+      kdc = "kerberos.mit.edu";
+      kerberosAdminServer = "kerberos.mit.edu";
+    };
   };
 
-  machine =
-    { ... }: {
-      krb5 = {
-        enable = true;
-        defaultRealm = "ATHENA.MIT.EDU";
-        domainRealm = "athena.mit.edu";
-        kdc = "kerberos.mit.edu";
-        kerberosAdminServer = "kerberos.mit.edu";
-      };
-    };
-
-  testScript =
-    let snapshot = pkgs.writeText "krb5-with-deprecated-config.conf" ''
+  testScript = let
+    snapshot = pkgs.writeText "krb5-with-deprecated-config.conf" ''
       [libdefaults]
         default_realm = ATHENA.MIT.EDU
 

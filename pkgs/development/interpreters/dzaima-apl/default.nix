@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jdk
-, makeWrapper
-, buildNativeImage ? true
-}:
+{ lib, stdenv, fetchFromGitHub, jdk, makeWrapper, buildNativeImage ? true }:
 
 stdenv.mkDerivation rec {
   pname = "dapl" + lib.optionalString buildNativeImage "-native";
@@ -17,10 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-UdumMytqT909JRpNqzhYPuKPw644m/vRUsEbIVF2a7U=";
   };
 
-  nativeBuildInputs = [
-    jdk
-    makeWrapper
-  ];
+  nativeBuildInputs = [ jdk makeWrapper ];
 
   dontConfigure = true;
 
@@ -60,7 +51,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/APL";
-    description = "An APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    description = "An APL implementation in Java"
+      + lib.optionalString buildNativeImage ", compiled as a native image";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (jdk.meta) platforms;

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip
+, language ? "en_US" }:
 let
   pname = "geogebra";
   version = "5-0-662-0";
@@ -20,7 +21,8 @@ let
   };
 
   meta = with lib; {
-    description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
+    description =
+      "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
       together geometry, algebra, spreadsheets, graphing, statistics and
@@ -30,7 +32,7 @@ let
     maintainers = with maintainers; [ sikmir ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {
@@ -86,7 +88,4 @@ let
       unzip $src -d $out/Applications
     '';
   };
-in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+in if stdenv.isDarwin then darwinPkg else linuxPkg

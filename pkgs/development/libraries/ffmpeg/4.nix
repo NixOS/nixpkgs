@@ -1,9 +1,6 @@
 { callPackage
 # Darwin frameworks
-, Cocoa, CoreMedia, VideoToolbox
-, stdenv, lib
-, ...
-}@args:
+, Cocoa, CoreMedia, VideoToolbox, stdenv, lib, ... }@args:
 
 callPackage ./generic.nix (rec {
   version = "4.4.1";

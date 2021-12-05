@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, mock
-, sphinx-testing
-, sphinx
-, blockdiag
-}:
+{ lib, buildPythonPackage, fetchPypi, python, mock, sphinx-testing, sphinx
+, blockdiag }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-blockdiag";

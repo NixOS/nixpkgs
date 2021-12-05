@@ -1,9 +1,10 @@
-{ mkXfceDerivation, lib, python3, intltool, gettext,
- gtk3, libxfce4ui, libxfce4util, pango, harfbuzz, gdk-pixbuf, atk }:
+{ mkXfceDerivation, lib, python3, intltool, gettext, gtk3, libxfce4ui
+, libxfce4util, pango, harfbuzz, gdk-pixbuf, atk }:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.pygobject3 ]);
-  makeTypelibPath = lib.makeSearchPathOutput "lib/girepository-1.0" "lib/girepository-1.0";
+  pythonEnv = python3.withPackages (ps: [ ps.pygobject3 ]);
+  makeTypelibPath =
+    lib.makeSearchPathOutput "lib/girepository-1.0" "lib/girepository-1.0";
 in mkXfceDerivation {
   category = "apps";
   pname = "xfce4-panel-profiles";
@@ -20,10 +21,18 @@ in mkXfceDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/xfce4-panel-profiles \
-      --set GI_TYPELIB_PATH ${makeTypelibPath [ gtk3 libxfce4ui libxfce4util pango harfbuzz gdk-pixbuf atk ]}
+      --set GI_TYPELIB_PATH ${
+        makeTypelibPath [
+          gtk3
+          libxfce4ui
+          libxfce4util
+          pango
+          harfbuzz
+          gdk-pixbuf
+          atk
+        ]
+      }
   '';
 
-  meta = {
-    description = "Simple application to manage Xfce panel layouts";
-  };
+  meta = { description = "Simple application to manage Xfce panel layouts"; };
 }

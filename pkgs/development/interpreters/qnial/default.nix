@@ -24,10 +24,7 @@ stdenv.mkDerivation {
     cp -r niallib $out/lib/
   '';
 
-  buildInputs = [
-     pkg-config
-     ncurses
-  ];
+  buildInputs = [ pkg-config ncurses ];
 
   meta = {
     description = "An array language from Nial Systems";

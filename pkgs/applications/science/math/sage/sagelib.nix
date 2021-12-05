@@ -1,60 +1,11 @@
-{ sage-src
-, env-locations
-, perl
-, buildPythonPackage
-, arb
-, blas
-, lapack
-, brial
-, cliquer
-, cypari2
-, cysignals
-, cython
-, lisp-compiler
-, eclib
-, ecm
-, flint
-, gd
-, giac
-, givaro
-, glpk
-, gsl
-, iml
-, jinja2
-, lcalc
-, lrcalc
-, gap
-, linbox
-, m4ri
-, m4rie
-, memory-allocator
-, libmpc
-, mpfi
-, ntl
-, numpy
-, pari
+{ sage-src, env-locations, perl, buildPythonPackage, arb, blas, lapack, brial
+, cliquer, cypari2, cysignals, cython, lisp-compiler, eclib, ecm, flint, gd
+, giac, givaro, glpk, gsl, iml, jinja2, lcalc, lrcalc, gap, linbox, m4ri, m4rie
+, memory-allocator, libmpc, mpfi, ntl, numpy, pari
 , pkgconfig # the python module, not the pkg-config alias
-, pkg-config
-, planarity
-, ppl
-, pynac
-, python
-, ratpoints
-, readline
-, rankwidth
-, symmetrica
-, zn_poly
-, fflas-ffpack
-, boost
-, singular
-, pip
-, jupyter_core
-, libhomfly
-, libbraiding
-, gmpy2
-, pplpy
-, sqlite
-}:
+, pkg-config, planarity, ppl, pynac, python, ratpoints, readline, rankwidth
+, symmetrica, zn_poly, fflas-ffpack, boost, singular, pip, jupyter_core
+, libhomfly, libbraiding, gmpy2, pplpy, sqlite }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -77,11 +28,7 @@ buildPythonPackage rec {
     lisp-compiler
   ];
 
-  buildInputs = [
-    gd
-    readline
-    iml
-  ];
+  buildInputs = [ gd readline iml ];
 
   propagatedBuildInputs = [
     cypari2

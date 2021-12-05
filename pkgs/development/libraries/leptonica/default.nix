@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, which, gnuplot
-, giflib, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, which, gnuplot, giflib
+, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "leptonica";
@@ -23,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image processing and analysis library";
     homepage = "http://www.leptonica.org/";
-    license = lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
+    license =
+      lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
     platforms = lib.platforms.unix;
   };
 }

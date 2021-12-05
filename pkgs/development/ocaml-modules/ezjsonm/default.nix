@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-v${version}.tbz";
     sha256 = "1q6cf63cc614lr141rzhm2w4rhi1snfqai6fmkhvfjs84hfbw2w7";
   };
 

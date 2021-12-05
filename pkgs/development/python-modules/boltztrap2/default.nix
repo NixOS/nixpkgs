@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spglib
-, numpy
-, scipy
-, matplotlib
-, ase
-, netcdf4
-, pytest
-, pythonOlder
-, cython
-, cmake
-}:
+{ lib, buildPythonPackage, fetchPypi, spglib, numpy, scipy, matplotlib, ase
+, netcdf4, pytest, pythonOlder, cython, cmake }:
 
 buildPythonPackage rec {
   version = "20.7.1";
@@ -38,7 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://www.boltztrap.org/";
-    description = "Band-structure interpolator and transport coefficient calculator";
+    description =
+      "Band-structure interpolator and transport coefficient calculator";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];
   };

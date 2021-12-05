@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, gnome, meson, ninja, pkg-config, vala, libssh2
-, gtk-doc, gobject-introspection, libgit2, glib, python3 }:
+{ lib, stdenv, fetchurl, gnome, meson, ninja, pkg-config, vala, libssh2, gtk-doc
+, gobject-introspection, libgit2, glib, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
   version = "0.99.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1pmrcnsa7qdda73c3dxf47733mwprmj5ljpw3acxbj6r8k27anp0";
   };
 
@@ -24,13 +26,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [
-    meson ninja pkg-config vala gtk-doc gobject-introspection
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config vala gtk-doc gobject-introspection ];
 
   propagatedBuildInputs = [
     # Required by libgit2-glib-1.0.pc
-    libgit2 glib
+    libgit2
+    glib
   ];
 
   buildInputs = [
@@ -39,7 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A glib wrapper library around the libgit2 git access library";
+    description =
+      "A glib wrapper library around the libgit2 git access library";
     homepage = "https://wiki.gnome.org/Projects/Libgit2-glib";
     license = licenses.lgpl21;
     maintainers = teams.gnome.members;

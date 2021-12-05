@@ -9,7 +9,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/pecu/releases/download/v${version}/pecu-v${version}.tbz";
+    url =
+      "https://github.com/mirage/pecu/releases/download/v${version}/pecu-v${version}.tbz";
     sha256 = "a9d2b7da444c83b20f879f6c3b7fc911d08ac1e6245ad7105437504f9394e5c7";
   };
 

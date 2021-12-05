@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
-, polkit, util-linuxMinimal, x264, zlib
-, coreutils, procps, psmisc, nixosTests }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake
+, makeWrapper, pkg-config, curl, ffmpeg, glib, libjpeg, libselinux, libsepol
+, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages, polkit
+, util-linuxMinimal, x264, zlib, coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
 #
@@ -62,17 +62,16 @@ let
     }
   ];
 
-  addons = [
-    {
-      path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
-      src = fetchurl {
-        url = "https://gist.githubusercontent.com/joshstrange/73a2f24dfaf5cd5b470024096ce2680f/raw/e964270c5cdbf95e5b7f214f7f0fc6113791530e/Xiaomi.pm";
-        sha256 = "04n1ap8fx66xfl9q9rypj48pzbgzikq0gisfsfm8wdsmflarz43v";
-      };
-    }
-  ];
+  addons = [{
+    path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
+    src = fetchurl {
+      url =
+        "https://gist.githubusercontent.com/joshstrange/73a2f24dfaf5cd5b470024096ce2680f/raw/e964270c5cdbf95e5b7f214f7f0fc6113791530e/Xiaomi.pm";
+      sha256 = "04n1ap8fx66xfl9q9rypj48pzbgzikq0gisfsfm8wdsmflarz43v";
+    };
+  }];
 
-  user    = "zoneminder";
+  user = "zoneminder";
   dirName = "zoneminder";
   perlBin = "${perl}/bin/perl";
 
@@ -81,9 +80,9 @@ in stdenv.mkDerivation rec {
   version = "1.36.10";
 
   src = fetchFromGitHub {
-    owner  = "ZoneMinder";
-    repo   = "zoneminder";
-    rev    = version;
+    owner = "ZoneMinder";
+    repo = "zoneminder";
+    rev = version;
     sha256 = "sha256-MmBnbVDitKOctPe2dNe1sMNNs/qEYGVq3UMJxAkLlCc=";
     fetchSubmodules = true;
   };
@@ -119,7 +118,9 @@ in stdenv.mkDerivation rec {
              scripts/ZoneMinder/lib/ZoneMinder/Memory.pm.in ; do
       substituteInPlace $f \
         --replace '/usr/bin/perl' '${perlBin}' \
-        --replace '/bin:/usr/bin' "$out/bin:${lib.makeBinPath [ coreutils procps psmisc ]}"
+        --replace '/bin:/usr/bin' "$out/bin:${
+          lib.makeBinPath [ coreutils procps psmisc ]
+        }"
     done
 
     substituteInPlace scripts/zmdbbackup.in \
@@ -148,14 +149,40 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb.client
+    pcre
+    perl
+    polkit
+    x264
+    zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
-    DateManip DBI DBDmysql LWP SysMmap
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
-    CryptEksblowfish DataEntropy # zmupdate.pl
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];

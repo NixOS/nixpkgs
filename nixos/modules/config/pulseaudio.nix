@@ -19,28 +19,28 @@ let
 
   # Forces 32bit pulseaudio and alsa-plugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64
+    && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio
+      != null);
 
-
-  myConfigFile =
-    let
-      addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
-      allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
-      ipAnon =  let a = cfg.tcp.anonymousClients.allowedIpRanges;
-                in optional (a != []) ''auth-ip-acl=${concatStringsSep ";" a}'';
-    in writeTextFile {
-      name = "default.pa";
-        text = ''
-        .include ${cfg.configFile}
-        ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
-        ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
-        ${addModuleIf cfg.tcp.enable (concatStringsSep " "
-           ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
-        ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
-        ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
-        ${cfg.extraConfig}
-      '';
-    };
+  myConfigFile = let
+    addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
+    allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
+    ipAnon = let a = cfg.tcp.anonymousClients.allowedIpRanges;
+    in optional (a != [ ]) "auth-ip-acl=${concatStringsSep ";" a}";
+  in writeTextFile {
+    name = "default.pa";
+    text = ''
+      .include ${cfg.configFile}
+      ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
+      ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
+      ${addModuleIf cfg.tcp.enable (concatStringsSep " "
+        ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
+      ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
+      ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
+      ${cfg.extraConfig}
+    '';
+  };
 
   ids = config.ids;
 
@@ -63,8 +63,10 @@ let
   alsaConf = writeText "asound.conf" (''
     pcm_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+      ${
+        lib.optionalString enable32BitAlsaPlugins
+        "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"
+      }
     }
     pcm.!default {
       type pulse
@@ -72,8 +74,10 @@ let
     }
     ctl_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+      ${
+        lib.optionalString enable32BitAlsaPlugins
+        "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"
+      }
     }
     ctl.!default {
       type pulse
@@ -146,9 +150,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = if config.services.jack.jackd.enable
-                  then pkgs.pulseaudioFull
-                  else pkgs.pulseaudio;
+        default = if config.services.jack.jackd.enable then
+          pkgs.pulseaudioFull
+        else
+          pkgs.pulseaudio;
         defaultText = literalExpression "pkgs.pulseaudio";
         example = literalExpression "pkgs.pulseaudioFull";
         description = ''
@@ -160,7 +165,7 @@ in {
 
       extraModules = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.pulseaudio-modules-bt ]";
         description = ''
           Extra pulseaudio modules to use. This is intended for out-of-tree
@@ -182,8 +187,9 @@ in {
 
         config = mkOption {
           type = types.attrsOf types.unspecified;
-          default = {};
-          description = "Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.";
+          default = { };
+          description =
+            "Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.";
           example = literalExpression ''{ realtime-scheduling = "yes"; }'';
         };
       };
@@ -200,10 +206,11 @@ in {
         enable = mkEnableOption "tcp streaming support";
 
         anonymousClients = {
-          allowAll = mkEnableOption "all anonymous clients to stream to the server";
+          allowAll =
+            mkEnableOption "all anonymous clients to stream to the server";
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = literalExpression ''[ "127.0.0.1" "192.168.1.0/24" ]'';
             description = ''
               A list of IP subnets that are allowed to stream to the server.
@@ -216,14 +223,12 @@ in {
 
   };
 
-
   config = mkMerge [
     {
-      environment.etc = {
-        "pulse/client.conf".source = clientConf;
-      };
+      environment.etc = { "pulse/client.conf".source = clientConf; };
 
-      hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
+      hardware.pulseaudio.configFile =
+        mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
     }
 
     (mkIf cfg.enable {
@@ -235,7 +240,7 @@ in {
         "asound.conf".source = alsaConf;
 
         "pulse/daemon.conf".source = writeText "daemon.conf"
-          (lib.generators.toKeyValue {} cfg.daemon.config);
+          (lib.generators.toKeyValue { } cfg.daemon.config);
 
         "openal/alsoft.conf".source = writeText "alsoft.conf" "drivers=pulse";
 
@@ -246,7 +251,8 @@ in {
       hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
 
       # Upstream defaults to speex-float-1 which results in audible artifacts
-      hardware.pulseaudio.daemon.config.resample-method = mkDefault "speex-float-5";
+      hardware.pulseaudio.daemon.config.resample-method =
+        mkDefault "speex-float-5";
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
@@ -257,10 +263,10 @@ in {
       services.udev.packages = [ overriddenPackage ];
     })
 
-    (mkIf (cfg.extraModules != []) {
+    (mkIf (cfg.extraModules != [ ]) {
       hardware.pulseaudio.daemon.config.dl-search-path = let
-        overriddenModules = builtins.map
-          (drv: drv.override { pulseaudio = overriddenPackage; })
+        overriddenModules =
+          builtins.map (drv: drv.override { pulseaudio = overriddenPackage; })
           cfg.extraModules;
         modulePaths = builtins.map
           (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
@@ -269,18 +275,14 @@ in {
       in lib.concatStringsSep ":" modulePaths;
     })
 
-    (mkIf hasZeroconf {
-      services.avahi.enable = true;
-    })
+    (mkIf hasZeroconf { services.avahi.enable = true; })
     (mkIf cfg.zeroconf.publish.enable {
       services.avahi.publish.enable = true;
       services.avahi.publish.userServices = true;
     })
 
     (mkIf nonSystemWide {
-      environment.etc = {
-        "pulse/default.pa".source = myConfigFile;
-      };
+      environment.etc = { "pulse/default.pa".source = myConfigFile; };
       systemd.user = {
         services.pulseaudio = {
           restartIfChanged = true;
@@ -291,9 +293,7 @@ in {
         } // optionalAttrs config.services.jack.jackd.enable {
           environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
         };
-        sockets.pulseaudio = {
-          wantedBy = [ "sockets.target" ];
-        };
+        sockets.pulseaudio = { wantedBy = [ "sockets.target" ]; };
       };
     })
 
@@ -318,7 +318,8 @@ in {
         environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
           Type = "notify";
-          ExecStart = "${binaryNoDaemon} --log-level=${cfg.daemon.logLevel} --system -n --file=${myConfigFile}";
+          ExecStart =
+            "${binaryNoDaemon} --log-level=${cfg.daemon.logLevel} --system -n --file=${myConfigFile}";
           Restart = "on-failure";
           RestartSec = "500ms";
         };

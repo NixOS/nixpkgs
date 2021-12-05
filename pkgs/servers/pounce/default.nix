@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://code.causal.agency/june/pounce";

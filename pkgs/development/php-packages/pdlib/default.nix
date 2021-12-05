@@ -2,8 +2,7 @@
 let
   pname = "pdlib";
   version = "1.0.2";
-in
-buildPecl {
+in buildPecl {
   inherit pname version;
 
   src = fetchFromGitHub {

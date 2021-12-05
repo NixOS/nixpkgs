@@ -1,11 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, isPyPy
-, pkgs
-, python
-, six
-}:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, isPyPy, pkgs, python, six }:
 
 buildPythonPackage rec {
   pname = "pyparted";
@@ -30,9 +23,7 @@ buildPythonPackage rec {
       tests/test__ped_ped.py
   '';
 
-  patches = [
-    ./fix-test-pythonpath.patch
-  ];
+  patches = [ ./fix-test-pythonpath.patch ];
 
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"

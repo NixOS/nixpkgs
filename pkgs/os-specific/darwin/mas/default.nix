@@ -1,16 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, libarchive
-, p7zip
-}:
+{ lib, stdenv, fetchurl, libarchive, p7zip }:
 
 stdenv.mkDerivation rec {
   pname = "mas";
   version = "1.8.2";
 
   src = fetchurl {
-    url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas.pkg";
+    url =
+      "https://github.com/mas-cli/mas/releases/download/v${version}/mas.pkg";
     sha256 = "HlLQKBVIYKanS6kjkbYdabBi1T0irxE6fNd2H6mDKe4=";
   };
 

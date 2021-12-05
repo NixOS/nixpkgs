@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common
+, azure-mgmt-nspkg }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-msi";
@@ -17,12 +11,7 @@ buildPythonPackage rec {
     sha256 = "0n4gbwk843z66hhpcp1kcrnwqkzygbbc2ma01r9asgfv4nmklvyl";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-nspkg
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common azure-mgmt-nspkg ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

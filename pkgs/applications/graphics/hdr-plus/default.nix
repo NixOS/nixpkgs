@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, halide
-, libpng, libjpeg, libtiff, libraw
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, halide, libpng, libjpeg
+, libtiff, libraw }:
 
 stdenv.mkDerivation rec {
   pname = "hdr-plus-unstable";
@@ -17,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # PR #70, fixes incompatibility with Halide 10.0.0
     (fetchpatch {
-      url = "https://github.com/timothybrooks/hdr-plus/pull/70/commits/077e1a476279539c72e615210762dca27984c57b.patch";
+      url =
+        "https://github.com/timothybrooks/hdr-plus/pull/70/commits/077e1a476279539c72e615210762dca27984c57b.patch";
       sha256 = "1sg2l1bqs2smpfpy4flwg86fzhcc4yf7zx998v1bfhim43yyrx59";
     })
   ];

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, readline}:
+{ lib, stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   pname = "renameutils";

@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, globalplatform, pcsclite, gppcscconnectionplugin
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, pkg-config, globalplatform, pcsclite
+, gppcscconnectionplugin, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "gpshell";

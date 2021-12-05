@@ -1,46 +1,9 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, dpkg
-, wrapGAppsHook
-, autoPatchelfHook
-, gtk3
-, cairo
-, pango
-, atk
-, gdk-pixbuf
-, glib
-, at-spi2-atk
-, dbus
-, libX11
-, libxcb
-, libXi
-, libXcursor
-, libXdamage
-, libXrandr
-, libXcomposite
-, libXext
-, libXfixes
-, libXrender
-, libXtst
-, libXScrnSaver
-, nss
-, nspr
-, alsa-lib
-, cups
-, fontconfig
-, expat
-, libudev0-shim
-, glibc
-, curl
-, openssl
-, libnghttp2
-, gsettings-desktop-schemas
-, libdrm
-, mesa
-}:
-
+{ stdenv, lib, makeWrapper, fetchurl, dpkg, wrapGAppsHook, autoPatchelfHook
+, gtk3, cairo, pango, atk, gdk-pixbuf, glib, at-spi2-atk, dbus, libX11, libxcb
+, libXi, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
+, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib, cups, fontconfig
+, expat, libudev0-shim, glibc, curl, openssl, libnghttp2
+, gsettings-desktop-schemas, libdrm, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "polar-bookshelf";
@@ -48,7 +11,8 @@ stdenv.mkDerivation rec {
 
   # fetching a .deb because there's no easy way to package this Electron app
   src = fetchurl {
-    url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-desktop-app-${version}-amd64.deb";
+    url =
+      "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-desktop-app-${version}-amd64.deb";
     hash = "sha256-jcq0hW698bAhVM3fLQQeKAnld33XLkHsGjS3QwUpciQ=";
   };
 
@@ -84,14 +48,10 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    autoPatchelfHook
-    makeWrapper
-    dpkg
-  ];
+  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook makeWrapper dpkg ];
 
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
+  runtimeLibs =
+    lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -121,7 +81,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://getpolarized.io/";
-    description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
+    description =
+      "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.noneucat ];

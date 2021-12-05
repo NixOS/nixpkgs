@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, dav1d, rav1e, libde265, x265, libpng,
-  libjpeg, libaom }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, dav1d, rav1e
+, libde265, x265, libpng, libjpeg, libaom }:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.libheif.org/";
-    description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
+    description =
+      "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gebner ];

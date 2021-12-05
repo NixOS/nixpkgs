@@ -6,6 +6,4 @@
 
 # This attrs can be extended in the future if there happen to be glimpse-only
 # plugins or some that need further modification in order to work with Glimpse.
-gimpPlugins.overrideScope' (self: super: {
-  gimp = glimpse;
-})
+gimpPlugins.overrideScope' (self: super: { gimp = glimpse; })

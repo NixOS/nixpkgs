@@ -1,4 +1,5 @@
-{ mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, glib-networking }:
+{ mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel
+, glib-networking }:
 
 mkXfceDerivation {
   category = "apps";
@@ -8,9 +9,8 @@ mkXfceDerivation {
 
   sha256 = "sha256-QOYJl+bxRk0+spgtGADPgkw2lPLfQOwTZQuZNHWq39c=";
 
-  buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
+  buildInputs =
+    [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
 
-  meta = {
-    description = "Screenshot utility for the Xfce desktop";
-  };
+  meta = { description = "Screenshot utility for the Xfce desktop"; };
 }

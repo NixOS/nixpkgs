@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, fetchzip
-, python3
-, config
-, acceptLicense ? config.input-fonts.acceptLicense or false
-}:
+{ lib, stdenv, fetchzip, python3, config
+, acceptLicense ? config.input-fonts.acceptLicense or false }:
 
 let
 
@@ -29,18 +24,16 @@ let
 
   releaseDate = "2015-06-24";
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "input-fonts";
   version = "1.2";
 
-  src =
-    assert !acceptLicense -> throwLicense;
+  src = assert !acceptLicense -> throwLicense;
     fetchzip {
       name = "input-fonts-${version}";
       # Add .zip parameter so that zip unpackCmd can match it.
-      url = "https://input.djr.com/build/?fontSelection=whole&a=0&g=0&i=0&l=0&zero=0&asterisk=0&braces=0&preset=default&line-height=1.2&accept=I+do&email=&.zip";
+      url =
+        "https://input.djr.com/build/?fontSelection=whole&a=0&g=0&i=0&l=0&zero=0&asterisk=0&braces=0&preset=default&line-height=1.2&accept=I+do&email=&.zip";
       sha256 = "BESZ4Bjgm2hvQ7oPpMvYSlE8EqvQjqHZtXWIovqyIzA=";
       stripRoot = false;
 
@@ -51,7 +44,9 @@ stdenv.mkDerivation rec {
           ttx_file=$(dirname "$ttf_file")/$(basename "$ttf_file" .ttf).ttx
           ttx "$ttf_file"
           rm "$ttf_file"
-          touch -m -t ${builtins.replaceStrings [ "-" ] [ "" ] releaseDate}0000 "$ttx_file"
+          touch -m -t ${
+            builtins.replaceStrings [ "-" ] [ "" ] releaseDate
+          }0000 "$ttx_file"
           ttx --recalc-timestamp "$ttx_file"
           rm "$ttx_file"
         done
@@ -89,10 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://input.djr.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [
-      jtojnar
-      romildo
-    ];
+    maintainers = with maintainers; [ jtojnar romildo ];
     platforms = platforms.all;
   };
 }

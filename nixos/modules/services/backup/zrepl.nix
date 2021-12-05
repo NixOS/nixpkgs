@@ -5,8 +5,7 @@ let
   cfg = config.services.zrepl;
   format = pkgs.formats.yaml { };
   configFile = format.generate "zrepl.yml" cfg.settings;
-in
-{
+in {
   meta.maintainers = with maintainers; [ cole-h ];
 
   options = {
@@ -20,9 +19,7 @@ in
           xlink:href="https://zrepl.github.io/configuration.html"/>
           for more information.
         '';
-        type = types.submodule {
-          freeformType = format.type;
-        };
+        type = types.submodule { freeformType = format.type; };
       };
     };
   };
@@ -46,9 +43,7 @@ in
       path = [ config.boot.zfs.package ];
       restartTriggers = [ configFile ];
 
-      serviceConfig = {
-        Restart = "on-failure";
-      };
+      serviceConfig = { Restart = "on-failure"; };
     };
   };
 }

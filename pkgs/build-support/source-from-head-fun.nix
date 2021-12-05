@@ -1,5 +1,4 @@
-/*
-   purpose: mantain bleeding edge head sources.
+/* purpose: mantain bleeding edge head sources.
 
    you run
    app --update
@@ -7,10 +6,12 @@
    to create source snapshots
 
    The documentation is availible at https://github.com/MarcWeber/nix-repository-manager/raw/master/README
-
 */
 { config }:
-  localTarName: publishedSrcSnapshot:
-  if config.sourceFromHead.useLocalRepos or false then
-    "${config.sourceFromHead.managedRepoDir or "/set/sourceFromHead.managedRepoDir/please"}/dist/${localTarName}"
-  else publishedSrcSnapshot
+localTarName: publishedSrcSnapshot:
+if config.sourceFromHead.useLocalRepos or false then
+  "${
+    config.sourceFromHead.managedRepoDir or "/set/sourceFromHead.managedRepoDir/please"
+  }/dist/${localTarName}"
+else
+  publishedSrcSnapshot

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, testfixtures
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests, testfixtures }:
 
 buildPythonPackage rec {
   pname = "openerz-api";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "10kxsmaz2rn26jijaxmdmhx8vjdz8hrhlrvd39gc8yvqbjwhi3nw";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    testfixtures
-  ];
+  checkInputs = [ pytestCheckHook testfixtures ];
 
   pythonImportsCheck = [ "openerz_api" ];
 

@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "20170904";
+let version = "20170904";
 in fetchzip {
   name = "hanazono-${version}";
 

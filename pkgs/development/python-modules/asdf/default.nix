@@ -1,19 +1,6 @@
-{ lib
-, astropy
-, buildPythonPackage
-, fetchPypi
-, importlib-resources
-, jmespath
-, jsonschema
-, numpy
-, packaging
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, semantic-version
-, setuptools-scm
-}:
+{ lib, astropy, buildPythonPackage, fetchPypi, importlib-resources, jmespath
+, jsonschema, numpy, packaging, pytest-astropy, pytestCheckHook, pythonOlder
+, pyyaml, semantic-version, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "asdf";
@@ -28,22 +15,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    jmespath
-    jsonschema
-    numpy
-    packaging
-    pyyaml
-    semantic-version
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [ jmespath jsonschema numpy packaging pyyaml semantic-version ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  checkInputs = [
-    pytest-astropy
-    astropy
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-astropy astropy pytestCheckHook ];
 
   preCheck = ''
     export PY_IGNORE_IMPORTMISMATCH=1

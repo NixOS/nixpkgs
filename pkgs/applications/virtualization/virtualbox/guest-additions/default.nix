@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox}:
+{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper, zlib
+, xorg, dbus, virtualbox }:
 
 let
   version = virtualbox.version;
@@ -11,35 +11,46 @@ let
   # (not via videoDrivers = ["vboxvideo"]).
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" || abi == "120" then "118" else abi;
+  in if abi == "119" || abi == "120" then "118" else abi;
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
   # RUNPATH in matching binaries to contain the needed library paths.
   dlopenLibs = [
-    { name = "libdbus-1.so"; pkg = dbus; }
-    { name = "libXfixes.so"; pkg = xorg.libXfixes; }
-    { name = "libXrandr.so"; pkg = xorg.libXrandr; }
+    {
+      name = "libdbus-1.so";
+      pkg = dbus;
+    }
+    {
+      name = "libXfixes.so";
+      pkg = xorg.libXfixes;
+    }
+    {
+      name = "libXrandr.so";
+      pkg = xorg.libXrandr;
+    }
   ];
 
 in stdenv.mkDerivation rec {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+    url =
+      "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
     sha256 = "eab85206cfb9d7087982deb2635d19a4244a3c6783622a4817fb1a31e48e98e5";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  KERN_INCL =
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  NIX_CFLAGS_COMPILE =
+    "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
-
 
   prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
@@ -49,26 +60,26 @@ in stdenv.mkDerivation rec {
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
 
   unpackPhase = ''
-    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
-        chmod 755 ./VBoxLinuxAdditions.run
-        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
-        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
-        ./VBoxLinuxAdditions.run --noexec --keep
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    ${if stdenv.hostPlatform.system == "i686-linux"
+    || stdenv.hostPlatform.system == "x86_64-linux" then ''
+      isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
+      chmod 755 ./VBoxLinuxAdditions.run
+      # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+      sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
+      ./VBoxLinuxAdditions.run --noexec --keep
+    '' else
+      throw ("Architecture: " + stdenv.hostPlatform.system
+        + " not supported for VirtualBox guest additions")}
 
     # Unpack files
     cd install
     ${if stdenv.hostPlatform.system == "i686-linux" then ''
-        tar xfvj VBoxGuestAdditions-x86.tar.bz2
-      ''
-      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
-        tar xfvj VBoxGuestAdditions-amd64.tar.bz2
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+      tar xfvj VBoxGuestAdditions-x86.tar.bz2
+    '' else if stdenv.hostPlatform.system == "x86_64-linux" then ''
+      tar xfvj VBoxGuestAdditions-amd64.tar.bz2
+    '' else
+      throw ("Architecture: " + stdenv.hostPlatform.system
+        + " not supported for VirtualBox guest additions")}
   '';
 
   buildPhase = ''
@@ -83,14 +94,33 @@ in stdenv.mkDerivation rec {
     # Change the interpreter for various binaries
     for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf; do
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} $i
-        patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc zlib
-          xorg.libX11 xorg.libXt xorg.libXext xorg.libXmu xorg.libXfixes xorg.libXrandr xorg.libXcursor ]} $i
+        patchelf --set-rpath ${
+          lib.makeLibraryPath [
+            stdenv.cc.cc
+            stdenv.cc.libc
+            zlib
+            xorg.libX11
+            xorg.libXt
+            xorg.libXext
+            xorg.libXmu
+            xorg.libXfixes
+            xorg.libXrandr
+            xorg.libXcursor
+          ]
+        } $i
     done
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath ${lib.makeLibraryPath [ "$out"
-          xorg.libXcomposite xorg.libXdamage xorg.libXext xorg.libXfixes ]} $i
+        patchelf --set-rpath ${
+          lib.makeLibraryPath [
+            "$out"
+            xorg.libXcomposite
+            xorg.libXdamage
+            xorg.libXext
+            xorg.libXfixes
+          ]
+        } $i
     done
 
     # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions
@@ -146,9 +176,13 @@ in stdenv.mkDerivation rec {
 
   # Patch RUNPATH according to dlopenLibs (see the comment there).
   postFixup = lib.concatMapStrings (library: ''
-    for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
+    for i in $(grep -F ${
+      lib.escapeShellArg library.name
+    } -l -r $out/{lib,bin}); do
       origRpath=$(patchelf --print-rpath "$i")
-      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
+      patchelf --set-rpath "$origRpath:${
+        lib.makeLibraryPath [ library.pkg ]
+      }" "$i"
     done
   '') dlopenLibs;
 

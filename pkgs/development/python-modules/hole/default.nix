@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "hole";
@@ -18,17 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-yZpzGfB5RTWaRn2DmT+cbSDC0pL16FyUc0Nr/V6TlhU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # no tests are present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hole"
-  ];
+  pythonImportsCheck = [ "hole" ];
 
   meta = with lib; {
     description = "Python API for interacting with a Pihole instance.";

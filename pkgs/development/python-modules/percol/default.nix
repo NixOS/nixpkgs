@@ -19,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mooz/percol";
-    description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
+    description =
+      "Adds flavor of interactive filtering to the traditional pipe concept of shell";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

@@ -1,20 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, poetry-core
-, gobject-introspection
-, pango
-, gtksourceview4
-, wrapGAppsHook
-, makeDesktopItem
-, copyDesktopItems
-, gaphas
-, generic
-, pycairo
-, pygobject3
-, python
-, tinycss2
-}:
+{ lib, buildPythonApplication, fetchPypi, poetry-core, gobject-introspection
+, pango, gtksourceview4, wrapGAppsHook, makeDesktopItem, copyDesktopItems
+, gaphas, generic, pycairo, pygobject3, python, tinycss2 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
@@ -27,22 +13,15 @@ buildPythonApplication rec {
     sha256 = "sha256-IFsbWx5lblKsnEibVihM6ZPRoydXC+JM1gdZEUUTKxw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core copyDesktopItems gobject-introspection wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ poetry-core copyDesktopItems gobject-introspection wrapGAppsHook ];
 
   # Setting gobject-introspection on booth nativeBuildInputs and
   # buildInputs because of #56943. This recognizes pango, avoiding
   # a "ValueError: Namespace PangoCairo not available".
   buildInputs = [ gobject-introspection gtksourceview4 pango ];
 
-  propagatedBuildInputs = [
-    gaphas
-    generic
-    pycairo
-    pygobject3
-    tinycss2
-  ];
+  propagatedBuildInputs = [ gaphas generic pycairo pygobject3 tinycss2 ];
 
   desktopItems = makeDesktopItem {
     name = pname;

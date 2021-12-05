@@ -50,9 +50,7 @@ let
     ${cfg.extraConfig}
   '';
 
-in
-
-{
+in {
   options = {
     services.privacyidea = {
       enable = mkEnableOption "PrivacyIDEA";
@@ -183,7 +181,8 @@ in
         group = mkOption {
           type = types.str;
           default = "pi-ldap-proxy";
-          description = "Group account under which PrivacyIDEA LDAP proxy runs.";
+          description =
+            "Group account under which PrivacyIDEA LDAP proxy runs.";
         };
       };
     };
@@ -227,14 +226,17 @@ in
         path = with pkgs; [ openssl ];
         environment.PRIVACYIDEA_CONFIGFILE = "${cfg.stateDir}/privacyidea.cfg";
         preStart = let
-          pi-manage = "${config.security.sudo.package}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
+          pi-manage =
+            "${config.security.sudo.package}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
           pgsu = config.services.postgresql.superUser;
           psql = config.services.postgresql.package;
         in ''
           mkdir -p ${cfg.stateDir} /run/privacyidea
           chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} /run/privacyidea
           umask 077
-          ${lib.getBin pkgs.envsubst}/bin/envsubst -o ${cfg.stateDir}/privacyidea.cfg \
+          ${
+            lib.getBin pkgs.envsubst
+          }/bin/envsubst -o ${cfg.stateDir}/privacyidea.cfg \
                                                    -i "${piCfgFile}"
           chown ${cfg.user}:${cfg.group} ${cfg.stateDir}/privacyidea.cfg
           if ! test -e "${cfg.stateDir}/db-created"; then
@@ -254,7 +256,8 @@ in
           Type = "notify";
           ExecStart = "${uwsgi}/bin/uwsgi --json ${piuwsgi}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+          EnvironmentFile =
+            lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           NotifyAccess = "main";
           KillSignal = "SIGQUIT";
@@ -266,13 +269,14 @@ in
         isSystemUser = true;
       };
 
-      users.groups.privacyidea = mkIf (cfg.group == "privacyidea") {};
+      users.groups.privacyidea = mkIf (cfg.group == "privacyidea") { };
     })
 
     (mkIf cfg.ldap-proxy.enable {
 
       systemd.services.privacyidea-ldap-proxy = let
-        ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
+        ldap-proxy-env =
+          pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
       in {
         description = "privacyIDEA LDAP proxy";
         wantedBy = [ "multi-user.target" ];
@@ -292,12 +296,14 @@ in
         };
       };
 
-      users.users.pi-ldap-proxy = mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
-        group = cfg.ldap-proxy.group;
-        isSystemUser = true;
-      };
+      users.users.pi-ldap-proxy =
+        mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
+          group = cfg.ldap-proxy.group;
+          isSystemUser = true;
+        };
 
-      users.groups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};
+      users.groups.pi-ldap-proxy =
+        mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") { };
     })
   ];
 

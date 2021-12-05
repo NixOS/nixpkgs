@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, simplejson
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, requests, simplejson }:
 
 buildPythonPackage rec {
   pname = "wallbox";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "651c61e2264258382d1f54c4f0bf6bcd198482a744d8f1db3dd73084c240d9bb";
   };
 
-  propagatedBuildInputs = [
-    requests
-    simplejson
-  ];
+  propagatedBuildInputs = [ requests simplejson ];
 
   # no tests implemented
   doCheck = false;

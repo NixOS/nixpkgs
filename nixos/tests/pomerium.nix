@@ -1,23 +1,25 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "pomerium";
-  meta = with lib.maintainers; {
-    maintainers = [ lukegb ];
-  };
+  meta = with lib.maintainers; { maintainers = [ lukegb ]; };
 
-  nodes = let base = myIP: { pkgs, lib, ... }: {
-    virtualisation.vlans = [ 1 ];
-    networking = {
-      dhcpcd.enable = false;
-      firewall.allowedTCPPorts = [ 80 443 ];
-      hosts = {
-        "192.168.1.1" = [ "pomerium" "pom-auth" ];
-        "192.168.1.2" = [ "backend" "dummy-oidc" ];
+  nodes = let
+    base = myIP:
+      { pkgs, lib, ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          dhcpcd.enable = false;
+          firewall.allowedTCPPorts = [ 80 443 ];
+          hosts = {
+            "192.168.1.1" = [ "pomerium" "pom-auth" ];
+            "192.168.1.2" = [ "backend" "dummy-oidc" ];
+          };
+          interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [{
+            address = myIP;
+            prefixLength = 24;
+          }];
+        };
       };
-      interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-        { address = myIP; prefixLength = 24; }
-      ];
-    };
-  }; in {
+  in {
     pomerium = { pkgs, lib, ... }: {
       imports = [ (base "192.168.1.1") ];
       services.pomerium = {
@@ -32,17 +34,20 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           idp_client_id = "dummy";
           idp_provider_url = "http://dummy-oidc";
 
-          policy = [{
-            from = "https://my.website";
-            to = "http://192.168.1.2";
-            allow_public_unauthenticated_access = true;
-            preserve_host_header = true;
-          } {
-            from = "https://login.required";
-            to = "http://192.168.1.2";
-            allowed_domains = [ "my.domain" ];
-            preserve_host_header = true;
-          }];
+          policy = [
+            {
+              from = "https://my.website";
+              to = "http://192.168.1.2";
+              allow_public_unauthenticated_access = true;
+              preserve_host_header = true;
+            }
+            {
+              from = "https://login.required";
+              to = "http://192.168.1.2";
+              allowed_domains = [ "my.domain" ];
+              preserve_host_header = true;
+            }
+          ];
         };
         secretsFile = pkgs.writeText "pomerium-secrets" ''
           # 12345678901234567890123456789012 in base64
@@ -55,13 +60,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       imports = [ (base "192.168.1.2") ];
       services.nginx.enable = true;
       services.nginx.virtualHosts."my.website" = {
-        root = pkgs.runCommand "testdir" {} ''
+        root = pkgs.runCommand "testdir" { } ''
           mkdir "$out"
           echo hello world > "$out/index.html"
         '';
       };
       services.nginx.virtualHosts."dummy-oidc" = {
-        root = pkgs.runCommand "testdir" {} ''
+        root = pkgs.runCommand "testdir" { } ''
           mkdir -p "$out/.well-known"
           cat <<EOF >"$out/.well-known/openid-configuration"
             {

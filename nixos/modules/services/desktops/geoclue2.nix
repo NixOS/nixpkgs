@@ -6,7 +6,9 @@ with lib;
 
 let
   # the demo agent isn't built by default, but we need it here
-  package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
+  package = pkgs.geoclue2.override {
+    withDemoAgent = config.services.geoclue2.enableDemoAgent;
+  };
 
   cfg = config.services.geoclue2;
 
@@ -35,7 +37,7 @@ let
 
       users = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of UIDs of all users for which this application is allowed location
           info access, Defaults to an empty string to allow it for all users.
@@ -46,17 +48,17 @@ let
     config.desktopID = mkDefault name;
   });
 
-  appConfigToINICompatible = _: { desktopID, isAllowed, isSystem, users, ... }: {
-    name = desktopID;
-    value = {
-      allowed = isAllowed;
-      system = isSystem;
-      users = concatStringsSep ";" users;
+  appConfigToINICompatible = _:
+    { desktopID, isAllowed, isSystem, users, ... }: {
+      name = desktopID;
+      value = {
+        allowed = isAllowed;
+        system = isSystem;
+        users = concatStringsSep ";" users;
+      };
     };
-  };
 
-in
-{
+in {
 
   ###### interface
 
@@ -125,8 +127,10 @@ in
 
       geoProviderUrl = mkOption {
         type = types.str;
-        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
-        example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
+        default =
+          "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+        example =
+          "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
         description = ''
           The url to the wifi GeoLocation Service.
         '';
@@ -159,7 +163,7 @@ in
 
       appConfig = mkOption {
         type = types.attrsOf appConfigModule;
-        default = {};
+        default = { };
         example = literalExpression ''
           "com.github.app" = {
             isAllowed = true;
@@ -175,7 +179,6 @@ in
     };
 
   };
-
 
   ###### implementation
   config = mkIf cfg.enable {
@@ -196,14 +199,13 @@ in
         description = "Geoinformation service";
       };
 
-      groups.geoclue = {};
+      groups.geoclue = { };
     };
 
     systemd.services.geoclue = {
       # restart geoclue service when the configuration changes
-      restartTriggers = [
-        config.environment.etc."geoclue/geoclue.conf".source
-      ];
+      restartTriggers =
+        [ config.environment.etc."geoclue/geoclue.conf".source ];
       serviceConfig.StateDirectory = "geoclue";
     };
 
@@ -236,32 +238,24 @@ in
       isSystem = false;
     };
 
-    environment.etc."geoclue/geoclue.conf".text =
-      generators.toINI {} ({
-        agent = {
-          whitelist = concatStringsSep ";"
-            (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
-        };
-        network-nmea = {
-          enable = cfg.enableNmea;
-        };
-        "3g" = {
-          enable = cfg.enable3G;
-        };
-        cdma = {
-          enable = cfg.enableCDMA;
-        };
-        modem-gps = {
-          enable = cfg.enableModemGPS;
-        };
-        wifi = {
-          enable = cfg.enableWifi;
-          url = cfg.geoProviderUrl;
-          submit-data = boolToString cfg.submitData;
-          submission-url = cfg.submissionUrl;
-          submission-nick = cfg.submissionNick;
-        };
-      } // mapAttrs' appConfigToINICompatible cfg.appConfig);
+    environment.etc."geoclue/geoclue.conf".text = generators.toINI { } ({
+      agent = {
+        whitelist = concatStringsSep ";"
+          (optional cfg.enableDemoAgent "geoclue-demo-agent"
+            ++ defaultWhitelist);
+      };
+      network-nmea = { enable = cfg.enableNmea; };
+      "3g" = { enable = cfg.enable3G; };
+      cdma = { enable = cfg.enableCDMA; };
+      modem-gps = { enable = cfg.enableModemGPS; };
+      wifi = {
+        enable = cfg.enableWifi;
+        url = cfg.geoProviderUrl;
+        submit-data = boolToString cfg.submitData;
+        submission-url = cfg.submissionUrl;
+        submission-nick = cfg.submissionNick;
+      };
+    } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
   meta = with lib; {

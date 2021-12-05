@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.9";
 
   src = fetchurl {
-    url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1wp1ky1v353qqy5fnrk67apgzsap53jkr7pmghk3czpbk880ffi9";
   };
 

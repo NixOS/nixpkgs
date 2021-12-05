@@ -7,8 +7,8 @@ let
   cfg4 = config.services.dhcpd4;
   cfg6 = config.services.dhcpd6;
 
-  writeConfig = cfg: pkgs.writeText "dhcpd.conf"
-    ''
+  writeConfig = cfg:
+    pkgs.writeText "dhcpd.conf" ''
       default-lease-time 600;
       max-lease-time 7200;
       ${optionalString (!cfg.authoritative) "not "}authoritative;
@@ -17,39 +17,45 @@ let
 
       ${cfg.extraConfig}
 
-      ${lib.concatMapStrings
-          (machine: ''
-            host ${machine.hostName} {
-              hardware ethernet ${machine.ethernetAddress};
-              fixed-address ${machine.ipAddress};
-            }
-          '')
-          cfg.machines
-      }
+      ${lib.concatMapStrings (machine: ''
+        host ${machine.hostName} {
+          hardware ethernet ${machine.ethernetAddress};
+          fixed-address ${machine.ipAddress};
+        }
+      '') cfg.machines}
     '';
 
-  dhcpdService = postfix: cfg: optionalAttrs cfg.enable {
-    "dhcpd${postfix}" = {
-      description = "DHCPv${postfix} server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+  dhcpdService = postfix: cfg:
+    optionalAttrs cfg.enable {
+      "dhcpd${postfix}" = {
+        description = "DHCPv${postfix} server";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -m 755 -p ${cfg.stateDir}
-        chown dhcpd:nogroup ${cfg.stateDir}
-        touch ${cfg.stateDir}/dhcpd.leases
-      '';
+        preStart = ''
+          mkdir -m 755 -p ${cfg.stateDir}
+          chown dhcpd:nogroup ${cfg.stateDir}
+          touch ${cfg.stateDir}/dhcpd.leases
+        '';
 
-      serviceConfig =
-        let
-          configFile = if cfg.configFile != null then cfg.configFile else writeConfig cfg;
-          args = [ "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"
-                   "-pf" "/run/dhcpd${postfix}/dhcpd.pid"
-                   "-cf" "${configFile}"
-                   "-lf" "${cfg.stateDir}/dhcpd.leases"
-                   "-user" "dhcpd" "-group" "nogroup"
-                 ] ++ cfg.extraFlags
-                   ++ cfg.interfaces;
+        serviceConfig = let
+          configFile =
+            if cfg.configFile != null then cfg.configFile else writeConfig cfg;
+          args = [
+            "@${pkgs.dhcp}/sbin/dhcpd"
+            "dhcpd${postfix}"
+            "-${postfix}"
+            "-pf"
+            "/run/dhcpd${postfix}/dhcpd.pid"
+            "-cf"
+            "${configFile}"
+            "-lf"
+            "${cfg.stateDir}/dhcpd.leases"
+            "-user"
+            "dhcpd"
+            "-group"
+            "nogroup"
+          ] ++ cfg.extraFlags ++ cfg.interfaces;
 
         in {
           ExecStart = concatMapStringsSep " " escapeShellArg args;
@@ -58,8 +64,8 @@ let
           RuntimeDirectory = [ "dhcpd${postfix}" ];
           PIDFile = "/run/dhcpd${postfix}/dhcpd.pid";
         };
+      };
     };
-  };
 
   machineOpts = { ... }: {
 
@@ -134,7 +140,7 @@ let
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Additional command line flags to be passed to the dhcpd daemon.
       '';
@@ -151,7 +157,7 @@ let
 
     interfaces = mkOption {
       type = types.listOf types.str;
-      default = ["eth0"];
+      default = [ "eth0" ];
       description = ''
         The interfaces on which the DHCP server should listen.
       '';
@@ -159,13 +165,15 @@ let
 
     machines = mkOption {
       type = with types; listOf (submodule machineOpts);
-      default = [];
+      default = [ ];
       example = [
-        { hostName = "foo";
+        {
+          hostName = "foo";
           ethernetAddress = "00:16:76:9a:32:1d";
           ipAddress = "192.168.1.10";
         }
-        { hostName = "bar";
+        {
+          hostName = "bar";
           ethernetAddress = "00:19:d1:1d:c4:9a";
           ipAddress = "192.168.1.11";
         }
@@ -188,13 +196,10 @@ let
 
   };
 
-in
+in {
 
-{
-
-  imports = [
-    (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
-  ];
+  imports =
+    [ (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ]) ];
 
   ###### interface
 
@@ -204,7 +209,6 @@ in
     services.dhcpd6 = dhcpConfig "6";
 
   };
-
 
   ###### implementation
 
@@ -216,7 +220,7 @@ in
         group = "dhcpd";
         description = "DHCP daemon user";
       };
-      groups.dhcpd = {};
+      groups.dhcpd = { };
     };
 
     systemd.services = dhcpdService "4" cfg4 // dhcpdService "6" cfg6;

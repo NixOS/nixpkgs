@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, jinja2
-, speaklater
-, Babel
-, pytz
-}:
+{ lib, buildPythonPackage, fetchPypi, flask, jinja2, speaklater, Babel, pytz }:
 
 buildPythonPackage rec {
   pname = "Flask-Babel";

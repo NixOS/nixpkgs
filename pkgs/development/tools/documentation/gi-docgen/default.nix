@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, python3
-}:
+{ lib, fetchFromGitLab, fetchpatch, meson, ninja, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
@@ -24,19 +18,15 @@ python3.pkgs.buildPythonApplication rec {
     # Fix building docs of some packages (e.g. gnome-builder)
     # https://gitlab.gnome.org/GNOME/gi-docgen/-/issues/111
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/72f3c5dbe27aabb5f7a376afda23f3dfc3c2e212.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/72f3c5dbe27aabb5f7a376afda23f3dfc3c2e212.patch";
       sha256 = "iVXc3idmcjmFVZQdE2QX2V53YZ79lqxZid9nWdxAZ/Q=";
     })
   ];
 
-  depsBuildBuild = [
-    python3
-  ];
+  depsBuildBuild = [ python3 ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ meson ninja ];
 
   pythonPath = with python3.pkgs; [
     jinja2

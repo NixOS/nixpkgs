@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/xerial/sqlite-jdbc";
-    description = "Library for accessing and creating SQLite database files in Java";
+    description =
+      "Library for accessing and creating SQLite database files in Java";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jraygauthier ];

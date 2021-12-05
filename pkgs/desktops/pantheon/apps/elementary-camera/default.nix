@@ -1,27 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, python3
-, gettext
-, libxml2
-, gtk3
-, granite
-, libgee
-, libhandy
-, gst_all_1
-, libcanberra
-, clutter-gtk
-, clutter-gst
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, desktop-file-utils, python3, gettext, libxml2, gtk3, granite, libgee
+, libhandy, gst_all_1, libcanberra, clutter-gtk, clutter-gst
+, elementary-icon-theme, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
@@ -70,9 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

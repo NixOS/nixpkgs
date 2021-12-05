@@ -1,9 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, stdenv
-}:
+{ lib, buildGoModule, fetchFromGitHub, git, stdenv }:
 
 buildGoModule rec {
   pname = "gitjacker";

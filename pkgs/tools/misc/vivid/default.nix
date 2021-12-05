@@ -14,9 +14,13 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-1aox1eiF3hu5guBjRcM3qb6mHJOutI+yargW7X4cFfg=";
 
   meta = with lib; {
-    description = "A generator for LS_COLORS with support for multiple color themes";
+    description =
+      "A generator for LS_COLORS with support for multiple color themes";
     homepage = "https://github.com/sharkdp/vivid";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.dtzWill ];
     platforms = platforms.unix;
   };

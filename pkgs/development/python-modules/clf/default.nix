@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, docopt, requests, pygments }:
+{ lib, buildPythonPackage, fetchPypi, docopt, requests, pygments }:
 
 buildPythonPackage rec {
   pname = "clf";

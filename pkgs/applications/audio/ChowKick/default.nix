@@ -1,39 +1,8 @@
-{ alsa-lib
-, at-spi2-core
-, brotli
-, cmake
-, curl
-, dbus
-, libepoxy
-, fetchFromGitHub
-, freeglut
-, freetype
-, gtk2-x11
-, lib
-, libGL
-, libXcursor
-, libXdmcp
-, libXext
-, libXinerama
-, libXrandr
-, libXtst
-, libdatrie
-, libjack2
-, libpsl
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libxkbcommon
-, lv2
-, pcre
-, pkg-config
-, python3
-, sqlite
-, stdenv
-, util-linuxMinimal
-, webkitgtk
-}:
+{ alsa-lib, at-spi2-core, brotli, cmake, curl, dbus, libepoxy, fetchFromGitHub
+, freeglut, freetype, gtk2-x11, lib, libGL, libXcursor, libXdmcp, libXext
+, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
+, libsepol, libsysprof-capture, libthai, libxkbcommon, lv2, pcre, pkg-config
+, python3, sqlite, stdenv, util-linuxMinimal, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "ChowKick";
@@ -47,10 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     alsa-lib
     at-spi2-core

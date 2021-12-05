@@ -1,4 +1,5 @@
-{ buildEnv, qtbase }: name: paths:
+{ buildEnv, qtbase }:
+name: paths:
 
 buildEnv {
   inherit name;

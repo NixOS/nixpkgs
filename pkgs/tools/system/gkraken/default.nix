@@ -1,17 +1,6 @@
-{ python3Packages
-, lib
-, fetchFromGitLab
-, meson
-, pkg-config
-, glib
-, ninja
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, libnotify
-, dbus
-, wrapGAppsHook
-}:
+{ python3Packages, lib, fetchFromGitLab, meson, pkg-config, glib, ninja
+, desktop-file-utils, gobject-introspection, gtk3, libnotify, dbus
+, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gkraken";
@@ -30,23 +19,10 @@ python3Packages.buildPythonApplication rec {
     patchShebangs scripts/meson_post_install.py
   '';
 
-  nativeBuildInputs = [
-    meson
-    pkg-config
-    glib
-    ninja
-    gtk3
-    desktop-file-utils
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ meson pkg-config glib ninja gtk3 desktop-file-utils wrapGAppsHook ];
 
-  buildInputs = [
-    gobject-introspection
-    glib
-    gtk3
-    libnotify
-    dbus
-  ];
+  buildInputs = [ gobject-introspection glib gtk3 libnotify dbus ];
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
@@ -76,7 +52,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "GUI that allows to control the cooling (fan and/or pump profiles) of NZXT Kraken AIO liquid coolers from Linux";
+    description =
+      "GUI that allows to control the cooling (fan and/or pump profiles) of NZXT Kraken AIO liquid coolers from Linux";
     homepage = "https://gitlab.com/leinardi/gkraken";
     changelog = "https://gitlab.com/leinardi/gkraken/-/tags/${version}";
     license = licenses.gpl3Plus;

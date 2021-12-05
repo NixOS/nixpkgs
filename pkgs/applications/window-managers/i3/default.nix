@@ -1,9 +1,8 @@
-{ fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
-, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
-, yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb-run
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
-}:
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja
+, installShellFiles, libxcb, xcbutilkeysyms, xcbutil, xcbutilwm, xcbutilxrm
+, libstartup_notification, libX11, pcre, libev, yajl, xcb-util-cursor, perl
+, pango, perlPackages, libxkbcommon, xorgserver, xvfb-run, asciidoc, xmlto
+, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs }:
 
 stdenv.mkDerivation rec {
   pname = "i3";
@@ -15,21 +14,43 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config makeWrapper meson ninja installShellFiles perl
-    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+    pkg-config
+    makeWrapper
+    meson
+    ninja
+    installShellFiles
+    perl
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    findXMLCatalogs
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    "-Dmans=true"
-  ];
+  mesonFlags = [ "-Ddocs=true" "-Dmans=true" ];
 
   buildInputs = [
-    libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
-    libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
-    perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
-    perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb-run
+    libxcb
+    xcbutilkeysyms
+    xcbutil
+    xcbutilwm
+    xcbutilxrm
+    libxkbcommon
+    libstartup_notification
+    libX11
+    pcre
+    libev
+    yajl
+    xcb-util-cursor
+    perl
+    pango
+    perlPackages.AnyEventI3
+    perlPackages.X11XCB
+    perlPackages.IPCRun
+    perlPackages.ExtUtilsPkgConfig
+    perlPackages.InlineC
+    xorgserver
+    xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];
@@ -46,11 +67,11 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/7957
   doCheck = false; # stdenv.hostPlatform.system == "x86_64-linux";
 
-  checkPhase = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-  ''
-    (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
-    ! grep -q '^not ok' testcases/latest/complete-run.log
-  '';
+  checkPhase =
+    lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+      (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
+      ! grep -q '^not ok' testcases/latest/complete-run.log
+    '';
 
   postInstall = ''
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
@@ -65,10 +86,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tiling window manager";
-    homepage    = "https://i3wm.org";
+    homepage = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz globin ];
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
 
     longDescription = ''
       A tiling window manager primarily targeted at advanced users and

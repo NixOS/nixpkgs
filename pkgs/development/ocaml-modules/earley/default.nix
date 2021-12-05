@@ -1,6 +1,4 @@
-{ lib, fetchFromGitHub, ocaml, buildDunePackage
-, stdlib-shims
-}:
+{ lib, fetchFromGitHub, ocaml, buildDunePackage, stdlib-shims }:
 
 buildDunePackage rec {
   version = "3.0.0";

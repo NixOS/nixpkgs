@@ -14,30 +14,30 @@ with lib;
       usePostgreSQL = mkOption {
         type = types.bool;
         default = true;
-        description = "
-          Whether you use PostgreSQL service for your storage back-end.
-        ";
+        description =
+          "\n          Whether you use PostgreSQL service for your storage back-end.\n        ";
       };
 
     };
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.openfire.enable {
 
-    assertions = singleton
-      { assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
-        message = "OpenFire configured to use PostgreSQL but services.postgresql.enable is not enabled.";
-      };
+    assertions = singleton {
+      assertion = !(config.services.openfire.usePostgreSQL
+        -> config.services.postgresql.enable);
+      message =
+        "OpenFire configured to use PostgreSQL but services.postgresql.enable is not enabled.";
+    };
 
     systemd.services.openfire = {
       description = "OpenFire XMPP server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ] ++
-        optional config.services.openfire.usePostgreSQL "postgresql.service";
+      after = [ "networking.target" ]
+        ++ optional config.services.openfire.usePostgreSQL "postgresql.service";
       path = with pkgs; [ jre openfire coreutils which gnugrep gawk gnused ];
       script = ''
         export HOME=/tmp

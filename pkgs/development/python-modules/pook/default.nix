@@ -1,15 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, jsonschema
-, nose
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, furl, jsonschema, nose
+, pytestCheckHook, pythonOlder, requests, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pook";
@@ -23,18 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-4OGcnuajGdBRlXCYwbTK/zLNQRrir60qCYajHRRCpkU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    furl
-    jsonschema
-    requests
-    xmltodict
-  ];
+  propagatedBuildInputs = [ aiohttp furl jsonschema requests xmltodict ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ nose pytestCheckHook ];
 
   pythonImportsCheck = [ "pook" ];
 

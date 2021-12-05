@@ -1,19 +1,7 @@
-{ lib, stdenv
-, lightdm_gtk_greeter
-, fetchurl
-, lightdm
-, pkg-config
-, intltool
-, linkFarm
-, wrapGAppsHook
-, useGTK2 ? false
-, gtk2
+{ lib, stdenv, lightdm_gtk_greeter, fetchurl, lightdm, pkg-config, intltool
+, linkFarm, wrapGAppsHook, useGTK2 ? false, gtk2
 , gtk3 # gtk3 seems better supported
-, xfce4-dev-tools
-, at-spi2-core
-, librsvg
-, hicolor-icon-theme
-}:
+, xfce4-dev-tools, at-spi2-core, librsvg, hicolor-icon-theme }:
 
 #ToDo: bad icons with gtk2;
 #  avatar icon is missing in standard hicolor theme, I don't know where gtk3 takes it from
@@ -21,13 +9,13 @@
 let
   ver_branch = "2.0";
   version = "2.0.7";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lightdm-gtk-greeter";
   inherit version;
 
   src = fetchurl {
-    url = "${meta.homepage}/${ver_branch}/${version}/+download/${pname}-${version}.tar.gz";
+    url =
+      "${meta.homepage}/${ver_branch}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1g7wc3d3vqfa7mrdhx1w9ywydgjbffla6rbrxq9k3sc62br97qms";
   };
 
@@ -39,7 +27,9 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-indicator-services-command"
-    "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook to wrap automatically
+    "--sbindir=${
+      placeholder "out"
+    }/bin" # for wrapGAppsHook to wrap automatically
   ] ++ lib.optional useGTK2 "--with-gtk2";
 
   postPatch = ''
@@ -55,10 +45,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  installFlags = [
-    "localstatedir=\${TMPDIR}"
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  installFlags =
+    [ "localstatedir=\${TMPDIR}" "sysconfdir=${placeholder "out"}/etc" ];
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \

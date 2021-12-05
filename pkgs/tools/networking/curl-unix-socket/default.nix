@@ -26,7 +26,7 @@ buildGoPackage rec {
     description = "Run HTTP requests over UNIX socket";
     license = licenses.mit;
     homepage = "https://github.com/Soulou/curl-unix-socket";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
 }

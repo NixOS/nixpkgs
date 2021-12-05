@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, glib
-, granite
-, libnotify
-, wingpanel
-, libgee
-, libxml2
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, python3
+, ninja, vala, gtk3, glib, granite, libnotify, wingpanel, libgee, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
@@ -28,9 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [
@@ -43,14 +26,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    glib
-    granite
-    gtk3
-    libgee
-    libnotify
-    wingpanel
-  ];
+  buildInputs = [ glib granite gtk3 libgee libnotify wingpanel ];
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colander
-, sqlalchemy
-}:
+{ lib, buildPythonPackage, fetchPypi, colander, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "ColanderAlchemy";

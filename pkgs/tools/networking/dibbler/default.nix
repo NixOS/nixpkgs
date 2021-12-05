@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "18bnwkvax02scjdg5z8gvrkvy1lhssfnlpsaqb5kkh30w1vri1i7";
   };
 
-  configureFlags = [
-    "--enable-resolvconf"
-  ];
+  configureFlags = [ "--enable-resolvconf" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1";
 
   meta = with lib; {
     description = "Portable DHCPv6 implementation";

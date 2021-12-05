@@ -1,33 +1,32 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
-, python, twisted, jinja2, zope_interface, sqlalchemy, alembic, python-dateutil
-, txaio, autobahn, pyjwt, pyyaml, unidiff, treq, txrequests, pypugjs, boto3
-, moto, mock, lz4, setuptoolsTrial, isort, pylint, flake8, buildbot-worker
-, buildbot-pkg, buildbot-plugins, parameterized, git, openssh, glibcLocales
-, nixosTests
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k, python
+, twisted, jinja2, zope_interface, sqlalchemy, alembic, python-dateutil, txaio
+, autobahn, pyjwt, pyyaml, unidiff, treq, txrequests, pypugjs, boto3, moto, mock
+, lz4, setuptoolsTrial, isort, pylint, flake8, buildbot-worker, buildbot-pkg
+, buildbot-plugins, parameterized, git, openssh, glibcLocales, nixosTests }:
 
 let
-  withPlugins = plugins: buildPythonPackage {
-    pname = "${package.pname}-with-plugins";
-    inherit (package) version;
+  withPlugins = plugins:
+    buildPythonPackage {
+      pname = "${package.pname}-with-plugins";
+      inherit (package) version;
 
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      doCheck = false;
 
-    nativeBuildInputs = [ makeWrapper ];
-    propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
+      nativeBuildInputs = [ makeWrapper ];
+      propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
-    installPhase = ''
-      makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
-        --prefix PYTHONPATH : "${package}/${python.sitePackages}:$PYTHONPATH"
-      ln -sfv ${package}/lib $out/lib
-    '';
+      installPhase = ''
+        makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
+          --prefix PYTHONPATH : "${package}/${python.sitePackages}:$PYTHONPATH"
+        ln -sfv ${package}/lib $out/lib
+      '';
 
-    passthru = package.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      passthru = package.passthru // {
+        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      };
     };
-  };
 
   package = buildPythonPackage rec {
     pname = "buildbot";
@@ -52,7 +51,7 @@ let
       pyyaml
       unidiff
     ]
-      # tls
+    # tls
       ++ twisted.extras.tls;
 
     checkInputs = [
@@ -104,7 +103,8 @@ let
 
     meta = with lib; {
       homepage = "https://buildbot.net/";
-      description = "An open-source continuous integration framework for automating software build, test, and release processes";
+      description =
+        "An open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };

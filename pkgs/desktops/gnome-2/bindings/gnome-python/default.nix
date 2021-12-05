@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, python2, pkg-config, libgnome, GConf, glib, gtk2, gnome_vfs }:
+{ lib, stdenv, fetchurl, python2, pkg-config, libgnome, GConf, glib, gtk2
+, gnome_vfs }:
 
 with lib;
 
-let
-  inherit (python2.pkgs) python pygobject2 pygtk dbus-python;
+let inherit (python2.pkgs) python pygobject2 pygtk dbus-python;
 in stdenv.mkDerivation rec {
   version = "2.28";
   name = "gnome-python-${version}.1";

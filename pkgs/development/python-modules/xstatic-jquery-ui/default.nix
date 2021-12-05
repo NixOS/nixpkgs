@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, xstatic-jquery
-}:
+{ buildPythonPackage, lib, fetchPypi, xstatic-jquery }:
 
 buildPythonPackage rec {
   pname = "XStatic-jquery-ui";
@@ -18,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ xstatic-jquery ];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://jqueryui.com/";
     description = "jquery-ui packaged static files for python";
     license = licenses.mit;

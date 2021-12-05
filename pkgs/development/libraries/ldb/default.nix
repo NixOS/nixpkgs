@@ -1,18 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, tdb
-, talloc
-, tevent
-, popt
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, cmocka
-, wafHook
-}:
+{ lib, stdenv, fetchurl, python3, pkg-config, readline, tdb, talloc, tevent
+, popt, libxslt, docbook-xsl-nons, docbook_xml_dtd_42, cmocka, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "ldb";
@@ -25,14 +12,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-    wafHook
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_42
-  ];
+  nativeBuildInputs =
+    [ pkg-config python3 wafHook libxslt docbook-xsl-nons docbook_xml_dtd_42 ];
 
   buildInputs = [
     python3

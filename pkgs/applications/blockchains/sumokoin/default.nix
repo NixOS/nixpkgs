@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, unbound, openssl, boost
-, libunwind, lmdb, miniupnpc }:
+{ lib, stdenv, fetchFromGitHub, cmake, unbound, openssl, boost, libunwind, lmdb
+, miniupnpc }:
 
 stdenv.mkDerivation rec {
   pname = "sumokoin";
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/blockchain_db/lmdb/db_lmdb.cpp --replace mdb_size_t size_t
   '';
 
-  cmakeFlags = [
-    "-DLMDB_INCLUDE=${lmdb}/include"
-  ];
+  cmakeFlags = [ "-DLMDB_INCLUDE=${lmdb}/include" ];
 
   meta = with lib; {
     description = "A fork of Monero and a truely fungible cryptocurrency";

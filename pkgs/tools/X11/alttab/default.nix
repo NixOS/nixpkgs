@@ -1,5 +1,5 @@
-{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config, procps, ronn,
-libpng, uthash , which, xnee, xorg, python3Packages }:
+{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config
+, procps, ronn, libpng, uthash, which, xnee, xorg, python3Packages }:
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
@@ -13,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-G4tu008IC3RCeCRZVKFPY2+ioLuUa9hDDKUx1q5C5FQ=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    pkg-config
-    ronn
-  ];
+  nativeBuildInputs = [ autoconf automake pkg-config ronn ];
 
   preConfigure = "./bootstrap.sh";
 
@@ -49,7 +44,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sagb/alttab";
-    description = "X11 window switcher designed for minimalistic window managers or standalone X11 session";
+    description =
+      "X11 window switcher designed for minimalistic window managers or standalone X11 session";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.sgraf ];

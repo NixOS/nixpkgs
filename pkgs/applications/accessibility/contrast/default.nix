@@ -1,22 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cairo
-, dbus
-, desktop-file-utils
-, gettext
-, glib
-, gtk3
-, libhandy_0
-, libsass
-, meson
-, ninja
-, pango
-, pkg-config
-, python3
-, rustPlatform
-, wrapGAppsHook
-}:
+{ stdenv, lib, fetchFromGitLab, cairo, dbus, desktop-file-utils, gettext, glib
+, gtk3, libhandy_0, libsass, meson, ninja, pango, pkg-config, python3
+, rustPlatform, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "contrast";
@@ -51,22 +35,15 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-resources
   ];
 
-  buildInputs = [
-    cairo
-    dbus
-    glib
-    gtk3
-    libhandy_0
-    libsass
-    pango
-  ];
+  buildInputs = [ cairo dbus glib gtk3 libhandy_0 libsass pango ];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
   '';
 
   meta = with lib; {
-    description = "Checks whether the contrast between two colors meet the WCAG requirements";
+    description =
+      "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];

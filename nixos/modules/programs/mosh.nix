@@ -4,10 +4,9 @@ with lib;
 
 let
 
-  cfg  = config.programs.mosh;
+  cfg = config.programs.mosh;
 
-in
-{
+in {
   options.programs.mosh = {
     enable = mkOption {
       description = ''
@@ -29,7 +28,10 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mosh ];
-    networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
+    networking.firewall.allowedUDPPortRanges = [{
+      from = 60000;
+      to = 61000;
+    }];
     security.wrappers = mkIf cfg.withUtempter {
       utempter = {
         source = "${pkgs.libutempter}/lib/utempter/utempter";

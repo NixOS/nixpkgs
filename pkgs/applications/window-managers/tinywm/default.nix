@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "tinywm";
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     install -m644 annotated.c README -t $out/share/doc/${pname}-${version}
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "A tiny window manger for X11";
     longDescription = ''
 

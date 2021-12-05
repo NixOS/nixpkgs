@@ -1,18 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, autoreconfHook
-, perl
-, pkg-config
-, libsidplayfp
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, pulseSupport ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, out123Support ? stdenv.hostPlatform.isDarwin
-, mpg123
-}:
+{ stdenv, lib, fetchFromGitHub, nix-update-script, autoreconfHook, perl
+, pkg-config, libsidplayfp, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
+, pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
+, out123Support ? stdenv.hostPlatform.isDarwin, mpg123 }:
 
 stdenv.mkDerivation rec {
   pname = "sidplayfp";
@@ -27,22 +16,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config ];
 
-  buildInputs = [ libsidplayfp ]
-    ++ lib.optional alsaSupport alsa-lib
+  buildInputs = [ libsidplayfp ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional out123Support mpg123;
 
-  configureFlags = lib.optionals out123Support [
-    "--with-out123"
-  ];
+  configureFlags = lib.optionals out123Support [ "--with-out123" ];
 
   enableParallelBuilding = true;
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "A SID player using libsidplayfp";

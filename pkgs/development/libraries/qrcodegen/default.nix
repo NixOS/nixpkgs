@@ -17,18 +17,17 @@ stdenv.mkDerivation rec {
     cp qrcodegen.h $out/include/qrcodegen/
   '';
 
-  meta = with lib;
-    {
-      description = "qrcode generator library in multiple languages";
+  meta = with lib; {
+    description = "qrcode generator library in multiple languages";
 
-      longDescription = ''
-        This project aims to be the best, clearest library for generating QR Codes. My primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.
-      '';
+    longDescription = ''
+      This project aims to be the best, clearest library for generating QR Codes. My primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.
+    '';
 
-      homepage = "https://github.com/nayuki/QR-Code-generator";
+    homepage = "https://github.com/nayuki/QR-Code-generator";
 
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mcbeth ];
-    };
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mcbeth ];
+  };
 }

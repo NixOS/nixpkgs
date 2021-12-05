@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configparser
-, pytest
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, configparser, pytest, isPy3k }:
 
 buildPythonPackage rec {
   pname = "entrypoints";

@@ -48,7 +48,8 @@ in {
 
       hostname = mkOption {
         type = types.nullOr types.str;
-        description = "DNS name or IP address that will be used for the stream directory lookups or possibily the playlist generation if a Host header is not provided.";
+        description =
+          "DNS name or IP address that will be used for the stream directory lookups or possibily the playlist generation if a Host header is not provided.";
         default = config.networking.domain;
       };
 
@@ -74,7 +75,8 @@ in {
       listen = {
         port = mkOption {
           type = types.int;
-          description = "TCP port that will be used to accept client connections.";
+          description =
+            "TCP port that will be used to accept client connections.";
           default = 8000;
         };
 
@@ -107,7 +109,6 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -117,7 +118,8 @@ in {
       description = "Icecast Network Audio Streaming Server";
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "mkdir -p ${cfg.logDir} && chown ${cfg.user}:${cfg.group} ${cfg.logDir}";
+      preStart =
+        "mkdir -p ${cfg.logDir} && chown ${cfg.user}:${cfg.group} ${cfg.logDir}";
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.icecast}/bin/icecast -c ${configFile}";

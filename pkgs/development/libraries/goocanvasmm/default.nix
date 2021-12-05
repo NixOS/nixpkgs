@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0vpdfrj59nwzwj8bk4s0h05iyql62pxjzsxh72g3vry07s3i3zw0";
   };
   nativeBuildInputs = [ pkg-config ];
@@ -19,7 +21,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "goocanvasmm2";
-      versionPolicy = "none"; # stable version has not been released yet, last update 2015
+      versionPolicy =
+        "none"; # stable version has not been released yet, last update 2015
     };
   };
 

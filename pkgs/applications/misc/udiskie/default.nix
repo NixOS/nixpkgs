@@ -1,21 +1,6 @@
-{ lib
-, fetchFromGitHub
-, asciidoc-full
-, buildPythonApplication
-, docopt
-, gettext
-, gobject-introspection
-, gtk3
-, keyutils
-, libappindicator-gtk3
-, libnotify
-, librsvg
-, nose
-, pygobject3
-, pyyaml
-, udisks2
-, wrapGAppsHook
-}:
+{ lib, fetchFromGitHub, asciidoc-full, buildPythonApplication, docopt, gettext
+, gobject-introspection, gtk3, keyutils, libappindicator-gtk3, libnotify
+, librsvg, nose, pygobject3, pyyaml, udisks2, wrapGAppsHook }:
 
 buildPythonApplication rec {
   pname = "udiskie";
@@ -44,11 +29,7 @@ buildPythonApplication rec {
     udisks2
   ];
 
-  propagatedBuildInputs = [
-    docopt
-    pygobject3
-    pyyaml
-  ];
+  propagatedBuildInputs = [ docopt pygobject3 pyyaml ];
 
   postBuild = "make -C doc";
 
@@ -57,10 +38,7 @@ buildPythonApplication rec {
     cp -v doc/udiskie.8 $out/share/man/man8/
   '';
 
-  checkInputs = [
-    keyutils
-    nose
-  ];
+  checkInputs = [ keyutils nose ];
 
   checkPhase = ''
     nosetests

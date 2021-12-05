@@ -2,9 +2,8 @@
 
 let
 
-    arch = if stdenv.hostPlatform.system == "x86_64-linux"
-      then "x86_64"
-      else "i386";
+  arch =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
 
 in stdenv.mkDerivation rec {
   pname = "samsung-unified-linux-driver";
@@ -12,14 +11,11 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "0r66l9zp0p1qgakh4j08hynwsr4lsgq5yrpxyr0x4ldvl0z2b1bb";
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    url =
+      "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
   };
 
-  buildInputs = [
-    cups
-    libusb-compat-0_1
-    libxml2
-  ];
+  buildInputs = [ cups libusb-compat-0_1 libxml2 ];
 
   installPhase = ''
 
@@ -73,7 +69,9 @@ in stdenv.mkDerivation rec {
       patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$bin"
     done
 
-    patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$out/lib/libscmssc.so"
+    patchelf --set-rpath "$out/lib:${
+      lib.getLib cups
+    }/lib" "$out/lib/libscmssc.so"
     patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/

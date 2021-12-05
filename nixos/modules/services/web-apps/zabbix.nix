@@ -16,13 +16,24 @@ let
     <?php
     // Zabbix GUI configuration file.
     global $DB;
-    $DB['TYPE'] = '${ { mysql = "MYSQL"; pgsql = "POSTGRESQL"; oracle = "ORACLE"; }.${cfg.database.type} }';
+    $DB['TYPE'] = '${
+      {
+        mysql = "MYSQL";
+        pgsql = "POSTGRESQL";
+        oracle = "ORACLE";
+      }.${cfg.database.type}
+    }';
     $DB['SERVER'] = '${cfg.database.host}';
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
     $DB['USER'] = '${cfg.database.user}';
     # NOTE: file_get_contents adds newline at the end of returned string
-    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")" else "''"};
+    $DB['PASSWORD'] = ${
+      if cfg.database.passwordFile != null then
+        ''trim(file_get_contents('${cfg.database.passwordFile}'), "\r\n")''
+      else
+        "''"
+    };
     // Schema name. Used for IBM DB2 and PostgreSQL.
     $DB['SCHEMA'] = ''';
     $ZBX_SERVER = '${cfg.server.address}';
@@ -33,8 +44,7 @@ let
     ${cfg.extraConfig}
   '';
 
-in
-{
+in {
   # interface
 
   options.services = {
@@ -57,7 +67,8 @@ in
 
         address = mkOption {
           type = types.str;
-          description = "The IP address or hostname of the Zabbix server to connect to.";
+          description =
+            "The IP address or hostname of the Zabbix server to connect to.";
           default = "localhost";
         };
       };
@@ -78,10 +89,12 @@ in
 
         port = mkOption {
           type = types.int;
-          default =
-            if cfg.database.type == "mysql" then config.services.mysql.port
-            else if cfg.database.type == "pgsql" then config.services.postgresql.port
-            else 1521;
+          default = if cfg.database.type == "mysql" then
+            config.services.mysql.port
+          else if cfg.database.type == "pgsql" then
+            config.services.postgresql.port
+          else
+            1521;
           description = "Database host port.";
         };
 
@@ -111,12 +124,14 @@ in
           type = types.nullOr types.path;
           default = null;
           example = "/run/postgresql";
-          description = "Path to the unix socket file to use for authentication.";
+          description =
+            "Path to the unix socket file to use for authentication.";
         };
       };
 
       virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        type = types.submodule
+          (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
             hostName = "zabbix.example.org";
@@ -161,9 +176,11 @@ in
 
   config = mkIf cfg.enable {
 
-    services.zabbixWeb.extraConfig = optionalString ((versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")) ''
-      $DB['DOUBLE_IEEE754'] = 'true';
-    '';
+    services.zabbixWeb.extraConfig = optionalString
+      ((versionAtLeast config.system.stateVersion "20.09")
+        && (versionAtLeast cfg.package.version "5.0.0")) ''
+          $DB['DOUBLE_IEEE754'] = 'true';
+        '';
 
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0750 ${user} ${group} - -"
@@ -201,21 +218,24 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/zabbix";
-        extraConfig = ''
-          <Directory "${cfg.package}/share/zabbix">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
-            AllowOverride all
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
-      } ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/zabbix";
+          extraConfig = ''
+            <Directory "${cfg.package}/share/zabbix">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
+              AllowOverride all
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
+        }
+      ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {
@@ -224,9 +244,8 @@ in
       inherit group;
     };
 
-    users.groups.${group} = mapAttrs (name: mkDefault) {
-      gid = config.ids.gids.zabbix;
-    };
+    users.groups.${group} =
+      mapAttrs (name: mkDefault) { gid = config.ids.gids.zabbix; };
 
   };
 }

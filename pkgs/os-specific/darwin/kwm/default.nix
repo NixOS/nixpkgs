@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     stripRoot = false;
-    url = "https://github.com/koekeishiya/kwm/releases/download/v${version}/Kwm-${version}.zip";
+    url =
+      "https://github.com/koekeishiya/kwm/releases/download/v${version}/Kwm-${version}.zip";
     sha256 = "1ld1vblg3hmc6lpb8p2ljvisbkijjkijf4y87z5y1ia4k8pk7mxb";
   };
 

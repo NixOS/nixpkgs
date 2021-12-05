@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, python-snappy
-, thriftpy2
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, python-snappy
+, thriftpy2 }:
 
 buildPythonPackage rec {
   pname = "parquet";
@@ -17,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "1ahvg4dz9fzi4vdm9jmslq3v3jahjj17fdcc5fljgcw6h9yxyl2r";
   };
 
-  propagatedBuildInputs = [
-    python-snappy
-    thriftpy2
-  ];
+  propagatedBuildInputs = [ python-snappy thriftpy2 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Fails with AttributeError

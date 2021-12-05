@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, meson
-, ninja
-, pantheon
-, pkg-config
-, vala
-, gettext
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, glib, meson, ninja, pantheon, pkg-config, vala
+, gettext, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "vala-lint-unstable";
@@ -22,18 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "KwJ5sCp9ZrrxIqc6qi2+ZdHBt1esNOO1+uDkS+d9mW8=";
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext meson ninja pkg-config vala wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
   doCheck = true;
 

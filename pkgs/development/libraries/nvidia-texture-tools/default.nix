@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/castano/nvidia-texture-tools/commit/6474f2593428d89ec152da2502aa136ababe66ca.patch";
+      url =
+        "https://github.com/castano/nvidia-texture-tools/commit/6474f2593428d89ec152da2502aa136ababe66ca.patch";
       sha256 = "0akbkvm55hiv58jx71h9hj173rbnqlb5a430y9azjiix7zga42vd";
     })
   ];
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
   '';
 
-  cmakeFlags = [
-    "-DNVTT_SHARED=TRUE"
-  ];
+  cmakeFlags = [ "-DNVTT_SHARED=TRUE" ];
 
   postInstall = ''
     moveToOutput include "$dev"

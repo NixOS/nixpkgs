@@ -1,6 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
-, colorama, configobj, packaging, pyyaml, pykwalify
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, colorama, configobj, packaging
+, pyyaml, pykwalify }:
 
 buildPythonPackage rec {
   version = "0.12.0";
@@ -13,20 +12,12 @@ buildPythonPackage rec {
     sha256 = "d7ce0d719fd218fee5983442fe93a33a21a6be6a736915a7ffbe75369714e9ce";
   };
 
-  propagatedBuildInputs = [
-    colorama
-    configobj
-    packaging
-    pyyaml
-    pykwalify
-  ];
+  propagatedBuildInputs = [ colorama configobj packaging pyyaml pykwalify ];
 
   # pypi package does not include tests (and for good reason):
   # tests run under 'tox' and have west try to git clone repos (not sandboxable)
   doCheck = false;
-  pythonImportsCheck = [
-    "west"
-  ];
+  pythonImportsCheck = [ "west" ];
 
   meta = with lib; {
     homepage = "https://github.com/zephyrproject-rtos/west";

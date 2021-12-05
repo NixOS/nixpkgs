@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, hglib
-, isPy3k
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, hglib, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
   pname = "hgsvn";
@@ -21,11 +14,12 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
   propagatedBuildInputs = [ hglib ];
 
-  doCheck = false;  # too many assumptions
+  doCheck = false; # too many assumptions
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/hgsvn";
-    description = "A set of scripts to work locally on Subversion checkouts using Mercurial";
+    description =
+      "A set of scripts to work locally on Subversion checkouts using Mercurial";
     license = licenses.gpl2;
   };
 

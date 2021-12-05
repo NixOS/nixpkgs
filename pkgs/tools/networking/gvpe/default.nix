@@ -13,11 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl gmp zlib ];
 
-  configureFlags = [
-    "--enable-tcp"
-    "--enable-http-proxy"
-    "--enable-dns"
-    ];
+  configureFlags = [ "--enable-tcp" "--enable-http-proxy" "--enable-dns" ];
 
   preBuild = ''
     sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C

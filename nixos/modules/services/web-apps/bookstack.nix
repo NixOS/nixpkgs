@@ -4,9 +4,7 @@ with lib;
 
 let
   cfg = config.services.bookstack;
-  bookstack = pkgs.bookstack.override {
-    dataDir = cfg.dataDir;
-  };
+  bookstack = pkgs.bookstack.override { dataDir = cfg.dataDir; };
   db = cfg.database;
   mail = cfg.mail;
 
@@ -23,7 +21,6 @@ let
     fi
     $sudo ${pkgs.php}/bin/php artisan $*
   '';
-
 
 in {
   options.services.bookstack = {
@@ -129,12 +126,12 @@ in {
       fromName = mkOption {
         type = types.str;
         default = "BookStack";
-        description = "Mail \"from\" name.";
+        description = ''Mail "from" name.'';
       };
       from = mkOption {
         type = types.str;
         default = "mail@bookstackapp.com";
-        description = "Mail \"from\" email.";
+        description = ''Mail "from" email.'';
       };
       user = mkOption {
         type = with types; nullOr str;
@@ -182,11 +179,10 @@ in {
     };
 
     nginx = mkOption {
-      type = types.submodule (
-        recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
-      );
-      default = {};
+      type = types.submodule (recursiveUpdate
+        (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+        { });
+      default = { };
       example = literalExpression ''
         {
           serverAliases = [
@@ -220,11 +216,15 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = db.createLocally -> db.user == user;
-        message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
+      {
+        assertion = db.createLocally -> db.user == user;
+        message =
+          "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
-      { assertion = db.createLocally -> db.passwordFile == null;
-        message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
+      {
+        assertion = db.createLocally -> db.passwordFile == null;
+        message =
+          "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
 
@@ -234,11 +234,10 @@ in {
       enable = true;
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
-      ensureUsers = [
-        { name = db.user;
-          ensurePermissions = { "${db.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
+      ensureUsers = [{
+        name = db.user;
+        ensurePermissions = { "${db.name}.*" = "ALL PRIVILEGES"; };
+      }];
     };
 
     services.phpfpm.pools.bookstack = {
@@ -258,29 +257,38 @@ in {
 
     services.nginx = {
       enable = mkDefault true;
-      virtualHosts.bookstack = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
-        extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
-        locations = {
-          "/" = {
-            index = "index.php";
-            extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+      virtualHosts.bookstack = mkMerge [
+        cfg.nginx
+        {
+          root = mkForce "${bookstack}/public";
+          extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL
+            || cfg.nginx.onlySSL || cfg.nginx.enableACME)
+            "fastcgi_param HTTPS on;";
+          locations = {
+            "/" = {
+              index = "index.php";
+              extraConfig = "try_files $uri $uri/ /index.php?$query_string;";
+            };
+            "~ .php$" = {
+              extraConfig = ''
+                try_files $uri $uri/ /index.php?$query_string;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param REDIRECT_STATUS 200;
+                fastcgi_pass unix:${
+                  config.services.phpfpm.pools."bookstack".socket
+                };
+                ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL
+                  || cfg.nginx.onlySSL || cfg.nginx.enableACME)
+                "fastcgi_param HTTPS on;"}
+              '';
+            };
+            "~ .(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
           };
-          "~ \.php$" = {
-            extraConfig = ''
-              try_files $uri $uri/ /index.php?$query_string;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
-              ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
-            '';
-          };
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
-            extraConfig = "expires 365d;";
-          };
-        };
-      }];
+        }
+      ];
     };
 
     systemd.services.bookstack-setup = {
@@ -310,15 +318,20 @@ in {
         MAIL_HOST=${mail.host}
         MAIL_PORT=${toString mail.port}
         ${optionalString (mail.user != null) "MAIL_USERNAME=${mail.user};"}
-        ${optionalString (mail.encryption != null) "MAIL_ENCRYPTION=${mail.encryption};"}
-        ${optionalString (db.passwordFile != null) "DB_PASSWORD=$(head -n1 ${db.passwordFile})"}
-        ${optionalString (mail.passwordFile != null) "MAIL_PASSWORD=$(head -n1 ${mail.passwordFile})"}
+        ${optionalString (mail.encryption != null)
+        "MAIL_ENCRYPTION=${mail.encryption};"}
+        ${optionalString (db.passwordFile != null)
+        "DB_PASSWORD=$(head -n1 ${db.passwordFile})"}
+        ${optionalString (mail.passwordFile != null)
+        "MAIL_PASSWORD=$(head -n1 ${mail.passwordFile})"}
         APP_SERVICES_CACHE=${cfg.cacheDir}/services.php
         APP_PACKAGES_CACHE=${cfg.cacheDir}/packages.php
         APP_CONFIG_CACHE=${cfg.cacheDir}/config.php
         APP_ROUTES_CACHE=${cfg.cacheDir}/routes-v7.php
         APP_EVENTS_CACHE=${cfg.cacheDir}/events.php
-        ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "SESSION_SECURE_COOKIE=true"}
+        ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL
+          || cfg.nginx.onlySSL || cfg.nginx.enableACME)
+        "SESSION_SECURE_COOKIE=true"}
         ${toString cfg.extraConfig}
         " > "${cfg.dataDir}/.env"
 
@@ -359,9 +372,7 @@ in {
         };
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
-      groups = mkIf (group == "bookstack") {
-        bookstack = {};
-      };
+      groups = mkIf (group == "bookstack") { bookstack = { }; };
     };
 
   };

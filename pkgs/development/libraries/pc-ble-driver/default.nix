@@ -1,8 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, git
-, asio, catch2, spdlog
-, IOKit, udev
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, git, asio, catch2, spdlog, IOKit, udev }:
 
 stdenv.mkDerivation rec {
   pname = "pc-ble-driver";
@@ -15,20 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1609x17sbfi668jfwyvnfk9z29w6cgzvgv67xcpvpx5jv0czpcdj";
   };
 
-  cmakeFlags = [
-    "-DNRF_BLE_DRIVER_VERSION=${version}"
-  ];
+  cmakeFlags = [ "-DNRF_BLE_DRIVER_VERSION=${version}" ];
 
   nativeBuildInputs = [ cmake git ];
   buildInputs = [ asio catch2 spdlog ];
 
   propagatedBuildInputs = [
 
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit ]
+    ++ lib.optionals stdenv.isLinux [ udev ];
 
   meta = with lib; {
     description = "Desktop library for Bluetooth low energy development";

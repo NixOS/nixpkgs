@@ -5,10 +5,10 @@ with lib;
 let
   cfg = config.services.gitolite;
   # Use writeTextDir to not leak Nix store hash into file name
-  pubkeyFile = (pkgs.writeTextDir "gitolite-admin.pub" cfg.adminPubkey) + "/gitolite-admin.pub";
+  pubkeyFile = (pkgs.writeTextDir "gitolite-admin.pub" cfg.adminPubkey)
+    + "/gitolite-admin.pub";
   hooks = lib.concatMapStrings (hook: "${hook} ") cfg.commonHooks;
-in
-{
+in {
   options = {
     services.gitolite = {
       enable = mkOption {
@@ -55,7 +55,7 @@ in
 
       commonHooks = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of custom git hooks that get copied to <literal>~/.gitolite/hooks/common</literal>.
         '';
@@ -112,33 +112,33 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
-  let
+  config = mkIf cfg.enable (let
     manageGitoliteRc = cfg.extraGitoliteRc != "";
-    rcDir = pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
-    rcDirScript =
-      ''
-        mkdir "$out"
-        export HOME=temp-home
-        mkdir -p "$HOME/.gitolite/logs" # gitolite can't run without it
-        '${pkgs.gitolite}'/bin/gitolite print-default-rc >>"$out/gitolite.rc.default"
-        cat <<END >>"$out/gitolite.rc"
-        # This file is managed by NixOS.
-        # Use services.gitolite options to control it.
+    rcDir =
+      pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
+    rcDirScript = ''
+      mkdir "$out"
+      export HOME=temp-home
+      mkdir -p "$HOME/.gitolite/logs" # gitolite can't run without it
+      '${pkgs.gitolite}'/bin/gitolite print-default-rc >>"$out/gitolite.rc.default"
+      cat <<END >>"$out/gitolite.rc"
+      # This file is managed by NixOS.
+      # Use services.gitolite options to control it.
 
-        END
-        cat "$out/gitolite.rc.default" >>"$out/gitolite.rc"
-      '' +
-      optionalString (cfg.extraGitoliteRc != "") ''
-        echo -n ${escapeShellArg ''
+      END
+      cat "$out/gitolite.rc.default" >>"$out/gitolite.rc"
+    '' + optionalString (cfg.extraGitoliteRc != "") ''
+      echo -n ${
+        escapeShellArg ''
 
           # Added by NixOS:
           ${removeSuffix "\n" cfg.extraGitoliteRc}
 
           # per perl rules, this should be the last line in such a file:
           1;
-        ''} >>"$out/gitolite.rc"
-      '';
+        ''
+      } >>"$out/gitolite.rc"
+    '';
   in {
     services.gitolite.extraGitoliteRc = optionalString cfg.enableGitAnnex ''
       # Enable git-annex support:
@@ -146,17 +146,17 @@ in
     '';
 
     users.users.${cfg.user} = {
-      description     = "Gitolite user";
-      home            = cfg.dataDir;
-      uid             = config.ids.uids.gitolite;
-      group           = cfg.group;
+      description = "Gitolite user";
+      home = cfg.dataDir;
+      uid = config.ids.uids.gitolite;
+      group = cfg.group;
       useDefaultShell = true;
     };
     users.groups.${cfg.group}.gid = config.ids.gids.gitolite;
 
     systemd.services.gitolite-init = {
       description = "Gitolite initialization";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
       environment = {
@@ -166,7 +166,8 @@ in
 
       serviceConfig = mkMerge [
         (mkIf (cfg.dataDir == "/var/lib/gitolite") {
-          StateDirectory = "gitolite gitolite/.gitolite gitolite/.gitolite/logs";
+          StateDirectory =
+            "gitolite gitolite/.gitolite gitolite/.gitolite/logs";
           StateDirectoryMode = "0750";
         })
         {
@@ -178,57 +179,58 @@ in
         }
       ];
 
-      path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.diffutils config.programs.ssh.package ];
-      script =
-      let
-        rcSetupScriptIfCustomFile =
-          if manageGitoliteRc then ''
-            cat <<END
-            <3>ERROR: NixOS can't apply declarative configuration
-            <3>to your .gitolite.rc file, because it seems to be
-            <3>already customized manually.
-            <3>See the services.gitolite.extraGitoliteRc option
-            <3>in "man configuration.nix" for more information.
-            END
-            # Not sure if the line below addresses the issue directly or just
-            # adds a delay, but without it our error message often doesn't
-            # show up in `systemctl status gitolite-init`.
-            journalctl --flush
-            exit 1
-          '' else ''
-            :
-          '';
-        rcSetupScriptIfDefaultFileOrStoreSymlink =
-          if manageGitoliteRc then ''
-            ln -sf "${rcDir}/gitolite.rc" "$GITOLITE_RC"
-          '' else ''
-            [[ -L "$GITOLITE_RC" ]] && rm -f "$GITOLITE_RC"
-          '';
-      in
-        ''
-          if ( [[ ! -e "$GITOLITE_RC" ]] && [[ ! -L "$GITOLITE_RC" ]] ) ||
-             ( [[ -f "$GITOLITE_RC" ]] && diff -q "$GITOLITE_RC" "$GITOLITE_RC_DEFAULT" >/dev/null ) ||
-             ( [[ -L "$GITOLITE_RC" ]] && [[ "$(readlink "$GITOLITE_RC")" =~ ^/nix/store/ ]] )
-          then
-        '' + rcSetupScriptIfDefaultFileOrStoreSymlink +
-        ''
-          else
-        '' + rcSetupScriptIfCustomFile +
-        ''
-          fi
-
-          if [ ! -d repositories ]; then
-            gitolite setup -pk ${pubkeyFile}
-          fi
-          if [ -n "${hooks}" ]; then
-            cp -f ${hooks} .gitolite/hooks/common/
-            chmod +x .gitolite/hooks/common/*
-          fi
-          gitolite setup # Upgrade if needed
+      path = [
+        pkgs.gitolite
+        pkgs.git
+        pkgs.perl
+        pkgs.bash
+        pkgs.diffutils
+        config.programs.ssh.package
+      ];
+      script = let
+        rcSetupScriptIfCustomFile = if manageGitoliteRc then ''
+          cat <<END
+          <3>ERROR: NixOS can't apply declarative configuration
+          <3>to your .gitolite.rc file, because it seems to be
+          <3>already customized manually.
+          <3>See the services.gitolite.extraGitoliteRc option
+          <3>in "man configuration.nix" for more information.
+          END
+          # Not sure if the line below addresses the issue directly or just
+          # adds a delay, but without it our error message often doesn't
+          # show up in `systemctl status gitolite-init`.
+          journalctl --flush
+          exit 1
+        '' else ''
+          :
         '';
+        rcSetupScriptIfDefaultFileOrStoreSymlink = if manageGitoliteRc then ''
+          ln -sf "${rcDir}/gitolite.rc" "$GITOLITE_RC"
+        '' else ''
+          [[ -L "$GITOLITE_RC" ]] && rm -f "$GITOLITE_RC"
+        '';
+      in ''
+        if ( [[ ! -e "$GITOLITE_RC" ]] && [[ ! -L "$GITOLITE_RC" ]] ) ||
+           ( [[ -f "$GITOLITE_RC" ]] && diff -q "$GITOLITE_RC" "$GITOLITE_RC_DEFAULT" >/dev/null ) ||
+           ( [[ -L "$GITOLITE_RC" ]] && [[ "$(readlink "$GITOLITE_RC")" =~ ^/nix/store/ ]] )
+        then
+      '' + rcSetupScriptIfDefaultFileOrStoreSymlink + ''
+        else
+      '' + rcSetupScriptIfCustomFile + ''
+        fi
+
+        if [ ! -d repositories ]; then
+          gitolite setup -pk ${pubkeyFile}
+        fi
+        if [ -n "${hooks}" ]; then
+          cp -f ${hooks} .gitolite/hooks/common/
+          chmod +x .gitolite/hooks/common/*
+        fi
+        gitolite setup # Upgrade if needed
+      '';
     };
 
     environment.systemPackages = [ pkgs.gitolite pkgs.git ]
-        ++ optional cfg.enableGitAnnex pkgs.git-annex;
+      ++ optional cfg.enableGitAnnex pkgs.git-annex;
   });
 }

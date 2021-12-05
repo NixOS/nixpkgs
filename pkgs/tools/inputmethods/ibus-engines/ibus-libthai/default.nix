@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.1.4";
 
   src = fetchurl {
-    url = "https://linux.thai.net/pub/ThaiLinux/software/libthai/ibus-libthai-${version}.tar.xz";
+    url =
+      "https://linux.thai.net/pub/ThaiLinux/software/libthai/ibus-libthai-${version}.tar.xz";
     sha256 = "0iam7308rxkx2xwaabc5wyj7vrxgd4cr95pvwrkm8fr9gh2xnwgv";
   };
 

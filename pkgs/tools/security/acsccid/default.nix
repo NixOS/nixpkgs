@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, gettext
-, flex
-, perl
-, pkg-config
-, pcsclite
-, libusb1
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl
+, pkg-config, pcsclite, libusb1, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "1.1.8";
@@ -24,26 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoconf
-    automake
-    libtool
-    gettext
-    flex
-    perl
-  ];
+  nativeBuildInputs =
+    [ pkg-config autoconf automake libtool gettext flex perl ];
 
-  buildInputs = [
-    pcsclite
-    libusb1
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = [ pcsclite libusb1 ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  configureFlags = [
-    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
-  ];
+  configureFlags = [ "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers" ];
 
   doCheck = true;
 
@@ -62,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
+    description =
+      "A PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card
       readers. This library provides a PC/SC IFD handler implementation and

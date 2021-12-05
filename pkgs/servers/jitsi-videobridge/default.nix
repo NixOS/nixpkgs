@@ -7,8 +7,7 @@ let
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
     sha256 = "0SLaCIjMN2/+Iushyz8OQpRHHBYVqn6+DpwNGbQEzy4=";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version src;
 
   dontBuild = true;
@@ -24,7 +23,9 @@ stdenv.mkDerivation {
 
     mkdir -p $out/{bin,share/jitsi-videobridge,etc/jitsi/videobridge}
     mv etc/jitsi/videobridge/logging.properties $out/etc/jitsi/videobridge/
-    cp ${./logging.properties-journal} $out/etc/jitsi/videobridge/logging.properties-journal
+    cp ${
+      ./logging.properties-journal
+    } $out/etc/jitsi/videobridge/logging.properties-journal
     mv usr/share/jitsi-videobridge/* $out/share/jitsi-videobridge/
     ln -s $out/share/jitsi-videobridge/jvb.sh $out/bin/jitsi-videobridge
 
@@ -34,9 +35,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    single-host-smoke-test = nixosTests.jitsi-meet;
-  };
+  passthru.tests = { single-host-smoke-test = nixosTests.jitsi-meet; };
 
   passthru.updateScript = ./update.sh;
 

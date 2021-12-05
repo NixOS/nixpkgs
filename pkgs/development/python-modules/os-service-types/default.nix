@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, six
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, pbr, six, callPackage }:
 
 buildPythonPackage rec {
   pname = "os-service-types";
@@ -26,14 +20,13 @@ buildPythonPackage rec {
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
 
-  passthru.tests = {
-    tests = callPackage ./tests.nix { };
-  };
+  passthru.tests = { tests = callPackage ./tests.nix { }; };
 
   pythonImportsCheck = [ "os_service_types" ];
 
   meta = with lib; {
-    description = "Python library for consuming OpenStack sevice-types-authority data";
+    description =
+      "Python library for consuming OpenStack sevice-types-authority data";
     homepage = "https://github.com/openstack/os-service-types";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

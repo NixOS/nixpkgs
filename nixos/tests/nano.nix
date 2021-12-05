@@ -1,12 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nano";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
-  machine = { lib, ... }: {
-    environment.systemPackages = [ pkgs.nano ];
-  };
+  machine = { lib, ... }: { environment.systemPackages = [ pkgs.nano ]; };
 
   testScript = { ... }: ''
     start_all()

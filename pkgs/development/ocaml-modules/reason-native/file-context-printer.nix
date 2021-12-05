@@ -3,18 +3,15 @@
 {
   pname = "file-context-printer";
 
-  buildInputs = [
-    reason
-  ];
+  buildInputs = [ reason ];
 
-  propagatedBuildInputs = [
-    re
-    pastel
-  ];
+  propagatedBuildInputs = [ re pastel ];
 
   meta = {
-    description = "Utility for displaying snippets of files on the command line";
-    downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/file-context-printer";
+    description =
+      "Utility for displaying snippets of files on the command line";
+    downloadPage =
+      "https://github.com/reasonml/reason-native/tree/master/src/file-context-printer";
     homepage = "https://reason-native.com/docs/file-context-printer/";
   };
 }

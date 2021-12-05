@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "clack-socket";
   version = "clack-20210807-git";
 
@@ -9,13 +8,14 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/clack/2021-08-07/clack-20210807-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/clack/2021-08-07/clack-20210807-git.tgz";
     sha256 = "00bwpw04d6rri4hww9n1fa9ygvjgr5d18r7iadqwz0ns795p2pva";
   };
 
   packageName = "clack-socket";
 
-  asdFilesToKeep = ["clack-socket.asd"];
+  asdFilesToKeep = [ "clack-socket.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack-socket DESCRIPTION System lacks description SHA256
@@ -26,4 +26,5 @@ rec {
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-test clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "firejail";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ sgo ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ sgo ]; };
 
   nodes.machine = { ... }: {
     imports = [ ./common/user-account.nix ];
@@ -10,8 +8,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     programs.firejail = {
       enable = true;
       wrappedBinaries = {
-        bash-jailed  = "${pkgs.bash}/bin/bash";
-        bash-jailed2  = {
+        bash-jailed = "${pkgs.bash}/bin/bash";
+        bash-jailed2 = {
           executable = "${pkgs.bash}/bin/bash";
           extraArgs = [ "--private=~/firejail-home" ];
         };
@@ -22,9 +20,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       wantedBy = [ "multi-user.target" ];
       before = [ "multi-user.target" ];
 
-      environment = {
-        HOME = "/home/alice";
-      };
+      environment = { HOME = "/home/alice"; };
 
       unitConfig = {
         type = "oneshot";

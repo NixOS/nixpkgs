@@ -1,4 +1,5 @@
-{ lib, python3, fetchurl, pkg-config, gettext, mate, gtk3, glib, wrapGAppsHook, gobject-introspection, mateUpdateScript }:
+{ lib, python3, fetchurl, pkg-config, gettext, mate, gtk3, glib, wrapGAppsHook
+, gobject-introspection, mateUpdateScript }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
@@ -8,13 +9,16 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "DyRCmjsDe9BojsTDkdnYeB5Csj7zRfXlCvHnLF7y+jk=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs =
+    [ pkg-config gettext gobject-introspection wrapGAppsHook ];
 
-  propagatedBuildInputs =  [ mate.mate-menus python3.pkgs.pygobject3 ];
+  propagatedBuildInputs = [ mate.mate-menus python3.pkgs.pygobject3 ];
 
   buildInputs = [ gtk3 glib ];
 

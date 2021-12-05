@@ -1,17 +1,6 @@
-{ lib
-, aiohttp
-, authcaptureproxy
-, backoff
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, wrapt
-}:
+{ lib, aiohttp, authcaptureproxy, backoff, beautifulsoup4, buildPythonPackage
+, fetchFromGitHub, httpx, poetry-core, pytest-asyncio, pytestCheckHook
+, pythonOlder, wrapt }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
@@ -27,27 +16,14 @@ buildPythonPackage rec {
     sha256 = "sha256-49dQgzYsEn5jmHWTJ3e3QOTqNeoTRMjUWxp+MaOYod4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    authcaptureproxy
-    aiohttp
-    backoff
-    beautifulsoup4
-    httpx
-    wrapt
-  ];
+  propagatedBuildInputs =
+    [ authcaptureproxy aiohttp backoff beautifulsoup4 httpx wrapt ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "teslajsonpy"
-  ];
+  pythonImportsCheck = [ "teslajsonpy" ];
 
   meta = with lib; {
     description = "Python library to work with Tesla API";

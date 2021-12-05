@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, parts
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, parts, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "bitlist";
@@ -16,21 +10,15 @@ buildPythonPackage rec {
     sha256 = "sha256-LTrn+PCaqob0EGyyv1V1uCBeDQZvIYE1hNPqi4y/zfc=";
   };
 
-  propagatedBuildInputs = [
-    parts
-  ];
+  propagatedBuildInputs = [ parts ];
 
-  checkInputs = [
-    pytestCheckHook
-    nose
-  ];
+  checkInputs = [ pytestCheckHook nose ];
 
-  pythonImportsCheck = [
-    "bitlist"
-  ];
+  pythonImportsCheck = [ "bitlist" ];
 
   meta = with lib; {
-    description = "Python library for working with little-endian list representation of bit strings";
+    description =
+      "Python library for working with little-endian list representation of bit strings";
     homepage = "https://github.com/lapets/bitlist";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

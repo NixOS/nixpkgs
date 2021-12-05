@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, flake8
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, flake8 }:
 
 buildPythonPackage rec {
   pname = "getkey";
@@ -20,10 +15,7 @@ buildPythonPackage rec {
     rm setup.cfg
   '';
 
-  checkInputs = [
-    flake8
-    pytestCheckHook
-  ];
+  checkInputs = [ flake8 pytestCheckHook ];
 
   meta = with lib; {
     description = "Read single characters and key-strokes";

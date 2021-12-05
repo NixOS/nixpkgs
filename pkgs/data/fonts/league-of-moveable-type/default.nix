@@ -1,19 +1,18 @@
-{lib, stdenv, fetchurl, unzip, raleway}:
+{ lib, stdenv, fetchurl, unzip, raleway }:
 
 let
 
   # TO UPDATE:
   # ./update.sh > ./fonts.nix
   # we use the extended version of raleway (same license).
-  fonts = [raleway]
-    ++ map fetchurl (builtins.filter (f: f.name != "raleway.zip") (import ./fonts.nix));
+  fonts = [ raleway ] ++ map fetchurl
+    (builtins.filter (f: f.name != "raleway.zip") (import ./fonts.nix));
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
 
   baseName = "league-of-moveable-type";
   version = "2016-10-15";
-  name="${baseName}-${version}";
+  name = "${baseName}-${version}";
 
   srcs = fonts;
 

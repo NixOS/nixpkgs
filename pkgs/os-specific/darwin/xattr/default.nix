@@ -1,28 +1,19 @@
-{ lib
-, stdenv
-, fetchzip
-, buildPythonPackage
-, python
-, ed
-, unifdef
-}:
+{ lib, stdenv, fetchzip, buildPythonPackage, python, ed, unifdef }:
 
 buildPythonPackage rec {
   pname = "xattr";
   version = "61.60.1";
 
   src = fetchzip rec {
-    url = "https://opensource.apple.com/tarballs/python_modules/python_modules-${version}.tar.gz";
+    url =
+      "https://opensource.apple.com/tarballs/python_modules/python_modules-${version}.tar.gz";
     sha256 = "19kydl7w4vpdi7zmfd5z9vjkq24jfk2cv4j0pppw69j06czhdwwi";
   };
 
   sourceRoot = "${src.name}/Modules/xattr-0.6.4";
   format = "other";
 
-  nativeBuildInputs = [
-    ed
-    unifdef
-  ];
+  nativeBuildInputs = [ ed unifdef ];
 
   makeFlags = [
     "OBJROOT=$(PWD)"
@@ -60,12 +51,16 @@ buildPythonPackage rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix" "PYTHONPATH" ":" "${placeholder "python"}/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "python"}/${python.sitePackages}"
   ];
 
   meta = with lib; {
     description = "Display and manipulate extended attributes";
-    license = [ licenses.psfl licenses.mit ]; # see $doc/share/xattr/OpenSourceLicenses
+    license =
+      [ licenses.psfl licenses.mit ]; # see $doc/share/xattr/OpenSourceLicenses
     maintainers = [ maintainers.sternenseemann ];
     homepage = "https://opensource.apple.com/source/python_modules/";
     platforms = lib.platforms.darwin;

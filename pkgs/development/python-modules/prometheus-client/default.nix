@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "14swmy4dgpk6cyjsm2advgc2c8api7xaca1sl7swznblh5fyzgzg";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "prometheus_client" ];
 

@@ -1,21 +1,21 @@
 { lib, stdenv, config, fetchurl, libX11, libXext, libXinerama, libXrandr
 , libXrender, fontconfig, freetype, openal, runtimeShell }:
 
-let inherit (lib) makeLibraryPath; in
+let inherit (lib) makeLibraryPath;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "oilrush";
-  src =
-  let
+  src = let
     url = config.oilrush.url or null;
     sha256 = config.oilrush.sha256 or null;
-  in
-    assert url != null && sha256 != null;
-    fetchurl { inherit url sha256; };
+  in assert url != null && sha256 != null; fetchurl { inherit url sha256; };
   shell = stdenv.shell;
-  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-         else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-         else "";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "x64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "x86"
+  else
+    "";
   unpackPhase = ''
     mkdir oilrush
     cd oilrush
@@ -27,25 +27,56 @@ stdenv.mkDerivation {
     do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
     done
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${
+      makeLibraryPath [
+        stdenv.cc.cc
+        libX11
+        libXext
+        libXrender
+        fontconfig
+        freetype
+      ]
+    }\
              launcher_$arch
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
              libNetwork_$arch.so
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
              libQtCoreUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${
+      makeLibraryPath [
+        stdenv.cc.cc
+        libX11
+        libXext
+        libXrender
+        fontconfig
+        freetype
+      ]
+    }\
              libQtGuiUnigine_$arch.so.4
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
              libQtNetworkUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${
+      makeLibraryPath [
+        stdenv.cc.cc
+        libX11
+        libXext
+        libXrender
+        fontconfig
+        freetype
+      ]
+    }\
              libQtWebKitUnigine_$arch.so.4
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
              libQtXmlUnigine_$arch.so.4
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
              libRakNet_$arch.so
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${
+      makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]
+    }\
              libUnigine_$arch.so
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${
+      makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]
+    }\
              OilRush_$arch
   '';
   installPhase = ''
@@ -72,7 +103,7 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     #maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
 }

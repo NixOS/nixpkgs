@@ -5,7 +5,8 @@ stdenvNoCC.mkDerivation {
   version = "1";
 
   src = fetchurl {
-    url = "https://download.microsoft.com/download/7/6/b/76bd7a77-be02-47f3-8472-fa1de7eda62f/VistaFont_CHT.EXE";
+    url =
+      "https://download.microsoft.com/download/7/6/b/76bd7a77-be02-47f3-8472-fa1de7eda62f/VistaFont_CHT.EXE";
     sha256 = "sha256-fSnbbxlMPzbhFSQyKxQaS5paiWji8njK7tS8Eppsj6g=";
   };
 
@@ -26,9 +27,9 @@ stdenvNoCC.mkDerivation {
       --subst-var-by fontname "Microsoft JhengHei"
   '';
 
-
   meta = with lib; {
-    description = "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";
+    description =
+      "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";
     homepage = "https://www.microsoft.com/typography/fonts/family.aspx";
     license = licenses.unfree;
     maintainers = with maintainers; [ atkinschang ];

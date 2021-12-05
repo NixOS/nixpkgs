@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lzfse
-}:
+{ lib, buildPythonPackage, fetchPypi, lzfse }:
 buildPythonPackage rec {
   pname = "pyliblzfse";
   version = "0.4.1";
@@ -20,9 +16,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "liblzfse"
-  ];
+  pythonImportsCheck = [ "liblzfse" ];
 
   meta = with lib; {
     description = "Python bindings for LZFSE";

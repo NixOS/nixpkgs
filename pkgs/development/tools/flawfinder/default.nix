@@ -1,7 +1,4 @@
-{ lib
-, fetchurl
-, python3
-}:
+{ lib, fetchurl, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flawfinder";

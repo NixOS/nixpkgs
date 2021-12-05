@@ -5,7 +5,8 @@
   "Arimo" = "1k7ldfx6dmy9sigzsvi9qwms510nddw634g8xrn0vwnw6d7infk8";
   "AurulentSansMono" = "0q35948dai8qc7gfvas8sfn5s7b64b2y4f9psz6xslrv7nw8lcaz";
   "BigBlueTerminal" = "0ymw2m2xjsx77brm79aws26icwcf2a1d7q3p3ipsd25g4cgqcd2v";
-  "BitstreamVeraSansMono" = "1n2298g1fn8jb1fbvw74289n7nnmjddn7zxh88gnl58pwz8ra5dk";
+  "BitstreamVeraSansMono" =
+    "1n2298g1fn8jb1fbvw74289n7nnmjddn7zxh88gnl58pwz8ra5dk";
   "CascadiaCode" = "1q4l5a7b7ab6h1bs5pq734r9pp3fw9b59gdk1g4hyn2w61h0kdcj";
   "CodeNewRoman" = "1mgxawj3pblaxy0y9w0hzlfgipiskmc5p028m82zh1wyaplmh2pa";
   "Cousine" = "0jr0gxrsba3dhchp53vd67qq2pgfnvmvcwbv99l1700p539bcvy1";

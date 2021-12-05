@@ -1,44 +1,25 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchurl
-, freetype
-, glib
-, libGL
-, libGLU
-, libSM
+{ lib, stdenv, mkDerivation, fetchurl, freetype, glib, libGL, libGLU, libSM
 
-, libXrender
-, libX11
+, libXrender, libX11
 
-, libxcb
-, sqlite
-, zlib
-, fontconfig
-, dpkg
-, libproxy
-, libxml2
-, gst_all_1
-, dbus
+, libxcb, sqlite, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus
 , makeWrapper
 
-, cups
-, alsa-lib
+, cups, alsa-lib
 
-, xkeyboardconfig
-, autoPatchelfHook
-}:
+, xkeyboardconfig, autoPatchelfHook }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else throw "Unsupported system ${stdenv.hostPlatform.system} ";
-in
-mkDerivation rec {
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "amd64"
+  else
+    throw "Unsupported system ${stdenv.hostPlatform.system} ";
+in mkDerivation rec {
   pname = "googleearth-pro";
   version = "7.3.4.8248";
 
   src = fetchurl {
-    url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
+    url =
+      "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
     sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
   };
 
@@ -74,7 +55,7 @@ mkDerivation rec {
     dpkg --fsys-tarfile ${src} | tar --extract
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out

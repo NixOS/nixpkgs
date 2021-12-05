@@ -1,20 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dask
-, numpy, toolz # dask[array]
-, numba
-, pandas
-, scikit-learn
-, scipy
-, dask-glm
-, six
-, multipledispatch
-, packaging
-, distributed
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, dask, numpy
+, toolz # dask[array]
+, numba, pandas, scikit-learn, scipy, dask-glm, six, multipledispatch, packaging
+, distributed, setuptools-scm }:
 
 buildPythonPackage rec {
   version = "1.9.0";
@@ -26,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "2f376a7114133b484a6d393f62298473116fc49c79ec7d50d5b031d752f54307";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     dask
@@ -49,12 +34,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   # in lieu of proper tests
-  pythonImportsCheck = [
-    "dask_ml"
-    "dask_ml.naive_bayes"
-    "dask_ml.wrappers"
-    "dask_ml.utils"
-  ];
+  pythonImportsCheck =
+    [ "dask_ml" "dask_ml.naive_bayes" "dask_ml.wrappers" "dask_ml.utils" ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-ml";

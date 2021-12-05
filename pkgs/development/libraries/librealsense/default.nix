@@ -1,16 +1,6 @@
-{ stdenv
-, config
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libusb1
-, ninja
-, pkg-config
-, gcc
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, enablePython ? false, pythonPackages ? null
-}:
+{ stdenv, config, lib, fetchFromGitHub, fetchpatch, cmake, libusb1, ninja
+, pkg-config, gcc, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, enablePython ? false, pythonPackages ? null }:
 
 assert cudaSupport -> cudatoolkit != null;
 assert enablePython -> pythonPackages != null;
@@ -28,28 +18,22 @@ stdenv.mkDerivation rec {
     sha256 = "0aqf48zl7825v7x8c3x5w4d17m4qq377f1mn6xyqzf9b0dnk4i1j";
   };
 
-  buildInputs = [
-    libusb1
-    gcc.cc.lib
-  ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
+  buildInputs = [ libusb1 gcc.cc.lib ] ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ]);
 
   patches = [
     # fix build on aarch64-darwin
     # https://github.com/IntelRealSense/librealsense/pull/9253
     (fetchpatch {
-      url = "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
+      url =
+        "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
       sha256 = "05mxsd2pz3xrvywdqyxkwdvxx8hjfxzcgl51897avz4v2j89pyq8";
     })
     ./py_sitepackage_dir.patch
     ./py_pybind11_no_external_download.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=ON"
@@ -57,19 +41,22 @@ stdenv.mkDerivation rec {
     "-DBUILD_GLSL_EXTENSIONS=OFF"
   ] ++ lib.optionals enablePython [
     "-DBUILD_PYTHON_BINDINGS:bool=true"
-    "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
+    "-DXXNIX_PYTHON_SITEPACKAGES=${
+      placeholder "out"
+    }/${pythonPackages.python.sitePackages}"
   ] ++ lib.optional cudaSupport "-DBUILD_WITH_CUDA:bool=true";
 
   # ensure python package contains its __init__.py. for some reason the install
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
-  postInstall = lib.optionalString enablePython  ''
+  postInstall = lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
   meta = with lib; {
-    description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
+    description =
+      "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn ];

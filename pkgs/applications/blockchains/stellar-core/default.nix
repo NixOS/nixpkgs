@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
+    description =
+      "Implements the Stellar Consensus Protocol, a federated consensus protocol";
     longDescription = ''
       Stellar-core is the backbone of the Stellar network. It maintains a
       local copy of the ledger, communicating and staying in sync with other

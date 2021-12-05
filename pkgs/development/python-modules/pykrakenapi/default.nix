@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, krakenex
-, pandas
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, krakenex, pandas }:
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "047v0pkkwsd219lwc3hamdaz1nngxr2nbb7hh8n4xkyicm2axha6";
   };
 
-  propagatedBuildInputs = [
-    krakenex
-    pandas
-  ];
+  propagatedBuildInputs = [ krakenex pandas ];
 
   # tests require network connection
   doCheck = false;

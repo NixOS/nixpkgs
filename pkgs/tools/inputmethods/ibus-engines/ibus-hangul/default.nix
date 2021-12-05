@@ -1,22 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, appstream-glib
-, gettext
-, pkg-config
-, wrapGAppsHook
-, gtk3
-, ibus
-, libhangul
-, python3
-}:
+{ lib, stdenv, fetchurl, substituteAll, appstream-glib, gettext, pkg-config
+, wrapGAppsHook, gtk3, ibus, libhangul, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
   version = "1.5.4";
 
   src = fetchurl {
-    url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1q6g2pnrn5gqn9jqnm3975v9hh60hc5gn9x3zbrdjgy0n3wpxwm9";
   };
 
@@ -27,21 +18,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    appstream-glib
-    gettext
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ appstream-glib gettext pkg-config wrapGAppsHook ];
 
   buildInputs = [
     gtk3
     ibus
     libhangul
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages
+      (pypkgs: with pypkgs; [ pygobject3 (toPythonModule ibus) ]))
   ];
 
   meta = with lib; {

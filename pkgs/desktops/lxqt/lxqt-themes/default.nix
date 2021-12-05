@@ -1,9 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, lxqtUpdateScript
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -17,10 +12,7 @@ mkDerivation rec {
     sha256 = "1viaqmcq4axwsq5vrr08j95swapbqnwmv064kaijm1jj9csadsvv";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click, enum-compat, pyscard, pycountry, terminaltables
-, pytestCheckHook, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, click, enum-compat, pyscard
+, pycountry, terminaltables, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "emv";
@@ -24,17 +22,10 @@ buildPythonPackage rec {
       --replace "pyscard==2.0.0" "pyscard"
   '';
 
-  propagatedBuildInputs = [
-    enum-compat
-    click
-    pyscard
-    pycountry
-    terminaltables
-  ];
+  propagatedBuildInputs =
+    [ enum-compat click pyscard pycountry terminaltables ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/russss/python-emv";

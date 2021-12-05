@@ -1,19 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tornado
-, requests
-, httplib2
-, sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
-, six
-, mock
-, pytest
-, freezegun
+{ lib, buildPythonPackage, fetchPypi, tornado, requests, httplib2, sure, nose
+, nose-exclude, coverage, rednose, nose-randomly, six, mock, pytest, freezegun
 }:
 
 buildPythonPackage rec {
@@ -31,9 +17,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose pytest
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
+    pytest
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude freezegun
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
+    freezegun
   ];
 
   checkPhase = ''

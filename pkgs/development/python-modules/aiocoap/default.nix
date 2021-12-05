@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pygments
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pygments
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiocoap";
@@ -20,13 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-fTRDx9VEXDoMKM78YYL+mBEdvhbLtHiHdo66kwRnNhA=";
   };
 
-  propagatedBuildInputs = [
-    pygments
-  ];
+  propagatedBuildInputs = [ pygments ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Don't test the plugins
@@ -40,9 +31,7 @@ buildPythonPackage rec {
     "test_uri_parser"
   ];
 
-  pythonImportsCheck = [
-    "aiocoap"
-  ];
+  pythonImportsCheck = [ "aiocoap" ];
 
   meta = with lib; {
     description = "Python CoAP library";

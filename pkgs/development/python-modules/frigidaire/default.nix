@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, certifi
-, chardet
-, fetchFromGitHub
-, idna
-, pythonOlder
-, requests
-, urllib3
-}:
+{ lib, buildPythonPackage, certifi, chardet, fetchFromGitHub, idna, pythonOlder
+, requests, urllib3 }:
 
 buildPythonPackage rec {
   pname = "frigidaire";
@@ -23,20 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-U2ixBtigY15RzMNIeUK71uNOndUepK2kE/CTFwl855w=";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    chardet
-    idna
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs = [ certifi chardet idna requests urllib3 ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "frigidaire"
-  ];
+  pythonImportsCheck = [ "frigidaire" ];
 
   meta = with lib; {
     description = "Python API for the Frigidaire devices";

@@ -1,11 +1,5 @@
-{ lib
-, aiounittest
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, typing-extensions
-}:
+{ lib, aiounittest, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook
+, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "aiosqlite";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8OaswkvEhkFJJnrIL7Rt+zvkRV+Z/iHfgmCcxua67lE=";
   };
 
-  checkInputs = [
-    aiounittest
-    pytestCheckHook
-    typing-extensions
-  ];
+  checkInputs = [ aiounittest pytestCheckHook typing-extensions ];
 
   # tests are not pick-up automatically by the hook
   pytestFlagsArray = [ "aiosqlite/tests/*.py" ];

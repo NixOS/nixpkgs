@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl }:
-let
-  version = "15.04.6";
-in
-stdenv.mkDerivation {
+let version = "15.04.6";
+in stdenv.mkDerivation {
   pname = "curaengine";
   inherit version;
 
@@ -21,7 +19,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Engine for processing 3D models into 3D printing instructions";
+    description =
+      "Engine for processing 3D models into 3D printing instructions";
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3;
     platforms = platforms.linux;

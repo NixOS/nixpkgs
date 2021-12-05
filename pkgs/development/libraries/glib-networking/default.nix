@@ -1,20 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, glib
-, gettext
-, makeWrapper
-, python3
-, gnutls
-, p11-kit
-, libproxy
-, gnome
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, substituteAll, meson, ninja, nixosTests, pkg-config
+, glib, gettext, makeWrapper, python3, gnutls, p11-kit, libproxy, gnome
+, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
@@ -23,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0dbg1na239mbavn4hknkax5sns9q2dbdnqw9wcpmhv58mzkhid36";
   };
 
@@ -50,13 +38,7 @@ stdenv.mkDerivation rec {
     python3 # for install_script
   ];
 
-  buildInputs = [
-    glib
-    gnutls
-    p11-kit
-    libproxy
-    gsettings-desktop-schemas
-  ];
+  buildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
 
   doCheck = false; # tests need to access the certificates (among other things)
 
@@ -79,9 +61,7 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
 
-    tests = {
-      installedTests = nixosTests.installed-tests.glib-networking;
-    };
+    tests = { installedTests = nixosTests.installed-tests.glib-networking; };
   };
 
   meta = with lib; {

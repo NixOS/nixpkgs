@@ -1,31 +1,15 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, thunar
-, exo
-, libxfce4util
-, intltool
-, gettext
-}:
+{ lib, mkXfceDerivation, gtk3, thunar, exo, libxfce4util, intltool, gettext }:
 
 mkXfceDerivation {
   category = "thunar-plugins";
-  pname  = "thunar-archive-plugin";
+  pname = "thunar-archive-plugin";
   version = "0.4.0";
 
   sha256 = "sha256-aEAErm87K2k8TAz2ZtMQEhmzhOeR2hkJjcoBUFn8I50=";
 
-  nativeBuildInputs = [
-    intltool
-    gettext
-  ];
+  nativeBuildInputs = [ intltool gettext ];
 
-  buildInputs = [
-    thunar
-    exo
-    gtk3
-    libxfce4util
-  ];
+  buildInputs = [ thunar exo gtk3 libxfce4util ];
 
   preConfigure = ''
     ./autogen.sh

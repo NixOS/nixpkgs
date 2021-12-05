@@ -1,24 +1,7 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, importlib-resources
-, mock
-, pyasn1
-, pymongo
-, pyopenssl
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, responses
-, six
-, substituteAll
-, xmlschema
-, xmlsec
-}:
+{ lib, buildPythonPackage, cryptography, defusedxml, fetchFromGitHub
+, importlib-resources, mock, pyasn1, pymongo, pyopenssl, pytestCheckHook
+, python-dateutil, pythonOlder, pytz, requests, responses, six, substituteAll
+, xmlschema, xmlsec }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
@@ -43,17 +26,9 @@ buildPythonPackage rec {
     requests
     six
     xmlschema
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  checkInputs = [
-    mock
-    pyasn1
-    pymongo
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ mock pyasn1 pymongo pytestCheckHook responses ];
 
   patches = [
     (substituteAll {
@@ -75,9 +50,7 @@ buildPythonPackage rec {
     "test_conf_syslog"
   ];
 
-  pythonImportsCheck = [
-    "saml2"
-  ];
+  pythonImportsCheck = [ "saml2" ];
 
   meta = with lib; {
     description = "Python implementation of SAML Version 2 Standard";

@@ -6,36 +6,36 @@ with pkgs.lib;
 
 let
   matomoTest = package:
-  makeTest {
-    machine = { config, pkgs, ... }: {
-      services.matomo = {
-        package = package;
-        enable = true;
-        nginx = {
-          forceSSL = false;
-          enableACME = false;
+    makeTest {
+      machine = { config, pkgs, ... }: {
+        services.matomo = {
+          package = package;
+          enable = true;
+          nginx = {
+            forceSSL = false;
+            enableACME = false;
+          };
         };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+        };
+        services.nginx.enable = true;
       };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-      };
-      services.nginx.enable = true;
+
+      testScript = ''
+        start_all()
+        machine.wait_for_unit("mysql.service")
+        machine.wait_for_unit("phpfpm-matomo.service")
+        machine.wait_for_unit("nginx.service")
+
+        # without the grep the command does not produce valid utf-8 for some reason
+        with subtest("welcome screen loads"):
+            machine.succeed(
+                "curl -sSfL http://localhost/ | grep '<title>Matomo[^<]*Installation'"
+            )
+      '';
     };
-
-    testScript = ''
-      start_all()
-      machine.wait_for_unit("mysql.service")
-      machine.wait_for_unit("phpfpm-matomo.service")
-      machine.wait_for_unit("nginx.service")
-
-      # without the grep the command does not produce valid utf-8 for some reason
-      with subtest("welcome screen loads"):
-          machine.succeed(
-              "curl -sSfL http://localhost/ | grep '<title>Matomo[^<]*Installation'"
-          )
-    '';
-  };
 in {
   matomo = matomoTest pkgs.matomo // {
     name = "matomo";

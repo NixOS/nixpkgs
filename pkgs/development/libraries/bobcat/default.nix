@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, icmake
-, libmilter, libX11, openssl, readline
+{ lib, stdenv, fetchFromGitLab, icmake, libmilter, libX11, openssl, readline
 , util-linux, yodl }:
 
 stdenv.mkDerivation rec {

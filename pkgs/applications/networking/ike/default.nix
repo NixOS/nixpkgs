@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
-, gcc, nettools, iproute2, linuxHeaders }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4
+, makeWrapper, gcc, nettools, iproute2, linuxHeaders }:
 
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     # required for openssl 1.1.x compatibility
     (fetchpatch {
       name = "openssl-1.1.0.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/openssl-1.1.0.patch?h=ike&id=3a56735ddc26f750df4720f4baba0728bb4cb458";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/openssl-1.1.0.patch?h=ike&id=3a56735ddc26f750df4720f4baba0728bb4cb458";
       sha256 = "1hw8q4xy858rivpjkq5288q3mc75d52bg4w3n30y99h05wik0h51";
     })
   ];
@@ -47,13 +48,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]}"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${
+          lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]
+        }"
     done
   '';
 
   meta = with lib; {
     homepage = "https://www.shrew.net/software";
-    description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
+    description =
+      "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
     maintainers = [ ];
     license = licenses.sleepycat;

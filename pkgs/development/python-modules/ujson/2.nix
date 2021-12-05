@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ujson";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ujson";

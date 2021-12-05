@@ -1,12 +1,5 @@
-{ lib, stdenv
-, autoconf
-, automake
-, darwin
-, fetchsvn
-, makeWrapper
-, pkg-config
-, SDL2
-}:
+{ lib, stdenv, autoconf, automake, darwin, fetchsvn, makeWrapper, pkg-config
+, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "smpeg2";
@@ -18,14 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "193amdwgxkb1zp7pgr72fvrdhcg3ly72qpixfxxm85rzz8g2kr77";
   };
 
-  patches = [
-    ./hufftable-uint_max.patch
-  ];
+  patches = [ ./hufftable-uint_max.patch ];
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
 
-  buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
     sh autogen.sh

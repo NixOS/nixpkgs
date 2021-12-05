@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flask
-, flask-silk
-, future
-, pathlib
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, flask, flask-silk, future
+, pathlib }:
 
 buildPythonPackage rec {
   pname = "Flask-AutoIndex";
@@ -17,13 +10,8 @@ buildPythonPackage rec {
     sha256 = "ea319f7ccadf68ddf98d940002066278c779323644f9944b300066d50e2effc7";
   };
 
-  propagatedBuildInputs = [
-    flask
-    flask-silk
-    future
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    pathlib
-  ];
+  propagatedBuildInputs = [ flask flask-silk future ]
+    ++ lib.optionals (pythonOlder "3.4") [ pathlib ];
 
   meta = with lib; {
     description = "The mod_autoindex for Flask";

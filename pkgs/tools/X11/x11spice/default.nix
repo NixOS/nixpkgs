@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config
-, xorg, gtk2, spice, spice-protocol
-}:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, xorg, gtk2, spice
+, spice-protocol }:
 
 stdenv.mkDerivation rec {
   pname = "x11spice";
@@ -16,15 +15,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    xorg.libxcb xorg.xcbutil xorg.utilmacros
-    gtk2 spice spice-protocol
-  ];
+  buildInputs =
+    [ xorg.libxcb xorg.xcbutil xorg.utilmacros gtk2 spice spice-protocol ];
 
   NIX_LDFLAGS = "-lpthread";
 
   meta = with lib; {
-    description = "Enable a running X11 desktop to be available via a Spice server";
+    description =
+      "Enable a running X11 desktop to be available via a Spice server";
     homepage = "https://gitlab.freedesktop.org/spice/x11spice";
     platforms = platforms.linux;
     license = licenses.gpl3;

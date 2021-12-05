@@ -1,31 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, jxmlease
-, ncclient
-, netaddr
-, paramiko
-, pynetbox
-, scp
-, textfsm
-, ttp
-, xmltodict
-, withJunos ? false
+{ lib, buildPythonPackage, fetchPypi, jsonschema, jxmlease, ncclient, netaddr
+, paramiko, pynetbox, scp, textfsm, ttp, xmltodict, withJunos ? false
 , withNetbox ? false
 
-, version
-, sha256
-}:
+, version, sha256 }:
 
 buildPythonPackage rec {
   pname = "ansible";
   inherit version;
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version sha256;
-  };
+  src = fetchPypi { inherit pname version sha256; };
 
   postPatch = ''
     # make ansible-base depend on ansible-collection, not the other way around

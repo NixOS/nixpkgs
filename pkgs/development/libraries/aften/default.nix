@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSHARED=ON" ];
 
   meta = with lib; {
-    description = "An audio encoder which generates compressed audio streams based on ATSC A/52 specification";
+    description =
+      "An audio encoder which generates compressed audio streams based on ATSC A/52 specification";
     homepage = "http://aften.sourceforge.net/";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;

@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, buildPackages, bison, flex, pkg-config
-, db, iptables, libelf, libmnl
-}:
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages, bison, flex, pkg-config, db
+, iptables, libelf, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
@@ -15,7 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     # To avoid ./configure failing due to invalid arguments:
     (fetchpatch { # configure: restore backward compatibility
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
+      url =
+        "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
       sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
     })
   ];
@@ -34,13 +33,9 @@ stdenv.mkDerivation rec {
     "HDRDIR=$(dev)/include/iproute2"
   ];
 
-  buildFlags = [
-    "CONFDIR=/etc/iproute2"
-  ];
+  buildFlags = [ "CONFDIR=/etc/iproute2" ];
 
-  installFlags = [
-    "CONFDIR=$(out)/etc/iproute2"
-  ];
+  installFlags = [ "CONFDIR=$(out)/etc/iproute2" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
@@ -50,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
-    description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
+    description =
+      "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];

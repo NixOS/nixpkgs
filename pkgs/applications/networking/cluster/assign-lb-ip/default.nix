@@ -14,9 +14,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-j9SweQq45sYk0lH6zkFrmWRlVhhMO8rLJGQxS6smAVw=";
 
   meta = with lib; {
-    description = "Assigns loadBalancerIP address to a Kubernetes service for testing purposes";
-    homepage    = "https://github.com/Nordix/assign-lb-ip";
-    license     = licenses.asl20;
+    description =
+      "Assigns loadBalancerIP address to a Kubernetes service for testing purposes";
+    homepage = "https://github.com/Nordix/assign-lb-ip";
+    license = licenses.asl20;
     maintainers = [ maintainers.starcraft66 ];
   };
 }

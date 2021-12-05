@@ -1,16 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, click
-, semantic-version
-, requests
-, colorama
-, pyserial
-, wheel
-, setuptools
-, tinyprog
-, pytestCheckHook
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, click, semantic-version
+, requests, colorama, pyserial, wheel, setuptools, tinyprog, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "apio";
@@ -54,9 +43,7 @@ buildPythonApplication rec {
     tinyprog # needed for upload to TinyFPGA
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "--offline" ];
 

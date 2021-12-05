@@ -17,7 +17,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Open source modelling tool for operating software in the cloud";
+    description =
+      "Open source modelling tool for operating software in the cloud";
     homepage = "https://juju.is";
     license = licenses.mit;
     maintainers = with maintainers; [ citadelcore ];

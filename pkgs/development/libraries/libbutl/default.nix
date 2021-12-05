@@ -1,10 +1,5 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libuuid
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ lib, stdenv, build2, fetchurl, libuuid
+, enableShared ? !stdenv.hostPlatform.isStatic, enableStatic ? !enableShared }:
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
@@ -17,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zKufrUsLZmjw6pNbOAv+dPyolWpgXgygEnW0Lka6zw8=";
   };
 
-  nativeBuildInputs = [
-    build2
-  ];
+  nativeBuildInputs = [ build2 ];
 
   strictDeps = true;
 
@@ -32,9 +25,8 @@ stdenv.mkDerivation rec {
       --replace '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
   '';
 
-  build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
-  ];
+  build2ConfigureFlags =
+    [ "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}" ];
 
   doCheck = true;
 

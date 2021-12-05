@@ -6,14 +6,15 @@ stdenv.mkDerivation rec {
   version = "21.1";
 
   src = fetchurl {
-    url = "https://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
+    url =
+      "https://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
     sha256 = "sha256-To/BvrgNwq8tajajOjP0Te3d1EhgAsZE9MR5MEMHICU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 ncurses libsigcxx libpar2 gnutls
-                  libgcrypt zlib openssl ];
+  buildInputs =
+    [ libxml2 ncurses libsigcxx libpar2 gnutls libgcrypt zlib openssl ];
 
   enableParallelBuilding = true;
 

@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, flac, unzip, fftwFloat, hybridreverb2, libclthreads, libjack2, libsndfile, zita-convolver }:
+{ lib, stdenv, fetchurl, flac, unzip, fftwFloat, hybridreverb2, libclthreads
+, libjack2, libsndfile, zita-convolver }:
 
 stdenv.mkDerivation rec {
   pname = "jconvolver";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url =
+      "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "03fq1rk5wyn32w0aaa9vqijnw9x9i0i7sv4nhsf949bk5lvi2nmc";
   };
 
   reverbs = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/jconvolver-reverbs.tar.bz2";
+    url =
+      "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/jconvolver-reverbs.tar.bz2";
     sha256 = "127aj211xfqp37c94d9cn0mmwzbjkj3f6br5gr67ckqirvsdkndi";
   };
   weird = fetchurl {
@@ -32,32 +35,30 @@ stdenv.mkDerivation rec {
   };
 
   spacenet-hm2 = fetchurl {
-    url = "https://webfiles.york.ac.uk/OPENAIR/IRs/hamilton-mausoleum/b-format/hm2_000_bformat_48k.wav";
+    url =
+      "https://webfiles.york.ac.uk/OPENAIR/IRs/hamilton-mausoleum/b-format/hm2_000_bformat_48k.wav";
     sha256 = "1icnzfzq3mccbmnvmvh22mw8g8dci4i9h7lgrpmycj58v3gnb1p5";
   };
   spacenet-lyd3 = fetchurl {
-    url = "https://webfiles.york.ac.uk/OPENAIR/IRs/st-andrews-church/b-format/lyd3_000_bformat_48k.wav";
+    url =
+      "https://webfiles.york.ac.uk/OPENAIR/IRs/st-andrews-church/b-format/lyd3_000_bformat_48k.wav";
     sha256 = "144cc0i91q5i72lwbxydx3nvxrd12j7clxjhwa2b8sf69ypz58wd";
   };
   spacenet-mh3 = fetchurl {
-    url = "https://webfiles.york.ac.uk/OPENAIR/IRs/maes-howe/b-format/mh3_000_bformat_48k.wav";
+    url =
+      "https://webfiles.york.ac.uk/OPENAIR/IRs/maes-howe/b-format/mh3_000_bformat_48k.wav";
     sha256 = "1c6v9jlm88l1sx2383yivycdrs9jqfsfx8cpbkjg19v2x1dfns0b";
   };
   spacenet-minster1 = fetchurl {
-    url = "https://webfiles.york.ac.uk/OPENAIR/IRs/york-minster/b-format/minster1_bformat_48k.wav";
+    url =
+      "https://webfiles.york.ac.uk/OPENAIR/IRs/york-minster/b-format/minster1_bformat_48k.wav";
     sha256 = "1cs26pawjkv6qvwhfirfvzh21xvnmx8yh7f4xcr79cxv5c6hhnrw";
   };
 
   nativeBuildInputs = [ flac unzip ];
 
-  buildInputs = [
-    fftwFloat
-    hybridreverb2
-    libclthreads
-    libjack2
-    libsndfile
-    zita-convolver
-  ];
+  buildInputs =
+    [ fftwFloat hybridreverb2 libclthreads libjack2 libsndfile zita-convolver ];
 
   outputs = [ "bin" "out" "doc" ];
 
@@ -65,9 +66,7 @@ stdenv.mkDerivation rec {
     cd source
   '';
 
-  makeFlags = [
-    "PREFIX=$(bin)"
-  ];
+  makeFlags = [ "PREFIX=$(bin)" ];
 
   postInstall = ''
     mkdir -p $doc/share/doc/jconvolver

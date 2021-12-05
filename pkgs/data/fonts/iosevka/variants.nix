@@ -27,30 +27,52 @@
   sgr-iosevka = "0h9yg63cjc0s4kbl5k9lpic48y5iz0hlm8bi7h2h850zhbj405fm";
   sgr-iosevka-aile = "1sv0lb2xb18skwvvw95qzdi9hqr1mr3gi2p4plqlbxq6bjpcvc57";
   sgr-iosevka-curly = "1irg71zrbqnw1r2ar5qkfzdjzb1ziwd22jyvm9g1gynjiwh1idaj";
-  sgr-iosevka-curly-slab = "12lc9gqlbnp4crp9qrqf38dlzwaqanyj3l9xyasd96z33wmgnvcr";
+  sgr-iosevka-curly-slab =
+    "12lc9gqlbnp4crp9qrqf38dlzwaqanyj3l9xyasd96z33wmgnvcr";
   sgr-iosevka-etoile = "0j78cbrdsz9qnvs6y6vkv1ys2spfv9l207z20zkyw5m0i3yvhwi4";
   sgr-iosevka-fixed = "04lirldlmjlvz8q33xb2886d1jqaj1a7a94mnrm1ikw2gzbh7j1m";
-  sgr-iosevka-fixed-curly = "1s4xyzlmg9s8jvpvc22bxqc6z9qn0bbgham9kp1w2nwlmlnhl712";
-  sgr-iosevka-fixed-curly-slab = "01g6rk0n1xs0bv4vyqv9pwyndzk9k8cfhf0sd640zdkqi51p4raw";
-  sgr-iosevka-fixed-slab = "1ipzwxs0jqk4cc8snyy9mxhak1zrj9qlicwwhhhv8pmxs2lcirgq";
-  sgr-iosevka-fixed-ss01 = "1vpfgj496yzn5n8zb5hxzlx0kh0yfh27v2naz4zi4gci0k58mj4g";
-  sgr-iosevka-fixed-ss02 = "122id78h9lvnm4abflng5572zjdn52wqci9jq88gh5iyk02kja6b";
-  sgr-iosevka-fixed-ss03 = "0wa4q1zqp75ja5m34wy3zmx5in225ldr0ah23y7l9kh3x67lfykd";
-  sgr-iosevka-fixed-ss04 = "11dxlc3r1gn3psf4bpsiwr283zjpc63d8fgswwbh5d6swk9nxm7v";
-  sgr-iosevka-fixed-ss05 = "0jw57byz8rbdc5h1ig5d4kpjklqrm6880sx0z06gw97z3p4aqmb1";
-  sgr-iosevka-fixed-ss06 = "0saxvswnrszi3kirv5j1pp96n9fhnqwrmsc8naqdgq342rcy13w5";
-  sgr-iosevka-fixed-ss07 = "0bsrpfbcjf2g8vd6f6sv6yxvdi9s6wdjckbjb3m64mdgv25lpdwv";
-  sgr-iosevka-fixed-ss08 = "1l5k2y0h4h3fsk2ac7akym4rash6bb63bj9vhh3f9igq062dk10a";
-  sgr-iosevka-fixed-ss09 = "09s1x6q7lx4y0462m0ac3jp8jfy4x2sc2irfmxcz2rl5px2smgdg";
-  sgr-iosevka-fixed-ss10 = "0j8h200gw60rzknxyg7nvcg9cw1nhvgy3n6n70lf3b8jnp5splzd";
-  sgr-iosevka-fixed-ss11 = "0cgxy8gq5wak1a7z3j013l1kadph45ckl865dlkw5jnmndz7a684";
-  sgr-iosevka-fixed-ss12 = "1y9grhh3ami6qwdm8a6r7m671n7c9bnxp7qgmk7qxgb8jax31qcp";
-  sgr-iosevka-fixed-ss13 = "1a9in4ybl9vjyvxab0hdbjnq46rg3yx9gyalj6x8y3mxsfij0wh2";
-  sgr-iosevka-fixed-ss14 = "0wc3yw6rf05wdh8kzz6af1apirvyspkb8bav4pbdxahsy1asij58";
-  sgr-iosevka-fixed-ss15 = "1b7ns68lx267y9rwlv47yl0y48nvwyzqdpgpwdfwkmpl6vd9kmnn";
-  sgr-iosevka-fixed-ss16 = "07h4zvcll7324r4l7kwwk13874hmjs7vdiiffbjwhi403vbiw1an";
-  sgr-iosevka-fixed-ss17 = "1rjb0c3yvww8n3sam49ynj2f7h0xgbdsznk7xbj4sk5pkx3l5zr5";
-  sgr-iosevka-fixed-ss18 = "0s39p9khjidasizg1ps3k87ldlkpy3cxy5l6r0c2bkvnfz63k66n";
+  sgr-iosevka-fixed-curly =
+    "1s4xyzlmg9s8jvpvc22bxqc6z9qn0bbgham9kp1w2nwlmlnhl712";
+  sgr-iosevka-fixed-curly-slab =
+    "01g6rk0n1xs0bv4vyqv9pwyndzk9k8cfhf0sd640zdkqi51p4raw";
+  sgr-iosevka-fixed-slab =
+    "1ipzwxs0jqk4cc8snyy9mxhak1zrj9qlicwwhhhv8pmxs2lcirgq";
+  sgr-iosevka-fixed-ss01 =
+    "1vpfgj496yzn5n8zb5hxzlx0kh0yfh27v2naz4zi4gci0k58mj4g";
+  sgr-iosevka-fixed-ss02 =
+    "122id78h9lvnm4abflng5572zjdn52wqci9jq88gh5iyk02kja6b";
+  sgr-iosevka-fixed-ss03 =
+    "0wa4q1zqp75ja5m34wy3zmx5in225ldr0ah23y7l9kh3x67lfykd";
+  sgr-iosevka-fixed-ss04 =
+    "11dxlc3r1gn3psf4bpsiwr283zjpc63d8fgswwbh5d6swk9nxm7v";
+  sgr-iosevka-fixed-ss05 =
+    "0jw57byz8rbdc5h1ig5d4kpjklqrm6880sx0z06gw97z3p4aqmb1";
+  sgr-iosevka-fixed-ss06 =
+    "0saxvswnrszi3kirv5j1pp96n9fhnqwrmsc8naqdgq342rcy13w5";
+  sgr-iosevka-fixed-ss07 =
+    "0bsrpfbcjf2g8vd6f6sv6yxvdi9s6wdjckbjb3m64mdgv25lpdwv";
+  sgr-iosevka-fixed-ss08 =
+    "1l5k2y0h4h3fsk2ac7akym4rash6bb63bj9vhh3f9igq062dk10a";
+  sgr-iosevka-fixed-ss09 =
+    "09s1x6q7lx4y0462m0ac3jp8jfy4x2sc2irfmxcz2rl5px2smgdg";
+  sgr-iosevka-fixed-ss10 =
+    "0j8h200gw60rzknxyg7nvcg9cw1nhvgy3n6n70lf3b8jnp5splzd";
+  sgr-iosevka-fixed-ss11 =
+    "0cgxy8gq5wak1a7z3j013l1kadph45ckl865dlkw5jnmndz7a684";
+  sgr-iosevka-fixed-ss12 =
+    "1y9grhh3ami6qwdm8a6r7m671n7c9bnxp7qgmk7qxgb8jax31qcp";
+  sgr-iosevka-fixed-ss13 =
+    "1a9in4ybl9vjyvxab0hdbjnq46rg3yx9gyalj6x8y3mxsfij0wh2";
+  sgr-iosevka-fixed-ss14 =
+    "0wc3yw6rf05wdh8kzz6af1apirvyspkb8bav4pbdxahsy1asij58";
+  sgr-iosevka-fixed-ss15 =
+    "1b7ns68lx267y9rwlv47yl0y48nvwyzqdpgpwdfwkmpl6vd9kmnn";
+  sgr-iosevka-fixed-ss16 =
+    "07h4zvcll7324r4l7kwwk13874hmjs7vdiiffbjwhi403vbiw1an";
+  sgr-iosevka-fixed-ss17 =
+    "1rjb0c3yvww8n3sam49ynj2f7h0xgbdsznk7xbj4sk5pkx3l5zr5";
+  sgr-iosevka-fixed-ss18 =
+    "0s39p9khjidasizg1ps3k87ldlkpy3cxy5l6r0c2bkvnfz63k66n";
   sgr-iosevka-slab = "10gx0hlr2iywj3nksc70idjha9wja3fw9fl8yvkmnpbqaxlrlzm8";
   sgr-iosevka-ss01 = "1fzxzx9ky4zrbv3zbjh7c57k8dm949xz356a4jk1lpbmwyd0gry4";
   sgr-iosevka-ss02 = "1qk9f257pq2r4jfilrh02viwgy80kqga4czpc1mvwwbqfalz2lg9";
@@ -71,25 +93,46 @@
   sgr-iosevka-ss17 = "1zn0xh0h997afjsj6n97bmxanxk441iw6mcdliavfs9l6lj1zhns";
   sgr-iosevka-ss18 = "147w89y3p9s2qanm4wwxv3plpif50fs85hzhhdz23jin5zvh5lz2";
   sgr-iosevka-term = "01aqqniw3r2njv4fc114iymjzp9k5mdl7c5dyxypm71sdlpcjxqj";
-  sgr-iosevka-term-curly = "0rh0k1svfsan04q50ihhf2xf2fa8isggpqmfps77q1xrbih9miyc";
-  sgr-iosevka-term-curly-slab = "0ys2apprdz1awf6nad6phv2k2kf0qfigb22j930y1gya9vshxqx1";
-  sgr-iosevka-term-slab = "0qbiwsllyim81ayh0whrkzc1nq06x9g7hnv8haxh91jg9nf327vw";
-  sgr-iosevka-term-ss01 = "0mdgh9hdnz752d7sxv91ayi6lyp6czs6gq21dqigk3wmkgwaraz2";
-  sgr-iosevka-term-ss02 = "0zxynyzbngng6ymajd7yf5pmagdzxnr19vnpbmqkvhjnsjmhqpcd";
-  sgr-iosevka-term-ss03 = "192fjh0kc8jh0z8y7l74g41jvqfnax5p2shnn0ch1h824vraklvd";
-  sgr-iosevka-term-ss04 = "0fjmy0wl8hh38gbhf5h6m064la1dp68lyfimmxvjpf1s2c3g5szd";
-  sgr-iosevka-term-ss05 = "0w57k1kjn91srngy297fywi1wnc64bwyymclk0w704sqpx04jv4n";
-  sgr-iosevka-term-ss06 = "0n2ifw444z606qm9w4il6inmf5zmbkhrk2wvldfx5bsgv2pfxnjd";
-  sgr-iosevka-term-ss07 = "1wwky8pichvr467ypgxrxyfqgr27hqkpmx7c35fzka9c0kap483q";
-  sgr-iosevka-term-ss08 = "117c54z898rmsclm23hn4x2wvhypc2vmncrq2mvkqck0wawkwaxw";
-  sgr-iosevka-term-ss09 = "0lahhifnar8f716xq63xjhibay7cfqgaa7drxvz4pqxmzijv6r2r";
-  sgr-iosevka-term-ss10 = "0fp149a4dn7wgdsms70k162g60jgdg5ric93rhxnkn83x3d5jam1";
-  sgr-iosevka-term-ss11 = "16pvy63b194vig5vxy15ylmyl5422vrj9adqqwl82r0l9aqpkqlw";
-  sgr-iosevka-term-ss12 = "1gldv3srnm7zx9gkyizi6gvf34b7z7xg17qk77882jczsv95hyh1";
-  sgr-iosevka-term-ss13 = "0aznbica0yc4vhp4bp84dflfd6jhzw8lsakknfn8dz10kj1qq7vc";
-  sgr-iosevka-term-ss14 = "0x73vwywxj7j6qg3armbhm6rjy308j1rk1fhjfriv51hnkm6ylz2";
-  sgr-iosevka-term-ss15 = "0px9y25bx75ppsdaq0rfddd9ljxwa3fv5296kvvkw3mwd0ralflx";
-  sgr-iosevka-term-ss16 = "1bmnf7z8v4mbcq97lj2qkf722ww1n500jgv2zgs36vxc22zjjrvk";
-  sgr-iosevka-term-ss17 = "0lp5qz8j9xc8n959lm4sbfkjhm3ib79qnv69a57nkv5a10ddk20r";
-  sgr-iosevka-term-ss18 = "0jkp6zjx9ih5m4pa95a2rn7j1wx4hvnxg2j24cib9dixr7sc81b6";
+  sgr-iosevka-term-curly =
+    "0rh0k1svfsan04q50ihhf2xf2fa8isggpqmfps77q1xrbih9miyc";
+  sgr-iosevka-term-curly-slab =
+    "0ys2apprdz1awf6nad6phv2k2kf0qfigb22j930y1gya9vshxqx1";
+  sgr-iosevka-term-slab =
+    "0qbiwsllyim81ayh0whrkzc1nq06x9g7hnv8haxh91jg9nf327vw";
+  sgr-iosevka-term-ss01 =
+    "0mdgh9hdnz752d7sxv91ayi6lyp6czs6gq21dqigk3wmkgwaraz2";
+  sgr-iosevka-term-ss02 =
+    "0zxynyzbngng6ymajd7yf5pmagdzxnr19vnpbmqkvhjnsjmhqpcd";
+  sgr-iosevka-term-ss03 =
+    "192fjh0kc8jh0z8y7l74g41jvqfnax5p2shnn0ch1h824vraklvd";
+  sgr-iosevka-term-ss04 =
+    "0fjmy0wl8hh38gbhf5h6m064la1dp68lyfimmxvjpf1s2c3g5szd";
+  sgr-iosevka-term-ss05 =
+    "0w57k1kjn91srngy297fywi1wnc64bwyymclk0w704sqpx04jv4n";
+  sgr-iosevka-term-ss06 =
+    "0n2ifw444z606qm9w4il6inmf5zmbkhrk2wvldfx5bsgv2pfxnjd";
+  sgr-iosevka-term-ss07 =
+    "1wwky8pichvr467ypgxrxyfqgr27hqkpmx7c35fzka9c0kap483q";
+  sgr-iosevka-term-ss08 =
+    "117c54z898rmsclm23hn4x2wvhypc2vmncrq2mvkqck0wawkwaxw";
+  sgr-iosevka-term-ss09 =
+    "0lahhifnar8f716xq63xjhibay7cfqgaa7drxvz4pqxmzijv6r2r";
+  sgr-iosevka-term-ss10 =
+    "0fp149a4dn7wgdsms70k162g60jgdg5ric93rhxnkn83x3d5jam1";
+  sgr-iosevka-term-ss11 =
+    "16pvy63b194vig5vxy15ylmyl5422vrj9adqqwl82r0l9aqpkqlw";
+  sgr-iosevka-term-ss12 =
+    "1gldv3srnm7zx9gkyizi6gvf34b7z7xg17qk77882jczsv95hyh1";
+  sgr-iosevka-term-ss13 =
+    "0aznbica0yc4vhp4bp84dflfd6jhzw8lsakknfn8dz10kj1qq7vc";
+  sgr-iosevka-term-ss14 =
+    "0x73vwywxj7j6qg3armbhm6rjy308j1rk1fhjfriv51hnkm6ylz2";
+  sgr-iosevka-term-ss15 =
+    "0px9y25bx75ppsdaq0rfddd9ljxwa3fv5296kvvkw3mwd0ralflx";
+  sgr-iosevka-term-ss16 =
+    "1bmnf7z8v4mbcq97lj2qkf722ww1n500jgv2zgs36vxc22zjjrvk";
+  sgr-iosevka-term-ss17 =
+    "0lp5qz8j9xc8n959lm4sbfkjhm3ib79qnv69a57nkv5a10ddk20r";
+  sgr-iosevka-term-ss18 =
+    "0jkp6zjx9ih5m4pa95a2rn7j1wx4hvnxg2j24cib9dixr7sc81b6";
 }

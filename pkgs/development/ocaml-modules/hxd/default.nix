@@ -1,7 +1,5 @@
-{ lib, buildDunePackage, fetchurl
-, ocaml, dune-configurator, cmdliner
-, lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
-}:
+{ lib, buildDunePackage, fetchurl, ocaml, dune-configurator, cmdliner, lwt
+, withLwt ? lib.versionAtLeast ocaml.version "4.07" }:
 
 buildDunePackage rec {
   pname = "hxd";
@@ -12,7 +10,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-v${version}.tbz";
+    url =
+      "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-v${version}.tbz";
     sha256 = "1c226c91e17cd329dec0c287bfd20f36302aa533069ff9c6ced32721f96b29bc";
   };
 
@@ -21,15 +20,11 @@ buildDunePackage rec {
     sed -i 's|yes ".\+"|& 2> /dev/null|' test/*.t
   '';
 
-  nativeBuildInputs = [
-    dune-configurator
-  ];
+  nativeBuildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = lib.optional withLwt lwt;
 
-  buildInputs = [
-    cmdliner
-  ];
+  buildInputs = [ cmdliner ];
 
   doCheck = true;
 

@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gsl ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/est-usfs";
-    description = "Estimate the unfolded site frequency spectrum and ancestral states";
+    description =
+      "Estimate the unfolded site frequency spectrum and ancestral states";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.all;

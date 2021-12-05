@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-SjlJxushfry13RGA7BCjYC9oZqV4z6x8dOiHfl/wpF0=";
   };
 
-  patches = [
-    ./fix-cmake-config-includedir.patch
-  ];
+  patches = [ ./fix-cmake-config-includedir.patch ];
 
   nativeBuildInputs = [ cmake ninja ];
 

@@ -1,12 +1,5 @@
-{ lib, stdenv
-  , fetchFromGitHub
-  , autoreconfHook
-  , pkg-config
-  , perl
-  , fribidi
-  , kbd
-  , xkbutils
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, perl, fribidi, kbd
+, xkbutils }:
 
 stdenv.mkDerivation rec {
   pname = "bicon";
@@ -28,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A bidirectional console";
-    homepage =  "https://github.com/behdad/bicon";
+    homepage = "https://github.com/behdad/bicon";
     license = [ licenses.lgpl21 licenses.psfl licenses.bsd0 ];
     maintainers = [ maintainers.linarcx ];
     platforms = platforms.linux;

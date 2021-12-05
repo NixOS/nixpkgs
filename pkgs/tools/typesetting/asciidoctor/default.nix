@@ -1,8 +1,6 @@
 { lib, bundlerApp, makeWrapper,
-  # Optional dependencies, can be null
-  epubcheck,
-  bundlerUpdateScript
-}:
+# Optional dependencies, can be null
+epubcheck, bundlerUpdateScript }:
 
 let
   app = bundlerApp {
@@ -19,13 +17,14 @@ let
     buildInputs = [ makeWrapper ];
 
     postBuild = ''
-        wrapProgram "$out/bin/asciidoctor-epub3" \
-          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"}
-      '';
+      wrapProgram "$out/bin/asciidoctor-epub3" \
+        ${
+          lib.optionalString (epubcheck != null)
+          "--set EPUBCHECK ${epubcheck}/bin/epubcheck"
+        }
+    '';
 
-    passthru = {
-      updateScript = bundlerUpdateScript "asciidoctor";
-    };
+    passthru = { updateScript = bundlerUpdateScript "asciidoctor"; };
 
     meta = with lib; {
       description = "A faster Asciidoc processor written in Ruby";
@@ -35,5 +34,4 @@ let
       platforms = platforms.unix;
     };
   };
-in
-  app
+in app

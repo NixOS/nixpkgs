@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "1gbxm8gr9sx5g1q9dycs21hkxikcy97q09lp1lvs59pnd9qpdnwh";
-    url="http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
+    url =
+      "http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
   };
 
   dd_rhelp_src = fetchurl {

@@ -1,48 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, ninja
-, p7zip
-, pkg-config
-, asciidoctor
-, gettext
+{ lib, stdenv, fetchurl, cmake, ninja, p7zip, pkg-config, asciidoctor, gettext
 
-, SDL2
-, libtheora
-, libvorbis
-, openal
-, openalSoft
-, physfs
-, miniupnpc
-, libsodium
-, curl
-, libpng
-, freetype
-, harfbuzz
-, sqlite
-, which
-, vulkan-headers
-, vulkan-loader
+, SDL2, libtheora, libvorbis, openal, openalSoft, physfs, miniupnpc, libsodium
+, curl, libpng, freetype, harfbuzz, sqlite, which, vulkan-headers, vulkan-loader
 , shaderc
 
-, withVideos ? false
-}:
+, withVideos ? false }:
 
 let
   pname = "warzone2100";
   sequences_src = fetchurl {
-    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
+    url =
+      "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
     sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.2.3";
+  version = "4.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
+    url =
+      "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
     sha256 = "sha256-nmHl/Qk8Knck9kDF8cuPUzOUxNNx0Vk/g1NW/H82vo0=";
   };
 
@@ -60,20 +38,10 @@ stdenv.mkDerivation rec {
     freetype
     harfbuzz
     sqlite
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    vulkan-headers
-    vulkan-loader
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ vulkan-headers vulkan-loader ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    p7zip
-    asciidoctor
-    gettext
-    shaderc
-  ];
+  nativeBuildInputs =
+    [ pkg-config cmake ninja p7zip asciidoctor gettext shaderc ];
 
   postPatch = ''
     substituteInPlace lib/exceptionhandler/dumpinfo.cpp \

@@ -17,7 +17,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
     mkdir -p $out/include
   '' + lib.optionalString headersOnly ''
     cp *.h $out/include
-  '' + lib.optionalString (!headersOnly)''
+  '' + lib.optionalString (!headersOnly) ''
     mkdir -p $out/lib $out/include
 
     cp Products/Release/*.dylib $out/lib
@@ -37,7 +37,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
 
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

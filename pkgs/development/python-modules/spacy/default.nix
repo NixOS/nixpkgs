@@ -1,31 +1,7 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, blis
-, catalogue
-, cymem
-, jinja2
-, jsonschema
-, murmurhash
-, numpy
-, preshed
-, requests
-, setuptools
-, srsly
-, spacy-legacy
-, thinc
-, typer
-, wasabi
-, packaging
-, pathy
-, pydantic
-, python
-, tqdm
-, typing-extensions
-}:
+{ lib, buildPythonPackage, callPackage, fetchPypi, pythonOlder, pytest, blis
+, catalogue, cymem, jinja2, jsonschema, murmurhash, numpy, preshed, requests
+, setuptools, srsly, spacy-legacy, thinc, typer, wasabi, packaging, pathy
+, pydantic, python, tqdm, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "spacy";
@@ -60,9 +36,7 @@ buildPythonPackage rec {
     wasabi
   ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   doCheck = false;
   checkPhase = ''
@@ -74,7 +48,8 @@ buildPythonPackage rec {
   passthru.tests.annotation = callPackage ./annotation-test { };
 
   meta = with lib; {
-    description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
+    description =
+      "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

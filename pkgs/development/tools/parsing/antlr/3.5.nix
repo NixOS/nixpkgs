@@ -1,4 +1,4 @@
-{lib, stdenv, fetchpatch, fetchurl, fetchFromGitHub, jre}:
+{ lib, stdenv, fetchpatch, fetchurl, fetchFromGitHub, jre }:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/antlr3/raw/f1bb8d639678047935e1761c3bf3c1c7da8d0f1d/f/0006-antlr3memory.hpp-fix-for-C-20-mode.patch";
+      url =
+        "https://src.fedoraproject.org/rpms/antlr3/raw/f1bb8d639678047935e1761c3bf3c1c7da8d0f1d/f/0006-antlr3memory.hpp-fix-for-C-20-mode.patch";
       sha256 = "0apk904afjqbad6c7z9r72a9lkbz69vwrl8j2a6zgxjn8dfb2p8b";
     })
   ];

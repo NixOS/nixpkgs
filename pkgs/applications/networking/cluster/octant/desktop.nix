@@ -1,4 +1,5 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg
+}:
 
 let
   pname = "octant-desktop";
@@ -13,7 +14,8 @@ let
   }.${system} or (throw "Unsupported system: ${system}");
 
   src = fetchurl {
-    url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/Octant-${version}.${suffix}";
+    url =
+      "https://github.com/vmware-tanzu/octant/releases/download/v${version}/Octant-${version}.${suffix}";
     sha256 = {
       x86_64-linux = "sha256-K4z6SVCiuqy3xkWMWpm8KM7iYVXyKcnERljMG3NEFMw=";
       x86_64-darwin = "sha256-WYra0yw/aPW/wUGrlIn5ud3kjFTkekYEi2LWZcYO5Nw=";
@@ -31,8 +33,8 @@ let
     multiPkgs = null; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands =
-      let appimageContents = appimageTools.extractType2 { inherit name src; }; in
-      ''
+      let appimageContents = appimageTools.extractType2 { inherit name src; };
+      in ''
         mv $out/bin/{${name},${pname}}
         install -Dm444 ${appimageContents}/octant.desktop -t $out/share/applications
         substituteInPlace $out/share/applications/octant.desktop \
@@ -57,8 +59,10 @@ let
 
   meta = with lib; {
     homepage = "https://octant.dev/";
-    changelog = "https://github.com/vmware-tanzu/octant/blob/v${version}/CHANGELOG.md";
-    description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters";
+    changelog =
+      "https://github.com/vmware-tanzu/octant/blob/v${version}/CHANGELOG.md";
+    description =
+      "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters";
     longDescription = ''
       Octant is a tool for developers to understand how applications run on a
       Kubernetes cluster.
@@ -72,7 +76,4 @@ let
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

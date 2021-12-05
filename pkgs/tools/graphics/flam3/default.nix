@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libjpeg
-, libpng
-, libxml2
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, libjpeg, libpng, libxml2, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "flam3";
@@ -18,12 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-cKRfmTcyWY2LyxqojTzxD2wnxu5eh3emHi51bhS3gYg=";
   };
 
-  buildInputs = [
-    libjpeg
-    libpng
-    libxml2
-    zlib
-  ];
+  buildInputs = [ libjpeg libpng libxml2 zlib ];
 
   meta = with lib; {
     homepage = "https://flam3.com/";

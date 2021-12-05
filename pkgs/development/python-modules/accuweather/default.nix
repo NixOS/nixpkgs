@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub
+, pytest-asyncio, pytest-error-for-skips, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "accuweather";
@@ -28,21 +20,16 @@ buildPythonPackage rec {
       --replace "--cov --cov-report term-missing" ""
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytest-error-for-skips
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aioresponses pytest-asyncio pytest-error-for-skips pytestCheckHook ];
 
   pythonImportsCheck = [ "accuweather" ];
 
   meta = with lib; {
-    description = "Python wrapper for getting weather data from AccuWeather servers";
+    description =
+      "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];

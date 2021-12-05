@@ -8,9 +8,9 @@ in buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "petertodd";
-    repo   = "python-bitcoinlib";
-    rev    = "python-${pname}-v${version}";
+    owner = "petertodd";
+    repo = "python-bitcoinlib";
+    rev = "python-${pname}-v${version}";
     sha256 = "0pwypd966zzivb37fvg4l6yr7ihplqnr1jwz9zm3biip7x89bdzm";
   };
 

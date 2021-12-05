@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ vtk_9 ]
-    ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
+  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   meta = with lib; {

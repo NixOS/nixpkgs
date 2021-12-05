@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "An optimizing Scheme compiler";
 
     maintainers = [ ];
-    platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms
+    platforms = [ "i686-linux" ]; # doesn't want to work on 64-bit platforms
   };
 }

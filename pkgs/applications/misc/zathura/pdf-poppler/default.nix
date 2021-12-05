@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, poppler }:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, poppler
+}:
 
 stdenv.mkDerivation rec {
   pname = "zathura-pdf-poppler";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    url =
+      "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
     sha256 = "1vfl4vkyy3rf39r1sqaa7y8113bgkh2bkfq3nn2inis9mrykmk6m";
   };
 

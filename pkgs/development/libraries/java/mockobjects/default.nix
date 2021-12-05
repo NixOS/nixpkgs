@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl} :
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "mockobjects-0.09";
@@ -21,7 +21,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Generic unit testing framework and methodology for testing any kind of code";
+    description =
+      "Generic unit testing framework and methodology for testing any kind of code";
     platforms = platforms.unix;
     license = licenses.asl20;
   };

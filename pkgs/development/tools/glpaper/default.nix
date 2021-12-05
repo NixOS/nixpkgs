@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
-, libX11, libGL }:
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland
+, wayland-protocols, libX11, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "glpaper";

@@ -1,32 +1,32 @@
 { lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper
 , runtimeShell }:
-let self = stdenv.mkDerivation rec {
-  pname = "nix-pin";
-  version = "0.4.0";
-  src = fetchFromGitHub {
-    owner = "timbertson";
-    repo = "nix-pin";
-    rev = "version-${version}";
-    sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
-  };
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 mypy ];
-  checkPhase = ''
-    mypy bin/*
-  '';
-  installPhase = ''
-    mkdir "$out"
-    cp -r bin share "$out"
-    wrapProgram $out/bin/nix-pin \
-      --prefix PATH : "${lib.makeBinPath [ nix git ]}"
-  '';
-  passthru =
-    let
-      defaults = import "${self}/share/nix/defaults.nix";
+let
+  self = stdenv.mkDerivation rec {
+    pname = "nix-pin";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "timbertson";
+      repo = "nix-pin";
+      rev = "version-${version}";
+      sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
+    };
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ python3 mypy ];
+    checkPhase = ''
+      mypy bin/*
+    '';
+    installPhase = ''
+      mkdir "$out"
+      cp -r bin share "$out"
+      wrapProgram $out/bin/nix-pin \
+        --prefix PATH : "${lib.makeBinPath [ nix git ]}"
+    '';
+    passthru = let defaults = import "${self}/share/nix/defaults.nix";
     in {
       api = { pinConfig ? defaults.pinConfig }:
-        let impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; }; in
-        { inherit (impl) augmentedPkgs pins callPackage; };
+        let
+          impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; };
+        in { inherit (impl) augmentedPkgs pins callPackage; };
       updateScript = ''
         #!${runtimeShell}
         set -e
@@ -43,11 +43,12 @@ let self = stdenv.mkDerivation rec {
           --modify-nix default.nix
       '';
     };
-  meta = with lib; {
-    homepage = "https://github.com/timbertson/nix-pin";
-    description = "nixpkgs development utility";
-    license = licenses.mit;
-    maintainers = [ maintainers.timbertson ];
-    platforms = platforms.all;
+    meta = with lib; {
+      homepage = "https://github.com/timbertson/nix-pin";
+      description = "nixpkgs development utility";
+      license = licenses.mit;
+      maintainers = [ maintainers.timbertson ];
+      platforms = platforms.all;
+    };
   };
-}; in self
+in self

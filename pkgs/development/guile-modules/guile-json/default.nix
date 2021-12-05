@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, texinfo
-, pkg-config
-}:
+{ lib, stdenv, fetchurl, guile, texinfo, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "guile-json";
@@ -22,12 +16,8 @@ stdenv.mkDerivation rec {
     sed -i '/objdir\s*=/s%=.*%=''${out}/share/guile/ccache/json%' json/Makefile;
   '';
 
-  nativeBuildInputs = [
-    pkg-config texinfo
-  ];
-  buildInputs = [
-    guile
-  ];
+  nativeBuildInputs = [ pkg-config texinfo ];
+  buildInputs = [ guile ];
 
   meta = with lib; {
     description = "JSON Bindings for GNU Guile";

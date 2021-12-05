@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
+{ lib, stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau
+, libXdmcp }:
 
 let
   version = "1.3.7";
   name = "fricas-" + version;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

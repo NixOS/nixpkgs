@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp";
-    description = "A library and tool to access files on OBEX-based devices (such as Bluetooth phones)";
+    description =
+      "A library and tool to access files on OBEX-based devices (such as Bluetooth phones)";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, rapidfuzz
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, rapidfuzz }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
@@ -20,20 +15,15 @@ buildPythonPackage rec {
     sha256 = "agshUVkkqogj4FbonFd/rrGisMOomS62NND66YKZvjg=";
   };
 
-  propagatedBuildInputs = [
-    rapidfuzz
-  ];
+  propagatedBuildInputs = [ rapidfuzz ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "Levenshtein"
-  ];
+  pythonImportsCheck = [ "Levenshtein" ];
 
   meta = with lib; {
-    description = "Functions for fast computation of Levenshtein distance and string similarity";
+    description =
+      "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];

@@ -1,21 +1,6 @@
-{ lib, fetchFromGitHub
-, ninja
-, meson
-, pkg-config
-, wrapGAppsHook
-, appstream-glib
-, desktop-file-utils
-, gtk3
-, gst_all_1
-, gobject-introspection
-, libhandy
-, libdazzle
-, python3Packages
-, cairo
-, gettext
-, gnome
-, pantheon
-}:
+{ lib, fetchFromGitHub, ninja, meson, pkg-config, wrapGAppsHook, appstream-glib
+, desktop-file-utils, gtk3, gst_all_1, gobject-introspection, libhandy
+, libdazzle, python3Packages, cairo, gettext, gnome, pantheon }:
 
 python3Packages.buildPythonApplication rec {
 
@@ -37,7 +22,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config
+    meson
+    ninja
+    pkg-config
     wrapGAppsHook
     appstream-glib
     desktop-file-utils

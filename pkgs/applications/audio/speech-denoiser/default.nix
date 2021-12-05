@@ -14,11 +14,15 @@ let
     src = speech-denoiser-src;
     sourceRoot = "source/rnnoise";
     nativeBuildInputs = [ autoreconfHook ];
-    configureFlags = [ "--disable-examples" "--disable-doc" "--disable-shared" "--enable-static" ];
+    configureFlags = [
+      "--disable-examples"
+      "--disable-doc"
+      "--disable-shared"
+      "--enable-static"
+    ];
     installTargets = [ "install-rnnoise-nu" ];
   };
-in
-stdenv.mkDerivation  {
+in stdenv.mkDerivation {
   pname = "speech-denoiser";
   version = "unstable-07-10-2019";
 

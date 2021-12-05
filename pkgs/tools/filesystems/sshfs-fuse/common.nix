@@ -1,14 +1,9 @@
 { version, sha256, platforms, patches ? [ ] }:
 
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja, docutils, makeWrapper
-, fuse3, macfuse-stubs, glib
-, which, python3Packages
-, openssh
-}:
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, docutils, makeWrapper
+, fuse3, macfuse-stubs, glib, which, python3Packages, openssh }:
 
-let
-  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
+let fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "sshfs-fuse";
   inherit version;
@@ -26,8 +21,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ fuse glib ];
   checkInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString
-    (stdenv.hostPlatform.system == "i686-linux")
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
@@ -52,7 +47,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit platforms;
-    description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
+    description =
+      "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     longDescription = macfuse-stubs.warning;
     homepage = "https://github.com/libfuse/sshfs";
     license = licenses.gpl2Plus;

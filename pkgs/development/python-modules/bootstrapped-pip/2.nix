@@ -1,8 +1,5 @@
-{ lib, stdenv, python, makeWrapper, unzip
-, pipInstallHook
-, setuptoolsBuildHook
-, wheel, pip, setuptools
-}:
+{ lib, stdenv, python, makeWrapper, unzip, pipInstallHook, setuptoolsBuildHook
+, wheel, pip, setuptools }:
 
 stdenv.mkDerivation rec {
   pname = "pip";
@@ -18,8 +15,11 @@ stdenv.mkDerivation rec {
   # Should be propagatedNativeBuildInputs
   propagatedBuildInputs = [
     # Override to remove dependencies to prevent infinite recursion.
-    (pipInstallHook.override{pip=null;})
-    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+    (pipInstallHook.override { pip = null; })
+    (setuptoolsBuildHook.override {
+      setuptools = null;
+      wheel = null;
+    })
   ];
 
   postPatch = ''
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version of pip used for bootstrapping";
-    license = lib.unique (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
+    license = lib.unique
+      (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
     homepage = pip.meta.homepage;
   };
 }

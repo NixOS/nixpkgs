@@ -5,15 +5,14 @@ buildKodiAddon rec {
   version = "0.2.3+matrix.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
+    url =
+      "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1qhp40xd8mbcvzwlamqw1j5l224ry086593948g24drpqiiyc8x6";
   };
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.routing";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.routing"; };
   };
 
   meta = with lib; {

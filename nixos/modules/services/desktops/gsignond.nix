@@ -5,9 +5,9 @@
 with lib;
 
 let
-  package = pkgs.gsignond.override { plugins = config.services.gsignond.plugins; };
-in
-{
+  package =
+    pkgs.gsignond.override { plugins = config.services.gsignond.plugins; };
+in {
 
   meta.maintainers = teams.pantheon.members;
 
@@ -28,7 +28,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           What plugins to use with the gSignOn daemon.
         '';

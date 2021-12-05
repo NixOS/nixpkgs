@@ -1,12 +1,10 @@
 { stdenv, lib, fetchgit, makeDesktopItem, pkg-config, makeWrapper
 # Build
-, python2, autoconf213, yasm, perl
-, unzip, gnome2, gnum4
+, python2, autoconf213, yasm, perl, unzip, gnome2, gnum4
 
 # Runtime
-, xorg, zip, freetype, fontconfig, glibc, libffi
-, dbus, dbus-glib, gtk2, alsa-lib, jack2, ffmpeg
-}:
+, xorg, zip, freetype, fontconfig, glibc, libffi, dbus, dbus-glib, gtk2
+, alsa-lib, jack2, ffmpeg }:
 
 let
 
@@ -40,13 +38,21 @@ in stdenv.mkDerivation rec {
     ];
   };
 
-  nativeBuildInputs = [
-    gnum4 makeWrapper perl pkg-config python2 unzip
-  ];
+  nativeBuildInputs = [ gnum4 makeWrapper perl pkg-config python2 unzip ];
 
   buildInputs = [
-    alsa-lib dbus dbus-glib ffmpeg fontconfig freetype yasm zip jack2 gtk2
-    gnome2.GConf xorg.libXt
+    alsa-lib
+    dbus
+    dbus-glib
+    ffmpeg
+    fontconfig
+    freetype
+    yasm
+    zip
+    jack2
+    gtk2
+    gnome2.GConf
+    xorg.libXt
   ];
 
   enableParallelBuilding = true;
@@ -63,8 +69,12 @@ in stdenv.mkDerivation rec {
       --replace "mk_add_options PYTHON=/usr/bin/python2" "mk_add_options PYTHON=${python2}/bin/python2" \
       --replace "mk_add_options AUTOCONF=/usr/bin/autoconf-2.13" "mk_add_options AUTOCONF=${autoconf213}/bin/autoconf" \
       --replace 'mk_add_options MOZ_OBJDIR=$HOME/build/wbobjects/' "" \
-      --replace "ac_add_options --x-libraries=/usr/lib64" "ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}" \
-      --replace "_BUILD_64=1" "_BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}" \
+      --replace "ac_add_options --x-libraries=/usr/lib64" "ac_add_options --x-libraries=${
+        lib.makeLibraryPath [ xorg.libX11 ]
+      }" \
+      --replace "_BUILD_64=1" "_BUILD_64=${
+        lib.optionalString stdenv.hostPlatform.is64bit "1"
+      }" \
       --replace "--enable-ccache" "--disable-ccache"
 
     echo >> $MOZCONFIG '
@@ -99,11 +109,12 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Generic web browser without trackers compatible with XUL plugins using UXP rendering engine";
-    homepage    = "https://git.nuegia.net/webbrowser.git/";
-    license     = [ licenses.mpl20 licenses.gpl3 ];
+    description =
+      "Generic web browser without trackers compatible with XUL plugins using UXP rendering engine";
+    homepage = "https://git.nuegia.net/webbrowser.git/";
+    license = [ licenses.mpl20 licenses.gpl3 ];
     maintainers = with maintainers; [ TheBrainScrambler ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
-    broken      = true; # 2021-01-07
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = true; # 2021-01-07
   };
 }

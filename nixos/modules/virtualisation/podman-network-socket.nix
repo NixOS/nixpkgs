@@ -1,14 +1,10 @@
 { config, lib, pkg, ... }:
 let
-  inherit (lib)
-    mkOption
-    types
-    ;
+  inherit (lib) mkOption types;
 
   cfg = config.virtualisation.podman.networkSocket;
 
-in
-{
+in {
   options.virtualisation.podman.networkSocket = {
     enable = mkOption {
       type = types.bool;
@@ -27,7 +23,7 @@ in
     };
 
     server = mkOption {
-      type = types.enum [];
+      type = types.enum [ ];
       description = ''
         Choice of TLS proxy server.
       '';

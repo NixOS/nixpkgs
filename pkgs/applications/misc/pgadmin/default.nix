@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, postgresql, wxGTK, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchpatch, postgresql, wxGTK, libxml2, libxslt
+, openssl, zlib, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "pgadmin3";
   version = "1.22.2";
 
   src = fetchurl {
-    url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin3/v${version}/src/pgadmin3-${version}.tar.gz";
+    url =
+      "https://ftp.postgresql.org/pub/pgadmin/pgadmin3/v${version}/src/pgadmin3-${version}.tar.gz";
     sha256 = "1b24b356h8z188nci30xrb57l7kxjqjnh6dq9ws638phsgiv0s4v";
   };
 
@@ -17,7 +19,8 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       sha256 = "09hp7s3zjz80rpx2j3xyznwswwfxzi70z7c05dzrdk74mqjjpkfk";
       name = "843344.patch";
-      url = "https://sources.debian.net/data/main/p/pgadmin3/1.22.2-1/debian/patches/843344";
+      url =
+        "https://sources.debian.net/data/main/p/pgadmin3/1.22.2-1/debian/patches/843344";
     })
   ];
 

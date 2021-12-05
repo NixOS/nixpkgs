@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromBitbucket
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromBitbucket, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "20200125";
@@ -16,9 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://malb.bitbucket.io/m4ri/";

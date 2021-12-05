@@ -1,17 +1,6 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
-, pythonOlder
-  # Python dependencies
-, colorama
-, intervaltree
-, json5
-, pyyaml
-, scipy
-, tqdm
-, typing-extensions
-}:
+{ buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, pythonOlder
+# Python dependencies
+, colorama, intervaltree, json5, pyyaml, scipy, tqdm, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "graphtage";
@@ -25,15 +14,8 @@ buildPythonPackage rec {
     sha256 = "sha256-cFOTbPv7CnRdet7bx5LVq5xp9LG4yNm0oxlW5aSEeZs=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-    intervaltree
-    json5
-    pyyaml
-    scipy
-    tqdm
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [ colorama intervaltree json5 pyyaml scipy tqdm typing-extensions ];
 
   checkInputs = [ pytestCheckHook ];
 

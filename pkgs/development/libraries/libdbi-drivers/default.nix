@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, libdbi
-, libmysqlclient ? null
-, sqlite ? null
-, postgresql ? null
-}:
+{ lib, stdenv, fetchurl, libdbi, libmysqlclient ? null, sqlite ? null
+, postgresql ? null }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -13,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m680h8cc4428xin4p733azysamzgzcmv4psjvraykrsaz6ymlj3";
   };
 
-  buildInputs = [ libdbi sqlite postgresql ] ++ optional (libmysqlclient != null) libmysqlclient;
+  buildInputs = [ libdbi sqlite postgresql ]
+    ++ optional (libmysqlclient != null) libmysqlclient;
 
   postPatch = ''
     sed -i '/SQLITE3_LIBS/ s/-lsqlite/-lsqlite3/' configure;

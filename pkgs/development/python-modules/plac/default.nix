@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, python }:
 buildPythonPackage rec {
   pname = "plac";
   version = "1.3.3";

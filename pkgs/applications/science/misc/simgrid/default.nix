@@ -1,22 +1,19 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, perl, python3, boost, valgrind
+{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, perl, python3, boost
+, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
-, fortranSupport ? false, gfortran
-, buildDocumentation ? false, transfig, ghostscript, doxygen
-, buildJavaBindings ? false, openjdk
-, modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
-, debug ? false
-, moreTests ? false
-}:
+, fortranSupport ? false, gfortran, buildDocumentation ? false, transfig
+, ghostscript, doxygen, buildJavaBindings ? false, openjdk
+, modelCheckingSupport ? false, libunwind, libevent
+, elfutils # Inside elfutils: libelf and libdw
+, debug ? false, moreTests ? false }:
 
 with lib;
 
-let
-  optionOnOff = option: if option then "on" else "off";
-in
+let optionOnOff = option: if option then "on" else "off";
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "simgrid";
   version = "3.28";
 
@@ -31,17 +28,18 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-smpi-dirs-absolute.patch";
-      url = "https://framagit.org/simgrid/simgrid/-/commit/71f01e667577be1076646eb841e0a57bd5388545.patch";
+      url =
+        "https://framagit.org/simgrid/simgrid/-/commit/71f01e667577be1076646eb841e0a57bd5388545.patch";
       sha256 = "0x3y324b6269687zfy43ilc48bwrs4nb7svh2mpg88lrz53rky15";
     })
   ];
 
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake perl python3 valgrind ]
-      ++ optionals fortranSupport [ gfortran ]
-      ++ optionals buildJavaBindings [ openjdk ]
-      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
-      ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
+    ++ optionals fortranSupport [ gfortran ]
+    ++ optionals buildJavaBindings [ openjdk ]
+    ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+    ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   #buildInputs = optional luaSupport lua5;
 

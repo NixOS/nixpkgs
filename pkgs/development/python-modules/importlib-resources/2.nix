@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing
-, singledispatch
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, importlib-metadata, typing
+, singledispatch, python }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
@@ -19,11 +12,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
-    importlib-metadata
-    singledispatch
-    typing
-  ];
+  propagatedBuildInputs = [ importlib-metadata singledispatch typing ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover

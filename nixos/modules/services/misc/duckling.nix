@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.duckling;
+let cfg = config.services.duckling;
 in {
   options = {
     services.duckling = {
@@ -22,15 +21,14 @@ in {
   config = mkIf cfg.enable {
     systemd.services.duckling = {
       description = "Duckling server service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-      environment = {
-        PORT = builtins.toString cfg.port;
-      };
+      environment = { PORT = builtins.toString cfg.port; };
 
       serviceConfig = {
-        ExecStart = "${pkgs.haskellPackages.duckling}/bin/duckling-example-exe --no-access-log --no-error-log";
+        ExecStart =
+          "${pkgs.haskellPackages.duckling}/bin/duckling-example-exe --no-access-log --no-error-log";
         Restart = "always";
         DynamicUser = true;
       };

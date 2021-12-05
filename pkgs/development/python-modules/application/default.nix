@@ -20,7 +20,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Basic building blocks for python applications";
     homepage = "https://github.com/AGProjects/python-application";
-    changelog = "https://github.com/AGProjects/python-application/blob/master/ChangeLog";
+    changelog =
+      "https://github.com/AGProjects/python-application/blob/master/ChangeLog";
     license = licenses.lgpl2Plus;
   };
 }

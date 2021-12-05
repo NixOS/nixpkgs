@@ -1,17 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, pkg-config
-, autoreconfHook
-, gnome2
-, gtk2
-, glib
-, libtifiles2
-, libticables2
-, libticalcs2
-, libticonv
-}:
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, autoreconfHook, gnome2, gtk2
+, glib, libtifiles2, libticables2, libticalcs2, libticonv }:
 
 stdenv.mkDerivation rec {
   pname = "gfm";
@@ -23,14 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = fetchpatch {
     name = "remove-broken-kde-support.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/remove-broken-kde-support.patch?h=gfm";
+    url =
+      "https://aur.archlinux.org/cgit/aur.git/plain/remove-broken-kde-support.patch?h=gfm";
     sha256 = "03yc8s2avicmv04f2ygg3r3q8l7kpsc94mhp6clp584kmjpjqag5";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     gtk2
@@ -46,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
-    description = "Group File Manager (GFM) allows manipulation of single/group/tigroup files";
+    description =
+      "Group File Manager (GFM) allows manipulation of single/group/tigroup files";
     homepage = "http://lpg.ticalc.org/prj_gfm/index.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ siraben luc65r ];

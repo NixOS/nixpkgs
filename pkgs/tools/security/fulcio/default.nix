@@ -35,7 +35,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/sigstore/fulcio";
     changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
-    description = "A Root-CA for code signing certs - issuing certificates based on an OIDC email address";
+    description =
+      "A Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse jk ];
   };

@@ -1,19 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, gtk-doc
-, autoconf
-, automake
-, which
-, libtool
-, gobject-introspection
-, glib
-, gtk2
-, libGLU
-, libGL
-, pango
-, xorg
-}:
+{ lib, stdenv, fetchFromGitLab, pkg-config, gtk-doc, autoconf, automake, which
+, libtool, gobject-introspection, glib, gtk2, libGLU, libGL, pango, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "gtkglext";
@@ -39,15 +25,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    glib
-    gtk2
-    libGLU
-    libGL
-    pango
-    xorg.libX11
-    xorg.libXmu
-  ];
+  buildInputs = [ glib gtk2 libGLU libGL pango xorg.libX11 xorg.libXmu ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh

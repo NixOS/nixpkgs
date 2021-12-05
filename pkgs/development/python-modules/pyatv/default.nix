@@ -1,22 +1,7 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, bitarray
-, cryptography
-, deepdiff
-, fetchFromGitHub
-, mediafile
-, miniaudio
-, netifaces
-, protobuf
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, srptools
-, zeroconf
-}:
+{ lib, buildPythonPackage, aiohttp, bitarray, cryptography, deepdiff
+, fetchFromGitHub, mediafile, miniaudio, netifaces, protobuf, pytest-aiohttp
+, pytest-asyncio, pytest-timeout, pytestCheckHook, pythonOlder, srptools
+, zeroconf }:
 
 buildPythonPackage rec {
   pname = "pyatv";
@@ -44,13 +29,8 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
-    deepdiff
-    pytest-aiohttp
-    pytest-asyncio
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ deepdiff pytest-aiohttp pytest-asyncio pytest-timeout pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -66,9 +46,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pyatv"
-  ];
+  pythonImportsCheck = [ "pyatv" ];
 
   meta = with lib; {
     description = "Python client library for the Apple TV";

@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fixDarwinDylibNames
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "tbb";
@@ -19,24 +14,22 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes build with Musl.
     (fetchurl {
-      url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/GLIBC-PREREQ-is-not-defined-on-musl.patch";
+      url =
+        "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/GLIBC-PREREQ-is-not-defined-on-musl.patch";
       sha256 = "gUfXQ9OZQ82qD6brgauBCsKdjLvyHafMc18B+KxZoYs=";
     })
 
     # Fixes build with Musl.
     (fetchurl {
-      url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
+      url =
+        "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
       sha256 = "fhorfqO1hHKZ61uq+yTR7eQ8KYdyLwpM3K7WpwJpV74=";
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
-  makeFlags = lib.optionals stdenv.cc.isClang [
-    "compiler=clang"
-  ];
+  makeFlags = lib.optionals stdenv.cc.isClang [ "compiler=clang" ];
 
   enableParallelBuilding = true;
 
@@ -53,7 +46,8 @@ stdenv.mkDerivation rec {
 
   postInstall = let
     pcTemplate = fetchurl {
-      url = "https://github.com/oneapi-src/oneTBB/raw/master/integration/pkg-config/tbb.pc.in";
+      url =
+        "https://github.com/oneapi-src/oneTBB/raw/master/integration/pkg-config/tbb.pc.in";
       sha256 = "2pCad9txSpNbzac0vp/VY3x7HNySaYkbH3Rx8LK53pI=";
     };
   in ''

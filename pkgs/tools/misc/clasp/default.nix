@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";
+    url =
+      "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";
     sha256 = "1zkjqc4gp4n9p2kf3k3z8x82g42any4p3shhhivny89z1jlxi9zn";
   };
 
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Answer set solver for (extended) normal and disjunctive logic programs";
+    description =
+      "Answer set solver for (extended) normal and disjunctive logic programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];

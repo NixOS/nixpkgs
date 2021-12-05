@@ -22,7 +22,12 @@ python3Packages.buildPythonApplication rec {
     json-logging
     setuptools
   ];
-  checkInputs = with python3Packages; [ bottle mock pytest-console-scripts pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    bottle
+    mock
+    pytest-console-scripts
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # dnswanip connects to an external server to discover the
@@ -41,7 +46,8 @@ python3Packages.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Dynamic DNS update client with support for multiple protocols";
+    description =
+      "Dynamic DNS update client with support for multiple protocols";
     longDescription = ''
       Dyndnsc is a command line client for sending updates to Dynamic
       DNS (DDNS, DynDNS) services.  It supports multiple protocols and

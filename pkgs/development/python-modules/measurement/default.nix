@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k
-, sympy, pytest, pytest-runner, sphinx, setuptools-scm }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, sympy, pytest, pytest-runner
+, sphinx, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "measurement";

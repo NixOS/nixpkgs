@@ -52,7 +52,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = {
-        Type="oneshot";
+        Type = "oneshot";
         RemainAfterExit = "yes";
         ExecStart = "${cfg.package}/bin/ferm ${configFile}";
         ExecReload = "${cfg.package}/bin/ferm ${configFile}";

@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, flake8
-, stestr
-, ddt
-, testscenarios
-}:
+{ lib, buildPythonPackage, fetchPypi, pbr, flake8, stestr, ddt, testscenarios }:
 
 buildPythonPackage rec {
   pname = "hacking";
@@ -24,15 +16,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
-  checkInputs = [
-    ddt
-    stestr
-    testscenarios
-  ];
+  checkInputs = [ ddt stestr testscenarios ];
 
   checkPhase = ''
     stestr run -e <(echo "

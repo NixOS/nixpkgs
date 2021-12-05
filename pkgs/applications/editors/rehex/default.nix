@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, capstone
-, jansson
-, lua5_3
-, wxGTK31
-, Carbon
-, Cocoa
-, IOKit
-, libicns
-, wxmac
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, capstone, jansson, lua5_3, wxGTK31
+, Carbon, Cocoa, IOKit, libicns, wxmac }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "huisbaasje-client";
@@ -19,13 +14,9 @@ buildPythonPackage rec {
     sha256 = "113aymffyz1nki3a43j5cyj87qa0762j38qlz0wd5px7diwjxsfl";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "huisbaasje.huisbaasje" ];
 

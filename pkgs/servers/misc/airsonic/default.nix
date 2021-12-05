@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "10.6.2";
 
   src = fetchurl {
-    url = "https://github.com/airsonic/airsonic/releases/download/v${version}/airsonic.war";
+    url =
+      "https://github.com/airsonic/airsonic/releases/download/v${version}/airsonic.war";
     sha256 = "0q3qnqymj3gaa6n79pvbyidn1ga99lpngp5wvhlw1aarg1m7vccl";
   };
 
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/airsonic.war"
   '';
 
-  passthru.tests = {
-    airsonic-starts = nixosTests.airsonic;
-  };
+  passthru.tests = { airsonic-starts = nixosTests.airsonic; };
 
   meta = with lib; {
     description = "Personal media streamer";

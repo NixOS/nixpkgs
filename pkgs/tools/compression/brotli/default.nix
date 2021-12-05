@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, staticOnly ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch
+, staticOnly ? stdenv.hostPlatform.isStatic }:
 
 # ?TODO: there's also python lib in there
 
@@ -24,7 +19,8 @@ stdenv.mkDerivation rec {
   patches = lib.optional staticOnly (fetchpatch {
     # context from https://github.com/google/brotli/pull/655
     # updated patch from https://github.com/google/brotli/pull/655
-    url = "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
+    url =
+      "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
     sha256 = "sOeXNVsCaBSD9i82GRUDrkyreGeQ7qaJWjjy/uLL0/0=";
   });
 
@@ -58,18 +54,18 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
     description = "A generic-purpose lossless compression algorithm and tool";
-    longDescription =
-      ''  Brotli is a generic-purpose lossless compression algorithm that
-          compresses data using a combination of a modern variant of the LZ77
-          algorithm, Huffman coding and 2nd order context modeling, with a
-          compression ratio comparable to the best currently available
-          general-purpose compression methods. It is similar in speed with
-          deflate but offers more dense compression.
+    longDescription = ''
+      Brotli is a generic-purpose lossless compression algorithm that
+              compresses data using a combination of a modern variant of the LZ77
+              algorithm, Huffman coding and 2nd order context modeling, with a
+              compression ratio comparable to the best currently available
+              general-purpose compression methods. It is similar in speed with
+              deflate but offers more dense compression.
 
-          The specification of the Brotli Compressed Data Format is defined
-          in the following internet draft:
-          http://www.ietf.org/id/draft-alakuijala-brotli
-      '';
+              The specification of the Brotli Compressed Data Format is defined
+              in the following internet draft:
+              http://www.ietf.org/id/draft-alakuijala-brotli
+          '';
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;

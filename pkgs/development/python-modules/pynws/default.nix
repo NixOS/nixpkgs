@@ -1,15 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, metar
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, freezegun, metar
+, pytest-aiohttp, pytest-asyncio, pytest-cov, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pynws";
@@ -23,18 +13,10 @@ buildPythonPackage rec {
     sha256 = "0d2x3vlm444aar4wbdg48xzpgwng5m7i2d7h1z0pb6c514747sd1";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    metar
-  ];
+  propagatedBuildInputs = [ aiohttp metar ];
 
-  checkInputs = [
-    freezegun
-    pytest-aiohttp
-    pytest-asyncio
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ freezegun pytest-aiohttp pytest-asyncio pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "pynws" ];
 

@@ -1,14 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, numba
-, numpy
-, scipy
-  # Test Inputs
-, pytestCheckHook
-, dask
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, numba, numpy, scipy
+# Test Inputs
+, pytestCheckHook, dask }:
 
 buildPythonPackage rec {
   pname = "sparse";
@@ -21,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "685dc994aa770ee1b23f2d5392819c8429f27958771f8dceb2c4fb80210d5915";
   };
 
-  propagatedBuildInputs = [
-    numba
-    numpy
-    scipy
-  ];
+  propagatedBuildInputs = [ numba numpy scipy ];
   checkInputs = [ pytestCheckHook dask ];
 
   pythonImportsCheck = [ "sparse" ];

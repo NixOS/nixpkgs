@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
+    description =
+      "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "http://mysqltuner.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg shamilton ];

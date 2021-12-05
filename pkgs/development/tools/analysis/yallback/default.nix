@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, bashInteractive
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, bashInteractive }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
@@ -21,7 +15,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dv yallback $out/bin/yallback
-    wrapProgram $out/bin/yallback --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+    wrapProgram $out/bin/yallback --prefix PATH : ${
+      lib.makeBinPath [ coreutils ]
+    }
   '';
 
   meta = with lib; {

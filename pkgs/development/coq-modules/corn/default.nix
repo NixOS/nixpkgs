@@ -1,11 +1,18 @@
 { lib, mkCoqDerivation, coq, bignums, math-classes, version ? null }:
 
-with lib; mkCoqDerivation rec {
+with lib;
+mkCoqDerivation rec {
   pname = "corn";
   inherit version;
   defaultVersion = switch coq.coq-version [
-    { case = "8.6"; out = "8.8.1"; }
-    { case = (versions.range "8.7" "8.13"); out = "8.13.0"; }
+    {
+      case = "8.6";
+      out = "8.8.1";
+    }
+    {
+      case = (versions.range "8.7" "8.13");
+      out = "8.13.0";
+    }
   ] null;
   release = {
     "8.8.1".sha256 = "0gh32j0f18vv5lmf6nb87nr5450w6ai06rhrnvlx2wwi79gv10wp";

@@ -2,16 +2,15 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.pihole;
-in
-{
+let cfg = config.services.prometheus.exporters.pihole;
+in {
   port = 9617;
   extraOpts = {
     apiToken = mkOption {
       type = types.str;
       default = "";
-      example = "580a770cb40511eb85290242ac130003580a770cb40511eb85290242ac130003";
+      example =
+        "580a770cb40511eb85290242ac130003580a770cb40511eb85290242ac130003";
       description = ''
         pi-hole API token which can be used instead of a password
       '';
@@ -62,9 +61,15 @@ in
       ExecStart = ''
         ${pkgs.bash}/bin/bash -c "${pkgs.prometheus-pihole-exporter}/bin/pihole-exporter \
           -interval ${cfg.interval} \
-          ${optionalString (cfg.apiToken != "") "-pihole_api_token ${cfg.apiToken}"} \
+          ${
+            optionalString (cfg.apiToken != "")
+            "-pihole_api_token ${cfg.apiToken}"
+          } \
           -pihole_hostname ${cfg.piholeHostname} \
-          ${optionalString (cfg.password != "") "-pihole_password ${cfg.password}"} \
+          ${
+            optionalString (cfg.password != "")
+            "-pihole_password ${cfg.password}"
+          } \
           -pihole_port ${toString cfg.piholePort} \
           -pihole_protocol ${cfg.protocol} \
           -port ${toString cfg.port}"

@@ -1,45 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, cairo
-, cldr-emoji-annotation
-, pango
-, fribidi
-, fmt
-, wayland
-, systemd
-, wayland-protocols
-, json_c
-, isocodes
-, xkeyboard_config
-, enchant
-, gdk-pixbuf
-, libGL
-, libevent
-, libuuid
-, libselinux
-, libXdmcp
-, libsepol
-, libxkbcommon
-, libthai
-, libdatrie
-, xcbutilkeysyms
-, pcre
-, xcbutilwm
-, xcb-imdkit
-, libxkbfile
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules
+, cairo, cldr-emoji-annotation, pango, fribidi, fmt, wayland, systemd
+, wayland-protocols, json_c, isocodes, xkeyboard_config, enchant, gdk-pixbuf
+, libGL, libevent, libuuid, libselinux, libXdmcp, libsepol, libxkbcommon
+, libthai, libdatrie, xcbutilkeysyms, pcre, xcbutilwm, xcb-imdkit, libxkbfile }:
 let
   enDictVer = "20121020";
   enDict = fetchurl {
     url = "https://download.fcitx-im.org/data/en_dict-${enDictVer}.tar.gz";
     sha256 = "1svcb97sq7nrywp5f2ws57cqvlic8j6p811d9ngflplj8xw5sjn4";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "fcitx5";
   version = "5.0.9";
 
@@ -54,11 +24,7 @@ stdenv.mkDerivation rec {
     ln -s ${enDict} src/modules/spell/dict/$(stripHash ${enDict})
   '';
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
     fmt

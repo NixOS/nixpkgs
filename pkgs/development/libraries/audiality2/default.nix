@@ -1,11 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 # The two audio backends:
-, SDL2
-, jack2
-}:
+, SDL2, jack2 }:
 
 stdenv.mkDerivation rec {
   pname = "audiality2";
@@ -18,18 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ipqna7a9mxqm0fl9ggwhbc7i9yxz3jfyi0w3dymjp40v7jw1n20";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    SDL2
-    jack2
-  ];
+  buildInputs = [ SDL2 jack2 ];
 
   meta = with lib; {
-    description = "A realtime scripted modular audio engine for video games and musical applications";
+    description =
+      "A realtime scripted modular audio engine for video games and musical applications";
     homepage = "http://audiality.org";
     license = licenses.zlib;
     platforms = platforms.all;

@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gettext
-, xmlto
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxslt
-, libstemmer
-, glib
-, xapian
-, libxml2
-, libyaml
-, gobject-introspection
-, pcre
-, itstool
-, gperf
-, vala
-, lmdb
-, curl
-}:
+{ lib, stdenv, substituteAll, fetchFromGitHub, meson, ninja, pkg-config, gettext
+, xmlto, docbook-xsl-nons, docbook_xml_dtd_45, libxslt, libstemmer, glib, xapian
+, libxml2, libyaml, gobject-introspection, pcre, itstool, gperf, vala, lmdb
+, curl }:
 
 stdenv.mkDerivation rec {
   pname = "appstream";
@@ -59,23 +38,9 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    libstemmer
-    pcre
-    glib
-    xapian
-    libxml2
-    libyaml
-    gperf
-    lmdb
-    curl
-  ];
+  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf lmdb curl ];
 
-  mesonFlags = [
-    "-Dapidocs=false"
-    "-Ddocs=false"
-    "-Dvapi=true"
-  ];
+  mesonFlags = [ "-Dapidocs=false" "-Ddocs=false" "-Dvapi=true" ];
 
   meta = with lib; {
     description = "Software metadata handling library";
@@ -88,5 +53,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
- };
+  };
 }

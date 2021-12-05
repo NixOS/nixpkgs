@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook269, pkg-config, varnish, docutils, version, sha256 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook269, pkg-config, varnish, docutils
+, version, sha256 }:
 
 stdenv.mkDerivation {
   pname = "${varnish.name}-dynamic";

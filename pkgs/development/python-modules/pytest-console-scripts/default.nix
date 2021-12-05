@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, python
-, mock
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, python, mock
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-console-scripts";

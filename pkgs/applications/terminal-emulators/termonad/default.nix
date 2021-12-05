@@ -1,7 +1,8 @@
-{ stdenv, haskellPackages, makeWrapper, packages ? (pkgSet: []) }:
+{ stdenv, haskellPackages, makeWrapper, packages ? (pkgSet: [ ]) }:
 
 let
-  termonadEnv = haskellPackages.ghcWithPackages (self: [ self.termonad ] ++ packages self);
+  termonadEnv =
+    haskellPackages.ghcWithPackages (self: [ self.termonad ] ++ packages self);
 in stdenv.mkDerivation {
   name = "termonad-with-packages-${termonadEnv.version}";
 
@@ -17,7 +18,5 @@ in stdenv.mkDerivation {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  meta = haskellPackages.termonad.meta // {
-    mainProgram = "termonad";
-  };
+  meta = haskellPackages.termonad.meta // { mainProgram = "termonad"; };
 }

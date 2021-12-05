@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
-, html5lib
-, setuptools
-, packaging
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, six, html5lib, setuptools
+, packaging, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "bleach";
@@ -19,16 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-CQDYs366YagC7kCsAGH4wrXe4pwZJ90dIz4HXr9acdo=";
   };
 
-  propagatedBuildInputs = [
-    packaging
-    six
-    html5lib
-    setuptools
-  ];
+  propagatedBuildInputs = [ packaging six html5lib setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disable network tests

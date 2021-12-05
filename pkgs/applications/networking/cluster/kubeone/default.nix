@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubeone";
@@ -17,9 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-/rhV7JHuqejCTizcjKIkaJlbRcx7AfMcGqQYo6dlg48=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd kubeone \
@@ -28,7 +22,8 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";
+    description =
+      "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";
     homepage = "https://kubeone.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lblasc ];

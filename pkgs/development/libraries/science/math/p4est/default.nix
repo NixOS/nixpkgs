@@ -1,15 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, p4est-withMetis ? true, metis
-, p4est-sc
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, p4est-withMetis ? true, metis, p4est-sc }:
 
 let
   inherit (p4est-sc) debugEnable mpiSupport;
   dbg = if debugEnable then "-dbg" else "";
   withMetis = p4est-withMetis;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "p4est${dbg}";
   version = "unstable-2021-06-22";
 
@@ -36,12 +32,11 @@ stdenv.mkDerivation {
     ${if mpiSupport then "unset CC" else ""}
   '';
 
-  configureFlags = p4est-sc.configureFlags
-    ++ [ "--with-sc=${p4est-sc}" ]
-    ++ lib.optional withMetis "--with-metis"
-  ;
+  configureFlags = p4est-sc.configureFlags ++ [ "--with-sc=${p4est-sc}" ]
+    ++ lib.optional withMetis "--with-metis";
 
-  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
+  inherit (p4est-sc)
+    makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
 
   meta = {
     branch = "prev3-develop";

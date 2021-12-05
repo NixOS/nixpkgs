@@ -1,4 +1,5 @@
-{ coreutils, fetchFromGitHub, lib, makeWrapper, stdenv, util-linux, xauth, xorgserver }:
+{ coreutils, fetchFromGitHub, lib, makeWrapper, stdenv, util-linux, xauth
+, xorgserver }:
 
 stdenv.mkDerivation rec {
   pname = "sx";
@@ -17,11 +18,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/sx \
-      --prefix PATH : ${lib.makeBinPath [ coreutils util-linux xorgserver xauth ]}
+      --prefix PATH : ${
+        lib.makeBinPath [ coreutils util-linux xorgserver xauth ]
+      }
   '';
 
   meta = with lib; {
-    description = "Simple alternative to both xinit and startx for starting a Xorg server";
+    description =
+      "Simple alternative to both xinit and startx for starting a Xorg server";
     homepage = "https://github.com/earnestly/sx";
     license = licenses.mit;
     platforms = platforms.linux;

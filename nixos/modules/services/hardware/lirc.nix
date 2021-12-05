@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.lirc;
+let cfg = config.services.lirc;
 in {
 
   ###### interface
@@ -19,17 +18,19 @@ in {
           [lircd]
           nodaemon = False
         '';
-        description = "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
+        description =
+          "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
       };
 
       configs = mkOption {
         type = types.listOf types.lines;
-        description = "Configurations for lircd to load, see man:lircd.conf(5) for details (<filename>lircd.conf</filename>)";
+        description =
+          "Configurations for lircd to load, see man:lircd.conf(5) for details (<filename>lircd.conf</filename>)";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Extra arguments to lircd.";
       };
     };
@@ -57,7 +58,8 @@ in {
     };
 
     systemd.services.lircd = let
-      configFile = pkgs.writeText "lircd.conf" (builtins.concatStringsSep "\n" cfg.configs);
+      configFile = pkgs.writeText "lircd.conf"
+        (builtins.concatStringsSep "\n" cfg.configs);
     in {
       description = "LIRC daemon service";
       after = [ "network.target" ];
@@ -65,7 +67,7 @@ in {
       unitConfig.Documentation = [ "man:lircd(8)" ];
 
       serviceConfig = {
-        RuntimeDirectory = ["lirc" "lirc/lock"];
+        RuntimeDirectory = [ "lirc" "lirc/lock" ];
 
         # Service runtime directory and socket share same folder.
         # Following hacks are necessary to get everything right:
@@ -76,9 +78,7 @@ in {
         # 2. fix runtime folder owner-ship, happens when socket activation
         #    creates the folder
         PermissionsStartOnly = true;
-        ExecStartPre = [
-          "${pkgs.coreutils}/bin/chown lirc /run/lirc/"
-        ];
+        ExecStartPre = [ "${pkgs.coreutils}/bin/chown lirc /run/lirc/" ];
 
         ExecStart = ''
           ${pkgs.lirc}/bin/lircd --nodaemon \

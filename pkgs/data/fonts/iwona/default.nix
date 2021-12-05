@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "0_995";
+let version = "0_995";
 in fetchzip {
   name = "iwona-${version}";
   url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
@@ -13,7 +12,8 @@ in fetchzip {
   sha256 = "1dcpn13bd31dw7ir0s722bv3nk136dy6qsab0kznjbzfqd7agswa";
 
   meta = with lib; {
-    description = "A two-element sans-serif typeface, created by Małgorzata Budyta";
+    description =
+      "A two-element sans-serif typeface, created by Małgorzata Budyta";
     homepage = "http://jmn.pl/en/kurier-i-iwona/";
     # "[...] GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public # License (LPPL), version 1.3c or

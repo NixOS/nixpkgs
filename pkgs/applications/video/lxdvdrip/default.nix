@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdvdread ];
 
   meta = {
-    description = "Command line tool to make a copy from a video DVD for private use";
+    description =
+      "Command line tool to make a copy from a video DVD for private use";
     homepage = "https://sourceforge.net/projects/lxdvdrip";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

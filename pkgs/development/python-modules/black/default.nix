@@ -1,22 +1,7 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
-, aiohttp
-, aiohttp-cors
-, attrs
-, click
-, colorama
-, dataclasses
-, mypy-extensions
-, pathspec
-, parameterized
-, platformdirs
-, regex
-, tomli
-, typed-ast
-, typing-extensions
-, uvloop
-}:
-
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm
+, pytestCheckHook, aiohttp, aiohttp-cors, attrs, click, colorama, dataclasses
+, mypy-extensions, pathspec, parameterized, platformdirs, regex, tomli
+, typed-ast, typing-extensions, uvloop }:
 
 buildPythonPackage rec {
   pname = "black";

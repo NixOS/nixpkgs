@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pbr, pytestCheckHook, pythonOlder
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "ssdp";
@@ -22,17 +16,11 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pbr
-  ];
+  buildInputs = [ pbr ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -43,7 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ssdp" ];
 
   meta = with lib; {
-    description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
+    description =
+      "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
     homepage = "https://github.com/codingjoe/ssdp";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

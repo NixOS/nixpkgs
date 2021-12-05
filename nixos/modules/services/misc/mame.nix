@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.services.mame;
   mame = "mame${lib.optionalString pkgs.stdenv.is64bit "64"}";
-in
-{
+in {
   options = {
     services.mame = {
       enable = mkOption {
@@ -59,7 +58,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.mame}/bin/taputil.sh -c ${cfg.user} ${cfg.emuAddr} ${cfg.hostAddr} -";
+        ExecStart =
+          "${pkgs.mame}/bin/taputil.sh -c ${cfg.user} ${cfg.emuAddr} ${cfg.hostAddr} -";
         ExecStop = "${pkgs.mame}/bin/taputil.sh -d ${cfg.user}";
       };
     };

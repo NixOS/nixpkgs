@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, libdbusmenu
-, libfm-qt
-, libqtxdg
-, lxqt-build-tools
-, lxqtUpdateScript
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, libdbusmenu, libfm-qt, libqtxdg
+, lxqt-build-tools, lxqtUpdateScript, qtbase, qtsvg, qttools, qtx11extras }:
 
 mkDerivation rec {
   pname = "lxqt-qtplugin";
@@ -24,20 +12,10 @@ mkDerivation rec {
     sha256 = "1vr2hlv1q9xwkh9bapy29g9fi90d33xw7pr9zc1bfma6j152qs36";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [
-    libdbusmenu
-    libfm-qt
-    libqtxdg
-    qtbase
-    qtsvg
-    qttools
-    qtx11extras
-  ];
+  buildInputs =
+    [ libdbusmenu libfm-qt libqtxdg qtbase qtsvg qttools qtx11extras ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

@@ -1,10 +1,6 @@
-{ lib, stdenv, fetchurl, xorgproto, libX11, libXrender
-, gmp, libjpeg, libpng
-, expat, gettext, perl, guile
-, SDL, SDL_image, SDL_mixer, SDL_ttf
-, curl, sqlite, libtool, readline
-, libogg, libvorbis, libcaca, csound, cunit
-, pkg-config }:
+{ lib, stdenv, fetchurl, xorgproto, libX11, libXrender, gmp, libjpeg, libpng
+, expat, gettext, perl, guile, SDL, SDL_image, SDL_mixer, SDL_ttf, curl, sqlite
+, libtool, readline, libogg, libvorbis, libcaca, csound, cunit, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "liquidwar6";
@@ -16,25 +12,38 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorgproto libX11 gmp guile
-    libjpeg libpng
-    expat gettext perl
-    SDL SDL_image SDL_mixer SDL_ttf
-    curl sqlite
-    libogg libvorbis csound
-    libXrender libcaca cunit
-    libtool readline
+    xorgproto
+    libX11
+    gmp
+    guile
+    libjpeg
+    libpng
+    expat
+    gettext
+    perl
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+    curl
+    sqlite
+    libogg
+    libvorbis
+    csound
+    libXrender
+    libcaca
+    cunit
+    libtool
+    readline
   ];
 
   nativeBuildInputs = [ pkg-config ];
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE =
-    "-Wno-error=deprecated-declarations" +
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations" +
     # Avoid GL_GLEXT_VERSION double definition
-    " -DNO_SDL_GLEXT"
-  ;
+    " -DNO_SDL_GLEXT";
 
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];

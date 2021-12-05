@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, arrow
-, jinja2
-}:
+{ lib, buildPythonPackage, fetchPypi, arrow, jinja2 }:
 
 buildPythonPackage rec {
   version = "0.2.0";

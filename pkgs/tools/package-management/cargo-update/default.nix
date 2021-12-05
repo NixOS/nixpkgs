@@ -1,17 +1,5 @@
-{ lib, stdenv
-, rustPlatform
-, fetchCrate
-, cmake
-, pkg-config
-, installShellFiles
-, ronn
-, curl
-, libgit2
-, libssh2
-, openssl
-, Security
-, zlib
-}:
+{ lib, stdenv, rustPlatform, fetchCrate, cmake, pkg-config, installShellFiles
+, ronn, curl, libgit2, libssh2, openssl, Security, zlib }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
@@ -41,7 +29,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A cargo subcommand for checking and applying updates to installed executables";
+    description =
+      "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;
     maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];

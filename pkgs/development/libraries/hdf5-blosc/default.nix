@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = pname;
-    rev =  "v${version}";
+    rev = "v${version}";
     sha256 = "1nj2bm1v6ymm3fmyvhbn6ih5fgdiapavlfghh1pvbmhw71cysyqs";
   };
 
@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace 'set(BLOSC_INSTALL_DIR "''${CMAKE_CURRENT_BINARY_DIR}/blosc")' 'set(BLOSC_INSTALL_DIR "${c-blosc}")'
   '';
 
-  cmakeFlags = [
-    "-DPLUGIN_INSTALL_PATH=${placeholder "plugin"}/hdf5/lib/plugin"
-  ];
+  cmakeFlags =
+    [ "-DPLUGIN_INSTALL_PATH=${placeholder "plugin"}/hdf5/lib/plugin" ];
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig

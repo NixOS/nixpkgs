@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, adb-homeassistant
-, flask
-, pure-python-adb-homeassistant
-, pycryptodome
-, pyyaml
-, rsa
-}:
+{ lib, buildPythonPackage, fetchPypi, adb-homeassistant, flask
+, pure-python-adb-homeassistant, pycryptodome, pyyaml, rsa }:
 buildPythonPackage rec {
   pname = "firetv";
   version = "1.0.9";
@@ -30,7 +22,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Communicate with an Amazon Fire TV device via ADB over a network";
+    description =
+      "Communicate with an Amazon Fire TV device via ADB over a network";
     homepage = "https://github.com/happyleavesaoc/python-firetv/";
     license = licenses.mit;
     maintainers = [ maintainers.makefu ];

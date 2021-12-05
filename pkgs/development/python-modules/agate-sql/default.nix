@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, agate
-, sqlalchemy
-, crate
-, nose
-, geojson
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, agate, sqlalchemy, crate, nose
+, geojson }:
 
 buildPythonPackage rec {
   pname = "agate-sql";

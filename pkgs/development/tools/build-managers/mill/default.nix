@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.9.10";
 
   src = fetchurl {
-    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+    url =
+      "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
     sha256 = "sha256-JbZorHeBznBb+R9JjPQBNKlTdNNzg1G82OxWvBtNg5Q=";
   };
 

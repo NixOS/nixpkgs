@@ -1,18 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, runCommandLocal
-, bison
-, flex
-, llvmPackages_11
-, lld_11
-, opencl-clang
-, python3
-, spirv-llvm-translator
+{ lib, stdenv, fetchFromGitHub, cmake, runCommandLocal, bison, flex
+, llvmPackages_11, lld_11, opencl-clang, python3, spirv-llvm-translator
 
-, buildWithPatches ? true
-}:
+, buildWithPatches ? true }:
 
 let
   vc_intrinsics_src = fetchFromGitHub {
@@ -21,15 +10,13 @@ let
     rev = "e5ad7e02aa4aa21a3cd7b3e5d1f3ec9b95f58872";
     sha256 = "Vg1mngwpIQ3Tik0GgRXPG22lE4sLEAEFch492G2aIXs=";
   };
-  llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
+  llvmPkgs = llvmPackages_11 // { inherit spirv-llvm-translator; };
   inherit (llvmPkgs) llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang libclang spirv-llvm-translator;
+  inherit (if buildWithPatches then opencl-clang else llvmPkgs)
+    clang libclang spirv-llvm-translator;
   inherit (lib) getVersion optional optionals versionOlder versions;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
   version = "1.0.8744";
 
@@ -59,8 +46,12 @@ stdenv.mkDerivation rec {
     ln -s ${clang}/bin/clang $out/
     ln -s clang $out/clang-${versions.major (getVersion clang)}
     ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c-base.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${
+      getVersion clang
+    }/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${
+      getVersion clang
+    }/include/opencl-c-base.h $out/
   '';
 
   cmakeFlags = [
@@ -73,7 +64,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
+    description =
+      "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ gloaming ];

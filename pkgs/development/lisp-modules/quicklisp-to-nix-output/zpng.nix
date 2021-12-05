@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "zpng";
   version = "1.2.2";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "zpng";
 
-  asdFilesToKeep = ["zpng.asd"];
+  asdFilesToKeep = [ "zpng.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM zpng DESCRIPTION Create PNG files SHA256
@@ -25,4 +24,5 @@ rec {
     ((NAME salza2 FILENAME salza2)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams))
     DEPENDENCIES (salza2 trivial-gray-streams) VERSION 1.2.2 SIBLINGS NIL
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

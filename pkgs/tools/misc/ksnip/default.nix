@@ -1,15 +1,5 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, kcolorpicker
-, kimageannotator
-, wrapQtAppsHook
-, qtsvg
-, qttranslations
-, qtx11extras
-}:
+{ stdenv, lib, cmake, extra-cmake-modules, fetchFromGitHub, kcolorpicker
+, kimageannotator, wrapQtAppsHook, qtsvg, qttranslations, qtx11extras }:
 
 stdenv.mkDerivation rec {
   pname = "ksnip";
@@ -22,23 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "1izsk586n9fbm0di0hj6pxs7r0a6w554gpad1ghf247icr0pfc1l";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
 
-  buildInputs = [
-    kcolorpicker
-    kimageannotator
-    qtsvg
-    qttranslations
-    qtx11extras
-  ];
+  buildInputs =
+    [ kcolorpicker kimageannotator qtsvg qttranslations qtx11extras ];
 
   meta = with lib; {
     homepage = "https://github.com/ksnip/ksnip";
-    description = "Cross-platform screenshot tool wihth many annotation features";
+    description =
+      "Cross-platform screenshot tool wihth many annotation features";
     longDescription = ''
       Features:
 

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyftdi
-}:
+{ lib, buildPythonPackage, fetchPypi, pyftdi }:
 
 buildPythonPackage rec {
   pname = "pyspiflash";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "0ifnw1qm4nssb03af93qw6vpa92rmyc2hisw9m4043pm9ryqcmpc";
   };
 
-  propagatedBuildInputs = [
-    pyftdi
-  ];
+  propagatedBuildInputs = [ pyftdi ];
 
   # tests are not shipped with the PyPI source
   doCheck = false;

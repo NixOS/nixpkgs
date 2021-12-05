@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "3gq6awxvkz2hb8xzcwqhdhdqgspvqjfzm50bq9i29qy2iisq9vzb91bdp3f4q2sqcmk3gms44xyxyn3ih2hwlzsnk0f5prjzyg97fjj";
+    sha512 =
+      "3gq6awxvkz2hb8xzcwqhdhdqgspvqjfzm50bq9i29qy2iisq9vzb91bdp3f4q2sqcmk3gms44xyxyn3ih2hwlzsnk0f5prjzyg97fjj";
   };
 
   nativeBuildInputs = [ which ]

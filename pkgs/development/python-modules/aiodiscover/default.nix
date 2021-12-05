@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, ifaddr
-, pyroute2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, dnspython, fetchFromGitHub, ifaddr, pyroute2
+, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiodiscover";
@@ -21,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-QfeAEFB5WikuriBTcfFIgnJw5H4vEcGIVX47fyDb1Dk=";
   };
 
-  propagatedBuildInputs = [
-    dnspython
-    pyroute2
-    ifaddr
-  ];
+  propagatedBuildInputs = [ dnspython pyroute2 ifaddr ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -33,17 +21,14 @@ buildPythonPackage rec {
       --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
   '';
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # Tests require access to /etc/resolv.conf
     "test_async_discover_hosts"
   ];
 
-  pythonImportsCheck = ["aiodiscover"];
+  pythonImportsCheck = [ "aiodiscover" ];
 
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";

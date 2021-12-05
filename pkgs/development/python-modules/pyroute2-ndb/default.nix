@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-ndb";
@@ -14,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-pNMJWE6e9seEKvT4MrSPxTRKsiXnDjhLrtG3/iuU2fg=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;

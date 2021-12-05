@@ -1,14 +1,5 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchbzr
-, pkg-config
-, gtk3
-, glib
-, file
-, gobject-introspection
-, json-glib
-, libsoup
-}:
+{ lib, stdenv, autoreconfHook, fetchbzr, pkg-config, gtk3, glib, file
+, gobject-introspection, json-glib, libsoup }:
 
 stdenv.mkDerivation rec {
   pname = "timezonemap";
@@ -20,29 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wCJXwgnN+aZVerjQCm8oT3xIcwmc4ArcEoCh9pMrt+E=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ pkg-config autoreconfHook gobject-introspection ];
 
-  buildInputs = [
-    gtk3
-    glib
-    json-glib
-    libsoup
-  ];
+  buildInputs = [ gtk3 glib json-glib libsoup ];
 
-  configureFlags = [
-    "CFLAGS=-Wno-error"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ];
+  configureFlags =
+    [ "CFLAGS=-Wno-error" "--sysconfdir=/etc" "--localstatedir=/var" ];
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "localstatedir=\${TMPDIR}"
-  ];
+  installFlags =
+    [ "sysconfdir=${placeholder "out"}/etc" "localstatedir=\${TMPDIR}" ];
 
   preConfigure = ''
     for f in {configure,m4/libtool.m4}; do

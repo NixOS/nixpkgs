@@ -1,9 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub, curl, ncurses, pkg-config, readline
 , cmake }:
-let
-  version = "0.3.2";
-in
-buildGoPackage {
+let version = "0.3.2";
+in buildGoPackage {
   pname = "grv";
   inherit version;
 

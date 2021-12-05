@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gjs ];
 
-  patches = [
-    ./fix-gjs.patch
-  ];
+  patches = [ ./fix-gjs.patch ];
 
   makeFlags = [ "XDG_DATA_HOME=$(out)/share" ];
 

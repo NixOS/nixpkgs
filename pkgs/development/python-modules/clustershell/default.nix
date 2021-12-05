@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
-, nose, bc, hostname, coreutils, bash, gnused
-}:
+{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh, nose, bc, hostname
+, coreutils, bash, gnused }:
 
 buildPythonPackage rec {
   pname = "ClusterShell";

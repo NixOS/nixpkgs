@@ -1,4 +1,5 @@
-{ mkDerivation, lib, extra-cmake-modules, libkdegames, kconfig, kcrash, kio, ki18n }:
+{ mkDerivation, lib, extra-cmake-modules, libkdegames, kconfig, kcrash, kio
+, ki18n }:
 
 mkDerivation {
   pname = "kbounce";
@@ -9,14 +10,6 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    libkdegames
-    kconfig
-    kcrash
-    kio
-    ki18n
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ libkdegames kconfig kcrash kio ki18n ];
 }

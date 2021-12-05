@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, azure-common, requests }:
 
 buildPythonPackage rec {
   version = "0.20.7";
@@ -15,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "1kcibw17qm8c02y28xabm3k1zrawi6g4q8kzc751l5l3vagqnf2x";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    requests
-  ];
+  propagatedBuildInputs = [ azure-common requests ];
 
   pythonNamespaces = [ "azure" ];
   # has no tests
@@ -26,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "azure.servicemanagement" ];
 
   meta = with lib; {
-    description = "This is the Microsoft Azure Service Management Legacy Client Library";
+    description =
+      "This is the Microsoft Azure Service Management Legacy Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai maxwilson ];

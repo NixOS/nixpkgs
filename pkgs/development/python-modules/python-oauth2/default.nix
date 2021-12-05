@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "python-oauth2";
@@ -15,8 +12,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Framework that aims at making it easy to provide authentication via OAuth 2.0 within an application stack";
-    homepage =  "https://github.com/wndhydrnt/python-oauth2";
+    description =
+      "Framework that aims at making it easy to provide authentication via OAuth 2.0 within an application stack";
+    homepage = "https://github.com/wndhydrnt/python-oauth2";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

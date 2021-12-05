@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pyjwt
-, requests
-, requests-toolbelt
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, pyjwt, requests
+, requests-toolbelt }:
 
 buildPythonPackage rec {
   pname = "webexteamssdk";
@@ -18,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "0bw28ag1iqyqlxz83m4qb3r94kipv5mpf3bsvc8zv5vh4dv52bp2";
   };
 
-  propagatedBuildInputs = [
-    future
-    pyjwt
-    requests
-    requests-toolbelt
-  ];
+  propagatedBuildInputs = [ future pyjwt requests requests-toolbelt ];
 
   # Tests require a Webex Teams test domain
   doCheck = false;

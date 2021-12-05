@@ -1,23 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, glib
-, gtk3
-, coreutils
-, libsoup
-, libsecret
-, libhandy
-, wrapGAppsHook
-, libgpg-error
-, json-glib
-, duplicity
-}:
+{ lib, stdenv, fetchFromGitLab, substituteAll, meson, ninja, pkg-config, vala
+, gettext, itstool, glib, gtk3, coreutils, libsoup, libsecret, libhandy
+, wrapGAppsHook, libgpg-error, json-glib, duplicity }:
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
@@ -38,29 +21,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-    gettext
-    itstool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config vala gettext itstool wrapGAppsHook ];
 
-  buildInputs = [
-    libsoup
-    glib
-    gtk3
-    libsecret
-    libhandy
-    libgpg-error
-    json-glib
-  ];
+  buildInputs = [ libsoup glib gtk3 libsecret libhandy libgpg-error json-glib ];
 
-  mesonFlags = [
-    "-Dduplicity_command=${duplicity}/bin/duplicity"
-  ];
+  mesonFlags = [ "-Dduplicity_command=${duplicity}/bin/duplicity" ];
 
   meta = with lib; {
     description = "A simple backup tool";

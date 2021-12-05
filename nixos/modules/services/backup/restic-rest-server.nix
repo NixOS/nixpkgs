@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.restic.server;
-in
-{
+let cfg = config.services.restic.server;
+in {
   meta.maintainers = [ maintainers.bachp ];
 
   options.services.restic.server = {
@@ -51,7 +49,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra commandline options to pass to Restic REST server.
       '';

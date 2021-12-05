@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "nocaselist";
@@ -11,13 +9,9 @@ buildPythonPackage rec {
     sha256 = "73a9c0659e7135c66e46a6ab06e2cb637ce9248d73c690ebd31afb72a4e03ac0";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
-  pythonImportsCheck = [
-    "nocaselist"
-  ];
+  pythonImportsCheck = [ "nocaselist" ];
 
   meta = with lib; {
     description = "A case-insensitive list for Python";

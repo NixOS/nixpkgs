@@ -1,28 +1,22 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 
 # --- Runtime Dependencies ---
-, bash, procps, iproute2, dnsmasq, iptables
-, coreutils, flock, gawk, getopt, gnugrep, gnused, which
+, bash, procps, iproute2, dnsmasq, iptables, coreutils, flock, gawk, getopt
+, gnugrep, gnused, which
 # `nmcli` is not required for create_ap.
 # Use NetworkManager by default because it is very likely already present
-, useNetworkManager ? true
-, networkmanager
+, useNetworkManager ? true, networkmanager
 
 # --- WiFi Hotspot Dependencies ---
-, useWifiDependencies ? true
-, hostapd, iw
+, useWifiDependencies ? true, hostapd, iw
 # You only need this if 'iw' can not recognize your adapter.
-, useWirelessTools ? true
-, wirelesstools # for iwconfig
+, useWirelessTools ? true, wirelesstools # for iwconfig
 # To fall back to haveged if entropy is low.
 # Defaulting to false because not having it does not break things.
 # If it is really needed, warnings will be logged to journal.
-, useHaveged ? false
-, haveged
+, useHaveged ? false, haveged
 # You only need this if you wish to show WiFi QR codes in terminal
-, useQrencode ? true
-, qrencode
-}:
+, useQrencode ? true, qrencode }:
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
@@ -39,17 +33,28 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = with lib; let
-      binPath = makeBinPath ([ procps iproute2 getopt bash dnsmasq
-        iptables coreutils which flock gnugrep gnused gawk ]
-        ++ optional useNetworkManager                          networkmanager
-        ++ optional useWifiDependencies                        hostapd
-        ++ optional useWifiDependencies                        iw
-        ++ optional (useWifiDependencies && useWirelessTools)  wirelesstools
-        ++ optional (useWifiDependencies && useHaveged)        haveged
-        ++ optional (useWifiDependencies && useQrencode)       qrencode);
-    in
-    ''
+  installPhase = with lib;
+    let
+      binPath = makeBinPath ([
+        procps
+        iproute2
+        getopt
+        bash
+        dnsmasq
+        iptables
+        coreutils
+        which
+        flock
+        gnugrep
+        gnused
+        gawk
+      ] ++ optional useNetworkManager networkmanager
+        ++ optional useWifiDependencies hostapd
+        ++ optional useWifiDependencies iw
+        ++ optional (useWifiDependencies && useWirelessTools) wirelesstools
+        ++ optional (useWifiDependencies && useHaveged) haveged
+        ++ optional (useWifiDependencies && useQrencode) qrencode);
+    in ''
       mkdir -p $out/bin/ $out/.bin-wrapped
       mv lnxrouter $out/.bin-wrapped/lnxrouter
       makeWrapper $out/.bin-wrapped/lnxrouter $out/bin/lnxrouter --prefix PATH : ${binPath}

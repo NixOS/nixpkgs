@@ -1,15 +1,5 @@
-{ stdenv
-, lib
-, go
-, pkgs
-, nodejs
-, nodePackages
-, buildGoModule
-, fetchFromGitHub
-, mkYarnPackage
-, nixosTests
-, fetchpatch
-}:
+{ stdenv, lib, go, pkgs, nodejs, nodePackages, buildGoModule, fetchFromGitHub
+, mkYarnPackage, nixosTests, fetchpatch }:
 
 let
   version = "2.30.3";
@@ -36,7 +26,8 @@ let
     name = "prometheus-webui-codemirror-promql";
     src = "${src}/web/ui/module/codemirror-promql";
 
-    buildInputs = [ nodejs nodePackages.typescript codemirrorNode.nodeDependencies ];
+    buildInputs =
+      [ nodejs nodePackages.typescript codemirrorNode.nodeDependencies ];
 
     configurePhase = ''
       ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
@@ -50,7 +41,6 @@ let
     '';
     distPhase = ":";
   };
-
 
   webui = stdenv.mkDerivation {
     name = "prometheus-webui";
@@ -68,8 +58,7 @@ let
     installPhase = "mv build $out";
     distPhase = "true";
   };
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
@@ -95,10 +84,8 @@ buildGoModule rec {
   tags = [ "builtinassets" ];
 
   ldflags =
-    let
-      t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
-    in
-    [
+    let t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
+    in [
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"

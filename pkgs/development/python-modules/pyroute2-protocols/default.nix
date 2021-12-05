@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-protocols";
@@ -14,16 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-lj9Q8ew+44m+Y72miQyuZhzjHmdLqYB+c2FK+ph1d84=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.protocols"
-  ];
+  pythonImportsCheck = [ "pr2modules.protocols" ];
 
   meta = with lib; {
     description = "Protocols module for pyroute2";

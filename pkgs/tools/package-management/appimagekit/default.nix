@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, cmake, autoconf, automake, libtool, makeWrapper
-, wget, xxd, desktop-file-utils, file
-, gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
-, squashfsTools
-, gtest
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, autoconf, automake, libtool
+, makeWrapper, wget, xxd, desktop-file-utils, file, gnupg, glib, zlib, cairo
+, openssl, fuse, xz, squashfuse, inotify-tools, libarchive, squashfsTools, gtest
 }:
 
 let
@@ -23,7 +20,7 @@ let
 
     src = fetchFromGitHub {
       owner = "vasi";
-      repo  = pname;
+      repo = pname;
       rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
       sha256 = "sha256-BZd1+7sRYZHthULKk3RlgMIy4uCUei45GbSEiZxLPFM=";
     };
@@ -43,7 +40,10 @@ let
     '';
 
     configureFlags = [
-      "--disable-demo" "--disable-high-level" "--without-lzo" "--without-lz4"
+      "--disable-demo"
+      "--disable-high-level"
+      "--without-lzo"
+      "--without-lz4"
     ];
 
     postConfigure = ''
@@ -71,13 +71,28 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config cmake autoconf automake libtool wget xxd
-    desktop-file-utils makeWrapper
+    pkg-config
+    cmake
+    autoconf
+    automake
+    libtool
+    wget
+    xxd
+    desktop-file-utils
+    makeWrapper
   ];
 
   buildInputs = [
-    glib zlib cairo openssl fuse xz inotify-tools
-    libarchive squashfsTools appimagekit_squashfuse
+    glib
+    zlib
+    cairo
+    openssl
+    fuse
+    xz
+    inotify-tools
+    libarchive
+    squashfsTools
+    appimagekit_squashfuse
   ];
 
   preConfigure = ''
@@ -106,9 +121,7 @@ in stdenv.mkDerivation rec {
   checkInputs = [ gtest ];
 
   # for debugging
-  passthru = {
-    squashfuse = appimagekit_squashfuse;
-  };
+  passthru = { squashfuse = appimagekit_squashfuse; };
 
   meta = with lib; {
     description = "A tool to package desktop applications as AppImages";

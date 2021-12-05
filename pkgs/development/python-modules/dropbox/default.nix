@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, requests, urllib3, mock, setuptools, stone }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, urllib3, mock, setuptools
+, stone }:
 
 buildPythonPackage rec {
   pname = "dropbox";
@@ -25,7 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dropbox" ];
 
   meta = with lib; {
-    description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
+    description =
+      "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://www.dropbox.com/developers/core/docs";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

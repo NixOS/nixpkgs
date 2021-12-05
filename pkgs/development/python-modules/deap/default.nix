@@ -17,7 +17,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas.";
+    description =
+      "DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas.";
     homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];

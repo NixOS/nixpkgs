@@ -1,35 +1,7 @@
-{ alsa-lib
-, bctoolbox
-, bzrtp
-, cmake
-, doxygen
-, fetchFromGitLab
-, ffmpeg
-, glew
-, gsm
-, intltool
-, lib
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXv
-, libmatroska
-, libopus
-, libpcap
-, libpulseaudio
-, libtheora
-, libupnp
-, libv4l
-, libvpx
-, ortp
-, pkg-config
-, python3
-, SDL
-, speex
-, srtp
-, stdenv
-}:
+{ alsa-lib, bctoolbox, bzrtp, cmake, doxygen, fetchFromGitLab, ffmpeg, glew, gsm
+, intltool, lib, libGL, libGLU, libX11, libXext, libXv, libmatroska, libopus
+, libpcap, libpulseaudio, libtheora, libupnp, libv4l, libvpx, ortp, pkg-config
+, python3, SDL, speex, srtp, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
@@ -53,13 +25,7 @@ stdenv.mkDerivation rec {
     ./plugins_dir.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    intltool
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake doxygen intltool pkg-config python3 ];
 
   propagatedBuildInputs = [
     alsa-lib
@@ -93,7 +59,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = toString [
-    "-DGIT_VERSION=\"v${version}\""
+    ''-DGIT_VERSION="v${version}"''
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
     "-Wno-error=stringop-truncation"
@@ -102,7 +68,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lXext";
 
   meta = with lib; {
-    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
+    description =
+      "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

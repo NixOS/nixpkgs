@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libsoup, meson, ninja }:
+{ lib, stdenv, fetchurl, pkg-config, libsoup, meson, ninja }:
 
-let
-  version = "2.5";
+let version = "2.5";
 in stdenv.mkDerivation rec {
   pname = "phodav";
   inherit version;
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
+    url =
+      "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
     sha256 = "045rdzf8isqmzix12lkz6z073b5qvcqq6ad028advm5gf36skw3i";
   };
 

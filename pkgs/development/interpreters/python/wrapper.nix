@@ -1,23 +1,18 @@
 { lib, stdenv, buildEnv, makeWrapper
 
 # manually pased
-, python
-, requiredPythonModules
+, python, requiredPythonModules
 
 # extra opts
-, extraLibs ? []
-, extraOutputsToInstall ? []
-, postBuild ? ""
-, ignoreCollisions ? false
-, permitUserSite ? false
-# Wrap executables with the given argument.
-, makeWrapperArgs ? []
-, }:
+, extraLibs ? [ ], extraOutputsToInstall ? [ ], postBuild ? ""
+, ignoreCollisions ? false, permitUserSite ? false
+  # Wrap executables with the given argument.
+, makeWrapperArgs ? [ ], }:
 
 # Create a python executable that knows about additional packages.
 let
   env = let
-    paths = requiredPythonModules (extraLibs ++ [ python ] ) ;
+    paths = requiredPythonModules (extraLibs ++ [ python ]);
     pythonPath = "${placeholder "out"}/${python.sitePackages}";
     pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
   in buildEnv {
@@ -42,7 +37,12 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${if permitUserSite then "" else ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${
+                  if permitUserSite then
+                    ""
+                  else
+                    ''--set PYTHONNOUSERSITE "true"''
+                } ${lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done
@@ -65,7 +65,7 @@ let
           echo >&2 ""
           exit 1
         '';
-    };
+      };
     };
   };
 in env

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://github.com/Gnurou/tagainijisho/releases/download/${version}/tagainijisho-${version}.tar.gz";
+    url =
+      "https://github.com/Gnurou/tagainijisho/releases/download/${version}/tagainijisho-${version}.tar.gz";
     sha256 = "0kmg1940yiqfm4vpifyj680283ids4nsij9s750nrshwxiwwbqvg";
   };
 
@@ -13,12 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 sqlite ];
 
   meta = with lib; {
-    description = "A free, open-source Japanese dictionary and kanji lookup tool";
+    description =
+      "A free, open-source Japanese dictionary and kanji lookup tool";
     homepage = "https://www.tagaini.net/";
     license = with licenses; [
-      /* program */
+      # program
       gpl3Plus
-      /* data */
+      # data
       cc-by-sa-30
     ];
     platforms = platforms.linux;

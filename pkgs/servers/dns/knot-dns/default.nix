@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
-, autoreconfHook, nixosTests
-}:
+{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2
+, libunistring, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb
+, libbpf, nghttp2, libmnl, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
@@ -29,16 +28,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    gnutls liburcu libidn2 libunistring
-    nettle libedit
-    libiconv lmdb libintl
+    gnutls
+    liburcu
+    libidn2
+    libunistring
+    nettle
+    libedit
+    libiconv
+    lmdb
+    libintl
     nghttp2 # DoH support in kdig
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
   ] ++ lib.optionals stdenv.isLinux [
-    libcap_ng systemd
-    libbpf libmnl # XDP support (it's Linux kernel API)
+    libcap_ng
+    systemd
+    libbpf
+    libmnl # XDP support (it's Linux kernel API)
   ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;

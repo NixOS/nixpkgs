@@ -7,25 +7,13 @@
 #
 # > srcOnly pkgs.hello
 #
-{ name
-, src
-, stdenv ? orig.stdenv
-, patches ? []
+{ name, src, stdenv ? orig.stdenv, patches ? [ ]
 , # deprecated, use the nativeBuildInputs
-  buildInputs ? []
-, # used to pass extra unpackers
-  nativeBuildInputs ? []
-, # needed when passing an existing derivation
-  ...
-}:
+buildInputs ? [ ], # used to pass extra unpackers
+nativeBuildInputs ? [ ], # needed when passing an existing derivation
+... }:
 stdenv.mkDerivation {
-  inherit
-    buildInputs
-    name
-    nativeBuildInputs
-    patches
-    src
-    ;
+  inherit buildInputs name nativeBuildInputs patches src;
   installPhase = "cp -r . $out";
-  phases = ["unpackPhase" "patchPhase" "installPhase"];
+  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 }

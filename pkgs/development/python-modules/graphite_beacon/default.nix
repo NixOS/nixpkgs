@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, tornado_5, pyyaml, funcparserlib
-, nixosTests
-}:
+{ lib, buildPythonPackage, fetchPypi, tornado_5, pyyaml, funcparserlib
+, nixosTests }:
 
 buildPythonPackage rec {
   pname = "graphite_beacon";
@@ -20,9 +18,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphite_beacon" ];
 
-  passthru.tests = {
-    nixos = nixosTests.graphite;
-  };
+  passthru.tests = { nixos = nixosTests.graphite; };
 
   meta = with lib; {
     description = "A simple alerting application for Graphite metrics";

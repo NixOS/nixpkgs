@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "header-only single-file C++ std::filesystem compatible helper library";
+    description =
+      "header-only single-file C++ std::filesystem compatible helper library";
     homepage = "https://github.com/gulrak/filesystem";
     license = licenses.mit;
     maintainers = with maintainers; [ lourkeur ];

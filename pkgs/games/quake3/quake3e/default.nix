@@ -1,4 +1,5 @@
-{ lib, stdenv, curl, libGL, libX11, libXxf86dga, alsa-lib, libXrandr, libXxf86vm, libXext, fetchFromGitHub }:
+{ lib, stdenv, curl, libGL, libX11, libXxf86dga, alsa-lib, libXrandr, libXxf86vm
+, libXext, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "Quake3e";
@@ -11,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jvk8qd0mi0x8lslknhkfd8h6ridwca34c6qahsbmmpcgsvdv16s";
   };
 
-  buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext ];
+  buildInputs =
+    [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext ];
   enableParallelBuilding = true;
 
   postPatch = ''

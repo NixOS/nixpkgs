@@ -15,19 +15,18 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ pandoc ];
 
-  preBuild =
-    let
-      buildVars = {
-        version = version;
-        buildTime = "N/A";
-        builder = "nix";
-        goversion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
-      };
-      buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X main.${k}=${v}") buildVars);
-    in
-    ''
-      buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-    '';
+  preBuild = let
+    buildVars = {
+      version = version;
+      buildTime = "N/A";
+      builder = "nix";
+      goversion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
+    };
+    buildVarsFlags = lib.concatStringsSep " "
+      (lib.mapAttrsToList (k: v: "-X main.${k}=${v}") buildVars);
+  in ''
+    buildFlagsArray+=("-ldflags=${buildVarsFlags}")
+  '';
 
   postInstall = ''
     pandoc -s -t man -o checkmake.1 go/src/${goPackagePath}/man/man1/checkmake.1.md

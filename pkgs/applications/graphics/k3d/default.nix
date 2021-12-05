@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
-, cmake, ninja, libGLU, libGL, zlib, python2, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkg-config, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc, cmake, ninja
+, libGLU, libGL, zlib, python2, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkg-config, libjpeg, libtiff, gettext
+, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
@@ -14,28 +14,44 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { /* glibmm 2.50 fix */
-      url = "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
+    (fetchpatch { # glibmm 2.50 fix
+      url =
+        "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
       sha256 = "162icv1hicr2dirkb9ijacvg9bhz5j30yfwg7b45ijavk8rns62j";
     })
   ];
 
-  cmakeFlags = [
-    "-DK3D_BUILD_DOCS=false"
-    "-DK3D_BUILD_GUIDE=false"
-  ];
+  cmakeFlags = [ "-DK3D_BUILD_DOCS=false" "-DK3D_BUILD_GUIDE=false" ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
-  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkg-config perl asciidoc ];
+  nativeBuildInputs =
+    [ cmake ninja gettext intltool doxygen pkg-config perl asciidoc ];
 
   buildInputs = [
-     libGLU libGL zlib python2 expat libxml2 libsigcxx libuuid freetype libpng
-     boost cairomm libjpeg libtiff
-     ftgl glew gtkmm2 glibmm gtkglext libXmu
-    ];
+    libGLU
+    libGL
+    zlib
+    python2
+    expat
+    libxml2
+    libsigcxx
+    libuuid
+    freetype
+    libpng
+    boost
+    cairomm
+    libjpeg
+    libtiff
+    ftgl
+    glew
+    gtkmm2
+    glibmm
+    gtkglext
+    libXmu
+  ];
 
   #doCheck = false;
 

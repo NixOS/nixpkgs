@@ -16,7 +16,8 @@ let
     version = dartVersion;
     sources = {
       "${dartVersion}-x86_64-linux" = fetchurl {
-        url = "${dartSourceBase}/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+        url =
+          "${dartSourceBase}/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
         sha256 = "1gr2dr683kz0a0k6rcn4jcbxf9fr2xlzi5fcgn1lzrrxvys2lddx";
       };
     };
@@ -28,7 +29,8 @@ in {
     dart = dartForFlutter;
     pname = "flutter";
     src = fetchurl {
-      url = "https://storage.googleapis.com/flutter_infra_release/releases/${channel}/linux/${filename}";
+      url =
+        "https://storage.googleapis.com/flutter_infra_release/releases/${channel}/linux/${filename}";
       sha256 = "12ycz7iasrc9p9c6zr95l6llyji3za43gsx8cmr2kjfiv23bcrv2";
     };
     patches = getPatches ./patches;

@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, libjpeg
-, libpng
-, lirc
-, ncurses
-, pkg-config
-, readline
-, shared-mime-info
-, xine-lib
-, xorg
-}:
+{ lib, stdenv, fetchurl, curl, libjpeg, libpng, lirc, ncurses, pkg-config
+, readline, shared-mime-info, xine-lib, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xine-ui";
@@ -22,34 +10,24 @@ stdenv.mkDerivation rec {
     sha256 = "10zmmss3hm8gjjyra20qhdc0lb1m6sym2nb2w62bmfk8isfw9gsl";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    shared-mime-info
-  ];
-  buildInputs = [
-    curl
-    libjpeg
-    libpng
-    lirc
-    ncurses
-    readline
-    xine-lib
-  ] ++ (with xorg; [
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXtst
-    libXv
-    libXxf86vm
-    xlibsWrapper
-    xorgproto
-  ]);
+  nativeBuildInputs = [ pkg-config shared-mime-info ];
+  buildInputs = [ curl libjpeg libpng lirc ncurses readline xine-lib ]
+    ++ (with xorg; [
+      libXext
+      libXft
+      libXi
+      libXinerama
+      libXtst
+      libXv
+      libXxf86vm
+      xlibsWrapper
+      xorgproto
+    ]);
 
   configureFlags = [ "--with-readline=${readline.dev}" ];
 
-  LIRC_CFLAGS="-I${lirc}/include";
-  LIRC_LIBS="-L ${lirc}/lib -llirc_client";
+  LIRC_CFLAGS = "-I${lirc}/include";
+  LIRC_LIBS = "-L ${lirc}/lib -llirc_client";
 
   postInstall = ''
     substituteInPlace $out/share/applications/xine.desktop \

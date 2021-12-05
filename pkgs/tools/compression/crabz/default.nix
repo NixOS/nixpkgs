@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, stdenv
-, libiconv
-, CoreFoundation
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, cmake, stdenv, libiconv, CoreFoundation
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crabz";
@@ -23,11 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreFoundation
-    Security
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
 
   # link System as a dylib instead of a framework on macos
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -41,8 +31,12 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
-    changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ unlicense /* or */ mit ];
+    changelog =
+      "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

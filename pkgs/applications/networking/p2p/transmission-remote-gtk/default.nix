@@ -1,6 +1,6 @@
-{ lib, stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkg-config
-, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib, fetchpatch }:
-
+{ lib, stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub
+, pkg-config, intltool, gtk3, json-glib, curl, glib, autoconf-archive
+, appstream-glib, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "transmission-remote-gtk";
@@ -15,16 +15,22 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/commit/0f5cc8a9942e220ea0f7d0b17db4a78d094e3b65.patch";
+      url =
+        "https://github.com/transmission-remote-gtk/transmission-remote-gtk/commit/0f5cc8a9942e220ea0f7d0b17db4a78d094e3b65.patch";
       sha256 = "195rsjpbc0gzmr9bycvq4mra7abp3hd9by3a5vvcmxsh5ipikycf";
     })
   ];
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs= [
-    autoconf automake libtool wrapGAppsHook
-    pkg-config intltool autoconf-archive
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    wrapGAppsHook
+    pkg-config
+    intltool
+    autoconf-archive
     appstream-glib
   ];
 

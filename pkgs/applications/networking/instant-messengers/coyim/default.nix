@@ -1,5 +1,5 @@
-{ lib, buildGoPackage, fetchFromGitHub, pkg-config,
-  cairo, gdk-pixbuf, glib, gnome, wrapGAppsHook, gtk3 }:
+{ lib, buildGoPackage, fetchFromGitHub, pkg-config, cairo, gdk-pixbuf, glib
+, gnome, wrapGAppsHook, gtk3 }:
 
 buildGoPackage rec {
   pname = "coyim";

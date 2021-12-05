@@ -1,16 +1,13 @@
-{ lib, stdenv, fetchurl, perl
-, bdftopcf, bdf2psf, mkfontdir
-, fonttosfnt
-, targetsDat  ? null
-, variantsDat ? null
-}:
+{ lib, stdenv, fetchurl, perl, bdftopcf, bdf2psf, mkfontdir, fonttosfnt
+, targetsDat ? null, variantsDat ? null }:
 
 stdenv.mkDerivation rec {
   pname = "uw-ttyp0";
   version = "1.3";
 
   src = fetchurl {
-    url = "https://people.mpi-inf.mpg.de/~uwe/misc/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://people.mpi-inf.mpg.de/~uwe/misc/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1vp053bwv8sr40p3pn4sjaiq570zp7knh99z9ynk30v7ml4cz2i8";
   };
 
@@ -20,25 +17,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl bdftopcf bdf2psf fonttosfnt mkfontdir ];
 
   # configure sizes, encodings and variants
-  preConfigure =
-    (if targetsDat == null
-      then ''
-        cat << EOF > TARGETS.dat
-        SIZES = 11 12 13 14 15 16 17 18 22 \
-        11b 12b 13b 14b 15b 16b 17b 18b 22b 15i 16i 17i 18i
-        ENCODINGS = uni
-        EOF
-      ''
-      else ''cp "${targetsDat}" TARGETS.dat'') +
-    (if variantsDat == null
-      then ''
-        cat << EOF > VARIANTS.dat
-        COPYTO AccStress PApostropheAscii
-        COPYTO PAmComma AccGraveAscii
-        COPYTO Digit0Slashed Digit0
-        EOF
-      ''
-      else ''cp "${variantsDat}" VARIANTS.dat'');
+  preConfigure = (if targetsDat == null then ''
+    cat << EOF > TARGETS.dat
+    SIZES = 11 12 13 14 15 16 17 18 22 \
+    11b 12b 13b 14b 15b 16b 17b 18b 22b 15i 16i 17i 18i
+    ENCODINGS = uni
+    EOF
+  '' else
+    ''cp "${targetsDat}" TARGETS.dat'') + (if variantsDat == null then ''
+      cat << EOF > VARIANTS.dat
+      COPYTO AccStress PApostropheAscii
+      COPYTO PAmComma AccGraveAscii
+      COPYTO Digit0Slashed Digit0
+      EOF
+    '' else
+      ''cp "${variantsDat}" VARIANTS.dat'');
 
   postBuild = ''
     # convert bdf fonts to psf

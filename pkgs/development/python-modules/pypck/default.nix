@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, stdenv
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-asyncio, pytest-timeout
+, pytestCheckHook, pythonOlder, stdenv }:
 
 buildPythonPackage rec {
   pname = "pypck";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "1jj0y487qcxrprx4x2rs6r7rqsf5m9khk0xhigbvnbyvh8rsd2jr";
   };
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-timeout pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_connection_lost"
-  ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_connection_lost" ];
 
   __darwinAllowLocalNetworking = true;
 

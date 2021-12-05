@@ -1,26 +1,6 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, eventlet
-, futures ? null
-, iana-etc
-, geomet
-, libev
-, mock
-, nose
-, pytestCheckHook
-, pytz
-, pyyaml
-, scales
-, six
-, sure
-, gremlinpython
-, gevent
-, twisted
-, libredirect
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pythonOlder, cython
+, eventlet, futures ? null, iana-etc, geomet, libev, mock, nose, pytestCheckHook
+, pytz, pyyaml, scales, six, sure, gremlinpython, gevent, twisted, libredirect
 }:
 
 buildPythonPackage rec {
@@ -72,9 +52,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
   disabledTestPaths = [
     # requires puresasl
     "tests/unit/advanced/test_auth.py"

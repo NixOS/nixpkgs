@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "lisp-stat";
   version = "20210411-git";
 
@@ -8,16 +7,40 @@ rec {
 
   description = "A statistical computing environment for Common Lisp";
 
-  deps = [ args."alexandria" args."anaphora" args."array-operations" args."cl-ascii-table" args."cl-csv" args."cl-interpol" args."cl-ppcre" args."cl-semver" args."cl-unicode" args."data-frame" args."dexador" args."dfio" args."esrap" args."flexi-streams" args."iterate" args."let-plus" args."make-hash" args."named-readtables" args."num-utils" args."select" args."split-sequence" args."trivial-with-current-source-form" ];
+  deps = [
+    args."alexandria"
+    args."anaphora"
+    args."array-operations"
+    args."cl-ascii-table"
+    args."cl-csv"
+    args."cl-interpol"
+    args."cl-ppcre"
+    args."cl-semver"
+    args."cl-unicode"
+    args."data-frame"
+    args."dexador"
+    args."dfio"
+    args."esrap"
+    args."flexi-streams"
+    args."iterate"
+    args."let-plus"
+    args."make-hash"
+    args."named-readtables"
+    args."num-utils"
+    args."select"
+    args."split-sequence"
+    args."trivial-with-current-source-form"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/lisp-stat/2021-04-11/lisp-stat-20210411-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/lisp-stat/2021-04-11/lisp-stat-20210411-git.tgz";
     sha256 = "110cfj1svn9m9xn6l8p5z88knp0idyf0zcbnwi9rrgxssvaiwncg";
   };
 
   packageName = "lisp-stat";
 
-  asdFilesToKeep = ["lisp-stat.asd"];
+  asdFilesToKeep = [ "lisp-stat.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lisp-stat DESCRIPTION
@@ -46,4 +69,5 @@ rec {
      cl-ppcre cl-semver cl-unicode data-frame dexador dfio esrap flexi-streams
      iterate let-plus make-hash named-readtables num-utils select
      split-sequence trivial-with-current-source-form)
-    VERSION 20210411-git SIBLINGS NIL PARASITES (lisp-stat/rdata)) */
+    VERSION 20210411-git SIBLINGS NIL PARASITES (lisp-stat/rdata))
+*/

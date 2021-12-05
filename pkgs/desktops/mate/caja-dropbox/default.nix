@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, substituteAll
-, pkg-config, gobject-introspection, gdk-pixbuf
-, gtk3, mate, python3, dropbox, mateUpdateScript }:
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, gobject-introspection
+, gdk-pixbuf, gtk3, mate, python3, dropbox, mateUpdateScript }:
 
-let
-  dropboxd = "${dropbox}/bin/dropbox";
-in
-stdenv.mkDerivation rec {
+let dropboxd = "${dropbox}/bin/dropbox";
+in stdenv.mkDerivation rec {
   pname = "caja-dropbox";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "16w4r0zjps12lmzwiwpb9qnmbvd0p391q97296sxa8k88b1x14wn";
   };
 
@@ -27,19 +26,13 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     gdk-pixbuf
-    (python3.withPackages (ps: with ps; [
-      docutils
-      pygobject3
-    ]))
+    (python3.withPackages (ps: with ps; [ docutils pygobject3 ]))
   ];
 
-  buildInputs = [
-    gtk3
-    mate.caja
-    python3
-  ];
+  buildInputs = [ gtk3 mate.caja python3 ];
 
-  configureFlags = [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
+  configureFlags =
+    [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
 

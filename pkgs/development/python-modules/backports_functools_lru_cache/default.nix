@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, isPy3k
-, pytest
-, pytest-black
-, pytest-flake8
-, pytest-cov
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, isPy3k, pytest
+, pytest-black, pytest-flake8, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";

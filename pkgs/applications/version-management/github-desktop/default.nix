@@ -1,35 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, gnome
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-}:
+{ stdenv, lib, fetchurl, autoPatchelfHook, wrapGAppsHook, gnome, libsecret, git
+, curl, nss, nspr, xorg, libdrm, alsa-lib, cups, mesa, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
   version = "2.9.4";
 
   src = fetchurl {
-    url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
+    url =
+      "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
     sha256 = "sha256-CcAOATIEcrUKhVQWFr0dMvY9Q5rHWQI9/KdSEZ/ncD4=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
   buildInputs = [
     gnome.gnome-keyring
@@ -59,9 +41,7 @@ stdenv.mkDerivation rec {
     ln -sf $out/opt/${pname} $out/bin/${pname}
   '';
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-  ];
+  runtimeDependencies = [ (lib.getLib systemd) ];
 
   meta = with lib; {
     description = "GUI for managing Git and GitHub.";

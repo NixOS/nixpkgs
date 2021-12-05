@@ -1,6 +1,5 @@
 { buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, lib
-}:
+, fetchFromGitHub, responses, lib }:
 
 buildPythonPackage rec {
   pname = "asana";

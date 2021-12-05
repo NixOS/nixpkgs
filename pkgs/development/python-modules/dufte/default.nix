@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, importlib-metadata
-, matplotlib
-, numpy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, importlib-metadata
+, matplotlib, numpy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dufte";
@@ -21,16 +14,10 @@ buildPythonPackage rec {
   };
   format = "pyproject";
 
-  propagatedBuildInputs = [
-    matplotlib
-    numpy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ matplotlib numpy ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dufte" ];
 

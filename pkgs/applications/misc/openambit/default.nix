@@ -1,14 +1,5 @@
-{ cmake
-, fetchFromGitHub
-, lib
-, libusb1
-, mkDerivation
-, python3
-, qtbase
-, qttools
-, udev
-, zlib
-}:
+{ cmake, fetchFromGitHub, lib, libusb1, mkDerivation, python3, qtbase, qttools
+, udev, zlib }:
 
 mkDerivation rec {
   pname = "openambit";
@@ -24,7 +15,8 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [ libusb1 python3 qtbase udev zlib ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_UDEVRULESDIR=${placeholder "out"}/lib/udev/rules.d" ];
+  cmakeFlags =
+    [ "-DCMAKE_INSTALL_UDEVRULESDIR=${placeholder "out"}/lib/udev/rules.d" ];
 
   doInstallCheck = true;
   installCheckPhase = ''

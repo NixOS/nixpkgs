@@ -5,27 +5,23 @@ with lib;
 let
   cfg = config.networking.ucarp;
 
-  ucarpExec = concatStringsSep " " (
-    [
-      "${cfg.package}/bin/ucarp"
-      "--interface=${cfg.interface}"
-      "--srcip=${cfg.srcIp}"
-      "--vhid=${toString cfg.vhId}"
-      "--passfile=${cfg.passwordFile}"
-      "--addr=${cfg.addr}"
-      "--advbase=${toString cfg.advBase}"
-      "--advskew=${toString cfg.advSkew}"
-      "--upscript=${cfg.upscript}"
-      "--downscript=${cfg.downscript}"
-      "--deadratio=${toString cfg.deadratio}"
-    ]
-    ++ (optional cfg.preempt "--preempt")
-    ++ (optional cfg.neutral "--neutral")
+  ucarpExec = concatStringsSep " " ([
+    "${cfg.package}/bin/ucarp"
+    "--interface=${cfg.interface}"
+    "--srcip=${cfg.srcIp}"
+    "--vhid=${toString cfg.vhId}"
+    "--passfile=${cfg.passwordFile}"
+    "--addr=${cfg.addr}"
+    "--advbase=${toString cfg.advBase}"
+    "--advskew=${toString cfg.advSkew}"
+    "--upscript=${cfg.upscript}"
+    "--downscript=${cfg.downscript}"
+    "--deadratio=${toString cfg.deadratio}"
+  ] ++ (optional cfg.preempt "--preempt") ++ (optional cfg.neutral "--neutral")
     ++ (optional cfg.shutdown "--shutdown")
     ++ (optional cfg.ignoreIfState "--ignoreifstate")
     ++ (optional cfg.noMcast "--nomcast")
-    ++ (optional (cfg.extraParam != null) "--xparam=${cfg.extraParam}")
-  );
+    ++ (optional (cfg.extraParam != null) "--xparam=${cfg.extraParam}"));
 in {
   options.networking.ucarp = {
     enable = mkEnableOption "ucarp, userspace implementation of CARP";

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, isPy27
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, gevent, isPy27, python }:
 
 buildPythonPackage rec {
   pname = "yappi";
@@ -21,21 +15,18 @@ buildPythonPackage rec {
 
   patches = [ ./tests.patch ];
 
-  checkInputs = [
-    gevent
-  ];
+  checkInputs = [ gevent ];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py
   '';
 
-  pythonImportsCheck = [
-    "yappi"
-  ];
+  pythonImportsCheck = [ "yappi" ];
 
   meta = with lib; {
     homepage = "https://github.com/sumerc/yappi";
-    description = "Python profiler that supports multithreading and measuring CPU time";
+    description =
+      "Python profiler that supports multithreading and measuring CPU time";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
   };

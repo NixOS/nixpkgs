@@ -12,6 +12,5 @@ fetchzip {
 
   sha256 = "0yzf12z6fpbgycqwiz88f39iawdhjabadfa14wxar3nhl9n434ql";
 
-  meta = {
-  };
+  meta = { };
 }

@@ -1,34 +1,33 @@
-{ stdenv, lib, nodejs, nodePackages, remarshal
-, ttfautohint-nox
-  # Custom font set options.
-  # See https://typeof.net/Iosevka/customizer
-  # Can be a raw TOML string, or a Nix attrset.
+{ stdenv, lib, nodejs, nodePackages, remarshal, ttfautohint-nox
+# Custom font set options.
+# See https://typeof.net/Iosevka/customizer
+# Can be a raw TOML string, or a Nix attrset.
 
-  # Ex:
-  # privateBuildPlan = ''
-  #   [buildPlans.iosevka-custom]
-  #   family = "Iosevka Custom"
-  #   spacing = "normal"
-  #   serifs = "sans"
-  #
-  #   [buildPlans.iosevka-custom.variants.design]
-  #   capital-j = "serifless"
-  #
-  #   [buildPlans.iosevka-custom.variants.italic]
-  #   i = "tailed"
-  # '';
+# Ex:
+# privateBuildPlan = ''
+#   [buildPlans.iosevka-custom]
+#   family = "Iosevka Custom"
+#   spacing = "normal"
+#   serifs = "sans"
+#
+#   [buildPlans.iosevka-custom.variants.design]
+#   capital-j = "serifless"
+#
+#   [buildPlans.iosevka-custom.variants.italic]
+#   i = "tailed"
+# '';
 
-  # Or:
-  # privateBuildPlan = {
-  #   family = "Iosevka Custom";
-  #   spacing = "normal";
-  #   serifs = "sans";
-  #
-  #   variants = {
-  #     design.capital-j = "serifless";
-  #     italic.i = "tailed";
-  #   };
-  # }
+# Or:
+# privateBuildPlan = {
+#   family = "Iosevka Custom";
+#   spacing = "normal";
+#   serifs = "sans";
+#
+#   variants = {
+#     design.capital-j = "serifless";
+#     italic.i = "tailed";
+#   };
+# }
 , privateBuildPlan ? null
   # Extra parameters. Can be used for ligature mapping.
   # It must be a raw TOML string.
@@ -55,29 +54,21 @@ let
   #
   # Doing it this way ensures that the package can always be built,
   # although possibly an older version than ioseva-bin.
-  nodeIosevka = (
-    lib.findSingle
-      (drv: drv ? packageName && drv.packageName == "iosevka")
+  nodeIosevka =
+    (lib.findSingle (drv: drv ? packageName && drv.packageName == "iosevka")
       (throw "no 'iosevka' package found in nodePackages")
       (throw "multiple 'iosevka' packages found in nodePackages")
-      (lib.attrValues nodePackages)
-  ).override (drv: { dontNpmInstall = true; });
-in
-stdenv.mkDerivation rec {
+      (lib.attrValues nodePackages)).override (drv: { dontNpmInstall = true; });
+in stdenv.mkDerivation rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
   inherit (nodeIosevka) version src;
 
-  nativeBuildInputs = [
-    nodejs
-    nodeIosevka
-    remarshal
-    ttfautohint-nox
-  ];
+  nativeBuildInputs = [ nodejs nodeIosevka remarshal ttfautohint-nox ];
 
-  buildPlan =
-    if builtins.isAttrs privateBuildPlan
-      then builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
-    else privateBuildPlan;
+  buildPlan = if builtins.isAttrs privateBuildPlan then
+    builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
+  else
+    privateBuildPlan;
 
   inherit extraParameters;
   passAsFile = [ "buildPlan" "extraParameters" ];
@@ -114,9 +105,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru = {
-    updateScript = ./update-default.sh;
-  };
+  passthru = { updateScript = ./update-default.sh; };
 
   meta = with lib; {
     homepage = "https://be5invis.github.io/Iosevka";

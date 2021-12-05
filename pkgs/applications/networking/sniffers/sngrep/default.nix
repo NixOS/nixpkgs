@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, fetchpatch
-, libpcap
-, ncurses
-, openssl
-, pcre
-}:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch, libpcap, ncurses
+, openssl, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
@@ -26,30 +17,18 @@ stdenv.mkDerivation rec {
     #  https://github.com/irontec/sngrep/pull/382
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/irontec/sngrep/commit/d09e1c323dbd7fc899e8985899baec568f045601.patch";
+      url =
+        "https://github.com/irontec/sngrep/commit/d09e1c323dbd7fc899e8985899baec568f045601.patch";
       sha256 = "sha256-nY5i3WQh/oKboEAh4wvxF5Imf2BHYEKdFj+WF1M3SSA=";
     })
   ];
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
+  nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [
-    libpcap
-    ncurses
-    ncurses
-    openssl
-    pcre
-  ];
+  buildInputs = [ libpcap ncurses ncurses openssl pcre ];
 
-  configureFlags = [
-    "--with-pcre"
-    "--enable-unicode"
-    "--enable-ipv6"
-    "--enable-eep"
-  ];
+  configureFlags =
+    [ "--with-pcre" "--enable-unicode" "--enable-ipv6" "--enable-eep" ];
 
   preConfigure = ''
     ./bootstrap.sh

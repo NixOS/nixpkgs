@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, click
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, certifi, click, requests }:
 
 buildPythonPackage rec {
   pname = "gistyc";
@@ -15,15 +9,9 @@ buildPythonPackage rec {
     hash = "sha256-WVK45U9e3qyZFi9wSRHNi9+1u4TetlZkYXAZN7LVqhE=";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    click
-    requests
-  ];
+  propagatedBuildInputs = [ certifi click requests ];
 
-  pythonImportsCheck = [
-    "gistyc"
-  ];
+  pythonImportsCheck = [ "gistyc" ];
 
   meta = with lib; {
     homepage = "https://github.com/ThomasAlbin/gistyc";

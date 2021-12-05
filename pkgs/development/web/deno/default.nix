@@ -1,19 +1,6 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, rust
-, rustPlatform
-, installShellFiles
-, libiconv
-, libobjc
-, Security
-, CoreServices
-, Metal
-, Foundation
-, QuartzCore
-, librusty_v8 ? callPackage ./librusty_v8.nix { }
-}:
+{ stdenv, lib, callPackage, fetchFromGitHub, rust, rustPlatform
+, installShellFiles, libiconv, libobjc, Security, CoreServices, Metal
+, Foundation, QuartzCore, librusty_v8 ? callPackage ./librusty_v8.nix { } }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
@@ -32,8 +19,15 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cli";
 
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    libobjc
+    Security
+    CoreServices
+    Metal
+    Foundation
+    QuartzCore
+  ];
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
@@ -75,6 +69,7 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms =
+      [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

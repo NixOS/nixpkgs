@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, intltool
-, glib
-, gnome2
-, gtk2
-, gfm
-, libticables2
-, libticalcs2
-, libticonv
-, libtifiles2
-}:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, pkg-config, intltool, glib
+, gnome2, gtk2, gfm, libticables2, libticalcs2, libticonv, libtifiles2 }:
 
 stdenv.mkDerivation rec {
   pname = "tilp2";
@@ -25,15 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = fetchpatch {
     name = "remove-broken-kde-support.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/remove-broken-kde-support.patch?h=tilp";
+    url =
+      "https://aur.archlinux.org/cgit/aur.git/plain/remove-broken-kde-support.patch?h=tilp";
     sha256 = "1fn6vh7r45spkwpmkvffkbn7zrcsdrs5mjmspd5rwi3jc12cy3ny";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    intltool
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config intltool ];
 
   buildInputs = [
     glib
@@ -48,7 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
-    description = "Transfer data between Texas Instruments graphing calculators and a computer";
+    description =
+      "Transfer data between Texas Instruments graphing calculators and a computer";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ luc65r ];

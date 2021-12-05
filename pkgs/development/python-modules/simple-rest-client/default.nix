@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, python-slugify
-, python-status
-, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, httpx, pytest-asyncio
+, pytest-httpserver, pytestCheckHook, python-slugify, python-status, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -23,17 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-oJXP2/lChlzzKyNiTgJMHkcNkFyy92kTPxgDkon54g8=";
   };
 
-  propagatedBuildInputs = [
-    httpx
-    python-slugify
-    python-status
-  ];
+  propagatedBuildInputs = [ httpx python-slugify python-status ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-httpserver
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-httpserver pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -44,13 +28,9 @@ buildPythonPackage rec {
       --replace "asyncmock" ""
   '';
 
-  disabledTestPaths = [
-    "tests/test_decorators.py"
-  ];
+  disabledTestPaths = [ "tests/test_decorators.py" ];
 
-  pythonImportsCheck = [
-    "simple_rest_client"
-  ];
+  pythonImportsCheck = [ "simple_rest_client" ];
 
   meta = with lib; {
     description = "Simple REST client for Python";

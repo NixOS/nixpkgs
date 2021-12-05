@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, asynccmd
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aioresponses, asynccmd, buildPythonPackage, fetchFromGitHub
+, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyspcwebgw";
@@ -23,16 +15,9 @@ buildPythonPackage rec {
     sha256 = "0pc25myjc2adqcx2lbns9kw0gy17x1qjgicmfj46n6fn0c786p9v";
   };
 
-  propagatedBuildInputs = [
-    asynccmd
-    aiohttp
-  ];
+  propagatedBuildInputs = [ asynccmd aiohttp ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 

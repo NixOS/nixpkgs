@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ... } @ args:
+{ lib, stdenv, fetchurl, ... }@args:
 
 import ./generic.nix (args // {
   version = "6.2.23";

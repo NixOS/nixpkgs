@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, textfsm
-, pytestCheckHook
-, ruamel-yaml
-, yamllint
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, poetry-core, textfsm
+, pytestCheckHook, ruamel-yaml, yamllint }:
 
 buildPythonPackage rec {
   pname = "ntc-templates";
@@ -23,19 +15,11 @@ buildPythonPackage rec {
     sha256 = "0kijzmmvq2rw7ima19w7lyb2p26a5w52k70fzbkaqqw78qzw8178";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    textfsm
-  ];
+  propagatedBuildInputs = [ textfsm ];
 
-  checkInputs = [
-    pytestCheckHook
-    ruamel-yaml
-    yamllint
-  ];
+  checkInputs = [ pytestCheckHook ruamel-yaml yamllint ];
 
   # https://github.com/networktocode/ntc-templates/issues/743
   disabledTests = [
@@ -44,7 +28,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "TextFSM templates for parsing show commands of network devices";
+    description =
+      "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

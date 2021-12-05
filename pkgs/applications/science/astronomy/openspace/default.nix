@@ -1,27 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, cmake
-, curl, boost, gdal, glew, soil
-, libX11, libXi, libXxf86vm, libXcursor, libXrandr, libXinerama }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, cmake, curl, boost, gdal
+, glew, soil, libX11, libXi, libXxf86vm, libXcursor, libXrandr, libXinerama }:
 
 stdenv.mkDerivation rec {
   version = "0.11.1";
   pname = "openspace";
 
   src = fetchFromGitHub {
-    owner  = "OpenSpace";
-    repo   = "OpenSpace";
-    rev    = "a65eea61a1b8807ce3d69e9925e75f8e3dfb085d";
+    owner = "OpenSpace";
+    repo = "OpenSpace";
+    rev = "a65eea61a1b8807ce3d69e9925e75f8e3dfb085d";
     sha256 = "0msqixf30r0d41xmfmzkdfw6w9jkx2ph5clq8xiwrg1jc3z9q7nv";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    curl boost gdal glew soil
-    libX11 libXi libXxf86vm libXcursor libXrandr libXinerama
+    curl
+    boost
+    gdal
+    glew
+    soil
+    libX11
+    libXi
+    libXxf86vm
+    libXcursor
+    libXrandr
+    libXinerama
   ];
 
   glmPlatformH = fetchurl {
-    url    = "https://raw.githubusercontent.com/g-truc/glm/dd48b56e44d699a022c69155c8672caacafd9e8a/glm/simd/platform.h";
+    url =
+      "https://raw.githubusercontent.com/g-truc/glm/dd48b56e44d699a022c69155c8672caacafd9e8a/glm/simd/platform.h";
     sha256 = "0y91hlbgn5va7ijg5mz823gqkq9hqxl00lwmdwnf8q2g086rplzw";
   };
 
@@ -74,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description     = "Open-source astrovisualization project";
+    description = "Open-source astrovisualization project";
     longDescription = ''
       OpenSpace is open source interactive data visualization software
       designed to visualize the entire known universe and portray our
@@ -82,8 +91,8 @@ stdenv.mkDerivation rec {
 
       WARNING: This build is not very usable for now.
     '';
-    homepage  = "https://www.openspaceproject.com/";
-    license   = lib.licenses.mit;
+    homepage = "https://www.openspaceproject.com/";
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     broken = true; # fails to build
   };

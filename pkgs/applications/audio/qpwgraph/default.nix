@@ -1,7 +1,4 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, pkg-config
-, alsa-lib, pipewire
-}:
+{ lib, mkDerivation, fetchFromGitLab, cmake, pkg-config, alsa-lib, pipewire }:
 
 mkDerivation rec {
   pname = "qpwgraph";

@@ -1,10 +1,8 @@
 { lib, stdenv, fetchzip, libGLU, libGL, libXrandr, libX11, libXxf86vm, zlib }:
 
-let
-  common = import ./common.nix { inherit fetchzip; };
-in
+let common = import ./common.nix { inherit fetchzip; };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = common.pname;
   version = common.version;
 
@@ -32,14 +30,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [
-    libGLU libGL libXrandr libX11 libXxf86vm
-  ] ++ lib.optional stdenv.isAarch64 zlib;
+  buildInputs = [ libGLU libGL libXrandr libX11 libXxf86vm ]
+    ++ lib.optional stdenv.isAarch64 zlib;
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";
     license = lib.licenses.zlib;
-    description = "Open source high performance realtime 3D engine written in C++";
+    description =
+      "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

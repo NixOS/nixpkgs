@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, urllib3, requests
-, nosexcover, mock
-, lib
-}:
+{ buildPythonPackage, fetchPypi, urllib3, requests, nosexcover, mock, lib }:
 
 buildPythonPackage (rec {
   pname = "elasticsearch";

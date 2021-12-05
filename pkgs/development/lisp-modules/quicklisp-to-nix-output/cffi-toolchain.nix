@@ -1,12 +1,17 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cffi-toolchain";
   version = "cffi_0.24.1";
 
   description = "The CFFI toolchain";
 
-  deps = [ args."alexandria" args."asdf" args."babel" args."cffi" args."trivial-features" ];
+  deps = [
+    args."alexandria"
+    args."asdf"
+    args."babel"
+    args."cffi"
+    args."trivial-features"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
@@ -15,7 +20,7 @@ rec {
 
   packageName = "cffi-toolchain";
 
-  asdFilesToKeep = ["cffi-toolchain.asd"];
+  asdFilesToKeep = [ "cffi-toolchain.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cffi-toolchain DESCRIPTION The CFFI toolchain SHA256
@@ -29,4 +34,5 @@ rec {
     DEPENDENCIES (alexandria asdf babel cffi trivial-features) VERSION
     cffi_0.24.1 SIBLINGS
     (cffi-examples cffi-grovel cffi-libffi cffi-tests cffi-uffi-compat cffi)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

@@ -28,14 +28,16 @@ let
     };
   };
 
-  mkVariant = variant: {displayName, version, sha256, outputHash}:
-    let dotless_version = builtins.replaceStrings ["."] [""] version; in
-    stdenv.mkDerivation rec {
+  mkVariant = variant:
+    { displayName, version, sha256, outputHash }:
+    let dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;
+    in stdenv.mkDerivation rec {
       name = "tex-gyre-${variant}-math-${version}";
       inherit version;
 
       src = fetchzip {
-        url = "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
+        url =
+          "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
         inherit sha256;
       };
 
@@ -63,5 +65,4 @@ let
         platforms = platforms.all;
       };
     };
-in
-  lib.mapAttrs mkVariant variants
+in lib.mapAttrs mkVariant variants

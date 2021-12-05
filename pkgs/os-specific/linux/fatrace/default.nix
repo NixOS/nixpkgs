@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, python3, which }:
 
 stdenv.mkDerivation rec {
   pname = "fatrace";

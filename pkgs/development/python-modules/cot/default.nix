@@ -1,8 +1,6 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
-, colorlog, pyvmomi, requests, verboselogs
-, psutil, pyopenssl, setuptools
-, mock, pytest-mock, pytestCheckHook, qemu
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, colorlog
+, pyvmomi, requests, verboselogs, psutil, pyopenssl, setuptools, mock
+, pytest-mock, pytestCheckHook, qemu }:
 
 buildPythonPackage rec {
   pname = "cot";
@@ -14,8 +12,9 @@ buildPythonPackage rec {
     sha256 = "f4b3553415f90daac656f89d3e82e79b3d751793239bb173a683b4cc0ceb2635";
   };
 
-  propagatedBuildInputs = [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
-  ++ lib.optional (pythonOlder "3.3") psutil;
+  propagatedBuildInputs =
+    [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
+    ++ lib.optional (pythonOlder "3.3") psutil;
 
   checkInputs = [ mock pytestCheckHook pytest-mock qemu ];
 
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     "TestQCOW2"
     "TestRAW"
     "TestVMDKConversion"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_serial_fixup_invalid_host"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_serial_fixup_invalid_host" ];
 
   # argparse is part of the standardlib
   prePatch = ''

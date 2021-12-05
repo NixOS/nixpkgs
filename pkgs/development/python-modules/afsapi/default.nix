@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, lxml, pytest-aiohttp
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "afsapi";
@@ -22,23 +15,13 @@ buildPythonPackage rec {
     sha256 = "aevxhHuRedDs0JxeMlYSKHDQwcIs7miRm4FCtssdE0w=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    lxml
-  ];
+  propagatedBuildInputs = [ aiohttp lxml ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "async_tests.py"
-  ];
+  pytestFlagsArray = [ "async_tests.py" ];
 
-  pythonImportsCheck = [
-    "afsapi"
-  ];
+  pythonImportsCheck = [ "afsapi" ];
 
   meta = with lib; {
     description = "Python implementation of the Frontier Silicon API";

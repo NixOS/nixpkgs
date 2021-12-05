@@ -11,7 +11,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
+    description =
+      "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
     homepage = "https://github.com/echonest/pyechonest";
   };
 }

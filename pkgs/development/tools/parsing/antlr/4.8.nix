@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, darwin }:
+{ lib, stdenv, fetchurl, jre, fetchFromGitHub, cmake, ninja, pkg-config, libuuid
+, darwin }:
 
 let
   version = "4.8";
@@ -20,7 +20,8 @@ let
 
       nativeBuildInputs = [ cmake ninja pkg-config ];
       buildInputs = lib.optional stdenv.isLinux libuuid
-        ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
+        ++ lib.optional stdenv.isDarwin
+        darwin.apple_sdk.frameworks.CoreFoundation;
 
       # Install CMake config files, used to locate the runtime from another
       # CMake project, using the find_package function.
@@ -44,7 +45,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
+      url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
       sha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
     };
 

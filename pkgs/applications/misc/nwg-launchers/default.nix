@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gtkmm3
-, meson
-, ninja
-, nlohmann_json
-, pkg-config
-, swaylock
-, makeWrapper
-, gtk-layer-shell
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtkmm3, meson, ninja, nlohmann_json
+, pkg-config, swaylock, makeWrapper, gtk-layer-shell }:
 
 stdenv.mkDerivation rec {
   pname = "nwg-launchers";
@@ -22,19 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QWDYy0TBxoYxfRAOtAEVM8wsPUi2SnzMXsu38guAURU=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    cmake
-    makeWrapper
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config cmake makeWrapper ];
 
-  buildInputs = [
-    gtkmm3
-    nlohmann_json
-    gtk-layer-shell
-  ];
+  buildInputs = [ gtkmm3 nlohmann_json gtk-layer-shell ];
 
   postInstall = ''
     wrapProgram $out/bin/nwgbar \
@@ -42,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GTK-based launchers: application grid, button bar, dmenu for sway and other window managers";
+    description =
+      "GTK-based launchers: application grid, button bar, dmenu for sway and other window managers";
     homepage = "https://github.com/nwg-piotr/nwg-launchers";
     license = licenses.gpl3;
     platforms = platforms.linux;

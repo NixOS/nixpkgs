@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper
-, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, util-linux, wimlib, wget }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, coreutils
+, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted
+, p7zip, util-linux, wimlib, wget }:
 
 stdenv.mkDerivation rec {
   version = "5.1.2";
@@ -30,7 +31,23 @@ stdenv.mkDerivation rec {
     installManPage share/man/man1/woeusb.1
 
     wrapProgram "$out/bin/woeusb" \
-      --set PATH '${lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted p7zip util-linux wget wimlib ]}'
+      --set PATH '${
+        lib.makeBinPath [
+          coreutils
+          dosfstools
+          findutils
+          gawk
+          gnugrep
+          grub2_light
+          ncurses
+          ntfs3g
+          parted
+          p7zip
+          util-linux
+          wget
+          wimlib
+        ]
+      }'
 
     runHook postInstall
   '';

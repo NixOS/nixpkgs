@@ -1,9 +1,5 @@
-{ stdenv, lib, fetchurl, zip, unzip
-, jdk, python
-, confFile ? ""
-, extraLibraryPaths ? []
-, extraJars ? []
-}:
+{ stdenv, lib, fetchurl, zip, unzip, jdk, python, confFile ? ""
+, extraLibraryPaths ? [ ], extraJars ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "apache-storm";
@@ -46,7 +42,9 @@ stdenv.mkDerivation rec {
     unzip  $out/lib/storm-client-${version}.jar defaults.yaml;
     zip -d $out/lib/storm-client-${version}.jar defaults.yaml;
     sed -i \
-       -e 's|java.library.path: .*|java.library.path: "${lib.concatStringsSep ":" extraLibraryPaths}"|' \
+       -e 's|java.library.path: .*|java.library.path: "${
+         lib.concatStringsSep ":" extraLibraryPaths
+       }"|' \
        -e 's|storm.log4j2.conf.dir: .*|storm.log4j2.conf.dir: "conf/log4j2"|' \
       defaults.yaml
     ${if confFile != "" then "cat ${confFile} >> defaults.yaml" else ""}
@@ -54,7 +52,9 @@ stdenv.mkDerivation rec {
 
     # Link to extra jars
     cd $out/lib;
-    ${lib.concatMapStrings (jar: "ln -s ${jar};\n") extraJars}
+    ${lib.concatMapStrings (jar: ''
+      ln -s ${jar};
+    '') extraJars}
   '';
 
   dontStrip = true;

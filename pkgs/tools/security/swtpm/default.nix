@@ -1,14 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub, fetchpatch
-, autoreconfHook
-, pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp, json-glib
-, libtpms
-, unixtools, expect, socat
-, gnutls
-, perl
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libtasn1
+, openssl, fuse, glib, libseccomp, json-glib, libtpms, unixtools, expect, socat
+, gnutls, perl }:
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
@@ -23,28 +15,25 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/stefanberger/swtpm/pull/527.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/stefanberger/swtpm/pull/527.patch";
       sha256 = "sha256-cpKHP15a27ifmmswSgHoNzGPO6TY/ZuJIfM5xLOlqlU=";
     })
   ];
 
   nativeBuildInputs = [
-    pkg-config unixtools.netstat expect socat
+    pkg-config
+    unixtools.netstat
+    expect
+    socat
     perl # for pod2man
     autoreconfHook
   ];
 
-  buildInputs = [
-    libtpms
-    openssl libtasn1 libseccomp
-    fuse glib json-glib
-    gnutls
-  ];
+  buildInputs =
+    [ libtpms openssl libtasn1 libseccomp fuse glib json-glib gnutls ];
 
-  configureFlags = [
-    "--with-cuse"
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--with-cuse" "--localstatedir=/var" ];
 
   postPatch = ''
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails

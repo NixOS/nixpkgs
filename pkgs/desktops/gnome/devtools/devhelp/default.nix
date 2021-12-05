@@ -1,22 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, glib
-, appstream-glib
-, gobject-introspection
-, python3
-, gi-docgen
-, webkitgtk
-, gettext
-, itstool
-, gsettings-desktop-schemas
-, shared-mime-info
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gnome, gtk3, wrapGAppsHook
+, glib, appstream-glib, gobject-introspection, python3, gi-docgen, webkitgtk
+, gettext, itstool, gsettings-desktop-schemas, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
@@ -25,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/devhelp/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "7KqQsPTaqPsgMPbcaQv1M/+Zp3NDf+Dhis/oLZl/YNI=";
   };
 
@@ -42,17 +28,10 @@ stdenv.mkDerivation rec {
     gi-docgen
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    webkitgtk
-    gnome.adwaita-icon-theme
-    gsettings-desktop-schemas
-  ];
+  buildInputs =
+    [ glib gtk3 webkitgtk gnome.adwaita-icon-theme gsettings-desktop-schemas ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   doCheck = true;
 

@@ -1,28 +1,14 @@
-{ lib
-, mkDerivation
-, makeDesktopItem
-, fetchurl
-, pkg-config
-, copyDesktopItems
-, cairo
-, freetype
-, ghostscript
-, gsl
-, libjpeg
-, libpng
-, libspiro
-, lua5
-, qtbase
-, texlive
-, zlib
-}:
+{ lib, mkDerivation, makeDesktopItem, fetchurl, pkg-config, copyDesktopItems
+, cairo, freetype, ghostscript, gsl, libjpeg, libpng, libspiro, lua5, qtbase
+, texlive, zlib }:
 
 mkDerivation rec {
   pname = "ipe";
   version = "7.2.23";
 
   src = fetchurl {
-    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
+    url =
+      "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
     sha256 = "0yvm3zfba1ljyy518vjnvwpyg7lgnmdwm19v5k0wfgz64aca56x1";
   };
 

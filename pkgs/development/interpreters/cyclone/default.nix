@@ -21,8 +21,7 @@ let
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "cyclone";
   inherit version;
 
@@ -44,7 +43,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://justinethier.github.io/cyclone/";
-    description = "A brand-new compiler that allows practical application development using R7RS Scheme";
+    description =
+      "A brand-new compiler that allows practical application development using R7RS Scheme";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
   };

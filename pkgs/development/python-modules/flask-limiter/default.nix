@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-restful
-, hiro
-, limits
-, mock
-, ordereddict
-, pymemcache
-, pytestCheckHook
-, redis
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, flask-restful, hiro, limits
+, mock, ordereddict, pymemcache, pytestCheckHook, redis }:
 
 buildPythonPackage rec {
   pname = "Flask-Limiter";
@@ -25,15 +14,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask limits ];
 
-  checkInputs = [
-    pytestCheckHook
-    hiro
-    mock
-    redis
-    flask-restful
-    pymemcache
-    ordereddict
-  ];
+  checkInputs =
+    [ pytestCheckHook hiro mock redis flask-restful pymemcache ordereddict ];
 
   postPatch = ''
     sed -i "/--cov/d" pytest.ini

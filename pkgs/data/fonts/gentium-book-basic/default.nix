@@ -7,7 +7,8 @@ let
 in fetchzip rec {
   name = "gentium-book-basic-${version}";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${major}${minor}.zip";
+  url =
+    "http://software.sil.org/downloads/r/gentium/GentiumBasic_${major}${minor}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -19,7 +20,8 @@ in fetchzip rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
-    description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
+    description =
+      "A high-quality typeface family for Latin, Cyrillic, and Greek";
     maintainers = with maintainers; [ ];
     license = licenses.ofl;
     platforms = platforms.all;

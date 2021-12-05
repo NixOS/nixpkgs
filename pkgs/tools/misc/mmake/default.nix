@@ -17,13 +17,14 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tj/mmake";
-    description = "A small program  which wraps make to provide additional functionality";
+    description =
+      "A small program  which wraps make to provide additional functionality";
     longDescription = ''
       Mmake is a small program  which wraps make to provide additional
       functionality,  such   as  user-friendly  help   output,  remote
       includes,  and   eventually  more.   It  otherwise  acts   as  a
       pass-through to standard make.
-      '';
+    '';
     license = licenses.mit;
     maintainers = [ maintainers.gabesoft ];
   };

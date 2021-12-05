@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, zipp
-, pathlib2
-, contextlib2
-, configparser
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, zipp, pathlib2
+, contextlib2, configparser, isPy3k }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";

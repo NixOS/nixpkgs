@@ -23,7 +23,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Netdata orchestrator for data collection modules written in go";
+    description =
+      "Netdata orchestrator for data collection modules written in go";
     homepage = "https://github.com/netdata/go.d.plugin";
     license = licenses.gpl3;
     maintainers = [ ];

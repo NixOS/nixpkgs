@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, btrfs-progs
-, contextlib2
-, pyxdg
-, pycparser
-, alembic
-, cffi
-, pythonOlder
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, btrfs-progs, contextlib2, pyxdg
+, pycparser, alembic, cffi, pythonOlder, isPyPy }:
 
 buildPythonPackage rec {
   version = "0.10.1";

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "jsonnet";
   version = "0.17.0";
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -16,11 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "jsonnet"
-    "jsonnetfmt"
-    "libjsonnet.so"
-  ];
+  makeFlags = [ "jsonnet" "jsonnetfmt" "libjsonnet.so" ];
 
   # Upstream writes documentation in html, not in markdown/rst, so no
   # other output formats, sorry.
@@ -38,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Purely-functional configuration language that helps you define JSON data";
+    description =
+      "Purely-functional configuration language that helps you define JSON data";
     maintainers = with lib.maintainers; [ benley copumpkin ];
     license = lib.licenses.asl20;
     homepage = "https://github.com/google/jsonnet";

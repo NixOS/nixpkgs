@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
+, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec, libiconv
+, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
 , x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
 }:
@@ -27,23 +27,28 @@ let
     '';
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "ghostscript";
   version = "9.53.3";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
-    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
+    url =
+      "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${
+        lib.versions.minor version
+      }${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    sha512 =
+      "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
+      url =
+        "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
       sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
     })
     (fetchpatch {
-      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=a9bd3dec9fde";
+      url =
+        "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=a9bd3dec9fde";
       name = "CVE-2021-3781.patch";
       sha256 = "FvbH7cb3ZDCbNRz9DF0kDmLdF7OWNYk90wv44pimU58=";
     })
@@ -55,26 +60,33 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkg-config autoconf zlib ]
     ++ lib.optional cupsSupport cups;
 
   buildInputs = [
-    zlib expat openssl
-    libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-    libiconv ijs lcms2 bash
-  ]
-  ++ lib.optional x11Support xlibsWrapper
-  ++ lib.optional cupsSupport cups
-  ;
+    zlib
+    expat
+    openssl
+    libjpeg
+    libpng
+    libtiff
+    freetype
+    fontconfig
+    libpaper
+    jbig2dec
+    libiconv
+    ijs
+    lcms2
+    bash
+  ] ++ lib.optional x11Support xlibsWrapper ++ lib.optional cupsSupport cups;
 
   preConfigure = ''
     # https://ghostscript.com/doc/current/Make.htm
     export CCAUX=$CC_FOR_BUILD
-    ${lib.optionalString cupsSupport ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
+    ${lib.optionalString cupsSupport
+    ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
 
     # requires in-tree (heavily patched) openjpeg
     rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
@@ -85,14 +97,9 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  configureFlags = [
-    "--with-system-libtiff"
-    "--enable-dynamic"
-  ]
-  ++ lib.optional x11Support "--with-x"
-  ++ lib.optionals cupsSupport [
-    "--enable-cups"
-  ];
+  configureFlags = [ "--with-system-libtiff" "--enable-dynamic" ]
+    ++ lib.optional x11Support "--with-x"
+    ++ lib.optionals cupsSupport [ "--enable-cups" ];
 
   # make check does nothing useful
   doCheck = false;
@@ -142,7 +149,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
+  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix { };
 
   meta = {
     homepage = "https://www.ghostscript.com/";

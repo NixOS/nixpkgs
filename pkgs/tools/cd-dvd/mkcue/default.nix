@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/m/mkcue/mkcue_${version}.orig.tar.gz";
+    url =
+      "http://http.debian.net/debian/pool/main/m/mkcue/mkcue_${version}.orig.tar.gz";
     sha256 = "0rs897wp08z4hd904bjb5sl4lb8qxj82x5ayklr28bhg9pd5gbra";
   };
 

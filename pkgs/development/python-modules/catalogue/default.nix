@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "catalogue";
@@ -17,9 +12,8 @@ buildPythonPackage rec {
     sha256 = "0idjhx2s8cy6ppd18k1zy246d97gdd6i217m5q26fwa47xh3asik";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -28,7 +22,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
-    changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
+    changelog =
+      "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
   };
 }

@@ -18,14 +18,14 @@ let
 
       session.isauthenticated                 session.isauthenticated
       session.tokenkey                        session.tokenkey
-      session.validationinterval              ${toString cfg.sso.validationInterval}
+      session.validationinterval              ${
+        toString cfg.sso.validationInterval
+      }
       session.lastvalidation                  session.lastvalidation
     '';
   });
 
-in
-
-{
+in {
   options = {
     services.confluence = {
       enable = mkEnableOption "Atlassian Confluence service";
@@ -62,8 +62,12 @@ in
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
+        default = [ ];
+        example = [
+          "-Xms1024m"
+          "-Xmx2048m"
+          "-Dconfluence.disable.peopledirectory.all=true"
+        ];
         description = "Java options to pass to catalina/tomcat.";
       };
 
@@ -108,7 +112,8 @@ in
 
         applicationPassword = mkOption {
           type = types.str;
-          description = "Application password of this Confluence instance in Crowd";
+          description =
+            "Application password of this Confluence instance in Crowd";
         };
 
         validationInterval = mkOption {
@@ -136,7 +141,8 @@ in
         type = types.package;
         default = pkgs.oraclejre8;
         defaultText = literalExpression "pkgs.oraclejre8";
-        description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+        description =
+          "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };
@@ -147,7 +153,7 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.home}' - ${cfg.user} - - -"
@@ -178,11 +184,15 @@ in
       preStart = ''
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
-        '') + ''
-          ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
+        sed -e 's,port="8090",port="${
+          toString cfg.listenPort
+        }" address="${cfg.listenAddress}",' \
+      '' + (lib.optionalString cfg.proxy.enable ''
+        -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${
+          toString cfg.proxy.port
+        }" scheme="${cfg.proxy.scheme}",' \
+      '') + ''
+        ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
       serviceConfig = {

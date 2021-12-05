@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, buildPackages, ncurses }:
 
-let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
+let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lsof";
   version = "4.94.0";
 
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
-  configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+  configurePhase = ''
+    LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR="$AR cr" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}'';
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath

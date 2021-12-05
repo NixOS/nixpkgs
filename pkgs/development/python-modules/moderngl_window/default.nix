@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, numpy
-, moderngl
-, pyglet
-, pillow
-, pyrr
-, glcontext
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, moderngl, pyglet
+, pillow, pyrr, glcontext }:
 
 buildPythonPackage rec {
   pname = "moderngl_window";
@@ -30,7 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/moderngl/moderngl_window";
-    description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
+    description =
+      "Cross platform helper library for ModernGL making window creation and resource loading simple";
     license = licenses.mit;
     platforms = platforms.linux; # should be mesaPlatforms, darwin build breaks.
     maintainers = with maintainers; [ c0deaddict ];

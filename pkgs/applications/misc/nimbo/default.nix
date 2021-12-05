@@ -14,7 +14,8 @@ buildPythonApplication rec {
     sha256 = "1fs28s9ynfxrb4rzba6cmik0kl0q0vkpb4zdappsq62jqf960k24";
   };
   nativeBuildInputs = [ installShellFiles ];
-  propagatedBuildInputs = [ setuptools boto3 awscli requests click pyyaml pydantic ];
+  propagatedBuildInputs =
+    [ setuptools boto3 awscli requests click pyyaml pydantic ];
 
   # nimbo tests require an AWS instance
   doCheck = false;

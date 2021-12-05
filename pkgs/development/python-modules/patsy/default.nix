@@ -1,11 +1,6 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, numpy
+{ lib, fetchPypi, buildPythonPackage, six, numpy
 , scipy # optional, allows spline-related features (see patsy's docs)
-, pytestCheckHook
-}:
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "patsy";
@@ -16,19 +11,11 @@ buildPythonPackage rec {
     sha256 = "5053de7804676aba62783dbb0f23a2b3d74e35e5bfa238b88b7cbf148a38b69d";
   };
 
-  propagatedBuildInputs = [
-    six
-    numpy
-    scipy
-  ];
+  propagatedBuildInputs = [ six numpy scipy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "patsy"
-  ];
+  pythonImportsCheck = [ "patsy" ];
 
   meta = {
     description = "A Python package for describing statistical models";

@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
@@ -19,11 +16,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace '--cov-config=setup.cfg' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    portalocker
-    psutil
-    dbus-python
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ portalocker psutil dbus-python ];
 
   checkInputs = with python3.pkgs; [
     pytestCheckHook
@@ -43,14 +36,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Disable tests that need root
-  disabledTests = [
-    "test_smoke"
-    "test_multiple_sessions"
-  ];
+  disabledTests = [ "test_smoke" "test_multiple_sessions" ];
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "A daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
     license = licenses.gpl2Only;

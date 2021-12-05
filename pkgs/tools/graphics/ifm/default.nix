@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook bison flex help2man ];
 
-  buildInputs = [ perl tk ]; # perl and wish are not run but written as shebangs.
+  buildInputs =
+    [ perl tk ]; # perl and wish are not run but written as shebangs.
 
-  enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
+  enableParallelBuilding =
+    false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
   meta = with lib; {
     homepage = "https://bitbucket.org/zondo/ifm";

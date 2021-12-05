@@ -1,23 +1,15 @@
-/*
+/* # Updates
 
-# Updates
-
-Run `./fetch.sh` to update package sources from Git.
-Check for any minor version changes.
-
+   Run `./fetch.sh` to update package sources from Git.
+   Check for any minor version changes.
 */
 
-{ newScope
-, lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl
-, gstreamer, gst-plugins-base, gtk3, dconf
-, llvmPackages_5, darwin
+{ newScope, lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub
+, makeSetupHook, makeWrapper, bison, cups ? null, harfbuzz, libGL, perl
+, gstreamer, gst-plugins-base, gtk3, dconf, llvmPackages_5, darwin
 
-  # options
-, developerBuild ? false
-, decryptSslTraffic ? false
-, debug ? false
-}:
+# options
+, developerBuild ? false, decryptSslTraffic ? false, debug ? false }:
 
 let
 
@@ -65,12 +57,14 @@ let
     qtwebkit = [
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
+        url =
+          "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       (fetchpatch {
         name = "qtwebkit-glib-2.68.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+        url =
+          "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
         sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
       })
       ./qtwebkit.patch
@@ -82,30 +76,30 @@ let
     qttools = [ ./qttools.patch ];
   };
 
-  qtModule =
-    import ../qtModule.nix
-    {
-      inherit perl;
+  qtModule = import ../qtModule.nix {
+    inherit perl;
+    inherit lib;
+    # Use a variant of mkDerivation that does not include wrapQtApplications
+    # to avoid cyclic dependencies between Qt modules.
+    mkDerivation = import ../mkDerivation.nix {
       inherit lib;
-      # Use a variant of mkDerivation that does not include wrapQtApplications
-      # to avoid cyclic dependencies between Qt modules.
-      mkDerivation =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; wrapQtAppsHook = null; }
-        stdenvActual.mkDerivation;
-    }
-    { inherit self srcs patches; };
+      inherit debug;
+      wrapQtAppsHook = null;
+    } stdenvActual.mkDerivation;
+  } { inherit self srcs patches; };
 
-  addPackages = self: with self;
-    let
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+  addPackages = self:
+    with self;
+    let callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
-      mkDerivationWith =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+      mkDerivationWith = import ../mkDerivation.nix {
+        inherit lib;
+        inherit debug;
+        inherit (self) wrapQtAppsHook;
+      };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -113,68 +107,93 @@ let
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
-        withGtk3 = true; inherit dconf gtk3;
+        withGtk3 = true;
+        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
-          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
+        inherit (darwin.apple_sdk.frameworks)
+          AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit
+          IOKit;
         inherit (darwin) libobjc;
       };
 
-      qt3d = callPackage ../modules/qt3d.nix {};
-      qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
-      qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
-      qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {};
-      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
-      qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qt3d = callPackage ../modules/qt3d.nix { };
+      qtcharts = callPackage ../modules/qtcharts.nix { };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix { };
+      qtdeclarative = callPackage ../modules/qtdeclarative.nix { };
+      qtdoc = callPackage ../modules/qtdoc.nix { };
+      qtgamepad = callPackage ../modules/qtgamepad.nix { };
+      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix { };
+      qtimageformats = callPackage ../modules/qtimageformats.nix { };
+      qtlocation = callPackage ../modules/qtlocation.nix { };
+      qtmacextras = callPackage ../modules/qtmacextras.nix { };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
-      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
       qtquick1 = null;
-      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
-      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
-      qtscript = callPackage ../modules/qtscript.nix {};
-      qtsensors = callPackage ../modules/qtsensors.nix {};
-      qtserialbus = callPackage ../modules/qtserialbus.nix {};
-      qtserialport = callPackage ../modules/qtserialport.nix {};
-      qtspeech = callPackage ../modules/qtspeech.nix {};
-      qtsvg = callPackage ../modules/qtsvg.nix {};
-      qtscxml = callPackage ../modules/qtscxml.nix {};
-      qttools = callPackage ../modules/qttools.nix {};
-      qttranslations = callPackage ../modules/qttranslations.nix {};
-      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
-      qtwayland = callPackage ../modules/qtwayland.nix {};
-      qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
+      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix { };
+      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix { };
+      qtscript = callPackage ../modules/qtscript.nix { };
+      qtsensors = callPackage ../modules/qtsensors.nix { };
+      qtserialbus = callPackage ../modules/qtserialbus.nix { };
+      qtserialport = callPackage ../modules/qtserialport.nix { };
+      qtspeech = callPackage ../modules/qtspeech.nix { };
+      qtsvg = callPackage ../modules/qtsvg.nix { };
+      qtscxml = callPackage ../modules/qtscxml.nix { };
+      qttools = callPackage ../modules/qttools.nix { };
+      qttranslations = callPackage ../modules/qttranslations.nix { };
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
+      qtwayland = callPackage ../modules/qtwayland.nix { };
+      qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
       qtwebengine = callPackage ../modules/qtwebengine.nix {
         inherit (srcs.qtwebengine) version;
         inherit (darwin) cctools libobjc libunwind xnu;
         inherit (darwin.apple_sdk.libs) sandbox;
-        inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
+        inherit (darwin.apple_sdk.frameworks)
+          ApplicationServices AVFoundation Foundation ForceFeedback
+          GameController AppKit ImageCaptureCore CoreBluetooth IOBluetooth
+          CoreWLAN Quartz Cocoa LocalAuthentication;
       };
-      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
+      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
         inherit (darwin.apple_sdk.frameworks) OpenGL;
       };
-      qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
+      qtwebsockets = callPackage ../modules/qtwebsockets.nix { };
       qtwebview = callPackage ../modules/qtwebview.nix {
         inherit (darwin.apple_sdk.frameworks) CoreFoundation WebKit;
       };
-      qtx11extras = callPackage ../modules/qtx11extras.nix {};
-      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
+      qtx11extras = callPackage ../modules/qtx11extras.nix { };
+      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 
-      env = callPackage ../qt-env.nix {};
+      env = callPackage ../qt-env.nix { };
       full = env "qt-full-${qtbase.version}" ([
-        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qt3d
+        qtcharts
+        qtconnectivity
+        qtdeclarative
+        qtdoc
+        qtgraphicaleffects
+        qtimageformats
+        qtlocation
+        qtmultimedia
+        qtquickcontrols
+        qtquickcontrols2
+        qtscript
+        qtsensors
+        qtserialport
+        qtsvg
+        qttools
+        qttranslations
+        qtvirtualkeyboard
+        qtwebchannel
+        qtwebengine
+        qtwebkit
+        qtwebsockets
+        qtwebview
+        qtx11extras
+        qtxmlpatterns
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
@@ -192,6 +211,6 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-   self = lib.makeScope newScope addPackages;
+  self = lib.makeScope newScope addPackages;
 
 in self

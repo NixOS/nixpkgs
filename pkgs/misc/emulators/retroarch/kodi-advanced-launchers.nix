@@ -8,12 +8,13 @@ let
     # https://forum.kodi.tv/showthread.php?tid=185074&pid=1622750#pid1622750
     nohup sh -c "sleep 10 && ${exec} '$@' -f;pkill -SIGCONT kodi"
   '';
-  scriptSh = exec: pkgs.writeScript ("kodi-"+exec.name) (script exec.path);
-  execs = map (core: rec { name = core.core; path = core+"/bin/retroarch-"+name;}) cores;
+  scriptSh = exec: pkgs.writeScript ("kodi-" + exec.name) (script exec.path);
+  execs = map (core: rec {
+    name = core.core;
+    path = core + "/bin/retroarch-" + name;
+  }) cores;
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "kodi-retroarch-advanced-launchers";
   version = "0.2";
 
@@ -21,7 +22,8 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/bin
-    ${lib.concatMapStrings (exec: "ln -s ${scriptSh exec} $out/bin/kodi-${exec.name};") execs}
+    ${lib.concatMapStrings
+    (exec: "ln -s ${scriptSh exec} $out/bin/kodi-${exec.name};") execs}
   '';
 
   meta = {

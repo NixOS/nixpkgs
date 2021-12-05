@@ -1,24 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, gmime3
-, gnutls
-, gobject-introspection
-, gpgme
-, gtk3
-, gtksourceview
-, gtkspell3
-, intltool
-, libcanberra-gtk3
-, libesmtp
-, libical
-, libnotify
-, libsecret
-, openssl
-, pkg-config
-, webkitgtk
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, glib, gmime3, gnutls, gobject-introspection, gpgme
+, gtk3, gtksourceview, gtkspell3, intltool, libcanberra-gtk3, libesmtp, libical
+, libnotify, libsecret, openssl, pkg-config, webkitgtk, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "balsa";
@@ -29,12 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xkxx801p7sbfkn0bh3cz85wra4xf1z1zhjqqc80z1z1nln7fhb4";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config intltool gobject-introspection wrapGAppsHook ];
 
   buildInputs = [
     glib

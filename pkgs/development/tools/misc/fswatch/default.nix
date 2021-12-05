@@ -1,13 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-                     # for xargs
-, gettext
-, libtool
-, makeWrapper
-, texinfo
-, CoreServices
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+# for xargs
+, gettext, libtool, makeWrapper, texinfo, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "fswatch";
@@ -20,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EKbo5gkrWuijLJgYsNBDtxy0ioXu/yHxnPPeOpk620g=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool texinfo ];
 
   enableParallelBuilding = true;

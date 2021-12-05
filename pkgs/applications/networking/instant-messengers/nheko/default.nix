@@ -1,33 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cmark
-, lmdb
-, lmdbxx
-, libsecret
-, mkDerivation
-, qtbase
-, qtkeychain
-, qtmacextras
-, qtmultimedia
-, qttools
-, qtquickcontrols2
-, qtgraphicaleffects
-, mtxclient
-, boost17x
-, spdlog
-, olm
-, pkg-config
-, nlohmann_json
-, coeurl
-, libevent
-, curl
-, voipSupport ? true
-, gst_all_1
-, libnice
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, cmark, lmdb, lmdbxx
+, libsecret, mkDerivation, qtbase, qtkeychain, qtmacextras, qtmultimedia
+, qttools, qtquickcontrols2, qtgraphicaleffects, mtxclient, boost17x, spdlog
+, olm, pkg-config, nlohmann_json, coeurl, libevent, curl, voipSupport ? true
+, gst_all_1, libnice }:
 
 mkDerivation rec {
   pname = "nheko";
@@ -40,11 +15,7 @@ mkDerivation rec {
     sha256 = "1akhnngxkxbjwjkg5ispl6j5s2ylbcj92r3zxqqry4gbfxbjpx8k";
   };
 
-  nativeBuildInputs = [
-    lmdbxx
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ lmdbxx cmake pkg-config ];
 
   buildInputs = [
     nlohmann_json
@@ -64,8 +35,8 @@ mkDerivation rec {
     coeurl
     libevent
     curl
-  ] ++ lib.optional stdenv.isDarwin qtmacextras
-    ++ lib.optionals voipSupport (with gst_all_1; [
+  ] ++ lib.optional stdenv.isDarwin qtmacextras ++ lib.optionals voipSupport
+    (with gst_all_1; [
       gstreamer
       gst-plugins-base
       (gst-plugins-good.override { qt5Support = true; })

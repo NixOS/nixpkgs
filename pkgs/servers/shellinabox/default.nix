@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pam, openssl, openssh, shadow, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pam, openssl
+, openssh, shadow, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "2.20";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
     ./shellinabox-minus.patch
     (fetchpatch {
       name = "CVE-2018-16789.patch";
-      url = "https://github.com/shellinabox/shellinabox/commit/4f0ecc31ac6f985e0dd3f5a52cbfc0e9251f6361.patch";
+      url =
+        "https://github.com/shellinabox/shellinabox/commit/4f0ecc31ac6f985e0dd3f5a52cbfc0e9251f6361.patch";
       sha256 = "1mpm6acxdb0fms9pa2b88fx6hp07ph87ahxi82yyqj2m7p79jx7a";
     })
   ];

@@ -3,7 +3,8 @@ with lib;
 let
   pkg = pkgs._3proxy;
   cfg = config.services._3proxy;
-  optionalList = list: if list == [ ] then "*" else concatMapStringsSep "," toString list;
+  optionalList = list:
+    if list == [ ] then "*" else concatMapStringsSep "," toString list;
 in {
   options.services._3proxy = {
     enable = mkEnableOption "3proxy";
@@ -360,9 +361,7 @@ in {
       (mapAttrsToList (name: value: "${name} ${value}")
         cfg.resolution.nsrecord)}
 
-      ${optionalString (cfg.usersFile != null)
-        ''users $"${cfg.usersFile}"''
-      }
+      ${optionalString (cfg.usersFile != null) ''users $"${cfg.usersFile}"''}
 
       ${concatMapStringsSep "\n" (service: ''
         auth ${concatStringsSep " " service.auth}

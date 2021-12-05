@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyopenssl
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "uonet-request-signer-hebe";
@@ -17,16 +12,12 @@ buildPythonPackage rec {
     sha256 = "fidopnpAt5CXPsLbx+V8wrJCQQ/WIO6AqxpsYLDv8qM=";
   };
 
-  propagatedBuildInputs = [
-    pyopenssl
-  ];
+  propagatedBuildInputs = [ pyopenssl ];
 
   # Source is not tagged
   doCheck = false;
 
-  pythonImportsCheck = [
-    "uonet_request_signer_hebe"
-  ];
+  pythonImportsCheck = [ "uonet_request_signer_hebe" ];
 
   meta = with lib; {
     description = "UONET+ (hebe) request signer for Python";

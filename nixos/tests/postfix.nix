@@ -1,8 +1,7 @@
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
-in
-import ./make-test-python.nix {
+in import ./make-test-python.nix {
   name = "postfix";
 
   machine = { pkgs, ... }: {
@@ -15,15 +14,13 @@ import ./make-test-python.nix {
       sslCert = "${certs.${domain}.cert}";
       sslKey = "${certs.${domain}.key}";
       submissionsOptions = {
-          smtpd_sasl_auth_enable = "yes";
-          smtpd_client_restrictions = "permit";
-          milter_macro_daemon_name = "ORIGINATING";
+        smtpd_sasl_auth_enable = "yes";
+        smtpd_client_restrictions = "permit";
+        milter_macro_daemon_name = "ORIGINATING";
       };
     };
 
-    security.pki.certificateFiles = [
-      certs.ca.cert
-    ];
+    security.pki.certificateFiles = [ certs.ca.cert ];
 
     networking.extraHosts = ''
       127.0.0.1 ${domain}

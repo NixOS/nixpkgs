@@ -7,78 +7,31 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv
-, lib
-, fetchFromGitHub
-, nixosTests
-  # Main build tools
-, pkg-config
-, autoconf
-, automake
-, libtool
-, m4
-, xz
-, python3
-, numactl
-, writeText
-  # Processing, video codecs, containers
-, ffmpeg-full
-, nv-codec-headers
-, libogg
-, x264
-, x265
-, libvpx
-, libtheora
-, dav1d
+{ stdenv, lib, fetchFromGitHub, nixosTests
+# Main build tools
+, pkg-config, autoconf, automake, libtool, m4, xz, python3, numactl, writeText
+# Processing, video codecs, containers
+, ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d
 , zimg
-  # Codecs, audio
-, libopus
-, lame
-, libvorbis
-, a52dec
-, speex
-, libsamplerate
-  # Text processing
-, libiconv
-, fribidi
-, fontconfig
-, freetype
-, libass
-, jansson
-, libxml2
-, harfbuzz
+# Codecs, audio
+, libopus, lame, libvorbis, a52dec, speex, libsamplerate
+# Text processing
+, libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2, harfbuzz
 , libjpeg_turbo
-  # Optical media
-, libdvdread
-, libdvdnav
-, libdvdcss
-, libbluray
-  # Darwin-specific
-, AudioToolbox ? null
-, Foundation ? null
-, libobjc ? null
-, VideoToolbox ? null
+# Optical media
+, libdvdread, libdvdnav, libdvdcss, libbluray
+# Darwin-specific
+, AudioToolbox ? null, Foundation ? null, libobjc ? null, VideoToolbox ? null
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
-, useGtk ? !stdenv.isDarwin
-, wrapGAppsHook
-, intltool
-, glib
-, gtk3
-, libappindicator-gtk3
-, libnotify
-, gst_all_1
-, dbus-glib
-, udev
-, libgudev
+, useGtk ? !stdenv.isDarwin, wrapGAppsHook, intltool, glib, gtk3
+, libappindicator-gtk3, libnotify, gst_all_1, dbus-glib, udev, libgudev
 , hicolor-icon-theme
-  # FDK
-, useFdk ? false
-, fdk_aac
-}:
+# FDK
+, useFdk ? false, fdk_aac }:
 
 let
   version = "1.4.2";
@@ -102,8 +55,7 @@ let
 
   inherit (lib) optional optionals optionalString versions;
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "handbrake";
   inherit version src;
 
@@ -136,15 +88,8 @@ stdenv.mkDerivation rec {
       --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
   '';
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    m4
-    pkg-config
-    python3
-  ]
-  ++ optionals useGtk [ intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config python3 ]
+    ++ optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
     a52dec
@@ -175,9 +120,7 @@ stdenv.mkDerivation rec {
     x265
     xz
     zimg
-  ]
-  ++ optional (!stdenv.isDarwin) numactl
-  ++ optionals useGtk [
+  ] ++ optional (!stdenv.isDarwin) numactl ++ optionals useGtk [
     dbus-glib
     glib
     gst_all_1.gst-plugins-base
@@ -188,31 +131,28 @@ stdenv.mkDerivation rec {
     libgudev
     libnotify
     udev
+  ] ++ optional useFdk fdk_aac ++ optionals stdenv.isDarwin [
+    AudioToolbox
+    Foundation
+    libobjc
+    VideoToolbox
   ]
-  ++ optional useFdk fdk_aac
-  ++ optionals stdenv.isDarwin [ AudioToolbox Foundation libobjc VideoToolbox ]
   # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
   # look at ./make/configure.py search "enable_nvenc"
-  ++ optional stdenv.isLinux nv-codec-headers;
+    ++ optional stdenv.isLinux nv-codec-headers;
 
-  configureFlags = [
-    "--disable-df-fetch"
-    "--disable-df-verify"
-    "--disable-gtk-update-checks"
-  ]
-  ++ optional (!useGtk) "--disable-gtk"
-  ++ optional useFdk "--enable-fdk-aac"
-  ++ optional stdenv.isDarwin "--disable-xcode"
-  ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
+  configureFlags =
+    [ "--disable-df-fetch" "--disable-df-verify" "--disable-gtk-update-checks" ]
+    ++ optional (!useGtk) "--disable-gtk" ++ optional useFdk "--enable-fdk-aac"
+    ++ optional stdenv.isDarwin "--disable-xcode"
+    ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];
 
   makeFlags = [ "--directory=build" ];
 
-  passthru.tests = {
-    basic-conversion = nixosTests.handbrake;
-  };
+  passthru.tests = { basic-conversion = nixosTests.handbrake; };
 
   meta = with lib; {
     homepage = "https://handbrake.fr/";
@@ -228,6 +168,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ Anton-Latukha wmertens ];
     platforms = with platforms; unix;
-    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
+    broken = stdenv.isDarwin
+      && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
   };
 }

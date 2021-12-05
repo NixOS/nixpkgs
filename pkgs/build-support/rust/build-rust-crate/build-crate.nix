@@ -1,68 +1,58 @@
 { lib, stdenv, mkRustcDepArgs, mkRustcFeatureArgs, rust }:
-{ crateName,
-  dependencies,
-  crateFeatures, crateRenames, libName, release, libPath,
-  crateType, metadata, crateBin, hasCrateBin,
-  extraRustcOpts, verbose, colors,
-  buildTests
-}:
+{ crateName, dependencies, crateFeatures, crateRenames, libName, release
+, libPath, crateType, metadata, crateBin, hasCrateBin, extraRustcOpts, verbose
+, colors, buildTests }:
 
-  let
-    baseRustcOpts =
-      [
-        (if release then "-C opt-level=3" else "-C debuginfo=2")
-        "-C codegen-units=$NIX_BUILD_CORES"
-        "--remap-path-prefix=$NIX_BUILD_TOP=/"
-        (mkRustcDepArgs dependencies crateRenames)
-        (mkRustcFeatureArgs crateFeatures)
-      ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
-      ] ++ extraRustcOpts
-      # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
-      # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
-      ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
-    ;
-    rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
+let
+  baseRustcOpts = [
+    (if release then "-C opt-level=3" else "-C debuginfo=2")
+    "-C codegen-units=$NIX_BUILD_CORES"
+    "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    (mkRustcDepArgs dependencies crateRenames)
+    (mkRustcFeatureArgs crateFeatures)
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--target"
+    (rust.toRustTargetSpec stdenv.hostPlatform)
+  ] ++ extraRustcOpts
+    # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
+    # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
+    ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro";
+  rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
 
+  # build the final rustc arguments that can be different between different
+  # crates
+  libRustcOpts = lib.concatStringsSep " " (baseRustcOpts ++ [ rustcMeta ]
+    ++ (map (x: "--crate-type ${x}") crateType));
 
-    # build the final rustc arguments that can be different between different
-    # crates
-    libRustcOpts = lib.concatStringsSep " " (
-      baseRustcOpts
-      ++ [rustcMeta]
-      ++ (map (x: "--crate-type ${x}") crateType)
-    );
+  binRustcOpts = lib.concatStringsSep " " (baseRustcOpts);
 
-    binRustcOpts = lib.concatStringsSep " " (
-      baseRustcOpts
-    );
+  build_bin = if buildTests then "build_bin_test" else "build_bin";
+in ''
+  runHook preBuild
 
-    build_bin = if buildTests then "build_bin_test" else "build_bin";
-  in ''
-    runHook preBuild
+  # configure & source common build functions
+  LIB_RUSTC_OPTS="${libRustcOpts}"
+  BIN_RUSTC_OPTS="${binRustcOpts}"
+  LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary}"
+  LIB_PATH="${libPath}"
+  LIB_NAME="${libName}"
 
-    # configure & source common build functions
-    LIB_RUSTC_OPTS="${libRustcOpts}"
-    BIN_RUSTC_OPTS="${binRustcOpts}"
-    LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary}"
-    LIB_PATH="${libPath}"
-    LIB_NAME="${libName}"
+  CRATE_NAME='${lib.replaceStrings [ "-" ] [ "_" ] libName}'
 
-    CRATE_NAME='${lib.replaceStrings ["-"] ["_"] libName}'
+  setup_link_paths
 
-    setup_link_paths
-
-    if [[ -e "$LIB_PATH" ]]; then
-       build_lib "$LIB_PATH"
-       ${lib.optionalString buildTests ''build_lib_test "$LIB_PATH"''}
-    elif [[ -e src/lib.rs ]]; then
-       build_lib src/lib.rs
-       ${lib.optionalString buildTests "build_lib_test src/lib.rs"}
-    fi
+  if [[ -e "$LIB_PATH" ]]; then
+     build_lib "$LIB_PATH"
+     ${lib.optionalString buildTests ''build_lib_test "$LIB_PATH"''}
+  elif [[ -e src/lib.rs ]]; then
+     build_lib src/lib.rs
+     ${lib.optionalString buildTests "build_lib_test src/lib.rs"}
+  fi
 
 
 
-    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin: ''
+  ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n"
+    (bin: ''
       mkdir -p target/bin
       BIN_NAME='${bin.name or crateName}'
       ${if !bin ? path then ''
@@ -74,7 +64,7 @@
         ${build_bin} "$BIN_NAME" "$BIN_PATH"
     '') crateBin)}
 
-    ${lib.optionalString buildTests ''
+  ${lib.optionalString buildTests ''
     # When tests are enabled build all the files in the `tests` directory as
     # test binaries.
     if [ -d tests ]; then
@@ -92,21 +82,21 @@
       done
 
     fi
-    ''}
+  ''}
 
-    # If crateBin is empty and hasCrateBin is not set then we must try to
-    # detect some kind of bin target based on some files that might exist.
-    ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
-      if [[ -e src/main.rs ]]; then
-        mkdir -p target/bin
-        ${build_bin} ${crateName} src/main.rs
-      fi
-      for i in src/bin/*.rs; do #*/
-        mkdir -p target/bin
-        ${build_bin} "$(basename $i .rs)" "$i"
-      done
-    ''}
-    # Remove object files to avoid "wrong ELF type"
-    find target -type f -name "*.o" -print0 | xargs -0 rm -f
-    runHook postBuild
-  ''
+  # If crateBin is empty and hasCrateBin is not set then we must try to
+  # detect some kind of bin target based on some files that might exist.
+  ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+    if [[ -e src/main.rs ]]; then
+      mkdir -p target/bin
+      ${build_bin} ${crateName} src/main.rs
+    fi
+    for i in src/bin/*.rs; do #*/
+      mkdir -p target/bin
+      ${build_bin} "$(basename $i .rs)" "$i"
+    done
+  ''}
+  # Remove object files to avoid "wrong ELF type"
+  find target -type f -name "*.o" -print0 | xargs -0 rm -f
+  runHook postBuild
+''

@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jthornber/thin-provisioning-tools/";
-    description = "A suite of tools for manipulating the metadata of the dm-thin device-mapper target";
+    description =
+      "A suite of tools for manipulating the metadata of the dm-thin device-mapper target";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

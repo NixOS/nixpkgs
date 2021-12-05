@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, google-cloud-testutils
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, google-cloud-core, libcst
+, proto-plus, mock, pytestCheckHook, pytest-asyncio, google-cloud-testutils }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
@@ -20,19 +10,10 @@ buildPythonPackage rec {
     sha256 = "4a6f04112f2685a0a5cd8c7cb7946572bb7e0f6ca7cbe0088514006fca8594ca";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    google-cloud-core
-    libcst
-    proto-plus
-  ];
+  propagatedBuildInputs =
+    [ google-api-core google-cloud-core libcst proto-plus ];
 
-  checkInputs = [
-    google-cloud-testutils
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # directory shadows imports

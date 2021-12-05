@@ -14,7 +14,8 @@ buildPythonPackage rec {
   checkInputs = [ nose pyyaml ];
 
   meta = with lib; {
-    description = "Python bindings for C library for finding and handling crystal symmetries";
+    description =
+      "Python bindings for C library for finding and handling crystal symmetries";
     homepage = "https://atztogo.github.io/spglib";
     license = licenses.bsd3;
     maintainers = with maintainers; [ psyanticy ];

@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
-
 stdenv.mkDerivation rec {
   pname = "mod_csr";
   version = "0.2.3";
@@ -15,7 +14,8 @@ stdenv.mkDerivation rec {
   inherit (mod_ca) configureFlags installFlags;
 
   meta = with lib; {
-    description = "RedWax CA service module to handle Certificate Signing Requests";
+    description =
+      "RedWax CA service module to handle Certificate Signing Requests";
 
     homepage = "https://redwax.eu";
     license = licenses.asl20;

@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, limits
-, mock
-, hiro
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, redis
-, starlette
-}:
+{ lib, buildPythonPackage, fastapi, fetchFromGitHub, limits, mock, hiro
+, poetry-core, pytestCheckHook, pythonOlder, redis, starlette }:
 
 buildPythonPackage rec {
   pname = "slowapi";
@@ -25,22 +14,11 @@ buildPythonPackage rec {
     sha256 = "1wjnlhjfgil86h6i5yij723ncg18rqdprs1q6i68w4msaspwpxg9";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    limits
-    redis
-  ];
+  propagatedBuildInputs = [ limits redis ];
 
-  checkInputs = [
-    fastapi
-    hiro
-    mock
-    pytestCheckHook
-    starlette
-  ];
+  checkInputs = [ fastapi hiro mock pytestCheckHook starlette ];
 
   disabledTests = [
     # E       AssertionError: Regex pattern 'parameter `request` must be an instance of starlette.requests.Request' does not match 'This portal is not running'.

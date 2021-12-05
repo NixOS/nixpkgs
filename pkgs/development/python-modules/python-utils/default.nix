@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
@@ -22,17 +17,11 @@ buildPythonPackage rec {
     sed -i '/--flake8/d' pytest.ini
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "_python_utils_tests"
-  ];
+  pytestFlagsArray = [ "_python_utils_tests" ];
 
   meta = with lib; {
     description = "Module with some convenient utilities";

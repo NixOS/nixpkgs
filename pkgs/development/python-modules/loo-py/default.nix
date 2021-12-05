@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, pymbolic
-, genpy
-, cgen
-, islpy
-, six
-, colorama
-, mako
-, pyopencl
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytools, pymbolic, genpy, cgen, islpy, six
+, colorama, mako, pyopencl, pytest }:
 
 buildPythonPackage rec {
   pname = "loo-py";
@@ -24,17 +12,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    pytools
-    pymbolic
-    genpy
-    cgen
-    islpy
-    six
-    colorama
-    mako
-    pyopencl
-  ];
+  propagatedBuildInputs =
+    [ pytools pymbolic genpy cgen islpy six colorama mako pyopencl ];
 
   # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
   doCheck = false;

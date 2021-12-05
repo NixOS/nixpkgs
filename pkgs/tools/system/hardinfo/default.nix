@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
-, libsoup ? null
-}:
+, libsoup ? null }:
 
 stdenv.mkDerivation rec {
   pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/hardinfo.berlios/hardinfo-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/project/hardinfo.berlios/hardinfo-${version}.tar.bz2";
     sha256 = "0yhvfc5icam3i4mphlz0m9d9d2irjw8mbsxq203x59wjgh6nrpx0";
   };
 
@@ -42,9 +42,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://hardinfo.org/";
-    description = "Display information about your hardware and operating system";
+    description =
+      "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
+    platforms =
+      [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
   };
 }

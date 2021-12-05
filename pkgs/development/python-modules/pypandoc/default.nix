@@ -1,6 +1,4 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
-, pandoc, texlive
-}:
+{ lib, substituteAll, buildPythonPackage, fetchFromGitHub, pandoc, texlive }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
@@ -22,9 +20,7 @@ buildPythonPackage rec {
     ./skip-tests.patch
   ];
 
-  checkInputs = [
-    texlive.combined.scheme-small
-  ];
+  checkInputs = [ texlive.combined.scheme-small ];
 
   meta = with lib; {
     description = "Thin wrapper for pandoc";

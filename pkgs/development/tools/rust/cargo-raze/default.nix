@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, curl, libgit2, openssl, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, curl, libgit2, openssl
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";

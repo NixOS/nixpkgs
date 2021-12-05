@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wxGTK wxsqlite3 sqlite ];
 
-  makeFlags = [
-    "LDFLAGS=-L${wxsqlite3}/lib"
-  ];
+  makeFlags = [ "LDFLAGS=-L${wxsqlite3}/lib" ];
 
   preBuild = ''
     sed -ie 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile

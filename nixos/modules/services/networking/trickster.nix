@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.trickster;
-in
-{
+let cfg = config.services.trickster;
+in {
 
   options = {
     services.trickster = {
@@ -98,9 +96,15 @@ in
           -metrics-port ${toString cfg.metrics-port} \
           -origin ${cfg.origin} \
           -proxy-port ${toString cfg.proxy-port} \
-          ${optionalString (cfg.configFile != null) "-config ${cfg.configFile}"} \
-          ${optionalString (cfg.profiler-port != null) "-profiler-port ${cfg.profiler-port}"} \
-          ${optionalString (cfg.instance-id != null) "-instance-id ${cfg.instance-id}"}
+          ${
+            optionalString (cfg.configFile != null) "-config ${cfg.configFile}"
+          } \
+          ${
+            optionalString (cfg.profiler-port != null)
+            "-profiler-port ${cfg.profiler-port}"
+          } \
+          ${optionalString (cfg.instance-id != null)
+          "-instance-id ${cfg.instance-id}"}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";

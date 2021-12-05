@@ -1,9 +1,5 @@
-{ lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab
-, file, cmake
-, nixosTests, writeText
-, ...
-}:
+{ lib, beamPackages, fetchFromGitHub, fetchFromGitLab, file, cmake, nixosTests
+, writeText, ... }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
@@ -84,7 +80,7 @@ beamPackages.mixRelease rec {
 
         preBuild = ''
           touch config/prod.exs
-       '';
+        '';
         src = fetchFromGitLab {
           domain = "git.pleroma.social";
           group = "pleroma";
@@ -127,7 +123,8 @@ beamPackages.mixRelease rec {
           sha256 = "0fnzljxy9pwabh1nzx0vawn131d5pdfb0p98kvpkqs441jr0ii73";
         };
 
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
+        postInstall =
+          "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
 
         beamDeps = with final; [ elixir_make ];
       };
@@ -153,9 +150,8 @@ beamPackages.mixRelease rec {
         nativeBuildInputs = [ cmake ];
         dontUseCmakeConfigure = true;
       };
-      syslog = prev.syslog.override {
-        buildPlugins = with beamPackages; [ pc ];
-      };
+      syslog =
+        prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
 
       # This needs a different version (1.0.14 -> 1.0.18) to build properly with
       # our Erlang/OTP version.

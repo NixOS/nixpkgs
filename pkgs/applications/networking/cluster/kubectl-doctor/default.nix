@@ -20,7 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "kubectl cluster triage plugin for k8s";
     homepage = "https://github.com/emirozer/kubectl-doctor";
-    changelog = "https://github.com/emirozer/kubectl-doctor/releases/tag/v${version}";
+    changelog =
+      "https://github.com/emirozer/kubectl-doctor/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.zimbatm ];
   };

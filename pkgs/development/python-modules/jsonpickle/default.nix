@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, setuptools-scm
-, toml
-, importlib-metadata
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, setuptools-scm, toml
+, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "jsonpickle";
@@ -18,14 +12,9 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    toml
-  ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ importlib-metadata ];
 
   checkPhase = ''
     rm pytest.ini
@@ -33,7 +22,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Python library for serializing any arbitrary object graph into JSON";
+    description =
+      "Python library for serializing any arbitrary object graph into JSON";
     homepage = "http://jsonpickle.github.io/";
     license = lib.licenses.bsd3;
   };

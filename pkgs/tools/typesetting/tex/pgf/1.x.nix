@@ -11,10 +11,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = "
-    mkdir -p $out/share/texmf-nix
-    cp -prd * $out/share/texmf-nix
-  ";
+  installPhase =
+    "\n    mkdir -p $out/share/texmf-nix\n    cp -prd * $out/share/texmf-nix\n  ";
 
   meta = with lib; {
     branch = "1";

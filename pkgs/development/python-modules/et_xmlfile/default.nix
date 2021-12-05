@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, lxml, pytest }:
 
 buildPythonPackage rec {
   version = "1.0.1";
@@ -11,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
+    sha256 = "0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };
 
   checkInputs = [ lxml pytest ];

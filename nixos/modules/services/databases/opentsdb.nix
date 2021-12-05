@@ -83,16 +83,18 @@ in {
       environment.JAVA_HOME = "${pkgs.jre}";
       path = [ pkgs.gnuplot ];
 
-      preStart =
-        ''
+      preStart = ''
         COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/tsdb tsd --staticroot=${cfg.package}/share/opentsdb/static --cachedir=/tmp/opentsdb --port=${toString cfg.port} --config=${configFile}";
+        ExecStart =
+          "${cfg.package}/bin/tsdb tsd --staticroot=${cfg.package}/share/opentsdb/static --cachedir=/tmp/opentsdb --port=${
+            toString cfg.port
+          } --config=${configFile}";
       };
     };
 

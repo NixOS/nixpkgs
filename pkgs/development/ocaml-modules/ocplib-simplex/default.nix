@@ -3,9 +3,8 @@
 let
   pname = "ocplib-simplex";
   version = "0.4";
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -23,7 +22,8 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    description = "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
+    description =
+      "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
     homepage = "https://github.com/OCamlPro-Iguernlala/ocplib-simplex";
     inherit (ocaml.meta) platforms;
     license = lib.licenses.lgpl21;

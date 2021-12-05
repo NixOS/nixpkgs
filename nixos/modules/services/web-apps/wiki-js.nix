@@ -30,7 +30,7 @@ in {
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {
@@ -79,7 +79,8 @@ in {
 
           logLevel = mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
+            type =
+              types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
             description = ''
               Define how much detail is supposed to be logged at runtime.
             '';
@@ -125,7 +126,8 @@ in {
       '';
 
       serviceConfig = {
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile =
+          mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = cfg.stateDirectoryName;
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;

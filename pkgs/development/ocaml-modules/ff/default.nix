@@ -13,13 +13,9 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    zarith
-  ];
+  propagatedBuildInputs = [ zarith ];
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, redland, pkg-config, gmp, zlib, librdf_raptor2
-  , librdf_rasqal }:
+, librdf_rasqal }:
 
 stdenv.mkDerivation rec {
   pname = "redstore";
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     description = "An HTTP interface to Redland RDF store";
     homepage = "https://www.aelius.com/njh/redstore/";
     maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms;
-      linux ++ freebsd ++ gnu;
+    platforms = with lib.platforms; linux ++ freebsd ++ gnu;
     license = lib.licenses.gpl3Plus;
   };
 }

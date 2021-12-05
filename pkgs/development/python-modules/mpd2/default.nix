@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, python, mock }:
 
 buildPythonPackage rec {
   pname = "python-mpd2";

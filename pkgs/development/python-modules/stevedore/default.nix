@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, pbr
-, setuptools
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, importlib-metadata, pbr
+, setuptools, six }:
 
 buildPythonPackage rec {
   pname = "stevedore";
@@ -18,13 +11,8 @@ buildPythonPackage rec {
     sha256 = "sha256-9AJTiH2HEuqiuw6jgwN0QWc23I7A4i9aZQksEXTEQzU=";
   };
 
-  propagatedBuildInputs = [
-    pbr
-    setuptools
-    six
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ pbr setuptools six ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   doCheck = false;
   pythonImportsCheck = [ "stevedore" ];

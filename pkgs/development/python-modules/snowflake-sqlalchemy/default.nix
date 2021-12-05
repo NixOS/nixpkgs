@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, sqlalchemy
-, snowflake-connector-python
-}:
+{ buildPythonPackage, lib, fetchPypi, sqlalchemy, snowflake-connector-python }:
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "51d9d923ebbfefe392582f6e3d0faa83f52e5eb6f190607820e055318dd2d2f8";
   };
 
-  propagatedBuildInputs = [
-    sqlalchemy
-    snowflake-connector-python
-  ];
+  propagatedBuildInputs = [ sqlalchemy snowflake-connector-python ];
 
   # Pypi does not include tests
   doCheck = false;

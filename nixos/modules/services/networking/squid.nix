@@ -6,10 +6,9 @@ let
 
   cfg = config.services.squid;
 
-
-  squidConfig = pkgs.writeText "squid.conf"
-    (if cfg.configText != null then cfg.configText else
-    ''
+  squidConfig = pkgs.writeText "squid.conf" (if cfg.configText != null then
+    cfg.configText
+  else ''
     #
     # Recommended minimum configuration (3.5):
     #
@@ -95,9 +94,7 @@ let
     refresh_pattern .               0       20%     4320
   '');
 
-in
-
-{
+in {
 
   options = {
 
@@ -146,20 +143,20 @@ in
       createHome = true;
     };
 
-    users.groups.squid = {};
+    users.groups.squid = { };
 
     systemd.services.squid = {
       description = "Squid caching web proxy";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p "/var/log/squid"
         chown squid:squid "/var/log/squid"
       '';
       serviceConfig = {
-        Type="forking";
-        PIDFile="/run/squid.pid";
-        ExecStart  = "${pkgs.squid}/bin/squid -YCs -f ${squidConfig}";
+        Type = "forking";
+        PIDFile = "/run/squid.pid";
+        ExecStart = "${pkgs.squid}/bin/squid -YCs -f ${squidConfig}";
       };
     };
 

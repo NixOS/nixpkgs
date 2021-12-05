@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, cmake,
-  gfortran, blas, lapack}:
+{ lib, stdenv, fetchurl, cmake, gfortran, blas, lapack }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -16,14 +15,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ blas ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=true"
-    "-DUSE_XSDK_DEFAULTS=true"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=true" "-DUSE_XSDK_DEFAULTS=true" ];
 
-  patches = [
-    ./add-superlu-lib-as-dependency-for-the-unit-tests.patch
-  ];
+  patches = [ ./add-superlu-lib-as-dependency-for-the-unit-tests.patch ];
 
   doCheck = true;
   checkTarget = "test";
@@ -31,7 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/";
     license = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/License.txt";
-    description = "A library for the solution of large, sparse, nonsymmetric systems of linear equations";
+    description =
+      "A library for the solution of large, sparse, nonsymmetric systems of linear equations";
     platforms = lib.platforms.unix;
   };
 }

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkgs
-, python3
-, python3Packages
-}:
+{ lib, stdenv, fetchFromGitHub, pkgs, python3, python3Packages }:
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -24,8 +18,7 @@ let
       });
     };
   };
-in
-with py.pkgs;
+in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "nrfutil";
@@ -53,10 +46,7 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  checkInputs = [
-    behave
-    nose
-  ];
+  checkInputs = [ behave nose ];
 
   postPatch = ''
     mkdir test-reports

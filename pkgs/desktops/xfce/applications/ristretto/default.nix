@@ -1,5 +1,4 @@
-{ mkXfceDerivation, gtk3, glib, libexif
-, libxfce4ui, libxfce4util, xfconf }:
+{ mkXfceDerivation, gtk3, glib, libexif, libxfce4ui, libxfce4util, xfconf }:
 
 mkXfceDerivation {
   category = "apps";
@@ -13,6 +12,7 @@ mkXfceDerivation {
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = {
-    description = "A fast and lightweight picture-viewer for the Xfce desktop environment";
+    description =
+      "A fast and lightweight picture-viewer for the Xfce desktop environment";
   };
 }

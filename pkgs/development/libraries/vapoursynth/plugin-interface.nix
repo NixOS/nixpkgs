@@ -1,18 +1,20 @@
 { lib, python3, buildEnv, writeText, runCommandCC, stdenv, runCommand
 , vapoursynth, makeWrapper, withPlugins }:
 
-plugins: let
-  pythonEnvironment = python3.buildEnv.override {
-    extraLibs = plugins;
-  };
+plugins:
+let
+  pythonEnvironment = python3.buildEnv.override { extraLibs = plugins; };
 
-  getRecursivePropagatedBuildInputs = pkgs: lib.flatten
-    (map
-      (pkg: let cleanPropagatedBuildInputs = lib.filter lib.isDerivation pkg.propagatedBuildInputs;
-        in cleanPropagatedBuildInputs ++ (getRecursivePropagatedBuildInputs cleanPropagatedBuildInputs))
-      pkgs);
+  getRecursivePropagatedBuildInputs = pkgs:
+    lib.flatten (map (pkg:
+      let
+        cleanPropagatedBuildInputs =
+          lib.filter lib.isDerivation pkg.propagatedBuildInputs;
+      in cleanPropagatedBuildInputs
+      ++ (getRecursivePropagatedBuildInputs cleanPropagatedBuildInputs)) pkgs);
 
-  deepPlugins = lib.unique (plugins ++ (getRecursivePropagatedBuildInputs plugins));
+  deepPlugins =
+    lib.unique (plugins ++ (getRecursivePropagatedBuildInputs plugins));
 
   pluginsEnv = buildEnv {
     name = "vapoursynth-plugins-env";
@@ -23,11 +25,11 @@ plugins: let
   pluginLoader = let
     source = writeText "vapoursynth-nix-plugins.c" ''
       void VSLoadPluginsNix(void (*load)(void *data, const char *path), void *data) {
-      ${lib.concatMapStringsSep "" (path: "load(data, \"${path}/lib/vapoursynth\");") deepPlugins}
+      ${lib.concatMapStringsSep ""
+      (path: ''load(data, "${path}/lib/vapoursynth");'') deepPlugins}
       }
     '';
-  in
-  runCommandCC "vapoursynth-plugin-loader" {
+  in runCommandCC "vapoursynth-plugin-loader" {
     executable = true;
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -37,8 +39,7 @@ plugins: let
   '';
 
   ext = stdenv.targetPlatform.extensions.sharedLibrary;
-in
-runCommand "${vapoursynth.name}-with-plugins" {
+in runCommand "${vapoursynth.name}-with-plugins" {
   nativeBuildInputs = [ makeWrapper ];
   passthru = {
     inherit python3;

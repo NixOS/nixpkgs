@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.sawfish;
-in
-{
+let cfg = config.services.xserver.windowManager.sawfish;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.sawfish.enable = mkEnableOption "sawfish";

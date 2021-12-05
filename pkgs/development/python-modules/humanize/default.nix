@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, setuptools
-, pytestCheckHook
-, freezegun
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, setuptools-scm, setuptools
+, pytestCheckHook, freezegun }:
 
 buildPythonPackage rec {
   version = "3.12.0";

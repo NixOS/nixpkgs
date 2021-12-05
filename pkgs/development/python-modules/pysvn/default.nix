@@ -1,21 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
-}:
+{ stdenv, lib, buildPythonPackage, fetchurl, isPy3k, python, apr, aprutil, bash
+, e2fsprogs, expat, gcc, glibcLocales, neon, openssl, pycxx, subversion }:
 
 buildPythonPackage rec {
   pname = "pysvn";
@@ -23,7 +7,8 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
+    url =
+      "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
     sha256 = "sRPa4wNyjDmGdF1gTOgLS0pnrdyZwkkH4/9UCdh/R9Q=";
   };
 
@@ -51,7 +36,7 @@ buildPythonPackage rec {
     sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
   '');
 
-  checkInputs = [ glibcLocales  ];
+  checkInputs = [ glibcLocales ];
   checkPhase = ''
     runHook preCheck
 

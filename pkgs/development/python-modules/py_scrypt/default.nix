@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, openssl
-}:
+{ lib, buildPythonPackage, fetchPypi, openssl }:
 
 buildPythonPackage rec {
   pname = "scrypt";
@@ -19,7 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bindings for scrypt key derivation function library";
     homepage = "https://pypi.python.org/pypi/scrypt";
-    maintainers = [];
+    maintainers = [ ];
     license = licenses.bsd2;
   };
 }

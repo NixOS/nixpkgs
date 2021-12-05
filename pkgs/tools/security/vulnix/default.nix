@@ -1,8 +1,4 @@
-{ lib
-, python3Packages
-, nix
-, ronn
-}:
+{ lib, python3Packages, nix, ronn }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
@@ -23,9 +19,7 @@ python3Packages.buildPythonApplication rec {
     pytest-flake8
   ];
 
-  propagatedBuildInputs = [
-    nix
-  ] ++ (with python3Packages; [
+  propagatedBuildInputs = [ nix ] ++ (with python3Packages; [
     click
     colorama
     pyyaml

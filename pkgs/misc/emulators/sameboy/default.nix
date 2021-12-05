@@ -16,11 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ rgbds glib wrapGAppsHook ];
   buildInputs = [ SDL2 ];
 
-  makeFlags = [
-    "CONF=release"
-    "FREEDESKTOP=true"
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "CONF=release" "FREEDESKTOP=true" "PREFIX=$(out)" ];
 
   postPatch = ''
     substituteInPlace OpenDialog/gtk.c \

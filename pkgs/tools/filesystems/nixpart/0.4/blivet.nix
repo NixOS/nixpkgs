@@ -1,9 +1,9 @@
 # FIXME: Unify with pkgs/development/python-modules/blivet/default.nix.
 
 { lib, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
-, libselinux, cryptsetup, multipath_tools, lsof, util-linux
-, useNixUdev ? true, systemd ? null
-# useNixUdev is here for bw compatibility
+, libselinux, cryptsetup, multipath_tools, lsof, util-linux, useNixUdev ? true
+, systemd ? null
+  # useNixUdev is here for bw compatibility
 }:
 
 assert useNixUdev -> systemd != null;
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://git.fedorahosted.org/cgit/blivet.git/snapshot/"
-        + "${pname}-${version}.tar.bz2";
+      + "${pname}-${version}.tar.bz2";
     sha256 = "1k3mws2q0ryb7422mml6idmaasz2i2v6ngyvg6d976dx090qnmci";
   };
 
@@ -34,9 +34,8 @@ buildPythonApplication rec {
     }' blivet/pyudev.py
   '';
 
-  propagatedBuildInputs = [
-    pykickstart pyparted pyblock libselinux cryptsetup
-  ] ++ lib.optional useNixUdev systemd;
+  propagatedBuildInputs = [ pykickstart pyparted pyblock libselinux cryptsetup ]
+    ++ lib.optional useNixUdev systemd;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;

@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl
-, glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus
-}:
+{ lib, stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkg-config
+, python3, libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
   version = "1.18.2";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
     sha256 = "sha256-N0vhWK4cH7OKKe7xzDzfif81NrSP8TINIIqyBOpsX4o=";
   };
 
@@ -16,9 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
-  ];
+  installCheckInputs =
+    [ python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 ];
 
   configureFlags = [
     "--with-polkit"

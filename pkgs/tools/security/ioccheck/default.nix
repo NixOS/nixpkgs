@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 let
   py = python3.override {
@@ -22,8 +19,7 @@ let
       });
     };
   };
-in
-with py.pkgs;
+in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "ioccheck";
@@ -37,9 +33,7 @@ buildPythonApplication rec {
     sha256 = "0lgqypcd5lzb2yqd5lr02pba24m26ghly4immxgz13svi8f6vzm9";
   };
 
-  nativeBuildInputs = with py.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with py.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with py.pkgs; [
     backoff
@@ -56,9 +50,7 @@ buildPythonApplication rec {
     vt-py
   ];
 
-  checkInputs = with py.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with py.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     # Can be removed with the next release
@@ -67,9 +59,7 @@ buildPythonApplication rec {
       --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"'
   '';
 
-  pythonImportsCheck = [
-    "ioccheck"
-  ];
+  pythonImportsCheck = [ "ioccheck" ];
 
   meta = with lib; {
     description = "Tool for researching IOCs";

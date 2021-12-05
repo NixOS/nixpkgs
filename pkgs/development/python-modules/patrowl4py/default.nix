@@ -1,23 +1,6 @@
-{ lib
-, attrs
-, buildPythonPackage
-, certifi
-, chardet
-, fetchFromGitHub
-, idna
-, iniconfig
-, more-itertools
-, packaging
-, pluggy
-, py
-, pyparsing
-, python-slugify
-, requests
-, six
-, text-unidecode
-, toml
-, urllib3
-}:
+{ lib, attrs, buildPythonPackage, certifi, chardet, fetchFromGitHub, idna
+, iniconfig, more-itertools, packaging, pluggy, py, pyparsing, python-slugify
+, requests, six, text-unidecode, toml, urllib3 }:
 
 buildPythonPackage rec {
   pname = "patrowl4py";
@@ -52,9 +35,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "patrowl4py"
-  ];
+  pythonImportsCheck = [ "patrowl4py" ];
 
   meta = with lib; {
     description = "Python API Client for PatrOwl";

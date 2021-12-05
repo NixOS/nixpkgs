@@ -1,11 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, mock
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook
+, mock }:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
@@ -26,17 +20,11 @@ buildPythonPackage rec {
       --replace "--pylama" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ] ++ lib.optional (!isPy3k) [
-    mock
-  ];
+  checkInputs = [ pytestCheckHook ] ++ lib.optional (!isPy3k) [ mock ];
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [
-    "paho.mqtt"
-  ];
+  pythonImportsCheck = [ "paho.mqtt" ];
 
   meta = with lib; {
     description = "MQTT version 3.1.1 client class";

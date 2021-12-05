@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptoolsDarcs
-, pyutil
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptoolsDarcs, pyutil }:
 
 buildPythonPackage rec {
   pname = "zbase32";

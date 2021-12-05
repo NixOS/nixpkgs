@@ -1,4 +1,4 @@
-{ symlinkJoin, lib, makeWrapper, zathura_core, file, plugins ? [] }:
+{ symlinkJoin, lib, makeWrapper, zathura_core, file, plugins ? [ ] }:
 symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";
 
@@ -6,20 +6,20 @@ symlinkJoin {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postBuild = let
-    fishCompletion = "share/fish/vendor_completions.d/zathura.fish";
-  in ''
-    makeWrapper ${zathura_core.bin}/bin/zathura $out/bin/zathura \
-      --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
-      --add-flags --plugins-dir="$out/lib/zathura"
+  postBuild =
+    let fishCompletion = "share/fish/vendor_completions.d/zathura.fish";
+    in ''
+      makeWrapper ${zathura_core.bin}/bin/zathura $out/bin/zathura \
+        --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
+        --add-flags --plugins-dir="$out/lib/zathura"
 
-    # zathura fish completion references the zathura_core derivation to
-    # check for supported plugins which live in the wrapper derivation,
-    # so we need to fix the path to reference $out instead.
-    rm "$out/${fishCompletion}"
-    substitute "${zathura_core.out}/${fishCompletion}" "$out/${fishCompletion}" \
-      --replace "${zathura_core.out}" "$out"
-  '';
+      # zathura fish completion references the zathura_core derivation to
+      # check for supported plugins which live in the wrapper derivation,
+      # so we need to fix the path to reference $out instead.
+      rm "$out/${fishCompletion}"
+      substitute "${zathura_core.out}/${fishCompletion}" "$out/${fishCompletion}" \
+        --replace "${zathura_core.out}" "$out"
+    '';
 
   meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura/";

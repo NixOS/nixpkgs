@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, pkgs
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchurl, pkgs, isPy3k }:
 
 buildPythonPackage rec {
   pname = "lightblue";

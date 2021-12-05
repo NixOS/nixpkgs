@@ -1,8 +1,6 @@
 { config, lib, name, ... }:
-let
-  inherit (lib) literalExpression mkOption nameValuePair types;
-in
-{
+let inherit (lib) literalExpression mkOption nameValuePair types;
+in {
   options = {
 
     hostName = mkOption {
@@ -13,37 +11,49 @@ in
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = ["www.example.org" "www.example.org:8080" "example.org"];
+      default = [ ];
+      example = [ "www.example.org" "www.example.org:8080" "example.org" ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule ({
-        options = {
-          port = mkOption {
-            type = types.port;
-            description = "Port to listen on";
+      type = with types;
+        listOf (submodule ({
+          options = {
+            port = mkOption {
+              type = types.port;
+              description = "Port to listen on";
+            };
+            ip = mkOption {
+              type = types.str;
+              default = "*";
+              description =
+                "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
+            };
+            ssl = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether to enable SSL (https) support.";
+            };
           };
-          ip = mkOption {
-            type = types.str;
-            default = "*";
-            description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
-          };
-          ssl = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Whether to enable SSL (https) support.";
-          };
-        };
-      }));
-      default = [];
+        }));
+      default = [ ];
       example = [
-        { ip = "195.154.1.1"; port = 443; ssl = true;}
-        { ip = "192.154.1.1"; port = 80; }
-        { ip = "*"; port = 8080; }
+        {
+          ip = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          ip = "192.154.1.1";
+          port = 80;
+        }
+        {
+          ip = "*";
+          port = 8080;
+        }
       ];
       description = ''
         Listen addresses and ports for this virtual host.
@@ -130,7 +140,8 @@ in
     acmeRoot = mkOption {
       type = types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description =
+        "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
     };
 
     sslServerCert = mkOption {
@@ -180,12 +191,11 @@ in
 
     servedDirs = mkOption {
       type = types.listOf types.attrs;
-      default = [];
-      example = [
-        { urlPath = "/nix";
-          dir = "/home/eelco/Dev/nix-homepage";
-        }
-      ];
+      default = [ ];
+      example = [{
+        urlPath = "/nix";
+        dir = "/home/eelco/Dev/nix-homepage";
+      }];
       description = ''
         This option provides a simple way to serve static directories.
       '';
@@ -193,12 +203,11 @@ in
 
     servedFiles = mkOption {
       type = types.listOf types.attrs;
-      default = [];
-      example = [
-        { urlPath = "/foo/bar.png";
-          file = "/home/eelco/some-file.png";
-        }
-      ];
+      default = [ ];
+      example = [{
+        urlPath = "/foo/bar.png";
+        file = "/home/eelco/some-file.png";
+      }];
       description = ''
         This option provides a simple way to serve individual, static files.
 
@@ -265,7 +274,7 @@ in
 
     locations = mkOption {
       type = with types; attrsOf (submodule (import ./location-options.nix));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "/" = {
@@ -286,7 +295,9 @@ in
 
   config = {
 
-    locations = builtins.listToAttrs (map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles);
+    locations = builtins.listToAttrs
+      (map (elem: nameValuePair elem.urlPath { alias = elem.file; })
+        config.servedFiles);
 
   };
 }

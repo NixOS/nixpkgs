@@ -1,24 +1,6 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, dpkg
-, glibc
-, glib
-, libxcb
-, libGL
-, nss
-, libthai
-, wayland
-, alsa-lib
-, qtvirtualkeyboard
-, qtwebchannel
-, qtwebsockets
-, qtlocation
-, qtwebengine
-, autoPatchelfHook
-, wrapQtAppsHook
-}:
+{ stdenv, lib, fetchurl, makeWrapper, dpkg, glibc, glib, libxcb, libGL, nss
+, libthai, wayland, alsa-lib, qtvirtualkeyboard, qtwebchannel, qtwebsockets
+, qtlocation, qtwebengine, autoPatchelfHook, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "insync";
@@ -66,18 +48,18 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   meta = with lib; {
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ benley ];
     homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''
-     Insync is a commercial application that syncs your Drive files to your
-     computer.  It has more advanced features than Google's official client
-     such as multiple account support, Google Doc conversion, symlink support,
-     and built in sharing.
+      Insync is a commercial application that syncs your Drive files to your
+      computer.  It has more advanced features than Google's official client
+      such as multiple account support, Google Doc conversion, symlink support,
+      and built in sharing.
 
-     There is a 15-day free trial, and it is a paid application after that.
+      There is a 15-day free trial, and it is a paid application after that.
     '';
   };
 }

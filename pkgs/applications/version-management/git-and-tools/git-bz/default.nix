@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchgit
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
-, python2Packages }:
+{ lib, stdenv, fetchgit, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt
+, makeWrapper, xmlto, python2Packages }:
 
 stdenv.mkDerivation {
   pname = "git-bz";
@@ -12,11 +11,9 @@ stdenv.mkDerivation {
     url = "git://git.fishsoup.net/git-bz";
   };
 
-  nativeBuildInputs = [
-    asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
-  ];
-  buildInputs = []
-    ++ (with python2Packages; [ python pysqlite ]);
+  nativeBuildInputs =
+    [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto ];
+  buildInputs = [ ] ++ (with python2Packages; [ python pysqlite ]);
 
   postPatch = ''
     patchShebangs configure

@@ -7,9 +7,8 @@ let
 
   kernelParams = concatStringsSep " " crashdump.kernelParams;
 
-in
-###### interface
-{
+  ###### interface
+in {
   options = {
     boot = {
       crashDump = {
@@ -44,7 +43,7 @@ in
     };
   };
 
-###### implementation
+  ###### implementation
 
   config = mkIf crashdump.enable {
     boot = {
@@ -56,21 +55,21 @@ in
         --command-line="init=$(readlink -f /run/current-system/init) irqpoll maxcpus=1 reset_devices ${kernelParams}"
       '';
       kernelParams = [
-       "crashkernel=${crashdump.reservedMemory}"
-       "nmi_watchdog=panic"
-       "softlockup_panic=1"
+        "crashkernel=${crashdump.reservedMemory}"
+        "nmi_watchdog=panic"
+        "softlockup_panic=1"
       ];
-      kernelPatches = [ {
+      kernelPatches = [{
         name = "crashdump-config";
         patch = null;
         extraConfig = ''
-                CRASH_DUMP y
-                DEBUG_INFO y
-                PROC_VMCORE y
-                LOCKUP_DETECTOR y
-                HARDLOCKUP_DETECTOR y
-              '';
-        } ];
+          CRASH_DUMP y
+          DEBUG_INFO y
+          PROC_VMCORE y
+          LOCKUP_DETECTOR y
+          HARDLOCKUP_DETECTOR y
+        '';
+      }];
     };
   };
 }

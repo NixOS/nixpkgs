@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, requests
-, setuptools
-, hypothesis
-, nose
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, plumbum, requests, setuptools
+, hypothesis, nose, responses }:
 
 buildPythonPackage rec {
   pname = "habitipy";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "1vf485z5m4h61p64zr3sgkcil2s3brq7dja4n7m49d1fvzcirylv";
   };
 
-  propagatedBuildInputs = [
-    plumbum
-    requests
-    setuptools
-  ];
+  propagatedBuildInputs = [ plumbum requests setuptools ];
 
-  checkInputs = [
-    hypothesis
-    nose
-    responses
-  ];
+  checkInputs = [ hypothesis nose responses ];
 
   checkPhase = ''
     HOME=$TMPDIR nosetests

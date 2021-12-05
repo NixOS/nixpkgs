@@ -1,15 +1,5 @@
-{ lib
-, fetchFromGitHub
-, python3
-, keybinder3
-, intltool
-, file
-, gtk3
-, gobject-introspection
-, libnotify
-, wrapGAppsHook
-, vte
-}:
+{ lib, fetchFromGitHub, python3, keybinder3, intltool, file, gtk3
+, gobject-introspection, libnotify, wrapGAppsHook, vte }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";

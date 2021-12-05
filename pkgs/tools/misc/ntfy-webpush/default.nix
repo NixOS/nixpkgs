@@ -17,10 +17,7 @@ python3Packages.buildPythonPackage rec {
       --replace "'ntfy', " ""
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    pywebpush
-    py-vapid
-  ];
+  propagatedBuildInputs = with python3Packages; [ pywebpush py-vapid ];
 
   # no tests, just a script
   doCheck = false;

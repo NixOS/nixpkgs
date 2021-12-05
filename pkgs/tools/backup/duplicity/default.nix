@@ -1,23 +1,11 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, python3
-, librsync
-, ncftp
-, gnupg
-, gnutar
-, par2cmdline
-, util-linux
-, rsync
-, makeWrapper
-, gettext
-}:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, python3, librsync, ncftp, gnupg
+, gnutar, par2cmdline, util-linux, rsync, makeWrapper, gettext }:
 let
   pythonPackages = python3.pkgs;
   inherit (lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
-in
-pythonPackages.buildPythonApplication rec {
+  majorMinorPatch = v:
+    builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
+in pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
   version = "0.8.20";
 
@@ -39,7 +27,8 @@ pythonPackages.buildPythonApplication rec {
     # https://gitlab.com/duplicity/duplicity/-/merge_requests/64
     # remove on next release
     (fetchpatch {
-      url = "https://gitlab.com/duplicity/duplicity/-/commit/5c229a9b42f67257c747fbc0022c698fec405bbc.patch";
+      url =
+        "https://gitlab.com/duplicity/duplicity/-/commit/5c229a9b42f67257c747fbc0022c698fec405bbc.patch";
       sha256 = "05v931rnawfv11cyxj8gykmal8rj5vq2ksdysyr2mb4sl81mi7v0";
     })
   ] ++ lib.optionals stdenv.isLinux [
@@ -64,29 +53,26 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.wrapPython
     pythonPackages.setuptools-scm
   ];
-  buildInputs = [
-    librsync
-  ];
+  buildInputs = [ librsync ];
 
-  pythonPath = with pythonPackages; [
-    b2sdk
-    boto3
-    cffi
-    cryptography
-    ecdsa
-    idna
-    pygobject3
-    fasteners
-    ipaddress
-    lockfile
-    paramiko
-    pyasn1
-    pycrypto
-    pydrive
-    future
-  ] ++ lib.optionals (!isPy3k) [
-    enum
-  ];
+  pythonPath = with pythonPackages;
+    [
+      b2sdk
+      boto3
+      cffi
+      cryptography
+      ecdsa
+      idna
+      pygobject3
+      fasteners
+      ipaddress
+      lockfile
+      paramiko
+      pyasn1
+      pycrypto
+      pydrive
+      future
+    ] ++ lib.optionals (!isPy3k) [ enum ];
 
   checkInputs = [
     gnupg # Add 'gpg' to PATH.
@@ -95,13 +81,7 @@ pythonPackages.buildPythonApplication rec {
     par2cmdline # Add 'par2' to PATH.
   ] ++ lib.optionals stdenv.isLinux [
     util-linux # Add 'setsid' to PATH.
-  ] ++ (with pythonPackages; [
-    lockfile
-    mock
-    pexpect
-    pytest
-    pytest-runner
-  ]);
+  ] ++ (with pythonPackages; [ lockfile mock pexpect pytest pytest-runner ]);
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
@@ -137,7 +117,8 @@ pythonPackages.buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
+    description =
+      "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

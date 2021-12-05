@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "argtable";
@@ -18,9 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   postPatch = ''
     patchShebangs tools/build

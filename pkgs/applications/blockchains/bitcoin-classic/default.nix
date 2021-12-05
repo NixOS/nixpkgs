@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, openssl
-, db48
-, boost
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, util-linux
-, protobuf
-, qrencode
-, libevent
-, withGui
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
+, zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf, qrencode
+, libevent, withGui }:
 
 stdenv.mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-classic";
@@ -29,22 +14,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [
-    openssl
-    db48
-    boost
-    zlib
-    miniupnpc
-    util-linux
-    protobuf
-    libevent
-  ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
+  buildInputs =
+    [ openssl db48 boost zlib miniupnpc util-linux protobuf libevent ]
+    ++ lib.optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
     ++ lib.optionals withGui [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   enableParallelBuilding = true;
 

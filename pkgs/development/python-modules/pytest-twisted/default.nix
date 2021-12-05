@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, greenlet
-, pytest
-, decorator
-}:
+{ lib, buildPythonPackage, fetchPypi, greenlet, pytest, decorator }:
 
 buildPythonPackage rec {
   pname = "pytest-twisted";

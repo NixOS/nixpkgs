@@ -1,24 +1,25 @@
 # Based on https://github.com/justinwoo/easy-purescript-nix/blob/master/psc-package-simple.nix
 { stdenv, lib, fetchurl, gmp, zlib, libiconv, darwin, installShellFiles }:
 
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
+let dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "psc-package-simple";
 
   version = "0.6.2";
 
-  src = if stdenv.isDarwin
-  then fetchurl {
-    url = "https://github.com/purescript/psc-package/releases/download/v0.6.2/macos.tar.gz";
-    sha256 = "17dh3bc5b6ahfyx0pi6n9qnrhsyi83qdynnca6k1kamxwjimpcq1";
-  }
-  else fetchurl {
-    url = "https://github.com/purescript/psc-package/releases/download/v0.6.2/linux64.tar.gz";
-    sha256 = "1zvay9q3xj6yd76w6qyb9la4jaj9zvpf4dp78xcznfqbnbhm1a54";
-  };
+  src = if stdenv.isDarwin then
+    fetchurl {
+      url =
+        "https://github.com/purescript/psc-package/releases/download/v0.6.2/macos.tar.gz";
+      sha256 = "17dh3bc5b6ahfyx0pi6n9qnrhsyi83qdynnca6k1kamxwjimpcq1";
+    }
+  else
+    fetchurl {
+      url =
+        "https://github.com/purescript/psc-package/releases/download/v0.6.2/linux64.tar.gz";
+      sha256 = "1zvay9q3xj6yd76w6qyb9la4jaj9zvpf4dp78xcznfqbnbhm1a54";
+    };
 
   buildInputs = [ gmp zlib ];
   nativeBuildInputs = [ installShellFiles ];

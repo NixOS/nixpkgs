@@ -17,9 +17,7 @@ stdenv.mkDerivation {
     cp xclock.man $out/share/man/man1/xclock.1
   '';
 
-  makeFlags = [
-    "DESTINATION=$(out)/bin/"
-  ];
+  makeFlags = [ "DESTINATION=$(out)/bin/" ];
 
   buildInputs = [ xlibsWrapper motif ];
 

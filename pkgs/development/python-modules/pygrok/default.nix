@@ -13,14 +13,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  checkInputs =  [ pytest ];
+  checkInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';
 
   meta = with lib; {
     maintainers = with maintainers; [ winpat ];
-    description = "A python implementation of jordansissel's grok regular expression library";
+    description =
+      "A python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, poetry-core, pytest-aiohttp
+, pytest-timeout, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "motioneye-client";
@@ -23,28 +15,18 @@ buildPythonPackage rec {
     sha256 = "sha256-vEB9ztz0RTGoolFUVQcMV7DUthCEAx1kpwkAS2186OU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytest-timeout pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
   '';
 
-  pythonImportsCheck = [
-    "motioneye_client"
-  ];
+  pythonImportsCheck = [ "motioneye_client" ];
 
   meta = with lib; {
     description = "Python library for motionEye";

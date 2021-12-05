@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, runCommand, symlinkJoin, why3 }:
 provers:
-let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
-  ''
+let
+  configAwkScript = runCommand "why3-conf.awk" { inherit provers; } ''
     for p in $provers; do
       for b in $p/bin/*; do
         BASENAME=$(basename $b)
@@ -10,8 +10,7 @@ let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
     done
     echo '{ print }' >> $out
   '';
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${why3.name}-with-provers";
 
   nativeBuildInputs = [ makeWrapper ];

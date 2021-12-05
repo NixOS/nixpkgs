@@ -1,22 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, pkg-config
-, qmake
-, qtquickcontrols2
-, SDL2
-, SDL2_ttf
-, libva
-, libvdpau
-, libxkbcommon
-, alsa-lib
-, libpulseaudio
-, openssl
-, libopus
-, ffmpeg
-, wayland
-}:
+{ stdenv, lib, fetchFromGitHub, wrapQtAppsHook, pkg-config, qmake
+, qtquickcontrols2, SDL2, SDL2_ttf, libva, libvdpau, libxkbcommon, alsa-lib
+, libpulseaudio, openssl, libopus, ffmpeg, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
@@ -30,11 +14,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-    pkg-config
-    qmake
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook pkg-config qmake ];
 
   buildInputs = [
     qtquickcontrols2

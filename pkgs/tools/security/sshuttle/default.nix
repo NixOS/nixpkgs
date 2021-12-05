@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, python3Packages
-, makeWrapper
-, coreutils
-, iptables
-, nettools
-, openssh
-, procps
-}:
+{ lib, stdenv, python3Packages, makeWrapper, coreutils, iptables, nettools
+, openssh, procps }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
@@ -33,7 +25,10 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${
+        lib.makeBinPath ([ coreutils openssh procps ]
+          ++ lib.optionals stdenv.isLinux [ iptables nettools ])
+      }" \
   '';
 
   meta = with lib; {

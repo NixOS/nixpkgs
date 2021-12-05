@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, requests, requests_oauthlib, six
-, pytest, pytestcache, pytest-cov, responses, mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib, six
+, pytest, pytestcache, pytest-cov, responses, mock }:
 
 buildPythonPackage rec {
   version = "0.10.1";

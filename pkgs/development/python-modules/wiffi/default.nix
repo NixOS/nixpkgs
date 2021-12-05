@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "wiffi";
@@ -19,16 +14,12 @@ buildPythonPackage rec {
     sha256 = "sha256-uB4M3etW1DCE//V2pcmsLZbORmrL00pbPADMQD5y3CY=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wiffi"
-  ];
+  pythonImportsCheck = [ "wiffi" ];
 
   meta = with lib; {
     description = "Python module to interface with STALL WIFFI devices";

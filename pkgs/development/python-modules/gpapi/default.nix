@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, cryptography
-, fetchPypi
-, lib
-, pythonOlder
-, protobuf
-, pycryptodome
-, requests
-}:
+{ buildPythonPackage, cryptography, fetchPypi, lib, pythonOlder, protobuf
+, pycryptodome, requests }:
 
 buildPythonPackage rec {
   version = "0.4.4";

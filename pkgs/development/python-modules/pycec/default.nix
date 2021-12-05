@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libcec
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, libcec, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pycec";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "1ivnmihajhfkwwghgl0f8n9ragpirbmbj1mhj9bmjjc29zzdc3m6";
   };
 
-  propagatedBuildInputs = [
-    libcec
-  ];
+  propagatedBuildInputs = [ libcec ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pycec" ];
 

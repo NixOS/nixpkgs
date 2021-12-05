@@ -46,7 +46,8 @@ stdenv.mkDerivation {
   outputHash = "0a54gyrq6jfxxvimaa4yjfiyfwf7wv58v0a32l74yrzyarr3ldby";
 
   meta = with lib; {
-    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
+    description =
+      "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
     homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;

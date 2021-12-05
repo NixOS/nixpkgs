@@ -12,10 +12,7 @@ buildGoModule rec {
   };
   vendorSha256 = "1gw83bd14ig18y8si3f94iivx2ir1vw4b5b95fp6r7qhfp0rgbih";
 
-  ldflags = [
-    "-s" "-w"
-    "-X main.Version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/slok/agebox";

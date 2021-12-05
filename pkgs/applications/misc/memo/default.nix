@@ -1,7 +1,5 @@
-{ fetchFromGitHub, silver-searcher, tree, man, lib, stdenv,
-  git,
-  pandocSupport ? true, pandoc ? null
-  , ... }:
+{ fetchFromGitHub, silver-searcher, tree, man, lib, stdenv, git
+, pandocSupport ? true, pandoc ? null, ... }:
 
 assert pandocSupport -> pandoc != null;
 
@@ -12,9 +10,9 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchFromGitHub {
-    owner  = "mrVanDalo";
-    repo   = "memo";
-    rev    = version;
+    owner = "mrVanDalo";
+    repo = "memo";
+    rev = version;
     sha256 = "0azx2bx6y7j0637fg3m8zigcw09zfm2mw9wjfg218sx88cm1wdkp";
   };
 

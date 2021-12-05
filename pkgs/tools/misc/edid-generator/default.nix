@@ -1,10 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, dos2unix
-, edid-decode
-, hexdump
-, zsh
-, modelines ? [] # Modeline "1280x800"   83.50  1280 1352 1480 1680  800 803 809 831 -hsync +vsync
+{ lib, stdenv, fetchFromGitHub, dos2unix, edid-decode, hexdump, zsh, modelines ?
+  [ ] # Modeline "1280x800"   83.50  1280 1352 1480 1680  800 803 809 831 -hsync +vsync
 }:
 
 stdenv.mkDerivation rec {
@@ -24,14 +19,17 @@ stdenv.mkDerivation rec {
     patchShebangs modeline2edid
   '';
 
-  configurePhase = (lib.concatMapStringsSep "\n" (m: "echo \"${m}\" | ./modeline2edid -") modelines);
+  configurePhase =
+    (lib.concatMapStringsSep "\n" (m: ''echo "${m}" | ./modeline2edid -'')
+      modelines);
 
   installPhase = ''
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
   '';
 
   meta = {
-    description = "Hackerswork to generate an EDID blob from given Xorg Modelines";
+    description =
+      "Hackerswork to generate an EDID blob from given Xorg Modelines";
     homepage = "https://github.com/akatrevorjay/edid-generator";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flokli ];

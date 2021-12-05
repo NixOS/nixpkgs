@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, pythonOlder
-, requests
-, pytestCheckHook
-, pyjson5
-, Babel
-, jupyter_server
-, openapi-core
-, pytest-tornasync
-, ruamel-yaml
-, strict-rfc3339
-}:
+{ lib, buildPythonPackage, fetchPypi, jsonschema, pythonOlder, requests
+, pytestCheckHook, pyjson5, Babel, jupyter_server, openapi-core
+, pytest-tornasync, ruamel-yaml, strict-rfc3339 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";

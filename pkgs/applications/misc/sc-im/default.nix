@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, which
-, bison
-, gnuplot
-, libxls
-, libxlsxwriter
-, libxml2
-, libzip
-, ncurses
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, pkg-config, which, bison, gnuplot
+, libxls, libxlsxwriter, libxml2, libzip, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "sc-im";
@@ -26,26 +14,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    which
-    bison
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config which bison ];
 
-  buildInputs = [
-    gnuplot
-    libxls
-    libxlsxwriter
-    libxml2
-    libzip
-    ncurses
-  ];
+  buildInputs = [ gnuplot libxls libxlsxwriter libxml2 libzip ncurses ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
-    wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
+    wrapProgram "$out/bin/sc-im" --prefix PATH : "${
+      lib.makeBinPath [ gnuplot ]
+    }"
   '';
 
   meta = with lib; {

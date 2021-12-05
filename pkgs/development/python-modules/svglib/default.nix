@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cssselect2
-, lxml
-, pillow
-, pytest
-, reportlab
-, tinycss2
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cssselect2, lxml, pillow, pytest
+, reportlab, tinycss2 }:
 
 buildPythonPackage rec {
   pname = "svglib";
@@ -21,17 +12,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
-    cssselect2
-    lxml
-    pillow
-    reportlab
-    tinycss2
-  ];
+  propagatedBuildInputs = [ cssselect2 lxml pillow reportlab tinycss2 ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   # Ignore tests that require network access (TestWikipediaFlags and TestW3CSVG), and tests that
   # require files missing in the 1.0.0 PyPI release (TestOtherFiles).

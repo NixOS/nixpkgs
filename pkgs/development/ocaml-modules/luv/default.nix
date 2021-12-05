@@ -1,8 +1,4 @@
-{ lib, buildDunePackage, fetchurl
-, ctypes, result
-, alcotest
-, file
-}:
+{ lib, buildDunePackage, fetchurl, ctypes, result, alcotest, file }:
 
 buildDunePackage rec {
   pname = "luv";
@@ -10,7 +6,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
+    url =
+      "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
     sha256 = "0zygir01d6vglfs4b3klnbg90glvyl9agq5xnzn8hmsb6d8z0jqp";
   };
 

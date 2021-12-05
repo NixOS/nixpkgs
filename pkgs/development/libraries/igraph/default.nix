@@ -1,23 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, arpack
-, bison
-, blas
-, cmake
-, flex
-, fop
-, glpk
-, gmp
-, lapack
-, libxml2
-, libxslt
-, pkg-config
-, python3
-, sourceHighlight
-, suitesparse
-, xmlto
-}:
+{ stdenv, lib, fetchFromGitHub, arpack, bison, blas, cmake, flex, fop, glpk, gmp
+, lapack, libxml2, libxslt, pkg-config, python3, sourceHighlight, suitesparse
+, xmlto }:
 
 stdenv.mkDerivation rec {
   pname = "igraph";
@@ -58,15 +41,7 @@ stdenv.mkDerivation rec {
     xmlto
   ];
 
-  buildInputs = [
-    arpack
-    blas
-    glpk
-    gmp
-    lapack
-    libxml2
-    suitesparse
-  ];
+  buildInputs = [ arpack blas glpk gmp lapack libxml2 suitesparse ];
 
   cmakeFlags = [
     "-DIGRAPH_USE_INTERNAL_BLAS=OFF"

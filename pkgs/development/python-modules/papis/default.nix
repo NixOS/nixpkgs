@@ -1,13 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg-utils
-, requests, filetype, pyparsing, configparser, arxiv2bib
-, pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
-, click, python-slugify, habanero, isbnlib, typing-extensions
-, prompt-toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pytest-cov
+{ lib, buildPythonPackage, fetchFromGitHub, xdg-utils, requests, filetype
+, pyparsing, configparser, arxiv2bib, pyyaml, chardet, beautifulsoup4, colorama
+, bibtexparser, click, python-slugify, habanero, isbnlib, typing-extensions
+, prompt-toolkit, pygments, stevedore, tqdm, lxml, python-doi, isPy3k
+, pytest-cov
 #, optional, dependencies
-, whoosh, pytest
-, stdenv
-}:
+, whoosh, pytest, stdenv }:
 
 buildPythonPackage rec {
   pname = "papis";
@@ -23,11 +20,26 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests filetype pyparsing configparser arxiv2bib
-    pyyaml chardet beautifulsoup4 colorama bibtexparser
-    click python-slugify habanero isbnlib
-    prompt-toolkit pygments typing-extensions
-    stevedore tqdm lxml
+    requests
+    filetype
+    pyparsing
+    configparser
+    arxiv2bib
+    pyyaml
+    chardet
+    beautifulsoup4
+    colorama
+    bibtexparser
+    click
+    python-slugify
+    habanero
+    isbnlib
+    prompt-toolkit
+    pygments
+    typing-extensions
+    stevedore
+    tqdm
+    lxml
     python-doi
     # optional dependencies
     whoosh
@@ -42,11 +54,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = ([
-    pytest pytest-cov
-  ]) ++ [
-    xdg-utils
-  ];
+  checkInputs = ([ pytest pytest-cov ]) ++ [ xdg-utils ];
 
   # most of the downloader tests and 4 other tests require a network connection
   # test_export_yaml and test_citations check for the exact output produced by pyyaml 3.x and

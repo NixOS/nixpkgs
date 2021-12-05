@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "yubico-client";
@@ -16,9 +15,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Verifying Yubico OTPs based on the validation protocol version 2.0";
+    description =
+      "Verifying Yubico OTPs based on the validation protocol version 2.0";
     homepage = "https://github.com/Kami/python-yubico-client/";
-    maintainers= with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [ peterromfeldhk ];
     license = licenses.bsd3;
   };
 }

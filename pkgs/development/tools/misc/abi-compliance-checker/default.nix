@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lvc.github.io/abi-compliance-checker";
-    description = "A tool for checking backward API/ABI compatibility of a C/C++ library";
+    description =
+      "A tool for checking backward API/ABI compatibility of a C/C++ library";
     license = licenses.lgpl21;
     maintainers = [ maintainers.bhipple ];
     platforms = platforms.all;

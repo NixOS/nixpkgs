@@ -1,4 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which
+, pkg-config, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -10,11 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = let
-    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
-      url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
+    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }:
+      fetchurl {
+        url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
           + "/debian/patches/${pname}.diff?inline=false";
-      inherit name sha256;
-    };
+        inherit name sha256;
+      };
   in [
     (dp {
       pname = "20_no_Werror";
@@ -32,7 +34,8 @@ stdenv.mkDerivation rec {
     # patch meanwhile.
     (fetchpatch {
       name = "guile-3.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7";
       sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
     })
   ];
@@ -40,14 +43,16 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkg-config perl autoreconfHook/*patches applied*/
+    which
+    pkg-config
+    perl
+    autoreconfHook # patches applied
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
-    buildPackages.buildPackages.autogen buildPackages.texinfo
+    buildPackages.buildPackages.autogen
+    buildPackages.texinfo
   ];
-  buildInputs = [
-    guile libxml2
-  ];
+  buildInputs = [ guile libxml2 ];
 
   preConfigure = ''
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
     #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
   ]
   # See: https://sourceforge.net/p/autogen/bugs/187/
-  ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
+    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
 
   #doCheck = true; # not reliable
 

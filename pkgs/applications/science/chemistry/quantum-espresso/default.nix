@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gfortran
-, fftw
-, blas
-, lapack
-, useMpi ? false
-, mpi
-}:
+{ lib, stdenv, fetchFromGitLab, gfortran, fftw, blas, lapack, useMpi ? false
+, mpi }:
 
 stdenv.mkDerivation rec {
   version = "6.6";
@@ -20,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mkfmw0fq1dabplzdn6v1abhw0ds55gzlvbx3a9brv493whk21yp";
   };
 
-  passthru = {
-    inherit mpi;
-  };
+  passthru = { inherit mpi; };
 
   preConfigure = ''
     patchShebangs configure
@@ -30,15 +20,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran ];
 
-  buildInputs = [ fftw blas lapack ]
-    ++ (lib.optionals useMpi [ mpi ]);
+  buildInputs = [ fftw blas lapack ] ++ (lib.optionals useMpi [ mpi ]);
 
-  configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
+  configureFlags = if useMpi then
+    [ "LD=${mpi}/bin/mpif90" ]
+  else
+    [ "LD=${gfortran}/bin/gfortran" ];
 
   makeFlags = [ "all" ];
 
   meta = with lib; {
-    description = "Electronic-structure calculations and materials modeling at the nanoscale";
+    description =
+      "Electronic-structure calculations and materials modeling at the nanoscale";
     longDescription = ''
       Quantum ESPRESSO is an integrated suite of Open-Source computer codes for
       electronic-structure calculations and materials modeling at the

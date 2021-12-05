@@ -1,8 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
-, dfu-util, avrdude
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, gcc-arm-embedded, python3Packages
+, qtbase, qtmultimedia, qttranslations, SDL, gtest, dfu-util, avrdude }:
 
 mkDerivation rec {
   pname = "opentx";

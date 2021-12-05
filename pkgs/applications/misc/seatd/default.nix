@@ -1,12 +1,4 @@
-{ fetchFromSourcehut
-, lib
-, meson
-, ninja
-, pkg-config
-, scdoc
-, stdenv
-, systemd
-}:
+{ fetchFromSourcehut, lib, meson, ninja, pkg-config, scdoc, stdenv, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "seatd";
@@ -31,10 +23,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A universal seat management library";
-    changelog   = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
-    homepage    = "https://sr.ht/~kennylevinsen/seatd/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
+    homepage = "https://sr.ht/~kennylevinsen/seatd/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ emantor ];
   };
 }

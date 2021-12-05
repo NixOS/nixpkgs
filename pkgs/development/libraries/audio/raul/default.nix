@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A C++ utility library primarily aimed at audio/musical applications";
+    description =
+      "A C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

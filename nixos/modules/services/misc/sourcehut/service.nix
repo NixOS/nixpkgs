@@ -10,9 +10,9 @@ let
     from ${serviceDrv.pname}.app import db
     db.create()
   '';
-in
-with serviceCfg; with lib; recursiveUpdate
-{
+in with serviceCfg;
+with lib;
+recursiveUpdate {
   environment.HOME = statePath;
   path = [ config.services.postgresql.package ] ++ (attrs.path or [ ]);
   restartTriggers = [ config.environment.etc."sr.ht/config.ini".source ];
@@ -23,9 +23,9 @@ with serviceCfg; with lib; recursiveUpdate
     Restart = "always";
     WorkingDirectory = statePath;
   } // (if (cfg.statePath == "/var/lib/sourcehut/${serviceDrv.pname}") then {
-          StateDirectory = [ "sourcehut/${serviceDrv.pname}" ];
-        } else {})
-  ;
+    StateDirectory = [ "sourcehut/${serviceDrv.pname}" ];
+  } else
+    { });
 
   preStart = ''
     if ! test -e ${statePath}/db; then
@@ -50,17 +50,17 @@ with serviceCfg; with lib; recursiveUpdate
       touch ${statePath}/webhook
     fi
 
-    ${optionalString (builtins.hasAttr "migrate-on-upgrade" cfgIni && cfgIni.migrate-on-upgrade == "yes") ''
-      if [ "$(cat ${statePath}/db)" != "${serviceDrv.version}" ]; then
-        # Manage schema migrations using alembic
-        ${cfg.python}/bin/${serviceDrv.pname}-migrate -a upgrade head
+    ${optionalString (builtins.hasAttr "migrate-on-upgrade" cfgIni
+      && cfgIni.migrate-on-upgrade == "yes") ''
+        if [ "$(cat ${statePath}/db)" != "${serviceDrv.version}" ]; then
+          # Manage schema migrations using alembic
+          ${cfg.python}/bin/${serviceDrv.pname}-migrate -a upgrade head
 
-        # Mark down current package version
-        printf "%s" "${serviceDrv.version}" > ${statePath}/db
-      fi
-    ''}
+          # Mark down current package version
+          printf "%s" "${serviceDrv.version}" > ${statePath}/db
+        fi
+      ''}
 
     ${attrs.preStart or ""}
   '';
-}
-  (builtins.removeAttrs attrs [ "path" "preStart" ])
+} (builtins.removeAttrs attrs [ "path" "preStart" ])

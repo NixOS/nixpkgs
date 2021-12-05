@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, markupsafe
-, mock
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, isPyPy, markupsafe, mock, pytestCheckHook
 }:
 
 buildPythonPackage rec {

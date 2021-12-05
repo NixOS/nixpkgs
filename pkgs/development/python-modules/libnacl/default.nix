@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libsodium
-, pytestCheckHook
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, libsodium, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,13 +14,12 @@ buildPythonPackage rec {
 
   buildInputs = [ libsodium ];
 
-  postPatch =
-    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in
-    ''
-      substituteInPlace "./libnacl/__init__.py" --replace \
-        "ctypes.cdll.LoadLibrary('libsodium${soext}')" \
-        "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
-    '';
+  postPatch = let soext = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
+    substituteInPlace "./libnacl/__init__.py" --replace \
+      "ctypes.cdll.LoadLibrary('libsodium${soext}')" \
+      "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
+  '';
 
   checkInputs = [ pytestCheckHook ];
 

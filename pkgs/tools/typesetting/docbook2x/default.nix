@@ -1,7 +1,5 @@
-{ fetchurl, lib, stdenv, texinfo, perlPackages
-, groff, libxml2, libxslt, gnused, libiconv, opensp
-, docbook_xml_dtd_43, bash
-, makeWrapper }:
+{ fetchurl, lib, stdenv, texinfo, perlPackages, groff, libxml2, libxslt, gnused
+, libiconv, opensp, docbook_xml_dtd_43, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "docbook2X";
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
     # Broken substitution is used for `perl/config.pl', which leaves literal
     # `$prefix' in it.
     substituteInPlace "perl/config.pl"       \
-      --replace '${"\$" + "{prefix}"}' "$out"
+      --replace '${"$" + "{prefix}"}' "$out"
   '';
 
   doCheck = false; # fails a lot of tests
@@ -37,7 +35,10 @@ stdenv.mkDerivation rec {
       # XXX: We work around the fact that `wrapProgram' doesn't support
       # spaces below by inserting escaped backslashes.
       wrapProgram $out/bin/$i \
-        --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [XMLSAX XMLParser XMLNamespaceSupport]} \
+        --prefix PERL5LIB : ${
+          with perlPackages;
+          makeFullPerlPath [ XMLSAX XMLParser XMLNamespaceSupport ]
+        } \
         --prefix XML_CATALOG_FILES "\ " \
         "$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml\ ${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml"
     done

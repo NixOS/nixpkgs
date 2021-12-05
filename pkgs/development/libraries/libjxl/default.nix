@@ -1,20 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
-, asciidoc
-, brotli
-, cmake
-, graphviz
-, doxygen
-, giflib
-, gperftools
-, gtest
-, libjpeg
-, libpng
-, libwebp
-, openexr
-, pkg-config
-, python3
-, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, asciidoc, brotli, cmake, graphviz, doxygen
+, giflib, gperftools, gtest, libjpeg, libpng, libwebp, openexr, pkg-config
+, python3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
@@ -108,6 +94,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # `internal compiler error`, see https://github.com/NixOS/nixpkgs/pull/103160#issuecomment-866388610
+    broken =
+      stdenv.hostPlatform.isAarch64; # `internal compiler error`, see https://github.com/NixOS/nixpkgs/pull/103160#issuecomment-866388610
   };
 }

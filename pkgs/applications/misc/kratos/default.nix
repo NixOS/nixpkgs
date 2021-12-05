@@ -37,6 +37,7 @@ buildGoModule rec {
     maintainers = with maintainers; [ mrmebelman ];
     homepage = "https://www.ory.sh/kratos/";
     license = licenses.asl20;
-    description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    description =
+      "An API-first Identity and User Management system that is built according to cloud architecture best practices";
   };
 }

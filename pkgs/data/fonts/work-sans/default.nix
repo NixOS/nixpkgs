@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "1.6";
+let version = "1.6";
 in fetchFromGitHub {
   name = "work-sans-${version}";
 

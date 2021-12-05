@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers, ocl-icd }:
+{ lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers
+, ocl-icd }:
 
 let
   version = "2019-12-13";
@@ -17,15 +18,13 @@ let
 
     buildInputs = [ opencl-headers ocl-icd openssl zlib ];
 
-    postInstall = let
-      python = python2Packages.python;
+    postInstall = let python = python2Packages.python;
     in ''
       # pyrit uses "import _cpyrit_cuda" so put the output in the root site-packages
       mv $out/lib/${python.libPrefix}/site-packages/cpyrit/_cpyrit_opencl.so $out/lib/${python.libPrefix}/site-packages/
     '';
   };
-in
-python2Packages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   pname = "pyrit";
   inherit version src;
 

@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, appstream-glib
-, dbus
-, pango
-, pcre2
-, tmux
-, vte
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, appstream-glib, dbus
+, pango, pcre2, tmux, vte, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "germinal";
@@ -23,13 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
-  buildInputs = [
-    appstream-glib
-    dbus
-    pango
-    pcre2
-    vte
-  ];
+  buildInputs = [ appstream-glib dbus pango pcre2 vte ];
 
   configureFlags = [
     "--with-dbusservicesdir=${placeholder "out"}/etc/dbus-1/system-services/"

@@ -4,16 +4,16 @@
 with lib;
 
 {
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   imports = [
     # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "rygel" "enable" ]
-      [ "services" "gnome" "rygel" "enable" ]
-    )
+    (mkRenamedOptionModule [ "services" "gnome3" "rygel" "enable" ] [
+      "services"
+      "gnome"
+      "rygel"
+      "enable"
+    ])
   ];
 
   ###### interface

@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-
 # TODO: test configuration when building nixexpr (use -t parameter)
 # TODO: support sqlite3 (it's deprecate?) and mysql
 
@@ -10,79 +9,76 @@ let
   libDir = "/var/lib/bacula";
 
   fd_cfg = config.services.bacula-fd;
-  fd_conf = pkgs.writeText "bacula-fd.conf"
-    ''
-      Client {
-        Name = "${fd_cfg.name}";
-        FDPort = ${toString fd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
-        ${fd_cfg.extraClientConfig}
-      }
+  fd_conf = pkgs.writeText "bacula-fd.conf" ''
+    Client {
+      Name = "${fd_cfg.name}";
+      FDPort = ${toString fd_cfg.port};
+      WorkingDirectory = "${libDir}";
+      Pid Directory = "/run";
+      ${fd_cfg.extraClientConfig}
+    }
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
         Password = "${value.password}";
         Monitor = "${value.monitor}";
       }
-      '') fd_cfg.director)}
+    '') fd_cfg.director)}
 
-      Messages {
-        Name = Standard;
-        syslog = all, !skipped, !restored
-        ${fd_cfg.extraMessagesConfig}
-      }
-    '';
+    Messages {
+      Name = Standard;
+      syslog = all, !skipped, !restored
+      ${fd_cfg.extraMessagesConfig}
+    }
+  '';
 
   sd_cfg = config.services.bacula-sd;
-  sd_conf = pkgs.writeText "bacula-sd.conf"
-    ''
-      Storage {
-        Name = "${sd_cfg.name}";
-        SDPort = ${toString sd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
-        ${sd_cfg.extraStorageConfig}
-      }
+  sd_conf = pkgs.writeText "bacula-sd.conf" ''
+    Storage {
+      Name = "${sd_cfg.name}";
+      SDPort = ${toString sd_cfg.port};
+      WorkingDirectory = "${libDir}";
+      Pid Directory = "/run";
+      ${sd_cfg.extraStorageConfig}
+    }
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Autochanger {
         Name = "${name}";
-        Device = ${concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
+        Device = ${concatStringsSep ", " (map (a: ''"${a}"'') value.devices)};
         Changer Device =  "${value.changerDevice}";
         Changer Command = "${value.changerCommand}";
         ${value.extraAutochangerConfig}
       }
-      '') sd_cfg.autochanger)}
+    '') sd_cfg.autochanger)}
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Device {
         Name = "${name}";
         Archive Device = "${value.archiveDevice}";
         Media Type = "${value.mediaType}";
         ${value.extraDeviceConfig}
       }
-      '') sd_cfg.device)}
+    '') sd_cfg.device)}
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
         Password = "${value.password}";
         Monitor = "${value.monitor}";
       }
-      '') sd_cfg.director)}
+    '') sd_cfg.director)}
 
-      Messages {
-        Name = Standard;
-        syslog = all, !skipped, !restored
-        ${sd_cfg.extraMessagesConfig}
-      }
-    '';
+    Messages {
+      Name = Standard;
+      syslog = all, !skipped, !restored
+      ${sd_cfg.extraMessagesConfig}
+    }
+  '';
 
   dir_cfg = config.services.bacula-dir;
-  dir_conf = pkgs.writeText "bacula-dir.conf"
-    ''
+  dir_conf = pkgs.writeText "bacula-dir.conf" ''
     Director {
       Name = "${dir_cfg.name}";
       Password = "${dir_cfg.password}";
@@ -106,10 +102,9 @@ let
     }
 
     ${dir_cfg.extraConfig}
-    '';
+  '';
 
-  directorOptions = {...}:
-  {
+  directorOptions = { ... }: {
     options = {
       password = mkOption {
         type = types.str;
@@ -149,8 +144,7 @@ let
     };
   };
 
-  autochangerOptions = {...}:
-  {
+  autochangerOptions = { ... }: {
     options = {
       changerDevice = mkOption {
         type = types.str;
@@ -168,7 +162,7 @@ let
           is optional. See the Using AutochangersAutochangersChapter chapter of
           this manual for more details of using this and the following
           autochanger directives.
-          '';
+        '';
       };
 
       changerCommand = mkOption {
@@ -190,7 +184,7 @@ let
           AutochangersAutochangersChapter chapter of this manual. For FreeBSD
           users, you might want to see one of the several chio scripts in
           examples/autochangers.
-          '';
+        '';
         default = "/etc/bacula/mtx-changer %c %o %S %a %d";
       };
 
@@ -205,16 +199,12 @@ let
         description = ''
           Extra configuration to be passed in Autochanger directive.
         '';
-        example = ''
-
-        '';
+        example = "\n";
       };
     };
   };
 
-
-  deviceOptions = {...}:
-  {
+  deviceOptions = { ... }: {
     options = {
       archiveDevice = mkOption {
         # TODO: required?
@@ -322,7 +312,7 @@ in {
       };
 
       director = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines director resources in Bacula File Daemon.
         '';
@@ -380,7 +370,7 @@ in {
       };
 
       director = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
@@ -388,7 +378,7 @@ in {
       };
 
       device = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
@@ -396,7 +386,7 @@ in {
       };
 
       autochanger = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines Autochanger resources in Bacula Storage Daemon.
         '';
@@ -463,7 +453,7 @@ in {
         # TODO: required?
         type = types.str;
         description = ''
-           Specifies the password that must be supplied for a Director.
+          Specifies the password that must be supplied for a Director.
         '';
       };
 
@@ -510,7 +500,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
       serviceConfig = {
-        ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
+        ExecStart =
+          "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";
@@ -523,7 +514,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
       serviceConfig = {
-        ExecStart = "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
+        ExecStart =
+          "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";
@@ -538,7 +530,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
       serviceConfig = {
-        ExecStart = "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";
+        ExecStart =
+          "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";

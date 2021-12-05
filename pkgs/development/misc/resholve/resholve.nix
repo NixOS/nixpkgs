@@ -1,12 +1,5 @@
-{ lib
-, callPackage
-, python27Packages
-, installShellFiles
-, rSrc
-, version
-, oildev
-, binlore
-}:
+{ lib, callPackage, python27Packages, installShellFiles, rSrc, version, oildev
+, binlore }:
 
 python27Packages.buildPythonApplication {
   pname = "resholve";
@@ -36,7 +29,10 @@ python27Packages.buildPythonApplication {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  passthru.tests = callPackage ./test.nix { inherit rSrc; inherit binlore; };
+  passthru.tests = callPackage ./test.nix {
+    inherit rSrc;
+    inherit binlore;
+  };
 
   meta = with lib; {
     description = "Resolve external shell-script dependencies";

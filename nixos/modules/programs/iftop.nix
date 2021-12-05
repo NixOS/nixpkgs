@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.iftop;
+let cfg = config.programs.iftop;
 in {
   options = {
     programs.iftop.enable = mkEnableOption "iftop + setcap wrapper";

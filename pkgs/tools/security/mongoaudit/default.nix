@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mongoaudit";
@@ -16,19 +13,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "17k4vw5d3kr961axl49ywid4cf3n7zxvm885c4lv15w7s2al1425";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pymongo
-    setuptools
-    urwid
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pymongo setuptools urwid ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mongoaudit"
-  ];
+  pythonImportsCheck = [ "mongoaudit" ];
 
   meta = with lib; {
     description = "MongoDB auditing and pentesting tool";

@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, bison
-, flex
-, readline
-, libX11
-, libICE
-, libXaw
-, libXmu
-, libXext
-, libXt
-, fftw
-}:
+{ lib, stdenv, fetchurl, bison, flex, readline, libX11, libICE, libXaw, libXmu
+, libXext, libXt, fftw }:
 
 stdenv.mkDerivation rec {
   pname = "ngspice";
@@ -24,7 +13,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison ];
   buildInputs = [ readline libX11 libICE libXaw libXmu libXext libXt fftw ];
 
-  configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" ];
+  configureFlags = [
+    "--enable-x"
+    "--with-x"
+    "--with-readline"
+    "--enable-xspice"
+    "--enable-cider"
+  ];
 
   meta = with lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";

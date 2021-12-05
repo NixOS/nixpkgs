@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "subfinder";
@@ -18,9 +15,7 @@ buildGoModule rec {
 
   modRoot = "./v2";
 
-  subPackages = [
-    "cmd/subfinder/"
-  ];
+  subPackages = [ "cmd/subfinder/" ];
 
   meta = with lib; {
     description = "Subdomain discovery tool";

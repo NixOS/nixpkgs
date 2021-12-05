@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, httpx
-, ntlm-auth
-}:
+{ lib, buildPythonPackage, cryptography, fetchPypi, httpx, ntlm-auth }:
 
 buildPythonPackage rec {
   pname = "httpx-ntlm";
@@ -16,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "1rar6smz56y8k5qbgrpabpr639nwvf6whdi093hyakf0m3h9cpfz";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    httpx
-    ntlm-auth
-  ];
+  propagatedBuildInputs = [ cryptography httpx ntlm-auth ];
 
   # https://github.com/ulodciv/httpx-ntlm/issues/5
   doCheck = false;

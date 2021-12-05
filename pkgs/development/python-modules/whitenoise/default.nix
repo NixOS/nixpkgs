@@ -1,11 +1,5 @@
-{ lib
-, brotli
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-}:
+{ lib, brotli, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "17j1rml1hb43c7fs7kf4ygkpmnjppzgsbnyw3plq9w3yh9w5hkhg";
   };
 
-  propagatedBuildInputs = [
-    brotli
-  ];
+  propagatedBuildInputs = [ brotli ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests
-  ];
+  checkInputs = [ pytestCheckHook requests ];
 
   disabledTestPaths = [
     # Don't run Django tests
@@ -43,7 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "whitenoise" ];
 
   meta = with lib; {
-    description = "Radically simplified static file serving for WSGI applications";
+    description =
+      "Radically simplified static file serving for WSGI applications";
     homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

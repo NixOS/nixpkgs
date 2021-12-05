@@ -10,9 +10,7 @@ let
 in lldb_12.overrideAttrs (oldAttrs: {
   src = "${llvmSrc}/lldb";
 
-  passthru = (oldAttrs.passthru or {}) // {
-    inherit llvmSrc;
-  };
+  passthru = (oldAttrs.passthru or { }) // { inherit llvmSrc; };
 
   doInstallCheck = true;
   postInstallCheck = (oldAttrs.postInstallCheck or "") + ''

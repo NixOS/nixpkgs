@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, perl, pkg-config, audiofile, bzip2, glib, libgcrypt, zlib }:
+{ lib, stdenv, fetchurl, perl, pkg-config, audiofile, bzip2, glib, libgcrypt
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libspectrum";

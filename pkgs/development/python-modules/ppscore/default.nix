@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pandas
-, scikit-learn
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pandas, scikit-learn
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ppscore";
@@ -21,10 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    pandas
-    scikit-learn
-  ];
+  propagatedBuildInputs = [ pandas scikit-learn ];
 
   meta = with lib; {
     description = "A Python implementation of the Predictive Power Score (PPS)";

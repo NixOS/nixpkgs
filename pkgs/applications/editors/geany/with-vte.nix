@@ -1,9 +1,4 @@
-{ symlinkJoin
-, makeWrapper
-, geany
-, lndir
-, vte
-}:
+{ symlinkJoin, makeWrapper, geany, lndir, vte }:
 
 symlinkJoin {
   name = "geany-with-vte-${geany.version}";
@@ -20,5 +15,6 @@ symlinkJoin {
       --prefix LD_LIBRARY_PATH : ${vte}/lib
   '';
 
-  inherit (geany.meta);
+  inherit (geany.meta)
+  ;
 }

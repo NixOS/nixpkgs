@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
+{ lib, stdenv, fetchFromGitHub, re2, openfx, zlib, ilmbase, libGLU, libGL
+, openexr }:
 
 stdenv.mkDerivation {
   pname = "openexrid-unstable";
@@ -20,32 +21,34 @@ stdenv.mkDerivation {
         --replace g++ c++
   '';
 
-  NIX_CFLAGS_COMPILE=''-I${ilmbase.dev}/include/OpenEXR
-                       -I${openexr.dev}/include/OpenEXR
-                       -I${openfx.dev}/include/OpenFX
-                      '';
+  NIX_CFLAGS_COMPILE = ''
+    -I${ilmbase.dev}/include/OpenEXR
+                           -I${openexr.dev}/include/OpenEXR
+                           -I${openfx.dev}/include/OpenFX
+                          '';
 
   buildInputs = [ re2 openfx zlib ilmbase libGLU libGL openexr ];
 
   enableParallelBuilding = true;
 
   buildPhase = ''
-      mkdir openexrid/release
+    mkdir openexrid/release
 
-      PREFIX=$out make -C openexrid install
+    PREFIX=$out make -C openexrid install
 
-      mkdir $dev;
-      mkdir $lib;
+    mkdir $dev;
+    mkdir $lib;
   '';
 
   installPhase = ''
-      find $out
-      mv $out/include $dev/
-      mv $out/lib $lib/
+    find $out
+    mv $out/include $dev/
+    mv $out/lib $lib/
   '';
 
   meta = with lib; {
-    description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";
+    description =
+      "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";
     homepage = "https://github.com/MercenariesEngineering/openexrid";
     maintainers = [ maintainers.guibou ];
     platforms = platforms.all;

@@ -1,30 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, libxml2
-, gobject-introspection
-, wrapGAppsHook
-, python3
-, glib
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, gst_all_1
-, libgee
-, libsoup
-, gtk3
-, libmediaart
-, sqlite
-, systemd
-, tracker
-, shared-mime-info
-, gnome
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, gettext, libxml2
+, gobject-introspection, wrapGAppsHook, python3, glib, gssdp, gupnp, gupnp-av
+, gupnp-dlna, gst_all_1, libgee, libsoup, gtk3, libmediaart, sqlite, systemd
+, tracker, shared-mime-info, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "rygel";
@@ -34,13 +11,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "yejHNiltIsTe/pWXJ6KdMUN7vSt6oMZHDWviQBEFBpc=";
   };
 
-  patches = [
-    ./add-option-for-installation-sysconfdir.patch
-  ];
+  patches = [ ./add-option-for-installation-sysconfdir.patch ];
 
   nativeBuildInputs = [
     meson
@@ -99,7 +76,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
+    description =
+      "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://wiki.gnome.org/Projects/Rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

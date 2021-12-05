@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config
-, SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal
-, freealut, readline, gcc-unwrapped
-, enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+{ lib, stdenv, fetchurl, cmake, pkg-config, SDL2, libvorbis, libogg, libjpeg
+, libpng, freetype, glew, tinyxml, openal, freealut, readline, gcc-unwrapped
+, enableSoundtrack ?
+  false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
 }:
 
 let
@@ -14,7 +14,8 @@ in stdenv.mkDerivation rec {
   pname = "openclonk";
 
   src = fetchurl {
-    url = "https://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";
+    url =
+      "https://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";
     sha256 = "0imkqjp8lww5p0cnqf4k4mb2v682mnsas63qmiz17rspakr7fxik";
   };
 
@@ -27,18 +28,32 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL2 libvorbis libogg libjpeg libpng freetype glew tinyxml openal freealut
+    SDL2
+    libvorbis
+    libogg
+    libjpeg
+    libpng
+    freetype
+    glew
+    tinyxml
+    openal
+    freealut
     readline
   ];
 
-  cmakeFlags = [ "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar" "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib" ];
+  cmakeFlags = [
+    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
 
   meta = with lib; {
-    description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
+    description =
+      "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
-    license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
+    license =
+      if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     maintainers = with maintainers; [ lheckemann ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

@@ -1,10 +1,4 @@
-{ lib
-, fetchurl
-, python3
-, gettext
-, makeDesktopItem
-, copyDesktopItems
-}:
+{ lib, fetchurl, python3, gettext, makeDesktopItem, copyDesktopItems }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
@@ -26,10 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     pillow
   ];
 
-  checkInputs = [
-    gettext
-    python3.pkgs.mock
-  ];
+  checkInputs = [ gettext python3.pkgs.mock ];
 
   desktopItems = [
     (makeDesktopItem {

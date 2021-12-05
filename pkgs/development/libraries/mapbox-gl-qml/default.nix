@@ -1,13 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, curl
-, qtbase
-, qtlocation
-, mapbox-gl-native
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, curl, qtbase
+, qtlocation, mapbox-gl-native }:
 
 mkDerivation rec {
   pname = "mapbox-gl-qml";

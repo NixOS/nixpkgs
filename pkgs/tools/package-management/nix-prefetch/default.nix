@@ -52,7 +52,9 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
     makeWrapper $lib/main.sh $out/bin/${pname} \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ]}
+      --prefix PATH : ${
+        lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ]
+      }
 
     installManPage doc/nix-prefetch.?
 

@@ -1,11 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, perl
-, ghostscript #for postscript and html output
-, psutils, netpbm #for html output
-, buildPackages
-, autoreconfHook
-, pkg-config
-, texinfo
-}:
+, ghostscript # for postscript and html output
+, psutils, netpbm # for html output
+, buildPackages, autoreconfHook, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "groff";
@@ -20,16 +16,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  patches = [
-    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
-  ]
-  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
-    # https://trac.macports.org/ticket/59783
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/ce265cf467f1c3e5ba2edbfbef2170df1a727a52/meta/recipes-extended/groff/files/0001-Include-config.h.patch";
-      sha256 = "1b0mg31xkpxkzlx696nr08rcc7ndpaxdplvysy0hw5099c4n1wyf";
-    })
-  ];
+  patches = [ ./0001-Fix-cross-compilation-by-looking-for-ar.patch ]
+    ++ lib.optionals
+    (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
+      # https://trac.macports.org/ticket/59783
+      (fetchpatch {
+        url =
+          "https://raw.githubusercontent.com/openembedded/openembedded-core/ce265cf467f1c3e5ba2edbfbef2170df1a727a52/meta/recipes-extended/groff/files/0001-Include-config.h.patch";
+        sha256 = "1b0mg31xkpxkzlx696nr08rcc7ndpaxdplvysy0hw5099c4n1wyf";
+      })
+    ];
 
   postPatch = lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
@@ -42,7 +38,9 @@ stdenv.mkDerivation rec {
     substituteInPlace tmac/www.tmac \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
+      --replace "@PNMTOPS_NOSETPAGE@" "${
+        lib.getBin netpbm
+      }/bin/pnmtops -nosetpage"
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];
@@ -53,14 +51,11 @@ stdenv.mkDerivation rec {
   # package. To avoid this issue, X11 support is explicitly disabled.
   # Note: If we ever want to *enable* X11 support, then we'll probably
   # have to pass "--with-appresdir", too.
-  configureFlags = [
-    "--without-x"
-    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-  ] ++ lib.optionals (ghostscript != null) [
-    "--with-gs=${ghostscript}/bin/gs"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "gl_cv_func_signbit=yes"
-  ];
+  configureFlags =
+    [ "--without-x" "ac_cv_path_PERL=${buildPackages.perl}/bin/perl" ]
+    ++ lib.optionals (ghostscript != null) [ "--with-gs=${ghostscript}/bin/gs" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "gl_cv_func_signbit=yes" ];
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
@@ -111,7 +106,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/groff/";
-    description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
+    description =
+      "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];

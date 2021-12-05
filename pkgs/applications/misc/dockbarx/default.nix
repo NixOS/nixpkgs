@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, keybinder3
-, libwnck
-, python3Packages
-, wrapGAppsHook
-}:
+{ lib, fetchFromGitHub, glib, gobject-introspection, gtk3, keybinder3, libwnck
+, python3Packages, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
@@ -22,18 +14,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0xwqxh5mr2bi0sk54b848705awp0lfpd91am551811j2bdkbs04m";
   };
 
-  nativeBuildInputs = [
-    glib.dev
-    python3Packages.polib
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ glib.dev python3Packages.polib wrapGAppsHook ];
 
-  buildInputs = [
-    gobject-introspection
-    gtk3
-    libwnck
-    keybinder3
-  ];
+  buildInputs = [ gobject-introspection gtk3 libwnck keybinder3 ];
 
   propagatedBuildInputs = with python3Packages; [
     dbus-python
@@ -76,7 +59,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/xuzhen/dockbarx";
-    description = "Lightweight taskbar/panel replacement which works as a stand-alone dock";
+    description =
+      "Lightweight taskbar/panel replacement which works as a stand-alone dock";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

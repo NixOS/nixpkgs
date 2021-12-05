@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.clipmenu;
+let cfg = config.services.clipmenu;
 in {
 
   options.services.clipmenu = {
@@ -19,10 +18,10 @@ in {
 
   config = mkIf cfg.enable {
     systemd.user.services.clipmenu = {
-      enable      = true;
+      enable = true;
       description = "Clipboard management daemon";
       wantedBy = [ "graphical-session.target" ];
-      after    = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       serviceConfig.ExecStart = "${cfg.package}/bin/clipmenud";
     };
 

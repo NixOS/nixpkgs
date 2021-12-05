@@ -1,9 +1,4 @@
-{ lib
-, mkDerivationWith
-, python3Packages
-, p7zip
-, archiveSupport ? true
-}:
+{ lib, mkDerivationWith, python3Packages, p7zip, archiveSupport ? true }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "kcc";
@@ -15,7 +10,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
   };
 
-  propagatedBuildInputs = with python3Packages ; [
+  propagatedBuildInputs = with python3Packages; [
     pillow
     pyqt5
     psutil
@@ -23,14 +18,20 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     raven
   ];
 
-  qtWrapperArgs = lib.optional archiveSupport [ "--prefix" "PATH" ":" "${ lib.makeBinPath [ p7zip ] }" ];
+  qtWrapperArgs = lib.optional archiveSupport [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ p7zip ]}"
+  ];
 
-  postFixup =  ''
+  postFixup = ''
     wrapProgram $out/bin/kcc "''${qtWrapperArgs[@]}"
   '';
 
   meta = with lib; {
-    description = "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";
+    description =
+      "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";
     homepage = "https://kcc.iosphe.re";
     license = licenses.isc;
     maintainers = with maintainers; [ dawidsowa ];

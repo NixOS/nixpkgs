@@ -1,8 +1,4 @@
-{ lib
-, callPackage
-, boost-build
-, fetchurl
-}:
+{ lib, callPackage, boost-build, fetchurl }:
 
 let
   # for boost 1.55 we need to use 1.56's b2
@@ -11,7 +7,9 @@ let
   useBoost156 = rec {
     version = "1.56.0";
     src = fetchurl {
-      url = "mirror://sourceforge/boost/boost_${lib.replaceStrings ["."] ["_"] version}.tar.bz2";
+      url = "mirror://sourceforge/boost/boost_${
+          lib.replaceStrings [ "." ] [ "_" ] version
+        }.tar.bz2";
       sha256 = "07gz62nj767qzwqm3xjh11znpyph8gcii0cqhnx7wvismyn34iqk";
     };
   };
@@ -22,13 +20,12 @@ let
         boost-build = boost-build.override {
           # useBoost allows us passing in src and version from
           # the derivation we are building to get a matching b2 version.
-          useBoost =
-            if lib.versionAtLeast self.version "1.56"
-            then self
-            else useBoost156; # see above
+          useBoost = if lib.versionAtLeast self.version "1.56" then
+            self
+          else
+            useBoost156; # see above
         };
-      }
-    );
+      });
 in {
   boost155 = makeBoost ./1.55.nix;
   boost159 = makeBoost ./1.59.nix;

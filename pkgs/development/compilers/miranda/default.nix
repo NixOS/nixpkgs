@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   # Using `fetchzip` will make all the source files have `mtime=1`
   # from the start so this mismatch cannot occur.
   src = fetchzip {
-    url = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/src/mira-${builtins.replaceStrings [ "." ] [ "" ] version}-src.tgz";
+    url = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/src/mira-${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }-src.tgz";
     sha256 = "KE/FTL9YW9l7VBAgkFZlqgSM1Bt/BXT6GkkONtyKJjQ=";
   };
 
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
     # Sent upstream on 2020-10-10.
     (fetchpatch {
       name = "fix-makefile-variables.patch";
-      url = "https://github.com/jtojnar/miranda/commit/be62d2150725a4c314aa7e3e1e75a165c90be65d.patch";
+      url =
+        "https://github.com/jtojnar/miranda/commit/be62d2150725a4c314aa7e3e1e75a165c90be65d.patch";
       sha256 = "0r8nnr7iyzp1a3w3n6y1xi0ralqhm1ifp75yhyj3h1g229vk51a6";
     })
 
@@ -31,7 +34,8 @@ stdenv.mkDerivation rec {
     # Sent upstream on 2020-10-10.
     (fetchpatch {
       name = "add-mkdirs-makefile.patch";
-      url = "https://github.com/jtojnar/miranda/commit/048754606625975d5358e946549c41ae7b5d3428.patch";
+      url =
+        "https://github.com/jtojnar/miranda/commit/048754606625975d5358e946549c41ae7b5d3428.patch";
       sha256 = "1n8xv679i7s789km2dxxrs2pphyyi7vr7rhafqvmkcdmhmxk9h2a";
     })
 
@@ -39,7 +43,8 @@ stdenv.mkDerivation rec {
     # Sent upstream on 2020-10-10.
     (fetchpatch {
       name = "c-path-fixes.patch";
-      url = "https://github.com/jtojnar/miranda/commit/aea0a118a802a0da6029b781f7cfd388224263cf.patch";
+      url =
+        "https://github.com/jtojnar/miranda/commit/aea0a118a802a0da6029b781f7cfd388224263cf.patch";
       sha256 = "1z3giv8fzc35a23ga9ahz9d1fbvya67kavnb8h4rv2icbzr5j5gd";
     })
 
@@ -47,7 +52,8 @@ stdenv.mkDerivation rec {
     # Sent upstream on 2020-10-10.
     (fetchpatch {
       name = "deterministic-build.patch";
-      url = "https://github.com/jtojnar/miranda/commit/daf8abb8f30ec1cca21698e3fc355578b9f7c571.patch";
+      url =
+        "https://github.com/jtojnar/miranda/commit/daf8abb8f30ec1cca21698e3fc355578b9f7c571.patch";
       sha256 = "TC/YrHrMzdlwicJ3oJ/TjwhkufmV3ypemgyqhMmVut4=";
     })
   ];
@@ -66,7 +72,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
+    description =
+      "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
     homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ siraben ];

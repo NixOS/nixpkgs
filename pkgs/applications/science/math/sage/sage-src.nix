@@ -1,8 +1,4 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
-}:
+{ stdenv, fetchFromGitHub, fetchpatch, runtimeShell }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
 # It does not actually build anything, it just copies the patched sources to $out.
@@ -13,8 +9,8 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
-    fetchpatch ({
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ... }@args:
+    (fetchpatch ({
       inherit name sha256;
 
       # There are three places to get changes from:
@@ -43,20 +39,17 @@ let
       # Item 3 could cover all use cases if the sagemath/sagetrack-mirror repo had
       # release tags, but it requires a sha instead of a release number in "base", which
       # is inconvenient.
-      urls = if squashed
-             then [
-               "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
-               "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
-             ]
-             else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
+      urls = if squashed then [
+        "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
+        "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
+      ] else
+        [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
 
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
       excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
-  );
-in
-stdenv.mkDerivation rec {
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ]));
+in stdenv.mkDerivation rec {
   version = "9.4";
   pname = "sage-src";
 

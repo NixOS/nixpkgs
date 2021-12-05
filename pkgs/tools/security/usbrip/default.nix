@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "usbrip";
@@ -16,11 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1vws8ybhv7szpqvlbmv0hrkys2fhhaa5bj9dywv3q2y1xmljl0py";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    termcolor
-    terminaltables
-    tqdm
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ termcolor terminaltables tqdm ];
 
   postPatch = ''
     # Remove install helpers which we don't need

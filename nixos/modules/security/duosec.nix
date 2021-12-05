@@ -11,7 +11,7 @@ let
     [duo]
     ikey=${cfg.integrationKey}
     host=${cfg.host}
-    ${optionalString (cfg.groups != "") ("groups="+cfg.groups)}
+    ${optionalString (cfg.groups != "") ("groups=" + cfg.groups)}
     failmode=${cfg.failmode}
     pushinfo=${boolToStr cfg.pushinfo}
     autopush=${boolToStr cfg.autopush}
@@ -23,12 +23,20 @@ let
     motd=${boolToStr cfg.motd}
     accept_env_factor=${boolToStr cfg.acceptEnvFactor}
   '';
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
-    (mkRenamedOptionModule [ "security" "duosec" "ikey" ] [ "security" "duosec" "integrationKey" ])
-    (mkRemovedOptionModule [ "security" "duosec" "skey" ] "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead.")
+    (mkRenamedOptionModule [ "security" "duosec" "group" ] [
+      "security"
+      "duosec"
+      "groups"
+    ])
+    (mkRenamedOptionModule [ "security" "duosec" "ikey" ] [
+      "security"
+      "duosec"
+      "integrationKey"
+    ])
+    (mkRemovedOptionModule [ "security" "duosec" "skey" ]
+      "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead.")
   ];
 
   options = {
@@ -42,7 +50,8 @@ in
       pam.enable = mkOption {
         type = types.bool;
         default = false;
-        description = "If enabled, protect logins with Duo Security using PAM support.";
+        description =
+          "If enabled, protect logins with Duo Security using PAM support.";
       };
 
       integrationKey = mkOption {
@@ -186,12 +195,12 @@ in
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
     environment.systemPackages = [ pkgs.duo-unix ];
 
-    security.wrappers.login_duo =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.duo-unix.out}/bin/login_duo";
-      };
+    security.wrappers.login_duo = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.duo-unix.out}/bin/login_duo";
+    };
 
     system.activationScripts = {
       login_duo = mkIf cfg.ssh.enable ''
@@ -226,15 +235,18 @@ in
     };
 
     /* If PAM *and* SSH are enabled, then don't do anything special.
-    If PAM isn't used, set the default SSH-only options. */
-    services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
-    if cfg.pam.enable then "UseDNS no" else ''
-      # Duo Security configuration
-      ForceCommand ${config.security.wrapperDir}/login_duo
-      PermitTunnel no
-      ${optionalString (!cfg.allowTcpForwarding) ''
-        AllowTcpForwarding no
-      ''}
-    '');
+       If PAM isn't used, set the default SSH-only options.
+    */
+    services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable)
+      (if cfg.pam.enable then
+        "UseDNS no"
+      else ''
+        # Duo Security configuration
+        ForceCommand ${config.security.wrapperDir}/login_duo
+        PermitTunnel no
+        ${optionalString (!cfg.allowTcpForwarding) ''
+          AllowTcpForwarding no
+        ''}
+      '');
   };
 }

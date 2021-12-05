@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.4.6";
 
   src = fetchurl {
-    url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
+    url =
+      "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
     sha256 = "fGRPuv98sr3wcVbkVCJr2yKxBZ/IiQP854T9NBf/vCk=";
     name = "${pname}-${version}.AppImage";
   };
@@ -43,7 +44,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
+    description =
+      "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ weihua ];

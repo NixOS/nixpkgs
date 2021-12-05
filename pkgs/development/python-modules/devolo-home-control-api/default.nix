@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, websocket-client
-, zeroconf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
+, pythonOlder, requests, websocket-client, zeroconf }:
 
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-N/48Q2IEL194vCzrPPuy+mRNejXfkoXy2t2oe0Y6ug4=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    zeroconf
-    websocket-client
-  ];
+  propagatedBuildInputs = [ requests zeroconf websocket-client ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
   postPatch = ''
     # setup.py is not able to detect the version with setuptools_scm
@@ -40,10 +25,7 @@ buildPythonPackage rec {
   '';
 
   # Disable test that requires network access
-  disabledTests = [
-    "test__on_pong"
-    "TestMprm"
-  ];
+  disabledTests = [ "test__on_pong" "TestMprm" ];
 
   pythonImportsCheck = [ "devolo_home_control_api" ];
 

@@ -46,7 +46,8 @@ python.pkgs.buildPythonApplication rec {
       software.
     '';
     homepage = "https://scons.org/";
-    changelog = "https://raw.githubusercontent.com/SConsProject/scons/rel_${version}/src/CHANGES.txt";
+    changelog =
+      "https://raw.githubusercontent.com/SConsProject/scons/rel_${version}/src/CHANGES.txt";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ ];

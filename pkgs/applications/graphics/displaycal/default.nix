@@ -1,18 +1,7 @@
-{ python2
-, lib
-, fetchurl
-, pkg-config
-, libXext
-, libXxf86vm
-, libX11
-, libXrandr
-, libXinerama
-, libXScrnSaver
-, argyllcms
- }:
+{ python2, lib, fetchurl, pkg-config, libXext, libXxf86vm, libX11, libXrandr
+, libXinerama, libXScrnSaver, argyllcms }:
 
-let
-  inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
+let inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
 in buildPythonApplication rec {
   pname = "displaycal";
   version = "3.8.9.3";
@@ -20,7 +9,8 @@ in buildPythonApplication rec {
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dispcalgui/release/${version}/DisplayCAL-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/dispcalgui/release/${version}/DisplayCAL-${version}.tar.gz";
     sha256 = "1sivi4q7sqsrc95qg5gh37bsm2761md4mpl89hflzwk6kyyxyd3w";
   };
 
@@ -37,9 +27,7 @@ in buildPythonApplication rec {
     dbus-python
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   preConfigure = ''
     mkdir dist
@@ -63,10 +51,11 @@ in buildPythonApplication rec {
   '';
 
   meta = {
-    description = "Display Calibration and Characterization powered by Argyll CMS";
+    description =
+      "Display Calibration and Characterization powered by Argyll CMS";
     homepage = "https://displaycal.net/";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

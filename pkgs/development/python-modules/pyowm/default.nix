@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, pysocks
-, pythonOlder
-, requests
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, geojson, pysocks, pythonOlder
+, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyowm";
@@ -20,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "0sq8rxcgdiayl5gy4qhkvvsdq1d93sbzn0nfg8f1vr8qxh8qkfq4";
   };
 
-  propagatedBuildInputs = [
-    geojson
-    pysocks
-    requests
-  ];
+  propagatedBuildInputs = [ geojson pysocks requests ];
 
   checkInputs = [ pytestCheckHook ];
 

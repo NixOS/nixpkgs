@@ -1,12 +1,19 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "vecto";
   version = "1.5";
 
   description = "Create vector graphics in PNG files.";
 
-  deps = [ args."cl-aa" args."cl-paths" args."cl-vectors" args."salza2" args."trivial-gray-streams" args."zpb-ttf" args."zpng" ];
+  deps = [
+    args."cl-aa"
+    args."cl-paths"
+    args."cl-vectors"
+    args."salza2"
+    args."trivial-gray-streams"
+    args."zpb-ttf"
+    args."zpng"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/vecto/2017-12-27/vecto-1.5.tgz";
@@ -15,7 +22,7 @@ rec {
 
   packageName = "vecto";
 
-  asdFilesToKeep = ["vecto.asd"];
+  asdFilesToKeep = [ "vecto.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM vecto DESCRIPTION Create vector graphics in PNG files. SHA256
@@ -28,4 +35,5 @@ rec {
      (NAME zpb-ttf FILENAME zpb-ttf) (NAME zpng FILENAME zpng))
     DEPENDENCIES
     (cl-aa cl-paths cl-vectors salza2 trivial-gray-streams zpb-ttf zpng)
-    VERSION 1.5 SIBLINGS (vectometry) PARASITES NIL) */
+    VERSION 1.5 SIBLINGS (vectometry) PARASITES NIL)
+*/

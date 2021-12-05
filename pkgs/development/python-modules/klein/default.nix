@@ -1,7 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, attrs, enum34, hyperlink, incremental, six, twisted, typing, tubes, werkzeug, zope_interface
-, hypothesis, treq
-}:
+{ lib, buildPythonPackage, fetchPypi, python, attrs, enum34, hyperlink
+, incremental, six, twisted, typing, tubes, werkzeug, zope_interface, hypothesis
+, treq }:
 
 buildPythonPackage rec {
   pname = "klein";
@@ -12,7 +11,18 @@ buildPythonPackage rec {
     sha256 = "1mpydmz90d0n9dwa7mr6pgj5v0kczfs05ykssrasdq368dssw7ch";
   };
 
-  propagatedBuildInputs = [ attrs enum34 hyperlink incremental six twisted typing tubes werkzeug zope_interface ];
+  propagatedBuildInputs = [
+    attrs
+    enum34
+    hyperlink
+    incremental
+    six
+    twisted
+    typing
+    tubes
+    werkzeug
+    zope_interface
+  ];
 
   checkInputs = [ hypothesis treq ];
 
@@ -22,8 +32,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Klein Web Micro-Framework";
-    homepage    = "https://github.com/twisted/klein";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/klein";
+    license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
   };
 }

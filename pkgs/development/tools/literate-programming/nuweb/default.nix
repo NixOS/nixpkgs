@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, tex}:
+{ lib, stdenv, fetchurl, tex }:
 
 stdenv.mkDerivation rec {
 

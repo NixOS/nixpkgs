@@ -1,18 +1,5 @@
-{ lib
-, fetchFromGitHub
-, meson
-, python3Packages
-, ninja
-, gtk3
-, wrapGAppsHook
-, glib
-, itstool
-, gettext
-, pango
-, gdk-pixbuf
-, gobject-introspection
-, xvfb-run
-}:
+{ lib, fetchFromGitHub, meson, python3Packages, ninja, gtk3, wrapGAppsHook, glib
+, itstool, gettext, pango, gdk-pixbuf, gobject-introspection, xvfb-run }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
@@ -25,22 +12,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0b2slm7kjq6q8c7v4m7aqc8m1ynjxn3bl7445srpv1xc0dilq403";
   };
 
+  nativeBuildInputs =
+    [ meson ninja itstool gettext wrapGAppsHook gobject-introspection ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    itstool
-    gettext
-    wrapGAppsHook
-    gobject-introspection
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    pango
-    gdk-pixbuf
-  ];
+  buildInputs = [ glib gtk3 pango gdk-pixbuf ];
 
   propagatedBuildInputs = with python3Packages; [
     pycairo
@@ -50,18 +25,15 @@ python3Packages.buildPythonApplication rec {
     liblarch
   ];
 
-  checkInputs = with python3Packages; [
-    nose
-    mock
-    xvfb-run
-  ];
+  checkInputs = with python3Packages; [ nose mock xvfb-run ];
 
   preBuild = ''
     export HOME="$TMP"
   '';
 
   format = "other";
-  strictDeps = false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)
+  strictDeps =
+    false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)
 
   checkPhase = "xvfb-run python3 ../run-tests";
 

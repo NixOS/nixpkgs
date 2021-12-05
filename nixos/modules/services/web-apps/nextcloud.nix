@@ -11,19 +11,16 @@ let
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
-        enabled
-        ++ optional cfg.enableImagemagick imagick
+        enabled ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
-        ++ optional cfg.caching.apcu apcu
-        ++ optional cfg.caching.redis redis
-        ++ optional cfg.caching.memcached memcached
-      )
+        ++ optional cfg.caching.apcu apcu ++ optional cfg.caching.redis redis
+        ++ optional cfg.caching.memcached memcached)
       ++ cfg.phpExtraExtensions all; # Enabled by user
     extraConfig = toKeyValue phpOptions;
   };
 
   toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " = ";
+    mkKeyValue = generators.mkKeyValueDefault { } " = ";
   };
 
   phpOptions = {
@@ -31,9 +28,7 @@ let
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions
-    // optionalAttrs cfg.caching.apcu {
-      "apc.enable_cli" = "1";
-    };
+    // optionalAttrs cfg.caching.apcu { "apc.enable_cli" = "1"; };
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -119,7 +114,7 @@ in {
             version = "0.6.9";
           };
         }
-        '';
+      '';
     };
     extraAppsEnable = mkOption {
       type = types.bool;
@@ -194,7 +189,7 @@ in {
 
     phpExtraExtensions = mkOption {
       type = with types; functionTo (listOf package);
-      default = all: [];
+      default = all: [ ];
       defaultText = literalExpression "all: []";
       description = ''
         Additional PHP extensions to use for nextcloud.
@@ -309,7 +304,7 @@ in {
 
       extraTrustedDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Trusted domains, from which the nextcloud installation will be
           acessible.  You don't need to add
@@ -319,7 +314,7 @@ in {
 
       trustedProxies = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Trusted proxies, to provide if the nextcloud installation is being
           proxied to secure against e.g. spoofing.
@@ -443,11 +438,11 @@ in {
     };
 
     enableImagemagick = mkEnableOption ''
-        the ImageMagick module for PHP.
-        This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
-        You may want to disable it for increased security. In that case, previews will still be available
-        for some images (e.g. JPEG and PNG).
-        See <link xlink:href="https://github.com/nextcloud/server/issues/13099" />.
+      the ImageMagick module for PHP.
+      This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
+      You may want to disable it for increased security. In that case, previews will still be available
+      for some images (e.g. JPEG and PNG).
+      See <link xlink:href="https://github.com/nextcloud/server/issues/13099" />.
     '' // {
       default = true;
     };
@@ -507,21 +502,25 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    { warnings = let
+    {
+      warnings = let
         latest = 23;
-        upgradeWarning = major: nixos:
-          ''
-            A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
+        upgradeWarning = major: nixos: ''
+          A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
-            After nextcloud${toString major} is installed successfully, you can safely upgrade
-            to ${toString (major + 1)}. The latest version available is nextcloud${toString latest}.
+          After nextcloud${
+            toString major
+          } is installed successfully, you can safely upgrade
+          to ${
+            toString (major + 1)
+          }. The latest version available is nextcloud${toString latest}.
 
-            Please note that Nextcloud doesn't support upgrades across multiple major versions
-            (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
+          Please note that Nextcloud doesn't support upgrades across multiple major versions
+          (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
 
-            The package can be upgraded by explicitly declaring the service-option
-            `services.nextcloud.package`.
-          '';
+          The package can be upgraded by explicitly declaring the service-option
+          `services.nextcloud.package`.
+        '';
 
         # FIXME(@Ma27) remove as soon as nextcloud properly supports
         # mariadb >=10.6.
@@ -538,32 +537,32 @@ in {
           && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
 
       in (optional (cfg.poolConfig != null) ''
-          Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
-          Please migrate your configuration to config.services.nextcloud.poolSettings.
-        '')
-        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
-        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
-        ++ (optional isUnsupportedMariadb ''
-            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
-            Please note that this isn't supported officially by Nextcloud. You can either
+        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+        Please migrate your configuration to config.services.nextcloud.poolSettings.
+      '') ++ (optional (versionOlder cfg.package.version "21")
+        (upgradeWarning 20 "21.05"))
+      ++ (optional (versionOlder cfg.package.version "22")
+        (upgradeWarning 21 "21.11"))
+      ++ (optional (versionOlder cfg.package.version "23")
+        (upgradeWarning 22 "22.05")) ++ (optional isUnsupportedMariadb ''
+          You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
+          Please note that this isn't supported officially by Nextcloud. You can either
 
-            * Switch to `pkgs.mysql`
-            * Downgrade MariaDB to at least 10.5
-            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
+          * Switch to `pkgs.mysql`
+          * Downgrade MariaDB to at least 10.5
+          * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
 
-            For further context, please read
-            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
-          '');
+          For further context, please read
+          https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
+        '');
 
       services.nextcloud.package = with pkgs;
-        mkDefault (
-          if pkgs ? nextcloud
-            then throw ''
-              The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
-              nextcloud defined in an overlay, please set `services.nextcloud.package` to
-              `pkgs.nextcloud`.
-            ''
+        mkDefault (if pkgs ? nextcloud then
+          throw ''
+            The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
+            nextcloud defined in an overlay, please set `services.nextcloud.package` to
+            `pkgs.nextcloud`.
+          ''
           # 21.03 will not be an official release - it was instead 21.05.
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
@@ -572,20 +571,27 @@ in {
           # to ensure that users who are on Nextcloud 19 with a stateVersion <21.05 with
           # no explicit services.nextcloud.package don't upgrade to v21 by accident (
           # nextcloud20 throws an eval-error because it's dropped).
-          else if versionOlder stateVersion "21.03" then nextcloud20
-          else if versionOlder stateVersion "21.11" then nextcloud21
-          else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud23
-        );
+        else if versionOlder stateVersion "21.03" then
+          nextcloud20
+        else if versionOlder stateVersion "21.11" then
+          nextcloud21
+        else if versionOlder stateVersion "22.05" then
+          nextcloud22
+        else
+          nextcloud23);
 
-      services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
+      services.nextcloud.datadir =
+        mkOptionDefault config.services.nextcloud.home;
 
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "21" then pkgs.php74
-        else pkgs.php80;
+        if versionOlder cfg.package.version "21" then
+          pkgs.php74
+        else
+          pkgs.php80;
     }
 
-    { systemd.timers.nextcloud-cron = {
+    {
+      systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "5m";
@@ -600,9 +606,12 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
-          requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
-          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
+          writePhpArrary = a:
+            "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          requiresReadSecretFunction = c.dbpassFile != null
+            || c.objectstore.s3.enable;
+          objectstoreConfig = let s3 = c.objectstore.s3;
+          in optionalString s3.enable ''
             'objectstore' => [
               'class' => '\\OC\\Files\\ObjectStore\\S3',
               'arguments' => [
@@ -610,22 +619,28 @@ in {
                 'autocreate' => ${boolToString s3.autocreate},
                 'key' => '${s3.key}',
                 'secret' => nix_read_secret('${s3.secretFile}'),
-                ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
-                ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
+                ${
+                  optionalString (s3.hostname != null)
+                  "'hostname' => '${s3.hostname}',"
+                }
+                ${
+                  optionalString (s3.port != null)
+                  "'port' => ${toString s3.port},"
+                }
                 'use_ssl' => ${boolToString s3.useSsl},
-                ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
+                ${
+                  optionalString (s3.region != null)
+                  "'region' => '${s3.region}',"
+                }
                 'use_path_style' => ${boolToString s3.usePathStyle},
               ],
             ]
           '';
 
-          showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != {};
-          renderedAppStoreSetting =
-            let
-              x = cfg.appstoreEnable;
-            in
-              if x == null then "false"
-              else boolToString x;
+          showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps
+            != { };
+          renderedAppStoreSetting = let x = cfg.appstoreEnable;
+          in if x == null then "false" else boolToString x;
 
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
@@ -645,27 +660,53 @@ in {
             ''}
             $CONFIG = [
               'apps_paths' => [
-                ${optionalString (cfg.extraApps != { }) "[ 'path' => '${cfg.home}/nix-apps', 'url' => '/nix-apps', 'writable' => false ],"}
+                ${
+                  optionalString (cfg.extraApps != { })
+                  "[ 'path' => '${cfg.home}/nix-apps', 'url' => '/nix-apps', 'writable' => false ],"
+                }
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
                 [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
               ],
-              ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+              ${
+                optionalString (showAppStoreSetting)
+                "'appstoreenabled' => ${renderedAppStoreSetting},"
+              }
               'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
-              ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
+              ${
+                optionalString cfg.caching.apcu
+                "'memcache.local' => '\\OC\\Memcache\\APCu',"
+              }
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${
+                optionalString (c.overwriteProtocol != null)
+                "'overwriteprotocol' => '${c.overwriteProtocol}',"
+              }
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
-              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+              ${
+                optionalString (c.dbport != null)
+                "'dbport' => '${toString c.dbport}',"
+              }
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
-              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
+              ${
+                optionalString (c.dbtableprefix != null)
+                "'dbtableprefix' => '${toString c.dbtableprefix}',"
+              }
+              ${
+                optionalString (c.dbpassFile != null)
+                "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"
+              }
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+              'trusted_domains' => ${
+                writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)
+              },
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
-              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${
+                optionalString (c.defaultPhoneRegion != null)
+                "'default_phone_region' => '${c.defaultPhoneRegion}',"
+              }
               ${objectstoreConfig}
             ];
           '';
@@ -673,9 +714,10 @@ in {
             mkExport = { arg, value }: "export ${arg}=${value}";
             dbpass = {
               arg = "DBPASS";
-              value = if c.dbpassFile != null
-                then ''"$(<"${toString c.dbpassFile}")"''
-                else ''""'';
+              value = if c.dbpassFile != null then
+                ''"$(<"${toString c.dbpassFile}")"''
+              else
+                ''""'';
             };
             adminpass = {
               arg = "ADMINPASS";
@@ -683,30 +725,33 @@ in {
             };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--database" = ''"${c.dbtype}"'';
-              # The following attributes are optional depending on the type of
-              # database.  Those that evaluate to null on the left hand side
-              # will be omitted.
-              ${if c.dbname != null then "--database-name" else null} = ''"${c.dbname}"'';
-              ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
-              ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
-              ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = "\$${dbpass.arg}";
-              "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = "\$${adminpass.arg}";
-              "--data-dir" = ''"${datadir}/data"'';
-            });
+                "--database" = ''"${c.dbtype}"'';
+                # The following attributes are optional depending on the type of
+                # database.  Those that evaluate to null on the left hand side
+                # will be omitted.
+                ${if c.dbname != null then "--database-name" else null} =
+                  ''"${c.dbname}"'';
+                ${if c.dbhost != null then "--database-host" else null} =
+                  ''"${c.dbhost}"'';
+                ${if c.dbport != null then "--database-port" else null} =
+                  ''"${toString c.dbport}"'';
+                ${if c.dbuser != null then "--database-user" else null} =
+                  ''"${c.dbuser}"'';
+                "--database-pass" = "\$${dbpass.arg}";
+                "--admin-user" = ''"${c.adminuser}"'';
+                "--admin-pass" = "\$${adminpass.arg}";
+                "--data-dir" = ''"${datadir}/data"'';
+              });
           in ''
             ${mkExport dbpass}
             ${mkExport adminpass}
             ${occ}/bin/nextcloud-occ maintenance:install \
                 ${installFlags}
           '';
-          occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
-            (i: v: ''
-              ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
-                ${toString i} --value="${toString v}"
-            '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
+          occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0 (i: v: ''
+            ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
+              ${toString i} --value="${toString v}"
+          '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
 
         in {
           wantedBy = [ "multi-user.target" ];
@@ -738,8 +783,11 @@ in {
 
             # Install extra apps
             ln -sfT \
-              ${pkgs.linkFarm "nix-apps"
-                (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps)} \
+              ${
+                pkgs.linkFarm "nix-apps"
+                (mapAttrsToList (name: path: { inherit name path; })
+                  cfg.extraApps)
+              } \
               ${cfg.home}/nix-apps
 
             # create nextcloud directories.
@@ -764,8 +812,10 @@ in {
             ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
-                ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+              # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
+              ${occ}/bin/nextcloud-occ app:enable ${
+                concatStringsSep " " (attrNames cfg.extraApps)
+              }
             ''}
 
             ${occSetTrustedDomainsCmd}
@@ -777,7 +827,8 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
+          serviceConfig.ExecStart =
+            "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
@@ -794,7 +845,8 @@ in {
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+            PATH =
+              "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
             "listen.owner" = config.services.nginx.user;
@@ -810,7 +862,8 @@ in {
         createHome = true;
         isSystemUser = true;
       };
-      users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
+      users.groups.nextcloud.members =
+        [ "nextcloud" config.services.nginx.user ];
 
       environment.systemPackages = [ occ ];
 
@@ -863,39 +916,43 @@ in {
               try_files $uri $uri/ =404;
             '';
           };
-          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
-            priority = 500;
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/fastcgi.conf;
-              fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
-              set $path_info $fastcgi_path_info;
-              try_files $fastcgi_script_name =404;
-              fastcgi_param PATH_INFO $path_info;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
-              fastcgi_param modHeadersAvailable true;
-              fastcgi_param front_controller_active true;
-              fastcgi_pass unix:${fpm.socket};
-              fastcgi_intercept_errors on;
-              fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
+          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig =
+            ''
+              return 404;
             '';
-          };
+          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig =
+            ''
+              return 404;
+            '';
+          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" =
+            {
+              priority = 500;
+              extraConfig = ''
+                include ${config.services.nginx.package}/conf/fastcgi.conf;
+                fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
+                set $path_info $fastcgi_path_info;
+                try_files $fastcgi_script_name =404;
+                fastcgi_param PATH_INFO $path_info;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
+                fastcgi_param modHeadersAvailable true;
+                fastcgi_param front_controller_active true;
+                fastcgi_pass unix:${fpm.socket};
+                fastcgi_intercept_errors on;
+                fastcgi_request_buffering off;
+                fastcgi_read_timeout 120s;
+              '';
+            };
           "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
             try_files $uri /index.php$request_uri;
             expires 6M;
             access_log off;
           '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
-            try_files $uri/ =404;
-            index index.php;
-          '';
+          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig =
+            ''
+              try_files $uri/ =404;
+              index index.php;
+            '';
           "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
             try_files $uri /index.php$request_uri;
             access_log off;

@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals stdenv.isDarwin [
     (fetchpatch {
-      url = "https://github.com/zeux/qgrep/commit/21c4d1a5ab0f0bdaa0b5ca993c1315c041418cc6.patch";
+      url =
+        "https://github.com/zeux/qgrep/commit/21c4d1a5ab0f0bdaa0b5ca993c1315c041418cc6.patch";
       sha256 = "0wpxzrd9pmhgbgby17vb8279xwvkxfdd99gvv7r74indgdxqg7v8";
     })
   ];
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast regular expression grep for source code with incremental index updates";
+    description =
+      "Fast regular expression grep for source code with incremental index updates";
     homepage = "https://github.com/zeux/qgrep";
     license = licenses.mit;
     maintainers = [ maintainers.yrashk ];

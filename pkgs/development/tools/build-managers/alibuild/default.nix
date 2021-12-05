@@ -1,4 +1,4 @@
-{ lib, python}:
+{ lib, python }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "alibuild";
@@ -10,10 +10,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   doCheck = false;
-  propagatedBuildInputs = [
-    python.pkgs.requests
-    python.pkgs.pyyaml
-  ];
+  propagatedBuildInputs = [ python.pkgs.requests python.pkgs.pyyaml ];
 
   meta = with lib; {
     homepage = "https://alisw.github.io/alibuild/";

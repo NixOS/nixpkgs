@@ -1,25 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, debtcollector
-, eventlet
-, fixtures
-, iso8601
-, netaddr
-, netifaces
-, oslo-i18n
-, oslotest
-, packaging
-, pbr
-, pyparsing
-, pytz
-, stestr
-, testscenarios
-, pyyaml
-, iana-etc
-, libredirect
-}:
+{ lib, buildPythonPackage, fetchPypi, ddt, debtcollector, eventlet, fixtures
+, iso8601, netaddr, netifaces, oslo-i18n, oslotest, packaging, pbr, pyparsing
+, pytz, stestr, testscenarios, pyyaml, iana-etc, libredirect }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
@@ -50,15 +31,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
-    ddt
-    eventlet
-    fixtures
-    oslotest
-    stestr
-    testscenarios
-    pyyaml
-  ];
+  checkInputs = [ ddt eventlet fixtures oslotest stestr testscenarios pyyaml ];
 
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf

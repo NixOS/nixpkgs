@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ticker";
@@ -16,15 +13,15 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-vTB1RPg1LN44bkWrdGEXR6WRlM/Q2EITUO0yt5ar/zg=";
 
-  ldflags = [
-    "-s" "-w" "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/achannarasappa/ticker/cmd.Version=v${version}" ];
 
   # Tests require internet
   doCheck = false;
 
   meta = with lib; {
-    description = "Terminal stock ticker with live updates and position tracking";
+    description =
+      "Terminal stock ticker with live updates and position tracking";
     homepage = "https://github.com/achannarasappa/ticker";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben ];

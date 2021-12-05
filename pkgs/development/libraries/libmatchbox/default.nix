@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg}:
+{ lib, stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmatchbox";
@@ -9,7 +10,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lX11";
 
   src = fetchurl {
-    url = "https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
+    url =
+      "https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
     sha256 = "0lvv44s3bf96zvkysa4ansxj2ffgj3b5kgpliln538q4wd9ank15";
   };
 

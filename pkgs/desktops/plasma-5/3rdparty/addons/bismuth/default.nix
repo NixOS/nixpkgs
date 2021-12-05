@@ -1,14 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, kcoreaddons
-, kwindowsystem
-, plasma-framework
-, systemsettings
-, cmake
-, extra-cmake-modules
-, esbuild
-}:
+{ lib, mkDerivation, fetchFromGitHub, kcoreaddons, kwindowsystem
+, plasma-framework, systemsettings, cmake, extra-cmake-modules, esbuild }:
 
 mkDerivation rec {
   pname = "bismuth";
@@ -21,23 +12,11 @@ mkDerivation rec {
     sha256 = "sha256-ntfLijYPaOHvQToiAxuBZ5ayHPyQyevP9l6++SL0vUw=";
   };
 
-  cmakeFlags = [
-    "-DUSE_TSC=OFF"
-    "-DUSE_NPM=OFF"
-  ];
+  cmakeFlags = [ "-DUSE_TSC=OFF" "-DUSE_NPM=OFF" ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    esbuild
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules esbuild ];
 
-  buildInputs = [
-    kcoreaddons
-    kwindowsystem
-    plasma-framework
-    systemsettings
-  ];
+  buildInputs = [ kcoreaddons kwindowsystem plasma-framework systemsettings ];
 
   meta = with lib; {
     description = "A dynamic tiling extension for KWin";

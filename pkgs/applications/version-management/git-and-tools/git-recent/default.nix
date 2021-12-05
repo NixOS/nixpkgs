@@ -1,7 +1,6 @@
-{lib, stdenv, git, less, fetchFromGitHub, makeWrapper
+{ lib, stdenv, git, less, fetchFromGitHub, makeWrapper
 # util-linuxMinimal is included because we need the column command
-, util-linux
-}:
+, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "git-recent";

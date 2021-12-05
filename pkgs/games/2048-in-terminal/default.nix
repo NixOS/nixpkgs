@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/alewmoose/2048-in-terminal/commit/b1c78dc4b3cca3a193b1afea1ab85a75966823cf.patch";
+      url =
+        "https://github.com/alewmoose/2048-in-terminal/commit/b1c78dc4b3cca3a193b1afea1ab85a75966823cf.patch";
       sha256 = "05ibpgr83r7zxsak2l0gaf33858bp0sp0mjfdpmcmw745z3jw7q1";
     })
   ];

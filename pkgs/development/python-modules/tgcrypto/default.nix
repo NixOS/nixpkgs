@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "tgcrypto";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "1vyjycjb2n790371kf47qc0mkvd4bxmhh65cfxjsrcjpiri7shjf";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tgcrypto" ];
 

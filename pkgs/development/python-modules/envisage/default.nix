@@ -1,13 +1,5 @@
-{ lib
-, fetchPypi
-, isPy27
-, buildPythonPackage
-, traits
-, apptools
-, pytestCheckHook
-, ipython
-, setuptools
-}:
+{ lib, fetchPypi, isPy27, buildPythonPackage, traits, apptools, pytestCheckHook
+, ipython, setuptools }:
 
 buildPythonPackage rec {
   pname = "envisage";
@@ -28,13 +20,11 @@ buildPythonPackage rec {
     export HOME=$PWD/HOME
   '';
 
-  checkInputs = [
-    ipython
-    pytestCheckHook
-  ];
+  checkInputs = [ ipython pytestCheckHook ];
 
   meta = with lib; {
-    description = "Framework for building applications whose functionalities can be extended by adding 'plug-ins'";
+    description =
+      "Framework for building applications whose functionalities can be extended by adding 'plug-ins'";
     homepage = "https://github.com/enthought/envisage";
     maintainers = with lib.maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;

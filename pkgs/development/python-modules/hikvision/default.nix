@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "hikvision";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "1l0zvir4hf1pcwwcmrhkspbdljzmi4lknxar5bkipdanpsm588mn";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hikvision.api" ];
 

@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
+    description =
+      "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
     homepage = "https://github.com/kimocoder/bully";
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];

@@ -18,8 +18,7 @@ let
       maintainers = with maintainers; [ nickcao ];
     };
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit (generator) pname version src meta;
   buildPhase = ''
     runHook preBuild

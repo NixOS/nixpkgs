@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
-, Security, libiconv, installShellFiles
-}:
+, Security, libiconv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "exa";
@@ -19,8 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
-  buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   outputs = [ "out" "man" ];
 

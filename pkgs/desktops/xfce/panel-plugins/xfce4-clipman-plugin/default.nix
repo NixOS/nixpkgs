@@ -8,7 +8,5 @@ mkXfceDerivation {
 
   buildInputs = [ libXtst libxfce4ui xfce4-panel xfconf ];
 
-  meta = {
-    description = "Clipboard manager for Xfce panel";
-  };
+  meta = { description = "Clipboard manager for Xfce panel"; };
 }

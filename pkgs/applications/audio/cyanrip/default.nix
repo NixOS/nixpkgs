@@ -1,15 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, ffmpeg
-, libcdio
-, libcdio-paranoia
-, libmusicbrainz5
-, curl
-}:
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, ffmpeg, libcdio
+, libcdio-paranoia, libmusicbrainz5, curl }:
 stdenv.mkDerivation rec {
   pname = "cyanrip";
   version = "0.7.0";

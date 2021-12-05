@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mozinfo
-}:
+{ lib, buildPythonPackage, fetchPypi, mozinfo }:
 
 buildPythonPackage rec {
   pname = "moztest";

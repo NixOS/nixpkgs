@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, msgpack
-, pytestCheckHook
-, numpy
-, pandas
-, pydantic
-, pymongo
-, ruamel-yaml
-, tqdm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, msgpack
+, pytestCheckHook, numpy, pandas, pydantic, pymongo, ruamel-yaml, tqdm }:
 
 buildPythonPackage rec {
   pname = "monty";
@@ -29,27 +18,15 @@ buildPythonPackage rec {
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-    tqdm
-    msgpack
-  ];
+  propagatedBuildInputs = [ ruamel-yaml tqdm msgpack ];
 
-  checkInputs = [
-    pytestCheckHook
-    numpy
-    pandas
-    pydantic
-    pymongo
-  ];
+  checkInputs = [ pytestCheckHook numpy pandas pydantic pymongo ];
 
   meta = with lib; {
-    description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
-    longDescription = "
-      Monty implements supplementary useful functions for Python that are not part of the
-      standard library. Examples include useful utilities like transparent support for zipped files, useful design
-      patterns such as singleton and cached_class, and many more.
-    ";
+    description =
+      "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
+    longDescription =
+      "\n      Monty implements supplementary useful functions for Python that are not part of the\n      standard library. Examples include useful utilities like transparent support for zipped files, useful design\n      patterns such as singleton and cached_class, and many more.\n    ";
     homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];

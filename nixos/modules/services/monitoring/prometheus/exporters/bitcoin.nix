@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.bitcoin;
-in
-{
+let cfg = config.services.prometheus.exporters.bitcoin;
+in {
   port = 9332;
   extraOpts = {
     rpcUser = mkOption {
@@ -57,7 +55,7 @@ in
 
     extraEnv = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       description = ''
         Extra environment variables for the exporter.
       '';

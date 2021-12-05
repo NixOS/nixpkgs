@@ -1,18 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, xorg
-, freetype
-, alsa-lib
-, curl
-, libjack2
-, lv2
-, pkg-config
-, libGLU
-, libGL
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, xorg, freetype, alsa-lib, curl
+, libjack2, lv2, pkg-config, libGLU, libGL }:
 
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "0.9.0";
   pname = "helm";
 
@@ -24,9 +13,20 @@
   };
 
   buildInputs = [
-    xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsa-lib curl libjack2 libGLU libGL lv2
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrender
+    xorg.libXrandr
+    freetype
+    alsa-lib
+    curl
+    libjack2
+    libGLU
+    libGL
+    lv2
   ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,7 +37,8 @@
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
     (fetchpatch {
-      url = "https://github.com/mtytel/helm/commit/cb611a80bd5a36d31bfc31212ebbf79aa86c6f08.patch";
+      url =
+        "https://github.com/mtytel/helm/commit/cb611a80bd5a36d31bfc31212ebbf79aa86c6f08.patch";
       sha256 = "1i2289srcfz17c3zzab6f51aznzdj62kk53l4afr32bkjh9s4ixk";
     })
   ];

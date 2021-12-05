@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.5.8";
 
   src = fetchzip {
-    url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
+    url =
+      "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
     sha256 = "sha256-IJ3p7+0fs/2dCbE1BOb2580upR9W/1R2/e3xmkAsJ+M=";
   };
 
@@ -27,10 +28,10 @@ stdenv.mkDerivation rec {
   forceShare = [ "man" "info" ];
 
   meta = with lib; {
-      description = "A free, open-source boardgame engine";
-      homepage = "http://www.vassalengine.org/";
-      license = licenses.lgpl21Only;
-      maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.unix;
+    description = "A free, open-source boardgame engine";
+    homepage = "http://www.vassalengine.org/";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ tvestelind ];
+    platforms = platforms.unix;
   };
 }

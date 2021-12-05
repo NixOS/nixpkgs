@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man
-, apparmorRulesFromClosure
-}:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man, apparmorRulesFromClosure }:
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
@@ -11,32 +9,36 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1Uf2kXLfc6/vaRoPeIYoD9eBrOoo3vT/S0shIIaonYA";
   };
 
-  outputs = ["out" "apparmor"];
+  outputs = [ "out" "apparmor" ];
 
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
   ];
 
-  nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ ];
+  nativeBuildInputs = [
+    help2man
+    perl # for `whois'
+  ];
+  buildInputs = [
+    ncurses # for `talk'
+  ];
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
   # https://git.congatec.com/yocto/meta-openembedded/blob/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3/meta-networking/recipes-connectivity/inetutils/inetutils_1.9.1.bb#L44
-  preConfigure = let
-    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  preConfigure = let isCross = stdenv.hostPlatform != stdenv.buildPlatform;
   in lib.optionalString isCross ''
     export HELP2MAN=true
   '';
 
   configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
-    "--disable-rcp"
-    "--disable-rsh"
-    "--disable-rlogin"
-    "--disable-rexec"
-  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
+      "--disable-rcp"
+      "--disable-rsh"
+      "--disable-rlogin"
+      "--disable-rexec"
+    ] ++ lib.optional stdenv.isDarwin "--disable-servers";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.
@@ -51,7 +53,9 @@ stdenv.mkDerivation rec {
       include <abstractions/base>
       include <abstractions/consoles>
       include <abstractions/nameservice>
-      include "${apparmorRulesFromClosure { name = "ping"; } [stdenv.cc.libc]}"
+      include "${
+        apparmorRulesFromClosure { name = "ping"; } [ stdenv.cc.libc ]
+      }"
       include <local/bin.ping>
       capability net_raw,
       network inet raw,
@@ -64,12 +68,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of common network programs";
 
-    longDescription =
-      '' The GNU network utilities suite provides the
-         following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
-         rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
-         traceroute, uucpd, and whois.
-      '';
+    longDescription = ''
+      The GNU network utilities suite provides the
+              following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
+              rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
+              traceroute, uucpd, and whois.
+           '';
 
     homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;

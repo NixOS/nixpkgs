@@ -1,6 +1,6 @@
-{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
-, alsa-lib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex, libsamplerate }:
+{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config, alsa-lib
+, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi, libzip, rtaudio
+, rtmidi, speex, libsamplerate }:
 
 let
   # The package repo vendors some of the package dependencies as submodules.
@@ -35,8 +35,8 @@ let
     rev = "79ec59e6bc7201017fc13a20c6e33380adca1660";
     sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
-in
-with lib; stdenv.mkDerivation rec {
+in with lib;
+stdenv.mkDerivation rec {
   pname = "VCV-Rack";
   version = "1.1.6";
 
@@ -47,9 +47,7 @@ with lib; stdenv.mkDerivation rec {
     sha256 = "0ji64prr74qzxf5bx1sw022kbslx9nzll16lmk5in78hbl137b3i";
   };
 
-  patches = [
-    ./rack-minimize-vendoring.patch
-  ];
+  patches = [ ./rack-minimize-vendoring.patch ];
 
   prePatch = ''
     # As we can't use `make dep` to set up the dependencies (as explained
@@ -75,7 +73,20 @@ with lib; stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ alsa-lib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
+  buildInputs = [
+    alsa-lib
+    curl
+    glew
+    glfw
+    gtk2-x11
+    jansson
+    libjack2
+    libsamplerate
+    libzip
+    rtaudio
+    rtmidi
+    speex
+  ];
 
   buildFlags = [ "Rack" ];
 

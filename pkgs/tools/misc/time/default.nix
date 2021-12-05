@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "time";
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Tool that runs programs and summarizes the system resources they use";
+    description =
+      "Tool that runs programs and summarizes the system resources they use";
 
     longDescription = ''
       The `time' command runs another program, then displays

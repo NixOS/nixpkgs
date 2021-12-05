@@ -1,19 +1,5 @@
-{ alsa-lib
-, curl
-, fetchFromGitHub
-, freeglut
-, freetype
-, libGL
-, libXcursor
-, libXext
-, libXinerama
-, libXrandr
-, libjack2
-, pkg-config
-, python3
-, stdenv
-, lib
-}:
+{ alsa-lib, curl, fetchFromGitHub, freeglut, freetype, libGL, libXcursor
+, libXext, libXinerama, libXrandr, libjack2, pkg-config, python3, stdenv, lib }:
 
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";
@@ -27,9 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -62,7 +46,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
-    description = "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
+    description =
+      "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

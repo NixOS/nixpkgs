@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, marshmallow
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, marshmallow, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
@@ -15,13 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-zH/ZkqL+kL3J1o7dhB4WYy2tbofFZm+kxEGn5+nRgjc=";
   };
 
-  propagatedBuildInputs = [
-    marshmallow
-  ];
+  propagatedBuildInputs = [ marshmallow ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \

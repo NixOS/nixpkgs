@@ -1,11 +1,10 @@
-{lib, stdenv, fetchurl, ocaml, findlib, easy-format}:
+{ lib, stdenv, fetchurl, ocaml, findlib, easy-format }:
 let
   pname = "biniou";
   version = "1.0.9";
   webpage = "http://mjambon.com/${pname}.html";
-in
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
+in assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation rec {
 
@@ -27,10 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
+    description =
+      "A binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nedit/nedit-source/${pname}-${version}-src.tar.gz";
+    url =
+      "mirror://sourceforge/nedit/nedit-source/${pname}-${version}-src.tar.gz";
     sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   # the linux config works fine on darwin too!
   buildFlags = lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
 
-  NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
+  NIX_CFLAGS_COMPILE = "-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
   installPhase = ''
     mkdir -p $out/bin

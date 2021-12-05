@@ -1,6 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, alcotest, reason
-, ppxlib
-, yojson }:
+{ lib, buildDunePackage, fetchFromGitHub, alcotest, reason, ppxlib, yojson }:
 
 buildDunePackage rec {
   pname = "graphql_ppx";
@@ -17,10 +15,7 @@ buildDunePackage rec {
 
   buildInputs = [ ppxlib ];
 
-  propagatedBuildInputs = [
-    reason
-    yojson
-  ];
+  propagatedBuildInputs = [ reason yojson ];
 
   checkInputs = [ alcotest ];
 

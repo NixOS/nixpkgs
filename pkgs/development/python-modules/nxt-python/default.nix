@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, isPy3k
-, pyusb
-, pybluez
-, pyfantom
-, git
-}:
+{ lib, buildPythonPackage, fetchgit, isPy3k, pyusb, pybluez, pyfantom, git }:
 
 buildPythonPackage {
   version = "unstable-20160819";
@@ -17,7 +9,7 @@ buildPythonPackage {
     url = "https://github.com/Eelviny/nxt-python";
     rev = "479e20b7491b28567035f4cee294c4a2af629297";
     sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
-    branchName= "pyusb";
+    branchName = "pyusb";
   };
 
   propagatedBuildInputs = [ pyusb pybluez pyfantom git ];

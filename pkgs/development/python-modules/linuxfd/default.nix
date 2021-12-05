@@ -1,12 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "linuxfd";
   version = "1.5";
-
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +13,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Python bindings for the Linux eventfd/signalfd/timerfd/inotify syscalls";
+    description =
+      "Python bindings for the Linux eventfd/signalfd/timerfd/inotify syscalls";
     homepage = "https://github.com/FrankAbelbeck/linuxfd";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ lgpl3Plus ];

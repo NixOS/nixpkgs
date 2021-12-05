@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    lv2 libX11 libGL libGLU mesa
-  ];
+  buildInputs = [ lv2 libX11 libGL libGLU mesa ];
 
   installPhase = ''
     mkdir -p $out/lib/lv2

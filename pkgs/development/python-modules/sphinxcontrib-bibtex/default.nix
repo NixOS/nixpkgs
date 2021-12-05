@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, oset
-, pybtex
-, pybtex-docutils
-, sphinx
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, oset, pybtex, pybtex-docutils
+, sphinx }:
 
 buildPythonPackage rec {
   version = "2.4.1";

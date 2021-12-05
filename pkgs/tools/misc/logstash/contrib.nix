@@ -7,13 +7,14 @@ stdenv.mkDerivation rec {
   pname = "logstash-contrib";
 
   src = fetchzip {
-   url = "https://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";
-   sha256 = "1yj8sf3b526gixh3c6zhgkfpg4f0c72p1lzhfhdx8b3lw7zjkj0k";
+    url =
+      "https://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";
+    sha256 = "1yj8sf3b526gixh3c6zhgkfpg4f0c72p1lzhfhdx8b3lw7zjkj0k";
   };
 
-  dontBuild    = true;
+  dontBuild = true;
   dontPatchELF = true;
-  dontStrip    = true;
+  dontStrip = true;
   dontPatchShebangs = true;
 
   installPhase = ''
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Community-maintained logstash plugins";
-    homepage    = "https://github.com/elasticsearch/logstash-contrib";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
+    homepage = "https://github.com/elasticsearch/logstash-contrib";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

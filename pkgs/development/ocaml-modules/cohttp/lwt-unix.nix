@@ -1,9 +1,5 @@
-{ lib, buildDunePackage, cohttp-lwt
-, conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
-, cmdliner, fmt, logs, magic-mime
-, ounit
-, cacert
-}:
+{ lib, buildDunePackage, cohttp-lwt, conduit-lwt-unix, conduit-lwt
+, ppx_sexp_conv, cmdliner, fmt, logs, magic-mime, ounit, cacert }:
 
 buildDunePackage {
   pname = "cohttp-lwt-unix";
@@ -13,9 +9,8 @@ buildDunePackage {
 
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
-  propagatedBuildInputs = [
-    cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
-  ];
+  propagatedBuildInputs =
+    [ cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime ];
 
   # TODO(@sternenseemann): fail for unknown reason
   # https://github.com/mirage/ocaml-cohttp/issues/675#issuecomment-830692742

@@ -1,18 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pkg-config
-, openssl
-, publicsuffix-list
-, pythonOlder
-, libiconv
-, CoreFoundation
-, Security
-, pytestCheckHook
-, toml
-}:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, rustPlatform, pkg-config
+, openssl, publicsuffix-list, pythonOlder, libiconv, CoreFoundation, Security
+, pytestCheckHook, toml }:
 
 buildPythonPackage rec {
   pname = "adblock";
@@ -35,27 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-x0mcykHWhheD2ycELcfR1ZQ/6WfFQzY+L/LmMipP4Rc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs = [ pkg-config ]
+    ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreFoundation
-    Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
-  checkInputs = [
-    pytestCheckHook
-    toml
-  ];
+  checkInputs = [ pytestCheckHook toml ];
 
   preCheck = ''
     # import from $out instead
@@ -67,15 +43,15 @@ buildPythonPackage rec {
     "tests/test_typestubs.py"
   ];
 
-  pythonImportsCheck = [
-    "adblock"
-    "adblock.adblock"
-  ];
+  pythonImportsCheck = [ "adblock" "adblock.adblock" ];
 
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
     maintainers = with maintainers; [ petabyteboy dotlambda ];
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
   };
 }

@@ -1,6 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, shared ? !stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext
+, texinfo, shared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
@@ -18,13 +17,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid gettext ];
 
   # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc
-  patches = if stdenv.hostPlatform.libc == "glibc" then null
-    else [
+  patches = if stdenv.hostPlatform.libc == "glibc" then
+    null
+  else
+    [
       (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
-      excludes = [ "lib/ext2fs/hashmap.h" ];
-      extraPrefix = "";
+        url =
+          "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+        sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
+        excludes = [ "lib/ext2fs/hashmap.h" ];
+        extraPrefix = "";
       })
     ];
 
@@ -36,22 +38,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags =
-    if stdenv.isLinux then [
-      # It seems that the e2fsprogs is one of the few packages that cannot be
-      # build with shared and static libs.
-      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
-      "--enable-symlink-install"
-      "--enable-relative-symlinks"
-      "--with-crond-dir=no"
-      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
-      "--disable-fsck"
-      "--disable-libblkid"
-      "--disable-libuuid"
-      "--disable-uuidd"
-    ] else [
-      "--enable-libuuid --disable-e2initrd-helper"
-    ];
+  configureFlags = if stdenv.isLinux then [
+    # It seems that the e2fsprogs is one of the few packages that cannot be
+    # build with shared and static libs.
+    (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
+    "--enable-symlink-install"
+    "--enable-relative-symlinks"
+    "--with-crond-dir=no"
+    # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+    "--disable-fsck"
+    "--disable-libblkid"
+    "--disable-libuuid"
+    "--disable-uuidd"
+  ] else
+    [ "--enable-libuuid --disable-e2initrd-helper" ];
 
   checkInputs = [ buildPackages.perl ];
   doCheck = true;
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl2Plus
       lgpl2Plus # lib/ext2fs, lib/e2p
-      bsd3      # lib/uuid
-      mit       # lib/et, lib/ss
+      bsd3 # lib/uuid
+      mit # lib/et, lib/ss
     ];
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];

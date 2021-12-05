@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   version = "1.17.4"; # note: `conan` package may require a hardcoded one

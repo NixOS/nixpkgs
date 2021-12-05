@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pillow
-, pymaging_png
-, mock
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, six, pillow, pymaging_png, mock
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "qrcode";

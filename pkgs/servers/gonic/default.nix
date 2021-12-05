@@ -1,5 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub
-, pkg-config, taglib, alsa-lib
+{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, taglib, alsa-lib
 , zlib, AudioToolbox, AppKit
 
 # Disable on-the-fly transcoding,
@@ -21,8 +20,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib zlib ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+  buildInputs = [ taglib zlib ] ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.isDarwin [ AudioToolbox AppKit ];
   vendorSha256 = "sha256-oTuaA5ZsZ7zMcjzGh37zO/1XyOfj6xjfNr6A7ecrOiA=";
 

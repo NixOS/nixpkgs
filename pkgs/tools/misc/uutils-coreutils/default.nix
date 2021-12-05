@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, sphinx
-, Security
-, libiconv
-, prefix ? "uutils-"
-, buildMulticallBinary ? true
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cargo, sphinx, Security, libiconv
+, prefix ? "uutils-", buildMulticallBinary ? true }:
 
 stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
@@ -37,7 +28,7 @@ stdenv.mkDerivation rec {
     "PROFILE=release"
     "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
   ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   # too many impure/platform-dependent tests
   doCheck = false;

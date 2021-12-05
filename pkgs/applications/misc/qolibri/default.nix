@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, libeb, lzo
-, qtbase, qtmultimedia, qttools, qtwebengine }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, libeb, lzo, qtbase
+, qtmultimedia, qttools, qtwebengine }:
 
 mkDerivation {
   pname = "qolibri";
@@ -13,9 +13,7 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    libeb lzo qtbase qtmultimedia qttools qtwebengine
-  ];
+  buildInputs = [ libeb lzo qtbase qtmultimedia qttools qtwebengine ];
 
   meta = with lib; {
     homepage = "https://github.com/ludios/qolibri";

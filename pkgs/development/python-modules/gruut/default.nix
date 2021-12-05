@@ -1,32 +1,8 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, pythonOlder
-, fetchFromGitHub
-, Babel
-, gruut-ipa
-, jsonlines
-, num2words
-, python-crfsuite
-, dataclasses
-, python
-}:
+{ lib, buildPythonPackage, callPackage, pythonOlder, fetchFromGitHub, Babel
+, gruut-ipa, jsonlines, num2words, python-crfsuite, dataclasses, python }:
 
-let
-  langPkgs = [
-    "cs"
-    "de"
-    "es"
-    "fr"
-    "it"
-    "nl"
-    "pt"
-    "ru"
-    "sv"
-    "sw"
-  ];
-in
-buildPythonPackage rec {
+let langPkgs = [ "cs" "de" "es" "fr" "it" "nl" "pt" "ru" "sv" "sw" ];
+in buildPythonPackage rec {
   pname = "gruut";
   version = "1.2.3";
   format = "setuptools";
@@ -43,17 +19,11 @@ buildPythonPackage rec {
       --replace "Babel~=2.8.0" "Babel"
   '';
 
-  propagatedBuildInputs = [
-    Babel
-    gruut-ipa
-    jsonlines
-    num2words
-    python-crfsuite
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ] ++ (map (lang: callPackage ./language-pack.nix {
-    inherit lang version format src;
-  }) langPkgs);
+  propagatedBuildInputs =
+    [ Babel gruut-ipa jsonlines num2words python-crfsuite ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ] ++ (map (lang:
+      callPackage ./language-pack.nix { inherit lang version format src; })
+      langPkgs);
 
   checkPhase = ''
     runHook preCheck
@@ -61,12 +31,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "gruut"
-  ];
+  pythonImportsCheck = [ "gruut" ];
 
   meta = with lib; {
-    description = "A tokenizer, text cleaner, and phonemizer for many human languages";
+    description =
+      "A tokenizer, text cleaner, and phonemizer for many human languages";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
     maintainers = teams.tts.members;

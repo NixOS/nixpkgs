@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook, rendering LaTeX equations to HTML at build time.";
+    description =
+      "A preprocessor for mdbook, rendering LaTeX equations to HTML at build time.";
     homepage = "https://github.com/lzanini/${pname}";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ lovesegfault ];

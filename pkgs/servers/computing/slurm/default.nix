@@ -1,11 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
-, python3, munge, perl, pam, zlib, shadow, coreutils
-, ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, xorg, lz4, rdma-core, nixosTests
-, pmix
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl, python3, munge, perl
+, pam, zlib, shadow, coreutils, ncurses, libmysqlclient, gtk2, lua, hwloc
+, numactl, readline, freeipmi, xorg, lz4, rdma-core, nixosTests, pmix
 # enable internal X11 support via libssh2
-, enableX11 ? true
-}:
+, enableX11 ? true }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
@@ -17,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
+    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "0xaswxm54lxahjn5pkm8b1x1ny3iclyp07h7fzhadgbqmla26np2";
   };
 
@@ -46,14 +43,29 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config libtool python3 ];
   buildInputs = [
-    curl python3 munge perl pam zlib
-      libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi shadow.su
-      pmix
+    curl
+    python3
+    munge
+    perl
+    pam
+    zlib
+    libmysqlclient
+    ncurses
+    gtk2
+    lz4
+    rdma-core
+    lua
+    hwloc
+    numactl
+    readline
+    freeipmi
+    shadow.su
+    pmix
   ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with lib;
-    [ "--with-freeipmi=${freeipmi}"
+    [
+      "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
@@ -61,9 +73,8 @@ stdenv.mkDerivation rec {
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
-    ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional (!enableX11) "--disable-x11");
-
+    ] ++ (optional (gtk2 == null) "--disable-gtktest")
+    ++ (optional (!enableX11) "--disable-x11");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py

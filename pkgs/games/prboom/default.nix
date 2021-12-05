@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_net
-, libGLU ? null
-, libGL ? null
-, useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform
-}:
+{ lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_net, libGLU ? null, libGL ? null
+, useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform }:
 
 assert useOpenGL -> libGL != null && libGLU != null;
 
@@ -19,17 +16,17 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  configureFlags = [
-    (lib.enableFeature useOpenGL "gl")
-    (lib.enableFeature doCheck "sdltest")
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--disable-cpu-opt"
-    "--without-x"
-    "ac_cv_type_uid_t=yes"
-    "ac_cv_type_gid_t=yes"
-  ];
+  configureFlags =
+    [ (lib.enableFeature useOpenGL "gl") (lib.enableFeature doCheck "sdltest") ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--disable-cpu-opt"
+      "--without-x"
+      "ac_cv_type_uid_t=yes"
+      "ac_cv_type_gid_t=yes"
+    ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    mv $out/games/ $out/bin
-  '';
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      mv $out/games/ $out/bin
+    '';
 }

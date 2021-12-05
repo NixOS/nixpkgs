@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "gflags";

@@ -2,12 +2,12 @@
 let
   pname = "box";
   version = "2.7.5";
-in
-mkDerivation {
+in mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
+    url =
+      "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
     sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
   };
 

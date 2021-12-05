@@ -1,36 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, SDL
-, SDL_mixer
-, SDL_image
-, libmikmod
-, tinyxml
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, SDL, SDL_mixer, SDL_image
+, libmikmod, tinyxml }:
 
 stdenv.mkDerivation rec {
   pname = "tecnoballz";
   version = "0.93.1";
 
   src = fetchurl {
-    url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${version}.tgz";
+    url =
+      "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${version}.tgz";
     sha256 = "sha256-WRW76e+/eXE/KwuyOjzTPFQnKwNznbIrUrz14fnvgug=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
+  nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [
-    SDL
-    SDL_mixer
-    SDL_image
-    libmikmod
-    tinyxml
-  ];
+  buildInputs = [ SDL SDL_mixer SDL_image libmikmod tinyxml ];
 
   # Newer compilers introduced warnings
   postPatch = ''
@@ -53,7 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://linux.tlk.fr/games/TecnoballZ/";
     downloadPage = "https://linux.tlk.fr/games/TecnoballZ/download/";
-    description = "A brick breaker game with a sophisticated system of weapons and bonuses";
+    description =
+      "A brick breaker game with a sophisticated system of weapons and bonuses";
     longDescription = ''
       A exciting Brick Breaker with 50 levels of game and 11 special levels,
       distributed on the 2 modes of game to give the player a sophisticated

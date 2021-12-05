@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2
-, unzip, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, unzip, makeWrapper }:
 let
   python' = python2.override {
     packageOverrides = self: super: {
@@ -14,14 +13,10 @@ let
           sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
         };
 
-        propagatedBuildInputs = with self; [
-          six
-          requests
-          websocket-client
-          ipaddress
-          docker_pycreds
-          uptime
-        ] ++ lib.optionals (self.pythonOlder "3.7") [ backports_ssl_match_hostname ];
+        propagatedBuildInputs = with self;
+          [ six requests websocket-client ipaddress docker_pycreds uptime ]
+          ++ lib.optionals (self.pythonOlder "3.7")
+          [ backports_ssl_match_hostname ];
 
         # due to flake8
         doCheck = false;
@@ -31,7 +26,8 @@ let
         version = "2.9.5";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "912516ac6a355d7624374a38337b8587afe3eb535c0a5456b3bd12df637a6e70";
+          sha256 =
+            "912516ac6a355d7624374a38337b8587afe3eb535c0a5456b3bd12df637a6e70";
         };
       });
     };
@@ -42,18 +38,16 @@ in stdenv.mkDerivation rec {
   pname = "dd-agent";
 
   src = fetchFromGitHub {
-    owner  = "datadog";
-    repo   = "dd-agent";
-    rev    = version;
+    owner = "datadog";
+    repo = "dd-agent";
+    rev = version;
     sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
   patches = [ ./40103-iostat-fix.patch ];
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    makeWrapper
-  ] ++ (with python'.pkgs; [
+  buildInputs = [ makeWrapper ] ++ (with python'.pkgs; [
     requests
     psycopg2
     psutil
@@ -103,9 +97,9 @@ in stdenv.mkDerivation rec {
       Event collector for the DataDog analysis service
       -- v5 Python implementation
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.all;
+    homepage = "https://www.datadoghq.com";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

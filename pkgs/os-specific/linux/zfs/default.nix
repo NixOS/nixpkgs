@@ -1,23 +1,16 @@
-{ pkgs, lib, stdenv, fetchFromGitHub
-, autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, nixosTests
-, configFile ? "all"
+{ pkgs, lib, stdenv, fetchFromGitHub, autoreconfHook269, util-linux
+, nukeReferences, coreutils, perl, nixosTests, configFile ? "all"
 
-# Userspace dependencies
-, zlib, libuuid, python3, attr, openssl
-, libtirpc
-, nfs-utils, samba
-, gawk, gnugrep, gnused, systemd
-, smartmontools, enableMail ? false
-, sysstat, pkg-config
+  # Userspace dependencies
+, zlib, libuuid, python3, attr, openssl, libtirpc, nfs-utils, samba, gawk
+, gnugrep, gnused, systemd, smartmontools, enableMail ? false, sysstat
+, pkg-config
 
 # Kernel dependencies
-, kernel ? null
-, enablePython ? true
+, kernel ? null, enablePython ? true
 
-# for determining the latest compatible linuxPackages
-, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
-}:
+  # for determining the latest compatible linuxPackages
+, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14 }:
 
 with lib;
 let
@@ -34,16 +27,14 @@ let
   # clang-built) kernels.
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
 
-  common = { version
-    , sha256
-    , extraPatches ? []
-    , rev ? "zfs-${version}"
-    , isUnstable ? false
-    , latestCompatibleLinuxPackages
-    , kernelCompatible ? null }:
+  common = { version, sha256, extraPatches ? [ ], rev ? "zfs-${version}"
+    , isUnstable ? false, latestCompatibleLinuxPackages, kernelCompatible ? null
+    }:
 
     stdenv'.mkDerivation {
-      name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
+      name = "zfs-${configFile}-${version}${
+          optionalString buildKernel "-${kernel.version}"
+        }";
 
       src = fetchFromGitHub {
         owner = "zfsonlinux";
@@ -62,10 +53,11 @@ let
           --replace '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libshare/os/linux/nfs.c --replace "/usr/sbin/exportfs" "${
-          # We don't *need* python support, but we set it like this to minimize closure size:
-          # If it's disabled by default, no need to enable it, even if we have python enabled
-          # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
-          nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
+        # We don't *need* python support, but we set it like this to minimize closure size:
+        # If it's disabled by default, no need to enable it, even if we have python enabled
+        # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
+          nfs-utils.override
+          (old: { enablePython = old.enablePython or true && enablePython; })
         }/bin/exportfs"
         substituteInPlace ./lib/libshare/smb.h        --replace "/usr/bin/net"            "${samba}/bin/net"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -144,7 +136,7 @@ let
       # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
       # Hence we strip modules prior to compression.
       postBuild = optionalString buildKernel ''
-         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+        find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
       '';
 
       postInstall = optionalString buildKernel ''
@@ -170,7 +162,17 @@ let
       '';
 
       postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
+        path = "PATH=${
+            makeBinPath [
+              coreutils
+              gawk
+              gnused
+              gnugrep
+              util-linux
+              smartmon
+              sysstat
+            ]
+          }:$PATH";
       in ''
         for i in $out/libexec/zfs/zpool.d/*; do
           sed -i '2i${path}' $i
@@ -182,13 +184,12 @@ let
       passthru = {
         inherit enableMail latestCompatibleLinuxPackages;
 
-        tests =
-          if isUnstable then [
-            nixosTests.zfs.unstable
-          ] else [
-            nixosTests.zfs.installer
-            nixosTests.zfs.stable
-          ];
+        tests = if isUnstable then
+          [ nixosTests.zfs.unstable ]
+        else [
+          nixosTests.zfs.installer
+          nixosTests.zfs.stable
+        ];
       };
 
       meta = {
@@ -199,10 +200,18 @@ let
           snapshotting, cloning, block devices, deduplication, and more.
         '';
         homepage = "https://github.com/openzfs/zfs";
-        changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
+        changelog =
+          "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
+        maintainers = with maintainers; [
+          hmenke
+          jcumming
+          jonringer
+          wizeman
+          fpletz
+          globin
+        ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.

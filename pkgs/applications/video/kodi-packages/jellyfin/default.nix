@@ -1,8 +1,7 @@
-{ lib, addonDir, buildKodiAddon, fetchFromGitHub, kodi, requests, dateutil, six, kodi-six, signals, websocket }:
-let
-  python = kodi.pythonPackages.python.withPackages (p: with p; [ pyyaml ]);
-in
-buildKodiAddon rec {
+{ lib, addonDir, buildKodiAddon, fetchFromGitHub, kodi, requests, dateutil, six
+, kodi-six, signals, websocket }:
+let python = kodi.pythonPackages.python.withPackages (p: with p; [ pyyaml ]);
+in buildKodiAddon rec {
   pname = "jellyfin";
   namespace = "plugin.video.jellyfin";
   version = "0.7.7";
@@ -14,9 +13,7 @@ buildKodiAddon rec {
     sha256 = "06glhnpayldficvvhlkbxg7zizl2wqms66fnc3p63nm3y7mqa9dd";
   };
 
-  nativeBuildInputs = [
-    python
-  ];
+  nativeBuildInputs = [ python ];
 
   prePatch = ''
     # ZIP does not support timestamps before 1980 - https://bugs.python.org/issue34097
@@ -32,14 +29,7 @@ buildKodiAddon rec {
     mv /build/source/addon.xml $out${addonDir}/${namespace}/
   '';
 
-  propagatedBuildInputs = [
-    requests
-    dateutil
-    six
-    kodi-six
-    signals
-    websocket
-  ];
+  propagatedBuildInputs = [ requests dateutil six kodi-six signals websocket ];
 
   meta = with lib; {
     homepage = "https://jellyfin.org/";

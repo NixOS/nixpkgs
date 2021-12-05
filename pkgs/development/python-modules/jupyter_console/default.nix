@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, jupyter-client
-, ipython
-, ipykernel
-, prompt-toolkit
-, pygments
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, jupyter-client, ipython, ipykernel
+, prompt-toolkit, pygments, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "jupyter_console";
@@ -20,13 +11,8 @@ buildPythonPackage rec {
     sha256 = "242248e1685039cd8bff2c2ecb7ce6c1546eb50ee3b08519729e6e881aec19c7";
   };
 
-  propagatedBuildInputs = [
-    jupyter-client
-    ipython
-    ipykernel
-    prompt-toolkit
-    pygments
-  ];
+  propagatedBuildInputs =
+    [ jupyter-client ipython ipykernel prompt-toolkit pygments ];
   checkInputs = [ nose ];
 
   postPatch = ''

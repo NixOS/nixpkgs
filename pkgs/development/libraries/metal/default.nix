@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "Single-header C++11 library designed to make you love template metaprogramming";
+    description =
+      "Single-header C++11 library designed to make you love template metaprogramming";
     homepage = "https://github.com/brunocodutra/metal";
     license = licenses.mit;
     maintainers = with maintainers; [ pmiddend ];

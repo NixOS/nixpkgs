@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zetup
-, six
-, moretools
-, pathpy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, zetup, six, moretools, pathpy
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "modeled";

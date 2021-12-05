@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, poetry
-, docstring-to-markdown
-, jedi
-, pygls
-, pytestCheckHook
-, pyhamcrest
-, python-jsonrpc-server
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, poetry
+, docstring-to-markdown, jedi, pygls, pytestCheckHook, pyhamcrest
+, python-jsonrpc-server }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
@@ -23,29 +14,17 @@ buildPythonPackage rec {
     sha256 = "sha256-mJGgDDjPZXde4M4OHwj81KYoaFXFAwOZ+v18YE+arFE=";
   };
 
-  nativeBuildInputs = [
-    poetry
-  ];
+  nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [
-    docstring-to-markdown
-    jedi
-    pygls
-  ];
+  propagatedBuildInputs = [ docstring-to-markdown jedi pygls ];
 
-  checkInputs = [
-    pytestCheckHook
-    pyhamcrest
-    python-jsonrpc-server
-  ];
+  checkInputs = [ pytestCheckHook pyhamcrest python-jsonrpc-server ];
 
   preCheck = ''
     HOME="$(mktemp -d)"
   '';
 
-  pythonImportsCheck = [
-    "jedi_language_server"
-  ];
+  pythonImportsCheck = [ "jedi_language_server" ];
 
   meta = with lib; {
     homepage = "https://github.com/pappasam/jedi-language-server";

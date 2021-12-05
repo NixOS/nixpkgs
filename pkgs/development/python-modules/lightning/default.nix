@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jinja2
-, matplotlib
-, numpy
-, requests
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, jinja2, matplotlib, numpy
+, requests, six }:
 
 buildPythonPackage rec {
   version = "1.2.1";
@@ -22,7 +14,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ jinja2 matplotlib numpy requests six ];
 
   meta = with lib; {
-    description = "A Python client library for the Lightning data visualization server";
+    description =
+      "A Python client library for the Lightning data visualization server";
     homepage = "http://lightning-viz.org";
     license = licenses.mit;
   };

@@ -5,7 +5,8 @@ let
   version = "35";
 in fetchurl {
   name = "${pname}-${version}";
-  url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
+  url =
+    "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
 
   downloadToTemp = true;
   recursiveHash = true;

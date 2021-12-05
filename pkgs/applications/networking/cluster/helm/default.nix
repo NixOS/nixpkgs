@@ -17,7 +17,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
     "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
   ];
@@ -33,6 +34,12 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man ];
+    maintainers = with maintainers; [
+      rlupton20
+      edude03
+      saschagrunert
+      Frostman
+      Chili-Man
+    ];
   };
 }

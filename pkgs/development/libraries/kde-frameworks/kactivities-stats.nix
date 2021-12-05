@@ -1,8 +1,4 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  boost, kactivities, kconfig, qtbase,
-}:
+{ mkDerivation, extra-cmake-modules, boost, kactivities, kconfig, qtbase, }:
 
 mkDerivation {
   name = "kactivities-stats";

@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "3.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/weka/${lib.replaceChars ["."]["-"] "${pname}-${version}"}.zip";
+    url = "mirror://sourceforge/weka/${
+        lib.replaceChars [ "." ] [ "-" ] "${pname}-${version}"
+      }.zip";
     sha256 = "0zwmhspmqb0a7cm6k6i0s6q3w19ws1g9dx3cp2v3g3vsif6cdh31";
   };
 
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.cs.waikato.ac.nz/ml/weka/";
-    description = "Collection of machine learning algorithms for data mining tasks";
+    description =
+      "Collection of machine learning algorithms for data mining tasks";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.mimame ];
     platforms = lib.platforms.unix;

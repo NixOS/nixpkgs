@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, pyyaml
-, requests
-, requests-mock
-, sqlite-utils
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook, pyyaml
+, requests, requests-mock, sqlite-utils }:
 
 buildPythonPackage rec {
   pname = "github-to-sqlite";
@@ -21,20 +13,11 @@ buildPythonPackage rec {
     sha256 = "16mw429ppnhgsa98qs3fhprqvdpqbr5q1biq3ql8rsf38difdbl8";
   };
 
-  propagatedBuildInputs = [
-    sqlite-utils
-    pyyaml
-    requests
-  ];
+  propagatedBuildInputs = [ sqlite-utils pyyaml requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ pytestCheckHook requests-mock ];
 
-  disabledTests = [
-    "test_scrape_dependents"
-  ];
+  disabledTests = [ "test_scrape_dependents" ];
 
   meta = with lib; {
     description = "Save data from GitHub to a SQLite database";

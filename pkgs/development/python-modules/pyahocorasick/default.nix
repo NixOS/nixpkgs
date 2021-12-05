@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
@@ -19,7 +14,8 @@ buildPythonPackage rec {
   patches = [
     # Use proper temporary directory on Hydra
     (fetchpatch {
-      url = "https://github.com/WojciechMula/pyahocorasick/commit/b6549e06f3cced7ffdf4d1b587cd7de12041f495.patch";
+      url =
+        "https://github.com/WojciechMula/pyahocorasick/commit/b6549e06f3cced7ffdf4d1b587cd7de12041f495.patch";
       sha256 = "sha256-v3J/0aIPOnBhLlJ18r/l7O0MckqLOCtcmqIS9ZegaSI=";
     })
   ];

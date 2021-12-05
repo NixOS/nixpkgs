@@ -1,10 +1,5 @@
-{ lib
-, buildPythonApplication
-, docopt
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-}:
+{ lib, buildPythonApplication, docopt, fetchFromGitHub, importlib-metadata
+, poetry-core }:
 
 buildPythonApplication rec {
   pname = "xortool";

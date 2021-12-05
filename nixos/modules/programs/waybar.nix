@@ -3,9 +3,7 @@
 with lib;
 
 {
-  options.programs.waybar = {
-    enable = mkEnableOption "waybar";
-  };
+  options.programs.waybar = { enable = mkEnableOption "waybar"; };
 
   config = mkIf config.programs.waybar.enable {
     systemd.user.services.waybar = {

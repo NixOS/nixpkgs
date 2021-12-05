@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome, gmime3, webkitgtk, ronn
-, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome, gmime3, webkitgtk
+, ronn, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
 , vim
 
 # additional python3 packages to be available within plugins
-, extraPythonPackages ? []
-}:
+, extraPythonPackages ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "astroid";
@@ -21,15 +20,28 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake ronn pkg-config wrapGAppsHook gobject-introspection
-    python3 python3.pkgs.wrapPython
+    cmake
+    ronn
+    pkg-config
+    wrapGAppsHook
+    gobject-introspection
+    python3
+    python3.pkgs.wrapPython
   ];
 
   buildInputs = [
-    gtkmm3 gmime3 webkitgtk libsass libpeas
+    gtkmm3
+    gmime3
+    webkitgtk
+    libsass
+    libpeas
     python3
-    notmuch boost gsettings-desktop-schemas gnome.adwaita-icon-theme
-    glib-networking protobuf
+    notmuch
+    boost
+    gsettings-desktop-schemas
+    gnome.adwaita-icon-theme
+    glib-networking
+    protobuf
     vim
   ];
 
@@ -38,7 +50,8 @@ stdenv.mkDerivation rec {
     sed -i "s~ -geom 10x10~~g" src/config.cc
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ] ++ extraPythonPackages;
+  pythonPath = with python3.pkgs;
+    requiredPythonModules [ pygobject3 ] ++ extraPythonPackages;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(

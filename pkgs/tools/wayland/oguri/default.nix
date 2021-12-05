@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, cairo
-, gdk-pixbuf
-, wayland
-, wayland-protocols
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, cairo, gdk-pixbuf
+, wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "oguri";
@@ -22,16 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [
-    cairo
-    gdk-pixbuf
-    wayland
-    wayland-protocols
-  ];
+  buildInputs = [ cairo gdk-pixbuf wayland wayland-protocols ];
 
   meta = with lib; {
     homepage = "https://github.com/vilhalmer/oguri/";
-    description = "A very nice animated wallpaper daemon for Wayland compositors";
+    description =
+      "A very nice animated wallpaper daemon for Wayland compositors";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

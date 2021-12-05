@@ -2,7 +2,7 @@
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
-  pythonEnv = python3.withPackages(ps: with ps; [ sphinx ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ sphinx ]);
   pname = "pyside-generatorrunner";
   version = "0.6.16";
 in stdenv.mkDerivation {
@@ -23,7 +23,8 @@ in stdenv.mkDerivation {
   buildInputs = [ pysideApiextractor qt4 ];
 
   meta = with lib; {
-    description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
+    description =
+      "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
     license = licenses.gpl2;
     homepage = "http://www.pyside.org/docs/generatorrunner/";
     maintainers = [ ];

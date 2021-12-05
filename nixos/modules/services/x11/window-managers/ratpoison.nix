@@ -2,13 +2,12 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.ratpoison;
-in
-{
+let cfg = config.services.xserver.windowManager.ratpoison;
+in {
   ###### interface
   options = {
-    services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
+    services.xserver.windowManager.ratpoison.enable =
+      mkEnableOption "ratpoison";
   };
 
   ###### implementation

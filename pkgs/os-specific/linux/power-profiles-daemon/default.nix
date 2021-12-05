@@ -1,37 +1,13 @@
-{ stdenv
-, lib
-, pkg-config
-, meson
-, ninja
-, fetchFromGitLab
-, fetchpatch
-, libgudev
-, glib
-, polkit
-, gobject-introspection
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, libxml2
-, libxslt
-, upower
-, umockdev
-, systemd
-, python3
-, wrapGAppsNoGuiHook
-, nixosTests
-}:
+{ stdenv, lib, pkg-config, meson, ninja, fetchFromGitLab, fetchpatch, libgudev
+, glib, polkit, gobject-introspection, gettext, gtk-doc, docbook-xsl-nons
+, docbook_xml_dtd_412, libxml2, libxslt, upower, umockdev, systemd, python3
+, wrapGAppsNoGuiHook, nixosTests }:
 
 let
-  testPythonPkgs = ps: with ps; [
-    pygobject3
-    dbus-python
-    python-dbusmock
-  ];
-  testTypelibPath = lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ umockdev ];
-in
-stdenv.mkDerivation rec {
+  testPythonPkgs = ps: with ps; [ pygobject3 dbus-python python-dbusmock ];
+  testTypelibPath =
+    lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ umockdev ];
+in stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
   version = "0.10.1";
 
@@ -49,7 +25,8 @@ stdenv.mkDerivation rec {
     # Enable installed tests.
     # https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/merge_requests/92
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/commit/3c64d9e1732eb6425e33013c452f1c4aa7a26f7e.patch";
+      url =
+        "https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/commit/3c64d9e1732eb6425e33013c452f1c4aa7a26f7e.patch";
       sha256 = "din5VuZZwARNDInHtl44yJK8pLmlxr5eoD4iMT4a8HA=";
     })
 
@@ -87,9 +64,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # for cli tool
-  pythonPath = [
-    python3.pkgs.pygobject3
-  ];
+  pythonPath = [ python3.pkgs.pygobject3 ];
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -97,7 +72,8 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR =
+    "${placeholder "out"}/share/polkit-1/actions";
 
   # Avoid double wrapping
   dontWrapGApps = true;
@@ -146,9 +122,13 @@ stdenv.mkDerivation rec {
       # to add package directories to site will not carry over.
       # https://github.com/martinpitt/python-dbusmock/blob/2254e69279a02fb3027b500ed7288b77c7a80f2a/dbusmock/mockobject.py#L51
       # https://github.com/martinpitt/python-dbusmock/blob/2254e69279a02fb3027b500ed7288b77c7a80f2a/dbusmock/__main__.py#L60-L62
-      --prefix PYTHONPATH : "${lib.makeSearchPath python3.sitePackages (testPythonPkgs python3.pkgs)}"
+      --prefix PYTHONPATH : "${
+        lib.makeSearchPath python3.sitePackages (testPythonPkgs python3.pkgs)
+      }"
     )
-    wrapPythonProgramsIn "$installedTests/libexec/installed-tests" "$pythonPath ${lib.concatStringsSep " " (testPythonPkgs python3.pkgs)}"
+    wrapPythonProgramsIn "$installedTests/libexec/installed-tests" "$pythonPath ${
+      lib.concatStringsSep " " (testPythonPkgs python3.pkgs)
+    }"
   '';
 
   passthru = {
@@ -160,7 +140,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon";
-    description = "Makes user-selected power profiles handling available over D-Bus";
+    description =
+      "Makes user-selected power profiles handling available over D-Bus";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar mvnetbiz ];

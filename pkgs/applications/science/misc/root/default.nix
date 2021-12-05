@@ -1,42 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, makeWrapper
-, cmake
-, git
-, ftgl
-, gl2ps
-, glew
-, gsl
-, libX11
-, libXpm
-, libXft
-, libXext
-, libGLU
-, libGL
-, libxml2
-, llvm_9
-, lz4
-, xz
-, pcre
-, nlohmann_json
-, pkg-config
-, python
-, xxHash
-, zlib
-, zstd
-, libAfterImage
-, giflib
-, libjpeg
-, libtiff
-, libpng
-, tbb
-, Cocoa
-, CoreSymbolication
-, OpenGL
-, noSplash ? false
-}:
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, cmake, git, ftgl, gl2ps, glew
+, gsl, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, llvm_9, lz4, xz
+, pcre, nlohmann_json, pkg-config, python, xxHash, zlib, zstd, libAfterImage
+, giflib, libjpeg, libtiff, libpng, tbb, Cocoa, CoreSymbolication, OpenGL
+, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   pname = "root";
@@ -69,17 +35,22 @@ stdenv.mkDerivation rec {
     nlohmann_json
     python.pkgs.numpy
     tbb
-  ]
-  ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-  ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
-  ;
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libX11
+    libXpm
+    libXft
+    libXext
+    libGLU
+    libGL
+  ] ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ];
 
   patches = [
     ./sw_vers.patch
 
     # Fix builtin_llvm=OFF support
     (fetchpatch {
-      url = "https://github.com/root-project/root/commit/0cddef5d3562a89fe254e0036bb7d5ca8a5d34d2.diff";
+      url =
+        "https://github.com/root-project/root/commit/0cddef5d3562a89fe254e0036bb7d5ca8a5d34d2.diff";
       excludes = [ "interpreter/cling/tools/plugins/clad/CMakeLists.txt" ];
       sha256 = "sha256-VxWUbxRHB3O6tERFQdbGI7ypDAZD3sjSi+PYfu1OAbM=";
     })
@@ -156,16 +127,16 @@ stdenv.mkDerivation rec {
     "-Dwebgui=OFF"
     "-Dxml=ON"
     "-Dxrootd=OFF"
-  ]
-  ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
-  ++ lib.optionals stdenv.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
+  ] ++ lib.optional (stdenv.cc.libc != null)
+    "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
+    ++ lib.optionals stdenv.isDarwin [
+      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 
-    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
-    # fatal error: could not build module '_Builtin_intrinsics'
-    "-Druntime_cxxmodules=OFF"
-  ];
+      # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+      # fatal error: could not build module '_Builtin_intrinsics'
+      "-Druntime_cxxmodules=OFF"
+    ];
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do

@@ -3,7 +3,8 @@ let
   version = "2.5.0";
 
   completion = fetchurl {
-    url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
+    url =
+      "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
     sha256 = "sha256-RDygYQzK6NLWrOug7EqnkpuH7Wz1T2Zq/tGNZjoYo5U=";
   };
 
@@ -14,13 +15,13 @@ let
     [Phar]
     phar.readonly = Off
   '';
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "wp-cli";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
+    url =
+      "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
     sha256 = "sha256-vghT6fRD84SFZgcIcdNE6K2B6x4V0V3PkyS0p14nJ4k=";
   };
 

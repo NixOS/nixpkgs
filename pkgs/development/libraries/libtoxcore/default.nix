@@ -3,48 +3,43 @@
 
 let
   generic = { version, sha256 }:
-  stdenv.mkDerivation {
-    pname = "libtoxcore";
-    inherit version;
+    stdenv.mkDerivation {
+      pname = "libtoxcore";
+      inherit version;
 
-    src = fetchFromGitHub {
-      owner  = "TokTok";
-      repo   = "c-toxcore";
-      rev    = "v${version}";
-      inherit sha256;
+      src = fetchFromGitHub {
+        owner = "TokTok";
+        repo = "c-toxcore";
+        rev = "v${version}";
+        inherit sha256;
+      };
+
+      cmakeFlags =
+        [ "-DBUILD_NTOX=ON" "-DDHT_BOOTSTRAP=ON" "-DBOOTSTRAP_DAEMON=ON" ];
+
+      buildInputs = [ libsodium msgpack ncurses libconfig ]
+        ++ lib.optionals (!stdenv.isAarch32) [ libopus libvpx ];
+
+      nativeBuildInputs = [ cmake pkg-config ];
+
+      doCheck = false; # hangs, tries to access the net?
+      checkInputs = [ check ];
+
+      postFixup = ''
+        sed -i $out/lib/pkgconfig/*.pc \
+          -e "s|^libdir=.*|libdir=$out/lib|" \
+          -e "s|^includedir=.*|includedir=$out/include|"
+      '';
+
+      meta = with lib; {
+        description =
+          "P2P FOSS instant messaging application aimed to replace Skype";
+        homepage = "https://tox.chat";
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ peterhoeg ];
+        platforms = platforms.all;
+      };
     };
-
-    cmakeFlags = [
-      "-DBUILD_NTOX=ON"
-      "-DDHT_BOOTSTRAP=ON"
-      "-DBOOTSTRAP_DAEMON=ON"
-    ];
-
-    buildInputs = [
-      libsodium msgpack ncurses libconfig
-    ] ++ lib.optionals (!stdenv.isAarch32) [
-      libopus libvpx
-    ];
-
-    nativeBuildInputs = [ cmake pkg-config ];
-
-    doCheck = false; # hangs, tries to access the net?
-    checkInputs = [ check ];
-
-    postFixup =''
-      sed -i $out/lib/pkgconfig/*.pc \
-        -e "s|^libdir=.*|libdir=$out/lib|" \
-        -e "s|^includedir=.*|includedir=$out/include|"
-    '';
-
-    meta = with lib; {
-      description = "P2P FOSS instant messaging application aimed to replace Skype";
-      homepage = "https://tox.chat";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ peterhoeg ];
-      platforms = platforms.all;
-    };
-  };
 
 in {
   libtoxcore_0_1 = generic {

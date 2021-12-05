@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, bison
-, git
-, python2
-, rake
-, ruby
-, libGL
-, libuv
-, libX11
-}:
+{ lib, stdenv, fetchFromGitHub, bison, git, python2, rake, ruby, libGL, libuv
+, libX11 }:
 
 let
   mgem-list = fetchFromGitHub {
@@ -52,8 +43,7 @@ let
     rev = "383a9c79e191d524a9a2b4107cc5043ecbf6190b";
     sha256 = "003glxgxifk4ixl12sy4gn9bhwvgb79b4wga549ic79isgv81w2d";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mruby-zest";
   version = "3.0.5";
 
@@ -68,10 +58,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison git python2 rake ruby ];
   buildInputs = [ libGL libuv libX11 ];
 
-  patches = [
-    ./force-gcc-as-linker.patch
-    ./system-libuv.patch
-  ];
+  patches = [ ./force-gcc-as-linker.patch ./system-libuv.patch ];
 
   # Add missing dependencies of deps/mruby-dir-glob/mrbgem.rake
   # Should be fixed in next release, see bcadb0a5490bd6d599f1a0e66ce09b46363c9dae

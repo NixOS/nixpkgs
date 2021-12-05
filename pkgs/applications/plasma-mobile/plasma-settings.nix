@@ -1,26 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
+{ lib, mkDerivation, fetchFromGitLab
 
-, cmake
-, extra-cmake-modules
+, cmake, extra-cmake-modules
 
-, kauth
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kitemmodels
-, plasma-framework
+, kauth, kconfig, kcoreaddons, kdbusaddons, ki18n, kitemmodels, plasma-framework
 }:
 
 mkDerivation rec {
   pname = "plasma-settings";
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     kauth

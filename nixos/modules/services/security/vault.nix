@@ -8,33 +8,36 @@ let
   configFile = pkgs.writeText "vault.hcl" ''
     listener "tcp" {
       address = "${cfg.address}"
-      ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
+      ${
+        if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
           tls_disable = "true"
         '' else ''
           tls_cert_file = "${cfg.tlsCertFile}"
           tls_key_file = "${cfg.tlsKeyFile}"
-        ''}
+        ''
+      }
       ${cfg.listenerExtraConfig}
     }
     storage "${cfg.storageBackend}" {
-      ${optionalString (cfg.storagePath   != null) ''path = "${cfg.storagePath}"''}
+      ${
+        optionalString (cfg.storagePath != null) ''path = "${cfg.storagePath}"''
+      }
       ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
     }
     ${optionalString (cfg.telemetryConfig != "") ''
-        telemetry {
-          ${cfg.telemetryConfig}
-        }
-      ''}
+      telemetry {
+        ${cfg.telemetryConfig}
+      }
+    ''}
     ${cfg.extraConfig}
   '';
 
-  allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
+  allConfigPaths = [ configFile ] ++ cfg.extraSettingsPaths;
 
-  configOptions = escapeShellArgs (concatMap (p: ["-config" p]) allConfigPaths);
+  configOptions =
+    escapeShellArgs (concatMap (p: [ "-config" p ]) allConfigPaths);
 
-in
-
-{
+in {
   options = {
     services.vault = {
       enable = mkEnableOption "Vault daemon";
@@ -56,14 +59,16 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "/path/to/your/cert.pem";
-        description = "TLS certificate file. TLS will be disabled unless this option is set";
+        description =
+          "TLS certificate file. TLS will be disabled unless this option is set";
       };
 
       tlsKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/path/to/your/key.pem";
-        description = "TLS private key file. TLS will be disabled unless this option is set";
+        description =
+          "TLS private key file. TLS will be disabled unless this option is set";
       };
 
       listenerExtraConfig = mkOption {
@@ -75,14 +80,30 @@ in
       };
 
       storageBackend = mkOption {
-        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
+        type = types.enum [
+          "inmem"
+          "file"
+          "consul"
+          "zookeeper"
+          "s3"
+          "azure"
+          "dynamodb"
+          "etcd"
+          "mssql"
+          "mysql"
+          "postgresql"
+          "swift"
+          "gcs"
+          "raft"
+        ];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
 
       storagePath = mkOption {
         type = types.nullOr types.path;
-        default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        default =
+          if cfg.storageBackend == "file" then "/var/lib/vault" else null;
         description = "Data directory for file backend";
       };
 
@@ -113,7 +134,7 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Configuration files to load besides the immutable one defined by the NixOS module.
           This can be used to avoid putting credentials in the Nix store, which can be read by any user.
@@ -145,11 +166,18 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
-        message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
+      {
+        assertion = cfg.storageBackend == "inmem"
+          -> (cfg.storagePath == null && cfg.storageConfig == null);
+        message = ''
+          The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
       }
-      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
-        message = ''You must set services.vault.storagePath only when using the "file" backend'';
+      {
+        assertion = (cfg.storageBackend == "file"
+          -> (cfg.storagePath != null && cfg.storageConfig == null))
+          && (cfg.storagePath != null -> cfg.storageBackend == "file");
+        message = ''
+          You must set services.vault.storagePath only when using the "file" backend'';
       }
     ];
 
@@ -167,11 +195,13 @@ in
     systemd.services.vault = {
       description = "Vault server daemon";
 
-      wantedBy = ["multi-user.target"];
-      after = [ "network.target" ]
-           ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ] ++ optional
+        (config.services.consul.enable && cfg.storageBackend == "consul")
+        "consul.service";
 
-      restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
+      restartIfChanged =
+        false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 
       startLimitIntervalSec = 60;
       startLimitBurst = 3;
@@ -191,7 +221,8 @@ in
         Restart = "on-failure";
       };
 
-      unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
+      unitConfig.RequiresMountsFor =
+        optional (cfg.storagePath != null) cfg.storagePath;
     };
   };
 

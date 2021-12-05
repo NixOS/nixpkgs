@@ -2,38 +2,38 @@
 , js_of_ocaml-ppx, re }:
 
 if lib.versionOlder ocaml.version "4.03"
-|| lib.versionAtLeast ocaml.version "4.11"
-then throw "xtmpl not supported for ocaml ${ocaml.version}"
+|| lib.versionAtLeast ocaml.version "4.11" then
+  throw "xtmpl not supported for ocaml ${ocaml.version}"
 else
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-xtmpl-${version}";
-  version = "0.17.0";
-  src = fetchFromGitLab {
-    domain = "framagit.org";
-    owner = "zoggy";
-    repo = "xtmpl";
-    rev = version;
-    sha256 = "1hq6y4rhz958q40145k4av8hx8jyvspg78xf741samd7vc3jd221";
-  };
+  stdenv.mkDerivation rec {
+    name = "ocaml${ocaml.version}-xtmpl-${version}";
+    version = "0.17.0";
+    src = fetchFromGitLab {
+      domain = "framagit.org";
+      owner = "zoggy";
+      repo = "xtmpl";
+      rev = version;
+      sha256 = "1hq6y4rhz958q40145k4av8hx8jyvspg78xf741samd7vc3jd221";
+    };
 
-  patches = [ ./jsoo.patch ];
+    patches = [ ./jsoo.patch ];
 
-  postPatch = ''
-    substituteInPlace Makefile --replace js_of_ocaml.ppx js_of_ocaml-ppx
-  '';
+    postPatch = ''
+      substituteInPlace Makefile --replace js_of_ocaml.ppx js_of_ocaml-ppx
+    '';
 
-  buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
-  propagatedBuildInputs = [ iri re ];
+    buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
+    propagatedBuildInputs = [ iri re ];
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  dontStrip = true;
+    dontStrip = true;
 
-  meta = with lib; {
-    description = "XML templating library for OCaml";
-    homepage = "https://www.good-eris.net/xtmpl/";
-    license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ regnat ];
-  };
-}
+    meta = with lib; {
+      description = "XML templating library for OCaml";
+      homepage = "https://www.good-eris.net/xtmpl/";
+      license = licenses.lgpl3;
+      platforms = ocaml.meta.platforms or [ ];
+      maintainers = with maintainers; [ regnat ];
+    };
+  }

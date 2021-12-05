@@ -18,10 +18,14 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/terraform-provider-cloudfoundry{,_v${version}}";
 
-  passthru = { provider-source-address = "registry.terraform.io/cloudfoundry-community/cloudfoundry"; };
+  passthru = {
+    provider-source-address =
+      "registry.terraform.io/cloudfoundry-community/cloudfoundry";
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
+    homepage =
+      "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ris ];

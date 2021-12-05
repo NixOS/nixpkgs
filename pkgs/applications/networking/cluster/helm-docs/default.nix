@@ -14,15 +14,12 @@ buildGoModule rec {
   vendorSha256 = "sha256-aAn969C4UhFGu5/qXIG/rc1cErQIDtPwEA+f0d43y0w=";
 
   subPackages = [ "cmd/helm-docs" ];
-  ldflags = [
-    "-w"
-    "-s"
-    "-X main.version=v${version}"
-  ];
+  ldflags = [ "-w" "-s" "-X main.version=v${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/norwoodj/helm-docs";
-    description = "A tool for automatically generating markdown documentation for Helm charts";
+    description =
+      "A tool for automatically generating markdown documentation for Helm charts";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sagikazarmark ];
   };

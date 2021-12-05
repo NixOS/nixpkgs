@@ -1,20 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fluxbox
-, libarchive
-, linux-pam
-, numlockx
-, qmake
-, qtbase
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, xorg
-, xscreensaver
-, wrapGAppsHook
-}:
+{ lib, mkDerivation, fetchFromGitHub, fluxbox, libarchive, linux-pam, numlockx
+, qmake, qtbase, qtmultimedia, qtsvg, qttools, qtx11extras, xorg, xscreensaver
+, wrapGAppsHook }:
 
 mkDerivation rec {
   pname = "lumina";
@@ -27,11 +13,7 @@ mkDerivation rec {
     sha256 = "0wc8frhw1yv07n05r33c4zilq5lgn5gw07a9n37g6nyn5sgrbp4f";
   };
 
-  nativeBuildInputs = [
-    qmake
-    qttools
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ qmake qttools wrapGAppsHook ];
 
   buildInputs = [
     fluxbox # window manager for Lumina DE
@@ -50,9 +32,7 @@ mkDerivation rec {
     xscreensaver
   ];
 
-  patches = [
-    ./LuminaOS-NixOS.cpp.patch
-  ];
+  patches = [ ./LuminaOS-NixOS.cpp.patch ];
 
   prePatch = ''
     # Copy Gentoo setup as NixOS setup and then patch it

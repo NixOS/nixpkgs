@@ -1,13 +1,12 @@
 { callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
 
 let
-  mkStudio = opts: callPackage (import ./common.nix opts) {
-    fontsConf = makeFontsConf {
-      fontDirectories = [];
+  mkStudio = opts:
+    callPackage (import ./common.nix opts) {
+      fontsConf = makeFontsConf { fontDirectories = [ ]; };
+      inherit (gnome2) GConf gnome_vfs;
+      inherit buildFHSUserEnv;
     };
-    inherit (gnome2) GConf gnome_vfs;
-    inherit buildFHSUserEnv;
-  };
   stableVersion = {
     version = "2020.3.1.25"; # "Android Studio Arctic Fox (2020.3.1)"
     sha256Hash = "10gpwb130bzp6a9g958cjqcb2gsm0vdgm08nm5xy45xdh54nxjfg";

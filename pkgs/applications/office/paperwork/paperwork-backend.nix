@@ -1,28 +1,12 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{ buildPythonPackage, lib, fetchFromGitLab
 
-, isPy3k
-, isPyPy
+, isPy3k, isPyPy
 
-, pyenchant
-, simplebayes
-, pypillowfight
-, pycountry
-, whoosh
-, termcolor
-, python-Levenshtein
-, pygobject3
-, pyocr
-, natsort
-, libinsane
-, distro
-, openpaperwork-core
-, openpaperwork-gtk
-, psutil
+, pyenchant, simplebayes, pypillowfight, pycountry, whoosh, termcolor
+, python-Levenshtein, pygobject3, pyocr, natsort, libinsane, distro
+, openpaperwork-core, openpaperwork-gtk, psutil
 
-, pkgs
-}:
+, pkgs }:
 
 buildPythonPackage rec {
   pname = "paperwork-backend";

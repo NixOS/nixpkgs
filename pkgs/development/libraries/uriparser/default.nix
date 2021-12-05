@@ -6,15 +6,14 @@ stdenv.mkDerivation rec {
 
   # Release tarball differs from source tarball
   src = fetchurl {
-    url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
     sha256 = "0v30qr5hl3xybl9nzwaw46kblwn94w5xpri22wanrrpjlzmn306x";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DURIPARSER_BUILD_DOCS=OFF"
-  ];
+  cmakeFlags = [ "-DURIPARSER_BUILD_DOCS=OFF" ];
 
   checkInputs = [ gtest ];
   doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;

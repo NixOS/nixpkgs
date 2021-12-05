@@ -17,9 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/lego" ];
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Let's Encrypt client and ACME library written in Go";

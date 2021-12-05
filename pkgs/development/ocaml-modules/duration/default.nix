@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/hannesm/duration/releases/download/${version}/duration-${version}.tbz";
+    url =
+      "https://github.com/hannesm/duration/releases/download/${version}/duration-${version}.tbz";
     sha256 = "0m9r0ayhpl98g9vdxrbjdcllns274jilic5v8xj1x7dphw21p95h";
   };
 

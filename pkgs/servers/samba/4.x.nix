@@ -1,45 +1,14 @@
-{ lib, stdenv
-, buildPackages
-, fetchurl
-, wafHook
-, pkg-config
-, bison
-, flex
-, perl
-, libxslt
-, heimdal
-, docbook_xsl
-, fixDarwinDylibNames
-, docbook_xml_dtd_45
-, readline
-, popt
-, dbus
-, libbsd
-, libarchive
-, zlib
-, liburing
-, gnutls
-, libunwind
-, systemd
-, jansson
-, libtasn1
-, tdb
-, cmocka
-, rpcsvc-proto
-, python3Packages
+{ lib, stdenv, buildPackages, fetchurl, wafHook, pkg-config, bison, flex, perl
+, libxslt, heimdal, docbook_xsl, fixDarwinDylibNames, docbook_xml_dtd_45
+, readline, popt, dbus, libbsd, libarchive, zlib, liburing, gnutls, libunwind
+, systemd, jansson, libtasn1, tdb, cmocka, rpcsvc-proto, python3Packages
 , nixosTests
 
-, enableLDAP ? false, openldap
-, enablePrinting ? false, cups
-, enableProfiling ? true
-, enableMDNS ? false, avahi
-, enableDomainController ? false, gpgme, lmdb
-, enableRegedit ? true, ncurses
-, enableCephFS ? false, ceph
-, enableGlusterFS ? false, glusterfs, libuuid
-, enableAcl ? (!stdenv.isDarwin), acl
-, enablePam ? (!stdenv.isDarwin), pam
-}:
+, enableLDAP ? false, openldap, enablePrinting ? false, cups
+, enableProfiling ? true, enableMDNS ? false, avahi
+, enableDomainController ? false, gpgme, lmdb, enableRegedit ? true, ncurses
+, enableCephFS ? false, ceph, enableGlusterFS ? false, glusterfs, libuuid
+, enableAcl ? (!stdenv.isDarwin), acl, enablePam ? (!stdenv.isDarwin), pam }:
 
 with lib;
 
@@ -77,9 +46,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  ] ++ optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     python3Packages.python
@@ -103,8 +70,7 @@ stdenv.mkDerivation rec {
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
-    ++ optional enableAcl acl
-    ++ optional enablePam pam;
+    ++ optional enableAcl acl ++ optional enablePam pam;
 
   wafPath = "buildtools/bin/waf";
 
@@ -129,20 +95,17 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ optional (!enableDomainController)
-    "--without-ad-dc"
-  ++ optionals (!enableLDAP) [
-    "--without-ldap"
-    "--without-ads"
-  ] ++ optional enableProfiling "--with-profiling-data"
+  ] ++ optional (!enableDomainController) "--without-ad-dc"
+    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
+    ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optional stdenv.isAarch32 [
-    # https://bugs.gentoo.org/683148
-    "--jobs 1"
-  ];
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "--bundled-libraries=!asn1_compile,!compile_et" ]
+    ++ optional stdenv.isAarch32 [
+      # https://bugs.gentoo.org/683148
+      "--jobs 1"
+    ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
@@ -178,13 +141,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  passthru = {
-    tests.samba = nixosTests.samba;
-  };
+  passthru = { tests.samba = nixosTests.samba; };
 
   meta = with lib; {
     homepage = "https://www.samba.org";
-    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    description =
+      "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
     # N.B. enableGlusterFS does not build

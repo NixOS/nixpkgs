@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, six
-}:
+{ lib, stdenv, buildPythonPackage, cryptography, fetchFromGitHub, pyspnego
+, pytest-mock, pytestCheckHook, pythonOlder, six }:
 
 buildPythonPackage rec {
   pname = "smbprotocol";
@@ -24,16 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-m9C+uzwrEOcbkvBQ3Z+to2BsX2i7cLnUiV/+L7hMUdE=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    pyspnego
-    six
-  ];
+  propagatedBuildInputs = [ cryptography pyspnego six ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # https://github.com/jborean93/smbprotocol/issues/119
@@ -45,9 +29,7 @@ buildPythonPackage rec {
     "test_recv_"
   ];
 
-  pythonImportsCheck = [
-    "smbprotocol"
-  ];
+  pythonImportsCheck = [ "smbprotocol" ];
 
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";

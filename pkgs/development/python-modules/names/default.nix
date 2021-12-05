@@ -1,10 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{ buildPythonPackage, fetchFromGitHub, lib
 
 # pythonPackages
-, pytest
-}:
+, pytest }:
 
 buildPythonPackage rec {
   pname = "names";
@@ -17,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "0jfn11bl05k3qkqw0f4vi2i2lhllxdrbb1732qiisdy9fbvv8611";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest
@@ -29,8 +24,6 @@ buildPythonPackage rec {
     description = "Generate random names";
     homepage = "https://github.com/treyhunner/names";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

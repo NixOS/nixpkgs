@@ -1,9 +1,4 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, openssl
-}:
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, openssl }:
 
 buildDotnetModule rec {
   pname = "jackett";

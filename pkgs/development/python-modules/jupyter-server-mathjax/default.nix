@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, jupyter-packaging
-, jupyter_server
-, pytest-tornasync
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, jupyter-packaging, jupyter_server
+, pytest-tornasync, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "jupyter-server-mathjax";
@@ -15,18 +11,11 @@ buildPythonPackage rec {
     sha256 = "564e8d1272019c6771208f577b5f9f2b3afb02b9e2bff3b34c042cef8ed84451";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
-  propagatedBuildInputs = [
-    jupyter_server
-  ];
+  propagatedBuildInputs = [ jupyter_server ];
 
-  checkInputs = [
-    pytest-tornasync
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-tornasync pytestCheckHook ];
 
   pythonImportsCheck = [ "jupyter_server_mathjax" ];
 

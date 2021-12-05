@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, nix-update-script
-, gnome
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, granite
-, bamf
-, libgtop
-, libnotify
-, udev
-, wingpanel
-, libgee
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, nix-update-script, gnome
+, pkg-config, meson, python3, ninja, vala, gtk3, granite, bamf, libgtop
+, libnotify, udev, wingpanel, libgee }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
@@ -31,29 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 vala ];
 
-  buildInputs = [
-    bamf
-    granite
-    gtk3
-    libgee
-    libgtop
-    libnotify
-    udev
-    wingpanel
-  ];
+  buildInputs = [ bamf granite gtk3 libgee libgtop libnotify udev wingpanel ];
 
   patches = [
     (substituteAll {

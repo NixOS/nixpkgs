@@ -16,7 +16,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Source code spell checker";
     homepage = "https://github.com/crate-ci/typos/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.mgttlinger ];
   };
 }

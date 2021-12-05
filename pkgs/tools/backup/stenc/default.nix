@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, genericUpdater
-, common-updater-scripts
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, genericUpdater, common-updater-scripts
+, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "stenc";
@@ -21,7 +16,8 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
   meta = {

@@ -11,7 +11,8 @@ buildPythonPackage rec {
   checkInputs = [ nosexcover ];
 
   meta = {
-    description = "A pure python implementation of a sliding window memory map manager";
+    description =
+      "A pure python implementation of a sliding window memory map manager";
     homepage = "https://github.com/gitpython-developers/smmap";
     maintainers = [ ];
     license = lib.licenses.bsd3;

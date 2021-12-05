@@ -1,12 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pydsdl
-, pyyaml
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pydsdl, pyyaml }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nunavut";
   version = "1.5.1";
 
@@ -17,10 +11,7 @@
     sha256 = "2c57a9ffe6d462b0ad1ea49ac3ce9ebb3e8d43b2adf653dbe47eaf1b13be3c3b";
   };
 
-  propagatedBuildInputs = [
-    pydsdl
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pydsdl pyyaml ];
 
   # allow for writable directory for darwin
   preBuild = ''
@@ -31,9 +22,7 @@
   # https://github.com/UAVCAN/nunavut/issues/182
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nunavut"
-  ];
+  pythonImportsCheck = [ "nunavut" ];
 
   meta = with lib; {
     description = "A UAVCAN DSDL template engine";

@@ -1,16 +1,13 @@
-{
-  lib, mkDerivation, extra-cmake-modules, fetchurl,
+{ lib, mkDerivation, extra-cmake-modules, fetchurl,
 
-  kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
+kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio, knewstuff
+, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
 
+qtx11extras, qtwebsockets, qtkeychain, libsecret,
 
-  qtx11extras, qtwebsockets, qtkeychain, libsecret,
+eigen, zlib,
 
-  eigen, zlib,
-
-  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
-}:
+cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver }:
 
 mkDerivation rec {
   pname = "kstars";
@@ -23,20 +20,38 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
+    kconfig
+    kdoctools
+    kguiaddons
+    ki18n
+    kinit
+    kiconthemes
+    kio
+    knewstuff
+    kplotting
+    kwidgetsaddons
+    kxmlgui
+    knotifyconfig
 
-    qtx11extras qtwebsockets qtkeychain libsecret
+    qtx11extras
+    qtwebsockets
+    qtkeychain
+    libsecret
 
-    eigen zlib
+    eigen
+    zlib
 
-    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
+    cfitsio
+    indi-full
+    xplanet
+    libnova
+    libraw
+    gsl
+    wcslib
+    stellarsolver
   ];
 
-  cmakeFlags = [
-    "-DINDI_PREFIX=${indi-full}"
-    "-DXPLANET_PREFIX=${xplanet}"
-  ];
+  cmakeFlags = [ "-DINDI_PREFIX=${indi-full}" "-DXPLANET_PREFIX=${xplanet}" ];
 
   meta = with lib; {
     description = "Virtual planetarium astronomy software";

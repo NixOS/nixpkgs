@@ -12,9 +12,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    zarith
-  ];
+  propagatedBuildInputs = [ zarith ];
 
   doCheck = true;
 

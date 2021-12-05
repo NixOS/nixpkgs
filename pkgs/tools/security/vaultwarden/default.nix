@@ -1,7 +1,6 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
-, pkg-config, openssl
-, libiconv, Security, CoreServices
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests, pkg-config
+, openssl, libiconv, Security, CoreServices, dbBackend ? "sqlite"
+, libmysqlclient, postgresql }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
@@ -23,8 +22,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
+  buildInputs = with lib;
+    [ openssl ] ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 

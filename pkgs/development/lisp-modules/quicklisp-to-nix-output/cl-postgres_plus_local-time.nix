@@ -1,21 +1,33 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-postgres_plus_local-time";
   version = "local-time-20210124-git";
 
   description = "Integration between cl-postgres and local-time";
 
-  deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-ppcre" args."ironclad" args."local-time" args."md5" args."split-sequence" args."uax-15" args."usocket" ];
+  deps = [
+    args."alexandria"
+    args."bordeaux-threads"
+    args."cl-base64"
+    args."cl-postgres"
+    args."cl-ppcre"
+    args."ironclad"
+    args."local-time"
+    args."md5"
+    args."split-sequence"
+    args."uax-15"
+    args."usocket"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/local-time/2021-01-24/local-time-20210124-git.tgz";
     sha256 = "0bz5z0rd8gfd22bpqkalaijxlrk806zc010cvgd4qjapbrxzjg3s";
   };
 
   packageName = "cl-postgres+local-time";
 
-  asdFilesToKeep = ["cl-postgres+local-time.asd"];
+  asdFilesToKeep = [ "cl-postgres+local-time.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-postgres+local-time DESCRIPTION
@@ -34,4 +46,5 @@ rec {
     DEPENDENCIES
     (alexandria bordeaux-threads cl-base64 cl-postgres cl-ppcre ironclad
      local-time md5 split-sequence uax-15 usocket)
-    VERSION local-time-20210124-git SIBLINGS (local-time) PARASITES NIL) */
+    VERSION local-time-20210124-git SIBLINGS (local-time) PARASITES NIL)
+*/

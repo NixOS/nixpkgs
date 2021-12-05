@@ -1,19 +1,17 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, flex, bison, ncurses, buddy, tecla
-, libsigsegv, gmpxx, cln, yices
-}:
+, libsigsegv, gmpxx, cln, yices }:
 
 let
 
   version = "3.1";
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
+    url =
+      "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
     sha256 = "8b13af02c6243116c2ef9592622ecaa06d05dbe1dd6b1e595551ff33855948f2";
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "maude";
   inherit version;
 
@@ -23,12 +21,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper cln yices
-  ];
+  buildInputs =
+    [ flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper cln yices ];
 
-  hardeningDisable = [ "stackprotector" ] ++
-    lib.optionals stdenv.isi686 [ "pic" "fortify" ];
+  hardeningDisable = [ "stackprotector" ]
+    ++ lib.optionals stdenv.isi686 [ "pic" "fortify" ];
 
   preConfigure = ''
     configureFlagsArray=(

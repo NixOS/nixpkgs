@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, influxdb, graphite_api, memcached
+{ lib, buildPythonPackage, fetchPypi, isPy3k, influxdb, graphite_api, memcached
 }:
 
 buildPythonPackage rec {

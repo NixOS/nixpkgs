@@ -17,7 +17,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tk" ];
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CURRENT_VERSION=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags '-static'"
+    "-X github.com/grafana/tanka/pkg/tanka.CURRENT_VERSION=v${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

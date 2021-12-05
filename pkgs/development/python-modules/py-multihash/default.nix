@@ -1,14 +1,5 @@
-{ base58
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, morphys
-, pytest-runner
-, pytestCheckHook
-, pythonOlder
-, six
-, varint
-}:
+{ base58, buildPythonPackage, fetchFromGitHub, lib, morphys, pytest-runner
+, pytestCheckHook, pythonOlder, six, varint }:
 
 buildPythonPackage rec {
   pname = "py-multihash";
@@ -22,20 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [
-    base58
-    morphys
-    six
-    varint
-  ];
+  propagatedBuildInputs = [ base58 morphys six varint ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multihash" ];
 

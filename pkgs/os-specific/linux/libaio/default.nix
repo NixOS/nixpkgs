@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "libaio";
 
   src = fetchurl {
-    url = "https://pagure.io/libaio/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.gz";
+    url =
+      "https://pagure.io/libaio/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.gz";
     sha256 = "0wi2myh191sja13qj3claxhpfkngvy10x30f78hm9cxzkfr97kxp";
   };
 
@@ -17,9 +18,8 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
+  makeFlags = [ "prefix=${placeholder "out"}" ]
+    ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
 
   hardeningDisable = lib.optional (stdenv.isi686) "stackprotector";
 

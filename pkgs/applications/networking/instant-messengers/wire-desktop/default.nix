@@ -1,17 +1,5 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, udev
-, wrapGAppsHook
-, cpio
-, xar
-, libdbusmenu
-}:
+{ atomEnv, autoPatchelfHook, dpkg, fetchurl, makeDesktopItem, makeWrapper
+, stdenv, lib, udev, wrapGAppsHook, cpio, xar, libdbusmenu }:
 
 let
 
@@ -47,15 +35,8 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      arianvp
-      kiwi
-      toonn
-    ];
-    platforms = [
-      "x86_64-darwin"
-      "x86_64-linux"
-    ];
+    maintainers = with maintainers; [ arianvp kiwi toonn ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -63,7 +44,7 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
+        + "Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
@@ -85,12 +66,7 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      dpkg
-      makeWrapper
-      wrapGAppsHook
-    ];
+    nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
 
     buildInputs = atomEnv.packages;
 
@@ -117,10 +93,7 @@ let
       runHook postInstall
     '';
 
-    runtimeDependencies = [
-      (lib.getLib udev)
-      libdbusmenu
-    ];
+    runtimeDependencies = [ (lib.getLib udev) libdbusmenu ];
 
     postFixup = ''
       makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
@@ -133,14 +106,11 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
+        + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 
-    buildInputs = [
-      cpio
-      xar
-    ];
+    buildInputs = [ cpio xar ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -169,7 +139,4 @@ let
     '';
   };
 
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

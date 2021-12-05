@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "fn";
   version = "20171019-git";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "fn";
 
-  asdFilesToKeep = ["fn.asd"];
+  asdFilesToKeep = [ "fn.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fn DESCRIPTION Some macros for lambda brevity SHA256
@@ -23,4 +22,5 @@ rec {
     http://beta.quicklisp.org/archive/fn/2017-10-19/fn-20171019-git.tgz MD5
     0e1cfe5f19ceec8966baa3037772d31e NAME fn FILENAME fn DEPS
     ((NAME named-readtables FILENAME named-readtables)) DEPENDENCIES
-    (named-readtables) VERSION 20171019-git SIBLINGS NIL PARASITES NIL) */
+    (named-readtables) VERSION 20171019-git SIBLINGS NIL PARASITES NIL)
+*/

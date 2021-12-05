@@ -1,20 +1,14 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
-, CoreFoundation, IOKit, libossp_uuid
-, nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib
-, withCups ? false, cups
-, withDBengine ? true, libuv, lz4, judy
-, withIpmi ? (!stdenv.isDarwin), freeipmi
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
+, makeWrapper, CoreFoundation, IOKit, libossp_uuid, nixosTests, curl, libcap
+, libuuid, lm_sensors, zlib, withCups ? false, cups, withDBengine ? true, libuv
+, lz4, judy, withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin), json_c
-, withSsl ? true, openssl
-, withDebug ? false
-}:
+, withCloud ? (!stdenv.isDarwin), json_c, withSsl ? true, openssl
+, withDebug ? false }:
 
 with lib;
 
-let
-  go-d-plugin = callPackage ./go.d.plugin.nix {};
+let go-d-plugin = callPackage ./go.d.plugin.nix { };
 in stdenv.mkDerivation rec {
   version = "1.31.0";
   pname = "netdata";
@@ -35,8 +29,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withDBengine [ libuv lz4.dev judy ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ optionals withCloud [ json_c ]
-    ++ optionals withSsl [ openssl.dev ];
+    ++ optionals withCloud [ json_c ] ++ optionals withSsl [ openssl.dev ];
 
   patches = [
     # required to prevent plugins from relying on /etc
@@ -49,7 +42,8 @@ in stdenv.mkDerivation rec {
     ./ipc-socket-in-run.patch
   ];
 
-  NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  NIX_CFLAGS_COMPILE =
+    optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
     ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
@@ -75,16 +69,13 @@ in stdenv.mkDerivation rec {
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-  ] ++ optionals withCloud [
-    "--enable-cloud"
-    "--with-aclk-ng"
-  ];
+  configureFlags = [ "--localstatedir=/var" "--sysconfdir=/etc" ]
+    ++ optionals withCloud [ "--enable-cloud" "--with-aclk-ng" ];
 
   postFixup = ''
-    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
+    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${
+      lib.makeBinPath [ openssl ]
+    }
   '';
 
   passthru = {

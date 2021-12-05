@@ -3,7 +3,8 @@
 fetchzip {
   name = "bakoma-ttf";
 
-  url = "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+  url =
+    "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
 
   postFetch = ''
     tar xjvf $downloadedFile --strip-components=1

@@ -1,6 +1,5 @@
 { stdenv, cmake, lib, fetchFromGitHub, qt5, fftw, libtorch-bin, portaudio, eigen
-, xorg, pkg-config, autoPatchelfHook, soxr
-}:
+, xorg, pkg-config, autoPatchelfHook, soxr }:
 
 stdenv.mkDerivation rec {
   pname = "in-formant";

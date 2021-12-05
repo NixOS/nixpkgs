@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libiconv, libogg
-, ffmpeg, glibcLocales, perl, perlPackages }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libiconv, libogg, ffmpeg
+, glibcLocales, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "opustags";
@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libogg ];
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   doCheck = true;
 
-  checkInputs = [ ffmpeg glibcLocales perl ] ++ (with perlPackages; [ ListMoreUtils ]);
+  checkInputs = [ ffmpeg glibcLocales perl ]
+    ++ (with perlPackages; [ ListMoreUtils ]);
 
   checkPhase = ''
     export LANG="en_US.UTF-8"

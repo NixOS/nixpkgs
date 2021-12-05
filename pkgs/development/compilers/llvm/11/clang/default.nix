@@ -1,9 +1,6 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
-, buildLlvmTools
-, fixDarwinDylibNames
-, enableManpages ? false
-, enablePolly ? false
-}:
+{ lib, stdenv, llvm_meta, fetch, fetchpatch, substituteAll, cmake, libxml2
+, libllvm, version, clang-tools-extra_src, python3, buildLlvmTools
+, fixDarwinDylibNames, enableManpages ? false, enablePolly ? false }:
 
 let
   self = stdenv.mkDerivation ({
@@ -30,7 +27,10 @@ let
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${
+        lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+        "-native"
+      }"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -45,7 +45,6 @@ let
       "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
 
-
     patches = [
       ./purity.patch
       # https://reviews.llvm.org/D51899
@@ -57,7 +56,8 @@ let
       # matches gcc10's configuration in nixpkgs.
       (fetchpatch {
         revert = true;
-        url = "https://github.com/llvm/llvm-project/commit/0a9fc9233e172601e26381810d093e02ef410f65.diff";
+        url =
+          "https://github.com/llvm/llvm-project/commit/0a9fc9233e172601e26381810d093e02ef410f65.diff";
         stripLen = 1;
         excludes = [ "docs/*" "test/*" ];
         sha256 = "0gxgmi0qbm89mq911dahallhi8m6wa9vpklklqmxafx4rplrr8ph";
@@ -143,8 +143,6 @@ let
 
     doCheck = false;
 
-    meta = llvm_meta // {
-      description = "man page for Clang ${version}";
-    };
+    meta = llvm_meta // { description = "man page for Clang ${version}"; };
   });
 in self

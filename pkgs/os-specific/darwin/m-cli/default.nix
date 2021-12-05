@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     owner = "rgcr";
     repo = "m-cli";
     rev = "v${version}";
-    sha512 = "0mkcx7jq91pbfs8327qc8434gj73fvjgdfdsrza0lyd9wns6jhsqsf0585klzl68aqscvksgzi2asdnim4va35cdkp2fdzl0g3sm4kd";
+    sha512 =
+      "0mkcx7jq91pbfs8327qc8434gj73fvjgdfdsrza0lyd9wns6jhsqsf0585klzl68aqscvksgzi2asdnim4va35cdkp2fdzl0g3sm4kd";
   };
 
   dontBuild = true;
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
 
     platforms = platforms.darwin;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

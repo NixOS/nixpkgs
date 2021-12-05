@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, emacs
-, tcl
-, tclx
-, espeak-ng
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, emacs, tcl, tclx, espeak-ng }:
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
@@ -16,18 +8,11 @@ stdenv.mkDerivation rec {
     owner = "tvraman";
     repo = pname;
     rev = version;
-    hash= "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
+    hash = "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
   };
 
-  nativeBuildInputs = [
-    emacs
-    makeWrapper
-  ];
-  buildInputs = [
-    espeak-ng
-    tcl
-    tclx
-  ];
+  nativeBuildInputs = [ emacs makeWrapper ];
+  buildInputs = [ espeak-ng tcl tclx ];
 
   preConfigure = ''
     make config
@@ -46,7 +31,9 @@ stdenv.mkDerivation rec {
     find "$d" -type f -not -executable -execdir chmod 644 {} +
     makeWrapper ${emacs}/bin/emacs $out/bin/emacspeak \
         --set DTK_PROGRAM "${espeak-ng}/bin/espeak" \
-        --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
+        --add-flags '-l "${
+          placeholder "out"
+        }/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
   '';
 
   meta = with lib; {

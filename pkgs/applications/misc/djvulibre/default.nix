@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, libjpeg
-, libtiff
-, librsvg
-, libiconv
-}:
+{ lib, stdenv, fetchurl, libjpeg, libtiff, librsvg, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "djvulibre";
@@ -17,15 +11,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  buildInputs = [
-    libjpeg
-    libtiff
-    librsvg
-    libiconv
-  ];
+  buildInputs = [ libjpeg libtiff librsvg libiconv ];
 
   meta = with lib; {
-    description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
+    description =
+      "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "http://djvu.sourceforge.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Anton-Latukha ];

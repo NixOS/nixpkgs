@@ -1,84 +1,81 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
-let
-  # Note: For some reason Privoxy can't issue valid
-  # certificates if the CA is generated using gnutls :(
-  certs = pkgs.runCommand "example-certs"
-    { buildInputs = [ pkgs.openssl ]; }
-    ''
-      mkdir $out
+  let
+    # Note: For some reason Privoxy can't issue valid
+    # certificates if the CA is generated using gnutls :(
+    certs =
+      pkgs.runCommand "example-certs" { buildInputs = [ pkgs.openssl ]; } ''
+        mkdir $out
 
-      # generate CA keypair
-      openssl req -new -nodes -x509 \
-        -extensions v3_ca -keyout $out/ca.key \
-        -out $out/ca.crt -days 365 \
-        -subj "/O=Privoxy CA/CN=Privoxy CA"
+        # generate CA keypair
+        openssl req -new -nodes -x509 \
+          -extensions v3_ca -keyout $out/ca.key \
+          -out $out/ca.crt -days 365 \
+          -subj "/O=Privoxy CA/CN=Privoxy CA"
 
-      # generate server key/signing request
-      openssl genrsa -out $out/server.key 3072
-      openssl req -new -key $out/server.key \
-        -out server.csr -sha256 \
-        -subj "/O=An unhappy server./CN=example.com"
+        # generate server key/signing request
+        openssl genrsa -out $out/server.key 3072
+        openssl req -new -key $out/server.key \
+          -out server.csr -sha256 \
+          -subj "/O=An unhappy server./CN=example.com"
 
-      # sign the request/generate the certificate
-      openssl x509 -req -in server.csr -CA $out/ca.crt \
-      -CAkey $out/ca.key -CAcreateserial -out $out/server.crt \
-      -days 500 -sha256
-    '';
-in
+        # sign the request/generate the certificate
+        openssl x509 -req -in server.csr -CA $out/ca.crt \
+        -CAkey $out/ca.key -CAcreateserial -out $out/server.crt \
+        -days 500 -sha256
+      '';
 
-{
-  name = "privoxy";
-  meta = with lib.maintainers; {
-    maintainers = [ rnhmjoj ];
-  };
+  in {
+    name = "privoxy";
+    meta = with lib.maintainers; { maintainers = [ rnhmjoj ]; };
 
-  machine = { ... }: {
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."example.com" = {
-      addSSL = true;
-      sslCertificate = "${certs}/server.crt";
-      sslCertificateKey = "${certs}/server.key";
-      locations."/".root = pkgs.writeTextFile
-        { name = "bad-day";
+    machine = { ... }: {
+      services.nginx.enable = true;
+      services.nginx.virtualHosts."example.com" = {
+        addSSL = true;
+        sslCertificate = "${certs}/server.crt";
+        sslCertificateKey = "${certs}/server.key";
+        locations."/".root = pkgs.writeTextFile {
+          name = "bad-day";
           destination = "/how-are-you/index.html";
-          text = "I've had a bad day!\n";
+          text = ''
+            I've had a bad day!
+          '';
         };
-      locations."/ads".extraConfig = ''
-        return 200 "Hot Nixpkgs PRs in your area. Click here!\n";
-      '';
-    };
-
-    services.privoxy = {
-      enable = true;
-      inspectHttps = true;
-      settings = {
-        ca-cert-file = "${certs}/ca.crt";
-        ca-key-file  = "${certs}/ca.key";
-        debug = 65536;
+        locations."/ads".extraConfig = ''
+          return 200 "Hot Nixpkgs PRs in your area. Click here!\n";
+        '';
       };
-      userActions = ''
-        {+filter{positive}}
-        example.com
 
-        {+block{Fake ads}}
-        example.com/ads
-      '';
-      userFilters = ''
-        FILTER: positive This is a filter example.
-        s/bad/great/ig
-      '';
+      services.privoxy = {
+        enable = true;
+        inspectHttps = true;
+        settings = {
+          ca-cert-file = "${certs}/ca.crt";
+          ca-key-file = "${certs}/ca.key";
+          debug = 65536;
+        };
+        userActions = ''
+          {+filter{positive}}
+          example.com
+
+          {+block{Fake ads}}
+          example.com/ads
+        '';
+        userFilters = ''
+          FILTER: positive This is a filter example.
+          s/bad/great/ig
+        '';
+      };
+
+      security.pki.certificateFiles = [ "${certs}/ca.crt" ];
+
+      networking.hosts."::1" = [ "example.com" ];
+      networking.proxy.httpProxy = "http://localhost:8118";
+      networking.proxy.httpsProxy = "http://localhost:8118";
     };
 
-    security.pki.certificateFiles = [ "${certs}/ca.crt" ];
-
-    networking.hosts."::1" = [ "example.com" ];
-    networking.proxy.httpProxy = "http://localhost:8118";
-    networking.proxy.httpsProxy = "http://localhost:8118";
-  };
-
-  testScript =
-    ''
+    testScript = ''
       with subtest("Privoxy is running"):
           machine.wait_for_unit("privoxy")
           machine.wait_for_open_port("8118")
@@ -110,4 +107,4 @@ in
           # ...and count again
           machine.succeed("test $(ls /run/privoxy/certs | wc -l) -eq 0")
     '';
-})
+  })

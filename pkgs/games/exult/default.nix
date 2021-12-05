@@ -9,9 +9,7 @@ let
     sha256 = "0s5wvgy9qja06v38g0qwzpaw76ff96vzd6gb1i3lb9k4hvx0xqbj";
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "exult";
   version = "1.6";
 
@@ -29,12 +27,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  postInstall =
-    ''
-      mkdir -p $out/share/exult/music
-      unzip -o -d $out/share/exult ${audio}
-      chmod 644 $out/share/exult/*.flx
-    ''; # */
+  postInstall = ''
+    mkdir -p $out/share/exult/music
+    unzip -o -d $out/share/exult ${audio}
+    chmod 644 $out/share/exult/*.flx
+  ''; # */
 
   meta = {
     homepage = "http://exult.sourceforge.net/";

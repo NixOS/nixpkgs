@@ -1,15 +1,5 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, distro
-, pysnmp
-, python-gnupg
-, qrcode
-, requests
-, sseclient-py
-, zfec
-, pytestCheckHook
-}:
+{ buildPythonPackage, fetchPypi, lib, distro, pysnmp, python-gnupg, qrcode
+, requests, sseclient-py, zfec, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
@@ -20,15 +10,8 @@ buildPythonPackage rec {
     sha256 = "96ec5e548dcdb71ada75727d76b34006fe5f6818bd89cf982e15616d41889603";
   };
 
-  propagatedBuildInputs = [
-    distro
-    pysnmp
-    python-gnupg
-    qrcode
-    requests
-    sseclient-py
-    zfec
-  ];
+  propagatedBuildInputs =
+    [ distro pysnmp python-gnupg qrcode requests sseclient-py zfec ];
 
   checkInputs = [ pytestCheckHook ];
 

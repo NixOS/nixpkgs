@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
@@ -14,30 +11,25 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0663hzpmn6p5xh65d2gk4yk2zh992lfd9lhdwwabhpv3n85nza75";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pytest-runner
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pytest-runner ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    browser-cookie3
-    cryptography
-    Mako
-    markupsafe
-    pysocks
-    httpx
-    httpx-ntlm
-    httpx-socks
-    six
-    tld
-    yaswfp
-  ] ++ lib.optionals (python3.pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      beautifulsoup4
+      browser-cookie3
+      cryptography
+      Mako
+      markupsafe
+      pysocks
+      httpx
+      httpx-ntlm
+      httpx-socks
+      six
+      tld
+      yaswfp
+    ] ++ lib.optionals (python3.pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = with python3.pkgs; [
-    respx
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ respx pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     # Ignore pinned versions

@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, gipc
-, greenlet
-, httplib2
-, six
-, python-dateutil
-, fusepy
-, google-api-python-client
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, gipc, greenlet, httplib2
+, six, python-dateutil, fusepy, google-api-python-client }:
 
 buildPythonPackage rec {
   version = "0.14.12";

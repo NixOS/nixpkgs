@@ -1,12 +1,10 @@
 { stdenv, fetchurl, makeWrapper, jre, callPackage }:
 
 let
-  dotty-bare = callPackage ./dotty-bare.nix {
-    inherit stdenv fetchurl makeWrapper jre;
-  };
-in
+  dotty-bare =
+    callPackage ./dotty-bare.nix { inherit stdenv fetchurl makeWrapper jre; };
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "dotty-${dotty-bare.version}";
 
   dontUnpack = true;

@@ -1,9 +1,7 @@
 { callPackage, python2, python3 }:
 
 let
-  mkScons = args: callPackage (import ./common.nix args) {
-    python = python3;
-  };
+  mkScons = args: callPackage (import ./common.nix args) { python = python3; };
 in {
   scons_3_0_1 = (mkScons {
     version = "3.0.1";

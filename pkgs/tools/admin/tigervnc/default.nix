@@ -1,13 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, xorg, xkeyboard_config, zlib
-, libjpeg_turbo, pixman, fltk
-, cmake, gettext, libtool
-, libGLU
-, gnutls, pam, nettle
-, xterm, openssh, perl
-, makeWrapper
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, xorg, xkeyboard_config, zlib, libjpeg_turbo
+, pixman, fltk, cmake, gettext, libtool, libGLU, gnutls, pam, nettle, xterm
+, openssh, perl, makeWrapper, nixosTests }:
 
 with lib;
 
@@ -21,7 +14,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
   };
-
 
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
@@ -74,19 +66,38 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/xorg/protocol.txt
 
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
+      --prefix PATH : ${
+        lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ])
+      }
   '';
 
-  buildInputs = with xorg; [
-    libjpeg_turbo fltk pixman
-    gnutls pam nettle perl
-    xorgproto
-    utilmacros libXtst libXext libX11 libXext libICE libXi libSM libXft
-    libxkbfile libXfont2 libpciaccess
-    libGLU
-  ] ++ xorg.xorgserver.buildInputs;
+  buildInputs = with xorg;
+    [
+      libjpeg_turbo
+      fltk
+      pixman
+      gnutls
+      pam
+      nettle
+      perl
+      xorgproto
+      utilmacros
+      libXtst
+      libXext
+      libX11
+      libXext
+      libICE
+      libXi
+      libSM
+      libXft
+      libxkbfile
+      libXfont2
+      libpciaccess
+      libGLU
+    ] ++ xorg.xorgserver.buildInputs;
 
-  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil makeWrapper ]
+  nativeBuildInputs = with xorg;
+    [ cmake zlib gettext libtool utilmacros fontutil makeWrapper ]
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
@@ -97,7 +108,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tigervnc.org/";
     license = lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
     # Prevent a store collision.
     priority = 4;

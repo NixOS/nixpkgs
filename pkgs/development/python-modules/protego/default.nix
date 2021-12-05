@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "Protego";
@@ -22,7 +17,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A pure-Python robots.txt parser with support for modern conventions";
+    description =
+      "A pure-Python robots.txt parser with support for modern conventions";
     homepage = "https://github.com/scrapy/protego";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];

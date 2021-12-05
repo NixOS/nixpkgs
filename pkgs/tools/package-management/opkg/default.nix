@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, curl, gpgme, libarchive, bzip2, xz, attr, acl, libxml2
-, autoreconfHook }:
+{ lib, stdenv, fetchurl, pkg-config, curl, gpgme, libarchive, bzip2, xz, attr
+, acl, libxml2, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "0.4.4";
   pname = "opkg";
   src = fetchurl {
-    url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
+    url =
+      "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
     sha256 = "sha256-IhesxYuOsxMAYx66514iLrxwDJwc9kCAiHBdGaRyyDk=";
   };
 

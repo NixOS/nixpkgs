@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, autoreconfHook,
-  libpng, glew, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, autoreconfHook
+, libpng, glew, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";

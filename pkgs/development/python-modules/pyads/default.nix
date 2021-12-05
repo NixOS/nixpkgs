@@ -1,9 +1,4 @@
-{ lib
-, adslib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{ lib, adslib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -20,22 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
   };
 
-  buildInputs = [
-    adslib
-  ];
+  buildInputs = [ adslib ];
 
   patchPhase = ''
     substituteInPlace pyads/pyads_ex.py \
       --replace "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyads"
-  ];
+  pythonImportsCheck = [ "pyads" ];
 
   meta = with lib; {
     description = "Python wrapper for TwinCAT ADS library";

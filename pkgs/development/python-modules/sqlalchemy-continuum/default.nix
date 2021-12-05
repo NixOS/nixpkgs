@@ -1,15 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, flask
-, flask_login
-, flask_sqlalchemy
-, flexmock
-, pytestCheckHook
-, sqlalchemy
-, sqlalchemy-utils
-, sqlalchemy-i18n
-}:
+{ lib, fetchPypi, buildPythonPackage, flask, flask_login, flask_sqlalchemy
+, flexmock, pytestCheckHook, sqlalchemy, sqlalchemy-utils, sqlalchemy-i18n }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy-Continuum";
@@ -20,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "1c9yd9s98crqgs39rc2ld2r0nchgyjrfbjdlqb99y4hhc6lv04xw";
   };
 
-  propagatedBuildInputs = [
-    sqlalchemy
-    sqlalchemy-utils
-  ];
+  propagatedBuildInputs = [ sqlalchemy sqlalchemy-utils ];
 
   # indicate tests that we don't have a database server at hand
   DB = "sqlite";

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
-, gnumake, gcc-arm-embedded, binutils-arm-embedded
-, dfu-util-axoloti, jdk, ant, libfaketime }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip, gnumake
+, gcc-arm-embedded, binutils-arm-embedded, dfu-util-axoloti, jdk, ant
+, libfaketime }:
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   chibi_name = "ChibiOS_${chibi_version}";
 
   chibios = fetchurl {
-    url = "mirror://sourceforge/project/chibios/ChibiOS_RT%20stable/Version%20${chibi_version}/${chibi_name}.zip";
+    url =
+      "mirror://sourceforge/project/chibios/ChibiOS_RT%20stable/Version%20${chibi_version}/${chibi_name}.zip";
     sha256 = "0lb5s8pkj80mqhsy47mmq0lqk34s2a2m3xagzihalvabwd0frhlj";
   };
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     dfu-util-axoloti
     ant
   ];
-  buildInputs = [jdk libfaketime ];
+  buildInputs = [ jdk libfaketime ];
 
   patchPhase = ''
     unzip ${chibios}

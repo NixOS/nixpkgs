@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, zope_testrunner
-, manuel
-, docutils
-, pygments
-}:
+{ lib, stdenv, fetchPypi, buildPythonPackage, zope_testrunner, manuel, docutils
+, pygments }:
 
 buildPythonPackage rec {
   pname = "ZConfig";
@@ -17,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "sha256-oo6VoK4zV5V0fsytNbLLcI831Ex/Ml4qyyAemDMLFuU=";
   };
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
+  patches =
+    lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];

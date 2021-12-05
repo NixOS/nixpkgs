@@ -1,49 +1,22 @@
-{ fetchurl
-, lib
-, substituteAll
-, aspellWithDicts
-, at-spi2-core ? null
-, atspiSupport ? true
-, bash
-, glib
-, dconf
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk3
-, hunspell
-, hunspellDicts
-, hunspellWithDicts
-, intltool
-, isocodes
-, libappindicator-gtk3
-, libcanberra-gtk3
-, mousetweaks
-, udev
-, libxkbcommon
-, pkg-config
-, procps
-, python3
-, wrapGAppsHook
-, xorg
-, yelp
-}:
+{ fetchurl, lib, substituteAll, aspellWithDicts, at-spi2-core ? null
+, atspiSupport ? true, bash, glib, dconf, gobject-introspection
+, gsettings-desktop-schemas, gtk3, hunspell, hunspellDicts, hunspellWithDicts
+, intltool, isocodes, libappindicator-gtk3, libcanberra-gtk3, mousetweaks, udev
+, libxkbcommon, pkg-config, procps, python3, wrapGAppsHook, xorg, yelp }:
 
 let
 
-  customHunspell = hunspellWithDicts [
-    hunspellDicts.en-us
-  ];
+  customHunspell = hunspellWithDicts [ hunspellDicts.en-us ];
 
   majorVersion = "1.4";
 
-in
-
-python3.pkgs.buildPythonApplication rec {
+in python3.pkgs.buildPythonApplication rec {
   pname = "onboard";
   version = "${majorVersion}.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
+    url =
+      "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "0r9q38ikmr4in4dwqd8m9gh9xjbgxnfxglnjbfcapw8ybfnf3jh1";
   };
 
@@ -56,12 +29,8 @@ python3.pkgs.buildPythonApplication rec {
     ./hunspell-use-xdg-datadirs.patch
   ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    intltool
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection intltool pkg-config wrapGAppsHook ];
 
   buildInputs = [
     bash
@@ -89,9 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     systemd
   ];
 
-  propagatedUserEnvPkgs = [
-    dconf
-  ];
+  propagatedUserEnvPkgs = [ dconf ];
 
   checkInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests
@@ -174,7 +141,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://launchpad.net/onboard";
-    description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
+    description =
+      "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = with maintainers; [ johnramsden ];
     license = licenses.gpl3;
   };

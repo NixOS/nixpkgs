@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
+{ lib, buildPythonPackage, fetchPypi, writeText, asttokens, pycryptodome
+, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
 , sphinx_rtd_theme, pytest-runner }:
 
 let
@@ -10,9 +10,8 @@ let
     def __init__(foo: address):
         self.count = 1
   '';
-in
 
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "vyper";
   version = "0.3.0";
 

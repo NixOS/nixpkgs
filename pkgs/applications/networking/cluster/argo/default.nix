@@ -16,8 +16,7 @@ let
 
     goPackagePath = "bou.ke/staticfiles";
   };
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "argo";
   version = "3.1.1";
 
@@ -44,7 +43,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
     "-X github.com/argoproj/argo-workflows/v3.gitCommit=${src.rev}"
     "-X github.com/argoproj/argo-workflows/v3.gitTag=${src.rev}"

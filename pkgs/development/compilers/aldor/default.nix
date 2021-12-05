@@ -1,5 +1,5 @@
-{ fetchgit, lib, stdenv, gmp, which, flex, bison, makeWrapper
-, autoconf, automake, libtool, jdk, perl }:
+{ fetchgit, lib, stdenv, gmp, which, flex, bison, makeWrapper, autoconf
+, automake, libtool, jdk, perl }:
 
 stdenv.mkDerivation {
   pname = "aldor";

@@ -9,7 +9,9 @@ let
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
 
-  xSessionWrapper = if (cfg.setupCommands == "") then null else
+  xSessionWrapper = if (cfg.setupCommands == "") then
+    null
+  else
     pkgs.writeScript "gdm-x-session-wrapper" ''
       #!${pkgs.bash}/bin/bash
       ${cfg.setupCommands}
@@ -35,29 +37,28 @@ let
   defaultSessionName = config.services.xserver.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
-in
 
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
+    (mkRenamedOptionModule [
       "services"
       "xserver"
       "displayManager"
+      "gdm"
       "autoLogin"
       "enable"
-    ])
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
+    ] [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
+    (mkRenamedOptionModule [
       "services"
       "xserver"
       "displayManager"
+      "gdm"
       "autoLogin"
       "user"
-    ])
+    ] [ "services" "xserver" "displayManager" "autoLogin" "user" ])
   ];
 
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   ###### interface
 
@@ -109,9 +110,7 @@ in
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
-        example = {
-          debug.enable = true;
-        };
+        example = { debug.enable = true; };
         description = ''
           Options passed to the gdm daemon.
           See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
@@ -122,20 +121,19 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
 
     services.xserver.displayManager.lightdm.enable = false;
 
-    users.users.gdm =
-      { name = "gdm";
-        uid = config.ids.uids.gdm;
-        group = "gdm";
-        home = "/run/gdm";
-        description = "GDM user";
-      };
+    users.users.gdm = {
+      name = "gdm";
+      uid = config.ids.uids.gdm;
+      group = "gdm";
+      home = "/run/gdm";
+      description = "GDM user";
+    };
 
     users.groups.gdm.gid = config.ids.gids.gdm;
 
@@ -144,34 +142,32 @@ in
     services.xserver.display = null;
     services.xserver.verbose = null;
 
-    services.xserver.displayManager.job =
-      {
-        environment = {
-          GDM_X_SERVER_EXTRA_ARGS = toString
-            (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
-        } // optionalAttrs (xSessionWrapper != null) {
-          # Make GDM use this wrapper before running the session, which runs the
-          # configured setupCommands. This relies on a patched GDM which supports
-          # this environment variable.
-          GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
-        };
-        execCmd = "exec ${gdm}/bin/gdm";
-        preStart = optionalString (defaultSessionName != null) ''
-          # Set default session in session chooser to a specified values – basically ignore session history.
-          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
-        '';
+    services.xserver.displayManager.job = {
+      environment = {
+        GDM_X_SERVER_EXTRA_ARGS =
+          toString (filter (arg: arg != "-terminate") cfg.xserverArgs);
+        XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
+      } // optionalAttrs (xSessionWrapper != null) {
+        # Make GDM use this wrapper before running the session, which runs the
+        # configured setupCommands. This relies on a patched GDM which supports
+        # this environment variable.
+        GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
       };
+      execCmd = "exec ${gdm}/bin/gdm";
+      preStart = optionalString (defaultSessionName != null) ''
+        # Set default session in session chooser to a specified values – basically ignore session history.
+        ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
+      '';
+    };
 
-    systemd.tmpfiles.rules = [
-      "d /run/gdm/.config 0711 gdm gdm"
-    ] ++ optionals config.hardware.pulseaudio.enable [
-      "d /run/gdm/.config/pulse 0711 gdm gdm"
-      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-    ] ++ optionals config.services.gnome.gnome-initial-setup.enable [
-      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
-    ];
+    systemd.tmpfiles.rules = [ "d /run/gdm/.config 0711 gdm gdm" ]
+      ++ optionals config.hardware.pulseaudio.enable [
+        "d /run/gdm/.config/pulse 0711 gdm gdm"
+        "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
+      ] ++ optionals config.services.gnome.gnome-initial-setup.enable [
+        # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+        "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+      ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
@@ -197,20 +193,16 @@ in
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
-    systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
-      "plymouth-quit.service"
-    ];
-    systemd.services.display-manager.onFailure = [
-      "plymouth-quit.service"
-    ];
+    systemd.services.display-manager.conflicts =
+      [ "getty@tty${gdm.initialVT}.service" "plymouth-quit.service" ];
+    systemd.services.display-manager.onFailure = [ "plymouth-quit.service" ];
 
     # Prevent nixos-rebuild switch from bringing down the graphical
     # session. (If multi-user.target wants plymouth-quit.service which
     # conflicts display-manager.service, then when nixos-rebuild
     # switch starts multi-user.target, display-manager.service is
     # stopped so plymouth-quit.service can be started.)
-    systemd.services.plymouth-quit.wantedBy = lib.mkForce [];
+    systemd.services.plymouth-quit.wantedBy = lib.mkForce [ ];
 
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
@@ -245,8 +237,7 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm =
-    let
+    programs.dconf.profiles.gdm = let
       customDconf = pkgs.writeTextFile {
         name = "gdm-dconf";
         destination = "/dconf/gdm-custom";
@@ -285,26 +276,27 @@ in
     # presented and there's a little delay.
     services.xserver.displayManager.gdm.settings = {
       daemon = mkMerge [
-        { WaylandEnable = cfg.gdm.wayland; }
+        {
+          WaylandEnable = cfg.gdm.wayland;
+        }
         # nested if else didn't work
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0) {
           TimedLoginEnable = true;
           TimedLogin = cfg.autoLogin.user;
           TimedLoginDelay = cfg.gdm.autoLogin.delay;
         })
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0) {
           AutomaticLoginEnable = true;
           AutomaticLogin = cfg.autoLogin.user;
         })
       ];
-      debug = mkIf cfg.gdm.debug {
-        Enable = true;
-      };
+      debug = mkIf cfg.gdm.debug { Enable = true; };
     };
 
     environment.etc."gdm/custom.conf".source = configFile;
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
+    environment.etc."gdm/Xsession".source =
+      config.services.xserver.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {

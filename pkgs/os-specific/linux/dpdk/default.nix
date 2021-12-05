@@ -1,11 +1,6 @@
-{ stdenv, lib
-, kernel
-, fetchurl
-, pkg-config, meson, ninja
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
-, doxygen, python3
-, withExamples ? []
-, shared ? false }:
+{ stdenv, lib, kernel, fetchurl, pkg-config, meson, ninja, libbsd, numactl
+, libbpf, zlib, libelf, jansson, openssl, libpcap, doxygen, python3
+, withExamples ? [ ], shared ? false }:
 
 let
   mod = kernel != null;
@@ -28,16 +23,9 @@ in stdenv.mkDerivation rec {
     python3.pkgs.sphinx
     python3.pkgs.pyelftools
   ];
-  buildInputs = [
-    jansson
-    libbpf
-    libbsd
-    libelf
-    libpcap
-    numactl
-    openssl.dev
-    zlib
-  ] ++ lib.optionals mod kernel.moduleBuildDependencies;
+  buildInputs =
+    [ jansson libbpf libbsd libelf libpcap numactl openssl.dev zlib ]
+    ++ lib.optionals mod kernel.moduleBuildDependencies;
 
   postPatch = ''
     patchShebangs config/arm buildtools
@@ -49,11 +37,12 @@ in stdenv.mkDerivation rec {
     "-Denable_kmods=${lib.boolToString mod}"
   ]
   # kni kernel driver is currently not compatble with 5.11
-  ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
-  ++ lib.optional (!shared) "-Ddefault_library=static"
-  ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
-  ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+    ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
+    ++ lib.optional (!shared) "-Ddefault_library=static"
+    ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem" ++ lib.optional mod
+    "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
+    ++ lib.optional (withExamples != [ ])
+    "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
   # dpdk meson script does not support separate kernel source and installion
   # dirs (except via destdir), so we temporarily link the former into the latter.
@@ -67,7 +56,7 @@ in stdenv.mkDerivation rec {
     rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
   '';
 
-  postInstall = lib.optionalString (withExamples != []) ''
+  postInstall = lib.optionalString (withExamples != [ ]) ''
     find examples -type f -executable -exec install {} $out/bin \;
   '';
 
@@ -77,7 +66,7 @@ in stdenv.mkDerivation rec {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
   };
 }

@@ -12,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
+    description =
+      "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
     homepage = "https://github.com/d11wtq/dockerpty";
     license = licenses.asl20;
   };

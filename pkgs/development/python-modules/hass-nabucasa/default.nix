@@ -1,16 +1,5 @@
-{ lib
-, acme
-, aiohttp
-, asynctest
-, atomicwrites
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytestCheckHook
-, snitun
-, warrant
+{ lib, acme, aiohttp, asynctest, atomicwrites, attrs, buildPythonPackage
+, fetchFromGitHub, pycognito, pytest-aiohttp, pytestCheckHook, snitun, warrant
 }:
 
 buildPythonPackage rec {
@@ -31,21 +20,10 @@ buildPythonPackage rec {
       --replace "snitun==" "snitun>="
   '';
 
-  propagatedBuildInputs = [
-    acme
-    aiohttp
-    atomicwrites
-    attrs
-    pycognito
-    snitun
-    warrant
-  ];
+  propagatedBuildInputs =
+    [ acme aiohttp atomicwrites attrs pycognito snitun warrant ];
 
-  checkInputs = [
-    asynctest
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytest-aiohttp pytestCheckHook ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 

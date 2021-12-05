@@ -1,10 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, ifaddr
-, bitstring
-}:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, ifaddr, bitstring }:
 
 buildPythonPackage rec {
   pname = "aiolifx";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-9FwTYcaXwGMMnhp+MXe1Iu8Og5aHL6qo9SVKWHFtc7o=";
   };
 
-  propagatedBuildInputs = [
-    bitstring
-    ifaddr
-  ];
+  propagatedBuildInputs = [ bitstring ifaddr ];
 
   # tests are not implemented
   doCheck = false;

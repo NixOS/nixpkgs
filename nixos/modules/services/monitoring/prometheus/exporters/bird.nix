@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.bird;
-in
-{
+let cfg = config.services.prometheus.exporters.bird;
+in {
   port = 9324;
   extraOpts = {
     birdVersion = mkOption {
@@ -32,7 +30,8 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      SupplementaryGroups = singleton (if cfg.birdVersion == 1 then "bird" else "bird2");
+      SupplementaryGroups =
+        singleton (if cfg.birdVersion == 1 then "bird" else "bird2");
       ExecStart = ''
         ${pkgs.prometheus-bird-exporter}/bin/bird_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

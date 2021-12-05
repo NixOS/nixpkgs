@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.0.3";
 
   src = fetchurl {
-    url = "https://www.keepassx.org/releases/${version}/keepassx-${version}.tar.gz";
+    url =
+      "https://www.keepassx.org/releases/${version}/keepassx-${version}.tar.gz";
     sha256 = "1ia7cqx9ias38mnffsl7da7g1f66bcbjsi23k49sln0c6spb9zr3";
   };
 
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libgcrypt qt4 xorg.libXtst ];
 
   meta = {
-    description = "Qt password manager compatible with its Win32 and Pocket PC versions";
+    description =
+      "Qt password manager compatible with its Win32 and Pocket PC versions";
     homepage = "https://www.keepassx.org/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ qknight ];

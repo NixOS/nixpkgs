@@ -1,15 +1,6 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, git
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, openssl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ lib, stdenv, build2, fetchurl, git, libbpkg, libbutl, libodb, libodb-sqlite
+, openssl, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? !enableShared }:
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
@@ -23,19 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    build2
-  ];
-  buildInputs = [
-    libbpkg
-    libbutl
-    libodb
-    libodb-sqlite
-  ];
-  checkInputs = [
-    git
-    openssl
-  ];
+  nativeBuildInputs = [ build2 ];
+  buildInputs = [ libbpkg libbutl libodb libodb-sqlite ];
+  checkInputs = [ git openssl ];
 
   doCheck = !stdenv.isDarwin; # tests hang
 
@@ -44,9 +25,8 @@ stdenv.mkDerivation rec {
     rm tests/rep-create.testscript
   '';
 
-  build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
-  ];
+  build2ConfigureFlags =
+    [ "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}" ];
 
   meta = with lib; {
     description = "build2 package dependency manager";

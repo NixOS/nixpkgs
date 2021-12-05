@@ -13,7 +13,8 @@ buildGoPackage rec {
   };
 
   meta = {
-    description = "A command line tool for Vultr services, a provider for cloud virtual private servers";
+    description =
+      "A command line tool for Vultr services, a provider for cloud virtual private servers";
     homepage = "https://github.com/JamesClonk/vultr";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zauberpony ];

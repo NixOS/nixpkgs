@@ -1,9 +1,4 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
-, python-utils
-}:
+{ lib, python, buildPythonPackage, fetchPypi, python-utils }:
 
 buildPythonPackage rec {
   pname = "progressbar2";

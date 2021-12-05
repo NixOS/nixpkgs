@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytest-cov
-, nbval
-, ipywidgets
-, numpy
-, six
-, traittypes
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, pytest-cov, nbval
+, ipywidgets, numpy, six, traittypes }:
 
 buildPythonPackage rec {
   pname = "ipydatawidgets";
@@ -22,19 +12,15 @@ buildPythonPackage rec {
     sha256 = "d0e4b58b59b508165e8562b8f5d1dbfcd739855847ec0477bd9185a5e9b7c5bc";
   };
 
-  propagatedBuildInputs = [
-    ipywidgets
-    numpy
-    six
-    traittypes
-  ];
+  propagatedBuildInputs = [ ipywidgets numpy six traittypes ];
 
   checkInputs = [ pytest pytest-cov nbval ];
 
   checkPhase = "pytest ipydatawidgets/tests";
 
   meta = {
-    description = "Widgets to help facilitate reuse of large datasets across different widgets";
+    description =
+      "Widgets to help facilitate reuse of large datasets across different widgets";
     homepage = "https://github.com/vidartf/ipydatawidgets";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];

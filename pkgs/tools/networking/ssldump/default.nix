@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, json_c
-, libnet
-, libpcap
-, openssl
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, json_c, libnet, libpcap, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -19,16 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1xnlfqsl93nxbcv4x4xsgxa6mnhcx37hijrpdb7vzla6q7xvg8qr";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [
-    json_c
-    libnet
-    libpcap
-    openssl
-  ];
+  buildInputs = [ json_c libnet libpcap openssl ];
 
   prePatch = ''
     sed -i -e 's|#include.*net/bpf.h|#include <pcap/bpf.h>|' \

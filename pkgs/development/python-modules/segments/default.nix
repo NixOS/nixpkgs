@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, regex
-, csvw
-, clldutils
-, mock
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, regex, csvw, clldutils, mock
+, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "segments";
@@ -26,20 +17,13 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
-    regex
-    csvw
-    clldutils
-  ];
+  propagatedBuildInputs = [ regex csvw clldutils ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ mock pytestCheckHook pytest-mock ];
 
   meta = with lib; {
-    description = "Unicode Standard tokenization routines and orthography profile segmentation";
+    description =
+      "Unicode Standard tokenization routines and orthography profile segmentation";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

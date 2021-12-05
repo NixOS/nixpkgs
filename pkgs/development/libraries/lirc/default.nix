@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
-  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man
+, python3, alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1
+}:
 
 stdenv.mkDerivation rec {
   pname = "lirc";
@@ -11,10 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   # Fix installation of Python bindings
-  patches = [ (fetchpatch {
-    url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
-    sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url =
+        "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
+      sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -31,10 +35,15 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config help2man
-    (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    help2man
+    (python3.withPackages (p: with p; [ pyyaml setuptools ]))
+  ];
 
-  buildInputs = [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
+  buildInputs =
+    [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -45,10 +54,7 @@ stdenv.mkDerivation rec {
     "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
   ];
 
-  installFlags = [
-    "sysconfdir=$out/etc"
-    "localstatedir=$TMPDIR"
-  ];
+  installFlags = [ "sysconfdir=$out/etc" "localstatedir=$TMPDIR" ];
 
   meta = with lib; {
     description = "Allows to receive and send infrared signals";

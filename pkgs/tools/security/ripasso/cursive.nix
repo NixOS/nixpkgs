@@ -1,4 +1,5 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpg-error, gpgme, xorg, AppKit, Security, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3
+, openssl, libgpg-error, gpgme, xorg, AppKit, Security, installShellFiles }:
 
 with rustPlatform;
 buildRustPackage rec {
@@ -8,7 +9,7 @@ buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev  = "release-${version}";
+    rev = "release-${version}";
     sha256 = "1jx6qv7skikl1ap3g1r34rkz4ab756kra7dgwwv45vl2fb6x74k4";
   };
 
@@ -19,9 +20,8 @@ buildRustPackage rec {
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
   nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles ];
-  buildInputs = [
-    ncurses openssl libgpg-error gpgme xorg.libxcb
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
+  buildInputs = [ ncurses openssl libgpg-error gpgme xorg.libxcb ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preCheck = ''
     export HOME=$TMPDIR

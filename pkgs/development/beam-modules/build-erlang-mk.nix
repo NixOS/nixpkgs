@@ -1,59 +1,47 @@
 { stdenv, writeText, erlang, perl, which, gitMinimal, wget, lib }:
 
-{ name
-, version
-, src
-, setupHook ? null
-, buildInputs ? [ ]
-, beamDeps ? [ ]
-, postPatch ? ""
-, compilePorts ? false
-, installPhase ? null
-, buildPhase ? null
-, configurePhase ? null
-, meta ? { }
-, enableDebugInfo ? false
-, buildFlags ? [ ]
-, ...
-}@attrs:
+{ name, version, src, setupHook ? null, buildInputs ? [ ], beamDeps ? [ ]
+, postPatch ? "", compilePorts ? false, installPhase ? null, buildPhase ? null
+, configurePhase ? null, meta ? { }, enableDebugInfo ? false, buildFlags ? [ ]
+, ... }@attrs:
 
 with lib;
 
 let
-  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
+  debugInfoFlag =
+    lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
 
-  shell = drv: stdenv.mkDerivation {
-    name = "interactive-shell-${drv.name}";
-    buildInputs = [ drv ];
-  };
+  shell = drv:
+    stdenv.mkDerivation {
+      name = "interactive-shell-${drv.name}";
+      buildInputs = [ drv ];
+    };
 
-  pkg = self: stdenv.mkDerivation (attrs // {
-    app_name = name;
-    name = "${name}-${version}";
-    inherit version;
+  pkg = self:
+    stdenv.mkDerivation (attrs // {
+      app_name = name;
+      name = "${name}-${version}";
+      inherit version;
 
-    dontStrip = true;
+      dontStrip = true;
 
-    inherit src;
+      inherit src;
 
-    setupHook =
-      if setupHook == null
-      then
+      setupHook = if setupHook == null then
         writeText "setupHook.sh" ''
           addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
         ''
-      else setupHook;
+      else
+        setupHook;
 
-    buildInputs = buildInputs ++ [ erlang perl which gitMinimal wget ];
-    propagatedBuildInputs = beamDeps;
+      buildInputs = buildInputs ++ [ erlang perl which gitMinimal wget ];
+      propagatedBuildInputs = beamDeps;
 
-    buildFlags = [ "SKIP_DEPS=1" ]
-      ++ lib.optional (enableDebugInfo || erlang.debugInfo) ''ERL_OPTS="$ERL_OPTS +debug_info"''
-      ++ buildFlags;
+      buildFlags = [ "SKIP_DEPS=1" ]
+        ++ lib.optional (enableDebugInfo || erlang.debugInfo)
+        ''ERL_OPTS="$ERL_OPTS +debug_info"'' ++ buildFlags;
 
-    configurePhase =
-      if configurePhase == null
-      then ''
+      configurePhase = if configurePhase == null then ''
         runHook preConfigure
 
         # We shouldnt need to do this, but it seems at times there is a *.app in
@@ -61,23 +49,19 @@ let
         make SKIP_DEPS=1 clean
 
         runHook postConfigure
-      ''
-      else configurePhase;
+      '' else
+        configurePhase;
 
-    buildPhase =
-      if buildPhase == null
-      then ''
+      buildPhase = if buildPhase == null then ''
         runHook preBuild
 
         make $buildFlags "''${buildFlagsArray[@]}"
 
         runHook postBuild
-      ''
-      else buildPhase;
+      '' else
+        buildPhase;
 
-    installPhase =
-      if installPhase == null
-      then ''
+      installPhase = if installPhase == null then ''
         runHook preInstall
 
         mkdir -p $out/lib/erlang/lib/${name}
@@ -97,14 +81,13 @@ let
         fi
 
         runHook postInstall
-      ''
-      else installPhase;
+      '' else
+        installPhase;
 
-    passthru = {
-      packageName = name;
-      env = shell self;
-      inherit beamDeps;
-    };
-  });
-in
-fix pkg
+      passthru = {
+        packageName = name;
+        env = shell self;
+        inherit beamDeps;
+      };
+    });
+in fix pkg

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, kubernetes
-, ruamel-yaml
-, six
-, python-string-utils
-, pytest-bdd
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, jinja2, kubernetes, ruamel-yaml, six
+, python-string-utils, pytest-bdd, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "openshift";
@@ -28,20 +19,12 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    jinja2
-    kubernetes
-    python-string-utils
-    ruamel-yaml
-    six
-  ];
+  propagatedBuildInputs =
+    [ jinja2 kubernetes python-string-utils ruamel-yaml six ];
 
-  pythonImportsCheck = ["openshift"];
+  pythonImportsCheck = [ "openshift" ];
 
-  checkInputs = [
-    pytest-bdd
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-bdd pytestCheckHook ];
 
   disabledTestPaths = [
     # requires docker

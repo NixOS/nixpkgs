@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "C++ wrapper for czmq. Aims to be minimal, simple and consistent";
+    description =
+      "C++ wrapper for czmq. Aims to be minimal, simple and consistent";
     license = licenses.lgpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];

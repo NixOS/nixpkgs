@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
-, libXaw, libXext, libSM, libICE, libXpm, libXp
-}:
+, libXaw, libXext, libSM, libICE, libXpm, libXp }:
 
 stdenv.mkDerivation {
   pname = "vncrec";
@@ -14,10 +13,8 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [
-    libX11 xorgproto libXt libXmu libXaw
-    libXext libSM libICE libXpm libXp
-  ];
+  buildInputs =
+    [ libX11 xorgproto libXt libXmu libXaw libXext libSM libICE libXpm libXp ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"

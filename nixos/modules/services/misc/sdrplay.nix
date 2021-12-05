@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
-with lib;
-{
+with lib; {
   options.services.sdrplayApi = {
     enable = mkOption {
       default = false;

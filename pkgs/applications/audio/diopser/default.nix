@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjack2, alsa-lib, freetype
+, libX11, libXrandr, libXinerama, libXext, libXcursor }:
 
 let
 
@@ -21,12 +20,11 @@ let
       owner = "juce-framework";
       repo = "JUCE";
       rev = "1a5fb5992a1a4e28e998708ed8dce2cc864a30d7";
-      sha256= "1ri7w4sz3sy5xilibg53ls9526fx7jwbv8rc54ccrqfhxqyin308";
+      sha256 = "1ri7w4sz3sy5xilibg53ls9526fx7jwbv8rc54ccrqfhxqyin308";
     };
   };
 
-
-in  stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "diopser";
   version = "unstable-2021-5-13";
 
@@ -57,7 +55,13 @@ in  stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libjack2 alsa-lib freetype libX11 libXrandr libXinerama libXext
+    libjack2
+    alsa-lib
+    freetype
+    libX11
+    libXrandr
+    libXinerama
+    libXext
     libXcursor
   ];
 

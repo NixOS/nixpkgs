@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
@@ -14,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "ed0e94953cdf96111c7f73c5fcf358f65dc0ff5e47f63fc057bf18ca7512e606";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests on PyPI, no tags on GitLab
   doCheck = false;

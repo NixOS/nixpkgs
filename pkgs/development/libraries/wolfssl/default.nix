@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
@@ -25,27 +21,21 @@ stdenv.mkDerivation rec {
     "--enable-tls13"
   ];
 
-  outputs = [
-    "dev"
-    "doc"
-    "lib"
-    "out"
-  ];
+  outputs = [ "dev" "doc" "lib" "out" ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   postInstall = ''
-     # fix recursive cycle:
-     # wolfssl-config points to dev, dev propagates bin
-     moveToOutput bin/wolfssl-config "$dev"
-     # moveToOutput also removes "$out" so recreate it
-     mkdir -p "$out"
+    # fix recursive cycle:
+    # wolfssl-config points to dev, dev propagates bin
+    moveToOutput bin/wolfssl-config "$dev"
+    # moveToOutput also removes "$out" so recreate it
+    mkdir -p "$out"
   '';
 
   meta = with lib; {
-    description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
+    description =
+      "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage = "https://www.wolfssl.com/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

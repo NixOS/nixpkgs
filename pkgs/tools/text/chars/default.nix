@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "chars";
@@ -20,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "Commandline tool to display information about unicode characters";
+    description =
+      "Commandline tool to display information about unicode characters";
     homepage = "https://github.com/antifuchs/chars";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];

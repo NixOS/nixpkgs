@@ -5,13 +5,11 @@ with lib;
 let
   cfg = config.services.syncplay;
 
-  cmdArgs =
-    [ "--port" cfg.port ]
+  cmdArgs = [ "--port" cfg.port ]
     ++ optionals (cfg.salt != null) [ "--salt" cfg.salt ]
     ++ optionals (cfg.certDir != null) [ "--tls" cfg.certDir ];
 
-in
-{
+in {
   options = {
     services.syncplay = {
       enable = mkOption {
@@ -67,11 +65,12 @@ in
   config = mkIf cfg.enable {
     systemd.services.syncplay = {
       description = "Syncplay Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target "];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target " ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.syncplay}/bin/syncplay-server ${escapeShellArgs cmdArgs}";
+        ExecStart =
+          "${pkgs.syncplay}/bin/syncplay-server ${escapeShellArgs cmdArgs}";
         User = cfg.user;
         Group = cfg.group;
       };

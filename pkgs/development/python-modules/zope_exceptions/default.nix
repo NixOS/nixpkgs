@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, zope_interface }:
 
 buildPythonPackage rec {
   pname = "zope.exceptions";

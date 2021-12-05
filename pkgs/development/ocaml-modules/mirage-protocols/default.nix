@@ -1,4 +1,5 @@
-{ lib, buildDunePackage, fetchurl, duration, ipaddr, mirage-device, mirage-flow }:
+{ lib, buildDunePackage, fetchurl, duration, ipaddr, mirage-device, mirage-flow
+}:
 
 buildDunePackage rec {
   pname = "mirage-protocols";
@@ -7,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-protocols/releases/download/v${version}/mirage-protocols-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-protocols/releases/download/v${version}/mirage-protocols-v${version}.tbz";
     sha256 = "1bd6zgxhq2qliyzzarfvaj3ksr20ryghxq6h24i2hha7rwim63bk";
   };
 
@@ -20,5 +22,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 }
-
 

@@ -26,16 +26,14 @@ let
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version;
     name = "graalvm${javaVersion}-ce";
-    srcs =
-      let
-        # Some platforms doesn't have all GraalVM features
-        # e.g.: GraalPython on aarch64-linux
-        # When the platform doesn't have a feature, sha256 is null on hashes.nix
-        # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
-        maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
-      in
-      (lib.remove null
-        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
+    srcs = let
+      # Some platforms doesn't have all GraalVM features
+      # e.g.: GraalPython on aarch64-linux
+      # When the platform doesn't have a feature, sha256 is null on hashes.nix
+      # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
+      maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
+    in (lib.remove null
+      (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -208,50 +206,44 @@ let
       $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
       ./helloworld | fgrep 'Hello World'
 
-      ${
-        lib.optionalString stdenv.isLinux ''
-          # Ahead-Of-Time compilation with --static
-          # --static flag doesn't work for darwin
-          $out/bin/native-image --no-server --static HelloWorld
-          ./helloworld | fgrep 'Hello World'
-        ''
-      }
+      ${lib.optionalString stdenv.isLinux ''
+        # Ahead-Of-Time compilation with --static
+        # --static flag doesn't work for darwin
+        $out/bin/native-image --no-server --static HelloWorld
+        ./helloworld | fgrep 'Hello World'
+      ''}
 
-      ${# TODO: Doesn't work on MacOS, we have this error:
-        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
-        lib.optionalString (stdenv.isLinux) ''
-          echo "Testing Jshell"
-          echo '1 + 1' | $out/bin/jshell
-        ''
-      }
+      ${ # TODO: Doesn't work on MacOS, we have this error:
+      # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
+      lib.optionalString (stdenv.isLinux) ''
+        echo "Testing Jshell"
+        echo '1 + 1' | $out/bin/jshell
+      ''}
 
-      ${
-        lib.optionalString (platform != "linux-aarch64") ''
-          echo "Testing GraalPython"
-          $out/bin/graalpython -c 'print(1 + 1)'
-          echo '1 + 1' | $out/bin/graalpython
-        ''
-      }
+      ${lib.optionalString (platform != "linux-aarch64") ''
+        echo "Testing GraalPython"
+        $out/bin/graalpython -c 'print(1 + 1)'
+        echo '1 + 1' | $out/bin/graalpython
+      ''}
 
       echo "Testing TruffleRuby"
       # Hide warnings about wrong locale
       export LANG=C
       export LC_ALL=C
       $out/bin/ruby -e 'puts(1 + 1)'
-      ${# FIXME: irb is broken in all platforms
-        # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
-        # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
-        # though `openssl` is in `propagatedBuildInputs`. For more details see:
-        # https://github.com/NixOS/nixpkgs/pull/105815
-        # TODO: "truffleruby: an internal exception escaped out of the interpreter"
-        # error on linux-aarch64
-        # TODO: "core/kernel.rb:234:in `gem_original_require':
-        # /nix/store/wlc5xalzj2ip1l83siqw8ac5fjd52ngm-graalvm11-ce/languages/llvm/native/lib:
-        # cannot read file data: Is a directory (RuntimeError)" error on linux-amd64
-        lib.optionalString false ''
-          echo '1 + 1' | $out/bin/irb
-        ''
-      }
+      ${ # FIXME: irb is broken in all platforms
+      # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
+      # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
+      # though `openssl` is in `propagatedBuildInputs`. For more details see:
+      # https://github.com/NixOS/nixpkgs/pull/105815
+      # TODO: "truffleruby: an internal exception escaped out of the interpreter"
+      # error on linux-aarch64
+      # TODO: "core/kernel.rb:234:in `gem_original_require':
+      # /nix/store/wlc5xalzj2ip1l83siqw8ac5fjd52ngm-graalvm11-ce/languages/llvm/native/lib:
+      # cannot read file data: Is a directory (RuntimeError)" error on linux-amd64
+      lib.optionalString false ''
+        echo '1 + 1' | $out/bin/irb
+      ''}
     '';
 
     passthru = {

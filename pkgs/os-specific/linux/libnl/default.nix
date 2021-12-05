@@ -1,5 +1,5 @@
 { stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkg-config
-, pythonSupport ? false, swig ? null, python ? null}:
+, pythonSupport ? false, swig ? null, python ? null }:
 
 stdenv.mkDerivation rec {
   pname = "libnl";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
-    rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
+    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1ak30jcx52gl5yz1691qq0b76ldbcp2z6vsvdr2mrrwqiplqbcs2";
   };
 
@@ -20,18 +20,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''
-      cd python
-      ${python.interpreter} setup.py install --prefix=../pythonlib
-      cd -
+    cd python
+    ${python.interpreter} setup.py install --prefix=../pythonlib
+    cd -
   '';
 
   postFixup = lib.optionalString pythonSupport ''
     mv "pythonlib/" "$py"
   '';
 
-  passthru = {
-    inherit pythonSupport;
-  };
+  passthru = { inherit pythonSupport; };
 
   meta = with lib; {
     homepage = "http://www.infradead.org/~tgr/libnl/";

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu
+, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "phonenumber";
@@ -11,17 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xLxadSxVY3DjFDQrqj3BuOvdMaKdFSLjocfzovJCBB0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    gtest
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake gtest pkg-config ];
 
-  buildInputs = [
-    boost
-    protobuf
-    icu
-  ] ++ lib.optional stdenv.isDarwin Foundation;
+  buildInputs = [ boost protobuf icu ]
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   cmakeDir = "../cpp";
 

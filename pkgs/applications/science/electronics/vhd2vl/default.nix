@@ -1,11 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, bison
-, flex
-, verilog
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex, verilog, which }:
 
 stdenv.mkDerivation rec {
   pname = "vhd2vl";
@@ -22,20 +15,15 @@ stdenv.mkDerivation rec {
     # fix build with verilog 11.0 - https://github.com/ldoolitt/vhd2vl/pull/15
     # for some strange reason, this is not needed for aarch64
     (fetchpatch {
-      url = "https://github.com/ldoolitt/vhd2vl/commit/ce9b8343ffd004dfe8779a309f4b5a594dbec45e.patch";
+      url =
+        "https://github.com/ldoolitt/vhd2vl/commit/ce9b8343ffd004dfe8779a309f4b5a594dbec45e.patch";
       sha256 = "1qaqhm2mk66spb2dir9n91b385rarglc067js1g6pcg8mg5v3hhf";
     })
   ];
 
-  nativeBuildInputs = [
-    bison
-    flex
-    which
-  ];
+  nativeBuildInputs = [ bison flex which ];
 
-  buildInputs = [
-    verilog
-  ];
+  buildInputs = [ verilog ];
 
   installPhase = ''
     runHook preInstall

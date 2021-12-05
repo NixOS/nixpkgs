@@ -1,7 +1,5 @@
-{
-  mkDerivation, lib, fetchpatch,
-  extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw
-}:
+{ mkDerivation, lib, fetchpatch, extra-cmake-modules, karchive, kio, libkexiv2
+, libkdcraw }:
 
 mkDerivation {
   pname = "kdegraphics-thumbnailers";

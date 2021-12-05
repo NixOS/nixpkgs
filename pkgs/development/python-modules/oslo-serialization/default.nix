@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msgpack
-, oslo-utils
-, oslotest
-, pbr
-, pytz
-, stestr
-}:
+{ lib, buildPythonPackage, fetchPypi, msgpack, oslo-utils, oslotest, pbr, pytz
+, stestr }:
 
 buildPythonPackage rec {
   pname = "oslo-serialization";

@@ -1,19 +1,5 @@
-{ alsa-lib
-, autoPatchelfHook
-, callPackage
-, fetchzip
-, gnome2
-, gtk2
-, gtk3
-, lib
-, mesa
-, nss
-, stdenv
-, udev
-, unzip
-, wrapGAppsHook
-, xorg
-}:
+{ alsa-lib, autoPatchelfHook, callPackage, fetchzip, gnome2, gtk2, gtk3, lib
+, mesa, nss, stdenv, udev, unzip, wrapGAppsHook, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
@@ -29,19 +15,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
-  buildInputs = with xorg; [
-    libXScrnSaver
-    libXdamage
-    libXtst
-    libxshmfence
-  ] ++ [
-    nss
-    gtk2
-    alsa-lib
-    gnome2.GConf
-    gtk3
-    mesa # for libgbm
-  ];
+  buildInputs = with xorg;
+    [ libXScrnSaver libXdamage libXtst libxshmfence ] ++ [
+      nss
+      gtk2
+      alsa-lib
+      gnome2.GConf
+      gtk3
+      mesa # for libgbm
+    ];
 
   runtimeDependencies = [ (lib.getLib udev) ];
 
@@ -64,13 +46,12 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = ./update.sh;
 
-    tests = {
-      example = callPackage ./cypress-example-kitchensink { };
-    };
+    tests = { example = callPackage ./cypress-example-kitchensink { }; };
   };
 
   meta = with lib; {
-    description = "Fast, easy and reliable testing for anything that runs in a browser";
+    description =
+      "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

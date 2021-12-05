@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   preBuild = let
-    CPPFLAGS = with stdenv; ""
-      + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
-      + "-Dunix";
+    CPPFLAGS = with stdenv;
+      "" + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ") + "-Dunix";
     CXXFLAGS = "-O3 -DNDEBUG";
   in ''
     buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Incremental journaling backup utility and archiver";
     homepage = "http://mattmahoney.net/dc/zpaq.html";
-    license = licenses.gpl3Plus ;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

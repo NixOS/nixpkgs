@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
-
 stdenv.mkDerivation rec {
   pname = "mod_crl";
   version = "0.2.3";

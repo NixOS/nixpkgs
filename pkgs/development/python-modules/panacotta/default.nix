@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "panacotta";
@@ -21,9 +17,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "panacotta"
-  ];
+  pythonImportsCheck = [ "panacotta" ];
 
   meta = with lib; {
     description = "Python API for controlling Panasonic Blu-Ray players";

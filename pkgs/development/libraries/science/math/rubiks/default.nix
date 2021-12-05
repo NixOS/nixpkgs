@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, coreutils
-}:
+{ lib, stdenv, fetchurl, fetchpatch, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "rubiks";
@@ -20,27 +16,29 @@ stdenv.mkDerivation rec {
   # everything is done in `make install`
   buildPhase = "true";
 
-  installFlags = [
-    "PREFIX=$(out)"
-  ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   patches = [
     # Fix makefiles which use all the variables in all the wrong ways and
     # hardcode values for some variables.
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-cu2-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-cu2-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1ry3w1mk9q4jqd91zlaa1bdiiplld4hpfjaldbhlmzlgrrc99qmq";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-mcube-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-mcube-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0zsbh6k3kqdg82fv0kzghr1x7pafisv943gmssqscp107bhg77bz";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-solver-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-solver-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0vhw70ylnmydgjhwx8jjlb2slccj4pfqn6vzirkyz1wp8apsmfhp";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/reid-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/reid-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1r311sn012xs135s0d21qwsig2kld7rdcq19nm0zbnklviid57df";
     })
   ];

@@ -24,8 +24,15 @@ in stdenv.mkDerivation rec {
   patches = [ ./conf.patch ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    curl libusb1 bluez libxml2 ncurses5 libmhash
-    xorg.libX11 xorg.libXi xorg.libXext
+    curl
+    libusb1
+    bluez
+    libxml2
+    ncurses5
+    libmhash
+    xorg.libX11
+    xorg.libXi
+    xorg.libXext
   ];
 
   postPatch = lib.optionals gimxPDP ''

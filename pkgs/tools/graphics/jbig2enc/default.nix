@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
+{ lib, stdenv, fetchFromGitHub, leptonica, zlib, libwebp, giflib, libjpeg
+, libpng, libtiff }:
 
 stdenv.mkDerivation rec {
   pname = "jbig2enc";
@@ -11,7 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y3IVTjvO5tqn/O076y/llnTyenKpbx1WyT/JFZ/s0VY=";
   };
 
-  propagatedBuildInputs = [ leptonica zlib libwebp giflib libjpeg libpng libtiff ];
+  propagatedBuildInputs =
+    [ leptonica zlib libwebp giflib libjpeg libpng libtiff ];
 
   patches = [
     # https://github.com/agl/jbig2enc/commit/53ce5fe7e73d7ed95c9e12b52dd4984723f865fa

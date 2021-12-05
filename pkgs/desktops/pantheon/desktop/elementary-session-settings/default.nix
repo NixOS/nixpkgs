@@ -1,22 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, pkg-config
-, writeScript
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, writeText
-, meson
-, ninja
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, desktop-file-utils
+, pkg-config, writeScript, gnome-keyring, gnome-session, wingpanel, orca
+, onboard, elementary-default-settings, gnome-settings-daemon, runtimeShell
+, writeText, meson, ninja }:
 
 let
 
@@ -86,9 +71,7 @@ let
     Type=Application
   '';
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "6.0.0";
 
@@ -101,19 +84,9 @@ stdenv.mkDerivation rec {
     sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ desktop-file-utils meson ninja pkg-config ];
 
-  buildInputs = [
-    gnome-keyring
-    gnome-settings-daemon
-    onboard
-    orca
-  ];
+  buildInputs = [ gnome-keyring gnome-settings-daemon onboard orca ];
 
   mesonFlags = [
     "-Dmimeapps-list=false"
@@ -126,7 +99,9 @@ stdenv.mkDerivation rec {
     # our mimeapps patched from upstream to exclude:
     # * evince.desktop -> org.gnome.Evince.desktop
     mkdir -p $out/share/applications
-    cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
+    cp -av ${
+      ./pantheon-mimeapps.list
+    } $out/share/applications/pantheon-mimeapps.list
 
     # instantiates pantheon's dockitems
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
@@ -141,13 +116,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
 
-    providedSessions = [
-      "pantheon"
-    ];
+    providedSessions = [ "pantheon" ];
   };
 
   meta = with lib; {

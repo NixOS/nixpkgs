@@ -5,9 +5,7 @@ stdenv.mkDerivation rec {
   pname = "textadept";
 
   nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [
-    gtk2 ncurses glib zip
-  ];
+  buildInputs = [ gtk2 ncurses glib zip ];
 
   src = fetchhg {
     url = "http://foicica.com/hg/textadept";
@@ -15,14 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dEZSx2tuHTWYhk9q5iGlrWTAvDvKaM8HaHwXcFcv33s=";
   };
 
-  preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
-      "ln -s ${fetchurl params} $PWD/src/${name}"
-    ) (import ./deps.nix)) + ''
+  preConfigure = lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (name: params: "ln -s ${fetchurl params} $PWD/src/${name}")
+    (import ./deps.nix)) + ''
 
-    cd src
-    make deps
-  '';
+      cd src
+      make deps
+    '';
 
   postBuild = ''
     make curses
@@ -37,12 +34,11 @@ stdenv.mkDerivation rec {
     make curses install PREFIX=$out MAKECMDGOALS=curses
   '';
 
-  makeFlags = [
-    "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps"
-  ];
+  makeFlags = [ "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps" ];
 
   meta = with lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting";
+    description =
+      "An extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];

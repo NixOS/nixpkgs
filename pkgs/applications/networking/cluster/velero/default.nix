@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "velero";
   version = "1.7.1";
 
-
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
@@ -13,16 +12,25 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
   ];
 
   vendorSha256 = "sha256-fX9FeoIkxxSi3dl5W2MZLz5vN1VHkPNpTBGRxGP5Qx8=";
 
-  excludedPackages = [ "issue-template-gen" "crd-gen" "release-tools" "velero-restic-restore-helper" "v1" "v1beta1" ];
+  excludedPackages = [
+    "issue-template-gen"
+    "crd-gen"
+    "release-tools"
+    "velero-restic-restore-helper"
+    "v1"
+    "v1beta1"
+  ];
 
-  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doCheck =
+    false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/velero version --client-only | grep ${version} > /dev/null

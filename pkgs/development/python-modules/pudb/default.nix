@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, jedi
-, pygments
-, urwid
-, pytest-mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, jedi, pygments, urwid, pytest-mock
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pudb";
@@ -19,20 +11,13 @@ buildPythonPackage rec {
     sha256 = "309ee82b45a0ffca0bc4c7f521fd3e357589c764f339bdf9dcabb7ad40692d6e";
   };
 
-  propagatedBuildInputs = [
-    jedi
-    pygments
-    urwid
-  ];
+  propagatedBuildInputs = [ jedi pygments urwid ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   meta = with lib; {
     description = "A full-screen, console-based Python debugger";

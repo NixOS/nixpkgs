@@ -1,19 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qtbase
-, qtscript
-, libXfixes
-, libXtst
-, qtx11extras
-, git
-, knotifications
-, qtwayland
-, wayland
-, fetchpatch
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules, qtbase
+, qtscript, libXfixes, libXtst, qtx11extras, git, knotifications, qtwayland
+, wayland, fetchpatch }:
 
 mkDerivation rec {
   pname = "CopyQ";
@@ -26,10 +13,7 @@ mkDerivation rec {
     sha256 = "1iacnd9dn0mrajff80r2g5nlks5sch9lmpl633mnyqmih9dwx2li";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     qtbase
@@ -46,7 +30,8 @@ mkDerivation rec {
     # Install the bash completion script correctly
     # Remove once 4.1.1 is released
     (fetchpatch {
-      url = "https://github.com/hluk/CopyQ/commit/aca7222ec28589af0b08f63686104b992d63ee42.patch";
+      url =
+        "https://github.com/hluk/CopyQ/commit/aca7222ec28589af0b08f63686104b992d63ee42.patch";
       sha256 = "0d440d0zsdzm9cd0b6c42y9qbrvxg7gdam0qmif62mr8qa0ylidl";
     })
   ];

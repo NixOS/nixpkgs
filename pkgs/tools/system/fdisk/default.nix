@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation rec {
   pname = "gnufdisk";
-  version = "2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
+  version =
+    "2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
 
   src = fetchurl {
     url = "mirror://gnu/fdisk/gnufdisk-${version}.tar.gz";

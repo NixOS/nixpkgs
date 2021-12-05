@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt
+, pythonPackages }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -18,7 +19,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 quazip qt-mobility qxt pythonPackages.python pythonPackages.pycrypto ];
+  buildInputs = [
+    qt4
+    quazip
+    qt-mobility
+    qxt
+    pythonPackages.python
+    pythonPackages.pycrypto
+  ];
 
   patchPhase = ''
     # Required to make the configure script work. Normally, screencloud's
@@ -68,7 +76,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://screencloud.net/";
-    description = "Client for Screencloud, an easy to use screenshot sharing tool";
+    description =
+      "Client for Screencloud, an easy to use screenshot sharing tool";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ forkk ];
     platforms = with lib.platforms; linux;

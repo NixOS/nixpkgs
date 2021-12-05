@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, asn1crypto
-, certvalidator
-, oscrypto
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, asn1crypto
+, certvalidator, oscrypto, pyasn1, pyasn1-modules, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "signify";
@@ -23,21 +14,12 @@ buildPythonPackage rec {
     sha256 = "sha256-YJc9RIqkEL7dd1ahE4IbxyyZgsZWBDqbXZAvI/nK24M=";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-    certvalidator
-    oscrypto
-    pyasn1
-    pyasn1-modules
-  ];
+  propagatedBuildInputs =
+    [ asn1crypto certvalidator oscrypto pyasn1 pyasn1-modules ];
 
-  pythonImportsCheck = [
-    "signify"
-  ];
+  pythonImportsCheck = [ "signify" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # chain doesn't validate because end-entitys certificate expired

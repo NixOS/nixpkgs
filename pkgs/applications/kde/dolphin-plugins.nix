@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  dolphin, ki18n, kio, kxmlgui
-}:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, dolphin, ki18n, kio
+, kxmlgui }:
 
 mkDerivation {
   pname = "dolphin-plugins";
@@ -11,8 +8,6 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
-    dolphin ki18n kio kxmlgui
-  ];
+  propagatedBuildInputs = [ dolphin ki18n kio kxmlgui ];
   outputs = [ "out" "dev" ];
 }

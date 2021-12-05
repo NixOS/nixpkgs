@@ -12,14 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
+    description =
+      "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
     homepage = "https://github.com/ibara/oksh";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
   };
 
-  passthru = {
-    shellPath = "/bin/oksh";
-  };
+  passthru = { shellPath = "/bin/oksh"; };
 }

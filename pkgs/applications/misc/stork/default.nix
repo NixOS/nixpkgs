@@ -1,9 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-}:
+{ lib, rustPlatform, fetchFromGitHub, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stork";

@@ -1,4 +1,5 @@
-{ lib, stdenv, autoreconfHook, libtool, pkg-config, gnutls, fetchFromGitHub, texinfo }:
+{ lib, stdenv, autoreconfHook, libtool, pkg-config, gnutls, fetchFromGitHub
+, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "iksemel";

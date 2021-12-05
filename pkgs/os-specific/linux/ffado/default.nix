@@ -1,28 +1,11 @@
-{ lib
-, mkDerivation
-, dbus
-, dbus_cplusplus
-, desktop-file-utils
-, fetchurl
-, glibmm
-, kernel
-, libavc1394
-, libconfig
-, libiec61883
-, libraw1394
-, libxmlxx3
-, pkg-config
-, python3
-, sconsPackages
-, which
-, wrapQtAppsHook
-}:
+{ lib, mkDerivation, dbus, dbus_cplusplus, desktop-file-utils, fetchurl, glibmm
+, kernel, libavc1394, libconfig, libiec61883, libraw1394, libxmlxx3, pkg-config
+, python3, sconsPackages, which, wrapQtAppsHook }:
 
 let
   inherit (python3.pkgs) pyqt5 dbus-python;
   python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "ffado";
   version = "2.4.3";
 
@@ -91,7 +74,9 @@ mkDerivation rec {
     install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
 
     # prevent build tools from leaking into closure
-    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
+    echo 'See `nix-store --query --tree ${
+      placeholder "out"
+    }`.' > $out/lib/libffado/static_info.txt
   '';
 
   preFixup = ''

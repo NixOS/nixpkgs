@@ -1,10 +1,9 @@
-{ config, lib, pkgs, ... }: with lib;
+{ config, lib, pkgs, ... }:
+with lib;
 
-let
-  cfg = config.services.dnscrypt-proxy2;
-in
+let cfg = config.services.dnscrypt-proxy2;
 
-{
+in {
   options.services.dnscrypt-proxy2 = {
     enable = mkEnableOption "dnscrypt-proxy2";
 
@@ -24,7 +23,7 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     upstreamDefaults = mkOption {
@@ -56,7 +55,8 @@ in
         ''}
         ${pkgs.remarshal}/bin/json2toml < config.json > $out
       '';
-      defaultText = literalDocBook "TOML file generated from <option>services.dnscrypt-proxy2.settings</option>";
+      defaultText = literalDocBook
+        "TOML file generated from <option>services.dnscrypt-proxy2.settings</option>";
     };
   };
 
@@ -66,21 +66,15 @@ in
 
     systemd.services.dnscrypt-proxy2 = {
       description = "DNSCrypt-proxy client";
-      wants = [
-        "network-online.target"
-        "nss-lookup.target"
-      ];
-      before = [
-        "nss-lookup.target"
-      ];
-      wantedBy = [
-        "multi-user.target"
-      ];
+      wants = [ "network-online.target" "nss-lookup.target" ];
+      before = [ "nss-lookup.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
-        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        ExecStart =
+          "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;
@@ -96,10 +90,7 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         Restart = "always";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RuntimeDirectory = "dnscrypt-proxy";

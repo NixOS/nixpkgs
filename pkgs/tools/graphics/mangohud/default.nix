@@ -1,32 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, substituteAll
-, coreutils
-, curl
-, gawk
-, glxinfo
-, gnugrep
-, gnused
-, lsof
-, xdg-utils
-, dbus
-, hwdata
-, libX11
-, mangohud32
-, vulkan-headers
-, glslang
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3Packages
-, unzip
-, vulkan-loader
-, libXNVCtrl
-, wayland
-, addOpenGLRunpath
+{ lib, stdenv, fetchFromGitHub, fetchurl, substituteAll, coreutils, curl, gawk
+, glxinfo, gnugrep, gnused, lsof, xdg-utils, dbus, hwdata, libX11, mangohud32
+, vulkan-headers, glslang, makeWrapper, meson, ninja, pkg-config
+, python3Packages, unzip, vulkan-loader, libXNVCtrl, wayland, addOpenGLRunpath
 }:
 
 let
@@ -59,11 +34,12 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" ];
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    unzip ${imgui.patch}
-  )'';
+  postUnpack = ''
+    (
+        cd "$sourceRoot/subprojects"
+        cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+        unzip ${imgui.patch}
+      )'';
 
   patches = [
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
@@ -117,30 +93,29 @@ in stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  buildInputs = [
-    dbus
-    libX11
-    libXNVCtrl
-    wayland
-  ];
+  buildInputs = [ dbus libX11 libXNVCtrl wayland ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
   # This is needed for the same reason the 32bit OpenGL workaround is needed.
-  postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.json \
-      "$out/share/vulkan/implicit_layer.d/MangoHud.x86.json"
-  '';
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+      ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.json \
+        "$out/share/vulkan/implicit_layer.d/MangoHud.x86.json"
+    '';
 
   # Support Nvidia cards by adding OpenGL path and support overlaying
   # Vulkan applications without requiring MangoHud to be installed
   postFixup = ''
     wrapProgram "$out/bin/mangohud" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]
+      } \
       --prefix XDG_DATA_DIRS : "$out/share"
   '';
 
   meta = with lib; {
-    description = "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
+    description =
+      "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
     homepage = "https://github.com/flightlessmango/MangoHud";
     platforms = platforms.linux;
     license = licenses.mit;

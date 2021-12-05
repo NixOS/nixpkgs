@@ -1,9 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, chardet, cssselect, lxml
-}:
+{ lib, fetchPypi, buildPythonPackage, requests, chardet, cssselect, lxml }:
 
 buildPythonPackage rec {
-  pname   = "PyReadability";
+  pname = "PyReadability";
   version = "0.4.0";
 
   src = fetchPypi {
@@ -18,7 +16,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/hyperlinkapp/python-readability";
-    description = "fast python port of arc90's readability tool, updated to match latest readability.js!";
+    description =
+      "fast python port of arc90's readability tool, updated to match latest readability.js!";
     license = lib.licenses.asl20;
   };
 

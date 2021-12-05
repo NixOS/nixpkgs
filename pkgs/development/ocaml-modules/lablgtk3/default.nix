@@ -1,4 +1,5 @@
-{ lib, fetchurl, pkg-config, buildDunePackage, dune-configurator, gtk3, cairo2 }:
+{ lib, fetchurl, pkg-config, buildDunePackage, dune-configurator, gtk3, cairo2
+}:
 
 buildDunePackage rec {
   version = "3.1.1";
@@ -9,7 +10,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.05";
 
   src = fetchurl {
-    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
+    url =
+      "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
     sha256 = "1ygc1yh99gh44h958yffw1vxdlfpn799d4x1s36c2jfbi8f0dir2";
   };
 

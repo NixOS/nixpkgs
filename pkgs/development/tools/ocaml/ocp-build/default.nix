@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner, re }:
-let
-  version = "1.99.21";
-in
-stdenv.mkDerivation {
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner
+, re }:
+let version = "1.99.21";
+in stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-ocp-build-${version}";
 
@@ -16,7 +15,8 @@ stdenv.mkDerivation {
   patches = [
     # Fix compilation with OCaml 4.12
     (fetchpatch {
-      url = "https://github.com/OCamlPro/ocp-build/commit/104e4656ca6dba9edb03b62539c9f1e10abcaae8.patch";
+      url =
+        "https://github.com/OCamlPro/ocp-build/commit/104e4656ca6dba9edb03b62539c9f1e10abcaae8.patch";
       sha256 = "0sbyi4acig9q8x1ky4hckfg5pm2nad6zasi51ravaf1spgl148c2";
     })
   ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       between source files.
     '';
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

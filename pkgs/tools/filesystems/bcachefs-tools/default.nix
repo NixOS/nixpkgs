@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, docutils
-, libuuid
-, libscrypt
-, libsodium
-, keyutils
-, liburcu
-, zlib
-, libaio
-, zstd
-, lz4
-, python3Packages
-, udev
-, valgrind
-, nixosTests
-, fuse3
-, fuseSupport ? false
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, docutils, libuuid, libscrypt
+, libsodium, keyutils, liburcu, zlib, libaio, zstd, lz4, python3Packages, udev
+, valgrind, nixosTests, fuse3, fuseSupport ? false }:
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
@@ -42,8 +24,18 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config docutils python3Packages.python ];
 
   buildInputs = [
-    libuuid libscrypt libsodium keyutils liburcu zlib libaio
-    zstd lz4 python3Packages.pytest udev valgrind
+    libuuid
+    libscrypt
+    libsodium
+    keyutils
+    liburcu
+    zlib
+    libaio
+    zstd
+    lz4
+    python3Packages.pytest
+    udev
+    valgrind
   ] ++ lib.optional fuseSupport fuse3;
 
   doCheck = false; # needs bcachefs module loaded on builder
@@ -56,9 +48,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  passthru.tests = {
-    smoke-test = nixosTests.bcachefs;
-  };
+  passthru.tests = { smoke-test = nixosTests.bcachefs; };
 
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";

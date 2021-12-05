@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, gfortran
-, texinfo
-, python
-, boost
-  # Select SIMD alignment width (in bytes) for vectorization.
+{ stdenv, lib, fetchFromGitHub, pkg-config, gfortran, texinfo, python, boost
+# Select SIMD alignment width (in bytes) for vectorization.
 , simdWidth ? 1
   # Pad arrays to simdWidth by default?
   # Note: Only useful if simdWidth > 1
@@ -15,13 +8,10 @@
 , enableSerialization ? true
   # Activate test-suite?
   # WARNING: Some of the tests require up to 1700MB of memory to compile.
-, doCheck ? true
-}:
+, doCheck ? true }:
 
-let
-  inherit (lib) optional optionals;
-in
-stdenv.mkDerivation rec {
+let inherit (lib) optional optionals;
+in stdenv.mkDerivation rec {
   pname = "blitz++";
   version = "1.0.1";
 
@@ -35,26 +25,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python texinfo ];
   buildInputs = [ gfortran texinfo boost ];
 
-  configureFlags =
-    [
-      "--enable-shared"
-      "--disable-static"
-      "--enable-fortran"
-      "--enable-optimize"
-      "--with-pic=yes"
-      "--enable-html-docs"
-      "--disable-doxygen"
-      "--disable-dot"
-      "--disable-latex-docs"
-      "--enable-simd-width=${toString simdWidth}"
-      "--with-boost=${boost.dev}"
-      "--with-boost-libdir=${boost.out}/lib"
-    ] ++ optional enablePadding "--enable-array-length-padding"
+  configureFlags = [
+    "--enable-shared"
+    "--disable-static"
+    "--enable-fortran"
+    "--enable-optimize"
+    "--with-pic=yes"
+    "--enable-html-docs"
+    "--disable-doxygen"
+    "--disable-dot"
+    "--disable-latex-docs"
+    "--enable-simd-width=${toString simdWidth}"
+    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost.out}/lib"
+  ] ++ optional enablePadding "--enable-array-length-padding"
     ++ optional enableSerialization "--enable-serialization"
     ++ optional stdenv.is64bit "--enable-64bit";
 
   # skip broken library name detection
-  ax_boost_user_serialization_lib = lib.optionalString stdenv.isDarwin "boost_serialization";
+  ax_boost_user_serialization_lib =
+    lib.optionalString stdenv.isDarwin "boost_serialization";
 
   enableParallelBuilding = true;
 

@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, numactl, libxml2
-, perl, gfortran, slurm, openssh, hwloc, zlib, makeWrapper
+{ lib, stdenv, fetchurl, pkg-config, bison, numactl, libxml2, perl, gfortran
+, slurm, openssh, hwloc, zlib, makeWrapper
 # InfiniBand dependencies
 , opensm, rdma-core
 # OmniPath dependencies
 , libpsm2, libfabric
 # Compile with slurm as a process manager
 , useSlurm ? false
-# Network type for MVAPICH2
-, network ? "ethernet"
-} :
+  # Network type for MVAPICH2
+, network ? "ethernet" }:
 
 assert builtins.elem network [ "ethernet" "infiniband" "omnipath" ];
 
@@ -17,33 +16,36 @@ stdenv.mkDerivation rec {
   version = "2.3.6";
 
   src = fetchurl {
-    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
+    url =
+      "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
     sha256 = "0jd28vy9ivl3rcpkxmhw73b6krzm0pd9jps8asw92wa00lm2z9mk";
   };
 
   nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
   propagatedBuildInputs = [ numactl rdma-core zlib opensm ];
-  buildInputs = with lib; [
-    numactl
-    libxml2
-    perl
-    openssh
-    hwloc
-  ] ++ optionals (network == "infiniband") [ rdma-core opensm ]
+  buildInputs = with lib;
+    [ numactl libxml2 perl openssh hwloc ]
+    ++ optionals (network == "infiniband") [ rdma-core opensm ]
     ++ optionals (network == "omnipath") [ libpsm2 libfabric ]
     ++ optional useSlurm slurm;
 
-  configureFlags = with lib; [
-    "--with-pm=hydra"
-    "--enable-fortran=all"
-    "--enable-cxx"
-    "--enable-threads=multiple"
-    "--enable-hybrid"
-    "--enable-shared"
-  ] ++ optional useSlurm "--with-pm=slurm"
+  configureFlags = with lib;
+    [
+      "--with-pm=hydra"
+      "--enable-fortran=all"
+      "--enable-cxx"
+      "--enable-threads=multiple"
+      "--enable-hybrid"
+      "--enable-shared"
+    ] ++ optional useSlurm "--with-pm=slurm"
     ++ optional (network == "ethernet") "--with-device=ch3:sock"
-    ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" ]
-    ++ optionals (network == "omnipath") ["--with-device=ch3:psm" "--with-psm2=${libpsm2}"];
+    ++ optionals (network == "infiniband") [
+      "--with-device=ch3:mrail"
+      "--with-rdma=gen2"
+    ] ++ optionals (network == "omnipath") [
+      "--with-device=ch3:psm"
+      "--with-psm2=${libpsm2}"
+    ];
 
   doCheck = true;
 

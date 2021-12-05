@@ -11,8 +11,7 @@ let
       ];
     }
   '';
-in
-{
+in {
 
   imports = [ ./google-compute-config.nix ];
 
@@ -61,7 +60,8 @@ in
         popd
       '';
       format = "raw";
-      configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      configFile =
+        if cfg.configFile == null then defaultConfigFile else cfg.configFile;
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };

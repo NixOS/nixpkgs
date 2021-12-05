@@ -1,7 +1,6 @@
-{ lib, fetchFromGitHub, stdenv
-, gtest, makeWrapper, meson, ninja, pkg-config
-, alsa-lib, fluidsynth, libGL, libGLU, libogg, libpng, munt, opusfile, SDL2, SDL2_net
-}:
+{ lib, fetchFromGitHub, stdenv, gtest, makeWrapper, meson, ninja, pkg-config
+, alsa-lib, fluidsynth, libGL, libGLU, libogg, libpng, munt, opusfile, SDL2
+, SDL2_net }:
 
 stdenv.mkDerivation rec {
   pname = "dosbox-staging";
@@ -15,7 +14,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gtest makeWrapper meson ninja pkg-config ];
-  buildInputs = [ alsa-lib fluidsynth libGL libGLU libogg libpng munt opusfile SDL2 SDL2_net ];
+  buildInputs = [
+    alsa-lib
+    fluidsynth
+    libGL
+    libGLU
+    libogg
+    libpng
+    munt
+    opusfile
+    SDL2
+    SDL2_net
+  ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, notebook
-, pythonOlder
-, jupyter_server
-, pytestCheckHook
-, pytest-tornasync
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, notebook, pythonOlder
+, jupyter_server, pytestCheckHook, pytest-tornasync }:
 
 buildPythonPackage rec {
   pname = "nbclassic";
@@ -23,10 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jupyter_server notebook ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-tornasync
-  ];
+  checkInputs = [ pytestCheckHook pytest-tornasync ];
 
   __darwinAllowLocalNetworking = true;
 

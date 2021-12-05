@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, proj
-, pythonOlder
-, substituteAll
-, cython
-, pytestCheckHook
-, mock
-, certifi
-, numpy
-, shapely
-, pandas
-, xarray
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, proj, pythonOlder
+, substituteAll, cython, pytestCheckHook, mock, certifi, numpy, shapely, pandas
+, xarray }:
 
 buildPythonPackage rec {
   pname = "pyproj";
@@ -39,18 +26,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ proj ];
 
-  propagatedBuildInputs = [
-     certifi
-  ];
+  propagatedBuildInputs = [ certifi ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    numpy
-    shapely
-    pandas
-    xarray
-  ];
+  checkInputs = [ pytestCheckHook mock numpy shapely pandas xarray ];
 
   preCheck = ''
     # We need to build extensions locally to run tests
@@ -58,10 +36,7 @@ buildPythonPackage rec {
     cd test
   '';
 
-  disabledTestPaths = [
-    "test_doctest_wrapper.py"
-    "test_datadir.py"
-  ];
+  disabledTestPaths = [ "test_doctest_wrapper.py" "test_datadir.py" ];
 
   disabledTests = [
     # The following tests try to access network and end up with a URLError

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pyparsing
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pyparsing, python }:
 
 buildPythonPackage rec {
   pname = "aenum";
@@ -16,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-LrrYWQtqAYPA2Yk1I7RY7c6YeuRTMznFrBhc+sMtrxo=";
   };
 
-  checkInputs = [
-    pyparsing
-  ];
+  checkInputs = [ pyparsing ];
 
   # py2 likes to reorder tests
   doCheck = isPy3k;
@@ -29,12 +21,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "aenum"
-  ];
+  pythonImportsCheck = [ "aenum" ];
 
   meta = with lib; {
-    description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
+    description =
+      "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
     homepage = "https://github.com/ethanfurman/aenum";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ];

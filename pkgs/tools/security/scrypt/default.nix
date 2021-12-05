@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, openssl
-, getconf
-, util-linux
-}:
+{ lib, stdenv, fetchurl, openssl, getconf, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
@@ -37,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Encryption utility";
-    homepage    = "https://www.tarsnap.com/scrypt.html";
-    license     = licenses.bsd2;
-    platforms   = platforms.all;
+    homepage = "https://www.tarsnap.com/scrypt.html";
+    license = licenses.bsd2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

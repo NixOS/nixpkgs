@@ -17,10 +17,8 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  qmakeFlags = [
-    "CONFIG+=WITH_I18N"
-    "LRELEASE=${lib.getDev qttools}/bin/lrelease"
-  ];
+  qmakeFlags =
+    [ "CONFIG+=WITH_I18N" "LRELEASE=${lib.getDev qttools}/bin/lrelease" ];
 
   meta = with lib; {
     description = "Scientific calculator for the Lumina Desktop";

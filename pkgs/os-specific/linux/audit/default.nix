@@ -1,9 +1,5 @@
-{
-  lib, stdenv, buildPackages, fetchurl, fetchpatch,
-  runCommand,
-  autoconf, automake, libtool,
-  enablePython ? false, python ? null,
-}:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, runCommand, autoconf
+, automake, libtool, enablePython ? false, python ? null, }:
 
 assert enablePython -> python != null;
 
@@ -19,8 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isMusl
-    [ autoconf automake libtool ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isMusl [ autoconf automake libtool ];
   buildInputs = lib.optional enablePython python;
 
   configureFlags = [
@@ -41,37 +37,38 @@ stdenv.mkDerivation rec {
     ./patches/weak-symbols.patch
     (fetchpatch {
       # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f.patch";
+      url =
+        "https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f.patch";
       sha256 = "100xa1rzkv0mvhjbfgpfm72f7c4p68syflvgc3xm6pxgrqqmfq8h";
     })
-  ]
-  ++ lib.optional stdenv.hostPlatform.isMusl [
-    (
-      let patch = fetchpatch {
-            url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
-            name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
-            sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
-          };
-      in
-        runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" {} ''
-          cp ${patch} $out
-          substituteInPlace $out --replace \
-              '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
-              '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
-        ''
-    )
+  ] ++ lib.optional stdenv.hostPlatform.isMusl [
+    (let
+      patch = fetchpatch {
+        url =
+          "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
+        name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
+        sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
+      };
+    in runCommand
+    "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict"
+    { } ''
+      cp ${patch} $out
+      substituteInPlace $out --replace \
+          '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
+          '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
+    '')
   ];
 
   prePatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
   ''
-  # According to https://stackoverflow.com/questions/13089166
-  # --whole-archive linker flag is required to be sure that linker
-  # correctly chooses strong version of symbol regardless of order of
-  # object files at command line.
-  + lib.optionalString stdenv.hostPlatform.isStatic ''
-    export LDFLAGS=-Wl,--whole-archive
-  '';
+    # According to https://stackoverflow.com/questions/13089166
+    # --whole-archive linker flag is required to be sure that linker
+    # correctly chooses strong version of symbol regardless of order of
+    # object files at command line.
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      export LDFLAGS=-Wl,--whole-archive
+    '';
   meta = {
     description = "Audit Library";
     homepage = "https://people.redhat.com/sgrubb/audit/";

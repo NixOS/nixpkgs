@@ -9,10 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nf680dl7a2vlgavdhj6ljq8a7lkhvr6zghkpzad53vmilxsndys";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    pythonPackages.wrapPython
-  ];
+  nativeBuildInputs = [ installShellFiles pythonPackages.wrapPython ];
 
   dontConfigure = true;
   dontBuild = true;

@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, tk
-, tcllib
-, tcl
-, tkremind ? true
-}:
+{ lib, stdenv, fetchurl, tk, tcllib, tcl, tkremind ? true }:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -13,13 +6,13 @@ let
   tkremindPatch = optionalString tkremind ''
     substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
   '';
-in
-tcl.mkTclDerivation rec {
+in tcl.mkTclDerivation rec {
   pname = "remind";
   version = "03.03.09";
 
   src = fetchurl {
-    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
+    url =
+      "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
     sha256 = "sha256-yQh6jGkRNkQvPoguRmd6025pCEsvO7w8W3YNO2vztvM=";
   };
 

@@ -1,38 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, util-linux
-, hexdump
-, autoSignDarwinBinariesHook
-, wrapQtAppsHook ? null
-, boost
-, libevent
-, miniupnpc
-, zeromq
-, zlib
-, db48
-, sqlite
-, qrencode
-, qtbase ? null
-, qttools ? null
-, python3
-, nixosTests
-, withGui
-, withWallet ? true
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, util-linux, hexdump
+, autoSignDarwinBinariesHook, wrapQtAppsHook ? null, boost, libevent, miniupnpc
+, zeromq, zlib, db48, sqlite, qrencode, qtbase ? null, qttools ? null, python3
+, nixosTests, withGui, withWallet ? true }:
 
 with lib;
 let
   version = "22.0";
   majorVersion = versions.major version;
   desktop = fetchurl {
-    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
+    url =
+      "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
   inherit version;
 
@@ -44,12 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "d0e9d089b57048b1555efa7cd5a63a7ed042482045f6f33402b1df425bf9613b";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook pkg-config ]
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals stdenv.isDarwin [ hexdump ]
-    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
-    ++ optionals withGui [ wrapQtAppsHook ];
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64)
+    [ autoSignDarwinBinariesHook ] ++ optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ optionals withWallet [ db48 sqlite ]
@@ -61,34 +40,27 @@ stdenv.mkDerivation rec {
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
   '';
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--disable-bench"
-  ] ++ optionals (!doCheck) [
-    "--disable-tests"
-    "--disable-gui-tests"
-  ] ++ optionals (!withWallet) [
-    "--disable-wallet"
-  ] ++ optionals withGui [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" "--disable-bench" ]
+    ++ optionals (!doCheck) [ "--disable-tests" "--disable-gui-tests" ]
+    ++ optionals (!withWallet) [ "--disable-wallet" ] ++ optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   checkInputs = [ python3 ];
 
   doCheck = true;
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    smoke-test = nixosTests.bitcoind;
-  };
+  passthru.tests = { smoke-test = nixosTests.bitcoind; };
 
   meta = {
     description = "Peer-to-peer electronic cash system";

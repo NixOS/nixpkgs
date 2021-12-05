@@ -1,52 +1,31 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gpm
-, file
-, e2fsprogs
-, libX11
-, libICE
-, perl
-, zip
-, unzip
-, gettext
-, slang
-, libssh2
-, openssl
-, coreutils
-, autoreconfHook
-, autoSignDarwinBinariesHook
-}:
+{ lib, stdenv, fetchurl, pkg-config, glib, gpm, file, e2fsprogs, libX11, libICE
+, perl, zip, unzip, gettext, slang, libssh2, openssl, coreutils, autoreconfHook
+, autoSignDarwinBinariesHook }:
 
 stdenv.mkDerivation rec {
   pname = "mc";
   version = "4.8.27";
 
   src = fetchurl {
-    url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
+    url =
+      "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
     sha256 = "sha256-Mb5ZIl/6mSCBbpqLO+CrIloW0Z5Pr0aJDyW9/6AqT/Q=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
-    # The preFixup hook rewrites the binary, which invaliates the code
-    # signature. Add the fixup hook to sign the output.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    unzip
+  ]
+  # The preFixup hook rewrites the binary, which invaliates the code
+  # signature. Add the fixup hook to sign the output.
+    ++ lib.optionals
+    (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    [ autoSignDarwinBinariesHook ];
 
-  buildInputs = [
-    file
-    gettext
-    glib
-    libICE
-    libX11
-    libssh2
-    openssl
-    perl
-    slang
-    zip
-  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  buildInputs =
+    [ file gettext glib libICE libX11 libssh2 openssl perl slang zip ]
+    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 

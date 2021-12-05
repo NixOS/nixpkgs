@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/raboof/nethogs/pull/210
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/raboof/nethogs/commit/455daf357da7f394763e5b93b11b3defe1f82ed1.patch";
+      url =
+        "https://github.com/raboof/nethogs/commit/455daf357da7f394763e5b93b11b3defe1f82ed1.patch";
       sha256 = "0wkp0yr6qg1asgvmsn7blf7rq48sh5k4n3w0nxf5869hxvkhnnzs";
     })
   ];

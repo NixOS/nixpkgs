@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.91";
 
   src = fetchurl {
-    url = "https://github.com/khenriks/mp3fs/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/khenriks/mp3fs/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "14ngiqg24p3a0s6hp33zjl4i46d8qn4v9id36psycq3n3csmwyx4";
   };
 

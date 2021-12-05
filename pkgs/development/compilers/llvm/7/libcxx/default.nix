@@ -1,6 +1,5 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames
+, version, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation {
   pname = "libcxx";
@@ -15,11 +14,9 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl
+    [ ../../libcxx-0001-musl-hacks.patch ];
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
@@ -43,12 +40,11 @@ stdenv.mkDerivation {
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false)
+    "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
-  passthru = {
-    isLLVM = true;
-  };
+  passthru = { isLLVM = true; };
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

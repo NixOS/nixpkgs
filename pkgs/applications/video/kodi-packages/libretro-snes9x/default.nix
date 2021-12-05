@@ -12,14 +12,11 @@ buildKodiBinaryAddon rec {
     sha256 = "1wyfkg4fncc604alnbaqk92fi1h80n7bwiqfkb8479x5517byab1";
   };
 
-  extraCMakeFlags = [
-    "-DSNES9X_LIB=${snes9x}/lib/retroarch/cores/snes9x_libretro.so"
-  ];
+  extraCMakeFlags =
+    [ "-DSNES9X_LIB=${snes9x}/lib/retroarch/cores/snes9x_libretro.so" ];
 
   extraBuildInputs = [ snes9x ];
-  propagatedBuildInputs = [
-    libretro
-  ];
+  propagatedBuildInputs = [ libretro ];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-game/game.libretro.snes9x";

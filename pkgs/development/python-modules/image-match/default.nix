@@ -13,9 +13,7 @@ buildPythonPackage {
 
   buildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [
-    scikitimage
-  ];
+  propagatedBuildInputs = [ scikitimage ];
 
   # remove elasticsearch requirement due to version incompatibility
   postPatch = ''

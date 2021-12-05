@@ -1,21 +1,34 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "varjo";
   version = "release-quicklisp-92f9c75b-git";
 
   description = "Common Lisp -> GLSL Compiler";
 
-  deps = [ args."alexandria" args."cl-ppcre" args."documentation-utils" args."fn" args."glsl-docs" args."glsl-spec" args."glsl-symbols" args."named-readtables" args."parse-float" args."trivial-indent" args."uiop" args."vas-string-metrics" ];
+  deps = [
+    args."alexandria"
+    args."cl-ppcre"
+    args."documentation-utils"
+    args."fn"
+    args."glsl-docs"
+    args."glsl-spec"
+    args."glsl-symbols"
+    args."named-readtables"
+    args."parse-float"
+    args."trivial-indent"
+    args."uiop"
+    args."vas-string-metrics"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/varjo/2021-01-24/varjo-release-quicklisp-92f9c75b-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/varjo/2021-01-24/varjo-release-quicklisp-92f9c75b-git.tgz";
     sha256 = "0xxi2ivjz3fqgw2nxzshf9m7ppvzv7wdg20lr0krq14i8j5gf5jy";
   };
 
   packageName = "varjo";
 
-  asdFilesToKeep = ["varjo.asd"];
+  asdFilesToKeep = [ "varjo.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM varjo DESCRIPTION Common Lisp -> GLSL Compiler SHA256
@@ -36,4 +49,5 @@ rec {
      glsl-symbols named-readtables parse-float trivial-indent uiop
      vas-string-metrics)
     VERSION release-quicklisp-92f9c75b-git SIBLINGS (varjo.import varjo.tests)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

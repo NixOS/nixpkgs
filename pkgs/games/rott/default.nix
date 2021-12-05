@@ -1,4 +1,5 @@
-{stdenv, lib, fetchurl, SDL, SDL_mixer, makeDesktopItem, copyDesktopItems, runtimeShell, buildShareware ? false}:
+{ stdenv, lib, fetchurl, SDL, SDL_mixer, makeDesktopItem, copyDesktopItems
+, runtimeShell, buildShareware ? false }:
 
 stdenv.mkDerivation rec {
   pname = "rott";
@@ -39,7 +40,9 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "rott";
       exec = "launch-rott";
-      desktopName = "Rise of the Triad: ${if buildShareware then "The HUNT Begins" else "Dark War"}";
+      desktopName = "Rise of the Triad: ${
+          if buildShareware then "The HUNT Begins" else "Dark War"
+        }";
       categories = "Game;";
     })
   ];

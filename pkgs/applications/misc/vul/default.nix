@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "aUl4f82sGOWkEvTDNILDszj5hztDRvYpHVovFl4oOCc=";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Latin Vulgate Bible on the Command Line";

@@ -6,7 +6,7 @@ import ./make-test-python.nix {
       networking.firewall.enable = false;
       services.nginx.enable = true;
       services.nginx.virtualHosts.server = {
-        root = pkgs.runCommandLocal "testdir" {} ''
+        root = pkgs.runCommandLocal "testdir" { } ''
           mkdir "$out"
           cat > "$out/test.js" <<EOF
           document.getElementById('foobar').setAttribute('foo', 'bar');
@@ -21,7 +21,7 @@ import ./make-test-python.nix {
 
       specialisation.pass-checks.configuration = {
         services.nginx.virtualHosts.server = {
-          root = lib.mkForce (pkgs.runCommandLocal "testdir2" {} ''
+          root = lib.mkForce (pkgs.runCommandLocal "testdir2" { } ''
             mkdir "$out"
             cat > "$out/test.js" <<EOF
             document.getElementById('foobar').setAttribute('foo', 'yay');
@@ -67,22 +67,23 @@ import ./make-test-python.nix {
     };
   };
 
-  testScript = { nodes, ... }: let
-    inherit (nodes.server.config.system.build) toplevel;
-    newSystem = "${toplevel}/specialisation/pass-checks";
-  in ''
-    start_all()
+  testScript = { nodes, ... }:
+    let
+      inherit (nodes.server.config.system.build) toplevel;
+      newSystem = "${toplevel}/specialisation/pass-checks";
+    in ''
+      start_all()
 
-    server.wait_for_unit("nginx.service")
-    client.wait_for_unit("multi-user.target")
-    client.execute("test-runner >&2 &")
-    client.wait_for_file("/tmp/passed_stage1")
+      server.wait_for_unit("nginx.service")
+      client.wait_for_unit("multi-user.target")
+      client.execute("test-runner >&2 &")
+      client.wait_for_file("/tmp/passed_stage1")
 
-    server.succeed(
-        "${newSystem}/bin/switch-to-configuration test >&2"
-    )
-    client.succeed("touch /tmp/proceed")
+      server.succeed(
+          "${newSystem}/bin/switch-to-configuration test >&2"
+      )
+      client.succeed("touch /tmp/proceed")
 
-    client.wait_for_file("/tmp/passed")
-  '';
+      client.wait_for_file("/tmp/passed")
+    '';
 }

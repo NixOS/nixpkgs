@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage rec {
   pname = "inotify";
@@ -16,9 +12,7 @@ buildPythonPackage rec {
     fetchSubmodules = false;
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   # dunno what's wrong but the module works regardless
   doCheck = false;

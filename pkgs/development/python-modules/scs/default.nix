@@ -1,13 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blas
-, lapack
-, numpy
-, scipy
-  # check inputs
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, blas, lapack, numpy, scipy
+# check inputs
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "scs";
@@ -21,15 +14,9 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    lapack
-    blas
-  ];
+  buildInputs = [ lapack blas ];
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-  ];
+  propagatedBuildInputs = [ numpy scipy ];
 
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];

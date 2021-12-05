@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron, alsa-lib
+, gtk3, libxshmfence, mesa, nss }:
 
 stdenv.mkDerivation rec {
   pname = "thedesk";
   version = "22.3.1";
 
   src = fetchurl {
-    url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
+    url =
+      "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
     sha256 = "sha256-5KB88zMgwfObgmcMTe6R+oG48qLHrMht6vM1EvI+QFY=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
 

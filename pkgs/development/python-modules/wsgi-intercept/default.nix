@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, six, httplib2, py, pytestCheckHook, requests, urllib3 }:
+{ lib, buildPythonPackage, fetchPypi, six, httplib2, py, pytestCheckHook
+, requests, urllib3 }:
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
@@ -23,7 +24,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wsgi_intercept" ];
 
   meta = with lib; {
-    description = "wsgi_intercept installs a WSGI application in place of a real URI for testing";
+    description =
+      "wsgi_intercept installs a WSGI application in place of a real URI for testing";
     homepage = "https://github.com/cdent/wsgi-intercept";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

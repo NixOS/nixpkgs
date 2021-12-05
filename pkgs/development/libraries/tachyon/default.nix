@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, Carbon ? null
-, libjpeg ? null
-, libpng ? null
+{ lib, stdenv, fetchurl, Carbon ? null, libjpeg ? null, libpng ? null
 , withJpegSupport ? true # support jpeg output
 , withPngSupport ? true # support png output
 }:
@@ -15,16 +11,13 @@ stdenv.mkDerivation rec {
   pname = "tachyon";
   version = "0.99b6";
   src = fetchurl {
-    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
+    url =
+      "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
     sha256 = "15wv2748ngk2iid798a774sjxhhijq7kjm32yl897x54fsfazp7l";
   };
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Carbon
-  ] ++ lib.optionals withJpegSupport [
-    libjpeg
-  ] ++ lib.optionals withPngSupport [
-    libpng
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Carbon ]
+    ++ lib.optionals withJpegSupport [ libjpeg ]
+    ++ lib.optionals withPngSupport [ libpng ];
   preBuild = ''
     cd unix
   '' + lib.optionalString withJpegSupport ''
@@ -34,19 +27,30 @@ stdenv.mkDerivation rec {
     export USEPNG=" -DUSEPNG"
     export PNGLIB=" -lpng -lz"
   '';
-  arch = if stdenv.hostPlatform.system == "x86_64-linux"   then "linux-64-thr"  else
-         if stdenv.hostPlatform.system == "i686-linux"     then "linux-thr"     else
-         # 2021-03-29: multithread (-DTHR -D_REENTRANT) was disabled on linux-arm
-         # because it caused Sage's 3D plotting tests to hang indefinitely.
-         # see https://github.com/NixOS/nixpkgs/pull/117465
-         if stdenv.hostPlatform.system == "aarch64-linux"  then "linux-arm"     else
-         if stdenv.hostPlatform.system == "armv7l-linux"   then "linux-arm"     else
-         if stdenv.hostPlatform.system == "x86_64-darwin"  then "macosx-thr"    else
-         if stdenv.hostPlatform.system == "i686-darwin"    then "macosx-64-thr" else
-         if stdenv.hostPlatform.system == "i686-cygwin"    then "win32"         else
-         if stdenv.hostPlatform.system == "x86_64-freebsd" then "bsd"           else
-         if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
-         throw "Don't know what arch to select for tachyon build";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "linux-64-thr"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "linux-thr"
+  else
+  # 2021-03-29: multithread (-DTHR -D_REENTRANT) was disabled on linux-arm
+  # because it caused Sage's 3D plotting tests to hang indefinitely.
+  # see https://github.com/NixOS/nixpkgs/pull/117465
+  if stdenv.hostPlatform.system == "aarch64-linux" then
+    "linux-arm"
+  else if stdenv.hostPlatform.system == "armv7l-linux" then
+    "linux-arm"
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    "macosx-thr"
+  else if stdenv.hostPlatform.system == "i686-darwin" then
+    "macosx-64-thr"
+  else if stdenv.hostPlatform.system == "i686-cygwin" then
+    "win32"
+  else if stdenv.hostPlatform.system == "x86_64-freebsd" then
+    "bsd"
+  else if stdenv.hostPlatform.system == "x686-freebsd" then
+    "bsd"
+  else
+    throw "Don't know what arch to select for tachyon build";
   makeFlags = [ arch ];
 
   patches = [
@@ -74,7 +78,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Parallel / Multiprocessor Ray Tracing System";
     license = lib.licenses.bsd3;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; linux ++ cygwin ++ darwin;
     homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };

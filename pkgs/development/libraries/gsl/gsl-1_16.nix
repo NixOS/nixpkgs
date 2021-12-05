@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
     (fetchpatch {
       name = "fix-parallel-test.patch";
-      url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=12654373c3b60541230921aae81f93b484ec5eaf";
+      url =
+        "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=12654373c3b60541230921aae81f93b484ec5eaf";
       sha256 = "1flzpbsfj7gjywv6v9qvm8wpdrkbpj7shryinfdpb40y7si9njdw";
     })
   ];

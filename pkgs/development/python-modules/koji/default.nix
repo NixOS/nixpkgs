@@ -1,4 +1,5 @@
-{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, python-dateutil }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, python-dateutil
+}:
 
 buildPythonPackage rec {
   pname = "koji";

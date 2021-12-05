@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cchardet
-, chardet
-, cleo
-, clikit
-, pandas
-, regex
-, tabview
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cchardet, chardet, cleo, clikit
+, pandas, regex, tabview, python }:
 
 buildPythonPackage rec {
   pname = "clevercsv";
@@ -23,20 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ynS3G2ZcEqVlC2d6n5ZQ1Em5lh/dWESj9jEO8C4WzZQ=";
   };
 
-  propagatedBuildInputs = [
-    cchardet
-    chardet
-    cleo
-    clikit
-    pandas
-    regex
-    tabview
-  ];
+  propagatedBuildInputs = [ cchardet chardet cleo clikit pandas regex tabview ];
 
-  pythonImportsCheck = [
-    "clevercsv"
-    "clevercsv.cparser"
-  ];
+  pythonImportsCheck = [ "clevercsv" "clevercsv.cparser" ];
 
   checkPhase = ''
     # by linking the installed version the tests also have access to compiled native libraries
@@ -49,13 +28,14 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CleverCSV is a Python package for handling messy CSV files";
     longDescription = ''
-       CleverCSV is a Python package for handling messy CSV files. It provides
-       a drop-in replacement for the builtin CSV module with improved dialect
-       detection, and comes with a handy command line application for working
-       with CSV files.
+      CleverCSV is a Python package for handling messy CSV files. It provides
+      a drop-in replacement for the builtin CSV module with improved dialect
+      detection, and comes with a handy command line application for working
+      with CSV files.
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
-    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/alan-turing-institute/CleverCSV/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

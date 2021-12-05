@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, requests
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "sharkiqpy";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "0nk1nbplyk28qadxc7rydjvdgbz3za0xjg6c95l95mhiz453q5sw";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    requests
-  ];
+  propagatedBuildInputs = [ aiohttp requests ];
 
   # Project has no tests
   doCheck = false;

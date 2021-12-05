@@ -1,8 +1,6 @@
 { lib, ... }: {
 
-  options.value = lib.mkOption {
-    type = lib.types.anything;
-  };
+  options.value = lib.mkOption { type = lib.types.anything; };
 
   config.value = {
     outPath = "foo";

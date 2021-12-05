@@ -5,7 +5,8 @@ let
   version = "1.10.3";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
+    url =
+      "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
     sha256 = "sha256-0VQ5rSGGsEAsOLB4H/Hn2w7wCOrCSoVFzCBqNV5NyVE=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };

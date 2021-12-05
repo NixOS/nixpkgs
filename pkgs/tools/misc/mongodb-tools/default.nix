@@ -1,10 +1,4 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, openssl
-, pkg-config
-, libpcap
-}:
+{ lib, buildGoPackage, fetchFromGitHub, openssl, pkg-config, libpcap }:
 
 let
   tools = [

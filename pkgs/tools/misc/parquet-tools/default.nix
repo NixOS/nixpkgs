@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-}:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
 
 with python3Packages;
 
@@ -22,7 +18,8 @@ buildPythonApplication rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/ktrueda/parquet-tools/commit/1c70a07e1c9f17c8890d23aad3ded5dd6c706cb3.patch";
+      url =
+        "https://github.com/ktrueda/parquet-tools/commit/1c70a07e1c9f17c8890d23aad3ded5dd6c706cb3.patch";
       sha256 = "08j1prdqj8ksw8gwiyj7ivshk82ahmywbzmywclw52nlnniig0sa";
     })
   ];
@@ -38,21 +35,10 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    boto3
-    colorama
-    halo
-    pandas
-    pyarrow
-    tabulate
-    thrift
-  ];
+  propagatedBuildInputs =
+    [ boto3 colorama halo pandas pyarrow tabulate thrift ];
 
-  checkInputs = [
-    pytestCheckHook
-    moto
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook moto pytest-mock ];
 
   disabledTests = [
     # these tests try to read python code as parquet and fail

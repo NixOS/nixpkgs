@@ -1,6 +1,5 @@
-{ stdenv, lib, cmake, fetchFromGitHub
-, wrapQtAppsHook, qtbase, qtquickcontrols2, qtgraphicaleffects
-}:
+{ stdenv, lib, cmake, fetchFromGitHub, wrapQtAppsHook, qtbase, qtquickcontrols2
+, qtgraphicaleffects }:
 
 stdenv.mkDerivation rec {
   pname = "graphia";
@@ -13,18 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:05givvvg743sawqy2vhljkfgn5v1s907sflsnsv11ddx6x51na1w";
   };
 
-  nativeBuildInputs = [
-    cmake
-    wrapQtAppsHook
-  ];
-  buildInputs = [
-    qtbase
-    qtquickcontrols2
-    qtgraphicaleffects
-  ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
 
   meta = with lib; {
-    description = "A visualisation tool for the creation and analysis of graphs.";
+    description =
+      "A visualisation tool for the creation and analysis of graphs.";
     homepage = "https://graphia.app";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.bgamari ];

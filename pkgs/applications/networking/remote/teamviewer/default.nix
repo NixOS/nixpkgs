@@ -1,15 +1,15 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
 , qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
 , libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
-, wrapQtAppsHook
-}:
+, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "teamviewer";
   version = "15.22.3";
 
   src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
+    url =
+      "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
     sha256 = "15fvzhdq7mnx2l2w4byvij8ww16qwdlkbadal60rm66yzv79mv9w";
   };
 
@@ -77,7 +77,18 @@ mkDerivation rec {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        libXrandr
+        libX11
+        libXext
+        libXdamage
+        libXtst
+        libSM
+        libXfixes
+        dbus
+      ]
+    }"
   ];
 
   postFixup = ''
@@ -95,7 +106,8 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.teamviewer.com";
     license = licenses.unfree;
-    description = "Desktop sharing application, providing remote support and online meetings";
+    description =
+      "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
   };

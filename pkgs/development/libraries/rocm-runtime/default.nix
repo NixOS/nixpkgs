@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, writeScript
-, addOpenGLRunpath
-, clang-unwrapped
-, cmake
-, xxd
-, elfutils
-, llvm
-, numactl
-, rocm-device-libs
-, rocm-thunk }:
+{ stdenv, lib, fetchFromGitHub, writeScript, addOpenGLRunpath, clang-unwrapped
+, cmake, xxd, elfutils, llvm, numactl, rocm-device-libs, rocm-thunk }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
@@ -30,8 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ clang-unwrapped elfutils llvm numactl ];
 
   cmakeFlags = [
-   "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"
-   "-DCMAKE_PREFIX_PATH=${rocm-thunk}"
+    "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"
+    "-DCMAKE_PREFIX_PATH=${rocm-thunk}"
   ];
 
   postPatch = ''

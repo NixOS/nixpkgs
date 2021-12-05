@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
-, six
-, dnspython
-, pycountry
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, setuptools-scm, six, dnspython
+, pycountry, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "FormEncode";
@@ -28,11 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    dnspython
-    pycountry
-    pytestCheckHook
-  ];
+  checkInputs = [ dnspython pycountry pytestCheckHook ];
 
   disabledTests = [
     # requires network for DNS resolution

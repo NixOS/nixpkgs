@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, ncurses5, libpulseaudio, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, fftw, ncurses5, libpulseaudio
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.8";

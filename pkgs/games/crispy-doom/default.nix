@@ -1,4 +1,5 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python2 }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net
+, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://fabiangreffrath.github.io/crispy-doom";
-    description = "A limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
+    description =
+      "A limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
     longDescription = ''
       Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom.
       Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, georss-client
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, georss-client, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "georss-generic-client";
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-XVejBbVilq8zrmuyBUd0mNPZ4qysSg9lAe/lhbKT+qs=";
   };
 
-  propagatedBuildInputs = [
-    georss-client
-  ];
+  propagatedBuildInputs = [ georss-client ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "georss_generic_client" ];
 

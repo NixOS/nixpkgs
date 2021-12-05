@@ -1,7 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-}:
+{ lib, buildPythonApplication, fetchFromGitHub }:
 
 buildPythonApplication rec {
   pname = "sipvicious";

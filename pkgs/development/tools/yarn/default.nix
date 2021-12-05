@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.22.17";
 
   src = fetchzip {
-    url = "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
+    url =
+      "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
     sha256 = "1skzlyv2976bl1063f94422jbjy4ns1nxl622biizq31z4821yvj";
   };
 
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
-    description = "Fast, reliable, and secure dependency management for javascript";
+    description =
+      "Fast, reliable, and secure dependency management for javascript";
     license = licenses.bsd2;
     maintainers = with maintainers; [ offline screendriver ];
     platforms = platforms.linux ++ platforms.darwin;

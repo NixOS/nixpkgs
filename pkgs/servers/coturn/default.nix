@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, libevent
-, pkg-config
-, libprom
-, libpromhttp
-, libmicrohttpd
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, libevent, pkg-config
+, libprom, libpromhttp, libmicrohttpd, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
@@ -23,17 +13,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    libevent
-    libprom
-    libpromhttp
-    libmicrohttpd
-  ];
+  buildInputs = [ openssl libevent libprom libpromhttp libmicrohttpd ];
 
-  patches = [
-    ./pure-configure.patch
-  ];
+  patches = [ ./pure-configure.patch ];
 
   passthru.tests.coturn = nixosTests.coturn;
 

@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-}:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "choose";
@@ -17,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-55/B+LxdbekfaKKyng0lUCU3QnqL34M+QnLUxaPqkqI=";
 
   meta = with lib; {
-    description = "A human-friendly and fast alternative to cut and (sometimes) awk";
+    description =
+      "A human-friendly and fast alternative to cut and (sometimes) awk";
     homepage = "https://github.com/theryangeary/choose";
     license = licenses.gpl3;
     maintainers = with maintainers; [ sohalt ];

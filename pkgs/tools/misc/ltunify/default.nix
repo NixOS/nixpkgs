@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
 
   meta = with lib; {
-    description = "Tool for working with Logitech Unifying receivers and devices";
+    description =
+      "Tool for working with Logitech Unifying receivers and devices";
     longDescription = ''
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';

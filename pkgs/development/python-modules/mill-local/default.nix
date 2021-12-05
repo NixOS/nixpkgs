@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -20,17 +15,12 @@ buildPythonPackage rec {
     sha256 = "0q0frwj9yxdmqi5axl7gxirfflgn8xh1932c6lhp9my2v1d0gdrk";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mill_local"
-  ];
+  pythonImportsCheck = [ "mill_local" ];
 
   meta = with lib; {
     description = "Python module to communicate locally with Mill heaters";

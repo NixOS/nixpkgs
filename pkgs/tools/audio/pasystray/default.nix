@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook, wrapGAppsHook
-, gnome, avahi, gtk3, libayatana-appindicator-gtk3, libnotify, libpulseaudio
-, xlibsWrapper, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
+, wrapGAppsHook, gnome, avahi, gtk3, libayatana-appindicator-gtk3, libnotify
+, libpulseaudio, xlibsWrapper, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "pasystray";
@@ -20,7 +19,8 @@ stdenv.mkDerivation rec {
 
     # https://github.com/christophgysin/pasystray/issues/98
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/p/pasystray/0.7.1-1/debian/patches/0001-Build-against-ayatana-appindicator.patch";
+      url =
+        "https://sources.debian.org/data/main/p/pasystray/0.7.1-1/debian/patches/0001-Build-against-ayatana-appindicator.patch";
       sha256 = "0hijphrf52n2zfwdnrmxlp3a7iwznnkb79awvpzplz0ia2lqywpw";
     })
   ];
@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
   buildInputs = [
     gnome.adwaita-icon-theme
-    avahi gtk3 libayatana-appindicator-gtk3 libnotify libpulseaudio xlibsWrapper
+    avahi
+    gtk3
+    libayatana-appindicator-gtk3
+    libnotify
+    libpulseaudio
+    xlibsWrapper
     gsettings-desktop-schemas
   ];
 

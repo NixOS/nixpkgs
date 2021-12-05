@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "boolean.py";

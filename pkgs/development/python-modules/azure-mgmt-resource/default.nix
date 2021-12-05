@@ -1,11 +1,5 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-mgmt-core
-, azure-mgmt-common
-, isPy3k
-}:
-
+{ pkgs, buildPythonPackage, fetchPypi, azure-mgmt-core, azure-mgmt-common
+, isPy3k }:
 
 buildPythonPackage rec {
   version = "20.0.0";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "622dca4484be64f9f5ce335d327dffabf3e71e14e8a3f4a1051dc85a5c3ebbca";
   };
 
-  propagatedBuildInputs = [
-    azure-mgmt-common
-    azure-mgmt-core
-  ];
+  propagatedBuildInputs = [ azure-mgmt-common azure-mgmt-core ];
 
   # has no tests
   doCheck = false;

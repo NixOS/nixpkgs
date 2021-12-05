@@ -1,6 +1,4 @@
-{ lib, python3, mautrix-telegram, fetchFromGitHub
-, withE2BE ? true
-}:
+{ lib, python3, mautrix-telegram, fetchFromGitHub, withE2BE ? true }:
 
 let
   python = python3.override {
@@ -9,7 +7,8 @@ let
         version = "1.3.24";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+          sha256 =
+            "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
         };
       });
 
@@ -43,34 +42,37 @@ in python.pkgs.buildPythonPackage rec {
     sha256 = "sha256-BYsGLyxhdjBVmnZXLC5ZjwDlWcHdUGp+DsNIOXA1/Tc=";
   };
 
-  patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
+  patches = [
+    ./0001-Re-add-entrypoint.patch
+    ./0002-Don-t-depend-on-pytest-runner.patch
+  ];
   postPatch = ''
     sed -i -e '/alembic>/d' requirements.txt
     substituteInPlace requirements.txt \
       --replace "telethon>=1.22,<1.23" "telethon"
   '';
 
-
-  propagatedBuildInputs = with python.pkgs; ([
-    Mako
-    aiohttp
-    mautrix
-    sqlalchemy
-    CommonMark
-    ruamel-yaml
-    python_magic
-    tulir-telethon
-    telethon-session-sqlalchemy
-    pillow
-    lxml
-    setuptools
-    prometheus-client
-  ] ++ lib.optionals withE2BE [
-    asyncpg
-    python-olm
-    pycryptodome
-    unpaddedbase64
-  ]) ++ dbDrivers;
+  propagatedBuildInputs = with python.pkgs;
+    ([
+      Mako
+      aiohttp
+      mautrix
+      sqlalchemy
+      CommonMark
+      ruamel-yaml
+      python_magic
+      tulir-telethon
+      telethon-session-sqlalchemy
+      pillow
+      lxml
+      setuptools
+      prometheus-client
+    ] ++ lib.optionals withE2BE [
+      asyncpg
+      python-olm
+      pycryptodome
+      unpaddedbase64
+    ]) ++ dbDrivers;
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
   # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
@@ -79,9 +81,8 @@ in python.pkgs.buildPythonPackage rec {
   # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
   # which has `mautrix-telegram` in its environment.
   passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
-      mautrix-telegram
-    ];
+    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers
+      ++ [ mautrix-telegram ];
   });
 
   # Tests are broken and throw the following for every test:
@@ -90,11 +91,7 @@ in python.pkgs.buildPythonPackage rec {
   # The tests were touched the last time in 2019 and upstream CI doesn't even build
   # those, so it's safe to assume that this part of the software is abandoned.
   doCheck = false;
-  checkInputs = with python.pkgs; [
-    pytest
-    pytest-mock
-    pytest-asyncio
-  ];
+  checkInputs = with python.pkgs; [ pytest pytest-mock pytest-asyncio ];
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/telegram";

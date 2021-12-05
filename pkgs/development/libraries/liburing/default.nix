@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchgit
-, fetchpatch
-}:
+{ lib, stdenv, fetchgit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "liburing";
   version = "2.1";
 
   src = fetchgit {
-    url    = "http://git.kernel.dk/${pname}";
-    rev    = "liburing-${version}";
+    url = "http://git.kernel.dk/${pname}";
+    rev = "liburing-${version}";
     sha256 = "sha256-7wSpKqjIdQeOdsQu4xN3kFHV49n6qQ3xVbjUcY1tmas=";
   };
 
@@ -21,15 +19,15 @@ stdenv.mkDerivation rec {
     # don't have structuredAttrs yet and using placeholder causes permissions
     # denied errors. Using $dev / $man in configureFlags causes bash evaluation
     # errors
-  ''
-    configureFlagsArray+=(
-      "--includedir=$dev/include"
-      "--mandir=$man/share/man"
-    )
-  '';
+    ''
+      configureFlagsArray+=(
+        "--includedir=$dev/include"
+        "--mandir=$man/share/man"
+      )
+    '';
 
   # Doesn't recognize platform flags
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   outputs = [ "out" "bin" "dev" "man" ];
 
@@ -45,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
-    homepage    = "https://git.kernel.dk/cgit/liburing/";
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://git.kernel.dk/cgit/liburing/";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

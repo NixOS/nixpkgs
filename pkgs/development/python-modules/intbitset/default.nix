@@ -1,9 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, nose
-}:
+{ lib, fetchPypi, buildPythonPackage, six, nose }:
 buildPythonPackage rec {
   pname = "intbitset";
   version = "2.4.1";
@@ -19,21 +14,15 @@ buildPythonPackage rec {
     ./remove-impure-tuning.patch
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  pythonImportsCheck = [
-    "intbitset"
-  ];
+  pythonImportsCheck = [ "intbitset" ];
 
   meta = with lib; {
     description = "C-based extension implementing fast integer bit sets";

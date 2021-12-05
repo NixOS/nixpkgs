@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "unihan-database";
@@ -12,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kfdhgg2gm52x3s07bijb5cxjy0jxwhd097k5lqhvzpznprm6ibf";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   setSourceRoot = ''
     sourceRoot=$PWD

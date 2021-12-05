@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchFromGitHub
-, karton-core
-, pytestCheckHook
-, python_magic
-, pythonOlder
-}:
+{ lib, buildPythonPackage, chardet, fetchFromGitHub, karton-core
+, pytestCheckHook, python_magic, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "karton-classifier";
@@ -21,11 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-AG2CtNMgXYfbdlOqB1ZdjMT8H67fsSMXTgiFg6K41IQ=";
   };
 
-  propagatedBuildInputs = [
-    chardet
-    karton-core
-    python_magic
-  ];
+  propagatedBuildInputs = [ chardet karton-core python_magic ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -33,9 +22,7 @@ buildPythonPackage rec {
       --replace "python-magic==0.4.18" "python-magic"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "karton.classifier" ];
 

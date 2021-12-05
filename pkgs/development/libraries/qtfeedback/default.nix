@@ -1,11 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, perl
-, qmake
-, qtbase
-, qtdeclarative
-}:
+{ lib, mkDerivation, fetchFromGitHub, perl, qmake, qtbase, qtdeclarative }:
 
 mkDerivation rec {
   pname = "qtfeedback";
@@ -20,14 +13,9 @@ mkDerivation rec {
     sha256 = "0kiiffvriagql1cark6g1qxy7l9c3q3s13cx3s2plbz19nlnikj7";
   };
 
-  nativeBuildInputs = [
-    perl
-    qmake
-  ];
+  nativeBuildInputs = [ perl qmake ];
 
-  buildInputs = [
-    qtdeclarative
-  ];
+  buildInputs = [ qtdeclarative ];
 
   qmakeFlags = [ "CONFIG+=git_build" ];
 
@@ -42,7 +30,10 @@ mkDerivation rec {
   meta = with lib; {
     description = "Qt Tactile Feedback";
     homepage = "https://github.com/qt/qtfeedback";
-    license = with licenses; [ lgpl3Only /* or */ gpl2Plus ];
+    license = with licenses; [
+      lgpl3Only # or
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ dotlambda OPNA2608 ];
   };
 }

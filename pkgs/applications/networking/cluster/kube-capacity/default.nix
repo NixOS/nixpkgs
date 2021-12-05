@@ -17,7 +17,8 @@ buildGoModule rec {
     description =
       "A simple CLI that provides an overview of the resource requests, limits, and utilization in a Kubernetes cluster";
     homepage = "https://github.com/robscott/kube-capacity";
-    changelog = "https://github.com/robscott/kube-capacity/releases/tag/v${version}";
+    changelog =
+      "https://github.com/robscott/kube-capacity/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.bryanasdev000 ];
   };

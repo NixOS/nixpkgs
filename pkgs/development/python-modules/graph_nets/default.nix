@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tensorflow
-, absl-py
-, dm-sonnet
-, networkx
-, numpy
-, setuptools
-, six
-, future
-}:
+{ lib, buildPythonPackage, fetchPypi, tensorflow, absl-py, dm-sonnet, networkx
+, numpy, setuptools, six, future }:
 
 buildPythonPackage rec {
   pname = "graph_nets";
@@ -25,16 +15,8 @@ buildPythonPackage rec {
     sed -i 's/dm-sonnet==1.23/dm-sonnet/' setup.py
   '';
 
-  propagatedBuildInputs = [
-    tensorflow
-    absl-py
-    dm-sonnet
-    networkx
-    numpy
-    setuptools
-    six
-    future
-  ];
+  propagatedBuildInputs =
+    [ tensorflow absl-py dm-sonnet networkx numpy setuptools six future ];
 
   meta = with lib; {
     description = "Build Graph Nets in Tensorflow";

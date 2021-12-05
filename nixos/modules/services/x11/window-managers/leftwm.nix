@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.leftwm;
-in
-{
+let cfg = config.services.xserver.windowManager.leftwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.leftwm.enable = mkEnableOption "leftwm";

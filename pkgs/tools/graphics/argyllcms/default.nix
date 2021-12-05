@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jam unzip ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace Jambase \
-      --replace "-m64" ""
-  '';
+  postPatch =
+    lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      substituteInPlace Jambase \
+        --replace "-m64" ""
+    '';
 
   preConfigure = let
     # The contents of this file comes from the Jamtop file from the
@@ -98,15 +99,24 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libtiff libjpeg libpng libX11 libXxf86vm libXrandr libXinerama libXext
-    libXrender libXScrnSaver libXdmcp libXau openssl
+    libtiff
+    libjpeg
+    libpng
+    libX11
+    libXxf86vm
+    libXrandr
+    libXinerama
+    libXext
+    libXrender
+    libXScrnSaver
+    libXdmcp
+    libXau
+    openssl
   ];
 
   buildFlags = [ "all" ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   # Install udev rules, but remove lines that set up the udev-acl
   # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
@@ -124,7 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.argyllcms.com";
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

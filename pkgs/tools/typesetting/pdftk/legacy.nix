@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.02";
 
   src = fetchurl {
-    url = "https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${version}-src.zip";
+    url =
+      "https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${version}-src.zip";
     sha256 = "1hdq6zm2dx2f9h7bjrp6a1hfa1ywgkwydp14i2sszjiszljnm3qi";
   };
 
@@ -31,7 +32,6 @@ stdenv.mkDerivation rec {
     cp pdftk $out/bin
     cp ../pdftk.1 $out/share/man/man1
   '';
-
 
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";

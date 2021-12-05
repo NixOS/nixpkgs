@@ -1,11 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libelfin
-, ncurses
-, python3
-, python3Packages
-, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, libelfin, ncurses, python3, python3Packages
+, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "coz";
   version = "0.2.1";
@@ -26,16 +20,9 @@ stdenv.mkDerivation rec {
     sed -e "s|/usr/lib/|$out/lib/|" -i ./coz
   '';
 
-  nativeBuildInputs = [
-    ncurses
-    makeWrapper
-    python3Packages.wrapPython
-  ];
+  nativeBuildInputs = [ ncurses makeWrapper python3Packages.wrapPython ];
 
-  buildInputs = [
-    libelfin
-    (python3.withPackages (p: [ p.docutils ]))
-  ];
+  buildInputs = [ libelfin (python3.withPackages (p: [ p.docutils ])) ];
 
   installPhase = ''
     mkdir -p $out/share/man/man1

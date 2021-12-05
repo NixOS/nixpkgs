@@ -4,11 +4,11 @@ with lib;
 
 let
 
-cfg = config.services.canto-daemon;
+  cfg = config.services.canto-daemon;
 
 in {
 
-##### interface
+  ##### interface
 
   options = {
 
@@ -22,7 +22,7 @@ in {
 
   };
 
-##### implementation
+  ##### implementation
 
   config = mkIf cfg.enable {
 

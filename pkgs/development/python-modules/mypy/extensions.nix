@@ -16,7 +16,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
   meta = with lib; {
-    description = "Experimental type system extensions for programs checked with the mypy typechecker";
+    description =
+      "Experimental type system extensions for programs checked with the mypy typechecker";
     homepage = "http://www.mypy-lang.org";
     license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];

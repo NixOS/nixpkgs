@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dill
-, filelock
-, fsspec
-, huggingface-hub
-, multiprocess
-, numpy
-, pandas
-, pyarrow
-, requests
-, tqdm
-, xxhash
+{ lib, buildPythonPackage, fetchFromGitHub, dill, filelock, fsspec
+, huggingface-hub, multiprocess, numpy, pandas, pyarrow, requests, tqdm, xxhash
 }:
 
 buildPythonPackage rec {
@@ -49,8 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/datasets";
-    description = "Fast, efficient, open-access datasets and evaluation metrics for natural language processing";
-    changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
+    description =
+      "Fast, efficient, open-access datasets and evaluation metrics for natural language processing";
+    changelog =
+      "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

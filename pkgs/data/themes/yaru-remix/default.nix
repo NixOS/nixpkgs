@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja, python3, gtk3, gnome }:
+{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja, python3
+, gtk3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "yaru-remix";

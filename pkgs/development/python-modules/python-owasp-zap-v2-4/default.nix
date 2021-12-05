@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyhamcrest
-, pytestCheckHook
-, requests
-, requests-mock
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyhamcrest, pytestCheckHook
+, requests, requests-mock, six }:
 
 buildPythonPackage rec {
   pname = "python-owasp-zap-v2-4";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "0b46m9s0vwaaq8vhiqspdr2ns9qdw65fnjh8mf58gjinlsd27ygk";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [
-    pyhamcrest
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ pyhamcrest pytestCheckHook requests-mock ];
 
   pythonImportsCheck = [ "zapv2" ];
 

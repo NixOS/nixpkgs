@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.301";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "3d35db0ac03f9e6b0d5a53577591b714238985f4cfc31a0aa17f26cd74675e83";
   };
 
@@ -21,14 +23,11 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "1sczskw2kv3qy39i9mzw2lkl94a90bjgv5ln9acy5kh4gb2zmy7z";
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = {
-    description = "Default typeface used in the user interface of GNOME since version 3.0";
+    description =
+      "Default typeface used in the user interface of GNOME since version 3.0";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ ];

@@ -1,28 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, shared-mime-info
-, gtk3
-, wrapGAppsHook
-, libxml2
-, xapps
-, meson
-, pkg-config
-, cairo
-, libsecret
-, poppler
-, libspectre
-, libgxps
-, webkitgtk
-, nodePackages
-, ninja
-, gsettings-desktop-schemas
-, djvulibre
-, backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
-}:
+{ stdenv, lib, fetchFromGitHub, glib, gobject-introspection, intltool
+, shared-mime-info, gtk3, wrapGAppsHook, libxml2, xapps, meson, pkg-config
+, cairo, libsecret, poppler, libspectre, libgxps, webkitgtk, nodePackages, ninja
+, gsettings-desktop-schemas, djvulibre, backends ? [
+  "pdf"
+  "ps" # "dvi" "t1lib"
+  "djvu"
+  "tiff"
+  "pixbuf"
+  "comics"
+  "xps"
+  "epub"
+] }:
 
 stdenv.mkDerivation rec {
   pname = "xreader";
@@ -66,8 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A document viewer capable of displaying multiple and single page
-document formats like PDF and Postscript";
+    description = ''
+      A document viewer capable of displaying multiple and single page
+      document formats like PDF and Postscript'';
     homepage = "https://github.com/linuxmint/xreader";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

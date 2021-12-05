@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, which
-, nodejs
-, mkYarnPackage
-, fetchYarnDeps
-, python2
-, nixosTests
-, buildGoModule
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, which, nodejs
+, mkYarnPackage, fetchYarnDeps, python2, nixosTests, buildGoModule }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -29,16 +18,15 @@ let
 
     vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
   };
-in
 
-mkYarnPackage rec {
+in mkYarnPackage rec {
   pname = "hedgedoc";
   inherit (pinData) version;
 
   src = fetchFromGitHub {
-    owner  = "hedgedoc";
-    repo   = "hedgedoc";
-    rev    = version;
+    owner = "hedgedoc";
+    repo = "hedgedoc";
+    rev = version;
     sha256 = pinData.srcHash;
   };
 

@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchPypi
-, jsonpickle
-, requests
-, tabulate
-, xmltodict
-, zeroconf
-}:
+{ lib, aiohttp, buildPythonPackage, click, fetchPypi, jsonpickle, requests
+, tabulate, xmltodict, zeroconf }:
 
 buildPythonPackage rec {
   pname = "pyvizio";
@@ -19,15 +10,8 @@ buildPythonPackage rec {
     sha256 = "1j2zbziklx4az55m3997y7yp4xflk7i0gsbdfh7fp9k0qngb2053";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    jsonpickle
-    requests
-    tabulate
-    xmltodict
-    zeroconf
-  ];
+  propagatedBuildInputs =
+    [ aiohttp click jsonpickle requests tabulate xmltodict zeroconf ];
 
   # Project has no tests
   doCheck = false;

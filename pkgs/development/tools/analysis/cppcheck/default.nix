@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre
+, withZ3 ? true, z3 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
-   ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+    ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
 
   outputs = [ "out" "man" ];
 

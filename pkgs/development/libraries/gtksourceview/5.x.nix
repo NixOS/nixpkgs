@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, pcre2
-, gtk4
-, pango
-, fribidi
-, vala
-, libxml2
-, perl
-, gettext
-, gnome
-, gobject-introspection
-, dbus
-, xvfb-run
-, shared-mime-info
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, pcre2, gtk4, pango
+, fribidi, vala, libxml2, perl, gettext, gnome, gobject-introspection, dbus
+, xvfb-run, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
@@ -27,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "ybNPoCZU9WziL6CIJ9idtLqBYxsubX0x6mXRPHKUMOk=";
   };
 
@@ -38,23 +22,10 @@ stdenv.mkDerivation rec {
     ./4.x-nix_share_path.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    perl
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config gettext perl gobject-introspection vala ];
 
-  buildInputs = [
-    glib
-    pcre2
-    pango
-    fribidi
-    libxml2
-  ];
+  buildInputs = [ glib pcre2 pango fribidi libxml2 ];
 
   propagatedBuildInputs = [
     # Required by gtksourceview-5.0.pc
@@ -63,10 +34,7 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
-    xvfb-run
-    dbus
-  ];
+  checkInputs = [ xvfb-run dbus ];
 
   doCheck = stdenv.isLinux;
 

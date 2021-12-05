@@ -16,7 +16,8 @@ buildPythonPackage rec {
   buildInputs = [ sqlite ];
 
   meta = with lib; {
-    description = "A Python wrapper for the SQLite embedded relational database engine";
+    description =
+      "A Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
   };

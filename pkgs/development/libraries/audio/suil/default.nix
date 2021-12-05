@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl, gtk2, lv2, pkg-config, python3, serd, sord, sratom
-, wafHook
-, withQt4 ? true, qt4 ? null
-, withQt5 ? false, qt5 ? null }:
+, wafHook, withQt4 ? true, qt4 ? null, withQt5 ? false, qt5 ? null }:
 
 # I haven't found an XOR operator in nix...
 assert withQt4 || withQt5;
@@ -18,8 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wafHook python3 ];
-  buildInputs = [ gtk2 lv2 serd sord sratom ]
-    ++ (lib.optionals withQt4 [ qt4 ])
+  buildInputs = [ gtk2 lv2 serd sord sratom ] ++ (lib.optionals withQt4 [ qt4 ])
     ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 
   dontWrapQtApps = true;
@@ -28,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/suil";
-    description = "A lightweight C library for loading and wrapping LV2 plugin UIs";
+    description =
+      "A lightweight C library for loading and wrapping LV2 plugin UIs";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

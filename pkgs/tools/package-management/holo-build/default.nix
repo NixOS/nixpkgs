@@ -15,7 +15,9 @@ buildGoModule rec {
     substituteInPlace Makefile \
       --replace 'VERSION :=' 'VERSION ?='
     substituteInPlace src/holo-build.sh \
-      --replace '/usr/lib/holo/holo-build' '${placeholder "out"}/lib/holo/holo-build'
+      --replace '/usr/lib/holo/holo-build' '${
+        placeholder "out"
+      }/lib/holo/holo-build'
   '';
 
   vendorSha256 = null;
@@ -24,7 +26,11 @@ buildGoModule rec {
 
   subPackages = [ "src/holo-build" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/holocm/holo-build/src/holo-build/common.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/holocm/holo-build/src/holo-build/common.version=${version}"
+  ];
 
   postBuild = ''
     make build/man/holo-build.8 VERSION=${version}

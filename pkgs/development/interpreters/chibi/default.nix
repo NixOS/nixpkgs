@@ -2,8 +2,7 @@
 let
   version = "0.10";
   name = "chibi-scheme-${version}";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   meta = {

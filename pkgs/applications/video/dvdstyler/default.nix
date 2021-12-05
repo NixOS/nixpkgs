@@ -1,44 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, cdrtools
-, docbook5
-, dvdauthor
-, dvdplusrwtools
-, ffmpeg
-, flex
-, fontconfig
-, gettext
-, libexif
-, makeWrapper
-, pkg-config
-, wxGTK30
-, wxSVG
-, xine-ui
-, xmlto
-, zip
+{ lib, stdenv, fetchurl, bison, cdrtools, docbook5, dvdauthor, dvdplusrwtools
+, ffmpeg, flex, fontconfig, gettext, libexif, makeWrapper, pkg-config, wxGTK30
+, wxSVG, xine-ui, xmlto, zip
 
-, dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
-, udevSupport ? true, udev ? null
-, dbusSupport ? true, dbus ? null
-}:
+, dvdisasterSupport ? true, dvdisaster ? null, thumbnailSupport ? true
+, libgnomeui ? null, udevSupport ? true, udev ? null, dbusSupport ? true
+, dbus ? null }:
 
-let
-  inherit (lib) optionals makeBinPath;
+let inherit (lib) optionals makeBinPath;
 in stdenv.mkDerivation rec {
   pname = "dvdstyler";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/DVDStyler-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/DVDStyler-${version}.tar.bz2";
     sha256 = "03lsblqficcadlzkbyk8agh5rqcfz6y6dqvy9y866wqng3163zq4";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bison
     cdrtools
@@ -56,22 +35,14 @@ in stdenv.mkDerivation rec {
     xine-ui
     xmlto
     zip
- ]
-  ++ optionals dvdisasterSupport [ dvdisaster ]
-  ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ]
-  ++ optionals thumbnailSupport [ libgnomeui ];
+  ] ++ optionals dvdisasterSupport [ dvdisaster ]
+    ++ optionals udevSupport [ udev ] ++ optionals dbusSupport [ dbus ]
+    ++ optionals thumbnailSupport [ libgnomeui ];
 
-
-  postInstall = let
-    binPath = makeBinPath [
-      cdrtools
-      dvdauthor
-      dvdplusrwtools
-    ]; in
-    ''
-       wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
-    '';
+  postInstall = let binPath = makeBinPath [ cdrtools dvdauthor dvdplusrwtools ];
+  in ''
+    wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
+  '';
 
   enableParallelBuilding = true;
 

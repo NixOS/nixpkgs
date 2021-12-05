@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, monotonic
-, diskcache
-, more-itertools
-, testtools
-, isPy3k
-, nose
-, futures ? null
-}:
+{ lib, buildPythonPackage, fetchPypi, six, monotonic, diskcache, more-itertools
+, testtools, isPy3k, nose, futures ? null }:
 
 buildPythonPackage rec {
   pname = "fasteners";
@@ -20,19 +10,10 @@ buildPythonPackage rec {
     sha256 = "b1ab4e5adfbc28681ce44b3024421c4f567e705cc3963c732bf1cba3348307de";
   };
 
-  propagatedBuildInputs = [
-    six
-    monotonic
-  ];
+  propagatedBuildInputs = [ six monotonic ];
 
-  checkInputs = [
-    diskcache
-    more-itertools
-    testtools
-    nose
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-  ];
+  checkInputs = [ diskcache more-itertools testtools nose ]
+    ++ lib.optionals (!isPy3k) [ futures ];
 
   checkPhase = ''
     nosetests

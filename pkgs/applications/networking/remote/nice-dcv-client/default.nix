@@ -1,35 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, libX11
-, gst_all_1
-, sqlite
-, libepoxy
-, pango
-, cairo
-, gdk-pixbuf
-, e2fsprogs
-, libkrb5
-, libva
-, openssl
-, pcsclite
-, gtk3
-, libselinux
-, libxml2
-, python3Packages
-, cpio
-, autoPatchelfHook
-}:
+{ lib, stdenv, fetchurl, glib, libX11, gst_all_1, sqlite, libepoxy, pango, cairo
+, gdk-pixbuf, e2fsprogs, libkrb5, libva, openssl, pcsclite, gtk3, libselinux
+, libxml2, python3Packages, cpio, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "nice-dcv-client";
   version = "2020.2.1737-1";
 
-  src =
-    fetchurl {
-      url = "https://d1uj6qtbmh3dt5.cloudfront.net/2020.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
-      sha256 = "sha256-SUpfHd/Btc07cfjc3zx5I5BiNatr/c4E2/mfJuU4R1E=";
-    };
+  src = fetchurl {
+    url =
+      "https://d1uj6qtbmh3dt5.cloudfront.net/2020.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
+    sha256 = "sha256-SUpfHd/Btc07cfjc3zx5I5BiNatr/c4E2/mfJuU4R1E=";
+  };
 
   nativeBuildInputs = [ autoPatchelfHook python3Packages.rpm ];
   unpackPhase = ''

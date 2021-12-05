@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, netifaces
-, pycryptodome
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, netifaces, pycryptodome
+, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "greeclimate";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-zaa3Z6w1BdmOV1otoewc1Zpvltnn5QDJHkAVldZCQlY=";
   };
 
-  propagatedBuildInputs = [
-    netifaces
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ netifaces pycryptodome ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [
     "greeclimate"

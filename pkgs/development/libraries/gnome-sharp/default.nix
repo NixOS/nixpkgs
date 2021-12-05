@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, gtk2
-, mono
-, gtk-sharp-2_0
-, gnome2
-, autoconf
-, automake
-, libtool
-, which
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, gtk2, mono, gtk-sharp-2_0, gnome2
+, autoconf, automake, libtool, which }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sharp";
@@ -24,8 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
-  buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
-  ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
+  buildInputs = [ gtk2 mono gtk-sharp-2_0 ] ++ (with gnome2; [
+    libart_lgpl
+    gnome_vfs
+    libgnome
+    libgnomecanvas
+    libgnomeui
+  ]);
 
   patches = [ ./fix-mono-path.patch ];
 

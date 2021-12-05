@@ -1,18 +1,16 @@
-{ lib, stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages, jupyter, packages }:
+{ lib, stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages
+, jupyter, packages }:
 let
-  ihaskellEnv = ghcWithPackages (self: [
-    self.ihaskell
-    self.ihaskell-blaze
-    self.ihaskell-diagrams
-  ] ++ packages self);
+  ihaskellEnv = ghcWithPackages (self:
+    [ self.ihaskell self.ihaskell-blaze self.ihaskell-diagrams ]
+    ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
     export PATH="${lib.makeBinPath ([ ihaskellEnv jupyter ])}''${PATH:+:}$PATH"
     ${ihaskellEnv}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${jupyter}/bin/jupyter notebook
   '';
-in
-buildEnv {
+in buildEnv {
   name = "ihaskell-with-packages";
   buildInputs = [ makeWrapper ];
   paths = [ ihaskellEnv jupyter ];

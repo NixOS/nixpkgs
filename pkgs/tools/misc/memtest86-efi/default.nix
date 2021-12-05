@@ -1,10 +1,4 @@
-{ stdenv
-, lib
-, fetchzip
-, util-linux
-, jq
-, mtools
-}:
+{ stdenv, lib, fetchzip, util-linux, jq, mtools }:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
@@ -28,11 +22,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    util-linux
-    jq
-    mtools
-  ];
+  nativeBuildInputs = [ util-linux jq mtools ];
 
   installPhase = ''
     runHook preInstall

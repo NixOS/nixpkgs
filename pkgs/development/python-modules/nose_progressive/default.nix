@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pillow
-, blessings
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pillow, blessings, isPy3k }:
 
 buildPythonPackage rec {
   pname = "nose-progressive";

@@ -1,22 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, alsa-lib, flac, libmad, libvorbis, mpg123
-, dsdSupport ? true
-, faad2Support ? true, faad2
-, ffmpegSupport ? true, ffmpeg
-, opusSupport ? true, opusfile
-, resampleSupport ? true, soxr
-, sslSupport ? true, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, alsa-lib, flac, libmad, libvorbis, mpg123
+, dsdSupport ? true, faad2Support ? true, faad2, ffmpegSupport ? true, ffmpeg
+, opusSupport ? true, opusfile, resampleSupport ? true, soxr, sslSupport ? true
+, openssl }:
 
 let
   concatStringsSep = lib.concatStringsSep;
   optional = lib.optional;
-  opts = [ "-DLINKALL" ]
-    ++ optional dsdSupport "-DDSD"
-    ++ optional (!faad2Support) "-DNO_FAAD"
-    ++ optional ffmpegSupport "-DFFMPEG"
-    ++ optional opusSupport "-DOPUS"
-    ++ optional resampleSupport "-DRESAMPLE"
+  opts = [ "-DLINKALL" ] ++ optional dsdSupport "-DDSD"
+    ++ optional (!faad2Support) "-DNO_FAAD" ++ optional ffmpegSupport "-DFFMPEG"
+    ++ optional opusSupport "-DOPUS" ++ optional resampleSupport "-DRESAMPLE"
     ++ optional sslSupport "-DUSE_SSL";
 
 in stdenv.mkDerivation {
@@ -27,17 +19,15 @@ in stdenv.mkDerivation {
   version = "1.9.6.1196";
 
   src = fetchFromGitHub {
-    owner  = "ralph-irving";
-    repo   = "squeezelite";
-    rev    = "2b508464dce2cbdb2a3089c58df2a6fbc36328c0";
+    owner = "ralph-irving";
+    repo = "squeezelite";
+    rev = "2b508464dce2cbdb2a3089c58df2a6fbc36328c0";
     sha256 = "024ypr1da2r079k3hgiifzd3d3wcfprhbl5zdm40zm0c7frzmr8i";
   };
 
   buildInputs = [ alsa-lib flac libmad libvorbis mpg123 ]
-    ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional opusSupport opusfile
-    ++ optional resampleSupport soxr
+    ++ optional faad2Support faad2 ++ optional ffmpegSupport ffmpeg
+    ++ optional opusSupport opusfile ++ optional resampleSupport soxr
     ++ optional sslSupport openssl;
 
   enableParallelBuilding = true;

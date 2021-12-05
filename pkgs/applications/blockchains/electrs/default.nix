@@ -1,16 +1,8 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, rocksdb_6_23
-, Security
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, rocksdb_6_23
+, Security }:
 
-let
-  rocksdb = rocksdb_6_23;
-in
-rustPlatform.buildRustPackage rec {
+let rocksdb = rocksdb_6_23;
+in rustPlatform.buildRustPackage rec {
   pname = "electrs";
   version = "0.9.3";
 

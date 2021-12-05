@@ -1,28 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, gobject-introspection
-, glib
-, gtk2
-, gtk3
-, gtk4
-, fmt
-, pcre
-, libuuid
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libXdmcp
-, libxkbcommon
-, libepoxy
-, dbus
-, at-spi2-core
-, libXtst
-, withGTK2 ? false
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, fcitx5
+, gobject-introspection, glib, gtk2, gtk3, gtk4, fmt, pcre, libuuid, libselinux
+, libsepol, libthai, libdatrie, libXdmcp, libxkbcommon, libepoxy, dbus
+, at-spi2-core, libXtst, withGTK2 ? false }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
@@ -38,7 +17,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-  ] ++ lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
+  ] ++ lib.optional (!withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
     glib
@@ -66,10 +45,7 @@ stdenv.mkDerivation rec {
     "${glib.dev}/include/glib-2.0"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   meta = with lib; {
     description = "Fcitx5 gtk im module and glib based dbus client library";

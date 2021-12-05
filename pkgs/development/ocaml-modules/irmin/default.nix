@@ -1,7 +1,5 @@
-{ lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap
-}:
+{ lib, buildDunePackage, astring, digestif, fmt, jsonm, logs, ocaml_lwt
+, ocamlgraph, uri, repr, ppx_irmin, bheap }:
 
 buildDunePackage {
   pname = "irmin";

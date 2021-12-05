@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys
+}:
 
 mkDerivation rec {
   pname = "corerenamer";
@@ -11,16 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-OI7M7vV0CA42J5cWCqgGKEzUUHSgIJCWRTXmKRD6Jb0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libcprime libcsys ];
 
   meta = with lib; {
     description = "A batch file renamer from the C Suite";

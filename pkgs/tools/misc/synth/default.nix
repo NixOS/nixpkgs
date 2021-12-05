@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, AppKit
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, AppKit
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "synth";
@@ -23,16 +16,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
   meta = with lib; {
-    description = "A tool for generating realistic data using a declarative data model";
+    description =
+      "A tool for generating realistic data using a declarative data model";
     homepage = "https://github.com/getsynth/synth";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];

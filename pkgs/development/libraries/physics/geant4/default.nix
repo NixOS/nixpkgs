@@ -1,63 +1,53 @@
-{ enableMultiThreading ? true
-, enableG3toG4         ? false
-, enableInventor       ? false
-, enableGDML           ? false
-, enableQT             ? false
-, enableXM             ? false
-, enableOpenGLX11      ? true
-, enablePython         ? false
-, enableRaytracerX11   ? false
+{ enableMultiThreading ? true, enableG3toG4 ? false, enableInventor ? false
+, enableGDML ? false, enableQT ? false, enableXM ? false, enableOpenGLX11 ? true
+, enablePython ? false, enableRaytracerX11 ? false
 
-# Standard build environment with cmake.
+  # Standard build environment with cmake.
 , lib, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
-, expat
-, zlib
+, expat, zlib
 
 # For enableGDML.
 , xercesc
 
 # For enableQT.
-, qtbase
-, wrapQtAppsHook
+, qtbase, wrapQtAppsHook
 
 # For enableXM.
 , motif
 
 # For enableInventor
-, coin3d
-, soxt
-, libXpm
+, coin3d, soxt, libXpm
 
 # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU, libGL
-, xlibsWrapper
-, libXmu
+, libGLU, libGL, xlibsWrapper, libXmu
 
 # For enablePython
-, boost
-, python3
+, boost, python3
 
 # For tests
-, callPackage
-}:
+, callPackage }:
 
 let
-  boost_python = boost.override { enablePython = true; python = python3; };
-in
+  boost_python = boost.override {
+    enablePython = true;
+    python = python3;
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "10.7.1";
   pname = "geant4";
 
-  src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.p01.tar.gz";
+  src = fetchurl {
+    url =
+      "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.p01.tar.gz";
     sha256 = "07if874aljizkjyp21qj6v193pmyifyfmwi5kg8jm71x79sn2laj";
   };
 
-  boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
+  boost_python_lib =
+    "python${builtins.replaceStrings [ "." ] [ "" ] python3.pythonVersion}";
   postPatch = ''
     # Fix for boost 1.67+
     substituteInPlace environments/g4py/CMakeLists.txt \
@@ -80,19 +70,17 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}"
     "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
     "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
-    "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-  ] ++ lib.optionals (enableMultiThreading && enablePython) [
-    "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
-  ] ++ lib.optionals enableInventor [
-    "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
-    "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
-  ];
+    "-DGEANT4_BUILD_MULTITHREADED=${
+      if enableMultiThreading then "ON" else "OFF"
+    }"
+  ] ++ lib.optionals (enableMultiThreading && enablePython)
+    [ "-DGEANT4_BUILD_TLS_MODEL=global-dynamic" ]
+    ++ lib.optionals enableInventor [
+      "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
+      "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
+    ];
 
-  nativeBuildInputs =  [
-    cmake
-  ] ++ lib.optionals enableQT [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableQT [ wrapQtAppsHook ];
 
   dontWrapQtApps = !enableQT;
 
@@ -101,8 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enablePython [ boost_python python3 ];
 
   propagatedBuildInputs = [ clhep expat zlib libGL ]
-    ++ lib.optionals enableGDML [ xercesc ]
-    ++ lib.optionals enableXM [ motif ]
+    ++ lib.optionals enableGDML [ xercesc ] ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQT [ qtbase ];
 
   postFixup = ''
@@ -116,11 +103,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     data = import ./datasets.nix {
-          inherit lib stdenv fetchurl;
-          geant_version = version;
-      };
+      inherit lib stdenv fetchurl;
+      geant_version = version;
+    };
 
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.
@@ -129,7 +116,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A toolkit for the simulation of the passage of particles through matter";
+    description =
+      "A toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
       Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.

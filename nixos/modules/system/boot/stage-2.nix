@@ -4,7 +4,8 @@ with lib;
 
 let
 
-  useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
+  useHostResolvConf = config.networking.resolvconf.enable
+    && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
@@ -15,25 +16,21 @@ let
     inherit (config.nix) readOnlyStore;
     inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path = lib.makeBinPath ([
-      pkgs.coreutils
-      pkgs.util-linux
-    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
+    path = lib.makeBinPath ([ pkgs.coreutils pkgs.util-linux ]
+      ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
-    systemdUnitPathEnvVar = lib.optionalString (config.boot.extraSystemdUnitPaths != [])
+    systemdUnitPathEnvVar =
+      lib.optionalString (config.boot.extraSystemdUnitPaths != [ ])
       ("SYSTEMD_UNIT_PATH="
-      + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
-      + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
-    postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+        + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
+        + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
+    postBootCommands = pkgs.writeText "local-cmds" ''
+      ${config.boot.postBootCommands}
+      ${config.powerManagement.powerUpCommands}
+    '';
   };
 
-in
-
-{
+in {
   options = {
 
     boot = {
@@ -88,7 +85,7 @@ in
       };
 
       extraSystemdUnitPaths = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Additional paths that get appended to the SYSTEMD_UNIT_PATH environment variable
@@ -98,7 +95,6 @@ in
     };
 
   };
-
 
   config = {
 

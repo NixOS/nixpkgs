@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromSourcehut
-, meson, pkg-config, ninja, wayland-scanner, scdoc
-, wayland, wayland-protocols
-}:
+{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, ninja, wayland-scanner
+, scdoc, wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "wlsunset";

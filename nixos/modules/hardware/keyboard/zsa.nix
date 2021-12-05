@@ -3,8 +3,7 @@
 let
   inherit (lib) mkOption mkIf types;
   cfg = config.hardware.keyboard.zsa;
-in
-{
+in {
   # TODO: make group configurable like in https://github.com/NixOS/nixpkgs/blob/0b2b4b8c4e729535a61db56468809c5c2d3d175c/pkgs/tools/security/nitrokey-app/udev-rules.nix ?
   options.hardware.keyboard.zsa = {
     enable = mkOption {
@@ -22,6 +21,6 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.zsa-udev-rules ];
-    users.groups.plugdev = {};
+    users.groups.plugdev = { };
   };
 }

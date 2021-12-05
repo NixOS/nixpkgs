@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.16";
 
   src = fetchurl {
-    url = "http://potrace.sourceforge.net/download/${version}/potrace-${version}.tar.gz";
+    url =
+      "http://potrace.sourceforge.net/download/${version}/potrace-${version}.tar.gz";
     sha256 = "1k3sxgjqq0jnpk9xxys05q32sl5hbf1lbk1gmfxcrmpdgnhli0my";
   };
 
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://potrace.sourceforge.net/";
-    description = "A tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image";
+    description =
+      "A tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image";
     platforms = platforms.unix;
     maintainers = [ maintainers.pSub ];
     license = licenses.gpl2;

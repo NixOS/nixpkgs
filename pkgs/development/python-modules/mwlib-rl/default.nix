@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mwlib
-, mwlib-ext
-, pygments
-}:
+{ lib, buildPythonPackage, fetchPypi, mwlib, mwlib-ext, pygments }:
 
 buildPythonPackage rec {
   version = "0.14.5";

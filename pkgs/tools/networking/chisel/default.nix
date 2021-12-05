@@ -1,7 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-}:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "chisel";
@@ -16,7 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-GzsQ6LXxe9UQc13XbsYFOWPe0EzlyHechchKc6xDkAc=";
 
-  ldflags = [ "-s" "-w" "-X github.com/jpillora/chisel/share.BuildVersion=${version}" ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/jpillora/chisel/share.BuildVersion=${version}" ];
 
   # tests require access to the network
   doCheck = false;

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, python-dateutil
-, ipaddress
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, python, six, python-dateutil, ipaddress
+, mock }:
 
 buildPythonPackage rec {
   pname = "fake-factory";
@@ -28,10 +21,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python package that generates fake data for you";
-    homepage    = "https://pypi.python.org/pypi/fake-factory";
-    license     = licenses.mit;
+    homepage = "https://pypi.python.org/pypi/fake-factory";
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

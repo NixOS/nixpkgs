@@ -1,16 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, python
-, intltool
-, docbook2x, docbook_xml_dtd_412, libxslt
-, sword, clucene_core, biblesync
-, gnome-doc-utils
-, libgsf, gconf
-, gtkhtml, libglade, scrollkeeper
-, webkitgtk
-, dbus-glib, enchant, isocodes, libuuid, icu
-, wrapGAppsHook
-, wafHook
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, python, intltool, docbook2x
+, docbook_xml_dtd_412, libxslt, sword, clucene_core, biblesync, gnome-doc-utils
+, libgsf, gconf, gtkhtml, libglade, scrollkeeper, webkitgtk, dbus-glib, enchant
+, isocodes, libuuid, icu, wrapGAppsHook, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "xiphos";
@@ -24,15 +15,34 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook wafHook ];
-  buildInputs = [ python intltool docbook2x docbook_xml_dtd_412 libxslt
-                  sword clucene_core biblesync gnome-doc-utils libgsf gconf gtkhtml
-                  libglade scrollkeeper webkitgtk dbus-glib enchant isocodes libuuid icu ];
+  buildInputs = [
+    python
+    intltool
+    docbook2x
+    docbook_xml_dtd_412
+    libxslt
+    sword
+    clucene_core
+    biblesync
+    gnome-doc-utils
+    libgsf
+    gconf
+    gtkhtml
+    libglade
+    scrollkeeper
+    webkitgtk
+    dbus-glib
+    enchant
+    isocodes
+    libuuid
+    icu
+  ];
 
   prePatch = ''
     patchShebangs .;
   '';
 
-  preConfigure =  ''
+  preConfigure = ''
     export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';

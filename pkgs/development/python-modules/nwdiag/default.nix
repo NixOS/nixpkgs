@@ -1,6 +1,5 @@
-{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, blockdiag, setuptools
-}:
+{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils, blockdiag
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
@@ -19,7 +18,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
+    description =
+      "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;

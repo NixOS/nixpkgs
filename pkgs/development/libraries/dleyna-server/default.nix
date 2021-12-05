@@ -1,18 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, makeWrapper
-, pkg-config
-, dleyna-core
-, dleyna-connector-dbus
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, libsoup
-}:
+{ stdenv, lib, fetchFromGitHub, meson, ninja, makeWrapper, pkg-config
+, dleyna-core, dleyna-connector-dbus, gssdp, gupnp, gupnp-av, gupnp-dlna
+, libsoup }:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-server";
@@ -25,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jlF9Lr/NG+Fsy/bB7aLb7xOLqel8GueJK5luo9rsDME=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
 
   buildInputs = [
     dleyna-core
@@ -48,7 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Library to discover, browse and manipulate Digital Media Servers";
+    description =
+      "Library to discover, browse and manipulate Digital Media Servers";
     homepage = "https://github.com/phako/dleyna-server";
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

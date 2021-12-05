@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, matplotlib
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, matplotlib }:
 
 buildPythonPackage rec {
   pname = "pycocotools";
@@ -15,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-OCkCSTABN3EVZSGkuNtLOu9ZBVbPo6jdP6sCfTmyFeE=";
   };
 
-  propagatedBuildInputs = [
-    cython
-    matplotlib
-  ];
+  propagatedBuildInputs = [ cython matplotlib ];
 
-  pythonImportsCheck = [
-    "pycocotools.coco"
-    "pycocotools.cocoeval"
-  ];
+  pythonImportsCheck = [ "pycocotools.coco" "pycocotools.cocoeval" ];
 
   # has no tests
   doCheck = false;

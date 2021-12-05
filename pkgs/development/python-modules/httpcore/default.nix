@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, anyio
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytestCheckHook
-, pytest-cov
-, sniffio
-, trio
-, trustme
-, uvicorn
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, anyio, h11, h2, pproxy
+, pytest-asyncio, pytestCheckHook, pytest-cov, sniffio, trio, trustme, uvicorn
 }:
 
 buildPythonPackage rec {
@@ -27,22 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-9hG9MqqEYMT2j7tXafToGYwHbJfp9/klNqZozHSbweE=";
   };
 
-  propagatedBuildInputs = [
-    anyio
-    h11
-    h2
-    sniffio
-  ];
+  propagatedBuildInputs = [ anyio h11 h2 sniffio ];
 
-  checkInputs = [
-    pproxy
-    pytest-asyncio
-    pytestCheckHook
-    pytest-cov
-    trio
-    trustme
-    uvicorn
-  ];
+  checkInputs =
+    [ pproxy pytest-asyncio pytestCheckHook pytest-cov trio trustme uvicorn ];
 
   disabledTestPaths = [
     # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known

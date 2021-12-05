@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, pytest
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchFromGitHub, freezegun, pytest, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,13 +14,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    freezegun
-  ];
+  propagatedBuildInputs = [ freezegun ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Wrap tests with fixtures in freeze_time";

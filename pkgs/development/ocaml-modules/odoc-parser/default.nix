@@ -7,7 +7,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-doc/odoc-parser/releases/download/0.9.0/odoc-parser-0.9.0.tbz";
+    url =
+      "https://github.com/ocaml-doc/odoc-parser/releases/download/0.9.0/odoc-parser-0.9.0.tbz";
     sha256 = "0ydxy2sj2w9i4vvyjnxplgmp5gbkp5ilnv36pvk4vgrrmldss3fz";
   };
 
@@ -20,6 +21,7 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.marsam ];
     homepage = "https://github.com/ocaml-doc/odoc-parser";
-    changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
+    changelog =
+      "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
   };
 }

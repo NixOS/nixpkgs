@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.6";
 
   src = fetchurl {
-    url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
+    url =
+      "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
     sha256 = "145qph3c0m4bmb342qxq1hwsg594lndmfs9ga1v7pk53s34sckq8";
   };
 
@@ -13,8 +14,8 @@ stdenv.mkDerivation rec {
 
   # build only the "package" target, which generates the fop command.
   buildPhase = ''
-     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
-     ant -f fop/build.xml package
+    export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+    ant -f fop/build.xml package
   '';
 
   installPhase = ''

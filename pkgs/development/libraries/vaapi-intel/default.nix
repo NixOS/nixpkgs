@@ -1,16 +1,15 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkg-config, python3
 , intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
-, enableHybridCodec ? false, vaapi-intel-hybrid
-}:
+, enableHybridCodec ? false, vaapi-intel-hybrid }:
 
 stdenv.mkDerivation rec {
   pname = "intel-vaapi-driver";
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "intel-vaapi-driver";
-    rev    = version;
+    owner = "intel";
+    repo = "intel-vaapi-driver";
+    rev = version;
     sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
   };
 
@@ -21,10 +20,8 @@ stdenv.mkDerivation rec {
     ln -s ${vaapi-intel-hybrid}/lib/dri/* $out/lib/dri/
   '';
 
-  configureFlags = [
-    "--enable-x11"
-    "--enable-wayland"
-  ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
+  configureFlags = [ "--enable-x11" "--enable-wayland" ]
+    ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [ autoreconfHook gnum4 pkg-config python3 ];
 

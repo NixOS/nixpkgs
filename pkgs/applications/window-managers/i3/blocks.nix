@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     # XDG_CONFIG_DIRS can contain multiple elements separated by colons, which should be searched in order.
     (fetchpatch {
       # https://github.com/vivien/i3blocks/pull/405
-      url = "https://github.com/edef1c/i3blocks/commit/d57b32f9a364aeaf36869efdd54240433c737e57.patch";
+      url =
+        "https://github.com/edef1c/i3blocks/commit/d57b32f9a364aeaf36869efdd54240433c737e57.patch";
       sha256 = "102xb0ax0hmg82dz2gzfag470dkckzf2yizai0izacvrz0d3ngj1";
     })
   ];

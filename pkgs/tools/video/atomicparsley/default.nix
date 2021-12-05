@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ zlib ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   installPhase = ''
     runHook preInstall
@@ -40,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
+    description =
+      "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
     homepage = "https://github.com/wez/atomicparsley";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "5.4.4";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-544.zip";
+    url =
+      "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-544.zip";
     sha256 = "01kpa8g6p6vcqq9y70w5bm8jbw4kp55pbywj2zrhgjibrhgjqi0b";
   };
 
@@ -32,7 +33,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   meta = {
-    description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
+    description =
+      "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.numinit ];
     platforms = lib.platforms.unix;

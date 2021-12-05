@@ -1,18 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, writeScript
-, cmake
-, rocm-cmake
-, clang
-, rocm-comgr
-, rocm-opencl-runtime
-, rocm-runtime
-, rocm-thunk
-, libelf
-, libglvnd
-, libX11
-, numactl
-}:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, rocm-cmake, clang
+, rocm-comgr, rocm-opencl-runtime, rocm-runtime, rocm-thunk, libelf, libglvnd
+, libX11, numactl }:
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
@@ -39,9 +27,7 @@ stdenv.mkDerivation rec {
       --replace "libamd_comgr.so" "${rocm-comgr}/lib/libamd_comgr.so"
   '';
 
-  cmakeFlags = [
-    "-DOPENCL_DIR=${rocm-opencl-runtime.src}"
-  ];
+  cmakeFlags = [ "-DOPENCL_DIR=${rocm-opencl-runtime.src}" ];
 
   preFixup = ''
     # Work around broken cmake files

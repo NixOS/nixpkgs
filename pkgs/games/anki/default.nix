@@ -1,34 +1,12 @@
-{ stdenv
-, buildPythonApplication
-, lib
-, python
-, fetchurl
-, fetchFromGitHub
-, fetchpatch
-, lame
-, mpv-unwrapped
-, libpulseaudio
-, pyqtwebengine
-, decorator
-, beautifulsoup4
-, sqlalchemy
-, pyaudio
-, requests
-, markdown
-, matplotlib
-, pytest
-, glibcLocales
-, nose
-, jsonschema
-, setuptools
-, send2trash
-, CoreAudio
-  # This little flag adds a huge number of dependencies, but we assume that
-  # everyone wants Anki to draw plots with statistics by default.
+{ stdenv, buildPythonApplication, lib, python, fetchurl, fetchFromGitHub
+, fetchpatch, lame, mpv-unwrapped, libpulseaudio, pyqtwebengine, decorator
+, beautifulsoup4, sqlalchemy, pyaudio, requests, markdown, matplotlib, pytest
+, glibcLocales, nose, jsonschema, setuptools, send2trash, CoreAudio
+# This little flag adds a huge number of dependencies, but we assume that
+# everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
   # manual
-, asciidoc
-}:
+, asciidoc }:
 
 let
   # when updating, also update rev-manual to a recent version of
@@ -70,8 +48,7 @@ let
     '';
   };
 
-in
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "anki";
   inherit version;
 
@@ -98,10 +75,8 @@ buildPythonApplication rec {
     markdown
     jsonschema
     setuptools
-  ]
-  ++ lib.optional plotsSupport matplotlib
-  ++ lib.optional stdenv.isDarwin [ CoreAudio ]
-  ;
+  ] ++ lib.optional plotsSupport matplotlib
+    ++ lib.optional stdenv.isDarwin [ CoreAudio ];
 
   checkInputs = [ pytest glibcLocales nose ];
 
@@ -113,7 +88,8 @@ buildPythonApplication rec {
     ./no-version-check.patch
     (fetchpatch {
       name = "fix-mpv-args.patch";
-      url = "https://sources.debian.org/data/main/a/anki/2.1.15+dfsg-3/debian/patches/fix-mpv-args.patch";
+      url =
+        "https://sources.debian.org/data/main/a/anki/2.1.15+dfsg-3/debian/patches/fix-mpv-args.patch";
       sha256 = "1dimnnawk64m5bbdbjrxw5k08q95l728n94cgkrrwxwavmmywaj2";
     })
   ];
@@ -183,9 +159,7 @@ buildPythonApplication rec {
     )
   '';
 
-  passthru = {
-    inherit manual;
-  };
+  passthru = { inherit manual; };
 
   meta = with lib; {
     homepage = "https://apps.ankiweb.net/";

@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, libSM
-, libX11
-, libXt
-, libffi
-, ncurses
-}:
+{ lib, stdenv, fetchurl, libSM, libX11, libXt, libffi, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "yabasic";
@@ -17,13 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-9LqiwS3Udql3YZoufo3spVpE46me3McI8L08TpNJpJo=";
   };
 
-  buildInputs = [
-    libSM
-    libX11
-    libXt
-    libffi
-    ncurses
-  ];
+  buildInputs = [ libSM libX11 libXt libffi ncurses ];
 
   meta = with lib; {
     homepage = "http://2484.de/yabasic/";
@@ -35,7 +21,7 @@ stdenv.mkDerivation rec {
       allows to create standalone programs. Yabasic runs under Unix and Windows
       and has a comprehensive documentation; it is small, simple, open-source
       and free.
-   '';
+    '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;

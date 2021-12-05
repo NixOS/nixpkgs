@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromBitbucket
-, fetchpatch
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromBitbucket, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.2";
@@ -17,9 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   patches = [
     # Fix include syntax:

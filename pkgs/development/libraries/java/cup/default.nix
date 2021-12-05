@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, jdk, ant } :
+{ lib, stdenv, fetchurl, jdk, ant }:
 
 stdenv.mkDerivation rec {
   pname = "java-cup";
   version = "11b-20160615";
 
   src = fetchurl {
-    url = "http://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${version}.tar.gz";
+    url =
+      "http://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${version}.tar.gz";
     sha256 = "1ymz3plngxclh7x3xr31537rvvak7lwyd0qkmnl1mkj5drh77rz0";
   };
 

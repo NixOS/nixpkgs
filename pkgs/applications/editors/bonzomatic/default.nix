@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, makeWrapper
-, alsa-lib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, alsa-lib, fontconfig
+, mesa_glu, libXcursor, libXinerama, libXrandr, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
@@ -16,8 +14,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    alsa-lib fontconfig mesa_glu
-    libXcursor libXinerama libXrandr xorg.xinput xorg.libXi xorg.libXext
+    alsa-lib
+    fontconfig
+    mesa_glu
+    libXcursor
+    libXinerama
+    libXrandr
+    xorg.xinput
+    xorg.libXi
+    xorg.libXext
   ];
 
   postFixup = ''

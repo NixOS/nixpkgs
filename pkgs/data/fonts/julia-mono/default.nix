@@ -1,12 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "0.043";
+let version = "0.043";
 
-in
-fetchzip {
+in fetchzip {
   name = "JuliaMono-ttf-${version}";
-  url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
+  url =
+    "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
   sha256 = "sha256-oxQRrFhTf37OrJSbDlmzh/7xOuKrtxO7v2+j7QcsAmE=";
 
   postFetch = ''

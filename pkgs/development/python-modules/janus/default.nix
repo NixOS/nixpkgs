@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "janus";

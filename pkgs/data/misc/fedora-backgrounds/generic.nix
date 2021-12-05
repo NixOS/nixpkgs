@@ -1,12 +1,6 @@
-{ lib
-, stdenvNoCC
-, coreutils
-}:
+{ lib, stdenvNoCC, coreutils }:
 
-{ version
-, src
-, patches ? [ ]
-}:
+{ version, src, patches ? [ ] }:
 
 stdenvNoCC.mkDerivation {
   inherit patches src version;
@@ -29,9 +23,7 @@ stdenvNoCC.mkDerivation {
     done;
   '';
 
-  installFlags = [
-    "DESTDIR=$(out)"
-  ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
     homepage = "https://github.com/fedoradesign/backgrounds";

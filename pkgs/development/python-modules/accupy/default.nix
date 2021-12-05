@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, mpmath
-, numpy
-, pybind11
-, pyfma
-, eigen
-, importlib-metadata
-, pytestCheckHook
-, matplotlib
-, dufte
-, perfplot
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, mpmath, numpy, pybind11
+, pyfma, eigen, importlib-metadata, pytestCheckHook, matplotlib, dufte, perfplot
 }:
 
 buildPythonPackage rec {
@@ -26,30 +14,18 @@ buildPythonPackage rec {
     sha256 = "0sxkwpp2xy2jgakhdxr4nh1cspqv8l89kz6s832h05pbpyc0n767";
   };
 
-  nativeBuildInputs = [
-    pybind11
-  ];
+  nativeBuildInputs = [ pybind11 ];
 
-  buildInputs = [
-    eigen
-  ];
+  buildInputs = [ eigen ];
 
-  propagatedBuildInputs = [
-    mpmath
-    numpy
-    pyfma
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  propagatedBuildInputs = [ mpmath numpy pyfma ]
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
-    perfplot
-    pytestCheckHook
-    matplotlib
-    dufte
-  ];
+  checkInputs = [ perfplot pytestCheckHook matplotlib dufte ];
 
   postConfigure = ''
-   substituteInPlace setup.py \
-     --replace "/usr/include/eigen3/" "${eigen}/include/eigen3/"
+    substituteInPlace setup.py \
+      --replace "/usr/include/eigen3/" "${eigen}/include/eigen3/"
   '';
 
   preBuild = ''

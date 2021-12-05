@@ -1,8 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-  async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
-  pytest, xmltodict, nbconvert, ipywidgets
-, doCheck ? true
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, async_generator, traitlets
+, nbformat, nest-asyncio, jupyter-client, pytest, xmltodict, nbconvert
+, ipywidgets, doCheck ? true }:
 
 buildPythonPackage rec {
   pname = "nbclient";
@@ -16,7 +14,8 @@ buildPythonPackage rec {
 
   inherit doCheck;
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
-  propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
+  propagatedBuildInputs =
+    [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbclient";

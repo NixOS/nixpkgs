@@ -1,9 +1,8 @@
-{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder
-, afdko, appdirs, attrs, black, booleanoperations, brotlipy, click
-, defcon, fontmath, fontparts, fontpens, fonttools, lxml
-, mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
-, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools-scm }:
+{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder, afdko, appdirs, attrs
+, black, booleanoperations, brotlipy, click, defcon, fontmath, fontparts
+, fontpens, fonttools, lxml, mutatormath, pathspec, psautohint, pyclipper, pytz
+, regex, scour, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2
+, zopfli, pillow, six, bash, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "nototools";
@@ -53,11 +52,7 @@ buildPythonPackage rec {
     zopfli
   ];
 
-  checkInputs = [
-    pillow
-    six
-    bash
-  ];
+  checkInputs = [ pillow six bash ];
 
   checkPhase = ''
     patchShebangs tests/
@@ -71,7 +66,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Noto fonts support tools and scripts plus web site generation";
+    description =
+      "Noto fonts support tools and scripts plus web site generation";
     license = lib.licenses.asl20;
     homepage = "https://github.com/googlefonts/nototools";
   };

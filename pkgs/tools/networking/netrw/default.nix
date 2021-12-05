@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl
-, checksumType ? "built-in"
-, libmhash ? null
-, openssl ? null
-}:
+{ lib, stdenv, fetchurl, checksumType ? "built-in", libmhash ? null
+, openssl ? null }:
 
 assert checksumType == "mhash" -> libmhash != null;
 assert checksumType == "openssl" -> openssl != null;
@@ -11,12 +8,10 @@ stdenv.mkDerivation rec {
   pname = "netrw";
   version = "1.3.2";
 
-  configureFlags = [
-    "--with-checksum=${checksumType}"
-  ];
+  configureFlags = [ "--with-checksum=${checksumType}" ];
 
   buildInputs = lib.optional (checksumType == "mhash") libmhash
-             ++ lib.optional (checksumType == "openssl") openssl;
+    ++ lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [

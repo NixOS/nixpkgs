@@ -1,4 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, pkg-config, pango, cython, AppKit, pytestCheckHook }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, pkg-config, pango
+, cython, AppKit, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "manimpango";
@@ -17,9 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
-  propagatedBuildInputs = [
-    cython
-  ];
+  propagatedBuildInputs = [ cython ];
 
   preBuild = ''
     ${python.interpreter} setup.py build_ext --inplace

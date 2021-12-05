@@ -5,13 +5,19 @@ with lib;
 let
   cfg = config.services.grafana;
   opt = options.services.grafana;
-  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: {
+    name = pkg.pname;
+    path = pkg;
+  }) cfg.declarativePlugins);
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
-    PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
+    PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then
+      "${cfg.dataDir}/plugins"
+    else
+      declarativePlugins;
     PATHS_LOGS = "${cfg.dataDir}/log";
 
     SERVER_PROTOCOL = cfg.protocol;
@@ -62,23 +68,26 @@ let
     datasources = cfg.provision.datasources;
   };
 
-  datasourceFile = pkgs.writeText "datasource.yaml" (builtins.toJSON datasourceConfiguration);
+  datasourceFile =
+    pkgs.writeText "datasource.yaml" (builtins.toJSON datasourceConfiguration);
 
   dashboardConfiguration = {
     apiVersion = 1;
     providers = cfg.provision.dashboards;
   };
 
-  dashboardFile = pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
+  dashboardFile =
+    pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
 
   notifierConfiguration = {
     apiVersion = 1;
     notifiers = cfg.provision.notifiers;
   };
 
-  notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
+  notifierFile =
+    pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
-  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" { } ''
     mkdir -p $out/{datasources,dashboards,notifiers}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
@@ -100,9 +109,10 @@ let
         description = "Datasource type. Required.";
       };
       access = mkOption {
-        type = types.enum ["proxy" "direct"];
+        type = types.enum [ "proxy" "direct" ];
         default = "proxy";
-        description = "Access mode. proxy or direct (Server or Browser in the UI). Required.";
+        description =
+          "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
       orgId = mkOption {
         type = types.int;
@@ -226,7 +236,27 @@ let
         description = "Notifier name.";
       };
       type = mkOption {
-        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+        type = types.enum [
+          "dingding"
+          "discord"
+          "email"
+          "googlechat"
+          "hipchat"
+          "kafka"
+          "line"
+          "teams"
+          "opsgenie"
+          "pagerduty"
+          "prometheus-alertmanager"
+          "pushover"
+          "sensu"
+          "sensugo"
+          "slack"
+          "telegram"
+          "threema"
+          "victorops"
+          "webhook"
+        ];
         description = "Notifier type.";
       };
       uid = mkOption {
@@ -251,7 +281,8 @@ let
       send_reminder = mkOption {
         type = types.bool;
         default = true;
-        description = "Should the notifier be sent reminder notifications while alerts continue to fire.";
+        description =
+          "Should the notifier be sent reminder notifications while alerts continue to fire.";
       };
       frequency = mkOption {
         type = types.str;
@@ -261,7 +292,8 @@ let
       disable_resolve_message = mkOption {
         type = types.bool;
         default = false;
-        description = "Turn off the message that sends when an alert returns to OK.";
+        description =
+          "Turn off the message that sends when an alert returns to OK.";
       };
       settings = mkOption {
         type = types.nullOr types.attrs;
@@ -282,7 +314,7 @@ in {
     protocol = mkOption {
       description = "Which protocol to listen.";
       default = "http";
-      type = types.enum ["http" "https" "socket"];
+      type = types.enum [ "http" "https" "socket" ];
     };
 
     addr = mkOption {
@@ -304,7 +336,8 @@ in {
     };
 
     domain = mkOption {
-      description = "The public facing domain name used to access grafana from a browser.";
+      description =
+        "The public facing domain name used to access grafana from a browser.";
       default = "localhost";
       type = types.str;
     };
@@ -344,8 +377,10 @@ in {
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
-      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
-      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      description =
+        "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      example = literalExpression
+        "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.
@@ -362,7 +397,7 @@ in {
       type = mkOption {
         description = "Database type.";
         default = "sqlite3";
-        type = types.enum ["mysql" "sqlite3" "postgres"];
+        type = types.enum [ "mysql" "sqlite3" "postgres" ];
       };
 
       host = mkOption {
@@ -422,19 +457,19 @@ in {
       enable = mkEnableOption "provision";
       datasources = mkOption {
         description = "Grafana datasources configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.datasourceConfig;
         apply = x: map _filter x;
       };
       dashboards = mkOption {
         description = "Grafana dashboard configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.dashboardConfig;
         apply = x: map _filter x;
       };
       notifiers = mkOption {
         description = "Grafana notifier configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
@@ -527,7 +562,8 @@ in {
       };
 
       autoAssignOrg = mkOption {
-        description = "Whether to automatically assign new users to default org.";
+        description =
+          "Whether to automatically assign new users to default org.";
         default = true;
         type = types.bool;
       };
@@ -535,7 +571,7 @@ in {
       autoAssignOrgRole = mkOption {
         description = "Default role new users will be auto assigned.";
         default = "Viewer";
-        type = types.enum ["Viewer" "Editor"];
+        type = types.enum [ "Viewer" "Editor" ];
       };
     };
 
@@ -583,7 +619,8 @@ in {
 
     analytics.reporting = {
       enable = mkOption {
-        description = "Whether to allow anonymous usage reporting to stats.grafana.net.";
+        description =
+          "Whether to allow anonymous usage reporting to stats.grafana.net.";
         default = true;
         type = types.bool;
       };
@@ -595,50 +632,56 @@ in {
         <link xlink:href="http://docs.grafana.org/installation/configuration/">documentation</link>,
         but without GF_ prefix
       '';
-      default = {};
+      default = { };
       type = with types; attrsOf (either str path);
     };
   };
 
   config = mkIf cfg.enable {
     warnings = flatten [
-      (optional (
-        cfg.database.password != opt.database.password.default ||
-        cfg.security.adminPassword != opt.security.adminPassword.default
-      ) "Grafana passwords will be stored as plaintext in the Nix store!")
-      (optional (
-        any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
-      ) "Datasource passwords will be stored as plaintext in the Nix store!")
-      (optional (
-        any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store!")
+      (optional (cfg.database.password != opt.database.password.default
+        || cfg.security.adminPassword != opt.security.adminPassword.default)
+        "Grafana passwords will be stored as plaintext in the Nix store!")
+      (optional (any (x:
+        x.password != null || x.basicAuthPassword != null || x.secureJsonData
+        != null) cfg.provision.datasources)
+        "Datasource passwords will be stored as plaintext in the Nix store!")
+      (optional (any (x: x.secure_settings != null) cfg.provision.notifiers)
+        "Notifier secure settings will be stored as plaintext in the Nix store!")
     ];
 
     environment.systemPackages = [ cfg.package ];
 
     assertions = [
       {
-        assertion = cfg.database.password != opt.database.password.default -> cfg.database.passwordFile == null;
+        assertion = cfg.database.password != opt.database.password.default
+          -> cfg.database.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
       {
-        assertion = cfg.security.adminPassword != opt.security.adminPassword.default -> cfg.security.adminPasswordFile == null;
+        assertion = cfg.security.adminPassword
+          != opt.security.adminPassword.default
+          -> cfg.security.adminPasswordFile == null;
         message = "Cannot set both adminPassword and adminPasswordFile";
       }
       {
-        assertion = cfg.security.secretKey != opt.security.secretKey.default -> cfg.security.secretKeyFile == null;
+        assertion = cfg.security.secretKey != opt.security.secretKey.default
+          -> cfg.security.secretKeyFile == null;
         message = "Cannot set both secretKey and secretKeyFile";
       }
       {
-        assertion = cfg.smtp.password != opt.smtp.password.default -> cfg.smtp.passwordFile == null;
+        assertion = cfg.smtp.password != opt.smtp.password.default
+          -> cfg.smtp.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
     ];
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
-      wantedBy = ["multi-user.target"];
-      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "networking.target" ]
+        ++ lib.optional usePostgresql "postgresql.service"
+        ++ lib.optional useMysql "mysql.service";
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
@@ -647,7 +690,9 @@ in {
         shopt -s inherit_errexit
 
         ${optionalString (cfg.auth.google.clientSecretFile != null) ''
-          GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
+          GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${
+            escapeShellArg cfg.auth.google.clientSecretFile
+          })"
           export GF_AUTH_GOOGLE_CLIENT_SECRET
         ''}
         ${optionalString (cfg.database.passwordFile != null) ''
@@ -655,11 +700,15 @@ in {
           export GF_DATABASE_PASSWORD
         ''}
         ${optionalString (cfg.security.adminPasswordFile != null) ''
-          GF_SECURITY_ADMIN_PASSWORD="$(<${escapeShellArg cfg.security.adminPasswordFile})"
+          GF_SECURITY_ADMIN_PASSWORD="$(<${
+            escapeShellArg cfg.security.adminPasswordFile
+          })"
           export GF_SECURITY_ADMIN_PASSWORD
         ''}
         ${optionalString (cfg.security.secretKeyFile != null) ''
-          GF_SECURITY_SECRET_KEY="$(<${escapeShellArg cfg.security.secretKeyFile})"
+          GF_SECURITY_SECRET_KEY="$(<${
+            escapeShellArg cfg.security.secretKeyFile
+          })"
           export GF_SECURITY_SECRET_KEY
         ''}
         ${optionalString (cfg.smtp.passwordFile != null) ''
@@ -677,8 +726,10 @@ in {
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        AmbientCapabilities =
+          lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet =
+          if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
         NoNewPrivileges = true;
@@ -717,6 +768,6 @@ in {
       createHome = true;
       group = "grafana";
     };
-    users.groups.grafana = {};
+    users.groups.grafana = { };
   };
 }

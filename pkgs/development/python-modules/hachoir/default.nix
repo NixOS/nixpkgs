@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, urwid
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, urwid }:
 
 buildPythonPackage rec {
   pname = "hachoir";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "06544qmmimvaznwcjs8wwfih1frdd7anwcw5z07cf69l8p146p0y";
   };
 
-  propagatedBuildInputs = [
-    urwid
-  ];
+  propagatedBuildInputs = [ urwid ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hachoir" ];
 

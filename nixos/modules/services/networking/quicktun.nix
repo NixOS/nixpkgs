@@ -4,9 +4,7 @@ let
 
   cfg = config.services.quicktun;
 
-in
-
-with lib;
+in with lib;
 
 {
   options = {
@@ -86,33 +84,32 @@ with lib;
 
   };
 
-  config = mkIf (cfg != []) {
-    systemd.services = foldr (a: b: a // b) {} (
-      mapAttrsToList (name: qtcfg: {
-        "quicktun-${name}" = {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          environment = {
-            INTERFACE = name;
-            TUN_MODE = toString qtcfg.tunMode;
-            REMOTE_ADDRESS = qtcfg.remoteAddress;
-            LOCAL_ADDRESS = qtcfg.localAddress;
-            LOCAL_PORT = toString qtcfg.localPort;
-            REMOTE_PORT = toString qtcfg.remotePort;
-            REMOTE_FLOAT = toString qtcfg.remoteFloat;
-            PRIVATE_KEY = qtcfg.privateKey;
-            PUBLIC_KEY = qtcfg.publicKey;
-            TIME_WINDOW = toString qtcfg.timeWindow;
-            TUN_UP_SCRIPT = pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript;
-            SUID = "nobody";
-          };
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${pkgs.quicktun}/bin/quicktun.${qtcfg.protocol}";
-          };
+  config = mkIf (cfg != [ ]) {
+    systemd.services = foldr (a: b: a // b) { } (mapAttrsToList (name: qtcfg: {
+      "quicktun-${name}" = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        environment = {
+          INTERFACE = name;
+          TUN_MODE = toString qtcfg.tunMode;
+          REMOTE_ADDRESS = qtcfg.remoteAddress;
+          LOCAL_ADDRESS = qtcfg.localAddress;
+          LOCAL_PORT = toString qtcfg.localPort;
+          REMOTE_PORT = toString qtcfg.remotePort;
+          REMOTE_FLOAT = toString qtcfg.remoteFloat;
+          PRIVATE_KEY = qtcfg.privateKey;
+          PUBLIC_KEY = qtcfg.publicKey;
+          TIME_WINDOW = toString qtcfg.timeWindow;
+          TUN_UP_SCRIPT =
+            pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript;
+          SUID = "nobody";
         };
-      }) cfg
-    );
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.quicktun}/bin/quicktun.${qtcfg.protocol}";
+        };
+      };
+    }) cfg);
   };
 
 }

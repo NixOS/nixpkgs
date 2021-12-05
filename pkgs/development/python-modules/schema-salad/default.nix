@@ -1,15 +1,5 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchPypi
-, cachecontrol
-, lockfile
-, mistune
-, rdflib
-, ruamel-yaml
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, black, buildPythonPackage, fetchPypi, cachecontrol, lockfile, mistune
+, rdflib, ruamel-yaml, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
@@ -23,18 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-1crKyAON8iZBYxP6bhj0MxV3fSpnCh3Lqp8x91KLBT8=";
   };
 
-  propagatedBuildInputs = [
-    cachecontrol
-    lockfile
-    mistune
-    rdflib
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ cachecontrol lockfile mistune rdflib ruamel-yaml ];
 
-  checkInputs = [
-    black
-    pytestCheckHook
-  ];
+  checkInputs = [ black pytestCheckHook ];
 
   disabledTests = [
     # setup for these tests requires network access
@@ -42,9 +23,7 @@ buildPythonPackage rec {
     "test_outputBinding"
   ];
 
-  pythonImportsCheck = [
-    "schema_salad"
-  ];
+  pythonImportsCheck = [ "schema_salad" ];
 
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";

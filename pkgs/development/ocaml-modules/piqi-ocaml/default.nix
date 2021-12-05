@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims
+}:
 
 stdenv.mkDerivation rec {
   version = "0.7.7";
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://piqi.org";
-    description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
+    description =
+      "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];
   };

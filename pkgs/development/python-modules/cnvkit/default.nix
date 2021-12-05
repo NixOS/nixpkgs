@@ -1,23 +1,6 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rPackages
-, buildPythonPackage
-, biopython
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, matplotlib
-, reportlab
-, pysam
-, future
-, pillow
-, pomegranate
-, pyfaidx
-, python
-, R
-}:
+{ lib, fetchFromGitHub, fetchpatch, rPackages, buildPythonPackage, biopython
+, numpy, scipy, scikit-learn, pandas, matplotlib, reportlab, pysam, future
+, pillow, pomegranate, pyfaidx, python, R }:
 
 buildPythonPackage rec {
   pname = "CNVkit";
@@ -33,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     # Fix: AttributeError: module 'pandas.io.common' has no attribute 'EmptyDataError'
     (fetchpatch {
-      url = "https://github.com/etal/cnvkit/commit/392adfffedfa0415e635b72c5027835b0a8d7ab5.patch";
+      url =
+        "https://github.com/etal/cnvkit/commit/392adfffedfa0415e635b72c5027835b0a8d7ab5.patch";
       sha256 = "0s0gwyy0hybmhc3jij2v9l44b6lkcmclii8bkwsazzj2kc24m2rh";
     })
   ];
@@ -67,7 +51,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";
-    description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
+    description =
+      "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
     license = licenses.asl20;
     maintainers = [ maintainers.jbedo ];
   };

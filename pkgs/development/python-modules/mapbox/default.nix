@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, boto3
-, cachecontrol
-, fetchFromGitHub
-, iso3166
-, python-dateutil
-, requests
-, responses
-, polyline
-, pytestCheckHook
-, uritemplate
+{ lib, buildPythonPackage, boto3, cachecontrol, fetchFromGitHub, iso3166
+, python-dateutil, requests, responses, polyline, pytestCheckHook, uritemplate
 }:
 
 buildPythonPackage rec {
@@ -23,7 +13,15 @@ buildPythonPackage rec {
     sha256 = "123wsa4j11ps5pkjgylbmw4gnzh2vi22swgmvy50w26glkszh075";
   };
 
-  propagatedBuildInputs = [ boto3 cachecontrol iso3166 python-dateutil requests polyline uritemplate ];
+  propagatedBuildInputs = [
+    boto3
+    cachecontrol
+    iso3166
+    python-dateutil
+    requests
+    polyline
+    uritemplate
+  ];
   checkInputs = [ pytestCheckHook responses ];
 
   meta = with lib; {

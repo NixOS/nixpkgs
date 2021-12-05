@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   meta = {
-    description = "Revised^${toString revision} Report on the Algorithmic Language Scheme";
+    description =
+      "Revised^${toString revision} Report on the Algorithmic Language Scheme";
 
     longDescription = ''
       This package contains the GNU Info version of the

@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-     substituteInPlace src/test/CMakeLists.txt \
-            --replace "add_subdirectory(gtest)" ""
+    substituteInPlace src/test/CMakeLists.txt \
+           --replace "add_subdirectory(gtest)" ""
   '';
 
   checkPhase = ''

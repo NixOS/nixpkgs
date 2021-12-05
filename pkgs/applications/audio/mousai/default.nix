@@ -1,22 +1,6 @@
-{ lib
-, python3
-, fetchFromGitHub
-, substituteAll
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, librsvg
-, meson
-, ninja
-, pkg-config
-, pulseaudio
-, wrapGAppsHook
-}:
+{ lib, python3, fetchFromGitHub, substituteAll, appstream-glib
+, desktop-file-utils, gettext, glib, gobject-introspection, gst_all_1, gtk4
+, libadwaita, librsvg, meson, ninja, pkg-config, pulseaudio, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
@@ -65,10 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     pulseaudio
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
-    requests
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 requests ];
 
   meta = with lib; {
     description = "Identify any songs in seconds";

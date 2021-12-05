@@ -14,9 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler gdk-pixbuf SDL gtk2 ];
 
-  patches = [
-    ./gdk-libs.patch
-  ];
+  patches = [ ./gdk-libs.patch ];
 
   buildPhase = ''
     make PREFIX=$out
@@ -32,7 +30,7 @@ stdenv.mkDerivation {
     description = "Viewer for PDF files, uses SDL and libpoppler";
 
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
   };
 }

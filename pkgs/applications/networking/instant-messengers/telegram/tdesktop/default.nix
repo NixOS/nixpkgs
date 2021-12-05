@@ -1,54 +1,12 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, callPackage
-, pkg-config
-, cmake
-, ninja
-, python3
-, wrapGAppsHook
-, wrapQtAppsHook
-, extra-cmake-modules
-, qtbase
-, qtimageformats
-, gtk3
-, kwayland
-, libdbusmenu
-, lz4
-, xxHash
-, ffmpeg
-, openalSoft
-, minizip
-, libopus
-, alsa-lib
-, libpulseaudio
-, range-v3
-, tl-expected
-, hunspell
-, glibmm
-, webkitgtk
-, jemalloc
-, rnnoise
-, abseil-cpp
-  # Transitive dependencies:
-, util-linuxMinimal
-, pcre
-, libpthreadstubs
-, libXdmcp
-, libselinux
-, libsepol
-, libepoxy
-, at-spi2-core
-, libXtst
-, libthai
-, libdatrie
-, xdg-utils
-, libsysprof-capture
-, libpsl
-, brotli
-, microsoft_gsl
-, rlottie
-}:
+{ mkDerivation, lib, fetchFromGitHub, callPackage, pkg-config, cmake, ninja
+, python3, wrapGAppsHook, wrapQtAppsHook, extra-cmake-modules, qtbase
+, qtimageformats, gtk3, kwayland, libdbusmenu, lz4, xxHash, ffmpeg, openalSoft
+, minizip, libopus, alsa-lib, libpulseaudio, range-v3, tl-expected, hunspell
+, glibmm, webkitgtk, jemalloc, rnnoise, abseil-cpp
+# Transitive dependencies:
+, util-linuxMinimal, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol
+, libepoxy, at-spi2-core, libXtst, libthai, libdatrie, xdg-utils
+, libsysprof-capture, libpsl, brotli, microsoft_gsl, rlottie }:
 
 # Main reference:
 # - This package was originally based on the Arch package but all patches are now upstreamed:
@@ -59,12 +17,9 @@
 
 let
   tg_owt = callPackage ./tg_owt.nix {
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
-    };
+    abseil-cpp = abseil-cpp.override { cxxStandard = "17"; };
   };
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "telegram-desktop";
   version = "3.1.11";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
@@ -162,7 +117,7 @@ mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -182,7 +137,8 @@ mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
+    changelog =
+      "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ oxalica primeos vanilla ];
   };
 }

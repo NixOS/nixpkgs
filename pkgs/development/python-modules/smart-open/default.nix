@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, azure-common
-, azure-core
-, azure-storage-blob
-, boto3
-, google-cloud-storage
-, requests
-, moto
-, parameterizedtestcase
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, azure-common
+, azure-core, azure-storage-blob, boto3, google-cloud-storage, requests, moto
+, parameterizedtestcase, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "smart-open";
@@ -35,11 +24,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    moto
-    parameterizedtestcase
-    pytestCheckHook
-  ];
+  checkInputs = [ moto parameterizedtestcase pytestCheckHook ];
 
   pytestFlagsArray = [ "smart_open" ];
 

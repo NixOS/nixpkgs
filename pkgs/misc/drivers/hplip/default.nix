@@ -1,15 +1,9 @@
-{ lib, stdenv, fetchurl, substituteAll
-, pkg-config
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
-, dbus, file, ghostscript, usbutils
-, net-snmp, openssl, perl, nettools, avahi
-, bash, util-linux
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, cups, zlib, libjpeg, libusb1
+, python3Packages, sane-backends, dbus, file, ghostscript, usbutils, net-snmp
+, openssl, perl, nettools, avahi, bash, util-linux
 # To remove references to gcc-unwrapped
-, removeReferencesTo, qt5
-, withQt5 ? true
-, withPlugin ? false
-, withStaticPPDInstall ? false
-}:
+, removeReferencesTo, qt5, withQt5 ? true, withPlugin ? false
+, withStaticPPDInstall ? false }:
 
 let
 
@@ -22,7 +16,8 @@ let
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
+    url =
+      "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
     sha256 = "r8PoQQFfjdHKySPCFwtDR8Tl6v5Eag9gXpBAp6sCF9Q=";
   };
 
@@ -32,21 +27,19 @@ let
   };
 
   hplipPlatforms = {
-    i686-linux   = "x86_32";
+    i686-linux = "x86_32";
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
     aarch64-linux = "arm64";
   };
 
-  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
-    or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system} or (throw
+    "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
 
-in
-
-assert withPlugin -> builtins.elem hplipArch pluginArches
+in assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
 python3Packages.buildPythonApplication {
@@ -68,23 +61,12 @@ python3Packages.buildPythonApplication {
     avahi
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    removeReferencesTo
-  ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config removeReferencesTo ]
+    ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
-  pythonPath = with python3Packages; [
-    dbus
-    pillow
-    pygobject3
-    reportlab
-    usbutils
-    sip_4
-    dbus-python
-  ] ++ lib.optionals withQt5 [
-    pyqt5
-    enum-compat
-  ];
+  pythonPath = with python3Packages;
+    [ dbus pillow pygobject3 reportlab usbutils sip_4 dbus-python ]
+    ++ lib.optionals withQt5 [ pyqt5 enum-compat ];
 
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
@@ -123,7 +105,8 @@ python3Packages.buildPythonApplication {
       {} +
   '';
 
-  configureFlags = let out = placeholder "out"; in [
+  configureFlags = let out = placeholder "out";
+  in [
     "--with-hpppddir=${out}/share/cups/model/HP"
     "--with-cupsfilterdir=${out}/lib/cups/filter"
     "--with-cupsbackenddir=${out}/lib/cups/backend"
@@ -132,10 +115,8 @@ python3Packages.buildPythonApplication {
     "--with-mimedir=${out}/etc/cups"
     "--enable-policykit"
     "--disable-qt4"
-  ]
-    ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
-    ++ lib.optional withQt5 "--enable-qt5"
-    ;
+  ] ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
+  ++ lib.optional withQt5 "--enable-qt5";
 
   # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
   # generation of '*.ppd' files.
@@ -143,7 +124,8 @@ python3Packages.buildPythonApplication {
   # Could not find how to fix the problem in 'ppdc' so this is a workaround.
   CUPS_DATADIR = "${cups}/share/cups";
 
-  makeFlags = let out = placeholder "out"; in [
+  makeFlags = let out = placeholder "out";
+  in [
     "halpredir=${out}/share/hal/fdi/preprobe/10osvendor"
     "rulesdir=${out}/etc/udev/rules.d"
     "policykit_dir=${out}/share/polkit-1/actions"
@@ -247,17 +229,28 @@ python3Packages.buildPythonApplication {
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+    "share/hplip"
+    "lib/cups/backend"
+    "lib/cups/filter"
+    python3Packages.python.sitePackages
+    "lib/sane"
   ];
 
   meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
-    license = if withPlugin
-      then licenses.unfree
-      else with licenses; [ mit bsd2 gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    license = if withPlugin then
+      licenses.unfree
+    else
+      with licenses; [ mit bsd2 gpl2Plus ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "armv6l-linux"
+      "armv7l-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [ ttuegel ];
   };
 }

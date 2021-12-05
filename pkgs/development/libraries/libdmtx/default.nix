@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libdmtx";
@@ -19,7 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = {
-    description = "An open source software for reading and writing Data Matrix barcodes";
+    description =
+      "An open source software for reading and writing Data Matrix barcodes";
     homepage = "https://github.com/dmtx/libdmtx";
     changelog = "https://github.com/dmtx/libdmtx/blob/v${version}/ChangeLog";
     platforms = lib.platforms.all;

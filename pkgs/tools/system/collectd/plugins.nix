@@ -1,96 +1,44 @@
-{ lib, stdenv
-, curl
-, darwin
-, hiredis
-, iptables
-, jdk
-, libatasmart
-, libdbi
-, libesmtp
-, libgcrypt
-, libmemcached, cyrus_sasl
-, libmodbus
-, libmicrohttpd
-, libmnl
-, libmysqlclient
-, libnotify, gdk-pixbuf
-, liboping
-, libpcap
-, libsigrok
-, libvirt
-, libxml2
-, libapparmor, libcap_ng, numactl
-, lua
-, lvm2
-, lm_sensors
-, mongoc
-, mosquitto
-, net-snmp
-, openldap
-, openipmi
-, perl
-, postgresql
-, protobufc
-, python
-, rabbitmq-c
-, rdkafka
-, riemann_c_client
-, rrdtool
-, udev
-, varnish
-, xen
-, yajl
-, IOKit
+{ lib, stdenv, curl, darwin, hiredis, iptables, jdk, libatasmart, libdbi
+, libesmtp, libgcrypt, libmemcached, cyrus_sasl, libmodbus, libmicrohttpd
+, libmnl, libmysqlclient, libnotify, gdk-pixbuf, liboping, libpcap, libsigrok
+, libvirt, libxml2, libapparmor, libcap_ng, numactl, lua, lvm2, lm_sensors
+, mongoc, mosquitto, net-snmp, openldap, openipmi, perl, postgresql, protobufc
+, python, rabbitmq-c, rdkafka, riemann_c_client, rrdtool, udev, varnish, xen
+, yajl, IOKit
 # Defaults to `null` for all supported plugins,
 # list of plugin names for a custom build
-, enabledPlugins ? null
-, ...
-}:
+, enabledPlugins ? null, ... }:
 
 let
   # Plugins that have dependencies.
   # Please help to extend these!
   plugins = {
-    amqp.buildInputs = [
-      yajl
-    ] ++ lib.optionals stdenv.isLinux [ rabbitmq-c ];
+    amqp.buildInputs = [ yajl ] ++ lib.optionals stdenv.isLinux [ rabbitmq-c ];
     apache.buildInputs = [ curl ];
     ascent.buildInputs = [ curl libxml2 ];
-    battery.buildInputs = lib.optionals stdenv.isDarwin [
-      IOKit
-    ];
+    battery.buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
     bind.buildInputs = [ curl libxml2 ];
     ceph.buildInputs = [ yajl ];
     curl.buildInputs = [ curl ];
     curl_json.buildInputs = [ curl yajl ];
     curl_xml.buildInputs = [ curl libxml2 ];
     dbi.buildInputs = [ libdbi ];
-    disk.buildInputs = lib.optionals stdenv.isLinux [
-      udev
-    ] ++ lib.optionals stdenv.isDarwin [
-      IOKit
-    ];
+    disk.buildInputs = lib.optionals stdenv.isLinux [ udev ]
+      ++ lib.optionals stdenv.isDarwin [ IOKit ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
-    iptables.buildInputs = [
-      libpcap
-    ] ++ lib.optionals stdenv.isLinux [
-      iptables libmnl
-    ];
+    iptables.buildInputs = [ libpcap ]
+      ++ lib.optionals stdenv.isLinux [ iptables libmnl ];
     java.buildInputs = [ jdk libgcrypt libxml2 ];
     log_logstash.buildInputs = [ yajl ];
     lua.buildInputs = [ lua ];
     memcachec.buildInputs = [ libmemcached cyrus_sasl ];
     modbus.buildInputs = lib.optionals stdenv.isLinux [ libmodbus ];
     mqtt.buildInputs = [ mosquitto ];
-    mysql.buildInputs = lib.optionals (libmysqlclient != null) [
-      libmysqlclient
-    ];
-    netlink.buildInputs = [
-      libpcap
-    ] ++ lib.optionals stdenv.isLinux [
-      libmnl
-    ];
+    mysql.buildInputs =
+      lib.optionals (libmysqlclient != null) [ libmysqlclient ];
+    netlink.buildInputs = [ libpcap ]
+      ++ lib.optionals stdenv.isLinux [ libmnl ];
     network.buildInputs = [ libgcrypt ];
     nginx.buildInputs = [ curl ];
     notify_desktop.buildInputs = [ libnotify gdk-pixbuf ];
@@ -112,9 +60,8 @@ let
     snmp.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     snmp_agent.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     varnish.buildInputs = [ curl varnish ];
-    virt.buildInputs = [
-      libvirt libxml2 yajl
-    ] ++ lib.optionals stdenv.isLinux [ lvm2 udev ];
+    virt.buildInputs = [ libvirt libxml2 yajl ]
+      ++ lib.optionals stdenv.isLinux [ lvm2 udev ];
     write_http.buildInputs = [ curl yajl ];
     write_kafka.buildInputs = [ yajl rdkafka ];
     write_log.buildInputs = [ yajl ];
@@ -125,19 +72,16 @@ let
     xencpu.buildInputs = [ xen ];
   };
 
-  configureFlags = lib.optionals (enabledPlugins != null) (
-    [ "--disable-all-plugins" ]
-    ++ (map (plugin: "--enable-${plugin}") enabledPlugins));
+  configureFlags = lib.optionals (enabledPlugins != null)
+    ([ "--disable-all-plugins" ]
+      ++ (map (plugin: "--enable-${plugin}") enabledPlugins));
 
   pluginBuildInputs = plugin:
     lib.optionals (plugins ? ${plugin} && plugins.${plugin} ? buildInputs)
     plugins.${plugin}.buildInputs;
 
-  buildInputs =
-    if enabledPlugins == null
-    then builtins.concatMap pluginBuildInputs
-      (builtins.attrNames plugins)
-    else builtins.concatMap pluginBuildInputs enabledPlugins;
-in {
-  inherit configureFlags buildInputs;
-}
+  buildInputs = if enabledPlugins == null then
+    builtins.concatMap pluginBuildInputs (builtins.attrNames plugins)
+  else
+    builtins.concatMap pluginBuildInputs enabledPlugins;
+in { inherit configureFlags buildInputs; }

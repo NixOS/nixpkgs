@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.evilwm;
-in
-{
+let cfg = config.services.xserver.windowManager.evilwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";

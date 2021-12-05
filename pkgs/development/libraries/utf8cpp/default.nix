@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gsbwif97i025bxgyax4fbf6v9z44zrca4s6wwd8x36ac8qzjppf";
   };
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   nativeBuildInputs = [ cmake ];
 

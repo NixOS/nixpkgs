@@ -1,12 +1,6 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, containers
-, lightyear
-, test
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, effects, containers, lightyear, test
+, lib }:
+build-idris-package {
   name = "config";
   version = "2017-11-06";
 

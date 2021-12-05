@@ -1,4 +1,4 @@
-{ lib, python2Packages, fetchFromGitHub, pkg-config, glib, alsa-lib, libjack2  }:
+{ lib, python2Packages, fetchFromGitHub, pkg-config, glib, alsa-lib, libjack2 }:
 
 python2Packages.buildPythonApplication {
   version = "2015-11-17";
@@ -13,23 +13,37 @@ python2Packages.buildPythonApplication {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib alsa-lib libjack2 python2Packages.boost ];
-  propagatedBuildInputs = with python2Packages; [ decorator ]
+  propagatedBuildInputs = with python2Packages;
+    [
+      decorator
+    ]
     # for livedings
-    ++ [ tkinter pyliblo ]
+    ++ [
+      tkinter
+      pyliblo
+    ]
     # for mididings.extra
-    ++ [ dbus-python pyinotify ]
+    ++ [
+      dbus-python
+      pyinotify
+    ]
     # to read/write standard MIDI files
-    ++ [ pysmf ]
+    ++ [
+      pysmf
+    ]
     # so mididings knows where to look for config files
     ++ [ pyxdg ];
 
   preBuild = with lib.versions; ''
     substituteInPlace setup.py \
-      --replace boost_python "boost_python${major python2Packages.python.version}${minor python2Packages.python.version}"
+      --replace boost_python "boost_python${
+        major python2Packages.python.version
+      }${minor python2Packages.python.version}"
   '';
 
   meta = with lib; {
-    description = "A MIDI router and processor based on Python, supporting ALSA and JACK MIDI";
+    description =
+      "A MIDI router and processor based on Python, supporting ALSA and JACK MIDI";
     homepage = "http://das.nasophon.de/mididings";
     license = licenses.gpl2;
     maintainers = [ ];

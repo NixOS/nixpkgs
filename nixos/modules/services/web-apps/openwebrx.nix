@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.services.openwebrx;
-in
-{
+let cfg = config.services.openwebrx;
+in {
   options.services.openwebrx = with lib; {
-    enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
+    enable = mkEnableOption
+      "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
 
     package = mkOption {
       type = types.package;
@@ -16,11 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.openwebrx = {
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [
-        csdr
-        alsaUtils
-        netcat
-      ];
+      path = with pkgs; [ csdr alsaUtils netcat ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/openwebrx";
         Restart = "always";

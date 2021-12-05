@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre
-, htmlunit-driver, chromedriver, chromeSupport ? true }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, htmlunit-driver, chromedriver
+, chromeSupport ? true }:
 
 with lib;
 
@@ -12,7 +12,8 @@ in stdenv.mkDerivation rec {
   version = "${minorVersion}.${patchVersion}";
 
   src = fetchurl {
-    url = "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
+    url =
+      "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
     sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
@@ -26,7 +27,10 @@ in stdenv.mkDerivation rec {
     cp $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/selenium-server \
       --add-flags "-cp $out/share/lib/${pname}-${version}/${pname}-${version}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
-      --add-flags ${optionalString chromeSupport "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"} \
+      --add-flags ${
+        optionalString chromeSupport
+        "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"
+      } \
       --add-flags "org.openqa.grid.selenium.GridLauncherV3"
   '';
 

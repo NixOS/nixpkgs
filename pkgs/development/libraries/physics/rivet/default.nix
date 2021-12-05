@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript
+, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -13,27 +14,18 @@ stdenv.mkDerivation rec {
     # Fixes build
     (fetchpatch {
       name = "rivet-3.1.5-namespace-fix.patch";
-      url = "https://gitlab.com/hepcedar/rivet/-/commit/17a99b38b52e65a4a3fd6289124bd9dd874c30bf.diff";
+      url =
+        "https://gitlab.com/hepcedar/rivet/-/commit/17a99b38b52e65a4a3fd6289124bd9dd874c30bf.diff";
       sha256 = "sha256-OknqghpMMB5nRHeeRc2ddxybhnkVGRB1x8jfOjrkyms=";
     })
   ];
 
-  latex = texlive.combine { inherit (texlive)
-    scheme-basic
-    collection-pstricks
-    collection-fontsrecommended
-    l3kernel
-    l3packages
-    mathastext
-    pgf
-    relsize
-    sansmath
-    sfmath
-    siunitx
-    xcolor
-    xkeyval
-    xstring
-    ;};
+  latex = texlive.combine {
+    inherit (texlive)
+      scheme-basic collection-pstricks collection-fontsrecommended l3kernel
+      l3packages mathastext pgf relsize sansmath sfmath siunitx xcolor xkeyval
+      xstring;
+  };
 
   nativeBuildInputs = [ rsync makeWrapper ];
   buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];
@@ -43,7 +35,9 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/rivet-build.in \
       --replace 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
       --replace 'which' '"${which}/bin/which"' \
-      --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
+      --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${
+        if stdenv.cc.isClang or false then "clang++" else "g++"
+      }  #' \
       --replace 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
 
@@ -63,14 +57,11 @@ stdenv.mkDerivation rec {
       --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"
   '';
 
-  configureFlags = [
-    "--with-fastjet=${fastjet}"
-    "--with-yoda=${yoda}"
-  ] ++ (if lib.versions.major hepmc.version == "3" then [
-    "--with-hepmc3=${hepmc}"
-  ] else [
-    "--with-hepmc=${hepmc}"
-  ]);
+  configureFlags = [ "--with-fastjet=${fastjet}" "--with-yoda=${yoda}" ]
+    ++ (if lib.versions.major hepmc.version == "3" then
+      [ "--with-hepmc3=${hepmc}" ]
+    else
+      [ "--with-hepmc=${hepmc}" ]);
 
   enableParallelBuilding = true;
 
@@ -81,10 +72,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license     = licenses.gpl3;
-    homepage    = "https://rivet.hepforge.org";
-    platforms   = platforms.unix;
+    description =
+      "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
+    license = licenses.gpl3;
+    homepage = "https://rivet.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

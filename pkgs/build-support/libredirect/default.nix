@@ -11,13 +11,15 @@ stdenv.mkDerivation rec {
 
   libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
-  outputs = ["out" "hook"];
+  outputs = [ "out" "hook" ];
 
   buildPhase = ''
     runHook preBuild
 
     $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
-      ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
+      ${
+        lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"
+      } \
       -o "$libName" \
       libredirect.c
 
@@ -42,9 +44,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
     ${if stdenv.isDarwin then ''
-    export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
+      export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
     '' else ''
-    export LD_PRELOAD="$out/lib/$libName"
+      export LD_PRELOAD="$out/lib/$libName"
     ''}
     SETUP_HOOK
 
@@ -62,7 +64,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.unix;
-    description = "An LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
+    description =
+      "An LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
     longDescription = ''
       libredirect is an LD_PRELOAD library to intercept and rewrite the paths in
       glibc calls based on the value of $NIX_REDIRECTS, a colon-separated list

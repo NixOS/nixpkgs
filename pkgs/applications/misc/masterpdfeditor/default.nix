@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, wrapQtAppsHook }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib
+, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
   version = "5.7.90";
 
   src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
+    url =
+      "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
     sha256 = "sha256-wUHLesJ/YV3QyTJfGUr1lFD55JBnfSmjO2VvriaqlII=";
   };
 

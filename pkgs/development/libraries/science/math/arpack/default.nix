@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, gfortran, blas, lapack, eigen }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gfortran, blas, lapack, eigen
+}:
 
 stdenv.mkDerivation rec {
   pname = "arpack";
@@ -16,18 +16,15 @@ stdenv.mkDerivation rec {
     # https://github.com/opencollab/arpack-ng/pull/301
     (fetchpatch {
       name = "pkg-config-paths.patch";
-      url = "https://github.com/opencollab/arpack-ng/commit/47fc83cb371a9cc8a8c058097de5e0298cd548f5.patch";
+      url =
+        "https://github.com/opencollab/arpack-ng/commit/47fc83cb371a9cc8a8c058097de5e0298cd548f5.patch";
       excludes = [ "CHANGES" ];
       sha256 = "1aijvrfsxkgzqmkzq2dmaj8q3jdpg2hwlqpfl8ddk9scv17gh9m8";
     })
   ];
 
   nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    blas
-    lapack
-    eigen
-  ];
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [ blas lapack eigen ];
 
   doCheck = true;
 
@@ -38,12 +35,13 @@ stdenv.mkDerivation rec {
 
   preCheck = if stdenv.isDarwin then ''
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib:${blas}/lib:${lapack}/lib
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
-  '' + ''
-    # Prevent tests from using all cores
-    export OMP_NUM_THREADS=2
-  '';
+  '' else
+    ''
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
+    '' + ''
+      # Prevent tests from using all cores
+      export OMP_NUM_THREADS=2
+    '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib

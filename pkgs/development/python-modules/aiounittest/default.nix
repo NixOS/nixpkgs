@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, coverage
-, isPy27
-, wrapt
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose, coverage, isPy27, wrapt }:
 
 buildPythonPackage rec {
   pname = "aiounittest";
@@ -19,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-FixGF1JLJVqTgLaWugbeu8f+SDjpHSdSLoGklYBup4M=";
   };
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  propagatedBuildInputs = [ wrapt ];
 
-  checkInputs = [
-    nose
-    coverage
-  ];
+  checkInputs = [ nose coverage ];
 
   checkPhase = ''
     nosetests

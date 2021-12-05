@@ -1,16 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, glib
-, lib
-, writeScriptBin
-}:
+{ stdenv, fetchFromGitHub, glib, lib, writeScriptBin }:
 let
   # make install will use dconf to find desktop background file uri.
   # consider adding an args to allow specify pictures manually.
   # https://github.com/daniruiz/flat-remix-gnome/blob/20211113/Makefile#L38
   fake-dconf = writeScriptBin "dconf" "echo -n";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
   version = "20211202";
 

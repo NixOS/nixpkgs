@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, boehmgc
-, glib
-, help2man
-, libgee
-, ncurses
-, perl
-, pkg-config
-, vala
-}:
+{ lib, stdenv, fetchurl, boehmgc, glib, help2man, libgee, ncurses, perl
+, pkg-config, vala }:
 
 stdenv.mkDerivation rec {
   pname = "zile";
@@ -20,12 +10,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-d+t9r/PJi9yI2qGsBA3MynK4HcMvwxZuB53Xpj5Cx0E=";
   };
 
-  buildInputs = [
-    boehmgc
-    glib
-    libgee
-    ncurses
-  ];
+  buildInputs = [ boehmgc glib libgee ncurses ];
   nativeBuildInputs = [
     perl
     pkg-config
@@ -33,14 +18,14 @@ stdenv.mkDerivation rec {
   ]
   # `help2man' wants to run Zile, which won't work when the
   # newly-produced binary can't be run at build-time.
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/zile/";

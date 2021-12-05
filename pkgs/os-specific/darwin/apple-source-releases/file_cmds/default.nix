@@ -1,4 +1,5 @@
-{ lib, appleDerivation, xcbuildHook, zlib, bzip2, xz, ncurses, libutil, Libinfo }:
+{ lib, appleDerivation, xcbuildHook, zlib, bzip2, xz, ncurses, libutil, Libinfo
+}:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];

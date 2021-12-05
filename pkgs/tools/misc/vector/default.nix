@@ -1,36 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, llvmPackages
-, openssl
-, protobuf
-, rdkafka
-, oniguruma
-, zstd
-, Security
-, libiconv
-, coreutils
-, CoreServices
-, tzdata
-  # kafka is optional but one of the most used features
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, llvmPackages, openssl
+, protobuf, rdkafka, oniguruma, zstd, Security, libiconv, coreutils
+, CoreServices, tzdata
+# kafka is optional but one of the most used features
 , enableKafka ? true
   # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" ]
-    # the second feature flag is passed to the rdkafka dependency
-    # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
-}:
+, features ? ([
+  "sinks"
+  "sources"
+  "transforms"
+]
+# the second feature flag is passed to the rdkafka dependency
+# building on linux fails without this feature flag (both x86_64 and AArch64)
+  ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
+  ++ lib.optional stdenv.targetPlatform.isUnix "unix") }:
 
 let
   pname = "vector";
   version = "0.18.0";
-in
-rustPlatform.buildRustPackage {
+in rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -43,7 +32,12 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "sha256-u7GzqQex5pqU7DuueMfbxMSOpAzd+uLQTZ2laG/aC+4=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      libiconv
+      coreutils
+      CoreServices
+    ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -90,7 +84,7 @@ rustPlatform.buildRustPackage {
       --replace "#[tokio::test]" ""
 
     ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
-        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
+      substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
     ''}
   '';
 

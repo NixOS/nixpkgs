@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testtools
-}:
+{ lib, buildPythonPackage, fetchPypi, testtools }:
 
 buildPythonPackage rec {
   pname = "testscenarios";

@@ -1,16 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, qmake4Hook
-, qt4
-, xorg
-}:
+{ lib, stdenv, fetchurl, qmake4Hook, qt4, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "qremotecontrol-server";
   version = "2.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/qrc/${version}/qremotecontrol-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/project/qrc/${version}/qremotecontrol-${version}.tar.bz2";
     sha256 = "07hzc9959a56b49jgmcv8ry8b9sppklvqs9kns3qjj3v9d22nbrp";
   };
 

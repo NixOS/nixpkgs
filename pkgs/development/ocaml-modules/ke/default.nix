@@ -1,6 +1,4 @@
-{ lib, buildDunePackage, fetchurl
-, bigarray-compat, fmt
-, alcotest, bigstringaf
+{ lib, buildDunePackage, fetchurl, bigarray-compat, fmt, alcotest, bigstringaf
 }:
 
 buildDunePackage rec {
@@ -10,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ke/releases/download/v${version}/ke-v${version}.tbz";
     sha256 = "13c9xy60vmq29mnwpg3h3zgl6gjbjfwbx1s0crfc6xwvark0zxnx";
   };
 

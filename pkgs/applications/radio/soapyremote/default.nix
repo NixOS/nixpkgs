@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, soapysdr, avahi }:
 
-let
-  version = "0.5.2";
+let version = "0.5.2";
 
 in stdenv.mkDerivation {
   pname = "soapyremote";

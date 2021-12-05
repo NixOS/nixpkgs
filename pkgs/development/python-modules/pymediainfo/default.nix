@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
-, libmediainfo
-, setuptools-scm
+{ lib, stdenv, fetchPypi, buildPythonPackage, libmediainfo, setuptools-scm
 , pytest, glibcLocales }:
 
 buildPythonPackage rec {

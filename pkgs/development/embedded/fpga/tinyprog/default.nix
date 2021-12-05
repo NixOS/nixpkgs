@@ -1,9 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-}:
+{ lib, python3Packages, fetchFromGitHub }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
   version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";
@@ -17,16 +15,8 @@ with python3Packages; buildPythonApplication rec {
 
   sourceRoot = "source/programmer";
 
-  propagatedBuildInputs = [
-    pyserial
-    jsonmerge
-    intelhex
-    tqdm
-    six
-    packaging
-    setuptools
-    pyusb
-  ];
+  propagatedBuildInputs =
+    [ pyserial jsonmerge intelhex tqdm six packaging setuptools pyusb ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -35,8 +25,10 @@ with python3Packages; buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
-    description = "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
+    homepage =
+      "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
+    description =
+      "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
     maintainers = with maintainers; [ emily ];
     license = licenses.asl20;
   };

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, elasticsearch
-, ipaddress
-, python-dateutil
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, elasticsearch, ipaddress
+, python-dateutil, six }:
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
@@ -18,7 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
-                          ++ lib.optional (!isPy3k) ipaddress;
+    ++ lib.optional (!isPy3k) ipaddress;
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch

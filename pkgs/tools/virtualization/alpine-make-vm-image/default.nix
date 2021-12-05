@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, apk-tools, coreutils, e2fsprogs, findutils, gnugrep, gnused, kmod, qemu-utils
-, util-linux
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, apk-tools, coreutils, e2fsprogs
+, findutils, gnugrep, gnused, kmod, qemu-utils, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "alpine-make-vm-image";
@@ -20,15 +18,25 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/alpine-make-vm-image --set PATH ${lib.makeBinPath [
-      apk-tools coreutils e2fsprogs findutils gnugrep gnused kmod qemu-utils
-      util-linux
-    ]}
+    wrapProgram $out/bin/alpine-make-vm-image --set PATH ${
+      lib.makeBinPath [
+        apk-tools
+        coreutils
+        e2fsprogs
+        findutils
+        gnugrep
+        gnused
+        kmod
+        qemu-utils
+        util-linux
+      ]
+    }
   '';
 
   meta = with lib; {
     homepage = "https://github.com/alpinelinux/alpine-make-vm-image";
-    description = "Make customized Alpine Linux disk image for virtual machines";
+    description =
+      "Make customized Alpine Linux disk image for virtual machines";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.unix;

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, python, isPy27 }:
 
 buildPythonPackage rec {
   pname = "regex";

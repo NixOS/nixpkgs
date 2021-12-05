@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "An integrated platform for performing security testing of web applications";
+    description =
+      "An integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = licenses.unfree;
     platforms = jdk11.meta.platforms;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ bennofs ];
   };
 }

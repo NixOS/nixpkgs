@@ -1,11 +1,4 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, demjson3
-, python
-}:
+{ lib, isPy27, buildPythonPackage, fetchFromGitHub, aiohttp, demjson3, python }:
 
 buildPythonPackage rec {
   pname = "pysyncthru";
@@ -20,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "1c29w2ldrnq0vxr9cfa2pjhwdvrpw393c84khgg2y56jrkbidq53";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    demjson3
-  ];
+  propagatedBuildInputs = [ aiohttp demjson3 ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest
@@ -32,7 +22,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysyncthru" ];
 
   meta = with lib; {
-    description = "Automated JSON API based communication with Samsung SyncThru Web Service";
+    description =
+      "Automated JSON API based communication with Samsung SyncThru Web Service";
     homepage = "https://github.com/nielstron/pysyncthru";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

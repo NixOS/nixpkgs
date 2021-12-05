@@ -1,26 +1,9 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, fetchurl
-, writeShellScript
-, runCommand
-, which
-, formats
-, rustPlatform
-, jq
-, nix-prefetch-git
-, xe
-, curl
-, emscripten
-, Security
-, callPackage
-, linkFarm
+{ lib, stdenv, fetchgit, fetchFromGitHub, fetchurl, writeShellScript, runCommand
+, which, formats, rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
+, Security, callPackage, linkFarm
 
 , enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? stdenv.hostPlatform.isStatic
-, webUISupport ? false
-}:
+, enableStatic ? stdenv.hostPlatform.isStatic, webUISupport ? false }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
 let
@@ -46,30 +29,39 @@ let
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
-  grammars =
-    runCommand "grammars" { } (''
-      mkdir $out
-    '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars { inherit lib; }))));
+  grammars = runCommand "grammars" { } (''
+    mkdir $out
+  '' + (lib.concatStrings (lib.mapAttrsToList (name: grammar: ''
+    ln -s ${fetchGrammar grammar} $out/${name}
+  '') (import ./grammars { inherit lib; }))));
 
-  builtGrammars =
-    let
-      change = name: grammar:
-        callPackage ./grammar.nix { } {
-          language = name;
-          inherit version;
-          source = fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
-        };
-      grammars' = (import ./grammars { inherit lib; });
-      grammars = grammars' //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
-        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
-    in
-    lib.mapAttrs change grammars;
+  builtGrammars = let
+    change = name: grammar:
+      callPackage ./grammar.nix { } {
+        language = name;
+        inherit version;
+        source = fetchGrammar grammar;
+        location = if grammar ? location then grammar.location else null;
+      };
+    grammars' = (import ./grammars { inherit lib; });
+    grammars = grammars' // {
+      tree-sitter-ocaml = grammars'.tree-sitter-ocaml // {
+        location = "ocaml";
+      };
+    } // {
+      tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // {
+        location = "interface";
+      };
+    } // {
+      tree-sitter-typescript = grammars'.tree-sitter-typescript // {
+        location = "typescript";
+      };
+    } // {
+      tree-sitter-tsx = grammars'.tree-sitter-typescript // {
+        location = "tsx";
+      };
+    };
+  in lib.mapAttrs change grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -79,38 +71,25 @@ let
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
   withPlugins = grammarFn:
-    let
-      grammars = grammarFn builtGrammars;
-    in
-    linkFarm "grammars"
-      (map
-        (drv:
-          let
-            name = lib.strings.getName drv;
-          in
-          {
-            name =
-              (lib.strings.replaceStrings ["-"] ["_"]
-                (lib.strings.removePrefix "tree-sitter-"
-                  (lib.strings.removeSuffix "-grammar" name)))
-              + stdenv.hostPlatform.extensions.sharedLibrary;
-            path = "${drv}/parser";
-          }
-        )
-        grammars);
+    let grammars = grammarFn builtGrammars;
+    in linkFarm "grammars" (map (drv:
+      let name = lib.strings.getName drv;
+      in {
+        name = (lib.strings.replaceStrings [ "-" ] [ "_" ]
+          (lib.strings.removePrefix "tree-sitter-"
+            (lib.strings.removeSuffix "-grammar" name)))
+          + stdenv.hostPlatform.extensions.sharedLibrary;
+        path = "${drv}/parser";
+      }) grammars);
 
   allGrammars = builtins.attrValues builtGrammars;
 
-in
-rustPlatform.buildRustPackage {
+in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
-  buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs =
-    [ which ]
-    ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
@@ -138,9 +117,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   passthru = {
-    updater = {
-      inherit update-all-grammars;
-    };
+    updater = { inherit update-all-grammars; };
     inherit grammars builtGrammars withPlugins allGrammars;
 
     tests = {

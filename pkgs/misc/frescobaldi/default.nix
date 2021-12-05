@@ -1,4 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
+{ lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine
+, lilypond }:
 
 buildPythonApplication rec {
   pname = "frescobaldi";
@@ -12,8 +13,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip_4
-    pyqt5 poppler-qt5
+    lilypond
+    pygame
+    python-ly
+    sip_4
+    pyqt5
+    poppler-qt5
     pyqtwebengine
   ];
 
@@ -29,9 +34,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
-  ];
+  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
 
   meta = with lib; {
     homepage = "https://frescobaldi.org/";

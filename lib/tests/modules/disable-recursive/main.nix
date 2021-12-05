@@ -1,8 +1,5 @@
 {
-  imports = [
-    ./foo.nix
-    ./bar.nix
-  ];
+  imports = [ ./foo.nix ./bar.nix ];
 
   enable = true;
 }

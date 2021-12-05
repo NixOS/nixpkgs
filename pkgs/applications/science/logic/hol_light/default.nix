@@ -1,26 +1,24 @@
 { lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
 
 let
-  load_num =
-    if num == null then "" else
-    ''
-      -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
-      -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
-      -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
-    '';
+  load_num = if num == null then
+    ""
+  else ''
+    -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
+    -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
+    -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+  '';
 
-  start_script =
-    ''
-      #!${runtimeShell}
-      cd $out/lib/hol_light
-      exec ${ocaml}/bin/ocaml \
-        -I \`${camlp5}/bin/camlp5 -where\` \
-        ${load_num} \
-        -init make.ml
-    '';
-in
+  start_script = ''
+    #!${runtimeShell}
+    cd $out/lib/hol_light
+    exec ${ocaml}/bin/ocaml \
+      -I \`${camlp5}/bin/camlp5 -where\` \
+      ${load_num} \
+      -init make.ml
+  '';
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "hol_light";
   version = "unstable-2019-10-06";
 
@@ -33,7 +31,8 @@ stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch";
+      url =
+        "https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch";
       sha256 = "180qmxbrk3vb1ix7j77hcs8vsar91rs11s5mm8ir5352rz7ylicr";
     })
   ];

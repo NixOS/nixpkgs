@@ -1,32 +1,15 @@
-{ fetchurl
-, lib
-, stdenv
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, atk
-, gobject-introspection
-, spidermonkey_78
-, pango
-, cairo
-, readline
-, glib
-, libxml2
-, dbus
-, gdk-pixbuf
-, harfbuzz
-, makeWrapper
-, which
-, xvfb-run
-, nixosTests
-}:
+{ fetchurl, lib, stdenv, meson, ninja, pkg-config, gnome, gtk3, atk
+, gobject-introspection, spidermonkey_78, pango, cairo, readline, glib, libxml2
+, dbus, gdk-pixbuf, harfbuzz, makeWrapper, which, xvfb-run, nixosTests }:
 
 let
   testDeps = [
     gobject-introspection # for Gio and cairo typelibs
-    gtk3 atk pango.out gdk-pixbuf harfbuzz
+    gtk3
+    atk
+    pango.out
+    gdk-pixbuf
+    harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
@@ -35,7 +18,9 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gjs/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-SwYpNBoxigI3ThE6uX+anzMlQjJp/B4LBDpf+wGGHF8=";
   };
 
@@ -64,13 +49,9 @@ in stdenv.mkDerivation rec {
     dbus # for dbus-run-session
   ];
 
-  checkInputs = [
-    xvfb-run
-  ] ++ testDeps;
+  checkInputs = [ xvfb-run ] ++ testDeps;
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dprofiler=disabled"
@@ -107,7 +88,9 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
-      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" testDeps}"
+      --prefix GI_TYPELIB_PATH : "${
+        lib.makeSearchPath "lib/girepository-1.0" testDeps
+      }"
   '';
 
   checkPhase = ''
@@ -120,9 +103,7 @@ in stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   passthru = {
-    tests = {
-      installed-tests = nixosTests.installed-tests.gjs;
-    };
+    tests = { installed-tests = nixosTests.installed-tests.gjs; };
 
     updateScript = gnome.updateScript {
       packageName = "gjs";

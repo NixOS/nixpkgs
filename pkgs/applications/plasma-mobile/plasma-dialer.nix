@@ -1,32 +1,15 @@
-{ lib
-, mkDerivation
+{ lib, mkDerivation
 
-, cmake
-, extra-cmake-modules
+, cmake, extra-cmake-modules
 
-, kcontacts
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami2
-, knotifications
-, kpeople
-, libphonenumber
-, libpulseaudio
-, libqofono
-, protobuf
-, pulseaudio-qt
-, qtquickcontrols2
-, telepathy
-}:
+, kcontacts, kcoreaddons, kdbusaddons, ki18n, kirigami2, knotifications, kpeople
+, libphonenumber, libpulseaudio, libqofono, protobuf, pulseaudio-qt
+, qtquickcontrols2, telepathy }:
 
 mkDerivation rec {
   pname = "plasma-dialer";
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     kcontacts

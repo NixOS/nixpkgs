@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = [
-    "BINDIR=$(out)/bin"
-    "MANDIR=$(out)/share/man/man8"
-  ];
+  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man/man8" ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

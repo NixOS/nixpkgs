@@ -5,14 +5,15 @@ with lib;
 let
   cfg = config.services.netdata;
 
-  wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
-    mkdir -p $out/libexec/netdata/plugins.d
-    ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
-    ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
-    ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
-    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
-    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
-  '';
+  wrappedPlugins =
+    pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
+      mkdir -p $out/libexec/netdata/plugins.d
+      ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+      ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
+      ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
+      ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
+      ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    '';
 
   plugins = [
     "${cfg.package}/libexec/netdata/plugins.d"
@@ -20,20 +21,20 @@ let
   ] ++ cfg.extraPluginPaths;
 
   localConfig = {
-    global = {
-      "plugins directory" = concatStringsSep " " plugins;
-    };
+    global = { "plugins directory" = concatStringsSep " " plugins; };
     web = {
       "web files owner" = "root";
       "web files group" = "root";
     };
     "plugin:cgroups" = {
-      "script to get cgroup network interfaces" = "${wrappedPlugins}/libexec/netdata/plugins.d/cgroup-network";
+      "script to get cgroup network interfaces" =
+        "${wrappedPlugins}/libexec/netdata/plugins.d/cgroup-network";
       "use unified cgroups" = "yes";
     };
   };
-  mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
-  configFile = pkgs.writeText "netdata.conf" (if cfg.configText != null then cfg.configText else mkConfig);
+  mkConfig = generators.toINI { } (recursiveUpdate localConfig cfg.config);
+  configFile = pkgs.writeText "netdata.conf"
+    (if cfg.configText != null then cfg.configText else mkConfig);
 
   defaultUser = "netdata";
 
@@ -83,7 +84,7 @@ in {
         };
         extraPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
-          default = ps: [];
+          default = ps: [ ];
           defaultText = literalExpression "ps: []";
           example = literalExpression ''
             ps: [
@@ -119,8 +120,9 @@ in {
 
       config = mkOption {
         type = types.attrsOf types.attrs;
-        default = {};
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        default = { };
+        description =
+          "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -144,27 +146,30 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = cfg.config != {} -> cfg.configText == null ;
-          message = "Cannot specify both config and configText";
-        }
-      ];
+    assertions = [{
+      assertion = cfg.config != { } -> cfg.configText == null;
+      message = "Cannot specify both config and configText";
+    }];
 
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = (with pkgs; [ curl gawk iproute2 which ])
-        ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
-        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
+        ++ lib.optional cfg.python.enable
+        (pkgs.python3.withPackages cfg.python.extraPackages)
+        ++ lib.optional config.virtualisation.libvirtd.enable
+        (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
-        ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        ExecStart =
+          "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecReload =
+          "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
         Restart = "on-failure";
         # User and group
@@ -189,16 +194,16 @@ in {
         ConfigurationDirectoryMode = "0755";
         # Capabilities
         CapabilityBoundingSet = [
-          "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
-          "CAP_DAC_READ_SEARCH"   # is required for apps plugin
-          "CAP_FOWNER"            # is required for freeipmi plugin
-          "CAP_SETPCAP"           # is required for apps, perf and slabinfo plugins
-          "CAP_SYS_ADMIN"         # is required for perf plugin
-          "CAP_SYS_PTRACE"        # is required for apps plugin
-          "CAP_SYS_RESOURCE"      # is required for ebpf plugin
-          "CAP_NET_RAW"           # is required for fping app
-          "CAP_SYS_CHROOT"        # is required for cgroups plugin
-          "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
+          "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
+          "CAP_DAC_READ_SEARCH" # is required for apps plugin
+          "CAP_FOWNER" # is required for freeipmi plugin
+          "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
+          "CAP_SYS_ADMIN" # is required for perf plugin
+          "CAP_SYS_PTRACE" # is required for apps plugin
+          "CAP_SYS_RESOURCE" # is required for ebpf plugin
+          "CAP_NET_RAW" # is required for fping app
+          "CAP_SYS_CHROOT" # is required for cgroups plugin
+          "CAP_SETUID" # is required for cgroups and cgroups-network plugins
         ];
         # Sandboxing
         ProtectSystem = "full";
@@ -255,8 +260,18 @@ in {
     };
 
     security.pam.loginLimits = [
-      { domain = "netdata"; type = "soft"; item = "nofile"; value = "10000"; }
-      { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
+      {
+        domain = "netdata";
+        type = "soft";
+        item = "nofile";
+        value = "10000";
+      }
+      {
+        domain = "netdata";
+        type = "hard";
+        item = "nofile";
+        value = "30000";
+      }
     ];
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
@@ -266,9 +281,8 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
-      ${defaultUser} = { };
-    };
+    users.groups =
+      optionalAttrs (cfg.group == defaultUser) { ${defaultUser} = { }; };
 
   };
 }

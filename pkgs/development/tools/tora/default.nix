@@ -7,21 +7,31 @@ mkDerivation {
   version = "3.2.176";
 
   src = fetchFromGitHub {
-    owner  = "tora-tool";
-    repo   = "tora";
-    rev    = "39bf2837779bf458fc72a9f0e49271152e57829f";
+    owner = "tora-tool";
+    repo = "tora";
+    rev = "39bf2837779bf458fc72a9f0e49271152e57829f";
     sha256 = "0fr9b542i8r6shgnz33lc3cz333fnxgmac033yxfrdjfglzk0j2k";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper qttools ];
 
   buildInputs = [
-    boost doxygen graphviz loki libmysqlclient openssl postgresql qscintilla qtbase
+    boost
+    doxygen
+    graphviz
+    loki
+    libmysqlclient
+    openssl
+    postgresql
+    qscintilla
+    qtbase
   ];
 
   preConfigure = ''
     substituteInPlace src/widgets/toglobalsetting.cpp \
-      --replace 'defaultGvHome = "/usr/bin"' 'defaultGvHome = "${lib.getBin graphviz}/bin"'
+      --replace 'defaultGvHome = "/usr/bin"' 'defaultGvHome = "${
+        lib.getBin graphviz
+      }/bin"'
     substituteInPlace extlibs/libermodel/dotgraph.cpp \
       --replace /usr/bin/dot ${lib.getBin graphviz}/bin/dot
   '';
@@ -42,11 +52,10 @@ mkDerivation {
   # these libraries are only searched for at runtime so we need to force-link them
   NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
 
-  NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+  NIX_CFLAGS_COMPILE =
+    "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 
-  qtWrapperArgs = [
-    ''--prefix PATH : ${lib.getBin graphviz}/bin''
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.getBin graphviz}/bin" ];
 
   meta = with lib; {
     description = "Tora SQL tool";

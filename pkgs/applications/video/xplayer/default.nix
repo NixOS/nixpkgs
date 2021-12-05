@@ -1,38 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, clutter-gst
-, clutter-gtk
-, gettext
-, glib
-, gobject-introspection
-, gst-plugins-bad
-, gst-plugins-base
-, gst-plugins-good
-, gstreamer
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libpeas
-, libxml2
-, libxplayer-plparser
-, pkg-config
-, python3
-, wrapGAppsHook
-, xapps
-, yelp-tools }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, autoconf-archive, clutter-gst
+, clutter-gtk, gettext, glib, gobject-introspection, gst-plugins-bad
+, gst-plugins-base, gst-plugins-good, gstreamer, gtk-doc, gtk3, intltool
+, itstool, libpeas, libxml2, libxplayer-plparser, pkg-config, python3
+, wrapGAppsHook, xapps, yelp-tools }:
 
 let
   pythonenv = python3.withPackages (ps: [
     ps.pygobject3
     ps.dbus-python # For one plugin
   ]);
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "xplayer";
   version = "2.4.2";
 

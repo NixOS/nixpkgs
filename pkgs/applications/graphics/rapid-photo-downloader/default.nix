@@ -1,15 +1,14 @@
-{ lib, mkDerivationWith, fetchurl, python3Packages
-, file, intltool, gobject-introspection, libgudev
-, udisks, gexiv2, gst_all_1, libnotify
-, exiftool, gdk-pixbuf, libmediainfo, vmtouch
-}:
+{ lib, mkDerivationWith, fetchurl, python3Packages, file, intltool
+, gobject-introspection, libgudev, udisks, gexiv2, gst_all_1, libnotify
+, exiftool, gdk-pixbuf, libmediainfo, vmtouch }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
   version = "0.9.18";
 
   src = fetchurl {
-    url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
+    url =
+      "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "15p7sssg6vmqbm5xnc4j5dr89d7gl7y5qyq44a240yl5aqkjnybw";
   };
 
@@ -21,10 +20,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
       --replace "from preferences" "from raphodo.preferences"
   '';
 
-  nativeBuildInputs = [
-    file
-    intltool
-  ];
+  nativeBuildInputs = [ file intltool ];
 
   # Package has no generally usable unit tests.
   # The included doctests expect specific, hardcoded hardware to be present.
@@ -79,7 +75,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Photo and video importer for cameras, phones, and memory cards";
+    description =
+      "Photo and video importer for cameras, phones, and memory cards";
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, fontconfig
-, freealut
-, freeglut
-, gettext
-, libGL
-, libGLU
-, openal
-, quesoglc
-, clanlib
-, libXrender
-, libmikmod
-, alsa-lib
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, SDL2_image, SDL2_mixer
+, fontconfig, freealut, freeglut, gettext, libGL, libGLU, openal, quesoglc
+, clanlib, libXrender, libmikmod, alsa-lib }:
 
 stdenv.mkDerivation rec {
   pname = "methane";
@@ -30,10 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-STS2+wfZ8E1jpr0PYQOBQsztxhJU0Dt3IhWBE3sjdWE=";
   };
 
-  nativeBuildInputs = [
-    gettext
-    pkg-config
-  ];
+  nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [
     SDL2
     SDL2_image
@@ -51,7 +31,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ];
 
-  installPhase  = ''
+  installPhase = ''
     runHook preInstall
     mkdir -p $out/bin/ $out/share/methane/ $out/share/docs/
     cp methane $out/bin
@@ -62,7 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/rombust/methane";
-    description = "A clone of Taito's Bubble Bobble arcade game released for Amiga in 1993 by Apache Software";
+    description =
+      "A clone of Taito's Bubble Bobble arcade game released for Amiga in 1993 by Apache Software";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nixinator ];
     platforms = [ "x86_64-linux" ];

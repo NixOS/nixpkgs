@@ -1,16 +1,9 @@
-{ lib
-, buildPythonPackage
-, dpkt
-, fetchFromGitHub
-, fetchpatch
-, libpcap
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, dpkt, fetchFromGitHub, fetchpatch, libpcap
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pypcap";
   version = "1.2.3";
-
 
   src = fetchFromGitHub {
     owner = "pynetwork";
@@ -23,7 +16,8 @@ buildPythonPackage rec {
     # Support for Python 3.9, https://github.com/pynetwork/pypcap/pull/102
     (fetchpatch {
       name = "support-python-3.9.patch";
-      url = "https://github.com/pynetwork/pypcap/pull/102/commits/e22f5d25f0d581d19ef337493434e72cd3a6ae71.patch";
+      url =
+        "https://github.com/pynetwork/pypcap/pull/102/commits/e22f5d25f0d581d19ef337493434e72cd3a6ae71.patch";
       sha256 = "0n1syh1vcplgsf6njincpqphd2w030s3b2jyg86d7kbqv1w5wk0l";
     })
   ];
@@ -37,10 +31,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libpcap ];
 
-  checkInputs = [
-    dpkt
-    pytestCheckHook
-  ];
+  checkInputs = [ dpkt pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
 

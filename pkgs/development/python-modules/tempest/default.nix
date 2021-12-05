@@ -1,31 +1,8 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, cliff
-, jsonschema
-, testtools
-, paramiko
-, netaddr
-, oslo-concurrency
-, oslo-config
-, oslo-log
-, stestr
-, oslo-serialization
-, oslo-utils
-, fixtures
-, pyyaml
-, subunit
-, stevedore
-, prettytable
-, urllib3
-, debtcollector
-, unittest2
-, hacking
-, oslotest
-, bash
-, python3
-}:
+{ lib, buildPythonApplication, fetchPypi, pbr, cliff, jsonschema, testtools
+, paramiko, netaddr, oslo-concurrency, oslo-config, oslo-log, stestr
+, oslo-serialization, oslo-utils, fixtures, pyyaml, subunit, stevedore
+, prettytable, urllib3, debtcollector, unittest2, hacking, oslotest, bash
+, python3 }:
 
 buildPythonApplication rec {
   pname = "tempest";
@@ -59,11 +36,7 @@ buildPythonApplication rec {
     unittest2
   ];
 
-  checkInputs = [
-    stestr
-    hacking
-    oslotest
-  ];
+  checkInputs = [ stestr hacking oslotest ];
 
   checkPhase = ''
     # Tests expect these applications available as such.
@@ -81,7 +54,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "tempest" ];
 
   meta = with lib; {
-    description = "An OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+    description =
+      "An OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

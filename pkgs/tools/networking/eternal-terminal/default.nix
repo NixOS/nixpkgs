@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gflags
-, libsodium
-, openssl
-, protobuf
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gflags, libsodium, openssl, protobuf
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
@@ -19,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kpabxpy779ppkaqaigq0x34ymz1jcwpsa78rm6nr55mdap2xxv6";
   };
 
-  cmakeFlags= [
+  cmakeFlags = [
     "-DDISABLE_VCPKG=TRUE"
     "-DDISABLE_SENTRY=TRUE"
     "-DDISABLE_CRASH_LOG=TRUE"
@@ -32,7 +25,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gflags openssl zlib libsodium protobuf ];
 
   meta = with lib; {
-    description = "Remote shell that automatically reconnects without interrupting the session";
+    description =
+      "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
     homepage = "https://eternalterminal.dev/";
     platforms = platforms.linux ++ platforms.darwin;

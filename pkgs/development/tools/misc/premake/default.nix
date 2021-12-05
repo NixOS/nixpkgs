@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, unzip }:
 
-let baseName = "premake";
-  version  = "4.3";
-in
+let
+  baseName = "premake";
+  version = "4.3";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
@@ -27,7 +27,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://industriousone.com/premake";
-    description = "A simple build configuration and project generation tool using lua";
+    description =
+      "A simple build configuration and project generation tool using lua";
     license = lib.licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

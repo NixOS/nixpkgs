@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "oshka";
@@ -16,17 +13,15 @@ buildGoModule rec {
 
   vendorSha256 = "08aj3nmj8angizkd3rbwbm7qzqxwrgfm1rka2x2a096z6mc3f4k4";
 
-  ldflags = [
-    "-w"
-    "-s"
-    "-X github.com/k1LoW/oshka/version.Version=${version}"
-  ];
+  ldflags =
+    [ "-w" "-s" "-X github.com/k1LoW/oshka/version.Version=${version}" ];
 
   # Tests requires a running Docker instance
   doCheck = false;
 
   meta = with lib; {
-    description = "Tool for extracting nested CI/CD supply chains and executing commands";
+    description =
+      "Tool for extracting nested CI/CD supply chains and executing commands";
     homepage = "https://github.com/k1LoW/oshka";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

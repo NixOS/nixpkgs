@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyparsing
-, pytestCheckHook
-, python-dateutil
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pyparsing, pytestCheckHook
+, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "pyhocon";
@@ -18,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ddspVDKy9++cISWH6R95r+gJrzNGqMTybI04OgVtIUU=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-    python-dateutil
-  ];
+  propagatedBuildInputs = [ pyparsing python-dateutil ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "pyhocon" ];
 

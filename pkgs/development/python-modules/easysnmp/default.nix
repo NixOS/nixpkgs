@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, net-snmp
-, openssl
-, pytest
-, pytest-cov
-, pytest-flake8
-, pytest-sugar
-, termcolor
-}:
+{ lib, buildPythonPackage, pythonAtLeast, fetchFromGitHub, net-snmp, openssl
+, pytest, pytest-cov, pytest-flake8, pytest-sugar, termcolor }:
 
 buildPythonPackage rec {
   pname = "easysnmp";
@@ -25,18 +15,9 @@ buildPythonPackage rec {
     sha256 = "1si9iyxqj6z22jzn6m93lwpinsqn20lix2py3jm3g3fmwawkd735";
   };
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    pytest-flake8
-    pytest-sugar
-    termcolor
-  ];
+  checkInputs = [ pytest pytest-cov pytest-flake8 pytest-sugar termcolor ];
 
-  buildInputs = [
-    net-snmp
-    openssl
-  ];
+  buildInputs = [ net-snmp openssl ];
 
   buildPhase = ''
     python setup.py build bdist_wheel --basedir=${lib.getBin net-snmp}/bin
@@ -47,7 +28,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A blazingly fast and Pythonic SNMP library based on the official Net-SNMP bindings";
+    description =
+      "A blazingly fast and Pythonic SNMP library based on the official Net-SNMP bindings";
     homepage = "https://easysnmp.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ WhittlesJr ];

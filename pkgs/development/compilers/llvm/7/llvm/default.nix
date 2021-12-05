@@ -1,42 +1,27 @@
-{ lib, stdenv, llvm_meta
-, pkgsBuildBuild
-, fetch
-, fetchpatch
-, cmake
-, python3
-, libffi
-, libbfd
-, libpfm
-, libxml2
-, ncurses
-, version
-, release_version
-, zlib
-, buildLlvmTools
-, debugVersion ? false
-, enableManpages ? false
-, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-  )
-, enablePolly ? false
-}:
+{ lib, stdenv, llvm_meta, pkgsBuildBuild, fetch, fetchpatch, cmake, python3
+, libffi, libbfd, libpfm, libxml2, ncurses, version, release_version, zlib
+, buildLlvmTools, debugVersion ? false, enableManpages ? false
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic, enablePFM ?
+  !(stdenv.isDarwin
+    || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+    || stdenv.isAarch32 # broken for the armv7l builder
+  ), enablePolly ? false }:
 
 let
   inherit (lib) optional optionals optionalString;
 
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with lib;
-    let parts = splitVersion release_version; in
-    imap (i: _: concatStringsSep "." (take i parts)) parts;
+    let parts = splitVersion release_version;
+    in imap (i: _: concatStringsSep "." (take i parts)) parts;
 
 in stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
 
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
-  polly_src = fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
+  polly_src =
+    fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
 
   unpackPhase = ''
     unpackFile $src
@@ -52,19 +37,20 @@ in stdenv.mkDerivation ({
   nativeBuildInputs = [ cmake python3 ]
     ++ optional enableManpages python3.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    ++ optional enablePFM libpfm; # exegesis
+  buildInputs = [ libxml2 libffi ] ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
 
   patches = [
     # backport, fix building rust crates with lto
     (fetchpatch {
-      url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
+      url =
+        "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
       sha256 = "0p81gkhc1xhcx0hmnkwyhrn8x8l8fd24xgaj1whni29yga466dwc";
     })
     (fetchpatch {
-      url = "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
+      url =
+        "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
       sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
     })
     ./gnu-install-dirs.patch
@@ -72,7 +58,8 @@ in stdenv.mkDerivation ({
     # Fix invalid std::string(nullptr) for GCC 12
     (fetchpatch {
       name = "nvptx-gcc-12.patch";
-      url = "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
+      url =
+        "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
       sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
       stripLen = 1;
     })
@@ -83,34 +70,34 @@ in stdenv.mkDerivation ({
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}" ''${extra_libdir})' ""
   ''
-  # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + optionalString (enableSharedLibraries) ''
-    substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
-    patch -p1 < ./outputs.patch
-  '' + ''
-    # FileSystem permissions tests fail with various special bits
-    substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
-    rm unittests/Support/Path.cpp
-  '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
-    substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "add_subdirectory(DynamicLibrary)" ""
-    rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-  '' + optionalString stdenv.hostPlatform.isAarch32 ''
-    # skip failing X86 test cases on armv7l
-    rm test/DebugInfo/X86/debug_addr.ll
-    rm test/tools/llvm-dwarfdump/X86/debug_addr.s
-    rm test/tools/llvm-dwarfdump/X86/debug_addr_address_size_mismatch.s
-    rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
-    rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
-    rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
-  '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
-    # Seems to require certain floating point hardware (NEON?)
-    rm test/ExecutionEngine/frem.ll
-  '' + ''
-    patchShebangs test/BugPoint/compile-custom.ll.py
-  '';
+    # Patch llvm-config to return correct library path based on --link-{shared,static}.
+    + optionalString (enableSharedLibraries) ''
+      substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
+      patch -p1 < ./outputs.patch
+    '' + ''
+      # FileSystem permissions tests fail with various special bits
+      substituteInPlace unittests/Support/CMakeLists.txt \
+        --replace "Path.cpp" ""
+      rm unittests/Support/Path.cpp
+    '' + optionalString stdenv.hostPlatform.isMusl ''
+      patch -p1 -i ${../../TLI-musl.patch}
+      substituteInPlace unittests/Support/CMakeLists.txt \
+        --replace "add_subdirectory(DynamicLibrary)" ""
+      rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    '' + optionalString stdenv.hostPlatform.isAarch32 ''
+      # skip failing X86 test cases on armv7l
+      rm test/DebugInfo/X86/debug_addr.ll
+      rm test/tools/llvm-dwarfdump/X86/debug_addr.s
+      rm test/tools/llvm-dwarfdump/X86/debug_addr_address_size_mismatch.s
+      rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
+      rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
+      rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
+    '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
+      # Seems to require certain floating point hardware (NEON?)
+      rm test/ExecutionEngine/frem.ll
+    '' + ''
+      patchShebangs test/BugPoint/compile-custom.ll.py
+    '';
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
@@ -118,35 +105,34 @@ in stdenv.mkDerivation ({
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
-    "-DLLVM_ENABLE_DUMP=ON"
-  ] ++ optionals enableSharedLibraries [
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ] ++ optionals enableManpages [
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (!isDarwin) [
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ] ++ optionals (isDarwin) [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-    (
-      let
+  cmakeFlags = with stdenv;
+    [
+      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
+      "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
+      "-DLLVM_BUILD_TESTS=ON"
+      "-DLLVM_ENABLE_FFI=ON"
+      "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+      "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+      "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
+      "-DLLVM_ENABLE_DUMP=ON"
+    ] ++ optionals enableSharedLibraries [ "-DLLVM_LINK_LLVM_DYLIB=ON" ]
+    ++ optionals enableManpages [
+      "-DLLVM_BUILD_DOCS=ON"
+      "-DLLVM_ENABLE_SPHINX=ON"
+      "-DSPHINX_OUTPUT_MAN=ON"
+      "-DSPHINX_OUTPUT_HTML=OFF"
+      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    ]
+    ++ optionals (!isDarwin) [ "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include" ]
+    ++ optionals (isDarwin) [
+      "-DLLVM_ENABLE_LIBCXX=ON"
+      "-DCAN_TARGET_i386=false"
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DCMAKE_CROSSCOMPILING=True"
+      "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+      (let
         nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
         nativeBintools = nativeCC.bintools.bintools;
         nativeToolchainFlags = [
@@ -156,9 +142,10 @@ in stdenv.mkDerivation ({
           "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
           "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
-    )
-  ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${
+        lib.concatStringsSep ";" nativeToolchainFlags
+      }")
+    ];
 
   postBuild = ''
     rm -fR $out
@@ -172,18 +159,18 @@ in stdenv.mkDerivation ({
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
     moveToOutput "bin/llvm-config*" "$dev"
-    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${
+      if debugVersion then "debug" else "release"
+    }.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-  ''
-  + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  '' + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
-  ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
@@ -194,7 +181,8 @@ in stdenv.mkDerivation ({
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
     homepage = "https://llvm.org/";
-    description = "A collection of modular and reusable compiler and toolchain technologies";
+    description =
+      "A collection of modular and reusable compiler and toolchain technologies";
     longDescription = ''
       The LLVM Project is a collection of modular and reusable compiler and
       toolchain technologies. Despite its name, LLVM has little to do with
@@ -217,7 +205,7 @@ in stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install
@@ -230,7 +218,5 @@ in stdenv.mkDerivation ({
 
   doCheck = false;
 
-  meta = llvm_meta // {
-    description = "man pages for LLVM ${version}";
-  };
+  meta = llvm_meta // { description = "man pages for LLVM ${version}"; };
 })

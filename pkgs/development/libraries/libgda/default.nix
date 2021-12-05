@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, itstool
-, libxml2
-, gtk3
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, overrideCC
-, gcc6
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, autoconf-archive
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient ? null
-, postgresSupport ? false
-, postgresql ? null
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, itstool, libxml2, gtk3, openssl
+, gnome, gobject-introspection, vala, libgee, overrideCC, gcc6, fetchpatch
+, autoreconfHook, gtk-doc, autoconf-archive, yelp-tools, mysqlSupport ? false
+, libmysqlclient ? null, postgresSupport ? false, postgresql ? null }:
 
 assert mysqlSupport -> libmysqlclient != null;
 assert postgresSupport -> postgresql != null;
@@ -32,14 +11,17 @@ assert postgresSupport -> postgresql != null;
   version = "5.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
   };
 
   patches = [
     # fix compile error with mysql
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
+      url =
+        "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
       sha256 = "158sncc5bg9lkri1wb0i1ri1nhx4c34rzi47gbfkwphlp7qd4qqv";
     })
   ];
@@ -57,15 +39,9 @@ assert postgresSupport -> postgresql != null;
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    openssl
-    libgee
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  buildInputs = [ gtk3 openssl libgee ]
+    ++ lib.optionals mysqlSupport [ libmysqlclient ]
+    ++ lib.optionals postgresSupport [ postgresql ];
 
   configureFlags = [
     "--with-mysql=${if mysqlSupport then "yes" else "no"}"

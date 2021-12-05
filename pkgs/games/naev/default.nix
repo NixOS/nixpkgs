@@ -5,8 +5,7 @@ let
   pname = "naev";
   version = "0.5.0";
   name = "${pname}-${version}";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   srcData = fetchurl {
@@ -19,11 +18,22 @@ stdenv.mkDerivation {
     sha256 = "0gahi91lmpra0wvxsz49zwwb28q9w2v1s3y7r70252hq6v80kanb";
   };
 
-  buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng libGLU libGL zlib freetype ];
+  buildInputs = [
+    SDL
+    SDL_mixer
+    openal
+    libxml2
+    libvorbis
+    libpng
+    libGLU
+    libGL
+    zlib
+    freetype
+  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  NIX_CFLAGS_COMPILE="-include ${zlib.dev}/include/zlib.h";
+  NIX_CFLAGS_COMPILE = "-include ${zlib.dev}/include/zlib.h";
 
   postInstall = ''
     mkdir -p $out/share/naev
@@ -35,8 +45,8 @@ stdenv.mkDerivation {
     description = "2D action/rpg space game";
     homepage = "http://www.naev.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

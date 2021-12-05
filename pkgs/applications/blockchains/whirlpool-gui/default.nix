@@ -90,9 +90,8 @@ in stdenv.mkDerivation rec {
     '';
   };
 
-  passthru.prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
-    outputHash = lib.fakeSha256;
-  });
+  passthru.prefetchYarnCache =
+    lib.overrideDerivation yarnCache (d: { outputHash = lib.fakeSha256; });
 
   meta = with lib; {
     description = "Desktop GUI for Whirlpool by Samourai-Wallet";

@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, openssl
-, pkg-config
-, CoreServices
-}:
+{ lib, stdenv, fetchCrate, rustPlatform, openssl, pkg-config, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "devserver";

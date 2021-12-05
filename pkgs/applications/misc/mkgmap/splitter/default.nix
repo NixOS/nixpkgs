@@ -1,17 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, jdk
-, jre
-, ant
-, makeWrapper
-, doCheck ? true
-}:
+{ lib, stdenv, fetchurl, substituteAll, jdk, jre, ant, makeWrapper
+, doCheck ? true }:
 let
   deps = import ../deps.nix { inherit fetchurl; };
   testInputs = import ./testinputs.nix { inherit fetchurl; };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "splitter";
   version = "643";
 
@@ -31,22 +23,25 @@ stdenv.mkDerivation rec {
     ./fix-failing-test.patch
   ];
 
-  postPatch = with deps; ''
-    mkdir -p lib/compile
-    cp ${fastutil} lib/compile/${fastutil.name}
-    cp ${osmpbf} lib/compile/${osmpbf.name}
-    cp ${protobuf} lib/compile/${protobuf.name}
-    cp ${xpp3} lib/compile/${xpp3.name}
-  '' + lib.optionalString doCheck ''
-    mkdir -p lib/test
-    cp ${junit} lib/test/${junit.name}
-    cp ${hamcrest-core} lib/test/${hamcrest-core.name}
+  postPatch = with deps;
+    ''
+      mkdir -p lib/compile
+      cp ${fastutil} lib/compile/${fastutil.name}
+      cp ${osmpbf} lib/compile/${osmpbf.name}
+      cp ${protobuf} lib/compile/${protobuf.name}
+      cp ${xpp3} lib/compile/${xpp3.name}
+    '' + lib.optionalString doCheck ''
+      mkdir -p lib/test
+      cp ${junit} lib/test/${junit.name}
+      cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
-    mkdir -p test/resources/in/osm
-    ${lib.concatMapStringsSep "\n" (res: ''
-      cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
-    '') testInputs}
-  '';
+      mkdir -p test/resources/in/osm
+      ${lib.concatMapStringsSep "\n" (res: ''
+        cp ${res} test/resources/in/${
+          builtins.replaceStrings [ "__" ] [ "/" ] res.name
+        }
+      '') testInputs}
+    '';
 
   nativeBuildInputs = [ jdk ant makeWrapper ];
 

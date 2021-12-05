@@ -1,72 +1,45 @@
-{ lib, stdenv
-, darwin
-, fetchurl
-, makeWrapper
-, pkg-config
-, poppler_utils
-, gitMinimal
-, harfbuzz
-, icu
-, fontconfig
-, lua
-, libiconv
-, makeFontsConf
-, gentium
+{ lib, stdenv, darwin, fetchurl, makeWrapper, pkg-config, poppler_utils
+, gitMinimal, harfbuzz, icu, fontconfig, lua, libiconv, makeFontsConf, gentium
 }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [
-    cassowary
-    cosmo
-    compat53
-    linenoise
-    lpeg
-    lua-zlib
-    lua_cliargs
-    luaepnf
-    luaexpat
-    luafilesystem
-    luarepl
-    luasec
-    luasocket
-    luautf8
-    penlight
-    stdlib
-    vstruct
-  ]);
-in
+  luaEnv = lua.withPackages (ps:
+    with ps; [
+      cassowary
+      cosmo
+      compat53
+      linenoise
+      lpeg
+      lua-zlib
+      lua_cliargs
+      luaepnf
+      luaexpat
+      luafilesystem
+      luarepl
+      luasec
+      luasocket
+      luautf8
+      penlight
+      stdlib
+      vstruct
+    ]);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "sile";
   version = "0.12.0";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "1rkdzf4khyvsn5qg455mdhnlacxlqgi9vchy369a66qp5nrs50y9";
   };
 
-  configureFlags = [
-    "--with-system-luarocks"
-    "--with-manual"
-  ];
+  configureFlags = [ "--with-system-luarocks" "--with-manual" ];
 
-  nativeBuildInputs = [
-    gitMinimal
-    pkg-config
-    makeWrapper
-  ];
-  buildInputs = [
-    harfbuzz
-    icu
-    fontconfig
-    libiconv
-    luaEnv
-  ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
-  ;
-  checkInputs = [
-    poppler_utils
-  ];
+  nativeBuildInputs = [ gitMinimal pkg-config makeWrapper ];
+  buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit;
+  checkInputs = [ poppler_utils ];
 
   preConfigure = ''
     patchShebangs build-aux/*.sh
@@ -76,11 +49,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [
-      gentium
-    ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ gentium ]; };
 
   doCheck = true;
 
@@ -109,9 +78,10 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org";
-    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };

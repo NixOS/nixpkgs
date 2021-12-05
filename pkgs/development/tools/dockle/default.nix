@@ -16,9 +16,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];
 
-  ldflags = [
-    "-s" "-w" "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   preCheck = ''
     # Remove tests that use networking
@@ -35,7 +33,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://containers.goodwith.tech";
-    changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
+    changelog =
+      "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
     description = "Container Image Linter for Security";
     longDescription = ''
       Container Image Linter for Security.

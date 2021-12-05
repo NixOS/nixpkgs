@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, numpy
-, nbconvert
-, pandas
-, mock
-, jinja2
-, branca
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, numpy, nbconvert
+, pandas, mock, jinja2, branca, requests }:
 
 buildPythonPackage rec {
   pname = "folium";

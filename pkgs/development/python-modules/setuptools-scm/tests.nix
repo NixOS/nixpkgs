@@ -1,11 +1,5 @@
-{ buildPythonPackage
-, setuptools-scm
-, pytestCheckHook
-, git
-, mercurial
-, pip
-, virtualenv
-}:
+{ buildPythonPackage, setuptools-scm, pytestCheckHook, git, mercurial, pip
+, virtualenv }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm-tests";
@@ -16,14 +10,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    pytestCheckHook
-    setuptools-scm
-    pip
-    virtualenv
-    git
-    mercurial
-  ];
+  checkInputs = [ pytestCheckHook setuptools-scm pip virtualenv git mercurial ];
 
   disabledTests = [
     # network access

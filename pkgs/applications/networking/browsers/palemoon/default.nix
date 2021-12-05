@@ -1,46 +1,15 @@
-{ lib
-, stdenv
-, alsa-lib
-, autoconf213
-, cairo
-, dbus
-, dbus-glib
-, desktop-file-utils
-, fetchzip
-, ffmpeg
-, fontconfig
-, freetype
-, gnome2
-, gnum4
-, libGL
-, libGLU
-, libevent
-, libnotify
-, libpulseaudio
-, libstartup_notification
-, pango
-, perl
-, pkg-config
-, python2
-, unzip
-, which
-, wrapGAppsHook
-, writeScript
-, xorg
-, yasm
-, zip
-, zlib
-, withGTK3 ? true, gtk3, gtk2
-}:
+{ lib, stdenv, alsa-lib, autoconf213, cairo, dbus, dbus-glib, desktop-file-utils
+, fetchzip, ffmpeg, fontconfig, freetype, gnome2, gnum4, libGL, libGLU, libevent
+, libnotify, libpulseaudio, libstartup_notification, pango, perl, pkg-config
+, python2, unzip, which, wrapGAppsHook, writeScript, xorg, yasm, zip, zlib
+, withGTK3 ? true, gtk3, gtk2 }:
 
 # Only specific GCC versions are supported with branding
 # https://developer.palemoon.org/build/linux/
 assert stdenv.cc.isGNU;
-assert with lib.strings; (
-  versionAtLeast stdenv.cc.version "4.9"
-  && !hasPrefix "6" stdenv.cc.version
-  && versionOlder stdenv.cc.version "11"
-);
+assert with lib.strings;
+  (versionAtLeast stdenv.cc.version "4.9" && !hasPrefix "6" stdenv.cc.version
+    && versionOlder stdenv.cc.version "11");
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
@@ -48,7 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     name = "${pname}-${version}";
-    url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
+    url =
+      "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
     sha256 = "sha256-iTn1jbbsw7u+rVe/1J9yJbS0wi5Rlkcy4rO8nWcXu2I=";
   };
 
@@ -84,8 +54,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     pango
     zlib
-  ]
-  ++ (with xorg; [
+  ] ++ (with xorg; [
     libX11
     libXext
     libXft
@@ -95,10 +64,7 @@ stdenv.mkDerivation rec {
     libXt
     pixman
     xorgproto
-  ])
-  ++ lib.optionals withGTK3 [
-    gtk3
-  ];
+  ]) ++ lib.optionals withGTK3 [ gtk3 ];
 
   enableParallelBuilding = true;
 
@@ -116,7 +82,9 @@ stdenv.mkDerivation rec {
     export gtkversion=${if withGTK3 then "3" else "2"}
     export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
     export prefix=$out
-    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export mozmakeflags="-j${
+      if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"
+    }"
     export autoconf=${autoconf213}/bin/autoconf
 
     substituteAll ${./mozconfig} $MOZCONFIG
@@ -160,14 +128,8 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  preFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        ffmpeg
-        libpulseaudio
-      ];
-    in
-      ''
+  preFixup = let libPath = lib.makeLibraryPath [ ffmpeg libpulseaudio ];
+  in ''
         gappsWrapperArgs+=(
           --prefix LD_LIBRARY_PATH : "${libPath}"
         )
@@ -176,7 +138,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description =
+      "An Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
@@ -188,7 +151,8 @@ stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog =
+      "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
     license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms = [ "i686-linux" "x86_64-linux" ];

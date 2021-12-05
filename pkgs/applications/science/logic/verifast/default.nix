@@ -3,10 +3,20 @@
 
 let
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk-pixbuf atk pango glib cairo
-      freetype fontconfig libxml2 gnome2.gtksourceview
-    ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.libc
+    stdenv.cc.cc
+    gtk2
+    gdk-pixbuf
+    atk
+    pango
+    glib
+    cairo
+    freetype
+    fontconfig
+    libxml2
+    gnome2.gtksourceview
+  ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
 
   patchExe = x: ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -17,13 +27,13 @@ let
     patchelf --set-rpath ${libPath} ${x}
   '';
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "verifast";
   version = "21.04";
 
   src = fetchurl {
-    url    = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
+    url =
+      "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
     sha256 = "sha256-PlRsf4wFXoM+E+60SbeKzs/RZK0HNVirX47AnI6NeYM=";
   };
 
@@ -42,9 +52,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Verification for C and Java programs via separation logic";
-    homepage    = "https://people.cs.kuleuven.be/~bart.jacobs/verifast/";
-    license     = lib.licenses.mit;
-    platforms   = [ "x86_64-linux" ];
+    homepage = "https://people.cs.kuleuven.be/~bart.jacobs/verifast/";
+    license = lib.licenses.mit;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

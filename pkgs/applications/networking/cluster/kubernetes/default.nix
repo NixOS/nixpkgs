@@ -1,23 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, removeReferencesTo
-, which
-, go
-, makeWrapper
-, rsync
-, installShellFiles
-, nixosTests
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, makeWrapper
+, rsync, installShellFiles, nixosTests
 
 , components ? [
-    "cmd/kubelet"
-    "cmd/kube-apiserver"
-    "cmd/kube-controller-manager"
-    "cmd/kube-proxy"
-    "cmd/kube-scheduler"
-    "test/e2e/e2e.test"
-  ]
-}:
+  "cmd/kubelet"
+  "cmd/kube-apiserver"
+  "cmd/kube-controller-manager"
+  "cmd/kube-proxy"
+  "cmd/kube-scheduler"
+  "test/e2e/e2e.test"
+] }:
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
@@ -30,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yXis1nq36MO/RnYLxOYBs6xnaTf9lk+VJBzSamrHcEU=";
   };
 
-  nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
+  nativeBuildInputs =
+    [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
 
   outputs = [ "out" "man" "pause" ];
 
@@ -49,10 +41,8 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT = lib.concatStringsSep " " ([
-    "cmd/kubeadm"
-    "cmd/kubectl"
-  ] ++ components);
+  WHAT =
+    lib.concatStringsSep " " ([ "cmd/kubeadm" "cmd/kubectl" ] ++ components);
 
   postBuild = ''
     ./hack/update-generated-docs.sh

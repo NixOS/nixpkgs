@@ -1,6 +1,5 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, cmake
-, qtmultimedia, qtserialport, qtscript, qtwebkit
-, garmindev, gdal, gpsd, libdmtx, libexif, libGLU, proj }:
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake, qtmultimedia, qtserialport
+, qtscript, qtwebkit, garmindev, gdal, gpsd, libdmtx, libexif, libGLU, proj }:
 
 mkDerivation rec {
   pname = "qlandkartegt";
@@ -13,39 +12,48 @@ mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-gps_read.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-gps_read.patch?h=qlandkartegt";
       sha256 = "1xyqxdqxwviq7b8jjxssxjlkldk01ms8dzqdjgvjs8n3fh7w0l70";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-incomplete-type.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-incomplete-type.patch?h=qlandkartegt";
       sha256 = "1q7rm321az3q6pq5mq0yjrihxl9sf3nln9z3xp20g9qldslv2cy2";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-proj_api.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-proj_api.patch?h=qlandkartegt";
       sha256 = "12yibxn85z2n30azmhyv02q091jj5r50nlnjq4gfzyqd3xb9582n";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-qt5-build.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-qt5-build.patch?h=qlandkartegt";
       sha256 = "1wq2hr06gzq8m7zddh10vizmvpwp4lcy1g86rlpppvdc5cm3jpkl";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-qtgui-include.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-qtgui-include.patch?h=qlandkartegt";
       sha256 = "16hql8ignzw4n1hlp4icbvaddqcadh2rjns0bvis720535112sc8";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-timespec.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-timespec.patch?h=qlandkartegt";
       sha256 = "1yzdwfsgjn7q04r9f7s5qk50y25hdl384dxrmpfmkm97fmpgyr7w";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-ver_str.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/fix-ver_str.patch?h=qlandkartegt";
       sha256 = "13fg05gqrjfa9j00lrqz1b06xf6r5j01kl6l06vkn0hz1jzxss5m";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/improve-gpx-creator.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/improve-gpx-creator.patch?h=qlandkartegt";
       sha256 = "1sdf5z8qrd43azrhwfw06zc0qr48z925hgbcfqlp0xrsxv2n6kks";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/improve-gpx-name.patch?h=qlandkartegt";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/improve-gpx-name.patch?h=qlandkartegt";
       sha256 = "10phafhns79i3rl4zpc7arw11x46cywgkdkxm7gw1i9y5h0cal79";
     })
   ];
@@ -53,8 +61,17 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    qtmultimedia qtserialport qtscript qtwebkit
-    garmindev gdal gpsd libdmtx libexif libGLU proj
+    qtmultimedia
+    qtserialport
+    qtscript
+    qtwebkit
+    garmindev
+    gdal
+    gpsd
+    libdmtx
+    libexif
+    libGLU
+    proj
   ];
 
   cmakeFlags = [

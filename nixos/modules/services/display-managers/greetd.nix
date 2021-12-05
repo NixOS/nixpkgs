@@ -4,9 +4,8 @@ with lib;
 let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
-  settingsFormat = pkgs.formats.toml {};
-in
-{
+  settingsFormat = pkgs.formats.toml { };
+in {
   options.services.greetd = {
     enable = mkEnableOption "greetd";
 
@@ -32,7 +31,7 @@ in
       '';
     };
 
-    vt = mkOption  {
+    vt = mkOption {
       type = types.int;
       default = 1;
       description = ''
@@ -43,7 +42,8 @@ in
     restart = mkOption {
       type = types.bool;
       default = !(cfg.settings ? initial_session);
-      defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
+      defaultText = literalExpression
+        "!(config.services.greetd.settings ? initial_session)";
       description = ''
         Wether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
@@ -66,21 +66,19 @@ in
 
     systemd.services.greetd = {
       unitConfig = {
-        Wants = [
-          "systemd-user-sessions.service"
-        ];
+        Wants = [ "systemd-user-sessions.service" ];
         After = [
           "systemd-user-sessions.service"
           "plymouth-quit-wait.service"
           "getty@${tty}.service"
         ];
-        Conflicts = [
-          "getty@${tty}.service"
-        ];
+        Conflicts = [ "getty@${tty}.service" ];
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
+        ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${
+            settingsFormat.generate "greetd.toml" cfg.settings
+          }";
 
         Restart = mkIf cfg.restart "always";
 
@@ -104,7 +102,7 @@ in
       group = "greeter";
     };
 
-    users.groups.greeter = {};
+    users.groups.greeter = { };
   };
 
   meta.maintainers = with maintainers; [ queezle ];

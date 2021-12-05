@@ -1,11 +1,5 @@
-{ lib , buildPythonPackage, fetchFromGitHub, isPy27
-, falcon
-, requests
-, pytestCheckHook
-, marshmallow
-, mock
-, numpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, falcon, requests
+, pytestCheckHook, marshmallow, mock, numpy }:
 
 buildPythonPackage rec {
   pname = "hug";
@@ -44,7 +38,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
+    description =
+      "A Python framework that makes developing APIs as simple as possible, but no simpler";
     homepage = "https://github.com/hugapi/hug";
     license = licenses.mit;
     # Missing support for later falcon releases

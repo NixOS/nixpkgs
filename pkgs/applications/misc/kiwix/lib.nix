@@ -1,16 +1,5 @@
-{ stdenv, lib, fetchFromGitHub
-, meson, ninja, pkg-config
-, python3
-, curl
-, icu
-, pugixml
-, zimlib
-, zlib
-, libmicrohttpd
-, mustache-hpp
-, gtest
-}:
-
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, python3, curl, icu
+, pugixml, zimlib, zlib, libmicrohttpd, mustache-hpp, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "kiwix-lib";
@@ -23,29 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "034nk6l623v78clrs2d0k1vg69sbzrd8c0q79qiqmlkinck1nkxw";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 ];
 
-  buildInputs = [
-    icu
-    zlib
-    mustache-hpp
-  ];
+  buildInputs = [ icu zlib mustache-hpp ];
 
-  propagatedBuildInputs = [
-    curl
-    libmicrohttpd
-    pugixml
-    zimlib
-  ];
+  propagatedBuildInputs = [ curl libmicrohttpd pugixml zimlib ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   doCheck = true;
 

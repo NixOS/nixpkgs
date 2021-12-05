@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gettext, libev, pcre, pkg-config, udns }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gettext, libev, pcre, pkg-config
+, udns }:
 
 stdenv.mkDerivation rec {
   pname = "sniproxy";

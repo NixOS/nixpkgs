@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyphen";
@@ -17,14 +13,12 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pure Python module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
-    license = with licenses; [gpl2 lgpl21 mpl20];
+    license = with licenses; [ gpl2 lgpl21 mpl20 ];
     maintainers = with maintainers; [ rvl ];
   };
 }

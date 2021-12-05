@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl }:
 
-let
-  name = "log4cplus-2.0.6";
-in
-stdenv.mkDerivation {
+let name = "log4cplus-2.0.6";
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

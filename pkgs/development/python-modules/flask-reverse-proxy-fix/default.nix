@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, flask
-, werkzeug
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, flask, werkzeug }:
 
 buildPythonPackage rec {
   pname = "flask-reverse-proxy-fix";
@@ -25,19 +19,18 @@ buildPythonPackage rec {
     sed -i 's@werkzeug.contrib.fixers@werkzeug.middleware.proxy_fix@g' flask_reverse_proxy_fix/middleware/__init__.py
   '';
 
-  propagatedBuildInputs = [
-    flask
-    werkzeug
-  ];
+  propagatedBuildInputs = [ flask werkzeug ];
 
   meta = with lib; {
-    description = "Python Flask middleware for applications running under a reverse proxy";
+    description =
+      "Python Flask middleware for applications running under a reverse proxy";
     maintainers = with maintainers; [ matthiasbeyer ];
     homepage = "https://github.com/antarctica/flask-reverse-proxy-fix";
 
     license = {
       fullName = "Open Government Licence";
-      url = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
+      url =
+        "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
     };
   };
 }

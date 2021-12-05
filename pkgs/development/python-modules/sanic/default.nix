@@ -1,24 +1,7 @@
-{ lib
-, stdenv
-, aiofiles
-, beautifulsoup4
-, buildPythonPackage
-, doCheck ? true
-, fetchFromGitHub
-, gunicorn
-, httptools
-, multidict
-, pytest-asyncio
-, pytest-benchmark
-, pytest-sugar
-, pytestCheckHook
-, sanic-routing
-, sanic-testing
-, ujson
-, uvicorn
-, uvloop
-, websockets
-}:
+{ lib, stdenv, aiofiles, beautifulsoup4, buildPythonPackage, doCheck ? true
+, fetchFromGitHub, gunicorn, httptools, multidict, pytest-asyncio
+, pytest-benchmark, pytest-sugar, pytestCheckHook, sanic-routing, sanic-testing
+, ujson, uvicorn, uvloop, websockets }:
 
 buildPythonPackage rec {
   pname = "sanic";
@@ -43,15 +26,8 @@ buildPythonPackage rec {
       --replace "deflate\r\n" "deflate, br\r\n"
   '';
 
-  propagatedBuildInputs = [
-    aiofiles
-    httptools
-    multidict
-    sanic-routing
-    ujson
-    uvloop
-    websockets
-  ];
+  propagatedBuildInputs =
+    [ aiofiles httptools multidict sanic-routing ujson uvloop websockets ];
 
   checkInputs = [
     beautifulsoup4

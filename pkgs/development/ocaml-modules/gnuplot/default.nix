@@ -9,9 +9,9 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
-    owner  = "c-cube";
-    repo   = "ocaml-${pname}";
-    rev    = "v${version}";
+    owner = "c-cube";
+    repo = "ocaml-${pname}";
+    rev = "v${version}";
     sha256 = "02pzi3lb57ysrdsba743s3vmnapjbxgq8ynlzpxbbs6cn1jj6ch9";
   };
 

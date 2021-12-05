@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub,
-  xlibsWrapper, libev, libXi, libXfixes,
-  pkg-config, asciidoc, libxslt, docbook_xsl }:
+{ lib, stdenv, fetchFromGitHub, xlibsWrapper, libev, libXi, libXfixes
+, pkg-config, asciidoc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "unclutter-xfixes";

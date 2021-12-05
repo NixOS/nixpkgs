@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, isPy27
-, mock
-, pkgs
-, pyahocorasick
-, pytestCheckHook
-, pyyaml
-, requests
-, responses
-, unidiff
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, gibberish-detector, isPy27, mock
+, pkgs, pyahocorasick, pytestCheckHook, pyyaml, requests, responses, unidiff }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
@@ -26,20 +14,9 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
-  propagatedBuildInputs = [
-    gibberish-detector
-    pyyaml
-    pyahocorasick
-    requests
-  ];
+  propagatedBuildInputs = [ gibberish-detector pyyaml pyahocorasick requests ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    responses
-    unidiff
-    pkgs.gitMinimal
-  ];
+  checkInputs = [ mock pytestCheckHook responses unidiff pkgs.gitMinimal ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -61,7 +38,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
-    description = "An enterprise friendly way of detecting and preventing secrets in code";
+    description =
+      "An enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];

@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles, git, makeWrapper}:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles, git, makeWrapper }:
 
 buildGoModule rec {
   pname = "mani";

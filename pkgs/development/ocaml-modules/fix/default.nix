@@ -17,7 +17,8 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://gitlab.inria.fr/fpottier/fix/";
-    description = "A simple OCaml module for computing the least solution of a system of monotone equations";
+    description =
+      "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;
     maintainers = with maintainers; [ vbgl ];
   };

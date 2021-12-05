@@ -1,8 +1,6 @@
 { callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
-let
-  common = opts: callPackage (import ./common.nix opts) { };
-in
-{
+let common = opts: callPackage (import ./common.nix opts) { };
+in {
 
   openssh = common rec {
     pname = "openssh";
@@ -25,7 +23,9 @@ in
     src = fetchFromGitHub {
       owner = "rapier1";
       repo = "openssh-portable";
-      rev = "hpn-KitchenSink-${builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version}";
+      rev = "hpn-KitchenSink-${
+          builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version
+        }";
       hash = "sha256-SYQPDGxZR41m4g603RaZaOYm4vCr9uZnFnZoKhruueY=";
     };
 
@@ -38,10 +38,7 @@ in
 
     extraNativeBuildInputs = [ autoreconfHook ];
 
-    extraMeta.knownVulnerabilities = [
-      "CVE-2021-28041"
-      "CVE-2021-41617"
-    ];
+    extraMeta.knownVulnerabilities = [ "CVE-2021-28041" "CVE-2021-41617" ];
   };
 
   openssh_gssapi = common rec {
@@ -62,16 +59,14 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+        url =
+          "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
         sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
       })
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
 
-    extraMeta.knownVulnerabilities = [
-      "CVE-2021-28041"
-      "CVE-2021-41617"
-    ];
+    extraMeta.knownVulnerabilities = [ "CVE-2021-28041" "CVE-2021-41617" ];
   };
 }

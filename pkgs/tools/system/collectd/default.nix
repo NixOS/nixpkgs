@@ -1,13 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
-, autoreconfHook
-, pkg-config
-, libtool
-, ...
-}@args:
-let
-  plugins = callPackage ./plugins.nix args;
-in
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage, autoreconfHook
+, pkg-config, libtool, ... }@args:
+let plugins = callPackage ./plugins.nix args;
+in stdenv.mkDerivation rec {
   version = "5.12.0";
   pname = "collectd";
 
@@ -17,20 +11,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [
-    libtool
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.ApplicationServices
-  ] ++ plugins.buildInputs;
+  buildInputs = [ libtool ] ++ lib.optionals stdenv.isDarwin
+    [ darwin.apple_sdk.frameworks.ApplicationServices ] ++ plugins.buildInputs;
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--disable-werror"
-  ] ++ plugins.configureFlags;
+  configureFlags = [ "--localstatedir=/var" "--disable-werror" ]
+    ++ plugins.configureFlags;
 
   # do not create directories in /var during installPhase
   postConfigure = ''
-     substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+    substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
   '';
 
   postInstall = ''
@@ -42,7 +31,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Daemon which collects system performance statistics periodically";
+    description =
+      "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
     license = licenses.gpl2;
     platforms = platforms.unix;

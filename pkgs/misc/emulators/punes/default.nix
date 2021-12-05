@@ -1,21 +1,6 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, qtbase
-, qtsvg
-, qttools
-, autoreconfHook
-, cmake
-, pkg-config
-, ffmpeg
-, libGLU
-, alsa-lib
-, libX11
-, libXrandr
-, sndio
-}:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, unstableGitUpdater, qtbase, qtsvg
+, qttools, autoreconfHook, cmake, pkg-config, ffmpeg, libGLU, alsa-lib, libX11
+, libXrandr, sndio }:
 
 mkDerivation rec {
   pname = "punes";
@@ -49,12 +34,12 @@ mkDerivation rec {
     "--with-ffmpeg"
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/punesemu/puNES.git";
-  };
+  passthru.updateScript =
+    unstableGitUpdater { url = "https://github.com/punesemu/puNES.git"; };
 
   meta = with lib; {
-    description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
+    description =
+      "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     homepage = "https://github.com/punesemu/puNES";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];

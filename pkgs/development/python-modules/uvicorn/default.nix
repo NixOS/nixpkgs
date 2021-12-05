@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, asgiref
-, click
-, colorama
-, h11
-, httptools
-, python-dotenv
-, pyyaml
-, typing-extensions
-, uvloop
-, watchgod
-, websockets
-, wsproto
-, pythonOlder
-}:
+{ lib, buildPythonPackage, callPackage, fetchFromGitHub, asgiref, click
+, colorama, h11, httptools, python-dotenv, pyyaml, typing-extensions, uvloop
+, watchgod, websockets, wsproto, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
@@ -29,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
   };
 
-  outputs = [
-    "out"
-    "testsout"
-  ];
+  outputs = [ "out" "testsout" ];
 
   propagatedBuildInputs = [
     asgiref
@@ -46,25 +28,19 @@ buildPythonPackage rec {
     watchgod
     websockets
     wsproto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   postInstall = ''
     mkdir $testsout
     cp -R tests $testsout/tests
   '';
 
-  pythonImportsCheck = [
-    "uvicorn"
-  ];
+  pythonImportsCheck = [ "uvicorn" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
   doCheck = false;
 
-  passthru.tests = {
-    pytest = callPackage ./tests.nix { };
-  };
+  passthru.tests = { pytest = callPackage ./tests.nix { }; };
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";

@@ -29,7 +29,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = with lib; {
-    description = "A network library for client/server games with dedicated servers";
+    description =
+      "A network library for client/server games with dedicated servers";
     longDescription = ''
       yojimbo is a network library for client/server games with dedicated servers.
       It's designed around the networking requirements of competitive multiplayer games like first person shooters.

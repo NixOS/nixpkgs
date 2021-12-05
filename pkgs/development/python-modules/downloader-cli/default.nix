@@ -19,7 +19,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "downloader_cli" ];
 
   meta = with lib; {
-    description = "A simple downloader written in Python with an awesome customizable progressbar. ";
+    description =
+      "A simple downloader written in Python with an awesome customizable progressbar. ";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];

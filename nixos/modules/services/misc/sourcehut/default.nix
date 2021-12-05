@@ -7,47 +7,46 @@ let
   settingsFormat = pkgs.formats.ini { };
 
   # Specialized python containing all the modules
-  python = pkgs.sourcehut.python.withPackages (ps: with ps; [
-    gunicorn
-    # Sourcehut services
-    srht
-    buildsrht
-    dispatchsrht
-    gitsrht
-    hgsrht
-    hubsrht
-    listssrht
-    mansrht
-    metasrht
-    pastesrht
-    todosrht
-  ]);
-in
-{
-  imports =
-    [
-      ./git.nix
-      ./hg.nix
-      ./hub.nix
-      ./todo.nix
-      ./man.nix
-      ./meta.nix
-      ./paste.nix
-      ./builds.nix
-      ./lists.nix
-      ./dispatch.nix
-      (mkRemovedOptionModule [ "services" "sourcehut" "nginx" "enable" ] ''
-        The sourcehut module supports `nginx` as a local reverse-proxy by default and doesn't
-        support other reverse-proxies officially.
+  python = pkgs.sourcehut.python.withPackages (ps:
+    with ps; [
+      gunicorn
+      # Sourcehut services
+      srht
+      buildsrht
+      dispatchsrht
+      gitsrht
+      hgsrht
+      hubsrht
+      listssrht
+      mansrht
+      metasrht
+      pastesrht
+      todosrht
+    ]);
+in {
+  imports = [
+    ./git.nix
+    ./hg.nix
+    ./hub.nix
+    ./todo.nix
+    ./man.nix
+    ./meta.nix
+    ./paste.nix
+    ./builds.nix
+    ./lists.nix
+    ./dispatch.nix
+    (mkRemovedOptionModule [ "services" "sourcehut" "nginx" "enable" ] ''
+      The sourcehut module supports `nginx` as a local reverse-proxy by default and doesn't
+      support other reverse-proxies officially.
 
-        However it's possible to use an alternative reverse-proxy by
+      However it's possible to use an alternative reverse-proxy by
 
-          * disabling nginx
-          * adjusting the relevant settings for server addresses and ports directly
+        * disabling nginx
+        * adjusting the relevant settings for server addresses and ports directly
 
-        Further details about this can be found in the `Sourcehut`-section of the NixOS-manual.
-      '')
-    ];
+      Further details about this can be found in the `Sourcehut`-section of the NixOS-manual.
+    '')
+  ];
 
   options.services.sourcehut = {
     enable = mkOption {
@@ -60,9 +59,31 @@ in
     };
 
     services = mkOption {
-      type = types.nonEmptyListOf (types.enum [ "builds" "dispatch" "git" "hub" "hg" "lists" "man" "meta" "paste" "todo" ]);
+      type = types.nonEmptyListOf (types.enum [
+        "builds"
+        "dispatch"
+        "git"
+        "hub"
+        "hg"
+        "lists"
+        "man"
+        "meta"
+        "paste"
+        "todo"
+      ]);
       default = [ "man" "meta" "paste" ];
-      example = [ "builds" "dispatch" "git" "hub" "hg" "lists" "man" "meta" "paste" "todo" ];
+      example = [
+        "builds"
+        "dispatch"
+        "git"
+        "hub"
+        "hg"
+        "lists"
+        "man"
+        "meta"
+        "paste"
+        "todo"
+      ];
       description = ''
         Services to enable on the sourcehut network.
       '';
@@ -70,7 +91,8 @@ in
 
     originBase = mkOption {
       type = types.str;
-      default = with config.networking; hostName + lib.optionalString (domain != null) ".${domain}";
+      default = with config.networking;
+        hostName + lib.optionalString (domain != null) ".${domain}";
       description = ''
         Host name used by reverse-proxy and for default settings. Will host services at git."''${originBase}". For example: git.sr.ht
       '';
@@ -106,9 +128,7 @@ in
     };
 
     settings = mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-      };
+      type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = { };
       description = ''
         The configuration for the sourcehut network.
@@ -117,26 +137,25 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = with cfgIni.webhooks; private-key != null && stringLength private-key == 44;
-          message = "The webhook's private key must be defined and of a 44 byte length.";
-        }
+    assertions = [
+      {
+        assertion = with cfgIni.webhooks;
+          private-key != null && stringLength private-key == 44;
+        message =
+          "The webhook's private key must be defined and of a 44 byte length.";
+      }
 
-        {
-          assertion = hasAttrByPath [ "meta.sr.ht" "origin" ] cfgIni && cfgIni."meta.sr.ht".origin != null;
-          message = "meta.sr.ht's origin must be defined.";
-        }
-      ];
+      {
+        assertion = hasAttrByPath [ "meta.sr.ht" "origin" ] cfgIni
+          && cfgIni."meta.sr.ht".origin != null;
+        message = "meta.sr.ht's origin must be defined.";
+      }
+    ];
 
     virtualisation.docker.enable = true;
     environment.etc."sr.ht/config.ini".source =
-      settingsFormat.generate "sourcehut-config.ini" (mapAttrsRecursive
-        (
-          path: v: if v == null then "" else v
-        )
-        cfg.settings);
+      settingsFormat.generate "sourcehut-config.ini"
+      (mapAttrsRecursive (path: v: if v == null then "" else v) cfg.settings);
 
     environment.systemPackages = [ pkgs.sourcehut.coresrht ];
 

@@ -1,10 +1,4 @@
-{ lib, stdenv, fetchurl
-, glib
-, gtk3
-, libffcall
-, pkg-config
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, glib, gtk3, libffcall, pkg-config, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-server";

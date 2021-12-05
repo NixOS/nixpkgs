@@ -1,20 +1,6 @@
-{ lib
-, buildGoModule
-, buildFHSUserEnv
-, binutils
-, dejavu_fonts
-, pkg-config
-, fetchFromGitHub
-, roboto
-, writeScript
-, xorg
-, libglvnd
-, addOpenGLRunpath
-, makeWrapper
-, gcc
-, go
-, flutter
-}:
+{ lib, buildGoModule, buildFHSUserEnv, binutils, dejavu_fonts, pkg-config
+, fetchFromGitHub, roboto, writeScript, xorg, libglvnd, addOpenGLRunpath
+, makeWrapper, gcc, go, flutter }:
 
 let
   pname = "hover";
@@ -61,9 +47,7 @@ let
 
     checkRun = false;
 
-    patches = [
-      ./fix-assets-path.patch
-    ];
+    patches = [ ./fix-assets-path.patch ];
 
     postPatch = ''
       sed -i 's|@assetsFolder@|'"''${out}/share/assets"'|g' internal/fileutils/assets.go
@@ -83,19 +67,10 @@ let
     '';
   };
 
-in
-buildFHSUserEnv rec {
+in buildFHSUserEnv rec {
   name = pname;
-  targetPkgs = pkgs: [
-    binutils
-    dejavu_fonts
-    flutter
-    gcc
-    go
-    hover
-    pkg-config
-    roboto
-  ] ++ libs;
+  targetPkgs = pkgs:
+    [ binutils dejavu_fonts flutter gcc go hover pkg-config roboto ] ++ libs;
 
   runScript = "hover";
 }

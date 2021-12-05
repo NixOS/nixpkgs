@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, tkinter
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, tkinter }:
 
 buildPythonPackage rec {
   pname = "guppy3";

@@ -1,7 +1,4 @@
-{ runtimeShell
-, symlinkJoin
-, writeTextFile
-}:
+{ runtimeShell, symlinkJoin, writeTextFile }:
 
 { emulator, rom }:
 
@@ -20,15 +17,10 @@ let
     executable = true;
     destination = "/bin/run-x16";
   };
-in
-symlinkJoin {
+in symlinkJoin {
   name = "run-x16-${emulator.version}";
 
-  paths = [
-    emulator
-    rom
-    runScript
-  ];
+  paths = [ emulator rom runScript ];
 }
 # TODO [ AndersonTorres ]:
 

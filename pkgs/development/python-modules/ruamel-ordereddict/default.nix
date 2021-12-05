@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
   pname = "ruamel-ordereddict";
@@ -17,7 +12,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A version of dict that keeps keys in insertion resp. sorted order";
+    description =
+      "A version of dict that keeps keys in insertion resp. sorted order";
     homepage = "https://sourceforge.net/projects/ruamel-ordereddict/";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

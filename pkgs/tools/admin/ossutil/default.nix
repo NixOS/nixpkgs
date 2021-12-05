@@ -14,7 +14,8 @@ buildGoModule rec {
   # this patch is required to add go mods to fetch dependencies
   patches = [
     (fetchpatch {
-      url = "https://github.com/aliyun/ossutil/commit/64067e979fb24ffb198a0c4eca718e81b63f514e.patch";
+      url =
+        "https://github.com/aliyun/ossutil/commit/64067e979fb24ffb198a0c4eca718e81b63f514e.patch";
       sha256 = "2pn0BcbNNL+iMema54LRpG/ca5kyDugLIZQ/TMhYG/8=";
     })
   ];
@@ -26,7 +27,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/aliyun/ossutil";
-    description = "A user friendly command line tool to access Alibaba Cloud OSS";
+    description =
+      "A user friendly command line tool to access Alibaba Cloud OSS";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };

@@ -1,23 +1,6 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, setuptools-rust
-, openssl
-, cryptography_vectors
-, darwin
-, packaging
-, six
-, isPyPy
-, cffi
-, pytest
-, pytest-subtests
-, pretend
-, libiconv
-, iso8601
-, pytz
-, hypothesis
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, rustPlatform, setuptools-rust
+, openssl, cryptography_vectors, darwin, packaging, six, isPyPy, cffi, pytest
+, pytest-subtests, pretend, libiconv, iso8601, pytz, hypothesis }:
 
 buildPythonPackage rec {
   pname = "cryptography";
@@ -39,21 +22,15 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ] ++ [
-    rustPlatform.cargoSetupHook
-    setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+  nativeBuildInputs = lib.optionals (!isPyPy) [ cffi ]
+    ++ [ rustPlatform.cargoSetupHook setuptools-rust ]
+    ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
-  buildInputs = [ openssl ]
-             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
-  propagatedBuildInputs = [
-    packaging
-    six
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    libiconv
   ];
+  propagatedBuildInputs = [ packaging six ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   checkInputs = [
     cryptography_vectors
@@ -65,15 +42,12 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlags = lib.concatStringsSep " " ([
-    "--disable-pytest-warnings"
-  ] ++
-    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  pytestFlags = lib.concatStringsSep " " ([ "--disable-pytest-warnings" ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
       # aarch64-darwin forbids W+X memory, but this tests depends on it:
       # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
       "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
-    ]
-  );
+    ]);
 
   checkPhase = ''
     py.test ${pytestFlags} tests
@@ -84,7 +58,8 @@ buildPythonPackage rec {
   __impureHostDeps = [ "/usr/lib" ];
 
   meta = with lib; {
-    description = "A package which provides cryptographic recipes and primitives";
+    description =
+      "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message

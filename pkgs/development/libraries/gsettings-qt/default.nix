@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
-, qmake, qtbase, qtdeclarative, wrapQtAppsHook
-, glib, gobject-introspection
-, genericUpdater, common-updater-scripts
-}:
+{ lib, stdenv, fetchFromGitLab, pkg-config, qmake, qtbase, qtdeclarative
+, wrapQtAppsHook, glib, gobject-introspection, genericUpdater
+, common-updater-scripts }:
 
 stdenv.mkDerivation rec {
   pname = "gsettings-qt";
@@ -16,17 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "14l8xphw4jd9ckqba13cyxq0i362x8lfsd0zlfawwi2z1q1vqm92";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    gobject-introspection
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config qmake gobject-introspection wrapQtAppsHook ];
 
-  buildInputs = [
-    glib
-    qtdeclarative
-  ];
+  buildInputs = [ glib qtdeclarative ];
 
   patchPhase = ''
     # force ordered build of subdirs
@@ -58,7 +48,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = genericUpdater {
     inherit pname version;
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
   meta = with lib; {

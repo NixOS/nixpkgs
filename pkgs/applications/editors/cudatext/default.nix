@@ -1,42 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, lazarus
-, fpc
-, libX11
+{ stdenv, lib, fetchFromGitHub, lazarus, fpc, libX11
 
 # GTK2/3
-, pango
-, cairo
-, glib
-, atk
-, gtk2
-, gtk3
-, gdk-pixbuf
-, python3
+, pango, cairo, glib, atk, gtk2, gtk3, gdk-pixbuf, python3
 
 # Qt5
-, libqt5pas
-, qt5
+, libqt5pas, qt5
 
 , widgetset ? "qt5"
-# See https://github.com/Alexey-T/CudaText-lexers
-, additionalLexers ? [ "Nix" ]
-}:
+  # See https://github.com/Alexey-T/CudaText-lexers
+, additionalLexers ? [ "Nix" ] }:
 
 assert builtins.elem widgetset [ "gtk2" "gtk3" "qt5" ];
 
 let
-  deps = lib.mapAttrs
-    (name: spec:
-      fetchFromGitHub {
-        repo = name;
-        inherit (spec) owner rev sha256;
-      }
-    )
-    (lib.importJSON ./deps.json);
-in
-stdenv.mkDerivation rec {
+  deps = lib.mapAttrs (name: spec:
+    fetchFromGitHub {
+      repo = name;
+      inherit (spec) owner rev sha256;
+    }) (lib.importJSON ./deps.json);
+in stdenv.mkDerivation rec {
   pname = "cudatext";
   version = "1.150.0";
 
@@ -57,9 +39,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ lazarus fpc ]
     ++ lib.optional (widgetset == "qt5") qt5.wrapQtAppsHook;
 
-  buildInputs = [ libX11 ]
-    ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [ pango cairo glib atk gdk-pixbuf ]
-    ++ lib.optional (widgetset == "gtk2") gtk2
+  buildInputs = [ libX11 ] ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
+    pango
+    cairo
+    glib
+    atk
+    gdk-pixbuf
+  ] ++ lib.optional (widgetset == "gtk2") gtk2
     ++ lib.optional (widgetset == "gtk3") gtk3
     ++ lib.optional (widgetset == "qt5") libqt5pas;
 

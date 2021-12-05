@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "sta";
@@ -18,7 +14,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
-    description = "Simple statistics from the command line interface (CLI), fast";
+    description =
+      "Simple statistics from the command line interface (CLI), fast";
     longDescription = ''
       This is a lightweight, fast tool for calculating basic descriptive
       statistics from the command line. Inspired by

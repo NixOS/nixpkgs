@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, flex, bison, qt4, libX11, cmake, gperf, adms,
-ngspice, wrapGAppsHook,
-kernels ? [ ngspice ] }:
+{ stdenv, lib, fetchFromGitHub, flex, bison, qt4, libX11, cmake, gperf, adms
+, ngspice, wrapGAppsHook, kernels ? [ ngspice ] }:
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH ":" ${lib.makeBinPath kernels})
   '';
 
-  QTDIR=qt4;
+  QTDIR = qt4;
 
   doInstallCheck = true;
   installCheck = ''

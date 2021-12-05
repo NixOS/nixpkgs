@@ -12,9 +12,7 @@ buildDunePackage rec {
   };
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    lwt
-  ];
+  propagatedBuildInputs = [ lwt ];
 
   doCheck = true;
 

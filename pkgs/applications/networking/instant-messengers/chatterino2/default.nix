@@ -1,4 +1,5 @@
-{ mkDerivation, stdenv, lib, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl, wrapQtAppsHook }:
+{ mkDerivation, stdenv, lib, pkg-config, fetchFromGitHub, qtbase, qtsvg
+, qtmultimedia, qmake, boost, openssl, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "chatterino2";
@@ -25,7 +26,8 @@ mkDerivation rec {
       "Chatterino".
     '';
     homepage = "https://github.com/Chatterino/chatterino2";
-    changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rexim ];

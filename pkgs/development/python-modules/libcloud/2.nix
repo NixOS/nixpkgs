@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, mock
-, pycrypto
-, requests
-, pytest-runner
-, pytest
-, requests-mock
-, typing
-, backports_ssl_match_hostname
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pycrypto, requests
+, pytest-runner, pytest, requests-mock, typing, backports_ssl_match_hostname }:
 
 buildPythonPackage rec {
   pname = "apache-libcloud";

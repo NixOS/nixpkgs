@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, openssl
-, olm
-, spdlog
-, nlohmann_json
-, coeurl
-, libevent
-, curl
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, openssl, olm
+, spdlog, nlohmann_json, coeurl, libevent, curl }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
@@ -35,19 +24,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_LIB_EXAMPLES=OFF"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-  buildInputs = [
-    spdlog
-    nlohmann_json
-    openssl
-    olm
-    coeurl
-    libevent
-    curl
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ spdlog nlohmann_json openssl olm coeurl libevent curl ];
 
   meta = with lib; {
     description = "Client API library for the Matrix protocol.";

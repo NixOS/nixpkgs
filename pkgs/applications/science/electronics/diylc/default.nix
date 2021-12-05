@@ -5,19 +5,23 @@ let
   version = "4.18.0";
   files = {
     app = fetchurl {
-      url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
+      url =
+        "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
       sha256 = "09fpp3dn086clgnjz5yj4fh5bnjvj6mvxkx9n3zamcwszjmxr40d";
     };
     icon16 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
+      url =
+        "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
       sha256 = "1is50aidfwzwfzwqv57s2hwhx0r5c21cp77bkl93xkdqkh2wd8x4";
     };
     icon32 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_medium.png";
+      url =
+        "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_medium.png";
       sha256 = "0a45p18n84xz1nd3zv3y16jlimvqzhbzg3q3f4lawgx4rcrn2n3d";
     };
     icon48 = fetchurl {
-      url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_large.png";
+      url =
+        "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_large.png";
       sha256 = "06dkz0dcy8hfmnzr5ri5n1sh8r7mg83kzbvs3zy58wwhgzs1ddk6";
     };
   };
@@ -29,8 +33,7 @@ let
     icon = "diylc_icon";
     categories = "Development;Electronics;";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version;
 
   dontUnpack = true;

@@ -10,9 +10,8 @@ let
     mkdir -p $out/bin
     cp ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf $out/bin
   '';
-in
 
-{
+in {
   config = mkIf (any (fs: fs == "vboxsf") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ package ];

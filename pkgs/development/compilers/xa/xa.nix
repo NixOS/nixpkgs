@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-}:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "xa";
@@ -28,9 +24,7 @@ stdenv.mkDerivation rec {
       --replace "LDFLAGS = -lc" "LDFLAGS ?= -lc"
   '';
 
-  makeFlags = [
-    "DESTDIR:=${placeholder "out"}"
-  ];
+  makeFlags = [ "DESTDIR:=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 

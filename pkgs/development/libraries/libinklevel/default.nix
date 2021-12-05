@@ -9,10 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zwkicjznkzw81ax745inv4n29y20vq82w8249vizaal76739n19";
   };
 
-  buildInputs = [
-    pkg-config
-    libusb1
-  ];
+  buildInputs = [ pkg-config libusb1 ];
 
   outputs = [ "out" "dev" "doc" ];
 

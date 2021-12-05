@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, jdcal
-, et_xmlfile
-, lxml
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, jdcal, et_xmlfile, lxml }:
 
 buildPythonPackage rec {
   pname = "openpyxl";

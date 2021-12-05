@@ -12,9 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ dbus-glib gtk2 wordnet ];
 
-  patches = [
-    ./gio-underlink.patch
-  ];
+  patches = [ ./gio-underlink.patch ];
 
   meta = with lib; {
     description = "An offline thesaurus based on WordNet";

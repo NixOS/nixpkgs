@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchgit, perl, makeWrapper
-, makeDesktopItem, which, perlPackages, boost
-}:
+{ lib, stdenv, fetchgit, perl, makeWrapper, makeDesktopItem, which, perlPackages
+, boost }:
 
 stdenv.mkDerivation rec {
   version = "1.3.0";
@@ -12,15 +11,34 @@ stdenv.mkDerivation rec {
     sha256 = "1pg4jxzb7f58ls5s8mygza8kqdap2c50kwlsdkf28bz1xi611zbi";
   };
 
-  buildInputs =
-  [boost] ++
-  (with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp
-    MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
-    IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
-    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
-    ExtUtilsCppGuess ModuleBuildWithXSpp ExtUtilsTypemapsDefault
-    DevelChecklib locallib
+  buildInputs = [ boost ] ++ (with perlPackages; [
+    perl
+    makeWrapper
+    which
+    EncodeLocale
+    MathClipper
+    ExtUtilsXSpp
+    MathConvexHullMonotoneChain
+    MathGeometryVoronoi
+    MathPlanePath
+    Moo
+    IOStringy
+    ClassXSAccessor
+    Wx
+    GrowlGNTP
+    NetDBus
+    ImportInto
+    XMLSAX
+    ExtUtilsMakeMaker
+    OpenGL
+    WxGLCanvas
+    ModuleBuild
+    LWP
+    ExtUtilsCppGuess
+    ModuleBuildWithXSpp
+    ExtUtilsTypemapsDefault
+    DevelChecklib
+    locallib
   ]);
 
   desktopItem = makeDesktopItem {
@@ -43,7 +61,8 @@ stdenv.mkDerivation rec {
   # note the boost-compile-error is fixed in
   # https://github.com/slic3r/Slic3r/commit/90f108ae8e7a4315f82e317f2141733418d86a68
   # this patch can be probably be removed in the next version after 1.3.0
-  patches = lib.optional (lib.versionAtLeast boost.version "1.56.0") ./boost-compile-error.patch;
+  patches = lib.optional (lib.versionAtLeast boost.version "1.56.0")
+    ./boost-compile-error.patch;
 
   buildPhase = ''
     export SLIC3R_NO_AUTO=true

@@ -5,7 +5,8 @@ let
   name = "Apple.Music-${version}";
 
   src = fetchurl {
-    url = "https://github.com/cryptofyre/Apple-Music-Electron/releases/download/v${version}/${name}.AppImage";
+    url =
+      "https://github.com/cryptofyre/Apple-Music-Electron/releases/download/v${version}/${name}.AppImage";
     sha256 = "1gb6j3nvam9fcpsgiv56jccg9a4y14vzsyw11h3hckaigy90knpx";
   };
 
@@ -23,7 +24,8 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Unofficial Apple Music application without having to bother with a Web Browser or iTunes";
+    description =
+      "Unofficial Apple Music application without having to bother with a Web Browser or iTunes";
     homepage = "https://github.com/iiFir3z/Apple-Music-Electron";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];

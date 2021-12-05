@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, lz4, snappy, libsodium
 # For testing
-, coreutils, gawk
-}:
+, coreutils, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "dedup";

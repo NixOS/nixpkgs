@@ -1,28 +1,18 @@
-{ fetchgit
-, gmp
-, mltonBootstrap
-, url ? "https://github.com/mlton/mlton"
-, rev
-, sha256
-, stdenv
-, version
-, which
-}:
+{ fetchgit, gmp, mltonBootstrap, url ? "https://github.com/mlton/mlton", rev
+, sha256, stdenv, version, which }:
 
 stdenv.mkDerivation {
   pname = "mlton";
   inherit version;
 
-  src = fetchgit {
-    inherit url rev sha256;
-  };
+  src = fetchgit { inherit url rev sha256; };
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [mltonBootstrap gmp];
+  buildInputs = [ mltonBootstrap gmp ];
 
   preBuild = ''
-    find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+    find . -type f | grep -v -e '\.tgz$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
     sed -i "s|/tmp|$TMPDIR|" bin/regression
 
     makeFlagsArray=(

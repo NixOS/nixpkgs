@@ -1,36 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, desktop-file-utils
-, python3
-, wrapGAppsHook
-, gtk3
-, libhandy
-, libportal
-, gnome
-, gnome-autoar
-, glib-networking
-, shared-mime-info
-, libnotify
-, libexif
-, libseccomp
-, exempi
-, librsvg
-, tracker
-, tracker-miners
-, gexiv2
-, libselinux
-, gdk-pixbuf
-, substituteAll
-, gnome-desktop
-, gst_all_1
-, gsettings-desktop-schemas
-, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2
+, desktop-file-utils, python3, wrapGAppsHook, gtk3, libhandy, libportal, gnome
+, gnome-autoar, glib-networking, shared-mime-info, libnotify, libexif
+, libseccomp, exempi, librsvg, tracker, tracker-miners, gexiv2, libselinux
+, gdk-pixbuf, substituteAll, gnome-desktop, gst_all_1, gsettings-desktop-schemas
+, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
@@ -39,7 +12,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "PmMwmIU3EaPpaxL+kiizIBgW5VSygj8WHn2QGoiAWC8=";
   };
 
@@ -86,9 +61,7 @@ stdenv.mkDerivation rec {
     tracker-miners
   ];
 
-  propagatedBuildInputs = [
-    gnome-autoar
-  ];
+  propagatedBuildInputs = [ gnome-autoar ];
 
   preFixup = ''
     gappsWrapperArgs+=(

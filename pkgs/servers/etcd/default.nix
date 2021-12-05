@@ -27,7 +27,8 @@ buildGoPackage rec {
   passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
 
   meta = with lib; {
-    description = "Distributed reliable key-value store for the most critical data of a distributed system";
+    description =
+      "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [ offline zowoq ];

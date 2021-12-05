@@ -1,40 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, pkg-config
-, libXinerama
-, libSM
-, libXxf86vm
-, libXtst
-, gtk2
-, GConf ? null
-, gtk3
-, xorgproto
-, gst_all_1
-, setfile
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, withMesa ? libGLSupported
-, libGLU ? null
-, libGL ? null
-, compat28 ? false
-, compat30 ? true
-, unicode ? true
-, withGtk2 ? true
-, withWebKit ? false
-, webkitgtk ? null
-, AGL ? null
-, Carbon ? null
-, Cocoa ? null
-, Kernel ? null
-, QTKit ? null
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config, libXinerama, libSM
+, libXxf86vm, libXtst, gtk2, GConf ? null, gtk3, xorgproto, gst_all_1, setfile
+, libGLSupported ?
+  lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? libGLSupported, libGLU ? null, libGL ? null, compat28 ? false
+, compat30 ? true, unicode ? true, withGtk2 ? true, withWebKit ? false
+, webkitgtk ? null, AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null
+, QTKit ? null }:
 
 with lib;
 
 assert withMesa -> libGLU != null && libGL != null;
 assert withWebKit -> webkitgtk != null;
 
-assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK31: You cannot enable withWebKit when using withGtk2.";
+assert assertMsg (withGtk2 -> withWebKit == false)
+  "wxGTK31: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
   version = "3.1.4";
@@ -56,11 +35,9 @@ stdenv.mkDerivation rec {
     xorgproto
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-  ] ++ optionals withGtk2 [ gtk2 GConf ]
-  ++ optional (!withGtk2) gtk3
-  ++ optional withMesa libGLU
-  ++ optional withWebKit webkitgtk
-  ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
+  ] ++ optionals withGtk2 [ gtk2 GConf ] ++ optional (!withGtk2) gtk3
+    ++ optional withMesa libGLU ++ optional withWebKit webkitgtk
+    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -75,39 +52,34 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags =
-    [
-      "--disable-precomp-headers"
-      "--enable-mediactrl"
-      (if compat28 then "--enable-compat28" else "--disable-compat28")
-      (if compat30 then "--enable-compat30" else "--disable-compat30")
-    ]
-    ++ optional unicode "--enable-unicode"
-    ++ optional withMesa "--with-opengl"
+  configureFlags = [
+    "--disable-precomp-headers"
+    "--enable-mediactrl"
+    (if compat28 then "--enable-compat28" else "--disable-compat28")
+    (if compat30 then "--enable-compat30" else "--disable-compat30")
+  ] ++ optional unicode "--enable-unicode" ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin
-      # allow building on 64-bit
-      [ "--with-cocoa" "--enable-universal-binaries" "--with-macosx-version-min=10.7" ]
-    ++ optionals withWebKit
-      [ "--enable-webview" "--enable-webviewwebkit" ];
+    # allow building on 64-bit
+    [
+      "--with-cocoa"
+      "--enable-universal-binaries"
+      "--with-macosx-version-min=10.7"
+    ] ++ optionals withWebKit [ "--enable-webview" "--enable-webviewwebkit" ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
-  preConfigure = "
-    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
-    substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
-    substituteInPlace configure --replace /usr /no-such-path
-  " + optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace \
-      'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
-      'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-    substituteInPlace configure --replace \
-      "-framework System" \
-      -lSystem
-  '';
+  preConfigure =
+    "\n    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='\n    substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='\n    substituteInPlace configure --replace /usr /no-such-path\n  "
+    + optionalString stdenv.isDarwin ''
+      substituteInPlace configure --replace \
+        'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
+        'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
+      substituteInPlace configure --replace \
+        "-framework System" \
+        -lSystem
+    '';
 
-  postInstall = "
-    (cd $out/include && ln -s wx-*/* .)
-  ";
+  postInstall = "\n    (cd $out/include && ln -s wx-*/* .)\n  ";
 
   passthru = {
     inherit compat28 compat30 unicode;
@@ -120,7 +92,8 @@ stdenv.mkDerivation rec {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
     homepage = "https://www.wxwidgets.org/";
-    description = "A C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
+    description =
+      "A C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = ''
       WxWidgets gives you a single, easy-to-use API for
       writing GUI applications on multiple platforms that still utilize the

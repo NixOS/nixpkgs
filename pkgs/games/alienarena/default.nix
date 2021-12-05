@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGL libXxf86vm ];
+  buildInputs =
+    [ libjpeg libX11 curl libogg libvorbis freetype openal libGL libXxf86vm ];
 
   patchPhase = ''
     substituteInPlace ./configure \
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

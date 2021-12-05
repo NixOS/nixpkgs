@@ -1,8 +1,4 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, bluepy, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
@@ -16,16 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-dx3OMzWJohOYCg7TnrqL4FLZoC+Q1dyJyUAdreDyfl0=";
   };
 
-  propagatedBuildInputs = [
-    bluepy
-  ];
+  propagatedBuildInputs = [ bluepy ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "switchbot"
-  ];
+  pythonImportsCheck = [ "switchbot" ];
 
   meta = with lib; {
     description = "Python library to control Switchbot IoT devices";

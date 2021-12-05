@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "596";
 
   src = fetchurl {
-    url = "https://www.greenwoodsoftware.com/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://www.greenwoodsoftware.com/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-QhqP1ZfnIELu/P6OV2NnerxL6EM/bA321zmhbMDk1cM=";
   };
 

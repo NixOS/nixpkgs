@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "lilv";

@@ -1,7 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromSourcehut
-}:
+{ lib, rustPlatform, fetchFromSourcehut }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlgreet";
@@ -17,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1lwy8xmkl9n3fj3wlf80wp728nn9p5rjnbgmm2cbpqxklcgbmxhm";
 
   meta = with lib; {
-    description = "Raw wayland greeter for greetd, to be run under sway or similar";
+    description =
+      "Raw wayland greeter for greetd, to be run under sway or similar";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];

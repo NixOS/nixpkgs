@@ -1,11 +1,4 @@
-{
-  lib, stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  python3,
-  boost
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, python3, boost }:
 
 stdenv.mkDerivation rec {
   pname = "cli11";

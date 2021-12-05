@@ -1,21 +1,8 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, lz4
-, rocksdb_6_23
-, snappy
-, zeromq
-, zlib
-, nixosTests
-}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, bzip2, lz4
+, rocksdb_6_23, snappy, zeromq, zlib, nixosTests }:
 
-let
-  rocksdb = rocksdb_6_23;
-in
-buildGoModule rec {
+let rocksdb = rocksdb_6_23;
+in buildGoModule rec {
   pname = "blockbook";
   version = "0.3.6";
   commit = "5f8cf45";
@@ -57,9 +44,7 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.blockbook-frontend;
-  };
+  passthru.tests = { smoke-test = nixosTests.blockbook-frontend; };
 
   meta = with lib; {
     description = "Trezor address/account balance backend";

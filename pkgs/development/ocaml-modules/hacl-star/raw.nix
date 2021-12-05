@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.3.2";
 
   src = fetchzip {
-    url = "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
+    url =
+      "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
     sha256 = "1wp27vf0g43ggs7cv85hpa62jjvzkwzzg5rfznbwac6j6yr17zc7";
     stripRoot = false;
   };
@@ -26,21 +27,13 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
-  buildInputs = [
-    which
-    ocaml
-    findlib
-  ];
+  buildInputs = [ which ocaml findlib ];
 
-  propagatedBuildInputs = [
-    ctypes
-  ];
+  propagatedBuildInputs = [ ctypes ];
 
-  checkInputs = [
-    cppo
-  ];
+  checkInputs = [ cppo ];
 
   doCheck = true;
 

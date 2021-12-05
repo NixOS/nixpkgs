@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
@@ -19,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ApT89JcXrRKr+YnyEPAG3enwrfgYn7LeUmBbbmh/DPI=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -32,9 +25,7 @@ buildPythonPackage rec {
     "test_asyncio_gateway_discovery"
   ];
 
-  pythonImportsCheck = [
-    "screenlogicpy"
-  ];
+  pythonImportsCheck = [ "screenlogicpy" ];
 
   meta = with lib; {
     description = "Python interface for Pentair Screenlogic devices";

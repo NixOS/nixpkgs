@@ -1,12 +1,10 @@
-{lib, stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext}:
+{ lib, stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext }:
 
 stdenv.mkDerivation rec {
   version = "1.7";
   pname = "xbanish";
 
-  buildInputs = [
-    libX11 libXi libXt libXfixes libXext
-  ];
+  buildInputs = [ libX11 libXi libXt libXfixes libXext ];
 
   src = fetchFromGitHub {
     owner = "jcs";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ic5f7zgc32p5g1wxas9y5h8dhik0pvsa8wmn6skdry56gw9vg9q";
   };
 
-  makeFlags=[ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   preInstall = ''
     mkdir -p $out/bin $out/man/man1
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
       corner of the screen.
     '';
     license = lib.licenses.bsd3;
-    maintainers = [lib.maintainers.choochootrain];
+    maintainers = [ lib.maintainers.choochootrain ];
     platforms = lib.platforms.linux;
   };
 }

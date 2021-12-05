@@ -6,9 +6,7 @@ let
 
   cfg = config.services.safeeyes;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -32,7 +30,7 @@ in
       description = "Safeeyes";
 
       wantedBy = [ "graphical-session.target" ];
-      partOf   = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
 
       path = [ pkgs.alsa-utils ];
 

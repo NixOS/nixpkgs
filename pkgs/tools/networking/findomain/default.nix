@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, perl
-, libiconv
-, Security
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, installShellFiles, perl, libiconv
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";

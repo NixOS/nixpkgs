@@ -1,9 +1,8 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
+{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook, atk, at-spi2-atk
+, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
-}:
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
-
 
   installPhase = ''
     mkdir -p $out/share/postman

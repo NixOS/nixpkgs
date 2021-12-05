@@ -10,17 +10,25 @@ mkCoqDerivation {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.14"; out = "0.5"; }
-    { case = range "8.11" "8.12"; out = "0.4"; }
-  ] null;
+  defaultVersion = with versions;
+    switch coq.coq-version [
+      {
+        case = range "8.13" "8.14";
+        out = "0.5";
+      }
+      {
+        case = range "8.11" "8.12";
+        out = "0.4";
+      }
+    ] null;
 
   propagatedBuildInputs = [ equations ];
 
   useDune2 = true;
 
   meta = {
-    description = "Exploration of some properties of Kirby and Paris' hydra battles, with the help of Coq";
+    description =
+      "Exploration of some properties of Kirby and Paris' hydra battles, with the help of Coq";
     longDescription = ''
       An exploration of some properties of Kirby and Paris' hydra
       battles, with the help of the Coq Proof assistant. This

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytest-runner
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, pytest-runner
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "awkward0";
@@ -29,7 +24,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "awkward0" ];
 
   meta = with lib; {
-    description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";
+    description =
+      "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";
     homepage = "https://github.com/scikit-hep/awkward-array";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc SuperSandro2000 ];

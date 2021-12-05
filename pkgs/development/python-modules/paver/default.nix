@@ -1,15 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cogapp
-, mock
-, virtualenv
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, cogapp, mock, virtualenv }:
 
 buildPythonPackage rec {
   version = "1.3.4";
-  pname   = "Paver";
+  pname = "Paver";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,9 +18,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python-based build/distribution/deployment scripting tool";
-    homepage    = "https://github.com/paver/paver";
+    homepage = "https://github.com/paver/paver";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

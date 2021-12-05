@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest
-, mock
-, ipython_genutils
-, decorator
-, pythonOlder
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, pytest, mock
+, ipython_genutils, decorator, pythonOlder, six }:
 
 buildPythonPackage rec {
   pname = "traitlets";

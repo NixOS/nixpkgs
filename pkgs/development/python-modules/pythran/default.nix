@@ -1,24 +1,8 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, openmp
-, pytest-runner
-, ply
-, networkx
-, decorator
-, gast
-, six
-, numpy
-, beniget
-, pytestCheckHook
-, scipy
-, isPy3k
-, substituteAll
-}:
+{ lib, python, buildPythonPackage, fetchFromGitHub, openmp, pytest-runner, ply
+, networkx, decorator, gast, six, numpy, beniget, pytestCheckHook, scipy, isPy3k
+, substituteAll }:
 
-let
-  inherit (python) stdenv;
+let inherit (python) stdenv;
 
 in buildPythonPackage rec {
   pname = "pythran";
@@ -35,23 +19,15 @@ in buildPythonPackage rec {
     # Hardcode path to mp library
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
-      gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
+      gomp = "${
+          if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib
+        }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [
-    ply
-    networkx
-    decorator
-    gast
-    six
-    numpy
-    beniget
-  ];
+  propagatedBuildInputs = [ ply networkx decorator gast six numpy beniget ];
 
   pythonImportsCheck = [
     "pythran"
@@ -62,11 +38,7 @@ in buildPythonPackage rec {
     "pythran.spec"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    numpy
-    scipy
-  ];
+  checkInputs = [ pytestCheckHook numpy scipy ];
 
   # Test suite is huge.
   # Also, in the future scipy will rely on it resulting in a circular test dependency

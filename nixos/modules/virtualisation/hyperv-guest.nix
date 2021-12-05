@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.virtualisation.hypervGuest;
+let cfg = config.virtualisation.hypervGuest;
 
 in {
   options = {
@@ -27,18 +26,16 @@ in {
 
   config = mkIf cfg.enable {
     boot = {
-      initrd.kernelModules = [
-        "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
-      ];
+      initrd.kernelModules =
+        [ "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus" ];
 
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
-      kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
-      ];
+      kernelParams = [ "video=hyperv_fb:${cfg.videoMode}" "elevator=noop" ];
     };
 
-    environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
+    environment.systemPackages =
+      [ config.boot.kernelPackages.hyperv-daemons.bin ];
 
     # enable hotadding cpu/memory
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
@@ -58,9 +55,7 @@ in {
 
       services.hv-vss.unitConfig.ConditionPathExists = [ "/dev/vmbus/hv_vss" ];
 
-      targets.hyperv-daemons = {
-        wantedBy = [ "multi-user.target" ];
-      };
+      targets.hyperv-daemons = { wantedBy = [ "multi-user.target" ]; };
     };
   };
 }

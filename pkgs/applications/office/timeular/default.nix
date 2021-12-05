@@ -1,10 +1,4 @@
-{ lib
-, fetchurl
-, appimageTools
-, libsecret
-, gtk3
-, gsettings-desktop-schemas
-}:
+{ lib, fetchurl, appimageTools, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
   version = "3.9.1";
@@ -12,13 +6,12 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
+    url =
+      "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
     sha256 = "103hy443p697jdkz6li8s1n6kg1r55jmiw2vbjz12kskf7njg4y4";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 in appimageTools.wrapType2 rec {
   inherit name src;
 
@@ -26,9 +19,7 @@ in appimageTools.wrapType2 rec {
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  extraPkgs = pkgs: with pkgs; [ libsecret ];
 
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}

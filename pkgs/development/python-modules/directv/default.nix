@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, yarl, aresponses
+, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "directv";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "19jckf6qvl8fwi8yff1qy8c44xdz3zpi1ip1md6zl2c503qc91mk";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "directv" ];
 

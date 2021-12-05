@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, automake, autoconf, udisks1, dbus-glib, glib, libconfuse }:
+{ lib, stdenv, fetchurl, pkg-config, automake, autoconf, udisks1, dbus-glib
+, glib, libconfuse }:
 
 stdenv.mkDerivation rec {
   pname = "udisks-glue";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "https://github.com/fernandotcl/udisks-glue/archive/release-${version}.tar.gz";
+    url =
+      "https://github.com/fernandotcl/udisks-glue/archive/release-${version}.tar.gz";
     sha256 = "317d25bf249278dc8f6a5dcf18f760512427c772b9afe3cfe34e6e1baa258176";
   };
 

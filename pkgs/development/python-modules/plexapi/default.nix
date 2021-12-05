@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, tqdm
-, websocket-client
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, tqdm, websocket-client
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "plexapi";
@@ -21,18 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-e+nZi84mF9Z/gbFyhmE9TlntkTyrfoNr3U/fwH55fjw=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    tqdm
-    websocket-client
-  ];
+  propagatedBuildInputs = [ requests tqdm websocket-client ];
 
   # Tests require a running Plex instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "plexapi"
-  ];
+  pythonImportsCheck = [ "plexapi" ];
 
   meta = with lib; {
     description = "Python bindings for the Plex API";

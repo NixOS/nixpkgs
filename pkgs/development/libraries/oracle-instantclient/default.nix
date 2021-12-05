@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, fixDarwinDylibNames
-, unzip
-, libaio
-, makeWrapper
-, odbcSupport ? true
-, unixODBC
-}:
+{ lib, stdenv, fetchurl, autoPatchelfHook, fixDarwinDylibNames, unzip, libaio
+, makeWrapper, odbcSupport ? true, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
@@ -18,7 +9,8 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   # assemble list of components
-  components = [ "basic" "sdk" "sqlplus" "tools" ] ++ optional odbcSupport "odbc";
+  components = [ "basic" "sdk" "sqlplus" "tools" ]
+    ++ optional odbcSupport "odbc";
 
   # determine the version number, there might be different ones per architecture
   version = {
@@ -36,10 +28,13 @@ let
       odbc = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
     };
     x86_64-darwin = {
-      basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
+      basic =
+        "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
       sdk = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
-      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
-      tools = "b2bc474f98da13efdbc77fd05f559498cd8c08582c5b9038f6a862215de33f2c";
+      sqlplus =
+        "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
+      tools =
+        "b2bc474f98da13efdbc77fd05f559498cd8c08582c5b9038f6a862215de33f2c";
       odbc = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
     };
   }.${stdenv.hostPlatform.system} or throwSystem;
@@ -60,31 +55,31 @@ let
 
   # calculate the filename of a single zip file
   srcFilename = component: arch: version: rel:
-    "instantclient-${component}-${arch}-${version}" +
-    (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
+    "instantclient-${component}-${arch}-${version}"
+    + (optionalString (rel != "") "-${rel}")
+    + (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru")
+    + # ¯\_(ツ)_/¯
     ".zip";
 
   # fetcher for the non clickthrough artifacts
-  fetcher = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
-    sha256 = hash;
-  };
+  fetcher = srcFilename: hash:
+    fetchurl {
+      url =
+        "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+      sha256 = hash;
+    };
 
   # assemble srcs
-  srcs = map
-    (component:
-      (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
-    components;
+  srcs = map (component:
+    (fetcher (srcFilename component arch version rels.${component} or "")
+      hashes.${component} or "")) components;
 
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version srcs;
 
-  buildInputs = [ stdenv.cc.cc.lib ]
-    ++ optional stdenv.isLinux libaio
+  buildInputs = [ stdenv.cc.cc.lib ] ++ optional stdenv.isLinux libaio
     ++ optional odbcSupport unixODBC;
 
   nativeBuildInputs = [ makeWrapper unzip ]

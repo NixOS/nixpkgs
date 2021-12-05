@@ -1,25 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, glibcLocales
-, entrypoints
-, bleach
-, mistune
-, nbclient
-, jinja2
-, pygments
-, traitlets
-, testpath
-, jupyter_core
-, jupyterlab-pygments
-, nbformat
-, ipykernel
-, pandocfilters
-, tornado
-, jupyter-client
-, defusedxml
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, glibcLocales, entrypoints
+, bleach, mistune, nbclient, jinja2, pygments, traitlets, testpath, jupyter_core
+, jupyterlab-pygments, nbformat, ipykernel, pandocfilters, tornado
+, jupyter-client, defusedxml }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
@@ -32,9 +14,7 @@ buildPythonPackage rec {
 
   # Add $out/share/jupyter to the list of paths that are used to search for
   # various exporter templates
-  patches = [
-    ./templates.patch
-  ];
+  patches = [ ./templates.patch ];
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
@@ -43,8 +23,19 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
+    entrypoints
+    bleach
+    mistune
+    jinja2
+    pygments
+    traitlets
+    testpath
+    jupyter_core
+    nbformat
+    ipykernel
+    pandocfilters
+    tornado
+    jupyter-client
     defusedxml
     (nbclient.override { doCheck = false; }) # avoid infinite recursion
     jupyterlab-pygments
@@ -63,7 +54,6 @@ buildPythonPackage rec {
     "--ignore=nbconvert/tests/base.py"
     "--ignore=nbconvert/tests/test_nbconvertapp.py"
   ];
-
 
   disabledTests = [
     "test_export"

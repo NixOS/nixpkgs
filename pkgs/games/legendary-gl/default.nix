@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, pythonOlder
-, requests
-}:
+{ lib, fetchFromGitHub, buildPythonApplication, pythonOlder, requests }:
 
 buildPythonApplication rec {
   pname = "legendary-gl"; # Name in pypi

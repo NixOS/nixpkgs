@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, sass, glib, libxml2, gdk-pixbuf
-, gtk-engine-murrine
-}:
+, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   version = "2.6.7";
@@ -23,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Modern flat theme with a combination of light and dark elements (GNOME, Unity, Xfce and Openbox)";
+    description =
+      "Modern flat theme with a combination of light and dark elements (GNOME, Unity, Xfce and Openbox)";
     homepage = "https://numixproject.github.io";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;

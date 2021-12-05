@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [ ocaml findlib functory ];
 
   meta = with lib; {
-    description = "An open source model checker for verifying safety properties of array-based systems";
+    description =
+      "An open source model checker for verifying safety properties of array-based systems";
     homepage = "http://cubicle.lri.fr/";
     license = licenses.asl20;
     platforms = platforms.unix;

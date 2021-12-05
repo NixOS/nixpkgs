@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, requests-mock
-, oauthlib
-, requests_oauthlib
-, requests
-, pyaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, requests-mock
+, oauthlib, requests_oauthlib, requests, pyaml }:
 
 buildPythonPackage rec {
   pname = "pleroma-bot";
@@ -27,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://robertoszek.github.io/pleroma-bot/";
-    description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
+    description =
+      "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
     license = licenses.mit;
     maintainers = with maintainers; [ robertoszek ];
   };

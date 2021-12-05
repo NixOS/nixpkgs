@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.32";
 
   src = fetchurl {
-    url = "https://github.com/zlin/wgetpaste/releases/download/${version}/wgetpaste-${version}.tar.xz";
+    url =
+      "https://github.com/zlin/wgetpaste/releases/download/${version}/wgetpaste-${version}.tar.xz";
     sha256 = "04yv1hndxhrc5axwiw1yy0yrw1kli5fk4yj4267l7xdwqzxvl7b2";
   };
   # currently zsh-autocompletion support is not installed

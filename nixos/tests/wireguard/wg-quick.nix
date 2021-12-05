@@ -4,12 +4,9 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
     peer = (import ./make-peer.nix) { inherit lib; };
-  in
-  {
+  in {
     name = "wg-quick";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ d-xo ];
-    };
+    meta = with pkgs.lib.maintainers; { maintainers = [ d-xo ]; };
 
     nodes = {
       peer0 = peer {
@@ -63,5 +60,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
       peer1.succeed("ping -c5 fc00::1")
       peer1.succeed("ping -c5 10.23.42.1")
     '';
-  }
-)
+  })

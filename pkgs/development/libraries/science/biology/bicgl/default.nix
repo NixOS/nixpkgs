@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu, GLUT }:
+{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu, GLUT
+}:
 
 stdenv.mkDerivation rec {
   pname = "bicgl";
@@ -18,10 +19,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ GLUT ]
     ++ lib.optionals stdenv.isLinux [ freeglut ];
 
-  cmakeFlags = [
-    "-DLIBMINC_DIR=${libminc}/lib/cmake"
-    "-DBICPL_DIR=${bicpl}/lib"
-  ];
+  cmakeFlags =
+    [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DBICPL_DIR=${bicpl}/lib" ];
 
   meta = with lib; {
     homepage = "https://github.com/${owner}/${pname}";

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, nose
-}:
+{ lib, buildPythonPackage, fetchurl, nose }:
 
 buildPythonPackage rec {
   version = "1.2.8";

@@ -4,10 +4,8 @@
 
 with lib;
 
-let
-  cfg = config.programs.turbovnc;
-in
-{
+let cfg = config.programs.turbovnc;
+in {
   options = {
 
     programs.turbovnc = {

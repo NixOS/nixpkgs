@@ -1,4 +1,5 @@
-{ stdenv, lib, runCommand, buildEnv, makeWrapper, makeDesktopItem, gamePacks, libstdcxx5, SDL, openal }:
+{ stdenv, lib, runCommand, buildEnv, makeWrapper, makeDesktopItem, gamePacks
+, libstdcxx5, SDL, openal }:
 
 let
   game = buildEnv {
@@ -25,15 +26,14 @@ let
   desktop = makeDesktopItem {
     name = "ut2004";
     desktopName = "Unreal Tournament 2004";
-    comment = "A first-person shooter video game developed by Epic Games and Digital Extreme";
+    comment =
+      "A first-person shooter video game developed by Epic Games and Digital Extreme";
     genericName = "First-person shooter";
     categories = "Game;";
     exec = "ut2004";
   };
 
-in runCommand "ut2004" {
-  nativeBuildInputs = [ makeWrapper ];
-} ''
+in runCommand "ut2004" { nativeBuildInputs = [ makeWrapper ]; } ''
   mkdir -p $out/bin
   for i in ${game}/System/*-bin; do
     name="$(basename "$i")"

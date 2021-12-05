@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, numpy
-, pybind11
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, importlib-metadata, numpy, pybind11
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyfma";
@@ -21,19 +14,12 @@ buildPythonPackage rec {
   };
   format = "pyproject";
 
-  buildInputs = [
-    pybind11
-  ];
+  buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [
-    numpy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ numpy ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyfma" ];
 

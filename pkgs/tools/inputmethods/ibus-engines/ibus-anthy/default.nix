@@ -1,22 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, pkg-config
-, wrapGAppsHook
-, anthy
-, ibus
-, glib
-, gobject-introspection
-, gtk3
-, python3
-}:
+{ lib, stdenv, fetchurl, gettext, pkg-config, wrapGAppsHook, anthy, ibus, glib
+, gobject-introspection, gtk3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-anthy";
   version = "1.5.12";
 
   src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-6edY3dRq4pI3bqsXEYf6jyBjDwpXzRKKQSCP3N/fV7s=";
   };
 
@@ -25,22 +16,13 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     ibus
-    (python3.withPackages (ps: [
-      ps.pygobject3
-      (ps.toPythonModule ibus)
-    ]))
+    (python3.withPackages (ps: [ ps.pygobject3 (ps.toPythonModule ibus) ]))
   ];
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gettext gobject-introspection pkg-config wrapGAppsHook ];
 
-  configureFlags = [
-    "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t"
-  ];
+  configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
 
   postFixup = ''
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out

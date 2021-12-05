@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, io # >= 2.2.7
+{ buildOctavePackage, lib, fetchurl, io # >= 2.2.7
 , geometry # >= 4.0.0
 }:
 
@@ -14,10 +11,7 @@ buildOctavePackage rec {
     sha256 = "0wj0q1rkrqs4qgpjh4vn9kcpdh94pzr6v4jc1vcrjwkp87yjv8c0";
   };
 
-  requiredOctavePackages = [
-    io
-    geometry
-  ];
+  requiredOctavePackages = [ io geometry ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/mapping/index.html";

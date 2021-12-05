@@ -1,26 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, makeDesktopItem
-, mkYarnPackage
-, fetchYarnDeps
-, electron
-, element-web
-, callPackage
-, Security
-, AppKit
+{ lib, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, mkYarnPackage
+, fetchYarnDeps, electron, element-web, callPackage, Security, AppKit
 , CoreServices
 
-, useWayland ? false
-}:
+, useWayland ? false }:
 
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
-in
-mkYarnPackage rec {
+  electron_exec = if stdenv.isDarwin then
+    "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
+  else
+    "${electron}/bin/electron";
+in mkYarnPackage rec {
   pname = "element-desktop";
   inherit (pinData) version;
   name = "${pname}-${version}";
@@ -79,7 +70,10 @@ mkYarnPackage rec {
 
     # executable wrapper
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --add-flags "$out/share/element/electron${
+        lib.optionalString useWayland
+        " --enable-features=UseOzonePlatform --ozone-platform=wayland"
+      }"
   '';
 
   # Do not attempt generating a tarball for element-web again.
@@ -109,7 +103,8 @@ mkYarnPackage rec {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/vector-im/element-desktop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;

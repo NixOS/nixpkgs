@@ -1,13 +1,5 @@
-{ buildPythonPackage
-, enum34
-, fetchFromGitHub
-, flit-core
-, isPy27
-, lib
-, pathlib
-, pyyaml
-, pytestCheckHook
-}:
+{ buildPythonPackage, enum34, fetchFromGitHub, flit-core, isPy27, lib, pathlib
+, pyyaml, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "confuse";
@@ -21,20 +13,11 @@ buildPythonPackage rec {
     sha256 = "1kvilxhjifvz6ra64jadf9jiwphrah5rcb9ryq0v7w1dywgn4qp7";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ] ++ lib.optionals isPy27 [
-    enum34
-    pathlib
-  ] ;
+  propagatedBuildInputs = [ pyyaml ] ++ lib.optionals isPy27 [ enum34 pathlib ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "confuse" ];
 

@@ -53,8 +53,7 @@ in {
       dbus.packages = [ pkgs.cdemu-daemon ];
     };
 
-    environment.systemPackages =
-      [ pkgs.cdemu-daemon pkgs.cdemu-client ]
+    environment.systemPackages = [ pkgs.cdemu-daemon pkgs.cdemu-client ]
       ++ optional cfg.gui pkgs.gcdemu
       ++ optional cfg.image-analyzer pkgs.image-analyzer;
   };

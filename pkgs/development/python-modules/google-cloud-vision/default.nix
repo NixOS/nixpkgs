@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, libcst, mock, proto-plus
+, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
@@ -18,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "542a300f4b79ed9574cdeb4eb47cf8899f0915041e8bf0058e8192a620087d30";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus];
+  propagatedBuildInputs = [ libcst google-api-core proto-plus ];
 
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 

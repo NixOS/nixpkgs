@@ -15,7 +15,8 @@ in stdenv.mkDerivation rec {
   version = "1.3.74";
 
   src = fetchurl {
-    url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
+    url =
+      "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
     sha256 = "1cgpmsmmnbzw1lwsdafp8yklk1rwc61yf12vc1ahcc6bl7q2385x";
   };
 

@@ -1,26 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, vala
-, wrapGAppsHook
-, cairo
-, discount
-, glib
-, gtk3
-, gtksourceview4
-, hicolor-icon-theme # for setup-hook
-, libarchive
-, libgee
-, libhandy
-, libxml2
-, pantheon
-}:
+{ lib, stdenv, fetchFromGitHub, desktop-file-utils, meson, ninja, pkg-config
+, python3, shared-mime-info, vala, wrapGAppsHook, cairo, discount, glib, gtk3
+, gtksourceview4, hicolor-icon-theme # for setup-hook
+, libarchive, libgee, libhandy, libxml2, pantheon }:
 
 stdenv.mkDerivation rec {
   pname = "minder";

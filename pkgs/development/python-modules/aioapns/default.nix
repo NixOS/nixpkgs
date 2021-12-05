@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, h2
-, lib
-, pyjwt
-, pyopenssl
-}:
+{ buildPythonPackage, fetchPypi, h2, lib, pyjwt, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "aioapns";
@@ -15,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "ea58ce685aa6d0ffbdc3be4a6999c7268b9c765f806d3e4da7677c098fb72cbc";
   };
 
-  propagatedBuildInputs = [
-    h2
-    pyopenssl
-    pyjwt
-  ];
+  propagatedBuildInputs = [ h2 pyopenssl pyjwt ];
 
   # Project has no tests
   doCheck = false;

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libvarlink";
@@ -34,7 +28,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "C implementation of the Varlink protocol and command line tool";
+    description =
+      "C implementation of the Varlink protocol and command line tool";
     homepage = "https://github.com/varlink/libvarlink";
     license = licenses.asl20;
     maintainers = with maintainers; [ artturin ];

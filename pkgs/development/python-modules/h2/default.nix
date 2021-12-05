@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, hpack
-, hyperframe
-, pytestCheckHook
-, hypothesis
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, fetchpatch, hpack, hyperframe
+, pytestCheckHook, hypothesis }:
 
 buildPythonPackage rec {
   pname = "h2";
@@ -24,25 +16,17 @@ buildPythonPackage rec {
     # Workaround issues with hypothesis 6.6
     # https://github.com/python-hyper/h2/pull/1248
     (fetchpatch {
-      url = "https://github.com/python-hyper/h2/commit/0646279dab694a89562846c810202ce2c0b49be3.patch";
+      url =
+        "https://github.com/python-hyper/h2/commit/0646279dab694a89562846c810202ce2c0b49be3.patch";
       sha256 = "1k0fsxwq9wbv15sc9ixls4qmxxghlzpflf3awm66ar9m2ikahiak";
     })
   ];
 
-  propagatedBuildInputs = [
-    hpack
-    hyperframe
-  ];
+  propagatedBuildInputs = [ hpack hyperframe ];
 
-  checkInputs = [
-    pytestCheckHook
-    hypothesis
-  ];
+  checkInputs = [ pytestCheckHook hypothesis ];
 
-  pythonImportsCheck = [
-    "h2.connection"
-    "h2.config"
-  ];
+  pythonImportsCheck = [ "h2.connection" "h2.config" ];
 
   meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";

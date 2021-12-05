@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://natspec.sourceforge.net/";
-    description = "A library intended to smooth national specificities in using of programs";
+    description =
+      "A library intended to smooth national specificities in using of programs";
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };
-} // lib.optionalAttrs (!stdenv.isLinux) {
-  propagatedBuildInputs = [ libiconv ];
 }
+// lib.optionalAttrs (!stdenv.isLinux) { propagatedBuildInputs = [ libiconv ]; }

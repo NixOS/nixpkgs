@@ -1,13 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, vmprof
-, pyqt4
-, isPyPy
-, pkgs
-, scons
-, chrpath
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, vmprof, pyqt4, isPyPy, pkgs
+, scons, chrpath }:
 
 buildPythonPackage rec {
   version = "0.6.14.5";
@@ -45,7 +37,8 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   meta = with lib; {
-    description = "Python compiler with full language support and CPython compatibility";
+    description =
+      "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
   };

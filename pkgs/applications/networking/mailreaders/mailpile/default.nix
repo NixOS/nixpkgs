@@ -16,7 +16,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python2Packages; [ pbr git ];
-  PBR_VERSION=version;
+  PBR_VERSION = version;
 
   propagatedBuildInputs = with python2Packages; [
     appdirs
@@ -40,7 +40,8 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A modern, fast web-mail client with user-friendly encryption and privacy features";
+    description =
+      "A modern, fast web-mail client with user-friendly encryption and privacy features";
     homepage = "https://www.mailpile.is/";
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;

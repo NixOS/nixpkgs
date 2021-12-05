@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, ladspaH
-}:
+{ lib, stdenv, fetchurl, ladspaH }:
 
 stdenv.mkDerivation rec {
   pname = "FIL-plugins";
   version = "0.3.0";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url =
+      "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1scfv9j7jrp50r565haa4rvxn1vk2ss86xssl5qgcr8r45qz42qw";
   };
 
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
   '';
 
-  preInstall="mkdir -p $out/lib/ladspa";
+  preInstall = "mkdir -p $out/lib/ladspa";
 
   meta = {
-    description = "a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";
+    description =
+      "a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";
     longDescription = ''
       Each section has an active/bypass switch, frequency, bandwidth and gain controls.
       There is also a global bypass switch and gain control.

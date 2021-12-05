@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
-     description = "A simple and efficient MsgPack binary serialization library in a self-contained header file";
-     homepage = "https://github.com/rtsisyk/msgpuck";
-     license = licenses.bsd2;
-     platforms = platforms.all;
-     maintainers = with maintainers; [ izorkin ];
- };
+    description =
+      "A simple and efficient MsgPack binary serialization library in a self-contained header file";
+    homepage = "https://github.com/rtsisyk/msgpuck";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ izorkin ];
+  };
 }

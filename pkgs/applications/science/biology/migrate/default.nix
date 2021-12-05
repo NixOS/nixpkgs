@@ -5,7 +5,8 @@ gccStdenv.mkDerivation rec {
   pname = "migrate";
 
   src = fetchurl {
-    url = "https://peterbeerli.com/migrate-html5/download_version3/${pname}-${version}.src.tar.gz";
+    url =
+      "https://peterbeerli.com/migrate-html5/download_version3/${pname}-${version}.src.tar.gz";
     sha256 = "1p2364ffjc56i82snzvjpy6pkf6wvqwvlvlqxliscx2c303fxs8v";
   };
 
@@ -15,7 +16,8 @@ gccStdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/man/man1";
 
   meta = with lib; {
-    description = "Estimates population size, migration, population splitting parameters using genetic/genomic data";
+    description =
+      "Estimates population size, migration, population splitting parameters using genetic/genomic data";
     homepage = "https://peterbeerli.com/migrate-html5/index.html";
     license = licenses.mit;
     maintainers = [ maintainers.bzizou ];

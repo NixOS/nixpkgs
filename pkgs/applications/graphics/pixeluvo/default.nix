@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper
-, gtk3-x11 }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, gtk3-x11 }:
 
 stdenv.mkDerivation rec {
   pname = "pixeluvo";
@@ -10,16 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QYSuD6o3kHg0DrFihYEcf9e3b8U1bu4Zf78+Akmm8yo=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
 
-  buildInputs = [
-    gtk3-x11
-    stdenv.cc.cc
-  ];
+  buildInputs = [ gtk3-x11 stdenv.cc.cc ];
 
   libPath = lib.makeLibraryPath buildInputs;
 
@@ -47,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Beautifully Designed Image and Photo Editor for Windows and Linux";
+    description =
+      "A Beautifully Designed Image and Photo Editor for Windows and Linux";
     homepage = "http://www.pixeluvo.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang ];

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libiconv
-, zlib
-, enableOcr ? true
-, makeWrapper
-, tesseract4
-, leptonica
-, ffmpeg
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, libiconv, zlib
+, enableOcr ? true, makeWrapper, tesseract4, leptonica, ffmpeg }:
 
 stdenv.mkDerivation rec {
   pname = "ccextractor";
@@ -32,8 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper ];
 
-  buildInputs = [ zlib ]
-    ++ lib.optional (!stdenv.isLinux) libiconv
+  buildInputs = [ zlib ] ++ lib.optional (!stdenv.isLinux) libiconv
     ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
 
   cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
@@ -45,7 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.ccextractor.org";
-    description = "Tool that produces subtitles from closed caption data in videos";
+    description =
+      "Tool that produces subtitles from closed caption data in videos";
     longDescription = ''
       A tool that analyzes video files and produces independent subtitle files from
       closed captions data. CCExtractor is portable, small, and very fast.

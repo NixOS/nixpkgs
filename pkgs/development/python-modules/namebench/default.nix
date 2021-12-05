@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, isPyPy
-, fetchurl
-, tkinter
-}:
+{ lib, buildPythonPackage, isPy3k, isPyPy, fetchurl, tkinter }:
 
 buildPythonPackage rec {
   pname = "namebench";
@@ -12,7 +6,8 @@ buildPythonPackage rec {
   disabled = isPy3k || isPyPy;
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/{pname}/${pname}-${version}-source.tgz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/{pname}/${pname}-${version}-source.tgz";
     sha256 = "09clbcd6wxgk4r6qw7hb78h818mvca7lijigy1mlq5y1f3lgkk1h";
   };
 
@@ -28,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/google/namebench"; # Formerly https://code.google.com/archive/p/namebench/
+    homepage =
+      "https://github.com/google/namebench"; # Formerly https://code.google.com/archive/p/namebench/
     description = "Find fastest DNS servers available";
     license = with licenses; [
       asl20

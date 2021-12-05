@@ -1,10 +1,9 @@
-{ lib, pythonPackages, pkg-config
-, qmake, qtbase, qtsvg, qtwebengine
-, wrapQtAppsHook
-}:
+{ lib, pythonPackages, pkg-config, qmake, qtbase, qtsvg, qtwebengine
+, wrapQtAppsHook }:
 
 let
-  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
+  inherit (pythonPackages)
+    buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
@@ -19,27 +18,16 @@ in buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
+      --replace "[tool.sip.project]" "[tool.sip.project]
+    sip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    sip
-    qtbase
-    qtsvg
-    qtwebengine
-    pyqt-builder
-  ];
+  nativeBuildInputs =
+    [ pkg-config qmake sip qtbase qtsvg qtwebengine pyqt-builder ];
 
-  buildInputs = [
-    sip
-    qtbase
-    qtsvg
-    qtwebengine
-  ];
+  buildInputs = [ sip qtbase qtsvg qtwebengine ];
 
   propagatedBuildInputs = [ pyqt5 ];
 
@@ -51,21 +39,16 @@ in buildPythonPackage rec {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5.QtWebEngine"
-    "PyQt5.QtWebEngineWidgets"
-  ];
+  pythonImportsCheck = [ "PyQt5.QtWebEngine" "PyQt5.QtWebEngineWidgets" ];
 
   enableParallelBuilding = true;
 
-  passthru = {
-    inherit wrapQtAppsHook;
-  };
+  passthru = { inherit wrapQtAppsHook; };
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "http://www.riverbankcomputing.co.uk";
+    license = licenses.gpl3;
+    platforms = platforms.mesaPlatforms;
   };
 }

@@ -1,24 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, drvName ? "geoip"
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, drvName ? "geoip"
 
-# in geoipDatabase, you can insert a package defining
-# "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
-, geoipDatabase ? "/var/lib/geoip-databases"
-}:
+  # in geoipDatabase, you can insert a package defining
+  # "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
+, geoipDatabase ? "/var/lib/geoip-databases" }:
 
 let
-  dataDir = if lib.isDerivation geoipDatabase
-    then "${toString geoipDatabase}/share/GeoIP"
-    else geoipDatabase;
-in
-stdenv.mkDerivation rec {
+  dataDir = if lib.isDerivation geoipDatabase then
+    "${toString geoipDatabase}/share/GeoIP"
+  else
+    geoipDatabase;
+in stdenv.mkDerivation rec {
   pname = drvName;
   version = "1.6.12";
 
   src = fetchFromGitHub {
-    owner  = "maxmind";
-    repo   = "geoip-api-c";
-    rev    = "v${version}";
+    owner = "maxmind";
+    repo = "geoip-api-c";
+    rev = "v${version}";
     sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
   };
 
@@ -38,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An API for GeoIP/Geolocation databases";
     maintainers = with maintainers; [ thoughtpolice raskin ];
-    license     = licenses.lgpl21;
-    platforms   = platforms.unix;
-    homepage    = "https://www.maxmind.com";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    homepage = "https://www.maxmind.com";
   };
 }

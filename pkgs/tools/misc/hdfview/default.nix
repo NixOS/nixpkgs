@@ -1,17 +1,20 @@
-{ lib, stdenv, fetchurl, ant, jdk, nettools, hdf4, hdf5, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, ant, jdk, nettools, hdf4, hdf5, makeDesktopItem
+, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
   version = "3.1.3";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
+    url =
+      "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
     sha256 = "sha256-VmgHSVMFoy09plU5pSnyaPz8N15toy7QfCtXI7mqDGY=";
   };
 
   nativeBuildInputs = [
-    ant jdk
-    nettools  # "hostname" required
+    ant
+    jdk
+    nettools # "hostname" required
     copyDesktopItems
   ];
 

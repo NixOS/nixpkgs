@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
-  openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw, openimageio
+, libjpeg, libpng, libpthreadstubs, libX11, glib }:
 
 stdenv.mkDerivation rec {
   pname = "embree";
@@ -21,15 +21,11 @@ stdenv.mkDerivation rec {
     substituteInPlace common/math/math.h --replace 'defined(__WIN32__) || defined(__FreeBSD__)' 'defined(__WIN32__) || defined(__FreeBSD__) || defined(__MACOSX__)'
   '';
 
-  cmakeFlags = [
-    "-DEMBREE_TUTORIALS=OFF"
-    "-DEMBREE_RAY_MASK=ON"
-  ];
-
+  cmakeFlags = [ "-DEMBREE_TUTORIALS=OFF" "-DEMBREE_RAY_MASK=ON" ];
 
   nativeBuildInputs = [ ispc pkg-config cmake ];
   buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
-                ++ lib.optionals stdenv.isDarwin [ glib ];
+    ++ lib.optionals stdenv.isDarwin [ glib ];
 
   meta = with lib; {
     description = "High performance ray tracing kernels from Intel";

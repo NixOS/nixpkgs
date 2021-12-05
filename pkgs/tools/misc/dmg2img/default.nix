@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/dmg2img/openssl-1.1.diff";
+      url =
+        "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/dmg2img/openssl-1.1.diff";
       sha256 = "076sz69hf3ryylplg025vl8sj991cb81g3yazsmrf8anrd7ffmxx";
     })
   ];
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = lib.platforms.unix;
-    description = "An Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
+    description =
+      "An Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
     license = lib.licenses.gpl3;
   };
 }

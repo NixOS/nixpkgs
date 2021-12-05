@@ -5,7 +5,8 @@ let
   version = "1.9.1";
 in fetchurl {
   name = "${pname}-${version}";
-  url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
+  url =
+    "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
 
   downloadToTemp = true;
   recursiveHash = true;

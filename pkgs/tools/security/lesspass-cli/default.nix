@@ -3,8 +3,7 @@
 let
   inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;
   repo = "lesspass";
-in
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "lesspass-cli";
   version = "9.1.9";
 

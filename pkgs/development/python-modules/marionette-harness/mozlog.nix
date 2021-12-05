@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, blessings
-, mozterm
-, six
-, mozfile
+{ lib, buildPythonPackage, fetchPypi, isPy3k, blessings, mozterm, six, mozfile
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, glib
-, libticonv
-, libtifiles2
-, libticables2
-, xz
-, bzip2
-, acl
-, libobjc
-}:
+{ stdenv, lib, fetchurl, pkg-config, autoreconfHook, glib, libticonv
+, libtifiles2, libticables2, xz, bzip2, acl, libobjc }:
 
 stdenv.mkDerivation rec {
   pname = "libticalcs2";
@@ -21,23 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "08c9wgrdnyqcs45mx1bjb8riqq81bzfkhgaijxzn96rhpj40fy3n";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    glib
-    libticonv
-    libtifiles2
-    libticables2
-    xz
-    bzip2
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
-  ];
+  buildInputs = [ glib libticonv libtifiles2 libticables2 xz bzip2 ]
+    ++ lib.optionals stdenv.isLinux [ acl ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc ];
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

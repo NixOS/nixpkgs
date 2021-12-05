@@ -1,13 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, installShellFiles
-, git
-, stestr
-, nix-update-script
-, testVersion
-, git-machete
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, installShellFiles, git, stestr
+, nix-update-script, testVersion, git-machete }:
 
 buildPythonApplication rec {
   pname = "git-machete";
@@ -38,15 +30,12 @@ buildPythonApplication rec {
     test "$($out/bin/git-machete version)" = "git-machete version ${version}"
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     homepage = "https://github.com/VirtusLab/git-machete";
-    description = "Git repository organizer and rebase/merge workflow automation tool";
+    description =
+      "Git repository organizer and rebase/merge workflow automation tool";
     license = licenses.mit;
     maintainers = with maintainers; [ blitz ];
   };

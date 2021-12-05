@@ -1,20 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, perl
-, python3
+{ lib, stdenv, fetchFromGitHub, perl, python3
 
 # Enable BLAS interface with 64-bit integer width.
 , blas64 ? false
 
-# Target architecture. x86_64 builds Intel and AMD kernels.
+  # Target architecture. x86_64 builds Intel and AMD kernels.
 , withArchitecture ? "x86_64"
 
-# Enable OpenMP-based threading.
-, withOpenMP ? true
-}:
+  # Enable OpenMP-based threading.
+, withOpenMP ? true }:
 
-let
-  blasIntSize = if blas64 then "64" else "32";
+let blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "blis";
   version = "0.8.1";
@@ -28,19 +23,14 @@ in stdenv.mkDerivation rec {
 
   inherit blas64;
 
-  nativeBuildInputs = [
-    perl
-    python3
-  ];
+  nativeBuildInputs = [ perl python3 ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--enable-cblas"
-    "--blas-int-size=${blasIntSize}"
-  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  configureFlags = [ "--enable-cblas" "--blas-int-size=${blasIntSize}" ]
+    ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
     ++ [ withArchitecture ];
 
   postPatch = ''

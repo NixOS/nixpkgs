@@ -1,3 +1,1 @@
-{
-  submodule.config.config = true;
-}
+{ submodule.config.config = true; }

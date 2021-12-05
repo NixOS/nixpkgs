@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, vcver
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, setuptools-scm, vcver
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "deepmerge";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "1zfl8rkw98vj7jdpb29ably50x46pq6pazhrkrczndf5jc97zzgn";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    vcver
-  ];
+  nativeBuildInputs = [ setuptools-scm vcver ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "deepmerge" ];
 

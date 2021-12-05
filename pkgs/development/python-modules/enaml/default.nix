@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, atom
-, ply
-, kiwisolver
-, qtpy
-, sip_4
-, cppy
-, bytecode
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, atom, ply, kiwisolver, qtpy, sip_4
+, cppy, bytecode }:
 
 buildPythonPackage rec {
   pname = "enaml";
@@ -39,15 +30,7 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
-  propagatedBuildInputs = [
-    atom
-    ply
-    kiwisolver
-    qtpy
-    sip_4
-    cppy
-    bytecode
-  ];
+  propagatedBuildInputs = [ atom ply kiwisolver qtpy sip_4 cppy bytecode ];
 
   meta = with lib; {
     homepage = "https://github.com/nucleic/enaml";

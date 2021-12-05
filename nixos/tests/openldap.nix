@@ -1,7 +1,7 @@
-{ pkgs ? (import ../.. { inherit system; config = { }; })
-, system ? builtins.currentSystem
-, ...
-}:
+{ pkgs ? (import ../.. {
+  inherit system;
+  config = { };
+}), system ? builtins.currentSystem, ... }:
 
 let
   dbContents = ''
@@ -48,9 +48,7 @@ in {
                   # cn=root,dc=example
                   base64 = "Y249cm9vdCxkYz1leGFtcGxl";
                 };
-                olcRootPW = {
-                  path = "/etc/openldap/root_password";
-                };
+                olcRootPW = { path = "/etc/openldap/root_password"; };
               };
             };
           };

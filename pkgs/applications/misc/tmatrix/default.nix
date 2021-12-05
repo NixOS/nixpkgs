@@ -1,10 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, installShellFiles
-, ncurses
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, installShellFiles, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "tmatrix";

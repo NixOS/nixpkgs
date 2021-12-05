@@ -10,8 +10,7 @@ let
     EndSection
   '';
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "jibri";
   version = "8.0-93-g51fe7a2";
   src = fetchurl {

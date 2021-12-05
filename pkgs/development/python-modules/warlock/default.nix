@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, jsonpatch
-, jsonschema
-, jsonpointer
-}:
+{ lib, buildPythonPackage, fetchPypi, six, jsonpatch, jsonschema, jsonpointer }:
 
 buildPythonPackage rec {
   pname = "warlock";

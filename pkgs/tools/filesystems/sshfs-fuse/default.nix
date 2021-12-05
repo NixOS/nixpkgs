@@ -14,7 +14,8 @@ in if stdenv.isDarwin then
       # > result in much improved performance, e.g.: -o iosize=1048576
       (fetchpatch {
         name = "fix-configurable-blksize.patch";
-        url = "https://github.com/libfuse/sshfs/commit/667cf34622e2e873db776791df275c7a582d6295.patch";
+        url =
+          "https://github.com/libfuse/sshfs/commit/667cf34622e2e873db776791df275c7a582d6295.patch";
         sha256 = "0d65lawd2g2aisk1rw2vl65dgxywf4vqgv765n9zj9zysyya8a54";
       })
     ];

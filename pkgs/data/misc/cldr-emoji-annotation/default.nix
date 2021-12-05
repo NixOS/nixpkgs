@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "cldr-emoji-annotation";
@@ -14,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0la3h6l58j9jfjvzwz65x56ijx7sppirwpqbqc06if4c2g0kzswj";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "Emoji annotation files in CLDR";

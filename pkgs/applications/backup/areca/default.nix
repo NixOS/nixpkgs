@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "7.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/areca/areca-stable/areca-${version}/areca-${version}-src.tar.gz";
+    url =
+      "mirror://sourceforge/project/areca/areca-stable/areca-${version}/areca-${version}-src.tar.gz";
     sha256 = "1q4ha9s96c1syplxm04bh1v1gvjq16l4pa8w25w95d2ywwvyq1xb";
   };
 
@@ -27,7 +28,9 @@ stdenv.mkDerivation rec {
     substituteInPlace jni/com_myJava_file_metadata_posix_jni_wrapper_FileAccessWrapper.c --replace attr/xattr.h sys/xattr.h
 
     sed -i "s#^PROGRAM_DIR.*#PROGRAM_DIR=$out#g" bin/areca_run.sh
-    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
+    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${
+      lib.makeLibraryPath [ swt acl ]
+    }#g" bin/areca_run.sh
 
     # https://sourceforge.net/p/areca/bugs/563/
     substituteInPlace bin/areca_run.sh --replace '[ "$JAVA_IMPL" = "java" ]' \

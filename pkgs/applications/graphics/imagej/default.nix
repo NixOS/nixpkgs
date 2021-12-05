@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, jre
-, unzip
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, glib, jre, unzip, makeWrapper, makeDesktopItem
+, copyDesktopItems, wrapGAppsHook }:
 
 let
   icon = fetchurl {
@@ -37,9 +28,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    inherit jre;
-  };
+  passthru = { inherit jre; };
 
   # JAR files that are intended to be used by other packages
   # should go to $out/share/java.

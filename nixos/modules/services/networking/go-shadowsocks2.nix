@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.services.go-shadowsocks2.server;
+let cfg = config.services.go-shadowsocks2.server;
 in {
   options.services.go-shadowsocks2.server = {
     enable = mkEnableOption "go-shadowsocks2 server";
@@ -22,7 +21,8 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.go-shadowsocks2}/bin/go-shadowsocks2 -s '${cfg.listenAddress}'";
+        ExecStart =
+          "${pkgs.go-shadowsocks2}/bin/go-shadowsocks2 -s '${cfg.listenAddress}'";
         DynamicUser = true;
       };
     };

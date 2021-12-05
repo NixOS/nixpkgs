@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://genext2fs.sourceforge.net/";
-    description = "A tool to generate ext2 filesystem images without requiring root privileges";
+    description =
+      "A tool to generate ext2 filesystem images without requiring root privileges";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

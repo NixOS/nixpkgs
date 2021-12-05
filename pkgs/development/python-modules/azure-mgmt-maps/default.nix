@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common
+, azure-mgmt-core }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-maps";
@@ -17,12 +11,7 @@ buildPythonPackage rec {
     sha256 = "384e17f76a68b700a4f988478945c3a9721711c0400725afdfcb63cf84e85f0e";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-core
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common azure-mgmt-core ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

@@ -1,28 +1,24 @@
 { stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
 
 # Dynamic libraries
-, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
+, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat, gdk-pixbuf
+, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage
+, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libuuid
+, libxshmfence, nspr, nss, pango, mesa
 
-, systemd
-}:
+, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
   version = "15.8.7";
 
   src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
+    url =
+      "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
     sha256 = "532f9926b4b055cbb741a778d57df42c65c5af82d0a8829e87324eb5e82025e3";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    rpmextract
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook rpmextract wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib
@@ -57,9 +53,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-  ];
+  runtimeDependencies = [ (lib.getLib systemd) ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -90,7 +84,8 @@ stdenv.mkDerivation rec {
     description = "A desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
-    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
+    changelog =
+      "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
   };

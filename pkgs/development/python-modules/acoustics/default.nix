@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, tabulate
-}:
+{ lib, buildPythonPackage, fetchPypi, matplotlib, numpy, pandas, pytestCheckHook
+, pythonOlder, scipy, tabulate }:
 
 buildPythonPackage rec {
   pname = "acoustics";
@@ -21,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "a162625e5e70ed830fab8fab0ddcfe35333cb390cd24b0a827bcefc5bbcae97d";
   };
 
-  propagatedBuildInputs = [
-    matplotlib
-    numpy
-    pandas
-    scipy
-    tabulate
-  ];
+  propagatedBuildInputs = [ matplotlib numpy pandas scipy tabulate ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -39,9 +22,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
   disabledTestPaths = [
     # All tests fail with TypeError

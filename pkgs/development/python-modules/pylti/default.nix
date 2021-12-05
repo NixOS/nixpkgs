@@ -1,24 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httplib2
-, oauth
-, oauth2
-, semantic-version
-, flask
-, httpretty
-, oauthlib
-, pyflakes
-, pytest
-, pytestcache
-, pytest-cov
-, covCore
-, pytest-flakes
-, sphinx
-, mock
-, chalice
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, httplib2, oauth, oauth2, semantic-version
+, flask, httpretty, oauthlib, pyflakes, pytest, pytestcache, pytest-cov, covCore
+, pytest-flakes, sphinx, mock, chalice, isPy27 }:
 
 buildPythonPackage rec {
   pname = "PyLTI";
@@ -33,8 +15,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
   checkInputs = [
-    flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov covCore
-    pytest-flakes sphinx mock chalice
+    flask
+    httpretty
+    oauthlib
+    pyflakes
+    pytest
+    pytestcache
+    pytest-cov
+    covCore
+    pytest-flakes
+    sphinx
+    mock
+    chalice
   ];
 
   src = fetchPypi {

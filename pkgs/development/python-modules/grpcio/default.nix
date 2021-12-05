@@ -1,17 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, grpc
-, six
-, protobuf
-, enum34 ? null
-, futures ? null
-, isPy27
-, pkg-config
-, cython
-, c-ares
-, openssl
-, zlib
-}:
+{ lib, stdenv, buildPythonPackage, grpc, six, protobuf, enum34 ? null
+, futures ? null, isPy27, pkg-config, cython, c-ares, openssl, zlib }:
 
 buildPythonPackage rec {
   inherit (grpc) src version;

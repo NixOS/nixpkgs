@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, addOpenGLRunpath
-, cudatoolkit
-, cutensor_cudatoolkit
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, addOpenGLRunpath, cudatoolkit
+, cutensor_cudatoolkit }:
 
 let
   rev = "5aab680905d853bce0dbad4c488e4f7e9f7b2302";
@@ -13,7 +10,8 @@ let
     sha256 = "0gwgbkq05ygrfgg5hk07lmap7n7ampxv0ha1axrv8qb748ph81xs";
   };
   commonAttrs = {
-    version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
+    version = lib.strings.substring 0 7 rev + "-"
+      + lib.versions.majorMinor cudatoolkit.version;
     nativeBuildInputs = [ cmake addOpenGLRunpath ];
     buildInputs = [ cudatoolkit ];
     postFixup = ''
@@ -32,9 +30,8 @@ let
       maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
     };
   };
-in
 
-{
+in {
   cublas = stdenv.mkDerivation (commonAttrs // {
     pname = "cuda-library-samples-cublas";
 

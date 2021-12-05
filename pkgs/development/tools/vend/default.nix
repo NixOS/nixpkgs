@@ -3,13 +3,12 @@
 buildGoModule rec {
   pname = "vend";
 
-  /*
-  This package is used to generate vendor folders for
-  packages that use the `runVend` option with `buildGoModule`.
+  /* This package is used to generate vendor folders for
+     packages that use the `runVend` option with `buildGoModule`.
 
-  Do not update this package without checking that the vendorSha256
-  hashes of packages using the `runVend` option are unchanged
-  or updating their vendorSha256 hashes if necessary.
+     Do not update this package without checking that the vendorSha256
+     hashes of packages using the `runVend` option are unchanged
+     or updating their vendorSha256 hashes if necessary.
   */
   version = "1.0.2";
   # Disable the bot

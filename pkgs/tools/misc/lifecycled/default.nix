@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "lifecycled";
   version = "3.2.0";

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama
-, libXdmcp, libXt, autoreconfHook }:
+{ stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama, libXdmcp
+, libXt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
@@ -17,18 +17,17 @@ stdenv.mkDerivation rec {
 
   # Don't try to install `xlock' setuid. Password authentication works
   # fine via PAM without super user privileges.
-  configureFlags =
-    [ "--disable-setuid"
-    ] ++ (lib.optional (pam != null) "--enable-pam");
+  configureFlags = [ "--disable-setuid" ]
+    ++ (lib.optional (pam != null) "--enable-pam");
 
-  postPatch =
-    let makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
-        inputs = "${makePath "lib"} ${makePath "include"}";
-    in ''
-      sed -i 's,\(for ac_dir in\),\1 ${inputs},' configure.ac
-      sed -i 's,/usr/,/no-such-dir/,g' configure.ac
-      configureFlags+=" --enable-appdefaultdir=$out/share/X11/app-defaults"
-    '';
+  postPatch = let
+    makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
+    inputs = "${makePath "lib"} ${makePath "include"}";
+  in ''
+    sed -i 's,\(for ac_dir in\),\1 ${inputs},' configure.ac
+    sed -i 's,/usr/,/no-such-dir/,g' configure.ac
+    configureFlags+=" --enable-appdefaultdir=$out/share/X11/app-defaults"
+  '';
 
   hardeningDisable = [ "format" ]; # no build output otherwise
 

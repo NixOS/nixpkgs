@@ -3,11 +3,11 @@
 let
   pname = "open-fonts";
   version = "0.7.0";
-in
-fetchurl {
+in fetchurl {
   name = "${pname}-${version}";
 
-  url = "https://github.com/kiwi0fruit/open-fonts/releases/download/${version}/open-fonts.tar.xz";
+  url =
+    "https://github.com/kiwi0fruit/open-fonts/releases/download/${version}/open-fonts.tar.xz";
   downloadToTemp = true;
   recursiveHash = true;
   sha256 = "sha256-bSP9Flotoo3E5vRU3eKOUAPD2fmkWseWYWG4y0S07+4=";

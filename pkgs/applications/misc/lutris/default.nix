@@ -1,53 +1,19 @@
-{ buildPythonApplication
-, lib
-, fetchFromGitHub
+{ buildPythonApplication, lib, fetchFromGitHub
 
-  # build inputs
-, atk
-, gdk-pixbuf
-, glib-networking
-, gnome-desktop
-, gobject-introspection
-, gst_all_1
-, gtk3
-, libnotify
-, pango
-, webkitgtk
-, wrapGAppsHook
+# build inputs
+, atk, gdk-pixbuf, glib-networking, gnome-desktop, gobject-introspection
+, gst_all_1, gtk3, libnotify, pango, webkitgtk, wrapGAppsHook
 
-  # check inputs
-, xvfb-run
-, nose
-, flake8
+# check inputs
+, xvfb-run, nose, flake8
 
-  # python dependencies
-, dbus-python
-, distro
-, evdev
-, lxml
-, pillow
-, pygobject3
-, pyyaml
-, requests
-, keyring
-, python_magic
+# python dependencies
+, dbus-python, distro, evdev, lxml, pillow, pygobject3, pyyaml, requests
+, keyring, python_magic
 
-  # commands that lutris needs
-, xrandr
-, pciutils
-, psmisc
-, glxinfo
-, vulkan-tools
-, xboxdrv
-, pulseaudio
-, p7zip
-, xgamma
-, libstrangle
-, wine
-, fluidsynth
-, xorgserver
-, xorg
-}:
+# commands that lutris needs
+, xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip
+, xgamma, libstrangle, wine, fluidsynth, xorgserver, xorg }:
 
 let
   # See lutris/util/linux.py
@@ -80,8 +46,7 @@ let
     gstreamer
   ];
 
-in
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "lutris-original";
   version = "0.5.9.1";
 
@@ -128,16 +93,11 @@ buildPythonApplication rec {
 
   # unhardcodes xrandr and fixes nosetests
   # upstream in progress: https://github.com/lutris/lutris/pull/3754
-  patches = [
-    ./fixes.patch
-  ];
+  patches = [ ./fixes.patch ];
 
   # avoid double wrapping
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "--prefix PATH : ${binPath}"
-    "\${gappsWrapperArgs[@]}"
-  ];
+  makeWrapperArgs = [ "--prefix PATH : ${binPath}" "\${gappsWrapperArgs[@]}" ];
   # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
   # see https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;

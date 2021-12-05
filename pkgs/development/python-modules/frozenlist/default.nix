@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{ lib, buildPythonPackage, cython, fetchFromGitHub, pytestCheckHook, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-rTbekdceC5QK0aiySi/4QUwaEoDfTlLrx2t6Kb9bH7U=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

@@ -1,9 +1,4 @@
-{ buildEnv
-, libwebcam
-, makeWrapper
-, runCommand
-, drivers ? []
-, udevDebug ? false
+{ buildEnv, libwebcam, makeWrapper, runCommand, drivers ? [ ], udevDebug ? false
 }:
 
 let
@@ -18,20 +13,14 @@ let
 
   dataDir = "${dataPath}/share/uvcdynctrl/data";
   udevDebugVarValue = if udevDebug then "1" else "0";
-in
 
-runCommand "uvcdynctrl-udev-rules-${version}"
-{
+in runCommand "uvcdynctrl-udev-rules-${version}" {
   inherit dataPath;
-  buildInputs = [
-    makeWrapper
-    libwebcam
-  ];
+  buildInputs = [ makeWrapper libwebcam ];
   dontPatchELF = true;
   dontStrip = true;
   preferLocalBuild = true;
-}
-''
+} ''
   mkdir -p "$out/lib/udev"
   makeWrapper "${libwebcam}/lib/udev/uvcdynctrl" "$out/lib/udev/uvcdynctrl" \
     --set NIX_UVCDYNCTRL_DATA_DIR "${dataDir}" \

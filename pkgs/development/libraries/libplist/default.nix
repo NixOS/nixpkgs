@@ -1,4 +1,5 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, enablePython ? false, python ? null, glib }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, enablePython ? false
+, python ? null, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libplist";
@@ -11,19 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1vxhpjxniybqsg5wcygmdmr5dv7p2zb34dqnd3bi813rnnzsdjm6";
   };
 
-  outputs = ["bin" "dev" "out" ] ++ lib.optional enablePython "py";
+  outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ] ++ lib.optionals enablePython [
-    python
-    python.pkgs.cython
-  ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ]
+    ++ lib.optionals enablePython [ python python.pkgs.cython ];
 
-  configureFlags = lib.optionals (!enablePython) [
-    "--without-cython"
-  ];
+  configureFlags = lib.optionals (!enablePython) [ "--without-cython" ];
 
   propagatedBuildInputs = [ glib ];
 
@@ -32,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library to handle Apple Property List format in binary or XML";
+    description =
+      "A library to handle Apple Property List format in binary or XML";
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ infinisil ];

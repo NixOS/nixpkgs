@@ -1,66 +1,60 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
   makeZfsTest = name:
-    { kernelPackage ? if enableUnstable then pkgs.linuxPackages_latest else pkgs.linuxPackages
-    , enableUnstable ? false
-    , extraTest ? ""
-    }:
+    { kernelPackage ?
+      if enableUnstable then pkgs.linuxPackages_latest else pkgs.linuxPackages
+    , enableUnstable ? false, extraTest ? "" }:
     makeTest {
       name = "zfs-" + name;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis ];
-      };
+      meta = with pkgs.lib.maintainers; { maintainers = [ adisbladis ]; };
 
       machine = { pkgs, lib, ... }:
-        let
-          usersharePath = "/var/lib/samba/usershares";
+        let usersharePath = "/var/lib/samba/usershares";
         in {
-        virtualisation.emptyDiskImages = [ 4096 ];
-        networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackage;
-        boot.supportedFilesystems = [ "zfs" ];
-        boot.zfs.enableUnstable = enableUnstable;
+          virtualisation.emptyDiskImages = [ 4096 ];
+          networking.hostId = "deadbeef";
+          boot.kernelPackages = kernelPackage;
+          boot.supportedFilesystems = [ "zfs" ];
+          boot.zfs.enableUnstable = enableUnstable;
 
-        services.samba = {
-          enable = true;
-          extraConfig = ''
-            registry shares = yes
-            usershare path = ${usersharePath}
-            usershare allow guests = yes
-            usershare max shares = 100
-            usershare owner only = no
-          '';
-        };
-        systemd.services.samba-smbd.serviceConfig.ExecStartPre =
-          "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
-
-        environment.systemPackages = [ pkgs.parted ];
-
-        # Setup regular fileSystems machinery to ensure forceImportAll can be
-        # tested via the regular service units.
-        virtualisation.fileSystems = {
-          "/forcepool" = {
-            device = "forcepool";
-            fsType = "zfs";
-            options = [ "noauto" ];
+          services.samba = {
+            enable = true;
+            extraConfig = ''
+              registry shares = yes
+              usershare path = ${usersharePath}
+              usershare allow guests = yes
+              usershare max shares = 100
+              usershare owner only = no
+            '';
           };
-        };
+          systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+            "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
 
-        # forcepool doesn't exist at first boot, and we need to manually test
-        # the import after tweaking the hostId.
-        systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [];
-        systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
-        boot.zfs.forceImportAll = true;
-        # /dev/disk/by-id doesn't get populated in the NixOS test framework
-        boot.zfs.devNodes = "/dev/disk/by-uuid";
-      };
+          environment.systemPackages = [ pkgs.parted ];
+
+          # Setup regular fileSystems machinery to ensure forceImportAll can be
+          # tested via the regular service units.
+          virtualisation.fileSystems = {
+            "/forcepool" = {
+              device = "forcepool";
+              fsType = "zfs";
+              options = [ "noauto" ];
+            };
+          };
+
+          # forcepool doesn't exist at first boot, and we need to manually test
+          # the import after tweaking the hostId.
+          systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ ];
+          systemd.targets.zfs.wantedBy = lib.mkVMOverride [ ];
+          boot.zfs.forceImportAll = true;
+          # /dev/disk/by-id doesn't get populated in the NixOS test framework
+          boot.zfs.devNodes = "/dev/disk/by-uuid";
+        };
 
       testScript = ''
         machine.succeed(
@@ -117,14 +111,11 @@ let
 
     };
 
-
 in {
 
   stable = makeZfsTest "stable" { };
 
-  unstable = makeZfsTest "unstable" {
-    enableUnstable = true;
-  };
+  unstable = makeZfsTest "unstable" { enableUnstable = true; };
 
   installer = (import ./installer.nix { }).zfsroot;
 }

@@ -25,16 +25,37 @@ buildPythonApplication rec {
   dontStrip = true;
 
   propagatedBuildInputs = [
-    twitter-common-collections setproctitle ansicolors packaging pathspec
-    scandir twitter-common-dirutil psutil requests pystache pex docutils
-    markdown pygments twitter-common-confluence fasteners pywatchman
-    futures cffi subprocess32 contextlib2 faulthandler pyopenssl wheel
+    twitter-common-collections
+    setproctitle
+    ansicolors
+    packaging
+    pathspec
+    scandir
+    twitter-common-dirutil
+    psutil
+    requests
+    pystache
+    pex
+    docutils
+    markdown
+    pygments
+    twitter-common-confluence
+    fasteners
+    pywatchman
+    futures
+    cffi
+    subprocess32
+    contextlib2
+    faulthandler
+    pyopenssl
+    wheel
   ];
 
   meta = {
-    description = "A build system for software projects in a variety of languages";
-    homepage    = "https://www.pantsbuild.org/";
-    license     = licenses.asl20;
+    description =
+      "A build system for software projects in a variety of languages";
+    homepage = "https://www.pantsbuild.org/";
+    license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
     broken = true;
   };

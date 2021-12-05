@@ -1,11 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, vulkan-headers
-, vulkan-loader
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, python3, vulkan-headers
+, vulkan-loader }:
 let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
@@ -42,8 +36,7 @@ let
     sha256 = "1h3smicw5gzpa17syb30085zccydzs4f41fl30bcmiipdn2xfpjr";
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "amber";
   version = "unstable-2020-09-23";
 
@@ -54,16 +47,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rrbvmn9hvhj7xj89yqvy9mx0vg1qapdm5fkca8mkd3516d9f5pw";
   };
 
-  buildInputs = [
-    vulkan-headers
-    vulkan-loader
-  ];
+  buildInputs = [ vulkan-headers vulkan-loader ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies
   cmakeFlags = [ "-DAMBER_SKIP_TESTS=ON" ];

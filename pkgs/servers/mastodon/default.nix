@@ -1,11 +1,9 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
+{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, yarn
+, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 
-  # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? import ./version.nix
-, srcOverride ? null
-, dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+# Allow building a fork or custom version of Mastodon:
+, pname ? "mastodon", version ? import ./version.nix, srcOverride ? null
+, dependenciesDir ? ./. # Should contain gemset.nix, yarn.nix and package.json.
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +11,8 @@ stdenv.mkDerivation rec {
 
   # Using overrideAttrs on src does not build the gems and modules with the overridden src.
   # Putting the callPackage up in the arguments list also does not work.
-  src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
+  src =
+    if srcOverride != null then srcOverride else callPackage ./source.nix { };
 
   mastodon-gems = bundlerEnv {
     name = "${pname}-gems-${version}";
@@ -46,9 +45,7 @@ stdenv.mkDerivation rec {
     pname = "${pname}-assets";
     inherit src version;
 
-    buildInputs = [
-      mastodon-gems nodejs-slim yarn
-    ];
+    buildInputs = [ mastodon-gems nodejs-slim yarn ];
 
     # FIXME: "production" would require OTP_SECRET to be set, so we use
     # development here.
@@ -74,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  passthru.updateScript = callPackage ./update.nix {};
+  passthru.updateScript = callPackage ./update.nix { };
 
   buildPhase = ''
     if [ "$(ls ${mastodon-js-modules}/libexec/* | grep node_modules)" ]; then
@@ -112,7 +109,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
+    description =
+      "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];

@@ -1,11 +1,11 @@
 { lib, fetchurl }:
 
-let
-  version = "1.0";
+let version = "1.0";
 in fetchurl rec {
   name = "curie-${version}";
 
-  url = "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";
+  url =
+    "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";
 
   downloadToTemp = true;
 

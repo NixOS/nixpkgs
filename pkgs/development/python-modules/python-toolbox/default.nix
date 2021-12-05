@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, docutils, fetchFromGitHub, isPy27, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "1.0.10";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "1hpls1hwisdjx1g15cq052bdn9fvh43r120llws8bvgvj9ivnaha";
   };
 
-  checkInputs = [
-    docutils
-    pytestCheckHook
-  ];
+  checkInputs = [ docutils pytestCheckHook ];
 
   disabledTestPaths = [
     # file imports 'dummy_threading', which was deprecated since py37

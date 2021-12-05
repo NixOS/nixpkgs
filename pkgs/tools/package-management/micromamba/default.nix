@@ -1,27 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, cli11, nlohmann_json, curl
+, libarchive, libyamlcpp, libsolv, reproc }:
 
 let
   libsolv' = libsolv.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DENABLE_CONDA=true"
-    ];
+    cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DENABLE_CONDA=true" ];
 
     patches = [
       # Patch added by the mamba team
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/add_strict_repo_prio_rule.patch";
+        url =
+          "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/add_strict_repo_prio_rule.patch";
         sha256 = "19c47i5cpyy88nxskf7k6q6r43i55w61jvnz7fc2r84hpjkcrv7r";
       })
       # Patch added by the mamba team
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/conda_variant_priorization.patch";
+        url =
+          "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/conda_variant_priorization.patch";
         sha256 = "1iic0yx7h8s662hi2jqx68w5kpyrab4fr017vxd4wyxb6wyk35dd";
       })
       # Patch added by the mamba team
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/memcpy_to_memmove.patch";
+        url =
+          "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/memcpy_to_memmove.patch";
         sha256 = "1c9ir40l6crcxllj5zwhzbrbgibwqaizyykd0vip61gywlfzss64";
       })
     ];
@@ -39,8 +39,7 @@ let
       sha256 = "0ykkxzxcwwiv8l8r697gyqh1nl582krpvi7m7l6b40ijnk4pw30s";
     };
   });
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "micromamba";
   version = "0.15.0";
 

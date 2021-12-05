@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, llvmPackages
-, openssl
-, pkg-config
-, stdenv
-, systemd
-, darwin
-}:
+{ lib, fetchFromGitHub, rustPlatform, cmake, llvmPackages, openssl, pkg-config
+, stdenv, systemd, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
@@ -25,8 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isLinux [ systemd ]
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ systemd ]
     ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   buildFeatures = [ "final" ];

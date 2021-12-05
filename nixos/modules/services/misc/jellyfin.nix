@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.jellyfin;
-in
-{
+let cfg = config.services.jellyfin;
+in {
   options = {
     services.jellyfin = {
       enable = mkEnableOption "Jellyfin Media Server";
@@ -54,7 +52,8 @@ in
         Group = cfg.group;
         StateDirectory = "jellyfin";
         CacheDirectory = "jellyfin";
-        ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
+        ExecStart =
+          "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
         Restart = "on-failure";
 
         # Security options:
@@ -92,7 +91,13 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
@@ -104,9 +109,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
-    };
+    users.groups = mkIf (cfg.group == "jellyfin") { jellyfin = { }; };
 
     networking.firewall = mkIf cfg.openFirewall {
       # from https://jellyfin.org/docs/general/networking/index.html

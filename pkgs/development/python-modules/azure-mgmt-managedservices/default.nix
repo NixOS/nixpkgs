@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, azure-common, azure-mgmt-core
+, msrest, msrestazure }:
 
 buildPythonPackage rec {
   version = "6.0.0";
@@ -16,12 +12,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-mgmt-core
-    msrest
-    msrestazure
-  ];
+  propagatedBuildInputs = [ azure-common azure-mgmt-core msrest msrestazure ];
 
   # no tests included
   doCheck = false;

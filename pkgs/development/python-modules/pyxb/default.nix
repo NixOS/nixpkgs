@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "PyXB";
@@ -13,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "1d17pyixbfvjyi2lb0cfp0ch8wwdf44mmg3r5pwqhyyqs66z601a";
   };
 
-  pythonImportsCheck = [
-    "pyxb"
-  ];
+  pythonImportsCheck = [ "pyxb" ];
 
   # tests don't complete
   # https://github.com/pabigot/pyxb/issues/130

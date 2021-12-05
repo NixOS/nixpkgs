@@ -1,10 +1,4 @@
-{ enum-compat
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, python
-}:
+{ enum-compat, lib, buildPythonPackage, fetchFromGitHub, nose, python }:
 
 buildPythonPackage rec {
   pname = "bashlex";

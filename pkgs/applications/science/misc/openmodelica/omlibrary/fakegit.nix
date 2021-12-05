@@ -12,20 +12,17 @@ let
   '';
 
   hashname = r:
-    let
-      rpl = lib.replaceChars [ ":" "/" ] [ "_" "_" ];
-    in
-    (rpl r.url) + "-" + (rpl r.rev);
+    let rpl = lib.replaceChars [ ":" "/" ] [ "_" "_" ];
+    in (rpl r.url) + "-" + (rpl r.rev);
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "fakegit";
 
   buildCommand = ''
     mkdir -pv $out/repos
-    ${lib.concatMapStrings
-      (r: "cp -r ${fetchgit r} $out/repos/${hashname r}\n")
-      (import ./src-libs.nix)}
+    ${lib.concatMapStrings (r: ''
+      cp -r ${fetchgit r} $out/repos/${hashname r}
+    '') (import ./src-libs.nix)}
 
     ${mkscript "$out/bin/checkout-git.sh" ''
       if test "$#" -ne 4; then

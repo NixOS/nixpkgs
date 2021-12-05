@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.ratbagd;
-in
-{
+let cfg = config.services.ratbagd;
+in {
   ###### interface
 
   options = {

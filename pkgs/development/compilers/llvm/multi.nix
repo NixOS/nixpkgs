@@ -1,18 +1,14 @@
-{ runCommand,
-clang,
-gcc64,
-gcc32,
-glibc_multi
-}:
+{ runCommand, clang, gcc64, gcc32, glibc_multi }:
 
 let
-  combine = basegcc: runCommand "combine-gcc-libc" {} ''
-    mkdir -p $out
-    cp -r ${basegcc.cc}/lib $out/lib
+  combine = basegcc:
+    runCommand "combine-gcc-libc" { } ''
+      mkdir -p $out
+      cp -r ${basegcc.cc}/lib $out/lib
 
-    chmod u+rw -R $out/lib
-    cp -r ${basegcc.libc}/lib/* $(ls -d $out/lib/gcc/*/*)
-  '';
+      chmod u+rw -R $out/lib
+      cp -r ${basegcc.libc}/lib/* $(ls -d $out/lib/gcc/*/*)
+    '';
   gcc_multi_sysroot = runCommand "gcc-multi-sysroot" {
     passthru = {
       inherit (gcc64) version;
@@ -42,9 +38,7 @@ let
     # `gccForLibs`.
     libc = gcc_multi_sysroot;
 
-    bintools = clang.bintools.override {
-      libc = gcc_multi_sysroot;
-    };
+    bintools = clang.bintools.override { libc = gcc_multi_sysroot; };
 
     gccForLibs = gcc_multi_sysroot;
   };

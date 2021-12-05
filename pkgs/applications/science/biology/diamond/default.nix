@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "092smzzjcg51n3x4h84k52ijpz9m40ri838j9k2i463ribc3c8rh";
   };
 
-  patches = [
-    ./diamond-0.8.36-no-warning.patch
-  ];
+  patches = [ ./diamond-0.8.36-no-warning.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
@@ -35,7 +33,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bbuchfink/diamond";
     license = {
       fullName = "University of Tuebingen, Benjamin Buchfink";
-      url = "https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING";
+      url =
+        "https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING";
     };
     maintainers = [ maintainers.metabar ];
   };

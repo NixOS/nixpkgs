@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mailman
-, mock
-, nose2
-, python
-, pythonOlder
-, requests
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, mailman, mock, nose2, python, pythonOlder
+, requests, zope_interface }:
 
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
@@ -22,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-EQBx1KX3z/Wv3QAHOi+s/ihLOjpiupIQBYyE6IPbJto=";
   };
 
-  propagatedBuildInputs = [
-    mailman
-    requests
-    zope_interface
-  ];
+  propagatedBuildInputs = [ mailman requests zope_interface ];
 
-  checkInputs = [
-    mock
-    nose2
-  ];
+  checkInputs = [ mock nose2 ];
 
   checkPhase = ''
     ${python.interpreter} -m nose2 -v
@@ -40,9 +24,7 @@ buildPythonPackage rec {
   # There is an AssertionError
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mailman_hyperkitty"
-  ];
+  pythonImportsCheck = [ "mailman_hyperkitty" ];
 
   meta = with lib; {
     description = "Mailman archiver plugin for HyperKitty";

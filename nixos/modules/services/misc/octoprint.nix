@@ -15,14 +15,15 @@ let
 
   fullConfig = recursiveUpdate cfg.extraConfig baseConfig;
 
-  cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
+  cfgUpdate =
+    pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+  pluginsEnv =
+    package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
   package = pkgs.octoprint;
 
-in
-{
+in {
   ##### interface
 
   options = {
@@ -67,16 +68,19 @@ in
 
       plugins = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = plugins: [];
+        default = plugins: [ ];
         defaultText = literalExpression "plugins: []";
-        example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
-        description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
+        example =
+          literalExpression "plugins: with plugins; [ themeify stlviewer ]";
+        description =
+          "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
-        description = "Extra options which are added to OctoPrint's YAML configuration file.";
+        default = { };
+        description =
+          "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };
@@ -98,9 +102,8 @@ in
       octoprint.gid = config.ids.gids.octoprint;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";
@@ -122,9 +125,7 @@ in
         ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
-        SupplementaryGroups = [
-          "dialout"
-        ];
+        SupplementaryGroups = [ "dialout" ];
       };
     };
 

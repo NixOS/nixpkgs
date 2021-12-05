@@ -1,17 +1,9 @@
-{ lib, stdenv, octave, buildEnv
-, makeWrapper, texinfo
-, octavePackages
-, wrapOctave
-, computeRequiredOctavePackages
-, extraLibs ? []
-, extraOutputsToInstall ? []
-, postBuild ? ""
-, ignoreCollisions ? false
-}:
+{ lib, stdenv, octave, buildEnv, makeWrapper, texinfo, octavePackages
+, wrapOctave, computeRequiredOctavePackages, extraLibs ? [ ]
+, extraOutputsToInstall ? [ ], postBuild ? "", ignoreCollisions ? false }:
 
 # Create an octave executable that knows about additional packages
-let
-  packages = computeRequiredOctavePackages extraLibs;
+let packages = computeRequiredOctavePackages extraLibs;
 
 in buildEnv {
   name = "${octave.name}-env";
@@ -28,42 +20,42 @@ in buildEnv {
   # in env/share/octave, re-symlink everything from octave/share/octave and then
   # perform the pkg install.
   postBuild = ''
-      if [ -L "$out/bin" ]; then
-         unlink $out/bin
-         mkdir -p "$out/bin"
-         cd "${octave}/bin"
-         for prg in *; do
-             if [ -x $prg ]; then
-                makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc"
-             fi
-         done
-         cd $out
-      fi
+    if [ -L "$out/bin" ]; then
+       unlink $out/bin
+       mkdir -p "$out/bin"
+       cd "${octave}/bin"
+       for prg in *; do
+           if [ -x $prg ]; then
+              makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc"
+           fi
+       done
+       cd $out
+    fi
 
-      # Remove symlinks to the input tarballs, they aren't needed, use -f so it
-      # will not fail if no .tar.gz symlinks are there - for example if
-      # sommething which is not a tarball used as a package
-      rm -f $out/*.tar.gz
+    # Remove symlinks to the input tarballs, they aren't needed, use -f so it
+    # will not fail if no .tar.gz symlinks are there - for example if
+    # sommething which is not a tarball used as a package
+    rm -f $out/*.tar.gz
 
-      createOctavePackagesPath $out ${octave}
+    createOctavePackagesPath $out ${octave}
 
-      # Create the file even if the loop afterwards has no packages to run over
-      touch $out/.octave_packages
-      for path in ${lib.concatStringsSep " " packages}; do
-          if [ -e $path/*.tar.gz ]; then
-             $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \
-                                         pkg prefix $out/${octave.octPkgsPath} $out/${octave.octPkgsPath}; \
-                                         pfx = pkg (\"prefix\"); \
-                                         pkg install -nodeps -local $path/*.tar.gz"
-          fi
-      done
+    # Create the file even if the loop afterwards has no packages to run over
+    touch $out/.octave_packages
+    for path in ${lib.concatStringsSep " " packages}; do
+        if [ -e $path/*.tar.gz ]; then
+           $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \
+                                       pkg prefix $out/${octave.octPkgsPath} $out/${octave.octPkgsPath}; \
+                                       pfx = pkg (\"prefix\"); \
+                                       pkg install -nodeps -local $path/*.tar.gz"
+        fi
+    done
 
-      # Re-write the octave-wide startup file (share/octave/site/m/startup/octaverc)
-      # To point to the new local_list in $out
-      addPkgLocalList $out ${octave}
+    # Re-write the octave-wide startup file (share/octave/site/m/startup/octaverc)
+    # To point to the new local_list in $out
+    addPkgLocalList $out ${octave}
 
-      wrapOctavePrograms "${lib.concatStringsSep " " packages}"
-     '' + postBuild;
+    wrapOctavePrograms "${lib.concatStringsSep " " packages}"
+  '' + postBuild;
 
   inherit (octave) meta;
 

@@ -1,8 +1,5 @@
-{ mkDerivation, lib, fetchhg
-, qmake, qttools
-, qtbase, qtsvg, qtxmlpatterns
-, poppler_utils
-}:
+{ mkDerivation, lib, fetchhg, qmake, qttools, qtbase, qtsvg, qtxmlpatterns
+, poppler_utils }:
 
 with lib;
 
@@ -18,18 +15,26 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace common.pri \
-      --replace '$$[QT_INSTALL_HEADERS]/QtXmlPatterns' '${getDev qtxmlpatterns}/include/QtXmlPatterns' \
+      --replace '$$[QT_INSTALL_HEADERS]/QtXmlPatterns' '${
+        getDev qtxmlpatterns
+      }/include/QtXmlPatterns' \
       --replace '$$[QT_INSTALL_HEADERS]/QtSvg' '${getDev qtsvg}/include/QtSvg' \
       --replace '$$[QT_INSTALL_HEADERS]/' '${getDev qtbase}/include/' \
       --replace '$$[QT_INSTALL_HEADERS]' '${getDev qtbase}'
     substituteInPlace src/app/tape/tape.pro \
       --replace '$$[QT_INSTALL_BINS]/rcc' '${getDev qtbase}/bin/rcc'
     substituteInPlace src/app/translations.pri \
-      --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${getDev qttools}/bin/lrelease'
+      --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${
+        getDev qttools
+      }/bin/lrelease'
     substituteInPlace src/app/valentina/mainwindowsnogui.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${
+        getBin poppler_utils
+      }/bin/pdftops"'
     substituteInPlace src/app/valentina/dialogs/dialogsavelayout.h \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${
+        getBin poppler_utils
+      }/bin/pdftops"'
   '';
 
   nativeBuildInputs = [ qmake qttools ];

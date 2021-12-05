@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, prometheus-client
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, prometheus-client
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";

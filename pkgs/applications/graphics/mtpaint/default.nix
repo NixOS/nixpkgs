@@ -1,10 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config
-, freetype, giflib, gtk3, lcms2, libjpeg, libpng, libtiff, openjpeg, gifsicle
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, freetype, giflib, gtk3, lcms2
+, libjpeg, libpng, libtiff, openjpeg, gifsicle }:
 
 stdenv.mkDerivation rec {
-  p_name  = "mtPaint";
+  p_name = "mtPaint";
   ver_maj = "3.50";
   ver_min = "01";
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -17,9 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    freetype giflib gtk3 lcms2 libjpeg libpng libtiff openjpeg gifsicle
-  ];
+  buildInputs =
+    [ freetype giflib gtk3 lcms2 libjpeg libpng libtiff openjpeg gifsicle ];
 
   configureFlags = [ "gtk3" "intl" "man" ];
 

@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys
+}:
 
 mkDerivation rec {
   pname = "coreuniverse";
@@ -11,16 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-YZCMyYMAvd/xQYNUnURIvmQwaM+X+Ql93OS4ZIyAZLY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libcprime libcsys ];
 
   meta = with lib; {
     description = "Shows information about apps from the C Suite";

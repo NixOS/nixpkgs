@@ -1,17 +1,20 @@
 { lib, mkCoqDerivation, coq, callPackage }:
 
-with lib; let mkContrib = pname: coqs: param:
-  let contribVersion = {version ? null}: mkCoqDerivation ({
-      inherit pname version;
-      owner = "coq-contribs";
-      mlPlugin = true;
-    } // optionalAttrs (builtins.elem coq.coq-version coqs) ({
-      defaultVersion = param.version;
-      release = { "${param.version}" = { inherit (param) rev sha256; }; };
-    } // (removeAttrs param [ "version" "rev" "sha256" ]))
-  ); in
-  makeOverridable contribVersion {} ; in
-{
+with lib;
+let
+  mkContrib = pname: coqs: param:
+    let
+      contribVersion = { version ? null }:
+        mkCoqDerivation ({
+          inherit pname version;
+          owner = "coq-contribs";
+          mlPlugin = true;
+        } // optionalAttrs (builtins.elem coq.coq-version coqs) ({
+          defaultVersion = param.version;
+          release = { "${param.version}" = { inherit (param) rev sha256; }; };
+        } // (removeAttrs param [ "version" "rev" "sha256" ])));
+    in makeOverridable contribVersion { };
+in {
   aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
     "8.7" = {
       version = "20180530";
@@ -163,11 +166,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "0b15r2ln57mxsyz4fmpfzh4mzrwi604gqh8f471awm63a4xqj5ng";
   };
 
-  coinductive-examples = mkContrib "coinductive-examples" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "28b0e273c38fdecd1966e3ca5717ccd1f5871a15";
-    sha256 = "11dazllhl7qwhbnxqxpgwy0pf2a8c2aijrs93fzj5inf8z48vxnp";
-  };
+  coinductive-examples =
+    mkContrib "coinductive-examples" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0";
+      rev = "28b0e273c38fdecd1966e3ca5717ccd1f5871a15";
+      sha256 = "11dazllhl7qwhbnxqxpgwy0pf2a8c2aijrs93fzj5inf8z48vxnp";
+    };
 
   coinductive-reals = mkContrib "coinductive-reals" [ ] {
     version = "v8.6.0-9-gf89f884";
@@ -181,11 +185,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "1haw5i5rz420jsr2mw699ny3f0gfmdsy0i6mzi48dhpj12ni8rfq";
   };
 
-  constructive-geometry = mkContrib "constructive-geometry" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.5.0-7-g470ffa3";
-    rev = "470ffa3d38eb7f78974693e52d190535e87004c4";
-    sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
-  };
+  constructive-geometry =
+    mkContrib "constructive-geometry" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.5.0-7-g470ffa3";
+      rev = "470ffa3d38eb7f78974693e52d190535e87004c4";
+      sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
+    };
 
   containers = mkContrib "containers" [ "8.6" "8.7" "8.8" "8.9" ] {
     "8.6" = {
@@ -282,11 +287,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "0b0c4vcf5dl7bcgxj1pvdin4jg6py6nr1wqcy3yw8vbd1apnhgri";
   };
 
-  distributed-reference-counting = mkContrib "distributed-reference-counting" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.5.0-7-gfae0b8a";
-    rev = "fae0b8a8e26c19f853996fae318e4e9f8f166c0e";
-    sha256 = "153xqfkw5cb24z6h4pj6xaqhxbi20bx4zr60mf5aly390sjd4m7x";
-  };
+  distributed-reference-counting =
+    mkContrib "distributed-reference-counting" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.5.0-7-gfae0b8a";
+      rev = "fae0b8a8e26c19f853996fae318e4e9f8f166c0e";
+      sha256 = "153xqfkw5cb24z6h4pj6xaqhxbi20bx4zr60mf5aly390sjd4m7x";
+    };
 
   domain-theory = mkContrib "domain-theory" [ "8.5" "8.6" "8.7" ] {
     version = "v8.5.0-6-g8a121a2";
@@ -312,11 +318,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "1wd6hay32ri91sk8pra6rr5vkyyrxfl2rxdhhw4gzyzsv72njmfd";
   };
 
-  exact-real-arithmetic = mkContrib "exact-real-arithmetic" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0-1-g593028e";
-    rev = "593028ec7d094c23ed4dbb3990d6442f7d05950e";
-    sha256 = "10x7w57mpiwr4640vfa27pbllkls68nfra9nz7ml0fqhi3s3h6pj";
-  };
+  exact-real-arithmetic =
+    mkContrib "exact-real-arithmetic" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0-1-g593028e";
+      rev = "593028ec7d094c23ed4dbb3990d6442f7d05950e";
+      sha256 = "10x7w57mpiwr4640vfa27pbllkls68nfra9nz7ml0fqhi3s3h6pj";
+    };
 
   exceptions = mkContrib "exceptions" [ "8.6" "8.7" ] {
     version = "v8.5.0-8-gcfe4f0b";
@@ -343,9 +350,9 @@ with lib; let mkContrib = pname: coqs: param:
   };
 
   firing-squad = mkContrib "firing-squad" [ "8.6" ] {
-      version = "v8.5.0-9-gbe728cd";
-      rev = "be728cddbee58088809b51c25425d2a4bdf9b823";
-      sha256 = "0i0v5x6lncjasxk22pras3644ff026q8jai45dbimf2fz73312c9";
+    version = "v8.5.0-9-gbe728cd";
+    rev = "be728cddbee58088809b51c25425d2a4bdf9b823";
+    sha256 = "0i0v5x6lncjasxk22pras3644ff026q8jai45dbimf2fz73312c9";
   };
 
   float = mkContrib "float" [ "8.7" ] {
@@ -384,11 +391,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "076kdfc01mrqh1cz4zi4nzl9rk6yblclbd7r34fxqwbiwdavwsrr";
   };
 
-  fundamental-arithmetics = mkContrib "fundamental-arithmetics" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.5.0-6-g8976d4b";
-    rev = "8976d4ba6a5c53b7eb25d08921e592d200189431";
-    sha256 = "0pqq1y3hhw8k0qidigg9zkpblhasnb56rxq0n5sh2yfw07gbnfzc";
-  };
+  fundamental-arithmetics =
+    mkContrib "fundamental-arithmetics" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.5.0-6-g8976d4b";
+      rev = "8976d4ba6a5c53b7eb25d08921e592d200189431";
+      sha256 = "0pqq1y3hhw8k0qidigg9zkpblhasnb56rxq0n5sh2yfw07gbnfzc";
+    };
 
   gc = mkContrib "gc" [ "8.5" "8.6" "8.7" ] {
     version = "v8.5.0-6-gee41f2f";
@@ -396,11 +404,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "0hwlby4sn1p7cky0xz9fmgw50xai3i061y6kqhqy9fn2l2did2sc";
   };
 
-  generic-environments = mkContrib "generic-environments" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "48b81bb3b8c2941c8d7ef15f5513bbb7f1821ff8";
-    sha256 = "03576kkhn5ml4hpn8s8g0i1fxfibr0yjndk8820s7fxmp9838bkc";
-  };
+  generic-environments =
+    mkContrib "generic-environments" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0";
+      rev = "48b81bb3b8c2941c8d7ef15f5513bbb7f1821ff8";
+      sha256 = "03576kkhn5ml4hpn8s8g0i1fxfibr0yjndk8820s7fxmp9838bkc";
+    };
 
   goedel = mkContrib "goedel" [ ] {
     version = "v8.6.0-1-gc3f922c";
@@ -529,11 +538,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "131gpi3p3pxv50dzpr3zfzmfr02ymcwja51cs029j9a33mw9rwx0";
   };
 
-  jordan-curve-theorem = mkContrib "jordan-curve-theorem" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "906762607c3e05bedd3f9aab002172e34dd1b595";
-    sha256 = "1l4pl6rjfzbxnzg32rdcrjl5g889syl6iydiprm8b34blk15ajka";
-  };
+  jordan-curve-theorem =
+    mkContrib "jordan-curve-theorem" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0";
+      rev = "906762607c3e05bedd3f9aab002172e34dd1b595";
+      sha256 = "1l4pl6rjfzbxnzg32rdcrjl5g889syl6iydiprm8b34blk15ajka";
+    };
 
   jprover = mkContrib "jprover" [ ] {
     version = "v8.5.0-14-g80a9497";
@@ -595,11 +605,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "0m1i5xdmwfz4saacay7p6skqnw42csn473gisl24am9jls301cfh";
   };
 
-  lesniewski-mereology = mkContrib "lesniewski-mereology" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "eeaf56daa0b0bb0fe16368a5e79a089b42d3951c";
-    sha256 = "0j4r83biz128pl6g9z5c3x2p5h465ch4fz2jszbr2k1yd8b2gkd9";
-  };
+  lesniewski-mereology =
+    mkContrib "lesniewski-mereology" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0";
+      rev = "eeaf56daa0b0bb0fe16368a5e79a089b42d3951c";
+      sha256 = "0j4r83biz128pl6g9z5c3x2p5h465ch4fz2jszbr2k1yd8b2gkd9";
+    };
 
   lin-alg = mkContrib "lin-alg" [ ] {
     version = "v8.6.0-5-g74833da";
@@ -721,11 +732,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "09r9vdyc87ysciff3rfi4awpd432gblysjcsi42k8n03xhgjm1rv";
   };
 
-  persistent-union-find = mkContrib "persistent-union-find" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "62c2fac131b87d273c6278fe5bcba0e68895aa18";
-    sha256 = "0p4zd3mn8nljjch7c3mrmc5n2kcab8fh9xw7f933wqyh695n1zl9";
-  };
+  persistent-union-find =
+    mkContrib "persistent-union-find" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.6.0";
+      rev = "62c2fac131b87d273c6278fe5bcba0e68895aa18";
+      sha256 = "0p4zd3mn8nljjch7c3mrmc5n2kcab8fh9xw7f933wqyh695n1zl9";
+    };
 
   pi-calc = mkContrib "pi-calc" [ "8.5" "8.6" "8.7" ] {
     version = "v8.5.0-6-gf8cfa30";
@@ -829,11 +841,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "0z6sp1n1m2vbxhb220y3hqi1f24lz6g1nkkq84m9xq2wvg7li6hn";
   };
 
-  reflexive-first-order = mkContrib "reflexive-first-order" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.5.0-6-g307b421";
-    rev = "307b421dd4894ef624e67558087d2f0945ef1970";
-    sha256 = "0rwr8sy6v7a17x1g0pa9gbbd9kgrq5lxr6cxv8r926883blz891y";
-  };
+  reflexive-first-order =
+    mkContrib "reflexive-first-order" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.5.0-6-g307b421";
+      rev = "307b421dd4894ef624e67558087d2f0945ef1970";
+      sha256 = "0rwr8sy6v7a17x1g0pa9gbbd9kgrq5lxr6cxv8r926883blz891y";
+    };
 
   regexp = mkContrib "regexp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
@@ -967,11 +980,12 @@ with lib; let mkContrib = pname: coqs: param:
     sha256 = "00211410zb5z367mv2brqg1d0p50yjy446g7qc69c4kyp6sr80gf";
   };
 
-  tortoise-hare-algorithm = mkContrib "tortoise-hare-algorithm" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.5.0-6-gb34a87c";
-    rev = "b34a87c0b41eb9a72408292a5d714ae8f342a4c5";
-    sha256 = "08j6xc65scxzxznhiiapfny2hchl3mcvrsp2mr05snq5hlidlpxv";
-  };
+  tortoise-hare-algorithm =
+    mkContrib "tortoise-hare-algorithm" [ "8.5" "8.6" "8.7" ] {
+      version = "v8.5.0-6-gb34a87c";
+      rev = "b34a87c0b41eb9a72408292a5d714ae8f342a4c5";
+      sha256 = "08j6xc65scxzxznhiiapfny2hchl3mcvrsp2mr05snq5hlidlpxv";
+    };
 
   traversable-fincontainer = mkContrib "traversable-fincontainer" [ "8.7" ] {
     version = "v8.6.0-1-g3f1fc68";

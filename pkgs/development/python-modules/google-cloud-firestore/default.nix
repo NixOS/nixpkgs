@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiounittest
-, google-api-core
-, google-cloud-testutils
-, google-cloud-core
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, aiounittest, google-api-core
+, google-cloud-testutils, google-cloud-core, mock, proto-plus, pytestCheckHook
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
@@ -20,19 +11,10 @@ buildPythonPackage rec {
     sha256 = "sha256-cU4bwfxRAp14qmSTO+8u/APa7clWXqeeyRuEOwUgFuw=";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    google-cloud-core
-    proto-plus
-  ];
+  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
 
-  checkInputs = [
-    aiounittest
-    google-cloud-testutils
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs =
+    [ aiounittest google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # do not shadow imports
@@ -52,10 +34,8 @@ buildPythonPackage rec {
     "test_collections"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.firestore_v1"
-    "google.cloud.firestore_admin_v1"
-  ];
+  pythonImportsCheck =
+    [ "google.cloud.firestore_v1" "google.cloud.firestore_admin_v1" ];
 
   meta = with lib; {
     description = "Google Cloud Firestore API client library";

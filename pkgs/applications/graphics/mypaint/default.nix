@@ -1,24 +1,8 @@
-{ lib
-, fetchFromGitHub
-, gtk3
-, gettext
-, json_c
-, lcms2
-, libpng
-, librsvg
-, gobject-introspection
-, libmypaint
-, hicolor-icon-theme
-, mypaint-brushes
-, gdk-pixbuf
-, pkg-config
-, python3
-, swig
-, wrapGAppsHook
-}:
+{ lib, fetchFromGitHub, gtk3, gettext, json_c, lcms2, libpng, librsvg
+, gobject-introspection, libmypaint, hicolor-icon-theme, mypaint-brushes
+, gdk-pixbuf, pkg-config, python3, swig, wrapGAppsHook }:
 
-let
-  inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
+let inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
 in buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
@@ -56,15 +40,9 @@ in buildPythonApplication rec {
     hicolor-icon-theme
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    pycairo
-    pygobject3
-  ];
+  propagatedBuildInputs = [ numpy pycairo pygobject3 ];
 
-  checkInputs = [
-    gtk3
-  ];
+  checkInputs = [ gtk3 ];
 
   buildPhase = ''
     runHook preBuild

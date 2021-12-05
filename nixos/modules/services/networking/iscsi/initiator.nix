@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }: with lib;
-let
-  cfg = config.services.openiscsi;
-in
-{
+{ config, lib, pkgs, ... }:
+with lib;
+let cfg = config.services.openiscsi;
+in {
   options.services.openiscsi = with types; {
     enable = mkEnableOption "the openiscsi iscsi daemon";
     enableAutoLoginOut = mkEnableOption ''
@@ -43,14 +42,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc."iscsi/iscsid.conf.fragment".source = pkgs.runCommand "iscsid.conf" {} ''
-      cat "${cfg.package}/etc/iscsi/iscsid.conf" > $out
-      cat << 'EOF' >> $out
-      ${cfg.extraConfig}
-      ${optionalString cfg.enableAutoLoginOut "node.startup = automatic"}
-      EOF
-    '';
-    environment.etc."iscsi/initiatorname.iscsi".text = "InitiatorName=${cfg.name}";
+    environment.etc."iscsi/iscsid.conf.fragment".source =
+      pkgs.runCommand "iscsid.conf" { } ''
+        cat "${cfg.package}/etc/iscsi/iscsid.conf" > $out
+        cat << 'EOF' >> $out
+        ${cfg.extraConfig}
+        ${optionalString cfg.enableAutoLoginOut "node.startup = automatic"}
+        EOF
+      '';
+    environment.etc."iscsi/initiatorname.iscsi".text =
+      "InitiatorName=${cfg.name}";
 
     system.activationScripts.iscsid = let
       extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
@@ -75,7 +76,10 @@ in
 
     systemd.services."iscsi" = mkIf cfg.enableAutoLoginOut {
       wantedBy = [ "remote-fs.target" ];
-      serviceConfig.ExecStartPre = mkIf (cfg.discoverPortal != null) "${cfg.package}/bin/iscsiadm --mode discoverydb --type sendtargets --portal ${escapeShellArg cfg.discoverPortal} --discover";
+      serviceConfig.ExecStartPre = mkIf (cfg.discoverPortal != null)
+        "${cfg.package}/bin/iscsiadm --mode discoverydb --type sendtargets --portal ${
+          escapeShellArg cfg.discoverPortal
+        } --discover";
     };
 
     environment.systemPackages = [ cfg.package ];

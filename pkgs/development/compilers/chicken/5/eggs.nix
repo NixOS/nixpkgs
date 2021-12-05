@@ -1,5 +1,4 @@
-{ pkgs }:
-rec {
+{ pkgs }: rec {
   inherit (pkgs) eggDerivation fetchegg;
 
   args = eggDerivation {
@@ -11,11 +10,7 @@ rec {
       sha256 = "1y9sznh4kxqxvhd8k44bjx0s7xspp52sx4bn8i8i0f8lwch6r2g4";
     };
 
-    buildInputs = [
-      srfi-1
-      srfi-13
-      srfi-37
-    ];
+    buildInputs = [ srfi-1 srfi-13 srfi-37 ];
   };
 
   matchable = eggDerivation {
@@ -28,7 +23,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -42,7 +37,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -55,9 +50,7 @@ rec {
       sha256 = "0yaw9i6zhpxl1794pirh168clprjgmsb0xlr96drirjzsslgm3zp";
     };
 
-    buildInputs = [
-      srfi-14
-    ];
+    buildInputs = [ srfi-14 ];
   };
 
   srfi-14 = eggDerivation {
@@ -70,7 +63,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -84,7 +77,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 }

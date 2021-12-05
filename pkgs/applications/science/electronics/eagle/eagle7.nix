@@ -1,34 +1,40 @@
 { lib, stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
-, openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig, runtimeShell
-}:
+, openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
+, cups, xkeyboardconfig, runtimeShell }:
 
 let
 
-  libPath = lib.makeLibraryPath
-    [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
-      libXext libXi libxcb cups
-    ];
+  libPath = lib.makeLibraryPath [
+    zlib
+    freetype
+    fontconfig
+    openssl
+    libXrender
+    libXrandr
+    libXcursor
+    libX11
+    libXext
+    libXi
+    libxcb
+    cups
+  ];
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "eagle";
   version = "7.7.0";
 
-  src =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin32-${version}.run";
-        sha256 = "16fa66p77xigc7zvzfm7737mllrcs6nrgk2p7wvkjw3p9lvbz7z1";
-      }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
-        sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
-      }
-    else
-      throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  src = if stdenv.hostPlatform.system == "i686-linux" then
+    fetchurl {
+      url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin32-${version}.run";
+      sha256 = "16fa66p77xigc7zvzfm7737mllrcs6nrgk2p7wvkjw3p9lvbz7z1";
+    }
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
+    fetchurl {
+      url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
+      sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
+    }
+  else
+    throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "eagle";
@@ -40,10 +46,19 @@ stdenv.mkDerivation rec {
     categories = "Development;";
   };
 
-  buildInputs =
-    [ patchelf zlib freetype fontconfig openssl libXrender libXrandr libXcursor
-      libX11 libXext libXi
-    ];
+  buildInputs = [
+    patchelf
+    zlib
+    freetype
+    fontconfig
+    openssl
+    libXrender
+    libXrandr
+    libXcursor
+    libX11
+    libXext
+    libXi
+  ];
 
   dontUnpack = true;
 
@@ -66,7 +81,9 @@ stdenv.mkDerivation rec {
     # Build LD_PRELOAD library that redirects license file access to the home
     # directory of the user
     mkdir -p "$out"/lib
-    gcc -shared -fPIC -DEAGLE_PATH=\"$out/eagle-${version}\" ${./eagle7_fixer.c} -o "$out"/lib/eagle_fixer.so -ldl
+    gcc -shared -fPIC -DEAGLE_PATH=\"$out/eagle-${version}\" ${
+      ./eagle7_fixer.c
+    } -o "$out"/lib/eagle_fixer.so -ldl
 
     # Make wrapper script
     dynlinker="$(cat $NIX_CC/nix-support/dynamic-linker)"

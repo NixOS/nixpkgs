@@ -1,21 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
-, writeShellScript
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests, writeShellScript
 
 # for update.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
-}:
+, writeScript, common-updater-scripts, bash, coreutils, curl, gnugrep, gnupg
+, gnused, nix }:
 let
   tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
-    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    PATH="${lib.makeBinPath [ coreutils gnugrep openssl ]}"
     pem="$(openssl genpkey -algorithm x25519)"
 
     printf private_key=descriptor:x25519:
@@ -27,8 +18,7 @@ let
     grep -v " PUBLIC KEY" |
     base64 -d | tail --bytes=32 | base32 | tr -d =
   '';
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tor";
   version = "0.4.6.8";
 
@@ -40,8 +30,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
-    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ]
+    ++ lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -74,17 +64,8 @@ stdenv.mkDerivation rec {
     tests.tor = nixosTests.tor;
     updateScript = import ./update.nix {
       inherit lib;
-      inherit
-        writeScript
-        common-updater-scripts
-        bash
-        coreutils
-        curl
-        gnupg
-        gnugrep
-        gnused
-        nix
-      ;
+      inherit writeScript common-updater-scripts bash coreutils curl gnupg
+        gnugrep gnused nix;
     };
   };
 
@@ -105,8 +86,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.bsd3;
 
-    maintainers = with maintainers;
-      [ phreedom thoughtpolice joachifm prusnak ];
+    maintainers = with maintainers; [ phreedom thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "redo";
@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1c8gr5h77v4fw78zkhbm9z9adqs3kd7xvxwnmci2zvlf4bqqk4jv";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   sourceRoot = ".";
 

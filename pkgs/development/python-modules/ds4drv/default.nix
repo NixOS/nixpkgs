@@ -1,7 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, evdev, pyudev
-, bluez
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, evdev, pyudev, bluez }:
 
 buildPythonPackage rec {
   pname = "ds4drv";

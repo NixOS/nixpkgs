@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, Babel
-, speaklater
-, jinja2
-, pytest
+{ lib, buildPythonPackage, fetchPypi, flask, Babel, speaklater, jinja2, pytest
 }:
 
 buildPythonPackage rec {
@@ -18,16 +11,9 @@ buildPythonPackage rec {
     sha256 = "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r";
   };
 
-  propagatedBuildInputs = [
-    flask
-    Babel
-    speaklater
-    jinja2
-  ];
+  propagatedBuildInputs = [ flask Babel speaklater jinja2 ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # Disabled 3 tests failing due to string representations of dates:

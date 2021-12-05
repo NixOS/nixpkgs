@@ -1,10 +1,5 @@
-{ buildPythonPackage, fetchPypi, lib
-, dicttoxml
-, importlib-metadata
-, pexpect
-, prettytable
-, requests-toolbelt
-}:
+{ buildPythonPackage, fetchPypi, lib, dicttoxml, importlib-metadata, pexpect
+, prettytable, requests-toolbelt }:
 buildPythonPackage rec {
   pname = "argcomplete";
   version = "1.12.3";
@@ -19,13 +14,8 @@ buildPythonPackage rec {
   # re-enable if we are able to make testing work
   # checkInputs = [ bashInteractive coverage flake8 ];
 
-  propagatedBuildInputs = [
-    dicttoxml
-    importlib-metadata
-    pexpect
-    prettytable
-    requests-toolbelt
-  ];
+  propagatedBuildInputs =
+    [ dicttoxml importlib-metadata pexpect prettytable requests-toolbelt ];
 
   pythonImportsCheck = [ "argcomplete" ];
 

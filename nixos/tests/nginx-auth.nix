@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     webserver = { pkgs, lib, ... }: {
       services.nginx = let
-        root = pkgs.runCommand "testdir" {} ''
+        root = pkgs.runCommand "testdir" { } ''
           mkdir "$out"
           echo hello world > "$out/index.html"
         '';

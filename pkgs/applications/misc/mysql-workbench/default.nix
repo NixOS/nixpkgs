@@ -1,54 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, cmake
-, ninja
-, pkg-config
-, glibc
-, gtk3
-, gtkmm3
-, pcre
-, swig
-, antlr4_8
-, sudo
-, mysql
-, libxml2
-, libmysqlconnectorcpp
-, vsqlite
-, gdal
-, libiodbc
-, libpthreadstubs
-, libXdmcp
-, libuuid
-, libzip
-, libsecret
-, libssh
-, python2
-, jre
-, boost
-, libsigcxx
-, libX11
-, openssl
-, rapidjson
-, proj
-, cairo
-, libxkbcommon
-, libepoxy
-, wrapGAppsHook
-, at-spi2-core
-, dbus
-, bash
-, coreutils
-}:
+{ lib, stdenv, fetchurl, substituteAll, cmake, ninja, pkg-config, glibc, gtk3
+, gtkmm3, pcre, swig, antlr4_8, sudo, mysql, libxml2, libmysqlconnectorcpp
+, vsqlite, gdal, libiodbc, libpthreadstubs, libXdmcp, libuuid, libzip, libsecret
+, libssh, python2, jre, boost, libsigcxx, libX11, openssl, rapidjson, proj
+, cairo, libxkbcommon, libepoxy, wrapGAppsHook, at-spi2-core, dbus, bash
+, coreutils }:
 
-let
-  inherit (python2.pkgs) paramiko pycairo pyodbc;
+let inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
   version = "8.0.21";
 
   src = fetchurl {
-    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
+    url =
+      "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
     sha256 = "0rqgr1dcbf6yp60hninbw5dnwykx5ngbyhhx0sbhgv0m0cq5a44h";
   };
 
@@ -83,14 +47,7 @@ in stdenv.mkDerivation rec {
       --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    jre
-    swig
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config jre swig wrapGAppsHook ];
 
   buildInputs = [
     gtk3
@@ -173,7 +130,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Visual MySQL database modeling, administration and querying tool";
+    description =
+      "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
       and generate MySQL databases graphically. It also has administration

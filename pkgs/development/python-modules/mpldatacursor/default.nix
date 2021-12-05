@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, matplotlib }:
 
 buildPythonPackage rec {
   pname = "mpldatacursor";

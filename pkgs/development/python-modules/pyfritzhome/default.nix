@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, nose
-, mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests, nose, mock }:
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
@@ -21,10 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    mock
-    nose
-  ];
+  checkInputs = [ mock nose ];
 
   checkPhase = ''
     nosetests

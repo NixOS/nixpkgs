@@ -1,52 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, meson
-, ninja
-, pkg-config
-, gettext
+{ lib, stdenv, fetchurl, glib, meson, ninja, pkg-config, gettext
 , withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, gobject-introspection
-, fixDarwinDylibNames
-, gi-docgen
-, gnome
-}:
+, gobject-introspection, fixDarwinDylibNames, gi-docgen, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optional withIntrospection "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "luyYvnqR9t3jNjZyDj2i/27LuQ52zKpJSX8xpoVaSQ4=";
   };
 
   strictDeps = true;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gi-docgen
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext glib ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
+    ++ lib.optionals withIntrospection [ gobject-introspection gi-docgen ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = lib.optionals (!withIntrospection) [
     "-Dintrospection=disabled"
@@ -75,7 +52,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
+    description =
+      "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
     homepage = "https://wiki.gnome.org/Projects/JsonGlib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

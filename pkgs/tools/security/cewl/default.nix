@@ -5,8 +5,7 @@ let
     name = "cewl-ruby-env";
     gemdir = ./.;
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cewl";
   version = "5.5.2";
   src = fetchFromGitHub {

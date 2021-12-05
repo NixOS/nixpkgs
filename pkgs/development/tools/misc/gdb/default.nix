@@ -6,24 +6,23 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
-, guile ? null
-, safePaths ? [
-   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
-   "$debugdir" "$datadir/auto-load"
-   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
-  ]
-}:
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+  && !stdenv.hostPlatform.isCygwin, python3 ? null, enableDebuginfod ? false
+, elfutils, guile ? null, safePaths ? [
+  # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+  "$debugdir"
+  "$datadir/auto-load"
+  # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+  targetPackages.stdenv.cc.cc.lib
+] }:
 
 let
   basename = "gdb";
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                 "${stdenv.targetPlatform.config}-";
-in
+  targetPrefix =
+    lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
 
-assert pythonSupport -> python3 != null;
+in assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
@@ -37,20 +36,19 @@ stdenv.mkDerivation rec {
   postPatch = if stdenv.isDarwin then ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else null;
+  '' else
+    null;
 
-  patches = [
-    ./debug-info-from-env.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    ./darwin-target-match.patch
-  ];
+  patches = [ ./debug-info-from-env.patch ]
+    ++ lib.optionals stdenv.isDarwin [ ./darwin-target-match.patch ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
-    ++ lib.optional pythonSupport python3
-    ++ lib.optional doCheck dejagnu
-    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
+  buildInputs =
+    [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
+    ++ lib.optional pythonSupport python3 ++ lib.optional doCheck dejagnu
+    ++ lib.optional enableDebuginfod
+    (elfutils.override { enableDebuginfod = true; });
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -72,32 +70,36 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with lib; [
-    # Set the program prefix to the current targetPrefix.
-    # This ensures that the prefix always conforms to
-    # nixpkgs' expectations instead of relying on the build
-    # system which only receives `config` which is merely a
-    # subset of the platform description.
-    "--program-prefix=${targetPrefix}"
+  configureFlags = with lib;
+    [
+      # Set the program prefix to the current targetPrefix.
+      # This ensures that the prefix always conforms to
+      # nixpkgs' expectations instead of relying on the build
+      # system which only receives `config` which is merely a
+      # subset of the platform description.
+      "--program-prefix=${targetPrefix}"
 
-    "--enable-targets=all" "--enable-64-bit-bfd"
-    "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
-    "--with-system-zlib"
-    "--with-system-readline"
+      "--enable-targets=all"
+      "--enable-64-bit-bfd"
+      "--disable-install-libbfd"
+      "--disable-shared"
+      "--enable-static"
+      "--with-system-zlib"
+      "--with-system-readline"
 
-    "--with-gmp=${gmp.dev}"
-    "--with-mpfr=${mpfr.dev}"
-    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ] ++ lib.optional (!pythonSupport) "--without-python"
+      "--with-gmp=${gmp.dev}"
+      "--with-mpfr=${mpfr.dev}"
+      "--with-expat"
+      "--with-libexpat-prefix=${expat.dev}"
+      "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
+    ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
-  postInstall =
-    '' # Remove Info files already provided by Binutils and other packages.
-       rm -v $out/share/info/bfd.info
-    '';
+  postInstall = ''
+    # Remove Info files already provided by Binutils and other packages.
+          rm -v $out/share/info/bfd.info
+       '';
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;

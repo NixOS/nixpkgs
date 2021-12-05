@@ -1,11 +1,8 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-contacts, akonadi-mime, akonadi-search, grantlee, karchive, kcmutils, kcodecs,
-  kcompletion, kconfig, kconfigwidgets, kcontacts, kdbusaddons,
-  kiconthemes, kimap, kio, kitemmodels, kjobwidgets, kldap, knewstuff, kpimtextedit,
-  kpurpose, kwallet, kwindowsystem, libkdepim, qtwebengine
-}:
+{ mkDerivation, lib, kdepimTeam, extra-cmake-modules, kdoctools, akonadi
+, akonadi-contacts, akonadi-mime, akonadi-search, grantlee, karchive, kcmutils
+, kcodecs, kcompletion, kconfig, kconfigwidgets, kcontacts, kdbusaddons
+, kiconthemes, kimap, kio, kitemmodels, kjobwidgets, kldap, knewstuff
+, kpimtextedit, kpurpose, kwallet, kwindowsystem, libkdepim, qtwebengine }:
 
 mkDerivation {
   pname = "pimcommon";
@@ -15,12 +12,28 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi-mime grantlee karchive kcmutils kcodecs kcompletion kconfigwidgets
-    kdbusaddons kiconthemes kio kitemmodels kjobwidgets knewstuff kldap kpimtextedit
-    kpurpose kwallet kwindowsystem libkdepim qtwebengine
+    akonadi-mime
+    grantlee
+    karchive
+    kcmutils
+    kcodecs
+    kcompletion
+    kconfigwidgets
+    kdbusaddons
+    kiconthemes
+    kio
+    kitemmodels
+    kjobwidgets
+    knewstuff
+    kldap
+    kpimtextedit
+    kpurpose
+    kwallet
+    kwindowsystem
+    libkdepim
+    qtwebengine
   ];
-  propagatedBuildInputs = [
-    akonadi akonadi-contacts akonadi-search kconfig kcontacts kimap
-  ];
+  propagatedBuildInputs =
+    [ akonadi akonadi-contacts akonadi-search kconfig kcontacts kimap ];
   outputs = [ "out" "dev" ];
 }

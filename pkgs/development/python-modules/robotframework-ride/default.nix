@@ -6,7 +6,8 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   src = fetchurl {
-    url = "https://robotframework-ride.googlecode.com/files/${pname}-${version}.tar.gz";
+    url =
+      "https://robotframework-ride.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
   };
 
@@ -23,7 +24,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Light-weight and intuitive editor for Robot Framework test case files";
+    description =
+      "Light-weight and intuitive editor for Robot Framework test case files";
     homepage = "https://code.google.com/p/robotframework-ride/";
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, future
-, ifaddr
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitLab, future, ifaddr, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "yeelight";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-fKtG0D256bK1hIcQiLdzCM+IdD/mmcFpcoE3DEFt7r0=";
   };
 
-  propagatedBuildInputs = [
-    future
-    ifaddr
-  ];
+  propagatedBuildInputs = [ future ifaddr ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "yeelight/tests.py" ];
 

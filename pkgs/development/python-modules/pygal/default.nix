@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPyPy
-, flask
-, pyquery
-, pytest
-, pytest-runner
-, cairosvg
-, tinycss
-, cssselect
-, lxml
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPyPy, flask, pyquery, pytest
+, pytest-runner, cairosvg, tinycss, cssselect, lxml }:
 
 buildPythonPackage rec {
   pname = "pygal";
@@ -27,7 +15,8 @@ buildPythonPackage rec {
     # Fixes compatibility with latest pytest. October 12, 2020.
     # Should be included in the next release after 2.4.0
     (fetchpatch {
-      url = "https://github.com/Kozea/pygal/commit/19e5399be18a054b3b293f4a8a2777d2df4f9c18.patch";
+      url =
+        "https://github.com/Kozea/pygal/commit/19e5399be18a054b3b293f4a8a2777d2df4f9c18.patch";
       sha256 = "1j0hpcvd2mhi449wmlr0ml9gw4cakqk3av1j79bi2qy86dyrss2l";
     })
   ];
@@ -41,9 +30,7 @@ buildPythonPackage rec {
     pytest-runner
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   preCheck = ''
     # necessary on darwin to pass the testsuite

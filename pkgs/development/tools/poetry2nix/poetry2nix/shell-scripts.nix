@@ -1,15 +1,11 @@
-{ lib
-, scripts
-, python
-}:
+{ lib, scripts, python }:
 let
   mkScript = bin: entrypoint:
     let
       elem = builtins.elemAt (builtins.split ":" entrypoint);
       module = elem 0;
       fn = elem 2;
-    in
-    ''
+    in ''
       cat << EOF >> $out/bin/${bin}
       #!${python.interpreter}
       import sys
@@ -26,8 +22,7 @@ let
       EOF
       chmod +x $out/bin/${bin}
     '';
-in
-python.pkgs.buildPythonPackage {
+in python.pkgs.buildPythonPackage {
   name = "poetry2nix-env-scripts";
   dontUnpack = true;
   dontUseSetuptoolsBuild = true;

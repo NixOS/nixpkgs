@@ -1,42 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, gnome
-, pkg-config
-, meson
-, ninja
-, exiv2
-, libheif
-, libjpeg
-, libtiff
-, gst_all_1
-, libraw
-, libsoup
-, libsecret
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, libchamplain
-, librsvg
-, libwebp
-, json-glib
-, webkitgtk
-, lcms2
-, bison
-, flex
-, clutter-gtk
-, wrapGAppsHook
-, shared-mime-info
-, python3
-, desktop-file-utils
-, itstool
-}:
+{ lib, stdenv, fetchurl, gnome, pkg-config, meson, ninja, exiv2, libheif
+, libjpeg, libtiff, gst_all_1, libraw, libsoup, libsecret, glib, gtk3
+, gsettings-desktop-schemas, libchamplain, librsvg, libwebp, json-glib
+, webkitgtk, lcms2, bison, flex, clutter-gtk, wrapGAppsHook, shared-mime-info
+, python3, desktop-file-utils, itstool }:
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
   version = "3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-Pe/8AwOE5ktXNhxDfHm0ga4Uie9EyHroVugbsQ2OOD8=";
   };
 
@@ -78,9 +53,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  mesonFlags = [
-    "-Dlibchamplain=true"
-  ];
+  mesonFlags = [ "-Dlibchamplain=true" ];
 
   postPatch = ''
     chmod +x gthumb/make-gthumb-h.py

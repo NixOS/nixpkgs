@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kcoreaddons, kdeclarative, ki18n, kio, kwidgetsaddons, samba, qtbase,
-}:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, kcoreaddons, kdeclarative
+, ki18n, kio, kwidgetsaddons, samba, qtbase, }:
 
 mkDerivation {
   pname = "kdenetwork-filesharing";

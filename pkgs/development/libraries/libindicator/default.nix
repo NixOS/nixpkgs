@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, lib, file
-, pkg-config
-, gtkVersion ? "3", gtk2 ? null, gtk3 ? null }:
+{ stdenv, fetchurl, lib, file, pkg-config, gtkVersion ? "3", gtk2 ? null
+, gtk3 ? null }:
 
 with lib;
 
@@ -11,7 +10,8 @@ stdenv.mkDerivation rec {
   versionMinor = "1";
 
   src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libindicator-${version}.tar.gz";
+    url =
+      "${meta.homepage}/${versionMajor}/${version}/+download/libindicator-${version}.tar.gz";
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
@@ -35,15 +35,13 @@ stdenv.mkDerivation rec {
     "--with-gtk=${gtkVersion}"
   ];
 
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-    "localstatedir=\${TMPDIR}"
-  ];
+  installFlags = [ "sysconfdir=\${out}/etc" "localstatedir=\${TMPDIR}" ];
 
   doCheck = false; # fails 8 out of 8 tests
 
   meta = {
-    description = "A set of symbols and convenience functions for Ayatana indicators";
+    description =
+      "A set of symbols and convenience functions for Ayatana indicators";
     homepage = "https://launchpad.net/libindicator";
     license = licenses.gpl3;
     platforms = platforms.linux;

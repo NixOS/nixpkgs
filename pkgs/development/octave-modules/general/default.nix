@@ -1,9 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, pkg-config
-, nettle
-}:
+{ buildOctavePackage, lib, fetchurl, pkg-config, nettle }:
 
 buildOctavePackage rec {
   pname = "general";
@@ -14,13 +9,9 @@ buildOctavePackage rec {
     sha256 = "0jmvczssqz1aa665v9h8k9cchb7mg3n9af6b5kh9b2qcjl4r9l7v";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    nettle
-  ];
+  buildInputs = [ nettle ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/general/index.html";

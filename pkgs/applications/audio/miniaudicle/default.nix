@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, flex
-, which
-, alsa-lib
-, libsndfile
-, qt4
-, qscintilla
-, libpulseaudio
-, libjack2
+{ lib, stdenv, fetchurl, bison, flex, which, alsa-lib, libsndfile, qt4
+, qscintilla, libpulseaudio, libjack2
 , audioBackend ? "pulse" # "pulse", "alsa", or "jack"
 }:
 
@@ -18,7 +8,8 @@ stdenv.mkDerivation rec {
   version = "1.3.5.2";
 
   src = fetchurl {
-    url = "https://audicle.cs.princeton.edu/mini/release/files/miniAudicle-${version}.tgz";
+    url =
+      "https://audicle.cs.princeton.edu/mini/release/files/miniAudicle-${version}.tgz";
     hash = "sha256-dakDz69uHbKZFj8z67CubmRXEQ5X6GuYqlCXXvLzqSI=";
   };
 
@@ -29,26 +20,19 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" $out
   '';
 
-  nativeBuildInputs = [
-    bison
-    flex
-    which
-  ];
+  nativeBuildInputs = [ bison flex which ];
 
-  buildInputs = [
-    alsa-lib
-    libsndfile
-    qt4
-    qscintilla
-  ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
-    ++ lib.optional (audioBackend == "jack")  libjack2;
+  buildInputs = [ alsa-lib libsndfile qt4 qscintilla ]
+    ++ lib.optional (audioBackend == "pulse") libpulseaudio
+    ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A light-weight integrated development environment for the ChucK digital audio programming language";
+    description =
+      "A light-weight integrated development environment for the ChucK digital audio programming language";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
     license = licenses.gpl2Plus;

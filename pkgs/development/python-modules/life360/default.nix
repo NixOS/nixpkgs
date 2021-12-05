@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests }:
 
 buildPythonPackage rec {
   pname = "life360";
@@ -20,16 +15,12 @@ buildPythonPackage rec {
     sha256 = "v+j0DBWQb1JdOu+uxJAdWhzef5zB62z+NSQ+WxpsinA=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "life360"
-  ];
+  pythonImportsCheck = [ "life360" ];
 
   meta = with lib; {
     description = "Python module to interact with Life360";

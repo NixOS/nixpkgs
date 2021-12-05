@@ -1,23 +1,24 @@
 { lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib
-, fixDarwinDylibNames, gobject-introspection, gnome
-}:
+, fixDarwinDylibNames, gobject-introspection, gnome }:
 
 let
   pname = "atk";
   version = "2.36.0";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${name}.tar.xz";
     sha256 = "1217cmmykjgkkim0zr1lv5j13733m4w5vipmy4ivw0ll6rz28xpv";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext gobject-introspection glib ]
+  nativeBuildInputs =
+    [ meson ninja pkg-config gettext gobject-introspection glib ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
@@ -32,7 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dintrospection=${
+      lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)
+    }"
   ];
 
   doCheck = true;

@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, desktop-file-utils
-, appstream-glib
-, python3Packages
-, glib
-, gtk3
-, libhandy
-, gobject-introspection
-, gst_all_1
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsHook
+, desktop-file-utils, appstream-glib, python3Packages, glib, gtk3, libhandy
+, gobject-introspection, gst_all_1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
@@ -26,14 +13,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "00i821zqfbigxmc709322r16z75qsw4rg23yhv35gza9sl65bzkg";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook
-    desktop-file-utils
-    appstream-glib
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config wrapGAppsHook desktop-file-utils appstream-glib ];
 
   buildInputs = [
     glib
@@ -46,9 +27,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-bad
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3
-  ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
   # Broken with gobject-introspection setup hook
   # https://github.com/NixOS/nixpkgs/issues/56943

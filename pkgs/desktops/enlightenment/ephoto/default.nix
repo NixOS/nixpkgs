@@ -15,13 +15,11 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    efl
-    pcre
-  ];
+  buildInputs = [ efl pcre ];
 
   meta = {
-    description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
+    description =
+      "Image viewer and editor written using the Enlightenment Foundation Libraries";
     homepage = "https://smhouston.us/projects/ephoto/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;

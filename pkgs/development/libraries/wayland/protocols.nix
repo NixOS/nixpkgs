@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, meson, ninja, wayland-scanner
-, python3, wayland
-}:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, wayland-scanner, python3
+, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
@@ -34,9 +31,9 @@ stdenv.mkDerivation rec {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
+    homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos ];
   };
 

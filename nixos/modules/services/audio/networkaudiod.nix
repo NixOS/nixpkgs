@@ -7,9 +7,7 @@ let
   cfg = config.services.networkaudiod;
 in {
   options = {
-    services.networkaudiod = {
-      enable = mkEnableOption "Networkaudiod (NAA)";
-    };
+    services.networkaudiod = { enable = mkEnableOption "Networkaudiod (NAA)"; };
   };
 
   config = mkIf cfg.enable {

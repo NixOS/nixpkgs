@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, libraw1394
-, libusb1, CoreServices }:
+{ lib, stdenv, fetchurl, libraw1394, libusb1, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "libdc1394";
@@ -10,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v8gq54n1pg8izn7s15yylwjf8r1l1dmzbm2yvf6pv2fmb4mz41b";
   };
 
-  buildInputs = [ libusb1 ]
-    ++ lib.optional stdenv.isLinux libraw1394
+  buildInputs = [ libusb1 ] ++ lib.optional stdenv.isLinux libraw1394
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   meta = with lib; {

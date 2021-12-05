@@ -1,21 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, dxflib
-, eigen
-, flann
-, gdal
-, LASzip
-, libLAS
-, pdal
-, pcl
-, qtbase
-, qtsvg
-, qttools
-, tbb
-, xercesc
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, dxflib, eigen, flann, gdal, LASzip
+, libLAS, pdal, pcl, qtbase, qtsvg, qttools, tbb, xercesc }:
 
 mkDerivation rec {
   pname = "cloudcompare";

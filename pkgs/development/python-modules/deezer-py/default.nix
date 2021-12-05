@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "deezer-py";

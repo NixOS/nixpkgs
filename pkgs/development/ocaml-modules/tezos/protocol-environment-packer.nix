@@ -1,7 +1,4 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-}:
+{ lib, buildDunePackage, tezos-stdlib }:
 
 buildDunePackage {
   pname = "tezos-protocol-environment-packer";
@@ -13,6 +10,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: sigs/structs packer for economic protocol environment";
+    description =
+      "Tezos: sigs/structs packer for economic protocol environment";
   };
 }

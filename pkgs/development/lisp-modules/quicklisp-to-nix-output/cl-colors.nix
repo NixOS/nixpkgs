@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-colors";
   version = "20180328-git";
 
@@ -11,13 +10,14 @@ rec {
   deps = [ args."alexandria" args."anaphora" args."let-plus" args."lift" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-colors/2018-03-28/cl-colors-20180328-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-colors/2018-03-28/cl-colors-20180328-git.tgz";
     sha256 = "0anrb3zsi03dixfsjz92y06w93kpn0d0c5142fhx72f5kafwvc4a";
   };
 
   packageName = "cl-colors";
 
-  asdFilesToKeep = ["cl-colors.asd"];
+  asdFilesToKeep = [ "cl-colors.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-colors DESCRIPTION Simple color library for Common Lisp SHA256
@@ -27,4 +27,5 @@ rec {
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME let-plus FILENAME let-plus) (NAME lift FILENAME lift))
     DEPENDENCIES (alexandria anaphora let-plus lift) VERSION 20180328-git
-    SIBLINGS NIL PARASITES (cl-colors-tests)) */
+    SIBLINGS NIL PARASITES (cl-colors-tests))
+*/

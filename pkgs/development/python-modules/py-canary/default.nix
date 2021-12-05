@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook, pythonOlder
+, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "py-canary";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "0j743cc0wv7im3anx1vvdm79zyvw67swhc3zwwc1r8626dgnmxjr";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ mock pytestCheckHook requests-mock ];
 
   pythonImportsCheck = [ "canary" ];
 

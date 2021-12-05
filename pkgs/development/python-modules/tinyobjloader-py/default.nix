@@ -15,7 +15,9 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tinyobjloader" ];
 
-  meta = with lib; tinyobjloader.meta // {
-    description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
-  };
+  meta = with lib;
+    tinyobjloader.meta // {
+      description =
+        "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
+    };
 }

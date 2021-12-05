@@ -10,9 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0qqd6qmkrdc0r3rnl53c3yp93fbcz7d3mdw3vq5gmdqxyym4s9lj";
   };
 
-  patches = [
-    ./library-path.patch
-  ];
+  patches = [ ./library-path.patch ];
 
   buildInputs = [ curl cjson olm luaffi ];
 
@@ -38,10 +36,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A WeeChat script in Lua that implements the matrix.org chat protocol";
+    description =
+      "A WeeChat script in Lua that implements the matrix.org chat protocol";
     homepage = "https://github.com/torhve/weechat-matrix-protocol-script";
     maintainers = with maintainers; [ ];
-    license = licenses.mit; # see https://github.com/torhve/weechat-matrix-protocol-script/blob/0052e7275ae149dc5241226391c9b1889ecc3c6b/matrix.lua#L53
+    license =
+      licenses.mit; # see https://github.com/torhve/weechat-matrix-protocol-script/blob/0052e7275ae149dc5241226391c9b1889ecc3c6b/matrix.lua#L53
     platforms = platforms.unix;
 
     # As of 2019-06-30, all of the dependencies are available on macOS but the

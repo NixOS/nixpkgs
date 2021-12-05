@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, autoPatchelfHook
-, dotnetCorePackages
-}:
+{ lib, stdenv, buildDotnetModule, fetchFromGitHub, autoPatchelfHook
+, dotnetCorePackages }:
 
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, librime, brise, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, librime, brise
+, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-rime";
@@ -24,11 +25,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-rime";
-    downloadPage  = "https://download.fcitx-im.org/fcitx-rime/";
-    description   = "Rime support for Fcitx";
-    license       = licenses.gpl2;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ sifmelcara ];
+    homepage = "https://github.com/fcitx/fcitx-rime";
+    downloadPage = "https://download.fcitx-im.org/fcitx-rime/";
+    description = "Rime support for Fcitx";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sifmelcara ];
   };
 }

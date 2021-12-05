@@ -1,10 +1,5 @@
-{ lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib, python3
-, dotnet-sdk_5
-, autoPatchelfHook
-, libdbusmenu
-, vmopts ? null
-}:
+{ lib, stdenv, callPackage, fetchurl, jdk, cmake, zlib, python3, dotnet-sdk_5
+, autoPatchelfHook, libdbusmenu, vmopts ? null }:
 
 with lib;
 
@@ -27,14 +22,10 @@ let
         platforms = platforms.linux;
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
-        autoPatchelfHook
-      ];
-      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
-        python3
-        stdenv.cc.cc
-        libdbusmenu
-      ];
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ])
+        ++ optionals (stdenv.isLinux) [ autoPatchelfHook ];
+      buildInputs = (attrs.buildInputs or [ ])
+        ++ optionals (stdenv.isLinux) [ python3 stdenv.cc.cc libdbusmenu ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
         (
@@ -108,7 +99,8 @@ let
           as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo gytis-ivaskevicius ];
-        platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
+        platforms =
+          [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
       };
     });
 
@@ -170,9 +162,7 @@ let
         maintainers = with maintainers; [ ];
         platforms = platforms.linux;
       };
-    }).override {
-      propagatedUserEnvPkgs = [ python3 ];
-    };
+    }).override { propagatedUserEnvPkgs = [ python3 ]; };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
@@ -235,32 +225,34 @@ let
         rm -r jbr
       '';
     });
-in
 
-{
+in {
   # Sorted alphabetically
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2021.2.3"; /* updated by script */
-    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    version = "2021.2.3"; # updated by script
+    description = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "09qbzkxyk435s4n04s12ncjyri024wj9pwz8wgjjsswpfa69dhr5"; /* updated by script */
+      sha256 =
+        "09qbzkxyk435s4n04s12ncjyri024wj9pwz8wgjjsswpfa69dhr5"; # updated by script
     };
     wmClass = "jetbrains-clion";
-    update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+    update-channel =
+      "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2021.3.1"; /* updated by script */
+    version = "2021.3.1"; # updated by script
     description = "Your Swiss Army Knife for Databases and SQL";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "18drbddcjbbv6q6j95wy7ila8d7imi0gh5nnf0lhj4gkkxhszmii"; /* updated by script */
+      sha256 =
+        "18drbddcjbbv6q6j95wy7ila8d7imi0gh5nnf0lhj4gkkxhszmii"; # updated by script
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -268,12 +260,13 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2021.2.4"; /* updated by script */
+    version = "2021.2.4"; # updated by script
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "03x7yz8jz5r4pblm7cvph39zppa33lalvkpzmgvr3wjq0chqmh65"; /* updated by script */
+      sha256 =
+        "03x7yz8jz5r4pblm7cvph39zppa33lalvkpzmgvr3wjq0chqmh65"; # updated by script
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -281,12 +274,14 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2021.3"; /* updated by script */
-    description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
+    version = "2021.3"; # updated by script
+    description =
+      "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0xrhgqbsyd2plzkkmy00bwsa8dk4ijszmhmbyn6c9ygl01zhji6y"; /* updated by script */
+      sha256 =
+        "0xrhgqbsyd2plzkkmy00bwsa8dk4ijszmhmbyn6c9ygl01zhji6y"; # updated by script
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -294,12 +289,15 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2021.3"; /* updated by script */
-    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
+    version = "2021.3"; # updated by script
+    description =
+      "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "0riwww75aizprb01c1sccprbr00ky5wgy5cxxjxqgm8v72rfnihb"; /* updated by script */
+      url =
+        "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
+      sha256 =
+        "0riwww75aizprb01c1sccprbr00ky5wgy5cxxjxqgm8v72rfnihb"; # updated by script
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -307,13 +305,15 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2021.2.2"; /* updated by script */
-    versionMajorMinor = "2021.2"; /* updated by script */
+    version = "2021.2.2"; # updated by script
+    versionMajorMinor = "2021.2"; # updated by script
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
-      url = "https://download.jetbrains.com/mps/${versionMajorMinor}/MPS-${version}.tar.gz";
-      sha256 = "011prnpab72kfgkwq0ms27qqnjamh33h023gb01fxvqwwzcmp6sk"; /* updated by script */
+      url =
+        "https://download.jetbrains.com/mps/${versionMajorMinor}/MPS-${version}.tar.gz";
+      sha256 =
+        "011prnpab72kfgkwq0ms27qqnjamh33h023gb01fxvqwwzcmp6sk"; # updated by script
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -321,12 +321,13 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.2.3"; # updated by script
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1avcm4fnkn0jkw85s505yz5kjbxzk038463sjdsca04pv5yhsdp0"; /* updated by script */
+      sha256 =
+        "1avcm4fnkn0jkw85s505yz5kjbxzk038463sjdsca04pv5yhsdp0"; # updated by script
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -334,12 +335,13 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.2.3"; # updated by script
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0m98qhkgwnmqkay8sclfyig2xcqvpva74l2kdira3r5sbszmxvcr"; /* updated by script */
+      sha256 =
+        "0m98qhkgwnmqkay8sclfyig2xcqvpva74l2kdira3r5sbszmxvcr"; # updated by script
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -347,12 +349,13 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.2.3"; # updated by script
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0zp72ag9jqhq0sv4x5n43d6g9y2yzkxa4pkflc7gd5rpg555cqr7"; /* updated by script */
+      sha256 =
+        "0zp72ag9jqhq0sv4x5n43d6g9y2yzkxa4pkflc7gd5rpg555cqr7"; # updated by script
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -360,12 +363,15 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2021.2.2"; /* updated by script */
-    description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
+    version = "2021.2.2"; # updated by script
+    description =
+      "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "17xx8mz3dr5iqlr0lsiy8a6cxz3wp5vg8z955cdv0hf8b5rncqfa"; /* updated by script */
+      url =
+        "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
+      sha256 =
+        "17xx8mz3dr5iqlr0lsiy8a6cxz3wp5vg8z955cdv0hf8b5rncqfa"; # updated by script
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
@@ -373,12 +379,13 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2021.3"; /* updated by script */
+    version = "2021.3"; # updated by script
     description = "The Most Intelligent Ruby and Rails IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1vmybxnwyv7wiv3clm857yvzlws0bcza01wx8jm0dbnrzq38dz4d"; /* updated by script */
+      sha256 =
+        "1vmybxnwyv7wiv3clm857yvzlws0bcza01wx8jm0dbnrzq38dz4d"; # updated by script
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
@@ -386,12 +393,14 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2021.3"; /* updated by script */
+    version = "2021.3"; # updated by script
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1llz97r95xrf7yixgbfipg153qikkxziwwhv9dvvi29v7pi1k4ys"; /* updated by script */
+      url =
+        "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
+      sha256 =
+        "1llz97r95xrf7yixgbfipg153qikkxziwwhv9dvvi29v7pi1k4ys"; # updated by script
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

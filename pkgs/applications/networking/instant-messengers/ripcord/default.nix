@@ -1,7 +1,7 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
-, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
-, autoPatchelfHook, desktop-file-utils, imagemagick
-, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
+{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools, qtbase, qtsvg
+, qtmultimedia, qtwebsockets, qtimageformats, autoPatchelfHook
+, desktop-file-utils, imagemagick, twemoji-color-font, xorg, libsodium, libopus
+, libGL, alsa-lib }:
 
 mkDerivation rec {
   pname = "ripcord";
@@ -23,9 +23,7 @@ mkDerivation rec {
     ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
     ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
 
-  fontsConf = makeFontsConf {
-    fontDirectories = [ twemoji-color-font ];
-  };
+  fontsConf = makeFontsConf { fontDirectories = [ twemoji-color-font ]; };
 
   installPhase = ''
     runHook preInstall

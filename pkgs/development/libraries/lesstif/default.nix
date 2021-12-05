@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, xlibsWrapper, libXp, libXau}:
+{ lib, stdenv, fetchurl, xlibsWrapper, libXp, libXau }:
 
 stdenv.mkDerivation rec {
   pname = "lesstif";
@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/lesstif/${pname}-${version}.tar.bz2";
     sha256 = "1qzpxjjf7ri1jzv71mvq5m9g8hfaj5yzwp30rwxlm6n2b24a6jpb";
   };
-  buildInputs = [xlibsWrapper];
-  propagatedBuildInputs = [libXp libXau];
+  buildInputs = [ xlibsWrapper ];
+  propagatedBuildInputs = [ libXp libXau ];
 
   # These patches fix a number of later issues - in particular the
   # render_table_crash shows up in 'arb'. The same patches appear
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./c-missing_xm_h.patch
     ./c-render_table_crash.patch
     ./c-xpmpipethrough.patch
-    ];
+  ];
 
   meta = with lib; {
     description = "An open source clone of the Motif widget set";

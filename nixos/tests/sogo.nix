@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "sogo";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ajs124 das_j ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ ajs124 das_j ]; };
 
   nodes = {
     sogo = { config, pkgs, ... }: {
@@ -14,9 +12,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         ensureDatabases = [ "sogo" ];
         ensureUsers = [{
           name = "sogo";
-          ensurePermissions = {
-            "sogo.*" = "ALL PRIVILEGES";
-          };
+          ensurePermissions = { "sogo.*" = "ALL PRIVILEGES"; };
         }];
       };
 

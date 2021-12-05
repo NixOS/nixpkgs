@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "w3lib";
@@ -19,9 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "w3lib" ];
 
-  disabledTests = [
-    "test_add_or_replace_parameter"
-  ];
+  disabledTests = [ "test_add_or_replace_parameter" ];
 
   meta = with lib; {
     description = "A library of web-related functions";

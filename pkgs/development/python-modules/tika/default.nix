@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pyyaml, requests }:
 
 buildPythonPackage rec {
   pname = "tika";

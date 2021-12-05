@@ -37,7 +37,7 @@ in {
       };
 
       extensionPackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.mopidy-spotify ]";
         description = ''
@@ -54,7 +54,7 @@ in {
       };
 
       extraConfigFiles = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Extra config file read by Mopidy when the service starts.
@@ -70,16 +70,16 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - mopidy mopidy - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' - mopidy mopidy - -" ];
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "mopidy music player daemon";
       serviceConfig = {
-        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
+        ExecStart = "${mopidyEnv}/bin/mopidy --config ${
+            concatStringsSep ":" ([ mopidyConf ] ++ cfg.extraConfigFiles)
+          }";
         User = "mopidy";
       };
     };
@@ -87,7 +87,9 @@ in {
     systemd.services.mopidy-scan = {
       description = "mopidy local files scanner";
       serviceConfig = {
-        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
+        ExecStart = "${mopidyEnv}/bin/mopidy --config ${
+            concatStringsSep ":" ([ mopidyConf ] ++ cfg.extraConfigFiles)
+          } local scan";
         User = "mopidy";
         Type = "oneshot";
       };

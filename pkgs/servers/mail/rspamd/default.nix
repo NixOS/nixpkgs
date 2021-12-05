@@ -1,11 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
-, hyperscan, jemalloc, blas, lapack, lua, libsodium
-, withBlas ? true
-, withHyperscan ? stdenv.isx86_64
-, withLuaJIT ? stdenv.isx86_64
-, nixosTests
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, perl, glib, luajit, openssl, pcre
+, pkg-config, sqlite, ragel, icu, hyperscan, jemalloc, blas, lapack, lua
+, libsodium, withBlas ? true, withHyperscan ? stdenv.isx86_64
+, withLuaJIT ? stdenv.isx86_64, nixosTests }:
 
 assert withHyperscan -> stdenv.isx86_64;
 
@@ -25,8 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
     ++ lib.optional withHyperscan hyperscan
-    ++ lib.optionals withBlas [ blas lapack ]
-    ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
+    ++ lib.optionals withBlas [ blas lapack ] ++ lib.optional withLuaJIT luajit
+    ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     "-DDEBIAN_BUILD=ON"
@@ -36,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DLOCAL_CONFDIR=/etc/rspamd"
     "-DENABLE_JEMALLOC=ON"
   ] ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
-  ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+    ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "pytransportnsw";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "00jklgjirmc58hiaqqc2n2rgixvx91bgrd6lv6hv28k51kid10f3";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;

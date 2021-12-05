@@ -5,10 +5,9 @@ with lib;
 let
   cfg = config.services.plikd;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   plikdCfg = format.generate "plikd.cfg" cfg.settings;
-in
-{
+in {
   options = {
     services.plikd = {
       enable = mkEnableOption "the plikd server";
@@ -21,7 +20,7 @@ in
 
       settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for plikd, see <link xlink:href="https://github.com/root-gg/plik/blob/master/server/plikd.cfg"/>
           for supported values.
@@ -35,9 +34,7 @@ in
       ListenPort = 8080;
       ListenAddress = "localhost";
       DataBackend = "file";
-      DataBackendConfig = {
-         Directory = "/var/lib/plikd";
-      };
+      DataBackendConfig = { Directory = "/var/lib/plikd"; };
       MetadataBackendConfig = {
         Driver = "sqlite3";
         ConnectionString = "/var/lib/plikd/plik.db";
@@ -75,8 +72,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.ListenPort ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.ListenPort ]; };
   };
 }

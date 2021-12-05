@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gettext
-, which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
-, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gettext, which, xorg
+, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp, libXmu, libpng
+, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";

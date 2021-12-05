@@ -13,9 +13,7 @@ let
     inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -26,7 +24,8 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable JBoss. WARNING : this package is outdated and is known to have vulnerabilities.";
+        description =
+          "Whether to enable JBoss. WARNING : this package is outdated and is known to have vulnerabilities.";
       };
 
       tempDir = mkOption {
@@ -74,7 +73,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

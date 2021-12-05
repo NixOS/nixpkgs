@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "oatpp";
@@ -21,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://oatpp.io/";
-    description = "Light and powerful C++ web framework for highly scalable and resource-efficient web applications";
+    description =
+      "Light and powerful C++ web framework for highly scalable and resource-efficient web applications";
     license = licenses.asl20;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.all;

@@ -1,10 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
@@ -20,10 +15,7 @@ buildPythonPackage rec {
   # OSError: AF_UNIX path too long
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ pytestCheckHook pytest-asyncio ];
 
   disabledTests = [ "test_protocol_pause_resume" ];
 

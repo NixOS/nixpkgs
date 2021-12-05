@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, redis
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, redis, python }:
 
 buildPythonPackage rec {
   pname = "hiredis";
@@ -22,7 +17,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hiredis" ];
 
   meta = with lib; {
-    description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
+    description =
+      "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];

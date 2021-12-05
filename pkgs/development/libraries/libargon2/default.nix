@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released
     (fetchpatch {
-      url = "https://github.com/P-H-C/phc-winner-argon2/commit/cd1c1d8d204e4ec4557e358013567c097cb70562.patch";
+      url =
+        "https://github.com/P-H-C/phc-winner-argon2/commit/cd1c1d8d204e4ec4557e358013567c097cb70562.patch";
       sha256 = "0whqv8b6q9602n7vxpzbd8bk8wz22r1jz9x5lrm9z7ib3wz81c8a";
     })
   ];
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
+    description =
+      "A key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
     longDescription = ''
       A password-hashing function created by by Alex Biryukov, Daniel Dinu, and
       Dmitry Khovratovich. Argon2 was declared the winner of the Password

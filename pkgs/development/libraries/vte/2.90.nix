@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk3, ncurses, gobject-introspection }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk3, ncurses
+, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   versionMajor = "0.36";
   versionMinor = "3";
-  moduleName   = "vte";
+  moduleName = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 

@@ -1,24 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gtk2
-, libgnomeui
-, libXv
-, libraw1394
-, libdc1394
-, SDL
-, automake
-, GConf
-}:
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, libgnomeui, libXv, libraw1394
+, libdc1394, SDL, automake, GConf }:
 
 stdenv.mkDerivation rec {
   pname = "coriander";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "http://damien.douxchamps.net/ieee1394/coriander/archives/coriander-${version}.tar.gz";
+    url =
+      "http://damien.douxchamps.net/ieee1394/coriander/archives/coriander-${version}.tar.gz";
     sha256 = "0l6hpfgy5r4yardilmdrggsnn1fbfww516sk5a90g1740cd435x5";
   };
 
@@ -31,7 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://damien.douxchamps.net/ieee1394/coriander/";
-    description = "GUI for controlling a Digital Camera through the IEEE1394 bus";
+    description =
+      "GUI for controlling a Digital Camera through the IEEE1394 bus";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;

@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, python3 }:
 
-
 python3.pkgs.buildPythonApplication rec {
   pname = "fail2ban";
   version = "0.11.2";
@@ -12,10 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "q4U9iWCa1zg8sA+6pPNejt6v/41WGIKN5wITJCrCqQE=";
   };
 
-  pythonPath = with python3.pkgs;
-    lib.optionals stdenv.isLinux [
-      systemd
-    ];
+  pythonPath = with python3.pkgs; lib.optionals stdenv.isLinux [ systemd ];
 
   preConfigure = ''
     for i in config/action.d/sendmail*.conf; do
@@ -41,21 +37,19 @@ python3.pkgs.buildPythonApplication rec {
     ${stdenv.shell} ./fail2ban-2to3
   '';
 
-  postInstall =
-    let
-      sitePackages = "$out/${python3.sitePackages}";
-    in
-    ''
-      # see https://github.com/NixOS/nixpkgs/issues/4968
-      rm -r "${sitePackages}/etc"
-    '' + lib.optionalString stdenv.isLinux ''
-      # see https://github.com/NixOS/nixpkgs/issues/4968
-      rm -r "${sitePackages}/usr"
-    '';
+  postInstall = let sitePackages = "$out/${python3.sitePackages}";
+  in ''
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    rm -r "${sitePackages}/etc"
+  '' + lib.optionalString stdenv.isLinux ''
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    rm -r "${sitePackages}/usr"
+  '';
 
   meta = with lib; {
     homepage = "https://www.fail2ban.org/";
-    description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
+    description =
+      "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 fpletz ];
     platforms = platforms.unix;

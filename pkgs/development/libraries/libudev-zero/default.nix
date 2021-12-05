@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     # Fix static.
     # https://github.com/illiliti/libudev-zero/pull/48
     (fetchpatch {
-      url = "https://github.com/illiliti/libudev-zero/commit/505c61819b371a1802e054fe2601e64f2dc6d79e.patch";
+      url =
+        "https://github.com/illiliti/libudev-zero/commit/505c61819b371a1802e054fe2601e64f2dc6d79e.patch";
       sha256 = "0y06rgjv73dd7fi3a0dlabcc8ryk3yhbsyrrhnnn3v36y1wz6m0g";
     })
   ];

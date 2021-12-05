@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, mpg123, SDL2, gtkmm3, faad2, pcre
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, mpg123, SDL2, gtkmm3, faad2
+, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "dablin";

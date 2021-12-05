@@ -1,13 +1,5 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, makeDesktopItem
-, qmake
-, qtbase
-, libpng
-, giflib
-, impy
-}:
+{ mkDerivation, lib, fetchFromGitHub, makeDesktopItem, qmake, qtbase, libpng
+, giflib, impy }:
 
 let
   desktopItem = makeDesktopItem {
@@ -17,7 +9,8 @@ let
     icon = "evilpixie";
     genericName = "Image Editor";
     categories = "Graphics;2DGraphics;RasterGraphics;";
-    mimeType = "image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/x-pcx;image/x-targa;image/x-tga;";
+    mimeType =
+      "image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/x-pcx;image/x-targa;image/x-tga;";
   };
 
 in mkDerivation rec {
@@ -31,16 +24,9 @@ in mkDerivation rec {
     sha256 = "0dwgfr8kmkfppgf5wx9i5f7fjz3gxk0ji1l06x1z4r3vj52hdbph";
   };
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtbase
-    libpng
-    giflib
-    impy
-  ];
+  buildInputs = [ qtbase libpng giflib impy ];
 
   postInstall = ''
     ln -s ${desktopItem}/share/applications $out/share

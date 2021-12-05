@@ -1,7 +1,4 @@
-{ lib
-, isPy3k
-, fetchPypi
-, buildPythonPackage }:
+{ lib, isPy3k, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "mistletoe";

@@ -14,7 +14,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six pyudev pygobject3 ];
 
   meta = with lib; {
-    description = "A Python object API for managing the Linux LIO kernel target";
+    description =
+      "A Python object API for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
     license = licenses.asl20;
   };

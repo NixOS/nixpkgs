@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, docutils
-, readme_renderer
-, packaging
-, pygments
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, docutils, readme_renderer
+, packaging, pygments, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "restview";
@@ -21,7 +12,8 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/mgedmin/restview/commit/a1ded30a87c65f3ce59a18497a7fc5099317c2be.patch";
+      url =
+        "https://github.com/mgedmin/restview/commit/a1ded30a87c65f3ce59a18497a7fc5099317c2be.patch";
       sha256 = "1ax7pih456a3nbj8qrrq7hqigbyag4ihzpn6bm0z4y74d0r3v8a5";
     })
   ];

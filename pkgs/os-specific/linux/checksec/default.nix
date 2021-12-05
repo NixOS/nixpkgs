@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, file, findutils
-, binutils-unwrapped, glibc, coreutils, sysctl, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, file, findutils, binutils-unwrapped
+, glibc, coreutils, sysctl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "checksec";
@@ -17,9 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = let
-    path = lib.makeBinPath [
-      findutils file binutils-unwrapped sysctl openssl
-    ];
+    path = lib.makeBinPath [ findutils file binutils-unwrapped sysctl openssl ];
   in ''
     mkdir -p $out/bin
     install checksec $out/bin
@@ -31,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool for checking security bits on executables";
-    homepage    = "https://www.trapkit.de/tools/checksec/";
-    license     = licenses.bsd3;
-    platforms   = platforms.linux;
+    homepage = "https://www.trapkit.de/tools/checksec/";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice globin ];
   };
 }

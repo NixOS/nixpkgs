@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyyaml
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyyaml, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyyaml-env-tag";
@@ -17,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "1nsva88jsmwn0cb9jnrfiz4dvs9xakkpgfii7g1xwkx1pmsjc2bh";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yaml_env_tag" ];
 

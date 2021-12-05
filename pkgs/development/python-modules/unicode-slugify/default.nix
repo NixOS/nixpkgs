@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, six
-, unittest2
-, unidecode
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, six, unittest2, unidecode }:
 
 buildPythonPackage rec {
   pname = "unicode-slugify";

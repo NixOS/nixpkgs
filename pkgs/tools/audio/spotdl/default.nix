@@ -1,8 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg
-}:
+{ lib, python3, fetchFromGitHub, ffmpeg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
@@ -40,12 +36,11 @@ python3.pkgs.buildPythonApplication rec {
   # requires networking
   doCheck = false;
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
-  ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ]) ];
 
   meta = with lib; {
-    description = "Download your Spotify playlists and songs along with album art and metadata";
+    description =
+      "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

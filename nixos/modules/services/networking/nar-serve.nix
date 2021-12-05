@@ -1,13 +1,9 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-let
-  cfg = config.services.nar-serve;
-in
-{
-  meta = {
-    maintainers = [ maintainers.rizary ];
-  };
+let cfg = config.services.nar-serve;
+in {
+  meta = { maintainers = [ maintainers.rizary ]; };
   options = {
     services.nar-serve = {
       enable = mkEnableOption "Serve NAR file contents via HTTP";

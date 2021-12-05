@@ -1,6 +1,5 @@
 { config, options, lib, pkgs, stdenv, ... }:
-let
-  cfg = config.services.pleroma;
+let cfg = config.services.pleroma;
 in {
   options = {
     services.pleroma = with lib; {
@@ -29,7 +28,8 @@ in {
         type = types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
-        description = "Directory where the pleroma service will save the uploads and static files.";
+        description =
+          "Directory where the pleroma service will save the uploads and static files.";
       };
 
       configs = mkOption {
@@ -53,7 +53,7 @@ in {
 
           Have a look to Pleroma section in the NixOS manual for more
           informations.
-          '';
+        '';
       };
 
       secretConfigFile = mkOption {
@@ -78,7 +78,7 @@ in {
         group = cfg.group;
         isSystemUser = true;
       };
-      groups."${cfg.group}" = {};
+      groups."${cfg.group}" = { };
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -115,10 +115,10 @@ in {
         # It's sub-optimal as we'll always run this, even if pleroma
         # has not been updated. But the no-op process is pretty fast.
         # Better be safe than sorry migration-wise.
-        ExecStartPre =
-          let preScript = pkgs.writers.writeBashBin "pleromaStartPre"
+        ExecStartPre = let
+          preScript = pkgs.writers.writeBashBin "pleromaStartPre"
             "${cfg.package}/bin/pleroma_ctl migrate";
-          in "${preScript}/bin/pleromaStartPre";
+        in "${preScript}/bin/pleromaStartPre";
 
         ExecStart = "${cfg.package}/bin/pleroma start";
         ExecStop = "${cfg.package}/bin/pleroma stop";

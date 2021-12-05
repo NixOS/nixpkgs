@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyhcl
-, requests
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pyhcl, requests, six }:
 
 buildPythonPackage rec {
   pname = "hvac";
@@ -15,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "f905c59d32d88d3f67571fe5a8a78de4659e04798ad809de439f667247d13626";
   };
 
-  propagatedBuildInputs = [
-    pyhcl
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ pyhcl requests six ];
 
   # Requires running a Vault server
   doCheck = false;

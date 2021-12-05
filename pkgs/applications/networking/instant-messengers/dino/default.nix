@@ -1,19 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
-, libgcrypt
-, libepoxy
-, at-spi2-core
-, sqlite
-, dbus
-, gpgme
-, pcre
-, qrencode
-, icu
- }:
+{ lib, stdenv, fetchFromGitHub, vala, cmake, ninja, wrapGAppsHook, pkg-config
+, gettext, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
+, xorg, libXdmcp, libxkbcommon, libnotify, libsoup, libgee, librsvg
+, libsignal-protocol-c, libgcrypt, libepoxy, at-spi2-core, sqlite, dbus, gpgme
+, pcre, qrencode, icu }:
 
 stdenv.mkDerivation rec {
   pname = "dino";
@@ -26,14 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uYP3D2uyvfRP91fq/1jKOaKgp/+How0SUwmxSrLLH4c=";
   };
 
-  nativeBuildInputs = [
-    vala
-    cmake
-    ninja
-    pkg-config
-    wrapGAppsHook
-    gettext
-  ];
+  nativeBuildInputs = [ vala cmake ninja pkg-config wrapGAppsHook gettext ];
 
   buildInputs = [
     qrencode

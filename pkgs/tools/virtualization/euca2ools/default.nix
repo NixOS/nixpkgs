@@ -1,7 +1,6 @@
 { lib, fetchgit, python2Packages }:
 
-let
-  inherit (python2Packages) buildPythonApplication boto m2crypto;
+let inherit (python2Packages) buildPythonApplication boto m2crypto;
 in buildPythonApplication {
   pname = "euca2ools";
   version = "2.1.4";
@@ -16,7 +15,8 @@ in buildPythonApplication {
 
   meta = {
     homepage = "https://github.com/eucalyptus/euca2ools";
-    description = "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
+    description =
+      "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
   };

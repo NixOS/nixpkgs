@@ -1,11 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub
-, libusb1
-, pkg-config
-, qmake
-, qtbase
-, qttools
-, qtwebsockets
-}:
+{ lib, mkDerivation, fetchFromGitHub, libusb1, pkg-config, qmake, qtbase
+, qttools, qtwebsockets }:
 
 mkDerivation rec {
   pname = "moolticute";
@@ -30,7 +24,7 @@ mkDerivation rec {
     mkdir -p $udev/lib/udev/rules.d
     sed -n '/^ \+cat > "$tmpfile" <<- EOF$/,/^EOF$/p' ../data/moolticute.sh |
         sed '1d;$d' > $udev/lib/udev/rules.d/50-mooltipass.rules
- '';
+  '';
 
   meta = with lib; {
     description = "GUI app and daemon to work with Mooltipass device via USB";

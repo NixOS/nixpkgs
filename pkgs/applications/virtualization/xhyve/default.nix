@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
       --replace 'shell git describe --abbrev=6 --dirty --always --tags' "$version"
   '';
 
-
-  makeFlags = [ "CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"'' ];
+  makeFlags =
+    [ "CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"'' ];
 
   installPhase = ''
     mkdir -p $out/bin

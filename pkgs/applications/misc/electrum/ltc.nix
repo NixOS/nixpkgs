@@ -1,35 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, wrapQtAppsHook
-, python3
-, zbar
-, secp256k1
-, enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, zbar
+, secp256k1, enableQt ? true
+  # for updater.nix
+, writeScript, common-updater-scripts, bash, coreutils, curl, gnugrep, gnupg
+, gnused, nix }:
 
 let
   version = "4.0.9.3";
 
-  libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
-    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+  libsecp256k1_name = if stdenv.isLinux then
+    "libsecp256k1.so.0"
+  else if stdenv.isDarwin then
+    "libsecp256k1.0.dylib"
+  else
+    "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
-  libzbar_name =
-    if stdenv.isLinux then "libzbar.so.0"
-    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+  libzbar_name = if stdenv.isLinux then
+    "libzbar.so.0"
+  else
+    "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
   tests = fetchFromGitHub {
@@ -57,9 +45,7 @@ let
     };
   };
 
-in
-
-python3.pkgs.buildPythonApplication {
+in python3.pkgs.buildPythonApplication {
   pname = "electrum-ltc";
   inherit version;
 
@@ -80,32 +66,30 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
-    aiohttp
-    aiohttp-socks
-    aiorpcx
-    attrs
-    bitstring
-    cryptography
-    dnspython
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
-    protobuf
-    py_scrypt
-    pysocks
-    qrcode
-    requests
-    tlslite-ng
-    # plugins
-    btchip
-    ckcc-protocol
-    keepkey
-    trezor
-  ] ++ lib.optionals enableQt [
-    pyqt5
-    qdarkstyle
-  ];
+  propagatedBuildInputs = with py.pkgs;
+    [
+      aiohttp
+      aiohttp-socks
+      aiorpcx
+      attrs
+      bitstring
+      cryptography
+      dnspython
+      jsonrpclib-pelix
+      matplotlib
+      pbkdf2
+      protobuf
+      py_scrypt
+      pysocks
+      qrcode
+      requests
+      tlslite-ng
+      # plugins
+      btchip
+      ckcc-protocol
+      keepkey
+      trezor
+    ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -141,8 +125,8 @@ python3.pkgs.buildPythonApplication {
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
   disabledTests = [
-    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
-    "test_is_ip_address"  # fails spuriously https://github.com/spesmilo/electrum/issues/7307
+    "test_loop" # test tries to bind 127.0.0.1 causing permission error
+    "test_is_ip_address" # fails spuriously https://github.com/spesmilo/electrum/issues/7307
   ];
 
   postCheck = ''
@@ -151,17 +135,8 @@ python3.pkgs.buildPythonApplication {
 
   passthru.updateScript = import ./update.nix {
     inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+    inherit writeScript common-updater-scripts bash coreutils curl gnupg gnugrep
+      gnused nix;
   };
 
   meta = with lib; {

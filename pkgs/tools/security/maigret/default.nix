@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
@@ -79,9 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_self_check_db_positive_enable"
   ];
 
-  pythonImportsCheck = [
-    "maigret"
-  ];
+  pythonImportsCheck = [ "maigret" ];
 
   meta = with lib; {
     description = "Tool to collect details about an username";

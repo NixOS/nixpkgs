@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytest-runner
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "iaqualink";

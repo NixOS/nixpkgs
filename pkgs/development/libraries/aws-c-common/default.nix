@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, coreutils
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
@@ -29,11 +24,10 @@ stdenv.mkDerivation rec {
 
   # Prevent the execution of tests known to be flaky.
   preCheck = let
-    ignoreTests = [
-      "promise_test_multiple_waiters"
-    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "sba_metrics" # https://github.com/awslabs/aws-c-common/issues/839
-    ];
+    ignoreTests = [ "promise_test_multiple_waiters" ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        "sba_metrics" # https://github.com/awslabs/aws-c-common/issues/839
+      ];
   in ''
     cat <<EOW >CTestCustom.cmake
     SET(CTEST_CUSTOM_TESTS_IGNORE ${toString ignoreTests})

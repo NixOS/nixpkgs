@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "goodwe";
@@ -19,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "6/JAp7zK60+om4l14sLn+pUki0Q/5XwCJSawOf1q2q0=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -29,9 +22,7 @@ buildPythonPackage rec {
       --replace "version: file: VERSION" "version = ${version}"
   '';
 
-  pythonImportsCheck = [
-    "goodwe"
-  ];
+  pythonImportsCheck = [ "goodwe" ];
 
   meta = with lib; {
     description = "Python library for connecting to GoodWe inverter";

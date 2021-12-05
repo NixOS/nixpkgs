@@ -18,10 +18,7 @@ rec {
        assertMsg :: Bool -> String -> Bool
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg = pred: msg:
-    if pred
-    then true
-    else builtins.trace msg false;
+  assertMsg = pred: msg: if pred then true else builtins.trace msg false;
 
   /* Specialized `assertMsg` for checking if val is one of the elements
      of a list. Useful for checking enums.
@@ -35,10 +32,10 @@ rec {
      Type:
        assertOneOf :: String -> ComparableVal -> List ComparableVal -> Bool
   */
-  assertOneOf = name: val: xs: assertMsg
-    (lib.elem val xs)
-    "${name} must be one of ${
-      lib.generators.toPretty {} xs}, but is: ${
-        lib.generators.toPretty {} val}";
+  assertOneOf = name: val: xs:
+    assertMsg (lib.elem val xs)
+    "${name} must be one of ${lib.generators.toPretty { } xs}, but is: ${
+      lib.generators.toPretty { } val
+    }";
 
 }

@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, libsodium, mbedtls, libev, c-ares, pcre
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libsodium, mbedtls, libev, c-ares, pcre
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "shadowsocks-libev";
@@ -17,10 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libsodium mbedtls libev c-ares pcre ];
-  nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45
-                        docbook_xsl libxslt ];
+  nativeBuildInputs =
+    [ cmake asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ];
 
-  cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
+  cmakeFlags = [ "-DWITH_STATIC=OFF" "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
 
   postInstall = ''
     cp lib/* $out/lib

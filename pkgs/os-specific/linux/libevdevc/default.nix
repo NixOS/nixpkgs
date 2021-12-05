@@ -20,10 +20,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
   meta = with lib; {
-    description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
+    description =
+      "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    homepage = "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
+    homepage =
+      "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
     maintainers = with maintainers; [ kcalvinalvin ];
   };
 }

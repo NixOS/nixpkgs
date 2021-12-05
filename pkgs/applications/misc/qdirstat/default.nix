@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, qmake
-, coreutils, xdg-utils, bash
-, makeWrapper, perlPackages, mkDerivation }:
+{ lib, fetchFromGitHub, qmake, coreutils, xdg-utils, bash, makeWrapper
+, perlPackages, mkDerivation }:
 
 let
   pname = "qdirstat";
@@ -12,9 +11,8 @@ let
     rev = version;
     sha256 = "sha256-R/eUqv5AxO5TcLkqOvlAXEkjAzeKGihf8YIQIIevOR0=";
   };
-in
 
-mkDerivation {
+in mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ qmake makeWrapper ];

@@ -12,11 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.llvm llvmPackages.clang-unwrapped readline python ];
+  buildInputs =
+    [ llvmPackages.llvm llvmPackages.clang-unwrapped readline python ];
 
-  cmakeFlags = [
-    "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}"
-  ];
+  cmakeFlags = [ "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}" ];
 
   meta = with lib; {
     description = "An OpenCL device simulator and debugger";

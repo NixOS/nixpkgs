@@ -1,17 +1,16 @@
 { lib, pythonPackages, fetchurl, xpdf }:
-let
-  py = pythonPackages;
-in
-py.buildPythonApplication rec {
+let py = pythonPackages;
+in py.buildPythonApplication rec {
   name = "pdfdiff-${version}";
   version = "0.92";
 
   src = fetchurl {
-    url = "https://www.cs.ox.ac.uk/people/cas.cremers/downloads/software/pdfdiff.py";
+    url =
+      "https://www.cs.ox.ac.uk/people/cas.cremers/downloads/software/pdfdiff.py";
     sha256 = "0zxwjjbklz87wkbhkmsvhc7xmv5php7m2a9vm6ydhmhlxsybf836";
   };
 
-  buildInputs = [  pythonPackages.wrapPython ];
+  buildInputs = [ pythonPackages.wrapPython ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -22,7 +21,7 @@ py.buildPythonApplication rec {
   postPatch = ''
     sed -i -r 's|pdftotextProgram = "pdftotext"|pdftotextProgram = "${xpdf}/bin/pdftotext"|' pdfdiff.py
     sed -i -r 's|progName = "pdfdiff.py"|progName = "pdfdiff"|' pdfdiff.py
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +29,7 @@ py.buildPythonApplication rec {
     chmod +x $out/bin/pdfdiff
 
     substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${pythonPackages.python.interpreter}"
-    '';
+  '';
 
   meta = with lib; {
     homepage = "http://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html";

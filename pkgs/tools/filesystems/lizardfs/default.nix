@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, python3
-, db
-, fuse
-, asciidoc
-, libxml2
-, libxslt
-, docbook_xml_dtd_412
-, docbook_xsl
-, boost
-, pkg-config
-, judy
-, pam
-, spdlog
-, systemdMinimal
-, zlib # optional
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, python3, db
+, fuse, asciidoc, libxml2, libxslt, docbook_xml_dtd_412, docbook_xsl, boost
+, pkg-config, judy, pam, spdlog, systemdMinimal, zlib # optional
 }:
 
 stdenv.mkDerivation rec {
@@ -35,13 +17,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [
-    db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-    zlib boost judy pam spdlog python3 systemdMinimal
+    db
+    fuse
+    asciidoc
+    libxml2
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xsl
+    zlib
+    boost
+    judy
+    pam
+    spdlog
+    python3
+    systemdMinimal
   ];
 
   meta = with lib; {
     homepage = "https://lizardfs.com";
-    description = "A highly reliable, scalable and efficient distributed file system";
+    description =
+      "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rushmorem shamilton ];

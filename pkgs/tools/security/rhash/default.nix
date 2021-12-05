@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, which
-, enableStatic ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, which
+, enableStatic ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -20,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix clang configuration; remove with next release
     (fetchpatch {
-      url = "https://github.com/rhash/RHash/commit/4dc506066cf1727b021e6352535a8bb315c3f8dc.patch";
+      url =
+        "https://github.com/rhash/RHash/commit/4dc506066cf1727b021e6352535a8bb315c3f8dc.patch";
       sha256 = "0i5jz2s37h278c8d36pzphhp8rjy660zmhpg2cqlp960f6ny8wwj";
     })
   ];
@@ -42,16 +38,13 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-full";
 
-  installTargets = [
-    "install"
-    "install-lib-headers"
-  ] ++ lib.optional (!enableStatic) [
-    "install-lib-so-link"
-  ];
+  installTargets = [ "install" "install-lib-headers" ]
+    ++ lib.optional (!enableStatic) [ "install-lib-so-link" ];
 
   meta = with lib; {
     homepage = "http://rhash.sourceforge.net/";
-    description = "Console utility and library for computing and verifying hash sums of files";
+    description =
+      "Console utility and library for computing and verifying hash sums of files";
     license = licenses.bsd0;
     platforms = platforms.all;
     maintainers = with maintainers; [ andrewrk ];

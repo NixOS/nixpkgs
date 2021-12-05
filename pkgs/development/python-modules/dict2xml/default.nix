@@ -12,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "Super simple library to convert a Python dictionary into an xml string";
+    description =
+      "Super simple library to convert a Python dictionary into an xml string";
     homepage = "https://github.com/delfick/python-dict2xml";
     license = licenses.mit;
     maintainers = with maintainers; [ johnazoidberg ];

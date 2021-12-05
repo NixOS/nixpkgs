@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, ninja, git, pandoc
-, libGL, libGLU, libXxf86vm, freeimage
-, qtbase, wrapQtAppsHook
-, copyDesktopItems, makeDesktopItem
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, git, pandoc, libGL, libGLU
+, libXxf86vm, freeimage, qtbase, wrapQtAppsHook, copyDesktopItems
+, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
@@ -27,9 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL libGLU libXxf86vm freeimage qtbase ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
   QT_QPA_PLATFORM = "offscreen";
-  ninjaFlags = [
-    "TrenchBroom"
-  ];
+  ninjaFlags = [ "TrenchBroom" ];
   preBuild = "export HOME=$(mktemp -d)";
 
   postInstall = ''

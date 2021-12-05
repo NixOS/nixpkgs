@@ -1,6 +1,6 @@
-{ lib, callPackage, python3Packages, fetchFromGitLab, cacert
-, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip
-, jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
+{ lib, callPackage, python3Packages, fetchFromGitLab, cacert, rustPlatform
+, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip, jre
+, makeWrapper, tr-patcher, tes3cmd, openmw }:
 
 let
   version = "2.1.0";
@@ -33,8 +33,7 @@ let
     openmw
   ];
 
-in
-python3Packages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   inherit src version;
 
   pname = "portmod";
@@ -65,9 +64,7 @@ python3Packages.buildPythonApplication rec {
     fasteners
   ];
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ] ++ bin-programs;
+  checkInputs = with python3Packages; [ pytestCheckHook ] ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -91,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
   meta = {

@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, haversine
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
-}:
+{ lib, buildPythonPackage, dateparser, fetchFromGitHub, haversine
+, pytestCheckHook, pythonOlder, requests, xmltodict }:
 
 buildPythonPackage rec {
   pname = "georss-client";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-rviXXNmDLEVNYOCkqvLT9EXSuVpI5wMlCXnlpUUl1P0=";
   };
 
-  propagatedBuildInputs = [
-    haversine
-    xmltodict
-    requests
-    dateparser
-  ];
+  propagatedBuildInputs = [ haversine xmltodict requests dateparser ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "georss_client" ];
 

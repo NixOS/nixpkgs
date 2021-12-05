@@ -1,16 +1,14 @@
-{
-  stdenv, lib, fetchFromGitHub,
-  cmake, expat, libyamlcpp, ilmbase, pystring, # Base dependencies
+{ stdenv, lib, fetchFromGitHub, cmake, expat, libyamlcpp, ilmbase, pystring
+, # Base dependencies
 
-  glew, freeglut, # Only required on Linux
-  Carbon, GLUT, Cocoa, # Only required on Darwin
+glew, freeglut, # Only required on Linux
+Carbon, GLUT, Cocoa, # Only required on Darwin
 
-  pythonBindings ? true, # Python bindings
-  python3Packages,
+pythonBindings ? true, # Python bindings
+python3Packages,
 
-  buildApps ? true, # Utility applications
-  lcms2, openimageio2, openexr,
-}:
+buildApps ? true, # Utility applications
+lcms2, openimageio2, openexr, }:
 
 with lib;
 
@@ -29,10 +27,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat libyamlcpp ilmbase pystring ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
-    ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
-    ++ lib.optionals buildApps [ lcms2 openimageio2 openexr ];
+    ++ lib.optionals pythonBindings [
+      python3Packages.python
+      python3Packages.pybind11
+    ] ++ lib.optionals buildApps [ lcms2 openimageio2 openexr ];
 
-    cmakeFlags = [ "-DOCIO_INSTALL_EXT_PACKAGES=NONE" ]
+  cmakeFlags = [ "-DOCIO_INSTALL_EXT_PACKAGES=NONE" ]
     ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
-    description = "A color management framework for visual effects and animation";
+    description =
+      "A color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;

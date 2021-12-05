@@ -1,12 +1,9 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-}:
+, libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch, setJavaClassPath
+, headless ? false, enableJavaFX ? openjfx.meta.available, openjfx
+, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf }:
 
 let
   major = "12";
@@ -18,17 +15,45 @@ let
     version = "${major}${update}-${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      url =
+        "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
       sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11
+      cpio
+      file
+      which
+      zip
+      perl
+      zlib
+      cups
+      freetype
+      alsa-lib
+      libjpeg
+      giflib
+      libpng
+      zlib
+      lcms2
+      libX11
+      libICE
+      libXrender
+      libXext
+      libXtst
+      libXt
+      libXtst
+      libXi
+      libXinerama
+      libXcursor
+      libXrandr
+      fontconfig
+      openjdk11
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+      gtk3
+      gnome_vfs
+      GConf
+      glib
     ];
 
     patches = [
@@ -41,17 +66,18 @@ let
       # so grab the work-around from
       # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
       (fetchurl {
-        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
+        url =
+          "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
       # Fix gnumake 4.3 incompatibility
       (fetchpatch {
-        url = "https://github.com/openjdk/panama-foreign/commit/af5c725b8109ce83fc04ef0f8bf6aaf0b50c0441.patch";
+        url =
+          "https://github.com/openjdk/panama-foreign/commit/af5c725b8109ce83fc04ef0f8bf6aaf0b50c0441.patch";
         sha256 = "0ja84kih5wkjn58pml53s59qnavb1z92dc88cbgw7vcyqwc1gs0h";
       })
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
-    ];
+    ] ++ lib.optionals (!headless && enableGnome2)
+      [ ./swing-use-gtk-jdk10.patch ];
 
     prePatch = ''
       chmod +x configure
@@ -71,16 +97,24 @@ let
       "--with-stdc++lib=dynamic"
     ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+      ++ lib.optional (!headless && enableJavaFX)
+      "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
     NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
     NIX_LDFLAGS = lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-3"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ];
 
     # -j flag is explicitly rejected by the build system:

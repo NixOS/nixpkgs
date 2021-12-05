@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Reduces browser profile sizes by cleaning their sqlite databases";
+    description =
+      "Reduces browser profile sizes by cleaning their sqlite databases";
     longDescription = ''
       Use profile-cleaner to reduce the size of browser profiles by organizing
       their sqlite databases using sqlite3's vacuum and reindex functions. The

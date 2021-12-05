@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, repoze_lru
-, six
-, soupsieve
-, webob
-, coverage
-, webtest
-}:
+{ lib, buildPythonPackage, fetchPypi, repoze_lru, six, soupsieve, webob
+, coverage, webtest }:
 
 buildPythonPackage rec {
   pname = "Routes";
@@ -26,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "routes" ];
 
   meta = with lib; {
-    description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
+    description =
+      "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
     homepage = "http://routes.groovie.org/";
     license = licenses.mit;
   };

@@ -13,10 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-ifH+420FIrib+zQtzzHtMMYd84BED+vgnRw4xToYIl4=";
 
-  ldflags = [
-    "-s" "-w"
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   preCheck = ''
     export VOUCH_ROOT=$PWD
@@ -24,7 +21,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/vouch/vouch-proxy";
-    description = "An SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
+    description =
+      "An SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
     license = licenses.mit;
     maintainers = with maintainers; [ em0lar ];
   };

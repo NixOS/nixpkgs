@@ -6,13 +6,13 @@ let
   manifestsSha256 = "10rh0q1la5dq6n9y1yvw9ilj5lhzx8vh1zi2lznfjsvc5niwx7wf";
 
   manifests = fetchzip {
-    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    url =
+      "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
     sha256 = manifestsSha256;
     stripRoot = false;
   };
-in
 
-buildGoModule rec {
+in buildGoModule rec {
   pname = "fluxcd";
   inherit version;
 
@@ -29,9 +29,7 @@ buildGoModule rec {
     cp -r ${manifests} source/cmd/flux/manifests
   '';
 
-  patches = [
-    ./patches/disable-tests-ssh_key.patch
-  ];
+  patches = [ ./patches/disable-tests-ssh_key.patch ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -39,7 +37,7 @@ buildGoModule rec {
 
   # Required to workaround test error:
   #   panic: mkdir /homeless-shelter: permission denied
-  HOME="$TMPDIR";
+  HOME = "$TMPDIR";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,7 +56,8 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Open and extensible continuous delivery solution for Kubernetes";
+    description =
+      "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync
       with sources of configuration (like Git repositories), and automating

@@ -1,6 +1,5 @@
-{ mkXfceDerivation, exo, garcon, gtk3, glib
-, libnotify, libxfce4ui, libxfce4util, libxklavier
-, upower, xfconf, xf86inputlibinput }:
+{ mkXfceDerivation, exo, garcon, gtk3, glib, libnotify, libxfce4ui, libxfce4util
+, libxklavier, upower, xfconf, xf86inputlibinput }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -29,12 +28,7 @@ mkXfceDerivation {
     xfconf
   ];
 
-  configureFlags = [
-    "--enable-pluggable-dialogs"
-    "--enable-sound-settings"
-  ];
+  configureFlags = [ "--enable-pluggable-dialogs" "--enable-sound-settings" ];
 
-  meta = {
-    description = "Settings manager for Xfce";
-  };
+  meta = { description = "Settings manager for Xfce"; };
 }

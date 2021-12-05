@@ -1,9 +1,7 @@
-{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl }:
 
-{ pname, version ? "113.33.03", buildInputs ? [],
-  hash ? "",
-  minimumSupportedOcamlVersion ? "4.02", ...
-}@args:
+{ pname, version ? "113.33.03", buildInputs ? [ ], hash ? ""
+, minimumSupportedOcamlVersion ? "4.02", ... }@args:
 
 buildOcaml (args // {
   inherit pname version minimumSupportedOcamlVersion;
@@ -18,7 +16,7 @@ buildOcaml (args // {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   configurePhase = ''
     ./configure --prefix $out

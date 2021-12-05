@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
+{ lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl
+, pcre, zlib }:
 
 import ./versions.nix ({ version, sha256 }:
   buildGoModule {
@@ -6,7 +7,9 @@ import ./versions.nix ({ version, sha256 }:
     inherit version;
 
     src = fetchurl {
-      url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${
+          lib.versions.majorMinor version
+        }/zabbix-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -56,7 +59,8 @@ import ./versions.nix ({ version, sha256 }:
     '';
 
     meta = with lib; {
-      description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
+      description =
+        "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
       license = licenses.gpl2Plus;
       maintainers = [ maintainers.aanderse ];

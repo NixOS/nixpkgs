@@ -1,39 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, gst_all_1
-, clutter-gtk
-, clutter-gst
-, python3Packages
-, shared-mime-info
-, pkg-config
-, gtk3
-, glib
-, gobject-introspection
-, totem-pl-parser
-, wrapGAppsHook
-, itstool
-, libxml2
-, vala
-, gnome
-, grilo
-, grilo-plugins
-, libpeas
-, adwaita-icon-theme
-, gnome-desktop
-, gsettings-desktop-schemas
-, gdk-pixbuf
-, xvfb-run
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, gst_all_1, clutter-gtk
+, clutter-gst, python3Packages, shared-mime-info, pkg-config, gtk3, glib
+, gobject-introspection, totem-pl-parser, wrapGAppsHook, itstool, libxml2, vala
+, gnome, grilo, grilo-plugins, libpeas, adwaita-icon-theme, gnome-desktop
+, gsettings-desktop-schemas, gdk-pixbuf, xvfb-run }:
 
 stdenv.mkDerivation rec {
   pname = "totem";
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/totem/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "/OVi4rJsvPwMZ4U43MgfncFc5g1aie5DWJB79jQwTEA=";
   };
 
@@ -75,9 +53,7 @@ stdenv.mkDerivation rec {
     python3Packages.dbus-python
   ];
 
-  checkInputs = [
-    xvfb-run
-  ];
+  checkInputs = [ xvfb-run ];
 
   mesonFlags = [
     # TODO: https://github.com/NixOS/nixpkgs/issues/36468
@@ -117,7 +93,8 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Videos";
     description = "Movie player for the GNOME desktop based on GStreamer";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
+    license =
+      licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
   };
 }

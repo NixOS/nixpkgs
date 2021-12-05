@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config
-, SDL2, libGLU, libGL, openal, luajit
-, libdevil, freetype, physfs
-, libmodplug, mpg123, libvorbis, libogg
-}:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libGLU, libGL, openal, luajit
+, libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg }:
 
 stdenv.mkDerivation rec {
   name = "love-0.9.1";
@@ -13,15 +10,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL2 libGLU libGL openal luajit
-    libdevil freetype physfs libmodplug mpg123 libvorbis libogg
+    SDL2
+    libGLU
+    libGL
+    openal
+    luajit
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
   ];
 
-  configureFlags = [
-    "--with-lua=luajit"
-  ];
+  configureFlags = [ "--with-lua=luajit" ];
 
-  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE =
+    [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   meta = {
     homepage = "http://love2d.org";

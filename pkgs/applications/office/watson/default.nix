@@ -10,10 +10,12 @@ let
   # Workaround the issue by providing click 7 explicitly.
   python = python3.override {
     packageOverrides = self: super: {
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      click =
+        self.callPackage ../../../development/python-modules/click/7.nix { };
     };
   };
-in with python.pkgs; buildPythonApplication rec {
+in with python.pkgs;
+buildPythonApplication rec {
   pname = "watson";
 
   # When you update Watson, please check whether the Click 7

@@ -1,6 +1,7 @@
 { lib, python3, fetchFromGitHub, ncurses }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "almonds";
   version = "1.25b";
 

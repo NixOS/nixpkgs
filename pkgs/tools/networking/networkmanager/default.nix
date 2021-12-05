@@ -1,63 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, intltool
-, pkg-config
-, fetchpatch
-, dbus
-, gnome
-, systemd
-, libuuid
-, polkit
-, gnutls
-, ppp
-, dhcp
-, iptables
-, nftables
-, python3
-, vala
-, libgcrypt
-, dnsmasq
-, bluez5
-, readline
-, libselinux
-, audit
-, gobject-introspection
-, modemmanager
-, openresolv
-, libndp
-, newt
-, libsoup
-, ethtool
-, gnused
-, iputils
-, kmod
-, jansson
-, gtk-doc
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, openconnect
-, curl
-, meson
-, ninja
-, libpsl
-, mobile-broadband-provider-info
-, runtimeShell
-}:
+{ lib, stdenv, fetchurl, substituteAll, intltool, pkg-config, fetchpatch, dbus
+, gnome, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, nftables
+, python3, vala, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
+, gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
+, ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt, docbook_xsl
+, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43, openconnect, curl
+, meson, ninja, libpsl, mobile-broadband-provider-info, runtimeShell }:
 
-let
-  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
-in
-stdenv.mkDerivation rec {
+let pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+in stdenv.mkDerivation rec {
   pname = "networkmanager";
   version = "1.32.12";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager/${
+        lib.versions.majorMinor version
+      }/NetworkManager-${version}.tar.xz";
     sha256 = "sha256-qKs2oKUC/nPNjjustlhfl/u5Tr73nids268Rwz/49Us=";
   };
 
@@ -175,7 +132,9 @@ stdenv.mkDerivation rec {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
-    ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+    ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${
+      placeholder "out"
+    }/lib/libnm.so.0
   '';
 
   passthru = {
@@ -190,8 +149,10 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ phreedom domenkozar obadz maxeaubrey ]);
+    changelog =
+      "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
+    maintainers = teams.freedesktop.members
+      ++ (with maintainers; [ phreedom domenkozar obadz maxeaubrey ]);
     platforms = platforms.linux;
   };
 }

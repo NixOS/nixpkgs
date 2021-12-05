@@ -11,13 +11,10 @@ let
   # (locale set by the user may differ). This would usually be C.UTF-8, but
   # darwin has no such locale.
   utf8Locale =
-    if stdenv.hostPlatform.isDarwin
-    then "en_US.UTF-8"
-    else "C.UTF-8";
-in
+    if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
 
-assert executableCross ||
-  throw "mandoc relies on executing compiled programs in configurePhase, can't cross compile";
+in assert executableCross || throw
+  "mandoc relies on executing compiled programs in configurePhase, can't cross compile";
 
 stdenv.mkDerivation rec {
   pname = "mandoc";

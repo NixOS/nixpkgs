@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, getopt, tzdata, ksh
+{ lib, stdenv, fetchurl, fetchpatch, getopt, tzdata, ksh
 , pkgsMusl # for passthru.tests
 }:
 
@@ -8,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "20210621";
 
   src = fetchurl {
-    url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
+    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
     sha256 = "0gpzv75ibzqz1j1h0hdjgx1v7hkl3i5cb5yf6q9sfcgx0bvb55xa";
   };
 
@@ -37,13 +36,15 @@ stdenv.mkDerivation rec {
     # decouple tests from build phase
     (fetchpatch {
       name = "separate-tests.patch";
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
+      url =
+        "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
       sha256 = "00s76jwyr83c6rkvq67b1lxs8jhm0gj2rjgy77xazqr5400slj9a";
     })
     # add a shebang to bmake's install(1) replacement
     (fetchpatch {
       name = "install-sh.patch";
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
+      url =
+        "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
       sha256 = "0z8icd6akb96r4cksqnhynkn591vbxlmrrs4w6wil3r6ggk6mwa6";
     })
   ];
@@ -53,9 +54,7 @@ stdenv.mkDerivation rec {
   # makefile clobbers a distinct, shipped, Makefile and causes
   # infinite recursion during tests which eventually fail with
   # "fork: Resource temporarily unavailable"
-  configureFlags = [
-    "--without-makefile"
-  ];
+  configureFlags = [ "--without-makefile" ];
 
   buildPhase = ''
     runHook preBuild
@@ -74,11 +73,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [
-    tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  checkInputs = [ tzdata ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [ ksh ];
   checkPhase = ''
     runHook preCheck
 
@@ -89,15 +85,13 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.tests = {
-    bmakeMusl = pkgsMusl.bmake;
-  };
+  passthru.tests = { bmakeMusl = pkgsMusl.bmake; };
 
   meta = with lib; {
     description = "Portable version of NetBSD 'make'";
-    homepage    = "http://www.crufty.net/help/sjg/bmake.html";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    homepage = "http://www.crufty.net/help/sjg/bmake.html";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -1,4 +1,5 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib
+, fetchFromGitHub }:
 
 let
   ourNodePackages = import ./node-composition.nix {
@@ -7,8 +8,7 @@ let
   };
   version = (lib.importJSON ./package.json).version;
   srcInfo = lib.importJSON ./src.json;
-in
-ourNodePackages.package.override {
+in ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
   inherit version;
 

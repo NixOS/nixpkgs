@@ -1,18 +1,8 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 
-, cmake
-, pkg-config
+, cmake, pkg-config
 
-, exiv2
-, mpv
-, opencv4
-, qtbase
-, qtimageformats
-, qtsvg
-}:
+, exiv2, mpv, opencv4, qtbase, qtimageformats, qtsvg }:
 
 mkDerivation rec {
   pname = "qimgv";
@@ -25,19 +15,9 @@ mkDerivation rec {
     sha256 = "sha256-YlV/ysm7bdPverpKpanrL+jPVvMtP1paoAm0PREMaww=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    exiv2
-    mpv
-    opencv4
-    qtbase
-    qtimageformats
-    qtsvg
-  ];
+  buildInputs = [ exiv2 mpv opencv4 qtbase qtimageformats qtsvg ];
 
   postPatch = ''
     sed -i "s@/usr/bin/mpv@${mpv}/bin/mpv@" \
@@ -46,9 +26,7 @@ mkDerivation rec {
 
   # Wrap the library path so it can see `libqimgv_player_mpv.so`, which is used
   # to play video files within qimgv itself.
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
 
   meta = with lib; {
     description = "A Qt5 image viewer with optional video support";

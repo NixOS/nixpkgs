@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perlPackages
-, makeWrapper
-, installShellFiles
-}:
+{ lib, stdenv, fetchFromGitHub, perlPackages, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "nikto";
@@ -33,9 +27,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ perlPackages.NetSSLeay ];
 
-  buildInputs = [
-    perlPackages.perl
-  ];
+  buildInputs = [ perlPackages.perl ];
 
   installPhase = ''
     runHook preInstall

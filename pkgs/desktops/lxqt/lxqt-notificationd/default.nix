@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, qtx11extras
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools
+, qtsvg, kwindowsystem, liblxqt, libqtxdg, qtx11extras, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-notificationd";
@@ -24,20 +12,10 @@ mkDerivation rec {
     sha256 = "06gb8k1p24gm5axy42npq7n4lmsxb03a9kvzqby44qmgwh8pn069";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [
-    qtbase
-    qttools
-    qtsvg
-    kwindowsystem
-    liblxqt
-    libqtxdg
-    qtx11extras
-  ];
+  buildInputs =
+    [ qtbase qttools qtsvg kwindowsystem liblxqt libqtxdg qtx11extras ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

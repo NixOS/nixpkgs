@@ -1,5 +1,5 @@
-{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
-, qtbase, qttools, qtmultimedia, qtx11extras
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper, qtbase, qttools
+, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
 # input plugins
@@ -8,8 +8,7 @@
 # output plugins
 , alsa-lib, libpulseaudio
 # effect plugins
-, libsamplerate
-}:
+, libsamplerate }:
 
 # Additional plugins that can be added:
 #  wavpack (https://www.wavpack.com/)
@@ -38,19 +37,36 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs =
-    [ # basic requirements
-      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
-      # transports
-      curl libmms
-      # input plugins
-      libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
-      # output plugins
-      alsa-lib libpulseaudio
-      # effect plugins
-      libsamplerate
-    ];
+  buildInputs = [ # basic requirements
+    qtbase
+    qttools
+    qtmultimedia
+    qtx11extras
+    xlibsWrapper
+    # transports
+    curl
+    libmms
+    # input plugins
+    libmad
+    taglib
+    libvorbis
+    libogg
+    flac
+    libmpcdec
+    libmodplug
+    libsndfile
+    libcdio
+    cdparanoia
+    libcddb
+    faad2
+    ffmpeg
+    wildmidi
+    # output plugins
+    alsa-lib
+    libpulseaudio
+    # effect plugins
+    libsamplerate
+  ];
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";

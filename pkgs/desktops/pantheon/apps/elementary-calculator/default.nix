@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, libxml2
-, gtk3
-, python3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, ninja, vala, desktop-file-utils, libxml2, gtk3, python3, granite, libgee
+, libhandy, elementary-icon-theme, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
@@ -33,9 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [
@@ -50,13 +31,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
-    libgee
-    libhandy
-  ];
+  buildInputs = [ elementary-icon-theme granite gtk3 libgee libhandy ];
 
   postPatch = ''
     chmod +x meson/post_install.py

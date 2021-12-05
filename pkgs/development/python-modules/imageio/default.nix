@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, imageio-ffmpeg
-, numpy
-, pillow
-, psutil
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, imageio-ffmpeg, numpy, pillow
+, psutil, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "imageio";
@@ -19,16 +11,9 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
-  propagatedBuildInputs = [
-    imageio-ffmpeg
-    numpy
-    pillow
-  ];
+  propagatedBuildInputs = [ imageio-ffmpeg numpy pillow ];
 
-  checkInputs = [
-    psutil
-    pytestCheckHook
-  ];
+  checkInputs = [ psutil pytestCheckHook ];
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
@@ -37,7 +22,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
+    description =
+      "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
   };

@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, bundlerEnv
-, alsa-utils
-, atk
-, copyDesktopItems
-, gobject-introspection
-, gtk2
-, ruby
-, libicns
-, libnotify
-, makeDesktopItem
-, which
-, wrapGAppsHook
-, writeText
-}:
+{ lib, stdenv, fetchurl, bundlerEnv, alsa-utils, atk, copyDesktopItems
+, gobject-introspection, gtk2, ruby, libicns, libnotify, makeDesktopItem, which
+, wrapGAppsHook, writeText }:
 
 let
   # NOTE: $out may have different values depending on context
@@ -68,8 +54,8 @@ let
     });
 
   inherit (gems) wrappedRuby;
-in
-with mikutterPaths; stdenv.mkDerivation rec {
+in with mikutterPaths;
+stdenv.mkDerivation rec {
   pname = "mikutter";
   version = "4.1.4";
 
@@ -89,10 +75,8 @@ with mikutterPaths; stdenv.mkDerivation rec {
     wrappedRuby
   ] ++ lib.optionals stdenv.isLinux [ alsa-utils ];
 
-  scriptPath = lib.makeBinPath (
-    [ wrappedRuby libnotify which ]
-    ++ lib.optionals stdenv.isLinux [ alsa-utils ]
-  );
+  scriptPath = lib.makeBinPath ([ wrappedRuby libnotify which ]
+    ++ lib.optionals stdenv.isLinux [ alsa-utils ]);
 
   postUnpack = ''
     rm -rf vendor
@@ -120,31 +104,28 @@ with mikutterPaths; stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall =
-    let
-      infoPlist = mkInfoPlist { inherit version; };
-    in
-    lib.optionalString stdenv.isDarwin ''
-      mkdir -p ${appBinDir} ${appResourceDir}
-      install -Dm644 ${infoPlist} ${appPrefixDir}/Info.plist
-      ln -s $out/bin/mikutter ${appBinDir}/mikutter
-      png2icns ${appResourceDir}/mikutter.icns ${iconPath}
-    '';
+  postInstall = let infoPlist = mkInfoPlist { inherit version; };
+  in lib.optionalString stdenv.isDarwin ''
+    mkdir -p ${appBinDir} ${appResourceDir}
+    install -Dm644 ${infoPlist} ${appPrefixDir}/Info.plist
+    ln -s $out/bin/mikutter ${appBinDir}/mikutter
+    png2icns ${appResourceDir}/mikutter.icns ${iconPath}
+  '';
 
   installCheckPhase = ''
     runHook preInstallCheck
 
     testDir="$(mktemp -d)"
-    install -Dm644 ${./test_plugin.rb} "$testDir/plugin/test_plugin/test_plugin.rb"
+    install -Dm644 ${
+      ./test_plugin.rb
+    } "$testDir/plugin/test_plugin/test_plugin.rb"
 
     $out/bin/mikutter --confroot="$testDir" --plugin=test_plugin --debug
 
     runHook postInstallCheck
   '';
 
-  desktopItems = [
-    (mkDesktopItem { inherit (meta) description; })
-  ];
+  desktopItems = [ (mkDesktopItem { inherit (meta) description; }) ];
 
   doInstallCheck = true;
   dontWrapGApps = true; # the target is placed outside of bin/

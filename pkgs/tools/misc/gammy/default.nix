@@ -3,9 +3,8 @@
 let
   pname = "gammy";
   version = "0.9.64";
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -20,7 +19,8 @@ stdenv.mkDerivation {
   buildInputs = [ libXxf86vm ];
 
   meta = with lib; {
-    description = "GUI tool for manual- of auto-adjusting of brightness/temperature";
+    description =
+      "GUI tool for manual- of auto-adjusting of brightness/temperature";
     homepage = "https://github.com/Fushko/gammy";
     license = licenses.gpl3;
     maintainers = with maintainers; [ atemu ];

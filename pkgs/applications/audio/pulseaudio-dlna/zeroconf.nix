@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ifaddr
-, typing
-, pythonOlder
-, netifaces
-, six
-, enum-compat
-}:
+{ lib, buildPythonPackage, fetchPypi, ifaddr, typing, pythonOlder, netifaces
+, six, enum-compat }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
@@ -22,7 +14,8 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   meta = with lib; {
-    description = "A pure python implementation of multicast DNS service discovery";
+    description =
+      "A pure python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = licenses.lgpl21;
     maintainers = [ ];

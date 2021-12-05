@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cryptography
-, requests
-, pykerberos
-, pytestCheckHook
-, mock
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, cryptography, requests, pykerberos
+, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
@@ -20,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "1qw96aw84nljh9cip372mfv50p1yyirfgigavvavgpc3c5g278s6";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    requests
-    pykerberos
-  ];
+  propagatedBuildInputs = [ cryptography requests pykerberos ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   # they have a setup.py which mentions a test suite that doesn't exist...
   patches = [ ./fix_setup.patch ];
@@ -37,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "requests_kerberos" ];
 
   meta = with lib; {
-    description = "An authentication handler for using Kerberos with Python Requests";
+    description =
+      "An authentication handler for using Kerberos with Python Requests";
     homepage = "https://github.com/requests/requests-kerberos";
     license = licenses.isc;
     maintainers = with maintainers; [ catern ];

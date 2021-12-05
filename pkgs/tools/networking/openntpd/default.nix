@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, libressl
-, privsepPath ? "/var/empty"
-, privsepUser ? "ntp"
-}:
+{ lib, stdenv, fetchurl, libressl, privsepPath ? "/var/empty"
+, privsepUser ? "ntp" }:
 
 stdenv.mkDerivation rec {
   pname = "openntpd";
@@ -27,10 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libressl ];
 
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-    "localstatedir=\${TMPDIR}"
-  ];
+  installFlags = [ "sysconfdir=\${out}/etc" "localstatedir=\${TMPDIR}" ];
 
   meta = with lib; {
     homepage = "http://www.openntpd.org/";

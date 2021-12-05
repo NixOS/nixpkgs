@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, gpgme, libgpg-error, libassuan }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, gpgme, libgpg-error
+, libassuan }:
 
 stdenv.mkDerivation rec {
   pname = "gpa";

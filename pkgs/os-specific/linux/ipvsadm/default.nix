@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.31";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
     sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 

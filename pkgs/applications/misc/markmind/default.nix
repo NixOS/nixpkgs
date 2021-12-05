@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://github.com/MarkMindCkm/Mark-Mind/releases/download/v${version}/Mark.Mind-${version}.AppImage";
+    url =
+      "https://github.com/MarkMindCkm/Mark-Mind/releases/download/v${version}/Mark.Mind-${version}.AppImage";
     sha256 = "sha256-iOJ0IOIzleA69rv94Qd35rMbHc+XSi8OPatf2V6sYrI=";
   };
 

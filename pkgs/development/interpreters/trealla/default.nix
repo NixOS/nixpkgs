@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, readline, openssl, withThread ? true, withSSL ? true, xxd }:
+{ lib, stdenv, fetchFromGitHub, readline, openssl, withThread ? true
+, withSSL ? true, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "trealla";
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "GIT_VERSION=\"v${version}\""
+    ''GIT_VERSION="v${version}"''
     (lib.optionalString withThread "THREADS=1")
     (lib.optionalString (!withSSL) "NOSSL=1")
     (lib.optionalString stdenv.isDarwin "NOLDLIBS=1")

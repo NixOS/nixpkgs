@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.6.2";
 
   src = fetchurl {
-    url = "https://github.com/libxls/libxls/releases/download/v${version}/libxls-${version}.tar.gz";
+    url =
+      "https://github.com/libxls/libxls/releases/download/v${version}/libxls-${version}.tar.gz";
     sha256 = "sha256-XazDTZS/IRWSbIDG+2nk570u1kA9Uc/0kEGpQXL143E=";
   };
 

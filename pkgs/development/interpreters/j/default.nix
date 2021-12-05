@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, readline, libedit, bc
-, avxSupport ? stdenv.hostPlatform.avxSupport
-}:
+, avxSupport ? stdenv.hostPlatform.avxSupport }:
 
 stdenv.mkDerivation rec {
   pname = "j";
@@ -16,14 +15,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline libedit bc ];
   bits = if stdenv.is64bit then "64" else "32";
-  platform =
-    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
-    if stdenv.isLinux then "linux" else
-    if stdenv.isDarwin then "darwin" else
+  platform = if (stdenv.isAarch32 || stdenv.isAarch64) then
+    "raspberry"
+  else if stdenv.isLinux then
+    "linux"
+  else if stdenv.isDarwin then
+    "darwin"
+  else
     "unknown";
   variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
 
-  j64x="j${bits}${variant}";
+  j64x = "j${bits}${variant}";
 
   doCheck = true;
 

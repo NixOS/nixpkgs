@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python2, ruby
+{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake, gperf
+, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python2, ruby
 , openjdk11-bootstrap }:
 
 let
@@ -7,47 +7,47 @@ let
   update = ".0.3";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradle_4.override {
-    java = openjdk11-bootstrap;
-  });
+  gradle_ = (gradle_4.override { java = openjdk11-bootstrap; });
 
-  makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}-${build}";
+  makePackage = args:
+    stdenv.mkDerivation ({
+      version = "${major}${update}-${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
-      sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
-    };
+      src = fetchurl {
+        url =
+          "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
+        sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
+      };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python2 ruby ];
+      buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
+      nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python2 ruby ];
 
-    dontUseCmakeConfigure = true;
+      dontUseCmakeConfigure = true;
 
-    postPatch = ''
-      substituteInPlace buildSrc/linux.gradle \
-        --replace ', "-Werror=implicit-function-declaration"' ""
-    '';
+      postPatch = ''
+        substituteInPlace buildSrc/linux.gradle \
+          --replace ', "-Werror=implicit-function-declaration"' ""
+      '';
 
-    config = writeText "gradle.properties" (''
-      CONF = Release
-      JDK_HOME = ${openjdk11-bootstrap.home}
-    '' + args.gradleProperties or "");
+      config = writeText "gradle.properties" (''
+        CONF = Release
+        JDK_HOME = ${openjdk11-bootstrap.home}
+      '' + args.gradleProperties or "");
 
-    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+      #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+      NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
-    buildPhase = ''
-      runHook preBuild
+      buildPhase = ''
+        runHook preBuild
 
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ln -s $config gradle.properties
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+        export GRADLE_USER_HOME=$(mktemp -d)
+        ln -s $config gradle.properties
+        export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
+        gradle --no-daemon $gradleFlags sdk
 
-      runHook postBuild
-    '';
-  } // args);
+        runHook postBuild
+      '';
+    } // args);
 
   # Fake build to pre-download deps into fixed-output derivation.
   # We run nearly full build because I see no other way to download everything that's needed.

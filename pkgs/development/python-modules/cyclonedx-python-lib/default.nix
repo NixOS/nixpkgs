@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, packageurl-python
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requirements-parser
-, setuptools
-, toml
-, types-setuptools
-, types-toml
-, tox
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, importlib-metadata
+, packageurl-python, poetry-core, pytestCheckHook, pythonOlder
+, requirements-parser, setuptools, toml, types-setuptools, types-toml, tox }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
@@ -28,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-+Gu9WaGC2R5TC8XSqDNSJ3t7aMS69IeeKTzytYFcHvE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -42,10 +28,7 @@ buildPythonPackage rec {
     types-toml
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    tox
-  ];
+  checkInputs = [ pytestCheckHook tox ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -53,9 +36,7 @@ buildPythonPackage rec {
       --replace 'importlib-metadata = "^4.8.1"' 'importlib-metadata = "*"'
   '';
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
+  pythonImportsCheck = [ "cyclonedx" ];
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

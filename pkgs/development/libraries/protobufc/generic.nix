@@ -1,7 +1,4 @@
-{ lib, stdenv, src, version
-, autoreconfHook, pkg-config, protobuf, zlib
-, ...
-}:
+{ lib, stdenv, src, version, autoreconfHook, pkg-config, protobuf, zlib, ... }:
 
 stdenv.mkDerivation {
   pname = "protobuf-c";

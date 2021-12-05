@@ -1,4 +1,5 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, pythonOlder, requests }:
+{ buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, pythonOlder
+, requests }:
 
 buildPythonPackage rec {
   pname = "python-tado";

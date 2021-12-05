@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, pytest-runner
-, pytestCheckHook
-, requests
-, websocket-client
-}:
+{ lib, buildPythonPackage, click, fetchFromGitHub, mock, pytest-runner
+, pytestCheckHook, requests, websocket-client }:
 
 buildPythonPackage rec {
   pname = "waterfurnace";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "1ba247fw1fvi7zy31zj2wbjq7fajrbxhp139cl9jj67rfvxfv8xf";
   };
 
-  propagatedBuildInputs = [
-    click
-    pytest-runner
-    requests
-    websocket-client
-  ];
+  propagatedBuildInputs = [ click pytest-runner requests websocket-client ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "waterfurnace" ];
 

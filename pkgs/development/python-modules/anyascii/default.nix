@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "anyascii";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-JPJ0Mftkxsk6MxJftm+MugB6UmK8H6q+r+2l9LtwtZM=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Unicode to ASCII transliteration";

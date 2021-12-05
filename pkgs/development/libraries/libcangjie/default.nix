@@ -1,4 +1,5 @@
-{ lib, stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config, sqlite }:
+{ lib, stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config
+, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "libcangjie";

@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib
-, easy-format
-}:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, easy-format }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-dum-${version}";
@@ -20,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mjambon/dum";
-    description = "Inspect the runtime representation of arbitrary OCaml values";
+    description =
+      "Inspect the runtime representation of arbitrary OCaml values";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.alexfmpe ];
   };

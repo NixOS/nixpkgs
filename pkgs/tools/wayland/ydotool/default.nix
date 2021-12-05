@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus, libuinputplus, iodash, cxxopts}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus
+, libuinputplus, iodash, cxxopts }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
@@ -17,7 +18,6 @@ stdenv.mkDerivation rec {
   # Both changes are to respect the sandbox.
   patches = [ ./fixup-cmakelists.patch ];
 
-
   # cxxopts is a header only library.
   # See pull request: https://github.com/ReimuNotMoe/ydotool/pull/105
   postPatch = ''
@@ -27,9 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    boost libevdevplus libuinputplus iodash cxxopts
-  ];
+  buildInputs = [ boost libevdevplus libuinputplus iodash cxxopts ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

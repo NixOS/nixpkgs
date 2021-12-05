@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
 
   src = fetchurl {
-    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
     sha256 = "1d5mqlknfywbx2bgj7ap7x6qzvz257hhqcqhy6zk45dqpsirdn7a";
   };
 

@@ -1,29 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
-, openssl
-, linkOpenssl? true
-, openldap
-, withLdap ? true
-, sqlite
-, withSqlite ? true
-, libpcap
-, withPcap ? true
-, libcap
-, withCap ? true
-, libmemcached
-, withMemcached ? false
-, hiredis
-, withRedis ? false
-, libmysqlclient
-, withMysql ? false
-, json_c
-, withJson ? false
-, libyubikey
-, withYubikey ? false
-, collectd
-, withCollectd ? false
-, curl
-, withRest ? false
-}:
+, openssl, linkOpenssl ? true, openldap, withLdap ? true, sqlite
+, withSqlite ? true, libpcap, withPcap ? true, libcap, withCap ? true
+, libmemcached, withMemcached ? false, hiredis, withRedis ? false
+, libmysqlclient, withMysql ? false, json_c, withJson ? false, libyubikey
+, withYubikey ? false, collectd, withCollectd ? false, curl, withRest ? false }:
 
 assert withSqlite -> sqlite != null;
 assert withLdap -> openldap != null;
@@ -46,34 +26,27 @@ stdenv.mkDerivation rec {
   version = "3.0.21";
 
   src = fetchurl {
-    url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
+    url =
+      "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
     sha256 = "1bij07angf6ll6bq8lccd4fx1a1clf7k13kh5vbryh6lf7a19y9b";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ openssl talloc finger_bsd perl ]
-    ++ optional withLdap openldap
-    ++ optional withSqlite sqlite
-    ++ optional withPcap libpcap
-    ++ optional withCap libcap
-    ++ optional withMemcached libmemcached
-    ++ optional withRedis hiredis
-    ++ optional withMysql libmysqlclient
-    ++ optional withJson json_c
-    ++ optional withYubikey libyubikey
-    ++ optional withCollectd collectd
-    ++ optional withRest curl;
+  buildInputs = [ openssl talloc finger_bsd perl ] ++ optional withLdap openldap
+    ++ optional withSqlite sqlite ++ optional withPcap libpcap
+    ++ optional withCap libcap ++ optional withMemcached libmemcached
+    ++ optional withRedis hiredis ++ optional withMysql libmysqlclient
+    ++ optional withJson json_c ++ optional withYubikey libyubikey
+    ++ optional withCollectd collectd ++ optional withRest curl;
 
-
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ] ++ optional (!linkOpenssl) "--with-openssl=no";
+  configureFlags = [ "--sysconfdir=/etc" "--localstatedir=/var" ]
+    ++ optional (!linkOpenssl) "--with-openssl=no";
 
   patches = lib.optional withRest (fetchpatch {
     # Fix HTTP/2 in rest
-    url = "https://github.com/FreeRADIUS/freeradius-server/commit/6286520698a3cc4053b4d49eb0a61d9ba77632aa.patch";
+    url =
+      "https://github.com/FreeRADIUS/freeradius-server/commit/6286520698a3cc4053b4d49eb0a61d9ba77632aa.patch";
     sha256 = "1ycvr3ql1mfkvzydnn4aiygnidicv2hgllppv37nb1p2pk02159g";
   });
 
@@ -102,7 +75,13 @@ stdenv.mkDerivation rec {
     homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];
+    maintainers = with maintainers; [
+      sheenobu
+      willibutz
+      fpletz
+      lheckemann
+      elseym
+    ];
     platforms = with platforms; linux;
   };
 

@@ -2,10 +2,10 @@
 
 { stdenv, python, writeText, extraCfg ? "", overrideCfg ? "" }:
 
-
 let
-  distutilsCfg = writeText "distutils.cfg" (
-  if overrideCfg != "" then overrideCfg else ''
+  distutilsCfg = writeText "distutils.cfg" (if overrideCfg != "" then
+    overrideCfg
+  else ''
     [easy_install]
 
     # don't allow network connections during build to ensure purity

@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
-, koji, rpmfluff }:
+{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils, koji
+, rpmfluff }:
 
 buildPythonPackage rec {
   pname = "rpkg";
@@ -11,7 +11,6 @@ buildPythonPackage rec {
     url = "https://releases.pagure.org/rpkg/${pname}-${version}.tar.gz";
     sha256 = "0j83bnm9snr3m1mabw2cvd2r7d6kcnkzyz7b9p65fhcc3c7s3rvv";
   };
-
 
   propagatedBuildInputs = [ pycurl koji cccolutils six rpmfluff ];
 

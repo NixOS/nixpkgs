@@ -1,10 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, gnutls
-, openssl
-, pkg-config
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gnutls, openssl, pkg-config
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "librelp";

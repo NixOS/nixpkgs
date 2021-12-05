@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/lfranchi/libechonest/commit/009514f65044823ef29045397d4b58dd04d09977.patch";
+      url =
+        "https://github.com/lfranchi/libechonest/commit/009514f65044823ef29045397d4b58dd04d09977.patch";
       sha256 = "0dmmpi7hixdngwiv045ilqrzyzkf56xpfyihcsx5i3xya2m0mynx";
     })
     (fetchpatch {
-      url = "https://github.com/lfranchi/libechonest/commit/3ce779536d56a163656e8098913f923e6cda2b5c.patch";
+      url =
+        "https://github.com/lfranchi/libechonest/commit/3ce779536d56a163656e8098913f923e6cda2b5c.patch";
       sha256 = "1vasd3sgqah562vxk71jibyws5cbihjjfnffd50qvdm2xqgvbx94";
     })
   ];

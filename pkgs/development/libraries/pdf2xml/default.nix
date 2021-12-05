@@ -1,17 +1,17 @@
-{lib, stdenv, fetchurl, libxpdf, libxml2}:
+{ lib, stdenv, fetchurl, libxpdf, libxml2 }:
 
 stdenv.mkDerivation {
   name = "pdf2xml";
 
   src = fetchurl {
-      url = "http://tarballs.nixos.org/pdf2xml.tar.gz";
-      sha256 = "04rl7ppxqgnvxvvws669cxp478lnrdmiqj0g3m4p69bawfjc4z3w";
+    url = "http://tarballs.nixos.org/pdf2xml.tar.gz";
+    sha256 = "04rl7ppxqgnvxvvws669cxp478lnrdmiqj0g3m4p69bawfjc4z3w";
   };
   sourceRoot = "pdf2xml/pdf2xml";
 
-  buildInputs = [libxml2 libxpdf];
+  buildInputs = [ libxml2 libxpdf ];
 
-  patches = [./pdf2xml.patch];
+  patches = [ ./pdf2xml.patch ];
 
   hardeningDisable = [ "format" ];
 

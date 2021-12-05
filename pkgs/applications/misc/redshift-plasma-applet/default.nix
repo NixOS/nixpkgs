@@ -1,8 +1,9 @@
-{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, fetchpatch, }:
+{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem
+, redshift, fetchFromGitHub, fetchpatch, }:
 
-let version = "1.0.18"; in
+let version = "1.0.18";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "redshift-plasma-applet";
   inherit version;
 
@@ -19,8 +20,9 @@ stdenv.mkDerivation {
     # Redshift version >= 1.12 requires the -P option to clear the existing effects before applying shading.
     #     Without it scrolling makes the screen gets darker and darker until it is impossible to see anything.
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-redshift-control/-/commit/898c3a4cfc6c317915f1e664078d8606497c4049.patch";
-      sha256 =  "0b6pa3fcj698mgqnc85jbbmcl3qpf418mh06qgsd3c4v237my0nv";
+      url =
+        "https://invent.kde.org/plasma/plasma-redshift-control/-/commit/898c3a4cfc6c317915f1e664078d8606497c4049.patch";
+      sha256 = "0b6pa3fcj698mgqnc85jbbmcl3qpf418mh06qgsd3c4v237my0nv";
     })
   ];
 
@@ -36,15 +38,9 @@ stdenv.mkDerivation {
                 "'${redshift}/bin/redshift -V'"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    plasma-framework
-    kwindowsystem
-  ];
+  buildInputs = [ plasma-framework kwindowsystem ];
 
   dontWrapQtApps = true;
 

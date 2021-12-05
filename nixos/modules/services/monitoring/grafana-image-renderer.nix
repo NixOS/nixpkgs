@@ -7,7 +7,8 @@ let
 
   format = pkgs.formats.json { };
 
-  configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
+  configFile =
+    format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
   options.services.grafana-image-renderer = {
     enable = mkEnableOption "grafana-image-renderer";
@@ -21,7 +22,8 @@ in {
 
     verbose = mkEnableOption "verbosity for the service";
 
-    provisionGrafana = mkEnableOption "Grafana configuration for grafana-image-renderer";
+    provisionGrafana =
+      mkEnableOption "Grafana configuration for grafana-image-renderer";
 
     settings = mkOption {
       type = types.submodule {
@@ -87,7 +89,7 @@ in {
         };
       };
 
-      default = {};
+      default = { };
 
       description = ''
         Configuration attributes for <package>grafana-image-renderer</package>.
@@ -99,18 +101,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.provisionGrafana -> config.services.grafana.enable;
-        message = ''
-          To provision a Grafana instance to use grafana-image-renderer,
-          `services.grafana.enable` must be set to `true`!
-        '';
-      }
-    ];
+    assertions = [{
+      assertion = cfg.provisionGrafana -> config.services.grafana.enable;
+      message = ''
+        To provision a Grafana instance to use grafana-image-renderer,
+        `services.grafana.enable` must be set to `true`!
+      '';
+    }];
 
     services.grafana.extraOptions = mkIf cfg.provisionGrafana {
-      RENDERING_SERVER_URL = "http://localhost:${toString cfg.settings.service.port}/render";
-      RENDERING_CALLBACK_URL = "http://localhost:${toString config.services.grafana.port}";
+      RENDERING_SERVER_URL =
+        "http://localhost:${toString cfg.settings.service.port}/render";
+      RENDERING_CALLBACK_URL =
+        "http://localhost:${toString config.services.grafana.port}";
     };
 
     services.grafana-image-renderer.chromium = mkDefault pkgs.chromium;
@@ -131,16 +134,16 @@ in {
     systemd.services.grafana-image-renderer = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      description = " A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
+      description =
+        " A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
 
-      environment = {
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
-      };
+      environment = { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"; };
 
       serviceConfig = {
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.grafana-image-renderer}/bin/grafana-image-renderer server --config=${configFile}";
+        ExecStart =
+          "${pkgs.grafana-image-renderer}/bin/grafana-image-renderer server --config=${configFile}";
         Restart = "always";
       };
     };

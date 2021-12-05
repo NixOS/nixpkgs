@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, enableVTK ? true
-, vtk
-, ApplicationServices
-, Cocoa
-, enablePython ? false
-, python ? null
-, swig
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, enableVTK ? true, vtk
+, ApplicationServices, Cocoa, enablePython ? false, python ? null, swig }:
 
 stdenv.mkDerivation rec {
   pname = "gdcm";
@@ -22,24 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KFN13kGE0E8gQBgtErvkW7Fa+3YYqQh0RA2bPS90WUI=";
   };
 
-  cmakeFlags = [
-    "-DGDCM_BUILD_APPLICATIONS=ON"
-    "-DGDCM_BUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals enableVTK [
-    "-DGDCM_USE_VTK=ON"
-  ] ++ lib.optionals enablePython [
-    "-DGDCM_WRAP_PYTHON:BOOL=ON"
-    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
-  ];
+  cmakeFlags = [ "-DGDCM_BUILD_APPLICATIONS=ON" "-DGDCM_BUILD_SHARED_LIBS=ON" ]
+    ++ lib.optionals enableVTK [ "-DGDCM_USE_VTK=ON" ]
+    ++ lib.optionals enablePython [
+      "-DGDCM_WRAP_PYTHON:BOOL=ON"
+      "-DGDCM_INSTALL_PYTHONMODULE_DIR=${
+        placeholder "out"
+      }/${python.sitePackages}"
+    ];
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals enableVTK [
-    vtk
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Cocoa
-  ] ++ lib.optionals enablePython [ swig python ];
+  buildInputs = lib.optionals enableVTK [ vtk ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices Cocoa ]
+    ++ lib.optionals enablePython [ swig python ];
 
   meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";

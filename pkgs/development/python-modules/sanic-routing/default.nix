@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "sanic-routing";

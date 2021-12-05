@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, varint
-, base58
-, netaddr
-, idna
-, py-cid
-, py-multicodec
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, varint, base58, netaddr
+, idna, py-cid, py-multicodec, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "py-multiaddr";
@@ -27,18 +17,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
-    varint
-    base58
-    netaddr
-    idna
-    py-cid
-    py-multicodec
-  ];
+  propagatedBuildInputs = [ varint base58 netaddr idna py-cid py-multicodec ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multiaddr" ];
 

@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "so";
@@ -14,9 +15,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-VBuWKit50cSHYg7WzUP5ein3MEoZN/KFfm+YEEu544Q=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "A TUI interface to the StackExchange network";

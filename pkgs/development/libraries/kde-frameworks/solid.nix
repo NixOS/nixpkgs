@@ -1,8 +1,5 @@
-{
-  mkDerivation,
-  bison, extra-cmake-modules, flex,
-  media-player-info, qtbase, qtdeclarative, qttools
-}:
+{ mkDerivation, bison, extra-cmake-modules, flex, media-player-info, qtbase
+, qtdeclarative, qttools }:
 
 mkDerivation {
   name = "solid";

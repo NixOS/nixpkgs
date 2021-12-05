@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, decorator
-, appdirs
-, six
-, numpy
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, decorator, appdirs, six
+, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "pytools";
@@ -21,12 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    decorator
-    appdirs
-    six
-    numpy
-  ];
+  propagatedBuildInputs = [ decorator appdirs six numpy ];
 
   checkPhase = ''
     py.test -k 'not test_persistent_dict'

@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch, pytest, flake8}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch, pytest, flake8 }:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   # see https://github.com/tholo/pytest-flake8/pull/82/commits
   patches = [
     (fetchpatch {
-      url = "https://github.com/tholo/pytest-flake8/commit/eda4ef74c0f25b856fe282742ea206b21e94c24c.patch";
+      url =
+        "https://github.com/tholo/pytest-flake8/commit/eda4ef74c0f25b856fe282742ea206b21e94c24c.patch";
       sha256 = "0kq0wshds00rk6wvkn6ccjrjyqxg7m9l7dlyaqw974asizw6byci";
     })
   ];

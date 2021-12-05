@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, postgresql, openssl, zlib, readline, libkrb5 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, postgresql, openssl, zlib, readline
+, libkrb5 }:
 
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/citusdata/pg_auto_failover/pull/830
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/citusdata/pg_auto_failover/commit/fc92546965437a6d5f82ed9a6bdc8204a3bca725.patch";
+      url =
+        "https://github.com/citusdata/pg_auto_failover/commit/fc92546965437a6d5f82ed9a6bdc8204a3bca725.patch";
       sha256 = "sha256-t4DC/d/2s/Mc44rpFxBMOWGhACG0s5wAWyeDD7Mefo8=";
     })
   ];
@@ -31,9 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PostgreSQL extension and service for automated failover and high-availability";
+    description =
+      "PostgreSQL extension and service for automated failover and high-availability";
     homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/raw/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/citusdata/pg_auto_failover/raw/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;

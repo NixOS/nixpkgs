@@ -1,13 +1,17 @@
-{stdenv, unzip}:
-{package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+{ stdenv, unzip }:
+{ package, os ? null, buildInputs ? [ ], patchInstructions ? "", meta ? { }, ...
+}@args:
 
 let
-  extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
-in
-stdenv.mkDerivation ({
+  extraParams =
+    removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
+in stdenv.mkDerivation ({
   pname = package.name;
   version = package.revision;
-  src = if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all;
+  src = if os != null && builtins.hasAttr os package.archives then
+    package.archives.${os}
+  else
+    package.archives.all;
   buildInputs = [ unzip ] ++ buildInputs;
   preferLocalBuild = true;
 
@@ -40,7 +44,5 @@ stdenv.mkDerivation ({
   dontPatchELF = true;
   dontAutoPatchelf = true;
 
-  meta = {
-    description = package.displayName;
-  } // meta;
+  meta = { description = package.displayName; } // meta;
 } // extraParams)

@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, toml
-, pythonOlder
-, importlib-metadata
-, zipp
-, pytestCheckHook
-, testpath
-, mock
-, pip
-}:
+{ lib, buildPythonPackage, fetchPypi, flit-core, toml, pythonOlder
+, importlib-metadata, zipp, pytestCheckHook, testpath, mock, pip }:
 
 buildPythonPackage rec {
   pname = "pep517";
@@ -22,22 +11,12 @@ buildPythonPackage rec {
     sha256 = "0zqidxah03qpnp6zkg3zd1kmd5f79hhdsfmlc0cldaniy80qddxf";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    toml
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata zipp
-  ];
+  propagatedBuildInputs = [ toml ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata zipp ];
 
-  checkInputs = [
-    pytestCheckHook
-    testpath
-    mock
-    pip
-  ];
+  checkInputs = [ pytestCheckHook testpath mock pip ];
 
   preCheck = ''
     rm pytest.ini # wants flake8

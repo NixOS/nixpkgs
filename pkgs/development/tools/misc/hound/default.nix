@@ -1,10 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, mercurial
-, git
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, mercurial, git }:
 
 buildGoModule rec {
   pname = "hound";
@@ -25,7 +19,9 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    wrapProgram $out/bin/houndd --prefix PATH : ${lib.makeBinPath [ mercurial git ]}
+    wrapProgram $out/bin/houndd --prefix PATH : ${
+      lib.makeBinPath [ mercurial git ]
+    }
   '';
 
   meta = with lib; {

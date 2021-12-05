@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, pkg-config
-, cmake
-, openssl
-, db53
-, boost
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, util-linux
-, protobuf
-, qrencode
-, libevent
-, withGui
-, python3
-, jemalloc
-, zeromq4
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53
+, boost, zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf
+, qrencode, libevent, withGui, python3, jemalloc, zeromq4 }:
 
 mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-abc";
@@ -49,9 +30,7 @@ mkDerivation rec {
     libevent
   ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
 
-  cmakeFlags = lib.optionals (!withGui) [
-    "-DBUILD_BITCOIN_QT=OFF"
-  ];
+  cmakeFlags = lib.optionals (!withGui) [ "-DBUILD_BITCOIN_QT=OFF" ];
 
   # many of the generated scripts lack execute permissions
   postConfigure = ''

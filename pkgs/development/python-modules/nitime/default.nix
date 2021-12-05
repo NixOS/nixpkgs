@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, cython
-, numpy
-, scipy
-, matplotlib
-, networkx
-, nibabel
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook, cython, numpy
+, scipy, matplotlib, networkx, nibabel }:
 
 buildPythonPackage rec {
   pname = "nitime";
@@ -27,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";
-    description = "Algorithms and containers for time-series analysis in time and spectral domains";
+    description =
+      "Algorithms and containers for time-series analysis in time and spectral domains";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, clutter-gst
-, clutter-gtk
-, gst_all_1
-, elementary-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, python3, desktop-file-utils, gtk3, granite, libgee, libhandy
+, clutter-gst, clutter-gtk, gst_all_1, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
@@ -32,15 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FFCtQ42LygfjowehwZcISWTfv8PBZTH0X8mPrpiG8Ug=";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 vala wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
     clutter-gst
@@ -64,9 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

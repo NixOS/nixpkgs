@@ -1,23 +1,8 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, darwin
-, git
-, nettle
+{ stdenv, fetchFromGitLab, lib, darwin, git, nettle
 # Use the same llvmPackages version as Rust
-, llvmPackages_10
-, cargo
-, rustc
-, rustPlatform
-, pkg-config
-, glib
-, openssl
-, sqlite
-, capnproto
-, ensureNewerSourcesForZipFilesHook
-, pythonSupport ? true
-, pythonPackages ? null
-}:
+, llvmPackages_10, cargo, rustc, rustPlatform, pkg-config, glib, openssl, sqlite
+, capnproto, ensureNewerSourcesForZipFilesHook, pythonSupport ? true
+, pythonPackages ? null }:
 
 assert pythonSupport -> pythonPackages != null;
 
@@ -45,22 +30,16 @@ rustPlatform.buildRustPackage rec {
     llvmPackages_10.clang
     ensureNewerSourcesForZipFilesHook
     capnproto
-  ] ++
-    lib.optionals pythonSupport [ pythonPackages.setuptools ]
-  ;
+  ] ++ lib.optionals pythonSupport [ pythonPackages.setuptools ];
 
   checkInputs = lib.optionals pythonSupport [
     pythonPackages.pytest
     pythonPackages.pytest-runner
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    nettle
-  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
-  ;
+  buildInputs = [ openssl sqlite nettle ]
+    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -68,9 +47,7 @@ rustPlatform.buildRustPackage rec {
     "INSTALL=install"
   ];
 
-  buildFlags = [
-    "build-release"
-  ];
+  buildFlags = [ "build-release" ];
 
   LIBCLANG_PATH = "${llvmPackages_10.libclang.lib}/lib";
 
@@ -84,7 +61,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace ffi/examples/Makefile \
       --replace '-O0 -g -Wall -Werror' '-g'
   '';
-
 
   preInstall = lib.optionalString pythonSupport ''
     export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"

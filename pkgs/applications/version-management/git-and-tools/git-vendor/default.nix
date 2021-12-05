@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, writeShellScriptBin, skawarePackages
-}:
+{ lib, stdenv, fetchFromGitHub, writeShellScriptBin, skawarePackages }:
 
 let
   version = "1.2.2";
@@ -28,11 +27,9 @@ in stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    ${skawarePackages.cleanPackaging.commonFileActions {
-        docFiles = [
-          "LICENSE"
-          "README.md"
-        ];
+    ${
+      skawarePackages.cleanPackaging.commonFileActions {
+        docFiles = [ "LICENSE" "README.md" ];
         noiseFiles = [
           "bin/git-vendor"
           "Makefile"
@@ -40,7 +37,8 @@ in stdenv.mkDerivation {
           "man"
           "install.sh"
         ];
-      }} $doc/share/doc/git-vendor
+      }
+    } $doc/share/doc/git-vendor
   '';
 
   postFixup = ''

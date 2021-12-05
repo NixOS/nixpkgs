@@ -1,17 +1,11 @@
-{ lib
-, stdenv
-, stdenvNoLibs
-, fetchFromGitea
-, runtimeShell
-, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
-}:
+{ lib, stdenv, stdenvNoLibs, fetchFromGitea, runtimeShell
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform }:
 
 let
   # k itself is compiled with -ffreestanding, but tests require a libc
   useStdenv = if doCheck then stdenv else stdenvNoLibs;
-in
 
-useStdenv.mkDerivation {
+in useStdenv.mkDerivation {
   pname = "ngn-k";
   version = "unstable-2021-08-30";
 
@@ -23,9 +17,7 @@ useStdenv.mkDerivation {
     sha256 = "0b16971xgf0sgx7qf41dilrpz02jnas61gfwkyvbxv18874w5vap";
   };
 
-  patches = [
-    ./repl-license-path.patch
-  ];
+  patches = [ ./repl-license-path.patch ];
 
   postPatch = ''
     # make self-reference for LICENSE

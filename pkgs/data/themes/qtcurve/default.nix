@@ -1,11 +1,9 @@
 { lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, mkDerivation
-, gtk2Support ? true, gtk2
-, qtbase, qtsvg, qtx11extras # Toolkit dependencies
-, karchive, kconfig, kconfigwidgets, kio, frameworkintegration
-, kguiaddons, ki18n, kwindowsystem, kdelibs4support, kiconthemes
-, libpthreadstubs, pcre, libXdmcp, libX11, libXau # X11 dependencies
-, fetchpatch
-}:
+, gtk2Support ? true, gtk2, qtbase, qtsvg, qtx11extras # Toolkit dependencies
+, karchive, kconfig, kconfigwidgets, kio, frameworkintegration, kguiaddons
+, ki18n, kwindowsystem, kdelibs4support, kiconthemes, libpthreadstubs, pcre
+, libXdmcp, libX11, libXau # X11 dependencies
+, fetchpatch }:
 
 mkDerivation rec {
   pname = "qtcurve";
@@ -20,12 +18,14 @@ mkDerivation rec {
   patches = [
     # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {
-      url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
+      url =
+        "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
       sha256 = "1vz5frsrsps93awn84gk8d7injrqfcyhc1rji6s0gsgsp5z9sl34";
     })
     # Fix build with Qt5.15
     (fetchpatch {
-      url = "https://github.com/KDE/qtcurve/commit/44e2a35ebb164dcab0bad1a9158b1219a3ff6504.patch";
+      url =
+        "https://github.com/KDE/qtcurve/commit/44e2a35ebb164dcab0bad1a9158b1219a3ff6504.patch";
       sha256 = "5I2fTxKRJX0cJcyUvYHWZx369FKk6ti9Se7AfYmB9ek=";
     })
   ];
@@ -33,12 +33,24 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
-    qtbase qtsvg qtx11extras
-    karchive kconfig kconfigwidgets kio kiconthemes kguiaddons ki18n
-    kwindowsystem kdelibs4support frameworkintegration
+    qtbase
+    qtsvg
+    qtx11extras
+    karchive
+    kconfig
+    kconfigwidgets
+    kio
+    kiconthemes
+    kguiaddons
+    ki18n
+    kwindowsystem
+    kdelibs4support
+    frameworkintegration
     libpthreadstubs
     pcre
-    libXdmcp libX11 libXau
+    libXdmcp
+    libX11
+    libXau
   ] ++ lib.optional gtk2Support gtk2;
 
   preConfigure = ''

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scikit-learn
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scikit-learn, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -24,14 +19,9 @@ buildPythonPackage rec {
       --replace "setup_requires=['setuptools_scm']," "setup_requires=[],"
   '';
 
-  propagatedBuildInputs = [
-    numpy
-    scikit-learn
-  ];
+  propagatedBuildInputs = [ numpy scikit-learn ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests call perl script and get stuck in there

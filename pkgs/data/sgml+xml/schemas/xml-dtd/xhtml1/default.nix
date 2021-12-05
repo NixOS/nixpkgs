@@ -10,23 +10,23 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ libxml2 ];
 
-  installPhase =
-    ''
-      mkdir -p $out/xml/dtd/xhtml1
-      cp DTD/*.ent DTD/*.dtd $out/xml/dtd/xhtml1
+  installPhase = ''
+    mkdir -p $out/xml/dtd/xhtml1
+    cp DTD/*.ent DTD/*.dtd $out/xml/dtd/xhtml1
 
-      # Generate an XML catalog.
-      cat=$out/xml/dtd/xhtml1/catalog.xml
-      xmlcatalog --noout --create $cat
-      grep PUBLIC DTD/*.soc | while read x; do
-          eval a=($x)
-          xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat
-      done
-    ''; # */
+    # Generate an XML catalog.
+    cat=$out/xml/dtd/xhtml1/catalog.xml
+    xmlcatalog --noout --create $cat
+    grep PUBLIC DTD/*.soc | while read x; do
+        eval a=($x)
+        xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat
+    done
+  ''; # */
 
   meta = {
     homepage = "http://www.w3.org/TR/xhtml1/";
-    description = "DTDs for XHTML 1.0, the Extensible HyperText Markup Language";
+    description =
+      "DTDs for XHTML 1.0, the Extensible HyperText Markup Language";
     platforms = lib.platforms.unix;
   };
 }

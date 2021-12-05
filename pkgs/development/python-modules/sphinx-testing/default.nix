@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, sphinx
-, six
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, sphinx, six, python }:
 
 buildPythonPackage rec {
   pname = "sphinx-testing";

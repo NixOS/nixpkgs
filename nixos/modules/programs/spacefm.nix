@@ -6,8 +6,7 @@ with lib;
 
 let cfg = config.programs.spacefm;
 
-in
-{
+in {
   ###### interface
 
   options = {
@@ -51,7 +50,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.spaceFM ];
 
-    environment.etc."spacefm/spacefm.conf".text =
-      concatStrings (mapAttrsToList (n: v: "${n}=${toString v}\n") cfg.settings);
+    environment.etc."spacefm/spacefm.conf".text = concatStrings (mapAttrsToList
+      (n: v: ''
+        ${n}=${toString v}
+      '') cfg.settings);
   };
 }

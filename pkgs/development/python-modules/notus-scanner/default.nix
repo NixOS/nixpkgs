@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, paho-mqtt
-, poetry-core
-, psutil
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, paho-mqtt, poetry-core
+, psutil, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "notus-scanner";
@@ -23,24 +15,18 @@ buildPythonPackage rec {
     sha256 = "1fjxyn8wg2kf6xy3pbh7d7yn20dk529p03xpqyz7s40n9nsxhnza";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    paho-mqtt
-    psutil
-  ];
+  propagatedBuildInputs = [ paho-mqtt psutil ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   patches = [
     # Switch to poetry-core, https://github.com/greenbone/notus-scanner/pull/31
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
-      url = "https://github.com/greenbone/notus-scanner/commit/b52eea317faca30d411096044f9e5ea20b58da65.patch";
+      url =
+        "https://github.com/greenbone/notus-scanner/commit/b52eea317faca30d411096044f9e5ea20b58da65.patch";
       sha256 = "0q11aslhva47kkpsnpayra7spa849j894vqv34pjqhcnlyipqw6d";
     })
   ];

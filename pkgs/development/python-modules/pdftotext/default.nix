@@ -11,7 +11,9 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py \
-        --replace '= brew_poppler_include()' '= "${lib.getDev poppler}/include", "${lib.getLib poppler}/lib"'
+        --replace '= brew_poppler_include()' '= "${
+          lib.getDev poppler
+        }/include", "${lib.getLib poppler}/lib"'
   '';
 
   buildInputs = [ poppler ];

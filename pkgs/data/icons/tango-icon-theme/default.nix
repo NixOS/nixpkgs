@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, iconnamingutils, imagemagick, librsvg
-, gtk/*any version*/, gnome-icon-theme, hicolor-icon-theme
-}:
+{ lib, stdenv, fetchurl, intltool, pkg-config, iconnamingutils, imagemagick
+, librsvg, gtk # any version
+, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "tango-icon-theme-0.8.90";
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-png-creation" ];
 
-  postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
+  postInstall =
+    '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
   meta = {
     description = "A basic set of icons";

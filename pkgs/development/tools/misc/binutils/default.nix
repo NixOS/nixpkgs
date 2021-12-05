@@ -1,19 +1,12 @@
-let
-  execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
-in
+let execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
 
-{ stdenv, lib, buildPackages
-, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
+in { stdenv, lib, buildPackages, fetchFromGitHub, fetchurl, zlib, autoreconfHook
+, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
-, enableShared ? !stdenv.hostPlatform.isStatic
-, noSysDirs
-, gold ? execFormatIsELF stdenv.targetPlatform
-, bison ? null
-, flex
-, texinfo
-, perl
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic, noSysDirs
+, gold ? execFormatIsELF stdenv.targetPlatform, bison ? null, flex, texinfo
+, perl }:
 
 # configure silently disables ld.gold if it's unsupported,
 # so we need to make sure that intent matches result ourselves.
@@ -31,8 +24,9 @@ let
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+  targetPrefix =
+    lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
   vc4-binutils-src = fetchFromGitHub {
     owner = "itszor";
     repo = "binutils-vc4";
@@ -44,9 +38,8 @@ let
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
     sha256 = "sha256-z6dkTb7PRZHhNutAfBwdoWV4vSsD8MLorNzroZS7nWE=";
   });
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = targetPrefix + basename;
   inherit version;
 
@@ -87,24 +80,21 @@ stdenv.mkDerivation {
     ./CVE-2021-3487.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
-       # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-       # It can be removed when that 7-year-old bug is closed.
-       # This binutils bug causes GHC to emit broken binaries on armv7, and
-       # indeed GHC will refuse to compile with a binutils suffering from it. See
-       # this comment for more information:
-       # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+    # It can be removed when that 7-year-old bug is closed.
+    # This binutils bug causes GHC to emit broken binaries on armv7, and
+    # indeed GHC will refuse to compile with a binutils suffering from it. See
+    # this comment for more information:
+    # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
+    lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system
+      != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    bison
-    perl
-    texinfo
-  ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
-    autoreconfHook
-  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
+  nativeBuildInputs = [ bison perl texinfo ]
+    ++ (lib.optionals stdenv.targetPlatform.isiOS [ autoreconfHook ])
+    ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
@@ -124,19 +114,22 @@ stdenv.mkDerivation {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin
-    then "-Wno-string-plus-int -Wno-deprecated-declarations"
-    else "-static-libgcc";
+  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin then
+    "-Wno-string-plus-int -Wno-deprecated-declarations"
+  else
+    "-static-libgcc";
 
   hardeningDisable = [ "format" "pie" ];
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags =
-    (if enableShared then [ "--enable-shared" "--disable-static" ]
-                     else [ "--disable-shared" "--enable-static" ])
-  ++ lib.optional withAllTargets "--enable-targets=all"
-  ++ [
+  configureFlags = (if enableShared then [
+    "--enable-shared"
+    "--disable-static"
+  ] else [
+    "--disable-shared"
+    "--enable-static"
+  ]) ++ lib.optional withAllTargets "--enable-targets=all" ++ [
     "--enable-64-bit-bfd"
     "--with-system-zlib"
 
@@ -157,10 +150,7 @@ stdenv.mkDerivation {
     # The easiest thing for us to do is not leave it to chance, and force
     # the program prefix to be what we want it to be.
     "--program-prefix=${targetPrefix}"
-  ] ++ lib.optionals gold [
-    "--enable-gold"
-    "--enable-plugins"
-  ];
+  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   doCheck = false; # fails
 
@@ -171,7 +161,8 @@ stdenv.mkDerivation {
   '';
 
   # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
-  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform && stdenv.hostPlatform == stdenv.targetPlatform;
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform
+    && stdenv.hostPlatform == stdenv.targetPlatform;
 
   enableParallelBuilding = true;
 
@@ -195,7 +186,8 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
-       collision due to the ld/as wrappers/symlinks in the latter. */
+       collision due to the ld/as wrappers/symlinks in the latter.
+    */
     priority = 10;
   };
 }

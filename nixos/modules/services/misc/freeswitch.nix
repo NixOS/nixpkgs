@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.freeswitch;
@@ -12,9 +12,7 @@ let
       cp ${filePath} $out/${fileName}
     '') cfg.configDir)}
   '';
-  configPath = if cfg.enableReload
-    then "/etc/freeswitch"
-    else configDirectory;
+  configPath = if cfg.enableReload then "/etc/freeswitch" else configDirectory;
 in {
   options = {
     services.freeswitch = {
@@ -31,9 +29,12 @@ in {
       };
       configTemplate = mkOption {
         type = types.path;
-        default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
-        defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
-        example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
+        default =
+          "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
+        defaultText = literalExpression ''
+          "''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
+        example = literalExpression ''
+          "''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
         description = ''
           Configuration template to use.
           See available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
@@ -69,30 +70,32 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.etc.freeswitch = mkIf cfg.enableReload {
-      source = configDirectory;
-    };
+    environment.etc.freeswitch =
+      mkIf cfg.enableReload { source = configDirectory; };
     systemd.services.freeswitch-config-reload = mkIf cfg.enableReload {
       before = [ "freeswitch.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configDirectory ];
       serviceConfig = {
-        ExecStart = "/run/current-system/systemd/bin/systemctl try-reload-or-restart freeswitch.service";
+        ExecStart =
+          "/run/current-system/systemd/bin/systemctl try-reload-or-restart freeswitch.service";
         RemainAfterExit = true;
         Type = "oneshot";
       };
     };
     systemd.services.freeswitch = {
-      description = "Free and open-source application server for real-time communication";
+      description =
+        "Free and open-source application server for real-time communication";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "freeswitch";
-        ExecStart = "${pkg}/bin/freeswitch -nf \\
-          -mod ${pkg}/lib/freeswitch/mod \\
-          -conf ${configPath} \\
-          -base /var/lib/freeswitch";
+        ExecStart = ''
+          ${pkg}/bin/freeswitch -nf \
+                    -mod ${pkg}/lib/freeswitch/mod \
+                    -conf ${configPath} \
+                    -base /var/lib/freeswitch'';
         ExecReload = "${pkg}/bin/fs_cli -x reloadxml";
         Restart = "on-failure";
         RestartSec = "5s";

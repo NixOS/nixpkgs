@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU
+, wrapQtAppsHook, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "nifskope";
@@ -7,7 +8,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "niftools";
     repo = "nifskope";
-    rev = "47b788d26ae0fa12e60e8e7a4f0fa945a510c7b2"; # `v${version}` doesn't work with submodules
+    rev =
+      "47b788d26ae0fa12e60e8e7a4f0fa945a510c7b2"; # `v${version}` doesn't work with submodules
     sha256 = "1wqpn53rkq28ws3apqghkzyrib4wis91x171ns64g8kp4q6mfczi";
     fetchSubmodules = true;
   };
@@ -20,7 +22,8 @@ stdenv.mkDerivation {
     })
     (fetchpatch {
       name = "qt512-build-fix.patch";
-      url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
+      url =
+        "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
       sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
     })
   ] ++ (lib.optional stdenv.isAarch64 ./no-sse-on-arm.patch);
@@ -59,7 +62,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://niftools.sourceforge.net/wiki/NifSkope";
-    description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
+    description =
+      "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;
     license = licenses.bsd3;

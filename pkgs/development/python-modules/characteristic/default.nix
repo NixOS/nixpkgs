@@ -1,7 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-}:
+{ buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "characteristic";

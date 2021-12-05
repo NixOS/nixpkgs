@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, argcomplete
-, colorama
-, halo
-, nose2
-, semver
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, appdirs, argcomplete, colorama, halo
+, nose2, semver }:
 
 buildPythonPackage rec {
   pname = "milc";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-aX6cTpIN9+9xuEGYHVlM5SjTPLcudJFEuOI4CiN3byE=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
-    argcomplete
-    colorama
-    halo
-  ];
+  propagatedBuildInputs = [ appdirs argcomplete colorama halo ];
 
-  checkInputs = [
-    nose2
-    semver
-  ];
+  checkInputs = [ nose2 semver ];
 
   pythonImportsCheck = [ "milc" ];
 

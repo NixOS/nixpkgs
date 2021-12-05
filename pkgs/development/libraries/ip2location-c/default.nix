@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "ip2location-c";
@@ -15,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rqjgmv62s7abiiqi3ff3ff838qx4pzr509irmzvqlflnkxxi0q6";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
 

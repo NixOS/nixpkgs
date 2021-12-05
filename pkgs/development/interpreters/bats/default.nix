@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
+{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses
+, doCheck ? true }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
@@ -17,7 +18,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ./install.sh $out
-    wrapProgram $out/bin/bats --suffix PATH : "${lib.makeBinPath [ bash coreutils gnugrep ]}"
+    wrapProgram $out/bin/bats --suffix PATH : "${
+      lib.makeBinPath [ bash coreutils gnugrep ]
+    }"
   '';
 
   inherit doCheck;

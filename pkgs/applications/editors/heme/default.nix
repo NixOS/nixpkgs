@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "heme";
   version = "0.4.2";
   src = fetchurl {
-    url = "mirror://sourceforge/project/heme/heme/heme-${version}/heme-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/heme/heme/heme-${version}/heme-${version}.tar.gz";
     sha256 = "0wsrnj5mrlazgqs4252k30aw8m86qw0z9dmrsli9zdxl7j4cg99v";
   };
   postPatch = ''
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/man1
   '';
   meta = with lib; {
-    description = "Portable and fast console hex editor for unix operating systems";
+    description =
+      "Portable and fast console hex editor for unix operating systems";
     homepage = "http://heme.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;

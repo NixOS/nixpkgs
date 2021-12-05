@@ -1,10 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
-  jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint,
-  keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
-  cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
-  watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
-  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8, textdistance
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree
+, jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint, keyring
+, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle
+, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog
+, python-language-server, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
+, three-merge, pyls-black, pyls-spyder, flake8, textdistance }:
 
 buildPythonPackage rec {
   pname = "spyder";
@@ -20,11 +19,40 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
-    atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
-    flake8 textdistance
+    intervaltree
+    jedi
+    pycodestyle
+    psutil
+    rope
+    numpy
+    scipy
+    matplotlib
+    pylint
+    keyring
+    numpydoc
+    qtconsole
+    qtawesome
+    nbconvert
+    mccabe
+    pyopengl
+    cloudpickle
+    spyder-kernels
+    pygments
+    qtpy
+    pyzmq
+    chardet
+    pyqtwebengine
+    qdarkstyle
+    watchdog
+    python-language-server
+    atomicwrites
+    pyxdg
+    diff-match-patch
+    three-merge
+    pyls-black
+    pyls-spyder
+    flake8
+    textdistance
   ];
 
   # There is no test for spyder

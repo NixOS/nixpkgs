@@ -1,30 +1,42 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   platforms = {
-    aarch64-linux = { folder = "aarch64"; ld-linux = "ld-linux-aarch64.so.1"; };
-    armv7l-linux = { folder = "armv7"; ld-linux = "ld-linux-armhf.so.3"; };
-    i686-linux = { folder = "i686"; ld-linux = "ld-linux.so.2"; };
+    aarch64-linux = {
+      folder = "aarch64";
+      ld-linux = "ld-linux-aarch64.so.1";
+    };
+    armv7l-linux = {
+      folder = "armv7";
+      ld-linux = "ld-linux-armhf.so.3";
+    };
+    i686-linux = {
+      folder = "i686";
+      ld-linux = "ld-linux.so.2";
+    };
     x86_64-darwin = { folder = "."; };
-    x86_64-linux = { folder = "amd64"; ld-linux = "ld-linux-x86-64.so.2"; };
+    x86_64-linux = {
+      folder = "amd64";
+      ld-linux = "ld-linux-x86-64.so.2";
+    };
   };
-  platform = platforms."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  download = if stdenv.isDarwin
-    then { extension = "macos.zip"; hash = "sha256-MnL6lH7q/BrACG4fFJNfnvoh0JClVeaJIlX+XIj2aG4="; }
-    else { extension = "linux.tar.gz"; hash = "sha256-rDi7pvDeKQM96GZTjDr6ZDQTGbaVu+OI77xf2egw6Sg="; };
-in
-stdenv.mkDerivation rec {
+  platform = platforms."${stdenv.hostPlatform.system}" or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
+  download = if stdenv.isDarwin then {
+    extension = "macos.zip";
+    hash = "sha256-MnL6lH7q/BrACG4fFJNfnvoh0JClVeaJIlX+XIj2aG4=";
+  } else {
+    extension = "linux.tar.gz";
+    hash = "sha256-rDi7pvDeKQM96GZTjDr6ZDQTGbaVu+OI77xf2egw6Sg=";
+  };
+in stdenv.mkDerivation rec {
   pname = "pngout";
   version = "20200115";
 
   src = fetchurl {
     inherit (download) hash;
-    url = "http://static.jonof.id.au/dl/kenutils/pngout-${version}-${download.extension}";
+    url =
+      "http://static.jonof.id.au/dl/kenutils/pngout-${version}-${download.extension}";
   };
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ unzip ];

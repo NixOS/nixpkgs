@@ -1,48 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, appstream
-, glib
-, gtk3
-, pango
-, atk
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, gnome
-, poppler
-, ghostscriptX
-, djvulibre
-, libspectre
-, libarchive
-, libhandy
-, libsecret
-, wrapGAppsHook
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gspell
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, pantheon
-, python3
-, texlive
-, t1lib
-, gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, supportMultimedia ? true # PDF multimedia
-, libgxps
-, supportXPS ? true # Open XML Paper Specification via libgxps
-, withPantheon ? false
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, appstream
+, glib, gtk3, pango, atk, gdk-pixbuf, shared-mime-info, itstool, gnome, poppler
+, ghostscriptX, djvulibre, libspectre, libarchive, libhandy, libsecret
+, wrapGAppsHook, librsvg, gobject-introspection, yelp-tools, gspell
+, adwaita-icon-theme, gsettings-desktop-schemas, gnome-desktop, dbus, pantheon
+, python3, texlive, t1lib, gst_all_1, gtk-doc, docbook-xsl-nons
+, docbook_xml_dtd_43, supportMultimedia ? true # PDF multimedia
+, libgxps, supportXPS ? true # Open XML Paper Specification via libgxps
+, withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
@@ -51,7 +15,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/evince/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "M0awH5vcjy1f/qkvEQoJDGSjYklCtbVDqtRZKp3jO7A=";
   };
 
@@ -105,23 +71,17 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optionals supportXPS [
-    libgxps
-  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]) ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  ] ++ lib.optionals supportXPS [ libgxps ] ++ lib.optionals supportMultimedia
+    (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]) ++ lib.optionals withPantheon [ pantheon.granite ];
 
-  mesonFlags = [
-    "-Dnautilus=false"
-    "-Dps=enabled"
-  ];
+  mesonFlags = [ "-Dnautilus=false" "-Dps=enabled" ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -129,11 +89,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Evince";

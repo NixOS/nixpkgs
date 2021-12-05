@@ -26,7 +26,8 @@ gccStdenv.mkDerivation rec {
       representations, sizes, and overall close to the bits
     '';
     homepage = "https://alt-romes.github.io/programmer-calculator";
-    changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${version}";
+    changelog =
+      "https://github.com/alt-romes/programmer-calculator/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cjab ];
     platforms = platforms.all;

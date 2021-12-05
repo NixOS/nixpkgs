@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium
+, mockito, robotstatuschecker, approvaltests }:
 
 buildPythonPackage rec {
   version = "5.1.3";

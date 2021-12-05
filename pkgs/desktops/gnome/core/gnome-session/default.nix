@@ -1,15 +1,18 @@
-{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome, glib, gtk3, gsettings-desktop-schemas
-, gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, libepoxy, gnugrep, bash, gnome-session-ctl }:
+{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome, glib
+, gtk3, gsettings-desktop-schemas, gnome-desktop, dbus, json-glib, libICE, xmlto
+, docbook_xsl, docbook_xml_dtd_412, python3, libxslt, gettext, makeWrapper
+, systemd, xorg, libepoxy, gnugrep, bash, gnome-session-ctl }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   version = "40.1.1";
 
-  outputs = ["out" "sessions"];
+  outputs = [ "out" "sessions" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-session/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "10nzyhmgkrzk6i70kj7690na0hmsv6qy5bmr10akxq9jxqlphy4w";
   };
 
@@ -26,14 +29,31 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dsystemd=true" "-Dsystemd_session=default" ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config gettext makeWrapper
-    xmlto libxslt docbook_xsl docbook_xml_dtd_412 python3
+    meson
+    ninja
+    pkg-config
+    gettext
+    makeWrapper
+    xmlto
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_412
+    python3
     dbus # for DTD
   ];
 
   buildInputs = [
-    glib gtk3 libICE gnome-desktop json-glib xorg.xtrans gnome.adwaita-icon-theme
-    gnome.gnome-settings-daemon gsettings-desktop-schemas systemd libepoxy
+    glib
+    gtk3
+    libICE
+    gnome-desktop
+    json-glib
+    xorg.xtrans
+    gnome.adwaita-icon-theme
+    gnome.gnome-settings-daemon
+    gsettings-desktop-schemas
+    systemd
+    libepoxy
   ];
 
   postPatch = ''

@@ -1,11 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-motd";
@@ -25,7 +18,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "Beautiful, useful MOTD generation with zero runtime dependencies";
+    description =
+      "Beautiful, useful MOTD generation with zero runtime dependencies";
     homepage = "https://github.com/rust-motd/rust-motd";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

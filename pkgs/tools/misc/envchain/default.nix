@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, libedit, libsecret, ncurses, pkg-config, readline, Security }:
+{ lib, stdenv, fetchFromGitHub, libedit, libsecret, ncurses, pkg-config
+, readline, Security }:
 
 stdenv.mkDerivation rec {
   pname = "envchain";
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    description = "Set environment variables with macOS keychain or D-Bus secret service";
+    description =
+      "Set environment variables with macOS keychain or D-Bus secret service";
     homepage = "https://github.com/sorah/envchain";
     license = licenses.mit;
     platforms = platforms.unix;

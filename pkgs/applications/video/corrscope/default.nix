@@ -1,12 +1,5 @@
-{ lib
-, mkDerivationWith
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
-, wrapQtAppsHook
-, ffmpeg
-, qtbase
-}:
+{ lib, mkDerivationWith, python3Packages, fetchFromGitHub, fetchpatch
+, wrapQtAppsHook, ffmpeg, qtbase }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
@@ -25,16 +18,27 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     # Remove when bumping past 0.7.1
     (fetchpatch {
       name = "0001-Use-poetry-core.patch";
-      url = "https://github.com/corrscope/corrscope/commit/d40d1846dd54b8bccd7b8055d6aece48aacbb943.patch";
+      url =
+        "https://github.com/corrscope/corrscope/commit/d40d1846dd54b8bccd7b8055d6aece48aacbb943.patch";
       sha256 = "0xxsbmxdbh3agfm6ww3rpa7ab0ysppan490w0gaqwmwzrxmmdljv";
     })
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ] ++ (with python3Packages; [ poetry-core ]);
+  nativeBuildInputs = [ wrapQtAppsHook ]
+    ++ (with python3Packages; [ poetry-core ]);
 
   buildInputs = [ ffmpeg qtbase ];
 
-  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel-yaml ];
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    atomicwrites
+    attrs
+    click
+    matplotlib
+    numpy
+    pyqt5
+    ruamel-yaml
+  ];
 
   dontWrapQtApps = true;
 
@@ -46,7 +50,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";
+    description =
+      "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";
     longDescription = ''
       Corrscope renders oscilloscope views of WAV files recorded from chiptune (game music from
       retro sound chips).

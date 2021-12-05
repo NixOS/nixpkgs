@@ -26,14 +26,15 @@ in {
   cocoapods-deploy = cocoapod-plugin "cocoapods-deploy";
   cocoapods-generate = cocoapod-plugin "cocoapods-generate";
   cocoapods-git_url_rewriter = cocoapod-plugin "cocoapods-git_url_rewriter";
-  cocoapods-keys = []; # osx only cocoapod-plugin "cocoapods-keys";
+  cocoapods-keys = [ ]; # osx only cocoapod-plugin "cocoapods-keys";
   cocoapods-open = [ "cocoapods" "cocoapods_plugin" ];
   cocoapods-packager = [ "cocoapods_packager" ];
   cocoapods-packager-pro = [ ]; # requires osx
   cocoapods-plugins = [ "cocoapods_plugins" ];
   cocoapods-sorted-search = [ ]; # requires osx
   cocoapods-check = cocoapod-plugin "cocoapods-check";
-  cocoapods-disable-podfile-validations = cocoapod-plugin "cocoapods-disable-podfile-validations";
+  cocoapods-disable-podfile-validations =
+    cocoapod-plugin "cocoapods-disable-podfile-validations";
   cocoapods-stats = [ "cocoapods_stats" ];
   cocoapods-testing = [ "cocoapods_testing" ];
   cocoapods-trunk = [ "cocoapods_trunk" ];
@@ -50,7 +51,7 @@ in {
   gobject-introspection = [ "gobject-introspection" ];
   gtk2 = [ ]; # requires display
   idn-ruby = [ "idn" ];
-  jekyll-sass-converter = []; # tested through jekyll
+  jekyll-sass-converter = [ ]; # tested through jekyll
   libxml-ruby = [ "libxml" ];
   multipart-post = [ "multipart_post" ];
   unicode-display_width = [ "unicode/display_width" ];

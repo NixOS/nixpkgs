@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, indent}:
+{ lib, stdenv, fetchurl, indent }:
 
 stdenv.mkDerivation {
   name = "libdwg-0.6";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     description = "Library reading dwg files";
     homepage = "http://libdwg.sourceforge.net/en/";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

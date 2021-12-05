@@ -1,11 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
-}:
+{ lib, python3, fetchFromGitHub, fetchpatch, nixosTests }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "pinnwand";
   version = "1.3.0";
   format = "pyproject";
@@ -25,9 +21,7 @@ with python3.pkgs; buildPythonApplication rec {
       --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click

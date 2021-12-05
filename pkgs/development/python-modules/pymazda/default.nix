@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, cryptography, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pymazda";
@@ -16,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-D0odz4GkKvjuafhEGlHtRnO8lk4rV9y3imaHl7jXqJw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    cryptography
-  ];
+  propagatedBuildInputs = [ aiohttp cryptography ];
 
   # Project has no tests
   doCheck = false;

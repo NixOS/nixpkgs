@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, click
-, pytestCheckHook
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, click, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,17 +14,11 @@ buildPythonPackage rec {
     sha256 = "1w0692s8fabncpggpwl2d4dfqjjlmcia271rrb8hcz0r6nvw98ak";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "click_option_group"
-  ];
+  pythonImportsCheck = [ "click_option_group" ];
 
   meta = with lib; {
     description = "Option groups missing in Click";

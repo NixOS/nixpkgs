@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, marshmallow
-, sqlalchemy
-, pytest-lazy-fixture
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, marshmallow, sqlalchemy
+, pytest-lazy-fixture, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
@@ -18,19 +11,11 @@ buildPythonPackage rec {
     sha256 = "d8525f74de51554b5c8491effe036f60629a426229befa33ff614c8569a16a73";
   };
 
-  propagatedBuildInputs = [
-    marshmallow
-    sqlalchemy
-  ];
+  propagatedBuildInputs = [ marshmallow sqlalchemy ];
 
-  pythonImportsCheck = [
-    "marshmallow_sqlalchemy"
-  ];
+  pythonImportsCheck = [ "marshmallow_sqlalchemy" ];
 
-  checkInputs = [
-    pytest-lazy-fixture
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-lazy-fixture pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";

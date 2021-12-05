@@ -1,7 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-}:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "mmh3";
@@ -15,7 +12,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mmh3" ];
 
   meta = with lib; {
-    description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
+    description =
+      "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://pypi.org/project/mmh3/";
     license = licenses.cc0;
   };

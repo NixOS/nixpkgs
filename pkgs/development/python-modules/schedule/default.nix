@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, mock }:
 
 buildPythonPackage rec {
   pname = "schedule";

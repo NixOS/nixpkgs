@@ -51,23 +51,24 @@ gcc9Stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = lib.optional (gcc9Stdenv.buildPlatform == gcc9Stdenv.hostPlatform) {
-    hello = runCommand "hello-world" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
-      ${gcc9Stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
-        -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
-        -include ${cosmopolitan}/lib/{include/cosmopolitan.h,crt.o,ape.o,cosmopolitan.a}
-      ${gcc9Stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
-      ./hello.com
-      printf "test successful" > $out
-    '';
-    cosmoc = runCommand "cosmoc-hello" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
-      ${cosmopolitan}/bin/cosmoc hello.c
-      ./a.out
-      printf "test successful" > $out
-    '';
-  };
+  passthru.tests =
+    lib.optional (gcc9Stdenv.buildPlatform == gcc9Stdenv.hostPlatform) {
+      hello = runCommand "hello-world" { } ''
+        printf 'main() { printf("hello world\\n"); }\n' >hello.c
+        ${gcc9Stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
+          -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
+          -include ${cosmopolitan}/lib/{include/cosmopolitan.h,crt.o,ape.o,cosmopolitan.a}
+        ${gcc9Stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
+        ./hello.com
+        printf "test successful" > $out
+      '';
+      cosmoc = runCommand "cosmoc-hello" { } ''
+        printf 'main() { printf("hello world\\n"); }\n' >hello.c
+        ${cosmopolitan}/bin/cosmoc hello.c
+        ./a.out
+        printf "test successful" > $out
+      '';
+    };
 
   meta = with lib; {
     homepage = "https://justine.lol/cosmopolitan/";

@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
-, flask, blinker, nose, mock, semantic-version }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, flask, blinker, nose, mock
+, semantic-version }:
 
 buildPythonPackage rec {
   pname = "Flask-Login";

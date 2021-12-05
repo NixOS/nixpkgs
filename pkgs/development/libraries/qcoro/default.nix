@@ -1,10 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, libpthreadstubs
-, qtbase
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, libpthreadstubs, qtbase }:
 
 mkDerivation rec {
   pname = "qcoro";
@@ -19,17 +13,13 @@ mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    qtbase
-    libpthreadstubs
-  ];
+  buildInputs = [ qtbase libpthreadstubs ];
 
   meta = with lib; {
-    description = "Library for using C++20 coroutines in connection with certain asynchronous Qt actions";
+    description =
+      "Library for using C++20 coroutines in connection with certain asynchronous Qt actions";
     homepage = "https://github.com/danvratil/qcoro";
     license = licenses.mit;
     maintainers = with maintainers; [ smitop ];

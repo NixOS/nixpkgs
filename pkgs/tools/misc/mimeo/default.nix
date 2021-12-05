@@ -5,7 +5,8 @@ python3Packages.buildPythonApplication rec {
   version = "2021.2";
 
   src = fetchurl {
-    url = "https://xyne.archlinux.ca/projects/mimeo/src/${pname}-${version}.tar.xz";
+    url =
+      "https://xyne.archlinux.ca/projects/mimeo/src/${pname}-${version}.tar.xz";
     sha256 = "113ip024ggajjdx0l406g6lwypdrddxz6k3640y6lzqjivcgybjf";
   };
 
@@ -24,7 +25,8 @@ python3Packages.buildPythonApplication rec {
   installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
 
   meta = with lib; {
-    description = "Open files by MIME-type or file name using regular expressions";
+    description =
+      "Open files by MIME-type or file name using regular expressions";
     homepage = "https://xyne.archlinux.ca/projects/mimeo/";
     license = [ licenses.gpl2 ];
     maintainers = [ maintainers.rycee ];

@@ -1,16 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bluez-tools
-, cinnamon
-, gnome
-, gobject-introspection
-, intltool
-, pavucontrol
-, python3Packages
-, util-linux
-, wrapGAppsHook
-}:
+{ stdenv, lib, fetchFromGitHub, bluez-tools, cinnamon, gnome
+, gobject-introspection, intltool, pavucontrol, python3Packages, util-linux
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "blueberry";
@@ -23,11 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dz0uGesyuQVXI7aEONCeOsa2vVw5yuStSFPnrqv2VcM=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    python3Packages.wrapPython
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection python3Packages.wrapPython wrapGAppsHook ];
 
   buildInputs = [
     bluez-tools
@@ -37,11 +24,7 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  pythonPath = with python3Packages; [
-    dbus-python
-    pygobject3
-    setproctitle
-  ];
+  pythonPath = with python3Packages; [ dbus-python pygobject3 setproctitle ];
 
   installPhase = ''
     runHook preInstall

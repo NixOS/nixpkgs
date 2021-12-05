@@ -1,7 +1,7 @@
 { lib, multiStdenv, fetchurl }:
 
-let version = "1.7.4"; in
-multiStdenv.mkDerivation {
+let version = "1.7.4";
+in multiStdenv.mkDerivation {
   name = "statifier-${version}";
 
   src = fetchurl {

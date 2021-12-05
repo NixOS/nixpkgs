@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    description = "Simulates the falling characters theme from The Matrix movie";
+    description =
+      "Simulates the falling characters theme from The Matrix movie";
     license = licenses.gpl3;
     longDescription = ''
       CMatrix simulates the display from "The Matrix" and is based

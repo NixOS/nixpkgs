@@ -24,13 +24,14 @@ let
       };
     };
   };
-  enabledProxies = lib.filterAttrs (n: v: v.enable) config.services.nix-store-gcs-proxy;
-  mapProxies = function: lib.mkMerge (lib.mapAttrsToList function enabledProxies);
-in
-{
+  enabledProxies =
+    lib.filterAttrs (n: v: v.enable) config.services.nix-store-gcs-proxy;
+  mapProxies = function:
+    lib.mkMerge (lib.mapAttrsToList function enabledProxies);
+in {
   options.services.nix-store-gcs-proxy = mkOption {
     type = types.attrsOf (types.submodule opts);
-    default = {};
+    default = { };
     description = ''
       An attribute set describing an HTTP to GCS proxy that allows us to use GCS
       bucket via HTTP protocol.
@@ -40,7 +41,7 @@ in
   config.systemd.services = mapProxies (name: cfg: {
     "nix-store-gcs-proxy-${name}" = {
       description = "A HTTP nix store that proxies requests to Google Storage";
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
 
       startLimitIntervalSec = 10;
       serviceConfig = {

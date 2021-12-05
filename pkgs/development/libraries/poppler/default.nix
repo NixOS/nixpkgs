@@ -1,40 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cairo
-, cmake
-, pcre
-, boost
-, cups-filters
-, curl
-, fontconfig
-, freetype
-, inkscape
-, lcms
-, libiconv
-, libintl
-, libjpeg
-, ninja
-, openjpeg
-, pkg-config
-, scribusUnstable
-, texlive
-, zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
-, utils ? false, nss ? null
-, minimal ? false
-, suffix ? "glib"
-}:
+{ lib, stdenv, fetchurl, fetchpatch, cairo, cmake, pcre, boost, cups-filters
+, curl, fontconfig, freetype, inkscape, lcms, libiconv, libintl, libjpeg, ninja
+, openjpeg, pkg-config, scribusUnstable, texlive, zlib, withData ? true
+, poppler_data, qt5Support ? false, qtbase ? null, introspectionSupport ? false
+, gobject-introspection ? null, utils ? false, nss ? null, minimal ? false
+, suffix ? "glib" }:
 
-let
-  mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
-in
-stdenv.mkDerivation rec {
+let mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
+in stdenv.mkDerivation rec {
   pname = "poppler-${suffix}";
-  version = "21.06.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version =
+    "21.06.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   outputs = [ "out" "dev" ];
 
@@ -43,38 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hrCeWgLeQAgaORbvhxHFEo6vSx/FnV+H0Oxm8E9ZXbQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [
-    boost
-    pcre
-    libiconv
-    libintl
-  ] ++ lib.optional withData [
-    poppler_data
-  ];
+  buildInputs = [ boost pcre libiconv libintl ]
+    ++ lib.optional withData [ poppler_data ];
 
   # TODO: reduce propagation to necessary libs
-  propagatedBuildInputs = [
-    zlib
-    freetype
-    fontconfig
-    libjpeg
-    openjpeg
-  ] ++ lib.optionals (!minimal) [
-    cairo
-    lcms
-    curl
-    nss
-  ] ++ lib.optionals qt5Support [
-    qtbase
-  ] ++ lib.optionals introspectionSupport [
-    gobject-introspection
-  ];
+  propagatedBuildInputs = [ zlib freetype fontconfig libjpeg openjpeg ]
+    ++ lib.optionals (!minimal) [ cairo lcms curl nss ]
+    ++ lib.optionals qt5Support [ qtbase ]
+    ++ lib.optionals introspectionSupport [ gobject-introspection ];
 
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"

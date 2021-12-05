@@ -1,17 +1,10 @@
 { buildDunePackage
 
-, ppx_sexp_conv
-, ppx_fields_conv
+, ppx_sexp_conv, ppx_fields_conv
 
-, cmdliner
-, cohttp-lwt-unix
-, logs
-, magic-mime
-, opium_kernel
-, stringext
+, cmdliner, cohttp-lwt-unix, logs, magic-mime, opium_kernel, stringext
 
-, alcotest
-}:
+, alcotest }:
 
 buildDunePackage {
   pname = "opium";
@@ -21,12 +14,8 @@ buildDunePackage {
 
   doCheck = true;
 
-  buildInputs = [
-    ppx_sexp_conv ppx_fields_conv
-    alcotest
-  ];
+  buildInputs = [ ppx_sexp_conv ppx_fields_conv alcotest ];
 
-  propagatedBuildInputs = [
-    opium_kernel cmdliner cohttp-lwt-unix magic-mime logs stringext
-  ];
+  propagatedBuildInputs =
+    [ opium_kernel cmdliner cohttp-lwt-unix magic-mime logs stringext ];
 }

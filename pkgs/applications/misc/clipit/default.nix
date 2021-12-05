@@ -1,6 +1,5 @@
-{ fetchFromGitHub, lib, stdenv
-, autoreconfHook, intltool, pkg-config
-, gtk3, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkg-config, gtk3
+, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "clipit";
@@ -21,15 +20,14 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-gtk3" "--enable-appindicator=yes" ];
   buildInputs = [ gtk3 libayatana-appindicator ];
 
-  gappsWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ xdotool which ]}"
-  ];
+  gappsWrapperArgs =
+    [ "--prefix" "PATH" ":" "${lib.makeBinPath [ xdotool which ]}" ];
 
   meta = with lib; {
     description = "Lightweight GTK Clipboard Manager";
     inherit (src.meta) homepage;
-    license     = licenses.gpl3;
-    platforms   = platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ kamilchm ];
   };
 }

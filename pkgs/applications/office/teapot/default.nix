@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchzip
-, cmake
-, libtirpc
-, ncurses
-}:
+{ lib, stdenv, fetchzip, cmake, libtirpc, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "teapot";
@@ -23,22 +17,15 @@ stdenv.mkDerivation rec {
     ./002-remove-help.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libtirpc
-    ncurses
-  ];
+  buildInputs = [ libtirpc ncurses ];
 
   # By no known reason libtirpc is not detected
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  cmakeConfigureFlags = [
-    "-DENABLE_HELP=OFF"
-  ];
+  cmakeConfigureFlags = [ "-DENABLE_HELP=OFF" ];
 
   meta = with lib; {
     homepage = "https://www.syntax-k.de/projekte/teapot/";

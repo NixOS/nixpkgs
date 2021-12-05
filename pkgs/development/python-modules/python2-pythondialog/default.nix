@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "python2-pythondialog";
@@ -19,7 +15,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Python interface to the UNIX dialog utility and mostly-compatible programs (Python 2 backport)";
+    description =
+      "A Python interface to the UNIX dialog utility and mostly-compatible programs (Python 2 backport)";
     homepage = "http://pythondialog.sourceforge.net/";
     license = licenses.lgpl3;
   };

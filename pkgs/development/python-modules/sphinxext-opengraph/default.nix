@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-978aPtaqUDHcswDdFynzi+IjDYaBmCZDZk+dmDkhajY=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   doCheck = false; # no tests
 

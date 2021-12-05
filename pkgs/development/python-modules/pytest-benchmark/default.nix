@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, py-cpuinfo
-, pythonOlder
-, pathlib
-, statistics
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, py-cpuinfo, pythonOlder
+, pathlib, statistics }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
@@ -21,7 +14,8 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ py-cpuinfo ] ++ lib.optionals (pythonOlder "3.4") [ pathlib statistics ];
+  propagatedBuildInputs = [ py-cpuinfo ]
+    ++ lib.optionals (pythonOlder "3.4") [ pathlib statistics ];
 
   meta = {
     description = "Py.test fixture for benchmarking code";

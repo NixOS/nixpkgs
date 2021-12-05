@@ -1,12 +1,5 @@
-{ lib
-, bitlist
-, buildPythonPackage
-, fetchPypi
-, fountains
-, parts
-, nose
-, pytestCheckHook
-}:
+{ lib, bitlist, buildPythonPackage, fetchPypi, fountains, parts, nose
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "fe25519";
@@ -18,16 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-947DIkmg56mAegEgLKq8iqETWf2SCvtmeDZi5cxVSJA=";
   };
 
-  propagatedBuildInputs = [
-    bitlist
-    fountains
-    parts
-  ];
+  propagatedBuildInputs = [ bitlist fountains parts ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ nose pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -35,9 +21,7 @@ buildPythonPackage rec {
       --replace "parts~=1.1.2" "parts>=1.1.2"
   '';
 
-  pythonImportsCheck = [
-    "fe25519"
-  ];
+  pythonImportsCheck = [ "fe25519" ];
 
   meta = with lib; {
     description = "Python field operations for Curve25519's prime";

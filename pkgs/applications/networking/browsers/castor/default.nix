@@ -1,15 +1,5 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, pkg-config
-, wrapGAppsHook
-, openssl
-, gtk3
-, gdk-pixbuf
-, pango
-, atk
-, cairo
-}:
+{ lib, fetchFromSourcehut, rustPlatform, pkg-config, wrapGAppsHook, openssl
+, gtk3, gdk-pixbuf, pango, atk, cairo }:
 
 rustPlatform.buildRustPackage rec {
   pname = "castor";
@@ -24,19 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-/IHxvTW9VYZmgjmDh0zJFDQqfw/H5CXVwEuLKq6Hnys=";
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    openssl
-    gtk3
-    gdk-pixbuf
-    pango
-    atk
-    cairo
-  ];
+  buildInputs = [ openssl gtk3 gdk-pixbuf pango atk cairo ];
 
   postInstall = "make PREFIX=$out copy-data";
 
@@ -44,7 +24,8 @@ rustPlatform.buildRustPackage rec {
   dontUseCargoParallelThreads = true;
 
   meta = with lib; {
-    description = "A graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
+    description =
+      "A graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
     homepage = "https://sr.ht/~julienxx/Castor";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

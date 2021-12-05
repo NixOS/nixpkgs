@@ -1,15 +1,5 @@
-{ lib
-, fetchFromGitLab
-, makeDesktopItem
-, copyDesktopItems
-, rustPlatform
-, pkg-config
-, clang
-, libclang
-, glib
-, gtk4
-, pipewire
-}:
+{ lib, fetchFromGitLab, makeDesktopItem, copyDesktopItems, rustPlatform
+, pkg-config, clang, libclang, glib, gtk4, pipewire }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helvum";

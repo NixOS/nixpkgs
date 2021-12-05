@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, lib
-, setuptools-scm
-, pytest
-, typing-extensions
-, glibcLocales
-}:
+{ buildPythonPackage, fetchPypi, pythonOlder, lib, setuptools-scm, pytest
+, typing-extensions, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "typeguard";
@@ -20,7 +13,7 @@ buildPythonPackage rec {
   buildInputs = [ setuptools-scm ];
   nativeBuildInputs = [ glibcLocales ];
 
-  LC_ALL="en_US.utf-8";
+  LC_ALL = "en_US.utf-8";
 
   postPatch = ''
     substituteInPlace setup.cfg --replace " --cov" ""
@@ -36,7 +29,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.3";
 
   meta = with lib; {
-    description = "This library provides run-time type checking for functions defined with argument type annotations";
+    description =
+      "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     license = licenses.mit;
   };

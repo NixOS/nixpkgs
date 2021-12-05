@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "widevine";
@@ -28,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.widevine.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ betaboon ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder, yarl }:
 
 buildPythonPackage rec {
   pname = "aiotractive";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "1rkylzbxxy3p744q1iqcvpnkn12ra6ja16vhqzidn702n4h5377j";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
   # Project has no tests
   doCheck = false;

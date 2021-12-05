@@ -19,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/barryp/py-amqplib";
-    description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    description =
+      "Python client for the Advanced Message Queuing Procotol (AMQP)";
     license = licenses.lgpl21;
   };
 }

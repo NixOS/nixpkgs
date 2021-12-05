@@ -1,4 +1,5 @@
-{ lib, clangStdenv, stdenvNoCC, cmake, fetchFromGitHub, dotnetCorePackages, buildDotnetModule }:
+{ lib, clangStdenv, stdenvNoCC, cmake, fetchFromGitHub, dotnetCorePackages
+, buildDotnetModule }:
 let
   pname = "netcoredbg";
   version = "1.2.0-825";
@@ -57,8 +58,7 @@ let
 
     executables = [ ];
   };
-in
-stdenvNoCC.mkDerivation {
+in stdenvNoCC.mkDerivation {
   inherit pname version;
 
   buildCommand = ''

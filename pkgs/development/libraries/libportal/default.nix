@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, glib
-}:
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, gtk-doc
+, docbook-xsl-nons, docbook_xml_dtd_45, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libportal";
@@ -23,18 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "fuYZWGkdazq6H0rThqpF6KIcvwgc17o+CiISb1LjBso=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config gtk-doc docbook-xsl-nons docbook_xml_dtd_45 ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   meta = with lib; {
     description = "Flatpak portal library";

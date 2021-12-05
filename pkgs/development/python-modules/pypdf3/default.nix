@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, python
-, tqdm
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, python, tqdm }:
 
 buildPythonPackage rec {
   pname = "pypdf3";
@@ -23,9 +17,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest tests/*.py
   '';
 
-  propagatedBuildInputs = [
-    tqdm
-  ];
+  propagatedBuildInputs = [ tqdm ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";

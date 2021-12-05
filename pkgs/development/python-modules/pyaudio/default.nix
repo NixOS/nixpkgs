@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, pkgs }:
 
 buildPythonPackage rec {
   pname = "PyAudio";

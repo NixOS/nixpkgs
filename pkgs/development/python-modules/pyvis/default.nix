@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, networkx
-, jinja2
-, ipython
-, jsonpickle
-, numpy }:
+{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, networkx, jinja2
+, ipython, jsonpickle, numpy }:
 
 buildPythonPackage rec {
   pname = "pyvis";
@@ -23,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     # Remove when https://github.com/WestHealth/pyvis/pull/101 is merged.
     (fetchpatch {
-      url = "https://github.com/WestHealth/pyvis/commit/158a34de45f970b17ffd746c6e705b89128e2445.patch";
+      url =
+        "https://github.com/WestHealth/pyvis/commit/158a34de45f970b17ffd746c6e705b89128e2445.patch";
       sha256 = "sha256-zK72nrnn5YLGNW6PKYUyHry5ORCdt1T1oH6n1X64DKg=";
     })
   ];
@@ -36,7 +30,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/WestHealth/pyvis";
-    description = "Python package for creating and visualizing interactive network graphs";
+    description =
+      "Python package for creating and visualizing interactive network graphs";
     license = licenses.bsd3;
     maintainers = with maintainers; [ erictapen ];
   };

@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "navidrome";
 
-  machine = { ... }: {
-    services.navidrome.enable = true;
-  };
+  machine = { ... }: { services.navidrome.enable = true; };
 
   testScript = ''
     machine.wait_for_unit("navidrome")

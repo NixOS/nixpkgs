@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, pythonAtLeast
-, buildPythonPackage
-, importlib-resources
-, pyyaml
-, requests
-, setuptools-scm
-}:
+{ lib, fetchFromGitHub, pythonAtLeast, buildPythonPackage, importlib-resources
+, pyyaml, requests, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
@@ -22,13 +15,9 @@ buildPythonPackage rec {
     sha256 = "0x6ba02f3sba9341nhyg9jdcbl9c1h880d8m75ybdpbn7zlaya1d";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-  propagatedBuildInputs = [
-    pyyaml
-    requests
-  ] ++ lib.optional (!pythonAtLeast "3.9") importlib-resources;
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ pyyaml requests ]
+    ++ lib.optional (!pythonAtLeast "3.9") importlib-resources;
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -39,7 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/scikit-hep-testdata";
-    description = "A common package to provide example files (e.g., ROOT) for testing and developing packages against";
+    description =
+      "A common package to provide example files (e.g., ROOT) for testing and developing packages against";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
   };

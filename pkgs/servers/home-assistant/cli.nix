@@ -1,6 +1,4 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
@@ -38,15 +36,13 @@ python3.pkgs.buildPythonApplication rec {
   #  $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
   #'';
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook requests-mock ];
 
   meta = with lib; {
     description = "Command-line tool for Home Assistant";
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
-    changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
+    changelog =
+      "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

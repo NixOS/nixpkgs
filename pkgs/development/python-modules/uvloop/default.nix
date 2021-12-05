@@ -1,17 +1,7 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, libuv
-, CoreServices
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, libuv, CoreServices
 , ApplicationServices
 # Check Inputs
-, aiohttp
-, psutil
-, pyopenssl
-, pytestCheckHook
-}:
+, aiohttp, psutil, pyopenssl, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "uvloop";
@@ -23,20 +13,11 @@ buildPythonPackage rec {
     sha256 = "f74bc20c7b67d1c27c72601c78cf95be99d5c2cdd4514502b4f3eb0933ff1228";
   };
 
-  buildInputs = [
-    libuv
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    ApplicationServices
-  ];
+  buildInputs = [ libuv ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
 
   dontUseSetuptoolsCheck = true;
-  checkInputs = [
-    aiohttp
-    pytestCheckHook
-    pyopenssl
-    psutil
-  ];
+  checkInputs = [ aiohttp pytestCheckHook pyopenssl psutil ];
 
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
@@ -47,10 +28,12 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isAarch64) [
     # test gets stuck in epoll_pwait on hydras aarch64 builders
     # https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
+    "--deselect"
+    "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Flaky test: https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    "--deselect"
+    "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
   ];
 
   disabledTestPaths = [
@@ -69,10 +52,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "uvloop"
-    "uvloop.loop"
-  ];
+  pythonImportsCheck = [ "uvloop" "uvloop.loop" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

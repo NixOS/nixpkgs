@@ -1,6 +1,5 @@
-{ buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
-, pytest-cov, pytest-runner, lib, stringcase
-}:
+{ buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest, pytest-cov
+, pytest-runner, lib, stringcase }:
 
 buildPythonApplication rec {
   pname = "zfs-replicate";
@@ -11,21 +10,11 @@ buildPythonApplication rec {
     sha256 = "b2cb9d4670a6e12d14a446c10d857862e91af6e4526f607e08b41bde89953bb8";
   };
 
-  checkInputs = [
-    hypothesis
-    mypy
-    pytest
-    pytest-cov
-  ];
+  checkInputs = [ hypothesis mypy pytest pytest-cov ];
 
-  buildInputs = [
-    pytest-runner
-  ];
+  buildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [
-    click
-    stringcase
-  ];
+  propagatedBuildInputs = [ click stringcase ];
 
   doCheck = true;
 

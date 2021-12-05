@@ -1,9 +1,5 @@
-{ lib, stdenv
-, nixosTests
-, fetchurl, autoreconfHook
-, zlib, pcre, w3m, man
-, openssl, brotli
-}:
+{ lib, stdenv, nixosTests, fetchurl, autoreconfHook, zlib, pcre, w3m, man
+, openssl, brotli }:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "3.0.32";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
+    url =
+      "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
     sha256 = "sha256-xh3kAIxiRF7Bjx8nBAfL8jcuq6k76szcnjI4uy3v7tc=";
   };
 

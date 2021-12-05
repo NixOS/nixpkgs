@@ -1,48 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, automoc4
-, chromaprint
-, cmake
-, docbook_xml_dtd_45
-, docbook_xsl
-, ffmpeg
-, flac
-, id3lib
-, libogg
-, libvorbis
-, libxslt
-, mp4v2
-, phonon
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, qtquickcontrols
-, qttools
-, readline
-, taglib
-, wrapQtAppsHook
-, zlib
-}:
+{ lib, stdenv, fetchurl, automoc4, chromaprint, cmake, docbook_xml_dtd_45
+, docbook_xsl, ffmpeg, flac, id3lib, libogg, libvorbis, libxslt, mp4v2, phonon
+, pkg-config, python3, qtbase, qtmultimedia, qtquickcontrols, qttools, readline
+, taglib, wrapQtAppsHook, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "kid3";
   version = "3.8.7";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-Dr+NLh5ajG42jRKt1Swq6mccPfuAXRvhhoTNuO8lnI0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    docbook_xml_dtd_45
-    docbook_xsl
-    pkg-config
-    python3
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [ cmake docbook_xml_dtd_45 docbook_xsl pkg-config python3 wrapQtAppsHook ];
   buildInputs = [
     automoc4
     chromaprint

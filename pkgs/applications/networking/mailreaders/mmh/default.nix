@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace sbr/Makefile.in \
       --replace "ar " "${stdenv.cc.targetPrefix}ar "
- '';
+  '';
 
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ autoreconfHook flex ];

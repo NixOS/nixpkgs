@@ -1,17 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gobject-introspection
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, glib
-, gupnp
-, gnome
-}:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gettext
+, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp
+, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-igd";
@@ -21,13 +10,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -40,14 +29,15 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  propagatedBuildInputs = [
-    glib
-    gupnp
-  ];
+  propagatedBuildInputs = [ glib gupnp ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=${
+      lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)
+    }"
+    "-Dintrospection=${
+      lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)
+    }"
   ];
 
   # Seems to get stuck sometimes.

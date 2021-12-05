@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "importmagic";
@@ -15,10 +11,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # missing json file from tarball
+  doCheck = false; # missing json file from tarball
 
   meta = with lib; {
-    description = "Python Import Magic - automagically add, remove and manage imports";
+    description =
+      "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
     license = licenses.bsd0;
   };

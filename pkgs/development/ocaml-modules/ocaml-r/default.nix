@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage, pkg-config, dune-configurator, stdio, R
-, alcotest
-}:
+{ lib, fetchFromGitHub, buildDunePackage, pkg-config, dune-configurator, stdio
+, R, alcotest }:
 
 buildDunePackage rec {
   pname = "ocaml-r";

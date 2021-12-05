@@ -1,11 +1,4 @@
-{ lib, stdenv
-, fetchzip
-, alsa-lib
-, glib
-, gst_all_1
-, libGLU, libGL
-, xorg
-}:
+{ lib, stdenv, fetchzip, alsa-lib, glib, gst_all_1, libGLU, libGL, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
@@ -13,17 +6,19 @@ stdenv.mkDerivation rec {
 
   suffix = {
     aarch64-linux = "linux-arm64";
-    armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x86_64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    armv7l-linux = "linux-armhf";
+    x86_64-linux = "linux-x86_64";
+  }.${stdenv.hostPlatform.system} or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchzip {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.zip";
     sha256 = {
       aarch64-linux = "0ryjmpzpfqdqrvqpq851vvrjd8ld5g91gcigpv9rxp3z1b7qdand";
-      armv7l-linux  = "08nlwn8ixndqil4m7j6c8gjxmwx8zi3in86arnwf13shk6cds5nb";
-      x86_64-linux  = "0kbz7pvh4i4a3pj1vzbzzslha825i888isvsigcqsqvipjr4798q";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      armv7l-linux = "08nlwn8ixndqil4m7j6c8gjxmwx8zi3in86arnwf13shk6cds5nb";
+      x86_64-linux = "0kbz7pvh4i4a3pj1vzbzzslha825i888isvsigcqsqvipjr4798q";
+    }.${stdenv.hostPlatform.system} or (throw
+      "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   dontConfigure = true;
@@ -46,7 +41,8 @@ stdenv.mkDerivation rec {
       glib
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
-      libGLU libGL
+      libGLU
+      libGL
       xorg.libX11
     ];
   in ''

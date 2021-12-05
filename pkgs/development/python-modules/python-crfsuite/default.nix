@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "python-crfsuite";
@@ -19,13 +15,9 @@ buildPythonPackage rec {
     rm -r pycrfsuite
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pycrfsuite"
-  ];
+  pythonImportsCheck = [ "pycrfsuite" ];
 
   meta = with lib; {
     description = "Python binding for CRFsuite";

@@ -2,8 +2,7 @@
 let
   pname = "xml-light";
   version = "2.4";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "ocaml-${pname}-${version}";
 
   src = fetchFromGitHub {

@@ -6,7 +6,9 @@ stdenv.mkDerivation rec {
   version = "21.04";
 
   src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings ["." ] [""] version}-src.7z";
+    url = "https://7-zip.org/a/7z${
+        lib.replaceStrings [ "." ] [ "" ] version
+      }-src.7z";
     sha256 = "sha256-XmuEyIJAJQM0ZbgrW02lQ2rp4KFDBjLXKRaTfY+VCOg=";
   };
 

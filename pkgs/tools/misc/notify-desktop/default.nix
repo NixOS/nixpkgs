@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Little application that lets you send desktop notifications with one command";
+    description =
+      "Little application that lets you send desktop notifications with one command";
     longDescription = ''
       It's basically clone of notify-send from libnotify,
       but it supports reusing notifications on screen by passing its ID.

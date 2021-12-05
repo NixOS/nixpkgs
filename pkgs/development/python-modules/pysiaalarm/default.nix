@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, dataclasses-json
-, pycryptodome
-, setuptools
-, pytest-asyncio
-, pytest-cases
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, dataclasses-json
+, pycryptodome, setuptools, pytest-asyncio, pytest-cases, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
@@ -28,25 +19,15 @@ buildPythonPackage rec {
       --replace "--cov pysiaalarm --cov-report term-missing" ""
   '';
 
-  propagatedBuildInputs = [
-    dataclasses-json
-    pycryptodome
-    setuptools
-  ];
+  propagatedBuildInputs = [ dataclasses-json pycryptodome setuptools ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-cases
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-cases pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pysiaalarm"
-    "pysiaalarm.aio"
-  ];
+  pythonImportsCheck = [ "pysiaalarm" "pysiaalarm.aio" ];
 
   meta = with lib; {
-    description = "Python package for creating a client that talks with SIA-based alarm systems";
+    description =
+      "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

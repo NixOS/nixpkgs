@@ -4,9 +4,7 @@ let
   inherit (python3Packages) python;
   pname = "honcho";
 
-in
-
-python3Packages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   version = "1.1.0";
 
@@ -31,7 +29,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A Python clone of Foreman, a tool for managing Procfile-based applications";
+    description =
+      "A Python clone of Foreman, a tool for managing Procfile-based applications";
     license = licenses.mit;
     homepage = "https://github.com/nickstenning/honcho";
     maintainers = with maintainers; [ benley ];

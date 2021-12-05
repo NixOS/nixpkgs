@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
-, pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, sqlalchemy, aiocontextvars, aiopg
+, pythonOlder, pytestCheckHook, pymysql, asyncpg, aiomysql, aiosqlite }:
 
 buildPythonPackage rec {
   pname = "databases";
@@ -25,20 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-67ykx7HKGgRvJ+GRVEI/e2+x51kfHHFjh/iI4tY+6aE=";
   };
 
-  propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
+  propagatedBuildInputs =
+    [ aiopg aiomysql aiosqlite asyncpg pymysql sqlalchemy ]
+    ++ lib.optionals (pythonOlder "3.7") [ aiocontextvars ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # circular dependency on starlette
@@ -48,9 +28,7 @@ buildPythonPackage rec {
     "tests/test_connection_options.py"
   ];
 
-  pythonImportsCheck = [
-    "databases"
-  ];
+  pythonImportsCheck = [ "databases" ];
 
   meta = with lib; {
     description = "Async database support for Python";

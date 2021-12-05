@@ -43,7 +43,8 @@ mkDerivation {
 
   meta = {
     homepage = "https://github.com/basho/otp/";
-    description = "Programming language used for massively scalable soft real-time systems, Basho fork";
+    description =
+      "Programming language used for massively scalable soft real-time systems, Basho fork";
 
     longDescription = ''
       Erlang is a programming language used to build massively scalable
@@ -58,7 +59,7 @@ mkDerivation {
 
     knownVulnerabilities = [ "CVE-2017-1000385" ];
 
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = pkgs.lib.licenses.asl20;
     maintainers = with pkgs.lib.maintainers; [ mdaiter ];
   };

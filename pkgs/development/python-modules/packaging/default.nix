@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytestCheckHook
-, pretend
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, pyparsing, six, pytestCheckHook, pretend
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "packaging";
@@ -18,16 +11,11 @@ buildPythonPackage rec {
     sha256 = "sha256-WzJ6wTINyGPcpy9FFOzAhvMRhnRLhKIwN0zB/Xdv6uU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ pyparsing six ];
 
-  checkInputs = [
-    pytestCheckHook
-    pretend
-  ];
+  checkInputs = [ pytestCheckHook pretend ];
 
   # Prevent circular dependency
   doCheck = false;

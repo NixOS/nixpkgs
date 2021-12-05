@@ -11,10 +11,20 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1jic5kynfan5zirv9pm3pfjps12zf68cpnhl7i1vls2m79zdkfa3";
   };
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-future-import flake8-import-order openssl ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ pyserial pyaes ecdsa reedsolo bitstring cryptography ];
+  checkInputs = with python3.pkgs; [
+    flake8
+    flake8-future-import
+    flake8-import-order
+    openssl
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyserial
+    pyaes
+    ecdsa
+    reedsolo
+    bitstring
+    cryptography
+  ];
 
   # wrapPythonPrograms will overwrite esptool.py with a bash script,
   # but espefuse.py tries to import it. Since we don't add any binary paths,

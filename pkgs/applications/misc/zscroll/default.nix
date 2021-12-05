@@ -1,8 +1,8 @@
 { lib, python3, python3Packages, fetchFromGitHub }:
 
-let version = "1.0"; in
+let version = "1.0";
 
-python3Packages.buildPythonApplication {
+in python3Packages.buildPythonApplication {
   name = "zscroll-${version}";
   # don't prefix with python version
   namePrefix = "";

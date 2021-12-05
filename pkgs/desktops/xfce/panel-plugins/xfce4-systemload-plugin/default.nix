@@ -1,35 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, xfce
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, xfce4-panel, libxfce4ui, xfconf
+, xfce }:
 
-let
-  category = "panel-plugins";
+let category = "panel-plugins";
 in stdenv.mkDerivation rec {
-  pname  = "xfce4-systemload-plugin";
+  pname = "xfce4-systemload-plugin";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-VtEAeAHVLXwrWhO7VHRfbX8G/aKLSc6TYUVjMGiBdlI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
-  buildInputs = [
-    libxfce4ui
-    xfce4-panel
-    xfconf
-  ];
+  buildInputs = [ libxfce4ui xfce4-panel xfconf ];
 
   passthru.updateScript = xfce.updateScript {
     inherit pname version;

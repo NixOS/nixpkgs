@@ -1,7 +1,5 @@
-{ lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libbfd
-}:
+{ lib, stdenv, buildPackages, autoreconfHook, bison, binutils-unwrapped
+, libiberty, libbfd }:
 
 stdenv.mkDerivation {
   pname = "libopcodes";
@@ -9,9 +7,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-unwrapped.patches ++ [
-    ../../tools/misc/binutils/build-components-separately.patch
-  ];
+  patches = binutils-unwrapped.patches
+    ++ [ ../../tools/misc/binutils/build-components-separately.patch ];
 
   # We just want to build libopcodes
   postPatch = ''
@@ -27,7 +24,8 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--enable-shared"
   ];

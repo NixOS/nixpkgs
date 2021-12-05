@@ -1,10 +1,6 @@
-{ useLua ? !stdenv.isDarwin
-, usePcre ? true
-, withPrometheusExporter ? true
-, stdenv, lib, fetchurl, nixosTests
-, openssl, zlib
-, lua5_3 ? null, pcre ? null, systemd ? null
-}:
+{ useLua ? !stdenv.isDarwin, usePcre ? true, withPrometheusExporter ? true
+, stdenv, lib, fetchurl, nixosTests, openssl, zlib, lua5_3 ? null, pcre ? null
+, systemd ? null }:
 
 assert useLua -> lua5_3 != null;
 assert usePcre -> pcre != null;
@@ -14,41 +10,39 @@ stdenv.mkDerivation rec {
   version = "2.3.14";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    url = "https://www.haproxy.org/download/${
+        lib.versions.majorMinor version
+      }/src/${pname}-${version}.tar.gz";
     sha256 = "0ah6xsxlk1a7jsxdg0pbdhzhssz9ysrfxd3bs5hm1shql1jmqzh4";
   };
 
-  buildInputs = [ openssl zlib ]
-    ++ lib.optional useLua lua5_3
-    ++ lib.optional usePcre pcre
-    ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = [ openssl zlib ] ++ lib.optional useLua lua5_3
+    ++ lib.optional usePcre pcre ++ lib.optional stdenv.isLinux systemd;
 
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=\${out}"
-    ("TARGET=" + (if stdenv.isSunOS  then "solaris"
-             else if stdenv.isLinux  then "linux-glibc"
-             else if stdenv.isDarwin then "osx"
-             else "generic"))
+    ("TARGET=" + (if stdenv.isSunOS then
+      "solaris"
+    else if stdenv.isLinux then
+      "linux-glibc"
+    else if stdenv.isDarwin then
+      "osx"
+    else
+      "generic"))
   ];
 
-  buildFlags = [
-    "USE_OPENSSL=yes"
-    "USE_ZLIB=yes"
-  ] ++ lib.optionals usePcre [
-    "USE_PCRE=yes"
-    "USE_PCRE_JIT=yes"
-  ] ++ lib.optionals useLua [
-    "USE_LUA=yes"
-    "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_3}/lib"
-    "LUA_INC=${lua5_3}/include"
-  ] ++ lib.optionals stdenv.isLinux [
-    "USE_SYSTEMD=yes"
-    "USE_GETADDRINFO=1"
-  ] ++ lib.optionals withPrometheusExporter [
-    "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o"
-  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = [ "USE_OPENSSL=yes" "USE_ZLIB=yes" ]
+    ++ lib.optionals usePcre [ "USE_PCRE=yes" "USE_PCRE_JIT=yes" ]
+    ++ lib.optionals useLua [
+      "USE_LUA=yes"
+      "LUA_LIB_NAME=lua"
+      "LUA_LIB=${lua5_3}/lib"
+      "LUA_INC=${lua5_3}/include"
+    ] ++ lib.optionals stdenv.isLinux [ "USE_SYSTEMD=yes" "USE_GETADDRINFO=1" ]
+    ++ lib.optionals withPrometheusExporter
+    [ "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o" ]
+    ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 

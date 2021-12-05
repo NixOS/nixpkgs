@@ -1,7 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, pkgs
-}:
+{ lib, stdenv, buildPythonPackage, pkgs }:
 
 buildPythonPackage {
   name = pkgs.file.name;

@@ -1,15 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, systemd
-, glib
-, dbus
-, libnl
-, python2Packages
-}:
+{ stdenv, lib, fetchurl, autoreconfHook, autoconf-archive, pkg-config, systemd
+, glib, dbus, libnl, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "neard";
@@ -18,31 +8,18 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/neard-${version}.tar.gz";
+    url =
+      "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/neard-${version}.tar.gz";
     sha256 = "wBPjEVMV4uEdFrXw8cjOmvvNuiaACq2RJF/ZtKXck4s=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
-    pkg-config
-    python2Packages.wrapPython
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook autoconf-archive pkg-config python2Packages.wrapPython ];
 
-  buildInputs = [
-    systemd
-    glib
-    dbus
-    libnl
-  ] ++ (with python2Packages; [
-    python
-  ]);
+  buildInputs = [ systemd glib dbus libnl ]
+    ++ (with python2Packages; [ python ]);
 
-  pythonPath = with python2Packages; [
-    pygobject2
-    dbus-python
-    pygtk
-  ];
+  pythonPath = with python2Packages; [ pygobject2 dbus-python pygtk ];
 
   strictDeps = true;
 

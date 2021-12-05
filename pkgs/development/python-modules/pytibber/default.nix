@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, async-timeout
-, graphql-subscription-manager
-, python-dateutil
-, pytz
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp, async-timeout
+, graphql-subscription-manager, python-dateutil, pytz, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytibber";
@@ -24,28 +15,17 @@ buildPythonPackage rec {
     sha256 = "sha256-lUe79VHlK/2/1SZfC+Ha+27NUoIKoTlqn75XA/mPCNU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-    graphql-subscription-manager
-    python-dateutil
-    pytz
-  ];
+  propagatedBuildInputs =
+    [ aiohttp async-timeout graphql-subscription-manager python-dateutil pytz ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   # tests access network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tibber"
-  ];
+  pythonImportsCheck = [ "tibber" ];
 
   meta = with lib; {
     description = "Python library to communicate with Tibber";

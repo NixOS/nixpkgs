@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "httmock";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-yid4vh1do0zqVzd1VV7gc+Du4VPrkeGFsDHqNbHL28I=";
   };
 
-  checkInputs = [
-    requests
-    pytestCheckHook
-  ];
+  checkInputs = [ requests pytestCheckHook ];
 
   pytestFlagsArray = [ "tests.py" ];
 

@@ -27,9 +27,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  ldflags = [
-    "-s" "-w" "-X main.revision=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.revision=${version}" ];
 
   installPhase = ''
     install -Dm755 $GOPATH/bin/app $out/bin/reproxy

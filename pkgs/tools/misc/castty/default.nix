@@ -13,13 +13,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libsoundio lame ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "CLI tool to record audio-enabled screencasts of your terminal, for the web";
+    description =
+      "CLI tool to record audio-enabled screencasts of your terminal, for the web";
     homepage = "https://github.com/dhobsd/castty";
     license = licenses.bsd3;
     maintainers = with maintainers; [ iblech ];

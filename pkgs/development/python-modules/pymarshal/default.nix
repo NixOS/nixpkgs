@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, bson
-, pytest
-, pytest-cov
-, pytest-runner
-, pytestCheckHook
-, pyyaml
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, bson, pytest
+, pytest-cov, pytest-runner, pytestCheckHook, pyyaml, setuptools }:
 
 buildPythonPackage rec {
   pname = "pymarshal";
@@ -23,22 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    pytest-runner
-  ];
+  nativeBuildInputs = [ setuptools pytest-runner ];
 
-  propagatedBuildInputs = [
-    bson
-  ];
+  propagatedBuildInputs = [ bson ];
 
-  checkInputs = [
-    pytestCheckHook
-    bson
-    pytest
-    pytest-cov
-    pyyaml
-  ];
+  checkInputs = [ pytestCheckHook bson pytest pytest-cov pyyaml ];
 
   pytestFlagsArray = [ "test" ];
 

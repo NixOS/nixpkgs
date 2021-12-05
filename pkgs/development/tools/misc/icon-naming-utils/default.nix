@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, perl, librsvg}:
+{ lib, stdenv, fetchurl, perl, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "icon-naming-utils";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ librsvg (perl.withPackages (p: [ p.XMLSimple ])) ];
 
   meta = with lib; {
-    homepage = "http://tango.freedesktop.org/Standard_Icon_Naming_Specification";
+    homepage =
+      "http://tango.freedesktop.org/Standard_Icon_Naming_Specification";
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };

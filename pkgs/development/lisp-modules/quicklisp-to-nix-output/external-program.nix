@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "external-program";
   version = "20190307-git";
 
@@ -11,13 +10,14 @@ rec {
   deps = [ args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/external-program/2019-03-07/external-program-20190307-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/external-program/2019-03-07/external-program-20190307-git.tgz";
     sha256 = "1nl3mngh7vp2l9mfbdhni4nc164zznafnl74p1kv9j07n5fcpnyz";
   };
 
   packageName = "external-program";
 
-  asdFilesToKeep = ["external-program.asd"];
+  asdFilesToKeep = [ "external-program.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM external-program DESCRIPTION System lacks description SHA256
@@ -28,4 +28,5 @@ rec {
     ((NAME fiveam FILENAME fiveam)
      (NAME trivial-features FILENAME trivial-features))
     DEPENDENCIES (fiveam trivial-features) VERSION 20190307-git SIBLINGS NIL
-    PARASITES (external-program-test)) */
+    PARASITES (external-program-test))
+*/

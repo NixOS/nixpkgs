@@ -1,6 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config, qmake
-, SDL2, fluidsynth, libsndfile, libvorbis, mpg123, qtbase
-}:
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config, qmake, SDL2
+, fluidsynth, libsndfile, libvorbis, mpg123, qtbase }:
 
 mkDerivation rec {
   pname = "qtads";

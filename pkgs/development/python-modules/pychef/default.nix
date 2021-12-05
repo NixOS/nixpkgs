@@ -1,14 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, requests
-, mock
-, unittest2
-}:
+{ lib, buildPythonPackage, fetchPypi, six, requests, mock, unittest2 }:
 
 buildPythonPackage rec {
-  pname    = "PyChef";
+  pname = "PyChef";
   version = "0.3.0";
 
   src = fetchPypi {

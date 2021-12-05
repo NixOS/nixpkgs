@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, jdk, maven
-, runtimeShell, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, jdk, maven, runtimeShell, makeWrapper }:
 
 let
-  platform =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "mac"
-    else if stdenv.isWindows then "windows"
-    else throw "unsupported platform";
-in
-stdenv.mkDerivation rec {
+  platform = if stdenv.isLinux then
+    "linux"
+  else if stdenv.isDarwin then
+    "mac"
+  else if stdenv.isWindows then
+    "windows"
+  else
+    throw "unsupported platform";
+in stdenv.mkDerivation rec {
   pname = "java-language-server";
   version = "0.2.38";
 
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     outputHash = "sha256-YkcQKmm8oeEH7uyUzV/qGoe4LiI6o5wZ7o69qrO3oCA=";
   };
 
-
   nativeBuildInputs = [ maven jdk makeWrapper ];
 
   dontConfigure = true;
@@ -62,7 +60,10 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     jlink \
-      ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${
+        lib.optionalString (!stdenv.isDarwin)
+        "--module-path './jdks/${platform}/jdk-13/jmods'"
+      } \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \
@@ -87,7 +88,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    description =
+      "A Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];

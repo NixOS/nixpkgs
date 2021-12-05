@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, perl
-, python3
-, dbus
-, polkit
-, systemd
-, IOKit
-}:
+{ stdenv, lib, fetchurl, autoreconfHook, autoconf-archive, pkg-config, perl
+, python3, dbus, polkit, systemd, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
@@ -34,14 +23,12 @@ stdenv.mkDerivation rec {
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-  ]
-  ++ (if stdenv.isLinux then [
+  ] ++ (if stdenv.isLinux then [
     "--enable-ipcdir=/run/pcscd"
     "--enable-polkit"
     "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
-  ] else [
-    "--disable-libsystemd"
-  ]);
+  ] else
+    [ "--disable-libsystemd" ]);
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {

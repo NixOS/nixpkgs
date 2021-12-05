@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-, python3
-, python3Packages
-, nodePackages
-, wkhtmltopdf
-}:
+{ stdenv, lib, fetchurl, python3, python3Packages, nodePackages, wkhtmltopdf }:
 
 with python3Packages;
 
@@ -20,26 +13,25 @@ buildPythonApplication rec {
 
   # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
   src = fetchurl {
-    url = "https://nightly.odoo.com/${major}.${minor}/nightly/src/odoo_${version}.tar.gz";
+    url =
+      "https://nightly.odoo.com/${major}.${minor}/nightly/src/odoo_${version}.tar.gz";
     name = "${pname}-${version}";
     sha256 = "sha256-/E+bLBbiz7fRyTwP+0AMpqbuRkOpE4B4P6kREIB4m1Q=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-    mock
-  ];
+  nativeBuildInputs = [ setuptools wheel mock ];
 
-  buildInputs = [
-    wkhtmltopdf
-    nodePackages.rtlcss
-  ];
+  buildInputs = [ wkhtmltopdf nodePackages.rtlcss ];
 
   # needs some investigation
   doCheck = false;
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+  ];
 
   propagatedBuildInputs = [
     Babel

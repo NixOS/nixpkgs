@@ -1,35 +1,7 @@
-{ lib
-, stdenv
-, cairo
-, curl
-, fetchurl
-, freealut
-, gdk-pixbuf
-, git
-, glib
-, gnome2
-, graphviz
-, gtk2-x11
-, interpreter
-, libGL
-, libGLU
-, libogg
-, librsvg
-, libvorbis
-, makeWrapper
-, ncurses
-, openal
-, openssl
-, pango
-, pcre
-, runCommand
-, runtimeShell
-, tzdata
-, udis86
-, unzip
-, writeScriptBin
-, zlib
-}:
+{ lib, stdenv, cairo, curl, fetchurl, freealut, gdk-pixbuf, git, glib, gnome2
+, graphviz, gtk2-x11, interpreter, libGL, libGLU, libogg, librsvg, libvorbis
+, makeWrapper, ncurses, openal, openssl, pango, pcre, runCommand, runtimeShell
+, tzdata, udis86, unzip, writeScriptBin, zlib }:
 let
   runtimeLibs = [
     cairo
@@ -60,39 +32,42 @@ let
     ${if to then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --argv0 factor \
-      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
+      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${
+        lib.makeLibraryPath runtimeLibs
+      } \
       --prefix PATH : ${lib.makeBinPath [ graphviz ]}
   '';
 
   wrapFactor = runtimeLibs:
-    runCommand (lib.appendToName "with-libs" interpreter).name
-      {
-        nativeBuildInputs = [ makeWrapper ];
-        buildInputs = [ gdk-pixbuf ];
-        passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
-      }
-      (wrapFactorScript {
-        from = "${interpreter}/lib/factor/.factor.wrapped";
-        to = "$out/bin/factor";
-        runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
-      });
+    runCommand (lib.appendToName "with-libs" interpreter).name {
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ gdk-pixbuf ];
+      passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
+    } (wrapFactorScript {
+      from = "${interpreter}/lib/factor/.factor.wrapped";
+      to = "$out/bin/factor";
+      runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
+    });
 
   # Development helper for use in nix shell
   wrapLocalFactor = writeScriptBin "wrapFactor" ''
     #!${runtimeShell}
-    ${wrapFactorScript { from = "./factor"; inherit runtimeLibs; }}
+    ${wrapFactorScript {
+      from = "./factor";
+      inherit runtimeLibs;
+    }}
     ln -sf factor.image .factor-wrapped.image
   '';
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
   version = "0.98";
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "factor-lang";
   inherit version;
 
   src = fetchurl {
-    url = "https://downloads.factorcode.org/releases/${version}/factor-src-${version}.zip";
+    url =
+      "https://downloads.factorcode.org/releases/${version}/factor-src-${version}.zip";
     sha256 = "01ip9mbnar4sv60d2wcwfz62qaamdvbykxw3gbhzqa25z36vi3ri";
   };
 
@@ -143,7 +118,9 @@ stdenv.mkDerivation {
     # out of known libraries. The side effect is that find-lib
     # will work only on the known libraries. There does not seem
     # to be a generic solution here.
-    find $(echo ${lib.makeLibraryPath runtimeLibs} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
+    find $(echo ${
+      lib.makeLibraryPath runtimeLibs
+    } | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
     (echo $(cat $TMPDIR/so.lst | wc -l) "libs found in cache \`/etc/ld.so.cache'";
       for l in $(<$TMPDIR/so.lst); do
         echo " $(basename $l) (libc6,x86-64) => $l";
@@ -177,7 +154,10 @@ stdenv.mkDerivation {
     cp -r factor factor.image LICENSE.txt README.md basis core extra misc $out/lib/factor
 
     # Create a wrapper in bin/ and lib/factor/
-    ${wrapFactorScript { from = "$out/lib/factor/factor"; inherit runtimeLibs; }}
+    ${wrapFactorScript {
+      from = "$out/lib/factor/factor";
+      inherit runtimeLibs;
+    }}
     mv $out/lib/factor/factor.image $out/lib/factor/.factor-wrapped.image
     cp $out/lib/factor/factor $out/bin/
 

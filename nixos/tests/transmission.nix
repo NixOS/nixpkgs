@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "transmission";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ coconnor ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ coconnor ]; };
 
   machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
@@ -14,10 +12,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     services.transmission.enable = true;
   };
 
-  testScript =
-    ''
-      start_all()
-      machine.wait_for_unit("transmission")
-      machine.shutdown()
-    '';
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("transmission")
+    machine.shutdown()
+  '';
 })

@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0mm6059wjh5p8923dwz55dpwi55gq2bcmpx7kn40pq5ppkiqjiw9";
 
   meta = with lib; {
-    description = "Cargo extension that can generate BitBake recipes utilizing the classes from meta-rust";
+    description =
+      "Cargo extension that can generate BitBake recipes utilizing the classes from meta-rust";
     homepage = "https://github.com/meta-rust/cargo-bitbake";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ rvarago ];

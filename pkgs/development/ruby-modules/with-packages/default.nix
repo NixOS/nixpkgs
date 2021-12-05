@@ -1,17 +1,15 @@
 { stdenv, lib, buildEnv, buildRubyGem, ruby, gemConfig, makeWrapper }:
 
-/*
-Example usage:
-nix-shell -E "(import <nixpkgs> {}).ruby.withPackages (pkgs: with pkgs; [ pry nokogiri ])"
+/* Example usage:
+   nix-shell -E "(import <nixpkgs> {}).ruby.withPackages (pkgs: with pkgs; [ pry nokogiri ])"
 
-You can also use this for writing ruby scripts that run anywhere that has nix
-using a nix-shell shebang:
-  #!/usr/bin/env nix-shell
-  #!nix-shell -i ruby -p "ruby.withPackages (pkgs: with pkgs; [ pry nokogiri ])"
+   You can also use this for writing ruby scripts that run anywhere that has nix
+   using a nix-shell shebang:
+     #!/usr/bin/env nix-shell
+     #!nix-shell -i ruby -p "ruby.withPackages (pkgs: with pkgs; [ pry nokogiri ])"
 
-
-Run the following in the nixpkgs root directory to update the ruby-packages.nix:
-./maintainers/scripts/update-ruby-packages
+   Run the following in the nixpkgs root directory to update the ruby-packages.nix:
+   ./maintainers/scripts/update-ruby-packages
 */
 
 let
@@ -20,13 +18,14 @@ let
   buildGems = gemset:
     let
       realGemset = if builtins.isAttrs gemset then gemset else import gemset;
-      builtGems =
-        lib.mapAttrs (name: initialAttrs:
-          let
-            attrs = functions.applyGemConfigs ({ inherit ruby; gemName = name; } // initialAttrs);
-          in
-            buildRubyGem (functions.composeGemAttrs ruby builtGems name attrs)
-        ) realGemset;
+      builtGems = lib.mapAttrs (name: initialAttrs:
+        let
+          attrs = functions.applyGemConfigs ({
+            inherit ruby;
+            gemName = name;
+          } // initialAttrs);
+        in buildRubyGem (functions.composeGemAttrs ruby builtGems name attrs))
+        realGemset;
     in builtGems;
 
   gems = buildGems (import ../../../top-level/ruby-packages.nix);

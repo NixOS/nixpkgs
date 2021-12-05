@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
-, bluez, dbus-next, pytestCheckHook, pytest-cov
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, bluez, dbus-next, pytestCheckHook
+, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "bleak";

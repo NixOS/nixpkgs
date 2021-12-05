@@ -3,9 +3,11 @@
 fetchzip {
   name = "mro-unicode-2013-05-25";
 
-  url = "https://github.com/phjamr/MroUnicode/raw/f297de070f7eba721a47c850e08efc119d3bfbe8/MroUnicode-Regular.ttf";
+  url =
+    "https://github.com/phjamr/MroUnicode/raw/f297de070f7eba721a47c850e08efc119d3bfbe8/MroUnicode-Regular.ttf";
 
-  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/MroUnicode-Regular.ttf";
+  postFetch =
+    "install -Dm644 $downloadedFile $out/share/fonts/truetype/MroUnicode-Regular.ttf";
 
   sha256 = "1i71bjd9gdyn8ladfncbfhz6xz1h8xx8yf876j1z8lh719410c8g";
 

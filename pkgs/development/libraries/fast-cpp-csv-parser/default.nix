@@ -14,11 +14,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/lib/pkgconfig $out/include
     cp -r *.h $out/include/
-    substituteAll ${./fast-cpp-csv-parser.pc.in} $out/lib/pkgconfig/fast-cpp-csv-parser.pc
+    substituteAll ${
+      ./fast-cpp-csv-parser.pc.in
+    } $out/lib/pkgconfig/fast-cpp-csv-parser.pc
   '';
 
   meta = with lib; {
-    description = "A small, easy-to-use and fast header-only library for reading comma separated value (CSV) files";
+    description =
+      "A small, easy-to-use and fast header-only library for reading comma separated value (CSV) files";
     homepage = "https://github.com/ben-strasser/fast-cpp-csv-parser";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bhipple ];

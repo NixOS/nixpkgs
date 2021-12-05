@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.programs.git;
-in
+let cfg = config.programs.git;
 
-{
+in {
   options = {
     programs.git = {
       enable = mkEnableOption "git";
@@ -48,9 +46,8 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
-      environment.etc.gitconfig = mkIf (cfg.config != {}) {
-        text = generators.toGitINI cfg.config;
-      };
+      environment.etc.gitconfig =
+        mkIf (cfg.config != { }) { text = generators.toGitINI cfg.config; };
     })
     (mkIf (cfg.enable && cfg.lfs.enable) {
       environment.systemPackages = [ cfg.lfs.package ];

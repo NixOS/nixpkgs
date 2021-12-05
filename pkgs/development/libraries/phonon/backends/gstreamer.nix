@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkg-config
-, extra-cmake-modules, qttools, qtbase, qtx11extras
-, debug ? false
-}:
+, extra-cmake-modules, qttools, qtbase, qtx11extras, debug ? false }:
 
 with lib;
 
@@ -18,7 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "1wk1ip2w7fkh65zk6rilj314dna0hgsv2xhjmpr5w08xa8sii1y5";
   };
 
@@ -28,23 +27,22 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  NIX_CFLAGS_COMPILE =
-    let gstPluginPaths =
-          lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
-          (with gst_all_1; [
-            gstreamer
-            gst-plugins-base
-            gst-plugins-good
-            gst-plugins-ugly
-            gst-plugins-bad
-            gst-libav
-          ]);
-    in toString [
-      # This flag should be picked up through pkg-config, but it isn't.
-      "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
+  NIX_CFLAGS_COMPILE = let
+    gstPluginPaths = lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
+      (with gst_all_1; [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-ugly
+        gst-plugins-bad
+        gst-libav
+      ]);
+  in toString [
+    # This flag should be picked up through pkg-config, but it isn't.
+    "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
 
-      ''-DGST_PLUGIN_PATH_1_0="${gstPluginPaths}"''
-    ];
+    ''-DGST_PLUGIN_PATH_1_0="${gstPluginPaths}"''
+  ];
 
   buildInputs = with gst_all_1; [
     gstreamer
@@ -54,14 +52,7 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    extra-cmake-modules
-    qttools
-  ];
+  nativeBuildInputs = [ cmake pkg-config extra-cmake-modules qttools ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}" ];
 }

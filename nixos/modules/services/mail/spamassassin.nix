@@ -6,9 +6,7 @@ let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
 
-in
-
-{
+in {
   options = {
 
     services.spamassassin = {
@@ -55,9 +53,9 @@ in
       initPreConf = mkOption {
         type = with types; either str path;
         description = "The SpamAssassin init.pre config.";
-        apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
-        default =
-        ''
+        apply = val:
+          if builtins.isPath val then val else pkgs.writeText "init.pre" val;
+        default = ''
           #
           # to update this list, run this command in the rules directory:
           # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
@@ -121,9 +119,7 @@ in
       group = "spamd";
     };
 
-    users.groups.spamd = {
-      gid = config.ids.gids.spamd;
-    };
+    users.groups.spamd = { gid = config.ids.gids.spamd; };
 
     systemd.services.sa-update = {
       # Needs to be able to contact the update server.
@@ -135,7 +131,8 @@ in
         User = "spamd";
         Group = "spamd";
         StateDirectory = "spamassassin";
-        ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
+        ExecStartPost =
+          "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
       };
 
       script = ''
@@ -161,8 +158,8 @@ in
 
     systemd.timers.sa-update = {
       description = "sa-update-service";
-      partOf      = [ "sa-update.service" ];
-      wantedBy    = [ "timers.target" ];
+      partOf = [ "sa-update.service" ];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "1:*";
         Persistent = true;
@@ -174,15 +171,14 @@ in
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "sa-update.service" ];
-      after = [
-        "network.target"
-        "sa-update.service"
-      ];
+      after = [ "network.target" "sa-update.service" ];
 
       serviceConfig = {
         User = "spamd";
         Group = "spamd";
-        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
+        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${
+            optionalString cfg.debug "-D"
+          } --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "+${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         StateDirectory = "spamassassin";
       };

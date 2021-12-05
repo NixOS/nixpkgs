@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
+    url =
+      "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
     sha256 = "118hg64w5wb95lbxw6w1hbqxrx3plcbxfjhvxx86q0zx0saa9diw";
   };
 
@@ -52,9 +53,10 @@ stdenv.mkDerivation rec {
     # macFUSE as a whole includes code with restrictions on commercial
     # redistribution. However, the build artifacts that we actually touch for
     # this derivation are distributed under a free license.
-    license = with licenses; [
-      lgpl2Plus # libfuse
-    ];
+    license = with licenses;
+      [
+        lgpl2Plus # libfuse
+      ];
   };
 
   passthru.warning = ''

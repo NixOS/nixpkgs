@@ -1,28 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, python3
-, vala
-, wrapGAppsHook
-, evolution-data-server
-, libical
-, libgee
-, json-glib
-, glib
-, glib-networking
-, sqlite
-, libsoup
-, libgdata
-, gtk3
-, pantheon /* granite, icons, maintainers */
-, webkitgtk
-, libpeas
-, libhandy
-, curl
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, desktop-file-utils
+, python3, vala, wrapGAppsHook, evolution-data-server, libical, libgee
+, json-glib, glib, glib-networking, sqlite, libsoup, libgdata, gtk3
+, pantheon # granite, icons, maintainers
+, webkitgtk, libpeas, libhandy, curl }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
@@ -35,15 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3eFPGRcZWhzFYi52TbHmpFNLI0pWYcHbbBI7efqZwYE=";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 vala wrapGAppsHook ];
 
   buildInputs = [
     evolution-data-server

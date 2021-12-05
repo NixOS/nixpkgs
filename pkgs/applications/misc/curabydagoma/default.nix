@@ -13,8 +13,7 @@
 # I guess people owning a 3D printer generally don't use i686.
 # If, however, someone needs it, we certainly can find a solution.
 
-let
-  pythonPackages = python2Packages;
+let pythonPackages = python2Packages;
 in stdenv.mkDerivation rec {
   pname = "curabydagoma";
   # Version is the date, UNIX format
@@ -28,7 +27,13 @@ in stdenv.mkDerivation rec {
   };
   unpackCmd = "unzip $curSrc && tar zxf CuraByDagoma_amd64.tar.gz";
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ pythonPackages.python pythonPackages.pyopengl pythonPackages.wxPython pythonPackages.pyserial pythonPackages.numpy ];
+  buildInputs = [
+    pythonPackages.python
+    pythonPackages.pyopengl
+    pythonPackages.wxPython
+    pythonPackages.pyserial
+    pythonPackages.numpy
+  ];
 
   # Compile all pyc files because the included pyc files may be older than the
   # py files. However, Python doesn't realize that because the packages

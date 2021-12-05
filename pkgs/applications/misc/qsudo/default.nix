@@ -1,10 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, sudo
-}:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, sudo }:
 
 mkDerivation rec {
   pname = "qsudo";
@@ -19,14 +13,9 @@ mkDerivation rec {
 
   sourceRoot = "source/src-qt5";
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtbase
-    sudo
-  ];
+  buildInputs = [ qtbase sudo ];
 
   postPatch = ''
     substituteInPlace qsudo.pro --replace /usr/bin $out/bin

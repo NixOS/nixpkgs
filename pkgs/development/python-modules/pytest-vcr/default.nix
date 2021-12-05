@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, vcrpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, vcrpy }:
 
 buildPythonPackage rec {
   pname = "pytest-vcr";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    vcrpy
-   ];
+  propagatedBuildInputs = [ vcrpy ];
 
   # Tests are using an obsolete attribute 'config'
   # https://github.com/ktosiek/pytest-vcr/issues/43

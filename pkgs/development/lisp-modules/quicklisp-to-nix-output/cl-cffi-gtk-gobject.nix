@@ -1,21 +1,31 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-cffi-gtk-gobject";
   version = "cl-cffi-gtk-20201220-git";
 
   description = "A Lisp binding GObject 2";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk-glib" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cl-cffi-gtk-glib"
+    args."closer-mop"
+    args."iterate"
+    args."trivial-features"
+    args."trivial-garbage"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-12-20/cl-cffi-gtk-20201220-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-cffi-gtk/2020-12-20/cl-cffi-gtk-20201220-git.tgz";
     sha256 = "15vc0d7nirh0m6rkvzby2zb7qcpyvsxzs5yw5h6h3madyl8qm9b1";
   };
 
   packageName = "cl-cffi-gtk-gobject";
 
-  asdFilesToKeep = ["cl-cffi-gtk-gobject.asd"];
+  asdFilesToKeep = [ "cl-cffi-gtk-gobject.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-cffi-gtk-gobject DESCRIPTION A Lisp binding GObject 2 SHA256
@@ -38,4 +48,5 @@ rec {
      cl-cffi-gtk-demo-gobject cl-cffi-gtk-example-gtk cl-cffi-gtk-opengl-demo
      cl-cffi-gtk-gdk-pixbuf cl-cffi-gtk-gdk cl-cffi-gtk-gio cl-cffi-gtk-glib
      cl-cffi-gtk cl-cffi-gtk-pango)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

@@ -11,18 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "04da8rq23rl1qcvrdm5m3l90xbwyli7x601sckv7hmkip2q3g1kz";
   };
 
-  nativeBuildInputs = [
-    python2Packages.wrapPython
-  ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
-  buildInputs = [
-    python2Packages.python
-  ];
+  buildInputs = [ python2Packages.python ];
 
-  pythonPath = [
-    python2Packages.xlib
-    python2Packages.pygtk
-  ];
+  pythonPath = [ python2Packages.xlib python2Packages.pygtk ];
 
   installPhase = ''
     install -D -t $out/bin neap

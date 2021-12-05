@@ -15,14 +15,11 @@ buildPythonPackage rec {
   # all 2 of the tests both try to pull down from a url
   doCheck = false;
 
-  pythonImportsCheck = [
-    "etelemetry"
-    "etelemetry.client"
-    "etelemetry.config"
-  ];
+  pythonImportsCheck = [ "etelemetry" "etelemetry.client" "etelemetry.config" ];
 
   meta = with lib; {
-    description = "Lightweight python client to communicate with the etelemetry server";
+    description =
+      "Lightweight python client to communicate with the etelemetry server";
     homepage = "https://github.com/mgxd/etelemetry-client";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

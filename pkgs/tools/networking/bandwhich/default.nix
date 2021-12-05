@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   # FIXME: remove when the linked-hash-map dependency is bumped upstream
   cargoPatches = [
     (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/pull/222/commits/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
+      url =
+        "https://github.com/imsnif/bandwhich/pull/222/commits/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
       sha256 = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
     })
   ];

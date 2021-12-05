@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pytz
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, google-cloud-testutils
+, libcst, proto-plus, pytestCheckHook, pytest-asyncio, pytz, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
@@ -29,10 +19,7 @@ buildPythonPackage rec {
     "test_inspect_content"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.dlp"
-    "google.cloud.dlp_v2"
-  ];
+  pythonImportsCheck = [ "google.cloud.dlp" "google.cloud.dlp_v2" ];
 
   meta = with lib; {
     description = "Cloud Data Loss Prevention (DLP) API API client library";

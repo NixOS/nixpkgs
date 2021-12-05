@@ -1,32 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, cairo
-, cmake
-, curl
-, fontconfig
-, freetype
-, lcms
-, libiconv
-, libintl
-, libjpeg
-, ninja
-, openjpeg
-, pkg-config
-, zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
-, utils ? false
-, minimal ? false, suffix ? "glib"
-}:
+{ stdenv, lib, fetchurl, fetchpatch, cairo, cmake, curl, fontconfig, freetype
+, lcms, libiconv, libintl, libjpeg, ninja, openjpeg, pkg-config, zlib
+, withData ? true, poppler_data, qt5Support ? false, qtbase ? null
+, introspectionSupport ? false, gobject-introspection ? null, utils ? false
+, minimal ? false, suffix ? "glib" }:
 
 let
   version = "0.61.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "poppler-${suffix}";
   inherit version;
 
@@ -41,30 +22,22 @@ stdenv.mkDerivation rec {
     # Fix internal crash: a negative number that should not be
     (fetchpatch {
       name = "CVE-2018-13988";
-      url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
+      url =
+        "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
       sha256 = "1l8713s57xc6g81bldw934rsfm140fqc7ggd50ha5mxdl1b3app2";
     })
     # Fix internal crash: a negative number that should not be (not the above!)
     ./0.61-CVE-2019-9959.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [
-    libiconv
-    libintl
-  ]
-  ++ lib.optional withData poppler_data;
+  buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
     [ zlib freetype fontconfig libjpeg openjpeg ]
-    ++ optionals (!minimal) [ cairo lcms curl ]
-    ++ optional qt5Support qtbase
+    ++ optionals (!minimal) [ cairo lcms curl ] ++ optional qt5Support qtbase
     ++ optional introspectionSupport gobject-introspection;
 
   # Not sure when and how to pass it.  It seems an upstream bug anyway.

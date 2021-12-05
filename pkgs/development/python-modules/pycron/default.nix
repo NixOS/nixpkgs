@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, udatetime, pytz, pendulum, nose
-, delorean, coveralls, arrow
-}:
+, delorean, coveralls, arrow }:
 
 buildPythonPackage rec {
   pname = "pycron";
@@ -22,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycron" ];
 
   meta = with lib; {
-    description = "Simple cron-like parser for Python, which determines if current datetime matches conditions";
+    description =
+      "Simple cron-like parser for Python, which determines if current datetime matches conditions";
     license = licenses.mit;
     homepage = "https://github.com/kipe/pycron";
     maintainers = with maintainers; [ globin ];

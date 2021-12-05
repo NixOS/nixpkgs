@@ -13,10 +13,8 @@ mkDerivation rec {
 
   postPatch = "sed '1i#include <vector>' -i src/model/World.h";
 
-  buildInputs = [
-    qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which cmake
-    gettext
-  ];
+  buildInputs =
+    [ qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which cmake gettext ];
 
   installPhase = ''
     make DESTDIR=.. install

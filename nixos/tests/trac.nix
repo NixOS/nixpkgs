@@ -1,14 +1,8 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "trac";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mmahut ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ mmahut ]; };
 
-  nodes = {
-    machine = { ... }: {
-      services.trac.enable = true;
-    };
-  };
+  nodes = { machine = { ... }: { services.trac.enable = true; }; };
 
   testScript = ''
     start_all()

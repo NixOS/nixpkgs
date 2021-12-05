@@ -2,8 +2,7 @@
 
 with pythonPackages;
 
-let
-  cerberus_1_1 = callPackage ./cerberus.nix { };
+let cerberus_1_1 = callPackage ./cerberus.nix { };
 in buildPythonApplication rec {
   pname = "pyditz";
   version = "0.11";

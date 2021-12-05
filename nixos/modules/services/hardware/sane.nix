@@ -32,14 +32,16 @@ let
     LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf
+    ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig {
+    paths = backends;
+    inherit (config.hardware.sane) disabledDefaultBackends;
+  };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -65,7 +67,7 @@ in
 
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
 
@@ -78,7 +80,7 @@ in
 
     hardware.sane.disabledDefaultBackends = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
@@ -147,7 +149,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkMerge [
@@ -189,7 +190,8 @@ in
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
-        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
+        extraGroups = [ "lp" ]
+          ++ optionals config.services.avahi.enable [ "avahi" ];
       };
     })
   ];

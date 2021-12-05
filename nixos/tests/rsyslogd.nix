@@ -1,7 +1,5 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -27,9 +25,7 @@ with pkgs.lib;
     name = "rsyslogd-test2";
     meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
-    machine = { config, pkgs, ... }: {
-      services.rsyslogd.enable = true;
-    };
+    machine = { config, pkgs, ... }: { services.rsyslogd.enable = true; };
 
     # ensure rsyslogd is receiving messages from journald
     testScript = ''

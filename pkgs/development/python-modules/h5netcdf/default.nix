@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, h5py
-, pytestCheckHook
-, netcdf4
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, h5py, pytestCheckHook, netcdf4
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "h5netcdf";
@@ -18,20 +11,16 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch{
-      url = "https://patch-diff.githubusercontent.com/raw/h5netcdf/h5netcdf/pull/82.patch";
-    sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
+    (fetchpatch {
+      url =
+        "https://patch-diff.githubusercontent.com/raw/h5netcdf/h5netcdf/pull/82.patch";
+      sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
     })
   ];
 
-  propagatedBuildInputs = [
-    h5py
-  ];
+  propagatedBuildInputs = [ h5py ];
 
-  checkInputs = [
-    pytestCheckHook
-    netcdf4
-  ];
+  checkInputs = [ pytestCheckHook netcdf4 ];
 
   disabled = pythonOlder "3.6";
 

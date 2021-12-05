@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dnspython
-, idna
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, dnspython, idna, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "email-validator";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "19n6p75m96kwg38bpfsa7ksj26aki02p5pr5f36q8wv3af84s61c";
   };
 
-  propagatedBuildInputs = [
-    dnspython
-    idna
-  ];
+  propagatedBuildInputs = [ dnspython idna ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # fails with dns.resolver.NoResolverConfiguration due to network sandboxing
@@ -39,15 +28,14 @@ buildPythonPackage rec {
     "test_validate_email__with_configured_resolver"
   ];
 
-  pythonImportsCheck = [
-    "email_validator"
-  ];
+  pythonImportsCheck = [ "email_validator" ];
 
   meta = with lib; {
-    description = "A robust email syntax and deliverability validation library for Python 2.x/3.x.";
-    homepage    = "https://github.com/JoshData/python-email-validator";
-    license     = licenses.cc0;
+    description =
+      "A robust email syntax and deliverability validation library for Python 2.x/3.x.";
+    homepage = "https://github.com/JoshData/python-email-validator";
+    license = licenses.cc0;
     maintainers = with maintainers; [ siddharthist ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

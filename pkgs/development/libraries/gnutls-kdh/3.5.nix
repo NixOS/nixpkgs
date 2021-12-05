@@ -1,4 +1,4 @@
-{ callPackage, fetchFromGitHub, autoreconfHook, ... } @ args:
+{ callPackage, fetchFromGitHub, autoreconfHook, ... }@args:
 
 callPackage ./generic.nix (args // {
   version = "1.0";

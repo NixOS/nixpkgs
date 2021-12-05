@@ -1,7 +1,4 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-}:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "tfsec";
@@ -16,11 +13,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/aquasecurity/tfsec";
 
-  ldflags = [
-    "-w"
-    "-s"
-    "-X ${goPackagePath}/version.Version=${version}"
-  ];
+  ldflags = [ "-w" "-s" "-X ${goPackagePath}/version.Version=${version}" ];
 
   meta = with lib; {
     description = "Static analysis powered security scanner for terraform code";

@@ -12,20 +12,19 @@ let
       sha256 = "sha256-IDXO+MgFlnT7VPugcQr/IGLZeD/vWFqJ0D0zVIbTtk4=";
     };
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "scala-cli";
   inherit version;
   nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
   buildInputs = [ coreutils zlib stdenv.cc.cc ];
-  src =
-    let
-      asset = assets."${stdenv.hostPlatform.system}" or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-    in
-    fetchurl {
-      url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
-      sha256 = asset.sha256;
-    };
+  src = let
+    asset = assets."${stdenv.hostPlatform.system}" or (throw
+      "Unsupported platform ${stdenv.hostPlatform.system}");
+  in fetchurl {
+    url =
+      "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
+    sha256 = asset.sha256;
+  };
 
   unpackPhase = ''
     runHook preUnpack
@@ -56,7 +55,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://scala-cli.virtuslab.org";
-    downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
+    downloadPage =
+      "https://github.com/VirtusLab/scala-cli/releases/v${version}";
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];

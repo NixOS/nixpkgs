@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, six
-, requests
-}:
+{ buildPythonPackage, lib, fetchPypi, six, requests }:
 
 buildPythonPackage rec {
   version = "3.2.0";

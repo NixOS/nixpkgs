@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitLab
-, fetchpatch
-, python3
-, wrapGAppsHook
-, gobject-introspection
-, gtk3
-, glib
-, gst_all_1
-}:
+{ lib, fetchFromGitLab, fetchpatch, python3, wrapGAppsHook
+, gobject-introspection, gtk3, glib, gst_all_1 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-keysign";
@@ -24,26 +16,23 @@ python3.pkgs.buildPythonApplication rec {
   patches = [
     # fix build failure due to missing import
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-keysign/commit/216c3677e68960afc517edc00529323e85909323.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gnome-keysign/commit/216c3677e68960afc517edc00529323e85909323.patch";
       sha256 = "1w410gvcridbq26sry7fxn49v59ss2lc0w5ab7csva8rzs1nc990";
     })
 
     # stop requiring lxml (no longer used)
     # https://gitlab.gnome.org/GNOME/gnome-keysign/merge_requests/23
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-keysign/commit/ffc6f40584d7564951e1c8b6d18d4f8a6a3fa09d.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gnome-keysign/commit/ffc6f40584d7564951e1c8b6d18d4f8a6a3fa09d.patch";
       sha256 = "1hs6mmhi2f21kvy26llzvp37yf0i0dr69d18r641139nr6qg6kwy";
       includes = [ "setup.py" ];
     })
   ];
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    gobject-introspection
-  ] ++ (with python3.pkgs; [
-    Babel
-    babelgladeextractor
-  ]);
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ]
+    ++ (with python3.pkgs; [ Babel babelgladeextractor ]);
 
   buildInputs = [
     # TODO: add avahi support
@@ -52,7 +41,9 @@ python3.pkgs.buildPythonApplication rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    (gst_all_1.gst-plugins-bad.override { enableZbar = true; }) # for zbar plug-in
+    (gst_all_1.gst-plugins-bad.override {
+      enableZbar = true;
+    }) # for zbar plug-in
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -74,7 +65,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
+    description =
+      "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://wiki.gnome.org/Apps/Keysign";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

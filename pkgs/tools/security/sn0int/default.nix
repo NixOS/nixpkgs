@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libsodium
-, libseccomp
-, sqlite
-, pkg-config
+{ lib, fetchFromGitHub, rustPlatform, libsodium, libseccomp, sqlite, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,15 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-dXNIbngfwMVvLx4uSO6MWpSrZfUGhlggGvXHysYAJIE=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libsodium
-    libseccomp
-    sqlite
-  ];
+  buildInputs = [ libsodium libseccomp sqlite ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
   # in "checkPhase", hence fails in sandbox of "nix".

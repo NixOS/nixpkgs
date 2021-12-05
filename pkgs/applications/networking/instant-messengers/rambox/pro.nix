@@ -1,7 +1,6 @@
 { stdenv, callPackage, fetchurl, lib }:
 
-let
-  mkRambox = opts: callPackage (import ./rambox.nix opts) { };
+let mkRambox = opts: callPackage (import ./rambox.nix opts) { };
 in mkRambox rec {
   pname = "rambox-pro";
   version = "1.5.0";
@@ -10,13 +9,15 @@ in mkRambox rec {
 
   src = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.AppImage";
+      url =
+        "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.AppImage";
       sha256 = "1g7lrjm8yxklqpc2mp8gy0g61wfilr15dl80r3sh6pa5b4k5spir";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = with lib; {
-    description = "Messaging and emailing app that combines common web applications into one";
+    description =
+      "Messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.unfree;
     maintainers = with maintainers; [ chrisaw ];

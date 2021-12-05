@@ -1,14 +1,12 @@
 { config, pkgs, lib, ... }:
 
-
 let
   cfg = config.services.xmrig;
 
   json = pkgs.formats.json { };
   configFile = json.generate "config.json" cfg.settings;
-in
 
-with lib;
+in with lib;
 
 {
   options = {
@@ -58,7 +56,8 @@ with lib;
       after = [ "network.target" ];
       description = "XMRig Mining Software Service";
       serviceConfig = {
-        ExecStartPre = "${cfg.package}/bin/xmrig --config=${configFile} --dry-run";
+        ExecStartPre =
+          "${cfg.package}/bin/xmrig --config=${configFile} --dry-run";
         ExecStart = "${cfg.package}/bin/xmrig --config=${configFile}";
         # https://xmrig.com/docs/miner/randomx-optimization-guide/msr
         # If you use recent XMRig with root privileges (Linux) or admin
@@ -69,7 +68,5 @@ with lib;
     };
   };
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ratsclub ];
-  };
+  meta = with lib; { maintainers = with maintainers; [ ratsclub ]; };
 }

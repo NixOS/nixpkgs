@@ -1,11 +1,12 @@
-{ lib, appleDerivation, xcbuildHook
-, openssl_1_0_2, Librpcsvc, xnu, libpcap, developer_cmds }:
+{ lib, appleDerivation, xcbuildHook, openssl_1_0_2, Librpcsvc, xnu, libpcap
+, developer_cmds }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ openssl_1_0_2 xnu Librpcsvc libpcap developer_cmds ];
 
-  NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
+  NIX_CFLAGS_COMPILE =
+    " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
 
   # "spray" requires some files that aren't compiling correctly in xcbuild.
   # "rtadvd" seems to fail with some missing constants.
@@ -41,7 +42,7 @@ appleDerivation {
 
     # mkdir -p $out/System/Library/LaunchDaemons
     # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
- '';
+  '';
 
   meta = {
     platforms = lib.platforms.darwin;

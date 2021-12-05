@@ -1,27 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
+{ lib, buildPythonApplication, fetchPypi
 # buildInputs
-, glibcLocales
-, pkginfo
-, check-manifest
+, glibcLocales, pkginfo, check-manifest
 # propagatedBuildInputs
-, py
-, devpi-common
-, pluggy
-, setuptools
+, py, devpi-common, pluggy, setuptools
 # CheckInputs
-, pytest
-, pytest-flake8
-, webtest
-, mock
-, devpi-server
-, tox
-, sphinx
-, wheel
-, git
-, mercurial
-}:
+, pytest, pytest-flake8, webtest, mock, devpi-server, tox, sphinx, wheel, git
+, mercurial }:
 
 buildPythonApplication rec {
   pname = "devpi-client";
@@ -34,12 +18,20 @@ buildPythonApplication rec {
 
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
+  propagatedBuildInputs =
+    [ py devpi-common pluggy setuptools check-manifest pkginfo ];
 
   checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+    pytest
+    pytest-flake8
+    webtest
+    mock
+    devpi-server
+    tox
+    sphinx
+    wheel
+    git
+    mercurial
   ];
 
   # --fast skips tests which try to start a devpi-server improperly
@@ -53,7 +45,8 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://doc.devpi.net";
-    description = "Client for devpi, a pypi index server and packaging meta tool";
+    description =
+      "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
   };

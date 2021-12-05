@@ -1,18 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, xorg
-, lxqt-build-tools
-, libfm-qt
-, libexif
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, qtbase, qttools
+, qtx11extras, qtsvg, xorg, lxqt-build-tools, libfm-qt, libexif
+, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lximage-qt";
@@ -25,11 +13,7 @@ mkDerivation rec {
     sha256 = "1bf0smkawyibrabw7zcynwr2afpsv7pnnyxn4nqgh6mxnp7al157";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     qtbase

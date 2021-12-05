@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, jupyterhub
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, jupyterhub }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
@@ -23,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tmpauthenticator" ];
 
   meta = with lib; {
-    description = "Simple Jupyterhub authenticator that allows anyone to log in.";
+    description =
+      "Simple Jupyterhub authenticator that allows anyone to log in.";
     license = with licenses; [ bsd3 ];
     homepage = "https://github.com/jupyterhub/tmpauthenticator";
     maintainers = with maintainers; [ chiroptical ];

@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/make/";
-    description = "A tool to control the generation of non-source files from sources";
+    description =
+      "A tool to control the generation of non-source files from sources";
     license = licenses.gpl3Plus;
 
     longDescription = ''

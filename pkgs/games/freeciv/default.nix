@@ -1,11 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
-, zlib, bzip2, curl, xz, gettext, libiconv
-, sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk3, wrapGAppsHook
-, qtClient ? false, qt5
-, server ? true, readline
-, enableSqlite ? true, sqlite
-}:
+, zlib, bzip2, curl, xz, gettext, libiconv, sdlClient ? true, SDL, SDL_mixer
+, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth, gtkClient ? false, gtk3
+, wrapGAppsHook, qtClient ? false, qt5, server ? true, readline
+, enableSqlite ? true, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
@@ -30,24 +27,29 @@ stdenv.mkDerivation rec {
     ++ lib.optional gtkClient [ wrapGAppsHook ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv ]
-    ++ lib.optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
-    ++ lib.optionals gtkClient [ gtk3 ]
-    ++ lib.optionals qtClient  [ qt5.qtbase ]
-    ++ lib.optional server readline
+    ++ lib.optionals sdlClient [
+      SDL
+      SDL_mixer
+      SDL_image
+      SDL_ttf
+      SDL_gfx
+      freetype
+      fluidsynth
+    ] ++ lib.optionals gtkClient [ gtk3 ]
+    ++ lib.optionals qtClient [ qt5.qtbase ] ++ lib.optional server readline
     ++ lib.optional enableSqlite sqlite;
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
   configureFlags = [ "--enable-shared" ]
-    ++ lib.optional sdlClient "--enable-client=sdl"
-    ++ lib.optionals qtClient [
+    ++ lib.optional sdlClient "--enable-client=sdl" ++ lib.optionals qtClient [
       "--enable-client=qt"
       "--with-qt5-includes=${qt5.qtbase.dev}/include"
     ] ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
     ++ lib.optional (!gtkClient) "--enable-fcmp=cli"
-    ++ lib.optional (!server)    "--disable-server";
+    ++ lib.optional (!server) "--disable-server";
 
   postFixup = lib.optionalString qtClient ''
     wrapQtApp $out/bin/freeciv-qt

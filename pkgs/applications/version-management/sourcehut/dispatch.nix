@@ -1,11 +1,4 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, pyyaml
-, PyGithub
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, srht, pyyaml, PyGithub, python }:
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
@@ -20,11 +13,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    pyyaml
-    PyGithub
-  ];
+  propagatedBuildInputs = [ srht pyyaml PyGithub ];
 
   preBuild = ''
     export PKGVER=${version}
@@ -33,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht";
-    description = "Task dispatcher and service integration tool for the sr.ht network";
+    description =
+      "Task dispatcher and service integration tool for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];
   };

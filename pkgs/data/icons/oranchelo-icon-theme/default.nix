@@ -11,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TKi42SA33pGKdrPtGTpvxFbOP+5N93Y4BvO4CRTveLM=";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ plasma5Packages.breeze-icons hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

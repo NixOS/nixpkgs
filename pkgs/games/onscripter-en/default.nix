@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl
-, libpng, libjpeg, libogg, libvorbis, freetype, smpeg
+{ lib, stdenv, fetchurl, libpng, libjpeg, libogg, libvorbis, freetype, smpeg
 , SDL, SDL_image, SDL_mixer, SDL_ttf }:
-
 
 stdenv.mkDerivation {
   pname = "onscripter-en";
@@ -9,13 +7,23 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     # The website is not available now.
-    url = "https://www.dropbox.com/s/ag21owy9poyr2oy/onscripter-en-20110930-src.tar.bz2";
+    url =
+      "https://www.dropbox.com/s/ag21owy9poyr2oy/onscripter-en-20110930-src.tar.bz2";
     sha256 = "1kzm6d894c0ihgkwhd03x3kaqqz0sb6kf0r86xrrz12y309zfam6";
   };
 
-  buildInputs = [ libpng libjpeg libogg libvorbis freetype smpeg
-                  SDL SDL_image SDL_mixer SDL_ttf
-                ];
+  buildInputs = [
+    libpng
+    libjpeg
+    libogg
+    libvorbis
+    freetype
+    smpeg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+  ];
 
   configureFlags = [ "--no-werror" ];
 

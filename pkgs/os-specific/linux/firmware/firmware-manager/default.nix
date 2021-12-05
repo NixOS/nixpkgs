@@ -1,4 +1,5 @@
-{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, glib, udev, cairo, pango, atk, gdk-pixbuf, gtk3, wrapGAppsHook }:
+{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, glib, udev
+, cairo, pango, atk, gdk-pixbuf, gtk3, wrapGAppsHook }:
 rustPlatform.buildRustPackage rec {
   pname = "firmware-manager";
   version = "0.1.2";

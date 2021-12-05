@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.10.2";
 
   src = fetchurl {
-    url = "https://oss.sonatype.org/service/local/repositories/releases/content/com/jpmorgan/quorum/${pname}-app/${version}/${pname}-app-${version}-app.jar";
+    url =
+      "https://oss.sonatype.org/service/local/repositories/releases/content/com/jpmorgan/quorum/${pname}-app/${version}/${pname}-app-${version}-app.jar";
     sha256 = "1zn8w7q0q5man0407kb82lw4mlvyiy9whq2f6izf2b5415f9s0m4";
   };
 

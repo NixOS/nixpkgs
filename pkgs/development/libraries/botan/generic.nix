@@ -1,15 +1,8 @@
 { lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
-, baseVersion, revision, sha256
-, sourceExtension ? "tar.xz"
-, extraConfigureFlags ? ""
-, extraPatches ? [ ]
-, postPatch ? null
-, knownVulnerabilities ? [ ]
-, CoreServices
-, Security
-, ...
-}:
+, baseVersion, revision, sha256, sourceExtension ? "tar.xz"
+, extraConfigureFlags ? "", extraPatches ? [ ], postPatch ? null
+, knownVulnerabilities ? [ ], CoreServices, Security, ... }:
 
 stdenv.mkDerivation rec {
   pname = "botan";
@@ -18,8 +11,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "Botan-${version}.${sourceExtension}";
     urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
-       "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
+      "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
+      "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
     ];
     inherit sha256;
   };
@@ -30,7 +23,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${
+      if openssl != null then "--with-openssl" else ""
+    } ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else ""}
   '';
 
   enableParallelBuilding = true;

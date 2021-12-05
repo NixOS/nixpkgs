@@ -1,12 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, filelock
-, requests
-, tqdm
-, setuptools
-, six
-}:
+{ lib, buildPythonApplication, fetchPypi, filelock, requests, tqdm, setuptools
+, six }:
 
 buildPythonApplication rec {
   pname = "gdown";

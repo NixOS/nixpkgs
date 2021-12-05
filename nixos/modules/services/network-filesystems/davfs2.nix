@@ -9,8 +9,7 @@ let
     dav_group ${cfg.davGroup}
     ${cfg.extraConfig}
   '';
-in
-{
+in {
   options.services.davfs2 = {
     enable = mkOption {
       type = types.bool;
@@ -49,7 +48,7 @@ in
       '';
       description = ''
         Extra lines appended to the configuration of davfs2.
-      ''  ;
+      '';
     };
   };
 

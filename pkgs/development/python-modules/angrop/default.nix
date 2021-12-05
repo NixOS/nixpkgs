@@ -1,10 +1,4 @@
-{ lib
-, angr
-, buildPythonPackage
-, fetchFromGitHub
-, progressbar
-, pythonOlder
-, tqdm
+{ lib, angr, buildPythonPackage, fetchFromGitHub, progressbar, pythonOlder, tqdm
 }:
 
 buildPythonPackage rec {
@@ -19,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ZWu9Kk/d6Qz9IEDUkuaB0f5cZV0HnZAaEDnYSoiKMDI=";
   };
 
-  propagatedBuildInputs = [
-    angr
-    progressbar
-    tqdm
-  ];
+  propagatedBuildInputs = [ angr progressbar tqdm ];
 
   # Tests have additional requirements, e.g., angr binaries
   # cle is executing the tests with the angr binaries already and is a requirement of angr

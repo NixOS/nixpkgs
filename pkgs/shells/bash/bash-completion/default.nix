@@ -1,11 +1,5 @@
-{ lib, stdenv, fetchurl
-, fetchpatch
-, autoreconfHook
-, perl
-, ps
-, python3Packages
-, bashInteractive
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, perl, ps, python3Packages
+, bashInteractive }:
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
@@ -16,7 +10,8 @@ stdenv.mkDerivation rec {
   # test fixtures that are part of the repository.
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
-    url = "https://github.com/scop/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/scop/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
@@ -45,7 +40,11 @@ stdenv.mkDerivation rec {
   # - ignore test_screen because it assumes vt terminals exist
   checkPhase = ''
     pytest . \
-      ${lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) "--ignore=test/t/test_gcc.py"} \
+      ${
+        lib.optionalString
+        (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32)
+        "--ignore=test/t/test_gcc.py"
+      } \
       --ignore=test/t/test_chsh.py \
       --ignore=test/t/test_ether_wake.py \
       --ignore=test/t/test_ifdown.py \

@@ -1,14 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland-scanner, scdoc
-, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
-, nixosTests
+{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg, meson, ninja, pkg-config
+, wayland-scanner, scdoc, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
+, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg, wlroots
+, wayland-protocols, libdrm, nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
 
-, enableXWayland ? true
-}:
+, enableXWayland ? true }:
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
@@ -38,22 +35,29 @@ stdenv.mkDerivation rec {
     ./sway-config-nixos-paths.patch
   ];
 
-  nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner scdoc
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc ];
 
   buildInputs = [
-    wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wayland-protocols libdrm
+    wayland
+    libxkbcommon
+    pcre
+    json_c
+    dbus
+    libevdev
+    pango
+    cairo
+    libinput
+    libcap
+    pam
+    gdk-pixbuf
+    librsvg
+    wayland-protocols
+    libdrm
     (wlroots.override { inherit enableXWayland; })
   ];
 
-  mesonFlags = [
-    "-Dsd-bus-provider=libsystemd"
-  ]
-    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+  mesonFlags = [ "-Dsd-bus-provider=libsystemd" ]
+    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   passthru.tests.basic = nixosTests.sway;
 
@@ -68,10 +72,10 @@ stdenv.mkDerivation rec {
       maximizes the efficiency of your screen and can be quickly manipulated
       using only the keyboard.
     '';
-    homepage    = "https://swaywm.org";
-    changelog   = "https://github.com/swaywm/sway/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://swaywm.org";
+    changelog = "https://github.com/swaywm/sway/releases/tag/${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

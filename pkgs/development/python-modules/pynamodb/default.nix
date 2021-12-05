@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, botocore
-, fetchPypi
-, mock
-, mypy
-, python-dateutil
-, pytest
-, requests
-}:
+{ lib, buildPythonPackage, botocore, fetchPypi, mock, mypy, python-dateutil
+, pytest, requests }:
 
 buildPythonPackage rec {
   pname = "pynamodb";
@@ -22,7 +14,8 @@ buildPythonPackage rec {
   checkInputs = [ requests mock pytest mypy ];
 
   meta = with lib; {
-    description = "A Pythonic interface for Amazon’s DynamoDB that supports Python 2 and 3.";
+    description =
+      "A Pythonic interface for Amazon’s DynamoDB that supports Python 2 and 3.";
     longDescription = ''
       DynamoDB is a great NoSQL service provided by Amazon, but the API is
       verbose. PynamoDB presents you with a simple, elegant API.

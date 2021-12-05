@@ -1,11 +1,6 @@
-{ lib
-, pythonPackages
-, qscintilla
-, qtbase
-}:
+{ lib, pythonPackages, qscintilla, qtbase }:
 
-let
-  inherit (pythonPackages) buildPythonPackage isPy3k python sip_4 pyqt5;
+let inherit (pythonPackages) buildPythonPackage isPy3k python sip_4 pyqt5;
 in buildPythonPackage rec {
   pname = "qscintilla";
   version = qscintilla.version;
@@ -58,7 +53,8 @@ in buildPythonPackage rec {
   pythonImportsCheck = [ "PyQt5.Qsci" ];
 
   meta = with lib; {
-    description = "A Python binding to QScintilla, Qt based text editing control";
+    description =
+      "A Python binding to QScintilla, Qt based text editing control";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/";

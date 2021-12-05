@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2017-8364-fill-buffer.patch";
-      url = "https://sources.debian.net/data/main/r/rzip/2.1-4.1/debian/patches/80-CVE-2017-8364-fill-buffer.patch";
+      url =
+        "https://sources.debian.net/data/main/r/rzip/2.1-4.1/debian/patches/80-CVE-2017-8364-fill-buffer.patch";
       sha256 = "0jcjlx9ksdvxvjyxmyzscx9ar9992iy5icw0sc3n0p09qi4d6x1r";
     })
   ];

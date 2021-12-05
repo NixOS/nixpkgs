@@ -19,25 +19,16 @@ let
     curses = tiles.override { tiles = false; };
   };
 
-  lib = callPackage ./lib.nix {};
+  lib = callPackage ./lib.nix { };
 
-  pkgs = callPackage ./pkgs {};
+  pkgs = callPackage ./pkgs { };
 
   self = {
-    inherit
-    callPackage
-    stable
-    git;
+    inherit callPackage stable git;
 
-    inherit (lib)
-    buildMod
-    buildSoundPack
-    buildTileSet
-    wrapCDDA
-    attachPkgs;
+    inherit (lib) buildMod buildSoundPack buildTileSet wrapCDDA attachPkgs;
 
     inherit pkgs;
   };
-in
 
-self
+in self

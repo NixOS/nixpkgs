@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pillow, xlib, six, xvfb-run, sphinx }:
+{ lib, buildPythonPackage, fetchFromGitHub, pillow, xlib, six, xvfb-run, sphinx
+}:
 
 buildPythonPackage rec {
   pname = "pystray";

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, poetry-core
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, lxml, poetry-core, pythonOlder
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "xpath-expressions";
@@ -20,14 +14,9 @@ buildPythonPackage rec {
     sha256 = "0l289iw2zmzxyfi3g2z7b917vmsaz47h5jp871zvykpmpigc632h";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    lxml
-    pytestCheckHook
-  ];
+  checkInputs = [ lxml pytestCheckHook ];
 
   postPatch = ''
     # Was fixed upstream but not released

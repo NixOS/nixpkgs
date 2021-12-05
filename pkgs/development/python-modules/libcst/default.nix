@@ -1,16 +1,5 @@
-{ lib
-, black
-, buildPythonPackage
-, dataclasses
-, fetchFromGitHub
-, hypothesis
-, isort
-, pytest
-, python
-, pythonOlder
-, pyyaml
-, typing-extensions
-, typing-inspect
+{ lib, black, buildPythonPackage, dataclasses, fetchFromGitHub, hypothesis
+, isort, pytest, python, pythonOlder, pyyaml, typing-extensions, typing-inspect
 }:
 
 buildPythonPackage rec {
@@ -27,20 +16,10 @@ buildPythonPackage rec {
     sha256 = "063bl21gyyd25i2v0j6kz29cxxdfhng2nins4i2qblmac90f2nqy";
   };
 
-  propagatedBuildInputs = [
-    hypothesis
-    typing-extensions
-    typing-inspect
-    pyyaml
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = [ hypothesis typing-extensions typing-inspect pyyaml ]
+    ++ lib.optional (pythonOlder "3.7") [ dataclasses ];
 
-  checkInputs = [
-    black
-    isort
-    pytest
-  ];
+  checkInputs = [ black isort pytest ];
 
   preCheck = ''
     ${python.interpreter} -m libcst.codegen.generate visitors
@@ -54,12 +33,11 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [
-    "libcst"
-  ];
+  pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
-    description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
+    description =
+      "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ruuda SuperSandro2000 ];

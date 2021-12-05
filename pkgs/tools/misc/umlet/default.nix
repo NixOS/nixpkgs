@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   pname = "umlet";
 
   src = fetchurl {
-    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
+    url =
+      "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
     sha256 = "0jfyxjxsjx29xhs3fl0f574nyncmk9j5jp8zlgd401mcaznn9c7l";
   };
 

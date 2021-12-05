@@ -16,11 +16,7 @@ buildGoModule rec {
 
   buildInputs = [ readline ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.dataDir=${placeholder "out"}/share/hilbish"
-  ];
+  ldflags = [ "-s" "-w" "-X main.dataDir=${placeholder "out"}/share/hilbish" ];
 
   postInstall = ''
     mkdir -p "$out/share/hilbish"

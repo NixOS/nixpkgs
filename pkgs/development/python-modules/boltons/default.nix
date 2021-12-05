@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "boltons";
@@ -19,7 +14,8 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/mahmoud/boltons/commit/754afddf141ea26956c88c7e13fe5e7ca7942654.patch";
+      url =
+        "https://github.com/mahmoud/boltons/commit/754afddf141ea26956c88c7e13fe5e7ca7942654.patch";
       sha256 = "14kcq8pl4pmgcnlnmj1sh1yrksgym0kn0kgz2648g192svqkbpz8";
     })
   ];
@@ -33,7 +29,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mahmoud/boltons";
-    description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
+    description =
+      "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
     longDescription = ''
       Boltons is a set of over 220 BSD-licensed, pure-Python utilities
       in the same spirit as — and yet conspicuously missing from — the

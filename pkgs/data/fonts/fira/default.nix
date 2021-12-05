@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "4.202";
+let version = "4.202";
 in fetchFromGitHub {
   name = "fira-${version}";
 

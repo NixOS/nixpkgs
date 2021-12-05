@@ -1,6 +1,7 @@
 { pname, version, src, meta, desktopName ? "Rambox" }:
 
-{ appimageTools, lib, fetchurl, gsettings-desktop-schemas, gtk3, makeDesktopItem }:
+{ appimageTools, lib, fetchurl, gsettings-desktop-schemas, gtk3, makeDesktopItem
+}:
 
 let
   name = "${pname}-${version}";
@@ -14,9 +15,7 @@ let
     categories = "Network;";
   });
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 in appimageTools.wrapType2 rec {
   inherit name src meta;
   profile = ''

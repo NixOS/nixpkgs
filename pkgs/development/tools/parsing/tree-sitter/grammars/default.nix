@@ -13,7 +13,8 @@
   tree-sitter-dart = lib.importJSON ./tree-sitter-dart.json;
   tree-sitter-dot = lib.importJSON ./tree-sitter-dot.json;
   tree-sitter-elisp = lib.importJSON ./tree-sitter-elisp.json;
-  tree-sitter-embedded-template = lib.importJSON ./tree-sitter-embedded-template.json;
+  tree-sitter-embedded-template =
+    lib.importJSON ./tree-sitter-embedded-template.json;
   tree-sitter-fennel = lib.importJSON ./tree-sitter-fennel.json;
   tree-sitter-fish = lib.importJSON ./tree-sitter-fish.json;
   tree-sitter-fluent = lib.importJSON ./tree-sitter-fluent.json;

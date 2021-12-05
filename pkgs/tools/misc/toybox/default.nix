@@ -1,10 +1,6 @@
-{
-  stdenv, lib, fetchFromGitHub, which,
-  buildPackages,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableMinimal ? false,
-  extraConfig ? ""
-}:
+{ stdenv, lib, fetchFromGitHub, which, buildPackages
+, enableStatic ? stdenv.hostPlatform.isStatic, enableMinimal ? false
+, extraConfig ? "" }:
 
 stdenv.mkDerivation rec {
   pname = "toybox";
@@ -18,8 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
-  buildInputs = lib.optionals (enableStatic && stdenv.cc.libc ? static)
-    [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -27,16 +25,15 @@ stdenv.mkDerivation rec {
   passAsFile = [ "extraConfig" ];
 
   configurePhase = ''
-    make ${if enableMinimal then
-      "allnoconfig"
-    else
-      if stdenv.isFreeBSD then
+    make ${
+      if enableMinimal then
+        "allnoconfig"
+      else if stdenv.isFreeBSD then
         "freebsd_defconfig"
+      else if stdenv.isDarwin then
+        "macos_defconfig"
       else
-        if stdenv.isDarwin then
-          "macos_defconfig"
-        else
-          "defconfig"
+        "defconfig"
     }
 
     cat $extraConfigPath .config > .config-
@@ -45,7 +42,8 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
+  makeFlags = [ "PREFIX=$(out)/bin" ]
+    ++ lib.optional enableStatic "LDFLAGS=--static";
 
   installTargets = [ "install_flat" ];
 
@@ -59,7 +57,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
-    description = "Lightweight implementation of some Unix command line utilities";
+    description =
+      "Lightweight implementation of some Unix command line utilities";
     homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;

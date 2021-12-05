@@ -1,28 +1,7 @@
-{ lib
-, fetchFromGitHub
-, fetchzip
-, mkDerivation
-, stdenv
-, Cocoa
-, CoreAudio
-, CoreFoundation
-, MediaPlayer
-, SDL2
-, cmake
-, libGL
-, libX11
-, libXrandr
-, libvdpau
-, mpv
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtwayland
-, qtwebchannel
-, qtwebengine
-, qtx11extras
-}:
+{ lib, fetchFromGitHub, fetchzip, mkDerivation, stdenv, Cocoa, CoreAudio
+, CoreFoundation, MediaPlayer, SDL2, cmake, libGL, libX11, libXrandr, libvdpau
+, mpv, ninja, pkg-config, python3, qtbase, qtwayland, qtwebchannel, qtwebengine
+, qtx11extras }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
@@ -36,7 +15,8 @@ mkDerivation rec {
   };
 
   jmpDist = fetchzip {
-    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
+    url =
+      "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
     sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
   };
 
@@ -58,27 +38,17 @@ mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreAudio
-    CoreFoundation
-    MediaPlayer
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+      CoreAudio
+      CoreFoundation
+      MediaPlayer
+    ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake ninja pkg-config python3 ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DQTROOT=${qtbase}"
-    "-GNinja"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DQTROOT=${qtbase}" "-GNinja" ];
 
   preBuild = ''
     # copy the webclient-files to the expected "dist" directory

@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ezxmlm/releases/download/v${version}/ezxmlm-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ezxmlm/releases/download/v${version}/ezxmlm-v${version}.tbz";
     sha256 = "123dn4h993mlng9gzf4nc6mw75ja7ndcxkbkwfs48j5jk1z05j6d";
   };
 

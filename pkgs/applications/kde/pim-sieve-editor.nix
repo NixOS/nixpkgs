@@ -1,9 +1,6 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kdbusaddons, kcrash, kbookmarks, kiconthemes, kio, kpimtextedit,
-  kmailtransport, libksieve, pimcommon, qtkeychain, libsecret
-}:
+{ mkDerivation, lib, kdepimTeam, extra-cmake-modules, kdoctools, kdbusaddons
+, kcrash, kbookmarks, kiconthemes, kio, kpimtextedit, kmailtransport, libksieve
+, pimcommon, qtkeychain, libsecret }:
 
 mkDerivation {
   pname = "pim-sieve-editor";
@@ -13,7 +10,16 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kdbusaddons kcrash kbookmarks kiconthemes kio kpimtextedit kmailtransport
-    libksieve pimcommon qtkeychain libsecret
+    kdbusaddons
+    kcrash
+    kbookmarks
+    kiconthemes
+    kio
+    kpimtextedit
+    kmailtransport
+    libksieve
+    pimcommon
+    qtkeychain
+    libsecret
   ];
 }

@@ -8,13 +8,9 @@ let
 
   evdi = config.boot.kernelPackages.evdi;
 
-  displaylink = pkgs.displaylink.override {
-    inherit evdi;
-  };
+  displaylink = pkgs.displaylink.override { inherit evdi; };
 
-in
-
-{
+in {
 
   config = mkIf enabled {
 

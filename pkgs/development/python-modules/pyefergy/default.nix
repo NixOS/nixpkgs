@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, iso4217
-, pythonOlder
-, pytz
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, iso4217, pythonOlder, pytz
 }:
 
 buildPythonPackage rec {
@@ -21,11 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-X/dWEBg3WG6SmMore5otLL4iIueGUS5KgjCPYoMSNd0=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    iso4217
-    pytz
-  ];
+  propagatedBuildInputs = [ aiohttp iso4217 pytz ];
 
   # Project has no tests
   doCheck = false;

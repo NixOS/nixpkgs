@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, nunavut
-, pyserial , pytest, ruamel-yaml}:
+, pyserial, pytest, ruamel-yaml }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pyuavcan";
   version = "1.1.0.dev1";
   disabled = pythonOlder "3.7"; # only python>=3.7 is supported
@@ -13,13 +13,7 @@
     sha256 = "0fmbmdnnh679zkllv5m6pkrasg7m9vjwabqnmz5m7flrgdh6h4qa";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    nunavut
-    pyserial
-    pytest
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ numpy nunavut pyserial pytest ruamel-yaml ];
 
   # allow for writable directory for darwin
   preBuild = ''
@@ -31,9 +25,7 @@
   doCheck = false;
 
   # check at least that import works, as tests fail
-  pythonImportsCheck = [
-    "pyuavcan"
-  ];
+  pythonImportsCheck = [ "pyuavcan" ];
 
   meta = with lib; {
     description = "A full-featured implementation of the UAVCAN protocol stack";

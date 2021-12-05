@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, cmake
-, curl, openssl, zlib
-, libiconv
-, version, sha256, ...
-}:
+{ lib, stdenv, fetchurl, cmake, curl, openssl, zlib, libiconv, version, sha256
+, ... }:
 
 with lib;
 
@@ -63,7 +60,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Client library that can be used to connect to MySQL or MariaDB";
+    description =
+      "Client library that can be used to connect to MySQL or MariaDB";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.all;

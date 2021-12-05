@@ -6,8 +6,11 @@ gerbil-support.gerbilPackage {
   git-version = "0.0-35-g44d490d";
   gerbil-package = "clan/poo";
   gerbil = gerbil-unstable;
-  gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto];
-  buildInputs = [];
+  gerbilInputs = with gerbil-support.gerbilPackages-unstable; [
+    gerbil-utils
+    gerbil-crypto
+  ];
+  buildInputs = [ ];
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-POO";
@@ -19,9 +22,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
-    homepage    = "https://github.com/fare/gerbil-poo";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
+    homepage = "https://github.com/fare/gerbil-poo";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
 }

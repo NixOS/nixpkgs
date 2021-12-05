@@ -1,10 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, colorama
-, hypothesis
-, poetry-core
-, pylama
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, colorama, hypothesis, poetry-core
+, pylama, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "isort";
@@ -18,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-JbRZ/3Xz35tGoCNnQesR08Sjoz3yimxZyxhhOXGvmXw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    colorama
-    hypothesis
-    pylama
-    pytestCheckHook
-  ];
+  checkInputs = [ colorama hypothesis pylama pytestCheckHook ];
 
   postCheck = ''
     # Confirm that the produced executable script is wrapped correctly and runs

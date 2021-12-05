@@ -1,16 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, zlib
-}:
+{ lib, stdenv, fetchurl, unzip, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "atasm";
   version = "1.09";
 
   src = fetchurl {
-    url = "https://atari.miribilist.com/${pname}/${pname}${builtins.replaceStrings ["."] [""] version}.zip";
+    url = "https://atari.miribilist.com/${pname}/${pname}${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }.zip";
     hash = "sha256-26shhw2r30GZIPz6S1rf6dOLKRpgpLwrqCRZX3+8PvA=";
   };
 
@@ -23,13 +20,9 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   preBuild = ''
     makeFlagsArray+=(

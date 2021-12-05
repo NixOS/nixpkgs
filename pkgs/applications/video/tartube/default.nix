@@ -1,17 +1,5 @@
-{ lib
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, pango
-, python3Packages
-, wrapGAppsHook
-, youtube-dl
-, glib
-, ffmpeg
-, aria
-}:
+{ lib, fetchFromGitHub, gdk-pixbuf, gobject-introspection, gtk3, libnotify
+, pango, python3Packages, wrapGAppsHook, youtube-dl, glib, ffmpeg, aria }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
@@ -24,10 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1m7p4chpvbh4mswsymh89dksdgwhmnkpfbx9zi2jzqgkinfd6a2k";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
   strictDeps = false;
 
@@ -43,13 +28,7 @@ python3Packages.buildPythonApplication rec {
     aria
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gtk3
-    glib
-    libnotify
-    pango
-  ];
+  buildInputs = [ gdk-pixbuf gtk3 glib libnotify pango ];
 
   postPatch = ''
     sed -i "/^\s*'pgi',$/d" setup.py
@@ -64,9 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
-  ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}" ];
 
   meta = with lib; {
     description = "A GUI front-end for youtube-dl";

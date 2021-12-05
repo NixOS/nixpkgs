@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl
-, pkg-config, intltool
-, glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
-, librsvg, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, intltool, glib, dbus, gtk3
+, libappindicator-gtk3, gst_all_1, librsvg, wrapGAppsHook
 , pulseaudioSupport ? true, libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +8,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
-    url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ebionic.tar.gz";
+    url =
+      "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ebionic.tar.gz";
     sha256 = "160pnmnmc9zwzyclsci3w1qwlgxkfx1y3x5ck6i587w78570an1r";
   };
 
@@ -19,11 +18,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
-  buildInputs = [
-    glib dbus gtk3 librsvg libappindicator-gtk3
-  ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs = [ glib dbus gtk3 librsvg libappindicator-gtk3 ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]) ++ lib.optional pulseaudioSupport libpulseaudio;
 
   meta = with lib; {
     description = "Audio recorder for GNOME and Unity Desktops";

@@ -1,22 +1,7 @@
-{ lib, stdenv, fetchurl, pkg-config, fetchFromGitLab
-, python3
-, perl
-, perlPackages
-, gtk3
-, intltool
-, libpeas
-, libsoup
-, libsecret
-, libnotify
-, libdmapsharing
-, gnome
-, totem-pl-parser
-, tdb
-, json-glib
-, itstool
-, wrapGAppsHook
-, gst_all_1
-, gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
+{ lib, stdenv, fetchurl, pkg-config, fetchFromGitLab, python3, perl
+, perlPackages, gtk3, intltool, libpeas, libsoup, libsecret, libnotify
+, libdmapsharing, gnome, totem-pl-parser, tdb, json-glib, itstool, wrapGAppsHook
+, gst_all_1, gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
 
@@ -33,7 +18,9 @@ let
       domain = "gitlab.gnome.org";
       owner = "GNOME";
       repo = old.pname;
-      rev = "${lib.toUpper old.pname}_${lib.replaceStrings ["."] ["_"] version}";
+      rev = "${lib.toUpper old.pname}_${
+          lib.replaceStrings [ "." ] [ "_" ] version
+        }";
       sha256 = "05kvrzf0cp3mskdy6iv7zqq24qdczl800q2dn1h4bk3d9wchgm4p";
     };
   });
@@ -43,16 +30,14 @@ in stdenv.mkDerivation rec {
   version = "3.4.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool perl perlPackages.XMLParser
-    itstool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config intltool perl perlPackages.XMLParser itstool wrapGAppsHook ];
 
   buildInputs = [
     python3
@@ -77,11 +62,7 @@ in stdenv.mkDerivation rec {
     libnotify
   ] ++ gst_plugins;
 
-  configureFlags = [
-    "--enable-daap"
-    "--enable-libnotify"
-    "--with-libsecret"
-  ];
+  configureFlags = [ "--enable-daap" "--enable-libnotify" "--with-libsecret" ];
 
   enableParallelBuilding = true;
 

@@ -1,10 +1,7 @@
-{ lib
-, git
-, gnupg1
-, python3Packages
-}:
+{ lib, git, gnupg1, python3Packages }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "reno";
   version = "3.1.0";
 
@@ -18,7 +15,7 @@ with python3Packages; buildPythonApplication rec {
     dulwich
     pbr
     pyyaml
-    setuptools  # required for finding pkg_resources at runtime
+    setuptools # required for finding pkg_resources at runtime
   ];
 
   checkInputs = [

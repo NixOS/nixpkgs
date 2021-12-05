@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tool to generate rust bindings and user API for glib-based libraries";
+    description =
+      "Tool to generate rust bindings and user API for glib-based libraries";
     homepage = "https://github.com/gtk-rs/gir/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ekleog ];

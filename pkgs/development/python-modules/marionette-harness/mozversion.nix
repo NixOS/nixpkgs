@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mozlog
-, mozdevice
-}:
+{ lib, buildPythonPackage, fetchPypi, mozlog, mozdevice }:
 
 buildPythonPackage rec {
   pname = "mozversion";

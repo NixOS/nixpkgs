@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.0.2-20211014";
 
   src = fetchzip {
-    url = "https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
+    url =
+      "https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
     sha256 = "sha256-1o0kfBMhka/Midtg+GzpVDDygixL6mrfxtY5WrjLN+0=";
   };
 

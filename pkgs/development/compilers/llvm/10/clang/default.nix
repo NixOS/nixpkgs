@@ -1,8 +1,6 @@
-{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
-, buildLlvmTools
-, fixDarwinDylibNames
-, enableManpages ? false
-}:
+{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version
+, clang-tools-extra_src, python3, buildLlvmTools, fixDarwinDylibNames
+, enableManpages ? false }:
 
 let
   self = stdenv.mkDerivation ({
@@ -29,7 +27,10 @@ let
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${
+        lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+        "-native"
+      }"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -127,8 +128,6 @@ let
 
     doCheck = false;
 
-    meta = llvm_meta // {
-      description = "man page for Clang ${version}";
-    };
+    meta = llvm_meta // { description = "man page for Clang ${version}"; };
   });
 in self

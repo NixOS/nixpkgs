@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
-, parted, systemd ? null
-}:
+{ stdenv, lib, fetchFromGitHub, parted, systemd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "f3";
@@ -14,34 +12,25 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     sed -i 's/-oroot -groot//' Makefile
+    sed -i 's/-oroot -groot//' Makefile
 
-     for f in f3write.h2w log-f3wr; do
-      substituteInPlace $f \
-        --replace '$(dirname $0)' $out/bin
-     done
+    for f in f3write.h2w log-f3wr; do
+     substituteInPlace $f \
+       --replace '$(dirname $0)' $out/bin
+    done
   '';
 
-  buildInputs = [
-    parted
-  ]
-  ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = [ parted ] ++ lib.optional stdenv.isLinux systemd;
 
   enableParallelBuilding = true;
 
-  buildFlags   = [
+  buildFlags = [
     "all" # f3read, f3write
-  ]
-  ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
+  ] ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
 
-  installFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installTargets = [
-    "install"
-  ]
-  ++ lib.optional stdenv.isLinux "install-extra";
+  installTargets = [ "install" ] ++ lib.optional stdenv.isLinux "install-extra";
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr

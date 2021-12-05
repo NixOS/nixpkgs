@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-}:
+{ lib, buildPythonPackage, fetchPypi, cython }:
 
 buildPythonPackage rec {
   pname = "murmurhash";
@@ -17,9 +13,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'wheel>=0.32.0,<0.33.0'" ""
   '';
 
-  buildInputs = [
-   cython
-  ];
+  buildInputs = [ cython ];
 
   # No test
   doCheck = false;

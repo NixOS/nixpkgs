@@ -1,19 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ocaml
+{ lib, buildDunePackage, fetchurl, ocaml
 
-, alcotest
-, eqaf
-, fmt
-}:
+, alcotest, eqaf, fmt }:
 
 buildDunePackage rec {
   pname = "callipyge";
   version = "0.2";
 
   src = fetchurl {
-    url = "https://github.com/oklm-wsh/Callipyge/releases/download/v${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/oklm-wsh/Callipyge/releases/download/v${version}/${pname}-${version}.tbz";
     sha256 = "sha256-T/94a88xvK51TggjXecdKc9kyTE9aIyueIt5T24sZB0=";
   };
 

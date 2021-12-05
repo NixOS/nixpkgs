@@ -1,14 +1,5 @@
-{ lib, stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  glib,
-  pkg-config,
-  json_c,
-  xen,
-  libvirt,
-  xenSupport ? true }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flex, glib, pkg-config
+, json_c, xen, libvirt, xenSupport ? true }:
 
 with lib;
 

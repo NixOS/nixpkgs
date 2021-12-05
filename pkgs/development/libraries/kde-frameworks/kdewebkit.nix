@@ -1,5 +1,4 @@
-{ mkDerivation, extra-cmake-modules
-, kconfig, kcoreaddons, kio, kparts, qtwebkit
+{ mkDerivation, extra-cmake-modules, kconfig, kcoreaddons, kio, kparts, qtwebkit
 }:
 
 mkDerivation {
@@ -8,7 +7,5 @@ mkDerivation {
   buildInputs = [ kconfig kcoreaddons kio kparts ];
   propagatedBuildInputs = [ qtwebkit ];
   outputs = [ "out" "dev" ];
-  cmakeFlags = [
-    "-DBUILD_DESIGNERPLUGIN=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_DESIGNERPLUGIN=OFF" ];
 }

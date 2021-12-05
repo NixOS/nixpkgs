@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, python3, gtk3, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, python3, gtk3, pantheon
+, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
@@ -12,18 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0xh6ppr73p76z60ym49b4d0liwdc96w41cc5p07d48hxjsa6qd6n";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    python3
-    gtk3
-  ];
+  nativeBuildInputs = [ meson ninja python3 gtk3 ];
 
-  propagatedBuildInputs = [
-    pantheon.elementary-icon-theme
-    gnome-icon-theme
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs =
+    [ pantheon.elementary-icon-theme gnome-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

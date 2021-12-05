@@ -1,31 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja, boost
+, brotli, capnproto, cctz, clang-unwrapped, double-conversion, icu, jemalloc
+, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl, poco
+, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
   version = "21.8.8.29";
 
-  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
+  broken =
+    stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
     sha256 = "1hvsnh3fzbh1vl7cki0sbpd5ar6cxdc7k3mfqby0xxv3zfywmmr2";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
+    boost
+    brotli
+    capnproto
+    cctz
+    clang-unwrapped
+    double-conversion
+    icu
+    jemalloc
+    libxml2
+    lld
+    llvm
+    lz4
+    libmysqlclient
+    openssl
+    perl
+    poco
+    protobuf
+    python3
+    rapidjson
+    re2
+    rdkafka
+    readline
+    sparsehash
+    unixODBC
+    xxHash
+    zstd
   ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''

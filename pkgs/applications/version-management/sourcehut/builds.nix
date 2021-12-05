@@ -1,26 +1,16 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, buildGoModule
-, srht
-, redis
-, celery
-, pyyaml
-, markdown
-, ansi2html
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, buildGoModule, srht, redis
+, celery, pyyaml, markdown, ansi2html, python }:
 let
   version = "0.66.7";
 
-  buildWorker = src: buildGoModule {
-    inherit src version;
-    pname = "builds-sr-ht-worker";
+  buildWorker = src:
+    buildGoModule {
+      inherit src version;
+      pname = "builds-sr-ht-worker";
 
-    vendorSha256 = "sha256-giOaldV46aBqXyFH/cQVsbUr6Rb4VMhbBO86o48tRZY=";
-  };
-in
-buildPythonPackage rec {
+      vendorSha256 = "sha256-giOaldV46aBqXyFH/cQVsbUr6Rb4VMhbBO86o48tRZY=";
+    };
+in buildPythonPackage rec {
   inherit version;
   pname = "buildsrht";
 
@@ -33,14 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    redis
-    celery
-    pyyaml
-    markdown
-    ansi2html
-  ];
+  propagatedBuildInputs = [ srht redis celery pyyaml markdown ansi2html ];
 
   preBuild = ''
     export PKGVER=${version}

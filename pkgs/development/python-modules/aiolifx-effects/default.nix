@@ -1,9 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, aiolifx
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, aiolifx }:
 
 buildPythonPackage rec {
   pname = "aiolifx-effects";
@@ -26,7 +21,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/amelchio/aiolifx_effects";
     license = licenses.mit;
-    description = "Light effects (pulse, colorloop ...) for LIFX lights running on aiolifx";
+    description =
+      "Light effects (pulse, colorloop ...) for LIFX lights running on aiolifx";
     maintainers = with maintainers; [ netixx ];
   };
 }

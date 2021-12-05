@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbr
-, calmjs-parse
-, certifi
-, chardet
-, idna
-, ply
-, requests
-, urllib3
-, httpretty
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pbr, calmjs-parse, certifi, chardet
+, idna, ply, requests, urllib3, httpretty, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "eebrightbox";
@@ -28,26 +16,14 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "==" ">="
   '';
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   PBR_VERSION = version;
 
-  propagatedBuildInputs = [
-    calmjs-parse
-    certifi
-    chardet
-    idna
-    ply
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs =
+    [ calmjs-parse certifi chardet idna ply requests urllib3 ];
 
-  checkInputs = [
-    httpretty
-    pytestCheckHook
-  ];
+  checkInputs = [ httpretty pytestCheckHook ];
 
   meta = with lib; {
     description = "Connector for EE BrightBox routers";

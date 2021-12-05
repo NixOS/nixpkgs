@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
-}:
+{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte
+, wrapGAppsHook, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2
+, findXMLCatalogs }:
 
-let version = "0.3.2"; in
+let version = "0.3.2";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "lxterminal";
   inherit version;
 
@@ -13,21 +13,24 @@ stdenv.mkDerivation {
     sha256 = "1iafqmccsm3nnzwp6pb2c04iniqqnscj83bq1rvf58ppzk0bvih3";
   };
 
-  configureFlags = [
-    "--enable-man"
-    "--enable-gtk3"
-  ];
+  configureFlags = [ "--enable-man" "--enable-gtk3" ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkg-config wrapGAppsHook
-    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
+    automake
+    autoconf
+    intltool
+    pkg-config
+    wrapGAppsHook
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xsl
+    libxml2
+    findXMLCatalogs
   ];
 
   buildInputs = [ gtk3 vte ];
 
-  patches = [
-    ./respect-xml-catalog-files-var.patch
-  ];
+  patches = [ ./respect-xml-catalog-files-var.patch ];
 
   preConfigure = ''
     ./autogen.sh

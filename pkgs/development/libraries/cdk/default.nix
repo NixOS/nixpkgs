@@ -2,11 +2,9 @@
 
 stdenv.mkDerivation rec {
   pname = "cdk";
-  version ="5.0-20210109";
+  version = "5.0-20210109";
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   src = fetchurl {
     urls = [
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Curses development kit";
-    license = licenses.bsdOriginal ;
+    license = licenses.bsdOriginal;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-device/releases/download/v${version}/mirage-device-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-device/releases/download/v${version}/mirage-device-v${version}.tbz";
     sha256 = "18alxyi6wlxqvb4lajjlbdfkgcajsmklxi9xqmpcz07j51knqa04";
   };
 
@@ -20,5 +21,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 }
-
 

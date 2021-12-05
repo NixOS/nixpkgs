@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests_oauthlib
-, simplejson
-, pkce
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests_oauthlib
+, simplejson, pkce, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyvicare";
@@ -24,15 +17,9 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    requests_oauthlib
-    simplejson
-    pkce
-  ];
+  propagatedBuildInputs = [ requests_oauthlib simplejson pkce ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -40,9 +27,7 @@ buildPythonPackage rec {
       --replace "'setuptools-git-versioning'" " "
   '';
 
-  pythonImportsCheck = [
-    "PyViCare"
-  ];
+  pythonImportsCheck = [ "PyViCare" ];
 
   meta = with lib; {
     description = "Python Library to access Viessmann ViCare API";

@@ -4,7 +4,8 @@ buildDunePackage (rec {
   pname = "ppxfind";
   version = "1.4";
   src = fetchurl {
-    url = "https://github.com/diml/ppxfind/releases/download/${version}/ppxfind-${version}.tbz";
+    url =
+      "https://github.com/diml/ppxfind/releases/download/${version}/ppxfind-${version}.tbz";
     sha256 = "0wa9vcrc26kirc2cqqs6kmarbi8gqy3dgdfiv9y7nzsgy1liqacq";
   };
 
@@ -22,8 +23,7 @@ buildDunePackage (rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
   };
-} // (
-if lib.versions.majorMinor ocaml.version == "4.04" then {
+} // (if lib.versions.majorMinor ocaml.version == "4.04" then {
   dontStrip = true;
-} else {}
-))
+} else
+  { }))

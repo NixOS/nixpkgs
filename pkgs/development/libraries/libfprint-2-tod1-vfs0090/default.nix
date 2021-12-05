@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, libfprint, libfprint-tod, gusb, udev, nss, openssl, meson, pixman, ninja, glib }:
+{ stdenv, lib, fetchFromGitLab, pkg-config, libfprint, libfprint-tod, gusb, udev
+, nss, openssl, meson, pixman, ninja, glib }:
 stdenv.mkDerivation {
   pname = "libfprint-2-tod1-vfs0090";
   version = "0.8.5";
@@ -33,7 +34,8 @@ stdenv.mkDerivation {
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
   meta = with lib; {
-    description = "A libfprint-2-tod Touch OEM Driver for 2016 ThinkPad's fingerprint readers";
+    description =
+      "A libfprint-2-tod Touch OEM Driver for 2016 ThinkPad's fingerprint readers";
     homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

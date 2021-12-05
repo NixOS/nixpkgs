@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytz
-, gflags
-, python-dateutil
-, mox
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytz, gflags, python-dateutil, mox
+, python }:
 
 buildPythonPackage rec {
   pname = "google-apputils";

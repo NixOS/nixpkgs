@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, tqdm
-, pytestCheckHook
-, ffmpeg
-}:
+{ lib, buildPythonPackage, fetchPypi, colorama, tqdm, pytestCheckHook, ffmpeg }:
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";

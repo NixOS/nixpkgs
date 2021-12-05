@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, SDL
-, SDL_image
-, mesa
-, libtheora
-, libvorbis
-, libogg
-, ftgl
-, freetype
-}:
+{ lib, stdenv, fetchurl, pkg-config, SDL, SDL_image, mesa, libtheora, libvorbis
+, libogg, ftgl, freetype }:
 
 stdenv.mkDerivation rec {
   pname = "zaz";
@@ -20,22 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1r3bmwny05zzmdalxm5ah2rray0nnsg1w00r30p47q6x2lpwj8ml";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    SDL.dev
-    SDL_image
-    mesa
-    libtheora
-    libvorbis.dev
-    libogg
-    ftgl
-    freetype
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs =
+    [ SDL.dev SDL_image mesa libtheora libvorbis.dev libogg ftgl freetype ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
@@ -48,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
+    description =
+      "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "http://zaz.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];

@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, mate-icon-theme, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, mate-icon-theme, gtk2, gtk3
+, gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";
   version = "3.22.23";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/themes/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1avgzccdmr7y18rnp3xrhwk82alv2dlig3wh7ivgahcqdiiavrb1";
   };
 

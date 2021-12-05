@@ -11,10 +11,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libGL sfml fribidi taglib ];
-  patches = [
-    ./unbind_fix.patch
-    ./fix-gluortho2d.patch
-  ];
+  patches = [ ./unbind_fix.patch ./fix-gluortho2d.patch ];
   installPhase = ''
     cd ..
     find -name '*.svn' -exec rm -rf {} \;

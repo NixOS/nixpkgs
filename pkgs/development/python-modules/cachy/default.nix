@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, redis
-, memcached
-, msgpack
-}:
+{ lib, buildPythonPackage, fetchPypi, redis, memcached, msgpack }:
 
 buildPythonPackage rec {
   pname = "cachy";
@@ -13,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "186581f4ceb42a0bbe040c407da73c14092379b1e4c0e327fdb72ae4a9b269b1";
   };
 
-  propagatedBuildInputs = [
-    redis
-    memcached
-    msgpack
-  ];
+  propagatedBuildInputs = [ redis memcached msgpack ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't
   # buildable until we bootstrap poetry, see

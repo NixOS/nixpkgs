@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu
+, dotnetCorePackages, openssl, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -6,7 +7,8 @@ let
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  }."${stdenv.hostPlatform.system}" or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
     x64-linux_hash = "sha256-IwD7PFRz6mjEjUTbpqItorvFMB/hcMcRhHG8XQHv0iM=";
@@ -19,7 +21,8 @@ in stdenv.mkDerivation rec {
   version = "3.2.2.5080";
 
   src = fetchurl {
-    url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
+    url =
+      "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
     sha256 = hash;
   };
 
@@ -33,8 +36,9 @@ in stdenv.mkDerivation rec {
 
     makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Radarr \
       --add-flags "$out/share/${pname}-${version}/Radarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo mono openssl icu ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ curl sqlite libmediainfo mono openssl icu ]
+      }
 
     runHook postInstall
   '';

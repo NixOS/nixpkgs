@@ -1,5 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config, symlinkJoin, qmake, diffPlugins
-, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
+{ lib, mkDerivation, fetchFromGitHub, pkg-config, symlinkJoin, qmake
+, diffPlugins, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
   version = "2019-04-23";
@@ -16,72 +16,72 @@ let
     "lyric"
     "preparatory"
     "rename"
- ];
+  ];
 
-  patchedSrc =
-    let src = fetchFromGitHub {
+  patchedSrc = let
+    src = fetchFromGitHub {
       owner = "UltraStar-Deluxe";
       repo = "UltraStar-Manager";
       inherit rev sha256;
     };
-    in mkDerivation {
-      name = "${src.name}-patched";
-      inherit src;
+  in mkDerivation {
+    name = "${src.name}-patched";
+    inherit src;
 
-      dontInstall = true;
+    dontInstall = true;
 
-      patchPhase = with lib; ''
-        # we don’t want prebuild binaries checked into version control!
-        rm -rf lib include
+    patchPhase = with lib; ''
+      # we don’t want prebuild binaries checked into version control!
+      rm -rf lib include
 
-        # fix up main project file
-        sed -e 's|-L.*unix.*lbass.*$|-lbass|' \
-            -e "/QMAKE_POST_LINK/d" \
-            -e "s|../include/bass|${getLib libbass}/include|g" \
-            -e "s|../include/taglib|${getLib taglib}/include|g" \
-            -e "s|../include/mediainfo|${getLib libmediainfo}/include|g" \
-            -i src/UltraStar-Manager.pro
+      # fix up main project file
+      sed -e 's|-L.*unix.*lbass.*$|-lbass|' \
+          -e "/QMAKE_POST_LINK/d" \
+          -e "s|../include/bass|${getLib libbass}/include|g" \
+          -e "s|../include/taglib|${getLib taglib}/include|g" \
+          -e "s|../include/mediainfo|${getLib libmediainfo}/include|g" \
+          -i src/UltraStar-Manager.pro
 
-        # if more plugins start depending on ../../../include,
-        # it should be abstracted out for all .pro files
-        sed -e "s|../../../include/taglib|${getLib taglib}/include/taglib|g" \
-            -i src/plugins/audiotag/audiotag.pro
+      # if more plugins start depending on ../../../include,
+      # it should be abstracted out for all .pro files
+      sed -e "s|../../../include/taglib|${getLib taglib}/include/taglib|g" \
+          -i src/plugins/audiotag/audiotag.pro
 
-        mkdir $out
-        mv * $out
-      '';
-    };
+      mkdir $out
+      mv * $out
+    '';
+  };
 
   patchApplicationPath = file: path: ''
     sed -e "s|QCore.*applicationDirPath()|QString(\"${path}\")|" -i "${file}"
   '';
 
-  buildPlugin = name: mkDerivation {
-    name = "ultrastar-manager-${name}-plugin-${version}";
-    src = patchedSrc;
+  buildPlugin = name:
+    mkDerivation {
+      name = "ultrastar-manager-${name}-plugin-${version}";
+      src = patchedSrc;
 
-    buildInputs = [ qmake ] ++ buildInputs;
+      buildInputs = [ qmake ] ++ buildInputs;
 
-    postPatch = ''
-      sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
-          -i src/plugins/${name}/${name}.pro
+      postPatch = ''
+        sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
+            -i src/plugins/${name}/${name}.pro
 
-      # plugins use the application’s binary folder (wtf)
-      for f in $(grep -lr "QCoreApplication::applicationDirPath" src/plugins); do
-        ${patchApplicationPath "$f" "\$out"}
-      done
+        # plugins use the application’s binary folder (wtf)
+        for f in $(grep -lr "QCoreApplication::applicationDirPath" src/plugins); do
+          ${patchApplicationPath "$f" "$out"}
+        done
 
-    '';
-    preConfigure = ''
-      cd src/plugins/${name}
-    '';
-  };
-
-  builtPlugins =
-    symlinkJoin {
-      name = "ultrastar-manager-plugins-${version}";
-      paths = map buildPlugin plugins;
+      '';
+      preConfigure = ''
+        cd src/plugins/${name}
+      '';
     };
+
+  builtPlugins = symlinkJoin {
+    name = "ultrastar-manager-plugins-${version}";
+    paths = map buildPlugin plugins;
+  };
 
 in mkDerivation {
   pname = "ultrastar-manager";

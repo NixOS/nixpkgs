@@ -10,7 +10,8 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [ rustc rustc.llvm ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ rustc rustc.llvm ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;
@@ -26,7 +27,8 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://rust-lang.github.io/rust-clippy/";
-    description = "A bunch of lints to catch common mistakes and improve your Rust code";
+    description =
+      "A bunch of lints to catch common mistakes and improve your Rust code";
     maintainers = with maintainers; [ basvandijk ];
     license = with licenses; [ mit asl20 ];
     platforms = platforms.unix;

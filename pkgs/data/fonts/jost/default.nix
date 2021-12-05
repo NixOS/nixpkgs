@@ -1,17 +1,17 @@
-{lib, fetchzip}:
+{ lib, fetchzip }:
 
-let
-  version = "3.5";
+let version = "3.5";
 in fetchzip {
   name = "jost-${version}";
-  url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
+  url =
+    "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256="0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
+  sha256 = "0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
 
   meta = with lib; {
     homepage = "https://github.com/indestructible-type/Jost";

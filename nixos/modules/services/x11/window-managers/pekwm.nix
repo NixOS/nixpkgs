@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.pekwm;
-in
-{
+let cfg = config.services.xserver.windowManager.pekwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.pekwm.enable = mkEnableOption "pekwm";

@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, docopt
-, delegator-py
-, pytest
-}:
+{ buildPythonPackage, lib, fetchPypi, docopt, delegator-py, pytest }:
 
 buildPythonPackage rec {
   version = "0.5.10";
@@ -30,6 +24,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jonringer ];
 
     longDescription =
-    "num2words is a library that converts numbers like 42 to words like forty-two. It supports multiple languages (see the list below for full list of languages) and can even generate ordinal numbers like forty-second";
+      "num2words is a library that converts numbers like 42 to words like forty-two. It supports multiple languages (see the list below for full list of languages) and can even generate ordinal numbers like forty-second";
   };
 }

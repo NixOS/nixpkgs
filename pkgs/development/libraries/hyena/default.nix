@@ -5,14 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "eb7154a42b6529bb9746c39272719f3168d6363ed4bad305a916ed7d90bc8de9";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    mono gtk-sharp-2_0
-  ];
+  buildInputs = [ mono gtk-sharp-2_0 ];
 
   postPatch = ''
     patchShebangs build/dll-map-makefile-verifier

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ant, jdk}:
+{ lib, stdenv, fetchurl, ant, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "martyr";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Java framework around the IRC protocol to allow application writers easy manipulation of the protocol and client state";
+    description =
+      "Java framework around the IRC protocol to allow application writers easy manipulation of the protocol and client state";
     homepage = "http://martyr.sourceforge.net/";
     license = lib.licenses.lgpl21;
   };

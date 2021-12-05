@@ -1,8 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi
-, requests
-, nose
-, responses
-}:
+{ buildPythonPackage, lib, fetchPypi, requests, nose, responses }:
 
 buildPythonPackage rec {
   pname = "python-forecastio";
@@ -24,7 +20,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://zeevgilovitz.com/python-forecast.io/";
-    description = "A thin Python Wrapper for the Dark Sky (formerly forecast.io) weather API";
+    description =
+      "A thin Python Wrapper for the Dark Sky (formerly forecast.io) weather API";
     license = licenses.bsd2;
     maintainers = with maintainers; [ makefu ];
   };

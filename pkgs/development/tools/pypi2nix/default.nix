@@ -1,5 +1,4 @@
-{ python3
-}:
+{ python3 }:
 with python3;
 
 pkgs.buildPythonApplication rec {

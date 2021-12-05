@@ -1,22 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config
-, SDL, libGLU, libGL, openal, lua
-, libdevil, freetype, physfs
-, libmodplug, mpg123, libvorbis, libogg
-}:
+{ lib, stdenv, fetchurl, pkg-config, SDL, libGLU, libGL, openal, lua, libdevil
+, freetype, physfs, libmodplug, mpg123, libvorbis, libogg }:
 
 stdenv.mkDerivation rec {
   pname = "love";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/rude/love/downloads/${pname}-${version}-linux-src.tar.gz";
+    url =
+      "https://bitbucket.org/rude/love/downloads/${pname}-${version}-linux-src.tar.gz";
     sha256 = "1k4fcsa8zzi04ja179bmj24hvqcbm3icfvrvrzyz2gw9qwfclrwi";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL libGLU libGL openal lua
-    libdevil freetype physfs libmodplug mpg123 libvorbis libogg
+    SDL
+    libGLU
+    libGL
+    openal
+    lua
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
   ];
 
   preConfigure = ''

@@ -1,30 +1,30 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
-, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
+{ stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL, SDL
+, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null
 
-, useRemixPacks ? false
-}:
+, useRemixPacks ? false }:
 
 assert use3DOVideos -> requireFile != null && writeText != null
-                    && haskellPackages != null;
+  && haskellPackages != null;
 
 let
   videos = import ./3dovideo.nix {
     inherit stdenv lib requireFile writeText fetchFromGitHub haskellPackages;
   };
 
-  remixPacks = lib.imap1 (num: sha256: fetchurl rec {
-    name = "uqm-remix-disc${toString num}.uqm";
-    url = "mirror://sourceforge/sc2/${name}";
-    inherit sha256;
-  }) [
-    "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
-    "1pmsq65k8gk4jcbyk3qjgi9yqlm0dlaimc2r8hz2fc9f2124gfvz"
-    "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
-    "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
-  ];
+  remixPacks = lib.imap1 (num: sha256:
+    fetchurl rec {
+      name = "uqm-remix-disc${toString num}.uqm";
+      url = "mirror://sourceforge/sc2/${name}";
+      inherit sha256;
+    }) [
+      "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
+      "1pmsq65k8gk4jcbyk3qjgi9yqlm0dlaimc2r8hz2fc9f2124gfvz"
+      "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
+      "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
+    ];
 
 in stdenv.mkDerivation rec {
   pname = "uqm";
@@ -51,7 +51,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
+  buildInputs =
+    [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages

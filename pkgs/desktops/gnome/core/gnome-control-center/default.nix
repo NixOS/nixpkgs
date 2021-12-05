@@ -1,77 +1,23 @@
-{ fetchurl
-, lib
-, stdenv
-, substituteAll
-, accountsservice
-, adwaita-icon-theme
-, cheese
-, clutter
-, clutter-gtk
-, colord
-, colord-gtk
-, cups
-, docbook-xsl-nons
-, fontconfig
-, gdk-pixbuf
-, gettext
-, glib
-, glib-networking
-, gcr
-, glibc
-, gnome-bluetooth
-, gnome-color-manager
-, gnome-desktop
-, gnome-online-accounts
-, gnome-settings-daemon
-, gnome
-, gsettings-desktop-schemas
-, gsound
-, gtk3
-, ibus
-, libcanberra-gtk3
-, libgnomekbd
-, libgtop
-, libgudev
-, libhandy
-, libkrb5
-, libpulseaudio
-, libpwquality
-, librsvg
-, libsecret
-, libsoup
-, libwacom
-, libxml2
-, libxslt
-, meson
-, modemmanager
-, mutter
-, networkmanager
-, networkmanagerapplet
-, libnma
-, ninja
-, pkg-config
-, polkit
-, python3
-, samba
-, shared-mime-info
-, sound-theme-freedesktop
-, tracker
-, tracker-miners
-, tzdata
-, udisks2
-, upower
-, libepoxy
-, gnome-user-share
-, gnome-remote-desktop
-, wrapGAppsHook
-}:
+{ fetchurl, lib, stdenv, substituteAll, accountsservice, adwaita-icon-theme
+, cheese, clutter, clutter-gtk, colord, colord-gtk, cups, docbook-xsl-nons
+, fontconfig, gdk-pixbuf, gettext, glib, glib-networking, gcr, glibc
+, gnome-bluetooth, gnome-color-manager, gnome-desktop, gnome-online-accounts
+, gnome-settings-daemon, gnome, gsettings-desktop-schemas, gsound, gtk3, ibus
+, libcanberra-gtk3, libgnomekbd, libgtop, libgudev, libhandy, libkrb5
+, libpulseaudio, libpwquality, librsvg, libsecret, libsoup, libwacom, libxml2
+, libxslt, meson, modemmanager, mutter, networkmanager, networkmanagerapplet
+, libnma, ninja, pkg-config, polkit, python3, samba, shared-mime-info
+, sound-theme-freedesktop, tracker, tracker-miners, tzdata, udisks2, upower
+, libepoxy, gnome-user-share, gnome-remote-desktop, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-6gxxSExlzizBE3b5sB5iEfpKf/0zT0MH/FLJPw/d1Mc=";
   };
 

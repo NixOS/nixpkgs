@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, zlib
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, zlib }:
 
 buildPythonPackage rec {
   pname = "pytabix";

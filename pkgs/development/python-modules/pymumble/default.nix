@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, lib
-, opuslib
-, protobuf
-, pytestCheckHook
-, pycrypto
-}:
+{ buildPythonPackage, fetchFromGitHub, isPy27, lib, opuslib, protobuf
+, pytestCheckHook, pycrypto }:
 
 buildPythonPackage rec {
   pname = "pymumble";
@@ -26,23 +19,15 @@ buildPythonPackage rec {
     sed -i 's/\(.*\)==.*/\1/' requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    opuslib
-    protobuf
-  ];
+  propagatedBuildInputs = [ opuslib protobuf ];
 
-  checkInputs = [
-    pycrypto
-    pytestCheckHook
-  ];
+  checkInputs = [ pycrypto pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pymumble_py3"
-    "pymumble_py3.constants"
-  ];
+  pythonImportsCheck = [ "pymumble_py3" "pymumble_py3.constants" ];
 
   meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
+    description =
+      "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
     homepage = "https://github.com/azlux/pymumble";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thelegy infinisil ];

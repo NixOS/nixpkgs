@@ -1,6 +1,5 @@
-{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
-}:
+{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper, elfutils, kernel
+, gnumake, python2, python2Packages }:
 
 let
   ## fetchgit info
@@ -41,7 +40,8 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   meta = {
     homepage = "https://sourceware.org/systemtap/";
     repositories.git = url;
-    description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
+    description =
+      "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
@@ -53,7 +53,9 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
     --add-flags "-r $kernelBuildDir" \
-    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
+    --prefix PATH : ${
+      lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]
+    }
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}
 ''

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, pythonOlder
-, requests
-, requests_oauthlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, oauthlib, pythonOlder, requests
+, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "ondilo";
@@ -19,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-MI6K+41I/IVi+GRBdmRIHbljULDFLAwpo3W8tdxCOBM=";
   };
 
-  propagatedBuildInputs = [
-    oauthlib
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
 
   # Project has no tests
   doCheck = false;

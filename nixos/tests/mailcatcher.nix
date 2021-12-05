@@ -1,12 +1,10 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-{
-  name = "mailcatcher";
-  meta.maintainers = [ lib.maintainers.aanderse ];
+  {
+    name = "mailcatcher";
+    meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
-    { pkgs, ... }:
-    {
+    machine = { pkgs, ... }: {
       services.mailcatcher.enable = true;
 
       services.ssmtp.enable = true;
@@ -15,16 +13,16 @@ import ./make-test-python.nix ({ lib, ... }:
       environment.systemPackages = [ pkgs.mailutils ];
     };
 
-  testScript = ''
-    start_all()
+    testScript = ''
+      start_all()
 
-    machine.wait_for_unit("mailcatcher.service")
-    machine.wait_for_open_port("1025")
-    machine.succeed(
-        'echo "this is the body of the email" | mail -s "subject" root@example.org'
-    )
-    assert "this is the body of the email" in machine.succeed(
-        "curl -f http://localhost:1080/messages/1.source"
-    )
-  '';
-})
+      machine.wait_for_unit("mailcatcher.service")
+      machine.wait_for_open_port("1025")
+      machine.succeed(
+          'echo "this is the body of the email" | mail -s "subject" root@example.org'
+      )
+      assert "this is the body of the email" in machine.succeed(
+          "curl -f http://localhost:1080/messages/1.source"
+      )
+    '';
+  })

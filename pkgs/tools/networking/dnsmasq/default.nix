@@ -1,17 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch, libidn
+, libnetfilter_conntrack, buildPackages }:
 
 with lib;
 let
-  copts = concatStringsSep " " ([
-    "-DHAVE_IDN"
-    "-DHAVE_DNSSEC"
-  ] ++ optionals stdenv.isLinux [
-    "-DHAVE_DBUS"
-    "-DHAVE_CONNTRACK"
-  ]);
-in
-stdenv.mkDerivation rec {
+  copts = concatStringsSep " " ([ "-DHAVE_IDN" "-DHAVE_DNSSEC" ]
+    ++ optionals stdenv.isLinux [ "-DHAVE_DBUS" "-DHAVE_CONNTRACK" ]);
+in stdenv.mkDerivation rec {
   pname = "dnsmasq";
   version = "2.85";
 

@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, libtool, libxml2, cppunit, boost
-, apr, aprutil, db, expat
-}:
+{ lib, stdenv, fetchurl, libtool, libxml2, cppunit, boost, apr, aprutil, db
+, expat }:
 
 stdenv.mkDerivation rec {
   pname = "log4cxx";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "http://apache.mirrors.hoobly.com/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
+    url =
+      "http://apache.mirrors.hoobly.com/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
     sha256 = "130cjafck1jlqv92mxbn47yhxd2ccwwnprk605c6lmm941i3kq0d";
   };
 

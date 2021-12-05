@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, gconf
-, glib
-, gnome_vfs
-, gtk2
-, guile
-, guile-cairo
-, guile-lib
-, gwrap
-, libglade
-, libgnome
-, libgnomecanvas
-, libgnomeui
-, pango
-, pkg-config
-, texinfo
-}:
+{ lib, stdenv, fetchurl, gconf, glib, gnome_vfs, gtk2, guile, guile-cairo
+, guile-lib, gwrap, libglade, libgnome, libgnomecanvas, libgnomeui, pango
+, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "guile-gnome-platform";
@@ -27,10 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ravUjtWZPYUo/WBOCqDZatgaYdBtps3WgyNXKtbCFsM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    texinfo
-  ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     gconf
     glib
@@ -49,9 +30,7 @@ stdenv.mkDerivation rec {
   # The test suite tries to open an X display, which fails.
   doCheck = false;
 
-  makeFlags = [
-    "GUILE_AUTO_COMPILE=0"
-  ];
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-gnome/";

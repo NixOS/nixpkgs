@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, file
-, stdenv
-}:
+{ lib, buildPythonPackage, fetchPypi, file, stdenv }:
 
 buildPythonPackage rec {
   pname = "sqlmap";

@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testVersion
-, seaweedfs
-}:
+{ lib, fetchFromGitHub, buildGoModule, testVersion, seaweedfs }:
 
 buildGoModule rec {
   pname = "seaweedfs";
@@ -20,8 +15,10 @@ buildGoModule rec {
 
   subPackages = [ "weed" ];
 
-  passthru.tests.version =
-    testVersion { package = seaweedfs; command = "weed version"; };
+  passthru.tests.version = testVersion {
+    package = seaweedfs;
+    command = "weed version";
+  };
 
   meta = with lib; {
     description = "Simple and highly scalable distributed file system";

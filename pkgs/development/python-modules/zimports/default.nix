@@ -1,12 +1,5 @@
-{ lib
-, isPy3k
-, fetchFromGitHub
-, buildPythonPackage
-, flake8-import-order
-, pyflakes
-, mock
-, setuptools
-}:
+{ lib, isPy3k, fetchFromGitHub, buildPythonPackage, flake8-import-order
+, pyflakes, mock, setuptools }:
 
 buildPythonPackage rec {
   pname = "zimports";
@@ -21,15 +14,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
-    pyflakes
-    flake8-import-order
-    setuptools
-  ];
+  propagatedBuildInputs = [ pyflakes flake8-import-order setuptools ];
 
-  checkInputs = [
-    mock
-  ];
+  checkInputs = [ mock ];
 
   checkPhase = ''
     runHook preInstallCheck

@@ -1,14 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, unzip
-, jdk8
-, ant
-, makeWrapper
-, callPackage
-}:
+{ lib, stdenv, fetchurl, unzip, jdk8, ant, makeWrapper, callPackage }:
 
-let jre = jdk8.jre; jdk = jdk8; in
-stdenv.mkDerivation rec {
+let
+  jre = jdk8.jre;
+  jdk = jdk8;
+in stdenv.mkDerivation rec {
   pname = "jasmin";
   version = "2.4";
 
@@ -20,8 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip jdk ant makeWrapper ];
 
   buildPhase = "ant all";
-  installPhase =
-  ''
+  installPhase = ''
     install -Dm644 jasmin.jar $out/share/java/jasmin.jar
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/jasmin \
@@ -29,13 +23,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    minimal-module = callPackage ./test-assemble-hello-world {};
+    minimal-module = callPackage ./test-assemble-hello-world { };
   };
 
   meta = with lib; {
     description = "An assembler for the Java Virtual Machine";
     homepage = "http://jasmin.sourceforge.net/";
-    downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
+    downloadPage =
+      "https://sourceforge.net/projects/jasmin/files/latest/download";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

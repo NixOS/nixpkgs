@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, python3
-, zlib, libssh2, openssl, pcre, http-parser
-, libiconv, Security
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, python3, zlib, libssh2
+, openssl, pcre, http-parser, libiconv, Security }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
@@ -15,10 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
   };
 
-  cmakeFlags = [
-    "-DTHREADSAFE=ON"
-    "-DUSE_HTTP_PARSER=system"
-  ];
+  cmakeFlags = [ "-DTHREADSAFE=ON" "-DUSE_HTTP_PARSER=system" ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
 

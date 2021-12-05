@@ -18,7 +18,11 @@ let
     doCheck = false;
 
     ldflags = [
-      "-s" "-w" "-X github.com/mattermost/mattermost-server/v${lib.versions.major version}/model.BuildNumber=${version}"
+      "-s"
+      "-w"
+      "-X github.com/mattermost/mattermost-server/v${
+        lib.versions.major version
+      }/model.BuildNumber=${version}"
     ];
 
   };
@@ -28,7 +32,8 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
+      url =
+        "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
       sha256 = "sha256-BzQVkOPo/f6O2ncQ0taS3cZkglOL+D+zBcfNYrpMgTM=";
     };
 
@@ -43,16 +48,15 @@ let
     '';
   };
 
-in
-  buildEnv {
-    name = "mattermost-${version}";
-    paths = [ mattermost-server mattermost-webapp ];
+in buildEnv {
+  name = "mattermost-${version}";
+  paths = [ mattermost-server mattermost-webapp ];
 
-    meta = with lib; {
-      description = "Open-source, self-hosted Slack-alternative";
-      homepage = "https://www.mattermost.org";
-      license = with licenses; [ agpl3 asl20 ];
-      maintainers = with maintainers; [ fpletz ryantm ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Open-source, self-hosted Slack-alternative";
+    homepage = "https://www.mattermost.org";
+    license = with licenses; [ agpl3 asl20 ];
+    maintainers = with maintainers; [ fpletz ryantm ];
+    platforms = platforms.unix;
+  };
+}

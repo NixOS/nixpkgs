@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, fcitx5
-, m17n_lib
-, m17n_db
-, gettext
-, fmt
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, fcitx5
+, m17n_lib, m17n_db, gettext, fmt }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
@@ -22,19 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-duL9FgXPCr4/rMuguw8cf3EIdK6MW/alUNeh1yduY68=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    pkg-config
-    gettext
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config gettext ];
 
-  buildInputs = [
-    fcitx5
-    m17n_db
-    m17n_lib
-    fmt
-  ];
+  buildInputs = [ fcitx5 m17n_db m17n_lib fmt ];
 
   meta = with lib; {
     description = "m17n support for Fcitx5";

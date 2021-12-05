@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytestCheckHook
-, psutil
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, pytestCheckHook, psutil
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-openfiles";
@@ -22,9 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    psutil
-  ];
+  propagatedBuildInputs = [ psutil ];
 
   checkInputs = [ pytestCheckHook ];
 

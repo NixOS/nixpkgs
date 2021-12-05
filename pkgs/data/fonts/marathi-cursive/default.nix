@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "2.0";
+let version = "2.0";
 in fetchzip rec {
   name = "marathi-cursive-${version}";
 
-  url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
+  url =
+    "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1

@@ -1,18 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, libxml2
-, gst_all_1
-, gnome
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, gobject-introspection, vala
+, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_412, libxml2, gst_all_1, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-dlna";
@@ -21,7 +8,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "PVO5b4W8VijTPjZ+yb8q2zjvKzTXrQQ0proM9K2QSOY=";
   };
 
@@ -36,14 +25,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  buildInputs = [
-    libxml2
-    gst_all_1.gst-plugins-base
-  ];
+  buildInputs = [ libxml2 gst_all_1.gst-plugins-base ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   doCheck = true;
 
@@ -61,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GUPnP/";
-    description = "Library to ease DLNA-related bits for applications using GUPnP";
+    description =
+      "Library to ease DLNA-related bits for applications using GUPnP";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

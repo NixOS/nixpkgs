@@ -1,10 +1,8 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkg-config, openssl
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl
 # testing packages
 , cargo-insta
 # darwin dependencies
-, Security, CoreFoundation, libiconv
-}:
+, Security, CoreFoundation, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
@@ -23,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     ${cargo-insta}/bin/cargo-insta test
   '';
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
   nativeBuildInputs = [ pkg-config ];
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -34,9 +33,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
+    description =
+      "Detects usage of unsafe Rust in a Rust crate and its dependencies";
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ evanjs ];
   };
 }

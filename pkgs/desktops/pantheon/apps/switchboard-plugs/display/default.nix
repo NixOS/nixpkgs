@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libhandy
-, granite
-, gtk3
-, switchboard
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config
+, vala, libgee, libhandy, granite, gtk3, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
@@ -25,25 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    libhandy
-    switchboard
-  ];
+  buildInputs = [ granite gtk3 libgee libhandy switchboard ];
 
   meta = with lib; {
     description = "Switchboard Displays Plug";

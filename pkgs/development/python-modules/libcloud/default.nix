@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycrypto
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pycrypto, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-iPGNoM8/rAr3I+dD+3QdnRviUYge2reloNFimVW1ARs=";
   };
 
-  propagatedBuildInputs = [
-    pycrypto
-    requests
-  ];
+  propagatedBuildInputs = [ pycrypto requests ];
 
   preConfigure = ''
     cp libcloud/test/secrets.py-dist libcloud/test/secrets.py
@@ -35,14 +26,13 @@ buildPythonPackage rec {
   # requires a certificates file
   doCheck = false;
 
-  pythonImportsCheck = [
-    "libcloud"
-  ];
+  pythonImportsCheck = [ "libcloud" ];
 
   meta = with lib; {
     description = "A unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
-    changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
+    changelog =
+      "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

@@ -1,14 +1,5 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, asyncpg
-, aiosmtpd
-, pygit2
-, emailthreads
-, redis
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, srht, asyncpg, aiosmtpd, pygit2
+, emailthreads, redis, python }:
 
 buildPythonPackage rec {
   pname = "listssrht";
@@ -23,14 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    pygit2
-    asyncpg
-    aiosmtpd
-    emailthreads
-    redis
-  ];
+  propagatedBuildInputs = [ srht pygit2 asyncpg aiosmtpd emailthreads redis ];
 
   preBuild = ''
     export PKGVER=${version}

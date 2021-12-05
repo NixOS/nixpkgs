@@ -1,7 +1,5 @@
-{ lib, stdenv
-, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libintl, zlib
-}:
+{ lib, stdenv, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
+, libiberty, libintl, zlib }:
 
 stdenv.mkDerivation {
   pname = "libbfd";
@@ -12,7 +10,8 @@ stdenv.mkDerivation {
   patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/mxe/mxe/e1d4c144ee1994f70f86cf7fd8168fe69bd629c6/src/bfd-1-disable-subdir-doc.patch";
+      url =
+        "https://raw.githubusercontent.com/mxe/mxe/e1d4c144ee1994f70f86cf7fd8168fe69bd629c6/src/bfd-1-disable-subdir-doc.patch";
       sha256 = "0pzb3i74d1r7lhjan376h59a7kirw15j7swwm8pz3zy9lkdqkj6q";
     })
   ];
@@ -36,7 +35,8 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--with-system-zlib"
   ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";

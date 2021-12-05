@@ -1,7 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-}:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "gobuster";
@@ -19,7 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";
+    description =
+      "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";
     homepage = "https://github.com/OJ/gobuster";
     license = licenses.asl20;
     maintainers = with maintainers; [ pamplemousse ];

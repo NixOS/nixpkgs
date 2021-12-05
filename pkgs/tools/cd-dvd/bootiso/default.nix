@@ -1,16 +1,5 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, bash
-, makeWrapper
-, bc
-, jq
-, coreutils
-, util-linux
-, wimlib
-, file
-, syslinux
-, busybox
+{ lib, stdenvNoCC, fetchFromGitHub, bash, makeWrapper, bc, jq, coreutils
+, util-linux, wimlib, file, syslinux, busybox
 , gnugrep # We can't use busybox's 'grep' as it doesn't support perl '-P' expressions.
 }:
 
@@ -33,12 +22,25 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/bootiso \
-      --prefix PATH : ${lib.makeBinPath [ bc jq coreutils util-linux wimlib file syslinux gnugrep busybox ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bc
+          jq
+          coreutils
+          util-linux
+          wimlib
+          file
+          syslinux
+          gnugrep
+          busybox
+        ]
+      } \
       --prefix BOOTISO_SYSLINUX_LIB_ROOT : ${syslinux}/share/syslinux
   '';
 
   meta = with lib; {
-    description = "Script for securely creating a bootable USB device from one image file";
+    description =
+      "Script for securely creating a bootable USB device from one image file";
     homepage = "https://github.com/jsamr/bootiso";
     license = licenses.gpl3;
     maintainers = with maintainers; [ musfay ];

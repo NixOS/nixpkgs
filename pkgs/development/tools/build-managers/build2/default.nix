@@ -1,20 +1,16 @@
-{ stdenv, lib
-, build2
-, fetchurl
-, fixDarwinDylibNames
-, libbutl
-, libpkgconf
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-}:
+{ stdenv, lib, build2, fetchurl, fixDarwinDylibNames, libbutl, libpkgconf
+, enableShared ? !stdenv.hostPlatform.isStatic, enableStatic ? !enableShared }:
 let
   configSharedStatic = enableShared: enableStatic:
-    if enableShared && enableStatic then "both"
-    else if enableShared then "shared"
-    else if enableStatic then "static"
-    else throw "neither shared nor static libraries requested";
-in
-stdenv.mkDerivation rec {
+    if enableShared && enableStatic then
+      "both"
+    else if enableShared then
+      "shared"
+    else if enableStatic then
+      "static"
+    else
+      throw "neither shared nor static libraries requested";
+in stdenv.mkDerivation rec {
   pname = "build2";
   version = "0.14.0";
 
@@ -35,27 +31,17 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [
-    build2
-  ];
-  disallowedReferences = [
-    build2
-    libbutl.dev
-    libpkgconf.dev
-  ];
-  buildInputs = [
-    libbutl
-    libpkgconf
-  ];
+  nativeBuildInputs = [ build2 ];
+  disallowedReferences = [ build2 libbutl.dev libpkgconf.dev ];
+  buildInputs = [ libbutl libpkgconf ];
 
   # Build2 uses @rpath on darwin
   # https://github.com/build2/build2/issues/166
   # N.B. this only adjusts the install_name after all libraries are installed;
   # packages containing multiple interdependent libraries may have
   # LC_LOAD_DYLIB entries containing @rpath, requiring manual fixup
-  propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  propagatedBuildInputs =
+    lib.optionals stdenv.targetPlatform.isDarwin [ fixDarwinDylibNames ];
 
   postPatch = ''
     patchShebangs --build tests/bash/testscript

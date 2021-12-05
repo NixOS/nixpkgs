@@ -1,11 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, withLibrary ? false, libtool
-, unicodeSupport ? true
-, enableShared ? !stdenv.isDarwin
-}:
+{ lib, stdenv, fetchurl, ncurses, withLibrary ? false, libtool
+, unicodeSupport ? true, enableShared ? !stdenv.isDarwin }:
 
 assert withLibrary -> libtool != null;
 assert unicodeSupport -> ncurses.unicode && ncurses != null;
@@ -19,9 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-w68izPzZuso4QGIQjdk1ToaZCSnuJwwjnu9pUYxdp8g=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   configureFlags = [
     "--disable-rpath-hacks"
@@ -30,9 +22,7 @@ stdenv.mkDerivation rec {
     "--with-libtool-opts=${lib.optionalString enableShared "-shared"}"
   ];
 
-  installTargets = [
-    "install${lib.optionalString withLibrary "-full"}"
-  ];
+  installTargets = [ "install${lib.optionalString withLibrary "-full"}" ];
 
   meta = with lib; {
     homepage = "https://invisible-island.net/dialog/dialog.html";

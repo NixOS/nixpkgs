@@ -1,10 +1,9 @@
-{ lib, stdenv, buildPackages
-, fetchurl, binutils ? null, bison, autoconf, util-linux
+{ lib, stdenv, buildPackages, fetchurl, binutils ? null, bison, autoconf
+, util-linux
 
 # patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin, readline70 ? null
-, withDocs ? false, texinfo ? null
-}:
+, interactive ? stdenv.isCygwin, readline70 ? null, withDocs ? false
+, texinfo ? null }:
 
 with lib;
 
@@ -18,14 +17,16 @@ assert stdenv.hostPlatform.isDarwin -> binutils != null;
 # files.
 
 let
-  upstreamPatches = import ./bash-4.4-patches.nix (nr: sha256: fetchurl {
-    url = "mirror://gnu/bash/bash-4.4-patches/bash44-${nr}";
-    inherit sha256;
-  });
-in
+  upstreamPatches = import ./bash-4.4-patches.nix (nr: sha256:
+    fetchurl {
+      url = "mirror://gnu/bash/bash-4.4-patches/bash44-${nr}";
+      inherit sha256;
+    });
 
-stdenv.mkDerivation rec {
-  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+in stdenv.mkDerivation rec {
+  name = "bash-${optionalString interactive "interactive-"}${version}-p${
+      toString (builtins.length upstreamPatches)
+    }";
   version = "4.4";
 
   src = fetchurl {
@@ -48,12 +49,12 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  patches = upstreamPatches
-    ++ [ ./pgrp-pipe-4.4.patch ]
+  patches = upstreamPatches ++ [ ./pgrp-pipe-4.4.patch ]
     ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
     # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
     ++ optional stdenv.hostPlatform.isMusl (fetchurl {
-      url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
+      url =
+        "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
       sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
     });
 
@@ -77,8 +78,7 @@ stdenv.mkDerivation rec {
 
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ]
-    ++ optional withDocs texinfo
+  nativeBuildInputs = [ bison ] ++ optional withDocs texinfo
     ++ optional stdenv.hostPlatform.isDarwin binutils
     ++ optional (stdenv.hostPlatform.libc == "musl") autoconf;
 
@@ -101,21 +101,19 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup = if interactive
-    then ''
-      substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
-    ''
-    # most space is taken by locale data
-    else ''
-      rm -rf "$out/share" "$out/bin/bashbug"
-    '';
+  postFixup = if interactive then ''
+    substituteInPlace "$out/bin/bashbug" \
+      --replace '${stdenv.shell}' "$out/bin/bash"
+  ''
+  # most space is taken by locale data
+  else ''
+    rm -rf "$out/share" "$out/bin/bashbug"
+  '';
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/bash/";
-    description =
-      "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
-        (if interactive then " (for interactive use)" else "");
+    description = "GNU Bourne-Again Shell, the de facto standard shell on Linux"
+      + (if interactive then " (for interactive use)" else "");
 
     longDescription = ''
       Bash is the shell, or command language interpreter, that will
@@ -134,7 +132,5 @@ stdenv.mkDerivation rec {
 
   };
 
-  passthru = {
-    shellPath = "/bin/bash";
-  };
+  passthru = { shellPath = "/bin/bash"; };
 }

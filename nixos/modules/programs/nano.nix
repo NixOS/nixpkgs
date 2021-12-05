@@ -3,9 +3,8 @@
 let
   cfg = config.programs.nano;
   LF = "\n";
-in
 
-{
+in {
   ###### interface
 
   options = {
@@ -27,7 +26,8 @@ in
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable syntax highlight for various languages.";
+        description =
+          "Whether to enable syntax highlight for various languages.";
       };
     };
   };
@@ -35,8 +35,11 @@ in
   ###### implementation
 
   config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
-    environment.etc.nanorc.text = lib.concatStrings [ cfg.nanorc
-      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
+    environment.etc.nanorc.text = lib.concatStrings [
+      cfg.nanorc
+      (lib.optionalString cfg.syntaxHighlight
+        ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'')
+    ];
   };
 
 }

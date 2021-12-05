@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ xorg.libX11 dbus-glib ];
 
   meta = {
-    description = "Simple daemon and library to make per window layout using XKB";
+    description =
+      "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

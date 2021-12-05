@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.3.7";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-cloudpinyin/${pname}-${version}.tar.xz";
+    url =
+      "http://download.fcitx-im.org/fcitx-cloudpinyin/${pname}-${version}.tar.xz";
     sha256 = "0ai347wv3qdjzcbh0j9hdjpzwvh2kk57324xbxq37nzagrdgg5x0";
   };
 
@@ -21,9 +22,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    description  = "A standalone module for fcitx that uses web API to provide better pinyin result";
-    homepage     = "https://github.com/fcitx/fcitx-cloudpinyin";
-    license      = licenses.gpl3Plus;
-    platforms    = platforms.linux;
+    description =
+      "A standalone module for fcitx that uses web API to provide better pinyin result";
+    homepage = "https://github.com/fcitx/fcitx-cloudpinyin";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

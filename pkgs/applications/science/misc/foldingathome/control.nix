@@ -1,37 +1,21 @@
-{ lib, stdenv
-, autoPatchelfHook
-, dpkg
-, fahviewer
-, fetchurl
-, makeWrapper
-, python2
+{ lib, stdenv, autoPatchelfHook, dpkg, fahviewer, fetchurl, makeWrapper, python2
 }:
 let
   majMin = lib.versions.majorMinor version;
   version = "7.6.21";
 
-  python = python2.withPackages
-    (
-      ps: [
-        ps.pycairo
-        ps.pygobject2
-        ps.pygtk
-      ]
-    );
-in
-stdenv.mkDerivation rec {
+  python = python2.withPackages (ps: [ ps.pycairo ps.pygobject2 ps.pygtk ]);
+in stdenv.mkDerivation rec {
   inherit version;
   pname = "fahcontrol";
 
   src = fetchurl {
-    url = "https://download.foldingathome.org/releases/public/release/fahcontrol/debian-stable-64bit/v${majMin}/fahcontrol_${version}-1_all.deb";
+    url =
+      "https://download.foldingathome.org/releases/public/release/fahcontrol/debian-stable-64bit/v${majMin}/fahcontrol_${version}-1_all.deb";
     sha256 = "1vfrdqkrvdlyxaw3f6z92w5dllrv6810lmf8yhcmjcwmphipvf71";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-  ];
+  nativeBuildInputs = [ dpkg makeWrapper ];
 
   buildInputs = [ fahviewer python ];
 

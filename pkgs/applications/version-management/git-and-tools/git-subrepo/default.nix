@@ -11,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0n10qnc8kyms6cv65k1n5xa9nnwpwbjn9h2cq47llxplawzqgrvp";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    which
-  ];
+  nativeBuildInputs = [ makeWrapper which ];
 
-  buildInputs = [
-    git
-  ];
+  buildInputs = [ git ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

@@ -9,8 +9,7 @@ let
       ATH_USER_REGD y
     '';
   };
-in
-{
+in {
   options.networking.wireless.athUserRegulatoryDomain = mkOption {
     default = false;
     type = types.bool;
@@ -23,8 +22,10 @@ in
 
   config = mkIf config.networking.wireless.athUserRegulatoryDomain {
     assertions = singleton {
-      assertion = lessThan 0 (builtins.compareVersions kernelVersion linuxKernelMinVersion);
-      message = "ATH_USER_REGD patch for kernels older than ${linuxKernelMinVersion} not ported yet!";
+      assertion = lessThan 0
+        (builtins.compareVersions kernelVersion linuxKernelMinVersion);
+      message =
+        "ATH_USER_REGD patch for kernels older than ${linuxKernelMinVersion} not ported yet!";
     };
     boot.kernelPatches = [ kernelPatch ];
   };

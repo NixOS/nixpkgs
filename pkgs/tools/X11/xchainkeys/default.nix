@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.11";
 
   src = fetchurl {
-    url = "http://henning-bekel.de/download/xchainkeys/xchainkeys-${version}.tar.gz";
+    url =
+      "http://henning-bekel.de/download/xchainkeys/xchainkeys-${version}.tar.gz";
     sha256 = "1rpqs7h5krral08vqxwb0imy33z17v5llvrg5hy8hkl2ap7ya0mn";
   };
 

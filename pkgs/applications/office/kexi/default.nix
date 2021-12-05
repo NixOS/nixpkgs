@@ -1,11 +1,8 @@
-{
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
-  boost, qttools, qtwebkit,
-  breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
-  kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
-  kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
-}:
+{ mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, boost
+, qttools, qtwebkit, breeze-icons, karchive, kcodecs, kcompletion, kconfig
+, kconfigwidgets, kcoreaddons, kcrash, kguiaddons, ki18n, kiconthemes
+, kitemviews, kio, ktexteditor, ktextwidgets, kwidgetsaddons, kxmlgui, kdb
+, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql }:
 
 mkDerivation rec {
   pname = "kexi";
@@ -19,11 +16,33 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   buildInputs = [
-    boost qttools qtwebkit
-    breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
-    kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
-    kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
+    boost
+    qttools
+    qtwebkit
+    breeze-icons
+    karchive
+    kcodecs
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kguiaddons
+    ki18n
+    kiconthemes
+    kitemviews
+    kio
+    ktexteditor
+    ktextwidgets
+    kwidgetsaddons
+    kxmlgui
+    kdb
+    kproperty
+    kreport
+    lcms2
+    libmysqlclient
+    marble
+    postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
@@ -34,13 +53,15 @@ mkDerivation rec {
     # needed.
     # Should be unnecessary with kexi >= 3.3
     (fetchpatch {
-      url = "https://cgit.kde.org/kexi.git/patch/src/plugins/forms/widgets/kexidbdatepicker.cpp?id=511d99b7745a6ce87a208bdbf69e631f1f136d53";
+      url =
+        "https://cgit.kde.org/kexi.git/patch/src/plugins/forms/widgets/kexidbdatepicker.cpp?id=511d99b7745a6ce87a208bdbf69e631f1f136d53";
       sha256 = "0m5cwq2v46gb1b12p7acck6dadvn7sw4xf8lkqikj9hvzq3r1dnj";
     })
   ];
 
   meta = with lib; {
-    description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
+    description =
+      "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
     longDescription = ''
       Kexi is a visual database applications creator.
       It can be used for creating database schemas,

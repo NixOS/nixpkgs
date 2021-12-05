@@ -1,21 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, freetype
-, fontconfig
-, libGL
-, libX11
-, libXrandr
-, libxcb
-, libxkbcommon
-, utf8proc
-, wayland
+{ stdenv, lib, fetchFromGitHub, pkg-config, freetype, fontconfig, libGL, libX11
+, libXrandr, libxcb, libxkbcommon, utf8proc, wayland
 
-, libnotify
-, xdg-utils
-, makeDesktopItem
-}:
+, libnotify, xdg-utils, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -31,8 +17,7 @@ let
       Keywords=wayst;terminal;
     '';
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "wayst";
   version = "unstable-2021-04-05";
 

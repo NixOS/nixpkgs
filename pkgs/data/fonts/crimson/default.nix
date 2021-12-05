@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "2014.10";
+let version = "2014.10";
 in fetchzip rec {
   name = "crimson-${version}";
 
@@ -20,6 +19,6 @@ in fetchzip rec {
     description = "A font family inspired by beautiful oldstyle typefaces";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8VhSm+nQWUJjx/Eah2FqSeoj5VrGNpElKiME+7x9OoM=";
   };
 
-  configureFlags = [
-    "--program-transform-name='s,^,b,'"
-  ];
+  configureFlags = [ "--program-transform-name='s,^,b,'" ];
 
   doCheck = true;
 

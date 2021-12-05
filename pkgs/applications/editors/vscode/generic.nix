@@ -1,8 +1,6 @@
-{ stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
-, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
-, writeShellScriptBin
+{ stdenv, lib, makeDesktopItem, unzip, libsecret, libXScrnSaver, libxshmfence
+, wrapGAppsHook, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook, systemd
+, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, writeShellScriptBin
 
 # Populate passthru.tests
 , tests
@@ -11,12 +9,11 @@
 , nodePackages, bash
 
 # Attributes inherit from specific versions
-, version, src, meta, sourceRoot
-, executableName, longName, shortName, pname, updateScript
+, version, src, meta, sourceRoot, executableName, longName, shortName, pname
+, updateScript
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
-, sourceExecutableName ? executableName
-}:
+, sourceExecutableName ? executableName }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -26,7 +23,7 @@ let
 
     passthru = {
       inherit executableName longName tests updateScript;
-      fhs = fhs {};
+      fhs = fhs { };
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };
 
@@ -69,11 +66,17 @@ let
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
+      ++ lib.optionals (!stdenv.isDarwin)
+      ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optional (stdenv.isLinux) [
+      (lib.getLib systemd)
+      fontconfig.lib
+      libdbusmenu
+    ];
 
-    nativeBuildInputs = [unzip] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -139,52 +142,53 @@ let
   #
   # buildFHSUserEnv allows for users to use the existing vscode
   # extension tooling without significant pain.
-  fhs = { additionalPkgs ? pkgs: [] }: buildFHSUserEnvBubblewrap {
-    # also determines the name of the wrapped command
-    name = executableName;
+  fhs = { additionalPkgs ? pkgs: [ ] }:
+    buildFHSUserEnvBubblewrap {
+      # also determines the name of the wrapped command
+      name = executableName;
 
-    # additional libraries which are commonly needed for extensions
-    targetPkgs = pkgs: (with pkgs; [
-      # ld-linux-x86-64-linux.so.2 and others
-      glibc
+      # additional libraries which are commonly needed for extensions
+      targetPkgs = pkgs:
+        (with pkgs; [
+          # ld-linux-x86-64-linux.so.2 and others
+          glibc
 
-      # dotnet
-      curl
-      icu
-      libunwind
-      libuuid
-      openssl
-      zlib
+          # dotnet
+          curl
+          icu
+          libunwind
+          libuuid
+          openssl
+          zlib
 
-      # mono
-      krb5
-    ]) ++ additionalPkgs pkgs;
+          # mono
+          krb5
+        ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
-    extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s "$item" "$out/share/applications/"
-      done
-    '';
-
-    runScript = "${unwrapped}/bin/${executableName}";
-
-    # vscode likes to kill the parent so that the
-    # gui application isn't attached to the terminal session
-    dieWithParent = false;
-
-    passthru = {
-      inherit executableName;
-      inherit (unwrapped) pname version; # for home-manager module
-    };
-
-    meta = meta // {
-      description = ''
-        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
-        Should allow for easy usage of extensions without nix-specific modifications.
+      # restore desktop item icons
+      extraInstallCommands = ''
+        mkdir -p "$out/share/applications"
+        for item in ${unwrapped}/share/applications/*.desktop; do
+          ln -s "$item" "$out/share/applications/"
+        done
       '';
+
+      runScript = "${unwrapped}/bin/${executableName}";
+
+      # vscode likes to kill the parent so that the
+      # gui application isn't attached to the terminal session
+      dieWithParent = false;
+
+      passthru = {
+        inherit executableName;
+        inherit (unwrapped) pname version; # for home-manager module
+      };
+
+      meta = meta // {
+        description = ''
+          Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+          Should allow for easy usage of extensions without nix-specific modifications.
+        '';
+      };
     };
-  };
-in
-  unwrapped
+in unwrapped

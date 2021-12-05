@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.telegraf;
 
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
   configFile = settingsFormat.generate "config.toml" cfg.extraConfig;
 in {
   ###### interface
@@ -22,7 +22,7 @@ in {
 
       environmentFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = [ "/run/keys/telegraf.env" ];
         description = ''
           File to load as environment file. Environment variables from this file
@@ -33,12 +33,12 @@ in {
       };
 
       extraConfig = mkOption {
-        default = {};
+        default = { };
         description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
           outputs.influxdb = {
-            urls = ["http://localhost:8086"];
+            urls = [ "http://localhost:8086" ];
             database = "telegraf";
           };
           inputs.statsd = {
@@ -50,26 +50,27 @@ in {
     };
   };
 
-
   ###### implementation
   config = mkIf config.services.telegraf.enable {
     systemd.services.telegraf = let
-      finalConfigFile = if config.services.telegraf.environmentFiles == []
-                        then configFile
-                        else "/var/run/telegraf/config.toml";
+      finalConfigFile = if config.services.telegraf.environmentFiles == [ ] then
+        configFile
+      else
+        "/var/run/telegraf/config.toml";
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
-        ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])
+        ExecStartPre =
+          lib.optional (config.services.telegraf.environmentFiles != [ ])
           (pkgs.writeShellScript "pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /var/run/telegraf/config.toml
           '');
-        ExecStart="${cfg.package}/bin/telegraf -config ${finalConfigFile}";
-        ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = "${cfg.package}/bin/telegraf -config ${finalConfigFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = "telegraf";
         User = "telegraf";
         Group = "telegraf";
@@ -85,6 +86,6 @@ in {
       description = "telegraf daemon user";
     };
 
-    users.groups.telegraf = {};
+    users.groups.telegraf = { };
   };
 }

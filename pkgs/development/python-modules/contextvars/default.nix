@@ -13,7 +13,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ immutables ];
 
   meta = {
-    description = "A backport of the Python 3.7 contextvars module for Python 3.6";
+    description =
+      "A backport of the Python 3.7 contextvars module for Python 3.6";
     homepage = "https://github.com/MagicStack/contextvars";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ catern ];

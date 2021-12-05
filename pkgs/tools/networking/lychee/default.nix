@@ -1,9 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
@@ -26,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A fast, async, resource-friendly link checker written in Rust.";
+    description =
+      "A fast, async, resource-friendly link checker written in Rust.";
     homepage = "https://github.com/lycheeverse/lychee";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ tuxinaut ];

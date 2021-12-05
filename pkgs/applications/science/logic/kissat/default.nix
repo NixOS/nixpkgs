@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, drat-trim, p7zip
-}:
+{ lib, stdenv, fetchFromGitHub, drat-trim, p7zip }:
 
 stdenv.mkDerivation rec {
   pname = "kissat";
@@ -40,7 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A 'keep it simple and clean bare metal SAT solver' written in C";
+    description =
+      "A 'keep it simple and clean bare metal SAT solver' written in C";
     longDescription = ''
       Kissat is a "keep it simple and clean bare metal SAT solver" written in C.
       It is a port of CaDiCaL back to C with improved data structures,

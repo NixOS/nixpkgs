@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, pybind11
-, pythonOlder
-, pytestCheckHook
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, cmake, pybind11, pythonOlder
+, pytestCheckHook, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "chiabip158";
@@ -22,9 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # CMake needs to be run by setuptools rather than by its hook
   dontConfigure = true;

@@ -1,18 +1,5 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, param
-, numpy
-, pyviz-comms
-, ipython
-, notebook
-, pandas
-, matplotlib
-, bokeh
-, scipy
-, panel
-, colorcet
-}:
+{ buildPythonPackage, fetchPypi, lib, param, numpy, pyviz-comms, ipython
+, notebook, pandas, matplotlib, bokeh, scipy, panel, colorcet }:
 
 buildPythonPackage rec {
   pname = "holoviews";
@@ -23,14 +10,7 @@ buildPythonPackage rec {
     sha256 = "3a25c4fe3195fdc4639461abbfa5a8bebce8ab737674b6673da2236a901cfefd";
   };
 
-  propagatedBuildInputs = [
-    colorcet
-    numpy
-    pandas
-    panel
-    param
-    pyviz-comms
-  ];
+  propagatedBuildInputs = [ colorcet numpy pandas panel param pyviz-comms ];
 
   # tests not fully included with pypi release
   doCheck = false;

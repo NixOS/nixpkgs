@@ -1,11 +1,5 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, libkrb5
-, zlib
-, openssl
-}:
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, libkrb5, zlib
+, openssl }:
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
@@ -43,7 +37,8 @@ buildDotnetModule rec {
   passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
-    description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
+    description =
+      "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     platforms = dotnetCorePackages.aspnetcore_5_0.meta.platforms;

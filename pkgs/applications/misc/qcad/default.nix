@@ -1,18 +1,5 @@
-{ boost
-, fetchFromGitHub
-, libGLU
-, mkDerivationWith
-, muparser
-, pkg-config
-, qtbase
-, qmake
-, qtscript
-, qtsvg
-, qtxmlpatterns
-, qttools
-, lib
-, stdenv
-, installShellFiles
+{ boost, fetchFromGitHub, libGLU, mkDerivationWith, muparser, pkg-config, qtbase
+, qmake, qtscript, qtsvg, qtxmlpatterns, qttools, lib, stdenv, installShellFiles
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
@@ -89,22 +76,9 @@ mkDerivationWith stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [
-    boost
-    muparser
-    libGLU
-    qtbase
-    qtscript
-    qtsvg
-    qtxmlpatterns
-  ];
+  buildInputs = [ boost muparser libGLU qtbase qtscript qtsvg qtxmlpatterns ];
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    qttools
-    installShellFiles
-  ];
+  nativeBuildInputs = [ pkg-config qmake qttools installShellFiles ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";

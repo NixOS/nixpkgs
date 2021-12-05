@@ -1,5 +1,5 @@
-{stdenv, lib, fetchFromGitHub, makeWrapper, gettext,
-python3, rsync, cron, openssh, sshfs-fuse, encfs }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, gettext, python3, rsync, cron
+, openssh, sshfs-fuse, encfs }:
 
 let
   python' = python3.withPackages (ps: with ps; [ dbus-python keyring ]);
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/backintime" \
       --prefix PATH : ${apps}
-    '';
+  '';
 
   meta = {
     homepage = "https://github.com/bit-team/backintime";

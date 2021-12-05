@@ -1,21 +1,6 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, jsonpickle
-, munch
-, mypy
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pytz
-, semver
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, crcmod, defusedxml
+, fetchFromGitHub, jsonpickle, munch, mypy, pyserial, pytest-aiohttp
+, pytest-asyncio, pytestCheckHook, python-dateutil, pytz, semver }:
 
 buildPythonPackage rec {
   pname = "plugwise";
@@ -41,13 +26,8 @@ buildPythonPackage rec {
     semver
   ];
 
-  checkInputs = [
-    jsonpickle
-    mypy
-    pytest-aiohttp
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ jsonpickle mypy pytest-aiohttp pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "plugwise" ];
 

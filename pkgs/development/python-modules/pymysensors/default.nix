@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, click
-, crcmod
-, fetchFromGitHub
-, getmac
-, intelhex
-, paho-mqtt
-, pyserial
-, pyserial-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
-}:
+{ lib, buildPythonPackage, click, crcmod, fetchFromGitHub, getmac, intelhex
+, paho-mqtt, pyserial, pyserial-asyncio, pytest-sugar, pytest-timeout
+, pytestCheckHook, pythonOlder, voluptuous }:
 
 buildPythonPackage rec {
   pname = "pymysensors";
@@ -40,15 +27,9 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
-    pytest-sugar
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-sugar pytest-timeout pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mysensors"
-  ];
+  pythonImportsCheck = [ "mysensors" ];
 
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";

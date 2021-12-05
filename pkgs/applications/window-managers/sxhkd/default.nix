@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, asciidoc, libxcb, xcbutil, xcbutilkeysyms
-, xcbutilwm
-}:
+, xcbutilwm }:
 
 stdenv.mkDerivation rec {
   pname = "sxhkd";

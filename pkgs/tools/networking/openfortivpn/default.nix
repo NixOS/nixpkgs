@@ -1,12 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, openssl, ppp
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, openssl, ppp
 , systemd ? null }:
 
-let
-  withSystemd = stdenv.isLinux && !(systemd == null);
+let withSystemd = stdenv.isLinux && !(systemd == null);
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "openfortivpn";
   version = "1.16.0";
 
@@ -25,16 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    openssl ppp
-  ]
-  ++ lib.optional withSystemd systemd;
+  buildInputs = [ openssl ppp ] ++ lib.optional withSystemd systemd;
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--with-pppd=${ppp}/bin/pppd"
-  ]
-  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
+  configureFlags = [ "--sysconfdir=/etc" "--with-pppd=${ppp}/bin/pppd" ]
+    ++ lib.optional withSystemd
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
 
   enableParallelBuilding = true;
 

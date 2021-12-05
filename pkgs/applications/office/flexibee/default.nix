@@ -3,14 +3,14 @@
 let
   version = "2021.2.1";
   majorVersion = builtins.substring 0 6 version;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "flexibee";
   inherit version;
 
   src = fetchurl {
-    url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
+    url =
+      "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-WorRyfjWucV8UhAjvuW+22CRzPcz5tjXF7Has4wrLMI=";
   };
 
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/flexibee" $out \
       --replace "/var/run" "/run"
   '';
-
 
   installPhase = ''
     runHook preInstall

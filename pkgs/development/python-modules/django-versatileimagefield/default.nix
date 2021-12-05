@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pillow
-, python_magic
-}:
+{ lib, buildPythonPackage, fetchPypi, django, pillow, python_magic }:
 
 buildPythonPackage rec {
   pname = "django-versatileimagefield";

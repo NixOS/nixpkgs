@@ -1,11 +1,10 @@
-{ lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
+{ lib, stdenv, buildLinux, fetchFromGitHub, ... }@args:
 
 let
   version = "5.15.4";
   release = "1";
   suffix = "xanmod${release}-tt";
-in
-buildLinux (args // rec {
+in buildLinux (args // rec {
   inherit version;
   modDirVersion = "${version}-${suffix}";
 
@@ -66,7 +65,8 @@ buildLinux (args // rec {
   extraMeta = {
     branch = "5.15-tt";
     maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
-    description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
+    description =
+      "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
   };
 } // (args.argsOverride or { }))

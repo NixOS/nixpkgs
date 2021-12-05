@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common
+, azure-mgmt-core, azure-mgmt-nspkg }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iothubprovisioningservices";
@@ -18,13 +11,8 @@ buildPythonPackage rec {
     sha256 = "e5871b03488b5ae6dfc441cdbda40cb39c000635ee57c513053792b3c15826a9";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-core
-    azure-mgmt-nspkg
-  ];
+  propagatedBuildInputs =
+    [ msrest msrestazure azure-common azure-mgmt-core azure-mgmt-nspkg ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
@@ -32,7 +20,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is the Microsoft Azure IoTHub Provisioning Services Client Library";
+    description =
+      "This is the Microsoft Azure IoTHub Provisioning Services Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer maxwilson ];

@@ -1,7 +1,5 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, base64, jsonm, re, stringext, uri-sexp
-, ocaml, fmt, alcotest
-}:
+{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, base64, jsonm, re, stringext
+, uri-sexp, ocaml, fmt, alcotest }:
 
 buildDunePackage rec {
   pname = "cohttp";
@@ -12,7 +10,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
     sha256 = "bd7aa4cd2c82744990ed7c49e3ee7a40324c64cb3d8509804809155e2bacd1d2";
   };
 

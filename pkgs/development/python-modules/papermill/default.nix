@@ -1,27 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ansiwrap
-, click
-, future
-, pyyaml
-, nbformat
-, nbconvert
-, nbclient
-, six
-, tqdm
-, jupyter-client
-, requests
-, entrypoints
-, tenacity
-, futures ? null
-, black
-, backports_tempfile
-, isPy27
-, pytest
-, pytest-cov
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchPypi, ansiwrap, click, future, pyyaml, nbformat
+, nbconvert, nbclient, six, tqdm, jupyter-client, requests, entrypoints
+, tenacity, futures ? null, black, backports_tempfile, isPy27, pytest
+, pytest-cov, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "papermill";
@@ -47,16 +27,9 @@ buildPythonPackage rec {
     entrypoints
     tenacity
     black
-  ] ++ lib.optionals isPy27 [
-    futures
-    backports_tempfile
-  ];
+  ] ++ lib.optionals isPy27 [ futures backports_tempfile ];
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    pytest-mock
-  ];
+  checkInputs = [ pytest pytest-cov pytest-mock ];
 
   checkPhase = ''
     HOME=$(mktemp -d) pytest

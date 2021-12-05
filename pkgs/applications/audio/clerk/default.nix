@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rofi
-, mpc_cli
-, perl
-, util-linux
-, python3Packages
-, libnotify
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl, util-linux
+, python3Packages, libnotify }:
 
 stdenv.mkDerivation {
   pname = "clerk";
@@ -31,7 +22,9 @@ stdenv.mkDerivation {
   installPhase = ''
     DESTDIR=$out PREFIX=/ make install
     wrapProgram $out/bin/clerk \
-      --prefix PATH : "${lib.makeBinPath [ rofi mpc_cli perl util-linux libnotify ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [ rofi mpc_cli perl util-linux libnotify ]
+      }"
   '';
 
   meta = with lib; {

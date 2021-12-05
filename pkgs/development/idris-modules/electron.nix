@@ -1,11 +1,6 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, jheiling-extras
-, jheiling-js
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, contrib, jheiling-extras, jheiling-js
+, lib }:
+build-idris-package {
   name = "electron";
   version = "2016-03-07";
 

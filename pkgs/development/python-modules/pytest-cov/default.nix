@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, coverage
-, toml
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, coverage, toml }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
@@ -31,7 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_cov" ];
 
   meta = with lib; {
-    description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
+    description =
+      "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
     homepage = "https://github.com/pytest-dev/pytest-cov";
     license = licenses.mit;
   };

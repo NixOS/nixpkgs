@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
-, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
-, bluez
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook
+, pkg-config, qmake, curl, grantlee, libgit2, libusb-compat-0_1, libssh2
+, libxml2, libxslt, libzip, zlib, qtbase, qtconnectivity, qtlocation, qtsvg
+, qttools, qtwebkit, libXcomposite, bluez }:
 
 let
   version = "5.0.2";
@@ -30,7 +29,8 @@ let
 
     meta = with lib; {
       homepage = "http://www.libdivecomputer.org";
-      description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
+      description =
+        "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -80,18 +80,27 @@ in stdenv.mkDerivation {
   src = subsurfaceSrc;
 
   buildInputs = [
-    libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
-    qtbase qtconnectivity qtsvg qttools qtwebkit
+    libdc
+    googlemaps
+    curl
+    grantlee
+    libgit2
+    libssh2
+    libusb-compat-0_1
+    libxml2
+    libxslt
+    libzip
+    qtbase
+    qtconnectivity
+    qtsvg
+    qttools
+    qtwebkit
     bluez
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
 
-  cmakeFlags = [
-    "-DLIBDC_FROM_PKGCONFIG=ON"
-    "-DNO_PRINTING=OFF"
-  ];
+  cmakeFlags = [ "-DLIBDC_FROM_PKGCONFIG=ON" "-DNO_PRINTING=OFF" ];
 
   passthru = { inherit version libdc googlemaps; };
 

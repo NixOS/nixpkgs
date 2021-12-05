@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "ephem";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "c076794a511a34b5b91871c1cf6374dbc323ec69fca3f50eb718f20b171259d6";
   };
 
-  checkInputs = [
-    glibcLocales
-    pytest
-  ];
+  checkInputs = [ glibcLocales pytest ];
 
   # JPLTest uses assets not distributed in package
   checkPhase = ''

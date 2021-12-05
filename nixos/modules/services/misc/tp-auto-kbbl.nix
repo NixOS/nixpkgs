@@ -9,7 +9,8 @@ in {
 
   options = {
     services.tp-auto-kbbl = {
-      enable = mkEnableOption "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
+      enable = mkEnableOption
+        "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
 
       package = mkOption {
         type = types.package;
@@ -41,7 +42,8 @@ in {
     systemd.services.tp-auto-kbbl = {
       serviceConfig = {
         ExecStart = concatStringsSep " "
-          ([ "${cfg.package}/bin/tp-auto-kbbl" "--device ${cfg.device}" ] ++ cfg.arguments);
+          ([ "${cfg.package}/bin/tp-auto-kbbl" "--device ${cfg.device}" ]
+            ++ cfg.arguments);
         Restart = "always";
         Type = "simple";
       };

@@ -1,10 +1,6 @@
-{ buildPythonPackage, lib, fetchPypi
-, pytestCheckHook, filelock, mock, pep8
-, cython
-, six, pyshp, shapely, geos, numpy
-, gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
-}:
+{ buildPythonPackage, lib, fetchPypi, pytestCheckHook, filelock, mock, pep8
+, cython, six, pyshp, shapely, geos, numpy, gdal, pillow, matplotlib, pyepsg
+, pykdtree, scipy, owslib, fiona, proj, flufl_lock }:
 
 buildPythonPackage rec {
   pname = "cartopy";
@@ -23,24 +19,30 @@ buildPythonPackage rec {
       --replace "test_epsg(" "dont_test_epsg("
   '';
 
-  buildInputs = [
-    geos proj
-  ];
+  buildInputs = [ geos proj ];
 
   propagatedBuildInputs = [
     # required
-    six pyshp shapely numpy
+    six
+    pyshp
+    shapely
+    numpy
 
     # optional
-    gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
+    gdal
+    pillow
+    matplotlib
+    pyepsg
+    pykdtree
+    scipy
+    fiona
+    owslib
   ];
 
   checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
 
-  pytestFlagsArray = [
-    "--pyargs" "cartopy"
-    "-m" "'not network and not natural_earth'"
-  ];
+  pytestFlagsArray =
+    [ "--pyargs" "cartopy" "-m" "'not network and not natural_earth'" ];
 
   disabledTests = [
     "test_nightshade_image"

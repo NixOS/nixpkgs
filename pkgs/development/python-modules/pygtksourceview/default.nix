@@ -1,4 +1,5 @@
-{ lib, fetchurl, python, buildPythonPackage, pkg-config, pygobject2, glib, pygtk, gnome2 }:
+{ lib, fetchurl, python, buildPythonPackage, pkg-config, pygobject2, glib, pygtk
+, gnome2 }:
 
 buildPythonPackage rec {
   pname = "pygtksourceview";
@@ -6,7 +7,8 @@ buildPythonPackage rec {
   version = "2.10.1";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/pygtksourceview/2.10/pygtksourceview-${version}.tar.bz2";
+    url =
+      "http://ftp.gnome.org/pub/gnome/sources/pygtksourceview/2.10/pygtksourceview-${version}.tar.bz2";
     sha256 = "0x2r9k547ad68sfddr5am341ap6zvy8k0rh3rd0n38k7xdd7rd5l";
   };
 
@@ -15,7 +17,5 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ python pygobject2 glib pygtk gnome2.gtksourceview ];
 
-  meta = {
-    platforms = lib.platforms.unix;
-  };
+  meta = { platforms = lib.platforms.unix; };
 }

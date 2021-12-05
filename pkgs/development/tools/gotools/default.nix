@@ -40,13 +40,14 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
-    + "\\)";
+    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ]) + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
-    substitute ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook \
+    substitute ${
+      ../../go-modules/tools/setup-hook.sh
+    } $out/nix-support/setup-hook \
       --subst-var-by bin $out
   '';
 

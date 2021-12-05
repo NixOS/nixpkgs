@@ -1,10 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, mock
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonApplication, fetchPypi, mock, pytestCheckHook, six }:
 
 buildPythonApplication rec {
   pname = "wad";
@@ -16,14 +10,9 @@ buildPythonApplication rec {
     sha256 = "02jq77h6g9v7n4qqq7qri6wmhggy257983dwgmpjsf4qsagkgwy8";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ];
+  checkInputs = [ pytestCheckHook mock ];
 
   pythonImportsCheck = [ "wad" ];
 

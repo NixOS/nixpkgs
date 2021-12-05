@@ -1,15 +1,6 @@
-{ lib
-, assertpy
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-mockservers
-, pytest-resource-path
-, pytest-sugar
-, pytestCheckHook
-, time-machine
-}:
+{ lib, assertpy, buildPythonPackage, fetchFromGitHub, poetry-core
+, pytest-asyncio, pytest-mockservers, pytest-resource-path, pytest-sugar
+, pytestCheckHook, time-machine }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
@@ -23,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-zgfgM3orhm2ZPp3Cf803adNzPeMOdRGX+sN6rhK1OT4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   preCheck = ''
     export TZ=Asia/Jerusalem

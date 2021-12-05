@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
-, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
-, zimg, libass, python3, libiconv
-, ApplicationServices
-}:
+, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv, zimg
+, libass, python3, libiconv, ApplicationServices }:
 
 with lib;
 
@@ -11,21 +9,19 @@ stdenv.mkDerivation rec {
   version = "R57";
 
   src = fetchFromGitHub {
-    owner  = "vapoursynth";
-    repo   = "vapoursynth";
-    rev    = version;
+    owner = "vapoursynth";
+    repo = "vapoursynth";
+    rev = version;
     sha256 = "sha256-tPQ1SOIpFevOYzL9a8Lc5+dv2egVX1CY3km8yWVv+Sk=";
   };
 
-  patches = [
-    ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
-  ];
+  patches =
+    [ ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
-  buildInputs = [
-    zimg libass
-    (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  buildInputs =
+    [ zimg libass (python3.withPackages (ps: with ps; [ sphinx cython ])) ]
+    ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -53,9 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A video processing framework with the future in mind";
-    homepage    = "http://www.vapoursynth.com/";
-    license     = licenses.lgpl21;
-    platforms   = platforms.x86_64;
+    homepage = "http://www.vapoursynth.com/";
+    license = licenses.lgpl21;
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
   };
 

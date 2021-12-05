@@ -11,14 +11,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ ucommon openssl libgcrypt ];
 
-  configureFlags = [
-    "--disable-demos"
-  ];
+  configureFlags = [ "--disable-demos" ];
 
   doCheck = true;
 
   meta = {
-    description = "An implementation of the IETF real-time transport protocol (RTP)";
+    description =
+      "An implementation of the IETF real-time transport protocol (RTP)";
     homepage = "https://www.gnu.org/software/ccrtp/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ marcweber ];

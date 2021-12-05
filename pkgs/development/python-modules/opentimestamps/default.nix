@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, isPy3k
-, bitcoinlib, GitPython, pysha3, git }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, isPy3k, bitcoinlib
+, GitPython, pysha3, git }:
 
 buildPythonPackage rec {
   pname = "opentimestamps";
@@ -18,7 +18,8 @@ buildPythonPackage rec {
   patches = [
     # build against bitcoinlib-0.11
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/opentimestamps/python-opentimestamps/pull/43.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/opentimestamps/python-opentimestamps/pull/43.patch";
       sha256 = "0bxzk4pzpqk7zrk2x7vn2bj2n3pc5whf8ijbd225s6674q450zbg";
     })
   ];

@@ -1,38 +1,9 @@
-{ pname
-, version
-, patches
-, dart
-, src
-}:
+{ pname, version, patches, dart, src }:
 
-{ bash
-, buildFHSUserEnv
-, cacert
-, git
-, runCommand
-, stdenv
-, lib
-, alsa-lib
-, dbus
-, expat
-, libpulseaudio
-, libuuid
-, libX11
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXfixes
-, libXrender
-, libXtst
-, libXi
-, libXext
-, libGL
-, nspr
-, nss
-, systemd
-, which
-}:
+{ bash, buildFHSUserEnv, cacert, git, runCommand, stdenv, lib, alsa-lib, dbus
+, expat, libpulseaudio, libuuid, libX11, libxcb, libXcomposite, libXcursor
+, libXdamage, libXfixes, libXrender, libXtst, libXi, libXext, libGL, nspr, nss
+, systemd, which }:
 let
   drvName = "flutter-${version}";
   flutter = stdenv.mkDerivation {
@@ -145,9 +116,7 @@ let
       ];
   };
 
-in
-runCommand drvName
-{
+in runCommand drvName {
   startScript = ''
     #!${bash}/bin/bash
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
@@ -161,7 +130,8 @@ runCommand drvName
     inherit dart;
   };
   meta = with lib; {
-    description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
+    description =
+      "Flutter is Google's SDK for building mobile, web and desktop with Dart";
     longDescription = ''
       Flutter is Google’s UI toolkit for building beautiful,
       natively compiled applications for mobile, web, and desktop from a single codebase.

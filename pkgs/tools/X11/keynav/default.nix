@@ -1,21 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libX11
-, xorgproto
-, libXtst
-, libXi
-, libXext
-, libXinerama
-, libXrandr
-, glib
-, cairo
-, xdotool
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, xorgproto, libXtst, libXi
+, libXext, libXinerama, libXrandr, glib, cairo, xdotool }:
 
-let release = "20180821"; in
-stdenv.mkDerivation {
+let release = "20180821";
+in stdenv.mkDerivation {
   pname = "keynav";
   version = "0.${release}.0";
 

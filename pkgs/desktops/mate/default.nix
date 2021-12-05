@@ -6,11 +6,13 @@ let
   self = rec {
 
     # Update script tailored to mate packages from git repository
-    mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
+    mateUpdateScript = { pname, version, odd-unstable ? true
+      , url ? "https://pub.mate-desktop.org/releases" }:
       pkgs.genericUpdater {
         inherit pname version odd-unstable;
         attrPath = "mate.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions ${url}";
+        versionLister =
+          "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions ${url}";
       };
 
     atril = callPackage ./atril { };

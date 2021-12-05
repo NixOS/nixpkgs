@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "asynccmd";
@@ -23,7 +18,8 @@ buildPythonPackage rec {
     # Deprecation of asyncio.Task.all_tasks(), https://github.com/valentinmk/asynccmd/pull/2
     (fetchpatch {
       name = "deprecation-python-38.patch";
-      url = "https://github.com/valentinmk/asynccmd/commit/12afa60ac07db17e96755e266061f2c88cb545ff.patch";
+      url =
+        "https://github.com/valentinmk/asynccmd/commit/12afa60ac07db17e96755e266061f2c88cb545ff.patch";
       sha256 = "0l6sk93gj51qqrpw01a8iiyz14k6dd2z68vr9l9w9vx76l8725yf";
     })
   ];

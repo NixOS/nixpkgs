@@ -1,44 +1,8 @@
-{ alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, curl
-, dbus
-, dnsmasq
-, dpkg
-, expat
-, fetchurl
-, gdk-pixbuf
-, glib
-, gtk3
-, icu
-, iproute2
-, krb5
-, lib
-, libdrm
-, libsecret
-, libuuid
-, libxcb
-, libxkbcommon
-, lttng-ust
-, makeWrapper
-, mesa
-, networkmanager
-, nspr
-, nss
-, openssl
-, pango
-, procps
-, python3
-, stdenv
-, systemd
-, xdg-utils
-, xorg
-, zlib
-}:
+{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups, curl
+, dbus, dnsmasq, dpkg, expat, fetchurl, gdk-pixbuf, glib, gtk3, icu, iproute2
+, krb5, lib, libdrm, libsecret, libuuid, libxcb, libxkbcommon, lttng-ust
+, makeWrapper, mesa, networkmanager, nspr, nss, openssl, pango, procps, python3
+, stdenv, systemd, xdg-utils, xorg, zlib }:
 with lib;
 let
   deps = [
@@ -84,13 +48,14 @@ let
     xorg.libxshmfence
     zlib
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "appgate-sdp";
   version = "5.5.0";
 
   src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+    url = "https://bin.appgate-sdp.com/${
+        versions.majorMinor version
+      }/client/appgate-sdp_${version}_amd64.deb";
     sha256 = "sha256-lWInks3DBkSpKQh+dcNyn43iY5vvE67FLadohBbF6n4=";
   };
 
@@ -99,16 +64,9 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  buildInputs = [
-    python3
-    python3.pkgs.dbus-python
-  ];
+  buildInputs = [ python3 python3.pkgs.dbus-python ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    dpkg
-  ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper dpkg ];
 
   unpackPhase = ''
     dpkg-deb -x $src $out
@@ -150,7 +108,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
-    homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
+    homepage =
+      "https://www.appgate.com/support/software-defined-perimeter-support";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];

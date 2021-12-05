@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, bc, dbus, gawk, gnused, libnotify, pulseaudio }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bc, dbus, gawk, gnused, libnotify
+, pulseaudio }:
 
 let
   path = lib.makeBinPath [ bc dbus gawk gnused libnotify pulseaudio ];
@@ -32,7 +32,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
+    description =
+      "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
     homepage = "https://bbs.archlinux.org/viewtopic.php?id=124513";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

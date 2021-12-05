@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, locale
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, importlib-metadata, locale
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "click";
@@ -21,13 +15,10 @@ buildPythonPackage rec {
       --replace '"locale"' "'${locale}/bin/locale'"
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";

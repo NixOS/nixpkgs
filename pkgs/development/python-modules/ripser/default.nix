@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, numpy
-, scipy
-, scikit-learn
-, persim
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, cython, numpy, scipy
+, scikit-learn, persim, pytest }:
 
 buildPythonPackage rec {
   pname = "ripser";
@@ -20,17 +11,9 @@ buildPythonPackage rec {
     sha256 = "335112a0f94532ccbe686db7826ee8d0714b32f65891abf92c0a02f3cb0fc5fd";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    cython
-    numpy
-    scipy
-    scikit-learn
-    persim
-  ];
+  propagatedBuildInputs = [ cython numpy scipy scikit-learn persim ];
 
   checkPhase = ''
     # specifically needed for darwin

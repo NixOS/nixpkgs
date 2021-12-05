@@ -1,17 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, pkg-config
-, meson
-, ninja
-, wayland
-, wayland-protocols
-, wayland-scanner
-, cairo
-, dbus
-, pango
-, libxkbcommon
-}:
+{ stdenv, lib, fetchFromGitLab, pkg-config, meson, ninja, wayland
+, wayland-protocols, wayland-scanner, cairo, dbus, pango, libxkbcommon }:
 
 stdenv.mkDerivation rec {
   pname = "libdecor";
@@ -27,21 +15,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
-  buildInputs = [
-    wayland
-    wayland-protocols
-    cairo
-    dbus
-    pango
-    libxkbcommon
-  ];
+  buildInputs = [ wayland wayland-protocols cairo dbus pango libxkbcommon ];
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/jadahl/libdecor";

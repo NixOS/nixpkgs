@@ -1,36 +1,59 @@
 { mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
-, karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
-, kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
-, kio, kcrash, breeze-icons
-, boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio_1, vc, poppler, curl, ilmbase
-, qtmultimedia, qtx11extras, quazip
+, karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons, kguiaddons, ki18n
+, kitemmodels, kitemviews, kwindowsystem, kio, kcrash, breeze-icons, boost
+, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, openjpeg
+, opencolorio_1, vc, poppler, curl, ilmbase, qtmultimedia, qtx11extras, quazip
 , python3Packages
 
-, version
-, kde-channel
-, sha256
+, version, kde-channel, sha256
 
-, callPackage
-}:
+, callPackage }:
 
 mkDerivation rec {
   pname = "krita";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.kde.org/${kde-channel}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://download.kde.org/${kde-channel}/${pname}/${version}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
+  nativeBuildInputs =
+    [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
-    karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
-    ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
-    boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
-    openjpeg opencolorio_1 poppler curl ilmbase
-    qtmultimedia qtx11extras quazip
+    karchive
+    kconfig
+    kwidgetsaddons
+    kcompletion
+    kcoreaddons
+    kguiaddons
+    ki18n
+    kitemmodels
+    kitemviews
+    kwindowsystem
+    kio
+    kcrash
+    breeze-icons
+    boost
+    libraw
+    fftw
+    eigen
+    exiv2
+    lcms2
+    gsl
+    openexr
+    libheif
+    giflib
+    openjpeg
+    opencolorio_1
+    poppler
+    curl
+    ilmbase
+    qtmultimedia
+    qtx11extras
+    quazip
     python3Packages.pyqt5
   ] ++ lib.optional stdenv.hostPlatform.isx86 vc;
 

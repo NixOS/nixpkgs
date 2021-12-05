@@ -1,32 +1,8 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, kguiaddons
-, kwindowsystem
-, libXdamage
-, libdbusmenu
-, liblxqt
-, libpulseaudio
-, libqtxdg
-, libstatgrab
-, libsysstat
-, lm_sensors
-, lxmenu-data
-, lxqt-build-tools
-, lxqt-globalkeys
-, lxqtUpdateScript
-, menu-cache
-, pcre
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-, solid
-, xorg
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, alsa-lib, kguiaddons
+, kwindowsystem, libXdamage, libdbusmenu, liblxqt, libpulseaudio, libqtxdg
+, libstatgrab, libsysstat, lm_sensors, lxmenu-data, lxqt-build-tools
+, lxqt-globalkeys, lxqtUpdateScript, menu-cache, pcre, qtbase, qtsvg, qttools
+, qtx11extras, solid, xorg }:
 
 mkDerivation rec {
   pname = "lxqt-panel";
@@ -39,11 +15,7 @@ mkDerivation rec {
     sha256 = "0i63jyjg31336davjdak7z3as34gazx1lri65fk2f07kka9dx1jl";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     alsa-lib

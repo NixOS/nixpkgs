@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.programs.plotinus;
-in
-{
+let cfg = config.programs.plotinus;
+in {
   meta = {
     maintainers = pkgs.plotinus.meta.maintainers;
     doc = ./plotinus.xml;
@@ -30,7 +28,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}" ];
-    environment.variables.GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
+    environment.sessionVariables.XDG_DATA_DIRS =
+      [ "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}" ];
+    environment.variables.GTK3_MODULES =
+      [ "${pkgs.plotinus}/lib/libplotinus.so" ];
   };
 }

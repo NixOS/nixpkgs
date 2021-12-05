@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, isPyPy
-, ipython
-, python
-, scikit-build
-, cmake
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, isPyPy, ipython, python
+, scikit-build, cmake }:
 
 buildPythonPackage rec {
   pname = "line_profiler";
@@ -18,17 +10,11 @@ buildPythonPackage rec {
     sha256 = "6e2fb792ca022f900f374f9659fd3e7c530cd4df7d3b7e84be889093b487639f";
   };
 
-  nativeBuildInputs = [
-    cython
-    cmake
-    scikit-build
-  ];
+  nativeBuildInputs = [ cython cmake scikit-build ];
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    ipython
-  ];
+  propagatedBuildInputs = [ ipython ];
 
   disabled = isPyPy;
 
@@ -36,9 +22,7 @@ buildPythonPackage rec {
     rm -f _line_profiler.c
   '';
 
-  checkInputs = [
-    ipython
-  ];
+  checkInputs = [ ipython ];
 
   checkPhase = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .

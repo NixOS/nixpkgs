@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
@@ -17,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
@@ -27,7 +23,8 @@ stdenv.mkDerivation rec {
     "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
   ];
 
-  propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+  propagatedBuildInputs =
+    [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
   postInstall = ''
     # Glob for 'shared' or 'static' subdir

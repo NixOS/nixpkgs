@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, guile
-, libgcrypt
-, autoreconfHook
-, pkg-config
-, texinfo
-}:
+{ lib, stdenv, fetchFromGitea, guile, libgcrypt, autoreconfHook, pkg-config
+, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "guile-gcrypt";
@@ -25,15 +18,9 @@ stdenv.mkDerivation rec {
     sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
-  ];
-  buildInputs = [
-    guile
-  ];
-  propagatedBuildInputs = [
-    libgcrypt
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  buildInputs = [ guile ];
+  propagatedBuildInputs = [ libgcrypt ];
 
   meta = with lib; {
     description = "Bindings to Libgcrypt for GNU Guile";

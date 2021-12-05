@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, pytest-cov
-, jinja2
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytestCheckHook, pytest-cov
+, jinja2, pyyaml }:
 
 buildPythonPackage rec {
   pname = "typesystem";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "1k0jwcky17zwaz2vx4x2zbsnp270g4mgn7kx5bpl8jgx76qmsnba";
   };
 
-  propagatedBuildInputs = [
-    jinja2
-    pyyaml
-  ];
+  propagatedBuildInputs = [ jinja2 pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-  ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
 
   disabledTests = [
     # https://github.com/encode/typesystem/issues/102. cosmetic issue where python3.8 changed

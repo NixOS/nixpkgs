@@ -1,36 +1,15 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, poppler_utils
-, pkg-config
-, libpng
-, imagemagick
-, libjpeg
-, fontconfig
-, podofo
-, qtbase
-, qmake
-, icu
-, sqlite
-, hunspell
-, hyphen
-, unrarSupport ? false
-, chmlib
-, python3Packages
-, libusb1
-, libmtp
-, xdg-utils
-, removeReferencesTo
-, libstemmer
-}:
+{ lib, mkDerivation, fetchurl, fetchpatch, poppler_utils, pkg-config, libpng
+, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite, hunspell
+, hyphen, unrarSupport ? false, chmlib, python3Packages, libusb1, libmtp
+, xdg-utils, removeReferencesTo, libstemmer }:
 
 mkDerivation rec {
   pname = "calibre";
   version = "5.31.1";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-3LGEWuHms54ji9GWSyLl8cFWIRBqHY1Jf/CNPJOywrU=";
   };
 
@@ -39,11 +18,11 @@ mkDerivation rec {
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      url =
+        "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
       sha256 = "sha256-dLzO1TWP7Q4nw2a3oN7qlhGCmcA0NKJrZidUnD6hUMA=";
     })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings\"]@g" \
@@ -76,11 +55,10 @@ mkDerivation rec {
     qtbase
     sqlite
     xdg-utils
-  ] ++ (
-    with python3Packages; [
-      (apsw.overrideAttrs (oldAttrs: rec {
-        setupPyBuildFlags = [ "--enable=load_extension" ];
-      }))
+  ] ++ (with python3Packages;
+    [
+      (apsw.overrideAttrs
+        (oldAttrs: rec { setupPyBuildFlags = [ "--enable=load_extension" ]; }))
       beautifulsoup4
       cchardet
       css-parser
@@ -107,8 +85,7 @@ mkDerivation rec {
       jeepney
       # the following are distributed with calibre, but we use upstream instead
       odfpy
-    ] ++ lib.optional (unrarSupport) unrardll
-  );
+    ] ++ lib.optional (unrarSupport) unrardll);
 
   installPhase = ''
     runHook preInstall
@@ -176,7 +153,8 @@ mkDerivation rec {
       it takes things a step beyond normal e-book software. It’s also completely
       free and open source and great for both casual users and computer experts.
     '';
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
+    license = with licenses;
+      if unrarSupport then unfreeRedistributable else gpl3Plus;
     maintainers = with maintainers; [ pSub AndersonTorres ];
     platforms = platforms.linux;
   };

@@ -1,43 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, undmg
-, makeWrapper
-, nodePackages
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, expat
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gnome2
-, gtk3
-, libGL
-, libappindicator-gtk3
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxcb
-, libxkbcommon
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, pipewire
-, systemd
-, xdg-utils
-, xorg
-}:
+{ lib, stdenv, fetchurl, dpkg, undmg, makeWrapper, nodePackages, alsa-lib
+, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig
+, freetype, gdk-pixbuf, glib, gnome2, gtk3, libGL, libappindicator-gtk3, libdrm
+, libnotify, libpulseaudio, libuuid, libxcb, libxkbcommon, libxshmfence, mesa
+, nspr, nss, pango, pipewire, systemd, xdg-utils, xorg }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -52,7 +17,8 @@ let
   x86_64-linux-sha256 = "0k84glxp653lxgfv5b65zvvysax7fr3lhsjgq76safk7g7cjc86i";
 
   aarch64-darwin-version = "4.22.0";
-  aarch64-darwin-sha256 = "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
+  aarch64-darwin-sha256 =
+    "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -60,31 +26,31 @@ let
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
-  src =
-    let
-      base = "https://downloads.slack-edge.com";
-    in
-      {
-        x86_64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-          sha256 = x86_64-darwin-sha256;
-        };
-        aarch64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
-          sha256 = aarch64-darwin-sha256;
-        };
-        x86_64-linux = fetchurl {
-          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
-          sha256 = x86_64-linux-sha256;
-        };
-      }.${system} or throwSystem;
+  src = let base = "https://downloads.slack-edge.com";
+  in {
+    x86_64-darwin = fetchurl {
+      url =
+        "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      sha256 = x86_64-darwin-sha256;
+    };
+    aarch64-darwin = fetchurl {
+      url =
+        "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      sha256 = aarch64-darwin-sha256;
+    };
+    x86_64-linux = fetchurl {
+      url =
+        "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+      sha256 = x86_64-linux-sha256;
+    };
+  }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -170,7 +136,7 @@ let
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
@@ -198,7 +164,4 @@ let
       runHook postInstall
     '';
   };
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

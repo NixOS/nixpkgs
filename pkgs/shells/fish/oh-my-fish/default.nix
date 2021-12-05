@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fish
-, runtimeShell
-, writeShellScript
-}:
+{ lib, stdenv, fetchFromGitHub, fish, runtimeShell, writeShellScript }:
 
 stdenv.mkDerivation rec {
   pname = "oh-my-fish";
@@ -17,9 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-lwMo4+PcYR9kYJPWK+ALiMfBdxFSgB2vjtSn8QrmmEA=";
   };
 
-  buildInputs = [
-    fish
-  ];
+  buildInputs = [ fish ];
 
   dontConfigure = true;
   dontBuild = true;

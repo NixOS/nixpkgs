@@ -10,7 +10,9 @@
     cd "$sourceRoot"
     tar -xf ${haskellPackages.constraints.src}
     tar -xf ${haskellPackages.linear.src}
-    cp ${writeText "cabal.project" "packages: constraints* linear*"} cabal.project
+    cp ${
+      writeText "cabal.project" "packages: constraints* linear*"
+    } cabal.project
   '';
   buildPhase = ''
     export HOME=$(mktemp -d)
@@ -22,15 +24,13 @@
     touch $out
   '';
 }).overrideAttrs (oldAttrs: {
-  meta =
-    let
-      oldMeta = oldAttrs.meta or {};
-      oldMaintainers = oldMeta.maintainers or [];
-      additionalMaintainers = with lib.maintainers; [ cdepillabout ];
-      allMaintainers = oldMaintainers ++ additionalMaintainers;
-    in
-    oldMeta // {
-      maintainers = allMaintainers;
-      inherit (cabal-install.meta) platforms;
-    };
+  meta = let
+    oldMeta = oldAttrs.meta or { };
+    oldMaintainers = oldMeta.maintainers or [ ];
+    additionalMaintainers = with lib.maintainers; [ cdepillabout ];
+    allMaintainers = oldMaintainers ++ additionalMaintainers;
+  in oldMeta // {
+    maintainers = allMaintainers;
+    inherit (cabal-install.meta) platforms;
+  };
 })

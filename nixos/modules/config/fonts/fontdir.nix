@@ -20,9 +20,7 @@ let
     cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
   '';
 
-in
-
-{
+in {
 
   options = {
     fonts.fontDir = {
@@ -60,7 +58,11 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "fonts" "enableFontDir" ] [ "fonts" "fontDir" "enable" ])
+    (mkRenamedOptionModule [ "fonts" "enableFontDir" ] [
+      "fonts"
+      "fontDir"
+      "enable"
+    ])
   ];
 
 }

@@ -1,31 +1,7 @@
-{ aiohttp
-, blinker
-, botocore
-, bottle
-, buildPythonPackage
-, celery
-, certifi
-, chalice
-, django
-, falcon
-, fetchPypi
-, flask
-, iana-etc
-, isPy3k
-, libredirect
-, pyramid
-, rq
-, sanic
-, sqlalchemy
-, lib
-, tornado
-, urllib3
-, trytond
-, werkzeug
-, executing
-, pure-eval
-, asttokens
-}:
+{ aiohttp, blinker, botocore, bottle, buildPythonPackage, celery, certifi
+, chalice, django, falcon, fetchPypi, flask, iana-etc, isPy3k, libredirect
+, pyramid, rq, sanic, sqlalchemy, lib, tornado, urllib3, trytond, werkzeug
+, executing, pure-eval, asttokens }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
@@ -36,12 +12,25 @@ buildPythonPackage rec {
     sha256 = "b9844751e40710e84a457c5bc29b21c383ccb2b63d76eeaad72f7f1c808c8828";
   };
 
-  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
-    executing pure-eval asttokens ]
-  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  checkInputs = [
+    blinker
+    botocore
+    chalice
+    django
+    flask
+    tornado
+    bottle
+    rq
+    falcon
+    sqlalchemy
+    werkzeug
+    trytond
+    executing
+    pure-eval
+    asttokens
+  ] ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];
-
 
   # The Sentry tests need access to `/etc/protocols` (the tests call
   # `socket.getprotobyname('tcp')`, which reads from this file). Normally

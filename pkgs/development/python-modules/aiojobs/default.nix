@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, pytestCheckHook
-, pytest-aiohttp
-, pygments
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aiohttp
+, pytestCheckHook, pytest-aiohttp, pygments }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
@@ -22,22 +15,13 @@ buildPythonPackage rec {
     sha256 = "EQwD0b2B9qFVd/8thKInaio0hpPzvVIjvCN0TcARu2w=";
   };
 
-  nativeBuildInputs = [
-    pygments
-  ];
+  nativeBuildInputs = [ pygments ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-aiohttp
-  ];
+  checkInputs = [ pytestCheckHook pytest-aiohttp ];
 
-  pythonImportsCheck = [
-    "aiojobs"
-  ];
+  pythonImportsCheck = [ "aiojobs" ];
 
   meta = with lib; {
     description = "Jobs scheduler for managing background task (asyncio)";

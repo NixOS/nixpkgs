@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pythonOlder
-, requests
-, six
-, websocket-client
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, ifaddr, poetry-core, pythonOlder
+, requests, six, websocket-client }:
 
 buildPythonPackage rec {
   pname = "roonapi";
@@ -22,16 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-vXx7MgoGjBPdx7uKUtAVqlXphPJYt5SyuTo2JlKia60=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    ifaddr
-    requests
-    six
-    websocket-client
-  ];
+  propagatedBuildInputs = [ ifaddr requests six websocket-client ];
 
   # Tests require access to the Roon API
   doCheck = false;

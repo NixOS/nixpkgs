@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 
 with python3.pkgs;
 
@@ -30,11 +27,7 @@ buildPythonApplication rec {
     packaging
   ];
 
-  checkInputs = [
-    Babel
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ Babel mock pytestCheckHook ];
 
   postPatch = ''
     # Remove test due to missing requirement
@@ -51,7 +44,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
-    description = "Project documentation with Markdown / static website generator";
+    description =
+      "Project documentation with Markdown / static website generator";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's
       geared towards building project documentation. Documentation source files

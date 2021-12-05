@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, givaro
-, pkg-config
-, blas
-, lapack
-, fflas-ffpack
-, gmpxx
-, withSage ? false # sage support
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, givaro, pkg-config, blas, lapack
+, fflas-ffpack, gmpxx, withSage ? false # sage support
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -23,17 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    givaro
-    blas
-    gmpxx
-    fflas-ffpack
-  ];
+  buildInputs = [ givaro blas gmpxx fflas-ffpack ];
 
   patches = [
     # Remove inappropriate `const &` qualifiers on data members that can be
@@ -49,22 +33,30 @@ stdenv.mkDerivation rec {
     find . -type f -exec sed -e 's/@LINBOXSAGE_LIBS@//' -i {} \;
   '';
 
-  configureFlags = [
-    "--with-blas-libs=-lblas"
-    "--disable-optimization"
-  ] ++ lib.optionals stdenv.isx86_64 [
-    # disable SIMD instructions (which are enabled *when available* by default)
-    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
-    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
-    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
-    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
-    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
-    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
-    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
-    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
-  ] ++ lib.optionals withSage [
-    "--enable-sage"
-  ];
+  configureFlags = [ "--with-blas-libs=-lblas" "--disable-optimization" ]
+    ++ lib.optionals stdenv.isx86_64 [
+      # disable SIMD instructions (which are enabled *when available* by default)
+      "--${
+        if stdenv.hostPlatform.sse3Support then "enable" else "disable"
+      }-sse3"
+      "--${
+        if stdenv.hostPlatform.ssse3Support then "enable" else "disable"
+      }-ssse3"
+      "--${
+        if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"
+      }-sse41"
+      "--${
+        if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"
+      }-sse42"
+      "--${if stdenv.hostPlatform.avxSupport then "enable" else "disable"}-avx"
+      "--${
+        if stdenv.hostPlatform.avx2Support then "enable" else "disable"
+      }-avx2"
+      "--${if stdenv.hostPlatform.fmaSupport then "enable" else "disable"}-fma"
+      "--${
+        if stdenv.hostPlatform.fma4Support then "enable" else "disable"
+      }-fma4"
+    ] ++ lib.optionals withSage [ "--enable-sage" ];
 
   doCheck = true;
 

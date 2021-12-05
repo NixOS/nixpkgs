@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gobject-introspection
-, gnutls
-, cairo
-, glib
-, pkg-config
-, cyrus_sasl
-, libpulseaudio
-, libgcrypt
-, gtk3
-, vala
-, gettext
-, perl
-, python3
-, gnome
-, gdk-pixbuf
-, zlib
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gobject-introspection, gnutls, cairo
+, glib, pkg-config, cyrus_sasl, libpulseaudio, libgcrypt, gtk3, vala, gettext
+, perl, python3, gnome, gdk-pixbuf, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
@@ -28,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "X6qlgjuMvowLC6HkVsTnDEsa5mhcn+gaQoLZjPAKIR0=";
   };
 

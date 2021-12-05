@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, harfbuzz
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, fontconfig, harfbuzz, libX11, libXext, libXft
+, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "lukesmithxyz-st";
@@ -21,17 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-WwjuNxWoeR/ppJxJgqD20kzrn1kIfgDarkTOedX/W4k=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    fontconfig
-    harfbuzz
-    libX11
-    libXext
-    libXft
-    ncurses
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ fontconfig harfbuzz libX11 libXext libXft ncurses ];
 
   patches = [
     # eliminate useless calls to git inside Makefile

@@ -3,13 +3,13 @@
 let
   pname = "camlidl";
   webpage = "https://caml.inria.fr/pub/old_caml_site/camlidl/";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.05";
 
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/old_caml_site/distrib/bazar-ocaml/${pname}-${version}.tar.gz";
+    url =
+      "http://caml.inria.fr/pub/old_caml_site/distrib/bazar-ocaml/${pname}-${version}.tar.gz";
     sha256 = "0483cs66zsxsavcllpw1qqvyhxb39ddil3h72clcd69g7fyxazl5";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
     export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
     export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
   '';

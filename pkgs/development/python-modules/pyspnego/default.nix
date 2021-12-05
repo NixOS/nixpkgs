@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, gssapi
-, krb5
-, ruamel-yaml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, glibcLocales
-}:
+{ lib, buildPythonPackage, cryptography, fetchFromGitHub, gssapi, krb5
+, ruamel-yaml, pytest-mock, pytestCheckHook, pythonOlder, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "pyspnego";
@@ -24,18 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-f7CR7wMxHNNpxizV7MFCtWci3SSNvdx+W5i/rgOUSxY=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    gssapi
-    krb5
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ cryptography gssapi krb5 ruamel-yaml ];
 
-  checkInputs = [
-    glibcLocales
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ glibcLocales pytest-mock pytestCheckHook ];
 
   disabledTests = [
     # struct.error: unpack requires a buffer of 1 bytes

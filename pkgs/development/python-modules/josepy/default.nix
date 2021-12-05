@@ -1,12 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cryptography
-, pyopenssl
-, setuptools
-, mock
-, pytestCheckHook
-}:
+{ lib, fetchPypi, buildPythonPackage, cryptography, pyopenssl, setuptools, mock
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "josepy";
@@ -23,22 +16,15 @@ buildPythonPackage rec {
     sed -i '/flake8-ignore/d' pytest.ini
   '';
 
-  propagatedBuildInputs = [
-    pyopenssl
-    cryptography
-    setuptools
-  ];
+  propagatedBuildInputs = [ pyopenssl cryptography setuptools ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   meta = with lib; {
     description = "JOSE protocol implementation in Python";
     homepage = "https://github.com/jezdez/josepy";
     license = licenses.asl20;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }
 

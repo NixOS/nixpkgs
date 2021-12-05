@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.3";
+let version = "1.3";
 in fetchzip {
   name = "mononoki-${version}";
 
-  url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
+  url =
+    "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/mononoki

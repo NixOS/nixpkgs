@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "smartctl-exporter.yml" {
     smartctl_exporter = {
       bind_to = "${cfg.listenAddress}:${toString cfg.port}";
@@ -20,7 +20,7 @@ in {
   extraOpts = {
     devices = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
@@ -40,12 +40,8 @@ in {
 
   serviceOpts = {
     serviceConfig = {
-      AmbientCapabilities = [
-        "CAP_SYS_ADMIN"
-      ];
-      CapabilityBoundingSet = [
-        "CAP_SYS_ADMIN"
-      ];
+      AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+      CapabilityBoundingSet = [ "CAP_SYS_ADMIN" ];
       DevicePolicy = "closed";
       DeviceAllow = lib.mkForce cfg.devices;
       ExecStart = ''
@@ -55,10 +51,7 @@ in {
       ProtectProc = "invisible";
       ProcSubset = "pid";
       SupplementaryGroups = [ "disk" ];
-      SystemCallFilter = [
-        "@system-service"
-        "~@privileged @resources"
-      ];
+      SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
     };
   };
 }

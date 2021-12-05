@@ -1,17 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
-, qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
+{ mkDerivation, lib, fetchFromGitHub, callPackage, pkg-config, cmake, ninja
+, python3, wrapGAppsHook, wrapQtAppsHook, qtbase, qtimageformats, gtk3
+, libsForQt5, lz4, xxHash, ffmpeg, openalSoft, minizip, libopus, alsa-lib
+, libpulseaudio, range-v3, tl-expected, hunspell, glibmm, webkitgtk
 # Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, libepoxy
-, at-spi2-core, libXtst, libthai, libdatrie
-}:
+, pcre, xorg, util-linux, libselinux, libsepol, libepoxy, at-spi2-core, libXtst
+, libthai, libdatrie }:
 
 with lib;
 
-let
-  tg_owt = callPackage ./tg_owt.nix {};
+let tg_owt = callPackage ./tg_owt.nix { };
 in mkDerivation rec {
   pname = "kotatogram-desktop";
   version = "1.4.1";
@@ -33,16 +30,40 @@ in mkDerivation rec {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs =
+    [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    qtbase
+    qtimageformats
+    gtk3
+    libsForQt5.kwayland
+    libsForQt5.libdbusmenu
+    lz4
+    xxHash
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsa-lib
+    libpulseaudio
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libXdmcp util-linux libselinux libsepol libepoxy
-    at-spi2-core libXtst libthai libdatrie
+    pcre
+    xorg.libXdmcp
+    util-linux
+    libselinux
+    libsepol
+    libepoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
   ];
 
   cmakeFlags = [ "-DTDESKTOP_API_TEST=ON" ];
@@ -54,9 +75,7 @@ in mkDerivation rec {
       "''${qtWrapperArgs[@]}"
   '';
 
-  passthru = {
-    inherit tg_owt;
-  };
+  passthru = { inherit tg_owt; };
 
   meta = {
     description = "Kotatogram – experimental Telegram Desktop fork";
@@ -68,7 +87,8 @@ in mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{ver}";
+    changelog =
+      "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{ver}";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }

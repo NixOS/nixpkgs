@@ -1,15 +1,5 @@
-{
-  bazel
-, bazelTest
-, bazel-examples
-, gccStdenv
-, lib
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-}:
+{ bazel, bazelTest, bazel-examples, gccStdenv, lib, runLocal, runtimeShell
+, writeScript, writeText, distDir }:
 
 let
 
@@ -27,11 +17,10 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace" { } (''
     cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
     find $out -type d -exec chmod 755 {} \;
-  ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  '' + (lib.optionalString gccStdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

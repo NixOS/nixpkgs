@@ -1,50 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, dbus
-, glib
-, libgudev
-, udisks2
-, libgcrypt
-, libcap
-, polkit
-, libgphoto2
-, avahi
-, libarchive
-, fuse3
-, libcdio
-, libxml2
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, samba
-, libmtp
-, gnomeSupport ? false
-, gnome
-, gcr
-, glib-networking
-, gnome-online-accounts
-, wrapGAppsHook
-, libimobiledevice
-, libbluray
-, libcdio-paranoia
-, libnfs
-, openssh
-, libsecret
-, libgdata
-, python3
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, dbus, glib, libgudev
+, udisks2, libgcrypt, libcap, polkit, libgphoto2, avahi, libarchive, fuse3
+, libcdio, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
+, gnomeSupport ? false, gnome, gcr, glib-networking, gnome-online-accounts
+, wrapGAppsHook, libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
+, libsecret, libgdata, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
   version = "1.48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1hlxl6368h6nyqp1888szxs9hnpcw98k3h23dgqi29xd38klzsmj";
   };
 
@@ -124,7 +92,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
+    description = "Virtual Filesystem support library"
+      + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ] ++ teams.gnome.members;

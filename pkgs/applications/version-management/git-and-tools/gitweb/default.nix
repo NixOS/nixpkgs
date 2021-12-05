@@ -1,5 +1,4 @@
-{ lib, buildEnv, git, fetchFromGitHub
-, gitwebTheme ? false }:
+{ lib, buildEnv, git, fetchFromGitHub, gitwebTheme ? false }:
 
 let
   gitwebThemeSrc = fetchFromGitHub {
@@ -18,10 +17,7 @@ in buildEnv {
   name = "gitweb-${lib.getVersion git}";
 
   ignoreCollisions = true;
-  paths = lib.optional gitwebTheme gitwebThemeSrc
-       ++ [ "${git}/share/gitweb" ];
+  paths = lib.optional gitwebTheme gitwebThemeSrc ++ [ "${git}/share/gitweb" ];
 
-  meta = git.meta // {
-    maintainers = with lib.maintainers; [ ];
-  };
+  meta = git.meta // { maintainers = with lib.maintainers; [ ]; };
 }

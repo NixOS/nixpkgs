@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes = {
@@ -15,9 +15,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
         networks = {
           "01-eth1" = {
             name = "eth1";
-            networkConfig = {
-              Address = "10.0.0.1/30";
-            };
+            networkConfig = { Address = "10.0.0.1/30"; };
           };
         };
       };
@@ -37,17 +35,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
 
           interfaces-config = {
             dhcp-socket-type = "raw";
-            interfaces = [
-              "eth1"
-            ];
+            interfaces = [ "eth1" ];
           };
 
-          subnet4 = [ {
+          subnet4 = [{
             subnet = "10.0.0.0/30";
-            pools = [ {
-              pool = "10.0.0.2 - 10.0.0.2";
-            } ];
-          } ];
+            pools = [{ pool = "10.0.0.2 - 10.0.0.2"; }];
+          }];
         };
       };
     };

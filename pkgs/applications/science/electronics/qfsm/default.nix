@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ qt4 graphviz ];
 
-  patches = [
-    ./drop-hardcoded-prefix.patch
-    ./gcc6-fixes.patch
-  ];
+  patches = [ ./drop-hardcoded-prefix.patch ./gcc6-fixes.patch ];
 
   hardeningDisable = [ "format" ];
 

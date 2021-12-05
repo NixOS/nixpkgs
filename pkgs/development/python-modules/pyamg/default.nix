@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, pytest
-, pybind11
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, scipy, pytest, pybind11 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
@@ -16,12 +9,7 @@ buildPythonPackage rec {
     sha256 = "b4cacfcfd13379762a4551ac059a2e52a093b476ca1ad44b9202e736490a8863";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    pytest
-    pybind11
-  ];
+  propagatedBuildInputs = [ numpy scipy pytest pybind11 ];
 
   preBuild = ''
     export HOME=$(mktemp -d)

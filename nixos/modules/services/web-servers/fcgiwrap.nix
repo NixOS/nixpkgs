@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.fcgiwrap;
+let cfg = config.services.fcgiwrap;
 in {
 
   options = {
@@ -11,7 +10,8 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
+        description =
+          "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
       };
 
       preforkProcesses = mkOption {
@@ -30,7 +30,8 @@ in {
         type = types.str;
         default = "/run/fcgiwrap.sock";
         example = "1.2.3.4:5678";
-        description = "Socket address. In case of a UNIX socket, this should be its filesystem path.";
+        description =
+          "Socket address. In case of a UNIX socket, this should be its filesystem path.";
       };
 
       user = mkOption {
@@ -53,13 +54,19 @@ in {
       wantedBy = optional (cfg.socketType != "unix") "multi-user.target";
 
       serviceConfig = {
-        ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${builtins.toString cfg.preforkProcesses} ${
-          if (cfg.socketType != "unix") then "-s ${cfg.socketType}:${cfg.socketAddress}" else ""
-        }";
+        ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${
+            builtins.toString cfg.preforkProcesses
+          } ${
+            if (cfg.socketType != "unix") then
+              "-s ${cfg.socketType}:${cfg.socketAddress}"
+            else
+              ""
+          }";
       } // (if cfg.user != null && cfg.group != null then {
         User = cfg.user;
         Group = cfg.group;
-      } else { } );
+      } else
+        { });
     };
 
     systemd.sockets = if (cfg.socketType == "unix") then {
@@ -67,6 +74,7 @@ in {
         wantedBy = [ "sockets.target" ];
         socketConfig.ListenStream = cfg.socketAddress;
       };
-    } else { };
+    } else
+      { };
   };
 }

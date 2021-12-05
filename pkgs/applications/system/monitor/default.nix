@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libwnck
-, libgee
-, libgtop
-, libhandy
-, sassc
-, udisks2
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, vala
+, pkg-config, pantheon, python3, gettext, glib, gtk3, libwnck, libgee, libgtop
+, libhandy, sassc, udisks2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
@@ -32,15 +14,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    vala
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gettext meson ninja vala pkg-config python3 wrapGAppsHook ];
 
   buildInputs = [
     glib
@@ -60,11 +35,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Manage processes and monitor system resources";

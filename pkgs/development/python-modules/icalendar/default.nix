@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, python-dateutil
-, pytz
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools, python-dateutil, pytz }:
 
 buildPythonPackage rec {
   version = "4.0.9";

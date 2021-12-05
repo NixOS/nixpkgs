@@ -2,15 +2,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "moinmoin";
   meta.maintainers = with lib.maintainers; [ mmilata ];
 
-  machine =
-    { ... }:
-    { services.moinmoin.enable = true;
-      services.moinmoin.wikis.ExampleWiki.superUsers = [ "admin" ];
-      services.moinmoin.wikis.ExampleWiki.webHost = "localhost";
+  machine = { ... }: {
+    services.moinmoin.enable = true;
+    services.moinmoin.wikis.ExampleWiki.superUsers = [ "admin" ];
+    services.moinmoin.wikis.ExampleWiki.webHost = "localhost";
 
-      services.nginx.virtualHosts.localhost.enableACME = false;
-      services.nginx.virtualHosts.localhost.forceSSL = false;
-    };
+    services.nginx.virtualHosts.localhost.enableACME = false;
+    services.nginx.virtualHosts.localhost.forceSSL = false;
+  };
 
   testScript = ''
     start_all()

@@ -1,23 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, jq
-, python3
-, gnome
-, wrapGAppsHook
-, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, cmake, ninja, jq, python3, gnome, wrapGAppsHook
+, gobject-introspection }:
 
-let
-  inherit (python3.pkgs) python pygobject3 requests;
-in
-stdenv.mkDerivation rec {
+let inherit (python3.pkgs) python pygobject3 requests;
+in stdenv.mkDerivation rec {
   pname = "chrome-gnome-shell";
   version = "10.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${pname}-${version}.tar.xz";
+    url =
+      "mirror://gnome/sources/chrome-gnome-shell/${version}/${pname}-${version}.tar.xz";
     sha256 = "0f54xyamm383ypbh0ndkza0pif6ljddg2f947p265fkqj3p4zban";
   };
 
@@ -37,13 +28,9 @@ stdenv.mkDerivation rec {
     gobject-introspection # for Gio typelib
   ];
 
-  cmakeFlags = [
-    "-DBUILD_EXTENSION=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_EXTENSION=OFF" ];
 
-  wrapPrefixVariables = [
-    "PYTHONPATH"
-  ];
+  wrapPrefixVariables = [ "PYTHONPATH" ];
 
   # cmake setup hook changes /etc/opt into /var/empty
   dontFixCmake = true;
@@ -53,9 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "chrome-gnome-shell";
-    };
+    updateScript = gnome.updateScript { packageName = "chrome-gnome-shell"; };
   };
 
   meta = with lib; {

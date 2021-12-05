@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-}:
+{ lib, buildPythonPackage, fetchPypi, pillow }:
 
 buildPythonPackage rec {
   pname = "pillowfight";

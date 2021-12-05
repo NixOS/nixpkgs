@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk ];
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";
+    url =
+      "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";
     sha256 = "1rs3li2hyig6cdzvgqlbz0vw6x7rmgr59qd6m0cvrai8xhqqykda";
   };
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://packages.debian.org/source/xbindkeys-config";
     description = "Graphical interface for configuring xbindkeys";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [benley];
+    maintainers = with lib.maintainers; [ benley ];
     platforms = with lib.platforms; linux;
   };
 

@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     # Upstream fix for ncurses-6.3.
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/folkertvanheusden/HTTPing/commit/4ea9d5b78540c972e3fe1bf44db9f7b3f87c0ad0.patch";
+      url =
+        "https://github.com/folkertvanheusden/HTTPing/commit/4ea9d5b78540c972e3fe1bf44db9f7b3f87c0ad0.patch";
       sha256 = "0w3kdkq6c6hz1d9jjnw0ldvd6dy39yamj8haf0hvcyb1sb67qjmp";
     })
   ];
@@ -22,10 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftw libintl ncurses openssl ];
   nativeBuildInputs = [ gettext ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
-  ];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   meta = with lib; {
     homepage = "https://vanheusden.com/httping";
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
       latency of the webserver + network. It supports IPv6.
     '';
     license = licenses.agpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

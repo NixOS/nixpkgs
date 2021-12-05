@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock
-}:
+{ lib, stdenv, fetchFromGitHub, buildPythonApplication, colorama, decorator
+, psutil, pyte, six, go, mock, pytestCheckHook, pytest-mock }:
 
 buildPythonApplication rec {
   pname = "thefuck";
@@ -37,7 +35,8 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/nvbn/thefuck";
-    description = "Magnificent app which corrects your previous console command";
+    description =
+      "Magnificent app which corrects your previous console command";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

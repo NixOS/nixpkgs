@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, inetutils
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, inetutils }:
 
 buildPythonPackage rec {
   pname = "whois";

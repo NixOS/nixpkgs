@@ -1,14 +1,11 @@
-{ python, lib, stdenv, pyside2
-, cmake, qt5, llvmPackages }:
+{ python, lib, stdenv, pyside2, cmake, qt5, llvmPackages }:
 
 stdenv.mkDerivation {
   pname = "shiboken2";
 
   inherit (pyside2) version src;
 
-  patches = [
-    ./nix_compile_cflags.patch
-  ];
+  patches = [ ./nix_compile_cflags.patch ];
 
   postPatch = ''
     cd sources/shiboken2
@@ -19,9 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns ];
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   dontWrapQtApps = true;
 

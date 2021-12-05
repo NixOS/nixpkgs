@@ -5,7 +5,8 @@ stdenv.mkDerivation {
   version = "0.12";
 
   src = fetchurl {
-    url = "https://highered.mheducation.com/sites/dl/free/0072467509/104652/lc3tools_v12.zip";
+    url =
+      "https://highered.mheducation.com/sites/dl/free/0072467509/104652/lc3tools_v12.zip";
     hash = "sha256-PTM0ole8pHiJmUaahjPwcBQY8/hVVgQhADZ4bSABt3I=";
   };
 

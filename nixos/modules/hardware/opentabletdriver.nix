@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.hardware.opentabletdriver;
-in
-{
+let cfg = config.hardware.opentabletdriver;
+in {
   meta.maintainers = with lib.maintainers; [ thiagokokada ];
 
   options = {
@@ -54,16 +52,18 @@ in
 
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
-    systemd.user.services.opentabletdriver = with pkgs; mkIf cfg.daemon.enable {
-      description = "Open source, cross-platform, user-mode tablet driver";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+    systemd.user.services.opentabletdriver = with pkgs;
+      mkIf cfg.daemon.enable {
+        description = "Open source, cross-platform, user-mode tablet driver";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${cfg.package}/bin/otd-daemon -c ${cfg.package}/lib/OpenTabletDriver/Configurations";
-        Restart = "on-failure";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart =
+            "${cfg.package}/bin/otd-daemon -c ${cfg.package}/lib/OpenTabletDriver/Configurations";
+          Restart = "on-failure";
+        };
       };
-    };
   };
 }

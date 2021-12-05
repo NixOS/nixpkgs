@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
+{ lib, stdenv, fetchurl, pkg-config, libpng, glib # just passthru
+}:
 
 stdenv.mkDerivation rec {
   pname = "pixman";

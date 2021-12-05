@@ -1,10 +1,4 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, voluptuous
-, pythonOlder
-}:
+{ lib, attrs, buildPythonPackage, fetchFromGitHub, voluptuous, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "hatasmota";
@@ -20,20 +14,16 @@ buildPythonPackage rec {
     sha256 = "sha256-KPFnlw6rk+jDKs8Ss/34lIt0MsAQGernCyyF1ImRylA=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    voluptuous
-  ];
+  propagatedBuildInputs = [ attrs voluptuous ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hatasmota"
-  ];
+  pythonImportsCheck = [ "hatasmota" ];
 
   meta = with lib; {
-    description = "Python module to help parse and construct Tasmota MQTT messages";
+    description =
+      "Python module to help parse and construct Tasmota MQTT messages";
     homepage = "https://github.com/emontnemery/hatasmota";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

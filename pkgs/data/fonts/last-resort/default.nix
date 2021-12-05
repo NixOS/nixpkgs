@@ -1,11 +1,11 @@
 { lib, fetchurl }:
 
-let
-  version = "13.001";
+let version = "13.001";
 in fetchurl {
   name = "last-resort-${version}";
 
-  url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
+  url =
+    "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
   downloadToTemp = true;
 
   postFetch = ''

@@ -1,9 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, enchant2
-}:
+{ lib, stdenv, buildPythonPackage, isPy27, fetchPypi, enchant2 }:
 
 buildPythonPackage rec {
   pname = "pyenchant";
@@ -17,8 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ enchant2 ];
 
-  postPatch = let
-    libext = stdenv.hostPlatform.extensions.sharedLibrary;
+  postPatch = let libext = stdenv.hostPlatform.extensions.sharedLibrary;
   in ''
     # Use the $PYENCHANT_LIBRARY_PATH envvar lookup line to hard-code the
     # location of the nix enchant-2 library into _enchant.py.

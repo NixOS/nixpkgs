@@ -19,16 +19,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    single-node-smoke-test = nixosTests.jitsi-meet;
-  };
+  passthru.tests = { single-node-smoke-test = nixosTests.jitsi-meet; };
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Prosody configuration for Jitsi Meet";
     longDescription = ''
-        This package contains configuration for Prosody to be used with Jitsi Meet.
+      This package contains configuration for Prosody to be used with Jitsi Meet.
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
     license = licenses.asl20;

@@ -7,11 +7,10 @@ let
   cfg = config.services.actkbd;
 
   configFile = pkgs.writeText "actkbd.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, events, attributes, command, ... }:
-        ''${concatMapStringsSep "+" toString keys}:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
-      )
-      cfg.bindings}
+    ${concatMapStringsSep "\n" ({ keys, events, attributes, command, ... }:
+      "${concatMapStringsSep "+" toString keys}:${
+        concatStringsSep "," events
+      }:${concatStringsSep "," attributes}:${command}") cfg.bindings}
     ${cfg.extraConfig}
   '';
 
@@ -24,7 +23,7 @@ let
       };
 
       events = mkOption {
-        type = types.listOf (types.enum ["key" "rep" "rel"]);
+        type = types.listOf (types.enum [ "key" "rep" "rel" ]);
         default = [ "key" ];
         description = "List of events to match.";
       };
@@ -44,9 +43,7 @@ let
     };
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -73,7 +70,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
@@ -98,7 +95,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

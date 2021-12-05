@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, click
-, colorful
-, docopt
-, fetchFromGitHub
-, freezegun
-, humanize
-, lark-parser
-, parse-type
-, pysingleton
-, pytestCheckHook
-, pyyaml
-, tag-expressions
-, lxml
-, pytest-mock
-}:
+{ lib, buildPythonPackage, click, colorful, docopt, fetchFromGitHub, freezegun
+, humanize, lark-parser, parse-type, pysingleton, pytestCheckHook, pyyaml
+, tag-expressions, lxml, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "radish-bdd";

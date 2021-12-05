@@ -146,18 +146,17 @@ in {
     systemd.services."engelsystem-init" = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = { Type = "oneshot"; };
-      script =
-        let
-          genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh"
-            (utils.genJqSecretsReplacementSnippet cfg.config "config.json");
-        in ''
-          umask 077
-          mkdir -p /var/lib/engelsystem/storage/app
-          mkdir -p /var/lib/engelsystem/storage/cache/views
-          cd /var/lib/engelsystem
-          ${genConfigScript}
-          chmod 400 config.json
-          chown -R engelsystem .
+      script = let
+        genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh"
+          (utils.genJqSecretsReplacementSnippet cfg.config "config.json");
+      in ''
+        umask 077
+        mkdir -p /var/lib/engelsystem/storage/app
+        mkdir -p /var/lib/engelsystem/storage/cache/views
+        cd /var/lib/engelsystem
+        ${genConfigScript}
+        chmod 400 config.json
+        chown -R engelsystem .
       '';
     };
     systemd.services."engelsystem-migrate" = {

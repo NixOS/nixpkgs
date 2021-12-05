@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, poetry, pytest-asyncio, }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, poetry
+, pytest-asyncio, }:
 
 buildPythonPackage rec {
   pname = "backoff";

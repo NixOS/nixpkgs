@@ -1,23 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPyPy
-, python
-, pillow
-, pycairo
-, pkg-config
-, boost
-, cairo
-, harfbuzz
-, icu
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, mapnik
-, proj
-, zlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPyPy, python, pillow, pycairo
+, pkg-config, boost, cairo, harfbuzz, icu, libjpeg, libpng, libtiff, libwebp
+, mapnik, proj, zlib }:
 
 buildPythonPackage rec {
   pname = "python-mapnik";
@@ -33,7 +16,9 @@ buildPythonPackage rec {
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
   preBuild = ''
-    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
+    export BOOST_PYTHON_LIB="boost_python${
+      "${lib.versions.major python.version}${lib.versions.minor python.version}"
+    }"
     export BOOST_THREAD_LIB="boost_thread"
     export BOOST_SYSTEM_LIB="boost_system"
     export PYCAIRO=true
@@ -44,9 +29,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  patches = [
-    ./find-pycairo-with-pkg-config.patch
-  ];
+  patches = [ ./find-pycairo-with-pkg-config.patch ];
 
   buildInputs = [
     mapnik

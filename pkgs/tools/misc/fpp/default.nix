@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "CLI program that accepts piped input and presents files for selection";
+    description =
+      "CLI program that accepts piped input and presents files for selection";
     homepage = "https://facebook.github.io/PathPicker/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

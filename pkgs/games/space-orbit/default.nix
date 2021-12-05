@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl
-, libGLU, libGL, libXi, libXt, libXext, libX11, libXmu, freeglut
-}:
+{ lib, stdenv, fetchurl, libGLU, libGL, libXi, libXt, libXext, libX11, libXmu
+, freeglut }:
 
 stdenv.mkDerivation rec {
   pname = "space-orbit";
@@ -10,15 +9,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGLU libGL libXi libXt libXext libX11 libXmu freeglut ];
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/s/space-orbit/space-orbit_${version}.orig.tar.gz";
+    url =
+      "mirror://debian/pool/main/s/space-orbit/space-orbit_${version}.orig.tar.gz";
     sha256 = "1kx69f9jqnfzwjh47cl1df8p8hn3bnp6bznxnb6c4wx32ijn5gri";
   };
 
   patches = [
     (fetchurl {
-       url = "mirror://debian/pool/main/s/space-orbit/space-orbit_${version}-${patchversion}.diff.gz";
-       sha256 = "1v3s97day6fhv08l2rn81waiprhi1lfyjjsj55axfh6n6zqfn1w2";
-     })
+      url =
+        "mirror://debian/pool/main/s/space-orbit/space-orbit_${version}-${patchversion}.diff.gz";
+      sha256 = "1v3s97day6fhv08l2rn81waiprhi1lfyjjsj55axfh6n6zqfn1w2";
+    })
   ];
 
   preBuild = ''
@@ -28,14 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r .. $out/dump
-    cat >$out/bin/space-orbit <<EOF
-#! ${stdenv.shell}
-exec $out/dump/orbit "\$@"
-EOF
-    chmod a+x $out/bin/space-orbit
-  '';
+        mkdir -p $out/bin
+        cp -r .. $out/dump
+        cat >$out/bin/space-orbit <<EOF
+    #! ${stdenv.shell}
+    exec $out/dump/orbit "\$@"
+    EOF
+        chmod a+x $out/bin/space-orbit
+      '';
 
   meta = with lib; {
     description = "A space combat simulator";

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, alarmdecoder
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools-scm, alarmdecoder
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "adext";
@@ -19,17 +14,11 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    alarmdecoder
-  ];
+  propagatedBuildInputs = [ alarmdecoder ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "adext" ];
 

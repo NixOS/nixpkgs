@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cffi-uffi-compat";
   version = "cffi_0.24.1";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "cffi-uffi-compat";
 
-  asdFilesToKeep = ["cffi-uffi-compat.asd"];
+  asdFilesToKeep = [ "cffi-uffi-compat.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cffi-uffi-compat DESCRIPTION UFFI Compatibility Layer for CFFI
@@ -29,4 +28,5 @@ rec {
     DEPENDENCIES (alexandria babel cffi trivial-features) VERSION cffi_0.24.1
     SIBLINGS
     (cffi-examples cffi-grovel cffi-libffi cffi-tests cffi-toolchain cffi)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

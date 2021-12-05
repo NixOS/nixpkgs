@@ -8,7 +8,7 @@
 # `glibc` needs to be overridden here because it's still needed to `./configure` the source in order
 # to have a build environment where we can call the needed make target.
 
-glibc.overrideAttrs ({ meta ? {}, ... }: {
+glibc.overrideAttrs ({ meta ? { }, ... }: {
   pname = "glibc-mtrace";
 
   buildPhase = ''
@@ -33,6 +33,7 @@ glibc.overrideAttrs ({ meta ? {}, ... }: {
   separateDebugInfo = false;
 
   meta = meta // {
-    description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
+    description =
+      "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
   };
 })

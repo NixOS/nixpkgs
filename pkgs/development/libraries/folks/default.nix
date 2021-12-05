@@ -1,36 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, pkg-config
-, meson
-, ninja
-, glib
-, gnome
-, nspr
-, gettext
-, gobject-introspection
-, vala
-, sqlite
-, libxml2
-, dbus-glib
-, libsoup
-, nss
-, dbus
-, libgee
-, evolution-data-server
-, libgdata
-, libsecret
-, db
-, python3
-, readline
-, gtk3
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, telepathy-glib
-, telepathySupport ? false
-}:
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, meson, ninja, glib, gnome, nspr
+, gettext, gobject-introspection, vala, sqlite, libxml2, dbus-glib, libsoup, nss
+, dbus, libgee, evolution-data-server, libgdata, libsecret, db, python3
+, readline, gtk3, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43, telepathy-glib
+, telepathySupport ? false }:
 
 # TODO: enable more folks backends
 
@@ -41,7 +13,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
   };
 
@@ -49,7 +23,8 @@ stdenv.mkDerivation rec {
     # Fix build with evolution-data-server ≥ 3.41
     # https://gitlab.gnome.org/GNOME/folks/-/merge_requests/52
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/62d588b0c609de17df5b4d1ebfbc67c456267efc.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/folks/-/commit/62d588b0c609de17df5b4d1ebfbc67c456267efc.patch";
       sha256 = "TDL/5kvVwHnvDMuKDdPLQmpmE1FTZhY+7HG8NxKqt5w=";
     })
   ];
@@ -81,21 +56,18 @@ stdenv.mkDerivation rec {
     readline
   ] ++ lib.optional telepathySupport telepathy-glib;
 
-  propagatedBuildInputs = [
-    glib
-    libgee
-    sqlite
-  ];
+  propagatedBuildInputs = [ glib libgee sqlite ];
 
   checkInputs = [
     dbus
-    (python3.withPackages (pp: with pp; [
-      python-dbusmock
-      # The following possibly need to be propagated by dbusmock
-      # if they are not optional
-      dbus-python
-      pygobject3
-    ]))
+    (python3.withPackages (pp:
+      with pp; [
+        python-dbusmock
+        # The following possibly need to be propagated by dbusmock
+        # if they are not optional
+        dbus-python
+        pygobject3
+      ]))
   ];
 
   mesonFlags = [
@@ -131,7 +103,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library that aggregates people from multiple sources to create metacontacts";
+    description =
+      "A library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;

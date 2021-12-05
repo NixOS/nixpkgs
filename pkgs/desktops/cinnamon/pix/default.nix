@@ -1,30 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, cinnamon-desktop
-, file
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libtool
-, libxml2
-, pkg-config
-, shared-mime-info
-, wrapGAppsHook
-, xapps
-, yelp-tools
-, libsecret
-, webkitgtk
-, libwebp
-, librsvg
-, json-glib
-, gnome
-, clutter
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, cinnamon-desktop, file
+, gdk-pixbuf, glib, gobject-introspection, gtk-doc, gtk3, intltool, itstool
+, libtool, libxml2, pkg-config, shared-mime-info, wrapGAppsHook, xapps
+, yelp-tools, libsecret, webkitgtk, libwebp, librsvg, json-glib, gnome, clutter
 }:
 
 stdenv.mkDerivation rec {
@@ -53,17 +30,8 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    xapps
-    libsecret
-    webkitgtk
-    libwebp
-    librsvg
-    json-glib
-    clutter
-  ];
+  buildInputs =
+    [ glib gtk3 xapps libsecret webkitgtk libwebp librsvg json-glib clutter ];
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";

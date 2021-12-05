@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, gtk
-, intltool
-, libtool
-, ncurses
-, openssl
-, pkg-config
-, readline
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, gettext, gtk, intltool
+, libtool, ncurses, openssl, pkg-config, readline }:
 
 stdenv.mkDerivation rec {
   pname = "gftp";
@@ -24,20 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-cIB3SneYKavgdI8eTtM1qsOrBJJ0c7/3CEvNPishNog=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    gettext
-    intltool
-    libtool
-    pkg-config
-  ];
-  buildInputs = [
-    gtk
-    ncurses
-    openssl
-    readline
-  ];
+  nativeBuildInputs = [ autoconf automake gettext intltool libtool pkg-config ];
+  buildInputs = [ gtk ncurses openssl readline ];
 
   hardeningDisable = [ "format" ];
 

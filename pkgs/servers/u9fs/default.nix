@@ -11,10 +11,10 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-      mkdir -p $out/bin $out/share/man4
-      cp u9fs.man $out/share/man4
-      cp u9fs $out/bin
-    '';
+    mkdir -p $out/bin $out/share/man4
+    cp u9fs.man $out/share/man4
+    cp u9fs $out/bin
+  '';
 
   meta = with lib; {
     description = "Serve 9P from Unix";

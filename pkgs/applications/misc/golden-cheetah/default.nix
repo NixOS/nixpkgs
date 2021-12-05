@@ -1,8 +1,7 @@
-{ lib, fetchFromGitHub, fetchpatch, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
-, bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
-}:
+{ lib, fetchFromGitHub, fetchpatch, mkDerivation, qtbase, qtsvg, qtserialport
+, qtwebengine, qtmultimedia, qttools, qtconnectivity, qtcharts
+, libusb-compat-0_1, gsl, blas, bison, flex, zlib, qmake, makeDesktopItem
+, makeWrapper }:
 
 let
   desktopItem = makeDesktopItem {
@@ -26,8 +25,18 @@ in mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1 gsl blas
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
+    gsl
+    blas
   ];
   nativeBuildInputs = [ flex makeWrapper qmake bison ];
 
@@ -35,7 +44,8 @@ in mkDerivation rec {
     # allow building with bison 3.7
     # PR at https://github.com/GoldenCheetah/GoldenCheetah/pull/3590
     (fetchpatch {
-      url = "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
+      url =
+        "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
       sha256 = "1h0y9vfji5jngqcpzxna5nnawxs77i1lrj44w8a72j0ah0sznivb";
     })
   ];

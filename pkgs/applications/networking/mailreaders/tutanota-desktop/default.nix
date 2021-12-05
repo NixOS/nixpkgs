@@ -1,20 +1,18 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper,
-electron, libsecret }:
+{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper
+, electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
   version = "3.89.5";
 
   src = fetchurl {
-    url = "https://github.com/tutao/tutanota/releases/download/tutanota-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
+    url =
+      "https://github.com/tutao/tutanota/releases/download/tutanota-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
     name = "tutanota-desktop-${version}.tar.gz";
     sha256 = "sha256-DBqeLoHPr/OwiA3cWO5MYoHSBqrEmP8j8q+rd50hYH8=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-  ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;

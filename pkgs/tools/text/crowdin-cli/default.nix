@@ -1,23 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, gawk
-, git
-, gnugrep
-, installShellFiles
-, jre
-, makeWrapper
-, crowdin-cli
-, testVersion
-, unzip
-}:
+{ lib, stdenv, fetchurl, gawk, git, gnugrep, installShellFiles, jre, makeWrapper
+, crowdin-cli, testVersion, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "crowdin-cli";
   version = "3.7.1";
 
   src = fetchurl {
-    url = "https://github.com/crowdin/${pname}/releases/download/${version}/${pname}.zip";
+    url =
+      "https://github.com/crowdin/${pname}/releases/download/${version}/${pname}.zip";
     sha256 = "sha256-WoDFBV1Nid1y57MIrTFMOB2yqHRUrvhp974Dz5agar0=";
   };
 

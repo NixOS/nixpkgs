@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, nettle, gnutls
-, libev, protobufc, guile, geoip, libseccomp, gperf, readline
-, lz4, libgssglue, ronn, pam
-}:
+, libev, protobufc, guile, geoip, libseccomp, gperf, readline, lz4, libgssglue
+, ronn, pam }:
 
 stdenv.mkDerivation rec {
   pname = "ocserv";
@@ -15,12 +14,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ nettle gnutls libev protobufc guile geoip libseccomp gperf readline lz4 libgssglue ronn pam ];
+  buildInputs = [
+    nettle
+    gnutls
+    libev
+    protobufc
+    guile
+    geoip
+    libseccomp
+    gperf
+    readline
+    lz4
+    libgssglue
+    ronn
+    pam
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/openconnect/ocserv";
     license = licenses.gpl2;
-    description = "This program is openconnect VPN server (ocserv), a server for the openconnect VPN client";
+    description =
+      "This program is openconnect VPN server (ocserv), a server for the openconnect VPN client";
     maintainers = with maintainers; [ neverbehave ];
   };
 }

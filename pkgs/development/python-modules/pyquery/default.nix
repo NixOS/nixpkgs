@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, pythonOlder
-}:
+{ lib, buildPythonPackage, cssselect, fetchPypi, lxml, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyquery";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
   };
 
-  propagatedBuildInputs = [
-    cssselect
-    lxml
-  ];
+  propagatedBuildInputs = [ cssselect lxml ];
 
   # circular dependency on webtest
   doCheck = false;

@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
-, OpenGL
-}:
+{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi, OpenGL }:
 
 with lib;
 
@@ -16,7 +14,10 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "doc" ];
 
   buildInputs = optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  propagatedBuildInputs = if stdenv.isDarwin then
+    [ OpenGL ]
+  else
+    [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
@@ -42,7 +43,12 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
+    "SYSTEM=${
+      if stdenv.hostPlatform.isMinGW then
+        "mingw"
+      else
+        stdenv.hostPlatform.parsed.kernel.name
+    }"
     "CC=${stdenv.cc.targetPrefix}cc"
     "LD=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "An OpenGL extension loading library for C(++)";
     homepage = "http://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
-      #["BSD" "GLX" "SGI-B" "GPL2"]
+    #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;
   };
 }

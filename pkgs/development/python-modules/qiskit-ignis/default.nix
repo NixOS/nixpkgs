@@ -1,25 +1,10 @@
-{ lib
-, stdenv
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, qiskit-terra
-, scikit-learn
-, scipy
-  # Optional package inputs
-, withVisualization ? false
-, matplotlib
-, withCvx ? false
-, cvxpy
-, withJit ? false
+{ lib, stdenv, pythonOlder, buildPythonPackage, fetchFromGitHub, numpy
+, qiskit-terra, scikit-learn, scipy
+# Optional package inputs
+, withVisualization ? false, matplotlib, withCvx ? false, cvxpy, withJit ? false
 , numba
-  # Check Inputs
-, pytestCheckHook
-, ddt
-, pyfakefs
-, qiskit-aer
-}:
+# Check Inputs
+, pytestCheckHook, ddt, pyfakefs, qiskit-aer }:
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
@@ -35,14 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-L5fwCMsN03ojiDvKIyqsGfUnwej1P7bpyHlL6mu7nh0=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    qiskit-terra
-    scikit-learn
-    scipy
-  ] ++ lib.optionals (withCvx) [ cvxpy ]
-  ++ lib.optionals (withVisualization) [ matplotlib ]
-  ++ lib.optionals (withJit) [ numba ];
+  propagatedBuildInputs = [ numpy qiskit-terra scikit-learn scipy ]
+    ++ lib.optionals (withCvx) [ cvxpy ]
+    ++ lib.optionals (withVisualization) [ matplotlib ]
+    ++ lib.optionals (withJit) [ numba ];
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
@@ -50,12 +31,7 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
-  checkInputs = [
-    pytestCheckHook
-    ddt
-    pyfakefs
-    qiskit-aer
-  ];
+  checkInputs = [ pytestCheckHook ddt pyfakefs qiskit-aer ];
   disabledTests = [
     "test_tensored_meas_cal_on_circuit" # Flaky test, occasionally returns result outside bounds
   ] ++ lib.optionals stdenv.isAarch64 [
@@ -63,7 +39,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
+    description =
+      "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
     homepage = "https://qiskit.org/ignis";
     downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";

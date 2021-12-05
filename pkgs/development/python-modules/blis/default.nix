@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, hypothesis
-, numpy
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, hypothesis, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "blis";
@@ -16,19 +9,11 @@ buildPythonPackage rec {
     sha256 = "833e01e9eaff4c01aa6e049bbc1e6acb9eca6ee513d7b35b5bf135d49705ad33";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-
-  checkInputs = [
-    hypothesis
-    pytest
-  ];
+  checkInputs = [ hypothesis pytest ];
 
   meta = with lib; {
     description = "BLAS-like linear algebra library";

@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
 
   src = fetchurl {
-    url = "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
+    url =
+      "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
     sha256 = "0fr3svn8kjp7bq1wzbkvv5awylwn8b01bngj04zvk7fpzqpgs7mz";
   };
 
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/prometheus/jmx_exporter";
-    description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
+    description =
+      "A process for exposing JMX Beans via HTTP for Prometheus consumption";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.unix;

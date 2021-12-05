@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
+{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44
+, perlPackages, makeWrapper, darwin }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -19,7 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ]
     ++ optional stdenv.isDarwin darwin.cctools;
 
-  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
+  propagatedBuildInputs = with perlPackages; [
+    perl
+    IPCRun
+    TimeDate
+    TimeDuration
+  ];
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -30,7 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
+    description =
+      "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
     maintainers = with maintainers; [ koral pSub ];
     platforms = platforms.all;

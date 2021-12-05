@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, graphviz
-, xdg-utils
-, makeFontsConf
-, freefont_ttf
-, mock
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, substituteAll, graphviz
+, xdg-utils, makeFontsConf, freefont_ttf, mock, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "graphviz";
@@ -39,9 +28,7 @@ buildPythonPackage rec {
   '';
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
   checkInputs = [ mock pytestCheckHook pytest-mock ];
 

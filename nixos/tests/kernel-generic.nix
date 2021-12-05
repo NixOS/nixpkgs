@@ -1,35 +1,27 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
-}@args:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }@args:
 
 with pkgs.lib;
 
 let
-  testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
-    name = "kernel-${linuxPackages.kernel.version}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus atemu ];
-    };
-
-    machine = { ... }:
-      {
-        boot.kernelPackages = linuxPackages;
+  testsForLinuxPackages = linuxPackages:
+    (import ./make-test-python.nix ({ pkgs, ... }: {
+      name = "kernel-${linuxPackages.kernel.version}";
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ nequissimus atemu ];
       };
 
-    testScript =
-      ''
+      machine = { ... }: { boot.kernelPackages = linuxPackages; };
+
+      testScript = ''
         assert "Linux" in machine.succeed("uname -s")
         assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
       '';
-  }) args);
+    }) args);
   kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
-      linux_4_14_hardened
-      linux_4_19_hardened
-      linux_5_4_hardened
-      linux_5_10_hardened
-      linux_5_15_hardened
+      linux_4_14_hardened linux_4_19_hardened linux_5_4_hardened
+      linux_5_10_hardened linux_5_15_hardened
 
       linux_testing;
   };

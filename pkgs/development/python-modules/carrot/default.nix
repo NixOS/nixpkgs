@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, amqplib, anyjson }:
+{ lib, buildPythonPackage, fetchPypi, nose, amqplib, anyjson }:
 
 buildPythonPackage rec {
   pname = "carrot";

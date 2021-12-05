@@ -1,14 +1,6 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-, boost, openssl, unbound
-, pcsclite, readline, libsodium, hidapi
-, rapidjson
-, curl, sqlite
-, trezorSupport ? true
-, libusb1
-, protobuf
-, python3
-}:
+{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, cmake, pkg-config, boost
+, openssl, unbound, pcsclite, readline, libsodium, hidapi, rapidjson, curl
+, sqlite, trezorSupport ? true, libusb1, protobuf, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "oxen";
@@ -24,8 +16,10 @@ stdenv.mkDerivation rec {
 
   # Required for static linking, the only supported install path
   lbzmqsrc = fetchurl {
-    url = "https://github.com/zeromq/libzmq/releases/download/v4.3.3/zeromq-4.3.3.tar.gz";
-    sha512 = "4c18d784085179c5b1fcb753a93813095a12c8d34970f2e1bfca6499be6c9d67769c71c68b7ca54ff181b20390043170e89733c22f76ff1ea46494814f7095b1";
+    url =
+      "https://github.com/zeromq/libzmq/releases/download/v4.3.3/zeromq-4.3.3.tar.gz";
+    sha512 =
+      "4c18d784085179c5b1fcb753a93813095a12c8d34970f2e1bfca6499be6c9d67769c71c68b7ca54ff181b20390043170e89733c22f76ff1ea46494814f7095b1";
   };
 
   postPatch = ''
@@ -41,10 +35,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    boost openssl unbound
-    pcsclite readline
-    libsodium hidapi rapidjson
-    protobuf curl sqlite
+    boost
+    openssl
+    unbound
+    pcsclite
+    readline
+    libsodium
+    hidapi
+    rapidjson
+    protobuf
+    curl
+    sqlite
   ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
@@ -59,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Private cryptocurrency based on Monero";
-    homepage    = "https://oxen.io/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://oxen.io/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = [ maintainers.viric ];
   };
 }

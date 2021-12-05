@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex_2, easy-format, xmlm, base64 }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex_2, easy-format
+, xmlm, base64 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.15";
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://piqi.org";
-    description = "Universal schema language and a collection of tools built around it";
+    description =
+      "Universal schema language and a collection of tools built around it";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];
   };

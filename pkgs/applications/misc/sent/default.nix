@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
-, patches ? [] }:
+{ lib, stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper, patches ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "sent";

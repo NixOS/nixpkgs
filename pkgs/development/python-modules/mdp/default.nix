@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, numpy
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, future, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "MDP";
@@ -38,7 +32,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Library for building complex data processing software by combining widely used machine learning algorithms";
+    description =
+      "Library for building complex data processing software by combining widely used machine learning algorithms";
     homepage = "http://mdp-toolkit.sourceforge.net";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nico202 ];

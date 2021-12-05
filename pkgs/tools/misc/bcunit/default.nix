@@ -1,7 +1,4 @@
-{ cmake
-, fetchFromGitLab
-, lib, stdenv
-}:
+{ cmake, fetchFromGitLab, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "bcunit";

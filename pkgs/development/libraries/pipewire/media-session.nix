@@ -1,18 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, doxygen
-, graphviz
-, systemd
-, pipewire
-, glib
-, dbus
-, alsa-lib
-, callPackage
-}:
+{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config, doxygen, graphviz
+, systemd, pipewire, glib, dbus, alsa-lib, callPackage }:
 
 let
   mesonEnable = b: if b then "enabled" else "disabled";
@@ -30,21 +17,9 @@ let
       sha256 = "sha256-e537gTkiNYMz2YJrOff/MXYWVDgHZDkqkSn8Qh+7Wr4=";
     };
 
-    nativeBuildInputs = [
-      doxygen
-      graphviz
-      meson
-      ninja
-      pkg-config
-    ];
+    nativeBuildInputs = [ doxygen graphviz meson ninja pkg-config ];
 
-    buildInputs = [
-      alsa-lib
-      dbus
-      glib
-      pipewire
-      systemd
-    ];
+    buildInputs = [ alsa-lib dbus glib pipewire systemd ];
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -76,7 +51,7 @@ let
             "nix-support/media-session.conf.json"
             "nix-support/v4l2-monitor.conf.json"
           ];
-          paths-lib = [];
+          paths-lib = [ ];
         };
       };
     };
@@ -90,5 +65,4 @@ let
     };
   };
 
-in
-self
+in self

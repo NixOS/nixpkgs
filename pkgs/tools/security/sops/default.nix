@@ -17,7 +17,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mozilla/sops";
-    description = "Mozilla sops (Secrets OPerationS) is an editor of encrypted files";
+    description =
+      "Mozilla sops (Secrets OPerationS) is an editor of encrypted files";
     changelog = "https://github.com/mozilla/sops/raw/v${version}/CHANGELOG.rst";
     maintainers = [ maintainers.marsam ];
     license = licenses.mpl20;

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
-, curl, gnome2, gpsd, gtk2, wrapGAppsHook
-, intltool, libexif, python3Packages, sqlite }:
+{ lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick
+, pkg-config, curl, gnome2, gpsd, gtk2, wrapGAppsHook, intltool, libexif
+, python3Packages, sqlite }:
 
 let
   srcs = {
@@ -23,8 +23,13 @@ in stdenv.mkDerivation rec {
   src = srcs.foxtrot;
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook texinfo help2man
-    imagemagick wrapGAppsHook intltool
+    pkg-config
+    autoreconfHook
+    texinfo
+    help2man
+    imagemagick
+    wrapGAppsHook
+    intltool
   ];
 
   buildInputs = [
@@ -34,8 +39,12 @@ in stdenv.mkDerivation rec {
     gtk2.dev
     libexif
     sqlite.dev
-    (python3Packages.python.withPackages (pythonPackages: with python3Packages;
-    [ beautifulsoup4 feedparser sqlalchemy ]))
+    (python3Packages.python.withPackages (pythonPackages:
+      with python3Packages; [
+        beautifulsoup4
+        feedparser
+        sqlalchemy
+      ]))
   ];
 
   postUnpack = ''

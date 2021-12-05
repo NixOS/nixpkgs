@@ -18,7 +18,8 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  configureFlags = [ (if aesni then "--enable-aes-ni" else "--disable-aes-ni") ];
+  configureFlags =
+    [ (if aesni then "--enable-aes-ni" else "--disable-aes-ni") ];
 
   meta = with lib; {
     description = "Multi-algo CPUMiner";

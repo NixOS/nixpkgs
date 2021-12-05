@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pkgs }:
 
 buildPythonPackage rec {
   version = "unstable-20160819";

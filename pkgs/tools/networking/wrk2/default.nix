@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "4.0.0-${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner  = "giltene";
-    repo   = "wrk2";
-    rev    = "e0109df5b9de09251adb5f5848f223fbee2aa9f5";
+    owner = "giltene";
+    repo = "wrk2";
+    rev = "e0109df5b9de09251adb5f5848f223fbee2aa9f5";
     sha256 = "1aqdwmgdd74wq73f1zp28yqj91gd6p6nf9nbdfibl7mlklbzvak8";
   };
 
@@ -33,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Constant throughput, correct latency recording variant of wrk";
-    homepage    = "https://github.com/giltene/wrk2";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.linux;
+    description =
+      "Constant throughput, correct latency recording variant of wrk";
+    homepage = "https://github.com/giltene/wrk2";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

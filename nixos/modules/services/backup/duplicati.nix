@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.duplicati;
-in
-{
+let cfg = config.services.duplicati;
+in {
   options = {
     services.duplicati = {
       enable = mkEnableOption "Duplicati";
@@ -49,7 +47,10 @@ in
         User = cfg.user;
         Group = "duplicati";
         StateDirectory = "duplicati";
-        ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=/var/lib/duplicati";
+        ExecStart =
+          "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${
+            toString cfg.port
+          } --server-datafolder=/var/lib/duplicati";
         Restart = "on-failure";
       };
     };

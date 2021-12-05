@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, xercesc }:
 
 let
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "xsd";
   version = "4.0.0";
 
@@ -19,19 +18,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildFlags = [
-    "LDFLAGS=-L${xercesc}/lib"
-    "CPPFLAGS=-I${xercesc}/include"
-  ];
-  installFlags = buildFlags ++ [
-    "install_prefix=${placeholder "out"}"
-  ];
+  buildFlags = [ "LDFLAGS=-L${xercesc}/lib" "CPPFLAGS=-I${xercesc}/include" ];
+  installFlags = buildFlags ++ [ "install_prefix=${placeholder "out"}" ];
 
   buildInputs = [ xercesc ];
 
   meta = {
     homepage = "http://www.codesynthesis.com/products/xsd";
-    description = "An open-source, cross-platform W3C XML Schema to C++ data binding compiler";
+    description =
+      "An open-source, cross-platform W3C XML Schema to C++ data binding compiler";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jagajaga ];

@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "1.14.0";
 
   src = fetchurl {
-    url = "https://web-cpan.shlomifish.org/downloads/${pname}-${version}.tar.xz";
+    url =
+      "https://web-cpan.shlomifish.org/downloads/${pname}-${version}.tar.xz";
     sha256 = "1ga7rqmppa8ady665736cx443icscqlgflkqmxd4xbkzypmdj9bk";
   };
 

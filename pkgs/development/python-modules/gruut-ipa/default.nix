@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pkgs, python }:
 
 buildPythonPackage rec {
   pname = "gruut-ipa";
@@ -20,7 +15,9 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs bin/speak-ipa
     substituteInPlace bin/speak-ipa \
-      --replace '${"\${src_dir}:"}' "$out/lib/${python.libPrefix}/site-packages:" \
+      --replace '${
+        "\${src_dir}:"
+      }' "$out/lib/${python.libPrefix}/site-packages:" \
       --replace "do espeak" "do ${pkgs.espeak}/bin/espeak"
   '';
 
@@ -34,12 +31,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "gruut_ipa"
-  ];
+  pythonImportsCheck = [ "gruut_ipa" ];
 
   meta = with lib; {
-    description = "Library for manipulating pronunciations using the International Phonetic Alphabet (IPA)";
+    description =
+      "Library for manipulating pronunciations using the International Phonetic Alphabet (IPA)";
     homepage = "https://github.com/rhasspy/gruut-ipa";
     license = licenses.mit;
     maintainers = teams.tts.members;

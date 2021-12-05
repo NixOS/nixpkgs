@@ -6,13 +6,11 @@ let
   cfg = config.services.radicale;
 
   format = pkgs.formats.ini {
-    listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
+    listToValue =
+      concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
 
-  pkg = if isNull cfg.package then
-    pkgs.radicale
-  else
-    cfg.package;
+  pkg = if isNull cfg.package then pkgs.radicale else cfg.package;
 
   confFile = if cfg.settings == { } then
     pkgs.writeText "radicale.conf" cfg.config
@@ -21,7 +19,8 @@ let
 
   rightsFile = format.generate "radicale.rights" cfg.rights;
 
-  bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
+  bindLocalhost = cfg.settings != { }
+    && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
 
 in {
   options.services.radicale = {
@@ -101,37 +100,37 @@ in {
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Extra arguments passed to the Radicale daemon.";
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.settings == { } || cfg.config == "";
-        message = ''
-          The options services.radicale.config and services.radicale.settings
-          are mutually exclusive.
-        '';
-      }
-    ];
+    assertions = [{
+      assertion = cfg.settings == { } || cfg.config == "";
+      message = ''
+        The options services.radicale.config and services.radicale.settings
+        are mutually exclusive.
+      '';
+    }];
 
-    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
-      The configuration and storage formats of your existing Radicale
-      installation might be incompatible with the newest version.
-      For upgrade instructions see
-      https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
-      Set services.radicale.package to suppress this warning.
-    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
-      The configuration format of your existing Radicale installation might be
-      incompatible with the newest version.  For upgrade instructions see
-      https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
-      Set services.radicale.package to suppress this warning.
-    '' ++ optional (cfg.config != "") ''
-      The option services.radicale.config is deprecated.
-      Use services.radicale.settings instead.
-    '';
+    warnings = optional
+      (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+        The configuration and storage formats of your existing Radicale
+        installation might be incompatible with the newest version.
+        For upgrade instructions see
+        https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
+        Set services.radicale.package to suppress this warning.
+      '' ++ optional
+      (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+        The configuration format of your existing Radicale installation might be
+        incompatible with the newest version.  For upgrade instructions see
+        https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
+        Set services.radicale.package to suppress this warning.
+      '' ++ optional (cfg.config != "") ''
+        The option services.radicale.config is deprecated.
+        Use services.radicale.settings instead.
+      '';
 
     services.radicale.settings.rights = mkIf (cfg.rights != { }) {
       type = "from_file";
@@ -145,7 +144,7 @@ in {
       group = "radicale";
     };
 
-    users.groups.radicale = {};
+    users.groups.radicale = { };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -153,11 +152,9 @@ in {
       requires = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = concatStringsSep " " ([
-          "${pkg}/bin/radicale" "-C" confFile
-        ] ++ (
-          map escapeShellArg cfg.extraArgs
-        ));
+        ExecStart = concatStringsSep " "
+          ([ "${pkg}/bin/radicale" "-C" confFile ]
+            ++ (map escapeShellArg cfg.extraArgs));
         User = "radicale";
         Group = "radicale";
         StateDirectory = "radicale/collections";

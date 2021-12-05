@@ -5,9 +5,8 @@ with lib;
 let
   cpupower = config.boot.kernelPackages.cpupower;
   cfg = config.powerManagement;
-in
 
-{
+in {
   ###### interface
 
   options.powerManagement = {
@@ -51,40 +50,37 @@ in
 
   };
 
-
   ###### implementation
 
-  config =
-    let
-      governorEnable = cfg.cpuFreqGovernor != null;
-      maxEnable = cfg.cpufreq.max != null;
-      minEnable = cfg.cpufreq.min != null;
-      enable =
-        !config.boot.isContainer &&
-        (governorEnable || maxEnable || minEnable);
-    in
-    mkIf enable {
+  config = let
+    governorEnable = cfg.cpuFreqGovernor != null;
+    maxEnable = cfg.cpufreq.max != null;
+    minEnable = cfg.cpufreq.min != null;
+    enable = !config.boot.isContainer
+      && (governorEnable || maxEnable || minEnable);
+  in mkIf enable {
 
-      boot.kernelModules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
+    boot.kernelModules =
+      optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
 
-      environment.systemPackages = [ cpupower ];
+    environment.systemPackages = [ cpupower ];
 
-      systemd.services.cpufreq = {
-        description = "CPU Frequency Setup";
-        after = [ "systemd-modules-load.service" ];
-        wantedBy = [ "multi-user.target" ];
-        path = [ cpupower pkgs.kmod ];
-        unitConfig.ConditionVirtualization = false;
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = "yes";
-          ExecStart = "${cpupower}/bin/cpupower frequency-set " +
-            optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} " +
-            optionalString maxEnable "--max ${toString cfg.cpufreq.max} " +
-            optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
-          SuccessExitStatus = "0 237";
-        };
+    systemd.services.cpufreq = {
+      description = "CPU Frequency Setup";
+      after = [ "systemd-modules-load.service" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ cpupower pkgs.kmod ];
+      unitConfig.ConditionVirtualization = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+        ExecStart = "${cpupower}/bin/cpupower frequency-set "
+          + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
+          + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
+          + optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
+        SuccessExitStatus = "0 237";
       };
+    };
 
   };
 }

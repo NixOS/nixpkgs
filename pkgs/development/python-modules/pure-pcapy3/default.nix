@@ -10,7 +10,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Pure Python reimplementation of pcapy. This package is API compatible and a drop-in replacement.";
+    description =
+      "Pure Python reimplementation of pcapy. This package is API compatible and a drop-in replacement.";
     homepage = "https://bitbucket.org/viraptor/pure-pcapy";
     license = licenses.bsd2;
     maintainers = with maintainers; [ etu ];

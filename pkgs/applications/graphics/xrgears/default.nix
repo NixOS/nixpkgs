@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
-, glm
-, glslang
-, meson
-, ninja
-, openxr-loader
-, pkg-config
-, vulkan-headers
-, vulkan-loader
-, xxd
-}:
+{ lib, stdenv, fetchFromGitLab, glm, glslang, meson, ninja, openxr-loader
+, pkg-config, vulkan-headers, vulkan-loader, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "xrgears";
@@ -23,20 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k0k8dkclyiav99kf0933kyd2ymz3hs1p0ap2wbciq9s62jgz29i";
   };
 
-  nativeBuildInputs = [
-    glslang
-    meson
-    ninja
-    pkg-config
-    xxd
-  ];
+  nativeBuildInputs = [ glslang meson ninja pkg-config xxd ];
 
-  buildInputs = [
-    glm
-    openxr-loader
-    vulkan-headers
-    vulkan-loader
-  ];
+  buildInputs = [ glm openxr-loader vulkan-headers vulkan-loader ];
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";

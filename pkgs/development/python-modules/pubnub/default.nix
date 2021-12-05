@@ -1,15 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, pytest-vcr
-, pytest-asyncio
-, requests
-, six
-}:
+{ lib, aiohttp, buildPythonPackage, cbor2, fetchFromGitHub, pycryptodomex
+, pytestCheckHook, pytest-vcr, pytest-asyncio, requests, six }:
 
 buildPythonPackage rec {
   pname = "pubnub";
@@ -22,25 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-FyDsTqDQTI/Xxu4Sl4eHqwmgwN+ip+8WKGJs/h/kl2Y=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    cbor2
-    pycryptodomex
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ aiohttp cbor2 pycryptodomex requests six ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-    pytest-vcr
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook pytest-vcr ];
 
   # Some tests don't pass with recent releases of twisted
-  disabledTestPaths = [
-    "tests/integrational"
-    "tests/manual/asyncio"
-  ];
+  disabledTestPaths = [ "tests/integrational" "tests/manual/asyncio" ];
 
   pythonImportsCheck = [ "pubnub" ];
 

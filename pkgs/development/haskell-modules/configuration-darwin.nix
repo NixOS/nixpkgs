@@ -2,27 +2,25 @@
 
 { pkgs, haskellLib }:
 
-let
-  inherit (pkgs) lib darwin;
-in
+let inherit (pkgs) lib darwin;
 
-with haskellLib;
+in with haskellLib;
 
-self: super: ({
+self: super:
+({
 
   # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
   # see: https://github.com/psibi/shell-conduit/issues/12
   shell-conduit = dontCheck super.shell-conduit;
 
-  conduit-extra = super.conduit-extra.overrideAttrs (drv: {
-    __darwinAllowLocalNetworking = true;
-  });
+  conduit-extra = super.conduit-extra.overrideAttrs
+    (drv: { __darwinAllowLocalNetworking = true; });
 
   halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
   hakyll = overrideCabal {
-    testToolDepends = [];
+    testToolDepends = [ ];
     doCheck = false;
   } super.hakyll;
 
@@ -30,9 +28,9 @@ self: super: ({
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
-  apecs-physics = addPkgconfigDepends [
-    darwin.apple_sdk.frameworks.ApplicationServices
-  ] super.apecs-physics;
+  apecs-physics =
+    addPkgconfigDepends [ darwin.apple_sdk.frameworks.ApplicationServices ]
+    super.apecs-physics;
 
   # "erf table" test fails on Darwin
   # https://github.com/bos/math-functions/issues/63
@@ -59,12 +57,12 @@ self: super: ({
   OpenAL = addExtraLibrary darwin.apple_sdk.frameworks.OpenAL super.OpenAL;
 
   al = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.OpenAL
-    ] ++ (drv.libraryFrameworkDepends or []);
+    libraryFrameworkDepends = [ darwin.apple_sdk.frameworks.OpenAL ]
+      ++ (drv.libraryFrameworkDepends or [ ]);
   }) super.al;
 
-  proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
+  proteaaudio =
+    addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = dontCheck super.system-fileio;
@@ -107,17 +105,15 @@ self: super: ({
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
   blas-hs = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Accelerate
-    ] ++ (drv.libraryFrameworkDepends or []);
+    libraryFrameworkDepends = [ darwin.apple_sdk.frameworks.Accelerate ]
+      ++ (drv.libraryFrameworkDepends or [ ]);
   }) super.blas-hs;
 
   # Ensure the necessary frameworks are propagatedBuildInputs on darwin
   OpenGLRaw = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
+    librarySystemDepends = [ ];
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ [ darwin.apple_sdk.frameworks.OpenGL ];
     preConfigure = ''
       frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
       frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
@@ -125,13 +121,12 @@ self: super: ({
     '' + (drv.preConfigure or "");
   }) super.OpenGLRaw;
   GLURaw = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
+    librarySystemDepends = [ ];
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ [ darwin.apple_sdk.frameworks.OpenGL ];
   }) super.GLURaw;
   bindings-GLFW = overrideCabal (drv: {
-    librarySystemDepends = [];
+    librarySystemDepends = [ ];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
       darwin.apple_sdk.frameworks.AGL
       darwin.apple_sdk.frameworks.Cocoa
@@ -143,10 +138,9 @@ self: super: ({
     ];
   }) super.bindings-GLFW;
   OpenCL = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenCL
-    ];
+    librarySystemDepends = [ ];
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ [ darwin.apple_sdk.frameworks.OpenCL ];
   }) super.OpenCL;
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is
@@ -155,14 +149,12 @@ self: super: ({
 
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues.
-  fsnotify = addBuildDepend darwin.apple_sdk.frameworks.Cocoa
-    (dontCheck super.fsnotify);
+  fsnotify =
+    addBuildDepend darwin.apple_sdk.frameworks.Cocoa (dontCheck super.fsnotify);
 
   FractalArt = overrideCabal (drv: {
-    librarySystemDepends = [
-      darwin.libobjc
-      darwin.apple_sdk.frameworks.AppKit
-    ] ++ (drv.librarySystemDepends or []);
+    librarySystemDepends = [ darwin.libobjc darwin.apple_sdk.frameworks.AppKit ]
+      ++ (drv.librarySystemDepends or [ ]);
   }) super.FractalArt;
 
   arbtt = overrideCabal (drv: {
@@ -170,7 +162,7 @@ self: super: ({
       darwin.apple_sdk.frameworks.Foundation
       darwin.apple_sdk.frameworks.Carbon
       darwin.apple_sdk.frameworks.IOKit
-    ] ++ (drv.librarySystemDepends or []);
+    ] ++ (drv.librarySystemDepends or [ ]);
   }) super.arbtt;
 
   HTF = overrideCabal (drv: {
@@ -182,9 +174,8 @@ self: super: ({
 
   # conditional dependency via a cabal flag
   cas-store = overrideCabal (drv: {
-    libraryHaskellDepends = [
-      self.kqueue
-    ] ++ (drv.libraryHaskellDepends or []);
+    libraryHaskellDepends = [ self.kqueue ]
+      ++ (drv.libraryHaskellDepends or [ ]);
   }) super.cas-store;
 
   # 2021-05-25: Tests fail and I have no way to debug them.
@@ -251,12 +242,11 @@ self: super: ({
 
   # streamly depends on Cocoa starting with 0.8.0
   streamly_0_8_0 = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Cocoa
-    ] ++ (drv.libraryFrameworkDepends or []);
+    libraryFrameworkDepends = [ darwin.apple_sdk.frameworks.Cocoa ]
+      ++ (drv.libraryFrameworkDepends or [ ]);
   }) super.streamly_0_8_0;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // lib.optionalAttrs pkgs.stdenv.isAarch64 { # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;

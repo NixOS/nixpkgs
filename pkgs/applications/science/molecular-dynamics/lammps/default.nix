@@ -1,16 +1,32 @@
-{ lib, stdenv, fetchFromGitHub
-, libpng, gzip, fftw, blas, lapack
-, withMPI ? false
-, mpi
-}:
-let packages = [
-     "asphere" "body" "class2" "colloid" "compress" "coreshell"
-     "dipole" "granular" "kspace" "manybody" "mc" "misc" "molecule"
-     "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
-    ];
-    lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
-in
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub, libpng, gzip, fftw, blas, lapack
+, withMPI ? false, mpi }:
+let
+  packages = [
+    "asphere"
+    "body"
+    "class2"
+    "colloid"
+    "compress"
+    "coreshell"
+    "dipole"
+    "granular"
+    "kspace"
+    "manybody"
+    "mc"
+    "misc"
+    "molecule"
+    "opt"
+    "peri"
+    "qeq"
+    "replica"
+    "rigid"
+    "shock"
+    "snap"
+    "srd"
+    "user-reaxc"
+  ];
+  lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
+in stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
   version = "stable_29Oct2020";
   pname = "lammps";
@@ -32,14 +48,20 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     cd src
-    for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+    for pack in ${
+      lib.concatStringsSep " " packages
+    }; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
   # Must do manual build due to LAMMPS requiring a seperate build for
   # the libraries and executable. Also non-typical make script
   buildPhase = ''
-    make mode=exe ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
-    make mode=shlib ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=exe ${
+      if withMPI then "mpi" else "serial"
+    } SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=shlib ${
+      if withMPI then "mpi" else "serial"
+    } SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
   '';
 
   installPhase = ''
@@ -58,7 +80,7 @@ stdenv.mkDerivation rec {
       National Laboratories, a US Department of Energy facility, with
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
-      '';
+    '';
     homepage = "https://lammps.sandia.gov";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

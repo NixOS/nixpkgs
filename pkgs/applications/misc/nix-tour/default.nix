@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, electron, runtimeShell } :
+{ lib, stdenv, fetchgit, electron, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";

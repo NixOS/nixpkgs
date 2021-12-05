@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, foomatic-filters, bc, ghostscript, systemd, vim, time }:
+{ lib, stdenv, fetchurl, foomatic-filters, bc, ghostscript, systemd, vim, time
+}:
 
 stdenv.mkDerivation rec {
   pname = "foo2zjs";
@@ -48,7 +49,8 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ time ];
-  doCheck = false; # fails to find its own binary. Also says "Tests will pass only if you are using ghostscript-8.71-16.fc14".
+  doCheck =
+    false; # fails to find its own binary. Also says "Tests will pass only if you are using ghostscript-8.71-16.fc14".
 
   preInstall = ''
     mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}
@@ -62,10 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ZjStream printer drivers";
-    maintainers = with maintainers;
-    [
-      raskin
-    ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

@@ -1,20 +1,11 @@
-{ lib, stdenv
-, fetchurl
+{ lib, stdenv, fetchurl
 
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gsettings-desktop-schemas
+, meson, ninja, pkg-config, gobject-introspection, gsettings-desktop-schemas
 , makeWrapper
 
-, dbus
-, glib
-, dconf
-, libX11
+, dbus, glib, dconf, libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-, libXi
-, libXext
+, libXi, libXext
 
 , gnome # To pass updateScript
 }:
@@ -24,19 +15,23 @@ stdenv.mkDerivation rec {
   version = "2.42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "11p3lvmbm0hfck3p5xwxxycln8x0cf7l68jjz6an2g7sjh7a2pab";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config gobject-introspection makeWrapper ];
   # libXext is a transitive dependency of libXi
   buildInputs = [ libX11 libXtst libXi libXext ];
   # In atspi-2.pc dbus-1 glib-2.0
   propagatedBuildInputs = [ dbus glib ];
 
-  doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+  doCheck =
+    false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
 
   # Provide dbus-daemon fallback when it is not already running when
   # at-spi2-bus-launcher is executed. This allows us to avoid
@@ -59,7 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
+    description =
+      "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

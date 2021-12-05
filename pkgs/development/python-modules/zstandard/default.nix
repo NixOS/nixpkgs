@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cffi
-, hypothesis
-}:
+{ lib, buildPythonPackage, fetchPypi, cffi, hypothesis }:
 
 buildPythonPackage rec {
   pname = "zstandard";

@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkg-config
-, speexdsp, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, cmake, curl, duktape, fontconfig, freetype
+, icu, jansson, libGLU, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json
+, openssl, pkg-config, speexdsp, zlib }:
 
 let
   openrct2-version = "0.3.5.1";
@@ -32,17 +30,13 @@ let
     rev = "v${title-sequences-version}";
     sha256 = "1qdrm4q75bznmgdrpjdaiqvbf3q4vwbkkmls45izxvyg1djrpsdf";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "openrct2";
   version = openrct2-version;
 
   src = openrct2-src;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     SDL2
@@ -63,10 +57,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  cmakeFlags = [
-    "-DDOWNLOAD_OBJECTS=OFF"
-    "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
-  ];
+  cmakeFlags = [ "-DDOWNLOAD_OBJECTS=OFF" "-DDOWNLOAD_TITLE_SEQUENCES=OFF" ];
 
   postUnpack = ''
     cp -r ${objects-src}         $sourceRoot/data/object
@@ -85,7 +76,8 @@ stdenv.mkDerivation {
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with lib; {
-    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
+    description =
+      "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = licenses.gpl3Only;

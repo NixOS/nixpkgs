@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k }:
+{ lib, fetchFromGitHub, buildPythonPackage, python, isPy3k }:
 
 buildPythonPackage rec {
   pname = "emailthreads";

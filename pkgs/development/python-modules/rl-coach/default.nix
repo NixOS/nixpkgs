@@ -1,25 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, tensorflow
-, annoy
-, pillow
-, matplotlib
-, numpy
-, pandas
-, pygame
-, pyopengl
-, scipy
-, scikitimage
-, gym
-, bokeh
-, kubernetes
-, redis
-, minio
-, pytest
-, psutil
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, tensorflow, annoy, pillow
+, matplotlib, numpy, pandas, pygame, pyopengl, scipy, scikitimage, gym, bokeh
+, kubernetes, redis, minio, pytest, psutil }:
 
 buildPythonPackage rec {
   version = "1.0.1";
@@ -49,9 +30,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   # run only some tests that do not need any optional dependencies
   # available tests: https://github.com/NervanaSystems/coach/tree/master/rl_coach/tests
@@ -68,8 +47,7 @@ buildPythonPackage rec {
     fullTestPaths = map (testfile: "rl_coach/tests/${testfile}") testsToRun;
     escapedPaths = map lib.escapeShellArg fullTestPaths;
     pytestArgs = builtins.concatStringsSep " " escapedPaths;
-  in
-  ''
+  in ''
     pytest ${pytestArgs}
   '';
 
@@ -89,7 +67,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5"; # minimum required version
 
   meta = with lib; {
-    description = "Enables easy experimentation with state of the art Reinforcement Learning algorithms";
+    description =
+      "Enables easy experimentation with state of the art Reinforcement Learning algorithms";
     homepage = "https://nervanasystems.github.io/coach/";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];

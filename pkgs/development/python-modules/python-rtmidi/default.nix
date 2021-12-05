@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pkg-config, alsa-lib, libjack2, tox, flake8, alabaster
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pkg-config, alsa-lib, libjack2
+, tox, flake8, alabaster }:
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
@@ -14,14 +13,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib libjack2 ];
-  checkInputs = [
-    tox
-    flake8
-    alabaster
-  ];
+  checkInputs = [ tox flake8 alabaster ];
 
   meta = with lib; {
-    description = "A Python binding for the RtMidi C++ library implemented using Cython";
+    description =
+      "A Python binding for the RtMidi C++ library implemented using Cython";
     homepage = "https://chrisarndt.de/projects/python-rtmidi/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

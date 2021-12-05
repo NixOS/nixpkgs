@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.16.2";
 
   src = fetchurl {
-    url = "https://bitbucket.org/odedevs/${pname}/downloads/${pname}-${version}.tar.gz";
+    url =
+      "https://bitbucket.org/odedevs/${pname}/downloads/${pname}-${version}.tar.gz";
     sha256 = "08hgh4gqdk77jcw8b7gq2mwsfg4a5v5y0j7g42bxiqhmn3ffnsmj";
   };
 

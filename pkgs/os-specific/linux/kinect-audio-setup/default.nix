@@ -1,22 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, requireFile
-, pkg-config
-, libusb1
-, p7zip
-}:
+{ lib, stdenv, fetchgit, requireFile, pkg-config, libusb1, p7zip }:
 
 let
   # The last known good firmware package to have been tested
   # by the upstream projet.
   # The firmware URL is hardcoded in the upstream project's installation script
-  firmwareUrl = "https://download.microsoft.com/download/F/9/9/F99791F2-D5BE-478A-B77A-830AD14950C3/KinectSDK-v1.0-beta2-x86.msi";
+  firmwareUrl =
+    "https://download.microsoft.com/download/F/9/9/F99791F2-D5BE-478A-B77A-830AD14950C3/KinectSDK-v1.0-beta2-x86.msi";
   # The original URL "https://research.microsoft.com/en-us/um/legal/kinectsdk-tou_noncommercial.htm"
   # redirects to the following url:
   licenseUrl = "https://www.microsoft.com/en-us/legal/terms-of-use";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "kinect-audio-setup";
 
   # On update: Make sure that the `firmwareURL` is still in sync with upstream.
@@ -45,10 +38,7 @@ stdenv.mkDerivation rec {
 
   # These patches are not upstream because the project has seen no
   # activity since 2016
-  patches = [
-    ./libusb-1-import-path.patch
-    ./udev-rules-extra-devices.patch
-  ];
+  patches = [ ./libusb-1-import-path.patch ./udev-rules-extra-devices.patch ];
 
   nativeBuildInputs = [ p7zip libusb1 pkg-config ];
 
@@ -82,7 +72,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tools to enable audio input from the Microsoft Kinect sensor device";
+    description =
+      "Tools to enable audio input from the Microsoft Kinect sensor device";
     homepage = "https://git.ao2.it/kinect-audio-setup.git";
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;

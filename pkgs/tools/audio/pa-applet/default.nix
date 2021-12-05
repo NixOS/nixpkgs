@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, libpulseaudio, pkg-config, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
+{ lib, stdenv, fetchgit, libpulseaudio, pkg-config, gtk3, glibc, autoconf
+, automake, libnotify, libX11, xf86inputevdev }:
 
 stdenv.mkDerivation {
   pname = "pa-applet";
@@ -12,7 +13,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk3 libpulseaudio glibc automake autoconf libnotify libX11 xf86inputevdev
+    gtk3
+    libpulseaudio
+    glibc
+    automake
+    autoconf
+    libnotify
+    libX11
+    xf86inputevdev
   ];
 
   preConfigure = ''

@@ -1,13 +1,5 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, pytest-mypy
-, pythonOlder
-, tenacity
-}:
+{ lib, async-timeout, buildPythonPackage, fetchFromGitHub, pytest-cov
+, pytestCheckHook, pytest-mypy, pythonOlder, tenacity }:
 
 buildPythonPackage rec {
   pname = "aiokef";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    tenacity
-  ];
+  propagatedBuildInputs = [ async-timeout tenacity ];
 
-  checkInputs = [
-    pytest-cov
-    pytest-mypy
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cov pytest-mypy pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];

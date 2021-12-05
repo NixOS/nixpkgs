@@ -1,27 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, docbook_xml_dtd_42
-, docbook_xsl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, gettext
-, glib
-, gobject-introspection
-, gperf
-, gtk-doc
-, gtk3
-, json-glib
-, libarchive
-, libsoup
-, libuuid
-, libxslt
-, meson
-, ninja
-, pkg-config
-, pngquant
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, docbook_xml_dtd_42, docbook_xsl
+, fontconfig, freetype, gdk-pixbuf, gettext, glib, gobject-introspection, gperf
+, gtk-doc, gtk3, json-glib, libarchive, libsoup, libuuid, libxslt, meson, ninja
+, pkg-config, pngquant }:
 stdenv.mkDerivation rec {
   pname = "appstream-glib";
   version = "0.7.18";
@@ -32,7 +12,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = "${lib.replaceStrings ["-"] ["_"] pname}_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "${lib.replaceStrings [ "-" ] [ "_" ] pname}_${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }";
     sha256 = "12s7d3nqjs1fldnppbg2mkjg4280f3h8yzj3q1hiz3chh1w0vjbx";
   };
 
@@ -61,10 +43,7 @@ stdenv.mkDerivation rec {
     libuuid
   ];
 
-  propagatedBuildInputs = [
-    glib
-    gdk-pixbuf
-  ];
+  propagatedBuildInputs = [ glib gdk-pixbuf ];
 
   patches = [
     (substituteAll {
@@ -73,11 +52,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  mesonFlags = [
-    "-Drpm=false"
-    "-Dstemmer=false"
-    "-Ddep11=false"
-  ];
+  mesonFlags = [ "-Drpm=false" "-Dstemmer=false" "-Ddep11=false" ];
 
   doCheck = false; # fails at least 1 test
 
@@ -86,7 +61,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Objects and helper methods to read and write AppStream metadata";
+    description =
+      "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;

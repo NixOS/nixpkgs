@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, beautifulsoup4
-, httpx
-, importlib-metadata
-, multidict
-, typer
-, yarl
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, aiohttp, beautifulsoup4
+, httpx, importlib-metadata, multidict, typer, yarl, pytest-asyncio
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
@@ -33,27 +22,16 @@ buildPythonPackage rec {
        --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    beautifulsoup4
-    httpx
-    importlib-metadata
-    multidict
-    typer
-    yarl
-  ];
+  propagatedBuildInputs =
+    [ aiohttp beautifulsoup4 httpx importlib-metadata multidict typer yarl ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   meta = with lib; {
-    description = "A proxy to capture authentication information from a webpage";
+    description =
+      "A proxy to capture authentication information from a webpage";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ graham33 hexa ];

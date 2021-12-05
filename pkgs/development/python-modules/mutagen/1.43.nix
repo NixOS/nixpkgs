@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pycodestyle
-, pyflakes
-, pytest
-, setuptools
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, pycodestyle, pyflakes, pytest
+, setuptools, pkgs }:
 
 buildPythonPackage rec {
   pname = "mutagen";
@@ -20,8 +12,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
   checkInputs = [
-    pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
+    pkgs.faad2
+    pkgs.flac
+    pkgs.vorbis-tools
+    pkgs.liboggz
+    pkgs.glibcLocales
+    pycodestyle
+    pyflakes
+    pytest
+    hypothesis
   ];
   LC_ALL = "en_US.UTF-8";
 

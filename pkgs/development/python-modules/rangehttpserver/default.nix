@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose, requests }:
 
 buildPythonPackage rec {
   pname = "rangehttpserver";
@@ -17,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "1sy9j6y8kp5jiwv2vd652v94kspp1yd4dwxrfqfn6zwnfyv2mzv5";
   };
 
-  checkInputs = [
-    nose
-    requests
-  ];
+  checkInputs = [ nose requests ];
 
   checkPhase = ''
     runHook preCheck
@@ -28,9 +20,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "RangeHTTPServer"
-  ];
+  pythonImportsCheck = [ "RangeHTTPServer" ];
 
   meta = with lib; {
     description = "SimpleHTTPServer with support for Range requests";

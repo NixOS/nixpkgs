@@ -1,21 +1,6 @@
-{ lib, stdenv, llvm_meta
-, fetch
-, cmake
-, zlib
-, ncurses
-, swig
-, which
-, libedit
-, libxml2
-, libllvm
-, libclang
-, python3
-, version
-, darwin
-, lit
-, makeWrapper
-, enableManpages ? false
-}:
+{ lib, stdenv, llvm_meta, fetch, cmake, zlib, ncurses, swig, which, libedit
+, libxml2, libllvm, libclang, python3, version, darwin, lit, makeWrapper
+, enableManpages ? false }:
 
 stdenv.mkDerivation (rec {
   pname = "lldb";
@@ -23,29 +8,25 @@ stdenv.mkDerivation (rec {
 
   src = fetch pname "1vlyg015dyng43xqb8cg2l6r9ix8klibxsajazbfnckdnh54hwxj";
 
-  patches = [
-    ./procfs.patch
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./procfs.patch ./gnu-install-dirs.patch ];
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
-  ] ++ lib.optionals enableManpages [
-    python3.pkgs.sphinx python3.pkgs.recommonmark
-  ];
+  nativeBuildInputs = [ cmake python3 which swig lit makeWrapper ]
+    ++ lib.optionals enableManpages [
+      python3.pkgs.sphinx
+      python3.pkgs.recommonmark
+    ];
 
-  buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs = [ ncurses zlib libedit libxml2 libllvm ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+      darwin.apple_sdk.libs.xpc
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.bootstrap_cmds
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   hardeningDisable = [ "format" ];
 
@@ -54,18 +35,17 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${libclang.dev}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
-  ] ++ lib.optionals enableManpages [
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-  ] ++ lib.optionals doCheck [
-    "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON" ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    ] ++ lib.optionals enableManpages [
+      "-DLLVM_ENABLE_SPHINX=ON"
+      "-DSPHINX_OUTPUT_MAN=ON"
+      "-DSPHINX_OUTPUT_HTML=OFF"
+    ] ++ lib.optionals doCheck [
+      "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+      "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
+    ];
 
   doCheck = false;
 
@@ -102,7 +82,7 @@ stdenv.mkDerivation (rec {
     make docs-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   # manually install lldb man page
   installPhase = ''
@@ -117,7 +97,5 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
-  meta = llvm_meta // {
-    description = "man pages for LLDB ${version}";
-  };
+  meta = llvm_meta // { description = "man pages for LLDB ${version}"; };
 })

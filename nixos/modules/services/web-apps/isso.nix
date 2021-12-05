@@ -27,9 +27,7 @@ in {
           for supported values.
         '';
 
-        type = types.submodule {
-          freeformType = settingsFormat.type;
-        };
+        type = types.submodule { freeformType = settingsFormat.type; };
 
         example = literalExpression ''
           {
@@ -43,7 +41,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.isso.settings.general.dbpath = lib.mkDefault "/var/lib/isso/comments.db";
+    services.isso.settings.general.dbpath =
+      lib.mkDefault "/var/lib/isso/comments.db";
 
     systemd.services.isso = {
       description = "isso, a commenting server similar to Disqus";

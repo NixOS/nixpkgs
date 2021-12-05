@@ -12,13 +12,15 @@ in {
       enable = mkEnableOption "ZFS snapshot replication.";
 
       followDelete = mkOption {
-        description = "Remove remote snapshots that don't have a local correspondant.";
+        description =
+          "Remove remote snapshots that don't have a local correspondant.";
         default = true;
         type = types.bool;
       };
 
       host = mkOption {
-        description = "Remote host where snapshots should be sent. <literal>lz4</literal> is expected to be installed on this host.";
+        description =
+          "Remote host where snapshots should be sent. <literal>lz4</literal> is expected to be installed on this host.";
         example = "example.com";
         type = types.str;
       };
@@ -30,7 +32,8 @@ in {
       };
 
       localFilesystem = mkOption {
-        description = "Local ZFS fileystem from which snapshots should be sent.  Defaults to the attribute name.";
+        description =
+          "Local ZFS fileystem from which snapshots should be sent.  Defaults to the attribute name.";
         example = "pool/file/path";
         type = types.str;
       };
@@ -56,9 +59,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.lz4
-    ];
+    environment.systemPackages = [ pkgs.lz4 ];
 
     systemd.services.zfs-replication = {
       after = [
@@ -69,11 +70,16 @@ in {
         "zfs-snapshot-weekly.service"
       ];
       description = "ZFS Snapshot Replication";
-      documentation = [
-        "https://github.com/alunduil/zfs-replicate"
-      ];
+      documentation = [ "https://github.com/alunduil/zfs-replicate" ];
       restartIfChanged = false;
-      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${escapeShellArg cfg.username} -i ${escapeShellArg cfg.identityFilePath}${followDelete} ${escapeShellArg cfg.host} ${escapeShellArg cfg.remoteFilesystem} ${escapeShellArg cfg.localFilesystem}";
+      serviceConfig.ExecStart =
+        "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${
+          escapeShellArg cfg.username
+        } -i ${escapeShellArg cfg.identityFilePath}${followDelete} ${
+          escapeShellArg cfg.host
+        } ${escapeShellArg cfg.remoteFilesystem} ${
+          escapeShellArg cfg.localFilesystem
+        }";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"
@@ -84,7 +90,5 @@ in {
     };
   };
 
-  meta = {
-    maintainers = with lib.maintainers; [ alunduil ];
-  };
+  meta = { maintainers = with lib.maintainers; [ alunduil ]; };
 }

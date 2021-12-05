@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkg-config, openssl, darwin }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkg-config
+, openssl, darwin }:
 
 with rustPlatform;
 
@@ -17,9 +18,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   outputs = [ "out" "man" ];
   preFixup = ''
@@ -27,7 +26,8 @@ buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Quickly and easily fetch .gitignore templates from gitignore.io";
+    description =
+      "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.sondr3 ];

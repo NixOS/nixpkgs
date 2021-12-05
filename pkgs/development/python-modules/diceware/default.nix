@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest-runner
-, setuptools
-, coverage, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest-runner, setuptools, coverage
+, pytest }:
 
 buildPythonPackage rec {
   pname = "diceware";
@@ -25,7 +22,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Generates passphrases by concatenating words randomly picked from wordlists";
+    description =
+      "Generates passphrases by concatenating words randomly picked from wordlists";
     homepage = "https://github.com/ulif/diceware";
     license = licenses.gpl3;
     maintainers = with maintainers; [ asymmetric ];

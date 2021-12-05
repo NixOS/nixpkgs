@@ -10,9 +10,7 @@ let
     Name = lib.toLower xcodePlatform;
   };
 
-  Version = {
-    ProjectName = "OSXPlatformSupport";
-  };
+  Version = { ProjectName = "OSXPlatformSupport"; };
 
   # These files are all based off of Xcode spec fies found in
   # /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/PrivatePlugIns/IDEOSXSupportCore.ideplugin/Contents/Resources.
@@ -69,7 +67,8 @@ let
       Type = "PackageType";
       Name = "Mach-O Executable";
       DefaultBuildSettings = {
-        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_NAME =
+          "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
         EXECUTABLE_PATH = "$(EXECUTABLE_NAME)";
       };
       ProductReference = {
@@ -82,7 +81,8 @@ let
       Type = "PackageType";
       Name = "Mach-O Object File";
       DefaultBuildSettings = {
-        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_NAME =
+          "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
         EXECUTABLE_PATH = "$(EXECUTABLE_NAME)";
       };
       ProductReference = {
@@ -95,7 +95,8 @@ let
       Type = "PackageType";
       Name = "Mach-O Dynamic Library";
       DefaultBuildSettings = {
-        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_NAME =
+          "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
         EXECUTABLE_PATH = "$(EXECUTABLE_NAME)";
       };
       ProductReference = {
@@ -110,7 +111,8 @@ let
       DefaultBuildSettings = {
         EXECUTABLE_PREFIX = "lib";
         EXECUTABLE_SUFFIX = ".a";
-        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_NAME =
+          "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
         EXECUTABLE_PATH = "$(EXECUTABLE_NAME)";
       };
       ProductReference = {
@@ -127,11 +129,13 @@ let
         WRAPPER_SUFFIX = ".bundle";
         WRAPPER_NAME = "$(WRAPPER_PREFIX)$(PRODUCT_NAME)$(WRAPPER_SUFFIX)";
         CONTENTS_FOLDER_PATH = "$(WRAPPER_NAME)/Contents";
-        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_NAME =
+          "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
         EXECUTABLE_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/MacOS";
         EXECUTABLE_PATH = "$(EXECUTABLE_FOLDER_PATH)/$(EXECUTABLE_NAME)";
         INFOPLIST_PATH = "$(CONTENTS_FOLDER_PATH)/Info.plist";
-        INFOSTRINGS_PATH = "$(LOCALIZED_RESOURCES_FOLDER_PATH)/InfoPlist.strings";
+        INFOSTRINGS_PATH =
+          "$(LOCALIZED_RESOURCES_FOLDER_PATH)/InfoPlist.strings";
         PKGINFO_PATH = "$(CONTENTS_FOLDER_PATH)/PkgInfo";
         PBDEVELOPMENTPLIST_PATH = "$(CONTENTS_FOLDER_PATH)/pbdevelopment.plist";
         VERSIONPLIST_PATH = "$(CONTENTS_FOLDER_PATH)/version.plist";
@@ -139,11 +143,14 @@ let
         PRIVATE_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PrivateHeaders";
         EXECUTABLES_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Executables";
         FRAMEWORKS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Frameworks";
-        SHARED_FRAMEWORKS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/SharedFrameworks";
+        SHARED_FRAMEWORKS_FOLDER_PATH =
+          "$(CONTENTS_FOLDER_PATH)/SharedFrameworks";
         SHARED_SUPPORT_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/SharedSupport";
         UNLOCALIZED_RESOURCES_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Resources";
-        LOCALIZED_RESOURCES_FOLDER_PATH = "$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/$(DEVELOPMENT_LANGUAGE).lproj";
-        DOCUMENTATION_FOLDER_PATH = "$(LOCALIZED_RESOURCES_FOLDER_PATH)/Documentation";
+        LOCALIZED_RESOURCES_FOLDER_PATH =
+          "$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/$(DEVELOPMENT_LANGUAGE).lproj";
+        DOCUMENTATION_FOLDER_PATH =
+          "$(LOCALIZED_RESOURCES_FOLDER_PATH)/Documentation";
         PLUGINS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/PlugIns";
         SCRIPTS_FOLDER_PATH = "$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Scripts";
       };
@@ -158,9 +165,7 @@ let
       Type = "PackageType";
       BasedOn = "com.apple.package-type.wrapper";
       Name = "Application Wrapper";
-      DefaultBuildSettings = {
-        GENERATE_PKGINFO_FILE = "YES";
-      };
+      DefaultBuildSettings = { GENERATE_PKGINFO_FILE = "YES"; };
       ProductReference = {
         FileType = "wrapper.application";
         Name = "$(WRAPPER_NAME)";
@@ -283,16 +288,22 @@ let
     }
   ];
 
-in
-
-runCommand "Platforms" {} ''
+in runCommand "Platforms" { } ''
   platform=$out/${xcodePlatform}.platform
 
-  install -D ${writeText "Info.plist" (toPlist {} Info)} $platform/Info.plist
-  install -D ${writeText "version.plist" (toPlist {} Version)} $platform/version.plist
-  install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $platform/Developer/Library/Xcode/Specifications/Architectures.xcspec
-  install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
-  install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
+  install -D ${writeText "Info.plist" (toPlist { } Info)} $platform/Info.plist
+  install -D ${
+    writeText "version.plist" (toPlist { } Version)
+  } $platform/version.plist
+  install -D ${
+    writeText "Architectures.xcspec" (toPlist { } Architectures)
+  } $platform/Developer/Library/Xcode/Specifications/Architectures.xcspec
+  install -D ${
+    writeText "PackageTypes.xcspec" (toPlist { } PackageTypes)
+  } $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
+  install -D ${
+    writeText "ProductTypes.xcspec" (toPlist { } ProductTypes)
+  } $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
 
   ln -s $platform $platform/usr
 

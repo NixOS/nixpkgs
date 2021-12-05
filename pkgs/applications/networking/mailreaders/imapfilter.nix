@@ -10,10 +10,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "nbVwbPkNbJz4GHhvOp+QVgiBqKA/HR34p4x3NXJB7ig=";
   };
-  makeFlags = [
-    "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt" "PREFIX=$(out)" ];
 
   buildInputs = [ openssl pcre2 lua ];
 

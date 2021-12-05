@@ -20,9 +20,6 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "1g2cclykr6ax584rlcri8w2h385n624sgfx2fm45r0cwkg1p77h2";
 
-  meta = {
-    description = "Phonetic font for TeX";
-  };
+  meta = { description = "Phonetic font for TeX"; };
 }
-
 

@@ -1,14 +1,5 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, qtbase
-, rtaudio
-, rtmidi
-}:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, qmake, pkg-config, qttools, qtbase
+, rtaudio, rtmidi }:
 
 mkDerivation rec {
   pname = "bambootracker";
@@ -37,7 +28,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
+    description =
+      "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://bambootracker.github.io/BambooTracker/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

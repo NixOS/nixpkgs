@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.gollum;
-in
+let cfg = config.services.gollum;
 
-{
+in {
   options.services.gollum = {
     enable = mkOption {
       type = types.bool;
@@ -66,7 +64,8 @@ in
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/gollum";
-      description = "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
+      description =
+        "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
   };
@@ -110,7 +109,10 @@ in
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
-            ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
+            ${
+              optionalString (cfg.allowUploads != null)
+              "--allow-uploads ${cfg.allowUploads}"
+            } \
             ${cfg.stateDir}
         '';
       };

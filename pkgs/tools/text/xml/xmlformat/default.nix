@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "1.04";
 
   src = fetchurl {
-    url = "http://www.kitebird.com/software/xmlformat/xmlformat-${version}.tar.gz";
+    url =
+      "http://www.kitebird.com/software/xmlformat/xmlformat-${version}.tar.gz";
     sha256 = "1vwgzn4ha0az7dx0cyc6dx5nywwrx9gxhyh08mvdcq27wjbh79vi";
   };
 
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "a configurable formatter (or 'pretty-printer') for XML documents";
+    description =
+      "a configurable formatter (or 'pretty-printer') for XML documents";
     homepage = "http://www.kitebird.com/software/xmlformat/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

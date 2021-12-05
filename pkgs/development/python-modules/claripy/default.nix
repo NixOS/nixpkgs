@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, cachetools
-, decorator
-, fetchFromGitHub
-, future
-, nose
-, pysmt
-, pythonOlder
-, pytestCheckHook
-, z3
-}:
+{ lib, buildPythonPackage, cachetools, decorator, fetchFromGitHub, future, nose
+, pysmt, pythonOlder, pytestCheckHook, z3 }:
 
 buildPythonPackage rec {
   pname = "claripy";
@@ -28,18 +18,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "z3-solver>=4.8.5.0" ""
   '';
 
-  propagatedBuildInputs = [
-    cachetools
-    decorator
-    future
-    pysmt
-    z3
-  ];
+  propagatedBuildInputs = [ cachetools decorator future pysmt z3 ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ nose pytestCheckHook ];
 
   pythonImportsCheck = [ "claripy" ];
 

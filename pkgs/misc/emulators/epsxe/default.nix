@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, alsa-lib, curl, gdk-pixbuf, glib, gtk3, libGLU, libGL,
-  libX11, openssl_1_0_2, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, alsa-lib, curl, gdk-pixbuf, glib, gtk3, libGLU, libGL
+, libX11, openssl_1_0_2, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook
+, autoPatchelfHook }:
 
 with lib;
 
@@ -8,13 +9,14 @@ stdenv.mkDerivation rec {
   version = "2.0.5";
 
   src = let
-    version2 = replaceStrings ["."] [""] version;
+    version2 = replaceStrings [ "." ] [ "" ] version;
     platform = "linux" + (optionalString stdenv.is64bit "_x64");
   in fetchurl {
     url = "https://www.epsxe.com/files/ePSXe${version2}${platform}.zip";
-    sha256 = if stdenv.is64bit
-             then "16fa9qc2xhaz1f6294m0b56s5l86cbmclwm9w3mqnch0yjsrvab0"
-             else "1677lclam557kp8jwvchdrk27zfj50fqx2q9i3bcx26d9k61q3kl";
+    sha256 = if stdenv.is64bit then
+      "16fa9qc2xhaz1f6294m0b56s5l86cbmclwm9w3mqnch0yjsrvab0"
+    else
+      "1677lclam557kp8jwvchdrk27zfj50fqx2q9i3bcx26d9k61q3kl";
   };
 
   nativeBuildInputs = [ unzip wrapGAppsHook autoPatchelfHook ];
@@ -27,7 +29,8 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libX11
-    libGLU libGL
+    libGLU
+    libGL
     openssl_1_0_2
     ncurses5
     SDL

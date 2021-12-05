@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nose
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, nose }:
 
 buildPythonPackage rec {
   pname = "archinfo";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-kye8muKTm79lVhOBJeHnI4apJBsUVtNtGYpNiykXFDs=";
   };
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ nose pytestCheckHook ];
 
   pythonImportsCheck = [ "archinfo" ];
 

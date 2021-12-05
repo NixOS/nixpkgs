@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, cmake
-, ninja
-, vala
-, pkg-config
-, pantheon
-, gtk3
-, glib
-, glib-networking
-, libxml2
-, webkitgtk
-, clutter-gtk
-, clutter-gst
-, libunity
-, libnotify
-, sqlite
-, gst_all_1
-, json-glib
-, libgee
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, cmake, ninja
+, vala, pkg-config, pantheon, gtk3, glib, glib-networking, libxml2, webkitgtk
+, clutter-gtk, clutter-gst, libunity, libnotify, sqlite, gst_all_1, json-glib
+, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "vocal";
@@ -35,14 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c4n89rdl9r13kmmh2qymmy9sa6shjwai7df48k2kfn0pnzq5mad";
   };
 
-  nativeBuildInputs = [
-    cmake
-    libxml2
-    ninja
-    vala
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake libxml2 ninja vala pkg-config wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
     clutter-gst
@@ -68,16 +40,13 @@ stdenv.mkDerivation rec {
     # see: https://github.com/needle-and-thread/vocal/issues/483
     (fetchpatch {
       name = "remove-about.patch";
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/03543ffdb6cd52ce1a8293f3303225b3afac2431/trunk/remove-about.patch";
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-community/03543ffdb6cd52ce1a8293f3303225b3afac2431/trunk/remove-about.patch";
       sha256 = "sha256-yGD7BYOTmqs4h+Odh/mB3fI1HM7GDO6F+QaHpRUD5p4=";
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "The podcast client for the modern free desktop";

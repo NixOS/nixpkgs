@@ -1,4 +1,5 @@
-{ lib, stdenv, libgcrypt, curl, gnutls, pkg-config, libiconv, libintl, version, src }:
+{ lib, stdenv, libgcrypt, curl, gnutls, pkg-config, libiconv, libintl, version
+, src }:
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";

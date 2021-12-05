@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gtk-doc, gettext
-, pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, gtk-doc, gettext, pkg-config, glib
+, libxml2, gobject-introspection, gnome-common, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "liblangtag";
@@ -8,7 +7,8 @@ stdenv.mkDerivation rec {
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
-    url = "https://bitbucket.org/tagoh/liblangtag/downloads/${pname}-${version}.tar.bz2";
+    url =
+      "https://bitbucket.org/tagoh/liblangtag/downloads/${pname}-${version}.tar.bz2";
     sha256 = "sha256-HxKiCgLsOo0i5U3tuLaDpDycFgvaG6M3vxBgYHrnM70=";
   };
 
@@ -30,16 +30,15 @@ stdenv.mkDerivation rec {
     cp "${language_subtag_registry}" data/language-subtag-registry
   '';
 
-  configureFlags =
-    lib.optional
-      (stdenv.hostPlatform.libc == "glibc")
-      "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
+  configureFlags = lib.optional (stdenv.hostPlatform.libc == "glibc")
+    "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
   buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common ];
   nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip ];
 
   meta = with lib; {
-    description = "An interface library to access tags for identifying languages";
+    description =
+      "An interface library to access tags for identifying languages";
     license = licenses.mpl20;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

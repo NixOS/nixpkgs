@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterlab_server
-, notebook
-, pythonOlder
-, jupyter-packaging
-, nbclassic
-}:
+{ lib, buildPythonPackage, fetchPypi, jupyterlab_server, notebook, pythonOlder
+, jupyter-packaging, nbclassic }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
@@ -22,9 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jupyterlab_server notebook nbclassic ];
 
-  makeWrapperArgs = [
-    "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
-  ];
+  makeWrapperArgs = [ "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab" ];
 
   # Depends on npm
   doCheck = false;

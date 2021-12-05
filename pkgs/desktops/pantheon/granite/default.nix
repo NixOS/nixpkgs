@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, python3
-, meson
-, ninja
-, vala
-, pkg-config
-, libgee
-, gtk3
-, glib
-, gettext
-, gsettings-desktop-schemas
-, gobject-introspection
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, python3, meson, ninja, vala
+, pkg-config, libgee, gtk3, glib, gettext, gsettings-desktop-schemas
+, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "granite";
@@ -53,9 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

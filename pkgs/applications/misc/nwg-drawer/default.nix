@@ -1,12 +1,5 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, cairo
-, gobject-introspection
-, gtk3
-, gtk-layer-shell
-}:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, cairo, gobject-introspection
+, gtk3, gtk-layer-shell }:
 
 buildGoModule rec {
   pname = "nwg-drawer";

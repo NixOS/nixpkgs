@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-asyncio
-, python-rapidjson
-, pretend
-, freezegun
-, twisted
-, simplejson
-, six
-, pythonAtLeast
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-asyncio, python-rapidjson
+, pretend, freezegun, twisted, simplejson, six, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "structlog";

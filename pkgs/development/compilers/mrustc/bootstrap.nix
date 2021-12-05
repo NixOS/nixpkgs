@@ -1,20 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, mrustc
-, mrustc-minicargo
-, rust
-, llvm_7
-, llvmPackages_7
-, libffi
-, cmake
-, python3
-, zlib
-, libxml2
-, openssl
-, pkg-config
-, curl
-, which
-, time
+{ lib, stdenv, fetchurl, mrustc, mrustc-minicargo, rust, llvm_7, llvmPackages_7
+, libffi, cmake, python3, zlib, libxml2, openssl, pkg-config, curl, which, time
 }:
 
 let
@@ -24,9 +9,8 @@ let
     sha256 = "1sb15znckj8pc8q3g7cq03pijnida6cg64yqmgiayxkzskzk9sx4";
   };
   rustcDir = "rustc-${rustcVersion}-src";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mrustc-bootstrap";
   version = "${mrustc.version}_${rustcVersion}";
 
@@ -58,20 +42,17 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   strictDeps = true;
-  nativeBuildInputs = [
-    cmake
-    mrustc
-    mrustc-minicargo
-    pkg-config
-    python3
-    time
-    which
-  ];
+  nativeBuildInputs =
+    [ cmake mrustc mrustc-minicargo pkg-config python3 time which ];
   buildInputs = [
     # for rustc
-    llvm_7 libffi zlib libxml2
+    llvm_7
+    libffi
+    zlib
+    libxml2
     # for cargo
-    openssl curl
+    openssl
+    curl
   ];
 
   makeFlags = [
@@ -133,7 +114,9 @@ stdenv.mkDerivation rec {
     cp run_rustc/output/prefix/bin/rustc_binary $out/bin/rustc
 
     cp -r run_rustc/output/prefix/lib/* $out/lib/
-    cp $out/lib/rustlib/${rust.toRustTarget stdenv.targetPlatform}/lib/*.so $out/lib/
+    cp $out/lib/rustlib/${
+      rust.toRustTarget stdenv.targetPlatform
+    }/lib/*.so $out/lib/
     runHook postInstall
   '';
 

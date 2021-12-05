@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, perl, gperf, bison, groff
-, pkg-config, libXft, pcre
+{ lib, stdenv, fetchurl, perl, gperf, bison, groff, pkg-config, libXft, pcre
 , libtomcrypt, libtommath, lz4 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +6,8 @@ stdenv.mkDerivation rec {
   version = "7.3.1ce";
 
   src = fetchurl {
-    url = "https://www.bitkeeper.org/downloads/${version}/bk-${version}.src.tar.gz";
+    url =
+      "https://www.bitkeeper.org/downloads/${version}/bk-${version}.src.tar.gz";
     sha256 = "0l6jwvcg4s1q00vb01hdv58jgv03l8x5mhjl73cwgfiff80zx147";
   };
 
@@ -16,16 +16,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    perl gperf bison groff libXft
-    pcre libtomcrypt libtommath lz4
-  ];
+  buildInputs =
+    [ perl gperf bison groff libXft pcre libtomcrypt libtommath lz4 ];
 
   postPatch = ''
-        substituteInPlace port/unix_platform.sh \
-                --replace /bin/rm rm
-        substituteInPlace ./undo.c \
-                --replace /bin/cat cat
+    substituteInPlace port/unix_platform.sh \
+            --replace /bin/rm rm
+    substituteInPlace ./undo.c \
+            --replace /bin/cat cat
   '';
 
   sourceRoot = "bk-${version}/src";
@@ -42,15 +40,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description     = "A distributed version control system";
+    description = "A distributed version control system";
     longDescription = ''
       BitKeeper is a fast, enterprise-ready, distributed SCM that
       scales up to very large projects and down to tiny ones.
     '';
-    homepage    = "https://www.bitkeeper.org/";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.linux;
+    homepage = "https://www.bitkeeper.org/";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wscott thoughtpolice ];
-    broken      = true; # seems to fail on recent glibc versions
+    broken = true; # seems to fail on recent glibc versions
   };
 }

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pandas
-, pytestCheckHook
-, scikit-learn
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pandas, pytestCheckHook
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
@@ -35,7 +29,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
+    description =
+      "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
     license = licenses.mit;
     maintainers = [ maintainers.rmcgibbo ];

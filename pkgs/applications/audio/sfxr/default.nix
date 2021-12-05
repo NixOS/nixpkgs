@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, desktop-file-utils
-, SDL
-, gtk3
-, gsettings-desktop-schemas
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, pkg-config, desktop-file-utils, SDL, gtk3
+, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "sfxr";
@@ -31,17 +24,9 @@ stdenv.mkDerivation rec {
       "$out/share/sfxr/ld48.tga"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    desktop-file-utils
-  ];
+  nativeBuildInputs = [ pkg-config desktop-file-utils ];
 
-  buildInputs = [
-    SDL
-    gtk3
-    gsettings-desktop-schemas
-    wrapGAppsHook
-  ];
+  buildInputs = [ SDL gtk3 gsettings-desktop-schemas wrapGAppsHook ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

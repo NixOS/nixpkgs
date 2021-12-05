@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, python, nose }:
 
 buildPythonPackage rec {
   pname = "cchardet";

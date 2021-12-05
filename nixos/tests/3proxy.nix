@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "3proxy";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ misuzu ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ misuzu ]; };
 
   nodes = {
     peer0 = { lib, ... }: {
@@ -81,11 +79,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             type = "proxy";
             bindPort = 3128;
             auth = [ "iponly" ];
-            acl = [
-              {
-                rule = "allow";
-              }
-            ];
+            acl = [{ rule = "allow"; }];
           }
         ];
       };
@@ -121,11 +115,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             type = "proxy";
             bindPort = 3128;
             auth = [ "strong" ];
-            acl = [
-              {
-                rule = "allow";
-              }
-            ];
+            acl = [{ rule = "allow"; }];
           }
         ];
       };

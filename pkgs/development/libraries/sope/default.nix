@@ -1,5 +1,5 @@
-{ gnustep, lib, fetchFromGitHub , libxml2, openssl
-, openldap, mariadb, libmysqlclient, postgresql }:
+{ gnustep, lib, fetchFromGitHub, libxml2, openssl, openldap, mariadb
+, libmysqlclient, postgresql }:
 with lib;
 
 gnustep.stdenv.mkDerivation rec {
@@ -29,7 +29,8 @@ gnustep.stdenv.mkDerivation rec {
     export DESTDIR="$out"
   '';
 
-  configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
+  configureFlags =
+    [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
     ++ optional (openldap != null) "--enable-openldap"
     ++ optional (mariadb != null) "--enable-mysql"
     ++ optional (postgresql != null) "--enable-postgresql";
@@ -41,7 +42,8 @@ gnustep.stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An extensive set of frameworks which form a complete Web application server environment";
+    description =
+      "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
     platforms = platforms.linux;

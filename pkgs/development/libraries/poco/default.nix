@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, zlib, pcre, expat
+, sqlite, openssl, unixODBC, libmysqlclient }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
@@ -6,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "1.10.1";
 
   src = fetchurl {
-    url = "https://pocoproject.org/releases/${pname}-${version}/${pname}-${version}-all.tar.gz";
+    url =
+      "https://pocoproject.org/releases/${pname}-${version}/${pname}-${version}-all.tar.gz";
     sha256 = "1jilzh0h6ik5lr167nax7q6nrpzxl99p11pkl202ig06pgh32nbz";
   };
 
@@ -14,7 +16,8 @@ stdenv.mkDerivation rec {
     # Use GNUInstallDirs (https://github.com/pocoproject/poco/pull/3105)
     (fetchpatch {
       name = "use-gnuinstalldirs.patch";
-      url = "https://github.com/pocoproject/poco/commit/9e8f84dff4575f01be02e0b07364efd1561ce66c.patch";
+      url =
+        "https://github.com/pocoproject/poco/commit/9e8f84dff4575f01be02e0b07364efd1561ce66c.patch";
       sha256 = "1bj4i93gxr7pwx33bfyhg20ad4ak1rbxkrlpsgzk7rm6mh0mld26";
       # Files not included in release tarball
       excludes = [
@@ -39,9 +42,7 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  cmakeFlags = [
-    "-DPOCO_UNBUNDLED=ON"
-  ];
+  cmakeFlags = [ "-DPOCO_UNBUNDLED=ON" ];
 
   meta = with lib; {
     homepage = "https://pocoproject.org/";

@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, python2
-}:
+{ lib, stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "elliptic_curves";
@@ -12,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pzaym44x88dn8rydiwqgm73yghzlgf7gqvd7qqsrsdl2vyp091w";
   };
 
-
   # Script that creates the sqlite database from the allcurves textfile
   spkg-install = fetchurl {
-    url = "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/spkg-install.py?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+    url =
+      "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/spkg-install.py?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
     sha256 = "116g684i6mvs11fvb6fzfsr4fn903axn31vigdyb8bgpf8l4hvc5";
   };
 

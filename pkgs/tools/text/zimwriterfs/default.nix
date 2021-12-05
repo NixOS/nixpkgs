@@ -1,19 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 
-, autoconf
-, automake
-, libtool
-, pkg-config
+, autoconf, automake, libtool, pkg-config
 
-, file
-, icu
-, gumbo
-, xz
-, xapian
-, zimlib
-, zlib
-}:
+, file, icu, gumbo, xz, xapian, zimlib, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "zimwriterfs";

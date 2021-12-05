@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "17.04";
 
   src = fetchFromGitHub {
-    owner  = "jinfeihan57";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "jinfeihan57";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
   };
 
@@ -44,15 +44,18 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
     homepage = "https://github.com/jinfeihan57/p7zip";
-    description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
+    description =
+      "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.raskin ];
     mainProgram = "7z";
     # RAR code is under non-free UnRAR license, but we remove it
-    license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
+    license =
+      if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };
 }

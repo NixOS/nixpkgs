@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc
+, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
 
 with lib;
 
@@ -13,7 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "0mspq4mvx41qri2v2zlg2y3znx5gfw6d8s3czbcfpr2218qbpz55";
   };
 
-  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
+  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt.bin
+  ];
 
   buildPhase = ''
     python configure.py --bootstrap

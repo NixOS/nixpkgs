@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
-, gtk2, halibut, ncurses, perl, darwin
-}:
+{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool, gtk2, halibut
+, ncurses, perl, darwin }:
 
 stdenv.mkDerivation rec {
   version = "0.76";
@@ -33,12 +32,12 @@ stdenv.mkDerivation rec {
     for exe in *.exe; do
        install -D $exe $out/bin/$exe
     done
-  '' else null;
+  '' else
+    null;
 
   nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk2 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [ gtk2 ncurses ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   meta = with lib; {

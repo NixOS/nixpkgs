@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "noip";
@@ -10,11 +10,10 @@ stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=\${out}" ];
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp noip2 $out/bin
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp noip2 $out/bin
+  '';
 
   enableParallelBuilding = true;
 

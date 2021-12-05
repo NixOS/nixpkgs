@@ -1,21 +1,17 @@
-{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2
+, wrapQtAppsHook, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL
+, libcap, libGL, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase
+, qtx11extras, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl
+, docbook_xml_dtd_43, alsa-lib, curl, libvpx, nettools, dbus, substituteAll
+, gsoap, zlib
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
-, open-watcom-bin
-, makeself, perl
-, javaBindings ? true, jdk # Almost doesn't affect closure size
-, pythonBindings ? false, python3
-, extensionPack ? null, fakeroot
+, open-watcom-bin, makeself, perl, javaBindings ? true
+, jdk # Almost doesn't affect closure size
+, pythonBindings ? false, python3, extensionPack ? null, fakeroot
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, enableHardening ? false
-, headless ? false
-, enable32bitGuests ? true
-, enableWebService ? false
-}:
+, enableHardening ? false, headless ? false, enable32bitGuests ? true
+, enableWebService ? false }:
 
 with lib;
 
@@ -29,7 +25,8 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    url =
+      "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
     sha256 = "8d34993d8e9c0cf35e7bd44dd26c8c757f17a3b7d5a64052f945d00fd798ebfe";
   };
 
@@ -42,11 +39,30 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs = [
-    acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-    libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libpng libopus python3 ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
+    acpica-tools
+    dev86
+    libxslt
+    libxml2
+    xorgproto
+    libX11
+    libXext
+    libXcursor
+    libIDL
+    libcap
+    glib
+    lvm2
+    alsa-lib
+    curl
+    libvpx
+    pam
+    makeself
+    perl
+    libXmu
+    libpng
+    libopus
+    python3
+  ] ++ optional javaBindings jdk ++ optional pythonBindings
+    python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals headless [ libXrandr libGL ]
     ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
@@ -57,17 +73,23 @@ in stdenv.mkDerivation {
   prePatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
-        -e 's@PYTHONDIR=.*@PYTHONDIR=${lib.optionalString pythonBindings python3}@' \
+        -e 's@PYTHONDIR=.*@PYTHONDIR=${
+          lib.optionalString pythonBindings python3
+        }@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
-        ${optionalString (!headless) ''
-        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
-        ''} -i configure
+        ${
+          optionalString (!headless) ''
+            -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
+          ''
+        } -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
-      ${optionalString pulseSupport
-        ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
+      ${
+        optionalString pulseSupport
+        ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''
+      }'
 
     grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
@@ -79,25 +101,25 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches =
-     optional enableHardening ./hardened.patch
-  ++ [ ./extra_symbols.patch ]
-     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
-     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
-     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
-     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
-     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
-     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
-     # the user's icon theme can be loaded.
-  ++ optional (!headless && enableHardening) (substituteAll {
+  patches = optional enableHardening ./hardened.patch ++ [
+    ./extra_symbols.patch
+  ]
+  # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+  # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+  # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+  # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+  # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+  # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+  # the user's icon theme can be loaded.
+    ++ optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
-      qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
-    })
-  ++ [
-    ./qtx11extras.patch
-    # https://github.com/NixOS/nixpkgs/issues/123851
-    ./fix-audio-driver-loading.patch
-  ];
+      qtPluginPath =
+        "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
+    }) ++ [
+      ./qtx11extras.patch
+      # https://github.com/NixOS/nixpkgs/issues/123851
+      ./fix-audio-driver-loading.patch
+    ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -110,7 +132,9 @@ in stdenv.mkDerivation {
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
-    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${
+      lib.getDev stdenv.cc.libc
+    }/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
@@ -127,16 +151,16 @@ in stdenv.mkDerivation {
     VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
     VBOX_PATH_APP_DOCS             := $out/doc
     ${optionalString javaBindings ''
-    VBOX_JAVA_HOME                 := ${jdk}
+      VBOX_JAVA_HOME                 := ${jdk}
     ''}
     ${optionalString (!headless) ''
-    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
-    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
+      PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
+      PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
+      TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     ''}
     ${optionalString enableWebService ''
-    # fix gsoap missing zlib include and produce errors with --as-needed
-    VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
+      # fix gsoap missing zlib include and produce errors with --as-needed
+      VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
     ''}
     LOCAL_CONFIG
 
@@ -148,7 +172,10 @@ in stdenv.mkDerivation {
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
-      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${
+        optionalString (open-watcom-bin != null)
+        "--with-ow-dir=${open-watcom-bin}"
+      } \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -174,7 +201,11 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${
+      optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"
+    } ${
+      optionalString enableWebService "vboxwebsrv"
+    } VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
@@ -211,14 +242,14 @@ in stdenv.mkDerivation {
   preFixup = optionalString (!headless) ''
     wrapQtApp $out/bin/VirtualBox
   ''
-  # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
-  # the source code (see postPatch).
-  + optionalString (!headless && !enableHardening) ''
-    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
-  '';
+    # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
+    # the source code (see postPatch).
+    + optionalString (!headless && !enableHardening) ''
+      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+    '';
 
   passthru = {
-    inherit version;       # for guest additions
+    inherit version; # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
     updateScript = ./update.sh;
   };

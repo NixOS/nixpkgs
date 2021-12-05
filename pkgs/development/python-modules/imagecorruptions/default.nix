@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, numpy
-, scikitimage
-, lib
-, opencv3
-}:
+{ buildPythonPackage, fetchPypi, numpy, scikitimage, lib, opencv3 }:
 
 buildPythonPackage rec {
   pname = "imagecorruptions";
@@ -20,11 +14,7 @@ buildPythonPackage rec {
       --replace "'opencv-python >= 3.4.5'," ""
   '';
 
-  propagatedBuildInputs = [
-    numpy
-    scikitimage
-    opencv3
-  ];
+  propagatedBuildInputs = [ numpy scikitimage opencv3 ];
 
   doCheck = false;
   pythonImportsCheck = [ "imagecorruptions" ];

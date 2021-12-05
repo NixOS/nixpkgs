@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, minidump
-, nose
-, pefile
-, pyelftools
-, pytestCheckHook
-, pythonOlder
-, pyvex
-, pyxbe
-, sortedcontainers
-}:
+{ lib, buildPythonPackage, cffi, fetchFromGitHub, minidump, nose, pefile
+, pyelftools, pytestCheckHook, pythonOlder, pyvex, pyxbe, sortedcontainers }:
 
 let
   # The binaries are following the argr projects release cycle
@@ -25,8 +13,7 @@ let
     sha256 = "1qlrxfj1n34xvwkac6mbcc7zmixxbp34fj7lkf0fvp7zcz1rpla1";
   };
 
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "cle";
   inherit version;
   disabled = pythonOlder "3.6";
@@ -38,20 +25,10 @@ buildPythonPackage rec {
     sha256 = "sha256-sZVdDEs+9UqPHWiCxrZpHp3UiB1hX8dTZxR3TXrIsTQ=";
   };
 
-  propagatedBuildInputs = [
-    cffi
-    minidump
-    pefile
-    pyelftools
-    pyvex
-    pyxbe
-    sortedcontainers
-  ];
+  propagatedBuildInputs =
+    [ cffi minidump pefile pyelftools pyvex pyxbe sortedcontainers ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ nose pytestCheckHook ];
 
   # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''
@@ -70,9 +47,7 @@ buildPythonPackage rec {
     "test_tls_pe_incorrect_tls_data_start"
   ];
 
-  pythonImportsCheck = [
-    "cle"
-  ];
+  pythonImportsCheck = [ "cle" ];
 
   meta = with lib; {
     description = "Python loader for many binary formats";

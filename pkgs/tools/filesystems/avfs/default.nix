@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse xz ];
 
-  configureFlags = [
-    "--enable-library"
-    "--enable-fuse"
-  ];
+  configureFlags = [ "--enable-library" "--enable-fuse" ];
 
   meta = {
     homepage = "http://avf.sourceforge.net/";

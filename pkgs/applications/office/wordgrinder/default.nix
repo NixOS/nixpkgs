@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
-, lua52Packages, libXft, ncurses, ninja, readline, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, lua52Packages, libXft
+, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "wordgrinder";
@@ -27,23 +27,14 @@ stdenv.mkDerivation rec {
   dontUseNinjaInstall = true;
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-    ninja
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper ninja ];
 
-  buildInputs = [
-    lua52Packages.lua
-    ncurses
-    readline
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    libXft
-  ];
+  buildInputs = [ lua52Packages.lua ncurses readline zlib ]
+    ++ lib.optionals stdenv.isLinux [ libXft ];
 
   # To be able to find <Xft.h>
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''

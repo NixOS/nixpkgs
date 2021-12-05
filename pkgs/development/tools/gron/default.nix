@@ -14,7 +14,8 @@ buildGoModule rec {
   patches = [
     (fetchpatch {
       name = "fix-inconsistent-vendoring.patch";
-      url = "https://github.com/tomnomnom/gron/pull/85/commits/d549a6cb68ed0e0ec7cc81d8275353acfe218725.patch";
+      url =
+        "https://github.com/tomnomnom/gron/pull/85/commits/d549a6cb68ed0e0ec7cc81d8275353acfe218725.patch";
       sha256 = "1461v4f7w6q75l3988br0g1ynfhzsh34z38pd2w8fp57vrgkcfi5";
     })
   ];

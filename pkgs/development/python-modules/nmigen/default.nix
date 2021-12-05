@@ -1,21 +1,8 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pyvcd
-, jinja2
-, importlib-resources
-, importlib-metadata
-, git
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, setuptools
+, setuptools-scm, pyvcd, jinja2, importlib-resources, importlib-metadata, git
 
 # for tests
-, pytestCheckHook
-, symbiyosys
-, yices
-, yosys
-}:
+, pytestCheckHook, symbiyosys, yices, yosys }:
 
 buildPythonPackage rec {
   pname = "nmigen";
@@ -31,27 +18,15 @@ buildPythonPackage rec {
     sha256 = "0cjs9wgmxa76xqmjhsw4fsb2mhgvd85jgs2mrjxqp6fwp8rlgnl1";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
+  SETUPTOOLS_SCM_PRETEND_VERSION = "${realVersion}";
 
-  nativeBuildInputs = [
-    git
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ git setuptools-scm ];
 
-  propagatedBuildInputs = [
-    jinja2
-    pyvcd
-    setuptools
-  ] ++
-    lib.optional (pythonOlder "3.9") importlib-resources ++
-    lib.optional (pythonOlder "3.8") importlib-metadata;
+  propagatedBuildInputs = [ jinja2 pyvcd setuptools ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
-    pytestCheckHook
-    symbiyosys
-    yices
-    yosys
-  ];
+  checkInputs = [ pytestCheckHook symbiyosys yices yosys ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -62,7 +37,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nmigen" ];
 
   meta = with lib; {
-    description = "A refreshed Python toolbox for building complex digital hardware";
+    description =
+      "A refreshed Python toolbox for building complex digital hardware";
     homepage = "https://nmigen.info/nmigen";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];

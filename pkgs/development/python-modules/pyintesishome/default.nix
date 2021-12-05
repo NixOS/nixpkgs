@@ -1,8 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyintesishome";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-+bad3VIoP0sVw0blK9YIot2GfK5de4HTXv5/ipV2Nds=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

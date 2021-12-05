@@ -1,46 +1,13 @@
-{ lib
-, stdenv
-, pkg-config
-, curl
-, darwin
-, libgit2
-, libssh2
-, openssl
-, sqlite
-, zlib
-, dbus
-, dbus-glib
-, gdk-pixbuf
-, cairo
-, python3
-, libsodium
-, postgresql
-, gmp
-, foundationdb
-, capnproto
-, nettle
-, clang
-, llvmPackages
-, linux-pam
-, cmake
-, glib
-, freetype
-, rdkafka
-, udev
-, ...
-}:
+{ lib, stdenv, pkg-config, curl, darwin, libgit2, libssh2, openssl, sqlite, zlib
+, dbus, dbus-glib, gdk-pixbuf, cairo, python3, libsodium, postgresql, gmp
+, foundationdb, capnproto, nettle, clang, llvmPackages, linux-pam, cmake, glib
+, freetype, rdkafka, udev, ... }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-in
-{
-  cairo-rs = attrs: {
-    buildInputs = [ cairo ];
-  };
+let inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+in {
+  cairo-rs = attrs: { buildInputs = [ cairo ]; };
 
-  capnp-rpc = attrs: {
-    nativeBuildInputs = [ capnproto ];
-  };
+  capnp-rpc = attrs: { nativeBuildInputs = [ capnproto ]; };
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
@@ -65,9 +32,7 @@ in
     buildInputs = [ dbus ];
   };
 
-  expat-sys = attrs: {
-    nativeBuildInputs = [ cmake ];
-  };
+  expat-sys = attrs: { nativeBuildInputs = [ cmake ]; };
 
   foundationdb-sys = attrs: {
     buildInputs = [ foundationdb ];
@@ -79,9 +44,7 @@ in
     # '';
   };
 
-  foundationdb = attrs: {
-    buildInputs = [ foundationdb ];
-  };
+  foundationdb = attrs: { buildInputs = [ foundationdb ]; };
 
   freetype-sys = attrs: {
     nativeBuildInputs = [ cmake ];
@@ -93,21 +56,13 @@ in
     buildInputs = [ glib ];
   };
 
-  gobject-sys = attrs: {
-    buildInputs = [ dbus-glib ];
-  };
+  gobject-sys = attrs: { buildInputs = [ dbus-glib ]; };
 
-  gio-sys = attrs: {
-    buildInputs = [ dbus-glib ];
-  };
+  gio-sys = attrs: { buildInputs = [ dbus-glib ]; };
 
-  gdk-pixbuf-sys = attrs: {
-    buildInputs = [ dbus-glib ];
-  };
+  gdk-pixbuf-sys = attrs: { buildInputs = [ dbus-glib ]; };
 
-  gdk-pixbuf = attrs: {
-    buildInputs = [ gdk-pixbuf ];
-  };
+  gdk-pixbuf = attrs: { buildInputs = [ gdk-pixbuf ]; };
 
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
@@ -141,18 +96,14 @@ in
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   };
 
-  openssl = attrs: {
-    buildInputs = [ openssl ];
-  };
+  openssl = attrs: { buildInputs = [ openssl ]; };
 
   openssl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
   };
 
-  pam-sys = attr: {
-    buildInputs = [ linux-pam ];
-  };
+  pam-sys = attr: { buildInputs = [ linux-pam ]; };
 
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
@@ -166,37 +117,28 @@ in
 
   rink = attrs: {
     buildInputs = [ gmp ];
-    crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
+    crateBin = [{
+      name = "rink";
+      path = "src/bin/rink.rs";
+    }];
   };
 
-  security-framework-sys = attr: {
-    propagatedBuildInputs = [ Security ];
-  };
+  security-framework-sys = attr: { propagatedBuildInputs = [ Security ]; };
 
-  sequoia-openpgp = attrs: {
-    buildInputs = [ gmp ];
-  };
+  sequoia-openpgp = attrs: { buildInputs = [ gmp ]; };
 
-  sequoia-openpgp-ffi = attrs: {
-    buildInputs = [ gmp ];
-  };
+  sequoia-openpgp-ffi = attrs: { buildInputs = [ gmp ]; };
 
-  sequoia-ipc = attrs: {
-    buildInputs = [ gmp ];
-  };
+  sequoia-ipc = attrs: { buildInputs = [ gmp ]; };
 
-  sequoia-guide = attrs: {
-    buildInputs = [ gmp ];
-  };
+  sequoia-guide = attrs: { buildInputs = [ gmp ]; };
 
   sequoia-store = attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
   };
 
-  sequoia-sq = attrs: {
-    buildInputs = [ sqlite gmp ];
-  };
+  sequoia-sq = attrs: { buildInputs = [ sqlite gmp ]; };
 
   sequoia-tool = attrs: {
     nativeBuildInputs = [ capnproto ];
@@ -217,7 +159,5 @@ in
     buildInputs = [ libsodium ];
   };
 
-  xcb = attrs: {
-    buildInputs = [ python3 ];
-  };
+  xcb = attrs: { buildInputs = [ python3 ]; };
 }

@@ -1,37 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, autoconf
-, automake
-, libtool
-, mm-common
-, intltool
-, itstool
-, doxygen
-, graphviz
-, makeFontsConf
-, freefont_ttf
-, boost
-, libxmlxx3
-, libxslt
-, libgdamm
-, libarchive
-, libepc
-, python3
-, ncurses
-, glibmm
-, gtk3
-, openssl
-, gtkmm3
-, goocanvasmm2
-, evince
-, isocodes
-, gtksourceview
-, gtksourceviewmm
-, postgresql
-, gobject-introspection
-, yelp-tools
-, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, libtool, mm-common
+, intltool, itstool, doxygen, graphviz, makeFontsConf, freefont_ttf, boost
+, libxmlxx3, libxslt, libgdamm, libarchive, libepc, python3, ncurses, glibmm
+, gtk3, openssl, gtkmm3, goocanvasmm2, evince, isocodes, gtksourceview
+, gtksourceviewmm, postgresql, gobject-introspection, yelp-tools, wrapGAppsHook
 }:
 
 let
@@ -46,7 +17,10 @@ let
       rm $out/nix-support/propagated-build-inputs
     '';
   });
-  boost_python = boost.override { enablePython = true; inherit python; };
+  boost_python = boost.override {
+    enablePython = true;
+    inherit python;
+  };
 in stdenv.mkDerivation rec {
   pname = "glom";
   version = "1.32.0";
@@ -54,7 +28,9 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "doc" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1wcd4kd3crwqjv0jfp73jkyyf5ws8mvykg37kqxmcb58piz21gsk";
   };
 
@@ -101,7 +77,9 @@ in stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--with-boost-python=boost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}"
+    "--with-boost-python=boost_python${lib.versions.major python3.version}${
+      lib.versions.minor python3.version
+    }"
   ];
 
   makeFlags = [
@@ -110,9 +88,7 @@ in stdenv.mkDerivation rec {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
   preFixup = ''
     gappsWrapperArgs+=(

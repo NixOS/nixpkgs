@@ -1,20 +1,29 @@
-with import ../../../default.nix {};
+with import ../../../default.nix { };
 let
-openssl_lib_marked = import ./openssl-lib-marked.nix;
-self = rec {
-  name = "ql-to-nix";
-  env = buildEnv { name = name; paths = buildInputs; };
-  buildInputs = [
-    gcc stdenv
-    openssl fuse libuv libmysqlclient libfixposix libev sqlite
-    freetds
-    lispPackages.quicklisp-to-nix lispPackages.quicklisp-to-nix-system-info
-  ];
-  CPATH = lib.makeSearchPath "include"
-    [ libfixposix
+  openssl_lib_marked = import ./openssl-lib-marked.nix;
+  self = rec {
+    name = "ql-to-nix";
+    env = buildEnv {
+      name = name;
+      paths = buildInputs;
+    };
+    buildInputs = [
+      gcc
+      stdenv
+      openssl
+      fuse
+      libuv
+      libmysqlclient
+      libfixposix
+      libev
+      sqlite
+      freetds
+      lispPackages.quicklisp-to-nix
+      lispPackages.quicklisp-to-nix-system-info
     ];
-  LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ cairo
+    CPATH = lib.makeSearchPath "include" [ libfixposix ];
+    LD_LIBRARY_PATH = lib.makeLibraryPath [
+      cairo
       freetds
       fuse
       gdk-pixbuf
@@ -32,7 +41,6 @@ self = rec {
       postgresql
       sqlite
       webkitgtk
-    ]
-    + ":${libmysqlclient}/lib/mysql";
-};
+    ] + ":${libmysqlclient}/lib/mysql";
+  };
 in stdenv.mkDerivation self

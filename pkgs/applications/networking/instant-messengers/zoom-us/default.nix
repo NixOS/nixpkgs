@@ -1,31 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-  # Dynamic libraries
-, alsa-lib
-, atk
-, cairo
-, dbus
-, libGL
-, fontconfig
-, freetype
-, gtk3
-, gdk-pixbuf
-, glib
-, pango
-, wayland
-, xorg
-, libxkbcommon
-, zlib
-  # Runtime
-, coreutils
-, pciutils
-, procps
-, util-linux
-, pulseaudioSupport ? true
-, libpulseaudio
-}:
+{ stdenv, lib, fetchurl, makeWrapper
+# Dynamic libraries
+, alsa-lib, atk, cairo, dbus, libGL, fontconfig, freetype, gtk3, gdk-pixbuf
+, glib, pango, wayland, xorg, libxkbcommon, zlib
+# Runtime
+, coreutils, pciutils, procps, util-linux, pulseaudioSupport ? true
+, libpulseaudio }:
 
 let
   version = "5.8.6.739";
@@ -64,8 +43,7 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
 
@@ -73,9 +51,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -108,7 +84,9 @@ stdenv.mkDerivation rec {
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
       --unset QT_SCREEN_SCALE_FACTORS \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]
+      } \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatiblity: we used to call it zoom-us

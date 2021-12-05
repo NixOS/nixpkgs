@@ -6,14 +6,17 @@ let
       versionParts = lib.versions.splitVersion version;
       major = lib.toInt (lib.elemAt versionParts 0);
       minor = lib.toInt (lib.elemAt versionParts 1);
-      patch = if lib.length versionParts > 2 then lib.toInt (lib.elemAt versionParts 2) else 0;
+      patch = if lib.length versionParts > 2 then
+        lib.toInt (lib.elemAt versionParts 2)
+      else
+        0;
     in toString (major * 10000 + minor * 100 + patch);
-in
 
-appleDerivation {
+in appleDerivation {
   nativeBuildInputs = [ python3 ];
 
-  depsBuildBuild = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
+  depsBuildBuild = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ buildPackages.stdenv.cc ];
 
   postPatch = ''
     substituteInPlace makefile \
@@ -59,22 +62,24 @@ appleDerivation {
 
     "DATA_INSTALL_DIR=/share/icu/"
     "DATA_LOOKUP_DIR=$(DSTROOT)$(DATA_INSTALL_DIR)"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ # darwin* platform properties are only defined on darwin
-    # hack to use our lower macos version
-    "MAC_OS_X_VERSION_MIN_REQUIRED=${formatVersionNumeric stdenv.hostPlatform.darwinMinVersion}"
-    "ICU_TARGET_VERSION=-m${stdenv.hostPlatform.darwinPlatform}-version-min=${stdenv.hostPlatform.darwinMinVersion}"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "CROSS_BUILD=YES"
-    "BUILD_TYPE="
-    "RC_ARCHS=${stdenv.hostPlatform.darwinArch}"
-    "HOSTCC=cc"
-    "HOSTCXX=c++"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "CXX=${stdenv.cc.targetPrefix}c++"
-    "HOSTISYSROOT="
-    "OSX_HOST_VERSION_MIN_STRING=${stdenv.buildPlatform.darwinMinVersion}"
-  ];
+  ] ++ lib.optionals
+    stdenv.hostPlatform.isDarwin [ # darwin* platform properties are only defined on darwin
+      # hack to use our lower macos version
+      "MAC_OS_X_VERSION_MIN_REQUIRED=${
+        formatVersionNumeric stdenv.hostPlatform.darwinMinVersion
+      }"
+      "ICU_TARGET_VERSION=-m${stdenv.hostPlatform.darwinPlatform}-version-min=${stdenv.hostPlatform.darwinMinVersion}"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "CROSS_BUILD=YES"
+      "BUILD_TYPE="
+      "RC_ARCHS=${stdenv.hostPlatform.darwinArch}"
+      "HOSTCC=cc"
+      "HOSTCXX=c++"
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "CXX=${stdenv.cc.targetPrefix}c++"
+      "HOSTISYSROOT="
+      "OSX_HOST_VERSION_MIN_STRING=${stdenv.buildPlatform.darwinMinVersion}"
+    ];
 
   doCheck = true;
   checkTarget = "check";

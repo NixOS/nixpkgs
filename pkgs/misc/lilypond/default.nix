@@ -1,18 +1,17 @@
-{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
-, python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
-, fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, makeWrapper, t1utils
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf;
-  }
-}:
+{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick
+, texi2html, guile, python3, gettext, flex, perl, bison, pkg-config
+, autoreconfHook, dblatex, fontconfig, freetype, pango, fontforge, help2man, zip
+, netpbm, groff, makeWrapper, t1utils, texlive
+, tex ? texlive.combine { inherit (texlive) scheme-small lh metafont epsf; } }:
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
   version = "2.22.1";
 
   src = fetchurl {
-    url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
+    url = "http://lilypond.org/download/sources/v${
+        lib.versions.majorMinor version
+      }/lilypond-${version}.tar.gz";
     sha256 = "sha256-cqwtVMMQwxQcC3gtTgvvkALVUZz0ZjJ1mx8D72lpzDA=";
   };
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-documentation"
-     # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
+    # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
     "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
@@ -40,11 +39,27 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
-  buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python3 gettext perl fontconfig freetype pango
-      fontforge help2man groff t1utils
-    ];
+  buildInputs = [
+    ghostscript
+    texinfo
+    imagemagick
+    texi2html
+    guile
+    dblatex
+    tex
+    zip
+    netpbm
+    python3
+    gettext
+    perl
+    fontconfig
+    freetype
+    pango
+    fontforge
+    help2man
+    groff
+    t1utils
+  ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
 

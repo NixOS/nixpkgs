@@ -1,19 +1,20 @@
-{ fetchurl, fetchpatch, lib, stdenv,
-  cmake, netcdf, gfortran, libpng, openjpeg,
-  enablePython ? false, pythonPackages ? null }:
+{ fetchurl, fetchpatch, lib, stdenv, cmake, netcdf, gfortran, libpng, openjpeg
+, enablePython ? false, pythonPackages ? null }:
 
 stdenv.mkDerivation rec {
   pname = "grib-api";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-${version}-Source.tar.gz";
+    url =
+      "https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-${version}-Source.tar.gz";
     sha256 = "0qbj12ap7yy2rl1pq629chnss2jl73wxdj1lwzv0xp87r6z5qdfl";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/science-team/grib-api/raw/debian/1.28.0-2/debian/patches/openjpeg2.patch";
+      url =
+        "https://salsa.debian.org/science-team/grib-api/raw/debian/1.28.0-2/debian/patches/openjpeg2.patch";
       sha256 = "05faxh51vlidiazxq1ssd3k4cjivk1adyn30k94mxqa1xnb2r2pc";
     })
   ];
@@ -24,22 +25,17 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = [ netcdf
-                  libpng
-                  openjpeg
-                ] ++ lib.optionals enablePython [
-                  pythonPackages.python
-                ];
+  buildInputs = [ netcdf libpng openjpeg ]
+    ++ lib.optionals enablePython [ pythonPackages.python ];
 
-  propagatedBuildInputs = lib.optionals enablePython [
-                  pythonPackages.numpy
-                ];
+  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
-  cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
-                 "-DENABLE_PNG=ON"
-                 "-DENABLE_FORTRAN=ON"
-                 "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/${openjpeg.incDir}"
-               ];
+  cmakeFlags = [
+    "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DENABLE_PNG=ON"
+    "-DENABLE_FORTRAN=ON"
+    "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/${openjpeg.incDir}"
+  ];
 
   doCheck = true;
 
@@ -51,7 +47,6 @@ stdenv.mkDerivation rec {
   '' + ''
     ctest -R "t_definitions|t_calendar|t_unit_tests" -VV
   '';
-
 
   meta = with lib; {
     homepage = "https://software.ecmwf.int/wiki/display/GRIB/Home";

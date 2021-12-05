@@ -18,9 +18,13 @@ rustPlatform.buildRustPackage rec {
   checkFlagsArray = [ "offline_tests" ];
 
   meta = with lib; {
-    description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
+    description =
+      "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
     homepage = "https://github.com/matthiaskrgr/cargo-cache";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

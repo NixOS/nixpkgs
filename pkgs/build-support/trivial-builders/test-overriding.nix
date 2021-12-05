@@ -4,14 +4,8 @@
 # to enable extglob in `writeShellScript`.
 #
 # Run using `nix-build -A tests.trivial-overriding`.
-{ lib
-, runtimeShell
-, runCommand
-, callPackage
-, writeShellScript
-, writeTextFile
-, writeShellScriptBin
-}:
+{ lib, runtimeShell, runCommand, callPackage, writeShellScript, writeTextFile
+, writeShellScriptBin }:
 
 let
   extglobScript = ''
@@ -42,7 +36,9 @@ let
     # write old checkPhase into a shell script, so we can check for
     # the phase to fail even though we have `set -e`.
     checkPhase = ''
-      if source ${writeShellScript "old-check-phase" old.checkPhase} 2>/dev/null; then
+      if source ${
+        writeShellScript "old-check-phase" old.checkPhase
+      } 2>/dev/null; then
         exit 1
       fi
     '';
@@ -51,10 +47,10 @@ let
   simpleCase = case:
     writeShellScript "test-trivial-overriding-${case}" extglobScript;
 
-  callPackageCase = case: callPackage (
-    { writeShellScript }:
-    writeShellScript "test-trivial-callpackage-overriding-${case}" extglobScript
-  ) { };
+  callPackageCase = case:
+    callPackage ({ writeShellScript }:
+      writeShellScript "test-trivial-callpackage-overriding-${case}"
+      extglobScript) { };
 
   binCase = case:
     writeShellScriptBin "test-trivial-overriding-bin-${case}" extglobScript;
@@ -89,9 +85,7 @@ let
     binSucc = mkCase binCase "succ" true;
     binFail = mkCase binCase "fail" true;
     # Check that we can also override plain writeTextFile
-    textFileSuccess = textFileCase.overrideAttrs (_: {
-      checkPhase = "true";
-    });
+    textFileSuccess = textFileCase.overrideAttrs (_: { checkPhase = "true"; });
   };
 
   # `runTest` forces nix to build the script of our test case and
@@ -99,21 +93,19 @@ let
   # it executes the script and thus makes sure that extglob also
   # works at run time.
   runTest = script:
-    let
-      name = script.name or (builtins.baseNameOf script);
+    let name = script.name or (builtins.baseNameOf script);
     in writeShellScript "run-${name}" ''
       if [ "$(${script})" != "success" ]; then
         echo "Failed in ${script}"
         exit 1
       fi
     '';
-in
 
-runCommand "test-writeShellScript-overriding" {
+in runCommand "test-writeShellScript-overriding" {
   passthru = { inherit writeTextOverrides; };
 } ''
   ${lib.concatMapStrings (test: ''
-      ${runTest test}
-    '') (lib.attrValues writeTextOverrides)}
+    ${runTest test}
+  '') (lib.attrValues writeTextOverrides)}
   touch "$out"
 ''

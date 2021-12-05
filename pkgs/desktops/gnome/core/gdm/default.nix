@@ -1,54 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, substituteAll
-, meson
-, ninja
-, python3
-, rsync
-, pkg-config
-, glib
-, itstool
-, libxml2
-, xorg
-, accountsservice
-, libX11
-, gnome
-, systemd
-, dconf
-, gtk3
-, libcanberra-gtk3
-, pam
-, libselinux
-, keyutils
-, audit
-, gobject-introspection
-, plymouth
-, librsvg
-, coreutils
-, xorgserver
-, xwayland
-, dbus
-, nixos-icons
-}:
+{ lib, stdenv, fetchurl, fetchpatch, substituteAll, meson, ninja, python3, rsync
+, pkg-config, glib, itstool, libxml2, xorg, accountsservice, libX11, gnome
+, systemd, dconf, gtk3, libcanberra-gtk3, pam, libselinux, keyutils, audit
+, gobject-introspection, plymouth, librsvg, coreutils, xorgserver, xwayland
+, dbus, nixos-icons }:
 
 let
 
   override = substituteAll {
     src = ./org.gnome.login-screen.gschema.override;
-    icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+    icon =
+      "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gdm";
   version = "41.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gdm/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "VzjEKTqfWoDUpungb00N8+nzE8p7Yb+02K+rqYPiANw=";
   };
 
@@ -95,7 +68,8 @@ stdenv.mkDerivation rec {
     # gdm-x-session[976]: dbus-run-session: failed to exec 'gnome-session': No such file or directory
     # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
       sha256 = "5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
       revert = true;
     })
@@ -128,7 +102,9 @@ stdenv.mkDerivation rec {
 
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    echo "echo ${
+      lib.getBin xorg.xorgserver
+    }/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
   '';
 
@@ -172,7 +148,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A program that manages graphical display servers and handles graphical user logins";
+    description =
+      "A program that manages graphical display servers and handles graphical user logins";
     homepage = "https://wiki.gnome.org/Projects/GDM";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

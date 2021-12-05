@@ -11,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qxysj08gjr6npyvg148llmwmjl2n9cyqjllfnf3gxb841dy370n";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-validation.patch;
-    })
-  ];
+  patches = [ (substituteAll { src = ./fix-validation.patch; }) ];
 
   installPhase = ''
     mkdir -p $out/bin

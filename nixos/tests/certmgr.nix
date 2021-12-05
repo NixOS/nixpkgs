@@ -1,7 +1,5 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 let
@@ -35,94 +33,104 @@ let
         algo = "rsa";
         size = 2048;
       };
-      names = [
-        {
-          C = "US";
-          L = "San Francisco";
-          O = "Example, LLC";
-          ST = "CA";
-        }
-      ];
+      names = [{
+        C = "US";
+        L = "San Francisco";
+        O = "Example, LLC";
+        ST = "CA";
+      }];
     };
     inherit service;
   };
 
-  mkCertmgrTest = { svcManager, specs, testScript }: makeTest {
-    name = "certmgr-" + svcManager;
-    nodes = {
-      machine = { config, lib, pkgs, ... }: {
-        networking.firewall.allowedTCPPorts = with config.services; [ cfssl.port certmgr.metricsPort ];
-        networking.extraHosts = "127.0.0.1 imp.example.org decl.example.org";
+  mkCertmgrTest = { svcManager, specs, testScript }:
+    makeTest {
+      name = "certmgr-" + svcManager;
+      nodes = {
+        machine = { config, lib, pkgs, ... }: {
+          networking.firewall.allowedTCPPorts = with config.services; [
+            cfssl.port
+            certmgr.metricsPort
+          ];
+          networking.extraHosts = "127.0.0.1 imp.example.org decl.example.org";
 
-        services.cfssl.enable = true;
-        systemd.services.cfssl.after = [ "cfssl-init.service" "networking.target" ];
+          services.cfssl.enable = true;
+          systemd.services.cfssl.after =
+            [ "cfssl-init.service" "networking.target" ];
 
-        systemd.tmpfiles.rules = [ "d /var/ssl 777 root root" ];
+          systemd.tmpfiles.rules = [ "d /var/ssl 777 root root" ];
 
-        systemd.services.cfssl-init = {
-          description = "Initialize the cfssl CA";
-          wantedBy    = [ "multi-user.target" ];
-          serviceConfig = {
-            User             = "cfssl";
-            Type             = "oneshot";
-            WorkingDirectory = config.services.cfssl.dataDir;
-          };
-          script = ''
-            ${pkgs.cfssl}/bin/cfssl genkey -initca ${pkgs.writeText "ca.json" (builtins.toJSON {
-              hosts = [ "ca.example.com" ];
-              key = {
-                algo = "rsa"; size = 4096; };
-                names = [
-                  {
+          systemd.services.cfssl-init = {
+            description = "Initialize the cfssl CA";
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              User = "cfssl";
+              Type = "oneshot";
+              WorkingDirectory = config.services.cfssl.dataDir;
+            };
+            script = ''
+              ${pkgs.cfssl}/bin/cfssl genkey -initca ${
+                pkgs.writeText "ca.json" (builtins.toJSON {
+                  hosts = [ "ca.example.com" ];
+                  key = {
+                    algo = "rsa";
+                    size = 4096;
+                  };
+                  names = [{
                     C = "US";
                     L = "San Francisco";
                     O = "Internet Widgets, LLC";
                     OU = "Certificate Authority";
                     ST = "California";
-                  }
-                ];
-            })} | ${pkgs.cfssl}/bin/cfssljson -bare ca
-          '';
+                  }];
+                })
+              } | ${pkgs.cfssl}/bin/cfssljson -bare ca
+            '';
+          };
+
+          services.nginx = {
+            enable = true;
+            virtualHosts = lib.mkMerge (map (host: {
+              ${host} = {
+                sslCertificate = "/var/ssl/${host}-cert.pem";
+                sslCertificateKey = "/var/ssl/${host}-key.pem";
+                extraConfig = ''
+                  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+                '';
+                onlySSL = true;
+                serverName = host;
+                root = pkgs.writeTextDir "index.html" "It works!";
+              };
+            }) [ "imp.example.org" "decl.example.org" ]);
+          };
+
+          systemd.services.nginx.wantedBy = lib.mkForce [ ];
+
+          systemd.services.certmgr.after = [ "cfssl.service" ];
+          services.certmgr = {
+            enable = true;
+            inherit svcManager;
+            inherit specs;
+          };
+
         };
-
-        services.nginx = {
-          enable = true;
-          virtualHosts = lib.mkMerge (map (host: {
-            ${host} = {
-              sslCertificate = "/var/ssl/${host}-cert.pem";
-              sslCertificateKey = "/var/ssl/${host}-key.pem";
-              extraConfig = ''
-                ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-              '';
-              onlySSL = true;
-              serverName = host;
-              root = pkgs.writeTextDir "index.html" "It works!";
-            };
-          }) [ "imp.example.org" "decl.example.org" ]);
-        };
-
-        systemd.services.nginx.wantedBy = lib.mkForce [];
-
-        systemd.services.certmgr.after = [ "cfssl.service" ];
-        services.certmgr = {
-          enable = true;
-          inherit svcManager;
-          inherit specs;
-        };
-
       };
+      inherit testScript;
     };
-    inherit testScript;
-  };
-in
-{
+in {
   systemd = mkCertmgrTest {
     svcManager = "systemd";
     specs = {
-      decl = mkSpec { host = "decl.example.org"; service = "nginx"; action ="restart"; };
-      imp = toString (pkgs.writeText "test.json" (builtins.toJSON (
-        mkSpec { host = "imp.example.org"; service = "nginx"; action = "restart"; }
-      )));
+      decl = mkSpec {
+        host = "decl.example.org";
+        service = "nginx";
+        action = "restart";
+      };
+      imp = toString (pkgs.writeText "test.json" (builtins.toJSON (mkSpec {
+        host = "imp.example.org";
+        service = "nginx";
+        action = "restart";
+      })));
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")
@@ -144,7 +152,10 @@ in
   command = mkCertmgrTest {
     svcManager = "command";
     specs = {
-      test = mkSpec { host = "command.example.org"; action = "touch /tmp/command.executed"; };
+      test = mkSpec {
+        host = "command.example.org";
+        action = "touch /tmp/command.executed";
+      };
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")

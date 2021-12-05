@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl } :
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "1.11";
   pname = "rig";
 
   src = fetchurl {
-    url = "https://ayera.dl.sourceforge.net/project/rig/rig/${version}/rig-${version}.tar.gz";
+    url =
+      "https://ayera.dl.sourceforge.net/project/rig/rig/${version}/rig-${version}.tar.gz";
     sha256 = "1f3snysjqqlpk2kgvm5p2icrj4lsdymccmn3igkc2f60smqckgq0";
   };
 

@@ -1,17 +1,5 @@
-{ fetchFromGitHub
-, lib
-, SDL2
-, libGL
-, libarchive
-, libusb-compat-0_1
-, qtbase
-, qmake
-, git
-, libpng_apng
-, pkg-config
-, wrapQtAppsHook
-, stdenv
-}:
+{ fetchFromGitHub, lib, SDL2, libGL, libarchive, libusb-compat-0_1, qtbase
+, qmake, git, libpng_apng, pkg-config, wrapQtAppsHook, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "CEmu";
@@ -24,30 +12,17 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    qmake
-    git
-    wrapQtAppsHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ qmake git wrapQtAppsHook pkg-config ];
 
-  buildInputs = [
-    SDL2
-    libGL
-    libarchive
-    libusb-compat-0_1
-    qtbase
-    libpng_apng
-  ];
+  buildInputs = [ SDL2 libGL libarchive libusb-compat-0_1 qtbase libpng_apng ];
 
-  qmakeFlags = [
-    "gui/qt"
-    "CONFIG+=ltcg"
-  ];
+  qmakeFlags = [ "gui/qt" "CONFIG+=ltcg" ];
 
   meta = with lib; {
-    changelog = "https://github.com/CE-Programming/CEmu/releases/tag/v${version}";
-    description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
+    changelog =
+      "https://github.com/CE-Programming/CEmu/releases/tag/v${version}";
+    description =
+      "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3;
     maintainers = with maintainers; [ luc65r ];

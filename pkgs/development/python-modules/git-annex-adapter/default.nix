@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
-, python, util-linux, pygit2, gitMinimal, git-annex, cacert
-}:
+, python, util-linux, pygit2, gitMinimal, git-annex, cacert }:
 
 buildPythonPackage rec {
   pname = "git-annex-adapter";
@@ -19,7 +18,8 @@ buildPythonPackage rec {
   patches = [
     # fix tests with recent versions of git-annex
     (fetchpatch {
-      url = "https://github.com/alpernebbi/git-annex-adapter/commit/6c210d828e8a57b12c716339ad1bf15c31cd4a55.patch";
+      url =
+        "https://github.com/alpernebbi/git-annex-adapter/commit/6c210d828e8a57b12c716339ad1bf15c31cd4a55.patch";
       sha256 = "17kp7pnm9svq9av4q7hfic95xa1w3z02dnr8nmg14sjck2rlmqsi";
     })
     (substituteAll {

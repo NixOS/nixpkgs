@@ -1,13 +1,5 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, autoPatchelfHook
-, cmake
-, llvmPackages_latest
-, xxHash
-, zlib
-, openssl
-}:
+{ stdenv, fetchFromGitHub, lib, autoPatchelfHook, cmake, llvmPackages_latest
+, xxHash, zlib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
@@ -29,7 +21,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "A high performance drop-in replacement for existing unix linkers";
+    description =
+      "A high performance drop-in replacement for existing unix linkers";
     homepage = "https://github.com/rui314/mold";
     license = lib.licenses.agpl3Plus;
     maintainers = with maintainers; [ nitsky ];

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, glib, pango}:
+{ lib, stdenv, fetchurl, pkg-config, glib, pango }:
 
 stdenv.mkDerivation {
   name = "pangoxsl-1.6.0.3";
@@ -8,13 +8,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    glib
-    pango
-  ];
+  buildInputs = [ glib pango ];
 
   meta = with lib; {
-    description = "Implements several of the inline properties defined by XSL that are not currently implemented by Pango";
+    description =
+      "Implements several of the inline properties defined by XSL that are not currently implemented by Pango";
     homepage = "https://sourceforge.net/projects/pangopdf";
     platforms = platforms.unix;
     license = licenses.lgpl2;

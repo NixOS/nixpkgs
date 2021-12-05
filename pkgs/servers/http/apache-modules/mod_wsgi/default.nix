@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/GrahamDumpleton/mod_wsgi";
-    description = "Host Python applications in Apache through the WSGI interface";
+    description =
+      "Host Python applications in Apache through the WSGI interface";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };

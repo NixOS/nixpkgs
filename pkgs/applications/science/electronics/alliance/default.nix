@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitLab, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
-}:
+, flex, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "alliance";
@@ -21,9 +20,7 @@ stdenv.mkDerivation rec {
 
   ALLIANCE_TOP = placeholder "out";
 
-  configureFlags = [
-    "--prefix=${placeholder "out"}" "--enable-alc-shared"
-  ];
+  configureFlags = [ "--prefix=${placeholder "out"}" "--enable-alc-shared" ];
 
   postPatch = ''
     # texlive for docs seems extreme
@@ -45,7 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
+    description =
+      "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with licenses; gpl2Plus;
     maintainers = with maintainers; [ l-as ];

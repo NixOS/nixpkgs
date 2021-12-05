@@ -1,9 +1,4 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, pkg-config
-, libgit2_0_27
-}:
+{ lib, buildGoPackage, fetchFromGitHub, pkg-config, libgit2_0_27 }:
 
 buildGoPackage rec {
   version = "0.2.3";

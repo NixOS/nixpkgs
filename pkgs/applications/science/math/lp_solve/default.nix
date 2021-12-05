@@ -6,19 +6,17 @@ stdenv.mkDerivation rec {
   version = "5.5.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/lpsolve/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
+    url =
+      "mirror://sourceforge/project/lpsolve/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
     sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    cctools
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.isDarwin [ cctools fixDarwinDylibNames ];
 
   dontConfigure = true;
 
-  buildPhase = let
-    ccc = if stdenv.isDarwin then "ccc.osx" else "ccc";
+  buildPhase = let ccc = if stdenv.isDarwin then "ccc.osx" else "ccc";
   in ''
     runHook preBuild
 
@@ -44,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Mixed Integer Linear Programming (MILP) solver";
-    homepage    = "http://lpsolve.sourceforge.net";
-    license     = licenses.gpl2Plus;
+    homepage = "http://lpsolve.sourceforge.net";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

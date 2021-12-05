@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "incomfort-client";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "0r9f15fcjwhrq6ldji1dzbb76wsvinpkmyyaj7n55rl6ibnsyrwp";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

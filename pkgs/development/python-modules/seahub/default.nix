@@ -7,7 +7,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "4f7bb3f617dd847cf0a6b33c0bfb567b44c06059"; # using a fixed revision because upstream may re-tag releases :/
+    rev =
+      "4f7bb3f617dd847cf0a6b33c0bfb567b44c06059"; # using a fixed revision because upstream may re-tag releases :/
     sha256 = "09d05sxly1bljxxzm77limhwsbg8c4b54fzv3kmaih59pjnjyr03";
   };
 

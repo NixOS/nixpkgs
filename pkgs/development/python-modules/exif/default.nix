@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, plum-py, pytestCheckHook, baseline }:
+{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, plum-py, pytestCheckHook
+, baseline }:
 
 buildPythonPackage rec {
   pname = "exif";
@@ -23,8 +24,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Read and modify image EXIF metadata using Python";
-    homepage    = "https://gitlab.com/TNThieding/exif";
-    license     = licenses.mit;
+    homepage = "https://gitlab.com/TNThieding/exif";
+    license = licenses.mit;
     maintainers = with maintainers; [ dnr ];
   };
 }

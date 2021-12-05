@@ -1,21 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, libcanberra-gtk3, libgtop
-, libXdamage, libXpresent, libstartup_notification, gnome, glib, gtk3, mate-settings-daemon, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, libcanberra-gtk3
+, libgtop, libXdamage, libXpresent, libstartup_notification, gnome, glib, gtk3
+, mate-settings-daemon, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "marco";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "01avxrg2fc6grfrp6hl8b0im4scy9xf6011swfrhli87ig6hhg7n";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gettext
-    itstool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config gettext itstool wrapGAppsHook ];
 
   buildInputs = [
     libxml2

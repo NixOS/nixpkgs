@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
+  libraries =
+    [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 
   meta = {
     homepage = "http://java.sun.com/products/sjwtoolkit/download.html";

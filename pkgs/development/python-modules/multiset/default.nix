@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest-runner
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest-runner, pytest }:
 
 buildPythonPackage rec {
   pname = "multiset";

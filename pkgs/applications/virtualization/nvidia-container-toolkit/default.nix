@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, nvidia-container-runtime
-}:
+{ lib, fetchFromGitHub, buildGoModule, makeWrapper, nvidia-container-runtime }:
 buildGoModule rec {
   pname = "nvidia-container-toolkit";
   version = "1.5.0";

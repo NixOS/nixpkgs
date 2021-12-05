@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "icingaweb2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ das_j ]; };
 
   nodes = {
     icingaweb2 = { config, pkgs, ... }: {
@@ -16,23 +14,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
         modules = {
           doc.enable = true;
-          migrate.enable =  true;
+          migrate.enable = true;
           setup.enable = true;
           test.enable = true;
           translation.enable = true;
         };
 
         generalConfig = {
-          global = {
-            module_path = "${pkgs.icingaweb2}/modules";
-          };
+          global = { module_path = "${pkgs.icingaweb2}/modules"; };
         };
 
-        authentications = {
-          icingaweb = {
-            backend = "external";
-          };
-        };
+        authentications = { icingaweb = { backend = "external"; }; };
 
         groupBackends = {
           icingaweb = {

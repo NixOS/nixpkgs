@@ -1,21 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-build
-, cmake
-, ush
-, requests
-, numpy
-, cffi
-, openfst
-, substituteAll
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, scikit-build, cmake, ush, requests
+, numpy, cffi, openfst, substituteAll, callPackage }:
 
-let
-  kaldi = callPackage ./fork.nix { };
-in
-buildPythonPackage rec {
+let kaldi = callPackage ./fork.nix { };
+in buildPythonPackage rec {
   pname = "kaldi-active-grammar";
   version = "2.1.0";
 

@@ -21,7 +21,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   meta = with lib; {
-    description = "Perl script for waking up computers via Wake-On-LAN magic packets";
+    description =
+      "Perl script for waking up computers via Wake-On-LAN magic packets";
     homepage = "https://github.com/jpoliv/wakeonlan";
     license = licenses.artistic1;
     maintainers = with maintainers; [ SuperSandro2000 ];

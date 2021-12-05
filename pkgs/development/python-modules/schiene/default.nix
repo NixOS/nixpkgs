@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, beautifulsoup4
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, beautifulsoup4 }:
 
 buildPythonPackage rec {
   pname = "schiene";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "014aaxmk7yxyml1xgfk3zqallyb5zi04m0v7jgqjkbjqq4n4j3ck";
   };
 
-  propagatedBuildInputs = [
-    requests
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ requests beautifulsoup4 ];
 
   # tests are not present
   doCheck = false;

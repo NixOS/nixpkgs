@@ -1,11 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, click
-, requests
-, tabulate
-, six
-, configparser
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, click, requests, tabulate, six
+, configparser, pytest }:
 
 buildPythonPackage rec {
   pname = "databricks-cli";
@@ -16,21 +10,13 @@ buildPythonPackage rec {
     sha256 = "3e9a65a19a589b795ebbd9b3b16a8e470d612d57d6216ae44a9c7a735e4080e6";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = "pytest tests";
   # tests folder is missing in PyPI
   doCheck = false;
 
-  propagatedBuildInputs = [
-    click
-    requests
-    tabulate
-    six
-    configparser
-  ];
+  propagatedBuildInputs = [ click requests tabulate six configparser ];
 
   meta = with lib; {
     homepage = "https://github.com/databricks/databricks-cli";

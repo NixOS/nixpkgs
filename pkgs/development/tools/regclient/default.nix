@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-let bins = [ "regbot" "regctl" "regsync" ]; in
+let bins = [ "regbot" "regctl" "regsync" ];
 
-buildGoModule rec {
+in buildGoModule rec {
   pname = "regclient";
   version = "0.3.8";
   tag = "v${version}";
@@ -17,23 +17,17 @@ buildGoModule rec {
 
   outputs = [ "out" ] ++ bins;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.VCSTag=${tag}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.VCSTag=${tag}" ];
 
-  postInstall =
-    lib.concatStringsSep "\n" (
-      map (bin: ''
-        mkdir -p ''$${bin}/bin &&
-        mv $out/bin/${bin} ''$${bin}/bin/ &&
-        ln -s ''$${bin}/bin/${bin} $out/bin/
-      '') bins
-    );
+  postInstall = lib.concatStringsSep "\n" (map (bin: ''
+    mkdir -p ''$${bin}/bin &&
+    mv $out/bin/${bin} ''$${bin}/bin/ &&
+    ln -s ''$${bin}/bin/${bin} $out/bin/
+  '') bins);
 
   meta = with lib; {
-    description = "Docker and OCI Registry Client in Go and tooling using those libraries";
+    description =
+      "Docker and OCI Registry Client in Go and tooling using those libraries";
     homepage = "https://github.com/regclient/regclient";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

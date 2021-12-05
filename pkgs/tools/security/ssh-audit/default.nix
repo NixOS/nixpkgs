@@ -11,9 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ks1zr0ksma285sm2dyy0nsbrkpssdk4mdzc3srr4mcyd6v927jd";
   };
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Tool for ssh server auditing";

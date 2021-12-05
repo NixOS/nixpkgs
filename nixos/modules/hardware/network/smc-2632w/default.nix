@@ -1,9 +1,5 @@
-{lib, ...}:
+{ lib, ... }:
 
 {
-  hardware = {
-    pcmcia = {
-      firmware = [ (lib.cleanSource ./firmware) ];
-    };
-  };
+  hardware = { pcmcia = { firmware = [ (lib.cleanSource ./firmware) ]; }; };
 }

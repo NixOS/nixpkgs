@@ -1,8 +1,4 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  qtbase, qtx11extras
-}:
+{ mkDerivation, extra-cmake-modules, qtbase, qtx11extras }:
 
 mkDerivation {
   name = "kidletime";

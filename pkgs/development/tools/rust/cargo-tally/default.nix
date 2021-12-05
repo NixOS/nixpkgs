@@ -11,16 +11,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0ffq67vy0pa7va8j93g03bralz7lck6ds1hidbpzzkp13pdcgf97";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    DiskArbitration
-    Foundation
-    IOKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ DiskArbitration Foundation IOKit ];
 
   meta = with lib; {
-    description = "Graph the number of crates that depend on your crate over time";
+    description =
+      "Graph the number of crates that depend on your crate over time";
     homepage = "https://github.com/dtolnay/cargo-tally";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

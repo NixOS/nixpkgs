@@ -1,16 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, cmake
-}:
+{ lib, stdenv, fetchurl, unzip, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "angelscript";
   version = "2.35.1";
 
   src = fetchurl {
-    url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
+    url =
+      "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
     sha256 = "12x12fs2bjkbh73n2w84wnqhg6xn6mnp6g79gbkwfl6gssv9c42w";
   };
 

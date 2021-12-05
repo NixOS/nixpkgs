@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, makeWrapper, python3, gettext
-, pyqt5, setuptools, requests
-}:
+{ stdenv, lib, fetchurl, makeWrapper, python3, gettext, pyqt5, setuptools
+, requests }:
 
 stdenv.mkDerivation rec {
   pname = "fs-uae-launcher";

@@ -3,7 +3,7 @@
 let
   tests = {
     bad-shebang = stdenv.mkDerivation {
-      name         = "bad-shebang";
+      name = "bad-shebang";
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/bin
@@ -26,7 +26,8 @@ let
         chmod +x $out/bin/test
       '';
       passthru = {
-        assertion = "grep \"^#!$NIX_STORE/path/to/sh\" $out/bin/test > /dev/null";
+        assertion =
+          ''grep "^#!$NIX_STORE/path/to/sh" $out/bin/test > /dev/null'';
       };
     };
   };
@@ -57,7 +58,9 @@ in runCommand "patch-shebangs-test" {
 
   fail=
   ${lib.concatStringsSep "\n" (lib.mapAttrsToList (_: test: ''
-    validate "${test.name}" "${test}" ${lib.escapeShellArg test.assertion} || fail=1
+    validate "${test.name}" "${test}" ${
+      lib.escapeShellArg test.assertion
+    } || fail=1
   '') tests)}
 
   if [ "$fail" ]; then

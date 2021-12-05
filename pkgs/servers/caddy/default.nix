@@ -7,8 +7,7 @@ let
     rev = "v${version}";
     sha256 = "sha256-EXs+LNb87RWkmSWvs8nZIVqRJMutn+ntR241gqI7CUg=";
   };
-in
-buildGoModule {
+in buildGoModule {
   pname = "caddy";
   inherit version;
 

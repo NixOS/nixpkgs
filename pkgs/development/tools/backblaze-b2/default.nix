@@ -6,11 +6,10 @@ let
       arrow = self.callPackage ../../python-modules/arrow/2.nix { };
     };
   };
-in
-let
-  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
-in
-python3Packages.buildPythonApplication rec {
+in let
+  python3Packages =
+    python3Packages2; # two separate let … in to avoid infinite recursion
+in python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
   version = "3.0.3";
 
@@ -35,19 +34,12 @@ python3Packages.buildPythonApplication rec {
     rst2ansi
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_files_headers"
-    "test_integration"
-    "test_get_account_info"
-  ];
+  disabledTests =
+    [ "test_files_headers" "test_integration" "test_get_account_info" ];
 
   postInstall = ''
     mv "$out/bin/b2" "$out/bin/backblaze-b2"
@@ -59,7 +51,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Command-line tool for accessing the Backblaze B2 storage service";
+    description =
+      "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     license = licenses.mit;
     maintainers = with maintainers; [ hrdinka kevincox ];

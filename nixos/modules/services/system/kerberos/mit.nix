@@ -1,22 +1,30 @@
-{ pkgs, config, lib, ... } :
+{ pkgs, config, lib, ... }:
 
 let
-  inherit (lib) mkIf concatStrings concatStringsSep concatMapStrings toList
-    mapAttrs mapAttrsToList;
+  inherit (lib)
+    mkIf concatStrings concatStringsSep concatMapStrings toList mapAttrs
+    mapAttrsToList;
   cfg = config.services.kerberos_server;
   kerberos = config.krb5.kerberos;
   stateDir = "/var/lib/krb5kdc";
   PIDFile = "/run/kdc.pid";
   aclMap = {
-    add = "a"; cpw = "c"; delete = "d"; get = "i"; list = "l"; modify = "m";
+    add = "a";
+    cpw = "c";
+    delete = "d";
+    get = "i";
+    list = "l";
+    modify = "m";
     all = "*";
   };
-  aclFiles = mapAttrs
-    (name: {acl, ...}: (pkgs.writeText "${name}.acl" (concatMapStrings (
-      {principal, access, target, ...} :
-      let access_code = map (a: aclMap.${a}) (toList access); in
-      "${principal} ${concatStrings access_code} ${target}\n"
-    ) acl))) cfg.realms;
+  aclFiles = mapAttrs (name:
+    { acl, ... }:
+    (pkgs.writeText "${name}.acl" (concatMapStrings
+      ({ principal, access, target, ... }:
+        let access_code = map (a: aclMap.${a}) (toList access);
+        in ''
+          ${principal} ${concatStrings access_code} ${target}
+        '') acl))) cfg.realms;
   kdcConfigs = mapAttrsToList (name: value: ''
     ${name} = {
       acl_file = ${value}
@@ -30,9 +38,8 @@ let
     # What Debian uses, could possibly link directly to Nix store?
     KRB5_KDC_PROFILE = "/etc/krb5kdc/kdc.conf";
   };
-in
 
-{
+in {
   config = mkIf (cfg.enable && kerberos == pkgs.krb5Full) {
     systemd.services.kadmind = {
       description = "Kerberos Administration Daemon";
@@ -60,9 +67,7 @@ in
       environment = env;
     };
 
-    environment.etc = {
-      "krb5kdc/kdc.conf".source = kdcConfFile;
-    };
+    environment.etc = { "krb5kdc/kdc.conf".source = kdcConfFile; };
     environment.variables = env;
   };
 }

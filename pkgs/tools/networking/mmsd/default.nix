@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, glib
-, dbus
-}:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, glib, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "mmsd";
@@ -16,15 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "0hcnpyhsi7b5m825dhnwbp65yi0961wi8mipzdvaw5nc693xv15b";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    glib
-    dbus
-  ];
+  buildInputs = [ glib dbus ];
 
   doCheck = true;
 

@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitLab
-}:
+{ stdenv, lib, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
   pname = "libbencodetools";
@@ -16,9 +15,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [
-    "--without-python"
-  ];
+  configureFlags = [ "--without-python" ];
 
   meta = with lib; {
     description = "Collection of tools for manipulating bencoded data";

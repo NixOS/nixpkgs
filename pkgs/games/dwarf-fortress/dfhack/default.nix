@@ -1,23 +1,6 @@
-{ stdenv
-, buildEnv
-, lib
-, fetchFromGitHub
-, cmake
-, writeScriptBin
-, perl
-, XMLLibXML
-, XMLLibXSLT
-, zlib
-, ruby
-, enableStoneSense ? false
-, allegro5
-, libGLU
-, libGL
-, enableTWBT ? true
-, twbt
-, SDL
-, dfVersion
-}:
+{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin, perl, XMLLibXML
+, XMLLibXSLT, zlib, ruby, enableStoneSense ? false, allegro5, libGLU, libGL
+, enableTWBT ? true, twbt, SDL, dfVersion }:
 
 with lib;
 
@@ -80,20 +63,22 @@ let
 
   };
 
-  release =
-    if hasAttr dfVersion dfhack-releases
-    then getAttr dfVersion dfhack-releases
-    else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release = if hasAttr dfVersion dfhack-releases then
+    getAttr dfVersion dfhack-releases
+  else
+    throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
 
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
 
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "32"
-    else throw "Unsupported architecture";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "32"
+  else
+    throw "Unsupported architecture";
 
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell}
@@ -159,7 +144,10 @@ let
     '';
 
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-      ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+      ++ lib.optionals enableStoneSense [
+        "-DBUILD_STONESENSE=ON"
+        "-DSTONESENSE_INTERNAL_SO=OFF"
+      ];
 
     # dfhack expects an unversioned libruby.so to be present in the hack
     # subdirectory for ruby plugins to function.
@@ -168,9 +156,8 @@ let
     '';
 
   };
-in
 
-buildEnv {
+in buildEnv {
   name = "dfhack-${version}";
 
   passthru = { inherit version dfVersion; };
@@ -178,7 +165,8 @@ buildEnv {
   paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
 
   meta = with lib; {
-    description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
+    description =
+      "Memory hacking library for Dwarf Fortress and a set of tools that use it";
     homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];

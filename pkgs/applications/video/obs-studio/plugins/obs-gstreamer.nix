@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gst_all_1
-, pkg-config
-, meson
-, ninja
-, obs-studio
+{ lib, stdenv, fetchFromGitHub, gst_all_1, pkg-config, meson, ninja, obs-studio
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gst_all_1.gstreamermm obs-studio ];
 
   meta = with lib; {
-    description = "An OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
+    description =
+      "An OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
     homepage = "https://github.com/fswoch/obs-gstreamer";
     maintainers = with maintainers; [ ahuzik ];
     license = licenses.gpl2Plus;

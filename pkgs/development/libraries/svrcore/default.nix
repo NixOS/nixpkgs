@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.0.4";
 
   src = fetchurl {
-    url = "mirror://mozilla/directory/svrcore/releases/${version}/src/${pname}-${version}.tar.bz2";
+    url =
+      "mirror://mozilla/directory/svrcore/releases/${version}/src/${pname}-${version}.tar.bz2";
     sha256 = "0n3alg6bxml8952fb6h0bi0l29farvq21q6k20gy2ba90m3znwj7";
   };
 

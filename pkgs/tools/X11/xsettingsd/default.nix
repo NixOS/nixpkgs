@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Provides settings to X11 applications via the XSETTINGS specification";
+    description =
+      "Provides settings to X11 applications via the XSETTINGS specification";
     homepage = "https://github.com/derat/xsettingsd";
     license = licenses.bsd3;
     maintainers = with maintainers; [ romildo ];

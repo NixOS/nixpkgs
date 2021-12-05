@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, poppler
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, poppler }:
 
 stdenv.mkDerivation rec {
   pname = "pdftoipe";
@@ -25,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program that tries to convert arbitrary PDF documents to Ipe files";
+    description =
+      "A program that tries to convert arbitrary PDF documents to Ipe files";
     homepage = "https://github.com/otfried/ipe-tools";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ yrd ];

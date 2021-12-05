@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     # Pull upstream patch for ncurses-6.3 compatibility
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/fenrus75/powertop/commit/9ef1559a1582f23d599c149601c3a8e06809296c.patch";
+      url =
+        "https://github.com/fenrus75/powertop/commit/9ef1559a1582f23d599c149601c3a8e06809296c.patch";
       sha256 = "0qx69f3bwhxgsga9nas8lgrclf1rxvr7fq7fd2n8dv3x4lsb46j1";
     })
   ];

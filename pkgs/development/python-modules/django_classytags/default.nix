@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, django, six }:
 
 buildPythonPackage rec {
   pname = "django-classy-tags";

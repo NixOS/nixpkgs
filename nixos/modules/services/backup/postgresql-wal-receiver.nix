@@ -140,8 +140,7 @@ in {
     };
   };
 
-  config = let
-    receivers = config.services.postgresqlWalReceiver.receivers;
+  config = let receivers = config.services.postgresqlWalReceiver.receivers;
   in mkIf (receivers != { }) {
     users = {
       users.postgres = {
@@ -150,54 +149,62 @@ in {
         description = "PostgreSQL server user";
       };
 
-      groups.postgres = {
-        gid = config.ids.gids.postgres;
-      };
+      groups.postgres = { gid = config.ids.gids.postgres; };
     };
 
-    assertions = concatLists (attrsets.mapAttrsToList (name: config: [
-      {
-        assertion = config.compress > 0 -> versionAtLeast config.postgresqlPackage.version "10";
-        message = "Invalid configuration for WAL receiver \"${name}\": compress requires PostgreSQL version >= 10.";
-      }
-    ]) receivers);
+    assertions = concatLists (attrsets.mapAttrsToList (name: config: [{
+      assertion = config.compress > 0
+        -> versionAtLeast config.postgresqlPackage.version "10";
+      message = ''
+        Invalid configuration for WAL receiver "${name}": compress requires PostgreSQL version >= 10.'';
+    }]) receivers);
 
     systemd.tmpfiles.rules = mapAttrsToList (name: config: ''
       d ${escapeShellArg config.directory} 0750 postgres postgres - -
     '') receivers;
 
-    systemd.services = with attrsets; mapAttrs' (name: config: nameValuePair "postgresql-wal-receiver-${name}" {
-      description = "PostgreSQL WAL receiver (${name})";
-      wantedBy = [ "multi-user.target" ];
-      startLimitIntervalSec = 0; # retry forever, useful in case of network disruption
+    systemd.services = with attrsets;
+      mapAttrs' (name: config:
+        nameValuePair "postgresql-wal-receiver-${name}" {
+          description = "PostgreSQL WAL receiver (${name})";
+          wantedBy = [ "multi-user.target" ];
+          startLimitIntervalSec =
+            0; # retry forever, useful in case of network disruption
 
-      serviceConfig = {
-        User = "postgres";
-        Group = "postgres";
-        KillSignal = "SIGINT";
-        Restart = "always";
-        RestartSec = 60;
-      };
+          serviceConfig = {
+            User = "postgres";
+            Group = "postgres";
+            KillSignal = "SIGINT";
+            Restart = "always";
+            RestartSec = 60;
+          };
 
-      inherit (config) environment;
+          inherit (config) environment;
 
-      script = let
-        receiverCommand = postgresqlPackage:
-         if (versionAtLeast postgresqlPackage.version "10")
-           then "${postgresqlPackage}/bin/pg_receivewal"
-           else "${postgresqlPackage}/bin/pg_receivexlog";
-      in ''
-        ${receiverCommand config.postgresqlPackage} \
-          --no-password \
-          --directory=${escapeShellArg config.directory} \
-          --status-interval=${toString config.statusInterval} \
-          --dbname=${escapeShellArg config.connection} \
-          ${optionalString (config.compress > 0) "--compress=${toString config.compress}"} \
-          ${optionalString (config.slot != "") "--slot=${escapeShellArg config.slot}"} \
-          ${optionalString config.synchronous "--synchronous"} \
-          ${concatStringsSep " " config.extraArgs}
-      '';
-    }) receivers;
+          script = let
+            receiverCommand = postgresqlPackage:
+              if (versionAtLeast postgresqlPackage.version "10") then
+                "${postgresqlPackage}/bin/pg_receivewal"
+              else
+                "${postgresqlPackage}/bin/pg_receivexlog";
+          in ''
+            ${receiverCommand config.postgresqlPackage} \
+              --no-password \
+              --directory=${escapeShellArg config.directory} \
+              --status-interval=${toString config.statusInterval} \
+              --dbname=${escapeShellArg config.connection} \
+              ${
+                optionalString (config.compress > 0)
+                "--compress=${toString config.compress}"
+              } \
+              ${
+                optionalString (config.slot != "")
+                "--slot=${escapeShellArg config.slot}"
+              } \
+              ${optionalString config.synchronous "--synchronous"} \
+              ${concatStringsSep " " config.extraArgs}
+          '';
+        }) receivers;
   };
 
   meta.maintainers = with maintainers; [ pacien ];

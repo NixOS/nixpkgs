@@ -1,6 +1,7 @@
 # alsa-lib vorbis-tools python can be made optional
 
-{ lib, stdenv, fetchurl, python, tcl, tk, vorbis-tools, pkg-config, xlibsWrapper }:
+{ lib, stdenv, fetchurl, python, tcl, tk, vorbis-tools, pkg-config, xlibsWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "snack";

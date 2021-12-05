@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr
+, vulkan-headers, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
@@ -31,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Khronos OpenXR loader";
-    homepage    = "https://www.khronos.org/openxr";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://www.khronos.org/openxr";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

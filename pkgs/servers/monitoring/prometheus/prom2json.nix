@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = null;
 
   meta = with lib; {
-    description = "Tool to scrape a Prometheus client and dump the result as JSON";
+    description =
+      "Tool to scrape a Prometheus client and dump the result as JSON";
     homepage = "https://github.com/prometheus/prom2json";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];

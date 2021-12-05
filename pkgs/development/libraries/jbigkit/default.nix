@@ -5,14 +5,19 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${pname}-${version}.tar.gz";
+    url =
+      "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${pname}-${version}.tar.gz";
     sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
   };
 
   makeFlags = [
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-    "RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    "AR=${
+      lib.getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${
+      lib.getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}ranlib"
   ];
 
   postPatch = ''
@@ -45,7 +50,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
-    description = "A software implementation of the JBIG1 data compression standard";
+    description =
+      "A software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

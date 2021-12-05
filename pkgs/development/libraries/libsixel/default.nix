@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gd
-, libjpeg
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gdk-pixbuf, gd, libjpeg
+, pkg-config }:
 stdenv.mkDerivation rec {
   pname = "libsixel";
   version = "1.10.3";
@@ -19,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1nny4295ipy4ajcxmmh04c796hcds0y7z7rv3qd17mj70y8j0r2d";
   };
 
-  buildInputs = [
-    gdk-pixbuf gd
-  ];
+  buildInputs = [ gdk-pixbuf gd ];
 
-  nativeBuildInputs = [
-    meson ninja pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   doCheck = true;
 
@@ -38,7 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The SIXEL library for console graphics, and converter programs";
+    description =
+      "The SIXEL library for console graphics, and converter programs";
     homepage = "https://github.com/libsixel/libsixel";
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;

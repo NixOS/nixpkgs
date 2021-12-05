@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, asciidoc
-, docbook_xsl
-, docbook_xml_dtd_45
-, git
-, perl
-, xmlto
-}:
+{ lib, fetchFromGitHub, installShellFiles, python3Packages, asciidoc
+, docbook_xsl, docbook_xml_dtd_45, git, perl, xmlto }:
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
@@ -21,7 +12,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0yx81d61kp33h7n0c14wvcrh8vvjjjq4xjh1qwq2sdbmqc43p3hg";
   };
 
-  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs =
+    [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 ];
 
   format = "other";
 

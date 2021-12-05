@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl
-, enableGui ? false, qt5
-, enableJupyter ? false, boost, jsoncpp, openssl, zmqpp
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, perl, enableGui ? false, qt5
+, enableJupyter ? false, boost, jsoncpp, openssl, zmqpp }:
 
 stdenv.mkDerivation rec {
   pname = "yacas";
@@ -23,16 +21,14 @@ stdenv.mkDerivation rec {
 
   # Perl is only for the documentation
   nativeBuildInputs = [ cmake perl ];
-  buildInputs = [
-  ] ++ lib.optionals enableGui (with qt5; [ qtbase qtwebkit ])
-    ++ lib.optionals enableJupyter [ boost jsoncpp openssl zmqpp ]
-    ;
+  buildInputs = [ ] ++ lib.optionals enableGui (with qt5; [ qtbase qtwebkit ])
+    ++ lib.optionals enableJupyter [ boost jsoncpp openssl zmqpp ];
 
   meta = {
     description = "Easy to use, general purpose Computer Algebra System";
     homepage = "http://www.yacas.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
     broken = enableGui || enableJupyter;
   };

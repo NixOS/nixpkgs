@@ -14,9 +14,11 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-mMXIiAfYBqOS3z4735T9dB9TEo7Ph2JCNq0QfyetxJg=";
 
   meta = with lib; {
-    description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";
+    description =
+      "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";
     homepage = "https://sr.ht/~jplatte/cargo-depgraph";
-    changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/v${version}/item/CHANGELOG.md";
+    changelog =
+      "https://git.sr.ht/~jplatte/cargo-depgraph/tree/v${version}/item/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
   };

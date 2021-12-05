@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config
-, libglvnd, SDL, SDL_image, SDL_mixer, xorg
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libglvnd, SDL, SDL_image
+, SDL_mixer, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "pinball";
@@ -19,9 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libglvnd SDL SDL_image SDL_mixer xorg.libSM ];
   strictDeps = true;
 
-  configureFlags = [
-    "--with-sdl-prefix=${lib.getDev SDL}"
-  ];
+  configureFlags = [ "--with-sdl-prefix=${lib.getDev SDL}" ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${lib.getDev SDL_image}/include/SDL"

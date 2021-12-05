@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, coverage
-, django
-, factory_boy
-, fetchFromGitHub
-, isPy3k
-, pylint-plugin-utils
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, coverage, django, factory_boy, fetchFromGitHub
+, isPy3k, pylint-plugin-utils, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-bFcb5GhC7jc7jEpNlyjWa2CuCSMvQLJdnag+7mHwSb8=";
   };
 
-  propagatedBuildInputs = [
-    django
-    pylint-plugin-utils
-  ];
+  propagatedBuildInputs = [ django pylint-plugin-utils ];
 
-  checkInputs = [
-    coverage
-    factory_boy
-    pytestCheckHook
-  ];
+  checkInputs = [ coverage factory_boy pytestCheckHook ];
 
   disabledTests = [
     # Skip outdated tests and the one with a missing dependency (django_tables2)
@@ -40,9 +25,7 @@ buildPythonPackage rec {
     "func_noerror_foreign_key_key_cls_unbound"
   ];
 
-  pythonImportsCheck = [
-    "pylint_django"
-  ];
+  pythonImportsCheck = [ "pylint_django" ];
 
   meta = with lib; {
     description = "Pylint plugin to analyze Django applications";

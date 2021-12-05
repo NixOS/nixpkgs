@@ -15,7 +15,5 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
-    platforms = lib.platforms.unix;
-  };
+  meta = { platforms = lib.platforms.unix; };
 }

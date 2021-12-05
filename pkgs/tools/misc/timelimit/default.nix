@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   INSTALL_DATA = "install -m644";
 
   meta = with lib; {
-    description = "Execute a command and terminates the spawned process after a given time with a given signal";
+    description =
+      "Execute a command and terminates the spawned process after a given time with a given signal";
     homepage = "https://devel.ringlet.net/sysutils/timelimit/";
     license = licenses.bsd2;
     platforms = platforms.all;

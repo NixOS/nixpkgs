@@ -1,6 +1,5 @@
-{ buildPythonPackage, lib, fetchFromGitHub, six, python-axolotl, pytest
-, isPy3k, consonance, appdirs
-}:
+{ buildPythonPackage, lib, fetchFromGitHub, six, python-axolotl, pytest, isPy3k
+, consonance, appdirs }:
 
 buildPythonPackage rec {
   pname = "yowsup";

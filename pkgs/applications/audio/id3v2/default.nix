@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, id3lib, groff, zlib}:
+{ lib, stdenv, fetchurl, id3lib, groff, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "id3v2";

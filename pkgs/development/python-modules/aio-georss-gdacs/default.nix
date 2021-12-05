@@ -1,13 +1,5 @@
-{ lib
-, aio-georss-client
-, aresponses
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aio-georss-client, aresponses, buildPythonPackage, dateparser
+, fetchFromGitHub, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-CIQoQRk5KIPEa/Y/7C1NPctuHvoiZ/o2bDa5YSWY+9M=";
   };
 
-  propagatedBuildInputs = [
-    aio-georss-client
-    dateparser
-  ];
+  propagatedBuildInputs = [ aio-georss-client dateparser ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "aio_georss_gdacs" ];
 

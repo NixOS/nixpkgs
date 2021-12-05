@@ -1,17 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27, pythonAtLeast
-, graphviz
-, multipledispatch
-, numpy
-, pandas
-, pyarrow
-, pytest
-, pytz
-, regex
-, requests
-, sqlalchemy
-, tables
-, toolz
-}:
+, graphviz, multipledispatch, numpy, pandas, pyarrow, pytest, pytz, regex
+, requests, sqlalchemy, tables, toolz }:
 
 buildPythonPackage rec {
   pname = "ibis-framework";
@@ -26,7 +15,8 @@ buildPythonPackage rec {
   patches = [
     # fix tests for pandas 1.1
     (fetchpatch {
-      url = "https://github.com/ibis-project/ibis/commit/53ef3cefc4ae90d61f3612310cb36da2bcd11305.diff";
+      url =
+        "https://github.com/ibis-project/ibis/commit/53ef3cefc4ae90d61f3612310cb36da2bcd11305.diff";
       sha256 = "1i5yjmqridjqpggiinsjaz5spcxca5bd48vy7a0mj4mm1b5flw2m";
     })
   ];
@@ -45,9 +35,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   # ignore tests which require test dataset, or frameworks not available
   checkPhase = ''

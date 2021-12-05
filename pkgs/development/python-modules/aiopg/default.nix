@@ -1,9 +1,4 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, psycopg2
-, pythonOlder
+{ lib, async-timeout, buildPythonPackage, fetchFromGitHub, psycopg2, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-GHKsI6JATiwUg+YlGhWPBqtYl+GyXWNiDi/hzPDl2hE=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    psycopg2
-  ];
+  propagatedBuildInputs = [ async-timeout psycopg2 ];
 
   postPatch = ''
     substituteInPlace setup.py \

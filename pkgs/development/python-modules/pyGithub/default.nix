@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, deprecated
-, fetchFromGitHub
-, pynacl
-, pyjwt
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, cryptography, deprecated, fetchFromGitHub, pynacl
+, pyjwt, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "PyGithub";
@@ -21,13 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-PuGCBFSbM91NtSzuyf0EQUr3LiuHDq90OwkSf53rSyA=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    deprecated
-    pynacl
-    pyjwt
-    requests
-  ];
+  propagatedBuildInputs = [ cryptography deprecated pynacl pyjwt requests ];
 
   # Test suite makes REST calls against github.com
   doCheck = false;

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, freeglut, libGLU, libGL, xlibsWrapper }:
+{ lib, stdenv, fetchurl, pkg-config, pure, freeglut, libGLU, libGL, xlibsWrapper
+}:
 
 stdenv.mkDerivation rec {
   baseName = "gl";
@@ -12,14 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure freeglut libGLU libGL xlibsWrapper ];
-  makeFlags = [
-    "libdir=${placeholder "out"}/lib"
-    "prefix=${placeholder "out"}/"
-  ];
+  makeFlags =
+    [ "libdir=${placeholder "out"}/lib" "prefix=${placeholder "out"}/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "Fairly complete Pure bindings for the OpenGL graphics library, which allow you to do 2D and 3D graphics programming with Pure";
+    description =
+      "Fairly complete Pure bindings for the OpenGL graphics library, which allow you to do 2D and 3D graphics programming with Pure";
     homepage = "http://puredocs.bitbucket.org/pure-gl.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

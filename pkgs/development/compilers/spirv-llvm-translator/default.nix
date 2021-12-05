@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lit
-, llvm_11
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, lit, llvm_11 }:
 
 stdenv.mkDerivation rec {
   pname = "SPIRV-LLVM-Translator";
@@ -23,18 +17,17 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ lit ];
 
-  cmakeFlags = [
-    "-DLLVM_INCLUDE_TESTS=ON"
-  ];
+  cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=ON" ];
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
 
   meta = with lib; {
-    homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
-    description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
-    license     = licenses.ncsa;
-    platforms   = platforms.all;
+    homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
+    description =
+      "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    license = licenses.ncsa;
+    platforms = platforms.all;
     maintainers = with maintainers; [ gloaming ];
   };
 }

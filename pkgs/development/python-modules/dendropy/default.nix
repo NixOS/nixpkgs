@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dendropy";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: 'paup'

@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-}:
+{ buildOctavePackage, lib, fetchurl }:
 
 buildOctavePackage rec {
   pname = "ocl";
@@ -18,9 +15,9 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Use OpenCL for parallelization";
     longDescription = ''
-       Package using OpenCL for parallelization, mostly suitable to
-       Single-Instruction-Multiple-Data (SIMD) computations, selectively
-       using available OpenCL hardware and drivers.
+      Package using OpenCL for parallelization, mostly suitable to
+      Single-Instruction-Multiple-Data (SIMD) computations, selectively
+      using available OpenCL hardware and drivers.
     '';
   };
 }

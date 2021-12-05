@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, ncurses }:
 
-let
-  INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
+let INSTALL_PATH = "${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
   version = "unstable-2021-11-12";
@@ -30,11 +29,11 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-     mkdir -p ${INSTALL_PATH}
-     cp -r lib ${INSTALL_PATH}/lib
-     install -D fzf-tab.zsh ${INSTALL_PATH}/fzf-tab.zsh
-     install -D fzf-tab.plugin.zsh ${INSTALL_PATH}/fzf-tab.plugin.zsh
-     install -D modules/Src/aloxaf/fzftab.so ${INSTALL_PATH}/modules/Src/aloxaf/fzftab.so
+    mkdir -p ${INSTALL_PATH}
+    cp -r lib ${INSTALL_PATH}/lib
+    install -D fzf-tab.zsh ${INSTALL_PATH}/fzf-tab.zsh
+    install -D fzf-tab.plugin.zsh ${INSTALL_PATH}/fzf-tab.plugin.zsh
+    install -D modules/Src/aloxaf/fzftab.so ${INSTALL_PATH}/modules/Src/aloxaf/fzftab.so
   '';
 
   meta = with lib; {

@@ -1,11 +1,5 @@
-{ lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  libspatialindex,
-  numpy,
-  pytestCheckHook
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, libspatialindex, numpy
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Rtree";
@@ -23,10 +17,7 @@ buildPythonPackage rec {
       "find_library('spatialindex_c')" "'${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkInputs = [
-    numpy
-    pytestCheckHook
-  ];
+  checkInputs = [ numpy pytestCheckHook ];
   pythonImportsCheck = [ "rtree" ];
 
   meta = with lib; {

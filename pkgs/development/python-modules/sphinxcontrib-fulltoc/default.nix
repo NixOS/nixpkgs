@@ -22,7 +22,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
 
   meta = with lib; {
-    description = "Include a full table of contents in your Sphinx HTML sidebar";
+    description =
+      "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jluttine ];

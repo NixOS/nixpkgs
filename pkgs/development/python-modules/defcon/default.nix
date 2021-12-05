@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, fonttools, setuptools-scm
-, pytest, pytest-runner, lxml, fs, unicodedata2, fontpens
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, fonttools, setuptools-scm
+, pytest, pytest-runner, lxml, fs, unicodedata2, fontpens }:
 
 buildPythonPackage rec {
   pname = "defcon";
@@ -15,25 +13,15 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
-  checkInputs = [
-    pytest
-    pytest-runner
-    lxml
-    fs
-    unicodedata2
-    fontpens
-  ];
+  checkInputs = [ pytest pytest-runner lxml fs unicodedata2 fontpens ];
 
   meta = with lib; {
-    description = "A set of UFO based objects for use in font editing applications";
+    description =
+      "A set of UFO based objects for use in font editing applications";
     homepage = "https://github.com/robotools/defcon";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];

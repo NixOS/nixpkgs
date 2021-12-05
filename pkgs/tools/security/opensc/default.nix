@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, readline, openssl
-, libiconv, pcsclite, libassuan, libXt
-, docbook_xsl, libxslt, docbook_xml_dtd_412
-, Carbon, PCSC, buildPackages
-, withApplePCSC ? stdenv.isDarwin
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, readline
+, openssl, libiconv, pcsclite, libassuan, libXt, docbook_xsl, libxslt
+, docbook_xml_dtd_412, Carbon, PCSC, buildPackages
+, withApplePCSC ? stdenv.isDarwin }:
 
 stdenv.mkDerivation rec {
   pname = "opensc";
@@ -18,11 +16,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    zlib readline openssl libassuan
-    libXt libxslt libiconv docbook_xml_dtd_412
-  ]
-  ++ lib.optional stdenv.isDarwin Carbon
-  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+    zlib
+    readline
+    openssl
+    libassuan
+    libXt
+    libxslt
+    libiconv
+    docbook_xml_dtd_412
+  ] ++ lib.optional stdenv.isDarwin Carbon
+    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -41,8 +44,10 @@ stdenv.mkDerivation rec {
       if withApplePCSC then
         "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
       else
-        "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-      }"
+        "${
+          lib.getLib pcsclite
+        }/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    }"
     (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
       "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
@@ -50,10 +55,7 @@ stdenv.mkDerivation rec {
   PCSC_CFLAGS = lib.optionalString withApplePCSC
     "-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
-  installFlags = [
-    "sysconfdir=$(out)/etc"
-    "completiondir=$(out)/etc"
-  ];
+  installFlags = [ "sysconfdir=$(out)/etc" "completiondir=$(out)/etc" ];
 
   meta = with lib; {
     description = "Set of libraries and utilities to access smart cards";

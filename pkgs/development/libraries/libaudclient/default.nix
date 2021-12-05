@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.5-rc2";
 
   src = fetchurl {
-    url = "https://distfiles.audacious-media-player.org/${pname}-${version}.tar.bz2";
+    url =
+      "https://distfiles.audacious-media-player.org/${pname}-${version}.tar.bz2";
     sha256 = "0nhpgz0kg8r00z54q5i96pjk7s57krq3fvdypq496c7fmlv9kdap";
   };
 

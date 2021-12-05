@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, pytest_4
-, pytest-expect
-, mock
-, six
-, webencodings
-}:
+{ lib, buildPythonPackage, fetchPypi, flake8, pytest_4, pytest-expect, mock, six
+, webencodings }:
 
 buildPythonPackage rec {
   pname = "html5lib";
@@ -19,9 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ flake8 pytest_4 pytest-expect mock ];
-  propagatedBuildInputs = [
-    six webencodings
-  ];
+  propagatedBuildInputs = [ six webencodings ];
 
   checkPhase = ''
     # remove test causing error

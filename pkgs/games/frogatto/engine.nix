@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, which
-, boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
-, glew, zlib, icu, pkg-config, cairo, libvpx }:
+{ lib, stdenv, fetchFromGitHub, which, boost, SDL2, SDL2_image, SDL2_mixer
+, SDL2_ttf, glew, zlib, icu, pkg-config, cairo, libvpx }:
 
 stdenv.mkDerivation {
   pname = "anura-engine";
@@ -14,22 +13,10 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    which pkg-config
-  ];
+  nativeBuildInputs = [ which pkg-config ];
 
-  buildInputs = [
-    boost
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
-    glew
-    zlib
-    icu
-    cairo
-    libvpx
-  ];
+  buildInputs =
+    [ boost SDL2 SDL2_image SDL2_mixer SDL2_ttf glew zlib icu cairo libvpx ];
 
   enableParallelBuilding = true;
 

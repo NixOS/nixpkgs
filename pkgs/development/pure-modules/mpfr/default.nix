@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "This module makes the MPFR multiprecision floats available in Pure";
+    description =
+      "This module makes the MPFR multiprecision floats available in Pure";
     homepage = "http://puredocs.bitbucket.org/pure-mpfr.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = licenses.gpl3;
-    description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
+    description =
+      "ZSH plugin that reminds you to use existing aliases for commands you just typed";
     maintainers = with maintainers; [ ma27 ];
   };
 }

@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg  = config.services.salt.master;
+  cfg = config.services.salt.master;
 
   fullConfig = lib.recursiveUpdate {
     # Provide defaults for some directories to allow an immutable config dir
@@ -15,15 +15,13 @@ let
     pki_dir = "/var/lib/salt/pki/master";
   } cfg.configuration;
 
-in
-
-{
+in {
   options = {
     services.salt.master = {
       enable = mkEnableOption "Salt master service";
       configuration = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Salt master configuration as Nix attribute set.";
       };
     };
@@ -35,27 +33,25 @@ in
       # The alternatives are
       # - passing --config-dir to all salt commands, not just the master unit,
       # - setting a global environment variable,
-      etc."salt/master".source = pkgs.writeText "master" (
-        builtins.toJSON fullConfig
-      );
+      etc."salt/master".source =
+        pkgs.writeText "master" (builtins.toJSON fullConfig);
       systemPackages = with pkgs; [ salt ];
     };
     systemd.services.salt-master = {
       description = "Salt Master";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [
-        util-linux  # for dmesg
-      ];
+      path = with pkgs;
+        [
+          util-linux # for dmesg
+        ];
       serviceConfig = {
         ExecStart = "${pkgs.salt}/bin/salt-master";
         LimitNOFILE = 16384;
         Type = "notify";
         NotifyAccess = "all";
       };
-      restartTriggers = [
-        config.environment.etc."salt/master".source
-      ];
+      restartTriggers = [ config.environment.etc."salt/master".source ];
     };
   };
 

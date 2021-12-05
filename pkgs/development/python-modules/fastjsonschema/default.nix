@@ -1,10 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-  # Check inputs
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub
+# Check inputs
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "fastjsonschema";

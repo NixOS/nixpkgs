@@ -1,14 +1,5 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, scipy
-, scikit-learn
-, pyaml
-, pytestCheckHook
-}:
+{ lib, isPy27, buildPythonPackage, fetchFromGitHub, matplotlib, numpy, scipy
+, scikit-learn, pyaml, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "scikit-optimize";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "0hsq6pmryimxc275yrcy4bv217bx7ma6rz0q6m4138bv4zgq18d1";
   };
 
-  propagatedBuildInputs = [
-    matplotlib
-    numpy
-    scipy
-    scikit-learn
-    pyaml
-  ];
+  propagatedBuildInputs = [ matplotlib numpy scipy scikit-learn pyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Sequential model-based optimization toolbox";

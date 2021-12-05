@@ -14,8 +14,7 @@ let
     "--port ${toString cfg.port}"
   ] ++ cfg.extraArgs);
 
-in
-{
+in {
   options.services.adguardhome = with types; {
     enable = mkEnableOption "AdGuard Home network-wide ad blocker";
 

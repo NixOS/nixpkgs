@@ -1,10 +1,7 @@
 { config, lib, ... }:
 
-with lib;
-{
-  meta = {
-    maintainers = teams.freedesktop.members;
-  };
+with lib; {
+  meta = { maintainers = teams.freedesktop.members; };
 
   options = {
     xdg.menus.enable = mkOption {

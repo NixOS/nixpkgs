@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, ordered-set
-, clevercsv
-, jsonpickle
-, numpy
-, pytestCheckHook
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, click, ordered-set, clevercsv
+, jsonpickle, numpy, pytestCheckHook, pyyaml }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
@@ -28,22 +19,11 @@ buildPythonPackage rec {
       --replace '/tmp/' "$TMPDIR/"
   '';
 
-  propagatedBuildInputs = [
-    click
-    ordered-set
-  ];
+  propagatedBuildInputs = [ click ordered-set ];
 
-  pythonImportsCheck = [
-    "deepdiff"
-  ];
+  pythonImportsCheck = [ "deepdiff" ];
 
-  checkInputs = [
-    clevercsv
-    jsonpickle
-    numpy
-    pytestCheckHook
-    pyyaml
-  ];
+  checkInputs = [ clevercsv jsonpickle numpy pytestCheckHook pyyaml ];
 
   meta = with lib; {
     description = "Deep Difference and Search of any Python object/data";

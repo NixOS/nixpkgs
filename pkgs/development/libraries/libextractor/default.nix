@@ -1,9 +1,8 @@
-{ fetchurl, lib, stdenv, substituteAll
-, libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkg-config
-, gstreamerSupport ? true, gst_all_1 ? null
-# ^ Needed e.g. for proper id3 and FLAC support.
-#   Set to `false` to decrease package closure size by about 87 MB (53%).
+{ fetchurl, lib, stdenv, substituteAll, libtool, gettext, zlib, bzip2, flac
+, libvorbis, exiv2, libgsf, rpm, pkg-config, gstreamerSupport ? true
+, gst_all_1 ? null
+  # ^ Needed e.g. for proper id3 and FLAC support.
+  #   Set to `false` to decrease package closure size by about 87 MB (53%).
 , gstPlugins ? (gst: [ gst.gst-plugins-base gst.gst-plugins-good ])
 # If an application needs additional gstreamer plugins it can also make them
 # available by adding them to the environment variable
@@ -12,10 +11,11 @@
 #   wrapProgram $out/bin/extract --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
 # '';
 # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
-, gtkSupport ? true, glib ? null, gtk3 ? null
-, videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
+, gtkSupport ? true, glib ? null, gtk3 ? null, videoSupport ? true
+, ffmpeg ? null, libmpeg2 ? null }:
 
-assert gstreamerSupport -> gst_all_1 != null && builtins.isList (gstPlugins gst_all_1);
+assert gstreamerSupport -> gst_all_1 != null
+  && builtins.isList (gstPlugins gst_all_1);
 assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
@@ -33,26 +33,25 @@ stdenv.mkDerivation rec {
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {
       src = ./gst-hardcode-plugins.patch;
-      load_gst_plugins = lib.concatMapStrings
-        (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'')
+      load_gst_plugins = lib.concatMapStrings (plugin:
+        ''
+          gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'')
         (gstPlugins gst_all_1);
     })
   ];
 
-  preConfigure =
-    '' echo "patching installation directory in \`extractor.c'..."
-       sed -i "src/main/extractor.c" \
-           -e "s|pexe[[:blank:]]*=.*$|pexe = strdup(\"$out/lib/\");|g"
-    '';
+  preConfigure = ''
+    echo "patching installation directory in \`extractor.c'..."
+          sed -i "src/main/extractor.c" \
+              -e "s|pexe[[:blank:]]*=.*$|pexe = strdup(\"$out/lib/\");|g"
+       '';
 
   buildInputs =
-   [ libtool gettext zlib bzip2 flac libvorbis exiv2
-     libgsf rpm
-     pkg-config
-   ] ++ lib.optionals gstreamerSupport
-          ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
-     ++ lib.optionals gtkSupport [ glib gtk3 ]
-     ++ lib.optionals videoSupport [ ffmpeg libmpeg2 ];
+    [ libtool gettext zlib bzip2 flac libvorbis exiv2 libgsf rpm pkg-config ]
+    ++ lib.optionals gstreamerSupport
+    ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
+    ++ lib.optionals gtkSupport [ glib gtk3 ]
+    ++ lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
   configureFlags = [
     "--disable-ltdl-install"
@@ -70,26 +69,26 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple library for keyword extraction";
 
-    longDescription =
-      '' GNU libextractor is a library used to extract meta-data from files
-         of arbitrary type.  It is designed to use helper-libraries to perform
-         the actual extraction, and to be trivially extendable by linking
-         against external extractors for additional file types.
+    longDescription = ''
+      GNU libextractor is a library used to extract meta-data from files
+              of arbitrary type.  It is designed to use helper-libraries to perform
+              the actual extraction, and to be trivially extendable by linking
+              against external extractors for additional file types.
 
-         The goal is to provide developers of file-sharing networks or
-         WWW-indexing bots with a universal library to obtain simple keywords
-         to match against queries.  libextractor contains a shell-command
-         extract that, similar to the well-known file command, can extract
-         meta-data from a file an print the results to stdout.
+              The goal is to provide developers of file-sharing networks or
+              WWW-indexing bots with a universal library to obtain simple keywords
+              to match against queries.  libextractor contains a shell-command
+              extract that, similar to the well-known file command, can extract
+              meta-data from a file an print the results to stdout.
 
-         Currently, libextractor supports the following formats: HTML, PDF,
-         PS, OLE2 (DOC, XLS, PPT), OpenOffice (sxw), StarOffice (sdw), DVI,
-         MAN, FLAC, MP3 (ID3v1 and ID3v2), NSF(E) (NES music), SID (C64
-         music), OGG, WAV, EXIV2, JPEG, GIF, PNG, TIFF, DEB, RPM, TAR(.GZ),
-         ZIP, ELF, S3M (Scream Tracker 3), XM (eXtended Module), IT (Impulse
-         Tracker), FLV, REAL, RIFF (AVI), MPEG, QT and ASF.  Also, various
-         additional MIME types are detected.
-      '';
+              Currently, libextractor supports the following formats: HTML, PDF,
+              PS, OLE2 (DOC, XLS, PPT), OpenOffice (sxw), StarOffice (sdw), DVI,
+              MAN, FLAC, MP3 (ID3v1 and ID3v2), NSF(E) (NES music), SID (C64
+              music), OGG, WAV, EXIV2, JPEG, GIF, PNG, TIFF, DEB, RPM, TAR(.GZ),
+              ZIP, ELF, S3M (Scream Tracker 3), XM (eXtended Module), IT (Impulse
+              Tracker), FLV, REAL, RIFF (AVI), MPEG, QT and ASF.  Also, various
+              additional MIME types are detected.
+           '';
 
     license = licenses.gpl3Plus;
 

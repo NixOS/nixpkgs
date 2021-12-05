@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, cmake
-}:
+{ lib, buildPythonPackage, fetchgit, cmake }:
 
 buildPythonPackage rec {
   pname = "editorconfig";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0vx8rl7kii72965jsi01mdsz9rfi1q9bwy13x47iaqm6rmcwc1rb";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   dontUseCmakeConfigure = true;
 

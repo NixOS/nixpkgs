@@ -1,14 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{ lib, stdenv, fetchurl
 
-, autoreconfHook
-, pkg-config
+, autoreconfHook, pkg-config
 
-, libdeflate
-, libjpeg
-, xz
-, zlib
-}:
+, libdeflate, libjpeg, xz, zlib }:
 
 #FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
 
@@ -36,16 +30,19 @@ stdenv.mkDerivation rec {
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs =
+    [ libjpeg xz zlib ]; # TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs =
+    [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
   meta = with lib; {
-    description = "Library and utilities for working with the TIFF image file format";
+    description =
+      "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
     maintainers = with maintainers; [ qyliss ];

@@ -4,8 +4,7 @@ with lib;
 let
   cfg = config.services.xserver.windowManager.wmii;
   wmii = pkgs.wmii_hg;
-in
-{
+in {
   options = {
     services.xserver.windowManager.wmii.enable = mkEnableOption "wmii";
   };
@@ -26,7 +25,8 @@ in
       # Another use case is kill -9 wmii; after rotating screen.
       # Note: we don't like kill for that purpose. But it works (->
       # subject "wmii and xrandr" on mailinglist)
-      { name = "wmii";
+      {
+        name = "wmii";
         start = ''
           while :; do
             ${wmii}/bin/wmii && break

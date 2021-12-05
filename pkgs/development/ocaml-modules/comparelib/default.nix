@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv}:
+{ lib, buildOcaml, fetchurl, type_conv }:
 
 buildOcaml rec {
   pname = "comparelib";
@@ -15,7 +15,8 @@ buildOcaml rec {
 
   meta = with lib; {
     homepage = "https://github.com/janestreet/comparelib";
-    description = "Syntax extension for deriving \"compare\" functions automatically";
+    description =
+      ''Syntax extension for deriving "compare" functions automatically'';
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];
   };

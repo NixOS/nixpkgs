@@ -14,11 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl boost zlib icu rippled ];
 
-  hardeningDisable = ["format"];
+  hardeningDisable = [ "format" ];
 
-  cmakeFlags = [
-    "-Dep_procs=1"
-  ];
+  cmakeFlags = [ "-Dep_procs=1" ];
 
   installPhase = ''
     runHook preInstall

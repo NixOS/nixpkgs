@@ -1,19 +1,6 @@
-{ lib, stdenv
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, gmt
-, numpy
-, netcdf4
-, pandas
-, packaging
-, xarray
-, pytest-mpl
-, ipython
-, ghostscript
-, pytestCheckHook
-}:
+{ lib, stdenv, pythonOlder, buildPythonPackage, fetchFromGitHub, setuptools-scm
+, gmt, numpy, netcdf4, pandas, packaging, xarray, pytest-mpl, ipython
+, ghostscript, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pygmt";

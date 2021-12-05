@@ -1,9 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, lxml
-, six
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, lxml, six }:
 
 buildPythonApplication rec {
   pname = "xmldiff";
@@ -16,10 +11,7 @@ buildPythonApplication rec {
     hash = "sha256-xqudHYfwOce2C0pcFzId0JDIIC6R5bllmVKsH+CvTdE=";
   };
 
-  buildInputs = [
-    lxml
-    six
-  ];
+  buildInputs = [ lxml six ];
 
   meta = with lib; {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";

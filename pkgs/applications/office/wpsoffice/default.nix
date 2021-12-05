@@ -1,48 +1,16 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, dpkg
-, wrapGAppsHook
-, wrapQtAppsHook
-, alsa-lib
-, atk
-, bzip2
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gperftools
-, gtk2-x11
-, libpng12
-, libtool
-, libuuid
-, libxml2
-, xz
-, nspr
-, nss
-, openssl
-, pango
-, qt4
-, qtbase
-, sqlite
-, unixODBC
-, xorg
-, zlib
-, steam
-, makeWrapper
-}:
+{ lib, stdenv, mkDerivation, fetchurl, dpkg, wrapGAppsHook, wrapQtAppsHook
+, alsa-lib, atk, bzip2, cairo, cups, dbus, expat, ffmpeg, fontconfig, freetype
+, gdk-pixbuf, glib, gperftools, gtk2-x11, libpng12, libtool, libuuid, libxml2
+, xz, nspr, nss, openssl, pango, qt4, qtbase, sqlite, unixODBC, xorg, zlib
+, steam, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = "11.1.0.9615";
 
   src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
+    url =
+      "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
     sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
   };
   unpackCmd = "dpkg -x $src .";
@@ -60,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mlatus th0rgal ];
   };
@@ -132,7 +100,8 @@ stdenv.mkDerivation rec {
     "png"
     # File saving breaks unless we are using vendored llvmPackages_8.libcxx
     #"c++"
-    "ssl" "crypto"
+    "ssl"
+    "crypto"
     "nspr"
     "nss"
     "odbc"

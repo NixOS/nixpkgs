@@ -1,6 +1,5 @@
 { lib, stdenv, fetchzip, coreutils, perl, gnutar, gzip }:
-let
-  version = "6M62";
+let version = "6M62";
 in stdenv.mkDerivation {
   pname = "inform7";
   inherit version;

@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "13.8.0";
   pname = "mediathekview";
   src = fetchurl {
-    url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
+    url =
+      "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
     sha256 = "0zfkwz5psv7m0881ykgqrxwjhadg39c55aj2wpy7m1jdara86c5q";
   };
 
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
+    description =
+      "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
     homepage = "https://mediathekview.de/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ moredread ];

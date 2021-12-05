@@ -1,11 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
+{ stdenv, lib, fetchFromGitHub, gnat
 # use gprbuild-boot since gprbuild proper depends
 # on this xmlada derivation.
-, gprbuild-boot
-}:
+, gprbuild-boot }:
 
 stdenv.mkDerivation rec {
   pname = "xmlada";
@@ -19,10 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pg6m0sfc1vwvd18r80jv2vwrsb2qgvyl8jmmrmpbdni0npx0kv3";
   };
 
-  nativeBuildInputs = [
-    gnat
-    gprbuild-boot
-  ];
+  nativeBuildInputs = [ gnat gprbuild-boot ];
 
   meta = with lib; {
     description = "XML/Ada: An XML parser for Ada";

@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, pbr, ldap, prettytable, fixtures, testresources, testtools }:
+{ lib, buildPythonPackage, fetchPypi, pbr, ldap, prettytable, fixtures
+, testresources, testtools }:
 
 buildPythonPackage rec {
   pname = "ldappool";

@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "1fihbchl5g5z9xrca68kaq26l674chcby634k8iz5h31dai8hpyh";
 
   meta = with lib; {
-    description = "Receives StatsD-style metrics and exports them to Prometheus";
+    description =
+      "Receives StatsD-style metrics and exports them to Prometheus";
     homepage = "https://github.com/prometheus/statsd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ivan ];

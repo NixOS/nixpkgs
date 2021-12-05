@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng
+, libjpeg }:
 stdenv.mkDerivation {
   pname = "vxl";
   version = "1.17.0-nix1";
@@ -26,10 +27,11 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "C++ Libraries for Computer Vision Research and Implementation";
+    description =
+      "C++ Libraries for Computer Vision Research and Implementation";
     homepage = "http://vxl.sourceforge.net/";
     license = "VXL License";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

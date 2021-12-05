@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, singularity
-, python3Packages
-}:
+{ lib, fetchFromGitHub, singularity, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "udocker";
@@ -17,20 +13,12 @@ python3Packages.buildPythonApplication rec {
 
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
-  buildInputs = [
-    singularity
-  ] ++ (with python3Packages; [
-    pytest-runner
-    pycurl
-  ]);
+  buildInputs = [ singularity ]
+    ++ (with python3Packages; [ pytest-runner pycurl ]);
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_05__get_volume_bindings"
-  ];
+  disabledTests = [ "test_05__get_volume_bindings" ];
 
   disabledTestPaths = [
     # Network
@@ -39,7 +27,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "basic user tool to execute simple docker containers in user space without root privileges";
+    description =
+      "basic user tool to execute simple docker containers in user space without root privileges";
     homepage = "https://indigo-dc.gitbooks.io/udocker";
     license = licenses.asl20;
     maintainers = [ maintainers.bzizou ];

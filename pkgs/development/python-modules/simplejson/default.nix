@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, stdenv, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "simplejson";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "1vljsd5bk12gasadkxcddwhmp38fj64x1aqi4frk3frq9lp8h3a1";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   doCheck = !stdenv.isDarwin;
 

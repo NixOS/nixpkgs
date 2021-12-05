@@ -3,20 +3,22 @@
 let
   version = "6.30.223.271";
   hashes = {
-    i686-linux   = "1kaqa2dw3nb8k23ffvx46g8jj3wdhz8xa6jp1v3wb35cjfr712sg";
+    i686-linux = "1kaqa2dw3nb8k23ffvx46g8jj3wdhz8xa6jp1v3wb35cjfr712sg";
     x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
   };
 
-  arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
-  tarballVersion = lib.replaceStrings ["."] ["_"] version;
+  arch =
+    lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
+  tarballVersion = lib.replaceStrings [ "." ] [ "_" ] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "broadcom-sta-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
-    sha256 = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    url =
+      "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
+    sha256 = hashes.${stdenv.hostPlatform.system} or (throw
+      "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   hardeningDisable = [ "pic" ];

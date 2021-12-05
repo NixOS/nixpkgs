@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, installShellFiles
-, docopt
-, hidapi
-, pyusb
-, smbus-cffi
-, i2c-tools
-, pytestCheckHook
-, colorlog
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, installShellFiles
+, docopt, hidapi, pyusb, smbus-cffi, i2c-tools, pytestCheckHook, colorlog }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
@@ -26,18 +15,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
-    docopt
-    hidapi
-    pyusb
-    smbus-cffi
-    i2c-tools
-    colorlog
-  ];
+  propagatedBuildInputs = [ docopt hidapi pyusb smbus-cffi i2c-tools colorlog ];
 
-  propagatedNativeBuildInputs = [
-    smbus-cffi
-  ];
+  propagatedNativeBuildInputs = [ smbus-cffi ];
 
   outputs = [ "out" "man" ];
 
@@ -59,9 +39,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "liquidctl" ];
 
   meta = with lib; {
-    description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
+    description =
+      "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
-    changelog = "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ arturcygan evils ];
   };

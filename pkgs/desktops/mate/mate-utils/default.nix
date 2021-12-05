@@ -1,22 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, gtk3, libxml2, libgtop, libcanberra-gtk3
-, inkscape, udisks2, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, gtk3, libxml2
+, libgtop, libcanberra-gtk3, inkscape, udisks2, mate, hicolor-icon-theme
+, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-utils";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0bkqj8qwwml9xyvb680yy06lv3dzwkv89yrzz5jamvz88ar6m9bw";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gettext
-    itstool
-    inkscape
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config gettext itstool inkscape wrapGAppsHook ];
 
   buildInputs = [
     gtk3

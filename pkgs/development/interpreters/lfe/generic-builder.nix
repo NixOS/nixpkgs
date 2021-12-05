@@ -1,18 +1,17 @@
-{ lib, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
+{ lib, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3
+, buildHex }:
 
-{ baseName ? "lfe"
-, version
-, maximumOTPVersion
-, sha256 ? null
-, rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
-, patches ? []
-}:
+{ baseName ? "lfe", version, maximumOTPVersion, sha256 ? null, rev ? version
+, src ? fetchFromGitHub {
+  inherit rev sha256;
+  owner = "rvirding";
+  repo = "lfe";
+}, patches ? [ ] }:
 
 let
   inherit (lib)
-    assertMsg makeBinPath optionalString
-    getVersion versionAtLeast versionOlder versions;
+    assertMsg makeBinPath optionalString getVersion versionAtLeast versionOlder
+    versions;
 
   mainVersion = versions.major (getVersion erlang);
 
@@ -20,15 +19,14 @@ let
     name = "proper";
     version = "1.1.1-beta";
 
-    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
+    sha256 = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
 
     configurePhase = ''
       ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
     '';
   };
 
-in
-assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
+in assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
   LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
 '';
 
@@ -38,12 +36,12 @@ buildRebar3 {
   inherit src version;
 
   buildInputs = [ erlang makeWrapper ];
-  beamDeps    = [ proper ];
-  patches     = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
-  doCheck     = true;
+  beamDeps = [ proper ];
+  patches = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
+  doCheck = true;
   checkTarget = "travis";
 
-  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out"];
+  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out" ];
 
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.
@@ -76,18 +74,18 @@ buildRebar3 {
   '';
 
   meta = with lib; {
-    description     = "The best of Erlang and of Lisp; at the same time!";
+    description = "The best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
       compiler. Code produced with it is compatible with "normal" Erlang
       code. An LFE evaluator and shell is also included.
     '';
 
-    homepage     = "http://lfe.io";
+    homepage = "http://lfe.io";
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
-    license      = licenses.asl20;
-    maintainers  = teams.beam.members;
-    platforms    = platforms.unix;
+    license = licenses.asl20;
+    maintainers = teams.beam.members;
+    platforms = platforms.unix;
   };
 }

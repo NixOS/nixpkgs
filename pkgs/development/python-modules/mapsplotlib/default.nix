@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, matplotlib
-, scipy
-, pandas
-, requests
-, pillow
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, matplotlib, scipy, pandas
+, requests, pillow }:
 
 buildPythonPackage rec {
   pname = "mapsplotlib";

@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 python3.pkgs.buildPythonApplication rec {
   pname = "xorex";
   version = "0.3.0";
@@ -24,10 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    colorama
-    pefile
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ colorama pefile ];
 
   meta = with lib; {
     description = "XOR Key Extractor";

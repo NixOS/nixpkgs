@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, wayland
-, wayland-protocols
-, libxml2
-, libxkbcommon
-, rustPlatform
-, feedbackd
-, wrapGAppsHook
-, fetchpatch
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, gnome, glib, gtk3
+, wayland, wayland-protocols, libxml2, libxkbcommon, rustPlatform, feedbackd
+, wrapGAppsHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
@@ -42,23 +27,14 @@ stdenv.mkDerivation rec {
     # remove when updating from 1.14.0
     (fetchpatch {
       name = "fix-rust-1.54-build.patch";
-      url = "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
+      url =
+        "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
       sha256 = "sha256-8rWcfhQmGiwlc2lpkRvJ95XQp1Xg7St+0K85x8nQ0mk=";
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-    wayland
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [ meson ninja pkg-config glib wayland wrapGAppsHook ]
+    ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   buildInputs = [
     gtk3

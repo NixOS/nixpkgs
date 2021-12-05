@@ -1,28 +1,16 @@
-{ pkgs
-, lib
-, stdenv
-, fetchFromGitHub
-, erlang
-, makeWrapper
-, coreutils
-, curl
-, bash
-, debugInfo ? false
-}:
+{ pkgs, lib, stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, curl, bash
+, debugInfo ? false }:
 
-{ baseName ? "elixir"
-, version
-, minimumOTPVersion
-, sha256 ? null
-, rev ? "v${version}"
-, src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
-} @ args:
+{ baseName ? "elixir", version, minimumOTPVersion, sha256 ? null
+, rev ? "v${version}", src ? fetchFromGitHub {
+  inherit rev sha256;
+  owner = "elixir-lang";
+  repo = "elixir";
+} }@args:
 
-let
-  inherit (lib) getVersion versionAtLeast optional;
+let inherit (lib) getVersion versionAtLeast optional;
 
-in
-assert versionAtLeast (getVersion erlang) minimumOTPVersion;
+in assert versionAtLeast (getVersion erlang) minimumOTPVersion;
 
 stdenv.mkDerivation ({
   name = "${baseName}-${version}";
@@ -62,7 +50,8 @@ stdenv.mkDerivation ({
   pos = builtins.unsafeGetAttrPos "sha256" args;
   meta = with lib; {
     homepage = "https://elixir-lang.org/";
-    description = "A functional, meta-programming aware language built on top of the Erlang VM";
+    description =
+      "A functional, meta-programming aware language built on top of the Erlang VM";
 
     longDescription = ''
       Elixir is a functional, meta-programming aware language built on

@@ -20,14 +20,9 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dywedir ];
   };
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
-  ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  passthru = {
-    shellPath = "/bin/ion";
-  };
+  passthru = { shellPath = "/bin/ion"; };
 }

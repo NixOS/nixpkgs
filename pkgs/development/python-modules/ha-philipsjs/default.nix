@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, httpx
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, respx
-}:
+{ lib, buildPythonPackage, cryptography, fetchFromGitHub, httpx, pytest-aiohttp
+, pytest-mock, pytestCheckHook, pythonOlder, respx }:
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
@@ -24,24 +15,15 @@ buildPythonPackage rec {
     sha256 = "sha256-U5XigLFkpRoIXcFB4dpxi8pxqcmmb20sv9i9J70s0C0=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    httpx
-  ];
+  propagatedBuildInputs = [ cryptography httpx ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-mock
-    pytestCheckHook
-    respx
-  ];
+  checkInputs = [ pytest-aiohttp pytest-mock pytestCheckHook respx ];
 
-  pythonImportsCheck = [
-    "haphilipsjs"
-  ];
+  pythonImportsCheck = [ "haphilipsjs" ];
 
   meta = with lib; {
-    description = "Python library to interact with Philips TVs with jointSPACE API";
+    description =
+      "Python library to interact with Philips TVs with jointSPACE API";
     homepage = "https://github.com/danielperna84/ha-philipsjs";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

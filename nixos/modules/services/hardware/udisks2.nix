@@ -25,7 +25,6 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.udisks2.enable {

@@ -1,56 +1,39 @@
-{ coreutils
-, fetchurl
-, gnugrep
-, gnused
-, iproute2
-, iptables
-, perl
-, perlPackages
-, lib, stdenv
-, tree
-, util-linux
-}:
+{ coreutils, fetchurl, gnugrep, gnused, iproute2, iptables, perl, perlPackages
+, lib, stdenv, tree, util-linux }:
 let
-  PATH = lib.concatStringsSep ":"
-           [ "${coreutils}/bin"
-             "${iproute2}/bin"
-             "${iptables}/bin"
-             "${util-linux}/bin"
-             "${gnugrep}/bin"
-             "${gnused}/bin"
-           ];
-in
-stdenv.mkDerivation rec {
+  PATH = lib.concatStringsSep ":" [
+    "${coreutils}/bin"
+    "${iproute2}/bin"
+    "${iptables}/bin"
+    "${util-linux}/bin"
+    "${gnugrep}/bin"
+    "${gnused}/bin"
+  ];
+in stdenv.mkDerivation rec {
   pname = "shorewall";
   version = "5.2.3.3";
 
   srcs = [
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-core-${version}.tar.bz2";
+      url =
+        "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-core-${version}.tar.bz2";
       sha256 = "1gg2yfxzm3y9qqjrrg5nq2ggi1c6yfxx0s7fvwjw70b185mwa5p5";
     })
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-${version}.tar.bz2";
+      url =
+        "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-${version}.tar.bz2";
       sha256 = "1ka70pa3s0cnvc83rlm57r05cdv9idnxnq0vmxi6nr7razak5f3b";
     })
     (fetchurl {
-      url = "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall6-${version}.tar.bz2";
+      url =
+        "http://www.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall6-${version}.tar.bz2";
       sha256 = "0mhs4m6agwk082h1n69gnyfsjpycdd8215r4r9rzb3czs5xi087n";
     })
   ];
   sourceRoot = ".";
 
-  buildInputs = [
-    coreutils
-    iproute2
-    iptables
-    util-linux
-    gnugrep
-    gnused
-    perl
-  ] ++ (with perlPackages; [
-    DigestSHA1
-  ]);
+  buildInputs = [ coreutils iproute2 iptables util-linux gnugrep gnused perl ]
+    ++ (with perlPackages; [ DigestSHA1 ]);
   prePatch = ''
     # Patch configure and install.sh files
     patchShebangs .

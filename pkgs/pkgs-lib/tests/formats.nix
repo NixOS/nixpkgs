@@ -1,35 +1,40 @@
 { pkgs }:
-let
-  inherit (pkgs) lib formats;
-in
-with lib;
+let inherit (pkgs) lib formats;
+in with lib;
 let
 
   evalFormat = format: args: def:
     let
       formatSet = format args;
-      config = formatSet.type.merge [] (imap1 (n: def: {
+      config = formatSet.type.merge [ ] (imap1 (n: def: {
         value = def;
         file = "def${toString n}";
       }) [ def ]);
     in formatSet.generate "test-format-file" config;
 
-  runBuildTest = name: { drv, expected }: pkgs.runCommand name {} ''
-    if diff -u '${builtins.toFile "expected" expected}' '${drv}'; then
-      touch "$out"
-    else
-      echo
-      echo "Got different values than expected; diff above."
-      exit 1
-    fi
-  '';
+  runBuildTest = name:
+    { drv, expected }:
+    pkgs.runCommand name { } ''
+      if diff -u '${builtins.toFile "expected" expected}' '${drv}'; then
+        touch "$out"
+      else
+        echo
+        echo "Got different values than expected; diff above."
+        exit 1
+      fi
+    '';
 
-  runBuildTests = tests: pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests" (mapAttrsToList (name: value: { inherit name; path = runBuildTest name value; }) (filterAttrs (name: value: value != null) tests));
+  runBuildTests = tests:
+    pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests" (mapAttrsToList
+      (name: value: {
+        inherit name;
+        path = runBuildTest name value;
+      }) (filterAttrs (name: value: value != null) tests));
 
 in runBuildTests {
 
   testJsonAtoms = {
-    drv = evalFormat formats.json {} {
+    drv = evalFormat formats.json { } {
       null = null;
       false = false;
       true = true;
@@ -61,7 +66,7 @@ in runBuildTests {
   };
 
   testYamlAtoms = {
-    drv = evalFormat formats.yaml {} {
+    drv = evalFormat formats.yaml { } {
       null = null;
       false = false;
       true = true;
@@ -87,7 +92,7 @@ in runBuildTests {
   };
 
   testIniAtoms = {
-    drv = evalFormat formats.ini {} {
+    drv = evalFormat formats.ini { } {
       foo = {
         bool = true;
         int = 10;
@@ -125,7 +130,10 @@ in runBuildTests {
   };
 
   testIniListToValue = {
-    drv = evalFormat formats.ini { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+    drv = evalFormat formats.ini {
+      listToValue =
+        concatMapStringsSep ", " (generators.mkValueStringDefault { });
+    } {
       foo = {
         bar = [ null true "test" 1.2 10 ];
         baz = false;
@@ -141,7 +149,7 @@ in runBuildTests {
   };
 
   testTomlAtoms = {
-    drv = evalFormat formats.toml {} {
+    drv = evalFormat formats.toml { } {
       false = false;
       true = true;
       int = 10;

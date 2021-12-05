@@ -1,9 +1,15 @@
 { lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
-, libarchive, db, pcre, libedit, libossp_uuid, libXpm
-, libSM, libXt, freetype, pkg-config, fontconfig
-, cmake, libyaml, Security
-, libjpeg, libX11, libXext, libXft, libXinerama
-, extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
+, libarchive, db, pcre, libedit, libossp_uuid, libXpm, libSM, libXt, freetype
+, pkg-config, fontconfig, cmake, libyaml, Security, libjpeg, libX11, libXext
+, libXft, libXinerama, extraLibraries ? [
+  jdk
+  unixODBC
+  libXpm
+  libSM
+  libXt
+  freetype
+  fontconfig
+]
 # Packs must be installed from a local directory during the build, with dependencies
 # resolved manually, e.g. to install the 'julian' pack, which depends on the 'delay', 'list_util' and 'typedef' packs:
 #   julian = pkgs.fetchzip {
@@ -29,17 +35,14 @@
 #   swiProlog = pkgs.swiProlog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
 #     julian delay list_util typedef
 #   ]; };
-, extraPacks ? []
-, withGui ? false
-}:
+, extraPacks ? [ ], withGui ? false }:
 
 let
   version = "8.3.29";
-  packInstall = swiplPath: pack:
-    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
-    '';
-in
-stdenv.mkDerivation {
+  packInstall = swiplPath: pack: ''
+    ${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
+        '';
+in stdenv.mkDerivation {
   pname = "swi-prolog";
   inherit version;
 
@@ -58,12 +61,25 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ gmp readline openssl
-    libarchive libyaml db pcre libedit libossp_uuid
-    zlib ]
-  ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
-  ++ extraLibraries
-  ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    gmp
+    readline
+    openssl
+    libarchive
+    libyaml
+    db
+    pcre
+    libedit
+    libossp_uuid
+    zlib
+  ] ++ lib.optionals (withGui && !stdenv.isDarwin) [
+    libXpm
+    libX11
+    libXext
+    libXft
+    libXinerama
+    libjpeg
+  ] ++ extraLibraries ++ lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "format" ];
 
@@ -74,15 +90,15 @@ stdenv.mkDerivation {
   '';
 
   postInstall = builtins.concatStringsSep "\n"
-  ( builtins.map (packInstall "$out") extraPacks
-  );
+    (builtins.map (packInstall "$out") extraPacks);
 
   meta = {
     homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
     license = lib.licenses.bsd2;
     mainProgram = "swipl";
-    platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
+    platforms = lib.platforms.linux
+      ++ lib.optionals (!withGui) lib.platforms.darwin;
     maintainers = [ lib.maintainers.meditans ];
   };
 }

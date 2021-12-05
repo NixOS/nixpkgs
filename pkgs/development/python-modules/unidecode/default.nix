@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "unidecode";
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "07789mrq0gjxrg1b9a3ypzzfww224sbj25wl0h9nik22sjwi8qhh";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "unidecode"
-  ];
+  pythonImportsCheck = [ "unidecode" ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/Unidecode/";

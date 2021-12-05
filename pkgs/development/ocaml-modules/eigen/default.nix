@@ -8,20 +8,22 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "owlbarn";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     sha256 = "1zaw03as14hyvfpyj6bjrfbcxp2ljdbqcqqgm53kms244mig425f";
   };
 
   minimumOCamlVersion = "4.02";
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ ctypes ];
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
+    description =
+      "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
     platforms = platforms.x86_64;
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.mit;

@@ -23,10 +23,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [
-     glib
-     llvmPackages.libclang
-  ];
+  buildInputs = [ glib llvmPackages.libclang ];
 
   meta = {
     description = "Higher Order Mutation Testing Tool for C and C++ programs";

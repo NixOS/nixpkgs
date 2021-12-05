@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys
+}:
 
 mkDerivation rec {
   pname = "corepad";
@@ -11,16 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-2bGHVv0+0NlkIqnvWm014Kr20uARWnOS5xSuNmCt/bQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libcprime libcsys ];
 
   meta = with lib; {
     description = "A document editor from the C Suite";

@@ -1,8 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkg-config
-, ronn, substituteAll
-, mbrolaSupport ? true, mbrola
-, pcaudiolibSupport ? true, pcaudiolib
-, sonicSupport ? true, sonic }:
+, ronn, substituteAll, mbrolaSupport ? true, mbrola, pcaudiolibSupport ? true
+, pcaudiolib, sonicSupport ? true, sonic }:
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
@@ -26,14 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
 
   buildInputs = lib.optional mbrolaSupport mbrola
-             ++ lib.optional pcaudiolibSupport pcaudiolib
-             ++ lib.optional sonicSupport sonic;
+    ++ lib.optional pcaudiolibSupport pcaudiolib
+    ++ lib.optional sonicSupport sonic;
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = [
-    "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
-  ];
+  configureFlags = [ "--with-mbrola=${if mbrolaSupport then "yes" else "no"}" ];
 
   # Current release lacks dependencies on local espeak-ng:
   #  cd dictsource && ESPEAK_DATA_PATH=/build/espeak-ng LD_LIBRARY_PATH=../src: ../src/espeak-ng --compile=yue && cd ..
@@ -46,9 +42,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
+    description =
+      "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
     homepage = "https://github.com/espeak-ng/espeak-ng";
-    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.all;

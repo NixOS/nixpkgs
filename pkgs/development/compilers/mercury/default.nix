@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   version = "20.06.1";
 
   src = fetchurl {
-    url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
+    url =
+      "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
     sha256 = "ef093ae81424c4f3fe696eff9aefb5fb66899e11bb17ae0326adfb70d09c1c1f";
   };
 
@@ -54,8 +55,8 @@ stdenv.mkDerivation rec {
       allowing modularity, separate compilation, and numerous optimization/time
       trade-offs.
     '';
-    homepage    = "http://mercurylang.org";
-    license     = lib.licenses.gpl2;
+    homepage = "http://mercurylang.org";
+    license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };

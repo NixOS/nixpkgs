@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Security, openssl, pkg-config }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Security, openssl
+, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
@@ -19,9 +20,13 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = ''Cargo subcommand "release": everything about releasing a rust crate'';
+    description =
+      ''Cargo subcommand "release": everything about releasing a rust crate'';
     homepage = "https://github.com/sunng87/cargo-release";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ gerschtli ];
   };
 }

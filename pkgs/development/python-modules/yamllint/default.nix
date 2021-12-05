@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pathspec
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, stdenv
-}:
+{ lib, buildPythonPackage, fetchPypi, pathspec, pytestCheckHook, pythonOlder
+, pyyaml, stdenv }:
 
 buildPythonPackage rec {
   pname = "yamllint";
@@ -18,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "3934dcde484374596d6b52d8db412929a169f6d9e52e20f9ade5bf3523d9b96e";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-    pathspec
-  ];
+  propagatedBuildInputs = [ pyyaml pathspec ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373

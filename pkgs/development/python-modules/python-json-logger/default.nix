@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, nose }:
 
 buildPythonPackage rec {
   version = "2.0.2";

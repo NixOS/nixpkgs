@@ -1,26 +1,26 @@
-{ lib, appimageTools, fetchurl, makeDesktopItem
-, gsettings-desktop-schemas, gtk3
+{ lib, appimageTools, fetchurl, makeDesktopItem, gsettings-desktop-schemas, gtk3
 }:
 
 let
   pname = "MyCrypto";
   version = "1.7.17";
-  sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
+  sha256 =
+    "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
+    url =
+      "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
     inherit sha256;
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 
   desktopItem = makeDesktopItem {
     name = pname;
     desktopName = pname;
-    comment = "MyCrypto is a free, open-source interface for interacting with the blockchain";
+    comment =
+      "MyCrypto is a free, open-source interface for interacting with the blockchain";
     exec = pname;
     icon = "mycrypto";
     categories = "Finance;";
@@ -46,7 +46,8 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source interface for interacting with the blockchain";
+    description =
+      "A free, open-source interface for interacting with the blockchain";
     longDescription = ''
       MyCrypto is an open-source, client-side tool for generating ether wallets,
       handling ERC-20 tokens, and interacting with the blockchain more easily.

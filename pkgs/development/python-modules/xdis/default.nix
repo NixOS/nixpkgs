@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, click
-, pytest
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, click, pytest, six }:
 
 buildPythonPackage rec {
   pname = "xdis";
@@ -25,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "xdis" ];
 
   meta = with lib; {
-    description = "Python cross-version byte-code disassembler and marshal routines";
+    description =
+      "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis/";
     license = licenses.gpl2Plus;
   };

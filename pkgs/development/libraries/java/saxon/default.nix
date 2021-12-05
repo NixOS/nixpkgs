@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, unzip, jre, jre8 }:
 
 let
-  common = { pname, version, src, description, java ? jre
-           , prog ? null, jar ? null, license ? lib.licenses.mpl20 }:
+  common = { pname, version, src, description, java ? jre, prog ? null
+    , jar ? null, license ? lib.licenses.mpl20 }:
     stdenv.mkDerivation {
       name = "${pname}-${version}";
       inherit pname version src;
@@ -56,7 +56,8 @@ in {
       url = "mirror://sourceforge/saxon/saxonb8-8j.zip";
       sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
     };
-    description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
+    description =
+      "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
     java = jre8;
   };
 
@@ -68,7 +69,8 @@ in {
       url = "mirror://sourceforge/saxon/Saxon-B/9.1.0.8/saxonb9-1-0-8j.zip";
       sha256 = "1d39jdnwr3v3pzswm81zry6yikqlqy9dp2l2wmpqdiw00r5drg4j";
     };
-    description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
+    description =
+      "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
   };
 
   saxon-he = common {

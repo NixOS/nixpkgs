@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, gettext
-, pkg-config
-, libxml2
-, gtk3
-, libportal
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, gettext, pkg-config, libxml2, gtk3
+, libportal, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gcolor3";
@@ -31,10 +22,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    gtk3
-    libportal
-  ];
+  buildInputs = [ gtk3 libportal ];
 
   postPatch = ''
     chmod +x meson_install.sh # patchShebangs requires executable file

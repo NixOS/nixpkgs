@@ -1,21 +1,6 @@
-{ stdenv
-, lib
-, docbook-xsl-nons
-, fetchurl
-, glib
-, gobject-introspection
-, gtk-doc
-, libgudev
-, libpcap
-, meson
-, ninja
-, pkg-config
-, python3
-, systemd
-, usbutils
-, vala
-, which
-}:
+{ stdenv, lib, docbook-xsl-nons, fetchurl, glib, gobject-introspection, gtk-doc
+, libgudev, libpcap, meson, ninja, pkg-config, python3, systemd, usbutils, vala
+, which }:
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
@@ -24,7 +9,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "TjHxqtz8mPhzpsMb5lXWdj8hx/whsadTfor4S2x4U2M=";
   };
 
@@ -38,22 +24,11 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    glib
-    systemd
-    libgudev
-    libpcap
-  ];
+  buildInputs = [ glib systemd libgudev libpcap ];
 
-  checkInputs = [
-    python3
-    which
-    usbutils
-  ];
+  checkInputs = [ python3 which usbutils ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   doCheck = true;
 

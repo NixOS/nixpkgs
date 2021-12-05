@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, mock
-, parameterized
-, termcolor
+{ lib, buildPythonPackage, fetchFromGitHub, nose, mock, parameterized, termcolor
 }:
 
 buildPythonPackage rec {
@@ -20,12 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
-  checkInputs = [
-    mock
-    nose
-    parameterized
-    termcolor
-  ];
+  checkInputs = [ mock nose parameterized termcolor ];
 
   checkPhase = ''
     runHook preCheck

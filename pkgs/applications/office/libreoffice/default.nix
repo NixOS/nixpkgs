@@ -1,32 +1,44 @@
 { stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
-, IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
-, openssl, gperf, cppunit, poppler, util-linux
-, librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
-, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, clucene_core, libcdr, lcms
-, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkg-config, bluez5, libtool, carlito
-, libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome, glib, ncurses, libepoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
-, withHelp ? true
-, kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
-, ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
-, wrapQtAppsHook ? null
-, variant ? "fresh"
-} @ args:
+, IOCompress, zlib, libjpeg, expat, freetype, libwpd, libxml2, db, curl
+, fontconfig, libsndfile, neon, bison, flex, zip, unzip, gtk3, libmspack, getopt
+, file, cairo, which, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
+, openssl, gperf, cppunit, poppler, util-linux, librsvg, libGLU, libGL, bsh
+, CoinMP, libwps, libabw, libmysqlclient, autoconf, automake, openldap, bash
+, hunspell, librdf_redland, nss, nspr, libwpg, dbus-glib, clucene_core, libcdr
+, lcms, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
+, fontsConf, pkg-config, bluez5, libtool, carlito, libatomic_ops, graphite2
+, harfbuzz, libodfgen, libzmf, librevenge, libe-book, libmwaw, glm, gst_all_1
+, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook, gnome, glib, ncurses
+, libepoxy, gpgme, langs ? [
+  "ca"
+  "cs"
+  "da"
+  "de"
+  "en-GB"
+  "en-US"
+  "eo"
+  "es"
+  "fr"
+  "hu"
+  "it"
+  "ja"
+  "nl"
+  "pl"
+  "pt"
+  "pt-BR"
+  "ro"
+  "ru"
+  "sl"
+  "zh-CN"
+], withHelp ? true, kdeIntegration ? false, mkDerivation ? null, qtbase ? null
+, qtx11extras ? null, ki18n ? null, kconfig ? null, kcoreaddons ? null
+, kio ? null, kwindowsystem ? null, wrapQtAppsHook ? null, variant ? "fresh"
+}@args:
 
 assert builtins.elem variant [ "fresh" "still" ];
 
 let
-  jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" ];
-  };
+  jre' = jre_minimal.override { modules = [ "java.base" "java.desktop" ]; };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
@@ -39,17 +51,16 @@ let
   mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
-    third_party =
-      map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      (importVariant "download.nix" ++ [
-        (rec {
-          name = "unowinreg.dll";
-          url = "https://dev-www.libreoffice.org/extern/${md5name}";
-          sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-          md5 = "185d60944ea767075d27247c3162b3bc";
-          md5name = "${md5}-${name}";
-        })
-      ]);
+    third_party = map (x:
+      ((fetchurl { inherit (x) url sha256 name; }) // {
+        inherit (x) md5name md5;
+      })) (importVariant "download.nix" ++ [(rec {
+        name = "unowinreg.dll";
+        url = "https://dev-www.libreoffice.org/extern/${md5name}";
+        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+        md5 = "185d60944ea767075d27247c3162b3bc";
+        md5name = "${md5}-${name}";
+      })]);
 
     translations = primary-src.translations;
     help = primary-src.help;
@@ -72,10 +83,9 @@ in (mkDrv rec {
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
   '' + (lib.flip lib.concatMapStrings srcs.third_party (f: ''
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-    ''))
-  + ''
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+  '')) + ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
     tar -xf ${srcs.help}
@@ -91,13 +101,13 @@ in (mkDrv rec {
   # contains all the relevant headers/libs which doesn't work with both as they
   # are in multiple directories due to each having their own derivation.
   postPatch = let
-    inc = e: path:
-      "${lib.getDev e}/include/KF5/${path}";
-    libs = list:
-      lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
+    inc = e: path: "${lib.getDev e}/include/KF5/${path}";
+    libs = list: lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
   in ''
     substituteInPlace shell/source/unix/exec/shellexec.cxx \
-      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
+      --replace /usr/bin/xdg-open ${
+        if kdeIntegration then "kde-open5" else "xdg-open"
+      }
 
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
@@ -109,19 +119,21 @@ in (mkDrv rec {
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
   '' + lib.optionalString kdeIntegration ''
-      substituteInPlace configure.ac \
-        --replace '$QT5INC'             ${qtbase.dev}/include \
-        --replace '$QT5LIB'             ${qtbase.out}/lib \
-        --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
-        --replace '-L$qt5_libdir '      '${libs [ qtbase qtx11extras ]} ' \
-        --replace '$KF5INC'             ${kcoreaddons.dev}/include \
-        --replace '$KF5LIB'             ${kcoreaddons.out}/lib \
-        --replace '$kf5_incdir/KCore'   ${inc kcoreaddons "KCore"} \
-        --replace '$kf5_incdir/KI18n'   ${inc ki18n "KI18n"} \
-        --replace '$kf5_incdir/KConfig' ${inc kconfig "KConfig"} \
-        --replace '$kf5_incdir/KWindow' ${inc kwindowsystem "KWindow"} \
-        --replace '$kf5_incdir/KIO'     ${inc kio "KIO"} \
-        --replace '-L$kf5_libdir '      '${libs [ kconfig kcoreaddons ki18n kio kwindowsystem ]} '
+    substituteInPlace configure.ac \
+      --replace '$QT5INC'             ${qtbase.dev}/include \
+      --replace '$QT5LIB'             ${qtbase.out}/lib \
+      --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
+      --replace '-L$qt5_libdir '      '${libs [ qtbase qtx11extras ]} ' \
+      --replace '$KF5INC'             ${kcoreaddons.dev}/include \
+      --replace '$KF5LIB'             ${kcoreaddons.out}/lib \
+      --replace '$kf5_incdir/KCore'   ${inc kcoreaddons "KCore"} \
+      --replace '$kf5_incdir/KI18n'   ${inc ki18n "KI18n"} \
+      --replace '$kf5_incdir/KConfig' ${inc kconfig "KConfig"} \
+      --replace '$kf5_incdir/KWindow' ${inc kwindowsystem "KWindow"} \
+      --replace '$kf5_incdir/KIO'     ${inc kio "KIO"} \
+      --replace '-L$kf5_libdir '      '${
+        libs [ kconfig kcoreaddons ki18n kio kwindowsystem ]
+      } '
   '';
 
   dontUseCmakeConfigure = true;
@@ -262,9 +274,9 @@ in (mkDrv rec {
     ''
     # This to avoid using /lib:/usr/lib at linking
     + ''
-    sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
+      sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
-    find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+      find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
@@ -302,10 +314,10 @@ in (mkDrv rec {
     mkdir -p $dev
     cp -r include $dev
   '' + lib.optionalString kdeIntegration ''
-      for prog in $out/bin/*
-      do
-        wrapQtApp $prog
-      done
+    for prog in $out/bin/*
+    do
+      wrapQtApp $prog
+    done
   '';
 
   dontWrapQtApps = true;
@@ -381,33 +393,108 @@ in (mkDrv rec {
     make slowcheck
   '';
 
-  nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkg-config libtool jdk
-  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
+  nativeBuildInputs =
+    [ gdb fontforge autoconf automake bison pkg-config libtool jdk ]
+    ++ lib.optional (!kdeIntegration) wrapGAppsHook
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
-    [ ant ArchiveZip boost box2d cairo clucene_core
-      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype getopt gperf gtk3
-      hunspell icu jre' lcms libcdr libexttextcat unixODBC libjpeg
-      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU libGL mythes
-      glib libmysqlclient
-      neon nspr nss openldap openssl pam perl pkg-config poppler
-      python3 sane-backends unzip which zip zlib
-      mdds bluez5 libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
-      librevenge libe-book libmwaw glm ncurses libepoxy
-      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
-    ]
-    ++ (with gst_all_1; [
+    [
+      ant
+      ArchiveZip
+      boost
+      box2d
+      cairo
+      clucene_core
+      IOCompress
+      cppunit
+      cups
+      curl
+      db
+      dbus-glib
+      expat
+      file
+      flex
+      fontconfig
+      freetype
+      getopt
+      gperf
+      gtk3
+      hunspell
+      icu
+      jre'
+      lcms
+      libcdr
+      libexttextcat
+      unixODBC
+      libjpeg
+      libmspack
+      librdf_redland
+      librsvg
+      libsndfile
+      libvisio
+      libwpd
+      libwpg
+      libX11
+      libXaw
+      libXext
+      libXi
+      libXinerama
+      libxml2
+      libxslt
+      libXtst
+      libXdmcp
+      libpthreadstubs
+      libGLU
+      libGL
+      mythes
+      glib
+      libmysqlclient
+      neon
+      nspr
+      nss
+      openldap
+      openssl
+      pam
+      perl
+      pkg-config
+      poppler
+      python3
+      sane-backends
+      unzip
+      which
+      zip
+      zlib
+      mdds
+      bluez5
+      libwps
+      libabw
+      libzmf
+      libxshmfence
+      libatomic_ops
+      graphite2
+      harfbuzz
+      gpgme
+      util-linux
+      librevenge
+      libe-book
+      libmwaw
+      glm
+      ncurses
+      libepoxy
+      libodfgen
+      CoinMP
+      librdf_rasqal
+      gnome.adwaita-icon-theme
+      gettext
+    ] ++ (with gst_all_1; [
       gstreamer
-      gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
       gst-libav
-    ])
-    ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
+    ]) ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
     inherit srcs;
@@ -417,10 +504,12 @@ in (mkDrv rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    description =
+      "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }))
+}).overrideAttrs
+((importVariant "override.nix") (args // { inherit kdeIntegration; }))

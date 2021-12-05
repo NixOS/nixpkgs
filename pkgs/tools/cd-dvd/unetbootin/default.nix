@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, mtools
-, p7zip
-, wrapQtAppsHook
-, qtbase
-, qttools
-, qmake
-, syslinux
-, util-linux
-, which
-}:
+{ lib, stdenv, coreutils, fetchFromGitHub, mtools, p7zip, wrapQtAppsHook, qtbase
+, qttools, qmake, syslinux, util-linux, which }:
 
 stdenv.mkDerivation rec {
   pname = "unetbootin";
@@ -28,11 +16,7 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */src/unetbootin)
   '';
 
-  buildInputs = [
-    qtbase
-    qttools
-    qmake
-  ];
+  buildInputs = [ qtbase qttools qmake ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 

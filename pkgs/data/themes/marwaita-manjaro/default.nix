@@ -1,11 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-}:
+{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, gtk-engine-murrine, gtk_engines
+, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-manjaro";
@@ -18,15 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qihxipk7ya6n3p9kg20bk6plnb85pg3ahwd02qq4bqfiw6mx3gw";
   };
 
-  buildInputs = [
-    gdk-pixbuf
-    gtk_engines
-    librsvg
-  ];
+  buildInputs = [ gdk-pixbuf gtk_engines librsvg ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontBuild = true;
 

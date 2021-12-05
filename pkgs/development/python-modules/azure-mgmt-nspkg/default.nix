@@ -1,8 +1,4 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-nspkg
-}:
+{ pkgs, buildPythonPackage, fetchPypi, azure-nspkg }:
 
 buildPythonPackage rec {
   version = "3.0.2";

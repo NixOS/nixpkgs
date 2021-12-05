@@ -1,24 +1,23 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, cmake, pkg-config
-, bison, flex
-, static ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, cmake
+, pkg-config, bison, flex, static ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
   version = "0.15.0";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-1Yg1ZtFh+Pbd1OIfOp4+a4JyeZ0FSCDxwlsR6GcY+Gs=";
   };
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [ cmake pkg-config bison flex ];
   buildInputs = [ boost zlib libevent openssl ]
-    ++ lib.optionals (!static) [ (python3.withPackages (ps: [ps.twisted])) ];
+    ++ lib.optionals (!static) [ (python3.withPackages (ps: [ ps.twisted ])) ];
 
   preConfigure = "export PY_PREFIX=$out";
 
@@ -40,9 +39,7 @@ stdenv.mkDerivation rec {
     "-DOPENSSL_USE_STATIC_LIBS=ON"
   ];
 
-  disabledTests = [
-    "PythonTestSSLSocket"
-  ] ++ lib.optionals stdenv.isDarwin [
+  disabledTests = [ "PythonTestSSLSocket" ] ++ lib.optionals stdenv.isDarwin [
     # tests that hang up in the darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
@@ -65,7 +62,9 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
+    ${
+      lib.optionalString stdenv.isDarwin "DY"
+    }LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
 
     runHook postCheck
   '';

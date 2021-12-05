@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchzip {
-    url = "https://github.com/pellegre/libcrafter/archive/version-${version}.zip";
+    url =
+      "https://github.com/pellegre/libcrafter/archive/version-${version}.zip";
     sha256 = "1d2vgxawdwk2zg3scxclxdby1rhghmivly8azdjja89kw7gls9xl";
   };
 

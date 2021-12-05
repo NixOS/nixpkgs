@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchPypi
-, isPy27
-, pytest-cov
-, pytestCheckHook
-, toml
-}:
+{ lib, buildPythonPackage, coverage, fetchPypi, isPy27, pytest-cov
+, pytestCheckHook, toml }:
 
 buildPythonPackage rec {
   pname = "vulture";
@@ -20,11 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ toml ];
 
-  checkInputs = [
-    coverage
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ coverage pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "vulture" ];
 

@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome,
-  libstartup_notification, libgtop, perlPackages,
-  autoreconfHook, intltool, docbook_xsl, xauth
-}:
+{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome
+, libstartup_notification, libgtop, perlPackages, autoreconfHook, intltool
+, docbook_xsl, xauth }:
 
 stdenv.mkDerivation rec {
   version = "2.0.12";
@@ -12,13 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "1brz9j3nf7l2gd3a5grbp0s3nksmlrp6rxmgp5s6gjvxcb1wzy92";
   };
 
-  nativeBuildInputs = [
-    pkg-config autoreconfHook intltool docbook_xsl wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config autoreconfHook intltool docbook_xsl wrapGAppsHook ];
 
   buildInputs = [
-    gtk2 gnome2.GConf libstartup_notification
-    gnome.libgnome-keyring libgtop gnome2.libglade
+    gtk2
+    gnome2.GConf
+    libstartup_notification
+    gnome.libgnome-keyring
+    libgtop
+    gnome2.libglade
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
@@ -26,28 +28,28 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   patches = [
-        # Patches from the gentoo ebuild
+    # Patches from the gentoo ebuild
 
-        # Fix compilation on bsdc
-        ./libgksu-2.0.0-fbsd.patch
+    # Fix compilation on bsdc
+    ./libgksu-2.0.0-fbsd.patch
 
-        # Fix wrong usage of LDFLAGS, gentoo bug #226837
-        ./libgksu-2.0.7-libs.patch
+    # Fix wrong usage of LDFLAGS, gentoo bug #226837
+    ./libgksu-2.0.7-libs.patch
 
-        # Use po/LINGUAS
-        ./libgksu-2.0.7-polinguas.patch
+    # Use po/LINGUAS
+    ./libgksu-2.0.7-polinguas.patch
 
-        # Don't forkpty; gentoo bug #298289
-        ./libgksu-2.0.12-revert-forkpty.patch
+    # Don't forkpty; gentoo bug #298289
+    ./libgksu-2.0.12-revert-forkpty.patch
 
-        # Make this gmake-3.82 compliant, gentoo bug #333961
-        ./libgksu-2.0.12-fix-make-3.82.patch
+    # Make this gmake-3.82 compliant, gentoo bug #333961
+    ./libgksu-2.0.12-fix-make-3.82.patch
 
-        # Do not build test programs that are never executed; also fixes gentoo bug #367397 (underlinking issues).
-        ./libgksu-2.0.12-notests.patch
+    # Do not build test programs that are never executed; also fixes gentoo bug #367397 (underlinking issues).
+    ./libgksu-2.0.12-notests.patch
 
-        # Fix automake-1.11.2 compatibility, gentoo bug #397411
-        ./libgksu-2.0.12-automake-1.11.2.patch
+    # Fix automake-1.11.2 compatibility, gentoo bug #397411
+    ./libgksu-2.0.12-automake-1.11.2.patch
   ];
 
   postPatch = ''
@@ -66,9 +68,7 @@ stdenv.mkDerivation rec {
     intltoolize --force --copy --automake
   '';
 
-  configureFlags = [
-    "--disable-gtk-doc"
-  ];
+  configureFlags = [ "--disable-gtk-doc" ];
 
   meta = {
     description = "A library for integration of su into applications";

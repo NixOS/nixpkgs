@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Prettyprint and syntax check BibTeX and Scribe bibliography data base files";
+    description =
+      "Prettyprint and syntax check BibTeX and Scribe bibliography data base files";
     homepage = "http://ftp.math.utah.edu/pub/bibclean";
     license = licenses.gpl2;
     platforms = platforms.all;

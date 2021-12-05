@@ -1,13 +1,5 @@
-{ autoreconfHook
-, docbook_xml_dtd_44
-, docbook-xsl-ns
-, fetchFromGitHub
-, lib
-, libX11
-, libXpm
-, libxslt
-, stdenv
-}:
+{ autoreconfHook, docbook_xml_dtd_44, docbook-xsl-ns, fetchFromGitHub, lib
+, libX11, libXpm, libxslt, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "stalonetray";
@@ -20,24 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-grxPqSYPLUstLIOKqzMActaSQ2ftYrjbalfR4HcPDRY=";
   };
 
-  preConfigure =
-    let
-      db_root = "${docbook-xsl-ns}/share/xml/docbook-xsl-ns";
-      ac_str = "AC_SUBST(DOCBOOK_ROOT)";
-      ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
-    in
-      ''
-        substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
-      '';
+  preConfigure = let
+    db_root = "${docbook-xsl-ns}/share/xml/docbook-xsl-ns";
+    ac_str = "AC_SUBST(DOCBOOK_ROOT)";
+    ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
+  in ''
+    substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
+  '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook-xsl-ns
-    docbook_xml_dtd_44
-    libX11
-    libXpm
-    libxslt
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook docbook-xsl-ns docbook_xml_dtd_44 libX11 libXpm libxslt ];
 
   hardeningDisable = [ "format" ];
 

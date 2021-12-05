@@ -1,10 +1,9 @@
-{ stdenv, lib, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
-}:
+{ stdenv, lib, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat
+, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
+, xorg, autoPatchelfHook, systemd, libnotify, libappindicator }:
 
-let deps = [
+let
+  deps = [
     alsa-lib
     atk
     cairo
@@ -38,21 +37,17 @@ let deps = [
     systemd
   ];
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
   version = "2021.5";
 
   src = fetchurl {
-    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    url =
+      "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
     sha256 = "186va4pllimmcqnlbry5ni8gi8p3mbpgjf7sdspmhy2hlfjvlz47";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
   buildInputs = deps;
 
@@ -84,7 +79,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
-    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];

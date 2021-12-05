@@ -1,14 +1,10 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
-, enableRedis ? true
-, callPackage
-}:
+{ lib, stdenv, python3, openssl, enableSystemd ? stdenv.isLinux, nixosTests
+, enableRedis ? true, callPackage }:
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
-in
-with python3.pkgs;
+in with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.48.0";

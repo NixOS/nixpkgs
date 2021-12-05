@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, alsa-lib
-, ffmpeg
-, libass
-, libcddb
-, libcdio
-, libgme
-, libpulseaudio
-, libsidplayfp
-, libva
-, libXv
-, taglib
-, qtbase
-, qttools
-, vulkan-headers
-, vulkan-tools
-, wrapQtAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, alsa-lib, ffmpeg, libass
+, libcddb, libcdio, libgme, libpulseaudio, libsidplayfp, libva, libXv, taglib
+, qtbase, qttools, vulkan-headers, vulkan-tools, wrapQtAppsHook }:
 stdenv.mkDerivation rec {
   pname = "qmplay2";
   version = "21.06.07";
@@ -32,11 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
     alsa-lib
     ffmpeg

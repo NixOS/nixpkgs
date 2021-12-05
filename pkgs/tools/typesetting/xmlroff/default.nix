@@ -1,14 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, gtk2
-, libxml2
-, libxslt
-, pango
-, pangoxsl
-, perl
-, pkg-config
-, popt
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk2, libxml2, libxslt, pango
+, pangoxsl, perl, pkg-config, popt }:
 
 stdenv.mkDerivation rec {
   pname = "xmlroff";
@@ -22,14 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [
-    libxml2
-    libxslt
-    pango
-    pangoxsl
-    gtk2
-    popt
-  ];
+  buildInputs = [ libxml2 libxslt pango pangoxsl gtk2 popt ];
 
   sourceRoot = "source/xmlroff/";
 
@@ -37,9 +21,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
-  configureFlags = [
-    "--disable-gp"
-  ];
+  configureFlags = [ "--disable-gp" ];
 
   preBuild = ''
     substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${perl}/bin/perl"

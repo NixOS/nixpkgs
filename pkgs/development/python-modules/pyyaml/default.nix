@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, libyaml
-, isPy27
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, libyaml, isPy27, python }:
 
 buildPythonPackage rec {
   pname = "PyYAML";
@@ -22,8 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libyaml ];
 
-  checkPhase = let
-    testdir = if isPy27 then "tests/lib" else "tests/lib3";
+  checkPhase = let testdir = if isPy27 then "tests/lib" else "tests/lib3";
   in ''
     runHook preCheck
     PYTHONPATH="${testdir}:$PYTHONPATH" ${python.interpreter} -m test_all

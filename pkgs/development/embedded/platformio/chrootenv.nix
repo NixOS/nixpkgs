@@ -8,16 +8,8 @@ let
           platformio = self.callPackage ./core.nix { inherit version src; };
         };
       };
-    in (with pkgs; [
-      zlib
-      git
-    ]) ++ (with python.pkgs; [
-      python
-      setuptools
-      pip
-      bottle
-      platformio
-    ]);
+    in (with pkgs; [ zlib git ])
+    ++ (with python.pkgs; [ python setuptools pip bottle platformio ]);
 
 in buildFHSUserEnv {
   name = "platformio";

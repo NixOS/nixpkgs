@@ -1,9 +1,7 @@
 { stdenv, ghdl-llvm, ghdl-mcode, backend }:
 
-let
-  ghdl = if backend == "llvm" then ghdl-llvm else ghdl-mcode;
-in
-stdenv.mkDerivation {
+let ghdl = if backend == "llvm" then ghdl-llvm else ghdl-mcode;
+in stdenv.mkDerivation {
   name = "ghdl-test-simple";
   meta.timeout = 300;
   nativeBuildInputs = [ ghdl ];

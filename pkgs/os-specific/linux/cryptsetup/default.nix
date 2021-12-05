@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkg-config, popt }:
+{ lib, stdenv, fetchurl, lvm2, json_c, openssl, libuuid, pkg-config, popt }:
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
@@ -8,7 +7,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.4/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kernel/linux/utils/cryptsetup/v2.4/${pname}-${version}.tar.xz";
     sha256 = "sha256-o1anJ6g6RkreVm6VI5Yioi2+Tg9IKxmP2wSrDTpanF8=";
   };
 

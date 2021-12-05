@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
-}:
+{ buildPythonPackage, cirq-core, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cirq-aqt";
@@ -15,14 +11,9 @@ buildPythonPackage rec {
       --replace "requests~=2.18" "requests"
   '';
 
-  propagatedBuildInputs = [
-    cirq-core
-    requests
-  ];
+  propagatedBuildInputs = [ cirq-core requests ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_aqt" ];

@@ -42,7 +42,8 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  nativeBuildInputs = [ cmake python3 ] ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+  nativeBuildInputs = [ cmake python3 ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -52,7 +53,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation";
+    description =
+      "A collection of tools, libraries and tests for shader compilation";
     platforms = platforms.all;
     license = [ licenses.asl20 ];
   };

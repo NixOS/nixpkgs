@@ -3,33 +3,37 @@
 let
   # kana to kanji
   small = fetchurl {
-    url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.S";
+    url =
+      "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.S";
     sha256 = "11cjrc8m99hj4xpl2nvzxanlswpapi92vmgk9d6yimdz0jidb6cq";
   };
   medium = fetchurl {
-    url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.M";
+    url =
+      "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.M";
     sha256 = "0pwjp9qjmn9sq6zc0k6632l7dc2dbjn45585ibckvvl9iwfqqxdp";
   };
   large = fetchurl {
-    url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.L";
+    url =
+      "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.L";
     sha256 = "0ps0a7sbkryd6hxvphq14i7g5wci4gvr0vraac8ia2ww67a2xbyc";
   };
 
   # english to japanese
   edict = fetchurl {
-    url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.edict";
+    url =
+      "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.edict";
     sha256 = "1vrwnq0vvjn61nijbln6wfinqg93802d2a8d4ad82n692v83b1li";
   };
   # misc
   assoc = fetchurl {
-    url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.assoc";
+    url =
+      "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.assoc";
     sha256 = "1smcbyv6srrhnpl7ic9nqds9nz3g2dgqngmhzkrdlwmvcpvakp1v";
   };
 
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
-in
+  iconvBin = if stdenv.isDarwin then libiconv else buildPackages.stdenv.cc.libc;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "skk-dicts-unstable";
   version = "2020-03-24";
   srcs = [ small medium large edict assoc ];

@@ -1,6 +1,5 @@
-{ lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
-, clang, llvm, gcc, which, libcgroup, python, perl, gmp
-, file, wine ? null, fetchpatch
+{ lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper, clang
+, llvm, gcc, which, libcgroup, python, perl, gmp, file, wine ? null, fetchpatch
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -10,9 +9,12 @@ assert (wine != null) -> (stdenv.targetPlatform.system == "i686-linux");
 
 let
   aflplusplus-qemu = callPackage ./qemu.nix { inherit aflplusplus; };
-  qemu-exe-name = if stdenv.targetPlatform.system == "x86_64-linux" then "qemu-x86_64"
-    else if stdenv.targetPlatform.system == "i686-linux" then "qemu-i386"
-    else throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
+  qemu-exe-name = if stdenv.targetPlatform.system == "x86_64-linux" then
+    "qemu-x86_64"
+  else if stdenv.targetPlatform.system == "i686-linux" then
+    "qemu-i386"
+  else
+    throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
   libdislocator = callPackage ./libdislocator.nix { inherit aflplusplus; };
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
@@ -32,7 +34,6 @@ let
     nativeBuildInputs = [ makeWrapper which clang gcc ];
     buildInputs = [ llvm python gmp ]
       ++ lib.optional (wine != null) python.pkgs.wrapPython;
-
 
     postPatch = ''
       # Replace the CLANG_BIN variables with the correct path
@@ -127,9 +128,9 @@ let
         A heavily enhanced version of AFL, incorporating many features
         and improvements from the community
       '';
-      homepage    = "https://aflplus.plus";
-      license     = lib.licenses.asl20;
-      platforms   = ["x86_64-linux" "i686-linux"];
+      homepage = "https://aflplus.plus";
+      license = lib.licenses.asl20;
+      platforms = [ "x86_64-linux" "i686-linux" ];
       maintainers = with lib.maintainers; [ ris mindavi ];
     };
   };

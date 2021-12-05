@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, git, makeWrapper, allegro5, libGL }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, git, makeWrapper, allegro5
+, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Linux packaging assets
     (fetchurl {
-      url = "https://github.com/linleyh/liberation-circuit/commit/72c1f6f4100bd227540aca14a535e7f4ebdeb851.patch";
+      url =
+        "https://github.com/linleyh/liberation-circuit/commit/72c1f6f4100bd227540aca14a535e7f4ebdeb851.patch";
       sha256 = "0sad1z1lls0hanv88g1q6x5qr4s8f5p42s8j8v55bmwsdc0s5qys";
     })
   ];
@@ -39,7 +41,8 @@ stdenv.mkDerivation rec {
     "-DALLEGRO_INCLUDE_DIR=${lib.getDev allegro5}/include"
   ];
 
-  NIX_CFLAGS_LINK = "-lallegro_image -lallegro_primitives -lallegro_color -lallegro_acodec -lallegro_audio -lallegro_dialog -lallegro_font -lallegro_main -lallegro -lm";
+  NIX_CFLAGS_LINK =
+    "-lallegro_image -lallegro_primitives -lallegro_color -lallegro_acodec -lallegro_audio -lallegro_dialog -lallegro_font -lallegro_main -lallegro -lm";
   hardeningDisable = [ "format" ];
 
   installPhase = ''

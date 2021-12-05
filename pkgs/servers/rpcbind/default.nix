@@ -11,15 +11,14 @@ stdenv.mkDerivation {
     sha256 = "sha256-aidETIZaQYzC3liDGM915wyBWpMrn4OudxEcFS/Iucw=";
   };
 
-  patches = [
-    ./sunrpc.patch
-  ];
+  patches = [ ./sunrpc.patch ];
 
-  buildInputs = [ libnsl libtirpc ]
-             ++ lib.optional useSystemd systemd;
+  buildInputs = [ libnsl libtirpc ] ++ lib.optional useSystemd systemd;
 
   configureFlags = [
-    "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"
+    "--with-systemdsystemunitdir=${
+      if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
+    }"
     "--enable-warmstarts"
     "--with-rpcuser=rpc"
   ];

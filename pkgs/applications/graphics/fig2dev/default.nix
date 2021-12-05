@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, ghostscript
-, libpng
-, makeWrapper
-, coreutils
-, bc
-, gnugrep
-, gawk
-, gnused
-}:
+{ lib, stdenv, fetchurl, ghostscript, libpng, makeWrapper, coreutils, bc
+, gnugrep, gawk, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "fig2dev";
@@ -23,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
-  GSEXE="${ghostscript}/bin/gs";
+  GSEXE = "${ghostscript}/bin/gs";
 
   postInstall = ''
     wrapProgram $out/bin/fig2ps2tex \

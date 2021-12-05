@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, future
-, numpy
-, qdldl
-, scipy
+{ lib, buildPythonPackage, fetchPypi, cmake, future, numpy, qdldl, scipy
 # check inputs
-, pytestCheckHook
-, cvxopt
-}:
+, pytestCheckHook, cvxopt }:
 
 buildPythonPackage rec {
   pname = "osqp";
@@ -23,18 +14,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    future
-    numpy
-    qdldl
-    scipy
-  ];
+  propagatedBuildInputs = [ future numpy qdldl scipy ];
 
   pythonImportsCheck = [ "osqp" ];
   checkInputs = [ pytestCheckHook cvxopt ];
-  disabledTests = [
-    "mkl_"
-  ];
+  disabledTests = [ "mkl_" ];
 
   meta = with lib; {
     description = "The Operator Splitting QP Solver";

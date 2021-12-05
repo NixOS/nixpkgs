@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, matplotlib, pytest }:
 
 buildPythonPackage rec {
   pname = "regional";
@@ -18,15 +11,9 @@ buildPythonPackage rec {
     sha256 = "03qgm35q9sa5cy0kkw4bj60zfylw0isfzb96nlhdfrsigzs2zkxv";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    matplotlib
-  ];
+  propagatedBuildInputs = [ numpy scipy matplotlib ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest

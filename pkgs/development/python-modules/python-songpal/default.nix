@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, aiohttp
-, async-upnp-client
-, attrs
-, click
-, importlib-metadata
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, fetchpatch, poetry-core
+, aiohttp, async-upnp-client, attrs, click, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "python-songpal";
@@ -30,7 +20,8 @@ buildPythonPackage rec {
     # https://github.com/rytilahti/python-songpal/pull/90
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
-      url = "https://github.com/rytilahti/python-songpal/commit/56b634790d94b2f9788d5af3d5cedff47f1e42c2.patch";
+      url =
+        "https://github.com/rytilahti/python-songpal/commit/56b634790d94b2f9788d5af3d5cedff47f1e42c2.patch";
       sha256 = "0yc0mrb91ywk77nd4mxvyc0p2kjz2w1p395755a32ls30zw2bs27";
     })
   ];
@@ -41,17 +32,10 @@ buildPythonPackage rec {
       --replace 'click = "^7"' 'click = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-upnp-client
-    attrs
-    click
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [ aiohttp async-upnp-client attrs click importlib-metadata ];
 
   # no tests implemented
   doCheck = false;

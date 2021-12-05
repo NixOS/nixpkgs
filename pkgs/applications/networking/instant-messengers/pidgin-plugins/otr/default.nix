@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libotr, pidgin, intltool } :
+{ lib, stdenv, fetchurl, libotr, pidgin, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-otr";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i5s9rrgbyss9rszq6c6y53hwqyw1k86s40cpsfx5ccl9bprxdgl";
   };
 
-  postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
+  postInstall = "ln -s $out/lib/pidgin $out/share/pidgin-otr";
 
   buildInputs = [ libotr pidgin intltool ];
 

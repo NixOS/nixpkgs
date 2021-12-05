@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, writeScript
-, cmake
-, pkg-config
-, numactl
-}:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, pkg-config, numactl }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";

@@ -1,16 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, setuptools-scm
-, setuptools
-, vdf
-, bash
-, steam-run
-, winetricks
-, yad
-, pytestCheckHook
-, nix-update-script
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, setuptools-scm, setuptools, vdf
+, bash, steam-run, winetricks, yad, pytestCheckHook, nix-update-script }:
 
 buildPythonApplication rec {
   pname = "protontricks";
@@ -37,14 +26,8 @@ buildPythonApplication rec {
     vdf
   ];
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      bash
-      steam-run
-      winetricks
-      yad
-    ]}"
-  ];
+  makeWrapperArgs =
+    [ "--prefix PATH : ${lib.makeBinPath [ bash steam-run winetricks yad ]}" ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -56,12 +39,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "protontricks" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
-    description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
+    description =
+      "A simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];

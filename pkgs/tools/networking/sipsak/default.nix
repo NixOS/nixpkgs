@@ -4,11 +4,7 @@ stdenv.mkDerivation rec {
   pname = "sipsak";
   version = "4.1.2.1";
 
-  buildInputs = [
-    autoreconfHook
-    openssl
-    c-ares
-  ];
+  buildInputs = [ autoreconfHook openssl c-ares ];
 
   NIX_CFLAGS_COMPILE = "--std=gnu89";
 

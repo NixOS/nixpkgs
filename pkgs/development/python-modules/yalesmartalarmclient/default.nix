@@ -1,9 +1,4 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-}:
+{ lib, backoff, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "yalesmartalarmclient";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "11i7vh61a5xfv32zm7rkigl010wzd6snag6sf7w38256j95nnb05";
   };
 
-  propagatedBuildInputs = [
-    backoff
-    requests
-  ];
+  propagatedBuildInputs = [ backoff requests ];
 
   # Project has no tests
   doCheck = false;

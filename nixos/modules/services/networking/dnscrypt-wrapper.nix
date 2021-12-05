@@ -2,13 +2,10 @@
 with lib;
 
 let
-  cfg     = config.services.dnscrypt-wrapper;
+  cfg = config.services.dnscrypt-wrapper;
   dataDir = "/var/lib/dnscrypt-wrapper";
 
-  mkPath = path: default:
-    if path != null
-      then toString path
-      else default;
+  mkPath = path: default: if path != null then toString path else default;
 
   publicKey = mkPath cfg.providerKey.public "${dataDir}/public.key";
   secretKey = mkPath cfg.providerKey.secret "${dataDir}/secret.key";
@@ -40,7 +37,8 @@ let
     cd ${dataDir}
 
     # generate provider keypair (first run only)
-    ${optionalString (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
+    ${optionalString
+    (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
       if [ ! -f ${publicKey} ] || [ ! -f ${secretKey} ]; then
         dnscrypt-wrapper --gen-provider-keypair
       fi
@@ -77,12 +75,10 @@ let
     fi
   '';
 
-
   # This is the fork of the original dnscrypt-proxy maintained by Dyne.org.
   # dnscrypt-proxy2 doesn't provide the `--test` feature that is needed to
   # correctly implement key rotation of dnscrypt-wrapper ephemeral keys.
-  dnscrypt-proxy1 = pkgs.callPackage
-    ({ stdenv, fetchFromGitHub, autoreconfHook
+  dnscrypt-proxy1 = pkgs.callPackage ({ stdenv, fetchFromGitHub, autoreconfHook
     , pkg-config, libsodium, ldns, openssl, systemd }:
 
     stdenv.mkDerivation rec {
@@ -101,7 +97,8 @@ let
       nativeBuildInputs = [ autoreconfHook pkg-config ];
 
       # <ldns/ldns.h> depends on <openssl/ssl.h>
-      buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
+      buildInputs = [ libsodium openssl.dev ldns ]
+        ++ optional stdenv.isLinux systemd;
 
       postInstall = ''
         # Previous versions required libtool files to load plugins; they are
@@ -110,7 +107,8 @@ let
       '';
 
       meta = {
-        description = "A tool for securing communications between a client and a DNS resolver";
+        description =
+          "A tool for securing communications between a client and a DNS resolver";
         homepage = "https://github.com/dyne/dnscrypt-proxy";
         license = licenses.isc;
         maintainers = with maintainers; [ rnhmjoj ];
@@ -119,7 +117,6 @@ let
     }) { };
 
 in {
-
 
   ###### interface
 
@@ -207,7 +204,6 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -234,31 +230,31 @@ in {
 
     systemd.services.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon";
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path     = [ pkgs.dnscrypt-wrapper ];
+      path = [ pkgs.dnscrypt-wrapper ];
 
       serviceConfig = {
         User = "dnscrypt-wrapper";
         WorkingDirectory = dataDir;
-        Restart   = "on-failure";
-        ExecStart = "${pkgs.dnscrypt-wrapper}/bin/dnscrypt-wrapper ${toString daemonArgs}";
+        Restart = "on-failure";
+        ExecStart = "${pkgs.dnscrypt-wrapper}/bin/dnscrypt-wrapper ${
+            toString daemonArgs
+          }";
       };
 
       preStart = genKeys;
     };
 
-
     systemd.services.dnscrypt-wrapper-rotate = {
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
-      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
+      path = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };
-
 
     systemd.timers.dnscrypt-wrapper-rotate = {
       description = "Periodically check DNSCrypt wrapper keys for expiration";
@@ -271,12 +267,11 @@ in {
       };
     };
 
-    assertions = with cfg; [
-      { assertion = (providerKey.public == null && providerKey.secret == null) ||
-                    (providerKey.secret != null && providerKey.public != null);
-        message = "The secret and public provider key must be set together.";
-      }
-    ];
+    assertions = with cfg; [{
+      assertion = (providerKey.public == null && providerKey.secret == null)
+        || (providerKey.secret != null && providerKey.public != null);
+      message = "The secret and public provider key must be set together.";
+    }];
 
   };
 

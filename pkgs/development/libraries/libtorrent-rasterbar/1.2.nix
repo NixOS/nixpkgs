@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, ncurses, SystemConfiguration
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, zlib, boost
+, openssl, libtool, python, libiconv, ncurses, SystemConfiguration }:
 
 let
   version = "1.2.11";
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost.override { enablePython = true; inherit python; };
+  boostPython = boost.override {
+    enablePython = true;
+    inherit python;
+  };
 
 in stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
@@ -45,7 +47,8 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://libtorrent.org/";
-    description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
+    description =
+      "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
     broken = stdenv.isDarwin;

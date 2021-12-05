@@ -1,21 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, openssl
-, gsound
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, glib-networking
-, gtk3
-, openssh
-, gnome
-, gjs
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, openssl, gsound, meson, ninja
+, pkg-config, gobject-introspection, wrapGAppsHook, glib, glib-networking, gtk3
+, openssh, gnome, gjs, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
@@ -60,7 +45,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgnome_shell_libdir=${gnome.gnome-shell}/lib"
-    "-Dgsettings_schemadir=${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}"
+    "-Dgsettings_schemadir=${
+      glib.makeSchemaPath (placeholder "out") "${pname}-${version}"
+    }"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"
@@ -104,14 +91,13 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.gsconnect;
-    };
+    tests = { installedTests = nixosTests.installed-tests.gsconnect; };
   };
 
   meta = with lib; {
     description = "KDE Connect implementation for Gnome Shell";
-    homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
+    homepage =
+      "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

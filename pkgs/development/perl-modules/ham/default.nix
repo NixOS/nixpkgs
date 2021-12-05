@@ -1,4 +1,5 @@
-{ lib, buildPerlPackage, fetchFromGitHub, makeWrapper, openssh, GitRepository, URI, XMLMini }:
+{ lib, buildPerlPackage, fetchFromGitHub, makeWrapper, openssh, GitRepository
+, URI, XMLMini }:
 
 buildPerlPackage {
   pname = "ham-unstable";
@@ -33,7 +34,8 @@ buildPerlPackage {
   doCheck = false;
 
   meta = {
-    description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
+    description =
+      "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
     homepage = "https://github.com/kernkonzept/ham";
     license = "unknown"; # should be gpl2, but not quite sure
     maintainers = with lib.maintainers; [ aw ];

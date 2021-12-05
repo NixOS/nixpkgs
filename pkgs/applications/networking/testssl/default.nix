@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper, lib
-, dnsutils, coreutils, openssl, nettools, util-linux, procps }:
+{ stdenv, fetchFromGitHub, makeWrapper, lib, dnsutils, coreutils, openssl
+, nettools, util-linux, procps }:
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     coreutils # for printf
-    dnsutils  # for dig
-    nettools  # for hostname
-    openssl   # for openssl
-    procps    # for ps
+    dnsutils # for dig
+    nettools # for hostname
+    openssl # for openssl
+    procps # for ps
     util-linux # for hexdump
   ];
 
@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     install -D testssl.sh $out/bin/testssl.sh
     cp -r etc $out
 
-    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${
+      lib.makeBinPath buildInputs
+    }
   '';
 
   meta = with lib; {

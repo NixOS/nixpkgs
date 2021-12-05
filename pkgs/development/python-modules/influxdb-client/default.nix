@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rx
-, certifi
-, six
-, python-dateutil
-, setuptools
-, urllib3
-, ciso8601
-, pytz
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, rx, certifi, six, python-dateutil
+, setuptools, urllib3, ciso8601, pytz, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "influxdb-client";
@@ -24,16 +13,8 @@ buildPythonPackage rec {
     sha256 = "0n8zflphcj9l17mkqa4acxb0sna0v05zq5y07ayizf84zm93hpbr";
   };
 
-  propagatedBuildInputs = [
-    rx
-    certifi
-    six
-    python-dateutil
-    setuptools
-    urllib3
-    ciso8601
-    pytz
-  ];
+  propagatedBuildInputs =
+    [ rx certifi six python-dateutil setuptools urllib3 ciso8601 pytz ];
 
   # requires influxdb server
   doCheck = false;

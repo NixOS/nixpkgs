@@ -1,7 +1,4 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "interfacer-unstable";

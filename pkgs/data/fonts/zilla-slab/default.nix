@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.002";
+let version = "1.002";
 in fetchzip {
   name = "zilla-slab-${version}";
 
-  url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";
+  url =
+    "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";
   postFetch = ''
     unzip $downloadedFile
     mkdir -p $out/share/fonts/truetype

@@ -1,12 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtquickcontrols2
-, SDL
-, python3
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtquickcontrols2, SDL
+, python3 }:
 
 mkDerivation rec {
   pname = "sfxr-qt";
@@ -22,11 +15,7 @@ mkDerivation rec {
     cmake
     (python3.withPackages (pp: with pp; [ pyyaml jinja2 setuptools ]))
   ];
-  buildInputs = [
-    qtbase
-    qtquickcontrols2
-    SDL
-  ];
+  buildInputs = [ qtbase qtquickcontrols2 SDL ];
 
   meta = with lib; {
     homepage = "https://github.com/agateau/sfxr-qt";

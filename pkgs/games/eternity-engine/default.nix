@@ -1,4 +1,5 @@
-{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "eternity-engine";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "sqlite-fts4";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "15r1mijk306fpm61viry5wjhqyxlbqqdk4nfcd901qarx7vqypgy";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Custom Python functions for working with SQLite FTS4";

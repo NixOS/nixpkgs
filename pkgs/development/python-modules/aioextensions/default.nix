@@ -1,12 +1,7 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pythonOlder
+{ buildPythonPackage, fetchPypi, lib, pythonOlder
 
 # Python dependencies
-, uvloop
-, pytest
-}:
+, uvloop, pytest }:
 
 buildPythonPackage rec {
   pname = "aioextensions";

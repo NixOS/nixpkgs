@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
 
-let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation {
+let srcs = import ./srcs.nix { inherit fetchurl; };
+in stdenv.mkDerivation {
   pname = "libagar-test";
   inherit (srcs) version src;
 

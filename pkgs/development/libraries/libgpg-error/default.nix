@@ -1,6 +1,5 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext
-, genPosixLockObjOnly ? false
-}: let
+{ stdenv, lib, buildPackages, fetchurl, gettext, genPosixLockObjOnly ? false }:
+let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
     buildPhase = ''
       cd src
@@ -30,17 +29,21 @@ in stdenv.mkDerivation (rec {
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
-  '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
-    ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
-  '' + lib.optionalString (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isMusl) ''
-    ln -s lock-obj-pub.i686-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
-  '';
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform
+    != stdenv.hostPlatform) ''
+      ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
+      ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
+    '' + lib.optionalString
+    (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
+      ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
+    '' + lib.optionalString
+    (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isMusl) ''
+      ln -s lock-obj-pub.i686-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
+    '' + lib.optionalString
+    (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
+      ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
+      ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
+    '';
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
@@ -50,21 +53,22 @@ in stdenv.mkDerivation (rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ gettext ];
 
-  postConfigure =
-    lib.optionalString stdenv.isSunOS
+  postConfigure = lib.optionalString stdenv.isSunOS
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number
     # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
     # Thus, re-run it with Bash.
-      "${stdenv.shell} config.status";
+    "${stdenv.shell} config.status";
 
   doCheck = true; # not cross
 
   meta = with lib; {
     homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
-    description = "A small library that defines common error values for all GnuPG components";
+    changelog =
+      "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
+    description =
+      "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''
       Libgpg-error is a small library that defines common error values

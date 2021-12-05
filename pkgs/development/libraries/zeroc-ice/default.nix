@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
-, bzip2, expat, libedit, lmdb, openssl
-, darwin, libiconv, Security
-, python3 # for tests only
-, cpp11 ? false
-}:
+{ stdenv, lib, fetchFromGitHub, bzip2, expat, libedit, lmdb, openssl, darwin
+, libiconv, Security, python3 # for tests only
+, cpp11 ? false }:
 
 let
   zeroc_mcpp = stdenv.mkDerivation rec {
@@ -59,18 +56,25 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = with python3.pkgs; [ passlib ];
-  checkPhase = with lib; let
-    # these tests require network access so we need to skip them.
-    brokenTests = map escapeRegex [
-      "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
-    ];
-    # matches CONFIGS flag in makeFlagsArray
-    configFlag = optionalString cpp11 "--config=cpp11-shared";
-  in ''
-    runHook preCheck
-    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${concatStringsSep "|" brokenTests}'
-    runHook postCheck
-  '';
+  checkPhase = with lib;
+    let
+      # these tests require network access so we need to skip them.
+      brokenTests = map escapeRegex [
+        "Ice/udp"
+        "Glacier2"
+        "IceGrid/simple"
+        "IceStorm"
+        "IceDiscovery/simple"
+      ];
+      # matches CONFIGS flag in makeFlagsArray
+      configFlag = optionalString cpp11 "--config=cpp11-shared";
+    in ''
+      runHook preCheck
+      ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${
+        concatStringsSep "|" brokenTests
+      }'
+      runHook postCheck
+    '';
 
   postInstall = ''
     mkdir -p $bin $dev/share

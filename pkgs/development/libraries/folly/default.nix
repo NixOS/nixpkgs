@@ -1,21 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, libevent
-, double-conversion
-, glog
-, gflags
-, libiberty
-, lz4
-, xz
-, zlib
-, jemalloc
-, openssl
-, pkg-config
-, libunwind
-, fmt
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
+, gflags, libiberty, lz4, xz, zlib, jemalloc, openssl, pkg-config, libunwind
+, fmt }:
 
 stdenv.mkDerivation (rec {
   pname = "folly";
@@ -28,10 +13,7 @@ stdenv.mkDerivation (rec {
     sha256 = "sha256-+di8Dzt5NRbqIydBR4sB6bUbQrZZ8URUosdP2JGQMec=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
   buildInputs = [
@@ -60,6 +42,4 @@ stdenv.mkDerivation (rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  LDFLAGS = "-ljemalloc";
-})
+} // lib.optionalAttrs stdenv.isDarwin { LDFLAGS = "-ljemalloc"; })

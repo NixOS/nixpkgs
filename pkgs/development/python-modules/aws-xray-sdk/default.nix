@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, jsonpickle
-, wrapt
-, requests
-, future
-, botocore
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, importlib-metadata
+, jsonpickle, wrapt, requests, future, botocore }:
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
@@ -19,11 +10,8 @@ buildPythonPackage rec {
     sha256 = "90c2fcc982a770e86d009a4c3d2b5c3e372da91cb8284d982bae458e2c0bb268";
   };
 
-  propagatedBuildInputs = [
-    jsonpickle wrapt requests future botocore
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ jsonpickle wrapt requests future botocore ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   meta = {
     description = "AWS X-Ray SDK for the Python programming language";

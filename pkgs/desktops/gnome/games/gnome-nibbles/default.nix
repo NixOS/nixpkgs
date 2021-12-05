@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, librsvg
-, gsound
-, clutter-gtk
-, gettext
-, itstool
-, vala
-, python3
-, libxml2
-, libgee
-, libgnome-games-support
-, meson
-, ninja
-, desktop-file-utils
-, hicolor-icon-theme
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gnome, gtk3, wrapGAppsHook
+, librsvg, gsound, clutter-gtk, gettext, itstool, vala, python3, libxml2, libgee
+, libgnome-games-support, meson, ninja, desktop-file-utils, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -27,18 +8,22 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-nibbles/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1naknfbciydbym79a0jq039xf0033z8gyln48c0qsbcfr2qn8yj5";
   };
 
   patches = [
     # Fix build with recent Vala.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/62964e9256fcac616109af874dbb2bd8342a9853.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/62964e9256fcac616109af874dbb2bd8342a9853.patch";
       sha256 = "4VijELRxycS8rwi1HU9U3h9K/VtdQjJntfdtMN9Uz34=";
     })
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/1b48446068608aff9b5edf1fdbd4b8c0d9f0be94.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/1b48446068608aff9b5edf1fdbd4b8c0d9f0be94.patch";
       sha256 = "X0+Go5ae4F06WTPDYc2HIIax8X4RDgUGO6A6Qp8UifQ=";
     })
   ];

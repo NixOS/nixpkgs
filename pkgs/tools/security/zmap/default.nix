@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjson, json_c, gengetopt, flex, byacc, gmp
-, libpcap
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjson, json_c, gengetopt
+, flex, byacc, gmp, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "zmap";
@@ -29,7 +28,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://zmap.io/";
     license = licenses.asl20;
-    description = "Fast single packet network scanner designed for Internet-wide network surveys";
+    description =
+      "Fast single packet network scanner designed for Internet-wide network surveys";
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;

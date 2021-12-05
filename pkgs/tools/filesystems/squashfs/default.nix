@@ -1,13 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, zlib
-, xz
-, lz4
-, lzo
-, zstd
-, nixosTests
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, xz, lz4, lzo, zstd, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +19,8 @@ stdenv.mkDerivation rec {
     # Otherwise sizes of some files may break in our ISO; see
     # https://github.com/NixOS/nixpkgs/issues/132286
     (fetchpatch {
-      url = "https://github.com/plougher/squashfs-tools/commit/19b161c1cd3e31f7a396ea92dea4390ad43f27b9.diff";
+      url =
+        "https://github.com/plougher/squashfs-tools/commit/19b161c1cd3e31f7a396ea92dea4390ad43f27b9.diff";
       sha256 = "15ng8m2my3a6a9hnfx474bip2vwdh08hzs2k0l5gwd36jv2z1h3f";
     })
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
@@ -37,16 +29,12 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd squashfs-tools
-  '' ;
+  '';
 
   installFlags = [ "INSTALL_DIR=${placeholder "out"}/bin" ];
 
-  makeFlags = [
-    "XZ_SUPPORT=1"
-    "ZSTD_SUPPORT=1"
-    "LZ4_SUPPORT=1"
-    "LZO_SUPPORT=1"
-  ];
+  makeFlags =
+    [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" "LZ4_SUPPORT=1" "LZO_SUPPORT=1" ];
 
   passthru.tests = {
     nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;

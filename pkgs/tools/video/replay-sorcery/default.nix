@@ -1,15 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, pkg-config
-, ffmpeg
-, libX11
-, drmSupport ? true, libdrm
-, notifySupport ? true, libnotify
-, pulseaudioSupport ? true, libpulseaudio
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, cmake, pkg-config, ffmpeg, libX11
+, drmSupport ? true, libdrm, notifySupport ? true, libnotify
+, pulseaudioSupport ? true, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "replay-sorcery";
@@ -34,14 +25,10 @@ stdenv.mkDerivation rec {
     inherit libnotify;
   });
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ ffmpeg libX11 ]
-  ++ lib.optional drmSupport libdrm
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs = [ ffmpeg libX11 ] ++ lib.optional drmSupport libdrm
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   cmakeFlags = [
     "-DRS_SYSTEMD_DIR=${placeholder "out"}/lib/systemd/user"

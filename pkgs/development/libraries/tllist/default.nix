@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, meson
-, ninja
-}:
+{ stdenv, lib, fetchFromGitea, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "tllist";

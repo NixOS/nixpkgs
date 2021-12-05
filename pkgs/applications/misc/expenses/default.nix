@@ -1,9 +1,6 @@
 { lib
 
-, buildGoModule
-, fetchFromGitHub
-, sqlite
-}:
+, buildGoModule, fetchFromGitHub, sqlite }:
 
 buildGoModule rec {
   pname = "expenses";
@@ -23,13 +20,12 @@ buildGoModule rec {
 
   buildInputs = [ sqlite ];
 
-  ldflags = [
-    "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}" ];
 
   meta = with lib; {
-   description = "An interactive command line expense logger";
-   license = licenses.mit;
-   maintainers = [ maintainers.manojkarthick ];
+    description = "An interactive command line expense logger";
+    license = licenses.mit;
+    maintainers = [ maintainers.manojkarthick ];
   };
 }

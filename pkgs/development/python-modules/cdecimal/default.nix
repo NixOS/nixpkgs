@@ -7,7 +7,8 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   src = fetchurl {
-    url="http://www.bytereef.org/software/mpdecimal/releases/${pname}-${version}.tar.gz";
+    url =
+      "http://www.bytereef.org/software/mpdecimal/releases/${pname}-${version}.tar.gz";
     sha256 = "d737cbe43ed1f6ad9874fb86c3db1e9bbe20c0c750868fde5be3f379ade83d8b";
   };
 
@@ -16,8 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast drop-in replacement for decimal.py";
-    homepage    = "http://www.bytereef.org/mpdecimal/";
-    license     = licenses.bsd2;
+    homepage = "http://www.bytereef.org/mpdecimal/";
+    license = licenses.bsd2;
     maintainers = [ maintainers.udono ];
   };
 }

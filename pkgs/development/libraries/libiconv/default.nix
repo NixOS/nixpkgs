@@ -1,7 +1,5 @@
-{ fetchurl, stdenv, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ fetchurl, stdenv, lib, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
@@ -14,17 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 
-  setupHooks = [
-    ../../../build-support/setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  setupHooks = [ ../../../build-support/setup-hooks/role.bash ./setup-hook.sh ];
 
-  postPatch =
-    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
-      ''
-        sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
-      ''
-    + lib.optionalString (!enableShared) ''
+  postPatch = lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform
+    && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc) ''
+      sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
+    '' + lib.optionalString (!enableShared) ''
       sed -i -e '/preload/d' Makefile.in
     '';
 

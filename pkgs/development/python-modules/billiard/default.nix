@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, case
-, psutil
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, pytestCheckHook, case, psutil }:
 
 buildPythonPackage rec {
   pname = "billiard";
@@ -17,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "0ismj2p8c66ykpss94rs0bfra5agxxmljz8r3gaq79r8valfb799";
   };
 
-  checkInputs = [
-    case
-    psutil
-    pytestCheckHook
-  ];
+  checkInputs = [ case psutil pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/celery/billiard";

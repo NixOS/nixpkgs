@@ -1,23 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, testfixtures
-, unittest2
-, webtest
-, pyramid
-, sqlalchemy
-, simplejson
-, mozsvc
-, cornice
-, pyramid_hawkauth
-, pymysql
-, pymysqlsa
-, umemcache
-, WSGIProxy
-, requests
-, pybrowserid
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, testfixtures, unittest2
+, webtest, pyramid, sqlalchemy, simplejson, mozsvc, cornice, pyramid_hawkauth
+, pymysql, pymysqlsa, umemcache, WSGIProxy, requests, pybrowserid }:
 
 buildPythonPackage rec {
   pname = "serversyncstorage";
@@ -33,8 +16,18 @@ buildPythonPackage rec {
 
   checkInputs = [ testfixtures unittest2 webtest ];
   propagatedBuildInputs = [
-    pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
-    pymysqlsa umemcache WSGIProxy requests pybrowserid
+    pyramid
+    sqlalchemy
+    simplejson
+    mozsvc
+    cornice
+    pyramid_hawkauth
+    pymysql
+    pymysqlsa
+    umemcache
+    WSGIProxy
+    requests
+    pybrowserid
   ];
 
   meta = with lib; {

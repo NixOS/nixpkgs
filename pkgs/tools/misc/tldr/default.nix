@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl libzip ];
   nativeBuildInputs = [ pkg-config ];
 
-  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS="
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

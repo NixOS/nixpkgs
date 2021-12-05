@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, pytest
-, six
-, sympy
-, pexpect
-, symengine
-}:
+{ lib, buildPythonPackage, fetchPypi, pytools, pytest, six, sympy, pexpect
+, symengine }:
 
 buildPythonPackage rec {
   pname = "pymbolic";
@@ -24,10 +16,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ sympy pexpect symengine pytest ];
-  propagatedBuildInputs = [
-    pytools
-    six
-  ];
+  propagatedBuildInputs = [ pytools six ];
 
   # too many tests fail
   doCheck = false;

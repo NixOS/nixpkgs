@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, potentials
-, pytest
-, pythonOlder
-, scipy
-, toolz
-, xmltodict
-, python
-}:
+{ lib, buildPythonPackage, cython, datamodeldict, fetchFromGitHub, matplotlib
+, numericalunits, numpy, pandas, potentials, pytest, pythonOlder, scipy, toolz
+, xmltodict, python }:
 
 buildPythonPackage rec {
   version = "1.4.2";
@@ -43,9 +29,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # pytestCheckHook doesn't work
@@ -53,9 +37,7 @@ buildPythonPackage rec {
       and not test_atomic_mass and not imageflags"
   '';
 
-  pythonImportsCheck = [
-    "atomman"
-  ];
+  pythonImportsCheck = [ "atomman" ];
 
   meta = with lib; {
     description = "Atomistic Manipulation Toolkit";

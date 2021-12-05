@@ -1,34 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, pkg-config
-, perl
-, libxml2
-, fuse
-, gnutls
-}:
+{ lib, stdenv, fetchurl, bash-completion, pkg-config, perl, libxml2, fuse
+, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
   version = "1.9.5";
 
   src = fetchurl {
-    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-development/${pname}-${version}.tar.gz";
+    url = "https://download.libguestfs.org/libnbd/${
+        lib.versions.majorMinor version
+      }-development/${pname}-${version}.tar.gz";
     hash = "sha256-BnMoxIiuwhqcwVr3AwAIFgZPcFsIg55N66ZwWMTUnCw=";
   };
 
-  nativeBuildInputs = [
-    bash-completion
-    pkg-config
-    perl
-  ];
+  nativeBuildInputs = [ bash-completion pkg-config perl ];
 
-  buildInputs = [
-    fuse
-    gnutls
-    libxml2
-  ];
+  buildInputs = [ fuse gnutls libxml2 ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 

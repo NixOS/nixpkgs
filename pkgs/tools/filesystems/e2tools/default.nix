@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://e2tools.github.io/";
-    description = "Utilities to read/write/manipulate files in an ext2/ext3 filesystem";
+    description =
+      "Utilities to read/write/manipulate files in an ext2/ext3 filesystem";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.leenaars ];

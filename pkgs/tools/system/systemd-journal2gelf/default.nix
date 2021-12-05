@@ -15,7 +15,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/parse-nl/SystemdJournal2Gelf";
 
   meta = with lib; {
-    description = "Export entries from systemd's journal and send them to a graylog server using gelf";
+    description =
+      "Export entries from systemd's journal and send them to a graylog server using gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz ];
     platforms = platforms.unix;

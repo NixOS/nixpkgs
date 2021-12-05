@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, xmltodict
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests, xmltodict }:
 
 buildPythonPackage rec {
   pname = "meteoalertapi";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EdHqWEkE/uUtz/xjV4k4NvNvtPPU4sJjHGwUM7J+HWs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    xmltodict
-  ];
+  propagatedBuildInputs = [ requests xmltodict ];
 
   # Tests require network access
   doCheck = false;

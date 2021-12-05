@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which}:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
   pname = "cntlm";
@@ -27,11 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "http://cntlm.sourceforge.net/";
     license = licenses.gpl2;
     maintainers =
-      [
-        maintainers.qknight
-        maintainers.markWot
-        maintainers.carlosdagos
-      ];
+      [ maintainers.qknight maintainers.markWot maintainers.carlosdagos ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

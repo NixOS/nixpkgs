@@ -6,7 +6,8 @@ let
 
 in fetchzip {
   name = "nanum-gothic-coding";
-  url = "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
+  url =
+    "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/NanumGothicCoding
@@ -16,7 +17,8 @@ in fetchzip {
   sha256 = "0b3pkhd6xn6393zi0dhj3ah08w1y1ji9fl6584bi0c8lanamf2pc";
 
   meta = with lib; {
-    description = "A contemporary monospaced sans-serif typeface with a warm touch";
+    description =
+      "A contemporary monospaced sans-serif typeface with a warm touch";
     homepage = "https://github.com/naver/nanumfont";
     license = licenses.ofl;
     platforms = platforms.all;

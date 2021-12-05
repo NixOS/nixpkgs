@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/prof7bit/TorChat";
-    description = "Instant messaging application on top of the Tor network and it's location hidden services";
+    description =
+      "Instant messaging application on top of the Tor network and it's location hidden services";
     license = licenses.gpl3;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.unix;

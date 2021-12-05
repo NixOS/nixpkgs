@@ -1,7 +1,5 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, astring, cmdliner, cppo, fpath, result, tyxml
-, markup, alcotest, yojson, sexplib, jq
-}:
+{ lib, fetchurl, buildDunePackage, ocaml, astring, cmdliner, cppo, fpath, result
+, tyxml, markup, alcotest, yojson, sexplib, jq }:
 
 buildDunePackage rec {
   pname = "odoc";
@@ -10,7 +8,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
+    url =
+      "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
     sha256 = "0idzidmz7y10xkwcf4aih0mdvkipxk1gzi4anhnbbi2q2s0nzdzj";
   };
 

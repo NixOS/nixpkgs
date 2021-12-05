@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, asn1crypto
-, fetchPypi
-, openssl
-}:
+{ lib, buildPythonPackage, asn1crypto, fetchPypi, openssl }:
 
 buildPythonPackage rec {
   pname = "oscrypto";
@@ -20,10 +15,7 @@ buildPythonPackage rec {
     sha256 = "1ha68dsrbx6mlra44x0n81vscn17pajbl4yg7cqkk7mq1zfmjwks";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-    openssl
-  ];
+  propagatedBuildInputs = [ asn1crypto openssl ];
 
   preCheck = ''
     tar -xf ${testSources}

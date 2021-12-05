@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (libgcrypt == null) "--without-gcrypt";
 
   meta = with lib; {
-    description = "Collection of powerful tools for manipulating EPROM load files";
+    description =
+      "Collection of powerful tools for manipulating EPROM load files";
     homepage = "http://srecord.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bjornfor ];

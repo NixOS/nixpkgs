@@ -1,13 +1,8 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
-, nixosTests
-, proxySupport ? true
-, sslSupport ? true, openssl
-, http2Support ? true, nghttp2
-, ldapSupport ? true, openldap
-, libxml2Support ? true, libxml2
-, brotliSupport ? true, brotli
-, luaSupport ? false, lua5
-}:
+, nixosTests, proxySupport ? true, sslSupport ? true, openssl
+, http2Support ? true, nghttp2, ldapSupport ? true, openldap
+, libxml2Support ? true, libxml2, brotliSupport ? true, brotli
+, luaSupport ? false, lua5 }:
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
@@ -22,13 +17,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [ perl ] ++
-    lib.optional brotliSupport brotli ++
-    lib.optional sslSupport openssl ++
-    lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
-    lib.optional libxml2Support libxml2 ++
-    lib.optional http2Support nghttp2 ++
-    lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ perl ] ++ lib.optional brotliSupport brotli
+    ++ lib.optional sslSupport openssl ++ lib.optional ldapSupport openldap
+    ++ # there is no --with-ldap flag
+    lib.optional libxml2Support libxml2 ++ lib.optional http2Support nghttp2
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -53,7 +46,8 @@ stdenv.mkDerivation rec {
     "--includedir=${placeholder "dev"}/include"
     (lib.enableFeature proxySupport "proxy")
     (lib.enableFeature sslSupport "ssl")
-    (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
+    (lib.withFeatureAs libxml2Support "libxml2"
+      "${libxml2.dev}/include/libxml2")
     "--docdir=$(doc)/share/doc"
 
     (lib.enableFeature brotliSupport "brotli")
@@ -88,9 +82,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "https://httpd.apache.org/";
-    license     = licenses.asl20;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://httpd.apache.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ lovek323 ];
   };
 }

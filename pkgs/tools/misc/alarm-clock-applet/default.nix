@@ -1,21 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config
-, autoconf
-, automake111x
-, libtool
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake111x, libtool
 
-, glib
-, gtk2
-, gst_all_1
-, gnome2
-, gnome-icon-theme
-, libnotify
-, libxml2
-, libunique
-, intltool
-, gst_plugins ? with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ]
-, wrapGAppsHook
-}:
+, glib, gtk2, gst_all_1, gnome2, gnome-icon-theme, libnotify, libxml2, libunique
+, intltool, gst_plugins ? with gst_all_1; [
+  gst-plugins-base
+  gst-plugins-good
+  gst-plugins-ugly
+], wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
@@ -59,7 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://alarm-clock.pseudoberries.com/";
-    description = "A fully-featured alarm clock for your GNOME panel or equivalent";
+    description =
+      "A fully-featured alarm clock for your GNOME panel or equivalent";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];

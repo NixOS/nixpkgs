@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "parameter-expansion-patched";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "1vhshscjifi78qapzwn29gln6p8jhyc7cccszl8ai2jamhcph5zs";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "parameter_expansion"
-  ];
+  pythonImportsCheck = [ "parameter_expansion" ];
 
   meta = with lib; {
     description = "POSIX parameter expansion in Python";

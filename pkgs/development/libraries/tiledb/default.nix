@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, lz4
-, bzip2
-, zstd
-, spdlog_0
-, tbb
-, openssl
-, boost
-, libpqxx
-, clang-tools
-, catch2
-, python
-, gtest
-, doxygen
-, fixDarwinDylibNames
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, lz4, bzip2, zstd, spdlog_0, tbb
+, openssl, boost, libpqxx, clang-tools, catch2, python, gtest, doxygen
+, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
@@ -32,33 +15,15 @@ stdenv.mkDerivation rec {
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
-  cmakeFlags = [
-    "-DTILEDB_WERROR=0"
-  ];
+  cmakeFlags = [ "-DTILEDB_WERROR=0" ];
 
-  nativeBuildInputs = [
-    clang-tools
-    cmake
-    python
-    doxygen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ clang-tools cmake python doxygen ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
-  buildInputs = [
-    catch2
-    zlib
-    lz4
-    bzip2
-    zstd
-    spdlog_0
-    tbb
-    openssl
-    boost
-    libpqxx
-  ];
+  buildInputs =
+    [ catch2 zlib lz4 bzip2 zstd spdlog_0 tbb openssl boost libpqxx ];
 
   # emulate the process of pulling catch down
   postPatch = ''
@@ -75,7 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
+    description =
+      "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
     license = licenses.mit;
     platforms = platforms.unix;

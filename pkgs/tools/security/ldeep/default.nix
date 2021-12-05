@@ -1,12 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, commandparse
-, dnspython
-, ldap3
-, termcolor
-, tqdm
-}:
+{ lib, buildPythonApplication, fetchPypi, commandparse, dnspython, ldap3
+, termcolor, tqdm }:
 
 buildPythonApplication rec {
   pname = "ldeep";
@@ -17,13 +10,7 @@ buildPythonApplication rec {
     sha256 = "sha256-MYVC8fxLW85n8uZVMhb2Zml1lQ8vW9gw/eRLcmemQx4=";
   };
 
-  propagatedBuildInputs = [
-    commandparse
-    dnspython
-    ldap3
-    termcolor
-    tqdm
-  ];
+  propagatedBuildInputs = [ commandparse dnspython ldap3 termcolor tqdm ];
 
   # no tests are present
   doCheck = false;

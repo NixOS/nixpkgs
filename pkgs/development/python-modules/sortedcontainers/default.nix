@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "sortedcontainers";
@@ -16,7 +13,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
+    description =
+      "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
     homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ costrouc ];

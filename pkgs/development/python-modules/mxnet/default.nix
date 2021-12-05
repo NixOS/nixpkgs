@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, pkgs
-, requests
-, numpy
-, graphviz
-, python
-, isPy3k
-}:
+{ lib, buildPythonPackage, pkgs, requests, numpy, graphviz, python, isPy3k }:
 
 buildPythonPackage {
   inherit (pkgs.mxnet) pname version src meta;

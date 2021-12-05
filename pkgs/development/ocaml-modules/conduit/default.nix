@@ -1,7 +1,5 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, sexplib, astring, uri, logs
-, ipaddr, ipaddr-sexp
-}:
+{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, sexplib, astring, uri, logs
+, ipaddr, ipaddr-sexp }:
 
 buildDunePackage rec {
   pname = "conduit";
@@ -11,7 +9,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-v${version}.tbz";
     sha256 = "500d95bf2a524f4851e94373e32d26b6e99ee04e5134db69fe6e151c3aad9b1f";
   };
 

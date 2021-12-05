@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
-, which, readline, zlib, icu, cargo, rustc, llvmPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2
+, python3, zip, buildPackages, which, readline, zlib, icu, cargo, rustc
+, llvmPackages }:
 
 with lib;
 
-let
-  python3Env = buildPackages.python3.withPackages (p: [p.six]);
+let python3Env = buildPackages.python3.withPackages (p: [ p.six ]);
 in stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "68.12.0";
 
   src = fetchurl {
-    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+    url =
+      "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
     sha256 = "1k17pi4zh9hrvkzbw4rzzw879a15hpvwriylp75wl22rl7r2nsdf";
   };
 
@@ -18,7 +19,8 @@ in stdenv.mkDerivation rec {
     # Backport a change from Firefox 75 that fixes finding the
     # location of clang and libclang.
     (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ccd1356fc8f1d0bfa9d896e88d3cc924425623da";
+      url =
+        "https://hg.mozilla.org/mozilla-central/raw-rev/ccd1356fc8f1d0bfa9d896e88d3cc924425623da";
       sha256 = "005g3mfmal9nw32khrgyiv3221z7pazfhhm2qvgc8d48i2yzj3j0";
     })
   ];
@@ -38,11 +40,7 @@ in stdenv.mkDerivation rec {
     llvmPackages.llvm
   ];
 
-  buildInputs = [
-    readline
-    zlib
-    icu
-  ];
+  buildInputs = [ readline zlib icu ];
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
@@ -78,7 +76,7 @@ in stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

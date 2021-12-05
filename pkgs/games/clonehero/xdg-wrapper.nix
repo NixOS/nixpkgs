@@ -5,8 +5,7 @@
 let
   name = "clonehero";
   desktopName = "Clone Hero";
-in
-writeScript "${name}-xdg-wrapper-${clonehero-unwrapped.version}" ''
+in writeScript "${name}-xdg-wrapper-${clonehero-unwrapped.version}" ''
   #!${stdenv.shell} -e
   configDir="''${XDG_CONFIG_HOME:-$HOME/.config}/unity3d/srylain Inc_/${desktopName}"
   mkdir -p "$configDir"

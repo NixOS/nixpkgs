@@ -14,12 +14,21 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ glib wrapGAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs cython dbus-python numpy six wxPython_4_0 psutil pyglet pyopengl pyserial
+    appdirs
+    cython
+    dbus-python
+    numpy
+    six
+    wxPython_4_0
+    psutil
+    pyglet
+    pyopengl
+    pyserial
   ];
 
   doCheck = false;
 
-  setupPyBuildFlags = ["-i"];
+  setupPyBuildFlags = [ "-i" ];
 
   postPatch = ''
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
@@ -40,7 +49,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
+    description =
+      "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = licenses.gpl3;
     platforms = platforms.linux;

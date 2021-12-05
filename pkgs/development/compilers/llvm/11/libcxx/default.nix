@@ -1,6 +1,5 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, python3, libcxxabi, llvm
+, fixDarwinDylibNames, version, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation {
   pname = "libcxx";
@@ -20,14 +19,14 @@ stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       # Backported from LLVM 12, avoids clashes with commonly used "block.h" header.
-      url = "https://github.com/llvm/llvm-project/commit/19bc9ea480b60b607a3e303f20c7a3a2ea553369.patch";
+      url =
+        "https://github.com/llvm/llvm-project/commit/19bc9ea480b60b607a3e303f20c7a3a2ea553369.patch";
       sha256 = "sha256-aWa66ogmPkG0xHzSfcpD0qZyZQcNKwLV44js4eiun78=";
       stripLen = 1;
     })
     ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl
+    [ ../../libcxx-0001-musl-hacks.patch ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
@@ -38,11 +37,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libcxxabi ];
 
-  cmakeFlags = [
-    "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional stdenv.hostPlatform.isWasm [
+  cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
+    ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi)
+    "-DLIBCXX_HAS_MUSL_LIBC=1"
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false)
+    "-DLIBCXX_USE_COMPILER_RT=ON" ++ lib.optional stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
@@ -56,14 +55,11 @@ stdenv.mkDerivation {
     # value here corresponds to `uname -r`. If stdenv.hostPlatform.release is
     # not null, then this property will be set via mkDerivation (TODO: how can
     # we set this?).
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 &&
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "-DCMAKE_SYSTEM_VERSION=20.1.0";
+    ++ lib.optional (stdenv.hostPlatform.isDarwin
+      && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform
+      != stdenv.buildPlatform) "-DCMAKE_SYSTEM_VERSION=20.1.0";
 
-  passthru = {
-    isLLVM = true;
-  };
+  passthru = { isLLVM = true; };
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

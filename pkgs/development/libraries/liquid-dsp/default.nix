@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "liquid-dsp";
@@ -15,7 +15,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://liquidsdr.org/";
-    description = "Digital signal processing library for software-defined radios";
+    description =
+      "Digital signal processing library for software-defined radios";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

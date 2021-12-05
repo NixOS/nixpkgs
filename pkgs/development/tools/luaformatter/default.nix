@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2, cmake, libyamlcpp }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2, cmake
+, libyamlcpp }:
 
 stdenv.mkDerivation rec {
   pname = "luaformatter";

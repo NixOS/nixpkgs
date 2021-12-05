@@ -1,24 +1,10 @@
-{ lib
-, buildDunePackage
-, paf
-, duration
-, emile
-, httpaf
-, letsencrypt
-, mirage-stack
-, mirage-time
-, tls-mirage
-}:
+{ lib, buildDunePackage, paf, duration, emile, httpaf, letsencrypt, mirage-stack
+, mirage-time, tls-mirage }:
 
 buildDunePackage {
   pname = "paf-le";
 
-  inherit (paf)
-    version
-    src
-    useDune2
-    minimumOCamlVersion
-  ;
+  inherit (paf) version src useDune2 minimumOCamlVersion;
 
   propagatedBuildInputs = [
     paf

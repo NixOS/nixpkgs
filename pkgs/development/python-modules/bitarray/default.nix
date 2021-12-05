@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "bitarray";
@@ -23,7 +19,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficient arrays of booleans";
     homepage = "https://github.com/ilanschnell/bitarray";
-    changelog = "https://github.com/ilanschnell/bitarray/blob/master/CHANGE_LOG";
+    changelog =
+      "https://github.com/ilanschnell/bitarray/blob/master/CHANGE_LOG";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
   };

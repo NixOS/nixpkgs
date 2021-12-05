@@ -1,21 +1,6 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, dataclasses
-, dataclasses-json
-, fetchFromGitHub
-, htmlmin
-, jinja2
-, markdown2
-, poetry-core
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-}:
+{ lib, beautifulsoup4, buildPythonPackage, click, dataclasses, dataclasses-json
+, fetchFromGitHub, htmlmin, jinja2, markdown2, poetry-core, pygments
+, pytestCheckHook, pythonOlder, pytz, pyyaml, requests }:
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
@@ -31,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-JoD4XEfIUsAbITWa0LMYgNP6WzrblI4HUIgLpx5gn18=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click
@@ -45,14 +28,9 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
-  checkInputs = [
-    beautifulsoup4
-    pytestCheckHook
-  ];
+  checkInputs = [ beautifulsoup4 pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -61,9 +39,7 @@ buildPythonPackage rec {
     "TestMdGenerate"
   ];
 
-  pythonImportsCheck = [
-    "json_schema_for_humans"
-  ];
+  pythonImportsCheck = [ "json_schema_for_humans" ];
 
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";

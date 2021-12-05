@@ -1,9 +1,4 @@
-{ lib
-, isPy3k
-, buildPythonPackage
-, fetchPypi
-, Babel
-}:
+{ lib, isPy3k, buildPythonPackage, fetchPypi, Babel }:
 
 buildPythonPackage rec {
   pname = "babelgladeextractor";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "160p4wi2ss69g141c2z59azvrhn7ymy5m9h9d65qrcabigi0by5w";
   };
 
-  propagatedBuildInputs = [
-    Babel
-  ];
+  propagatedBuildInputs = [ Babel ];
 
   # SyntaxError: Non-ASCII character '\xc3' in file /build/BabelGladeExtractor-0.6.3/babelglade/tests/test_translate.py on line 20, but no encoding declared; see http://python.org/dev/peps/pep-0263/ for details
   doCheck = isPy3k;

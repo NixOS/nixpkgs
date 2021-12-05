@@ -14,12 +14,11 @@ let
     categories = "Game;";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extract { inherit name src; };
 
   src = fetchurl {
-    url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
+    url =
+      "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
     name = "lunar-client.AppImage";
     sha256 = "sha256-zPu0rc/Qi6+EyHXeXRJfkPHKK6Hr1JsENBvLt8a9WBM=";
   };

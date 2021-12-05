@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "utils";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "07pr39cfw5ayzkp6h53y7lfpd0w19pphsdzsf100fsyy3npavgbr";
   };
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "utils" ];
 

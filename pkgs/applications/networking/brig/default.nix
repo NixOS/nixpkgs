@@ -6,7 +6,7 @@ buildGoPackage rec {
   rev = "v${version}";
 
   goPackagePath = "github.com/sahib/brig";
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "sahib";
@@ -16,7 +16,8 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "File synchronization on top of ipfs with git like interface and FUSE filesystem";
+    description =
+      "File synchronization on top of ipfs with git like interface and FUSE filesystem";
     homepage = "https://github.com/sahib/brig";
     license = licenses.agpl3;
     platforms = platforms.unix;

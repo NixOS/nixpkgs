@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, zeep
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder, zeep
 }:
 
 buildPythonPackage rec {
@@ -20,17 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-6hyeU0jigQZsZtdb4E8/iD8YfQeNOKm6IK1CHBizZQs=";
   };
 
-  propagatedBuildInputs = [
-    zeep
-  ];
+  propagatedBuildInputs = [ zeep ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "total_connect_client"
-  ];
+  pythonImportsCheck = [ "total_connect_client" ];
 
   meta = with lib; {
     description = "Interact with Total Connect 2 alarm systems";

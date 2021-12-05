@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, darcsver
-}:
+{ lib, buildPythonPackage, fetchPypi, darcsver }:
 
 buildPythonPackage rec {
   pname = "setuptools_darcs";

@@ -9,8 +9,7 @@ let
 
   # reuse the pinentryFlavor option from the gnupg module
   pinentryFlavor = config.programs.gnupg.agent.pinentryFlavor;
-in
-{
+in {
   ###### interface
 
   meta.maintainers = with maintainers; [ philandstuff rawkode jwoudenberg ];

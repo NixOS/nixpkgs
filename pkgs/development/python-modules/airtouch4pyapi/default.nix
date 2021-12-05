@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "airtouch4pyapi";
@@ -20,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "17c7fm72p085pg9msvsfdggbskvm12a6jlb5bw1cndrqsqcrxywx";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # Project has no tests
   doCheck = false;

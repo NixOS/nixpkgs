@@ -1,10 +1,4 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, uvloop
-}:
+{ lib, isPy27, buildPythonPackage, fetchFromGitHub, pycryptodome, uvloop }:
 
 buildPythonPackage rec {
   pname = "pproxy";
@@ -20,13 +14,13 @@ buildPythonPackage rec {
     sha256 = "1sl2i0kymnbsk49ina81yjnkxjy09541f7pmic8r6rwsv1s87skc";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-    uvloop
-  ];
+  propagatedBuildInputs = [ pycryptodome uvloop ];
 
   pythonImportsCheck = [ "pproxy" ];
-  disabledTests = [ "api_server" "api_client" ];  # try to connect to outside Internet, so disabled
+  disabledTests = [
+    "api_server"
+    "api_client"
+  ]; # try to connect to outside Internet, so disabled
   # test suite doesn't use test runner. so need to run ``python ./tests/*``
   checkPhase = ''
     shopt -s extglob
@@ -37,7 +31,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Proxy server that can tunnel among remote servers by regex rules";
+    description =
+      "Proxy server that can tunnel among remote servers by regex rules";
     homepage = "https://github.com/qwj/python-proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

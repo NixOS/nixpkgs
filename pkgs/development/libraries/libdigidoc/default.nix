@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   pname = "libdigidoc";
 
   src = fetchurl {
-    url = "https://github.com/open-eid/libdigidoc/releases/download/v${version}/libdigidoc-${version}.tar.gz";
+    url =
+      "https://github.com/open-eid/libdigidoc/releases/download/v${version}/libdigidoc-${version}.tar.gz";
     sha256 = "0nw36a4i6rcq7z6jqz5h2ln9hmmsfhw65jga3rymlswk2k7bndgn";
   };
 

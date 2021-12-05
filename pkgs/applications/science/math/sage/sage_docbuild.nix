@@ -1,16 +1,11 @@
-{ buildPythonPackage
-, sage-src
-, sphinx
-}:
+{ buildPythonPackage, sage-src, sphinx }:
 
 buildPythonPackage rec {
   version = src.version;
   pname = "sage_docbuild";
   src = sage-src;
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   preBuild = ''
     cd build/pkgs/sage_docbuild/src

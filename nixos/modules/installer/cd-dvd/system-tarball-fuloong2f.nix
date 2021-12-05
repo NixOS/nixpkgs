@@ -10,18 +10,20 @@ let
   # that we don't really know how the CD was built - the Nix
   # expression language doesn't allow us to query the expression being
   # evaluated.  So we'll just hope for the best.
-  dummyConfiguration = pkgs.writeText "configuration.nix"
-    ''
-      { config, pkgs, ... }:
+  dummyConfiguration = pkgs.writeText "configuration.nix" ''
+    { config, pkgs, ... }:
 
-      { # Add your own options below, e.g.:
-        #   services.openssh.enable = true;
-        nixpkgs.config.platform = pkgs.platforms.fuloong2f_n32;
-      }
-    '';
+    { # Add your own options below, e.g.:
+      #   services.openssh.enable = true;
+      nixpkgs.config.platform = pkgs.platforms.fuloong2f_n32;
+    }
+  '';
 
-
-  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  pkgs2storeContents = l:
+    map (x: {
+      object = x;
+      symlink = "none";
+    }) l;
 
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
@@ -37,9 +39,7 @@ let
     }
   '';
 
-in
-
-{
+in {
   imports = [ ./system-tarball.nix ];
 
   # Disable some other stuff we don't need.
@@ -47,72 +47,70 @@ in
 
   # Include only the en_US locale.  This saves 75 MiB or so compared to
   # the full glibcLocales package.
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "en_US/ISO-8859-1" ];
 
   # Include some utilities that are useful for installing or repairing
   # the system.
-  environment.systemPackages =
-    [ pkgs.w3m # needed for the manual anyway
-      pkgs.testdisk # useful for repairing boot problems
-      pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
-      pkgs.parted
-      pkgs.ddrescue
-      pkgs.ccrypt
-      pkgs.cryptsetup # needed for dm-crypt volumes
+  environment.systemPackages = [
+    pkgs.w3m # needed for the manual anyway
+    pkgs.testdisk # useful for repairing boot problems
+    pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
+    pkgs.parted
+    pkgs.ddrescue
+    pkgs.ccrypt
+    pkgs.cryptsetup # needed for dm-crypt volumes
 
-      # Some networking tools.
-      pkgs.sshfs-fuse
-      pkgs.socat
-      pkgs.screen
-      pkgs.wpa_supplicant # !!! should use the wpa module
+    # Some networking tools.
+    pkgs.sshfs-fuse
+    pkgs.socat
+    pkgs.screen
+    pkgs.wpa_supplicant # !!! should use the wpa module
 
-      # Hardware-related tools.
-      pkgs.sdparm
-      pkgs.hdparm
-      pkgs.dmraid
+    # Hardware-related tools.
+    pkgs.sdparm
+    pkgs.hdparm
+    pkgs.dmraid
 
-      # Tools to create / manipulate filesystems.
-      pkgs.ntfsprogs # for resizing NTFS partitions
-      pkgs.btrfs-progs
-      pkgs.jfsutils
+    # Tools to create / manipulate filesystems.
+    pkgs.ntfsprogs # for resizing NTFS partitions
+    pkgs.btrfs-progs
+    pkgs.jfsutils
 
-      # Some compression/archiver tools.
-      pkgs.unzip
-      pkgs.zip
-      pkgs.xz
-      pkgs.dar # disk archiver
+    # Some compression/archiver tools.
+    pkgs.unzip
+    pkgs.zip
+    pkgs.xz
+    pkgs.dar # disk archiver
 
-      # Some editors.
-      pkgs.nvi
-      pkgs.bvi # binary editor
-      pkgs.joe
-    ];
+    # Some editors.
+    pkgs.nvi
+    pkgs.bvi # binary editor
+    pkgs.joe
+  ];
 
   # The initrd has to contain any module that might be necessary for
   # mounting the CD/DVD.
-  boot.initrd.availableKernelModules =
-    [ "vfat" "reiserfs" ];
+  boot.initrd.availableKernelModules = [ "vfat" "reiserfs" ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
   boot.kernelParams = [ "console=tty1" ];
 
-  boot.postBootCommands =
-    ''
-      mkdir -p /mnt
+  boot.postBootCommands = ''
+    mkdir -p /mnt
 
-      cp ${dummyConfiguration} /etc/nixos/configuration.nix
-    '';
+    cp ${dummyConfiguration} /etc/nixos/configuration.nix
+  '';
 
   # Some more help text.
-  services.getty.helpLine =
-    ''
+  services.getty.helpLine = ''
 
-      Log in as "root" with an empty password.  ${
-        if config.services.xserver.enable then
-          "Type `start xserver' to start\nthe graphical user interface."
-        else ""
-      }
-    '';
+    Log in as "root" with an empty password.  ${
+      if config.services.xserver.enable then ''
+        Type `start xserver' to start
+        the graphical user interface.'' else
+        ""
+    }
+  '';
 
   # Include the firmware for various wireless cards.
   networking.enableRalinkFirmware = true;
@@ -120,26 +118,29 @@ in
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.
-  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ]
-    ++ [
-      {
-        object = config.system.build.bootStage2;
-        symlink = "/boot/init";
-      }
-      {
-        object = config.system.build.toplevel;
-        symlink = "/boot/system";
-      }
-    ];
+  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ] ++ [
+    {
+      object = config.system.build.bootStage2;
+      symlink = "/boot/init";
+    }
+    {
+      object = config.system.build.toplevel;
+      symlink = "/boot/system";
+    }
+  ];
 
   tarball.contents = [
-    { source = kernelParams;
+    {
+      source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+    {
+      source = config.boot.kernelPackages.kernel + "/"
+        + config.system.boot.loader.kernelFile;
       target = "/boot/" + config.system.boot.loader.kernelFile;
     }
-    { source = nixpkgsUserConfig;
+    {
+      source = nixpkgsUserConfig;
       target = "/root/.nixpkgs/config.nix";
     }
   ];
@@ -148,13 +149,11 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
+  systemd.services.openssh.wantedBy = lib.mkOverride 50 [ ];
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "vmlinux";
 
-  nixpkgs.config = {
-    platform = pkgs.platforms.fuloong2f_n32;
-  };
+  nixpkgs.config = { platform = pkgs.platforms.fuloong2f_n32; };
 }

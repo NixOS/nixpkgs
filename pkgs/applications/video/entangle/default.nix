@@ -1,42 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, libxml2
-, meson
-, ninja
-, perl
-, python3
-, pkgconf
-, wrapGAppsHook
-, at-spi2-core
-, dbus
-, elfutils
-, libepoxy
-, gexiv2
-, glib
-, gobject-introspection
-, gst-plugins-base
-, gstreamer
-, gtk3
-, lcms2
-, libdatrie
-, libgphoto2
-, libgudev
-, libpeas
-, libraw
-, libselinux
-, libsepol
-, libthai
-, libunwind
-, libxkbcommon
-, orc
-, pcre
-, udev
-, util-linux
-, xorg
-, zstd
-}:
+{ lib, stdenv, fetchFromGitLab, cmake, libxml2, meson, ninja, perl, python3
+, pkgconf, wrapGAppsHook, at-spi2-core, dbus, elfutils, libepoxy, gexiv2, glib
+, gobject-introspection, gst-plugins-base, gstreamer, gtk3, lcms2, libdatrie
+, libgphoto2, libgudev, libpeas, libraw, libselinux, libsepol, libthai
+, libunwind, libxkbcommon, orc, pcre, udev, util-linux, xorg, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "entangle";
@@ -88,10 +54,7 @@ stdenv.mkDerivation rec {
     udev
     util-linux
     zstd
-  ] ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+  ] ++ (with xorg; [ libXdmcp libXtst ]);
 
   dontUseCmakeConfigure = true;
 

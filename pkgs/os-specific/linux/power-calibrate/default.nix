@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.01.29";
 
   src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1v8wvhjqglkvk9cl2b48lkcwhbc6nsdi3hjd7sap4hyvd6703pgs";
   };
 

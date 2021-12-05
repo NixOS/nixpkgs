@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, makeWrapper
-, pkg-config
-, doxygen
-, freetype
-, libX11
-, libftdi
-, libusb-compat-0_1
-, libusb1
-, ncurses
-, perl
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkg-config, doxygen
+, freetype, libX11, libftdi, libusb-compat-0_1, libusb1, ncurses, perl }:
 
 stdenv.mkDerivation rec {
   pname = "lcdproc";
@@ -25,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r885zv1gsh88j43x6fvzbdgfkh712a227d369h4fdcbnnfd0kpm";
   };
 
-  patches = [
-    ./hardcode_mtab.patch
-  ];
+  patches = [ ./hardcode_mtab.patch ];
 
   # we don't need to see the GPL every time we launch lcdd in the foreground
   postPatch = ''
@@ -60,7 +45,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Client/server suite for controlling a wide variety of LCD devices";
+    description =
+      "Client/server suite for controlling a wide variety of LCD devices";
     homepage = "http://lcdproc.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

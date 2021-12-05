@@ -7,26 +7,24 @@ let
 
   badArch = throw "${name} requires i686-linux or x86_64-linux";
 
-  architecture =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      "i686"
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      "x86_64"
-    else
-      badArch;
-in
-stdenv.mkDerivation {
+  architecture = if stdenv.hostPlatform.system == "i686-linux" then
+    "i686"
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
+    "x86_64"
+  else
+    badArch;
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "https://www.scilab.org/download/${ver}/scilab-${ver}.bin.linux-${architecture}.tar.gz";
-    sha256 =
-      if stdenv.hostPlatform.system == "i686-linux" then
-        "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
-      else if stdenv.hostPlatform.system == "x86_64-linux" then
-        "05clcdgry90drirl3swbxn5q36fmgknnhs6h5pr7mmrzfr6r818w"
-      else
-        badArch;
+    url =
+      "https://www.scilab.org/download/${ver}/scilab-${ver}.bin.linux-${architecture}.tar.gz";
+    sha256 = if stdenv.hostPlatform.system == "i686-linux" then
+      "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
+      "05clcdgry90drirl3swbxn5q36fmgknnhs6h5pr7mmrzfr6r818w"
+    else
+      badArch;
   };
 
   libPath = lib.makeLibraryPath [
@@ -95,7 +93,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.scilab.org/";
-    description = "Scientific software package for numerical computations (Matlab lookalike)";
+    description =
+      "Scientific software package for numerical computations (Matlab lookalike)";
     # see http://www.scilab.org/legal_notice
     license = "Scilab";
   };

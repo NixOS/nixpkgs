@@ -22,7 +22,8 @@ buildDunePackage rec {
   meta = {
     inherit (src.meta) homepage;
     license = lib.licenses.bsd3;
-    description = "Path-based dispatching for client- and server-side applications";
+    description =
+      "Path-based dispatching for client- and server-side applications";
     maintainers = [ lib.maintainers.vbgl ];
   };
 

@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, Mako
-, python-dateutil
-, sqlalchemy
-, importlib-metadata
-, importlib-resources
-, pytest-xdist
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, Mako, python-dateutil
+, sqlalchemy, importlib-metadata, importlib-resources, pytest-xdist
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "alembic";
@@ -23,28 +14,15 @@ buildPythonPackage rec {
     sha256 = "sha256-fDKGlKLmjwPulx5jw72IWEZHA3OltTLPLJ8WAcQTsVM=";
   };
 
-  propagatedBuildInputs = [
-    Mako
-    python-dateutil
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ Mako python-dateutil sqlalchemy ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  pythonImportsCheck = [
-    "alembic"
-  ];
+  pythonImportsCheck = [ "alembic" ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ];
+  checkInputs = [ pytestCheckHook pytest-xdist ];
 
-  pytestFlagsArray = [
-    "--numprocesses" "$NIX_BUILD_CORES"
-  ];
+  pytestFlagsArray = [ "--numprocesses" "$NIX_BUILD_CORES" ];
 
   meta = with lib; {
     homepage = "https://bitbucket.org/zzzeek/alembic";

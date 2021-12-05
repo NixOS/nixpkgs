@@ -1,8 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nixosTests
-}:
+{ buildGoModule, fetchFromGitHub, lib, nixosTests }:
 
 buildGoModule rec {
   pname = "ghostunnel";
@@ -32,7 +28,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A simple TLS proxy with mutual authentication support for securing non-TLS backend applications";
+    description =
+      "A simple TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     license = licenses.asl20;
     maintainers = with maintainers; [ roberth ];

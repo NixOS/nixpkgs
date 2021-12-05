@@ -6,9 +6,7 @@ let
 
   cfg = config.services.shairport-sync;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -66,7 +64,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.shairport-sync.enable {
@@ -82,28 +79,32 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
+        extraGroups = [ "audio" ]
+          ++ optional config.hardware.pulseaudio.enable "pulse";
       };
-      groups.${cfg.group} = {};
+      groups.${cfg.group} = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5000 ];
-      allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
+      allowedUDPPortRanges = [{
+        from = 6001;
+        to = 6011;
+      }];
     };
 
-    systemd.services.shairport-sync =
-      {
-        description = "shairport-sync";
-        after = [ "network.target" "avahi-daemon.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
-          RuntimeDirectory = "shairport-sync";
-        };
+    systemd.services.shairport-sync = {
+      description = "shairport-sync";
+      after = [ "network.target" "avahi-daemon.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart =
+          "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+        RuntimeDirectory = "shairport-sync";
       };
+    };
 
     environment.systemPackages = [ pkgs.shairport-sync ];
 

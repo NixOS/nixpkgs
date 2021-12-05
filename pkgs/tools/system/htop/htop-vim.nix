@@ -12,7 +12,8 @@ htop.overrideAttrs (oldAttrs: rec {
   };
 
   meta = with lib; {
-    description = "An interactive process viewer for Linux, with vim-style keybindings";
+    description =
+      "An interactive process viewer for Linux, with vim-style keybindings";
     homepage = "https://github.com/KoffeinFlummi/htop-vim";
     license = licenses.gpl2Only;
     platforms = platforms.all;

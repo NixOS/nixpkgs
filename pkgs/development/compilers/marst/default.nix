@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, texinfo
-}:
+{ lib, stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "marst";
@@ -13,9 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Pue50cvjzZ+19iJxfae7VQbxpto7MPgS4jhLh7zk2lA=";
   };
 
-  nativeBuildInputs = [
-    texinfo
-  ];
+  nativeBuildInputs = [ texinfo ];
 
   postBuild = ''
     makeinfo doc/marst.texi -o doc/marst.info

@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   meta = with lib; {
-    description = "A program which generates ASCII pictures of a cow with a message";
+    description =
+      "A program which generates ASCII pictures of a cow with a message";
     homepage = "https://github.com/tnalpgge/rank-amateur-cowsay";
     license = licenses.gpl3Only;
     platforms = platforms.all;

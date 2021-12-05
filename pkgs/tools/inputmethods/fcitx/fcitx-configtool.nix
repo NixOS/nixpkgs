@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes
+, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-configtool";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://download.fcitx-im.org/fcitx-configtool/fcitx-configtool-${version}.tar.xz";
+    url =
+      "https://download.fcitx-im.org/fcitx-configtool/fcitx-configtool-${version}.tar.xz";
     sha256 = "1yyi9jhkwn49lx9a47k1zbvwgazv4y4z72gnqgzdpgdzfrlrgi5w";
   };
 

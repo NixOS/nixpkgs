@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
-}:
+{ lib, buildPythonPackage, fetchPypi, cliff, oslo-i18n, oslo-utils, openstacksdk
+, pbr, requests-mock, simplejson, stestr }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
@@ -20,22 +10,12 @@ buildPythonPackage rec {
     sha256 = "d6b530e3e50646840a6a5ef134e00f285cc4a04232c163f28585226ed40cc968";
   };
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    cliff
-    openstacksdk
-    oslo-i18n
-    oslo-utils
-    simplejson
-  ];
+  propagatedBuildInputs =
+    [ cliff openstacksdk oslo-i18n oslo-utils simplejson ];
 
-  checkInputs = [
-    requests-mock
-    stestr
-  ];
+  checkInputs = [ requests-mock stestr ];
 
   checkPhase = ''
     stestr run

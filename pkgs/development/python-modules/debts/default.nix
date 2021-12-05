@@ -1,11 +1,4 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitLab
-, isPy27
-, jinja2
-, pytest
-}:
+{ lib, python, buildPythonPackage, fetchFromGitLab, isPy27, jinja2, pytest }:
 
 buildPythonPackage rec {
   pname = "debts";
@@ -35,7 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A simple library and cli-tool to help you solve some debts settlement scenarios";
+    description =
+      "A simple library and cli-tool to help you solve some debts settlement scenarios";
     license = licenses.beerware;
     maintainers = [ maintainers.symphorien ];
   };

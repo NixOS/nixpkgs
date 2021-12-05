@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cachetools
-, paho-mqtt
-, pytz
-, requests
-, requests_oauthlib
-, schedule
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cachetools, paho-mqtt, pytz
+, requests, requests_oauthlib, schedule, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pysmappee";
@@ -22,14 +13,8 @@ buildPythonPackage rec {
     sha256 = "sha256-CzdkeC53ye+IMeGUiD1mK84h2ruC1/ZpjlDjuWMVoyQ=";
   };
 
-  propagatedBuildInputs = [
-    cachetools
-    paho-mqtt
-    pytz
-    requests
-    requests_oauthlib
-    schedule
-  ];
+  propagatedBuildInputs =
+    [ cachetools paho-mqtt pytz requests requests_oauthlib schedule ];
 
   # Project has no tests
   doCheck = false;

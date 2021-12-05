@@ -1,21 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "wmderland";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ takagiy ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ takagiy ]; };
 
   machine = { lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = lib.mkForce "none+wmderland";
+    services.xserver.displayManager.defaultSession =
+      lib.mkForce "none+wmderland";
     services.xserver.windowManager.wmderland.enable = true;
 
     systemd.services.setupWmderlandConfig = {
       wantedBy = [ "multi-user.target" ];
       before = [ "multi-user.target" ];
-      environment = {
-        HOME = "/home/alice";
-      };
+      environment = { HOME = "/home/alice"; };
       unitConfig = {
         type = "oneshot";
         RemainAfterExit = true;
@@ -23,8 +20,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       };
       script = let
         config = pkgs.writeText "config" ''
-             set $Mod = Mod1
-             bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
+          set $Mod = Mod1
+          bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
         '';
       in ''
         mkdir -p $HOME/.config/wmderland

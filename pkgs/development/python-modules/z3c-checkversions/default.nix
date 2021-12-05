@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope_testrunner
-}:
+{ lib, buildPythonPackage, fetchPypi, python, zc-buildout, zope_testrunner }:
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";

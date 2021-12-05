@@ -10,22 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   data = fetchzip {
-    url = "http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip";
+    url =
+      "http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip";
     sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
   };
 
-  buildInputs = [SDL SDL_net];
+  buildInputs = [ SDL SDL_net ];
 
-  patchPhase = "
-    substituteInPlace src/file.c --replace /usr/share $out/share
-  ";
+  patchPhase =
+    "\n    substituteInPlace src/file.c --replace /usr/share $out/share\n  ";
   buildPhase = "make release";
-  installPhase = "
-    mkdir -p $out/bin
-    cp ./opentyrian $out/bin
-    mkdir -p $out/share/opentyrian/data
-    cp -r $data/* $out/share/opentyrian/data
-  ";
+  installPhase =
+    "\n    mkdir -p $out/bin\n    cp ./opentyrian $out/bin\n    mkdir -p $out/share/opentyrian/data\n    cp -r $data/* $out/share/opentyrian/data\n  ";
 
   meta = {
     description = ''Open source port of the game "Tyrian"'';

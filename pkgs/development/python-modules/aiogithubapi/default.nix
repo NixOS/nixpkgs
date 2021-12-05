@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, async-timeout, backoff, buildPythonPackage
+, fetchFromGitHub, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
@@ -30,17 +21,9 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-    backoff
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout backoff ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "aiogithubapi" ];
 

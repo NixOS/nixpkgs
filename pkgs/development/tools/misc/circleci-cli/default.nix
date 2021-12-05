@@ -15,11 +15,19 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
+  ];
 
   preBuild = ''
     substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
+      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${
+        placeholder "out"
+      }/share/circleci-cli")'
   '';
 
   postInstall = ''

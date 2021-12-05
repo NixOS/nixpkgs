@@ -1,19 +1,13 @@
 # Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
-{ lib
-, vscode-utils
-, jq
-, rust-analyzer
-, nodePackages
-, moreutils
-, esbuild
-, setDefaultServerPath ? true
-}:
+{ lib, vscode-utils, jq, rust-analyzer, nodePackages, moreutils, esbuild
+, setDefaultServerPath ? true }:
 
 let
   pname = "rust-analyzer";
   publisher = "matklad";
 
-  build-deps = nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
+  build-deps =
+    nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
   vsix = build-deps.override {
@@ -41,8 +35,7 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-in
-vscode-utils.buildVscodeExtension {
+in vscode-utils.buildVscodeExtension {
   inherit version vsix;
   name = "${pname}-${version}";
   src = "${vsix}/${pname}.zip";

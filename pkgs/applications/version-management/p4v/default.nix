@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebengine, qtwebkit, openssl, xkeyboard_config, patchelfUnstable, wrapQtAppsHook }:
+{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebengine
+, qtwebkit, openssl, xkeyboard_config, patchelfUnstable, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "p4v";
   version = "2020.1.1966006";
 
   src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r20.1/bin.linux26x86_64/p4v.tgz";
+    url =
+      "https://cdist2.perforce.com/perforce/r20.1/bin.linux26x86_64/p4v.tgz";
     sha256 = "0zc70d7jgdrd2jli338n1h05hgb7jmmv8hvq205wh78vvllrlv10";
   };
 
@@ -13,14 +15,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelfUnstable wrapQtAppsHook ];
 
   ldLibraryPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtmultimedia
-      qtscript
-      qtsensors
-      qtwebengine
-      qtwebkit
-      openssl
+    stdenv.cc.cc.lib
+    qtbase
+    qtmultimedia
+    qtscript
+    qtsensors
+    qtwebengine
+    qtwebkit
+    openssl
   ];
 
   dontWrapQtApps = true;

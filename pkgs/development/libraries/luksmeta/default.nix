@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, asciidoc
-, cryptsetup
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, asciidoc, cryptsetup
 }:
 
 stdenv.mkDerivation rec {

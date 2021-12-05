@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron, alsa-lib
+, gtk3, libXScrnSaver, libXtst, mesa, nss }:
 
 stdenv.mkDerivation rec {
   pname = "pocket-casts";
   version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/felicianotech/pocket-casts-desktop-app/releases/download/v${version}/${pname}_${version}_amd64.deb";
+    url =
+      "https://github.com/felicianotech/pocket-casts-desktop-app/releases/download/v${version}/${pname}_${version}_amd64.deb";
     sha256 = "sha256-frBtIxwRO/6k6j0itqN10t+9AyNadqXm8vC1YP960ts=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
 
   buildInputs = [ alsa-lib gtk3 libXScrnSaver libXtst mesa nss ];
 

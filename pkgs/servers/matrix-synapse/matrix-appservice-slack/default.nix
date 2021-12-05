@@ -11,8 +11,7 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-in
-nodePackages.package.override {
+in nodePackages.package.override {
   pname = "matrix-appservice-slack";
 
   inherit src;

@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, emacs
-, trivialBuild
-}:
+{ lib, stdenv, fetchFromGitHub, emacs, trivialBuild }:
 
 trivialBuild {
   pname = "git-undo";

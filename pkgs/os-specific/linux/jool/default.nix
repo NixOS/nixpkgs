@@ -1,10 +1,8 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
-let
-  sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
-in
+let sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "jool-${sourceAttrs.version}-${kernel.version}";
 
   src = sourceAttrs.src;
@@ -26,7 +24,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.jool.mx/";
-    description = "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
+    description =
+      "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };

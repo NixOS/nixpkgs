@@ -6,20 +6,22 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-x86_64.tgz";
+      url =
+        "https://install.speedtest.net/app/cli/${pname}-${version}-linux-x86_64.tgz";
       sha256 = "sha256-lwR3/f7k10HnXwiPr2SPm1HHvgQxP7iP+13gfrGjBAw=";
     };
     aarch64-linux = fetchurl {
-      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
+      url =
+        "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
       sha256 = "sha256-J2pAhz/hw8okohWAwvxkqpLtNY/8bbYHGhPQOo1DH9k=";
     };
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src = srcs.${stdenv.hostPlatform.system} or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
   setSourceRoot = ''
     sourceRoot=$PWD

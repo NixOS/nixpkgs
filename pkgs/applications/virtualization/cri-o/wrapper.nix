@@ -1,27 +1,16 @@
-{ cri-o-unwrapped
-, runCommand
-, makeWrapper
-, lib
-, extraPackages ? []
-, cri-o
+{ cri-o-unwrapped, runCommand, makeWrapper, lib, extraPackages ? [ ], cri-o
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , util-linux # nsenter
 , cni-plugins # not added to path
-, iptables
-}:
+, iptables }:
 
 let
   cri-o = cri-o-unwrapped;
 
-  binPath = lib.makeBinPath ([
-    runc
-    crun
-    conmon
-    util-linux
-    iptables
-  ] ++ extraPackages);
+  binPath =
+    lib.makeBinPath ([ runc crun conmon util-linux iptables ] ++ extraPackages);
 
 in runCommand cri-o.name {
   name = "${cri-o.pname}-wrapper-${cri-o.version}";
@@ -31,14 +20,9 @@ in runCommand cri-o.name {
 
   meta = builtins.removeAttrs cri-o.meta [ "outputsToInstall" ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
 } ''
   ln -s ${cri-o.man} $man

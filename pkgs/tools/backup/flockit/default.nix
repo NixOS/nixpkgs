@@ -5,9 +5,9 @@ stdenv.mkDerivation {
   version = "2012-08-11";
 
   src = fetchFromGitHub {
-    owner  = "smerritt";
-    repo   = "flockit";
-    rev    = "5c2b2092f8edcc8e3e2eb6ef66c968675dbfa686";
+    owner = "smerritt";
+    repo = "flockit";
+    rev = "5c2b2092f8edcc8e3e2eb6ef66c968675dbfa686";
     sha256 = "0vajck9q2677gpn9a4flkyz7mw69ql1647cjwqh834nrcr2b5164";
   };
 
@@ -24,7 +24,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "LD_PRELOAD shim to add file locking to programs that don't do it (I'm looking at you, rsync!)";
+    description =
+      "LD_PRELOAD shim to add file locking to programs that don't do it (I'm looking at you, rsync!)";
     longDescription = ''
       This library and tool exists solely because rsync doesn't have file locking.
 

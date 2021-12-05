@@ -1,9 +1,5 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, qtbase,
-  ki18n, ktextwidgets, kwallet, kwidgetsaddons,
-  sane-backends
-}:
+{ mkDerivation, lib, extra-cmake-modules, qtbase, ki18n, ktextwidgets, kwallet
+, kwidgetsaddons, sane-backends }:
 
 mkDerivation {
   pname = "libksane";
@@ -12,5 +8,6 @@ mkDerivation {
     maintainers = with maintainers; [ polendri ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase ki18n ktextwidgets kwallet kwidgetsaddons sane-backends ];
+  buildInputs =
+    [ qtbase ki18n ktextwidgets kwallet kwidgetsaddons sane-backends ];
 }

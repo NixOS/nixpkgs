@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, webob
-}:
+{ lib, buildPythonPackage, fetchPypi, six, webob }:
 
 buildPythonPackage rec {
   pname = "WSGIProxy2";

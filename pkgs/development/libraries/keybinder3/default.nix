@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
-, gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection
-}:
+, gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "keybinder3";
@@ -15,8 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
   buildInputs = [
-    gnome.gnome-common gtk-doc gtk3
-    libX11 libXext libXrender gobject-introspection
+    gnome.gnome-common
+    gtk-doc
+    gtk3
+    libX11
+    libXext
+    libXrender
+    gobject-introspection
   ];
 
   preConfigure = ''

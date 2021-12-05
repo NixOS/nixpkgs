@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, simplejson
-, fake-useragent
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, simplejson, fake-useragent }:
 
 buildPythonPackage rec {
   pname = "pyatome";
@@ -21,9 +15,7 @@ buildPythonPackage rec {
   # no tests  in PyPI tarballs
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyatome"
-  ];
+  pythonImportsCheck = [ "pyatome" ];
 
   meta = with lib; {
     description = "Python module to get energy consumption data from Atome";

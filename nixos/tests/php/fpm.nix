@@ -9,10 +9,8 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
       enable = true;
 
       virtualHosts."phpfpm" =
-        let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-        in
-        {
+        let testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+        in {
           root = "${testdir}/web";
           locations."~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};

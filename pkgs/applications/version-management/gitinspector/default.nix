@@ -12,9 +12,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "sha256-9bChvE5aAZFunu599pH7QKHZFd7aQzv0i9LURrvh2t0=";
   };
 
-  checkInputs = with python2Packages; [
-    unittest2
-  ];
+  checkInputs = with python2Packages; [ unittest2 ];
 
   meta = with lib; {
     homepage = "https://github.com/ejwa/gitinspector";

@@ -6,13 +6,12 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
+    url =
+      "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
     sha256 = "0ff69m5jav2c90918avsr5wvik2gds3klij3dzhkb352fgrd1s0l";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 
 in appimageTools.wrapType2 {
   inherit name src;

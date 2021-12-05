@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/xorg62/tty-clock/pull/100
     (fetchpatch {
       name = "ncurses-6.2.patch";
-      url = "https://github.com/xorg62/tty-clock/commit/4cfd73080da1964557484da620c401745d73881c.patch";
+      url =
+        "https://github.com/xorg62/tty-clock/commit/4cfd73080da1964557484da620c401745d73881c.patch";
       sha256 = "13pj1v6yrfc4vynsa746974kixfxxsy2jzzpl73c8bp7msr9d3md";
     })
   ];

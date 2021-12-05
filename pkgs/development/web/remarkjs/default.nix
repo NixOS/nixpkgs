@@ -17,8 +17,7 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "remarkjs";
 
   version = "0.7.0";

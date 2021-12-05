@@ -1,12 +1,8 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
-}:
+{ lib, trivialBuild, fetchFromGitHub, emacs }:
 
 trivialBuild {
   pname = "railgun";
-  version= "0.pre+unstable=2012-10-17";
+  version = "0.pre+unstable=2012-10-17";
 
   src = fetchFromGitHub {
     owner = "mbriggs";
@@ -19,7 +15,8 @@ trivialBuild {
 
   meta = with lib; {
     homepage = "https://github.com/mbriggs/railgun.el";
-    description = "Propel yourself through a rails project with the power of magnets";
+    description =
+      "Propel yourself through a rails project with the power of magnets";
     inherit (emacs.meta) platforms;
   };
 }

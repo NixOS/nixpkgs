@@ -1,11 +1,4 @@
-{ lib
-, isPy3k
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, nose
-}:
+{ lib, isPy3k, buildPythonPackage, fetchFromGitHub, future, mock, nose }:
 
 buildPythonPackage rec {
   pname = "annexremote";

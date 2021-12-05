@@ -1,20 +1,6 @@
-{ lib
-, brotli
-, buildPythonPackage
-, cryptography
-, python-dateutil
-, fetchPypi
-, idna
-, isPy27
-, mock
-, pyopenssl
-, pysocks
-, pytest-freezegun
-, pytest-timeout
-, pytestCheckHook
-, tornado
-, trustme
-}:
+{ lib, brotli, buildPythonPackage, cryptography, python-dateutil, fetchPypi
+, idna, isPy27, mock, pyopenssl, pysocks, pytest-freezegun, pytest-timeout
+, pytestCheckHook, tornado, trustme }:
 
 buildPythonPackage rec {
   pname = "urllib3";
@@ -25,14 +11,8 @@ buildPythonPackage rec {
     sha256 = "sha256-SYfGVVT3otvzDBj9SHeO8SSvb6t3GjdxA9oFheIzbs4=";
   };
 
-  propagatedBuildInputs = [
-    brotli
-    pysocks
-  ] ++ lib.optionals isPy27 [
-    cryptography
-    idna
-    pyopenssl
-  ];
+  propagatedBuildInputs = [ brotli pysocks ]
+    ++ lib.optionals isPy27 [ cryptography idna pyopenssl ];
 
   checkInputs = [
     python-dateutil

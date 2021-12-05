@@ -1,36 +1,8 @@
-{ lib
-, stdenv
-, enableNvidiaCgToolkit ? false
-, withVulkan ? stdenv.isLinux
-, alsa-lib
-, AppKit
-, fetchFromGitHub
-, ffmpeg
-, Foundation
-, freetype
-, libdrm
-, libGL
-, libGLU
-, libobjc
-, libpulseaudio
-, libv4l
-, libX11
-, libXdmcp
-, libXext
-, libxkbcommon
-, libxml2
-, libXxf86vm
-, makeWrapper
-, mesa
-, nvidia_cg_toolkit
-, pkg-config
-, python3
-, SDL2
-, substituteAll
-, udev
-, vulkan-loader
-, wayland
-, which
+{ lib, stdenv, enableNvidiaCgToolkit ? false, withVulkan ? stdenv.isLinux
+, alsa-lib, AppKit, fetchFromGitHub, ffmpeg, Foundation, freetype, libdrm, libGL
+, libGLU, libobjc, libpulseaudio, libv4l, libX11, libXdmcp, libXext
+, libxkbcommon, libxml2, libXxf86vm, makeWrapper, mesa, nvidia_cg_toolkit
+, pkg-config, python3, SDL2, substituteAll, udev, vulkan-loader, wayland, which
 }:
 
 with lib;
@@ -44,8 +16,7 @@ let
     sha256 = "sha256-jM+iXNSCpJy4wOk1S72G1UjNGBzejyhs5LFFWCFjs2c=";
     rev = "v${mainVersion}";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "retroarch-bare";
   version = "${lib.concatStringsSep "." [ mainVersion revision ]}";
 
@@ -70,15 +41,14 @@ stdenv.mkDerivation rec {
       --replace "@libretro_info_path@" "$out/share/libretro/info"
   '';
 
-  nativeBuildInputs = [ pkg-config ] ++
-    optional stdenv.isLinux wayland ++
-    optional withVulkan makeWrapper;
+  nativeBuildInputs = [ pkg-config ] ++ optional stdenv.isLinux wayland
+    ++ optional withVulkan makeWrapper;
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
-    optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
-    optional withVulkan vulkan-loader ++
-    optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
-    optionals stdenv.isLinux [
+  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
+    ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
+    ++ optional withVulkan vulkan-loader
+    ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
+    ++ optionals stdenv.isLinux [
       alsa-lib
       libdrm
       libpulseaudio
@@ -95,7 +65,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+  configureFlags =
+    lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
     mkdir -p $out/share/libretro/info
@@ -111,7 +82,13 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    maintainers = with maintainers; [
+      MP2E
+      edwtjo
+      matthewbauer
+      kolbycrouch
+      thiagokokada
+    ];
     # FIXME: exits with error on macOS:
     # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
     broken = stdenv.isDarwin;

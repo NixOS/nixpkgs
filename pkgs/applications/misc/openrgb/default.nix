@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils }:
+{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config
+, coreutils }:
 
 mkDerivation rec {
   pname = "openrgb";

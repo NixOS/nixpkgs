@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, pbr
-, subunit
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, fixtures, pbr, subunit, callPackage }:
 
 buildPythonPackage rec {
   pname = "oslotest";
@@ -18,17 +11,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    fixtures
-    subunit
-  ];
+  propagatedBuildInputs = [ fixtures subunit ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
 
-  passthru.tests = {
-    tests = callPackage ./tests.nix {};
-  };
+  passthru.tests = { tests = callPackage ./tests.nix { }; };
 
   pythonImportsCheck = [ "oslotest" ];
 

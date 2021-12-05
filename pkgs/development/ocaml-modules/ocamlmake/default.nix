@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl}:
+{ stdenv, lib, fetchurl }:
 
 let
 
@@ -10,7 +10,8 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
+    url =
+      "https://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
     inherit sha256;
   };
 

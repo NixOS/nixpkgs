@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.distccd;
-in
-{
+let cfg = config.services.distccd;
+in {
   options = {
     services.distccd = {
       enable = mkEnableOption "distccd";
@@ -32,7 +30,8 @@ in
       };
 
       logLevel = mkOption {
-        type = types.nullOr (types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
+        type = types.nullOr
+          (types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
         default = "warning";
         description = ''
           Set the minimum severity of error that will be included in the log
@@ -48,7 +47,6 @@ in
           Maximum number of tasks distccd should execute at any time.
         '';
       };
-
 
       nice = mkOption {
         type = types.nullOr types.int;
@@ -131,12 +129,24 @@ in
             --daemon \
             --enable-tcp-insecure \
             --port ${toString cfg.port} \
-            ${optionalString (cfg.jobTimeout != null) "--job-lifetime ${toString cfg.jobTimeout}"} \
-            ${optionalString (cfg.logLevel != null) "--log-level ${cfg.logLevel}"} \
-            ${optionalString (cfg.maxJobs != null) "--jobs ${toString cfg.maxJobs}"} \
+            ${
+              optionalString (cfg.jobTimeout != null)
+              "--job-lifetime ${toString cfg.jobTimeout}"
+            } \
+            ${
+              optionalString (cfg.logLevel != null)
+              "--log-level ${cfg.logLevel}"
+            } \
+            ${
+              optionalString (cfg.maxJobs != null)
+              "--jobs ${toString cfg.maxJobs}"
+            } \
             ${optionalString (cfg.nice != null) "--nice ${toString cfg.nice}"} \
             ${optionalString cfg.stats.enable "--stats"} \
-            ${optionalString cfg.stats.enable "--stats-port ${toString cfg.stats.port}"} \
+            ${
+              optionalString cfg.stats.enable
+              "--stats-port ${toString cfg.stats.port}"
+            } \
             ${optionalString cfg.zeroconf "--zeroconf"} \
             ${concatMapStrings (c: "--allow ${c} ") cfg.allowedClients}
         '';

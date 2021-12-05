@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, protobuf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, protobuf }:
 
 buildPythonPackage rec {
   pname = "pycomfoconnect";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0bipzv68yw056iz9m2g9h40hzrwd058a7crxp0xbq4rw2d8j0jn6";
   };
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  propagatedBuildInputs = [ protobuf ];
 
   # Project has no tests
   doCheck = false;

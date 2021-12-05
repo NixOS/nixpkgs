@@ -3,8 +3,7 @@
 
 # Optional Dependencies
 , libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
-, libcap ? null, systemd ? null
-}:
+, libcap ? null, systemd ? null }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -16,17 +15,21 @@ stdenv.mkDerivation rec {
     sha256 = "0b7hv4n8b3lndhr0jf9j1gkbzxm8897a1myjsfgwzad9gkhq395g";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config perl docbook2x python3Packages.wrapPython
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook pkg-config perl docbook2x python3Packages.wrapPython ];
   buildInputs = [
-    pam libapparmor gnutls libselinux libseccomp libcap
-    python3Packages.python python3Packages.setuptools systemd
+    pam
+    libapparmor
+    gnutls
+    libselinux
+    libseccomp
+    libcap
+    python3Packages.python
+    python3Packages.setuptools
+    systemd
   ];
 
-  patches = [
-    ./support-db2x.patch
-  ];
+  patches = [ ./support-db2x.patch ];
 
   postPatch = ''
     sed -i '/chmod u+s/d' src/lxc/Makefile.am
@@ -44,15 +47,14 @@ stdenv.mkDerivation rec {
   ] ++ optional (libapparmor != null) "--enable-apparmor"
     ++ optional (libselinux != null) "--enable-selinux"
     ++ optional (libseccomp != null) "--enable-seccomp"
-    ++ optional (libcap != null) "--enable-capabilities"
-    ++ [
-    "--disable-examples"
-    "--enable-python"
-    "--disable-lua"
-    "--enable-bash"
-    (if doCheck then "--enable-tests" else "--disable-tests")
-    "--with-rootfs-path=/var/lib/lxc/rootfs"
-  ];
+    ++ optional (libcap != null) "--enable-capabilities" ++ [
+      "--disable-examples"
+      "--enable-python"
+      "--disable-lua"
+      "--enable-bash"
+      (if doCheck then "--enable-tests" else "--disable-tests")
+      "--with-rootfs-path=/var/lib/lxc/rootfs"
+    ];
 
   doCheck = false;
 
@@ -82,7 +84,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://linuxcontainers.org/";
-    description = "Userspace tools for Linux Containers, a lightweight virtualization system";
+    description =
+      "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;
 
     longDescription = ''

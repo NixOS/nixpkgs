@@ -53,27 +53,28 @@ let
     "mod_geoip"
     "mod_magnet"
     "mod_mysql_vhost"
-    "mod_openssl"  # since v1.4.46
+    "mod_openssl" # since v1.4.46
     "mod_scgi"
     "mod_setenv"
     "mod_trigger_b4_dl"
     "mod_uploadprogress"
-    "mod_vhostdb"  # since v1.4.46
+    "mod_vhostdb" # since v1.4.46
     "mod_webdav"
-    "mod_wstunnel"  # since v1.4.46
+    "mod_wstunnel" # since v1.4.46
   ];
 
   maybeModuleString = moduleName:
     if elem moduleName cfg.enableModules then ''"${moduleName}"'' else "";
 
-  modulesIncludeString = concatStringsSep ",\n"
-    (filter (x: x != "") (map maybeModuleString allKnownModules));
+  modulesIncludeString = concatStringsSep ''
+    ,
+  '' (filter (x: x != "") (map maybeModuleString allKnownModules));
 
   configFile = if cfg.configText != "" then
     pkgs.writeText "lighttpd.conf" ''
       ${cfg.configText}
     ''
-    else
+  else
     pkgs.writeText "lighttpd.conf" ''
       server.document-root = "${cfg.document-root}"
       server.port = ${toString cfg.port}
@@ -100,7 +101,7 @@ let
       server.errorlog-use-syslog = "enable"
 
       ${lib.optionalString cfg.enableUpstreamMimeTypes ''
-      include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
+        include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
       ''}
 
       static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
@@ -108,20 +109,20 @@ let
 
       ${if cfg.mod_userdir then ''
         userdir.path = "public_html"
-      '' else ""}
+      '' else
+        ""}
 
       ${if cfg.mod_status then ''
         status.status-url = "/server-status"
         status.statistics-url = "/server-statistics"
         status.config-url = "/server-config"
-      '' else ""}
+      '' else
+        ""}
 
       ${cfg.extraConfig}
     '';
 
-in
-
-{
+in {
 
   options = {
 
@@ -228,31 +229,31 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = all (x: elem x allKnownModules) cfg.enableModules;
-        message = ''
-          One (or more) modules in services.lighttpd.enableModules are
-          unrecognized.
+    assertions = [{
+      assertion = all (x: elem x allKnownModules) cfg.enableModules;
+      message = ''
+        One (or more) modules in services.lighttpd.enableModules are
+        unrecognized.
 
-          Known modules: ${toString allKnownModules}
+        Known modules: ${toString allKnownModules}
 
-          services.lighttpd.enableModules: ${toString cfg.enableModules}
-        '';
-      }
+        services.lighttpd.enableModules: ${toString cfg.enableModules}
+      '';
+    }];
+
+    services.lighttpd.enableModules = mkMerge [
+      (mkIf cfg.mod_status [ "mod_status" ])
+      (mkIf cfg.mod_userdir [ "mod_userdir" ])
+      # always load mod_accesslog so that we can log to the journal
+      [ "mod_accesslog" ]
     ];
-
-    services.lighttpd.enableModules = mkMerge
-      [ (mkIf cfg.mod_status [ "mod_status" ])
-        (mkIf cfg.mod_userdir [ "mod_userdir" ])
-        # always load mod_accesslog so that we can log to the journal
-        [ "mod_accesslog" ]
-      ];
 
     systemd.services.lighttpd = {
       description = "Lighttpd Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${cfg.package}/sbin/lighttpd -D -f ${configFile}";
+      serviceConfig.ExecStart =
+        "${cfg.package}/sbin/lighttpd -D -f ${configFile}";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };

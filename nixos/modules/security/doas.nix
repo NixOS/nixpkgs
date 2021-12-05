@@ -10,18 +10,24 @@ let
 
   mkGrpString = group: ":${toString group}";
 
-  mkOpts = rule: concatStringsSep " " [
-    (optionalString rule.noPass "nopass")
-    (optionalString rule.noLog "nolog")
-    (optionalString rule.persist "persist")
-    (optionalString rule.keepEnv "keepenv")
-    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${concatStringsSep " " rule.setEnv} }"
-  ];
+  mkOpts = rule:
+    concatStringsSep " " [
+      (optionalString rule.noPass "nopass")
+      (optionalString rule.noLog "nolog")
+      (optionalString rule.persist "persist")
+      (optionalString rule.keepEnv "keepenv")
+      "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${
+        concatStringsSep " " rule.setEnv
+      } }"
+    ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
-    else if (length rule.args == 0) then "args"
-    else "args ${concatStringsSep " " rule.args}";
+    if (isNull rule.args) then
+      ""
+    else if (length rule.args == 0) then
+      "args"
+    else
+      "args ${concatStringsSep " " rule.args}";
 
   mkRule = rule:
     let
@@ -32,19 +38,15 @@ let
       cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
-    in
-    optionals (length cfg.extraRules > 0) [
-      (
-        optionalString (length rule.users > 0)
-          (map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}") rule.users)
-      )
-      (
-        optionalString (length rule.groups > 0)
-          (map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}") rule.groups)
-      )
+    in optionals (length cfg.extraRules > 0) [
+      (optionalString (length rule.users > 0)
+        (map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}")
+          rule.users))
+      (optionalString (length rule.groups > 0)
+        (map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}")
+          rule.groups))
     ];
-in
-{
+in {
 
   ###### interface
 
@@ -69,7 +71,7 @@ in
     };
 
     extraRules = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Define specific rules to be set in the
         <filename>/etc/doas.conf</filename> file. More specific rules should
@@ -106,8 +108,8 @@ in
             setEnv = [ "-SSH_AUTH_SOCK" "ALPHA=1" "BETA" ]; }
         ]
       '';
-      type = with types; listOf (
-        submodule {
+      type = with types;
+        listOf (submodule {
           options = {
 
             noPass = mkOption {
@@ -151,7 +153,7 @@ in
 
             setEnv = mkOption {
               type = with types; listOf str;
-              default = [];
+              default = [ ];
               description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
@@ -170,13 +172,13 @@ in
 
             users = mkOption {
               type = with types; listOf (either str int);
-              default = [];
+              default = [ ];
               description = "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
-              default = [];
+              default = [ ];
               description = "The groups / GIDs this rule should apply for.";
             };
 
@@ -216,8 +218,7 @@ in
               '';
             };
           };
-        }
-      );
+        });
     };
 
     extraConfig = mkOption {
@@ -229,28 +230,23 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    security.doas.extraRules = mkOrder 600 [
-      {
-        groups = [ "wheel" ];
-        noPass = !cfg.wheelNeedsPassword;
-      }
-    ];
+    security.doas.extraRules = mkOrder 600 [{
+      groups = [ "wheel" ];
+      noPass = !cfg.wheelNeedsPassword;
+    }];
 
-    security.wrappers.doas =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${doas}/bin/doas";
-      };
+    security.wrappers.doas = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${doas}/bin/doas";
+    };
 
-    environment.systemPackages = [
-      doas
-    ];
+    environment.systemPackages = [ doas ];
 
     security.pam.services.doas = {
       allowNullPassword = true;
@@ -258,26 +254,25 @@ in
     };
 
     environment.etc."doas.conf" = {
-      source = pkgs.runCommand "doas-conf"
-        {
-          src = pkgs.writeText "doas-conf-in" ''
-            # To modify this file, set the NixOS options
-            # `security.doas.extraRules` or `security.doas.extraConfig`. To
-            # completely replace the contents of this file, use
-            # `environment.etc."doas.conf"`.
+      source = pkgs.runCommand "doas-conf" {
+        src = pkgs.writeText "doas-conf-in" ''
+          # To modify this file, set the NixOS options
+          # `security.doas.extraRules` or `security.doas.extraConfig`. To
+          # completely replace the contents of this file, use
+          # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
+          # "root" is allowed to do anything.
+          permit nopass keepenv root
 
-            # extraRules
-            ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
+          # extraRules
+          ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
-            # extraConfig
-            ${cfg.extraConfig}
-          '';
-          preferLocalBuild = true;
-        }
-        # Make sure that the doas.conf file is syntactically valid.
+          # extraConfig
+          ${cfg.extraConfig}
+        '';
+        preferLocalBuild = true;
+      }
+      # Make sure that the doas.conf file is syntactically valid.
         "${pkgs.buildPackages.doas}/bin/doas -C $src && cp $src $out";
       mode = "0440";
     };

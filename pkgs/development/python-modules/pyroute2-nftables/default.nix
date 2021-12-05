@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-nftables";
@@ -14,16 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-sUVaY6PvwFDRCNVQ0cr9AR7d7W6JTZnnvfoC1ZK/bxY=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.nftables"
-  ];
+  pythonImportsCheck = [ "pr2modules.nftables" ];
 
   meta = with lib; {
     description = "Nftables module for pyroute2";

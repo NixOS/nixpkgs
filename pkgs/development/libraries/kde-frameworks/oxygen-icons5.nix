@@ -1,8 +1,4 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, qtbase
-}:
+{ mkDerivation, lib, extra-cmake-modules, qtbase }:
 
 mkDerivation {
   name = "oxygen-icons5";

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, georss-client
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, georss-client, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "georss-nrcan-earthquakes-client";
@@ -18,19 +13,17 @@ buildPythonPackage rec {
     sha256 = "1brn6ycsw3d3znbqi2w2cxjw8hyfb44p2lra18rx2gyvgnkxg19l";
   };
 
-  propagatedBuildInputs = [
-    georss-client
-  ];
+  propagatedBuildInputs = [ georss-client ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "georss_nrcan_earthquakes_client" ];
 
   meta = with lib; {
-    description = "Python library for accessing Natural Resources Canada Earthquakes feed";
-    homepage = "https://github.com/exxamalte/python-georss-nrcan-earthquakes-client";
+    description =
+      "Python library for accessing Natural Resources Canada Earthquakes feed";
+    homepage =
+      "https://github.com/exxamalte/python-georss-nrcan-earthquakes-client";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

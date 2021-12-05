@@ -1,28 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, openssl
-, pkg-config
-, makeWrapper
-, installShellFiles
-, Security
-, libiconv
+{ lib, stdenv, rustPlatform, fetchCrate, openssl, pkg-config, makeWrapper
+, installShellFiles, Security, libiconv
 
-  # rbw-fzf
-, withFzf ? false
-, fzf
-, perl
+# rbw-fzf
+, withFzf ? false, fzf, perl
 
-  # rbw-rofi
-, withRofi ? false
-, rofi
-, xclip
+# rbw-rofi
+, withRofi ? false, rofi, xclip
 
-  # pass-import
-, withPass ? false
-, pass
-}:
+# pass-import
+, withPass ? false, pass }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
@@ -36,11 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-I0KwHCmfYxgSF5IMHiPooaf2bypd6eYCOPSB+qnEBJY=";
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-    installShellFiles
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 

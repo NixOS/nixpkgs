@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tornado
-, requests
-, httplib2
-, sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
-, six
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, tornado, requests, httplib2, sure, nose
+, nose-exclude, coverage, rednose, nose-randomly, six, mock }:
 
 buildPythonPackage rec {
   pname = "httpretty";
@@ -29,9 +16,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
   ];
 
   __darwinAllowLocalNetworking = true;

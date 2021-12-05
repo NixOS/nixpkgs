@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonAtLeast
-}:
+{ lib, buildPythonPackage, fetchPypi, python, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pathlib";

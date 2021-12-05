@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";
-    description = "Interactive configuration GUI for space navigator input devices";
+    description =
+      "Interactive configuration GUI for space navigator input devices";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

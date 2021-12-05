@@ -9,15 +9,17 @@ let
     "macosx"
   else if stdenv.hostPlatform.system == "aarch64-linux" then
     "linux-arm"
-  else throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
-in
+  else
+    throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "iozone";
   version = "3.490";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tar";
+    url = "http://www.iozone.org/src/current/iozone${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }.tar";
     sha256 = "1vagmm2k2bzlpahl2a2arpfmk3cd5nzhxi842a8mdag2b8iv9bay";
   };
 
@@ -54,9 +56,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IOzone Filesystem Benchmark";
-    homepage    = "http://www.iozone.org/";
-    license     = lib.licenses.unfreeRedistributable;
-    platforms   = ["i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    homepage = "http://www.iozone.org/";
+    license = lib.licenses.unfreeRedistributable;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with lib.maintainers; [ Baughn makefu ];
   };
 }

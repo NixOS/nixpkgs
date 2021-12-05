@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, zlib
-}:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cramfsprogs";
@@ -16,9 +13,7 @@ stdenv.mkDerivation rec {
   # So patch the "missing include" bug ourselves.
   patches = [ ./include-sysmacros.patch ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install --target $out/bin -D cramfsck mkcramfs
@@ -27,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    description = "Tools to create, check, and extract content of CramFs images";
+    description =
+      "Tools to create, check, and extract content of CramFs images";
     homepage = "https://packages.debian.org/jessie/cramfsprogs";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pamplemousse ];

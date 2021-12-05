@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook
 
 }:
 
@@ -13,11 +12,12 @@ stdenv.mkDerivation rec {
   version = "3.4.2";
 
   src = fetchurl {
-    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "081nx7wpzds168jbr59m34n6s3lyiq6r8zggvqxvlslsc4hvf3sl";
   };
 
-  patches = [];
+  patches = [ ];
 
   outputs = [ "out" "dev" "man" "info" ];
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv.hostPlatform
+    != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
 
   meta = with lib; {
     description = "A foreign function call interface library";

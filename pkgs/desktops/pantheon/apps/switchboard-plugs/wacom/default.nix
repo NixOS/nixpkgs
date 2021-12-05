@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, granite
-, gtk3
-, libgee
-, libgudev
-, libwacom
-, switchboard
-, xorg
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, meson, ninja
+, pkg-config, vala, glib, granite, gtk3, libgee, libgudev, libwacom, switchboard
+, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
@@ -32,23 +17,17 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard-plug-wacom/pull/29
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-wacom/commit/2a7dee180d73ffb3521d806efb7028f5a71cb511.patch";
+      url =
+        "https://github.com/elementary/switchboard-plug-wacom/commit/2a7dee180d73ffb3521d806efb7028f5a71cb511.patch";
       sha256 = "06ra5c0f14brmj2mmsqscpc4d1114i4qazgnsazzh2hrp04ilnva";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
   buildInputs = [
     glib

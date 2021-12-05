@@ -26,9 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TEMPDIR

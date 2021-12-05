@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, scipy
-, numpy
-, scikit-learn
-, pandas
-, matplotlib
-, joblib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytestCheckHook, scipy
+, numpy, scikit-learn, pandas, matplotlib, joblib }:
 
 buildPythonPackage rec {
   pname = "mlxtend";
@@ -30,19 +20,12 @@ buildPythonPackage rec {
   # see: https://github.com/rasbt/mlxtend/pull/721
   disabledTests = [ "test_variance_explained_ratio" ];
 
-  propagatedBuildInputs = [
-    scipy
-    numpy
-    scikit-learn
-    pandas
-    matplotlib
-    joblib
-  ];
+  propagatedBuildInputs = [ scipy numpy scikit-learn pandas matplotlib joblib ];
 
   meta = with lib; {
     description = "A library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license= licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
     # incompatible with nixpkgs scikit-learn version

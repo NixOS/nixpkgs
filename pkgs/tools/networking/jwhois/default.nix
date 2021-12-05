@@ -1,4 +1,4 @@
-{lib, stdenv, lynx, fetchurl}:
+{ lib, stdenv, lynx, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "jwhois";
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-Wno-undef-prefix";
 
   meta = {
-    description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";
+    description =
+      "A client for the WHOIS protocol allowing you to query the owner of a domain name";
     homepage = "https://www.gnu.org/software/jwhois/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;

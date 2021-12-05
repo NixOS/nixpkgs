@@ -1,11 +1,6 @@
-{ stdenv
-, lib
-, fetchurl
-, perl
-, gmp
-, gf2x ? null
-# I asked the ntl maintainer weather or not to include gf2x by default:
-# > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
+{ stdenv, lib, fetchurl, perl, gmp, gf2x ? null
+  # I asked the ntl maintainer weather or not to include gf2x by default:
+  # > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
 , withGf2x ? true
 , tune ? false # tune for current system; non reproducible and time consuming
 }:
@@ -21,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nX9uguEaQJ8VHA3i3rCMDXY7r5g0/d/UMr89IY+AIds=";
   };
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   nativeBuildInputs = [
     perl # needed for ./configure
@@ -49,10 +42,7 @@ stdenv.mkDerivation rec {
         "generic" # "chooses options that should be OK for most platforms"
     }"
     "CXX=${stdenv.cc.targetPrefix}c++"
-  ] ++ lib.optionals withGf2x [
-    "NTL_GF2X_LIB=on"
-    "GF2X_PREFIX=${gf2x}"
-  ];
+  ] ++ lib.optionals withGf2x [ "NTL_GF2X_LIB=on" "GF2X_PREFIX=${gf2x}" ];
 
   doCheck = true; # takes some time
 

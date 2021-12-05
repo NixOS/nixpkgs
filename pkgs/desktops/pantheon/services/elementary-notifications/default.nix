@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk3
-, glib
-, granite
-, libgee
-, libhandy
-, libcanberra-gtk3
-, python3
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, vala, gtk3, glib
+, granite, libgee, libhandy, libcanberra-gtk3, python3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
@@ -38,14 +24,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    granite
-    gtk3
-    libcanberra-gtk3
-    libgee
-    libhandy
-  ];
+  buildInputs = [ glib granite gtk3 libcanberra-gtk3 libgee libhandy ];
 
   postPatch = ''
     chmod +x meson/post_install.py

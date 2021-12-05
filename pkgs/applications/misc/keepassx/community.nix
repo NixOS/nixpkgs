@@ -1,41 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, qttools
-, darwin
+{ lib, stdenv, fetchFromGitHub, cmake, qttools, darwin
 
-, asciidoctor
-, curl
-, glibcLocales
-, libXi
-, libXtst
-, libargon2
-, libgcrypt
-, libgpg-error
-, libsodium
-, libyubikey
-, pkg-config
-, qrencode
-, qtbase
-, qtmacextras
-, qtsvg
-, qtx11extras
-, quazip
-, readline
-, wrapQtAppsHook
-, yubikey-personalization
+, asciidoctor, curl, glibcLocales, libXi, libXtst, libargon2, libgcrypt
+, libgpg-error, libsodium, libyubikey, pkg-config, qrencode, qtbase, qtmacextras
+, qtsvg, qtx11extras, quazip, readline, wrapQtAppsHook, yubikey-personalization
 , zlib
 
-, withKeePassBrowser ? true
-, withKeePassKeeShare ? true
-, withKeePassKeeShareSecure ? true
-, withKeePassSSHAgent ? true
-, withKeePassNetworking ? true
-, withKeePassTouchID ? true
+, withKeePassBrowser ? true, withKeePassKeeShare ? true
+, withKeePassKeeShareSecure ? true, withKeePassSSHAgent ? true
+, withKeePassNetworking ? true, withKeePassTouchID ? true
 , withKeePassFDOSecrets ? true
 
-, nixosTests
-}:
+, nixosTests }:
 
 with lib;
 
@@ -58,9 +33,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
-  patches = [
-    ./darwin.patch
-  ];
+  patches = [ ./darwin.patch ];
 
   cmakeFlags = [
     "-DKEEPASSXC_BUILD_TYPE=Release"
@@ -68,14 +41,14 @@ stdenv.mkDerivation rec {
     "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_UPDATECHECK=OFF"
     "-DWITH_XC_YUBIKEY=ON"
-  ]
-  ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-  ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
-  ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
-  ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-  ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
-  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
-  ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
+  ] ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+    ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
+    ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
+    ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+    ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
+    ++ (optional (withKeePassFDOSecrets && stdenv.isLinux)
+      "-DWITH_XC_FDOSECRETS=ON")
+    ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
@@ -109,10 +82,9 @@ stdenv.mkDerivation rec {
     readline
     yubikey-personalization
     zlib
-  ]
-  ++ optional withKeePassKeeShareSecure quazip
-  ++ optional stdenv.isDarwin qtmacextras
-  ++ optional (stdenv.isDarwin && withKeePassTouchID)
+  ] ++ optional withKeePassKeeShareSecure quazip
+    ++ optional stdenv.isDarwin qtmacextras
+    ++ optional (stdenv.isDarwin && withKeePassTouchID)
     darwin.apple_sdk.frameworks.LocalAuthentication;
 
   passthru.tests = nixosTests.keepassxc;

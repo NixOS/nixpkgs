@@ -22,13 +22,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [
-    "-X github.com/xetys/hetzner-kube/cmd.version=${version}"
-  ];
+  ldflags = [ "-X github.com/xetys/hetzner-kube/cmd.version=${version}" ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     # Need a writable home, because it fails if unable to write config.
@@ -40,7 +36,8 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
+    description =
+      "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
     homepage = "https://github.com/xetys/hetzner-kube";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eliasp ];

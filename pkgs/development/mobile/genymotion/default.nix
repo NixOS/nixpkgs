@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
-, xdg-utils, libXrender, fontconfig, freetype, systemd, libpulseaudio
+{ stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg
+, libxkbcommon, xdg-utils, libXrender, fontconfig, freetype, systemd
+, libpulseaudio
 # For glewinfo
 , libXmu, libXi, libXext }:
 
@@ -21,12 +22,12 @@ let
     libpulseaudio
   ];
   libPath = lib.makeLibraryPath packages;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "genymotion";
   version = "3.2.1";
   src = fetchurl {
-    url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
+    url =
+      "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
     sha256 = "sha256-yCczUfiMcuu9OauMDmMdtnheDBXiC9tOEu0cWAW95FM=";
   };
@@ -86,10 +87,10 @@ stdenv.mkDerivation rec {
       Genymotion is a relatively fast Android emulator which comes with
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
-     '';
+    '';
     homepage = "https://www.genymotion.com/";
     license = licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.puffnfresh ];
   };
 }

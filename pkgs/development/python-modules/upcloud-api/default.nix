@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, responses
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook, responses
 }:
 
 buildPythonPackage rec {
@@ -17,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "1kkgrn97pw4k49ys97hjrvh2j8y2p2r9970v9csgrk5wci4562wm";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytestCheckHook responses ];
 
   pythonImportsCheck = [ "upcloud_api" ];
 

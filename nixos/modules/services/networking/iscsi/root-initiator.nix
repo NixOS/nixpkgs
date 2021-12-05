@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }: with lib;
-let
-  cfg = config.boot.iscsi-initiator;
-in
-{
+{ config, lib, pkgs, ... }:
+with lib;
+let cfg = config.boot.iscsi-initiator;
+in {
   # If you're booting entirely off another machine you may want to add
   # this snippet to always boot the latest "system" version. It is not
   # enabled by default in case you have an initrd on a local disk:
@@ -113,7 +112,8 @@ in
       extraUtilsCommands = ''
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsid
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsiadm
-        ${optionalString (!config.boot.initrd.network.ssh.enable) "cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib"}
+        ${optionalString (!config.boot.initrd.network.ssh.enable)
+        "cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib"}
 
         mkdir -p $out/etc/iscsi
         cp ${config.environment.etc.hosts.source} $out/etc/hosts
@@ -139,10 +139,10 @@ in
         '';
       in ''
         ${optionalString (!config.boot.initrd.network.ssh.enable) ''
-        # stolen from initrd-ssh.nix
-        echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
-      ''}
+          # stolen from initrd-ssh.nix
+          echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
+          echo 'passwd: files' > /etc/nsswitch.conf
+        ''}
 
         cp -f $extraUtils/etc/hosts /etc/hosts
 
@@ -164,10 +164,10 @@ in
           --debug ${toString cfg.logLevel}
 
         ${if cfg.loginAll then ''
-        iscsiadm --mode node --loginall all
-      '' else ''
-        iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
-      ''}
+          iscsiadm --mode node --loginall all
+        '' else ''
+          iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
+        ''}
 
         ${cfg.extraIscsiCommands}
 
@@ -180,11 +180,10 @@ in
       inherit (cfg) name;
     };
 
-    assertions = [
-      {
-        assertion = cfg.loginAll -> cfg.target == null;
-        message = "iSCSI target name is set while login on all portals is enabled.";
-      }
-    ];
+    assertions = [{
+      assertion = cfg.loginAll -> cfg.target == null;
+      message =
+        "iSCSI target name is set while login on all portals is enabled.";
+    }];
   };
 }

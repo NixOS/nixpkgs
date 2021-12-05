@@ -1,18 +1,6 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, git
-, pkgconfig
-, pytest-runner
-, setuptools-scm
-, future
-, numpy
-, pyusb
-, mock
-, pytestCheckHook
-, zipp
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, cython, git, pkgconfig
+, pytest-runner, setuptools-scm, future, numpy, pyusb, mock, pytestCheckHook
+, zipp }:
 
 ## Usage
 # In NixOS, add the package to services.udev.packages for non-root plugdev
@@ -31,19 +19,9 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [
-    cython
-    git
-    pkgconfig
-    pytest-runner
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ cython git pkgconfig pytest-runner setuptools-scm ];
 
-  propagatedBuildInputs = [
-    future
-    numpy
-    pyusb
-  ];
+  propagatedBuildInputs = [ future numpy pyusb ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
@@ -51,18 +29,14 @@ buildPythonPackage rec {
   '';
 
   # few backends enabled, but still some tests
-  checkInputs = [
-    pytestCheckHook
-    mock
-    zipp
-  ];
+  checkInputs = [ pytestCheckHook mock zipp ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "A python library to access Ocean Optics spectrometers";
-    maintainers = [];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

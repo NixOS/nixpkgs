@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/pgf/pgf/version%20${version}/pgf_${version}.tds.zip";
+    url =
+      "mirror://sourceforge/project/pgf/pgf/version%20${version}/pgf_${version}.tds.zip";
     sha256 = "0kj769hyp4z2zmdv3f8xv443wcfqn5nkkbzxzqgfxjizlz81aav7";
   };
 
@@ -20,10 +21,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = "
-    mkdir -p $out/share/texmf-nix
-    cp -prd * $out/share/texmf-nix
-  ";
+  installPhase =
+    "\n    mkdir -p $out/share/texmf-nix\n    cp -prd * $out/share/texmf-nix\n  ";
 
   meta = with lib; {
     branch = "3";

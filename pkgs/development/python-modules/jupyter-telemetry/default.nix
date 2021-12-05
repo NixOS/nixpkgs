@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-json-logger
-, jsonschema
-, ruamel-yaml
-, traitlets
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, python-json-logger
+, jsonschema, ruamel-yaml, traitlets }:
 
 buildPythonPackage rec {
   pname = "jupyter_telemetry";
@@ -18,9 +11,8 @@ buildPythonPackage rec {
     sha256 = "052khyn6h97jxl3k5i2m81xvga5v6vwh5qixzrax4w6zwcx62p24";
   };
 
-  propagatedBuildInputs = [
-    python-json-logger jsonschema ruamel-yaml traitlets
-  ];
+  propagatedBuildInputs =
+    [ python-json-logger jsonschema ruamel-yaml traitlets ];
 
   meta = with lib; {
     description = "Telemetry for Jupyter Applications and extensions";

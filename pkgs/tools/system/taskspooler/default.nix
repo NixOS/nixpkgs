@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://vicerveza.homeunix.net/%7Eviric/wsgi-bin/hgweb.wsgi/ts/archive/7cf9a8bda6d3.tar.gz";
+    url =
+      "https://vicerveza.homeunix.net/%7Eviric/wsgi-bin/hgweb.wsgi/ts/archive/7cf9a8bda6d3.tar.gz";
     sha256 = "11i21s8sdmjl4gy5f3dyfsxsmg1japgs4r5ym0b3jdyp99xhpbl1";
   };
 

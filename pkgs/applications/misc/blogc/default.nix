@@ -15,11 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ronn git cmocka ];
 
-  configureFlags = [
-    "--enable-git-receiver"
-    "--enable-make"
-    "--enable-runserver"
-  ];
+  configureFlags =
+    [ "--enable-git-receiver" "--enable-make" "--enable-runserver" ];
 
   doCheck = true;
 

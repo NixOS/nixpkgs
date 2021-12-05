@@ -6,24 +6,21 @@ with import ../default.nix;
 let
 
   testSanitizeDerivationName = { name, expected }:
-  let
-    drv = derivation {
-      name = strings.sanitizeDerivationName name;
-      builder = "x";
-      system = "x";
+    let
+      drv = derivation {
+        name = strings.sanitizeDerivationName name;
+        builder = "x";
+        system = "x";
+      };
+    in {
+      # Evaluate the derivation so an invalid name would be caught
+      expr = builtins.seq drv.drvPath drv.name;
+      inherit expected;
     };
-  in {
-    # Evaluate the derivation so an invalid name would be caught
-    expr = builtins.seq drv.drvPath drv.name;
-    inherit expected;
-  };
 
-in
+in runTests {
 
-runTests {
-
-
-# TRIVIAL
+  # TRIVIAL
 
   testId = {
     expr = id 1;
@@ -44,27 +41,22 @@ runTests {
   };
 
   testPipeEmpty = {
-    expr = pipe 2 [];
+    expr = pipe 2 [ ];
     expected = 2;
   };
 
   testPipeStrings = {
-    expr = pipe [ 3 4 ] [
-      (map toString)
-      (map (s: s + "\n"))
-      concatStrings
-    ];
+    expr = pipe [ 3 4 ] [ (map toString) (map (s: s + "\n")) concatStrings ];
     expected = ''
       3
       4
     '';
   };
 
-  /*
-  testOr = {
-    expr = or true false;
-    expected = true;
-  };
+  /* testOr = {
+       expr = or true false;
+       expected = true;
+     };
   */
 
   testAnd = {
@@ -73,37 +65,46 @@ runTests {
   };
 
   testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
+    expr = fix (x: { a = if x ? a then "a" else "b"; });
+    expected = { a = "a"; };
   };
 
   testComposeExtensions = {
-    expr = let obj = makeExtensible (self: { foo = self.bar; });
-               f = self: super: { bar = false; baz = true; };
-               g = self: super: { bar = super.baz or false; };
-               f_o_g = composeExtensions f g;
-               composed = obj.extend f_o_g;
-           in composed.foo;
+    expr = let
+      obj = makeExtensible (self: { foo = self.bar; });
+      f = self: super: {
+        bar = false;
+        baz = true;
+      };
+      g = self: super: { bar = super.baz or false; };
+      f_o_g = composeExtensions f g;
+      composed = obj.extend f_o_g;
+    in composed.foo;
     expected = true;
   };
 
   testComposeManyExtensions0 = {
-    expr = let obj = makeExtensible (self: { foo = true; });
-               emptyComposition = composeManyExtensions [];
-               composed = obj.extend emptyComposition;
-           in composed.foo;
+    expr = let
+      obj = makeExtensible (self: { foo = true; });
+      emptyComposition = composeManyExtensions [ ];
+      composed = obj.extend emptyComposition;
+    in composed.foo;
     expected = true;
   };
 
-  testComposeManyExtensions =
-    let f = self: super: { bar = false; baz = true; };
-        g = self: super: { bar = super.baz or false; };
-        h = self: super: { qux = super.bar or false; };
-        obj = makeExtensible (self: { foo = self.qux; });
-    in {
-    expr = let composition = composeManyExtensions [f g h];
-               composed = obj.extend composition;
-           in composed.foo;
+  testComposeManyExtensions = let
+    f = self: super: {
+      bar = false;
+      baz = true;
+    };
+    g = self: super: { bar = super.baz or false; };
+    h = self: super: { qux = super.bar or false; };
+    obj = makeExtensible (self: { foo = self.qux; });
+  in {
+    expr = let
+      composition = composeManyExtensions [ f g h ];
+      composed = obj.extend composition;
+    in composed.foo;
     expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
   };
 
@@ -134,7 +135,10 @@ runTests {
 
   testFunctionArgsFunctor = {
     expr = functionArgs { __functor = self: { a, b }: null; };
-    expected = { a = false; b = false; };
+    expected = {
+      a = false;
+      b = false;
+    };
   };
 
   testFunctionArgsSetFunctionArgs = {
@@ -142,15 +146,15 @@ runTests {
     expected = { x = false; };
   };
 
-# STRINGS
+  # STRINGS
 
   testConcatMapStrings = {
-    expr = concatMapStrings (x: x + ";") ["a" "b" "c"];
+    expr = concatMapStrings (x: x + ";") [ "a" "b" "c" ];
     expected = "a;b;c;";
   };
 
   testConcatStringsSep = {
-    expr = concatStringsSep "," ["a" "b" "c"];
+    expr = concatStringsSep "," [ "a" "b" "c" ];
     expected = "a,b,c";
   };
 
@@ -190,12 +194,12 @@ runTests {
   };
 
   testSplitStringsDerivation = {
-    expr = take 3  (strings.splitString "/" (derivation {
+    expr = take 3 (strings.splitString "/" (derivation {
       name = "name";
       builder = "builder";
       system = "system";
     }));
-    expected = ["" "nix" "store"];
+    expected = [ "" "nix" "store" ];
   };
 
   testSplitVersionSingle = {
@@ -213,24 +217,25 @@ runTests {
     expected = [ "1" "2" "3" ];
   };
 
-  testIsStorePath =  {
-    expr =
-      let goodPath =
-            "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
-      in {
-        storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
-        storePathAppendix = isStorePath
-          "${goodPath}/bin/python";
-        nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
-        asPath = isStorePath (/. + goodPath);
-        otherPath = isStorePath "/something/else";
-        otherVals = {
-          attrset = isStorePath {};
-          list = isStorePath [];
-          int = isStorePath 42;
-        };
+  testIsStorePath = {
+    expr = let
+      goodPath =
+        "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+    in {
+      storePath = isStorePath goodPath;
+      storePathDerivation =
+        isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+      storePathAppendix = isStorePath "${goodPath}/bin/python";
+      nonAbsolute =
+        isStorePath (concatStrings (tail (stringToCharacters goodPath)));
+      asPath = isStorePath (/. + goodPath);
+      otherPath = isStorePath "/something/else";
+      otherVals = {
+        attrset = isStorePath { };
+        list = isStorePath [ ];
+        int = isStorePath 42;
       };
+    };
     expected = {
       storePath = true;
       storePathDerivation = true;
@@ -251,61 +256,70 @@ runTests {
     expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
   };
 
-# LISTS
+  # LISTS
 
   testFilter = {
-    expr = filter (x: x != "a") ["a" "b" "c" "a"];
-    expected = ["b" "c"];
+    expr = filter (x: x != "a") [ "a" "b" "c" "a" ];
+    expected = [ "b" "c" ];
   };
 
-  testFold =
-    let
-      f = op: fold: fold op 0 (range 0 100);
-      # fold with associative operator
-      assoc = f builtins.add;
-      # fold with non-associative operator
-      nonAssoc = f builtins.sub;
-    in {
-      expr = {
-        assocRight = assoc foldr;
-        # right fold with assoc operator is same as left fold
-        assocRightIsLeft = assoc foldr == assoc foldl;
-        nonAssocRight = nonAssoc foldr;
-        nonAssocLeft = nonAssoc foldl;
-        # with non-assoc operator the fold results are not the same
-        nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
-        # fold is an alias for foldr
-        foldIsRight = nonAssoc fold == nonAssoc foldr;
-      };
-      expected = {
-        assocRight = 5050;
-        assocRightIsLeft = true;
-        nonAssocRight = 50;
-        nonAssocLeft = (-5050);
-        nonAssocRightIsNotLeft = true;
-        foldIsRight = true;
-      };
+  testFold = let
+    f = op: fold: fold op 0 (range 0 100);
+    # fold with associative operator
+    assoc = f builtins.add;
+    # fold with non-associative operator
+    nonAssoc = f builtins.sub;
+  in {
+    expr = {
+      assocRight = assoc foldr;
+      # right fold with assoc operator is same as left fold
+      assocRightIsLeft = assoc foldr == assoc foldl;
+      nonAssocRight = nonAssoc foldr;
+      nonAssocLeft = nonAssoc foldl;
+      # with non-assoc operator the fold results are not the same
+      nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
+      # fold is an alias for foldr
+      foldIsRight = nonAssoc fold == nonAssoc foldr;
     };
+    expected = {
+      assocRight = 5050;
+      assocRightIsLeft = true;
+      nonAssocRight = 50;
+      nonAssocLeft = (-5050);
+      nonAssocRightIsNotLeft = true;
+      foldIsRight = true;
+    };
+  };
 
   testTake = testAllTrue [
-    ([] == (take 0 [  1 2 3 ]))
-    ([1] == (take 1 [  1 2 3 ]))
-    ([ 1 2 ] == (take 2 [  1 2 3 ]))
-    ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
-    ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
+    ([ ] == (take 0 [ 1 2 3 ]))
+    ([ 1 ] == (take 1 [ 1 2 3 ]))
+    ([ 1 2 ] == (take 2 [ 1 2 3 ]))
+    ([ 1 2 3 ] == (take 3 [ 1 2 3 ]))
+    ([ 1 2 3 ] == (take 4 [ 1 2 3 ]))
   ];
 
   testFoldAttrs = {
-    expr = foldAttrs (n: a: [n] ++ a) [] [
-    { a = 2; b = 7; }
-    { a = 3;        c = 8; }
+    expr = foldAttrs (n: a: [ n ] ++ a) [ ] [
+      {
+        a = 2;
+        b = 7;
+      }
+      {
+        a = 3;
+        c = 8;
+      }
     ];
-    expected = { a = [ 2 3 ]; b = [7]; c = [8];};
+    expected = {
+      a = [ 2 3 ];
+      b = [ 7 ];
+      c = [ 8 ];
+    };
   };
 
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
-    expected = [2 30 40 42];
+    expected = [ 2 30 40 42 ];
   };
 
   testToIntShouldConvertStringToInt = {
@@ -314,26 +328,28 @@ runTests {
   };
 
   testToIntShouldThrowErrorIfItCouldNotConvertToInt = {
-    expr = builtins.tryEval (toInt "\"foo\"");
-    expected = { success = false; value = false; };
+    expr = builtins.tryEval (toInt ''"foo"'');
+    expected = {
+      success = false;
+      value = false;
+    };
   };
 
   testHasAttrByPathTrue = {
-    expr = hasAttrByPath ["a" "b"] { a = { b = "yey"; }; };
+    expr = hasAttrByPath [ "a" "b" ] { a = { b = "yey"; }; };
     expected = true;
   };
 
   testHasAttrByPathFalse = {
-    expr = hasAttrByPath ["a" "b"] { a = { c = "yey"; }; };
+    expr = hasAttrByPath [ "a" "b" ] { a = { c = "yey"; }; };
     expected = false;
   };
 
-
-# ATTRSETS
+  # ATTRSETS
 
   # code from the example
   testRecursiveUpdateUntil = {
-    expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
+    expr = recursiveUpdateUntil (path: l: r: path == [ "foo" ]) {
       # first attribute set
       foo.bar = 1;
       foo.baz = 2;
@@ -346,15 +362,15 @@ runTests {
     };
     expected = {
       foo.bar = 1; # 'foo.*' from the second set
-      foo.quz = 2; #
-      bar = 3;     # 'bar' from the first set
-      baz = 4;     # 'baz' from the second set
+      foo.quz = 2;
+      bar = 3; # 'bar' from the first set
+      baz = 4; # 'baz' from the second set
     };
   };
 
   testOverrideExistingEmpty = {
-    expr = overrideExisting {} { a = 1; };
-    expected = {};
+    expr = overrideExisting { } { a = 1; };
+    expected = { };
   };
 
   testOverrideExistingDisjoint = {
@@ -363,17 +379,23 @@ runTests {
   };
 
   testOverrideExistingOverride = {
-    expr = overrideExisting { a = 3; b = 2; } { a = 1; };
-    expected = { a = 1; b = 2; };
+    expr = overrideExisting {
+      a = 3;
+      b = 2;
+    } { a = 1; };
+    expected = {
+      a = 1;
+      b = 2;
+    };
   };
 
-# GENERATORS
-# these tests assume attributes are converted to lists
-# in alphabetical order
+  # GENERATORS
+  # these tests assume attributes are converted to lists
+  # in alphabetical order
 
   testMkKeyValueDefault = {
-    expr = generators.mkKeyValueDefault {} ":" "f:oo" "bar";
-    expected = ''f\:oo:bar'';
+    expr = generators.mkKeyValueDefault { } ":" "f:oo" "bar";
+    expected = "f\\:oo:bar";
   };
 
   testMkValueString = {
@@ -386,9 +408,7 @@ runTests {
         null = null;
         # float = 42.23; # floats are strange
       };
-      in mapAttrs
-        (const (generators.mkValueStringDefault {}))
-        vals;
+    in mapAttrs (const (generators.mkValueStringDefault { })) vals;
     expected = {
       int = "42";
       string = ''fo"o'';
@@ -400,7 +420,7 @@ runTests {
   };
 
   testToKeyValue = {
-    expr = generators.toKeyValue {} {
+    expr = generators.toKeyValue { } {
       key = "value";
       "other=key" = "baz";
     };
@@ -411,12 +431,15 @@ runTests {
   };
 
   testToINIEmpty = {
-    expr = generators.toINI {} {};
+    expr = generators.toINI { } { };
     expected = "";
   };
 
   testToINIEmptySection = {
-    expr = generators.toINI {} { foo = {}; bar = {}; };
+    expr = generators.toINI { } {
+      foo = { };
+      bar = { };
+    };
     expected = ''
       [bar]
 
@@ -425,7 +448,10 @@ runTests {
   };
 
   testToINIDuplicateKeys = {
-    expr = generators.toINI { listsAsDuplicateKeys = true; } { foo.bar = true; baz.qux = [ 1 false ]; };
+    expr = generators.toINI { listsAsDuplicateKeys = true; } {
+      foo.bar = true;
+      baz.qux = [ 1 false ];
+    };
     expected = ''
       [baz]
       qux=1
@@ -437,10 +463,8 @@ runTests {
   };
 
   testToINIDefaultEscapes = {
-    expr = generators.toINI {} {
-      "no [ and ] allowed unescaped" = {
-        "and also no = in keys" = 42;
-      };
+    expr = generators.toINI { } {
+      "no [ and ] allowed unescaped" = { "and also no = in keys" = 42; };
     };
     expected = ''
       [no \[ and \] allowed unescaped]
@@ -449,16 +473,14 @@ runTests {
   };
 
   testToINIDefaultFull = {
-    expr = generators.toINI {} {
+    expr = generators.toINI { } {
       "section 1" = {
         attribute1 = 5;
         x = "Me-se JarJar Binx";
         # booleans are converted verbatim by default
         boolean = false;
       };
-      "foo[]" = {
-        "he\\h=he" = "this is okay";
-      };
+      "foo[]" = { "he\\h=he" = "this is okay"; };
     };
     expected = ''
       [foo\[\]]
@@ -471,33 +493,33 @@ runTests {
     '';
   };
 
-  /* right now only invocation check */
-  testToJSONSimple =
-    let val = {
-      foobar = [ "baz" 1 2 3 ];
-    };
-    in {
-      expr = generators.toJSON {} val;
-      # trivial implementation
-      expected = builtins.toJSON val;
+  # right now only invocation check
+  testToJSONSimple = let val = { foobar = [ "baz" 1 2 3 ]; };
+  in {
+    expr = generators.toJSON { } val;
+    # trivial implementation
+    expected = builtins.toJSON val;
   };
 
-  /* right now only invocation check */
-  testToYAMLSimple =
-    let val = {
+  # right now only invocation check
+  testToYAMLSimple = let
+    val = {
       list = [ { one = 1; } { two = 2; } ];
       all = 42;
     };
-    in {
-      expr = generators.toYAML {} val;
-      # trivial implementation
-      expected = builtins.toJSON val;
+  in {
+    expr = generators.toYAML { } val;
+    # trivial implementation
+    expected = builtins.toJSON val;
   };
 
-  testToPretty =
-    let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = builtins.currentSystem; };
-    in {
+  testToPretty = let
+    deriv = derivation {
+      name = "test";
+      builder = "/bin/sh";
+      system = builtins.currentSystem;
+    };
+  in {
     expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
       float = 0.1337;
@@ -510,9 +532,12 @@ runTests {
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
-      emptylist = [];
-      attrs = { foo = null; "foo bar" = "baz"; };
-      emptyattrs = {};
+      emptylist = [ ];
+      attrs = {
+        foo = null;
+        "foo bar" = "baz";
+      };
+      emptyattrs = { };
       drv = deriv;
     };
     expected = rec {
@@ -521,42 +546,56 @@ runTests {
       bool = "true";
       emptystring = ''""'';
       string = ''"fno\"rd"'';
-      newlinestring = "\"\\n\"";
+      newlinestring = ''"\n"'';
       path = "/foo";
       null_ = "null";
       function = "<function>";
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      attrs = ''{ foo = null; "foo bar" = "baz"; }'';
       emptyattrs = "{ }";
       drv = "<derivation ${deriv.drvPath}>";
     };
   };
 
-  testToPrettyLimit =
-    let
-      a.b = 1;
-      a.c = a;
-    in {
-      expr = generators.toPretty { } (generators.withRecursion { throwOnDepthLimit = false; depthLimit = 2; } a);
-      expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
-    };
+  testToPrettyLimit = let
+    a.b = 1;
+    a.c = a;
+  in {
+    expr = generators.toPretty { } (generators.withRecursion {
+      throwOnDepthLimit = false;
+      depthLimit = 2;
+    } a);
+    expected = ''
+      {
+        b = 1;
+        c = {
+          b = "<unevaluated>";
+          c = {
+            b = "<unevaluated>";
+            c = "<unevaluated>";
+          };
+        };
+      }'';
+  };
 
-  testToPrettyLimitThrow =
-    let
-      a.b = 1;
-      a.c = a;
-    in {
-      expr = (builtins.tryEval
-        (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
-      expected = false;
-    };
+  testToPrettyLimitThrow = let
+    a.b = 1;
+    a.c = a;
+  in {
+    expr = (builtins.tryEval (generators.toPretty { }
+      (generators.withRecursion { depthLimit = 2; } a))).success;
+    expected = false;
+  };
 
   testToPrettyMultiline = {
     expr = mapAttrs (const (generators.toPretty { })) rec {
       list = [ 3 4 [ false ] ];
-      attrs = { foo = null; bar.foo = "baz"; };
+      attrs = {
+        foo = null;
+        bar.foo = "baz";
+      };
       newlinestring = "\n";
       multilinestring = ''
         hello
@@ -584,7 +623,10 @@ runTests {
           };
           foo = null;
         }'';
-      newlinestring = "''\n  \n''";
+      newlinestring = ''
+        '''
+          
+        ''''';
       multilinestring = ''
         '''
           hello
@@ -601,16 +643,17 @@ runTests {
   };
 
   testToPrettyAllowPrettyValues = {
-    expr = generators.toPretty { allowPrettyValues = true; }
-             { __pretty = v: "«" + v + "»"; val = "foo"; };
-    expected  = "«foo»";
+    expr = generators.toPretty { allowPrettyValues = true; } {
+      __pretty = v: "«" + v + "»";
+      val = "foo";
+    };
+    expected = "«foo»";
   };
 
-
-# CLI
+  # CLI
 
   testToGNUCommandLine = {
-    expr = cli.toGNUCommandLine {} {
+    expr = cli.toGNUCommandLine { } {
       data = builtins.toJSON { id = 0; };
       X = "PUT";
       retry = 3;
@@ -621,17 +664,22 @@ runTests {
     };
 
     expected = [
-      "-X" "PUT"
-      "--data" "{\"id\":0}"
-      "--retry" "3"
-      "--url" "https://example.com/foo"
-      "--url" "https://example.com/bar"
+      "-X"
+      "PUT"
+      "--data"
+      ''{"id":0}''
+      "--retry"
+      "3"
+      "--url"
+      "https://example.com/foo"
+      "--url"
+      "https://example.com/bar"
       "--verbose"
     ];
   };
 
   testToGNUCommandLineShell = {
-    expr = cli.toGNUCommandLineShell {} {
+    expr = cli.toGNUCommandLineShell { } {
       data = builtins.toJSON { id = 0; };
       X = "PUT";
       retry = 3;
@@ -641,7 +689,8 @@ runTests {
       verbose = true;
     };
 
-    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    expected =
+      "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
@@ -650,18 +699,24 @@ runTests {
   };
 
   testSanitizeDerivationNameAscii = testSanitizeDerivationName {
-    name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
+    name =
+      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    expected =
+      "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
   };
 
   testSanitizeDerivationNameTooLong = testSanitizeDerivationName {
-    name = "This string is loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
-    expected = "loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
+    name =
+      "This string is loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
+    expected =
+      "loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
   };
 
   testSanitizeDerivationNameTooLongWithInvalid = testSanitizeDerivationName {
-    name = "Hello there aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa &&&&&&&&";
-    expected = "there-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-";
+    name =
+      "Hello there aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa &&&&&&&&";
+    expected =
+      "there-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-";
   };
 
   testSanitizeDerivationNameEmpty = testSanitizeDerivationName {
@@ -670,33 +725,27 @@ runTests {
   };
 
   testFreeformOptions = {
-    expr =
-      let
-        submodule = { lib, ... }: {
-          freeformType = lib.types.attrsOf (lib.types.submodule {
-            options.bar = lib.mkOption {};
-          });
-          options.bar = lib.mkOption {};
-        };
+    expr = let
+      submodule = { lib, ... }: {
+        freeformType = lib.types.attrsOf
+          (lib.types.submodule { options.bar = lib.mkOption { }; });
+        options.bar = lib.mkOption { };
+      };
 
-        module = { lib, ... }: {
-          options.foo = lib.mkOption {
-            type = lib.types.submodule submodule;
-          };
-        };
+      module = { lib, ... }: {
+        options.foo = lib.mkOption { type = lib.types.submodule submodule; };
+      };
 
-        options = (evalModules {
-          modules = [ module ];
-        }).options;
+      options = (evalModules { modules = [ module ]; }).options;
 
-        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
-      in map (o: o.loc) locs;
+      locs = filter (o: !o.internal) (optionAttrSetToDocList options);
+    in map (o: o.loc) locs;
     expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProductOfSets {};
-    expected = [ {} ];
+    expr = cartesianProductOfSets { };
+    expected = [ { } ];
   };
 
   testCartesianProductOfOneSet = {
@@ -705,60 +754,180 @@ runTests {
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProductOfSets {
+      a = [ 1 ];
+      b = [ 10 20 ];
+    };
     expected = [
-      { a = 1; b = 10; }
-      { a = 1; b = 20; }
+      {
+        a = 1;
+        b = 10;
+      }
+      {
+        a = 1;
+        b = 20;
+      }
     ];
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProductOfSets {
+      a = [ ];
+      b = [ 10 20 ];
+    };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
     expr = cartesianProductOfSets {
-      a = [   1   2   3 ];
-      b = [  10  20  30 ];
+      a = [ 1 2 3 ];
+      b = [ 10 20 30 ];
       c = [ 100 200 300 ];
     };
     expected = [
-      { a = 1; b = 10; c = 100; }
-      { a = 1; b = 10; c = 200; }
-      { a = 1; b = 10; c = 300; }
+      {
+        a = 1;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 1; b = 20; c = 100; }
-      { a = 1; b = 20; c = 200; }
-      { a = 1; b = 20; c = 300; }
+      {
+        a = 1;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 1; b = 30; c = 100; }
-      { a = 1; b = 30; c = 200; }
-      { a = 1; b = 30; c = 300; }
+      {
+        a = 1;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 30;
+        c = 300;
+      }
 
-      { a = 2; b = 10; c = 100; }
-      { a = 2; b = 10; c = 200; }
-      { a = 2; b = 10; c = 300; }
+      {
+        a = 2;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 2; b = 20; c = 100; }
-      { a = 2; b = 20; c = 200; }
-      { a = 2; b = 20; c = 300; }
+      {
+        a = 2;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 2; b = 30; c = 100; }
-      { a = 2; b = 30; c = 200; }
-      { a = 2; b = 30; c = 300; }
+      {
+        a = 2;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 30;
+        c = 300;
+      }
 
-      { a = 3; b = 10; c = 100; }
-      { a = 3; b = 10; c = 200; }
-      { a = 3; b = 10; c = 300; }
+      {
+        a = 3;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 3; b = 20; c = 100; }
-      { a = 3; b = 20; c = 200; }
-      { a = 3; b = 20; c = 300; }
+      {
+        a = 3;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 3; b = 30; c = 100; }
-      { a = 3; b = 30; c = 200; }
-      { a = 3; b = 30; c = 300; }
+      {
+        a = 3;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 30;
+        c = 300;
+      }
     ];
   };
 }

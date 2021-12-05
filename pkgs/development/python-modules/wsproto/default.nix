@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy36
-, dataclasses
-, h11
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy36, dataclasses, h11
+, pytest }:
 
 buildPythonPackage rec {
   pname = "wsproto";

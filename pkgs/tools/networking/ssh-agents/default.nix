@@ -1,7 +1,4 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-}:
+{ fetchFromGitHub, lib, stdenvNoCC }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "ssh-agents";
@@ -17,7 +14,8 @@ stdenvNoCC.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "ssh-agents capable of spawning and maintaining multiple ssh-agents across terminals";
+    description =
+      "ssh-agents capable of spawning and maintaining multiple ssh-agents across terminals";
     longDescription = ''
       The SSH agent is usually spawned by running eval $(ssh-agent), however this
       spawns a new SSH agent at every invocation. This project provides an

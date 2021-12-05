@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libdmtx
-, imagemagick
-, Foundation
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libdmtx, imagemagick
+, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "dmtx-utils";

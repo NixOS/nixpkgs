@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, mock, pytest-cov, coverage
-, future, futures ? null, ujson}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook, mock
+, pytest-cov, coverage, future, futures ? null, ujson }:
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
@@ -17,9 +16,7 @@ buildPythonPackage rec {
     sed -i "s/version=versioneer.get_version(),/version=\"$version\",/g" setup.py
   '';
 
-  checkInputs = [
-    pytestCheckHook mock pytest-cov coverage
-  ];
+  checkInputs = [ pytestCheckHook mock pytest-cov coverage ];
 
   propagatedBuildInputs = [ future ujson ]
     ++ lib.optional (pythonOlder "3.2") futures;

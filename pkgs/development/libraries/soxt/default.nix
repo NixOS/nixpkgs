@@ -1,4 +1,5 @@
-{ fetchhg, lib, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU, libGL }:
+{ fetchhg, lib, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU
+, libGL }:
 
 stdenv.mkDerivation {
   pname = "soxt";

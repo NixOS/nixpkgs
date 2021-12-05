@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, sconsPackages, boost, ladspaH, pkg-config }:
+{ lib, stdenv, fetchurl, sconsPackages, boost, ladspaH, pkg-config }:
 
 stdenv.mkDerivation {
   version = "0.2-2";

@@ -1,12 +1,6 @@
-{ stdenv
-, lib
-, cmake
-, libxml2
-, llvm
+{ stdenv, lib, cmake, libxml2, llvm
 
-, version
-, src
-}:
+, version, src }:
 
 stdenv.mkDerivation rec {
   inherit version src;

@@ -8,13 +8,22 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [ emacs ];
-  buildInputs = with emacs.pkgs; [
-    s f dash ansi ecukes servant ert-runner el-mock
-    noflet ert-async shell-split-string git package-build
-  ] ++ [
-    python3
-    bash
-  ];
+  buildInputs = with emacs.pkgs;
+    [
+      s
+      f
+      dash
+      ansi
+      ecukes
+      servant
+      ert-runner
+      el-mock
+      noflet
+      ert-async
+      shell-split-string
+      git
+      package-build
+    ] ++ [ python3 bash ];
 
   strictDeps = true;
 

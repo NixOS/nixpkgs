@@ -14,7 +14,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyusb ];
 
   meta = with lib; {
-    description = "Python implementation of the USBTMC instrument control protocol";
+    description =
+      "Python implementation of the USBTMC instrument control protocol";
     homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];

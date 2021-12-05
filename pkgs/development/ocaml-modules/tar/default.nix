@@ -1,11 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, ppx_cstruct
-, cstruct
-, re
-, ppx_tools
-}:
+{ lib, fetchFromGitHub, buildDunePackage, ppx_cstruct, cstruct, re, ppx_tools }:
 
 buildDunePackage rec {
   pname = "tar";
@@ -19,15 +12,9 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    ppx_cstruct
-    cstruct
-    re
-  ];
+  propagatedBuildInputs = [ ppx_cstruct cstruct re ];
 
-  buildInputs = [
-    ppx_tools
-  ];
+  buildInputs = [ ppx_tools ];
 
   doCheck = true;
 

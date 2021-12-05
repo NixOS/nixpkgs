@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jre_headless, coreutils, gradle_6, git, perl
-, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitLab, jre_headless, coreutils, gradle_6, git
+, perl, makeWrapper }:
 
 let
   pname = "signald";
@@ -13,7 +13,8 @@ let
   };
 
   buildConfigJar = fetchurl {
-    url = "https://dl.bintray.com/mfuerstenau/maven/gradle/plugin/de/fuerstenau/BuildConfigPlugin/1.1.8/BuildConfigPlugin-1.1.8.jar";
+    url =
+      "https://dl.bintray.com/mfuerstenau/maven/gradle/plugin/de/fuerstenau/BuildConfigPlugin/1.1.8/BuildConfigPlugin-1.1.8.jar";
     sha256 = "0y1f42y7ilm3ykgnm6s3ks54d71n8lsy5649xgd9ahv28lj05x9f";
   };
 

@@ -1,22 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, vala
-, gettext
-, glib
-, gtk3
-, libgee
-, libdazzle
-, meson
-, ninja
-, pantheon
-, pkg-config
-, python3
-, webkitgtk
-, wrapGAppsHook
-, glib-networking
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, desktop-file-utils, vala
+, gettext, glib, gtk3, libgee, libdazzle, meson, ninja, pantheon, pkg-config
+, python3, webkitgtk, wrapGAppsHook, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
@@ -40,26 +24,15 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    glib-networking
-    gtk3
-    libdazzle
-    libgee
-    pantheon.granite
-    webkitgtk
-  ];
+  buildInputs =
+    [ glib glib-networking gtk3 libdazzle libgee pantheon.granite webkitgtk ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "The always-incognito web browser";

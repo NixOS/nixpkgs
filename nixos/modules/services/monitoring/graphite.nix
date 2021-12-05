@@ -10,25 +10,26 @@ let
   staticDir = cfg.dataDir + "/static";
 
   graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
-      inherit graphiteLocalSettings;
-      preferLocalBuild = true;
-    } ''
+    inherit graphiteLocalSettings;
+    preferLocalBuild = true;
+  } ''
     mkdir -p $out
     ln -s $graphiteLocalSettings $out/graphite_local_settings.py
   '';
 
-  graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
-    "STATIC_ROOT = '${staticDir}'\n" +
-    optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
-    + cfg.web.extraConfig
-  );
+  graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (''
+    STATIC_ROOT = '${staticDir}'
+  '' + optionalString (config.time.timeZone != null) ''
+    TIME_ZONE = '${config.time.timeZone}'
+  '' + cfg.web.extraConfig);
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
     search_index: ${dataDir}/index
-    ${optionalString (config.time.timeZone != null) "time_zone: ${config.time.timeZone}"}
-    ${optionalString (cfg.api.finders != []) "finders:"}
+    ${optionalString (config.time.timeZone != null)
+    "time_zone: ${config.time.timeZone}"}
+    ${optionalString (cfg.api.finders != [ ]) "finders:"}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
-    ${optionalString (cfg.api.functions != []) "functions:"}
+    ${optionalString (cfg.api.functions != [ ]) "functions:"}
     ${concatMapStringsSep "\n" (f: "  - " + f) cfg.api.functions}
     ${cfg.api.extraConfig}
   '';
@@ -53,9 +54,10 @@ let
     ];
   };
 
-  carbonOpts = name: with config.ids; ''
-    --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
-  '';
+  carbonOpts = name:
+    with config.ids; ''
+      --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
+    '';
 
   carbonEnv = {
     PYTHONPATH = let
@@ -70,9 +72,7 @@ let
 
 in {
 
-  imports = [
-    (mkRemovedOptionModule ["services" "graphite" "pager"] "")
-  ];
+  imports = [ (mkRemovedOptionModule [ "services" "graphite" "pager" ] "") ];
 
   ###### interface
 
@@ -131,7 +131,7 @@ in {
 
       finders = mkOption {
         description = "List of finder plugins to load.";
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.python3Packages.influxgraph ]";
         type = types.listOf types.package;
       };
@@ -207,13 +207,15 @@ in {
       };
 
       enableCache = mkOption {
-        description = "Whether to enable carbon cache, the graphite storage daemon.";
+        description =
+          "Whether to enable carbon cache, the graphite storage daemon.";
         default = false;
         type = types.bool;
       };
 
       storageAggregation = mkOption {
-        description = "Defines how to aggregate data to lower-precision retentions.";
+        description =
+          "Defines how to aggregate data to lower-precision retentions.";
         default = null;
         type = types.nullOr types.str;
         example = ''
@@ -236,14 +238,16 @@ in {
       };
 
       blacklist = mkOption {
-        description = "Any metrics received which match one of the experssions will be dropped.";
+        description =
+          "Any metrics received which match one of the experssions will be dropped.";
         default = null;
         type = types.nullOr types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {
-        description = "Only metrics received which match one of the experssions will be persisted.";
+        description =
+          "Only metrics received which match one of the experssions will be persisted.";
         default = null;
         type = types.nullOr types.str;
         example = ".*";
@@ -264,13 +268,15 @@ in {
       };
 
       enableRelay = mkOption {
-        description = "Whether to enable carbon relay, the carbon replication and sharding service.";
+        description =
+          "Whether to enable carbon relay, the carbon replication and sharding service.";
         default = false;
         type = types.bool;
       };
 
       relayRules = mkOption {
-        description = "Relay rules are used to send certain metrics to a certain backend.";
+        description =
+          "Relay rules are used to send certain metrics to a certain backend.";
         default = null;
         type = types.nullOr types.str;
         example = ''
@@ -281,7 +287,8 @@ in {
       };
 
       enableAggregator = mkOption {
-        description = "Whether to enable carbon aggregator, the carbon buffering service.";
+        description =
+          "Whether to enable carbon aggregator, the carbon buffering service.";
         default = false;
         type = types.bool;
       };
@@ -329,7 +336,7 @@ in {
       };
 
       extraConfig = mkOption {
-        default = {};
+        default = { };
         description = ''
           Extra seyren configuration. See
           <link xlink:href='https://github.com/scobal/seyren#config' />
@@ -349,7 +356,7 @@ in {
 
       config = mkOption {
         description = "Graphite beacon configuration.";
-        default = {};
+        default = { };
         type = types.attrs;
       };
     };
@@ -359,18 +366,20 @@ in {
 
   config = mkMerge [
     (mkIf cfg.carbon.enableCache {
-      systemd.services.carbonCache = let name = "carbon-cache"; in {
+      systemd.services.carbonCache = let name = "carbon-cache";
+      in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart =
+            "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
         preStart = ''
           install -dm0700 -o graphite -g graphite ${cfg.dataDir}
@@ -380,7 +389,8 @@ in {
     })
 
     (mkIf cfg.carbon.enableAggregator {
-      systemd.services.carbonAggregator = let name = "carbon-aggregator"; in {
+      systemd.services.carbonAggregator = let name = "carbon-aggregator";
+      in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
@@ -388,35 +398,37 @@ in {
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart =
+            "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
 
     (mkIf cfg.carbon.enableRelay {
-      systemd.services.carbonRelay = let name = "carbon-relay"; in {
+      systemd.services.carbonRelay = let name = "carbon-relay";
+      in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart =
+            "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
 
-    (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
-      environment.systemPackages = [
-        pkgs.python3Packages.carbon
-      ];
-    })
+    (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator
+      || cfg.carbon.enableRelay) {
+        environment.systemPackages = [ pkgs.python3Packages.carbon ];
+      })
 
     (mkIf cfg.web.enable ({
       systemd.services.graphiteWeb = {
@@ -426,18 +438,16 @@ in {
         path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = let
-              penv = pkgs.python3.buildEnv.override {
-                extraLibs = [
-                  pkgs.python3Packages.graphite-web
-                ];
-              };
-              penvPack = "${penv}/${pkgs.python3.sitePackages}";
-            in concatStringsSep ":" [
-                 "${graphiteLocalSettingsDir}"
-                 "${penvPack}"
-                 # explicitly adding pycairo in path because it cannot be imported via buildEnv
-                 "${pkgs.python3Packages.pycairo}/${pkgs.python3.sitePackages}"
-               ];
+            penv = pkgs.python3.buildEnv.override {
+              extraLibs = [ pkgs.python3Packages.graphite-web ];
+            };
+            penvPack = "${penv}/${pkgs.python3.sitePackages}";
+          in concatStringsSep ":" [
+            "${graphiteLocalSettingsDir}"
+            "${penvPack}"
+            # explicitly adding pycairo in path because it cannot be imported via buildEnv
+            "${pkgs.python3Packages.pycairo}/${pkgs.python3.sitePackages}"
+          ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_SETTINGS_MODULE = "graphite_local_settings";
           GRAPHITE_CONF_DIR = configDir;
@@ -485,10 +495,12 @@ in {
         after = [ "network.target" ];
         environment = {
           PYTHONPATH = let
-              aenv = pkgs.python3.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ] ++ cfg.api.finders;
-              };
-            in "${aenv}/${pkgs.python3.sitePackages}";
+            aenv = pkgs.python3.buildEnv.override {
+              extraLibs =
+                [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ]
+                ++ cfg.api.finders;
+            };
+          in "${aenv}/${pkgs.python3.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
@@ -523,7 +535,8 @@ in {
         after = [ "network.target" "mongodb.service" ];
         environment = seyrenConfig;
         serviceConfig = {
-          ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
+          ExecStart =
+            "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
           WorkingDirectory = dataDir;
           User = "graphite";
           Group = "graphite";
@@ -546,7 +559,10 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.python3Packages.graphite_beacon}/bin/graphite-beacon \
-              --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
+              --config=${
+                pkgs.writeText "graphite-beacon.json"
+                (builtins.toJSON cfg.beacon.config)
+              }
           '';
           User = "graphite";
           Group = "graphite";
@@ -554,18 +570,16 @@ in {
       };
     })
 
-    (mkIf (
-      cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
-      cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.beacon.enable
-     ) {
-      users.users.graphite = {
-        uid = config.ids.uids.graphite;
-        group = "graphite";
-        description = "Graphite daemon user";
-        home = dataDir;
-      };
-      users.groups.graphite.gid = config.ids.gids.graphite;
-    })
+    (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator
+      || cfg.carbon.enableRelay || cfg.web.enable || cfg.api.enable
+      || cfg.seyren.enable || cfg.beacon.enable) {
+        users.users.graphite = {
+          uid = config.ids.uids.graphite;
+          group = "graphite";
+          description = "Graphite daemon user";
+          home = dataDir;
+        };
+        users.groups.graphite.gid = config.ids.gids.graphite;
+      })
   ];
 }

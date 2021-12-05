@@ -1,38 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, libhandy
-, wrapGAppsHook
-, gjs
-, gobject-introspection
-, libgweather
-, meson
-, ninja
-, geoclue2
-, gnome-desktop
-, python3
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, pkg-config, gnome, gtk3, libhandy, wrapGAppsHook, gjs
+, gobject-introspection, libgweather, meson, ninja, geoclue2, gnome-desktop
+, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1vidwq768xnrnr24jcfbpwjczz7vm5zmaiv41nb75q4p8avlwqg5";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    wrapGAppsHook
-    python3
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook python3 ];
 
   buildInputs = [
     gtk3

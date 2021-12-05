@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, xlibsWrapper
-, makeWrapper
-, libXpm
-, libXmu
-, libXi
-, libXp
-, Xaw3d
-, libXaw
-, fig2dev
-}:
+{ lib, stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm, libXmu, libXi, libXp
+, Xaw3d, libXaw, fig2dev }:
 
 stdenv.mkDerivation rec {
   pname = "xfig";
@@ -23,15 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    xlibsWrapper
-    libXpm
-    libXmu
-    libXi
-    libXp
-    Xaw3d
-    libXaw
-  ];
+  buildInputs = [ xlibsWrapper libXpm libXmu libXi libXp Xaw3d libXaw ];
 
   postPatch = ''
     sed -i 's:"fig2dev":"${fig2dev}/bin/fig2dev":' src/main.c

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, substituteAll
-, cmake
-, boost
-, gmp
-, pybind11
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm, substituteAll
+, cmake, boost, gmp, pybind11, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "chiavdf";
@@ -37,9 +26,7 @@ buildPythonPackage rec {
 
   buildInputs = [ boost gmp pybind11 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # CMake needs to be run by setuptools rather than by its hook
   dontConfigure = true;

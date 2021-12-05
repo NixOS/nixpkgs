@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pytest
-, decorator
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pytest, decorator, setuptools }:
 
 buildPythonPackage rec {
   pname = "networkx";
@@ -18,14 +11,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ decorator setuptools ];
-  checkInputs = [ nose pytest];
+  checkInputs = [ nose pytest ];
   checkPhase = ''
     pytest
   '';
 
   meta = {
     homepage = "https://networkx.github.io/";
-    description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
+    description =
+      "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
     license = lib.licenses.bsd3;
   };
 }

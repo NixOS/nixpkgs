@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, xmltodict
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pycontrol4";
@@ -19,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "068iiyi17ndv6cv124r5dzvififblbi2zw7jgnzb5xi0q093czkj";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    xmltodict
-  ];
+  propagatedBuildInputs = [ aiohttp xmltodict ];
 
   # tests access network
   doCheck = false;
@@ -35,7 +26,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python 3 asyncio package for interacting with Control4 systems";
+    description =
+      "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

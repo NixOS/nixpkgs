@@ -1,13 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, arrow
-, requests
-, units
-, pytz
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, arrow, requests, units, pytz, six }:
 
 buildPythonPackage rec {
   pname = "stravalib";
@@ -18,17 +9,9 @@ buildPythonPackage rec {
     sha256 = "451817c68a11e0c77db9cb628e3c4df0f4806c5a481536598ab3baa1d1c21215";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
-  propagatedBuildInputs = [
-    arrow
-    requests
-    units
-    pytz
-    six
-  ];
+  propagatedBuildInputs = [ arrow requests units pytz six ];
 
   # tests require network access
   # testing strava api

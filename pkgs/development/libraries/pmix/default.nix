@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
-, libtool, flex, libevent, hwloc, munge, zlib, pandoc
-} :
+{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake, libtool, flex
+, libevent, hwloc, munge, zlib, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "pmix";

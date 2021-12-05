@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "7.0.3";
 
   src = fetchurl {
-    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
+    url =
+      "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
     sha256 = "sha256-aKSxKYJ2OmxCDHwBrfUMenT9LYzFYH5P3R8q/QhkM+c=";
   };
 
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=format-security"
-  ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
 
   postPatch = ''
     patchShebangs ./MPC/prj_install.pl

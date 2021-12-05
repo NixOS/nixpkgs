@@ -1,14 +1,5 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, lib
-, stdenv
-, udev
-, wrapGAppsHook
-}:
+{ atomEnv, autoPatchelfHook, dpkg, fetchurl, makeDesktopItem, makeWrapper, lib
+, stdenv, udev, wrapGAppsHook }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -27,12 +18,8 @@ let
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kiwi
-    ];
-    platforms = [
-      "x86_64-linux"
-    ];
+    maintainers = with maintainers; [ kiwi ];
+    platforms = [ "x86_64-linux" ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -61,12 +48,7 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      dpkg
-      makeWrapper
-      wrapGAppsHook
-    ];
+    nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
 
     buildInputs = atomEnv.packages;
 
@@ -82,16 +64,13 @@ let
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
     '';
 
-    runtimeDependencies = [
-      (lib.getLib udev)
-    ];
+    runtimeDependencies = [ (lib.getLib udev) ];
 
     postFixup = ''
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}" \
         "''${gappsWrapperArgs[@]}"
     '';
   };
 
-in
-linux
+in linux

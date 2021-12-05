@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, SDL2
-}:
+{ stdenv, lib, fetchFromGitHub, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "x16-emulator";

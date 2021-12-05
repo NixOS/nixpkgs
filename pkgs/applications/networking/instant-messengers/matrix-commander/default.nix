@@ -13,15 +13,17 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cacert
-    (python3.withPackages(ps: with ps; [
-      matrix-nio
-      magic
-      markdown
-      pillow
-      urllib3
-      aiofiles
-      notify2
-    ]))];
+    (python3.withPackages (ps:
+      with ps; [
+        matrix-nio
+        magic
+        markdown
+        pillow
+        urllib3
+        aiofiles
+        notify2
+      ]))
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -34,7 +36,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
+    description =
+      "Simple but convenient CLI-based Matrix client app for sending and receiving";
     homepage = "https://github.com/8go/matrix-commander";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

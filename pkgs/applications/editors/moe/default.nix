@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, ncurses
-, lzip
-}:
+{ lib, stdenv, fetchurl, ncurses, lzip }:
 
 stdenv.mkDerivation rec {
   pname = "moe";

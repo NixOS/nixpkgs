@@ -1,6 +1,4 @@
-{ self
-, openssl
-}:
+{ self, openssl }:
 
 with self;
 
@@ -14,7 +12,8 @@ with self;
 
   sexplib0 = janePackage {
     pname = "sexplib0";
-    meta.description = "Library containing the definition of S-expressions and some base converters";
+    meta.description =
+      "Library containing the definition of S-expressions and some base converters";
     hash = "07v3ggyss7xhfv14bjk1n87sr42iqwj4cgjiv2lcdfkqk49i2bmi";
   };
 
@@ -27,7 +26,8 @@ with self;
 
   sexplib = janePackage {
     pname = "sexplib";
-    meta.description = "Library for serializing OCaml values to and from S-expressions";
+    meta.description =
+      "Library for serializing OCaml values to and from S-expressions";
     hash = "1qfl0m04rpcjvc4yw1hzh6r16jpwmap0sa9ax6zjji67dz4szpyb";
     propagatedBuildInputs = [ num parsexp ];
   };
@@ -68,7 +68,8 @@ with self;
     version = "0.11.2";
     hash = "0pqwnqy1xp309wvdcaax4lg02yk64lq2w03mbgfvf6ps5ry4gis9";
     propagatedBuildInputs = [ sexplib0 ppxlib ppx_deriving ];
-    meta.description = "Generation of S-expression conversion functions from type definitions";
+    meta.description =
+      "Generation of S-expression conversion functions from type definitions";
   };
 
   variantslib = janePackage {
@@ -85,7 +86,8 @@ with self;
     hash = "1yc0gsds5m2nv39zga8nnrca2n75rkqy5dz4xj1635ybz20hhbjd";
     buildInputs = [ ppxlib ];
     propagatedBuildInputs = [ ppx_deriving variantslib ];
-    meta.description = "Generation of accessor and iteration functions for OCaml variant types";
+    meta.description =
+      "Generation of accessor and iteration functions for OCaml variant types";
   };
 
   fieldslib = janePackage {
@@ -99,20 +101,23 @@ with self;
     pname = "ppx_fields_conv";
     hash = "1bb9cmn4js7p3qh8skzyik1pcz6sj1k4xkhf12fg1bjmb5fd0jx1";
     propagatedBuildInputs = [ fieldslib ];
-    meta.description = "Generation of accessor and iteration functions for OCaml records";
+    meta.description =
+      "Generation of accessor and iteration functions for OCaml records";
   };
 
   ppx_custom_printf = janePackage {
     pname = "ppx_custom_printf";
     hash = "1dvjzvaxhx53jqwrrlxdckwl1azrhs9kvwb48mhgd0jnz65ny726";
     propagatedBuildInputs = [ ppx_sexp_conv ];
-    meta.description = "Printf-style format-strings for user-defined string conversion";
+    meta.description =
+      "Printf-style format-strings for user-defined string conversion";
   };
 
   bin_prot = janePackage {
     pname = "bin_prot";
     hash = "1mgbyzsr8h0y4s4j9dv7hsdrxyzhhjww5khwg2spi2my7ia95m0l";
-    propagatedBuildInputs = [ ppx_compare ppx_custom_printf ppx_fields_conv ppx_variants_conv ];
+    propagatedBuildInputs =
+      [ ppx_compare ppx_custom_printf ppx_fields_conv ppx_variants_conv ];
     meta.description = "Binary protocol generator";
   };
 
@@ -134,7 +139,8 @@ with self;
     hash = "0qbdrl0rj0midnb6sdyaz00s0d4nb8zrrdf565lcdsi1rbnyrzan";
     buildInputs = [ ppx_here ];
     propagatedBuildInputs = [ ppx_compare ppx_sexp_conv ];
-    meta.description = "Assert-like extension nodes that raise useful errors on failure";
+    meta.description =
+      "Assert-like extension nodes that raise useful errors on failure";
   };
 
   ppx_hash = janePackage {
@@ -142,7 +148,8 @@ with self;
     pname = "ppx_hash";
     hash = "1p0ic6aijxlrdggpmycj12q3cy9xksbq2vq727215maz4snvlf5p";
     propagatedBuildInputs = [ ppx_compare ppx_sexp_conv ];
-    meta.description = "A ppx rewriter that generates hash functions from type expressions and definitions";
+    meta.description =
+      "A ppx rewriter that generates hash functions from type expressions and definitions";
   };
 
   ppx_inline_test = janePackage {
@@ -150,7 +157,8 @@ with self;
     hash = "11n94fz1asjf5vqdgriv0pvsa5lbfpqcyk525c7816w23vskcvq6";
     buildInputs = [ ppxlib ];
     propagatedBuildInputs = [ base ];
-    meta.description = "Syntax extension for writing in-line tests in OCaml code";
+    meta.description =
+      "Syntax extension for writing in-line tests in OCaml code";
   };
 
   ppx_sexp_message = janePackage {
@@ -204,7 +212,8 @@ with self;
     pname = "ppx_bench";
     hash = "0z98r6y4lpj6dy265m771ylx126hq3v1zjsk74yqvpwwd63gx3jz";
     buildInputs = [ ppxlib ppx_inline_test ];
-    meta.description = "Syntax extension for writing in-line benchmarks in OCaml code";
+    meta.description =
+      "Syntax extension for writing in-line benchmarks in OCaml code";
   };
 
   ppx_bin_prot = janePackage {
@@ -219,8 +228,16 @@ with self;
   ppx_expect = janePackage {
     pname = "ppx_expect";
     hash = "1g0r67vfw9jr75pybiw4ysfiswlzyfpbj0gl91rx62gqdhjh1pga";
-    buildInputs = [ ppx_assert ppx_custom_printf ppx_fields_conv ppx_here ppx_variants_conv re ];
-    propagatedBuildInputs = [ fieldslib ppx_compare ppx_inline_test ppx_sexp_conv ];
+    buildInputs = [
+      ppx_assert
+      ppx_custom_printf
+      ppx_fields_conv
+      ppx_here
+      ppx_variants_conv
+      re
+    ];
+    propagatedBuildInputs =
+      [ fieldslib ppx_compare ppx_inline_test ppx_sexp_conv ];
     meta.description = "Cram like framework for OCaml";
   };
 
@@ -257,7 +274,8 @@ with self;
     pname = "ppx_pipebang";
     hash = "0smgq587amlr3hivbbg153p83dj37w30cssp9cffc0v8kg84lfhr";
     buildInputs = [ ppxlib ];
-    meta.description = "A ppx rewriter that inlines reverse application operators |> and |!";
+    meta.description =
+      "A ppx rewriter that inlines reverse application operators |> and |!";
   };
 
   ppx_sexp_value = janePackage {
@@ -265,14 +283,30 @@ with self;
     hash = "107zwb580nrmc0l03dl3y3hf12s3c1vv8b8mz6sa4k5afp3s9nkl";
     buildInputs = [ ppx_here ];
     propagatedBuildInputs = [ ppx_sexp_conv ];
-    meta.description = "A ppx rewriter that simplifies building s-expressions from OCaml values";
+    meta.description =
+      "A ppx rewriter that simplifies building s-expressions from OCaml values";
   };
 
   ppx_jane = janePackage {
     pname = "ppx_jane";
     hash = "0l1p6llaa60mrc5p9400cqv9yy6h76x5wfq3z1cx5xawy0yz4vlb";
     buildInputs = [ ppxlib ];
-    propagatedBuildInputs = [ ppx_assert ppx_base ppx_bench ppx_bin_prot ppx_expect ppx_fail ppx_here ppx_let ppx_optcomp ppx_optional ppx_pipebang ppx_sexp_message ppx_sexp_value ppx_typerep_conv ];
+    propagatedBuildInputs = [
+      ppx_assert
+      ppx_base
+      ppx_bench
+      ppx_bin_prot
+      ppx_expect
+      ppx_fail
+      ppx_here
+      ppx_let
+      ppx_optcomp
+      ppx_optional
+      ppx_pipebang
+      ppx_sexp_message
+      ppx_sexp_value
+      ppx_typerep_conv
+    ];
     meta.description = "Standard Jane Street ppx rewriters";
   };
 
@@ -287,7 +321,8 @@ with self;
     version = "0.11.1";
     pname = "core_kernel";
     hash = "1dg7ygy7i64c5gaakb1cp1b26p9ks81vbxmb8fd7jff2q60j2z2g";
-    propagatedBuildInputs = [ configurator jane-street-headers sexplib splittable_random ];
+    propagatedBuildInputs =
+      [ configurator jane-street-headers sexplib splittable_random ];
     meta.description = "Jane Street's standard library overlay (kernel)";
   };
 
@@ -310,7 +345,8 @@ with self;
     pname = "textutils_kernel";
     hash = "0s1ps7h54vgl76pll3y5qa1bw8f4h8wxc8mg8jq6bz8vxvl0dfv4";
     propagatedBuildInputs = [ core_kernel ];
-    meta.description = "The subset of textutils using only core_kernel and working in javascript";
+    meta.description =
+      "The subset of textutils using only core_kernel and working in javascript";
   };
 
   textutils = janePackage {
@@ -346,7 +382,8 @@ with self;
     pname = "async_kernel";
     hash = "1ssv0gqbdns6by1wdjrrs35cj1c1n1qcfkxs8hj04b7x89wzvf1q";
     propagatedBuildInputs = [ core_kernel ];
-    meta.description = "Jane Street Capital's asynchronous execution library (core)";
+    meta.description =
+      "Jane Street Capital's asynchronous execution library (core)";
   };
 
   protocol_version_header = janePackage {
@@ -359,7 +396,8 @@ with self;
   async_rpc_kernel = janePackage {
     pname = "async_rpc_kernel";
     hash = "0wl7kp30qxkalk91q5pja9agsvvmdjvb2q7s3m79dlvwwi11l33y";
-    propagatedBuildInputs = [ core_kernel async_kernel protocol_version_header ];
+    propagatedBuildInputs =
+      [ core_kernel async_kernel protocol_version_header ];
     meta.description = "Platform-independent core of Async RPC library";
   };
 
@@ -367,7 +405,8 @@ with self;
     pname = "async_unix";
     hash = "1y5za5fdh0x82zdjigxci9zm9jnpfd2lfgpjcq4rih3s28f16sf7";
     propagatedBuildInputs = [ core async_kernel ];
-    meta.description = "Jane Street Capital's asynchronous execution library (unix)";
+    meta.description =
+      "Jane Street Capital's asynchronous execution library (unix)";
   };
 
   async_extra = janePackage {
@@ -396,7 +435,8 @@ with self;
     pname = "async_interactive";
     hash = "01rlfcylpiak6a2n6q3chp73cvkhvb65n906dj0flmxmagn7dxd1";
     propagatedBuildInputs = [ async ];
-    meta.description = "Utilities for building simple command-line based user interfaces";
+    meta.description =
+      "Utilities for building simple command-line based user interfaces";
   };
 
   async_parallel = janePackage {
@@ -457,7 +497,8 @@ with self;
     pname = "command_rpc";
     hash = "111v4km0ds8ixmpmwg9ck36ap97400mqzhijf57kj6wfwgzcmr2g";
     propagatedBuildInputs = [ async ];
-    meta.description = "Utilities for Versioned RPC communication with a child process over stdin and stdout";
+    meta.description =
+      "Utilities for Versioned RPC communication with a child process over stdin and stdout";
   };
 
   # Deprecated libraries
@@ -539,7 +580,8 @@ with self;
     pname = "incremental_kernel";
     hash = "1qp9dqncx2h0np0rndqaic4dna8f1dlkqnbjfcdhcim5dp2vg4x6";
     propagatedBuildInputs = [ core_kernel ];
-    meta.description = "Library for incremental computations depending only on core_kernel";
+    meta.description =
+      "Library for incremental computations depending only on core_kernel";
   };
 
   incremental = janePackage {
@@ -553,7 +595,8 @@ with self;
     pname = "incr_map";
     hash = "01vx9aldxpigz5ah9h337xcw73a7r8449v8l2xbralljhs0zglx9";
     propagatedBuildInputs = [ incremental_kernel ];
-    meta.description = "Helpers for incremental operations on map like data structures";
+    meta.description =
+      "Helpers for incremental operations on map like data structures";
   };
 
   parsexp_io = janePackage {

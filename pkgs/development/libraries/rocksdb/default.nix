@@ -1,17 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ninja
-, bzip2
-, lz4
-, snappy
-, zlib
-, zstd
-, enableJemalloc ? false, jemalloc
-, enableLite ? false
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, ninja, bzip2, lz4, snappy
+, zlib, zstd, enableJemalloc ? false, jemalloc, enableLite ? false
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
@@ -30,7 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableJemalloc jemalloc;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU
+    "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
     + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field";
 
   cmakeFlags = [
@@ -48,9 +38,8 @@ stdenv.mkDerivation rec {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional
-        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
-        "-DFORCE_SSE42=1")
+    (lib.optional (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
+      "-DFORCE_SSE42=1")
     (lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
@@ -60,8 +49,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rocksdb.org";
-    description = "A library that provides an embeddable, persistent key-value store for fast storage";
-    changelog = "https://github.com/facebook/rocksdb/raw/v${version}/HISTORY.md";
+    description =
+      "A library that provides an embeddable, persistent key-value store for fast storage";
+    changelog =
+      "https://github.com/facebook/rocksdb/raw/v${version}/HISTORY.md";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ adev magenbluten ];

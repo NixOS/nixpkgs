@@ -5,9 +5,8 @@ with lib;
 let
   cfg = config.services.rtsp-simple-server;
   package = pkgs.rtsp-simple-server;
-  format = pkgs.formats.yaml {};
-in
-{
+  format = pkgs.formats.yaml { };
+in {
   options = {
     services.rtsp-simple-server = {
       enable = mkEnableOption "RTSP Simple Server";
@@ -21,9 +20,7 @@ in
 
         default = {
           logLevel = "info";
-          logDestinations = [
-            "stdout"
-          ];
+          logDestinations = [ "stdout" ];
           # we set this so when the user uses it, it just works (see LogsDirectory below). but it's not used by default.
           logFile = "/var/log/rtsp-simple-server/rtsp-simple-server.log";
         };
@@ -31,7 +28,8 @@ in
         example = {
           paths = {
             cam = {
-              runOnInit = "ffmpeg -f v4l2 -i /dev/video0 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH";
+              runOnInit =
+                "ffmpeg -f v4l2 -i /dev/video0 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH";
               runOnInitRestart = true;
             };
           };
@@ -41,17 +39,16 @@ in
       env = mkOption {
         type = with types; attrsOf anything;
         description = "Extra environment variables for RTSP Simple Server";
-        default = {};
-        example = {
-          RTSP_CONFKEY = "mykey";
-        };
+        default = { };
+        example = { RTSP_CONFKEY = "mykey"; };
       };
     };
   };
 
   config = mkIf (cfg.enable) {
     # NOTE: rtsp-simple-server watches this file and automatically reloads if it changes
-    environment.etc."rtsp-simple-server.yaml".source = format.generate "rtsp-simple-server.yaml" cfg.settings;
+    environment.etc."rtsp-simple-server.yaml".source =
+      format.generate "rtsp-simple-server.yaml" cfg.settings;
 
     systemd.services.rtsp-simple-server = {
       environment = cfg.env;
@@ -59,9 +56,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [
-        ffmpeg
-      ];
+      path = with pkgs; [ ffmpeg ];
 
       serviceConfig = {
         DynamicUser = true;
@@ -73,7 +68,8 @@ in
         # user likely may want to stream cameras, can't hurt to add video group
         SupplementaryGroups = "video";
 
-        ExecStart = "${package}/bin/rtsp-simple-server /etc/rtsp-simple-server.yaml";
+        ExecStart =
+          "${package}/bin/rtsp-simple-server /etc/rtsp-simple-server.yaml";
       };
     };
   };

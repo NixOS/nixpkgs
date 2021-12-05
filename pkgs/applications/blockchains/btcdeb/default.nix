@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, openssl }:
 
 with lib;
 stdenv.mkDerivation rec {

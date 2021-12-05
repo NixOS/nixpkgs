@@ -1,16 +1,10 @@
-{ stdenv, stdenvGcc6, lib
-, fetchFromGitHub, cmake, libmicrohttpd_0_9_70, openssl
-, opencl-headers, ocl-icd, hwloc, cudatoolkit
-, devDonationLevel ? "0.0"
-, cudaSupport ? false
-, openclSupport ? true
-}:
+{ stdenv, stdenvGcc6, lib, fetchFromGitHub, cmake, libmicrohttpd_0_9_70, openssl
+, opencl-headers, ocl-icd, hwloc, cudatoolkit, devDonationLevel ? "0.0"
+, cudaSupport ? false, openclSupport ? true }:
 
-let
-  stdenv' = if cudaSupport then stdenvGcc6 else stdenv;
-in
+let stdenv' = if cudaSupport then stdenvGcc6 else stdenv;
 
-stdenv'.mkDerivation rec {
+in stdenv'.mkDerivation rec {
   name = "xmr-stak-${version}";
   version = "2.10.8";
 

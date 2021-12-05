@@ -1,15 +1,8 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, Security
-, DiskArbitration
-, Foundation
-}:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Security, DiskArbitration
+, Foundation }:
 
 let version = "0.23.1";
-in
-rustPlatform.buildRustPackage {
+in rustPlatform.buildRustPackage {
   pname = "meilisearch";
   inherit version;
   src = fetchFromGitHub {
@@ -24,7 +17,8 @@ rustPlatform.buildRustPackage {
     ./remove-default-feature.patch
   ];
   cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
-  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";

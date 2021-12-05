@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
-, m2crypto, rpm, chardet
-}:
+, m2crypto, rpm, chardet }:
 
 buildPythonPackage rec {
   pname = "osc";

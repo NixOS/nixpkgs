@@ -1,7 +1,4 @@
-{ lib
-, pkgs
-, callPackage
-}:
+{ lib, pkgs, callPackage }:
 
 rec {
   libtorrent = callPackage ./libtorrent.nix { };

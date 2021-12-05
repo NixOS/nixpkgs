@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.greenclip;
+let cfg = config.services.greenclip;
 in {
 
   options.services.greenclip = {
@@ -19,10 +18,10 @@ in {
 
   config = mkIf cfg.enable {
     systemd.user.services.greenclip = {
-      enable      = true;
+      enable = true;
       description = "greenclip daemon";
       wantedBy = [ "graphical-session.target" ];
-      after    = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       serviceConfig.ExecStart = "${cfg.package}/bin/greenclip daemon";
     };
 

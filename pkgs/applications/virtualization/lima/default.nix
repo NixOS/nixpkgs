@@ -1,10 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qemu
-, makeWrapper
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, qemu, makeWrapper }:
 
 buildGoModule rec {
   pname = "lima";

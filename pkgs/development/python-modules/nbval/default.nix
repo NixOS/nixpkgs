@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, ipykernel
-, jupyter-client
-, nbformat
-, pytestCheckHook
-, pytest
-, six
-, glibcLocales
-, matplotlib
-, sympy
-}:
+{ lib, buildPythonPackage, fetchPypi, coverage, ipykernel, jupyter-client
+, nbformat, pytestCheckHook, pytest, six, glibcLocales, matplotlib, sympy }:
 
 buildPythonPackage rec {
   pname = "nbval";
@@ -22,24 +10,12 @@ buildPythonPackage rec {
     sha256 = "cfefcd2ef66ee2d337d0b252c6bcec4023384eb32e8b9e5fcc3ac80ab8cd7d40";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [
-    coverage
-    ipykernel
-    jupyter-client
-    nbformat
-    pytest
-    six
-  ];
+  propagatedBuildInputs =
+    [ coverage ipykernel jupyter-client nbformat pytest six ];
 
-  checkInputs = [
-    pytestCheckHook
-    matplotlib
-    sympy
-  ];
+  checkInputs = [ pytestCheckHook matplotlib sympy ];
 
   disabledTestPaths = [
     "tests/test_ignore.py"
@@ -56,9 +32,7 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "nbval"
-  ];
+  pythonImportsCheck = [ "nbval" ];
 
   meta = with lib; {
     description = "A py.test plugin to validate Jupyter notebooks";

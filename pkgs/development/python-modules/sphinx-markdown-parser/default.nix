@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-, markdown
-, CommonMark
-, recommonmark
-, pydash
-, pyyaml
-, unify
-, yapf
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, sphinx, markdown, CommonMark
+, recommonmark, pydash, pyyaml, unify, yapf, python }:
 
 buildPythonPackage rec {
   pname = "sphinx-markdown-parser";
@@ -26,7 +15,8 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  propagatedBuildInputs = [ sphinx markdown CommonMark pydash pyyaml unify yapf recommonmark ];
+  propagatedBuildInputs =
+    [ sphinx markdown CommonMark pydash pyyaml unify yapf recommonmark ];
 
   # Avoids running broken tests in test_markdown.py
   checkPhase = ''

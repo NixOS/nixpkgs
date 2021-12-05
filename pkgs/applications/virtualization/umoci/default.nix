@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, bash
-}:
+{ lib, fetchFromGitHub, buildGoModule, go-md2man, installShellFiles, bash }:
 
 buildGoModule rec {
   pname = "umoci";

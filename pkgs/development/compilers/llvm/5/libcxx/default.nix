@@ -1,4 +1,5 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames
+, version }:
 
 stdenv.mkDerivation {
   pname = "libcxx";
@@ -13,11 +14,9 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl
+    [ ../../libcxx-0001-musl-hacks.patch ];
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
@@ -41,9 +40,7 @@ stdenv.mkDerivation {
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
 
-  passthru = {
-    isLLVM = true;
-  };
+  passthru = { isLLVM = true; };
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

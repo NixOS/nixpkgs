@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, buildFHSUserEnvBubblewrap
-, callPackage
-, copyDesktopItems
-, dpkg
-, lndir
-, makeDesktopItem
-, makeWrapper
-, requireFile
-}:
+{ stdenv, lib, buildFHSUserEnvBubblewrap, callPackage, copyDesktopItems, dpkg
+, lndir, makeDesktopItem, makeWrapper, requireFile }:
 
 let
   version = "7.3.1";
@@ -19,8 +10,11 @@ let
 
     dontUnpack = true;
     src = requireFile {
-      name = "PacketTracer_${builtins.replaceStrings ["."] [""] version}_amd64.deb";
-      sha256 = "c39802d15dd61d00ba27fb8c116da45fd8562ab4b49996555ad66b88deace27f";
+      name = "PacketTracer_${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_amd64.deb";
+      sha256 =
+        "c39802d15dd61d00ba27fb8c116da45fd8562ab4b49996555ad66b88deace27f";
       url = "https://www.netacad.com";
     };
 
@@ -45,25 +39,26 @@ let
     name = "packettracer7";
     runScript = "${ptFiles}/bin/packettracer7";
 
-    targetPkgs = pkgs: with pkgs; [
-      alsa-lib
-      dbus
-      expat
-      fontconfig
-      glib
-      libglvnd
-      libpulseaudio
-      libudev0-shim
-      libxkbcommon
-      libxml2
-      libxslt
-      nspr
-      nss
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXScrnSaver
-    ];
+    targetPkgs = pkgs:
+      with pkgs; [
+        alsa-lib
+        dbus
+        expat
+        fontconfig
+        glib
+        libglvnd
+        libpulseaudio
+        libudev0-shim
+        libxkbcommon
+        libxml2
+        libxslt
+        nspr
+        nss
+        xorg.libICE
+        xorg.libSM
+        xorg.libX11
+        xorg.libXScrnSaver
+      ];
   };
 in stdenv.mkDerivation {
   pname = "ciscoPacketTracer7";

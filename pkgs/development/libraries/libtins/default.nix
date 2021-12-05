@@ -18,28 +18,28 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [
-    openssl
-    libpcap
-    boost
-  ];
+  buildInputs = [ openssl libpcap boost ];
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
-  ];
+  configureFlags =
+    [ "--with-boost-libdir=${boost.out}/lib" "--with-boost=${boost.dev}" ];
 
   doCheck = true;
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${
+      placeholder "out"
+    }/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD${
+      placeholder "out"
+    }/lib
   '';
   checkTarget = "tests test";
 
   meta = with lib; {
-    description = "High-level, multiplatform C++ network packet sniffing and crafting library";
+    description =
+      "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
-    changelog = "https://raw.githubusercontent.com/mfontanini/${pname}/v${version}/CHANGES.md";
+    changelog =
+      "https://raw.githubusercontent.com/mfontanini/${pname}/v${version}/CHANGES.md";
     license = lib.licenses.bsd2;
     maintainers = with maintainers; [ fdns ];
     platforms = lib.platforms.unix;

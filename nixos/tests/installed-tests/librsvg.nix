@@ -3,7 +3,5 @@
 makeInstalledTest {
   tested = pkgs.librsvg;
 
-  testConfig = {
-    virtualisation.memorySize = 2047;
-  };
+  testConfig = { virtualisation.memorySize = 2047; };
 }

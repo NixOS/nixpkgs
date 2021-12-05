@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags =
+    [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +37,10 @@ stdenv.mkDerivation rec {
       based attestation on the platforms without Flexible Launch Control.
     '';
     homepage = "https://github.com/intel/linux-sgx-driver";
-    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
+    license = with licenses; [
+      bsd3 # OR
+      gpl2Only
+    ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
   };

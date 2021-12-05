@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, traceback2
-}:
+{ lib, buildPythonPackage, fetchPypi, six, traceback2 }:
 
 buildPythonPackage rec {
   version = "1.1.0";
@@ -30,7 +25,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A backport of the new features added to the unittest testing framework";
+    description =
+      "A backport of the new features added to the unittest testing framework";
     homepage = "https://pypi.python.org/pypi/unittest2";
     license = licenses.bsd0;
   };

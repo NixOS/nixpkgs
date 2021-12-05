@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, c-ares
-, cffi
-, fetchPypi
-, idna
-}:
+{ lib, buildPythonPackage, c-ares, cffi, fetchPypi, idna }:
 
 buildPythonPackage rec {
   pname = "pycares";
@@ -15,18 +9,11 @@ buildPythonPackage rec {
     sha256 = "sha256-A0kL4Oe1GgyAc/h3vsNH7/MQA/ZPV9lRjUGdk2lFKDc=";
   };
 
-  buildInputs = [
-    c-ares
-  ];
+  buildInputs = [ c-ares ];
 
-  propagatedBuildInputs = [
-    cffi
-    idna
-  ];
+  propagatedBuildInputs = [ cffi idna ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
   # Requires network access
   doCheck = false;

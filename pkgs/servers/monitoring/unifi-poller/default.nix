@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-HoYgBKTl9HIMVzzzNYtRrfmqb7HCpPHVPeR4gUXneWk=";
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/prometheus/common/version.Branch=master"
     "-X github.com/prometheus/common/version.BuildDate=unknown"
     "-X github.com/prometheus/common/version.Revision=${src.rev}"
@@ -22,7 +23,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
+    description =
+      "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
     homepage = "https://github.com/unifi-poller/unifi-poller";
     license = licenses.mit;
     maintainers = with maintainers; [ elseym ];

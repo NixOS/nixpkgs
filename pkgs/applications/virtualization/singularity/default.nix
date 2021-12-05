@@ -1,15 +1,5 @@
-{ lib
-, fetchurl
-, util-linux
-, gpgme
-, openssl
-, libuuid
-, coreutils
-, which
-, makeWrapper
-, cryptsetup
-, squashfsTools
-, buildGoPackage}:
+{ lib, fetchurl, util-linux, gpgme, openssl, libuuid, coreutils, which
+, makeWrapper, cryptsetup, squashfsTools, buildGoPackage }:
 
 with lib;
 
@@ -18,7 +8,8 @@ buildGoPackage rec {
   version = "3.8.5";
 
   src = fetchurl {
-    url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
+    url =
+      "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
     sha256 = "sha256-f/94tcB7XU0IJpvSZ6xemUOQ+TMyHlTv1rfIZoMVPOQ=";
   };
 
@@ -37,7 +28,9 @@ buildGoPackage rec {
     cd go/src/github.com/sylabs/singularity
 
     patchShebangs .
-    sed -i 's|defaultPath := "[^"]*"|defaultPath := "${lib.makeBinPath propagatedBuildInputs}"|' cmd/internal/cli/actions.go
+    sed -i 's|defaultPath := "[^"]*"|defaultPath := "${
+      lib.makeBinPath propagatedBuildInputs
+    }"|' cmd/internal/cli/actions.go
 
     ./mconfig -V ${version} -p $out --localstatedir=/var
 
@@ -57,8 +50,12 @@ buildGoPackage rec {
     chmod 755 $out/libexec/singularity/bin/starter-suid
 
     # Explicitly configure paths in the config file
-    sed -i 's|^# mksquashfs path =.*$|mksquashfs path = ${lib.makeBinPath [squashfsTools]}/mksquashfs|' $out/etc/singularity/singularity.conf
-    sed -i 's|^# cryptsetup path =.*$|cryptsetup path = ${lib.makeBinPath [cryptsetup]}/cryptsetup|' $out/etc/singularity/singularity.conf
+    sed -i 's|^# mksquashfs path =.*$|mksquashfs path = ${
+      lib.makeBinPath [ squashfsTools ]
+    }/mksquashfs|' $out/etc/singularity/singularity.conf
+    sed -i 's|^# cryptsetup path =.*$|cryptsetup path = ${
+      lib.makeBinPath [ cryptsetup ]
+    }/cryptsetup|' $out/etc/singularity/singularity.conf
 
     runHook postInstall
   '';

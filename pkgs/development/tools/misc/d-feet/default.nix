@@ -1,18 +1,5 @@
-{ lib
-, pkg-config
-, fetchurl
-, meson
-, ninja
-, glib
-, gtk3
-, python3
-, wrapGAppsHook
-, gnome
-, libwnck
-, gobject-introspection
-, gettext
-, itstool
-}:
+{ lib, pkg-config, fetchurl, meson, ninja, glib, gtk3, python3, wrapGAppsHook
+, gnome, libwnck, gobject-introspection, gettext, itstool }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "d-feet";
@@ -21,7 +8,9 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-feet/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/d-feet/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "hzPOS5qaVOwYWx2Fv02p2dEQUogqiAdg/2D5d5stHMs=";
   };
 
@@ -36,16 +25,9 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gnome.adwaita-icon-theme
-    gtk3
-    libwnck
-  ];
+  buildInputs = [ glib gnome.adwaita-icon-theme gtk3 libwnck ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 ];
 
   mesonFlags = [
     "-Dtests=false" # needs dbus

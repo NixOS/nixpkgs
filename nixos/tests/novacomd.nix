@@ -1,12 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "novacomd";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ dtzWill ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ dtzWill ]; };
 
-  machine = { ... }: {
-    services.novacomd.enable = true;
-  };
+  machine = { ... }: { services.novacomd.enable = true; };
 
   testScript = ''
     machine.wait_for_unit("novacomd.service")

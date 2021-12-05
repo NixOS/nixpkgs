@@ -1,6 +1,5 @@
-{ lib, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
-}:
+{ lib, runCommand, makeWrapper, lndir, dconf, hicolor-icon-theme, ibus, librsvg
+, plugins ? [ ] }:
 
 let
   name = "ibus-with-plugins-" + lib.getVersion ibus;
@@ -60,5 +59,4 @@ let
           --add-flags "--cache=refresh"
     done
   '';
-in
-  runCommand name env command
+in runCommand name env command

@@ -1,8 +1,6 @@
-{ buildPerlPackage, lib, fetchurl, fetchpatch, makeWrapper
-, DBDSQLite, EmailMIME, IOSocketSSL, IPCRun, Plack, PlackMiddlewareReverseProxy
-, SearchXapian, TimeDate, URI
-, git, highlight, openssl, xapian
-}:
+{ buildPerlPackage, lib, fetchurl, fetchpatch, makeWrapper, DBDSQLite, EmailMIME
+, IOSocketSSL, IPCRun, Plack, PlackMiddlewareReverseProxy, SearchXapian
+, TimeDate, URI, git, highlight, openssl, xapian }:
 
 let
 
@@ -18,9 +16,7 @@ let
   testConditions = with lib;
     concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
 
-in
-
-buildPerlPackage rec {
+in buildPerlPackage rec {
   pname = "public-inbox";
   version = "1.2.0";
 
@@ -47,8 +43,16 @@ buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    DBDSQLite EmailMIME IOSocketSSL IPCRun Plack PlackMiddlewareReverseProxy
-    SearchXapian TimeDate URI highlight
+    DBDSQLite
+    EmailMIME
+    IOSocketSSL
+    IPCRun
+    Plack
+    PlackMiddlewareReverseProxy
+    SearchXapian
+    TimeDate
+    URI
+    highlight
   ];
 
   checkInputs = [ git openssl xapian ];

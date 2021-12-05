@@ -1,23 +1,11 @@
-{ fetchFromGitLab
-, freetype
-, libao
-, libjpeg
-, libmodplug
-, libpng
-, libsamplerate
-, libsndfile
-, libvorbis
-, pkg-config
-, SDL2
-, SDL2_mixer
-, lib, stdenv
-, zlib }:
+{ fetchFromGitLab, freetype, libao, libjpeg, libmodplug, libpng, libsamplerate
+, libsndfile, libvorbis, pkg-config, SDL2, SDL2_mixer, lib, stdenv, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sfrotz";
   version = "2.52";
 
-  src = fetchFromGitLab  {
+  src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.2.5";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-unikey/${pname}-${version}.tar.xz";
+    url =
+      "http://download.fcitx-im.org/fcitx-unikey/${pname}-${version}.tar.xz";
     sha256 = "063vc29v7ycaai98v3z4q319sv9sm91my17pmhblw1vifxnw02wf";
   };
 
@@ -23,12 +24,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-unikey";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
-    description   = "Fcitx wrapper for unikey";
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-unikey";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
+    description = "Fcitx wrapper for unikey";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

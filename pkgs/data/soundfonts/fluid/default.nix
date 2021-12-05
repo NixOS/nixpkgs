@@ -4,7 +4,8 @@ stdenv.mkDerivation {
   name = "Fluid-3";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/musescore/soundfont/fluid-soundfont.tar.gz";
+    url =
+      "https://ftp.osuosl.org/pub/musescore/soundfont/fluid-soundfont.tar.gz";
     sha256 = "1f96bi0y6rms255yr8dfk436azvwk66c99j6p43iavyq8jg7c5f8";
   };
 

@@ -11,7 +11,10 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  ectl = ''
+    ${cfg.package}/bin/ejabberdctl ${
+      optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
+    } --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
 
@@ -74,20 +77,21 @@ in {
 
       loadDumps = mkOption {
         type = types.listOf types.path;
-        default = [];
-        description = "Configuration dumps that should be loaded on the first startup";
+        default = [ ];
+        description =
+          "Configuration dumps that should be loaded on the first startup";
         example = literalExpression "[ ./myejabberd.dump ]";
       };
 
       imagemagick = mkOption {
         type = types.bool;
         default = false;
-        description = "Add ImageMagick to server's path; allows for image thumbnailing";
+        description =
+          "Add ImageMagick to server's path; allows for image thumbnailing";
       };
     };
 
   };
-
 
   ###### implementation
 
@@ -111,7 +115,8 @@ in {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      path = [ pkgs.findutils pkgs.coreutils ]
+        ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
         User = cfg.user;
@@ -150,7 +155,7 @@ in {
       "d '${cfg.spoolDir}' 0700 ${cfg.user} ${cfg.group} -"
     ];
 
-    security.pam.services.ejabberd = {};
+    security.pam.services.ejabberd = { };
 
   };
 

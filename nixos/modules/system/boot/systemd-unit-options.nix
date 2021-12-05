@@ -6,10 +6,21 @@ with import ./systemd-lib.nix { inherit config lib pkgs; };
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec"
+      "simple"
+      "forking"
+      "oneshot"
+      "dbus"
+      "notify"
+      "idle"
     ])
     (assertValueOneOf "Restart" [
-      "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
+      "no"
+      "on-success"
+      "on-failure"
+      "on-abnormal"
+      "on-abort"
+      "always"
     ])
   ];
 
@@ -21,10 +32,10 @@ in rec {
       let
         defs' = filterOverrides defs;
         defs'' = getValues defs';
-      in
-        if isList (head defs'')
-        then concatLists defs''
-        else mergeEqualOption loc defs';
+      in if isList (head defs'') then
+        concatLists defs''
+      else
+        mergeEqualOption loc defs';
   };
 
   sharedOptions = {
@@ -44,7 +55,7 @@ in rec {
     };
 
     requiredBy = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Units that require (i.e. depend on and need to go down with)
@@ -55,7 +66,7 @@ in rec {
     };
 
     wantedBy = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Units that want (i.e. depend on) this unit. The standard way
@@ -72,7 +83,7 @@ in rec {
     };
 
     aliases = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = "Aliases of that unit.";
     };
@@ -99,17 +110,19 @@ in rec {
     description = mkOption {
       default = "";
       type = types.str;
-      description = "Description of this unit used in systemd messages and progress indicators.";
+      description =
+        "Description of this unit used in systemd messages and progress indicators.";
     };
 
     documentation = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
-      description = "A list of URIs referencing documentation for this unit or its configuration.";
+      description =
+        "A list of URIs referencing documentation for this unit or its configuration.";
     };
 
     requires = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Start the specified units when this unit is started, and stop
@@ -118,7 +131,7 @@ in rec {
     };
 
     wants = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Start the specified units when this unit is started.
@@ -126,7 +139,7 @@ in rec {
     };
 
     after = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         If the specified units are started at the same time as
@@ -135,7 +148,7 @@ in rec {
     };
 
     before = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         If the specified units are started at the same time as
@@ -144,7 +157,7 @@ in rec {
     };
 
     bindsTo = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Like ‘requires’, but in addition, if the specified units
@@ -153,7 +166,7 @@ in rec {
     };
 
     partOf = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         If the specified units are stopped or restarted, then this
@@ -162,7 +175,7 @@ in rec {
     };
 
     conflicts = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         If the specified units are started, then this unit is stopped
@@ -171,7 +184,7 @@ in rec {
     };
 
     requisite = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Similar to requires. However if the units listed are not started,
@@ -180,7 +193,7 @@ in rec {
     };
 
     unitConfig = mkOption {
-      default = {};
+      default = { };
       example = { RequiresMountsFor = "/data"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -192,7 +205,7 @@ in rec {
     };
 
     restartTriggers = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.unspecified;
       description = ''
         An arbitrary list of items such as derivations.  If any item
@@ -202,7 +215,7 @@ in rec {
     };
 
     onFailure = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of one or more units that are activated when
@@ -211,37 +224,39 @@ in rec {
     };
 
     startLimitBurst = mkOption {
-       type = types.int;
-       description = ''
-         Configure unit start rate limiting. Units which are started
-         more than startLimitBurst times within an interval time
-         interval are not permitted to start any more.
-       '';
+      type = types.int;
+      description = ''
+        Configure unit start rate limiting. Units which are started
+        more than startLimitBurst times within an interval time
+        interval are not permitted to start any more.
+      '';
     };
 
     startLimitIntervalSec = mkOption {
-       type = types.int;
-       description = ''
-         Configure unit start rate limiting. Units which are started
-         more than startLimitBurst times within an interval time
-         interval are not permitted to start any more.
-       '';
+      type = types.int;
+      description = ''
+        Configure unit start rate limiting. Units which are started
+        more than startLimitBurst times within an interval time
+        interval are not permitted to start any more.
+      '';
     };
 
   };
 
-
   serviceOptions = commonUnitOptions // {
 
     environment = mkOption {
-      default = {};
+      default = { };
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
-      example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
+      example = {
+        PATH = "/foo/bar/bin";
+        LANG = "nl_NL.UTF-8";
+      };
       description = "Environment variables passed to the service's processes.";
     };
 
     path = mkOption {
-      default = [];
+      default = [ ];
       type = with types; listOf (oneOf [ package str ]);
       description = ''
         Packages added to the service's <envar>PATH</envar>
@@ -252,10 +267,8 @@ in rec {
     };
 
     serviceConfig = mkOption {
-      default = {};
-      example =
-        { RestartSec = 5;
-        };
+      default = { };
+      example = { RestartSec = 5; };
       type = types.addCheck (types.attrsOf unitOption) checkService;
       description = ''
         Each attribute in this set specifies an option in the
@@ -358,7 +371,7 @@ in rec {
 
     startAt = mkOption {
       type = with types; either str (listOf str);
-      default = [];
+      default = [ ];
       example = "Sun 14:00:00";
       description = ''
         Automatically start this unit at the given date/time, which
@@ -373,11 +386,10 @@ in rec {
 
   };
 
-
   socketOptions = commonUnitOptions // {
 
     listenStreams = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
@@ -387,7 +399,7 @@ in rec {
     };
 
     listenDatagrams = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
@@ -397,7 +409,7 @@ in rec {
     };
 
     socketConfig = mkOption {
-      default = {};
+      default = { };
       example = { ListenStream = "/run/my-socket"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -410,12 +422,14 @@ in rec {
 
   };
 
-
   timerOptions = commonUnitOptions // {
 
     timerConfig = mkOption {
-      default = {};
-      example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
+      default = { };
+      example = {
+        OnCalendar = "Sun 14:00:00";
+        Unit = "foo.service";
+      };
       type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
@@ -429,12 +443,14 @@ in rec {
 
   };
 
-
   pathOptions = commonUnitOptions // {
 
     pathConfig = mkOption {
-      default = {};
-      example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
+      default = { };
+      example = {
+        PathChanged = "/some/path";
+        Unit = "changedpath.service";
+      };
       type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
@@ -446,13 +462,13 @@ in rec {
 
   };
 
-
   mountOptions = commonUnitOptions // {
 
     what = mkOption {
       example = "/dev/sda1";
       type = types.str;
-      description = "Absolute path of device node, file or other resource. (Mandatory)";
+      description =
+        "Absolute path of device node, file or other resource. (Mandatory)";
     };
 
     where = mkOption {
@@ -479,7 +495,7 @@ in rec {
     };
 
     mountConfig = mkOption {
-      default = {};
+      default = { };
       example = { DirectoryMode = "0775"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -503,7 +519,7 @@ in rec {
     };
 
     automountConfig = mkOption {
-      default = {};
+      default = { };
       example = { DirectoryMode = "0775"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -520,7 +536,7 @@ in rec {
   sliceOptions = commonUnitOptions // {
 
     sliceConfig = mkOption {
-      default = {};
+      default = { };
       example = { MemoryMax = "2G"; };
       type = types.attrsOf unitOption;
       description = ''

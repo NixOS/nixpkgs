@@ -1,10 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, makeWrapper
-, ncurses
-, stdenv
-}:
+{ buildGoModule, fetchFromGitHub, lib, makeWrapper, ncurses, stdenv }:
 
 buildGoModule rec {
   pname = "wtf";

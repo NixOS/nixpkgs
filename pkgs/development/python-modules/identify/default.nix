@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, editdistance-s
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, ukkonen
-}:
+{ lib, buildPythonPackage, editdistance-s, fetchFromGitHub, pytestCheckHook
+, pythonOlder, ukkonen }:
 
 buildPythonPackage rec {
   pname = "identify";
@@ -21,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-0J3P3RawafVAfOUhK9qSz5K8y0goMqTjMh5PL60sqME=";
   };
 
-  checkInputs = [
-    editdistance-s
-    pytestCheckHook
-    ukkonen
-  ];
+  checkInputs = [ editdistance-s pytestCheckHook ukkonen ];
 
-  pythonImportsCheck = [
-    "identify"
-  ];
+  pythonImportsCheck = [ "identify" ];
 
   meta = with lib; {
     description = "File identification library for Python";

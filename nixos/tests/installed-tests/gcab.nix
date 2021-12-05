@@ -1,5 +1,3 @@
 { pkgs, makeInstalledTest, ... }:
 
-makeInstalledTest {
-  tested = pkgs.gcab;
-}
+makeInstalledTest { tested = pkgs.gcab; }

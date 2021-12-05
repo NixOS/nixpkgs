@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
@@ -16,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "1cd83m831ngck2v8m08pb2g29z4vr9iggi73l7h506v6clkb4n3y";
   };
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
   meta = with lib; {
     description = "A JSON-RPC client library base interface";

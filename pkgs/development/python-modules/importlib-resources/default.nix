@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing ? null
-, singledispatch ? null
-, pythonOlder
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, importlib-metadata
+, typing ? null, singledispatch ? null, pythonOlder, python }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
@@ -19,25 +11,17 @@ buildPythonPackage rec {
     sha256 = "sha256-11bi+F3U3iuom+CyHboqO77C6HGkKjoWcZJYoR+HUGs=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.4") [
-    singledispatch
-  ] ++ lib.optional (pythonOlder "3.5") [
-    typing
-  ];
+  propagatedBuildInputs = [ importlib-metadata ]
+    ++ lib.optional (pythonOlder "3.4") [ singledispatch ]
+    ++ lib.optional (pythonOlder "3.5") [ typing ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';
 
-  pythonImportsCheck = [
-    "importlib_resources"
-  ];
+  pythonImportsCheck = [ "importlib_resources" ];
 
   meta = with lib; {
     description = "Read resources from Python packages";

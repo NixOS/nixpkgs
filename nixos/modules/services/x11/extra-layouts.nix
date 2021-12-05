@@ -14,8 +14,7 @@ let
 
       languages = mkOption {
         type = types.listOf types.str;
-        description =
-        ''
+        description = ''
           A list of languages provided by the layout.
           (Use ISO 639-2 codes, for example: "eng" for english)
         '';
@@ -83,18 +82,15 @@ let
     layouts = config.services.xserver.extraLayouts;
   };
 
-in
-
-{
+in {
 
   ###### interface
 
   options.services.xserver = {
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
-      default = {};
-      example = literalExpression
-      ''
+      default = { };
+      example = literalExpression ''
         {
           mine = {
             description = "My custom xkb layout.";

@@ -1,7 +1,5 @@
-{ lib, ocaml, fetchurl, buildDunePackage
-, bigarray-compat, eqaf, stdlib-shims
-, alcotest, astring, bos, findlib, fpath
-}:
+{ lib, ocaml, fetchurl, buildDunePackage, bigarray-compat, eqaf, stdlib-shims
+, alcotest, astring, bos, findlib, fpath }:
 
 buildDunePackage rec {
   pname = "digestif";
@@ -10,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
+    url =
+      "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
     sha256 = "11188ya6ksb0p0zvs6saz3qxv4a8pyy8m3sq35f3qfxrxhghqi99";
   };
 

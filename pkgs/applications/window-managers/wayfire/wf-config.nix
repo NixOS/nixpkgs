@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, cmake, meson, ninja, pkg-config
-, doctest, glm, libevdev, libxml2
-}:
+{ stdenv, lib, fetchurl, cmake, meson, ninja, pkg-config, doctest, glm, libevdev
+, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "wf-config";
   version = "0.7.1";
 
   src = fetchurl {
-    url = "https://github.com/WayfireWM/wf-config/releases/download/v${version}/wf-config-${version}.tar.xz";
+    url =
+      "https://github.com/WayfireWM/wf-config/releases/download/v${version}/wf-config-${version}.tar.xz";
     sha256 = "1w75yxhz0nvw4mlv38sxp8k8wb5h99b51x3fdvizc3yaxanqa8kx";
   };
 
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/WayfireWM/wf-config";
-    description = "Library for managing configuration files, written for Wayfire";
+    description =
+      "Library for managing configuration files, written for Wayfire";
     license = licenses.mit;
     maintainers = with maintainers; [ qyliss wucke13 ];
     platforms = platforms.unix;

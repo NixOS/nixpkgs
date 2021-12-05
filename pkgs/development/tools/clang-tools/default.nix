@@ -1,7 +1,6 @@
 { lib, stdenv, llvmPackages }:
 
-let
-  unwrapped = llvmPackages.clang-unwrapped;
+let unwrapped = llvmPackages.clang-unwrapped;
 
 in stdenv.mkDerivation {
   pname = "clang-tools";

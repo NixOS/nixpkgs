@@ -12,8 +12,7 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-in
-nodePackages.package.override {
+in nodePackages.package.override {
   inherit src;
   nativeBuildInputs = [ pkgs.makeWrapper pkgs.nodePackages.node-gyp-build ];
 
@@ -25,7 +24,8 @@ nodePackages.package.override {
   '';
 
   meta = with lib; {
-    description = "Version controlled multi-cluster deployment manager for kubernetes";
+    description =
+      "Version controlled multi-cluster deployment manager for kubernetes";
     maintainers = with maintainers; [ ];
     license = licenses.mit;
   };

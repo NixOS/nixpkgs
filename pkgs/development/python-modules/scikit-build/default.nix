@@ -1,27 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, distro
-, packaging
-, setuptools
-, wheel
+{ lib, buildPythonPackage, fetchPypi, distro, packaging, setuptools, wheel
 # Test Inputs
-, cmake
-, codecov
-, coverage
-, cython
-, flake8
-, ninja
-, pathpy
-, pytest
-, pytest-cov
-, pytest-mock
-, pytest-runner
-, pytest-virtualenv
-, requests
-, six
-, virtualenv
-}:
+, cmake, codecov, coverage, cython, flake8, ninja, pathpy, pytest, pytest-cov
+, pytest-mock, pytest-runner, pytest-virtualenv, requests, six, virtualenv }:
 
 buildPythonPackage rec {
   pname = "scikit-build";
@@ -32,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "f851382c469bcd9a8c98b1878bcfdd13b68556279d2fd9a329be41956ae5a7fe";
   };
 
-  propagatedBuildInputs = [
-    distro
-    packaging
-    setuptools
-    wheel
-  ];
+  propagatedBuildInputs = [ distro packaging setuptools wheel ];
   checkInputs = [
     cmake
     codecov
@@ -73,7 +48,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
+    description =
+      "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "http://scikit-build.org/";
     license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code
     maintainers = with maintainers; [ FlorianFranzen ];

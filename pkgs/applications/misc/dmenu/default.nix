@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" ];
 
   meta = with lib; {
-    description = "A generic, highly customizable, and efficient menu for the X Window System";
+    description =
+      "A generic, highly customizable, and efficient menu for the X Window System";
     homepage = "https://tools.suckless.org/dmenu";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub globin ];

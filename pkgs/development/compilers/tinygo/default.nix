@@ -1,10 +1,10 @@
 { lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
 , avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
 
-let main = ./main.go;
-    gomod = ./go.mod;
-in
-buildGoModule rec {
+let
+  main = ./main.go;
+  gomod = ./go.mod;
+in buildGoModule rec {
   pname = "tinygo";
   version = "0.16.0";
 
@@ -17,13 +17,13 @@ buildGoModule rec {
   };
 
   overrideModAttrs = (_: {
-      patches = [];
-      preBuild = ''
+    patches = [ ];
+    preBuild = ''
       rm -rf *
       cp ${main} main.go
       cp ${gomod} go.mod
       chmod +w go.mod
-      '';
+    '';
   });
 
   preBuild = "cp ${gomod} go.mod";

@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-, gfortran
-, blas
-, lapack
-, which
-}:
+{ stdenv, lib, fetchurl, gfortran, blas, lapack, which }:
 
 stdenv.mkDerivation rec {
   pname = "qrupdate";
@@ -18,21 +11,22 @@ stdenv.mkDerivation rec {
   preBuild =
     # Check that blas and lapack are compatible
     assert (blas.isILP64 == lapack.isILP64);
-  # We don't have structuredAttrs yet implemented, and we need to use space
-  # seprated values in makeFlags, so only this works.
-  ''
-    makeFlagsArray+=(
-      "LAPACK=-L${lapack}/lib -llapack"
-      "BLAS=-L${blas}/lib -lblas"
-      "PREFIX=${placeholder "out"}"
-      ${lib.optionalString blas.isILP64
-      # If another application intends to use qrupdate compiled with blas with
-      # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
-      # https://savannah.gnu.org/bugs/?50339
-      "FFLAGS=-fdefault-integer-8"
-      }
-    )
-  '';
+    # We don't have structuredAttrs yet implemented, and we need to use space
+    # seprated values in makeFlags, so only this works.
+    ''
+      makeFlagsArray+=(
+        "LAPACK=-L${lapack}/lib -llapack"
+        "BLAS=-L${blas}/lib -lblas"
+        "PREFIX=${placeholder "out"}"
+        ${
+          lib.optionalString blas.isILP64
+          # If another application intends to use qrupdate compiled with blas with
+          # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
+          # https://savannah.gnu.org/bugs/?50339
+          "FFLAGS=-fdefault-integer-8"
+        }
+      )
+    '';
 
   doCheck = true;
 
@@ -40,7 +34,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "lib" "solib" ];
 
-  installTargets = lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
+  installTargets =
+    lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
   nativeBuildInputs = [ which gfortran ];
 

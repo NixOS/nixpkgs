@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, more-itertools
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, more-itertools }:
 
 buildPythonPackage rec {
   pname = "zipp";

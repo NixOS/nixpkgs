@@ -1,28 +1,25 @@
 { lib, stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, libjack2
-, makeWrapper
-}:
+, makeWrapper }:
 
 let
-  rpath = lib.makeLibraryPath
-    [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
-in
-stdenv.mkDerivation rec {
+  rpath =
+    lib.makeLibraryPath [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
+in stdenv.mkDerivation rec {
   pname = "baudline";
   version = "1.08";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "http://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
-        sha256 = "09fn0046i69in1jpizkzbaq5ggij0mpflcsparyskm3wh71mbzvr";
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "http://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
-        sha256 = "1waip5pmcf5ffcfvn8lf1rvsaq2ab66imrbfqs777scz7k8fhhjb";
-      }
-    else
-      throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
+    fetchurl {
+      url = "http://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
+      sha256 = "09fn0046i69in1jpizkzbaq5ggij0mpflcsparyskm3wh71mbzvr";
+    }
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    fetchurl {
+      url = "http://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
+      sha256 = "1waip5pmcf5ffcfvn8lf1rvsaq2ab66imrbfqs777scz7k8fhhjb";
+    }
+  else
+    throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";
 
   nativeBuildInputs = [ makeWrapper ];
 

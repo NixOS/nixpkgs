@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytube";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "04s4hganb6x0dlfyyg9gjah5z0vxd7bxzqwgvd28hqnf0iwc2byb";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytube" ];
 

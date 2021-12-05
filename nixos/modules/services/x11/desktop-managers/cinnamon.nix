@@ -7,14 +7,13 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
-    extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
-    extraGSettingsOverrides = cfg.extraGSettingsOverrides;
-  };
+  nixos-gsettings-overrides =
+    pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+      extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
+      extraGSettingsOverrides = cfg.extraGSettingsOverrides;
+    };
 
-in
-
-{
+in {
   options = {
     services.cinnamon = {
       apps.enable = mkEnableOption "Cinnamon default applications";
@@ -24,7 +23,7 @@ in
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
@@ -42,42 +41,49 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
-      description = "Which packages cinnamon should exclude from the default environment";
+      description =
+        "Which packages cinnamon should exclude from the default environment";
     };
 
   };
 
   config = mkMerge [
-    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
+    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable
+      && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
+        services.xserver.displayManager.lightdm.greeters.gtk.extraConfig =
+          mkDefault (builtins.readFile
+            "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
       })
 
     (mkIf cfg.enable {
-      services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.xserver.displayManager.sessionPackages =
+        [ pkgs.cinnamon.cinnamon-common ];
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
             true
-            ${concatMapStrings (p: ''
-              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-              fi
+            ${
+              concatMapStrings (p: ''
+                if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+                  export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+                fi
 
-              if [ -d "${p}/lib/girepository-1.0" ]; then
-                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-              fi
-            '') cfg.sessionPath}
+                if [ -d "${p}/lib/girepository-1.0" ]; then
+                  export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+                  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+                fi
+              '') cfg.sessionPath
+            }
         fi
       '';
 
@@ -86,7 +92,8 @@ in
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.system-config-printer.enable =
+        (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.cinnamon; [
         cinnamon-common
         cinnamon-screensaver
@@ -113,9 +120,7 @@ in
       services.gnome.at-spi2-core.enable = true;
 
       # Fix lockscreen
-      security.pam.services = {
-        cinnamon-screensaver = {};
-      };
+      security.pam.services = { cinnamon-screensaver = { }; };
 
       environment.systemPackages = with pkgs.cinnamon // pkgs; [
         desktop-file-utils
@@ -166,7 +171,8 @@ in
       ];
 
       # Override GSettings schemas
-      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR =
+        "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -196,23 +202,24 @@ in
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
-        # cinnamon team apps
-        bulky
-        blueberry
-        warpinator
+      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon;
+        pkgs.gnome.removePackagesByName [
+          # cinnamon team apps
+          bulky
+          blueberry
+          warpinator
 
-        # cinnamon xapps
-        xviewer
-        xreader
-        xed
-        xplayer
-        pix
+          # cinnamon xapps
+          xviewer
+          xreader
+          xed
+          xplayer
+          pix
 
-        # external apps shipped with linux-mint
-        hexchat
-        gnome-calculator
-      ] config.environment.cinnamon.excludePackages);
+          # external apps shipped with linux-mint
+          hexchat
+          gnome-calculator
+        ] config.environment.cinnamon.excludePackages);
     })
   ];
 }

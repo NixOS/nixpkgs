@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.cadvisor;
+let cfg = config.services.cadvisor;
 
 in {
   options = {
@@ -87,7 +86,7 @@ in {
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional cadvisor options.
 
@@ -98,12 +97,13 @@ in {
   };
 
   config = mkMerge [
-    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
-        mkDefault (toString (pkgs.writeTextFile {
-          name = "cadvisor-storage-driver-password";
-          text = cfg.storageDriverPassword;
-        }))
-      );
+    {
+      services.cadvisor.storageDriverPasswordFile =
+        mkIf (cfg.storageDriverPassword != "") (mkDefault (toString
+          (pkgs.writeTextFile {
+            name = "cadvisor-storage-driver-password";
+            text = cfg.storageDriverPassword;
+          })));
     }
 
     (mkIf cfg.enable {
@@ -114,7 +114,9 @@ in {
         path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
 
         postStart = mkBefore ''
-          until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
+          until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${
+            toString cfg.port
+          }/containers/'; do
             sleep 1;
           done
         '';
@@ -125,17 +127,20 @@ in {
             -listen_ip="${cfg.listenAddress}" \
             -port="${toString cfg.port}" \
             ${escapeShellArgs cfg.extraOptions} \
-            ${optionalString (cfg.storageDriver != null) ''
-              -storage_driver "${cfg.storageDriver}" \
-              -storage_driver_user "${cfg.storageDriverHost}" \
-              -storage_driver_db "${cfg.storageDriverDb}" \
-              -storage_driver_user "${cfg.storageDriverUser}" \
-              -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
-              ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
-            ''}
+            ${
+              optionalString (cfg.storageDriver != null) ''
+                -storage_driver "${cfg.storageDriver}" \
+                -storage_driver_user "${cfg.storageDriverHost}" \
+                -storage_driver_db "${cfg.storageDriverDb}" \
+                -storage_driver_user "${cfg.storageDriverUser}" \
+                -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
+                ${optionalString cfg.storageDriverSecure
+                "-storage_driver_secure"}
+              ''
+            }
         '';
 
-        serviceConfig.TimeoutStartSec=300;
+        serviceConfig.TimeoutStartSec = 300;
       };
     })
   ];

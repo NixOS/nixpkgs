@@ -6,13 +6,12 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/egoist/devdocs-desktop/releases/download/v${version}/DevDocs-${version}.AppImage";
+    url =
+      "https://github.com/egoist/devdocs-desktop/releases/download/v${version}/DevDocs-${version}.AppImage";
     sha256 = "sha256-4ugpzh0Dweae6tKb6uqRhEW9HT+iVIo8MQRbVKTdRFw=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit name src; };
 
 in appimageTools.wrapType2 rec {
   inherit name src;

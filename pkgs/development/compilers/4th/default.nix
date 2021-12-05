@@ -5,16 +5,14 @@ stdenv.mkDerivation rec {
   version = "3.62.5";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/forth-4th/files/${pname}-${version}/${pname}-${version}-unix.tar.gz";
+    url =
+      "https://sourceforge.net/projects/forth-4th/files/${pname}-${version}/${pname}-${version}-unix.tar.gz";
     sha256 = "sha256-+CL33Yz7CxdEpi1lPG7+kzV4rheJ7GCgiFCaOLyktPw=";
   };
 
   dontConfigure = true;
 
-  makeFlags = [
-    "-C sources"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "-C sources" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     install -d ${placeholder "out"}/bin \

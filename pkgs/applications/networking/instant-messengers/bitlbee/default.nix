@@ -1,6 +1,5 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python2
-, enableLibPurple ? false, pidgin ? null
-, enablePam ? false, pam ? null
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr
+, python2, enableLibPurple ? false, pidgin ? null, enablePam ? false, pam ? null
 }:
 
 with lib;
@@ -15,23 +14,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls libotr python2 ]
-    ++ optional enableLibPurple pidgin
+  buildInputs = [ gnutls libotr python2 ] ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
 
   propagatedBuildInputs = [ glib ];
 
-  configureFlags = [
-    "--otr=1"
-    "--ssl=gnutls"
-    "--pidfile=/var/lib/bitlbee/bitlbee.pid"
-  ] ++ optional enableLibPurple "--purple=1"
-    ++ optional enablePam "--pam=1";
+  configureFlags =
+    [ "--otr=1" "--ssl=gnutls" "--pidfile=/var/lib/bitlbee/bitlbee.pid" ]
+    ++ optional enableLibPurple "--purple=1" ++ optional enablePam "--pam=1";
 
   patches = [
     # This should be dropped once the issue is fixed upstream.
     (fetchpatch {
-      url = "https://github.com/bitlbee/bitlbee/commit/6ff651b3ec93e5fd74f80766d5e9714d963137bc.diff";
+      url =
+        "https://github.com/bitlbee/bitlbee/commit/6ff651b3ec93e5fd74f80766d5e9714d963137bc.diff";
       sha256 = "144dpm4kq7c268fpww1q3n88ayg068n73fbabr5arh1zryw48qfv";
     })
   ];
@@ -64,6 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

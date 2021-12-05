@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shuffle2/nx2elf";
     description = "Convert Nintendo Switch executable files to ELFs";
     license = licenses.unfree; # No license specified upstream
-    platforms = [ "x86_64-linux" ]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
+    platforms = [
+      "x86_64-linux"
+    ]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
     maintainers = [ maintainers.ivar ];
   };
 }

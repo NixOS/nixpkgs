@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "promscale";
@@ -16,7 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-o7vRSCEEqzhruHEnRPuxC1e4NzCl8Br4vvqg0pwGIgA=";
 
-  ldflags = [ "-s" "-w" "-X github.com/timescale/promscale/pkg/version.Version=${version}" "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/timescale/promscale/pkg/version.Version=${version}"
+    "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}"
+  ];
 
   doCheck = false; # Requires access to a docker daemon
   doInstallCheck = true;

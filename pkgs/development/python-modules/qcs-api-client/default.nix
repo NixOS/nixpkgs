@@ -1,20 +1,6 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, httpx
-, iso8601
-, pydantic
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, respx
-, retrying
-, rfc3339
-, toml
-}:
+{ lib, attrs, buildPythonPackage, fetchPypi, httpx, iso8601, pydantic, pyjwt
+, pytest-asyncio, pytestCheckHook, python-dateutil, pythonOlder, respx, retrying
+, rfc3339, toml }:
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
@@ -40,11 +26,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-    respx
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook respx ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -56,9 +38,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qcs_api_client"
-  ];
+  pythonImportsCheck = [ "qcs_api_client" ];
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";

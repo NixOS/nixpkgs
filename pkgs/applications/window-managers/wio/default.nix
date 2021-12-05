@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alacritty
-, cage
-, cairo
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wlroots
-, xwayland
-}:
+{ lib, stdenv, fetchFromGitHub, alacritty, cage, cairo, libxkbcommon
+, makeWrapper, mesa, meson, ninja, pkg-config, udev, wayland, wayland-protocols
+, wlroots, xwayland }:
 
 stdenv.mkDerivation rec {
   pname = "wio";
@@ -28,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8H9fOnZsNjjq9XvOv68F4RRglGNluxs5/jp/h4ROLiI=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
   buildInputs = [
     cairo

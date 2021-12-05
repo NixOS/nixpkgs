@@ -1,16 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, bash
-, bashInteractive
-, util-linux
-, boto
-, setuptools
-, distro
-, stdenv
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, bash, bashInteractive, util-linux
+, boto, setuptools, distro, stdenv, pythonOlder, pytestCheckHook }:
 
 let
   guest-configs = stdenv.mkDerivation rec {
@@ -53,8 +42,7 @@ let
       runHook postInstall
     '';
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20200113.0";
 
@@ -66,7 +54,8 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bash guest-configs ];
-  propagatedBuildInputs = [ (if pythonOlder "3.7" then boto else distro) setuptools ];
+  propagatedBuildInputs =
+    [ (if pythonOlder "3.7" then boto else distro) setuptools ];
 
   preBuild = ''
     cd packages/python-google-compute-engine

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "justbackoff";
@@ -19,18 +14,14 @@ buildPythonPackage rec {
     sha256 = "097j6jxgl4b3z46x9y9z10643vnr9v831vhagrxzrq6nviil2z6l";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pytest-runner>=5.2" ""
   '';
 
-  pythonImportsCheck = [
-    "justbackoff"
-  ];
+  pythonImportsCheck = [ "justbackoff" ];
 
   meta = with lib; {
     description = "Simple backoff algorithm in Python";

@@ -9,13 +9,12 @@ let
   nameExecutable = "losslesscut";
   owner = "mifi";
   src = fetchurl {
-    url = "https://github.com/${owner}/${nameRepo}/releases/download/v${version}/${nameSource}";
+    url =
+      "https://github.com/${owner}/${nameRepo}/releases/download/v${version}/${nameSource}";
     name = nameSource;
     sha256 = "0aqz5ijl5japfzzbcdcd2mmihkb8b2fc2hs9kkm3211yb37c5ygv";
   };
-  extracted = appimageTools.extractType2 {
-    inherit name src;
-  };
+  extracted = appimageTools.extractType2 { inherit name src; };
 in appimageTools.wrapType2 {
   inherit name src;
 

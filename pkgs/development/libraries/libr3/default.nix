@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pcre
-, pkg-config
-, check
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, pcre, pkg-config, check, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "r3";

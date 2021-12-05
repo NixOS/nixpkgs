@@ -1,24 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, flex
-, bison
-, meson
-, ninja
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docbook_xml_dtd_45
-, pkg-config
-, libffi
-, python3
-, cctools
-, cairo
-, gnome
-, substituteAll
-, nixStoreDir ? builtins.storeDir
-, x11Support ? true
-}:
+{ lib, stdenv, fetchurl, glib, flex, bison, meson, ninja, gtk-doc
+, docbook-xsl-nons, docbook_xml_dtd_43, docbook_xml_dtd_45, pkg-config, libffi
+, python3, cctools, cairo, gnome, substituteAll, nixStoreDir ? builtins.storeDir
+, x11Support ? true }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
@@ -34,7 +17,9 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0jpwraip7pwl9bf9s59am3r7074p34fasvfb5ym1fb8hwc34jawh";
   };
 
@@ -68,18 +53,13 @@ stdenv.mkDerivation rec {
     setupHook # move .gir files
   ];
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 ];
 
   checkInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
-  propagatedBuildInputs = [
-    libffi
-    glib
-  ];
+  propagatedBuildInputs = [ libffi glib ];
 
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
@@ -119,7 +99,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A middleware layer between C libraries and language bindings";
+    description =
+      "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
     platforms = platforms.unix;

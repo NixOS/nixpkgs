@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, icalendar
-, lxml
-, mock
-, nose
-, pytz
-, requests
-, six
-, tzlocal
-, vobject
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, icalendar, lxml, mock
+, nose, pytz, requests, six, tzlocal, vobject }:
 
 buildPythonPackage rec {
   pname = "caldav";
@@ -28,11 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six requests vobject lxml ]
     ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
 
-  checkInputs = [
-    icalendar
-    nose
-    tzlocal
-  ];
+  checkInputs = [ icalendar nose tzlocal ];
 
   checkPhase = ''
     nosetests tests
@@ -48,7 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "caldav" ];
 
   meta = with lib; {
-    description = "This project is a CalDAV (RFC4791) client library for Python.";
+    description =
+      "This project is a CalDAV (RFC4791) client library for Python.";
     homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];

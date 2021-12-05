@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules,
-  qtbase, qttranslations, kcoreaddons, python2, sqlite, postgresql, libmysqlclient
-}:
+{ mkDerivation, lib, fetchurl, extra-cmake-modules, qtbase, qttranslations
+, kcoreaddons, python2, sqlite, postgresql, libmysqlclient }:
 
 mkDerivation rec {
   pname = "kdb";
@@ -15,12 +12,14 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [ qttranslations kcoreaddons python2 sqlite postgresql libmysqlclient ];
+  buildInputs =
+    [ qttranslations kcoreaddons python2 sqlite postgresql libmysqlclient ];
 
   propagatedBuildInputs = [ qtbase ];
 
   meta = with lib; {
-    description = "A database connectivity and creation framework for various database vendors";
+    description =
+      "A database connectivity and creation framework for various database vendors";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

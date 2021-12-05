@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder, xmltodict }:
 
 buildPythonPackage rec {
   pname = "aioeagle";
@@ -19,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "117nb50cxwrixif2r6fxmr9v0jxkcamm816v48hbhyc660w6xvk4";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    xmltodict
-  ];
+  propagatedBuildInputs = [ aiohttp xmltodict ];
 
   # Project has no tests
   doCheck = false;
@@ -32,7 +23,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to control EAGLE-200";
     homepage = "https://github.com/home-assistant-libs/aioeagle";
-    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
+    changelog =
+      "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

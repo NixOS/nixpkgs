@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Minimal Graphical IPV4 Ping Tool";
     homepage = "https://github.com/cntools/cnping";
-    license = with licenses; [ mit bsd3 ]; # dual licensed, MIT-x11 & BSD-3-Clause
+    license = with licenses; [
+      mit
+      bsd3
+    ]; # dual licensed, MIT-x11 & BSD-3-Clause
     maintainers = with maintainers; [ ckie ];
     platforms = platforms.linux;
   };

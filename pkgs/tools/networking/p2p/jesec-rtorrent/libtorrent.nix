@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, openssl
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "jesec-libtorrent";
@@ -18,25 +11,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-S3DOKzXkvU+ZJxfrxwLXCVBnepzmiZ+3iiQqz084BEk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
-  buildInputs = [
-    openssl
-    zlib
-  ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openssl zlib ];
 
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   meta = with lib; {
     homepage = "https://github.com/jesec/libtorrent";
-    description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
+    description =
+      "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ winter AndersonTorres ];
     platforms = platforms.linux;

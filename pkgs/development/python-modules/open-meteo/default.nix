@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, poetry-core
+, pydantic, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "open-meteo";
@@ -24,20 +15,11 @@ buildPythonPackage rec {
     sha256 = "tuAuY43HRz8zFTOhsm4TxSppP4CYTGPqQndDMxW3URs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    aresponses
-    pydantic
-  ];
+  propagatedBuildInputs = [ aiohttp aresponses pydantic ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -47,9 +29,7 @@ buildPythonPackage rec {
       --replace 'aiohttp = "^3.8.1"' 'aiohttp = "^3.8.0"'
   '';
 
-  pythonImportsCheck = [
-    "open_meteo"
-  ];
+  pythonImportsCheck = [ "open_meteo" ];
 
   meta = with lib; {
     description = "Python client for the Open-Meteo API";

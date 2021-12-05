@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, versiontools
-, gevent-websocket
-, mock
-, pytest
-, gevent
-}:
+{ lib, buildPythonPackage, fetchPypi, versiontools, gevent-websocket, mock
+, pytest, gevent }:
 
 buildPythonPackage rec {
   pname = "gevent-socketio";
@@ -22,7 +15,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/abourget/gevent-socketio";
-    description = "SocketIO server based on the Gevent pywsgi server, a Python network library";
+    description =
+      "SocketIO server based on the Gevent pywsgi server, a Python network library";
     license = licenses.bsd0;
   };
 

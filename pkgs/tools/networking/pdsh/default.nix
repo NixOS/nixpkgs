@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
+{ lib, stdenv, fetchurl, perl, readline, rsh, ssh, slurm, slurmSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdsh";
   version = "2.34";
 
   src = fetchurl {
-    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
+    url =
+      "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
     sha256 = "1s91hmhrz7rfb6h3l5k97s393rcm1ww3svp8dx5z8vkkc933wyxl";
   };
 
-  buildInputs = [ perl readline ssh ]
-    ++ (lib.optional slurmSupport slurm);
+  buildInputs = [ perl readline ssh ] ++ (lib.optional slurmSupport slurm);
 
   preConfigure = ''
     configureFlagsArray=(

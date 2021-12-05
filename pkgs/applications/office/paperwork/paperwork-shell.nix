@@ -1,19 +1,11 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{ buildPythonPackage, lib, fetchFromGitLab
 
-, isPy3k
-, isPyPy
+, isPy3k, isPyPy
 
-, openpaperwork-core
-, openpaperwork-gtk
-, paperwork-backend
-, fabulous
-, getkey
+, openpaperwork-core, openpaperwork-gtk, paperwork-backend, fabulous, getkey
 , psutil
 
-, pkgs
-}:
+, pkgs }:
 
 buildPythonPackage rec {
   pname = "paperwork-shell";
@@ -30,17 +22,10 @@ buildPythonPackage rec {
     patchShebangs ../tools
   '';
 
-  propagatedBuildInputs = [
-    openpaperwork-core
-    paperwork-backend
-    fabulous
-    getkey
-    psutil
-  ];
+  propagatedBuildInputs =
+    [ openpaperwork-core paperwork-backend fabulous getkey psutil ];
 
-  checkInputs = [
-    openpaperwork-gtk
-  ];
+  checkInputs = [ openpaperwork-gtk ];
 
   nativeBuildInputs = [ pkgs.gettext pkgs.which ];
   preBuild = ''

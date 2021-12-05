@@ -1,5 +1,4 @@
-{ lib }:
-rec {
+{ lib }: rec {
   pc = {
     linux-kernel = {
       name = "pc";
@@ -11,9 +10,8 @@ rec {
     };
   };
 
-  pc_simplekernel = lib.recursiveUpdate pc {
-    linux-kernel.autoModules = false;
-  };
+  pc_simplekernel =
+    lib.recursiveUpdate pc { linux-kernel.autoModules = false; };
 
   powernv = {
     linux-kernel = {
@@ -60,9 +58,7 @@ rec {
       # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
       #DTB = true;
     };
-    gcc = {
-      arch = "armv5te";
-    };
+    gcc = { arch = "armv5te"; };
   };
 
   sheevaplug = {
@@ -173,9 +169,7 @@ rec {
       target = "uImage";
       DTB = true; # Beyond 3.10
     };
-    gcc = {
-      arch = "armv5te";
-    };
+    gcc = { arch = "armv5te"; };
   };
 
   raspberrypi = {
@@ -378,9 +372,7 @@ rec {
       '';
       target = "Image";
     };
-    gcc = {
-      arch = "armv8-a";
-    };
+    gcc = { arch = "armv8-a"; };
   };
 
   apple-m1 = {
@@ -395,9 +387,7 @@ rec {
   ##
 
   ben_nanonote = {
-    linux-kernel = {
-      name = "ben_nanonote";
-    };
+    linux-kernel = { name = "ben_nanonote"; };
     gcc = {
       arch = "mips32";
       float = "soft";
@@ -501,25 +491,33 @@ rec {
 
   select = platform:
     # x86
-    /**/ if platform.isx86 then pc
+    if platform.isx86 then
+      pc
 
-    # ARM
-    else if platform.isAarch32 then let
-      version = platform.parsed.cpu.version or null;
-      in     if version == null then pc
-        else if lib.versionOlder version "6" then sheevaplug
-        else if lib.versionOlder version "7" then raspberrypi
-        else armv7l-hf-multiplatform
+      # ARM
+    else if platform.isAarch32 then
+      let version = platform.parsed.cpu.version or null;
+      in if version == null then
+        pc
+      else if lib.versionOlder version "6" then
+        sheevaplug
+      else if lib.versionOlder version "7" then
+        raspberrypi
+      else
+        armv7l-hf-multiplatform
 
     else if platform.isAarch64 then
-      if platform.isDarwin then apple-m1
-      else aarch64-multiplatform
+      if platform.isDarwin then apple-m1 else aarch64-multiplatform
 
-    else if platform.isRiscV then riscv-multiplatform
+    else if platform.isRiscV then
+      riscv-multiplatform
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
+      fuloong2f_n32
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
+      powernv
 
-    else pc;
+    else
+      pc;
 }

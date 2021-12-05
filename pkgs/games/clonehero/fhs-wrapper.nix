@@ -1,9 +1,5 @@
-{ clonehero-unwrapped
-, makeDesktopItem
-, buildFHSUserEnv
-, liberation_ttf
-, callPackage
-}:
+{ clonehero-unwrapped, makeDesktopItem, buildFHSUserEnv, liberation_ttf
+, callPackage }:
 
 let
   name = "clonehero";
@@ -15,8 +11,7 @@ let
     icon = name;
     categories = "Game;";
   };
-in
-buildFHSUserEnv {
+in buildFHSUserEnv {
   inherit name;
   inherit (clonehero-unwrapped) meta;
 

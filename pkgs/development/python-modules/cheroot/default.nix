@@ -1,24 +1,7 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, jaraco_functools
-, jaraco_text
-, more-itertools
-, portend
-, pyopenssl
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
-, requests
-, requests-toolbelt
-, requests-unixsocket
-, setuptools-scm
-, setuptools-scm-git-archive
-, six
-, trustme
-}:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, jaraco_functools
+, jaraco_text, more-itertools, portend, pyopenssl, pytestCheckHook, pytest-cov
+, pytest-mock, requests, requests-toolbelt, requests-unixsocket, setuptools-scm
+, setuptools-scm-git-archive, six, trustme }:
 
 buildPythonPackage rec {
   pname = "cheroot";

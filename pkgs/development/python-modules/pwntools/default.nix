@@ -1,32 +1,10 @@
-{ lib
-, buildPythonPackage
-, debugger
-, fetchPypi
-, Mako
-, packaging
-, pysocks
-, pygments
-, ropgadget
-, capstone
-, colored-traceback
-, paramiko
-, pip
-, psutil
-, pyelftools
-, pyserial
-, python-dateutil
-, requests
-, rpyc
-, tox
-, unicorn
-, intervaltree
-, installShellFiles
-}:
+{ lib, buildPythonPackage, debugger, fetchPypi, Mako, packaging, pysocks
+, pygments, ropgadget, capstone, colored-traceback, paramiko, pip, psutil
+, pyelftools, pyserial, python-dateutil, requests, rpyc, tox, unicorn
+, intervaltree, installShellFiles }:
 
-let
-  debuggerName = lib.strings.getName debugger;
-in
-buildPythonPackage rec {
+let debuggerName = lib.strings.getName debugger;
+in buildPythonPackage rec {
   version = "4.7.0";
   pname = "pwntools";
 
@@ -46,9 +24,7 @@ buildPythonPackage rec {
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     Mako

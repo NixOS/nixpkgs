@@ -11,11 +11,14 @@ mkCoqDerivation {
   releaseRev = v: "v${v}";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.13"; out = "0.9"; }
-  ] null;
+  defaultVersion = with versions;
+    switch coq.coq-version [{
+      case = isGe "8.13";
+      out = "0.9";
+    }] null;
 
-  propagatedBuildInputs = [ mathcomp-algebra mathcomp-finmap hierarchy-builder ];
+  propagatedBuildInputs =
+    [ mathcomp-algebra mathcomp-finmap hierarchy-builder ];
 
   meta = {
     description = "Library of formalized graph theory results in Coq";

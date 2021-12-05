@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, psutil
-, pyopenssl
-, pysendfile
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, psutil, pyopenssl, pysendfile }:
 
 buildPythonPackage rec {
   version = "1.5.6";

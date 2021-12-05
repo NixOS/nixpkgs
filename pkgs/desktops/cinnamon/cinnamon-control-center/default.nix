@@ -1,37 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, gettext
-, cinnamon-desktop
-, gtk3
-, libnotify
-, libxml2
-, gnome-online-accounts
-, cinnamon-settings-daemon
-, colord
-, polkit
-, libxkbfile
-, cinnamon-menus
-, dbus-glib
-, libgnomekbd
-, libxklavier
-, networkmanager
-, libwacom
-, gnome
-, wrapGAppsHook
-, tzdata
-, glibc
-, libnma
-, modemmanager
-, xorg
-, gdk-pixbuf
-, meson
-, ninja
-, cinnamon-translations
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, gettext, cinnamon-desktop
+, gtk3, libnotify, libxml2, gnome-online-accounts, cinnamon-settings-daemon
+, colord, polkit, libxkbfile, cinnamon-menus, dbus-glib, libgnomekbd
+, libxklavier, networkmanager, libwacom, gnome, wrapGAppsHook, tzdata, glibc
+, libnma, modemmanager, xorg, gdk-pixbuf, meson, ninja, cinnamon-translations
+, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
@@ -69,8 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
-    ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
-    ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
+     ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
+     ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
+  */
 
   postPatch = ''
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c
@@ -101,18 +74,12 @@ stdenv.mkDerivation rec {
   # the only test is wacom-calibrator and it seems to need an xserver and prob more services aswell
   doCheck = false;
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    wrapGAppsHook
-    gettext
-    python3
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook gettext python3 ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
-    description = "A collection of configuration plugins used in cinnamon-settings";
+    description =
+      "A collection of configuration plugins used in cinnamon-settings";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

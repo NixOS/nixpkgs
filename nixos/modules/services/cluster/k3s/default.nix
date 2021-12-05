@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.services.k3s;
-in
-{
+let cfg = config.services.k3s;
+in {
   # interface
   options.services.k3s = {
     enable = mkEnableOption "k3s";
@@ -27,7 +25,8 @@ in
 
     serverAddr = mkOption {
       type = types.str;
-      description = "The k3s server to connect to. This option only makes sense for an agent.";
+      description =
+        "The k3s server to connect to. This option only makes sense for an agent.";
       example = "https://10.0.0.10:6443";
       default = "";
     };
@@ -44,14 +43,16 @@ in
 
     tokenFile = mkOption {
       type = types.nullOr types.path;
-      description = "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      description =
+        "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
       default = null;
     };
 
     docker = mkOption {
       type = types.bool;
       default = false;
-      description = "Use docker to run containers rather than the built-in containerd.";
+      description =
+        "Use docker to run containers rather than the built-in containerd.";
     };
 
     extraFlags = mkOption {
@@ -64,13 +65,15 @@ in
     disableAgent = mkOption {
       type = types.bool;
       default = false;
-      description = "Only run the server. This option only makes sense for a server.";
+      description =
+        "Only run the server. This option only makes sense for a server.";
     };
 
     configPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
+      description =
+        "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
   };
 
@@ -79,18 +82,20 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role == "agent" -> (cfg.configPath != null || cfg.serverAddr != "");
-        message = "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
+        assertion = cfg.role == "agent"
+          -> (cfg.configPath != null || cfg.serverAddr != "");
+        message =
+          "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role == "agent" -> cfg.configPath != null || cfg.tokenFile != null || cfg.token != "";
-        message = "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> cfg.configPath != null
+          || cfg.tokenFile != null || cfg.token != "";
+        message =
+          "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
       }
     ];
 
-    virtualisation.docker = mkIf cfg.docker {
-      enable = mkDefault true;
-    };
+    virtualisation.docker = mkIf cfg.docker { enable = mkDefault true; };
 
     # TODO: disable this once k3s supports cgroupsv2, either by docker
     # supporting it, or their bundled containerd
@@ -100,7 +105,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
+      after = [ "network.service" "firewall.service" ]
+        ++ (optional cfg.docker "docker.service");
       wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
@@ -115,17 +121,16 @@ in
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
         TasksMax = "infinity";
-        ExecStart = concatStringsSep " \\\n " (
-          [
-            "${cfg.package}/bin/k3s ${cfg.role}"
-          ] ++ (optional cfg.docker "--docker")
-          ++ (optional cfg.disableAgent "--disable-agent")
-          ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
-          ++ (optional (cfg.token != "") "--token ${cfg.token}")
-          ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
-          ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-          ++ [ cfg.extraFlags ]
-        );
+        ExecStart = concatStringsSep " \\\n "
+          ([ "${cfg.package}/bin/k3s ${cfg.role}" ]
+            ++ (optional cfg.docker "--docker")
+            ++ (optional cfg.disableAgent "--disable-agent")
+            ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+            ++ (optional (cfg.token != "") "--token ${cfg.token}")
+            ++ (optional (cfg.tokenFile != null)
+              "--token-file ${cfg.tokenFile}")
+            ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+            ++ [ cfg.extraFlags ]);
       };
     };
   };

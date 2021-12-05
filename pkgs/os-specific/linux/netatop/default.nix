@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, kernel, kmod, zlib }:
 
-let
-  version = "3.1";
-in
+let version = "3.1";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "netatop-${kernel.version}-${version}";
 
   src = fetchurl {

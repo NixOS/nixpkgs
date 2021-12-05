@@ -1,8 +1,4 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  qtbase, qttools
-}:
+{ mkDerivation, lib, extra-cmake-modules, qtbase, qttools }:
 
 mkDerivation {
   name = "kitemviews";

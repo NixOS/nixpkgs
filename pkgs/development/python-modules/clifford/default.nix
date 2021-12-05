@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, ipython
-, numba
-, numpy
-, pytestCheckHook
-, scipy
-, sparse
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, h5py, ipython, numba, numpy
+, pytestCheckHook, scipy, sparse }:
 
 buildPythonPackage rec {
   pname = "clifford";
@@ -22,18 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-eVE8FrD0YHoRreY9CrNb8v4v4KrG83ZU0oFz+V+p+Q0=";
   };
 
-  propagatedBuildInputs = [
-    h5py
-    numba
-    numpy
-    scipy
-    sparse
-  ];
+  propagatedBuildInputs = [ h5py numba numpy scipy sparse ];
 
-  checkInputs = [
-    pytestCheckHook
-    ipython
-  ];
+  checkInputs = [ pytestCheckHook ipython ];
 
   # avoid collecting local files
   preCheck = ''

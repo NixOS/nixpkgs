@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, unasync
-, boto3
-, botocore
-, requests
-, aiohttp
-, pyquery
-, loguru
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, unasync, boto3
+, botocore, requests, aiohttp, pyquery, loguru }:
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
@@ -31,18 +21,9 @@ buildPythonPackage rec {
       --replace "pre-commit" ""
   '';
 
-  nativeBuildInputs = [
-    unasync
-  ];
+  nativeBuildInputs = [ unasync ];
 
-  propagatedBuildInputs = [
-    boto3
-    botocore
-    requests
-    aiohttp
-    pyquery
-    loguru
-  ];
+  propagatedBuildInputs = [ boto3 botocore requests aiohttp pyquery loguru ];
 
   # tests are not functional yet
   doCheck = false;

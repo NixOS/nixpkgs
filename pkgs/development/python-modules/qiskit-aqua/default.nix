@@ -1,35 +1,11 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, cvxpy
-, dlx
-, docplex
-, fastdtw
-, h5py
-, networkx
-, numpy
-, psutil
-, qiskit-ignis
-, qiskit-terra
-, quandl
-, scikit-learn
-, yfinance
-  # Optional inputs
-, withTorch ? false
-, pytorch
-, withPyscf ? false
-, pyscf
-, withScikitQuant ? false
-, scikit-quant ? null
-, withCplex ? false
-, cplex ? null
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub, cvxpy, dlx, docplex
+, fastdtw, h5py, networkx, numpy, psutil, qiskit-ignis, qiskit-terra, quandl
+, scikit-learn, yfinance
+# Optional inputs
+, withTorch ? false, pytorch, withPyscf ? false, pyscf, withScikitQuant ? false
+, scikit-quant ? null, withCplex ? false, cplex ? null
   # Check Inputs
-, ddt
-, pytestCheckHook
-, pytest-timeout
-, qiskit-aer
-}:
+, ddt, pytestCheckHook, pytest-timeout, qiskit-aer }:
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
@@ -61,9 +37,9 @@ buildPythonPackage rec {
     scikit-learn
     yfinance
   ] ++ lib.optionals (withTorch) [ pytorch ]
-  ++ lib.optionals (withPyscf) [ pyscf ]
-  ++ lib.optionals (withScikitQuant) [ scikit-quant ]
-  ++ lib.optionals (withCplex) [ cplex ];
+    ++ lib.optionals (withPyscf) [ pyscf ]
+    ++ lib.optionals (withScikitQuant) [ scikit-quant ]
+    ++ lib.optionals (withCplex) [ cplex ];
 
   # *** NOTE ***
   # We make pyscf optional in this package, due to difficulties packaging it in Nix (test failures, complicated flags, etc).
@@ -96,12 +72,7 @@ buildPythonPackage rec {
       >> qiskit/optimization/__init__.py
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    ddt
-    pytest-timeout
-    qiskit-aer
-  ];
+  checkInputs = [ pytestCheckHook ddt pytest-timeout qiskit-aer ];
   pythonImportsCheck = [
     "qiskit.aqua"
     "qiskit.aqua.algorithms"
@@ -111,7 +82,7 @@ buildPythonPackage rec {
     "qiskit.optimization"
   ];
   pytestFlagsArray = [
-    "--timeout=30"  # limit test duration to 30 seconds. Some tests previously would run indefinitely
+    "--timeout=30" # limit test duration to 30 seconds. Some tests previously would run indefinitely
     "--durations=10"
   ];
   disabledTestPaths = lib.optionals (!withPyscf) [

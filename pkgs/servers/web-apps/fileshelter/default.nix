@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libzip, boost, wt4, libconfig, pkg-config } :
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libzip, boost, wt4, libconfig
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fileshelter";

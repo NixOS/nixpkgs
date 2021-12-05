@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, moznetwork
-}:
+{ lib, buildPythonPackage, fetchPypi, moznetwork }:
 
 buildPythonPackage rec {
   pname = "mozhttpd";

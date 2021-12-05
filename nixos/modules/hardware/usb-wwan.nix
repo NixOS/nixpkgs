@@ -34,6 +34,7 @@ with lib;
     # configuration in /etc/usb_modeswitch.d. Configuring the correct
     # path in the package is difficult, as it would cause a cyclic
     # dependency.
-    environment.etc."usb_modeswitch.d".source = "${pkgs.usb-modeswitch-data}/share/usb_modeswitch";
+    environment.etc."usb_modeswitch.d".source =
+      "${pkgs.usb-modeswitch-data}/share/usb_modeswitch";
   };
 }

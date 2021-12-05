@@ -27,9 +27,7 @@ let
 
   ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -98,13 +96,12 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
-        default = [];
+        default = [ ];
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -115,34 +112,35 @@ in
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
+    systemd.services.systemd-timedated.environment = {
+      SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service";
+    };
 
-    users.users.ntp =
-      { isSystemUser = true;
-        group = "ntp";
-        description = "NTP daemon user";
-        home = stateDir;
+    users.users.ntp = {
+      isSystemUser = true;
+      group = "ntp";
+      description = "NTP daemon user";
+      home = stateDir;
+    };
+    users.groups.ntp = { };
+
+    systemd.services.ntpd = {
+      description = "NTP Daemon";
+
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "time-sync.target" ];
+      before = [ "time-sync.target" ];
+
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ntp ${stateDir}
+      '';
+
+      serviceConfig = {
+        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
+        Type = "forking";
       };
-    users.groups.ntp = {};
-
-    systemd.services.ntpd =
-      { description = "NTP Daemon";
-
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ntp ${stateDir}
-          '';
-
-        serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
-          Type = "forking";
-        };
-      };
+    };
 
   };
 

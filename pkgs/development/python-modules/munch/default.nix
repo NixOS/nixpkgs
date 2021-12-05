@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pbr
-}:
+{ lib, buildPythonPackage, fetchPypi, six, pbr }:
 
 buildPythonPackage rec {
   pname = "munch";

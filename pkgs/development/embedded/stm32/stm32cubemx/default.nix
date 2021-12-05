@@ -1,23 +1,24 @@
-{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
+{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick
+, jdk11, fetchzip }:
 # TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
 # This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
 # https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
 # If you're updating this derivation, check the link above to see if it's been fixed upstream
 # and try replacing all occurrences of jdk11 with jre and test whether it works.
-let
-  iconame = "STM32CubeMX";
-in
-stdenv.mkDerivation rec {
+let iconame = "STM32CubeMX";
+in stdenv.mkDerivation rec {
   pname = "stm32cubemx";
   version = "6.2.1";
 
   src = fetchzip {
-    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
+    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }-lin.zip";
     sha256 = "0m5h01iq0mgrr9svj4gmykfi9lsyjpqzrkvlizff26c8dqad59c5";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
+  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems ];
   desktopItems = [
     (makeDesktopItem {
       name = "stm32CubeMX";
@@ -55,7 +56,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
+    description =
+      "A graphical tool for configuring STM32 microcontrollers and microprocessors";
     longDescription = ''
       A graphical tool that allows a very easy configuration of STM32
       microcontrollers and microprocessors, as well as the generation of the

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, inflection, requests }:
 
 buildPythonPackage rec {
   pname = "sleepyq";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "1bhzrxpzglfw4qbqfzyxr7dmmavzq4pq0h90jh0aa8vdw7iy7g7v";
   };
 
-  propagatedBuildInputs = [
-    inflection
-    requests
-  ];
+  propagatedBuildInputs = [ inflection requests ];
 
   # Project has no tests
   doCheck = false;

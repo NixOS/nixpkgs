@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, isPy3k
-, pkgconfig
-, psutil
-, pytest
-, pytest-cov
-, pytest-runner
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, isPy3k, pkgconfig, psutil
+, pytest, pytest-cov, pytest-runner, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "python-lz4";
@@ -33,9 +23,9 @@ buildPythonPackage rec {
   '';
 
   meta = {
-     description = "LZ4 Bindings for Python";
-     homepage = "https://github.com/python-lz4/python-lz4";
-     license = lib.licenses.bsd3;
-     maintainers = with lib.maintainers; [ costrouc ];
+    description = "LZ4 Bindings for Python";
+    homepage = "https://github.com/python-lz4/python-lz4";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ costrouc ];
   };
 }

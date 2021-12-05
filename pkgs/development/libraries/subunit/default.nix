@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/subunit/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    url =
+      "https://launchpad.net/subunit/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1h7i5ifcx20qkya24j11nbwa829klw7dvnlljdgivgvcx6b20y80";
   };
 

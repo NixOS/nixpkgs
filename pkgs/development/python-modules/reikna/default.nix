@@ -1,15 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, sphinx
-, pytest-cov
-, pytest
-, Mako
-, numpy
-, funcsigs
-, withCuda ? false, pycuda
-, withOpenCL ? true, pyopencl
-}:
+{ lib, fetchPypi, buildPythonPackage, sphinx, pytest-cov, pytest, Mako, numpy
+, funcsigs, withCuda ? false, pycuda, withOpenCL ? true, pyopencl }:
 
 buildPythonPackage rec {
   pname = "reikna";
@@ -23,8 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ sphinx pytest-cov pytest ];
 
   propagatedBuildInputs = [ Mako numpy funcsigs ]
-    ++ lib.optional withCuda pycuda
-    ++ lib.optional withOpenCL pyopencl;
+    ++ lib.optional withCuda pycuda ++ lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test

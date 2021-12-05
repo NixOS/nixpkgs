@@ -8,19 +8,17 @@ let
 
   cfg = config.services.gvfs;
 
-in
+in {
 
-{
-
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   # Added 2019-08-19
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gvfs" "enable" ]
-      [ "services" "gvfs" "enable" ])
+    (mkRenamedOptionModule [ "services" "gnome3" "gvfs" "enable" ] [
+      "services"
+      "gvfs"
+      "enable"
+    ])
   ];
 
   ###### interface
@@ -43,7 +41,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -57,7 +54,8 @@ in
     services.udev.packages = [ pkgs.libmtp.bin ];
 
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
+    environment.variables.GIO_EXTRA_MODULES =
+      [ "${cfg.package}/lib/gio/modules" ];
 
   };
 

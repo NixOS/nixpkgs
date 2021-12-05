@@ -14,16 +14,14 @@ buildGoPackage rec {
     sha256 = "0lgw37iq1cvg3mqc94nzf0027mvv721ay8x6dw3fc814ww8a2hb6";
   };
 
-  patches = [
-    ./staticfiles-directory.patch
-  ];
+  patches = [ ./staticfiles-directory.patch ];
 
   goDeps = ./deps.nix;
 
   meta = {
     description = "A tool to manage network booting of machines";
     homepage = "https://github.com/ns1/waitron";
-    license =  lib.licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guibert ];
     platforms = lib.platforms.linux;
   };

@@ -1,6 +1,4 @@
-{ writeShellScript, nix-prefetch-git, formats, lib
-, curl, jq, xe
-, src }:
+{ writeShellScript, nix-prefetch-git, formats, lib, curl, jq, xe, src }:
 
 # Grammar list:
 # https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
@@ -37,7 +35,9 @@ let
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
   ];
-  knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
+  knownTreeSitterOrgGrammarReposJson =
+    jsonFile "known-tree-sitter-org-grammar-repos"
+    knownTreeSitterOrgGrammarRepos;
 
   # repos of the tree-sitter github orga we want to ignore (not grammars)
   ignoredTreeSitterOrgRepos = [
@@ -64,7 +64,8 @@ let
     # rust library for constructing arbitrary graph structures from source code
     "tree-sitter-graph"
   ];
-  ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
+  ignoredTreeSitterOrgReposJson =
+    jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
   # Additional grammars that are not in the official github orga.
   # If you need a grammar that already exists in the official orga,
@@ -152,36 +153,29 @@ let
     };
   };
 
-  allGrammars =
-    let
-      treeSitterOrgaGrammars =
-        lib.listToAttrs (map (repo:
-          { name = repo;
-            value = {
-              orga = "tree-sitter";
-              inherit repo;
-            };
-          })
-        knownTreeSitterOrgGrammarRepos);
+  allGrammars = let
+    treeSitterOrgaGrammars = lib.listToAttrs (map (repo: {
+      name = repo;
+      value = {
+        orga = "tree-sitter";
+        inherit repo;
+      };
+    }) knownTreeSitterOrgGrammarRepos);
 
-    in
-      mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
+  in mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
 
   # TODO: move to lib
   mergeAttrsUnique = left: right:
-    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
-    assert
-      lib.assertMsg (intersect == [])
-        (lib.concatStringsSep "\n" [
-          "mergeAttrsUnique: keys in attrset overlapping:"
-          "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-          "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-        ]);
+    let
+      intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right);
+    in assert lib.assertMsg (intersect == [ ]) (lib.concatStringsSep "\n" [
+      "mergeAttrsUnique: keys in attrset overlapping:"
+      "left: ${lib.generators.toPretty { } (lib.getAttrs intersect left)}"
+      "right: ${lib.generators.toPretty { } (lib.getAttrs intersect right)}"
+    ]);
     left // right;
 
-
-
-  jsonFile = name: val: (formats.json {}).generate name val;
+  jsonFile = name: val: (formats.json { }).generate name val;
 
   # check the tree-sitter orga repos
   checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
@@ -202,48 +196,55 @@ let
   urlEscape = x: x;
 
   # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
-    set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest")
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-    fi
-    release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
-    # github sometimes returns an empty list even tough there are releases
-    if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
-      release="HEAD"
-    fi
-    echo "$release"
-  '';
+  latestGithubRelease = { orga, repo }:
+    writeShellScript "latest-github-release" ''
+      set -euo pipefail
+      res=$(${curl}/bin/curl \
+        --silent \
+        "https://api.github.com/repos/${urlEscape orga}/${
+          urlEscape repo
+        }/releases/latest")
+      if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
+        echo "rate limited" >&2
+      fi
+      release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
+      # github sometimes returns an empty list even tough there are releases
+      if [ "$release" = "null" ]; then
+        echo "uh-oh, latest for ${
+          orga + "/" + repo
+        } is not there, using HEAD" >&2
+        release="HEAD"
+      fi
+      echo "$release"
+    '';
 
   # find the latest repos of a github organization
-  latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
-    set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100')
+  latestGithubRepos = { orga }:
+    writeShellScript "latest-github-repos" ''
+      set -euo pipefail
+      res=$(${curl}/bin/curl \
+        --silent \
+        'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100')
 
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2   #
-    fi
+      if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
+        echo "rate limited" >&2   #
+      fi
 
-    printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
-      || echo "failed $res"
-  '';
+      printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
+        || echo "failed $res"
+    '';
 
   # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { orga, repo }: writeShellScript "update-grammar.sh" ''
-    set -euo pipefail
-    latest="$(${latestGithubRelease { inherit orga repo; }})"
-    echo "Fetching latest release ($latest) of ${repo} …" >&2
-    ${nix-prefetch-git}/bin/nix-prefetch-git \
-      --quiet \
-      --no-deepClone \
-      --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
-      --rev "$latest"
+  updateGrammar = { orga, repo }:
+    writeShellScript "update-grammar.sh" ''
+      set -euo pipefail
+      latest="$(${latestGithubRelease { inherit orga repo; }})"
+      echo "Fetching latest release ($latest) of ${repo} …" >&2
+      ${nix-prefetch-git}/bin/nix-prefetch-git \
+        --quiet \
+        --no-deepClone \
+        --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
+        --rev "$latest"
     '';
 
   foreachSh = attrs: f:
@@ -259,13 +260,14 @@ let
     outputDir="${toString ./.}/grammars"
     echo "writing files to $outputDir" 1>&2
     mkdir -p "$outputDir"
-    ${foreachSh allGrammars
-      ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
+    ${foreachSh allGrammars ({ name, orga, repo }:
+      "${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json")}
     ( echo "{"
-      ${foreachSh allGrammars
-        ({name, ...}: ''
-           # indentation hack
-             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
+      ${
+        foreachSh allGrammars ({ name, ... }: ''
+          # indentation hack
+            printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')
+      }
       echo "}" ) \
       > "$outputDir/default.nix"
   '';

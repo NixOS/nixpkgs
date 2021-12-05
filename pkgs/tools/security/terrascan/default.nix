@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terrascan";
@@ -20,7 +17,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Detect compliance and security violations across Infrastructure";
+    description =
+      "Detect compliance and security violations across Infrastructure";
     longDescription = ''
       Detect compliance and security violations across Infrastructure as Code to
       mitigate risk before provisioning cloud native infrastructure. It contains

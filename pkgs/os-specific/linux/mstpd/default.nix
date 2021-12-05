@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-strncpy-gcc9.patch";
-      url = "https://github.com/mstpd/mstpd/commit/d27d7e93485d881d8ff3a7f85309b545edbe1fc6.patch";
+      url =
+        "https://github.com/mstpd/mstpd/commit/d27d7e93485d881d8ff3a7f85309b545edbe1fc6.patch";
       sha256 = "19456daih8l3y6m9kphjr7pj7slrqzbj6yacnlgznpxyd8y4d86y";
     })
   ];

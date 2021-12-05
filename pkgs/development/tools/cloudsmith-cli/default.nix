@@ -1,6 +1,4 @@
-{ python3
-, lib
-}:
+{ python3, lib }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";

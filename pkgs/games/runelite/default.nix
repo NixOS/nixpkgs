@@ -1,26 +1,31 @@
-{ pkgs, lib, stdenv, makeDesktopItem, fetchurl, unzip, makeWrapper, xorg, jre, }:
+{ pkgs, lib, stdenv, makeDesktopItem, fetchurl, unzip, makeWrapper, xorg, jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "runelite";
   version = "2.1.5";
 
   jar = fetchurl {
-    url = "https://github.com/runelite/launcher/releases/download/${version}/RuneLite.jar";
+    url =
+      "https://github.com/runelite/launcher/releases/download/${version}/RuneLite.jar";
     sha256 = "4BX188QIjIFTxng2ktqlKn7AqQ9tdBcKWmgOj/5yd10=";
   };
 
   icon = fetchurl {
-    url = "https://github.com/runelite/launcher/raw/${version}/appimage/runelite.png";
+    url =
+      "https://github.com/runelite/launcher/raw/${version}/appimage/runelite.png";
     sha256 = "04fcjm7p546gr82g0jbh497j7rnh70lrvas0k171bff4v3knrjw1";
   };
 
   # The `.so` files provided by these two jars aren't detected by RuneLite for some reason, so we have to provide them manually
   jogl = fetchurl {
-    url = "https://repo.runelite.net/net/runelite/jogl/jogl-all/2.4.0-rc-20200429/jogl-all-2.4.0-rc-20200429-natives-linux-amd64.jar";
+    url =
+      "https://repo.runelite.net/net/runelite/jogl/jogl-all/2.4.0-rc-20200429/jogl-all-2.4.0-rc-20200429-natives-linux-amd64.jar";
     sha256 = "S60qxyWY9RfyhLFygn/OxZFWnc8qVRtTFdWMbdu+2U0=";
   };
   gluegen = fetchurl {
-    url = "https://repo.runelite.net/net/runelite/gluegen/gluegen-rt/2.4.0-rc-20200429/gluegen-rt-2.4.0-rc-20200429-natives-linux-amd64.jar";
+    url =
+      "https://repo.runelite.net/net/runelite/gluegen/gluegen-rt/2.4.0-rc-20200429/gluegen-rt-2.4.0-rc-20200429-natives-linux-amd64.jar";
     sha256 = "eF8S5sQkJFDtW8rcVBKIyeyKm5Ze5rXK5r/yosZcHjU=";
   };
   dontUnpack = true;

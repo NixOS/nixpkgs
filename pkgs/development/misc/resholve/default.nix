@@ -1,22 +1,16 @@
-{ callPackage
-, writeTextFile
-}:
+{ callPackage, writeTextFile }:
 
 let
   source = callPackage ./source.nix { };
   deps = callPackage ./deps.nix { };
-in
-rec {
+in rec {
   resholve = callPackage ./resholve.nix {
     inherit (source) rSrc version;
     inherit (deps.oil) oildev;
   };
-  resholve-utils = callPackage ./resholve-utils.nix {
-    inherit resholve;
-  };
-  resholvePackage = callPackage ./resholve-package.nix {
-    inherit resholve resholve-utils;
-  };
+  resholve-utils = callPackage ./resholve-utils.nix { inherit resholve; };
+  resholvePackage =
+    callPackage ./resholve-package.nix { inherit resholve resholve-utils; };
   resholveScript = name: partialSolution: text:
     writeTextFile {
       inherit name text;
@@ -25,9 +19,10 @@ rec {
         (
           PS4=$'\x1f'"\033[33m[resholve context]\033[0m "
           set -x
-          ${resholve-utils.makeInvocation name (partialSolution // {
-            scripts = [ "${placeholder "out"}" ];
-          })}
+          ${
+            resholve-utils.makeInvocation name
+            (partialSolution // { scripts = [ "${placeholder "out"}" ]; })
+          }
         )
         ${partialSolution.interpreter} -n $out
       '';
@@ -43,9 +38,10 @@ rec {
           PS4=$'\x1f'"\033[33m[resholve context]\033[0m "
           set -x
           : changing directory to $PWD
-          ${resholve-utils.makeInvocation name (partialSolution // {
-            scripts = [ "bin/${name}" ];
-          })}
+          ${
+            resholve-utils.makeInvocation name
+            (partialSolution // { scripts = [ "bin/${name}" ]; })
+          }
         )
         ${partialSolution.interpreter} -n $out/bin/${name}
       '';

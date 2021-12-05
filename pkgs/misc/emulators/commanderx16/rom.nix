@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cc65
-}:
+{ stdenv, lib, fetchFromGitHub, cc65 }:
 
 stdenv.mkDerivation rec {
   pname = "x16-rom";

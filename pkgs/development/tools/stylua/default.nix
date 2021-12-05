@@ -1,10 +1,5 @@
-{ fetchFromGitHub
-, lib
-, rustPlatform
-, stdenvNoCC
-, lua52Support ? true
-, luauSupport ? false
-}:
+{ fetchFromGitHub, lib, rustPlatform, stdenvNoCC, lua52Support ? true
+, luauSupport ? false }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
@@ -28,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
-    changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
   };

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_interface
-, zope_exceptions
-, zope_testing
-, six
-}:
-
+{ lib, buildPythonPackage, fetchPypi, zope_interface, zope_exceptions
+, zope_testing, six }:
 
 buildPythonPackage rec {
   pname = "zope.testrunner";

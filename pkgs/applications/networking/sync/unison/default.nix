@@ -1,16 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ocamlPackages
-, fontschumachermisc
-, xset
-, makeWrapper
-, ncurses
-, gnugrep
-, copyDesktopItems
-, makeDesktopItem
-, enableX11 ? true
-}:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset
+, makeWrapper, ncurses, gnugrep, copyDesktopItems, makeDesktopItem
+, enableX11 ? true }:
 
 stdenv.mkDerivation rec {
   pname = "unison";

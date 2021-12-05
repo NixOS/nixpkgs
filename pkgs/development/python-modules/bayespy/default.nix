@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, nose, glibcLocales
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, nose, glibcLocales
 , numpy, scipy, matplotlib, h5py }:
 
 buildPythonPackage rec {

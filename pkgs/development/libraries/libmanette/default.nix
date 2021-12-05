@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, ninja
-, meson
-, pkg-config
-, vala
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, libgudev
-, libevdev
-, gnome
+{ lib, stdenv, fetchurl, ninja, meson, pkg-config, vala, gobject-introspection
+, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43, glib, libgudev, libevdev, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1b3bcdkk5xd5asq797cch9id8692grsjxrc1ss87vv11m1ck4rb3";
   };
 
@@ -36,15 +26,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [
-    glib
-    libgudev
-    libevdev
-  ];
+  buildInputs = [ glib libgudev libevdev ];
 
-  mesonFlags = [
-    "-Ddoc=true"
-  ];
+  mesonFlags = [ "-Ddoc=true" ];
 
   doCheck = true;
 

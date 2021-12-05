@@ -16,7 +16,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://launchpad.net/pyflakes";
-    description = "A simple program which checks Python source files for errors";
+    description =
+      "A simple program which checks Python source files for errors";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

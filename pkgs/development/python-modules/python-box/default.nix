@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, ruamel-yaml
-, toml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, msgpack, pytestCheckHook
+, pythonOlder, pyyaml, ruamel-yaml, toml }:
 
 buildPythonPackage rec {
   pname = "python-box";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-SkteajcWG7rBFMm6Xp6QCfkZfwthRituGL/RtICbtYk=";
   };
 
-  propagatedBuildInputs = [
-    msgpack
-    pyyaml
-    ruamel-yaml
-    toml
-  ];
+  propagatedBuildInputs = [ msgpack pyyaml ruamel-yaml toml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "box" ];
 

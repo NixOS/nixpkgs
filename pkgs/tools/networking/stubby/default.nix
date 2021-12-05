@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake, systemd }:
+{ lib, stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "stubby";
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dnsprivacy.org/wiki/x/JYAT";
     downloadPage = "https://github.com/getdnsapi/stubby";
     maintainers = with maintainers; [ leenaars ehmry ];
-    license = licenses.bsd3; platforms = platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }

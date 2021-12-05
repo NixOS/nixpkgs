@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
+  nativeBuildInputs =
+    lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 
   preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i -e "/libatomic_ops_gpl_la_SOURCES/a libatomic_ops_gpl_la_LIBADD = libatomic_ops.la" src/Makefile.am
@@ -22,9 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A library for semi-portable access to hardware-provided atomic memory update operations";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
+    description =
+      "A library for semi-portable access to hardware-provided atomic memory update operations";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; unix ++ windows;
   };
 }

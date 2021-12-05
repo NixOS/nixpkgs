@@ -1,17 +1,5 @@
-{ lib
-, black
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, isort
-, jinja2
-, md-toc
-, mdformat
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, black, boto3, buildPythonPackage, fetchFromGitHub, isort, jinja2, md-toc
+, mdformat, poetry-core, pyparsing, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
@@ -27,23 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-cFe8d6w28VFTNyj/ABWHkFQDfnM4aTrNZ+WUw5g8H5I=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    black
-    boto3
-    isort
-    jinja2
-    md-toc
-    mdformat
-    pyparsing
-  ];
+  propagatedBuildInputs =
+    [ black boto3 isort jinja2 md-toc mdformat pyparsing ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Should be fixed with 5.x

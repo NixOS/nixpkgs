@@ -5,19 +5,10 @@ buildDunePackage {
 
   inherit (repr) src version useDune2;
 
-  propagatedBuildInputs = [
-    ppx_deriving
-    ppxlib
-    repr
-  ];
+  propagatedBuildInputs = [ ppx_deriving ppxlib repr ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-    hex
-  ];
+  checkInputs = [ alcotest hex ];
 
-  meta = repr.meta // {
-    description = "PPX deriver for type representations";
-  };
+  meta = repr.meta // { description = "PPX deriver for type representations"; };
 }

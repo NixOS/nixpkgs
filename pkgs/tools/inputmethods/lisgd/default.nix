@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, writeText
-, libinput
-, libX11
-, wayland
-, conf ? null
-, patches ? [ ]
-}:
+{ lib, stdenv, fetchFromSourcehut, writeText, libinput, libX11, wayland
+, conf ? null, patches ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "lisgd";
@@ -31,15 +23,9 @@ stdenv.mkDerivation rec {
     cp ${configFile} config.def.h
   '';
 
-  buildInputs = [
-    libinput
-    libX11
-    wayland
-  ];
+  buildInputs = [ libinput libX11 wayland ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Bind gestures via libinput touch events";

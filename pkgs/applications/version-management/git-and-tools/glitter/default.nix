@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip" "runs_correctly" ];
 
   meta = with lib; {
-    description = "A git wrapper that allows you to compress multiple commands into one";
+    description =
+      "A git wrapper that allows you to compress multiple commands into one";
     homepage = "https://github.com/milo123459/glitter";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

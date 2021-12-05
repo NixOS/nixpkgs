@@ -1,16 +1,5 @@
-{ ripgrep
-, git
-, fzf
-, makeWrapper
-, vim_configurable
-, vimPlugins
-, fetchFromGitHub
-, lib
-, stdenv
-, formats
-, runCommand
-, spacevim_config ? import ./init.nix
-}:
+{ ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub
+, lib, stdenv, formats, runCommand, spacevim_config ? import ./init.nix }:
 
 let
   format = formats.toml { };
@@ -25,8 +14,7 @@ let
     mkdir -p $out
     cp ${format.generate "init.toml" spacevim_config} $out/init.toml
   '';
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "spacevim";
   version = "1.7.0";
   src = fetchFromGitHub {
@@ -60,7 +48,7 @@ stdenv.mkDerivation rec {
     # trailing slash very important for SPACEVIMDIR
     makeWrapper "${vim-customized}/bin/vim" "$out/bin/spacevim" \
         --add-flags "-u $out/SpaceVim/vimrc" --set SPACEVIMDIR "${spacevimdir}/" \
-        --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep]}
+        --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep ]}
     runHook postInstall
   '';
 

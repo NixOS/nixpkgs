@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, curl}:
+{ lib, stdenv, fetchurl, curl }:
 
 stdenv.mkDerivation {
   name = "libnxml-0.18.3";
@@ -12,7 +12,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.autistici.org/bakunin/libnxml/";
-    description = "C library for parsing, writing and creating XML 1.0 and 1.1 files or streams";
+    description =
+      "C library for parsing, writing and creating XML 1.0 and 1.1 files or streams";
     license = lib.licenses.lgpl2;
 
     platforms = lib.platforms.all;

@@ -11,7 +11,8 @@ in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://code.dogmap.org/${pname}/releases/${pname}-${version}.tar.bz2";
+    url =
+      "https://code.dogmap.org/${pname}/releases/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 
@@ -56,20 +57,18 @@ in stdenv.mkDerivation {
     mv library/fdtools.a $lib/lib/fdtools.a
     mv include/fdtools.h $dev/include/fdtools.h
 
-    ${skawarePackages.cleanPackaging.commonFileActions {
-       noiseFiles = [
-         "conf-compile/**/*"
-         "src/**/*"
-         "src/.**/*"
-         "compile/**/*"
-         "package/{build,check,compile,elsewhere,install,install_commands,own,run,sharing,upgrade,upgrade_version,url_src,url_src_latest,versions}"
-       ];
-       docFiles = [
-         "package/INSTALL"
-         "package/LICENSE"
-         "package/README"
-       ];
-    }} $docdir
+    ${
+      skawarePackages.cleanPackaging.commonFileActions {
+        noiseFiles = [
+          "conf-compile/**/*"
+          "src/**/*"
+          "src/.**/*"
+          "compile/**/*"
+          "package/{build,check,compile,elsewhere,install,install_commands,own,run,sharing,upgrade,upgrade_version,url_src,url_src_latest,versions}"
+        ];
+        docFiles = [ "package/INSTALL" "package/LICENSE" "package/README" ];
+      }
+    } $docdir
 
     ${skawarePackages.cleanPackaging.checkForRemainingFiles}
 

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy36
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy36 }:
 
 buildPythonPackage rec {
   pname = "mailcap-fix";

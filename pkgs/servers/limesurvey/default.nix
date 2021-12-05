@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('LIMESURVEY_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('LIMESURVEY_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -27,15 +27,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.limesurvey;
-  };
+  passthru.tests = { smoke-test = nixosTests.limesurvey; };
 
   meta = with lib; {
     description = "Open source survey application";
     license = licenses.gpl2;
     homepage = "https://www.limesurvey.org";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; unix;
     knownVulnerabilities = [
       # https://github.com/LimeSurvey/LimeSurvey/blob/3.x-LTS/docs/release_notes.txt

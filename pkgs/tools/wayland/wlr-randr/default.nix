@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";

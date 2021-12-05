@@ -11,15 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zldhylln412974cnxyqcrrc6b4ry3m9s5ijq3dnwz2g7nz1bx9d";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    gtk2
-    openssh
-  ];
+  buildInputs = [ gtk2 openssh ];
 
   meta = with lib; {
     description = "A small SSH askpass GUI using GTK+2";

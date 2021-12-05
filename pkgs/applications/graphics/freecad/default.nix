@@ -1,50 +1,9 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ninja
-, GitPython
-, boost
-, coin3d
-, eigen
-, gfortran
-, gts
-, hdf5
-, libGLU
-, libXmu
-, libf2c
-, libredwg
-, libspnav
-, matplotlib
-, medfile
-, mpi
-, ode
-, opencascade-occt
-, pivy
-, pkg-config
-, ply
-, pycollada
-, pyside2
-, pyside2-tools
-, python
-, pyyaml
-, qtbase
-, qttools
-, qtwebengine
-, qtx11extras
-, qtxmlpatterns
-, scipy
-, shiboken2
-, soqt
-, spaceNavSupport ? stdenv.isLinux
-, swig
-, vtk
-, wrapQtAppsHook
-, xercesc
-, zlib
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja
+, GitPython, boost, coin3d, eigen, gfortran, gts, hdf5, libGLU, libXmu, libf2c
+, libredwg, libspnav, matplotlib, medfile, mpi, ode, opencascade-occt, pivy
+, pkg-config, ply, pycollada, pyside2, pyside2-tools, python, pyyaml, qtbase
+, qttools, qtwebengine, qtx11extras, qtxmlpatterns, scipy, shiboken2, soqt
+, spaceNavSupport ? stdenv.isLinux, swig, vtk, wrapQtAppsHook, xercesc, zlib }:
 
 mkDerivation rec {
   pname = "freecad";
@@ -57,14 +16,8 @@ mkDerivation rec {
     hash = "sha256-XZ+fRl3CPCIFu3nHeMTLibwwFBlG/cWpKJlI58hTAuU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    pyside2-tools
-    gfortran
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [ cmake ninja pkg-config pyside2-tools gfortran wrapQtAppsHook ];
 
   buildInputs = [
     GitPython # for addon manager
@@ -99,10 +52,7 @@ mkDerivation rec {
     vtk
     xercesc
     zlib
-  ] ++ lib.optionals spaceNavSupport [
-    libspnav
-    qtx11extras
-  ];
+  ] ++ lib.optionals spaceNavSupport [ libspnav qtx11extras ];
 
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
@@ -113,8 +63,7 @@ mkDerivation rec {
     ("-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
       + ";${pyside2}/include/PySide2/QtCore"
       + ";${pyside2}/include/PySide2/QtWidgets"
-      + ";${pyside2}/include/PySide2/QtGui"
-    )
+      + ";${pyside2}/include/PySide2/QtGui")
     "-DPYSIDE_LIBRARY=PySide2::pyside2"
   ];
 

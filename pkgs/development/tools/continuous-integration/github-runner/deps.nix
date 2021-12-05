@@ -1,12 +1,12 @@
 { fetchurl }:
 let
-  fetchNuGet = { name, version, sha256 }: fetchurl {
-    inherit sha256;
-    name = "${name}.${version}";
-    url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-  };
-in
-[
+  fetchNuGet = { name, version, sha256 }:
+    fetchurl {
+      inherit sha256;
+      name = "${name}.${version}";
+      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
+    };
+in [
 
   (fetchNuGet {
     name = "castle.core";

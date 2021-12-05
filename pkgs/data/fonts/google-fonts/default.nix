@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation {
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ manveru ];
   };
 }

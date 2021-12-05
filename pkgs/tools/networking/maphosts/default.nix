@@ -20,10 +20,11 @@ in stdenv.mkDerivation {
   passthru.updateScript = bundlerUpdateScript "maphosts";
 
   meta = with lib; {
-    description = "Small command line application for keeping your project hostnames in sync with /etc/hosts";
-    homepage    = "https://github.com/mpscholten/maphosts";
-    license     = licenses.mit;
+    description =
+      "Small command line application for keeping your project hostnames in sync with /etc/hosts";
+    homepage = "https://github.com/mpscholten/maphosts";
+    license = licenses.mit;
     maintainers = with maintainers; [ mpscholten nicknovitski ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

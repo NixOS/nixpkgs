@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, enableTool ? false
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, enableTool ? false
 , enableTest ? false }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
 
-  configureFlags = [ "--enable-doc" ]
-    ++ lib.optional enableTest "--enable-test"
+  configureFlags = [ "--enable-doc" ] ++ lib.optional enableTest "--enable-test"
     ++ lib.optional enableTool "--enable-tool";
 
   doCheck = true;

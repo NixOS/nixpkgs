@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, agg
-, alsa-lib
-, desktop-file-utils
-, gtk3
-, intltool
-, libGLU
-, libXmu
-, libpcap
-, libtool
-, lua
-, meson
-, ninja
-, openal
-, pkg-config
-, soundtouch
-, tinyxml
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, agg, alsa-lib, desktop-file-utils, gtk3
+, intltool, libGLU, libXmu, libpcap, libtool, lua, meson, ninja, openal
+, pkg-config, soundtouch, tinyxml, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "desmume";
@@ -32,15 +13,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-sTCyjQ31w1Lp+aa3VQ7/rdLbhjnqthce54mjKJZQIDM=";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    intltool
-    libtool
-    lua
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils intltool libtool lua meson ninja pkg-config ];
 
   buildInputs = [
     SDL2
@@ -62,11 +36,7 @@ stdenv.mkDerivation rec {
     cd desmume/src/frontend/posix
   '';
 
-  mesonFlags = [
-    "-Db_pie=true"
-    "-Dopenal=true"
-    "-Dwifi=true"
-  ];
+  mesonFlags = [ "-Db_pie=true" "-Dopenal=true" "-Dwifi=true" ];
 
   meta = with lib; {
     homepage = "https://www.github.com/TASVideos/desmume/";

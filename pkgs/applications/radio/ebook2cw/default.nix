@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes non-GCC compilers and a missing directory in the install phase.
     (fetchpatch {
-      url = "https://git.fkurz.net/dj1yfk/ebook2cw/commit/eb5742e70b042cf98a04440395c34390b171c035.patch";
+      url =
+        "https://git.fkurz.net/dj1yfk/ebook2cw/commit/eb5742e70b042cf98a04440395c34390b171c035.patch";
       sha256 = "1m5f819cj3fj1piss0a5ciib3jqrqdc14lp3i3dszw4bg9v1pgyd";
     })
   ];

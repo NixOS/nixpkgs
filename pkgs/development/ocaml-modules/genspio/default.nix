@@ -1,6 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, nonstd, sosa
-}:
+{ lib, fetchFromGitHub, buildDunePackage, nonstd, sosa }:
 
 buildDunePackage rec {
   pname = "genspio";

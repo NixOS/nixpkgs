@@ -1,8 +1,6 @@
-{ mkDerivation, ansi-terminal, ansi-wl-pprint, array, base, bimap
-, binary, bytestring, containers, directory, fetchgit, filepath
-, lib, mtl, process, relude, tasty, tasty-discover, tasty-hspec
-, tasty-hunit, text
-}:
+{ mkDerivation, ansi-terminal, ansi-wl-pprint, array, base, bimap, binary
+, bytestring, containers, directory, fetchgit, filepath, lib, mtl, process
+, relude, tasty, tasty-discover, tasty-hspec, tasty-hunit, text }:
 mkDerivation {
   pname = "avh4-lib";
   version = "0.0.0.1";
@@ -14,13 +12,39 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/avh4-lib; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
-    ansi-terminal ansi-wl-pprint array base bimap binary bytestring
-    containers directory filepath mtl process relude text
+    ansi-terminal
+    ansi-wl-pprint
+    array
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    directory
+    filepath
+    mtl
+    process
+    relude
+    text
   ];
   testHaskellDepends = [
-    ansi-terminal ansi-wl-pprint array base bimap binary bytestring
-    containers directory filepath mtl process relude tasty tasty-hspec
-    tasty-hunit text
+    ansi-terminal
+    ansi-wl-pprint
+    array
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    directory
+    filepath
+    mtl
+    process
+    relude
+    tasty
+    tasty-hspec
+    tasty-hunit
+    text
   ];
   testToolDepends = [ tasty-discover ];
   doHaddock = false;

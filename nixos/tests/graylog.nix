@@ -16,11 +16,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     services.graylog = {
       enable = true;
-      passwordSecret = "YGhZ59wXMrYOojx5xdgEpBpDw2N6FbhM4lTtaJ1KPxxmKrUvSlDbtWArwAWMQ5LKx1ojHEVrQrBMVRdXbRyZLqffoUzHfssc";
+      passwordSecret =
+        "YGhZ59wXMrYOojx5xdgEpBpDw2N6FbhM4lTtaJ1KPxxmKrUvSlDbtWArwAWMQ5LKx1ojHEVrQrBMVRdXbRyZLqffoUzHfssc";
       elasticsearchHosts = [ "http://localhost:9200" ];
 
       # `echo -n "nixos" | shasum -a 256`
-      rootPasswordSha2 = "6ed332bcfa615381511d4d5ba44a293bb476f368f7e9e304f0dff50230d1a85b";
+      rootPasswordSha2 =
+        "6ed332bcfa615381511d4d5ba44a293bb476f368f7e9e304f0dff50230d1a85b";
     };
 
     environment.systemPackages = [ pkgs.jq ];

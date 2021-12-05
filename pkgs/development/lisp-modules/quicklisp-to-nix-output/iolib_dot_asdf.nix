@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "iolib_dot_asdf";
   version = "iolib-v0.8.4";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "iolib.asdf";
 
-  asdFilesToKeep = ["iolib.asdf.asd"];
+  asdFilesToKeep = [ "iolib.asdf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.asdf DESCRIPTION A few ASDF component classes. SHA256
@@ -25,4 +24,5 @@ rec {
     DEPS ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria)
     VERSION iolib-v0.8.4 SIBLINGS
     (iolib iolib.base iolib.common-lisp iolib.conf iolib.examples) PARASITES
-    NIL) */
+    NIL)
+*/

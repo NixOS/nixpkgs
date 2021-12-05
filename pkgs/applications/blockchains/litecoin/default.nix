@@ -1,12 +1,6 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, pkg-config, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc
-, glib, protobuf, util-linux, qrencode
-, AppKit
-, withGui ? true, libevent
-, qtbase, qttools
-, zeromq
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, autoreconfHook
+, openssl, db48, boost, zlib, miniupnpc, glib, protobuf, util-linux, qrencode
+, AppKit, withGui ? true, libevent, qtbase, qttools, zeromq }:
 
 with lib;
 
@@ -23,21 +17,32 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib zeromq
-                  miniupnpc glib protobuf util-linux libevent ]
-                  ++ optionals stdenv.isDarwin [ AppKit ]
-                  ++ optionals withGui [ qtbase qttools qrencode ];
+  buildInputs = [
+    openssl
+    db48
+    boost
+    zlib
+    zeromq
+    miniupnpc
+    glib
+    protobuf
+    util-linux
+    libevent
+  ] ++ optionals stdenv.isDarwin [ AppKit ]
+    ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                   ++ optionals withGui [
-                      "--with-gui=qt5"
-                      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin" ];
+    ++ optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
-    longDescription= ''
+    description =
+      "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
+    longDescription = ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
       to anyone in the world. It is based on the Bitcoin protocol but differs
       from Bitcoin in that it can be efficiently mined with consumer-grade hardware.

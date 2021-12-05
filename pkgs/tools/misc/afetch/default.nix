@@ -1,7 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-}:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "afetch";
@@ -14,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "A fetch program written in C";

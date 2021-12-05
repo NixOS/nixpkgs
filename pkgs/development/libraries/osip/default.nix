@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   version = "5.2.0";
   src = fetchurl {
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   meta = {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://www.gnu.org/software/osip/";
-    description = "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
+    description =
+      "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.all;
   };

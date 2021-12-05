@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, version
-, sha256
-, patches ? [ ]
-, preConfigure ? null
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, version, sha256, patches ? [ ]
+, preConfigure ? null }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
@@ -23,9 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
-  ];
+  cmakeFlags =
+    [ "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}" ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";

@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi, pytest-aiohttp, pytestCheckHook
+, pythonOlder, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
@@ -21,25 +14,17 @@ buildPythonPackage rec {
     sha256 = "e44f2c5fd5fc3305477c89bb25f14570589100cc58c48b36745d4239839d3174";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ aiohttp ]
+    ++ lib.optionals (pythonOlder "3.7") [ typing-extensions ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --no-cov-on-fail --cov-branch --cov=aiohttp_remotes --cov-report=term --cov-report=html" ""
   '';
 
-  pythonImportsCheck = [
-    "aiohttp_remotes"
-  ];
+  pythonImportsCheck = [ "aiohttp_remotes" ];
 
   meta = with lib; {
     description = "A set of useful tools for aiohttp.web server";

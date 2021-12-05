@@ -26,9 +26,7 @@ let
     virtlyst.* = true
   '';
 
-in
-
-{
+in {
 
   options.services.virtlyst = {
     enable = mkEnableOption "Virtlyst libvirt web interface";
@@ -59,9 +57,7 @@ in
 
     systemd.services.virtlyst = {
       wantedBy = [ "multi-user.target" ];
-      environment = {
-        VIRTLYST_ADMIN_PASSWORD = cfg.adminPassword;
-      };
+      environment = { VIRTLYST_ADMIN_PASSWORD = cfg.adminPassword; };
       serviceConfig = {
         ExecStart = "${pkgs.cutelyst}/bin/cutelyst-wsgi2 --ini ${ini}";
         User = "virtlyst";

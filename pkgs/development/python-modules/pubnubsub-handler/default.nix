@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pubnub
-, pycryptodomex
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pubnub, pycryptodomex, requests }:
 
 buildPythonPackage rec {
   pname = "pubnubsub-handler";
@@ -15,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256:1c44x19zi709sazgl060nkqa7vbaf3iyhwcnwdykhsbipvp6bscy";
   };
 
-  propagatedBuildInputs = [
-    pubnub
-    pycryptodomex
-    requests
-  ];
+  propagatedBuildInputs = [ pubnub pycryptodomex requests ];
 
   # Project has no tests
   doCheck = false;

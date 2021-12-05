@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/edolstra/aefs/commit/15d8df8b8d5dc1ee20d27a86c4d23163a67f3123.patch";
+      url =
+        "https://github.com/edolstra/aefs/commit/15d8df8b8d5dc1ee20d27a86c4d23163a67f3123.patch";
       sha256 = "0k36hsyvf8a0ji2hpghgqff2fncj0pllxn8p0rs0aj4h7j2vp4iv";
     })
   ];
@@ -24,13 +25,15 @@ stdenv.mkDerivation rec {
   #
   #     $ tar xf "$(nix-build -A aefs.src)"
   #     $ grep -R FUSE_USE_VERSION
-  configureFlags = lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
+  configureFlags =
+    lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
 
   buildInputs = [ fuse ];
 
   meta = with lib; {
     homepage = "https://github.com/edolstra/aefs";
-    description = "A cryptographic filesystem implemented in userspace using FUSE";
+    description =
+      "A cryptographic filesystem implemented in userspace using FUSE";
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
     license = licenses.gpl2;

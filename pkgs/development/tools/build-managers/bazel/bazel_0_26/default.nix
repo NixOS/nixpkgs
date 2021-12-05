@@ -1,59 +1,72 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, zip, unzip, bash, writeCBin, coreutils
-, which, python3, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper, zip
+, unzip, bash, writeCBin, coreutils, which, python3, perl, gawk, gnused, gnutar
+, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, llvmPackages_8, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
-, buildJdk, runJdk
-, buildJdkName
-, runtimeShell
+, buildJdk, runJdk, buildJdkName, runtimeShell
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
-, enableNixHacks ? false
-}:
+, enableNixHacks ? false }:
 
 let
   srcDeps = [
     # From: $REPO_ROOT/WORKSPACE
     (fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
+      url =
+        "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
       sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
-        sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
+      url =
+        "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
+      sha256 =
+        "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
-        sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
+      url =
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
+      sha256 =
+        "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
     })
     (fetchurl {
-      url = "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
-      sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
-    })
-     (fetchurl {
-         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
-         sha256 = "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
-     })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
-        sha256 = "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
+      url =
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
+      sha256 =
+        "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
-        sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
+      url =
+        "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
+      sha256 =
+        "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
     })
     (fetchurl {
-        url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
-        sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
+      url =
+        "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
+      sha256 =
+        "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
-        sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
+      url =
+        "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
+      sha256 =
+        "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
+    })
+    (fetchurl {
+      url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
+      sha256 =
+        "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
+    })
+    (fetchurl {
+      url =
+        "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
+      sha256 =
+        "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
     })
   ];
 
-  distDir = runCommand "bazel-deps" {} ''
+  distDir = runCommand "bazel-deps" { } ''
     mkdir -p $out
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
@@ -92,8 +105,7 @@ let
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
   stdenv' = if stdenv.isDarwin then llvmPackages_8.libcxxStdenv else stdenv;
 
-in
-stdenv'.mkDerivation rec {
+in stdenv'.mkDerivation rec {
 
   version = "0.26.0";
 
@@ -110,14 +122,15 @@ stdenv'.mkDerivation rec {
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests = {
-    pythonBinPath = callPackage ./python-bin-path-test.nix {};
-    bashTools = callPackage ./bash-tools-test.nix {};
+    pythonBinPath = callPackage ./python-bin-path-test.nix { };
+    bashTools = callPackage ./bash-tools-test.nix { };
   };
 
   name = "bazel-${version}";
 
   src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
+    url =
+      "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
     sha256 = "d26dadf62959255d58e523da3448a6222af768fe1224e321b120c1d5bbe4b4f2";
   };
 
@@ -127,10 +140,8 @@ stdenv'.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = [
-    ./glibc.patch
-    ./python-stub-path-fix.patch
-  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
+  patches = [ ./glibc.patch ./python-stub-path-fix.patch ]
+    ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -280,32 +291,29 @@ stdenv'.mkDerivation rec {
 
       patchShebangs .
     '';
-    in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
-     + genericPatches;
+  in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
+  + genericPatches;
 
-  buildInputs = [
-    buildJdk
-  ];
+  buildInputs = [ buildJdk ];
 
   strictDeps = true;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
-  nativeBuildInputs = [
-    zip
-    python3
-    unzip
-    makeWrapper
-    which
-    customBash
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools CoreFoundation CoreServices Foundation ];
+  nativeBuildInputs = [ zip python3 unzip makeWrapper which customBash ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      cctools
+      CoreFoundation
+      CoreServices
+      Foundation
+    ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
   # Bazel WORKSPACE. This is why before executing the build, the source code is moved into a
   # subdirectory.
   # Failing to do this causes "infinite symlink expansion detected"
-  preBuildPhases = ["preBuildPhase"];
+  preBuildPhases = [ "preBuildPhase" ];
   preBuildPhase = ''
     mkdir bazel_src
     shopt -s dotglob extglob

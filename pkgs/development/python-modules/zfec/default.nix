@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyutil
-, setuptoolsTrial
-, twisted
-}:
+{ lib, buildPythonPackage, fetchPypi, pyutil, setuptoolsTrial, twisted }:
 
 buildPythonPackage rec {
   pname = "zfec";
@@ -28,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";
-    description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
+    description =
+      "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
     longDescription = ''
       Fast, portable, programmable erasure coding a.k.a. "forward
       error correction": the generation of redundant blocks of

@@ -5,7 +5,8 @@ let
   cfg = config.services.openldap;
   legacyOptions = [ "rootpwFile" "suffix" "dataDir" "rootdn" "rootpw" ];
   openldap = cfg.package;
-  configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
+  configDir =
+    if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
   ldapValueType = let
     # Can't do types.either with multiple non-overlapping submodules, so define our own
@@ -18,85 +19,128 @@ let
     # We don't coerce to lists of single values, as some values must be unique
   in types.either singleLdapValueType (types.listOf singleLdapValueType);
 
-  ldapAttrsType =
-    let
-      options = {
-        attrs = mkOption {
-          type = types.attrsOf ldapValueType;
-          default = {};
-          description = "Attributes of the parent entry.";
-        };
-        children = mkOption {
-          # Hide the child attributes, to avoid infinite recursion in e.g. documentation
-          # Actual Nix evaluation is lazy, so this is not an issue there
-          type = let
-            hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
-          in types.attrsOf (types.submodule { options = hiddenOptions; });
-          default = {};
-          description = "Child entries of the current entry, with recursively the same structure.";
-          example = lib.literalExpression ''
-            {
-                "cn=schema" = {
-                # The attribute used in the DN must be defined
-                attrs = { cn = "schema"; };
-                children = {
-                    # This entry's DN is expanded to "cn=foo,cn=schema"
-                    "cn=foo" = { ... };
-                };
-                # These includes are inserted after "cn=schema", but before "cn=foo,cn=schema"
-                includes = [ ... ];
-                };
-            }
-          '';
-        };
-        includes = mkOption {
-          type = types.listOf types.path;
-          default = [];
-          description = ''
-            LDIF files to include after the parent's attributes but before its children.
-          '';
-        };
+  ldapAttrsType = let
+    options = {
+      attrs = mkOption {
+        type = types.attrsOf ldapValueType;
+        default = { };
+        description = "Attributes of the parent entry.";
       };
-    in types.submodule { inherit options; };
+      children = mkOption {
+        # Hide the child attributes, to avoid infinite recursion in e.g. documentation
+        # Actual Nix evaluation is lazy, so this is not an issue there
+        type = let
+          hiddenOptions =
+            lib.mapAttrs (name: attr: attr // { visible = false; }) options;
+        in types.attrsOf (types.submodule { options = hiddenOptions; });
+        default = { };
+        description =
+          "Child entries of the current entry, with recursively the same structure.";
+        example = lib.literalExpression ''
+          {
+              "cn=schema" = {
+              # The attribute used in the DN must be defined
+              attrs = { cn = "schema"; };
+              children = {
+                  # This entry's DN is expanded to "cn=foo,cn=schema"
+                  "cn=foo" = { ... };
+              };
+              # These includes are inserted after "cn=schema", but before "cn=foo,cn=schema"
+              includes = [ ... ];
+              };
+          }
+        '';
+      };
+      includes = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        description = ''
+          LDIF files to include after the parent's attributes but before its children.
+        '';
+      };
+    };
+  in types.submodule { inherit options; };
 
-  valueToLdif = attr: values: let
-    listValues = if lib.isList values then values else lib.singleton values;
-  in map (value:
-    if lib.isAttrs value then
-      if lib.hasAttr "path" value
-      then "${attr}:< file://${value.path}"
-      else "${attr}:: ${value.base64}"
-    else "${attr}: ${lib.replaceStrings [ "\n" ] [ "\n " ] value}"
-  ) listValues;
+  valueToLdif = attr: values:
+    let listValues = if lib.isList values then values else lib.singleton values;
+    in map (value:
+      if lib.isAttrs value then
+        if lib.hasAttr "path" value then
+          "${attr}:< file://${value.path}"
+        else
+          "${attr}:: ${value.base64}"
+      else
+        "${attr}: ${lib.replaceStrings [ "\n" ] [ "\n " ] value}") listValues;
 
-  attrsToLdif = dn: { attrs, children, includes, ... }: [''
-    dn: ${dn}
-    ${lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList valueToLdif attrs))}
-  ''] ++ (map (path: "include: file://${path}\n") includes) ++ (
-    lib.flatten (lib.mapAttrsToList (name: value: attrsToLdif "${name},${dn}" value) children)
-  );
+  attrsToLdif = dn:
+    { attrs, children, includes, ... }:
+    [''
+      dn: ${dn}
+      ${lib.concatStringsSep "\n"
+      (lib.flatten (lib.mapAttrsToList valueToLdif attrs))}
+    ''] ++ (map (path: ''
+      include: file://${path}
+    '') includes) ++ (lib.flatten
+      (lib.mapAttrsToList (name: value: attrsToLdif "${name},${dn}" value)
+        children));
 in {
   imports = let
-    deprecationNote = "This option is removed due to the deprecation of `slapd.conf` upstream. Please migrate to `services.openldap.settings`, see the release notes for advice with this process.";
+    deprecationNote =
+      "This option is removed due to the deprecation of `slapd.conf` upstream. Please migrate to `services.openldap.settings`, see the release notes for advice with this process.";
     mkDatabaseOption = old: new:
-      lib.mkChangedOptionModule [ "services" "openldap" old ] [ "services" "openldap" "settings" "children" ]
-        (config: let
-          database = lib.getAttrFromPath [ "services" "openldap" "database" ] config;
+      lib.mkChangedOptionModule [ "services" "openldap" old ] [
+        "services"
+        "openldap"
+        "settings"
+        "children"
+      ] (config:
+        let
+          database =
+            lib.getAttrFromPath [ "services" "openldap" "database" ] config;
           value = lib.getAttrFromPath [ "services" "openldap" old ] config;
-        in lib.setAttrByPath ([ "olcDatabase={1}${database}" "attrs" ] ++ new) value);
+        in lib.setAttrByPath ([ "olcDatabase={1}${database}" "attrs" ] ++ new)
+        value);
   in [
-    (lib.mkRemovedOptionModule [ "services" "openldap" "extraConfig" ] deprecationNote)
-    (lib.mkRemovedOptionModule [ "services" "openldap" "extraDatabaseConfig" ] deprecationNote)
+    (lib.mkRemovedOptionModule [ "services" "openldap" "extraConfig" ]
+      deprecationNote)
+    (lib.mkRemovedOptionModule [ "services" "openldap" "extraDatabaseConfig" ]
+      deprecationNote)
 
-    (lib.mkChangedOptionModule [ "services" "openldap" "logLevel" ] [ "services" "openldap" "settings" "attrs" "olcLogLevel" ]
-      (config: lib.splitString " " (lib.getAttrFromPath [ "services" "openldap" "logLevel" ] config)))
-    (lib.mkChangedOptionModule [ "services" "openldap" "defaultSchemas" ] [ "services" "openldap" "settings" "children" "cn=schema" "includes"]
-      (config: lib.optionals (lib.getAttrFromPath [ "services" "openldap" "defaultSchemas" ] config) (
-        map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ])))
+    (lib.mkChangedOptionModule [ "services" "openldap" "logLevel" ] [
+      "services"
+      "openldap"
+      "settings"
+      "attrs"
+      "olcLogLevel"
+    ] (config:
+      lib.splitString " "
+      (lib.getAttrFromPath [ "services" "openldap" "logLevel" ] config)))
+    (lib.mkChangedOptionModule [ "services" "openldap" "defaultSchemas" ] [
+      "services"
+      "openldap"
+      "settings"
+      "children"
+      "cn=schema"
+      "includes"
+    ] (config:
+      lib.optionals
+      (lib.getAttrFromPath [ "services" "openldap" "defaultSchemas" ] config)
+      (map (schema: "${openldap}/etc/schema/${schema}.ldif") [
+        "core"
+        "cosine"
+        "inetorgperson"
+        "nis"
+      ])))
 
-    (lib.mkChangedOptionModule [ "services" "openldap" "database" ] [ "services" "openldap" "settings" "children" ]
-      (config: let
-        database = lib.getAttrFromPath [ "services" "openldap" "database" ] config;
+    (lib.mkChangedOptionModule [ "services" "openldap" "database" ] [
+      "services"
+      "openldap"
+      "settings"
+      "children"
+    ] (config:
+      let
+        database =
+          lib.getAttrFromPath [ "services" "openldap" "database" ] config;
       in {
         "olcDatabase={1}${database}".attrs = {
           # objectClass is case-insensitive, so don't need to capitalize ${database}
@@ -104,9 +148,13 @@ in {
           olcDatabase = "{1}${database}";
           olcDbDirectory = lib.mkDefault "/var/db/openldap";
         };
-        "cn=schema".includes = lib.mkDefault (
-          map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
-        );
+        "cn=schema".includes = lib.mkDefault
+          (map (schema: "${openldap}/etc/schema/${schema}.ldif") [
+            "core"
+            "cosine"
+            "inetorgperson"
+            "nis"
+          ]);
       }))
     (mkDatabaseOption "rootpwFile" [ "olcRootPW" "path" ])
     (mkDatabaseOption "suffix" [ "olcSuffix" ])
@@ -119,9 +167,8 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the ldap server.
-        ";
+        description =
+          "\n          Whether to enable the ldap server.\n        ";
       };
 
       package = mkOption {
@@ -216,7 +263,7 @@ in {
 
       declarativeContents = mkOption {
         type = with types; attrsOf lines;
-        default = {};
+        default = { };
         description = ''
           Declarative contents for the LDAP database, in LDIF format by suffix.
 
@@ -249,8 +296,10 @@ in {
 
   config = mkIf cfg.enable {
     assertions = map (opt: {
-      assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
-      message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
+      assertion = ((getAttr opt cfg) != "_mkMergedOptionModule")
+        -> (cfg.database != "_mkMergedOptionModule");
+      message = ''
+        Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value "mdb" if unsure)'';
     }) legacyOptions;
     environment.systemPackages = [ openldap ];
 
@@ -272,25 +321,37 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = let
-        settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
+        settingsFile = pkgs.writeText "config.ldif"
+          (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
 
-        dbSettings = lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name) cfg.settings.children;
-        dataDirs = lib.mapAttrs' (name: value: lib.nameValuePair value.attrs.olcSuffix value.attrs.olcDbDirectory)
+        dbSettings =
+          lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name)
+          cfg.settings.children;
+        dataDirs = lib.mapAttrs' (name: value:
+          lib.nameValuePair value.attrs.olcSuffix value.attrs.olcDbDirectory)
           (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory) dbSettings);
-        dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
-        mkLoadScript = dn: let
-          dataDir = lib.escapeShellArg (getAttr dn dataDirs);
-        in  ''
-          rm -rf ${dataDir}/*
-          ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${getAttr dn dataFiles}
-          chown -R "${cfg.user}:${cfg.group}" ${dataDir}
-        '';
+        dataFiles =
+          lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents)
+          cfg.declarativeContents;
+        mkLoadScript = dn:
+          let dataDir = lib.escapeShellArg (getAttr dn dataDirs);
+          in ''
+            rm -rf ${dataDir}/*
+            ${openldap}/bin/slapadd -F ${
+              lib.escapeShellArg configDir
+            } -b ${dn} -l ${getAttr dn dataFiles}
+            chown -R "${cfg.user}:${cfg.group}" ${dataDir}
+          '';
       in ''
         mkdir -p /run/slapd
         chown -R "${cfg.user}:${cfg.group}" /run/slapd
 
-        mkdir -p ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-        chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
+        mkdir -p ${lib.escapeShellArg configDir} ${
+          lib.escapeShellArgs (lib.attrValues dataDirs)
+        }
+        chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${
+          lib.escapeShellArgs (lib.attrValues dataDirs)
+        }
 
         ${lib.optionalString (cfg.configDir == null) (''
           rm -Rf ${configDir}/*
@@ -298,13 +359,21 @@ in {
         '')}
         chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir}
 
-        ${lib.concatStrings (map mkLoadScript (lib.attrNames cfg.declarativeContents))}
+        ${lib.concatStrings
+        (map mkLoadScript (lib.attrNames cfg.declarativeContents))}
         ${openldap}/bin/slaptest -u -F ${lib.escapeShellArg configDir}
       '';
       serviceConfig = {
         ExecStart = lib.escapeShellArgs ([
-          "${openldap}/libexec/slapd" "-u" cfg.user "-g" cfg.group "-F" configDir
-          "-h" (lib.concatStringsSep " " cfg.urlList)
+          "${openldap}/libexec/slapd"
+          "-u"
+          cfg.user
+          "-g"
+          cfg.group
+          "-F"
+          configDir
+          "-h"
+          (lib.concatStringsSep " " cfg.urlList)
         ]);
         Type = "forking";
         PIDFile = cfg.settings.attrs.olcPidFile;
@@ -318,8 +387,7 @@ in {
       };
     };
 
-    users.groups = lib.optionalAttrs (cfg.group == "openldap") {
-      openldap = {};
-    };
+    users.groups =
+      lib.optionalAttrs (cfg.group == "openldap") { openldap = { }; };
   };
 }

@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "jasper";
@@ -16,10 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Uwgtex0MWC/pOmEr8itHMIa4wxd97c/tsTzcLgV8D0I=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
     homepage = "https://jasper-software.github.io/jasper/";

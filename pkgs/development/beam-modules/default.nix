@@ -13,12 +13,12 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
-    in
-    rec {
+    in rec {
       inherit callPackage erlang;
       beamPackages = self;
 
-      inherit (callPackage ../tools/build-managers/rebar3 { }) rebar3 rebar3WithPlugins;
+      inherit (callPackage ../tools/build-managers/rebar3 { })
+        rebar3 rebar3WithPlugins;
       rebar = callPackage ../tools/build-managers/rebar { };
 
       pc = callPackage ./pc { };
@@ -76,15 +76,17 @@ let
         debugInfo = true;
       };
 
-      elixir_ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
+      elixir_ls =
+        callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
 
       lfe = lfe_1_3;
-      lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
+      lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix {
+        inherit erlang buildRebar3 buildHex;
+      };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
     };
-in
-makeExtensible packages
+in makeExtensible packages

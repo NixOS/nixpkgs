@@ -1,10 +1,5 @@
-{ lib, stdenv
-, python3Packages
-, python3
-, fetchFromGitHub
-, pkgsCross
-, makeWrapper
-} :
+{ lib, stdenv, python3Packages, python3, fetchFromGitHub, pkgsCross, makeWrapper
+}:
 
 stdenv.mkDerivation {
   pname = "fusee-launcher";
@@ -28,13 +23,18 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
-  nativeBuildInputs = [ pkgsCross.arm-embedded.buildPackages.gcc makeWrapper python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    pkgsCross.arm-embedded.buildPackages.gcc
+    makeWrapper
+    python3Packages.wrapPython
+  ];
   buildInputs = [ python3 python3Packages.pyusb ];
   pythonPath = with python3Packages; [ pyusb ];
 
   meta = with lib; {
     homepage = "https://github.com/Cease-and-DeSwitch/fusee-launcher";
-    description = "Work-in-progress launcher for one of the Tegra X1 bootROM exploits";
+    description =
+      "Work-in-progress launcher for one of the Tegra X1 bootROM exploits";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pneumaticat ];
   };

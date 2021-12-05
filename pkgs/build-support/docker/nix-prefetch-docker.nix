@@ -17,7 +17,8 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "Script used to obtain source hashes for dockerTools.pullImage";
+    description =
+      "Script used to obtain source hashes for dockerTools.pullImage";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };

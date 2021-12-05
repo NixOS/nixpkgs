@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
-, Security
-}:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook, openssl
+, c-ares, libxml2, sqlite, zlib, libssh2, cppunit, sphinx, Security }:
 
 stdenv.mkDerivation rec {
   pname = "aria2";
@@ -17,8 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ]
+    ++ lib.optional stdenv.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
@@ -38,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://aria2.github.io";
-    description = "A lightweight, multi-protocol, multi-source, command-line download utility";
+    description =
+      "A lightweight, multi-protocol, multi-source, command-line download utility";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Br1ght0ne koral ];

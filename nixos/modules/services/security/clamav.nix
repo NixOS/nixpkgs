@@ -9,18 +9,22 @@ let
   pkg = pkgs.clamav;
 
   toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " ";
+    mkKeyValue = generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
 
-  clamdConfigFile = pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
-  freshclamConfigFile = pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
-in
-{
+  clamdConfigFile =
+    pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
+  freshclamConfigFile =
+    pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "config" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "extraConfig" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "daemon" "extraConfig" ] "Use services.clamav.daemon.settings instead.")
+    (mkRemovedOptionModule [ "services" "clamav" "updater" "config" ]
+      "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [ "services" "clamav" "updater" "extraConfig" ]
+      "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [ "services" "clamav" "daemon" "extraConfig" ]
+      "Use services.clamav.daemon.settings instead.")
   ];
 
   options = {
@@ -30,7 +34,7 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
+          default = { };
           description = ''
             ClamAV configuration. Refer to <link xlink:href="https://linux.die.net/man/5/clamd.conf"/>,
             for details on supported values.
@@ -59,7 +63,7 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
+          default = { };
           description = ''
             freshclam configuration. Refer to <link xlink:href="https://linux.die.net/man/5/freshclam.conf"/>,
             for details on supported values.
@@ -79,8 +83,7 @@ in
       home = stateDir;
     };
 
-    users.groups.${clamavGroup} =
-      { gid = config.ids.gids.clamav; };
+    users.groups.${clamavGroup} = { gid = config.ids.gids.clamav; };
 
     services.clamav.daemon.settings = {
       DatabaseDirectory = stateDir;

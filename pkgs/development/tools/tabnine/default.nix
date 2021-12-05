@@ -19,14 +19,14 @@ let
       builtins.getAttr (stdenv.hostPlatform.system) supportedPlatforms
     else
       throw "Not supported on ${stdenv.hostPlatform.system}";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tabnine";
   # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
   version = "3.7.25";
 
   src = fetchurl {
-    url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
+    url =
+      "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
     inherit (platform) sha256;
   };
 
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tabnine.com";
-    description = "Smart Compose for code that uses deep learning to help you write code faster";
+    description =
+      "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
     platforms = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];

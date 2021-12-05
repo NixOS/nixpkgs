@@ -1,11 +1,4 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, qtbase
-, qtsvg
-, qmake
-, leptonica
-, tesseract
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qtsvg, qmake, leptonica, tesseract
 }:
 
 mkDerivation {

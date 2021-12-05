@@ -1,12 +1,13 @@
 { lib, stdenv, fetchurl, qt4, qmake4Hook }:
 
-let version = "0.6.4"; in
-stdenv.mkDerivation {
+let version = "0.6.4";
+in stdenv.mkDerivation {
   pname = "confclerk";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
+    url =
+      "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
     sha256 = "10rhg44px4nvbkd3p341cmp2ds43jn8r4rvgladda9v8zmsgr2b3";
   };
 

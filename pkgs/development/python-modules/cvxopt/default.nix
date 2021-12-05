@@ -1,17 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, python
-, blas, lapack # build segfaults with 64-bit blas
-, suitesparse
-, glpk ? null
-, gsl ? null
-, fftw ? null
-, withGlpk ? true
-, withGsl ? true
-, withFftw ? true
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, python, blas
+, lapack # build segfaults with 64-bit blas
+, suitesparse, glpk ? null, gsl ? null, fftw ? null, withGlpk ? true
+, withGsl ? true, withFftw ? true }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, six
-, mock
-, nose
-, pytest
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, six, mock, nose, pytest
 }:
 
 buildPythonPackage rec {

@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Very simple way to find out which SSL ciphersuites are supported by a target";
+    description =
+      "Very simple way to find out which SSL ciphersuites are supported by a target";
     license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ cstrahan fpletz ];

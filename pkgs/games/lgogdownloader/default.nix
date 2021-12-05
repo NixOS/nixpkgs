@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, curl
-, boost
-, liboauth
-, jsoncpp
-, htmlcxx
-, rhash
-, tinyxml-2
-, help2man
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, boost, liboauth
+, jsoncpp, htmlcxx, rhash, tinyxml-2, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "lgogdownloader";
@@ -24,21 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LywFJCZevlhthOkAZo7JkXcPT9V6Zh28VD/MVQnMQjo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    help2man
-  ];
+  nativeBuildInputs = [ cmake pkg-config help2man ];
 
-  buildInputs = [
-    boost
-    curl
-    htmlcxx
-    jsoncpp
-    liboauth
-    rhash
-    tinyxml-2
-  ];
+  buildInputs = [ boost curl htmlcxx jsoncpp liboauth rhash tinyxml-2 ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -51,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
+    description =
+      "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ _0x4A6F ];

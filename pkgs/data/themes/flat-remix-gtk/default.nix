@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gtk-engine-murrine
-}:
+{ stdenv, lib, fetchFromGitHub, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "flat-remix-gtk";
@@ -19,9 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = with lib; {
     description = "GTK application theme inspired by material design";

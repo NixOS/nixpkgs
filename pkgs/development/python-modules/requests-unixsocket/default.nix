@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, requests
-, pytestCheckHook
-, waitress
+{ lib, buildPythonPackage, fetchPypi, pbr, requests, pytestCheckHook, waitress
 }:
 
 buildPythonPackage rec {

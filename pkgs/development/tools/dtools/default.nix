@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl}:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl }:
 
 stdenv.mkDerivation rec {
   pname = "dtools";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # part of https://github.com/dlang/tools/pull/441
-      url = "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch"; # Fix LDC arm64 build
+      url =
+        "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch"; # Fix LDC arm64 build
       sha256 = "sha256-x6EclTYN1Y5FG57KLhbBK0BZicSYcZoWO7MTVcP4T18=";
     })
   ];
@@ -34,11 +35,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-      $makeCmd test_rdmd
-    '';
+    $makeCmd test_rdmd
+  '';
 
   installPhase = ''
-      $makeCmd INSTALL_DIR=$out install
+    $makeCmd INSTALL_DIR=$out install
   '';
 
   meta = with lib; {

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pymatgen
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pymatgen
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "castepxbin";
@@ -18,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "16wnd1mwhl204d1s3har2fhyhyjg86sypg00bj812dxk8zixxszf";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    pymatgen
-  ];
+  propagatedBuildInputs = [ numpy scipy pymatgen ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A collection of readers for CASTEP binary outputs";

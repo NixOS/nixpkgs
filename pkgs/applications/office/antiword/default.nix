@@ -1,6 +1,6 @@
 { lib, fetchurl, stdenv }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "antiword";
   version = "0.37";
 

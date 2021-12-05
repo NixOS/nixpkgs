@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, callPackage, libpng12, imagemagick
-, autoreconfHook, glib, pstoedit, pkg-config, gettext, gd, darwin
-, runtimeShell }:
+{ lib, stdenv, fetchurl, callPackage, libpng12, imagemagick, autoreconfHook
+, glib, pstoedit, pkg-config, gettext, gd, darwin, runtimeShell }:
 
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
@@ -10,7 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.31.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${pname}-${version}.tar.gz";
     sha256 = "1xmgja5fv48mdbsa51inf7ksz36nqd6bsaybrk5xgprm6cy946js";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   #  sed -i -e "s/AT_BITMAP_BITS(bitmap)/AT_BITMAP_BITS(\&bitmap)/g" input-magick.c
   #'';
 
-  autofig = callPackage ./autofig.nix {};
+  autofig = callPackage ./autofig.nix { };
   nativeBuildInputs = [ autoreconfHook glib autofig pkg-config gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
     ++ lib.optionals stdenv.isDarwin
-       (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
+    (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
 
   postUnpack = ''
     pushd $sourceRoot

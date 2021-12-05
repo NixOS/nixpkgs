@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, flex
-, libuuid
-, libx86emu
-, perl
-}:
+{ lib, stdenv, fetchFromGitHub, flex, libuuid, libx86emu, perl }:
 
 stdenv.mkDerivation rec {
   pname = "hwinfo";
@@ -18,15 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uYI7nFwUJwuxAoa6+ZxYcFb3kI2DtxTobgxAetuvemw=";
   };
 
-  nativeBuildInputs = [
-    flex
-  ];
+  nativeBuildInputs = [ flex ];
 
-  buildInputs = [
-    libuuid
-    libx86emu
-    perl
-  ];
+  buildInputs = [ libuuid libx86emu perl ];
 
   postPatch = ''
     # VERSION and changelog are usually generated using Git
@@ -39,13 +26,9 @@ stdenv.mkDerivation rec {
     substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
   '';
 
-  makeFlags = [
-    "LIBDIR=/lib"
-  ];
+  makeFlags = [ "LIBDIR=/lib" ];
 
-  installFlags = [
-    "DESTDIR=$(out)"
-  ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
     description = "Hardware detection tool from openSUSE";

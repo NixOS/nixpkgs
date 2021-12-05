@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nbformat
-, sphinx
-, ipywidgets
-, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, nbformat, sphinx, ipywidgets, pythonOlder
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gitMinimal
-, python3
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, gitMinimal, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
@@ -20,16 +15,9 @@ python3.pkgs.buildPythonApplication rec {
   # simplify the dependency handling
   sourceRoot = "source/gitlint-core";
 
-  propagatedBuildInputs = with python3.pkgs; [
-    arrow
-    click
-    sh
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ arrow click sh ];
 
-  checkInputs = with python3.pkgs; [
-    gitMinimal
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ gitMinimal pytestCheckHook ];
 
   postPatch = ''
     # We don't need gitlint-core
@@ -37,9 +25,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "'gitlint-core[trusted-deps]==' + version," ""
   '';
 
-  pythonImportsCheck = [
-    "gitlint"
-  ];
+  pythonImportsCheck = [ "gitlint" ];
 
   meta = with lib; {
     description = "Linting for your git commit messages";

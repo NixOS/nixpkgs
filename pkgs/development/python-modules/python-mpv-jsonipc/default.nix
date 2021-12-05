@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests
-, tqdm, websocket-client, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, tqdm, websocket-client
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";

@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.grocy;
+let cfg = config.services.grocy;
 in {
   options.services.grocy = {
     enable = mkEnableOption "grocy";
@@ -64,7 +63,24 @@ in {
       };
 
       culture = mkOption {
-        type = types.enum [ "de" "en" "da" "en_GB" "es" "fr" "hu" "it" "nl" "no" "pl" "pt_BR" "ru" "sk_SK" "sv_SE" "tr" ];
+        type = types.enum [
+          "de"
+          "en"
+          "da"
+          "en_GB"
+          "es"
+          "fr"
+          "hu"
+          "it"
+          "nl"
+          "no"
+          "pl"
+          "pt_BR"
+          "ru"
+          "sk_SK"
+          "sv_SE"
+          "tr"
+        ];
         default = "en";
         description = ''
           Display language of the frontend.
@@ -96,8 +112,12 @@ in {
       <?php
       Setting('CULTURE', '${cfg.settings.culture}');
       Setting('CURRENCY', '${cfg.settings.currency}');
-      Setting('CALENDAR_FIRST_DAY_OF_WEEK', '${toString cfg.settings.calendar.firstDayOfWeek}');
-      Setting('CALENDAR_SHOW_WEEK_OF_YEAR', ${boolToString cfg.settings.calendar.showWeekNumber});
+      Setting('CALENDAR_FIRST_DAY_OF_WEEK', '${
+        toString cfg.settings.calendar.firstDayOfWeek
+      }');
+      Setting('CALENDAR_SHOW_WEEK_OF_YEAR', ${
+        boolToString cfg.settings.calendar.showWeekNumber
+      });
     '';
 
     users.users.grocy = {
@@ -107,9 +127,13 @@ in {
       group = "nginx";
     };
 
-    systemd.tmpfiles.rules = map (
-      dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -"
-    ) [ "viewcache" "plugins" "settingoverrides" "storage" ];
+    systemd.tmpfiles.rules =
+      map (dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -") [
+        "viewcache"
+        "plugins"
+        "settingoverrides"
+        "storage"
+      ];
 
     services.phpfpm.pools.grocy = {
       user = "grocy";
@@ -133,7 +157,8 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${pkgs.grocy}/public";
+        {
+          root = "${pkgs.grocy}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';

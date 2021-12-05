@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-random/releases/download/v${version}/mirage-random-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-random/releases/download/v${version}/mirage-random-v${version}.tbz";
     sha256 = "0qj41d5smkkkbjwsnz71bhhj94d2cwv53rf3j4rhky0pqbkidnv1";
   };
 

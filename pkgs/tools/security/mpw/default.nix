@@ -1,16 +1,14 @@
-{ lib, stdenv, cmake, fetchFromGitLab
-, json_c, libsodium, libxml2, ncurses }:
+{ lib, stdenv, cmake, fetchFromGitLab, json_c, libsodium, libxml2, ncurses }:
 
-let
-  rev = "22796663dcad81684ab24308d9db570f6781ba2c";
+let rev = "22796663dcad81684ab24308d9db570f6781ba2c";
 
 in stdenv.mkDerivation rec {
   name = "mpw-${version}-${builtins.substring 0 8 rev}";
   version = "2.6";
 
   src = fetchFromGitLab {
-    owner  = "MasterPassword";
-    repo   = "MasterPassword";
+    owner = "MasterPassword";
+    repo = "MasterPassword";
     sha256 = "1f2vqacgbyam1mazawrfim8zwp38gnwf5v3xkkficsfnv789g6fw";
     inherit rev;
   };
@@ -24,10 +22,7 @@ in stdenv.mkDerivation rec {
       --replace ./mpw ./build/mpw
   '';
 
-  cmakeFlags = [
-    "-Dmpw_version=${version}"
-    "-DBUILD_MPW_TESTS=ON"
-  ];
+  cmakeFlags = [ "-Dmpw_version=${version}" "-DBUILD_MPW_TESTS=ON" ];
 
   nativeBuildInputs = [ cmake ];
 

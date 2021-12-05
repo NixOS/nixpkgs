@@ -6,9 +6,7 @@ let
 
   cfg = config.boot.initrd.network.openvpn;
 
-in
-
-{
+in {
 
   options = {
 
@@ -41,12 +39,10 @@ in
   };
 
   config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
-    assertions = [
-      {
-        assertion = cfg.configuration != null;
-        message = "You should specify a configuration for initrd OpenVPN";
-      }
-    ];
+    assertions = [{
+      assertion = cfg.configuration != null;
+      message = "You should specify a configuration for initrd OpenVPN";
+    }];
 
     # Add kernel modules needed for OpenVPN
     boot.initrd.kernelModules = [ "tun" "tap" ];
@@ -61,9 +57,7 @@ in
       cp -pv ${pkgs.glibc}/lib/libnss_dns.so.2 $out/lib
     '';
 
-    boot.initrd.secrets = {
-      "/etc/initrd.ovpn" = cfg.configuration;
-    };
+    boot.initrd.secrets = { "/etc/initrd.ovpn" = cfg.configuration; };
 
     # openvpn --version would exit with 1 instead of 0
     boot.initrd.extraUtilsCommandsTest = ''

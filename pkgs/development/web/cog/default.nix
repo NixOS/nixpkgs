@@ -1,19 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, libwpe
-, libwpe-fdo
-, glib-networking
-, webkitgtk
-, makeWrapper
-, wrapGAppsHook
-, gnome
-, gdk-pixbuf
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, wayland, wayland-protocols
+, libwpe, libwpe-fdo, glib-networking, webkitgtk, makeWrapper, wrapGAppsHook
+, gnome, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "cog";
@@ -37,21 +24,11 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wayland
-    makeWrapper
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config wayland makeWrapper wrapGAppsHook ];
 
-  depsBuildsBuild = [
-    pkg-config
-  ];
+  depsBuildsBuild = [ pkg-config ];
 
-  cmakeFlags = [
-    "-DCOG_USE_WEBKITGTK=ON"
-  ];
+  cmakeFlags = [ "-DCOG_USE_WEBKITGTK=ON" ];
 
   # not ideal, see https://github.com/WebPlatformForEmbedded/libwpe/issues/59
   preFixup = ''

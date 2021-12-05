@@ -8,7 +8,8 @@ let
     version = "2.40-13.0";
 
     src = pkgs.fetchurl {
-      url = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${pname}-${version}_amd64.deb";
+      url =
+        "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${pname}-${version}_amd64.deb";
       sha256 = "11w7fwk93lmfw0yya4jpjwdmgjimqxx6412sqa166g1pz4jil4sw";
     };
 
@@ -34,7 +35,8 @@ let
 
     meta = with lib; {
       description = "HP Smart Array CLI";
-      homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
+      homepage =
+        "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ volth ];
@@ -53,7 +55,7 @@ in {
 
   config = mkIf config.hardware.raid.HPSmartArray.enable {
 
-    boot.initrd.kernelModules = [ "sg" ]; /* hpssacli wants it */
+    boot.initrd.kernelModules = [ "sg" ]; # hpssacli wants it
     boot.initrd.availableKernelModules = [ "hpsa" ];
 
     environment.systemPackages = [ hpssacli ];

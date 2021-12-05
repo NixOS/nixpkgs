@@ -1,7 +1,8 @@
-{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
+{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez
+, gtk3, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
 , gnome, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
+, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
@@ -12,20 +13,31 @@ in stdenv.mkDerivation rec {
   version = "2.2.2";
 
   src = fetchurl {
-    url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-Ge1ZsaE09YT8AF9HKV/vZAqXCf2bmyMHOI4RKjLs0PY=";
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkg-config pythonPackages.cython
-    pythonPackages.wrapPython wrapGAppsHook
+    gobject-introspection
+    intltool
+    pkg-config
+    pythonPackages.cython
+    pythonPackages.wrapPython
+    wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 libappindicator networkmanager ]
-                ++ pythonPath
-                ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    bluez
+    gtk3
+    pythonPackages.python
+    librsvg
+    gnome.adwaita-icon-theme
+    iproute2
+    libappindicator
+    networkmanager
+  ] ++ pythonPath ++ lib.optional withPulseAudio libpulseaudio;
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py

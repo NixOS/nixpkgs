@@ -1,24 +1,6 @@
-{ lib
-, argon2_cffi
-, buildPythonPackage
-, cbor
-, cbor2
-, cffi
-, cryptography
-, fetchPypi
-, flatbuffers
-, mock
-, msgpack
-, passlib
-, pynacl
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, twisted
-, py-ubjson
-, txaio
-, ujson
-, zope_interface
+{ lib, argon2_cffi, buildPythonPackage, cbor, cbor2, cffi, cryptography
+, fetchPypi, flatbuffers, mock, msgpack, passlib, pynacl, pytest-asyncio
+, pytestCheckHook, pythonOlder, twisted, py-ubjson, txaio, ujson, zope_interface
 }:
 
 buildPythonPackage rec {
@@ -50,11 +32,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -66,13 +44,9 @@ buildPythonPackage rec {
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [
-    "--pyargs autobahn"
-  ];
+  pytestFlagsArray = [ "--pyargs autobahn" ];
 
-  pythonImportsCheck = [
-    "autobahn"
-  ];
+  pythonImportsCheck = [ "autobahn" ];
 
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";

@@ -41,7 +41,7 @@ in {
     environment.etc."iwd/main.conf".source = configFile;
 
     # for iwctl
-    environment.systemPackages =  [ pkgs.iwd ];
+    environment.systemPackages = [ pkgs.iwd ];
 
     services.dbus.packages = [ pkgs.iwd ];
 

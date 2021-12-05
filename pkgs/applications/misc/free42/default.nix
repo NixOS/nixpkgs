@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, pkg-config
-, gtk3
-, alsa-lib
-}:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, copyDesktopItems, pkg-config
+, gtk3, alsa-lib }:
 
 stdenv.mkDerivation rec {
   pname = "free42";

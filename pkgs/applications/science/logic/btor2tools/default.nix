@@ -5,13 +5,14 @@ stdenv.mkDerivation rec {
   version = "1.0.0-pre_${src.rev}";
 
   src = fetchFromGitHub {
-    owner  = "boolector";
-    repo   = "btor2tools";
-    rev    = "9831f9909fb283752a3d6d60d43613173bd8af42";
+    owner = "boolector";
+    repo = "btor2tools";
+    rev = "9831f9909fb283752a3d6d60d43613173bd8af42";
     sha256 = "0mfqmkgvyw8fa2c09kww107dmk180ch1hp98r5kv41vnc04iqb0s";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   installPhase = ''
     mkdir -p $out $dev/include/btor2parser/ $lib/lib
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A generic parser and tool package for the BTOR2 format";
-    homepage    = "https://github.com/Boolector/btor2tools";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/Boolector/btor2tools";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

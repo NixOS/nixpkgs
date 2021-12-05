@@ -1,20 +1,8 @@
-{ lib
-, mkDerivation
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, cmake
-, pkg-config
-, qtbase
-, glib
-, alsa-lib
-, withJack ? stdenv.hostPlatform.isUnix, jack
-}:
+{ lib, mkDerivation, stdenv, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
+, qtbase, glib, alsa-lib, withJack ? stdenv.hostPlatform.isUnix, jack }:
 
-let
-  mainProgram = "mt32emu-qt";
-in
-mkDerivation rec {
+let mainProgram = "mt32emu-qt";
+in mkDerivation rec {
   pname = "munt";
   version = "2.5.0";
 
@@ -41,7 +29,8 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit mainProgram;
-    description = "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
+    description =
+      "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     homepage = "http://munt.sourceforge.net/";
     license = with licenses; [ lgpl21 gpl3 ];
     platforms = platforms.all;

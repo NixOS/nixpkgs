@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.3.2a";
 
   src = fetchurl {
-    url = "http://www.mbayer.de/html2text/downloads/html2text-${version}.tar.gz";
+    url =
+      "http://www.mbayer.de/html2text/downloads/html2text-${version}.tar.gz";
     sha256 = "000b39d5d910b867ff7e087177b470a1e26e2819920dcffd5991c33f6d480392";
   };
 

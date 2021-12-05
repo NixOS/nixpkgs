@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "cri-tools";
@@ -39,7 +35,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";
+    description =
+      "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";
     homepage = "https://github.com/kubernetes-sigs/cri-tools";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;

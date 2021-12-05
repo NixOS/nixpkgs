@@ -1,4 +1,4 @@
-{ lib, fetchurl, python2Packages, gettext, klick}:
+{ lib, fetchurl, python2Packages, gettext, klick }:
 
 python2Packages.buildPythonApplication rec {
   pname = "gtklick";
@@ -9,10 +9,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "7799d884126ccc818678aed79d58057f8cf3528e9f1be771c3fa5b694d9d0137";
   };
 
-  pythonPath = with python2Packages; [
-    pyliblo
-    pyGtkGlade
-  ];
+  pythonPath = with python2Packages; [ pyliblo pyGtkGlade ];
 
   nativeBuildInputs = [ gettext ];
 

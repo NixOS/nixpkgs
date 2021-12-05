@@ -1,9 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-}:
+{ lib, buildGoModule, fetchFromGitHub, git, installShellFiles }:
 
 buildGoModule rec {
   pname = "ko";
@@ -22,7 +17,8 @@ buildGoModule rec {
   # Pin so that we don't build the several other development tools
   subPackages = ".";
 
-  ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
   checkInputs = [ git ];
   preCheck = ''

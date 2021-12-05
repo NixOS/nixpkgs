@@ -1,11 +1,4 @@
-{
-  bazel
-, bazelTest
-, distDir
-, extracted
-, runLocal
-, unzip
-}:
+{ bazel, bazelTest, distDir, extracted, runLocal, unzip }:
 
 # Tests that all shebangs are patched appropriately.
 # #!/usr/bin/... should be replaced by Nix store references.
@@ -13,7 +6,7 @@
 
 let
 
-  workspaceDir = runLocal "our_workspace" {} "mkdir $out";
+  workspaceDir = runLocal "our_workspace" { } "mkdir $out";
 
   testBazel = bazelTest {
     name = "bazel-test-shebangs";

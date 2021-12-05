@@ -1,4 +1,5 @@
-{ cmake, fetchFromGitHub, icu, lib, pkg-config, stdenv, enableUnicodeHelp ? true }:
+{ cmake, fetchFromGitHub, icu, lib, pkg-config, stdenv, enableUnicodeHelp ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "cxxopts";
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE"
     # Due to -Wsuggest-override, remove when cxxopts is updated
     ++ lib.optional stdenv.isDarwin "-DCXXOPTS_ENABLE_WARNINGS=OFF";
-  nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp [ pkg-config ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;
 

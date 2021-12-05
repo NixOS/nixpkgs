@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mupdf
-, swig
-, freetype
-, harfbuzz
-, openjpeg
-, jbig2dec
-, libjpeg_turbo
-, gumbo
-}:
+{ lib, buildPythonPackage, fetchPypi, mupdf, swig, freetype, harfbuzz, openjpeg
+, jbig2dec, libjpeg_turbo, gumbo }:
 
 buildPythonPackage rec {
   pname = "pymupdf";
@@ -26,7 +16,8 @@ buildPythonPackage rec {
         --replace '/usr/include/mupdf' ${mupdf.dev}/include/mupdf
   '';
   nativeBuildInputs = [ swig ];
-  buildInputs = [ mupdf freetype harfbuzz openjpeg jbig2dec libjpeg_turbo gumbo ];
+  buildInputs =
+    [ mupdf freetype harfbuzz openjpeg jbig2dec libjpeg_turbo gumbo ];
 
   doCheck = false;
 

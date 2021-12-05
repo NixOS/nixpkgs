@@ -10,10 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1ms2v57f13r9km6mvf9rha5ndmlmjvrz3mcikai6nzhpj0nrjz0w";
   };
 
-  patches = [
-    ./openssl-1.1.patch
-    ./signed-ptr.patch
-  ];
+  patches = [ ./openssl-1.1.patch ./signed-ptr.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ gawk trousers cryptsetup openssl ];

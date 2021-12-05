@@ -14,15 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1cnq6rb14d4yllr0yi32p9jmcig8avs3f43bvdjrx4r1mpawspi6";
   };
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
-    "-DBUILD_EXAMPLES='OFF'"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE='Release'" "-DBUILD_EXAMPLES='OFF'" ];
 
   meta = with lib; {
     homepage = "https://github.com/kode54/dumb";
     description = "Module/tracker based music format parser and player library";
-    license = licenses.free;  # Derivative of GPL
+    license = licenses.free; # Derivative of GPL
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
   };

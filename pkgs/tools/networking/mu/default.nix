@@ -1,18 +1,15 @@
 { lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo, emacs, guile
-, gtk3, webkitgtk, libsoup, icu
-, makeWrapper
-, withMug ? false
-, batchSize ? null }:
+, xapian, glib, gmime3, texinfo, emacs, guile, gtk3, webkitgtk, libsoup, icu
+, makeWrapper, withMug ? false, batchSize ? null }:
 
 stdenv.mkDerivation rec {
   pname = "mu";
   version = "1.6.10";
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = version;
+    owner = "djcb";
+    repo = "mu";
+    rev = version;
     sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
   };
 
@@ -22,9 +19,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+    sqlite
+    xapian
+    glib
+    gmime3
+    texinfo
+    emacs
+    libsoup
+    icu
   ]
-    # Workaround for https://github.com/djcb/mu/issues/1641
+  # Workaround for https://github.com/djcb/mu/issues/1641
     ++ lib.optional (!stdenv.isDarwin) guile
     ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
@@ -52,7 +56,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A collection of utilties for indexing and searching Maildirs";
+    description =
+      "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/${version}";

@@ -5,15 +5,16 @@ buildGoPackage rec {
   version = "1.46.0";
 
   src = fetchFromGitHub {
-    owner  = "exoscale";
-    repo   = "cli";
-    rev    = "v${version}";
+    owner = "exoscale";
+    repo = "cli";
+    rev = "v${version}";
     sha256 = "sha256-dWbuzzFCBJuSUUQFXY3axK+T9rsMaIMOCKa0ig96bJE=";
   };
 
   goPackagePath = "github.com/exoscale/cli";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
+  ldflags =
+    [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   # ensures only the cli binary is built and we don't clutter bin/ with submodules
   subPackages = [ "." ];
@@ -25,9 +26,10 @@ buildGoPackage rec {
   '';
 
   meta = {
-    description = "Command-line tool for everything at Exoscale: compute, storage, dns";
-    homepage    = "https://github.com/exoscale/cli";
-    license     = lib.licenses.asl20;
+    description =
+      "Command-line tool for everything at Exoscale: compute, storage, dns";
+    homepage = "https://github.com/exoscale/cli";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dramaturg ];
   };
 }

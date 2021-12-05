@@ -5,19 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.5.13";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-TMVxx7D9wdujyN6PcbIxC8M6zby5myvxO9AqolrcWOY=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    efl
-  ];
+  buildInputs = [ efl ];
 
   meta = with lib; {
     description = "System and process monitor written with EFL";

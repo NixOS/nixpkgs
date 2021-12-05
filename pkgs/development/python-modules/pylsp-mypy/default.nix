@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, mypy
-, pytestCheckHook
-, python-lsp-server
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, mypy, pytestCheckHook
+, python-lsp-server, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
@@ -20,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "1d119csj1k5m9j0f7wdvpvnd02h548css6ybxqah92nk2v0rjscr";
   };
 
-  disabledTests = [
-    "test_multiple_workspaces"
-  ];
+  disabledTests = [ "test_multiple_workspaces" ];
 
   checkInputs = [ pytestCheckHook mock ];
 

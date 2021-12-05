@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numba
-, numpy
-, pytestCheckHook
-, pyyaml
-, rapidjson
-}:
+{ lib, buildPythonPackage, fetchPypi, cmake, numba, numpy, pytestCheckHook
+, pyyaml, rapidjson }:
 
 buildPythonPackage rec {
   pname = "awkward";

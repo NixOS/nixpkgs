@@ -14,13 +14,11 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.08";
   useDune2 = true;
 
-  buildInputs = [
-    cmdliner
-    ppxlib
-  ];
+  buildInputs = [ cmdliner ppxlib ];
 
   meta = with lib; {
-    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested.";
+    description =
+      "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested.";
     license = licenses.mit;
     homepage = "https://github.com/aantron/bisect_ppx";
     maintainers = with maintainers; [ ];

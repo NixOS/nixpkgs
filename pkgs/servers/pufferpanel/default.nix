@@ -1,14 +1,5 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, pkgs
-, stdenv
-, fetchzip
-, jdk
-, nodejs
-, pathDeps ? [ ]
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, pkgs, stdenv, fetchzip, jdk
+, nodejs, pathDeps ? [ ] }:
 
 buildGoModule rec {
   pname = "pufferpanel";
@@ -27,7 +18,8 @@ buildGoModule rec {
   # with all the proper node_modules populated. To work around this,
   # we just download the built frontend and package that.
   frontend = fetchzip {
-    url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
+    url =
+      "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
     sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
     stripRoot = false;
   } + "/www";

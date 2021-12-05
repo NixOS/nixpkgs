@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fastnumbers
-, fetchFromGitHub
-, hypothesis
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fastnumbers, fetchFromGitHub, hypothesis
+, pytestCheckHook, pythonOlder, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "fastnumbers";
@@ -22,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "1v9l5p90y6ygrs0qmgdzxfv2vp1mpfp65snkl9jp6kcy44g3alhp";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "fastnumbers"
-  ];
+  pythonImportsCheck = [ "fastnumbers" ];
 
   meta = with lib; {
     description = "Python module for number conversion";

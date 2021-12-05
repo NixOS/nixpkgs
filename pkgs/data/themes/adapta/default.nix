@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, parallel, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, parallel, sassc
+, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "adapta-gtk-theme";
@@ -24,20 +25,14 @@ stdenv.mkDerivation rec {
     gnome.gnome-shell
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    librsvg
-  ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = "patchShebangs .";
 
-  configureFlags = [
-    "--disable-gtk_legacy"
-    "--disable-gtk_next"
-    "--disable-unity"
-  ];
+  configureFlags =
+    [ "--disable-gtk_legacy" "--disable-gtk_next" "--disable-unity" ];
 
   meta = with lib; {
     description = "An adaptive GTK theme based on Material Design Guidelines";

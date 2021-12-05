@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pysnmp
-}:
+{ lib, buildPythonPackage, fetchPypi, pysnmp }:
 
 buildPythonPackage rec {
   pname = "atenpdu";

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "f048d1838da284c8bc9753e4506b85a1e0cc1ea8999d36f6995bcb9460cddbd7";
   };
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMinGW "ac_cv_func__set_invalid_parameter_handler=no";
+  configureFlags = lib.optional stdenv.hostPlatform.isMinGW
+    "ac_cv_func__set_invalid_parameter_handler=no";
 
   outputs = [ "out" "info" ];
 

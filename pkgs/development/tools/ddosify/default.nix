@@ -14,10 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-TY8shTb77uFm8/yCvlIncAfq7brWgnH/63W+hj1rvqg=";
 
   # triggers a different set of tests that seems to be interactive and fail (no url target defined)
-  ldflags = [
-    "-s -w"
-    "-X main.GitVersion=${version}"
-  ];
+  ldflags = [ "-s -w" "-X main.GitVersion=${version}" ];
 
   doInstallCheck = true;
   installCheckPhase = ''

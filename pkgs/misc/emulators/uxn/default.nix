@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
-}:
+{ lib, stdenv, fetchFromSourcehut, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "uxn";
@@ -15,9 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-/hxDYi814nQydm2iQk4NID4vpJ3BcBcM6NdL0iuZk5M=";
   };
 
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
   dontConfigure = true;
 

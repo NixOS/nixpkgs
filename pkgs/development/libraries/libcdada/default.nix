@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libcdada";
@@ -15,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0vcsf3s4fbw2w33jjc8b509kc0xb6ld58l8wfxgqwjqx5icfg1ps";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = [
-    "--without-tests"
-    "--without-examples"
-  ];
+  configureFlags = [ "--without-tests" "--without-examples" ];
 
   meta = with lib; {
     description = "Library for basic data structures in C";

@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder, yarl }:
 
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "0w81pl5fya17hg5xgba2vgxnylfd8jc70il575wdz2pw6z6ihj3s";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
   # Project has no tests
   doCheck = false;

@@ -1,21 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, fribidi
-, harfbuzz
-, libunistring
-, libwebp
-, mpg123
-, openssl
-, pcre
-, SDL2
-, AppKit
-, zip
-, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, nix-update-script, cmake, pkg-config, fribidi
+, harfbuzz, libunistring, libwebp, mpg123, openssl, pcre, SDL2, AppKit, zip
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
@@ -35,7 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 
-  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
+  buildInputs =
+    [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
@@ -45,11 +31,7 @@ stdenv.mkDerivation rec {
     mv Lagrange.app $out/Applications
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "A Beautiful Gemini Client";

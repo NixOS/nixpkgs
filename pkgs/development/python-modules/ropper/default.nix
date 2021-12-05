@@ -1,10 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, capstone
-, filebytes
-, pytest
-}:
+{ lib, buildPythonApplication, fetchPypi, capstone, filebytes, pytest }:
 
 buildPythonApplication rec {
   pname = "ropper";
@@ -21,7 +15,7 @@ buildPythonApplication rec {
   '';
   doCheck = false; # Tests not included in archive
 
-  checkInputs = [pytest];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with lib; {
     homepage = "https://scoding.de/ropper/";

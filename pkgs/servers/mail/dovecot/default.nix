@@ -1,29 +1,35 @@
-{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
-, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
-, nixosTests
+{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl, bzip2, zlib, lz4
+, inotify-tools, pam, libcap, coreutils, clucene_core_2, icu, openldap
+, libsodium, libstemmer, cyrus_sasl, nixosTests
 # Auth modules
-, withMySQL ? false, libmysqlclient
-, withPgSQL ? false, postgresql
-, withSQLite ? true, sqlite
-, withLua ? false, lua5_3
-}:
+, withMySQL ? false, libmysqlclient, withPgSQL ? false, postgresql
+, withSQLite ? true, sqlite, withLua ? false, lua5_3 }:
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
   version = "2.3.17";
 
   nativeBuildInputs = [ perl pkg-config ];
-  buildInputs =
-    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
-    ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
+  buildInputs = [
+    openssl
+    bzip2
+    zlib
+    lz4
+    clucene_core_2
+    icu
+    openldap
+    libsodium
+    libstemmer
+    cyrus_sasl.dev
+  ] ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withPgSQL postgresql
-    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withPgSQL postgresql ++ lib.optional withSQLite sqlite
     ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    url = "https://dovecot.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.gz";
     sha256 = "1y9dpn4jgzrfjibp5zrc11bdk0q843d998kxhpxkyfm2fz6i4i12";
   };
 
@@ -99,7 +105,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dovecot.org/";
-    description = "Open source IMAP and POP3 email server written with security primarily in mind";
+    description =
+      "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
     maintainers = with maintainers; [ fpletz globin ajs124 ];
     platforms = platforms.unix;

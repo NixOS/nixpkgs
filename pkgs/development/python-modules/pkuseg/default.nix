@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cython
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cython, numpy }:
 
 buildPythonPackage rec {
   pname = "pkuseg";

@@ -1,8 +1,5 @@
-{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages
-, bootstrap_cmds, bison, flex
-, gnum4, unifdef, perl, python3
-, headersOnly ? true
-}:
+{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages, bootstrap_cmds
+, bison, flex, gnum4, unifdef, perl, python3, headersOnly ? true }:
 
 appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
   depsBuildBuild = [ buildPackages.stdenv.cc ];

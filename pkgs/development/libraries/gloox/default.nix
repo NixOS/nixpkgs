@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
-}:
+{ lib, stdenv, fetchurl, zlibSupport ? true, zlib ? null, sslSupport ? true
+, openssl ? null, idnSupport ? true, libidn ? null }:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
@@ -10,7 +7,7 @@ assert idnSupport -> libidn != null;
 
 with lib;
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "gloox";
   version = "1.0.24";
 
@@ -19,9 +16,7 @@ stdenv.mkDerivation rec{
     sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
   };
 
-  buildInputs = [ ]
-    ++ optional zlibSupport zlib
-    ++ optional sslSupport openssl
+  buildInputs = [ ] ++ optional zlibSupport zlib ++ optional sslSupport openssl
     ++ optional idnSupport libidn;
 
   meta = {

@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "Professor-${version}.tar.gz";
-    url = "https://professor.hepforge.org/downloads/?f=Professor-${version}.tar.gz";
+    url =
+      "https://professor.hepforge.org/downloads/?f=Professor-${version}.tar.gz";
     sha256 = "17q026r2fpfxzf74d1013ksy3a9m57rcr2q164n9x02ci40bmib0";
   };
 

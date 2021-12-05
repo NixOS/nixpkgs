@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner  = "ghdl";
-    repo   = "ghdl";
-    rev    = "v${version}";
+    owner = "ghdl";
+    repo = "ghdl";
+    rev = "v${version}";
     sha256 = "1gyh0xckwbzgslbpw9yrpj4gqs9fm1a2qpbzl0sh143fk1kwjlly";
   };
 
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     # Allow compilation with GNAT 11, picked from master
     (fetchpatch {
       name = "fix-gnat-11-compilation.patch";
-      url = "https://github.com/ghdl/ghdl/commit/8356ea3bb4e8d0e5ad8638c3d50914b64fc360ec.patch";
+      url =
+        "https://github.com/ghdl/ghdl/commit/8356ea3bb4e8d0e5ad8638c3d50914b64fc360ec.patch";
       sha256 = "04pzn8g7xha8000wbjjmry6h1grfqyn3bjvj47hi4qwgl21wfjra";
     })
   ];
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
     # run with either of
     # nix-build -A ghdl-mcode.passthru.tests
     # nix-build -A ghdl-llvm.passthru.tests
-    tests = {
-      simple = callPackage ./test-simple.nix { inherit backend; };
-    };
+    tests = { simple = callPackage ./test-simple.nix { inherit backend; }; };
   };
 
   meta = with lib; {

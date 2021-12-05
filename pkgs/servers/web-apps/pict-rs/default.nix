@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, rustPlatform
-, makeWrapper
-, protobuf
-, Security
-, imagemagick
-, ffmpeg
-, exiftool
-}:
+{ stdenv, lib, fetchFromGitea, rustPlatform, makeWrapper, protobuf, Security
+, imagemagick, ffmpeg, exiftool }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pict-rs";

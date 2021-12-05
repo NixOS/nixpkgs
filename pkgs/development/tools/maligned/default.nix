@@ -1,7 +1,4 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "maligned-unstable";
@@ -21,7 +18,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "Tool to detect Go structs that would take less memory if their fields were sorted";
+    description =
+      "Tool to detect Go structs that would take less memory if their fields were sorted";
     homepage = "https://github.com/mdempsky/maligned";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];

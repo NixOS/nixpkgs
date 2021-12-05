@@ -1,7 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, exampleSupport ? false # Example encoding program
+{ lib, stdenv, fetchurl, exampleSupport ? false # Example encoding program
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +6,8 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
     sha256 = "sha256-yehjDPnUM/POrXSQahUg0iI/ibzT+pJUhhAXRAuOsi8=";
   };
 

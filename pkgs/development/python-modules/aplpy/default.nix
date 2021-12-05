@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, numpy
-, astropy
-, astropy-helpers
-, matplotlib
-, reproject
-, pyavm
-, pyregion
-, pillow
-, scikitimage
-, shapely
-, pytest
-, pytest-astropy
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, numpy, astropy
+, astropy-helpers, matplotlib, reproject, pyavm, pyregion, pillow, scikitimage
+, shapely, pytest, pytest-astropy }:
 
 buildPythonPackage rec {
   pname = "aplpy";
@@ -34,8 +20,20 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/aplpy/aplpy/pull/448.patch";
       sha256 = "1pnzh7ykjc8hwahzbzyryrzv5a8fddgd1bmzbhagkrn6lmvhhpvq";
-      excludes = [ "tox.ini" "azure-pipelines.yml" ".circleci/config.yml" "MANIFEST.in" ".gitignore"
-       "setup.cfg" "appveyor.yml" "readthedocs.yml" "CHANGES.rst" ".gitmodules" ".travis.yml" "astropy_helpers" ];
+      excludes = [
+        "tox.ini"
+        "azure-pipelines.yml"
+        ".circleci/config.yml"
+        "MANIFEST.in"
+        ".gitignore"
+        "setup.cfg"
+        "appveyor.yml"
+        "readthedocs.yml"
+        "CHANGES.rst"
+        ".gitmodules"
+        ".travis.yml"
+        "astropy_helpers"
+      ];
     })
     # Fix for matplotlib >= 3.4 (https://github.com/aplpy/aplpy/pull/466)
     # Note: because of a security thing, github will refuse to serve this patch from the
@@ -44,7 +42,8 @@ buildPythonPackage rec {
     # due to the fact that it contains the PDF magic bytes, but it will serve it from
     # this githubusercontent domain.
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/aplpy/aplpy/pull/466/commit/56c1cc694fdea69e7da8506d3212c4495adb0ca5.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/aplpy/aplpy/pull/466/commit/56c1cc694fdea69e7da8506d3212c4495adb0ca5.patch";
       sha256 = "0jna2n1cgfzr0a27m5z94wwph7qg25hs7lycrdb2dp3943rb35g4";
     })
   ];

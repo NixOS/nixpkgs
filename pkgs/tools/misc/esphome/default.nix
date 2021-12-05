@@ -1,21 +1,13 @@
-{ lib
-, pkgs
-, python3
-, fetchFromGitHub
-, fetchpatch
-, platformio
-, esptool
-, git
-}:
+{ lib, pkgs, python3, fetchFromGitHub, fetchpatch, platformio, esptool, git }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+      esphome-dashboard = pkgs.callPackage ./dashboard.nix { };
     };
   };
-in
-with python.pkgs; buildPythonApplication rec {
+in with python.pkgs;
+buildPythonApplication rec {
   pname = "esphome";
   version = "2021.11.4";
   format = "setuptools";
@@ -31,7 +23,8 @@ with python.pkgs; buildPythonApplication rec {
     # fix missing write permissions on src files before modifing them
     ./fix-src-permissions.patch
     (fetchpatch {
-      url = "https://github.com/esphome/esphome/commit/fbe1bca1b9896ba8c8b754c5a4faf790bffd887b.patch";
+      url =
+        "https://github.com/esphome/esphome/commit/fbe1bca1b9896ba8c8b754c5a4faf790bffd887b.patch";
       sha256 = "sha256-Iyc79iL2YkLGD81TbFK3GaCY2L9nTE9mKz6MQSNQWr8=";
     })
   ];
@@ -80,14 +73,8 @@ with python.pkgs; buildPythonApplication rec {
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-mock
-    pytest-sugar
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ hypothesis mock pytest-asyncio pytest-mock pytest-sugar pytestCheckHook ];
 
   disabledTestPaths = [
     # requires hypothesis 5.49, we have 6.x
@@ -100,9 +87,7 @@ with python.pkgs; buildPythonApplication rec {
     $out/bin/esphome --help > /dev/null
   '';
 
-  passthru = {
-    dashboard = esphome-dashboard;
-  };
+  passthru = { dashboard = esphome-dashboard; };
 
   meta = with lib; {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";

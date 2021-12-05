@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkg-config, serd, sord, sratom }:
+{ lib, stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkg-config, serd
+, sord, sratom }:
 
 stdenv.mkDerivation rec {
   pname = "lv2bm";

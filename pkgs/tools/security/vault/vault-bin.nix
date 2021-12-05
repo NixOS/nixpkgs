@@ -3,8 +3,7 @@
 let
   version = "1.9.0";
 
-  sources = let
-    base = "https://releases.hashicorp.com/vault/${version}";
+  sources = let base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
@@ -32,7 +31,8 @@ in stdenv.mkDerivation {
   pname = "vault-bin";
   inherit version;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw
+    "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ makeWrapper unzip ];
 
@@ -56,8 +56,15 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
     license = licenses.mpl20;
-    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man ];
+    maintainers = with maintainers;
+      teams.serokell.members ++ [ offline psyanticy Chili-Man ];
   };
 }

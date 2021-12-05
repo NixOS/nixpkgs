@@ -1,4 +1,5 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg
+, bzip2, xz, graphviz }:
 
 let
 
@@ -19,9 +20,7 @@ let
     sha256 = "0dkc4z687yk912lpv8rirv0nby7iny1zgdvnhdm5b47qmjr1sm5q";
   };
 
-in
-
-buildGoPackage {
+in buildGoPackage {
   pname = "aptly";
   inherit version;
 

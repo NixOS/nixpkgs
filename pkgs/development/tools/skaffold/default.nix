@@ -13,10 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-h5UybTcvr9Zxpfw7zBCeSAG2oAZzFWpuYugqXUCMtjs=";
 
-  subPackages = ["cmd/skaffold"];
+  subPackages = [ "cmd/skaffold" ];
 
-  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
-    "-s" "-w"
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold";
+  in [
+    "-s"
+    "-w"
     "-X ${t}/version.version=v${version}"
     "-X ${t}/version.gitCommit=${src.rev}"
     "-X ${t}/version.buildDate=unknown"
@@ -32,7 +34,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://skaffold.dev/";
-    changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
+    changelog =
+      "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
     description = "Easy and Repeatable Kubernetes Development";
     longDescription = ''
       Skaffold is a command line tool that facilitates continuous development for Kubernetes applications.

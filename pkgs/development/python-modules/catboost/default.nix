@@ -1,6 +1,5 @@
-{ buildPythonPackage, fetchFromGitHub, fetchpatch, lib, pythonOlder
-, clang_7, python2
-, graphviz, matplotlib, numpy, pandas, plotly, scipy, six
+{ buildPythonPackage, fetchFromGitHub, fetchpatch, lib, pythonOlder, clang_7
+, python2, graphviz, matplotlib, numpy, pandas, plotly, scipy, six
 , withCuda ? false, cudatoolkit }:
 
 buildPythonPackage rec {
@@ -25,14 +24,15 @@ buildPythonPackage rec {
     ./nix-support.patch
     (fetchpatch {
       name = "format.patch";
-      url = "https://github.com/catboost/catboost/pull/1528/commits/a692ba42e5c0f62e5da82b2f6fccfa77deb3419c.patch";
+      url =
+        "https://github.com/catboost/catboost/pull/1528/commits/a692ba42e5c0f62e5da82b2f6fccfa77deb3419c.patch";
       sha256 = "sha256-fNGucHxsSDFRLk3hFH7rm+zzTdDpY9/QjRs8K+AzVvo=";
     })
   ];
 
   preBuild = ''
     cd catboost/python-package
-    '';
+  '';
   setupPyBuildFlags = [ "--with-ymake=no" ];
   CUDA_ROOT = lib.optional withCuda cudatoolkit;
   enableParallelBuilding = true;
@@ -42,7 +42,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "catboost" ];
 
   meta = with lib; {
-    description = "High-performance library for gradient boosting on decision trees.";
+    description =
+      "High-performance library for gradient boosting on decision trees.";
     longDescription = ''
       A fast, scalable, high performance Gradient Boosting on Decision Trees
       library, used for ranking, classification, regression and other machine

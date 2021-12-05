@@ -1,18 +1,6 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, openssl
-, vulkan-loader
-, wayland
-, wayland-protocols
-, libxkbcommon
-, libX11
-, libXrandr
-, libXi
-, libXcursor
-, pkg-config
-, makeWrapper
-}:
+{ lib, rustPlatform, fetchFromGitLab, openssl, vulkan-loader, wayland
+, wayland-protocols, libxkbcommon, libX11, libXrandr, libXi, libXcursor
+, pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "airshipper";
@@ -45,21 +33,20 @@ rustPlatform.buildRustPackage rec {
     cp "client/assets/logo.ico" "$out/share/icons/net.veloren.airshipper.ico"
   '';
 
-  postFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        vulkan-loader
-        wayland
-        wayland-protocols
-        libxkbcommon
-        libX11
-        libXrandr
-        libXi
-        libXcursor
-      ];
-    in ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-    '';
+  postFixup = let
+    libPath = lib.makeLibraryPath [
+      vulkan-loader
+      wayland
+      wayland-protocols
+      libxkbcommon
+      libX11
+      libXrandr
+      libXi
+      libXcursor
+    ];
+  in ''
+    patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
+  '';
 
   doCheck = false;
   cargoBuildFlags = [ "--package" "airshipper" ];

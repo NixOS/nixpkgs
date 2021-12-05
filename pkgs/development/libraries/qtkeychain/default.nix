@@ -1,11 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, qtbase, qttools
-, CoreFoundation, Security
-, libsecret
-}:
+, CoreFoundation, Security, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.12.0";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
+  version =
+    "0.12.0"; # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
@@ -26,10 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ [ qtbase qttools ]
-    ++ lib.optionals stdenv.isDarwin [
-      CoreFoundation Security
-    ]
-  ;
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";

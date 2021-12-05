@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A significantly faster alternative to the classic Unix cp(1) command";
+    description =
+      "A significantly faster alternative to the classic Unix cp(1) command";
     homepage = "https://github.com/svetlitski/fcp";
     changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
     license = licenses.bsd3;

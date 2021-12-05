@@ -19,8 +19,6 @@ fetchzip {
 
   sha256 = "11f10qnp8a435lhh19zc2znlf9q4isynmvjmvr63g5n5fhvhc192";
 
-  meta = {
-    description = "Latin Modern font";
-  };
+  meta = { description = "Latin Modern font"; };
 }
 

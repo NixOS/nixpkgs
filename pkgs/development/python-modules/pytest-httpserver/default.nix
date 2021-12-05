@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-cov
-, pytestCheckHook
-, requests
-, werkzeug
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest-cov, pytestCheckHook, requests
+, werkzeug }:
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
@@ -19,11 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ werkzeug ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-    requests
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook requests ];
 
   pythonImportsCheck = [ "pytest_httpserver" ];
 

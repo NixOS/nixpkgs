@@ -23,7 +23,8 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    ${cleanPackaging.commonFileActions {
+    ${
+      cleanPackaging.commonFileActions {
         docFiles = [
           "README.md"
           "LICENCE"
@@ -52,7 +53,8 @@ stdenv.mkDerivation {
           ".gitattributes"
           ".github"
         ];
-      }} $doc/share/doc/kgt
+      }
+    } $doc/share/doc/kgt
 
     install -Dm755 build/bin/kgt $bin/bin/kgt
     rm build/bin/kgt
@@ -72,9 +74,9 @@ stdenv.mkDerivation {
       Input: Various BNF-like syntaxes
       Output: Various BNF-like syntaxes, AST dumps, and Railroad Syntax Diagrams
     '';
-    homepage    = "https://github.com/katef/kgt";
-    license     = licenses.bsd2;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/katef/kgt";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ Profpatsch ];
   };
 

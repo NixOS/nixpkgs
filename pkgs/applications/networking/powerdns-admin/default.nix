@@ -15,18 +15,42 @@ let
         version = "1.16.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+          sha256 =
+            "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
         };
       });
     };
   };
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
-    mysqlclient sqlalchemy
-    configobj bcrypt requests ldap pyotp qrcode dnspython
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    flask
+    flask_assets
+    flask_login
+    flask_sqlalchemy
+    flask_migrate
+    flask-seasurf
+    flask_mail
+    flask-sslify
+    mysqlclient
+    sqlalchemy
+    configobj
+    bcrypt
+    requests
+    ldap
+    pyotp
+    qrcode
+    dnspython
+    gunicorn
+    python3-saml
+    pyopenssl
+    pytz
+    cssmin
+    jsmin
+    authlib
+    bravado-core
+    lima
+    pytimeparse
+    pyyaml
   ];
 
   assets = mkYarnPackage {

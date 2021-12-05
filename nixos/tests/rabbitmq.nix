@@ -2,9 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "rabbitmq";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco offline ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ eelco offline ]; };
 
   machine = {
     services.rabbitmq = {

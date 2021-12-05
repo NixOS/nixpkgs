@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, miniupnpc_2
-, ffmpeg
-, enableSwftools ? false
-, swftools
-, python3Packages
-}:
+{ lib, fetchFromGitHub, wrapQtAppsHook, miniupnpc_2, ffmpeg
+, enableSwftools ? false, swftools, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
@@ -20,9 +13,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-ZAndODbl6cH0H1rA3Bhn3AlfIuba0LjxWxusGPDYvlA=";
   };
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
@@ -106,7 +97,8 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Danbooru-like image tagging and searching system for the desktop";
+    description =
+      "Danbooru-like image tagging and searching system for the desktop";
     license = licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
     maintainers = with maintainers; [ dandellion evanjs ];

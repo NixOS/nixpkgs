@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, kernel, perl, kmod, libelf }:
-let
-  version = "1.63";
-in
-stdenv.mkDerivation {
+let version = "1.63";
+in stdenv.mkDerivation {
   name = "ndiswrapper-${version}-${kernel.version}";
   inherit version;
 
@@ -13,12 +11,8 @@ stdenv.mkDerivation {
   # need at least .config and include
   kernel = kernel.dev;
 
-  buildPhase = "
-    echo make KBUILD=$(echo \$kernel/lib/modules/*/build);
-    echo -n $kernel/lib/modules/*/build > kbuild_path
-    export PATH=${kmod}/sbin:$PATH
-    make KBUILD=$(echo \$kernel/lib/modules/*/build);
-  ";
+  buildPhase =
+    "\n    echo make KBUILD=$(echo $kernel/lib/modules/*/build);\n    echo -n $kernel/lib/modules/*/build > kbuild_path\n    export PATH=${kmod}/sbin:$PATH\n    make KBUILD=$(echo $kernel/lib/modules/*/build);\n  ";
 
   installPhase = ''
     make install KBUILD=$(cat kbuild_path) DESTDIR=$out
@@ -30,7 +24,8 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${version}.tar.gz";
     sha256 = "1v6b66jhisl110jfl00hm43lmnrav32vs39d85gcbxrjqnmcx08g";
   };
 

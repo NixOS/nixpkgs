@@ -4,14 +4,17 @@ with lib;
 
 let
   cfg = config.services.prometheus.xmpp-alerts;
-  settingsFormat = pkgs.formats.yaml {};
-  configFile = settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
-in
-{
+  settingsFormat = pkgs.formats.yaml { };
+  configFile =
+    settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
+in {
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "prometheus" "xmpp-alerts" "configuration" ]
-      [ "services" "prometheus" "xmpp-alerts" "settings" ])
+    (mkRenamedOptionModule [
+      "services"
+      "prometheus"
+      "xmpp-alerts"
+      "configuration"
+    ] [ "services" "prometheus" "xmpp-alerts" "settings" ])
   ];
 
   options.services.prometheus.xmpp-alerts = {
@@ -19,7 +22,7 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
 
       description = ''
         Configuration for prometheus xmpp-alerts, see
@@ -35,7 +38,8 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.prometheus-xmpp-alerts}/bin/prometheus-xmpp-alerts --config ${configFile}";
+        ExecStart =
+          "${pkgs.prometheus-xmpp-alerts}/bin/prometheus-xmpp-alerts --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
         PrivateTmp = true;

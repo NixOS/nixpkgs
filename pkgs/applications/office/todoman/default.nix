@@ -1,13 +1,6 @@
-{ lib
-, python3
-, glibcLocales
-, installShellFiles
-, jq
-}:
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
-in
-buildPythonApplication rec {
+{ lib, python3, glibcLocales, installShellFiles, jq }:
+let inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
+in buildPythonApplication rec {
   pname = "todoman";
   version = "4.0.1";
 
@@ -18,10 +11,7 @@ buildPythonApplication rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    installShellFiles
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ installShellFiles setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -70,9 +60,7 @@ buildPythonApplication rec {
     "test_xdg_existant"
   ];
 
-  pythonImportsCheck = [
-    "todoman"
-  ];
+  pythonImportsCheck = [ "todoman" ];
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
@@ -90,7 +78,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
-    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
+    changelog =
+      "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
   };

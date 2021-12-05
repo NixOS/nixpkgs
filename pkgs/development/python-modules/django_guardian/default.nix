@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, django_environ, mock, django
-, pytest, pytest-runner, pytest-django
-}:
+{ lib, buildPythonPackage, fetchPypi, django_environ, mock, django, pytest
+, pytest-runner, pytest-django }:
 buildPythonPackage rec {
   pname = "django-guardian";
   version = "2.4.0";

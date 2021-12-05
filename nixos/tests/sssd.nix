@@ -1,17 +1,13 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-{
-  name = "sssd";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ bbigras ];
-  };
-  machine = { pkgs, ... }: {
-    services.sssd.enable = true;
-  };
+  {
+    name = "sssd";
+    meta = with pkgs.lib.maintainers; { maintainers = [ bbigras ]; };
+    machine = { pkgs, ... }: { services.sssd.enable = true; };
 
-  testScript = ''
+    testScript = ''
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("sssd.service")
     '';
-})
+  })

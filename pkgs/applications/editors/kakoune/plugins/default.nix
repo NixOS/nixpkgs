@@ -2,7 +2,7 @@
 
 let
 
-  inherit (kakouneUtils.override {}) buildKakounePluginFrom2Nix;
+  inherit (kakouneUtils.override { }) buildKakounePluginFrom2Nix;
 
   plugins = callPackage ./generated.nix {
     inherit buildKakounePluginFrom2Nix overrides;
@@ -14,12 +14,10 @@ let
   #
   # If additional modifications to the build process are required,
   # add to ./overrides.nix.
-  overrides = callPackage ./overrides.nix {
-    inherit buildKakounePluginFrom2Nix;
-  };
+  overrides =
+    callPackage ./overrides.nix { inherit buildKakounePluginFrom2Nix; };
 
-  aliases = lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib plugins);
+  aliases = lib.optionalAttrs (config.allowAliases or true)
+    (import ./aliases.nix lib plugins);
 
-in
-
-plugins // aliases
+in plugins // aliases

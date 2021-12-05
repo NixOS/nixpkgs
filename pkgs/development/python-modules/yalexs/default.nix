@@ -1,18 +1,6 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pubnub
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
-}:
+{ lib, aiofiles, aiohttp, aioresponses, aiounittest, asynctest
+, buildPythonPackage, fetchFromGitHub, pubnub, pytestCheckHook, python-dateutil
+, pythonOlder, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "yalexs";
@@ -26,21 +14,10 @@ buildPythonPackage rec {
     sha256 = "0938540n60xv7kxam3azszn3nj0mnhhgh5p4hgbfxj43bkwpqz4n";
   };
 
-  propagatedBuildInputs = [
-    aiofiles
-    aiohttp
-    pubnub
-    python-dateutil
-    requests
-  ];
+  propagatedBuildInputs = [ aiofiles aiohttp pubnub python-dateutil requests ];
 
-  checkInputs = [
-    aioresponses
-    aiounittest
-    asynctest
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs =
+    [ aioresponses aiounittest asynctest pytestCheckHook requests-mock ];
 
   postPatch = ''
     # Not used requirement
@@ -50,7 +27,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "yalexs" ];
 
   meta = with lib; {
-    description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
+    description =
+      "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

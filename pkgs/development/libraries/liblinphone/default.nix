@@ -1,49 +1,9 @@
-{ bcg729
-, bctoolbox
-, bcunit
-, belcard
-, belle-sip
-, belr
-, bzrtp
-, cairo
-, cmake
-, cyrus_sasl
-, doxygen
-, fetchFromGitLab
-, ffmpeg
-, gdk-pixbuf
-, glib
-, graphviz
-, gtk2
-, intltool
-, libexosip
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, lime
-, makeWrapper
-, mbedtls
-, mediastreamer
-, openldap
-, ortp
-, pango
-, pkg-config
-, python3
-, readline
-, soci
-, boost
-, speex
-, sqlite
-, lib, stdenv
-, udev
-, xercesc
-, xsd
-, zlib
-}:
+{ bcg729, bctoolbox, bcunit, belcard, belle-sip, belr, bzrtp, cairo, cmake
+, cyrus_sasl, doxygen, fetchFromGitLab, ffmpeg, gdk-pixbuf, glib, graphviz, gtk2
+, intltool, libexosip, libmatroska, libnotify, libosip, libsoup, libupnp, libX11
+, libxml2, lime, makeWrapper, mbedtls, mediastreamer, openldap, ortp, pango
+, pkg-config, python3, readline, soci, boost, speex, sqlite, lib, stdenv, udev
+, xercesc, xsd, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
@@ -103,15 +63,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [
-    bcunit
-    cmake
-    doxygen
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ bcunit cmake doxygen graphviz intltool makeWrapper pkg-config ];
 
   strictDeps = true;
 

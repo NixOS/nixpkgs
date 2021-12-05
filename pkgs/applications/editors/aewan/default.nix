@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     # Pull patch pending upstream inclusion:
     #  https://sourceforge.net/p/aewan/bugs/13/
     (fetchpatch {
-      url = "https://sourceforge.net/p/aewan/bugs/13/attachment/aewan-cvs-ncurses-6.3.patch";
+      url =
+        "https://sourceforge.net/p/aewan/bugs/13/attachment/aewan-cvs-ncurses-6.3.patch";
       sha256 = "0pgpk1l3d6d5y37lvvavipwnmv9gmpfdy21jkz6baxhlkgf43r4p";
       # patch is in CVS diff format, add 'a/' prefix
       extraPrefix = "";

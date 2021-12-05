@@ -1,11 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf
-, git
-, testVersion
-, buf
-}:
+{ lib, buildGoModule, fetchFromGitHub, protobuf, git, testVersion, buf }:
 
 buildGoModule rec {
   pname = "buf";
@@ -59,7 +52,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://buf.build";
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
-    description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
+    description =
+      "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
     maintainers = with maintainers; [ raboof jk lrewega ];
   };

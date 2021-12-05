@@ -3,47 +3,46 @@
 let
   version = "4.13.0";
   platform = with stdenv;
-    if isDarwin then "macosx"
-    else if isCygwin then "cygwin"
-    else if (isFreeBSD || isOpenBSD) then "bsd"
-    else if isSunOS then "solaris"
-    else "linux"; # Should be a sane default
-in
-stdenv.mkDerivation {
+    if isDarwin then
+      "macosx"
+    else if isCygwin then
+      "cygwin"
+    else if (isFreeBSD || isOpenBSD) then
+      "bsd"
+    else if isSunOS then
+      "solaris"
+    else
+      "linux"; # Should be a sane default
+in stdenv.mkDerivation {
   pname = "chicken";
   inherit version;
 
   binaryVersion = 8;
 
   src = fetchurl {
-    url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
+    url =
+      "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
     sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
-  makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
-    "VARDIR=$(out)/var/lib"
-  ] ++ (lib.optionals stdenv.isDarwin [
-    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
-    "C_COMPILER=$(CC)"
-  ]);
+  makeFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" "VARDIR=$(out)/var/lib" ]
+    ++ (lib.optionals stdenv.isDarwin [
+      "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+      "C_COMPILER=$(CC)"
+    ]);
 
   # We need a bootstrap-chicken to regenerate the c-files after
   # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA
-  patches = lib.optionals (bootstrap-chicken != null) [
-    ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch
-  ];
+  patches = lib.optionals (bootstrap-chicken != null)
+    [ ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch ];
 
-  buildInputs = [
-    makeWrapper
-  ] ++ (lib.optionals (bootstrap-chicken != null) [
-    bootstrap-chicken
-  ]);
+  buildInputs = [ makeWrapper ]
+    ++ (lib.optionals (bootstrap-chicken != null) [ bootstrap-chicken ]);
 
   preBuild = lib.optionalString (bootstrap-chicken != null) ''
     # Backup the build* files - those are generated from hostname,

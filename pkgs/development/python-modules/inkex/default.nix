@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, inkscape
-, lxml
-, python
-}:
+{ buildPythonPackage, inkscape, lxml, python }:
 
 buildPythonPackage {
   pname = "inkex";
@@ -10,9 +6,7 @@ buildPythonPackage {
 
   format = "other";
 
-  propagatedBuildInputs = [
-    lxml
-  ];
+  propagatedBuildInputs = [ lxml ];
 
   # We just copy the files.
   dontUnpack = true;

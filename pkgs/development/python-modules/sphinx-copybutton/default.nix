@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinx-copybutton";
@@ -16,16 +12,15 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "sphinx_copybutton" ];
 
   meta = with lib; {
-    description = "A small sphinx extension to add a \"copy\" button to code blocks";
+    description =
+      ''A small sphinx extension to add a "copy" button to code blocks'';
     homepage = "https://github.com/executablebooks/sphinx-copybutton";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

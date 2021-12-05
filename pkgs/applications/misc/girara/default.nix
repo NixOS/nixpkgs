@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, check, dbus, xvfb-run, glib, gtk, gettext, libiconv, json_c, libintl
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, check, dbus, xvfb-run, glib
+, gtk, gettext, libiconv, json_c, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "girara";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-GPECj0CVxKh+gTfAkkvs13tdiy93il97iqbSTxLQSiM=";
   };
 

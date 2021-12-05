@@ -1,6 +1,5 @@
-{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo
-, graphics, lablgtk, stdio
-}:
+{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo, graphics
+, lablgtk, stdio }:
 
 buildDunePackage rec {
   pname = "camlimages";

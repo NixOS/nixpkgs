@@ -1,9 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
-let
-  yesno = b: if b then "yes" else "no";
+, enableShared ? !stdenv.hostPlatform.isStatic }:
+let yesno = b: if b then "yes" else "no";
 in stdenv.mkDerivation rec {
   pname = "libbacktrace";
   version = "2020-05-13";
@@ -18,7 +16,8 @@ in stdenv.mkDerivation rec {
     "--enable-shared=${yesno enableShared}"
   ];
   meta = with lib; {
-    description = "A C library that may be linked into a C/C++ program to produce symbolic backtraces";
+    description =
+      "A C library that may be linked into a C/C++ program to produce symbolic backtraces";
     homepage = "https://github.com/ianlancetaylor/libbacktrace";
     maintainers = with maintainers; [ twey ];
     license = with licenses; [ bsd3 ];

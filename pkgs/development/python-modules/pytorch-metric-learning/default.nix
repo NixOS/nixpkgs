@@ -1,17 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, numpy
-, scikit-learn
-, pytestCheckHook
-, pytorch
-, torchvision
-, tqdm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, numpy, scikit-learn
+, pytestCheckHook, pytorch, torchvision, tqdm }:
 
 buildPythonPackage rec {
-  pname   = "pytorch-metric-learning";
+  pname = "pytorch-metric-learning";
   version = "0.9.99";
 
   disabled = isPy27;
@@ -23,13 +14,7 @@ buildPythonPackage rec {
     sha256 = "1ahs2b7q3hxi6yv4g2fjy7mvl899h56dvlpc2r9301440qsgkdzr";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    pytorch
-    scikit-learn
-    torchvision
-    tqdm
-  ];
+  propagatedBuildInputs = [ numpy pytorch scikit-learn torchvision tqdm ];
 
   preCheck = ''
     export HOME=$TMP
@@ -56,7 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Metric learning library for PyTorch";
     homepage = "https://github.com/KevinMusgrave/pytorch-metric-learning";
-    changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
+    changelog =
+      "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

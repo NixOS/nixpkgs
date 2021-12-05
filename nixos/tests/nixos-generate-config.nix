@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... } : {
+import ./make-test-python.nix ({ lib, ... }: {
   name = "nixos-generate-config";
   meta.maintainers = with lib.maintainers; [ basvandijk ];
   machine = {

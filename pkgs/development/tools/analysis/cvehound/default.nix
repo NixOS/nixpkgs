@@ -13,20 +13,12 @@ buildPythonApplication rec {
     sha256 = "sha256-m8vpea02flQ8elSvGWv9FqBhsEcBzRYjcUk+dc4kb2M=";
   };
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ coccinelle gnugrep ]}"
-  ];
+  makeWrapperArgs =
+    [ "--prefix PATH : ${lib.makeBinPath [ coccinelle gnugrep ]}" ];
 
-  propagatedBuildInputs = [
-    psutil
-    setuptools
-    sympy
-  ];
+  propagatedBuildInputs = [ psutil setuptools sympy ];
 
-  checkInputs = [
-    GitPython
-    pytestCheckHook
-  ];
+  checkInputs = [ GitPython pytestCheckHook ];
 
   # Tries to clone the kernel sources
   doCheck = false;

@@ -1,18 +1,6 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, cython
-, matplotlib
-, scikit-learn
-, cupy
-, pymanopt
-, autograd
-, pytestCheckHook
-, enableDimensionalityReduction ? false
-, enableGPU ? false
-}:
+{ lib, fetchPypi, buildPythonPackage, numpy, scipy, cython, matplotlib
+, scikit-learn, cupy, pymanopt, autograd, pytestCheckHook
+, enableDimensionalityReduction ? false, enableGPU ? false }:
 
 buildPythonPackage rec {
   pname = "pot";
@@ -30,8 +18,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ numpy scipy ]
-    ++ lib.optionals enableGPU [ cupy ]
+  propagatedBuildInputs = [ numpy scipy ] ++ lib.optionals enableGPU [ cupy ]
     ++ lib.optionals enableDimensionalityReduction [ pymanopt autograd ];
   checkInputs = [ matplotlib scikit-learn pytestCheckHook ];
 

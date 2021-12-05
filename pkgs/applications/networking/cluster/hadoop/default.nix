@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, jdk8_headless, jdk11_headless
-, bash, coreutils, which
-, bzip2, cyrus_sasl , protobuf3_7, snappy, zlib, zstd
-, openssl
-}:
+{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook, jdk8_headless
+, jdk11_headless, bash, coreutils, which, bzip2, cyrus_sasl, protobuf3_7, snappy
+, zlib, zstd, openssl }:
 
 with lib;
 
 let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
+  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk
+    , openssl, nativeLibs ? [ ], libPatches ? "" }:
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz";
+        url =
+          "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz";
         inherit sha256;
       };
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (nativeLibs != [] || libPatches != "") [ autoPatchelfHook ];
+        ++ optional (nativeLibs != [ ] || libPatches != "")
+        [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
@@ -29,14 +29,15 @@ let
             --set-default JAVA_HOME ${jdk.home}\
             --set-default HADOOP_HOME $out/lib/${untarDir}\
             --set-default HADOOP_CONF_DIR /etc/hadoop-conf/\
-            --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
+            --prefix PATH : "${makeBinPath [ bash coreutils which ]}"\
             --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
         done
       '' + libPatches;
 
       meta = {
         homepage = "https://hadoop.apache.org/";
-        description = "Framework for distributed processing of large data sets across clusters of computers";
+        description =
+          "Framework for distributed processing of large data sets across clusters of computers";
         license = licenses.asl20;
 
         longDescription = ''
@@ -55,8 +56,7 @@ let
       };
 
     };
-in
-{
+in {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
   hadoop_3_3 = common rec {
@@ -69,7 +69,9 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
     libPatches = ''
-      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
+      ln -s ${
+        getLib cyrus_sasl
+      }/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
       ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
       ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
       ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/

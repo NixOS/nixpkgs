@@ -1,19 +1,6 @@
-{ lib
-, blinker
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, flask_sqlalchemy
-, isPy27
-, mock
-, peewee
-, pytest-django
-, pytest-pythonpath
-, pytestCheckHook
-, six
-, sqlalchemy
-, webtest
-}:
+{ lib, blinker, buildPythonPackage, fetchFromGitHub, flake8, flask_sqlalchemy
+, isPy27, mock, peewee, pytest-django, pytest-pythonpath, pytestCheckHook, six
+, sqlalchemy, webtest }:
 
 buildPythonPackage rec {
   pname = "nplusone";
@@ -27,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "0qdwpvvg7dzmksz3vqkvb27n52lq5sa8i06m7idnj5xk2dgjkdxg";
   };
 
-  propagatedBuildInputs = [
-    blinker
-    six
-  ];
+  propagatedBuildInputs = [ blinker six ];
 
   checkInputs = [
     flake8

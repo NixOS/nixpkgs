@@ -1,7 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub
-, libsodium, openssl
-, pkg-config
-, fetchpatch
+{ lib, rustPlatform, fetchFromGitHub, libsodium, openssl, pkg-config, fetchpatch
 }:
 
 with rustPlatform;
@@ -20,7 +17,8 @@ buildRustPackage rec {
   cargoPatches = [
     # update cargo lock
     (fetchpatch {
-      url = "https://github.com/tox-rs/tox-node/commit/63712d49d84e55df7bba9710e129780bbc636de3.patch";
+      url =
+        "https://github.com/tox-rs/tox-node/commit/63712d49d84e55df7bba9710e129780bbc636de3.patch";
       sha256 = "sha256-jI6b5IHsAuGuM+7sPCdFnOOuV6K9rBmc5QqU5x72Fl0=";
     })
   ];

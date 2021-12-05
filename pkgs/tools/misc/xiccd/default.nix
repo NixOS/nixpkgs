@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libX11, libXrandr, glib, colord }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libX11, libXrandr
+, glib, colord }:
 
 stdenv.mkDerivation rec {
   pname = "xiccd";

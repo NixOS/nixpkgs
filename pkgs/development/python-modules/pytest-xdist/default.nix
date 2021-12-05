@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, pytest-forked
-, psutil
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm
+, pytestCheckHook, filelock, execnet, pytest, pytest-forked, psutil }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
@@ -22,9 +12,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
   checkInputs = [ pytestCheckHook filelock ];
   propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
@@ -39,7 +27,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
+    description =
+      "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, guile-commonmark
-, guile-reader
-, makeWrapper
-, pkg-config
-}:
+{ lib, stdenv, fetchurl, guile, guile-commonmark, guile-reader, makeWrapper
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "haunt";
@@ -17,27 +10,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-zOkICg7KmJJhPWPtJRT3C9sYB1Oig1xLtgPNGe0n3xQ=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-  ];
-  buildInputs = [
-    guile
-    guile-commonmark
-    guile-reader
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ guile guile-commonmark guile-reader ];
 
   doCheck = true;
 
-  postInstall =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      wrapProgram $out/bin/haunt \
-        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
-    '';
+  postInstall = let guileVersion = lib.versions.majorMinor guile.version;
+  in ''
+    wrapProgram $out/bin/haunt \
+      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

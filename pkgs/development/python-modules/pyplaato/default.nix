@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, python-dateutil
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "pyplaato";

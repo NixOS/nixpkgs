@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, avahi
-, curl
-, dbus-glib
-, gettext
-, gtk3
-, libmpdclient
-, libsoup
-, libxml2
-, taglib
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, avahi, curl, dbus-glib, gettext
+, gtk3, libmpdclient, libsoup, libxml2, taglib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "ario";
@@ -25,16 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config gettext intltool wrapGAppsHook ];
-  buildInputs = [
-    avahi
-    curl
-    dbus-glib
-    gtk3
-    libmpdclient
-    libsoup
-    libxml2
-    taglib
-  ];
+  buildInputs =
+    [ avahi curl dbus-glib gtk3 libmpdclient libsoup libxml2 taglib ];
 
   meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";

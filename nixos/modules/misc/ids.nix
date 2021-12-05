@@ -11,10 +11,8 @@
 
 { lib, ... }:
 
-let
-  inherit (lib) types;
-in
-{
+let inherit (lib) types;
+in {
   options = {
 
     ids.uids = lib.mkOption {
@@ -34,7 +32,6 @@ in
     };
 
   };
-
 
   config = {
 
@@ -111,7 +108,7 @@ in
       postgres = 71;
       #vboxusers = 72; # unused
       #vboxsf = 73; # unused
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -130,7 +127,8 @@ in
       amule = 90;
       minidlna = 91;
       elasticsearch = 92;
-      tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
+      tcpcryptd =
+        93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
       firebird = 95;
       #keys = 96; # unused
       #haproxy = 97; # dynamically allocated as of 2020-03-11
@@ -290,7 +288,7 @@ in
       postgrey = 258;
       hound = 259;
       leaps = 260;
-      ipfs  = 261;
+      ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
@@ -432,7 +430,7 @@ in
       postgres = 71;
       vboxusers = 72;
       vboxsf = 73;
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;

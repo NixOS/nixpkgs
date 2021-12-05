@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Functional reactive programming language for programming Arduino";
+    description =
+      "Functional reactive programming language for programming Arduino";
     longDescription = ''
       Juniper targets Arduino and supports many features typical of functional programming languages, including algebraic data types, tuples, records,
       pattern matching, immutable data structures, parametric polymorphic functions, and anonymous functions (lambdas).

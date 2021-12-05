@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, buildGoModule
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libseccomp
-, libselinux
-, systemd
-, go-md2man
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, installShellFiles, buildGoModule
+, gpgme, lvm2, btrfs-progs, libapparmor, libseccomp, libselinux, systemd
+, go-md2man, nixosTests }:
 
 buildGoModule rec {
   pname = "podman";
@@ -47,9 +34,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    ${if stdenv.isDarwin
-      then "make podman-remote"
-      else "make podman"}
+    ${if stdenv.isDarwin then "make podman-remote" else "make podman"}
     make docs
     runHook postBuild
   '';
@@ -72,22 +57,23 @@ buildGoModule rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/podman)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
+    patchelf --set-rpath "${
+      lib.makeLibraryPath [ systemd ]
+    }":$RPATH $out/bin/podman
   '';
 
   passthru.tests = {
     inherit (nixosTests) podman;
     # related modules
-    inherit (nixosTests)
-      podman-tls-ghostunnel
-      podman-dnsname
-      ;
+    inherit (nixosTests) podman-tls-ghostunnel podman-dnsname;
   };
 
   meta = with lib; {
     homepage = "https://podman.io/";
-    description = "A program for managing pods, containers and container images";
-    changelog = "https://github.com/containers/podman/blob/v${version}/changelog.txt";
+    description =
+      "A program for managing pods, containers and container images";
+    changelog =
+      "https://github.com/containers/podman/blob/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;

@@ -1,10 +1,4 @@
-{ fetchFromGitHub
-, glib
-, gtk3
-, lib
-, rustPlatform
-, wrapGAppsHook
-}:
+{ fetchFromGitHub, glib, gtk3, lib, rustPlatform, wrapGAppsHook }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fitnesstrax";
@@ -17,16 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1k6zhnbs0ggx7q0ig2abcnzprsgrychlpvsh6d36dw6mr8zpfkp7";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    glib
-    gtk3
-  ];
+  nativeBuildInputs = [ wrapGAppsHook glib gtk3 ];
 
-  buildInputs = [
-    glib
-    gtk3
-  ];
+  buildInputs = [ glib gtk3 ];
 
   cargoSha256 = "0dlnlb3hqyh98y916wvdb4rd20az73brs8hqna2lgr7kv1pd77j7";
 

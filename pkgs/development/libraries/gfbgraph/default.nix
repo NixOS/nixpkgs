@@ -1,18 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, librest
-, gnome-online-accounts
-, gnome
-, libsoup
-, json-glib
-, gobject-introspection
-, gtk-doc
-, pkgs
-, docbook-xsl-nons
-}:
+{ stdenv, lib, fetchurl, pkg-config, glib, librest, gnome-online-accounts, gnome
+, libsoup, json-glib, gobject-introspection, gtk-doc, pkgs, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
   pname = "gfbgraph";
@@ -21,32 +8,20 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "nLOBs/eLoRNt+Xrz8G47EdzCqzOawI907aD4BX1mA+M=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gobject-introspection
-    gtk-doc
-    docbook-xsl-nons
-  ];
+  nativeBuildInputs =
+    [ pkg-config gobject-introspection gtk-doc docbook-xsl-nons ];
 
-  buildInputs = [
-    glib
-    gnome-online-accounts
-  ];
+  buildInputs = [ glib gnome-online-accounts ];
 
-  propagatedBuildInputs = [
-    libsoup
-    json-glib
-    librest
-  ];
+  propagatedBuildInputs = [ libsoup json-glib librest ];
 
-  configureFlags = [
-    "--enable-introspection"
-    "--enable-gtk-doc"
-  ];
+  configureFlags = [ "--enable-introspection" "--enable-gtk-doc" ];
 
   enableParallelBuilding = true;
 

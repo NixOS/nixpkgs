@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, taglib
-, cython
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, taglib, cython, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytaglib";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-UAWXR1MCxEB48n7oQE+L545F+emlU3HErzLX6YTRteg=";
   };
 
-  buildInputs = [
-    cython
-    taglib
-  ];
+  buildInputs = [ cython taglib ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "taglib" ];
 

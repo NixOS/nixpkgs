@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, rlwrap, makeDesktopItem }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml
+, z3, rlwrap, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -7,19 +8,22 @@ stdenv.mkDerivation rec {
 
   dirname = "Isabelle${version}";
 
-  src = if stdenv.isDarwin
-    then fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+  src = if stdenv.isDarwin then
+    fetchurl {
+      url =
+        "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
       sha256 = "1c2qm2ksmpyxyccyyn4lyj2wqj5m74nz2i0c5abrd1hj45zcnh1m";
     }
-    else fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+  else
+    fetchurl {
+      url =
+        "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
       sha256 = "1isgc9w4q95638dcag9gxz1kmf97pkin3jz1dm2lhd64b2k12y2x";
     };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl polyml z3 ]
-             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
+    ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -55,12 +59,19 @@ stdenv.mkDerivation rec {
     for comp in contrib/jdk* contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
-    '' + (if ! stdenv.isLinux then "" else ''
-    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
+  '' + (if !stdenv.isLinux then
+    ""
+  else ''
+    arch=${
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+        "x86_64-linux"
+      else
+        "x86-linux"
+    }
     for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
-    '');
+  '');
 
   installPhase = ''
     mkdir -p $out/bin
@@ -76,7 +87,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share"
     cp -r "${desktopItem}/share/applications" "$out/share/applications"
 
-    wrapProgram $out/$dirname/src/HOL/Tools/ATP/scripts/remote_atp --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.LWP ]}
+    wrapProgram $out/$dirname/src/HOL/Tools/ATP/scripts/remote_atp --set PERL5LIB ${
+      perlPackages.makeFullPerlPath [ perlPackages.LWP ]
+    }
   '';
 
   desktopItem = makeDesktopItem {

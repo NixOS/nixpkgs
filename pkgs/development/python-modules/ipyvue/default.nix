@@ -1,10 +1,6 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchPypi
-  # Python Inputs
-, ipywidgets
-}:
+{ lib, isPy27, buildPythonPackage, fetchPypi
+# Python Inputs
+, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "ipyvue";
@@ -19,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ipywidgets ];
 
-  doCheck = false;  # No tests in package or GitHub
+  doCheck = false; # No tests in package or GitHub
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {

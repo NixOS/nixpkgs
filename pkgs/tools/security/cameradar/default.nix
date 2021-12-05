@@ -1,9 +1,4 @@
-{ lib
-, buildGoModule
-, curl
-, fetchFromGitHub
-, pkg-config
-}:
+{ lib, buildGoModule, curl, fetchFromGitHub, pkg-config }:
 
 buildGoModule rec {
   pname = "cameradar";
@@ -18,17 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "099np130dn51nb4lcyrrm46fihfipxrw0vpqs2jh5g4c6pnbk200";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    curl
-  ];
+  buildInputs = [ curl ];
 
-  subPackages = [
-    "cmd/cameradar"
-  ];
+  subPackages = [ "cmd/cameradar" ];
   # At least one test is outdated
   #doCheck = false;
 

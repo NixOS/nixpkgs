@@ -15,10 +15,7 @@ buildPythonPackage rec {
       "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
   '';
 
-  propagatedBuildInputs = [
-    rsa
-    pyaes
-  ];
+  propagatedBuildInputs = [ rsa pyaes ];
 
   # No tests available
   doCheck = false;

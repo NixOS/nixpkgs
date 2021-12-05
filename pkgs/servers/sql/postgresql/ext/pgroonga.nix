@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.3.4";
 
   src = fetchurl {
-    url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-XE669KfHEyY5TghMUC0GcIqdPTsdAs04pA/t84k+i2E=";
   };
 

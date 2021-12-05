@@ -1,23 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, numpy
-, decorator
-, imageio
-, imageio-ffmpeg
-, proglog
-, requests
-, tqdm
-  # Advanced image processing (triples size of output)
-, advancedProcessing ? false
-, opencv3
-, scikitimage
-, scikit-learn
-, scipy
-, matplotlib
-, youtube-dl
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, numpy, decorator, imageio
+, imageio-ffmpeg, proglog, requests, tqdm
+# Advanced image processing (triples size of output)
+, advancedProcessing ? false, opencv3, scikitimage, scikit-learn, scipy
+, matplotlib, youtube-dl }:
 
 buildPythonPackage rec {
   pname = "moviepy";
@@ -38,22 +23,16 @@ buildPythonPackage rec {
   # No tests, require network connection
   doCheck = false;
 
-  propagatedBuildInputs = [
-    numpy
-    decorator
-    imageio
-    imageio-ffmpeg
-    tqdm
-    requests
-    proglog
-  ] ++ lib.optionals advancedProcessing [
-    opencv3
-    scikitimage
-    scikit-learn
-    scipy
-    matplotlib
-    youtube-dl
-  ];
+  propagatedBuildInputs =
+    [ numpy decorator imageio imageio-ffmpeg tqdm requests proglog ]
+    ++ lib.optionals advancedProcessing [
+      opencv3
+      scikitimage
+      scikit-learn
+      scipy
+      matplotlib
+      youtube-dl
+    ];
 
   meta = with lib; {
     description = "Video editing with Python";

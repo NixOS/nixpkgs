@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ncurses
-, SDL
-}:
+{ lib, stdenv, fetchFromGitHub, ncurses, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "curseofwar";
@@ -15,12 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wd71wdnj9izg5d95m81yx3684g4zdi7fsy0j5wwnbd9j34ilz1i";
   };
 
-  buildInputs = [
-    ncurses
-    SDL
-  ];
+  buildInputs = [ ncurses SDL ];
 
-  makeFlags = (if isNull SDL then [] else [ "SDL=yes" ]) ++ [
+  makeFlags = (if isNull SDL then [ ] else [ "SDL=yes" ]) ++ [
     "PREFIX=$(out)"
     # force platform's cc on darwin, otherwise gcc is used
     "CC=${stdenv.cc.targetPrefix}cc"

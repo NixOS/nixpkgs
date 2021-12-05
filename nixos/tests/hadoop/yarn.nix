@@ -1,14 +1,15 @@
 # This only tests if YARN is able to start its services
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ ... }: {
   nodes = {
-    resourcemanager = {pkgs, ...}: {
+    resourcemanager = { pkgs, ... }: {
       services.hadoop.package = pkgs.hadoop;
       services.hadoop.yarn.resourcemanager.enable = true;
       services.hadoop.yarnSite = {
-        "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
+        "yarn.resourcemanager.scheduler.class" =
+          "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
       };
     };
-    nodemanager = {pkgs, ...}: {
+    nodemanager = { pkgs, ... }: {
       services.hadoop.package = pkgs.hadoop;
       services.hadoop.yarn.nodemanager.enable = true;
       services.hadoop.yarnSite = {

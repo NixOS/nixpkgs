@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, hicolor-icon-theme
-, pantheon
+{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, hicolor-icon-theme, pantheon
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1iw9wqfs8s3l5k5ngyjmvvxbsxcsya3a6h1xwl6d603swv7h1s02";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    breeze-icons
-    hicolor-icon-theme
-    pantheon.elementary-icon-theme
-  ];
+  propagatedBuildInputs =
+    [ breeze-icons hicolor-icon-theme pantheon.elementary-icon-theme ];
 
   dontDropIconThemeCache = true;
 

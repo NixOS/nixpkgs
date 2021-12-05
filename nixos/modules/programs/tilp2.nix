@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.tilp2;
+let cfg = config.programs.tilp2;
 
 in {
   options.programs.tilp2 = {
@@ -17,12 +16,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [
-      pkgs.libticables2
-    ];
+    services.udev.packages = [ pkgs.libticables2 ];
 
-    environment.systemPackages = [
-      pkgs.tilp2
-    ];
+    environment.systemPackages = [ pkgs.tilp2 ];
   };
 }

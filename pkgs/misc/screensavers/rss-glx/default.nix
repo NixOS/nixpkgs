@@ -1,4 +1,5 @@
-{lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libXext, libGLU, libGL, imagemagick6, libtiff, bzip2}:
+{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libXext, libGLU, libGL
+, imagemagick6, libtiff, bzip2 }:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGLU libGL xlibsWrapper imagemagick6 libtiff bzip2 ];
 
   NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
-  NIX_LDFLAGS= "-rpath ${libXext}/lib";
+  NIX_LDFLAGS = "-rpath ${libXext}/lib";
 
   meta = {
     description = "Really Slick Screensavers Port to GLX";

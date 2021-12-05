@@ -16,7 +16,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django ];
 
   meta = with lib; {
-    description = "Reusable model field that allows you to store validated JSON, automatically handling serialization to and from the database";
+    description =
+      "Reusable model field that allows you to store validated JSON, automatically handling serialization to and from the database";
     homepage = "https://github.com/rpkilby/jsonfield/";
     license = licenses.mit;
     maintainers = with maintainers; [ mrmebelman ];

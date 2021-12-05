@@ -18,7 +18,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) apcupsd; };
 
   meta = with lib; {
-    description = "Provides a Prometheus exporter for the apcupsd Network Information Server (NIS)";
+    description =
+      "Provides a Prometheus exporter for the apcupsd Network Information Server (NIS)";
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ _1000101 mdlayher ];

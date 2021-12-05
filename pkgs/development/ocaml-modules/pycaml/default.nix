@@ -8,13 +8,18 @@ stdenv.mkDerivation rec {
 
   srcs = [
     (fetchurl {
-      url = "mirror://debian/pool/main/p/pycaml/pycaml_${lib.versions.majorMinor version}.orig.tar.gz";
-      sha256 = "d57be559c8d586c575717d47817986bbdbcebe2ffd16ad6b291525c62868babe";
+      url = "mirror://debian/pool/main/p/pycaml/pycaml_${
+          lib.versions.majorMinor version
+        }.orig.tar.gz";
+      sha256 =
+        "d57be559c8d586c575717d47817986bbdbcebe2ffd16ad6b291525c62868babe";
     })
 
     (fetchurl {
-      url = "mirror://debian/pool/main/p/pycaml/pycaml_${version}.debian.tar.gz";
-      sha256 = "a763088ec1fa76c769bf586ed6692e7ac035b0a2bfd48a90a8e7a9539ec0c2f1";
+      url =
+        "mirror://debian/pool/main/p/pycaml/pycaml_${version}.debian.tar.gz";
+      sha256 =
+        "a763088ec1fa76c769bf586ed6692e7ac035b0a2bfd48a90a8e7a9539ec0c2f1";
     })
   ];
 

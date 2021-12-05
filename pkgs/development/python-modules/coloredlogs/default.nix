@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, humanfriendly
-, verboselogs
-, capturer
-, pytestCheckHook
-, mock
-, util-linux
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, humanfriendly, verboselogs
+, capturer, pytestCheckHook, mock, util-linux }:
 
 buildPythonPackage rec {
   pname = "coloredlogs";
@@ -21,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-C1Eo+XrrL3bwhT49KyOE6xjbAHJxn9Qy4s1RR5ERVtA=";
   };
 
-  propagatedBuildInputs = [
-    humanfriendly
-  ];
+  propagatedBuildInputs = [ humanfriendly ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    util-linux
-    verboselogs
-    capturer
-  ];
+  checkInputs = [ pytestCheckHook mock util-linux verboselogs capturer ];
 
   # capturer is broken on darwin / py38, so we skip the test until a fix for
   # https://github.com/xolox/python-capturer/issues/10 is released.
@@ -42,10 +25,7 @@ buildPythonPackage rec {
     PATH=$PATH:$out/bin
   '';
 
-  disabledTests = [
-    "test_plain_text_output_format"
-    "test_auto_install"
-  ];
+  disabledTests = [ "test_plain_text_output_format" "test_auto_install" ];
 
   pythonImportsCheck = [ "coloredlogs" ];
 

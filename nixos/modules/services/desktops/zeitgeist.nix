@@ -12,11 +12,7 @@ with lib;
 
   ###### interface
 
-  options = {
-    services.zeitgeist = {
-      enable = mkEnableOption "zeitgeist";
-    };
-  };
+  options = { services.zeitgeist = { enable = mkEnableOption "zeitgeist"; }; };
 
   ###### implementation
 

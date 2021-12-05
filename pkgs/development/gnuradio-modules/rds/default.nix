@@ -1,18 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, gnuradio
-, cmake
-, pkg-config
-, swig
-, python
-, log4cpp
-, mpir
-, thrift
-, boost
-, gmp
-, icu
-}:
+{ lib, mkDerivation, fetchFromGitHub, gnuradio, cmake, pkg-config, swig, python
+, log4cpp, mpir, thrift, boost, gmp, icu }:
 
 let
   version = {
@@ -35,23 +22,13 @@ in mkDerivation {
   inherit version src;
   disabledForGRafter = "3.9";
 
-  buildInputs = [
-    log4cpp
-    mpir
-    boost
-    gmp
-    icu
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
-    thrift
-    python.pkgs.thrift
-  ];
+  buildInputs = [ log4cpp mpir boost gmp icu ]
+    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+      thrift
+      python.pkgs.thrift
+    ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    swig
-    python
-  ];
+  nativeBuildInputs = [ cmake pkg-config swig python ];
 
   meta = with lib; {
     description = "Gnuradio block for radio data system";

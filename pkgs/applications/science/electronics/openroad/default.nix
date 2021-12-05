@@ -1,29 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, bison
-, cmake
-, doxygen
-, flex
-, git
-, python3
-, swig4
-, boost172
-, cimg
-, eigen
-, lcov
-, lemon-graph
-, libjpeg
-, pcre
-, qtbase
-, readline
-, spdlog
-, tcl
-, tcllib
-, xorg
-, yosys
-, zlib
-}:
+{ lib, mkDerivation, fetchFromGitHub, bison, cmake, doxygen, flex, git, python3
+, swig4, boost172, cimg, eigen, lcov, lemon-graph, libjpeg, pcre, qtbase
+, readline, spdlog, tcl, tcllib, xorg, yosys, zlib }:
 
 mkDerivation rec {
   pname = "openroad";
@@ -37,14 +14,7 @@ mkDerivation rec {
     sha256 = "1p677xh16wskfj06jnplhpc3glibhdaqxmk0j09832chqlryzwyx";
   };
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    doxygen
-    flex
-    git
-    swig4
-  ];
+  nativeBuildInputs = [ bison cmake doxygen flex git swig4 ];
 
   buildInputs = [
     boost172
@@ -77,7 +47,8 @@ mkDerivation rec {
 
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.
-  doCheck = false; # Disabled pending upstream release with fix for rcx log file creation.
+  doCheck =
+    false; # Disabled pending upstream release with fix for rcx log file creation.
   checkPhase = ''
     # Regression tests must be run from the project root not from within the CMake build directory.
     cd ..
@@ -85,7 +56,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
+    description =
+      "OpenROAD's unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ trepetti ];

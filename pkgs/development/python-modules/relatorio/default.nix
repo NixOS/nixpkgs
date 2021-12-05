@@ -9,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "6b9390eab696bdf569639ff58794fb9ef8ff19f94feea5b505a6ba06d0cfd026";
   };
 
-  propagatedBuildInputs = [
-    genshi
-    lxml
-    python_magic
-  ];
+  propagatedBuildInputs = [ genshi lxml python_magic ];
 
   meta = {
     homepage = "https://relatorio.tryton.org/";

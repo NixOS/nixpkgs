@@ -1,11 +1,11 @@
 { lib, fetchurl }:
 
-let
-  version = "0.52";
+let version = "0.52";
 in fetchurl {
   name = "edwin-${version}";
 
-  url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
+  url =
+    "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
 
   downloadToTemp = true;
 

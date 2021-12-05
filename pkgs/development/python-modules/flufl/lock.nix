@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
-, atpublic, psutil, pytest-cov, sybil
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, atpublic, psutil
+, pytest-cov, sybil }:
 
 buildPythonPackage rec {
   pname = "flufl.lock";

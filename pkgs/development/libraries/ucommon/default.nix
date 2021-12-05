@@ -1,12 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config
-, openssl ? null, zlib ? null, gnutls ? null
+{ lib, stdenv, fetchurl, pkg-config, openssl ? null, zlib ? null, gnutls ? null
 }:
 
-let
-  xor = a: b: (a || b) && (!(a && b));
-in
+let xor = a: b: (a || b) && (!(a && b));
 
-assert xor (openssl != null) (gnutls != null);
+in assert xor (openssl != null) (gnutls != null);
 assert !(xor (openssl != null) (zlib != null));
 
 stdenv.mkDerivation rec {

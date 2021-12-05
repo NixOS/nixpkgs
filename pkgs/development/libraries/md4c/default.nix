@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "md4c";
@@ -23,10 +18,7 @@ stdenv.mkDerivation rec {
     ./fix-pkgconfig.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
     homepage = "https://github.com/mity/md4c";

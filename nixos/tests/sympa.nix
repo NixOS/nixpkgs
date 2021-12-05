@@ -2,26 +2,20 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sympa";
   meta.maintainers = with lib.maintainers; [ mmilata ];
 
-  machine =
-    { ... }:
-    {
+  machine = { ... }: {
 
-      services.sympa = {
-        enable = true;
-        domains = {
-          "lists.example.org" = {
-            webHost = "localhost";
-          };
-        };
-        listMasters = [ "joe@example.org" ];
-        web.enable = true;
-        web.https = false;
-        database = {
-          type = "PostgreSQL";
-          createLocally = true;
-        };
+    services.sympa = {
+      enable = true;
+      domains = { "lists.example.org" = { webHost = "localhost"; }; };
+      listMasters = [ "joe@example.org" ];
+      web.enable = true;
+      web.https = false;
+      database = {
+        type = "PostgreSQL";
+        createLocally = true;
       };
     };
+  };
 
   testScript = ''
     start_all()

@@ -46,7 +46,9 @@ let
 
     # The host running MPD, possibly protected by a password
     # ([PASSWORD@]HOSTNAME).
-    host = ${(optionalString (cfg.passwordFile != null) "{{MPD_PASSWORD}}@") + cfg.host}
+    host = ${
+      (optionalString (cfg.passwordFile != null) "{{MPD_PASSWORD}}@") + cfg.host
+    }
 
     # The port that the MPD listens on and mpdscribble should try to
     # connect to.
@@ -58,8 +60,8 @@ let
   cfgFile = "/run/mpdscribble/mpdscribble.conf";
 
   replaceSecret = secretFile: placeholder: targetFile:
-    optionalString (secretFile != null) ''
-      ${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
+    optionalString (secretFile != null)
+    "${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' ";
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
@@ -116,10 +118,9 @@ in {
 
     passwordFile = mkOption {
       default = if localMpd then
-        (findFirst
-          (c: any (x: x == "read") c.permissions)
-          { passwordFile = null; }
-          mpdCfg.credentials).passwordFile
+        (findFirst (c: any (x: x == "read") c.permissions) {
+          passwordFile = null;
+        } mpdCfg.credentials).passwordFile
       else
         null;
       type = types.nullOr types.str;
@@ -172,7 +173,7 @@ in {
       description = ''
         Endpoints to scrobble to.
         If the endpoint is one of "${
-          concatStringsSep "\", \"" (attrNames endpointUrls)
+          concatStringsSep ''", "'' (attrNames endpointUrls)
         }" the url is set automatically.
       '';
     };

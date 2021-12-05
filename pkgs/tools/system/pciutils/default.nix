@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
-, hwdata
-, static ? stdenv.hostPlatform.isStatic
-, IOKit
-}:
+{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which, hwdata
+, static ? stdenv.hostPlatform.isStatic, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
@@ -14,10 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib kmod which ] ++
-    lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  buildInputs = [ zlib kmod which ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
-  preConfigure = if stdenv.cc.isGNU then null else ''
+  preConfigure = if stdenv.cc.isGNU then
+    null
+  else ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
@@ -44,9 +43,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://mj.ucw.cz/pciutils.html";
-    description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
+    description =
+      "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    maintainers =
+      [ maintainers.vcunat ]; # not really, but someone should watch it
   };
 }

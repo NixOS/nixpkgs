@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libsass
-, six
-, pytestCheckHook
-, werkzeug
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, libsass, six, pytestCheckHook
+, werkzeug }:
 
 buildPythonPackage rec {
   pname = "libsass";
@@ -26,10 +20,7 @@ buildPythonPackage rec {
     export SYSTEM_SASS=true;
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    werkzeug
-  ];
+  checkInputs = [ pytestCheckHook werkzeug ];
 
   pytestFlagsArray = [ "sasstests.py" ];
 

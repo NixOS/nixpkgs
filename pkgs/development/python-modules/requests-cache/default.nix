@@ -1,22 +1,6 @@
-{ lib
-, appdirs
-, attrs
-, buildPythonPackage
-, bson
-, cattrs
-, fetchFromGitHub
-, itsdangerous
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-mock
-, rich
-, timeout-decorator
-, ujson
-, url-normalize
-}:
+{ lib, appdirs, attrs, buildPythonPackage, bson, cattrs, fetchFromGitHub
+, itsdangerous, poetry-core, pytestCheckHook, pythonOlder, pyyaml, requests
+, requests-mock, rich, timeout-decorator, ujson, url-normalize }:
 
 buildPythonPackage rec {
   pname = "requests-cache";
@@ -32,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-HzOcPWmvUhqPtb/7Mnw6wWY7a4CwGRwPgq+7QoHJAc8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -48,12 +30,7 @@ buildPythonPackage rec {
     url-normalize
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests-mock
-    rich
-    timeout-decorator
-  ];
+  checkInputs = [ pytestCheckHook requests-mock rich timeout-decorator ];
 
   pytestFlagsArray = [
     # Integration tests require local DBs
@@ -65,9 +42,7 @@ buildPythonPackage rec {
     "test_remove_expired_responses"
   ];
 
-  pythonImportsCheck = [
-    "requests_cache"
-  ];
+  pythonImportsCheck = [ "requests_cache" ];
 
   meta = with lib; {
     description = "Persistent cache for requests library";

@@ -15,13 +15,15 @@ stdenv.mkDerivation rec {
     # https://github.com/jbeder/yaml-cpp/issues/774
     # https://github.com/jbeder/yaml-cpp/pull/1037
     (fetchpatch {
-      url = "https://github.com/jbeder/yaml-cpp/commit/4f48727b365962e31451cd91027bd797bc7d2ee7.patch";
+      url =
+        "https://github.com/jbeder/yaml-cpp/commit/4f48727b365962e31451cd91027bd797bc7d2ee7.patch";
       sha256 = "sha256-jarZAh7NgwL3xXzxijDiAQmC/EC2WYfNMkYHEIQBPhM=";
     })
     # TODO: Remove with the next release, when https://github.com/jbeder/yaml-cpp/pull/1058 is available
     (fetchpatch {
       name = "libyaml-cpp-Fix-pc-paths-for-absolute-GNUInstallDirs.patchj";
-      url = "https://github.com/jbeder/yaml-cpp/commit/328d2d85e833be7cb5a0ab246cc3f5d7e16fc67a.patch";
+      url =
+        "https://github.com/jbeder/yaml-cpp/commit/328d2d85e833be7cb5a0ab246cc3f5d7e16fc67a.patch";
       sha256 = "12g5h7lxzd5v16ykay03zww5g28j3k69k228yr3v8fnmyv2spkfl";
     })
   ];

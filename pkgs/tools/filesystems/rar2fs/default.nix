@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, fuse
-, unrar
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fuse, unrar }:
 
 stdenv.mkDerivation rec {
   pname = "rar2fs";
@@ -24,10 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ fuse unrar ];
 
-  configureFlags = [
-    "--with-unrar=${unrar.dev}/include/unrar"
-    "--disable-static-unrar"
-  ];
+  configureFlags =
+    [ "--with-unrar=${unrar.dev}/include/unrar" "--disable-static-unrar" ];
 
   meta = with lib; {
     description = "FUSE file system for reading RAR archives";

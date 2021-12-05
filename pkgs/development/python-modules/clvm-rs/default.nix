@@ -1,11 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pythonOlder
-, openssl
-, perl
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, rustPlatform, pythonOlder, openssl
+, perl }:
 
 buildPythonPackage rec {
   pname = "clvm_rs";
@@ -34,10 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     perl # used by openssl-sys to configure
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  ] ++ (with rustPlatform; [ cargoSetupHook maturinBuildHook ]);
 
   buildInputs = [ openssl ];
 

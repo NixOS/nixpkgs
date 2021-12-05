@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, django
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, django }:
 
 buildPythonPackage rec {
   pname = "django_evolution";
@@ -18,7 +13,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django ];
 
   meta = with lib; {
-    description = "A database schema evolution tool for the Django web framework";
+    description =
+      "A database schema evolution tool for the Django web framework";
     homepage = "https://github.com/beanbaginc/django-evolution";
     license = licenses.bsd0;
     broken = true;

@@ -1,21 +1,6 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, pkg-config
-, boost
-, gnutls
-, openssl
-, libevent
-, lttng-ust
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-}:
+{ stdenv, fetchgit, lib, meson, ninja, pkg-config, boost, gnutls, openssl
+, libevent, lttng-ust, gst_all_1, gtest, graphviz, doxygen, python3
+, python3Packages }:
 
 stdenv.mkDerivation {
   pname = "libcamera";
@@ -71,7 +56,8 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = with lib; {
-    description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
+    description =
+      "An open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];

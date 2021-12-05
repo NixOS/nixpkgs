@@ -20,7 +20,6 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.oidentd.enable {

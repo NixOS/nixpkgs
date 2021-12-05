@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-}:
+{ lib, buildPythonPackage, cython, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "lupa";

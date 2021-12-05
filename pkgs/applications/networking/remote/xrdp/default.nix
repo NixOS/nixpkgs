@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, which, perl, autoconf, automake
+, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
 
 let
   xorgxrdp = stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common" ];
 
     enableParallelBuilding = true;
   };
@@ -40,14 +41,25 @@ let
     src = fetchFromGitHub {
       owner = "volth";
       repo = "xrdp";
-      rev = "refs/tags/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
+      rev =
+        "refs/tags/runtime-cfg-path-${version}"; # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
       fetchSubmodules = true;
       sha256 = "0ynj6pml4f38y8571ryhifza57wfqg4frdrjcwzw3fmryiznfm1z";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
 
-    buildInputs = [ openssl systemd pam fuse libjpeg libopus xorg.libX11 xorg.libXfixes xorg.libXrandr ];
+    buildInputs = [
+      openssl
+      systemd
+      pam
+      fuse
+      libjpeg
+      libopus
+      xorg.libX11
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
@@ -58,7 +70,14 @@ let
       ./bootstrap
     '';
     dontDisableStatic = true;
-    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" ];
+    configureFlags = [
+      "--with-systemdsystemunitdir=/var/empty"
+      "--enable-ipv6"
+      "--enable-jpeg"
+      "--enable-fuse"
+      "--enable-rfxcodec"
+      "--enable-opus"
+    ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, param
-, pytestCheckHook
-, pyyaml
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, param, pytestCheckHook, pyyaml
+, requests }:
 
 buildPythonPackage rec {
   pname = "pyct";
@@ -17,21 +10,13 @@ buildPythonPackage rec {
     sha256 = "23d7525b5a1567535c093aea4b9c33809415aa5f018dd77f6eb738b1226df6f7";
   };
 
-  propagatedBuildInputs = [
-    param
-    pyyaml
-    requests
-  ];
+  propagatedBuildInputs = [ param pyyaml requests ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   doCheck = !isPy27;
 
-  pythonImportsCheck = [
-    "pyct"
-  ];
+  pythonImportsCheck = [ "pyct" ];
 
   meta = with lib; {
     description = "ClI for Python common tasks for users";

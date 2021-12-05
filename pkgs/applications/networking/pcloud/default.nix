@@ -15,14 +15,14 @@
 # ^1 https://github.com/NixOS/nixpkgs/issues/69338
 
 {
- # Build dependencies
- appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
+# Build dependencies
+appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
 
- # Runtime dependencies;
- # A few additional ones (e.g. Node) are already shipped together with the
- # AppImage, so we don't have to duplicate them here.
-, alsa-lib, dbus-glib, fuse, gnome, gsettings-desktop-schemas, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
-}:
+# Runtime dependencies;
+# A few additional ones (e.g. Node) are already shipped together with the
+# AppImage, so we don't have to duplicate them here.
+, alsa-lib, dbus-glib, fuse, gnome, gsettings-desktop-schemas, gtk3
+, libdbusmenu-gtk2, libXdamage, nss, udev }:
 
 let
   pname = "pcloud";
@@ -31,7 +31,8 @@ let
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
-    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
+    url =
+      "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
     hash = "sha256-6eMRFuZOLcoZd2hGw7QV+kAmzE5lK8uK6ZpGs4n7/zw=";
   };
 
@@ -48,20 +49,10 @@ in stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [
-    alsa-lib
-    dbus-glib
-    fuse
-    gtk3
-    libdbusmenu-gtk2
-    libXdamage
-    nss
-    udev
-  ];
+  buildInputs =
+    [ alsa-lib dbus-glib fuse gtk3 libdbusmenu-gtk2 libXdamage nss udev ];
 
   installPhase = ''
     mkdir "$out"
@@ -102,7 +93,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
+    description =
+      "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];

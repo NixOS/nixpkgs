@@ -1,30 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, Babel
-, colorama
-, cssselect
-, python-dateutil
-, feedparser
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, Babel, colorama, cssselect
+, python-dateutil, feedparser, gdata, gnupg, google-api-python-client, html2text
+, libyaml, lxml, mechanize, nose, pdfminer, pillow, prettytable, pyqt5, pyyaml
+, requests, simplejson, termcolor, unidecode }:
 
 buildPythonPackage rec {
   pname = "woob";
@@ -75,8 +52,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://woob.tech";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
+    description =
+      "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.DamienCassou ];
- };
+  };
 }

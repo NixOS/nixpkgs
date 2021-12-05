@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, factory_boy
-, faker
-, fetchPypi
-, pytest-cov
-, pytestCheckHook
-, tox
-}:
+{ lib, buildPythonPackage, factory_boy, faker, fetchPypi, pytest-cov
+, pytestCheckHook, tox }:
 
 buildPythonPackage rec {
   pname = "tld";
@@ -17,13 +10,7 @@ buildPythonPackage rec {
     sha256 = "69fed19d26bb3f715366fb4af66fdeace896c55c052b00e8aaba3a7b63f3e7f0";
   };
 
-  checkInputs = [
-    factory_boy
-    faker
-    pytest-cov
-    pytestCheckHook
-    tox
-  ];
+  checkInputs = [ factory_boy faker pytest-cov pytestCheckHook tox ];
 
   # these tests require network access, but disabledTestPaths doesn't work.
   # the file needs to be `import`ed by another python test file, so it

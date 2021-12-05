@@ -1,19 +1,6 @@
-{ lib, stdenv
-, meson
-, ninja
-, pkg-config
-, gettext
-, fetchFromGitLab
-, python3Packages
-, libhandy
-, libpwquality
-, wrapGAppsHook
-, gtk3
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, desktop-file-utils
-, appstream-glib }:
+{ lib, stdenv, meson, ninja, pkg-config, gettext, fetchFromGitLab
+, python3Packages, libhandy, libpwquality, wrapGAppsHook, gtk3, glib, gdk-pixbuf
+, gobject-introspection, desktop-file-utils, appstream-glib }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-passwordsafe";
@@ -40,24 +27,18 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk3
-    glib
-    gdk-pixbuf
-    libhandy
-  ];
+  buildInputs = [ gtk3 glib gdk-pixbuf libhandy ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3
-    construct
-    pykeepass
-  ] ++ [
-    libpwquality # using the python bindings
-  ];
+  propagatedBuildInputs = with python3Packages;
+    [ pygobject3 construct pykeepass ] ++ [
+      libpwquality # using the python bindings
+    ];
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
-    description = "Password manager for GNOME which makes use of the KeePass v.4 format";
+    broken =
+      stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
+    description =
+      "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/PasswordSafe";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

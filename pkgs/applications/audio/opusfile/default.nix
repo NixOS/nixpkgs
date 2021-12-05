@@ -11,10 +11,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libogg ];
   propagatedBuildInputs = [ libopus ];
-  patches = [ ./include-multistream.patch ]
-    # fixes problem with openssl 1.1 dependency
-    # see https://github.com/xiph/opusfile/issues/13
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ ./disable-cert-store.patch ];
+  patches = [
+    ./include-multistream.patch
+  ]
+  # fixes problem with openssl 1.1 dependency
+  # see https://github.com/xiph/opusfile/issues/13
+    ++ lib.optionals stdenv.hostPlatform.isWindows
+    [ ./disable-cert-store.patch ];
   configureFlags = [ "--disable-examples" ];
 
   meta = with lib; {

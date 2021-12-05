@@ -4,7 +4,9 @@ stdenv.mkDerivation rec {
   pname = "jboss-as";
   version = "7.1.1.Final";
   src = fetchurl {
-    url = "https://download.jboss.org/jbossas/${lib.versions.majorMinor version}/jboss-as-${version}/jboss-as-${version}.tar.gz";
+    url = "https://download.jboss.org/jbossas/${
+        lib.versions.majorMinor version
+      }/jboss-as-${version}/jboss-as-${version}.tar.gz";
     sha256 = "1bdjw0ib9qr498vpfbg8klqw6rl11vbz7vwn6gp1r5gpqkd3zzc8";
   };
 

@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, cmake
+, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "coregarage";
@@ -11,18 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-2pOQwSj+QKwpHVJp7VCyq6QpVW5wLUf/BE7ReXrJ78s=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libarchive
-    libarchive-qt
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libarchive libarchive-qt libcprime libcsys ];
 
   meta = with lib; {
     description = "A settings manager for the C Suite";

@@ -1,51 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, curl
-, docbook_xml_dtd_45
-, docbook_xsl
-, gtk2
-, libGL
-, libGLU
-, libX11
-, libXpm
-, libtool
-, ncurses
-, pkg-config
-, readline
-, wget
-, wxGTK
-}:
+{ lib, stdenv, fetchurl, SDL2, curl, docbook_xml_dtd_45, docbook_xsl, gtk2
+, libGL, libGLU, libX11, libXpm, libtool, ncurses, pkg-config, readline, wget
+, wxGTK }:
 
 stdenv.mkDerivation rec {
   pname = "bochs";
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
-  nativeBuildInputs = [
-    docbook_xml_dtd_45
-    docbook_xsl
-    libtool
-    pkg-config
-  ];
-  buildInputs = [
-    SDL2
-    curl
-    gtk2
-    libGL
-    libGLU
-    libX11
-    libXpm
-    ncurses
-    readline
-    wget
-    wxGTK
-  ];
+  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl libtool pkg-config ];
+  buildInputs =
+    [ SDL2 curl gtk2 libGL libGLU libX11 libXpm ncurses readline wget wxGTK ];
 
   configureFlags = [
     "--with-x=yes"
@@ -81,7 +50,7 @@ stdenv.mkDerivation rec {
     "--enable-clgd54xx"
     "--enable-configurable-msrs"
     "--enable-cpu-level=6" # from 3 to 6
-    "--enable-debugger" #conflicts with gdb-stub option
+    "--enable-debugger" # conflicts with gdb-stub option
     "--enable-debugger-gui"
     "--enable-e1000"
     "--enable-es1370"
@@ -113,9 +82,9 @@ stdenv.mkDerivation rec {
     "--enable-x86-debugger"
   ]
   # Boolean flags
-  ++ lib.optionals (SDL2 != null) [ "--with-sdl2" ]
-  ++ lib.optionals (ncurses != null) [ "--with-term" ]
-  ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
+    ++ lib.optionals (SDL2 != null) [ "--with-sdl2" ]
+    ++ lib.optionals (ncurses != null) [ "--with-term" ]
+    ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
 
   enableParallelBuilding = true;
 

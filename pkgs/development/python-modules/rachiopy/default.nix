@@ -1,10 +1,5 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-}:
+{ lib, requests, buildPythonPackage, fetchFromGitHub, jsonschema
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rachiopy";
@@ -19,10 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    jsonschema
-    pytestCheckHook
-  ];
+  checkInputs = [ jsonschema pytestCheckHook ];
 
   pythonImportsCheck = [ "rachiopy" ];
 

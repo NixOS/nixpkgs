@@ -1,10 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, genBytecode ? false
-, bqn-path ? null
-, mbqn-source ? null
-}:
+{ lib, stdenv, fetchFromGitHub, genBytecode ? false, bqn-path ? null
+, mbqn-source ? null }:
 
 let
   cbqn-bytecode-files = fetchFromGitHub {
@@ -14,8 +9,7 @@ let
     rev = "db686e89d4d2e9bfac3dddf306dff890135b2de1";
     hash = "sha256-RJ751jCsAGjqQx3V5S5Uc611n+/TBs6G2o0q26x98NM=";
   };
-in
-assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
+in assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
@@ -34,9 +28,7 @@ stdenv.mkDerivation rec {
     sed -i '/SHELL =.*/ d' makefile
   '';
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preBuild = ''
     # Purity: avoids git downloading bytecode files
@@ -48,22 +40,26 @@ stdenv.mkDerivation rec {
   '');
 
   installPhase = ''
-     runHook preInstall
+    runHook preInstall
 
-     mkdir -p $out/bin/
-     cp BQN -t $out/bin/
-     # note guard condition for case-insensitive filesystems
-     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
-     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
+    mkdir -p $out/bin/
+    cp BQN -t $out/bin/
+    # note guard condition for case-insensitive filesystems
+    [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+    [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
 
-     runHook postInstall
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      sternenseemann
+      synthetica
+    ];
     platforms = platforms.all;
   };
 }

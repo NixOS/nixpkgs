@@ -1,35 +1,17 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchurl
-, pythonOlder
-, lib
-, nixosTests
+{ buildPythonPackage, fetchPypi, fetchurl, pythonOlder, lib, nixosTests
 
 # pythonPackages
-, tqdm
-, dnspython
-, expiringdict
-, urllib3
-, requests
-, publicsuffix2
-, xmltodict
-, geoip2
-, imapclient
-, dateparser
-, elasticsearch-dsl
-, kafka-python
-, mailsuite
-, lxml
-, boto3
-}:
+, tqdm, dnspython, expiringdict, urllib3, requests, publicsuffix2, xmltodict
+, geoip2, imapclient, dateparser, elasticsearch-dsl, kafka-python, mailsuite
+, lxml, boto3 }:
 
 let
   dashboard = fetchurl {
-    url = "https://raw.githubusercontent.com/domainaware/parsedmarc/77331b55c54cb3269205295bd57d0ab680638964/grafana/Grafana-DMARC_Reports.json";
+    url =
+      "https://raw.githubusercontent.com/domainaware/parsedmarc/77331b55c54cb3269205295bd57d0ab680638964/grafana/Grafana-DMARC_Reports.json";
     sha256 = "0wbihyqbb4ndjg79qs8088zgrcg88km8khjhv2474y7nzjzkf43i";
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "parsedmarc";
   version = "7.0.1";
 

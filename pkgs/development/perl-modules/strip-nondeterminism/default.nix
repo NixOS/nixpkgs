@@ -1,4 +1,5 @@
-{ lib, stdenv, file, fetchFromGitLab, buildPerlPackage, ArchiveZip, ArchiveCpio, shortenPerlShebang }:
+{ lib, stdenv, file, fetchFromGitLab, buildPerlPackage, ArchiveZip, ArchiveCpio
+, shortenPerlShebang }:
 
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
@@ -32,7 +33,8 @@ buildPerlPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Perl module for stripping bits of non-deterministic information";
+    description =
+      "A Perl module for stripping bits of non-deterministic information";
     homepage = "https://reproducible-builds.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];

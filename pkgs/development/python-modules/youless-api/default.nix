@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, pythonOlder
-, certifi
-, chardet
-, idna
-, nose
-, requests
-, six
-, urllib3
-}:
+{ lib, buildPythonPackage, fetchFromBitbucket, pythonOlder, certifi, chardet
+, idna, nose, requests, six, urllib3 }:
 
 buildPythonPackage rec {
   pname = "youless-api";
@@ -25,22 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-77uQUAPDCFQiCpNAI0feOtHq82sE0n70IV1Njn/W29M=";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    chardet
-    idna
-    requests
-    six
-    urllib3
-  ];
+  propagatedBuildInputs = [ certifi chardet idna requests six urllib3 ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
-  pythonImportsCheck = [
-    "youless_api"
-  ];
+  pythonImportsCheck = [ "youless_api" ];
 
   meta = with lib; {
     description = "Python library for YouLess sensors";

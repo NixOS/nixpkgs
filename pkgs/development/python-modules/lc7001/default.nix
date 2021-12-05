@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
-, poetry-core
-}:
+{ lib, buildPythonPackage, cryptography, fetchPypi, pythonOlder, poetry-core }:
 
 buildPythonPackage rec {
   pname = "lc7001";
@@ -18,20 +12,14 @@ buildPythonPackage rec {
     sha256 = "NgnszlgmeUnfWs9onnboFRz3c4OibsNaZHjDINvoMPc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lc7001"
-  ];
+  pythonImportsCheck = [ "lc7001" ];
 
   meta = with lib; {
     description = "Python module for interacting with Legrand LC7001";

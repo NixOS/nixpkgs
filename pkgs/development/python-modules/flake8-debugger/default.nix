@@ -1,9 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
-, flake8
-, pycodestyle
-, six
-, pytestCheckHook
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy27, flake8, pycodestyle, six
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";

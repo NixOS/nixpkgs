@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "GNU Accounting Utilities, login and process accounting utilities";
+    description =
+      "GNU Accounting Utilities, login and process accounting utilities";
 
     longDescription = ''
       The GNU Accounting Utilities provide login and process accounting

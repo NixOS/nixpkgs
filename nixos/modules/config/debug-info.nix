@@ -29,7 +29,6 @@ with lib;
 
   };
 
-
   config = mkIf config.environment.enableDebugInfo {
 
     # FIXME: currently disabled because /lib is already in
@@ -38,7 +37,8 @@ with lib;
 
     environment.extraOutputsToInstall = [ "debug" ];
 
-    environment.variables.NIX_DEBUG_INFO_DIRS = [ "/run/current-system/sw/lib/debug" ];
+    environment.variables.NIX_DEBUG_INFO_DIRS =
+      [ "/run/current-system/sw/lib/debug" ];
 
   };
 

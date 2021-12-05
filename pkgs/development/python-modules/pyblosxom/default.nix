@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, pygments
-, markdown
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchurl, pygments, markdown, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pyblosxom";

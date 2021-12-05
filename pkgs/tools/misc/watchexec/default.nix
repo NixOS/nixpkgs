@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation, installShellFiles, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation
+, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
 
   postInstall = ''
     installManPage doc/watchexec.1

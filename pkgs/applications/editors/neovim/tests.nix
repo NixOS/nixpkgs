@@ -1,23 +1,18 @@
-{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
-, lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
-, neovim-unwrapped
-, fetchFromGitLab
-, pkgs
-}:
+{ vimUtils, vim_configurable, writeText, neovim, vimPlugins, lib
+, fetchFromGitHub, neovimUtils, wrapNeovimUnstable, neovim-unwrapped
+, fetchFromGitLab, pkgs }:
 let
   inherit (vimUtils) buildVimPluginFrom2Nix;
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
-  plugins = with vimPlugins; [
-    {
-      plugin = vim-obsession;
-      config = ''
-        map <Leader>$ <Cmd>Obsession<CR>
-      '';
-    }
-  ];
+  plugins = with vimPlugins; [{
+    plugin = vim-obsession;
+    config = ''
+      map <Leader>$ <Cmd>Obsession<CR>
+    '';
+  }];
 
   nvimConfNix = makeNeovimConfig {
     inherit plugins;
@@ -36,9 +31,7 @@ let
   };
 
   wrapNeovim2 = suffix: config:
-    wrapNeovimUnstable neovim-unwrapped (config // {
-      extraName = suffix;
-    });
+    wrapNeovimUnstable neovim-unwrapped (config // { extraName = suffix; });
 
   nmt = fetchFromGitLab {
     owner = "rycee";
@@ -59,10 +52,11 @@ let
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
     '' + buildCommand);
 
-in
-  pkgs.recurseIntoAttrs (
-rec {
-  vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
+in pkgs.recurseIntoAttrs (rec {
+  vim_empty_config = vimUtils.vimrcFile {
+    beforePlugins = "";
+    customRC = "";
+  };
 
   ### neovim tests
   ##################
@@ -86,9 +80,11 @@ rec {
 
   nvim_with_plug = neovim.override {
     extraName = "-with-plug";
-    configure.plug.plugins = with pkgs.vimPlugins; [
-      (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
-    ];
+    configure.plug.plugins = with pkgs.vimPlugins;
+      [
+        (base16-vim.overrideAttrs
+          (old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+      ];
     configure.customRC = ''
       color base16-tomorrow-night
       set background=dark
@@ -100,16 +96,14 @@ rec {
     ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-
   # check that the vim-doc hook correctly generates the tag
   # we know for a fact packer has a doc folder
-  checkForTags = vimPlugins.packer-nvim.overrideAttrs(oldAttrs: {
+  checkForTags = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     doInstallCheck = true;
     installCheckPhase = ''
       [ -f $out/doc/tags ]
     '';
   });
-
 
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
@@ -123,27 +117,25 @@ rec {
   });
 
   force-nowrap = runTest nvimDontWrap ''
-      ! grep "-u" ${nvimDontWrap}/bin/nvim
+    ! grep "-u" ${nvimDontWrap}/bin/nvim
   '';
 
   nvim_via_override-test = runTest nvim_via_override ''
-      assertFileContent \
-        "$vimrcGeneric" \
-        "${./neovim-override.vim}"
+    assertFileContent \
+      "$vimrcGeneric" \
+      "${./neovim-override.vim}"
   '';
 
-
   checkAliases = runTest nvim_with_aliases ''
-      folder=${nvim_with_aliases}/bin
-      assertFileExists "$folder/vi"
-      assertFileExists "$folder/vim"
+    folder=${nvim_with_aliases}/bin
+    assertFileExists "$folder/vi"
+    assertFileExists "$folder/vim"
   '';
 
   # having no RC generated should autodisable init.vim wrapping
   nvim_autowrap = runTest nvim_via_override ''
-      ! grep "-u" ${nvimShouldntWrap}/bin/nvim
+    ! grep "-u" ${nvimShouldntWrap}/bin/nvim
   '';
-
 
   # system remote plugin manifest should be generated, deoplete should be usable
   # without the user having to do `UpdateRemotePlugins`. To test, launch neovim
@@ -161,7 +153,7 @@ rec {
   };
 
   nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
-    extraLuaPackages = ps: [ps.mpack];
+    extraLuaPackages = ps: [ ps.mpack ];
     customRC = ''
       lua require("mpack")
     '';

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, multipledispatch
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools, multipledispatch, numpy }:
 
 buildPythonPackage rec {
   version = "0.10.3";

@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, gnome-bluetooth
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, gnome-bluetooth }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth-contract";

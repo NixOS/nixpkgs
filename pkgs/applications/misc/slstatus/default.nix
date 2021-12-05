@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, pkg-config, writeText, libX11, conf ? null, patches ? [] }:
+{ lib, stdenv, fetchgit, pkg-config, writeText, libX11, conf ? null
+, patches ? [ ] }:
 
 with lib;
 
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kayyhpmppybhwndxgabw48wsk9v8x9xdb05xrly9szkw3jbvgw4";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} config.def.h";
 
   inherit patches;
 
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://tools.suckless.org/slstatus/";
-    description = "status monitor for window managers that use WM_NAME like dwm";
+    description =
+      "status monitor for window managers that use WM_NAME like dwm";
     license = licenses.isc;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.linux;

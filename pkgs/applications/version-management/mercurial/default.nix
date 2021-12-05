@@ -1,12 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
-, re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
-, fullBuild ? false
-, gitSupport ? fullBuild
-, guiSupport ? fullBuild, tk
-, highlightSupport ? fullBuild
-, ApplicationServices
-}:
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext
+, installShellFiles, re2Support ? true
+, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform, fullBuild ? false
+, gitSupport ? fullBuild, guiSupport ? fullBuild, tk
+, highlightSupport ? fullBuild, ApplicationServices }:
 
 let
   inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
@@ -22,30 +18,31 @@ let
 
     format = "other";
 
-    passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
+    passthru = {
+      inherit python;
+    }; # pass it so that the same version can be used in hg2git
 
-    cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
-      sourceRoot = "${pname}-${version}/rust";
-    } else null;
+    cargoDeps = if rustSupport then
+      rustPlatform.fetchCargoTarball {
+        inherit src;
+        name = "${pname}-${version}";
+        sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
+        sourceRoot = "${pname}-${version}/rust";
+      }
+    else
+      null;
     cargoRoot = if rustSupport then "rust" else null;
 
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
-      ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      ++ lib.optionals rustSupport
+      (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-    makeFlags = [ "PREFIX=$(out)" ]
-      ++ lib.optional rustSupport "PURE=--rust";
+    makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
 
     postInstall = (lib.optionalString guiSupport ''
       mkdir -p $out/etc/mercurial
@@ -74,10 +71,11 @@ let
         --zsh contrib/zsh_completion
     '';
 
-    passthru.tests = {};
+    passthru.tests = { };
 
     meta = with lib; {
-      description = "A fast, lightweight SCM system for very large distributed projects";
+      description =
+        "A fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
@@ -86,20 +84,18 @@ let
       platforms = platforms.unix;
     };
   };
-in
-  self.overridePythonAttrs (origAttrs: {
-    passthru = origAttrs.passthru // rec {
-      # withExtensions takes a function which takes the python packages set and
-      # returns a list of extensions to install.
-      #
-      # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
-      withExtensions = f: let
+in self.overridePythonAttrs (origAttrs: {
+  passthru = origAttrs.passthru // rec {
+    # withExtensions takes a function which takes the python packages set and
+    # returns a list of extensions to install.
+    #
+    # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
+    withExtensions = f:
+      let
         python = self.python;
-        mercurialHighPrio = ps: (ps.toPythonModule self).overrideAttrs (oldAttrs: {
-          meta = oldAttrs.meta // {
-            priority = 50;
-          };
-        });
+        mercurialHighPrio = ps:
+          (ps.toPythonModule self).overrideAttrs
+          (oldAttrs: { meta = oldAttrs.meta // { priority = 50; }; });
         plugins = (f python.pkgs) ++ [ (mercurialHighPrio python.pkgs) ];
         env = python.withPackages (ps: plugins);
       in stdenv.mkDerivation {
@@ -117,7 +113,9 @@ in
 
           mkdir -p $out/bin
 
-          for bindir in ${lib.concatStringsSep " " (map (d: "${lib.getBin d}/bin") plugins)}; do
+          for bindir in ${
+            lib.concatStringsSep " " (map (d: "${lib.getBin d}/bin") plugins)
+          }; do
             for bin in $bindir/*; do
               ln -s ${env}/bin/$(basename $bin) $out/bin/
             done
@@ -137,8 +135,8 @@ in
         '';
       };
 
-      tests = origAttrs.passthru.tests // {
-        withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
-      };
+    tests = origAttrs.passthru.tests // {
+      withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
     };
-  })
+  };
+})

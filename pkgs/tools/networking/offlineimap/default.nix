@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, python3
-, asciidoc
-, cacert
-, docbook_xsl
-, installShellFiles
-, libxml2
-, libxslt
-}:
+{ lib, fetchFromGitHub, python3, asciidoc, cacert, docbook_xsl
+, installShellFiles, libxml2, libxslt }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offlineimap";
@@ -20,13 +12,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0y3giaz9i8vvczlxkbwymfkn3vi9fv599dy4pc2pn2afxsl4mg2w";
   };
 
-  nativeBuildInputs = [
-    asciidoc
-    docbook_xsl
-    installShellFiles
-    libxml2
-    libxslt
-  ];
+  nativeBuildInputs =
+    [ asciidoc docbook_xsl installShellFiles libxml2 libxslt ];
 
   propagatedBuildInputs = with python3.pkgs; [
     certifi
@@ -55,12 +42,11 @@ python3.pkgs.buildPythonApplication rec {
   # Test requires credentials
   doCheck = false;
 
-  pythonImportsCheck = [
-    "offlineimap"
-  ];
+  pythonImportsCheck = [ "offlineimap" ];
 
   meta = with lib; {
-    description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
+    description =
+      "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ endocrimes ];

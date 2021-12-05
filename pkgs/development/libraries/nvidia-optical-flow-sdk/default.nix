@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Nvidia optical flow headers for computing the relative motion of pixels between images";
+    description =
+      "Nvidia optical flow headers for computing the relative motion of pixels between images";
     homepage = "https://developer.nvidia.com/opticalflow-sdk";
     license = licenses.bsd3; # applies to the header files only
     platforms = platforms.all;

@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
-, gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pulseaudio
+{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype, gdk-pixbuf, glib, gtk3, lib
+, xorg, libglvnd, libjack2, ffmpeg, libxkbcommon, xdg-utils, zlib, pulseaudio
 , wrapGAppsHook, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "4.1";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
+    url =
+      "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
     sha256 = "sha256-h6TNlfKgN7CPhtY8DxESrydtEsdVPT+Uf+VKcqKVuXw=";
   };
 
@@ -24,7 +23,24 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib
+    cairo
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libxcb
+    xcbutil
+    xcbutilwm
+    zlib
+    libXtst
+    libxkbcommon
+    pulseaudio
+    libjack2
+    libX11
+    libglvnd
+    libXcursor
+    stdenv.cc.cc.lib
   ];
 
   installPhase = ''

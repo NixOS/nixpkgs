@@ -11,8 +11,6 @@
     };
     nix = nixUnstable;
 
-    tests = {
-      basic = nixosTests.hydra.hydra-unstable;
-    };
+    tests = { basic = nixosTests.hydra.hydra-unstable; };
   };
 }

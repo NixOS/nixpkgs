@@ -1,22 +1,6 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_44
-, glib
-, gssdp
-, libsoup
-, libxml2
-, libuuid
-, gnome
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, gobject-introspection, vala
+, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, glib, gssdp
+, libsoup, libxml2, libuuid, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
@@ -26,7 +10,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-WQ/7ArhNoqGuxo/VNLxArxs33T9iI/nRV3/EirSL428=";
   };
 
@@ -35,9 +21,7 @@ stdenv.mkDerivation rec {
     ./0001-pkg-config-Declare-header-dependencies-as-public.patch
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -51,29 +35,22 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_44
   ];
 
-  buildInputs = [
-    libuuid
-  ];
+  buildInputs = [ libuuid ];
 
-  propagatedBuildInputs = [
-    glib
-    gssdp
-    libsoup
-    libxml2
-  ];
+  propagatedBuildInputs = [ glib gssdp libsoup libxml2 ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=${
+      lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)
+    }"
+    "-Dintrospection=${
+      lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)
+    }"
   ];
 
   doCheck = true;
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     homepage = "http://www.gupnp.org/";

@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, lib
-, pytestCheckHook
-}:
+{ buildPythonPackage, fetchFromGitHub, hypothesis, lib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "json5";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-RJj5KvLKq43tRuTwxq/mB+sU35xTQwZqg/jpdYcMP6A=";
   };
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytestCheckHook ];
 
   pythonImportsCheck = [ "json5" ];
 

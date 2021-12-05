@@ -16,7 +16,9 @@ buildGoModule rec {
   runVend = true;
 
   ldflags = [
-    "-s" "-w" "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+    "-s"
+    "-w"
+    "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
   ];
 
   meta = with lib; {

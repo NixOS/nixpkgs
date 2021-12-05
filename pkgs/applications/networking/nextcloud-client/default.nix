@@ -1,23 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, inotify-tools
-, libcloudproviders
-, libsecret
-, openssl
-, pcre
-, pkg-config
-, qtbase
-, qtkeychain
-, qttools
-, qtwebengine
-, qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, sqlite
-, inkscape
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, inotify-tools, libcloudproviders
+, libsecret, openssl, pcre, pkg-config, qtbase, qtkeychain, qttools, qtwebengine
+, qtwebsockets, qtquickcontrols2, qtgraphicaleffects, sqlite, inkscape }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
@@ -36,11 +19,7 @@ mkDerivation rec {
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    inkscape
-  ];
+  nativeBuildInputs = [ pkg-config cmake inkscape ];
 
   buildInputs = [
     inotify-tools

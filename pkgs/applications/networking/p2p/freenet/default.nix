@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils
+, substituteAll }:
 
 let
   freenet_ext = fetchurl {
@@ -8,7 +9,8 @@ let
 
   bcprov_version = "jdk15on-154";
   bcprov = fetchurl {
-    url = "https://www.bouncycastle.org/download/bcprov-ext-${bcprov_version}.jar";
+    url =
+      "https://www.bouncycastle.org/download/bcprov-ext-${bcprov_version}.jar";
     sha256 = "0abmhg2h44g8c5p7skzqwfxj8xwcjh9vs84mc0hr78k1am0633jk";
   };
   seednodes = fetchurl {

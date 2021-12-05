@@ -1,6 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, ctypes, integers
-}:
+{ lib, buildDunePackage, fetchFromGitHub, ctypes, integers }:
 
 buildDunePackage rec {
   pname = "posix-base";

@@ -15,7 +15,8 @@ in {
     type = types.bool;
     default = true;
     example = true;
-    description = "Whether to reconfigure the system from Digital Ocean user data";
+    description =
+      "Whether to reconfigure the system from Digital Ocean user data";
   };
   options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
     type = types.path;
@@ -33,7 +34,8 @@ in {
 
   config = {
     systemd.services.digitalocean-init = mkIf cfg.rebuildFromUserData {
-      description = "Reconfigure the system from Digital Ocean userdata on startup";
+      description =
+        "Reconfigure the system from Digital Ocean userdata on startup";
       wantedBy = [ "network-online.target" ];
       unitConfig = {
         ConditionPathExists = "!/etc/nixos/do-userdata.nix";
@@ -46,7 +48,14 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild ];
+      path = [
+        pkgs.jq
+        pkgs.gnused
+        pkgs.gnugrep
+        pkgs.systemd
+        config.nix.package
+        config.system.build.nixos-rebuild
+      ];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [
@@ -88,7 +97,7 @@ in {
         else
           echo "no user data is available"
         fi
-        '';
+      '';
     };
   };
   meta.maintainers = with maintainers; [ arianvp eamsden ];

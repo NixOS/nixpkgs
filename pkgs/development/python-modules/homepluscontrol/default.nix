@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, yarl
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub, pyjwt
+, pytestCheckHook, pythonOlder, yarl }:
 
 buildPythonPackage rec {
   pname = "homepluscontrol";
@@ -21,21 +13,15 @@ buildPythonPackage rec {
     sha256 = "sha256-COOGqfYiR4tueQHXuCvVxShrYS0XNltcW4mclbFWcfA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    pyjwt
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp pyjwt yarl ];
 
-  checkInputs = [
-    aioresponses
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytestCheckHook ];
 
   pythonImportsCheck = [ "homepluscontrol" ];
 
   meta = with lib; {
-    description = "Python API to interact with the Legrand Eliot Home and Control";
+    description =
+      "Python API to interact with the Legrand Eliot Home and Control";
     homepage = "https://github.com/chemaaa/homepluscontrol";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
+{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh
+, libmysqlclient, postgresql, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -13,21 +13,25 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = let
-    makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
+    makeDirs = output: subDir:
+      lib.concatStringsSep " "
+      (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
   in ''
     substituteInPlace configure \
       --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
       --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
-      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+      --replace "/usr/include/math.h" "${
+        lib.getDev stdenv.cc.libc
+      }/include/math.h" \
       --replace "libcurses.so" "libncurses.so" \
       --replace "-lcurses" "-lncurses"
   '';
 
   nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 
-  buildInputs = [
-    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
-  ] ++ lib.optional withGUI gtk2;
+  buildInputs =
+    [ zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql ]
+    ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;
 
@@ -39,7 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A very fast network logon cracker which support many different services";
+    description =
+      "A very fast network logon cracker which support many different services";
     homepage = "https://www.thc.org/thc-hydra/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline ];

@@ -6,11 +6,10 @@ let
 
   cfg = config.security.pam.usb;
 
-  anyUsbAuth = any (attrByPath ["usbAuth"] false) (attrValues config.security.pam.services);
+  anyUsbAuth = any (attrByPath [ "usbAuth" ] false)
+    (attrValues config.security.pam.services);
 
-in
-
-{
+in {
   options = {
 
     security.pam.usb = {
@@ -32,18 +31,18 @@ in
 
     # Make sure pmount and pumount are setuid wrapped.
     security.wrappers = {
-      pmount =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.pmount.out}/bin/pmount";
-        };
-      pumount =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.pmount.out}/bin/pumount";
-        };
+      pmount = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.pmount.out}/bin/pmount";
+      };
+      pumount = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.pmount.out}/bin/pumount";
+      };
     };
 
     environment.systemPackages = [ pkgs.pmount ];

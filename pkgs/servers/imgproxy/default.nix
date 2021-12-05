@@ -26,7 +26,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Fast and secure on-the-fly image processing server written in Go";
+    description =
+      "Fast and secure on-the-fly image processing server written in Go";
     homepage = "https://imgproxy.net";
     license = licenses.mit;
     maintainers = with maintainers; [ paluh ];

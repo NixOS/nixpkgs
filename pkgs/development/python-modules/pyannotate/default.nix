@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, six
-, mypy-extensions
-, typing
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, six, mypy-extensions, typing
+, pytest }:
 
 buildPythonPackage rec {
   version = "1.2.0";

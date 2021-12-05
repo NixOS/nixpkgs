@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  cmakeFlags = [
-    "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
-  ];
+  cmakeFlags = [ "-DCAF_ENABLE_EXAMPLES:BOOL=OFF" ];
 
   doCheck = true;
   checkTarget = "test";
@@ -31,7 +29,8 @@ stdenv.mkDerivation rec {
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ bobakker tobim ];
   };
 }

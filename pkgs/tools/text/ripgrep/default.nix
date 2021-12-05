@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
-, pkg-config
-, Security
-, withPCRE2 ? true
-, pcre2
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, asciidoctor, installShellFiles
+, pkg-config, Security, withPCRE2 ? true, pcre2 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
@@ -47,9 +39,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
+    description =
+      "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = with licenses; [ unlicense /* or */ mit ];
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
     mainProgram = "rg";
   };

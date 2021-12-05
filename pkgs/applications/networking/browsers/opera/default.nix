@@ -1,47 +1,9 @@
-{ alsa-lib
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gnome2
-, gtk3
-, lib
-, libX11
-, libxcb
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, stdenv
-, systemd
-, at-spi2-atk
-, at-spi2-core
-, autoPatchelfHook
-, wrapGAppsHook
-}:
+{ alsa-lib, atk, cairo, cups, curl, dbus, dpkg, expat, fetchurl, fontconfig
+, freetype, gdk-pixbuf, glib, gnome2, gtk3, lib, libX11, libxcb, libXScrnSaver
+, libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr
+, libXrender, libXtst, libdrm, libnotify, libpulseaudio, libuuid, libxshmfence
+, mesa, nspr, nss, pango, stdenv, systemd, at-spi2-atk, at-spi2-core
+, autoPatchelfHook, wrapGAppsHook }:
 
 let
 
@@ -59,10 +21,7 @@ in stdenv.mkDerivation rec {
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib

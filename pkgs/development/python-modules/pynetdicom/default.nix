@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pydicom
-, pyfakefs
-, pytestCheckHook
-, sqlalchemy
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pydicom, pyfakefs
+, pytestCheckHook, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
@@ -19,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "0wr6nh0xrhzwf05gnf3dwg5r3lhn9nfwch3l16zkbj6fli871brc";
   };
 
-  propagatedBuildInputs = [
-    pydicom
-  ];
+  propagatedBuildInputs = [ pydicom ];
 
-  checkInputs = [
-    pyfakefs
-    pytestCheckHook
-    sqlalchemy
-  ];
+  checkInputs = [ pyfakefs pytestCheckHook sqlalchemy ];
 
   disabledTests = [
     # Some tests needs network capabilities

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses, readline, zlib, bzip2
+, autoconf, automake, curl }:
 
 stdenv.mkDerivation rec {
   pname = "lnav";
@@ -21,15 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [
-    zlib
-    bzip2
-    ncurses
-    pcre-cpp
-    readline
-    sqlite
-    curl
-  ];
+  buildInputs = [ zlib bzip2 ncurses pcre-cpp readline sqlite curl ];
 
   preConfigure = ''
     ./autogen.sh

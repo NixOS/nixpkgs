@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, bash, coreutils, python3
-, libcap_ng, policycoreutils, selinux-python, dbus
-, xorgserver, openbox, xmodmap }:
+{ lib, stdenv, fetchurl, bash, coreutils, python3, libcap_ng, policycoreutils
+, selinux-python, dbus, xorgserver, openbox, xmodmap }:
 
 # this is python3 only as it depends on selinux-python
 
@@ -18,7 +17,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapPython ];
-  buildInputs = [ bash coreutils libcap_ng policycoreutils python3 xorgserver openbox xmodmap dbus ];
+  buildInputs = [
+    bash
+    coreutils
+    libcap_ng
+    policycoreutils
+    python3
+    xorgserver
+    openbox
+    xmodmap
+    dbus
+  ];
   propagatedBuildInputs = [ pygobject3 selinux-python ];
 
   postPatch = ''
@@ -26,7 +35,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-m 4755" "-m 755"
     substituteInPlace sandboxX.sh \
       --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
+      --replace "/usr/share/sandbox/start" "${
+        placeholder "out"
+      }/share/sandbox/start" \
       --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
       --replace "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
       --replace "secon" "${policycoreutils}/bin/secon"
@@ -42,10 +53,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/test" "${coreutils}/bin/test" \
   '';
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "SYSCONFDIR=$(out)/etc/sysconfig"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc/sysconfig" ];
 
   postFixup = ''
     wrapPythonPrograms

@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "lack-util";
   version = "lack-20211020-git";
 
@@ -9,13 +8,14 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/lack/2021-10-20/lack-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/lack/2021-10-20/lack-20211020-git.tgz";
     sha256 = "0ly7bdvrl5xsls9syybcf0qm2981m434rhr3gr756kvvk4s9mdn2";
   };
 
   packageName = "lack-util";
 
-  asdFilesToKeep = ["lack-util.asd"];
+  asdFilesToKeep = [ "lack-util.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lack-util DESCRIPTION System lacks description SHA256
@@ -36,4 +36,5 @@ rec {
      t-lack-middleware-backtrace t-lack-middleware-csrf t-lack-middleware-mount
      t-lack-middleware-session t-lack-middleware-static t-lack-request
      t-lack-session-store-dbi t-lack-session-store-redis t-lack-util t-lack)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

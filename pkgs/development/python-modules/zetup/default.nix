@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nbconvert
-, pathpy
-, pytestCheckHook
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, nbconvert, pathpy, pytestCheckHook
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "zetup";
@@ -28,11 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pathpy
-    nbconvert
-    pytestCheckHook
-  ];
+  checkInputs = [ pathpy nbconvert pytestCheckHook ];
 
   pythonImportsCheck = [ "zetup" ];
 

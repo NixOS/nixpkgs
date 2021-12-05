@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libX11
-, freetype
-, libjpeg
-, openal
-, flac
-, libvorbis
-, glew
-, libXrandr
-, libXrender
-, udev
-, xcbutilimage
-, IOKit
-, Foundation
-, AppKit
-, OpenAL
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libX11, freetype, libjpeg, openal, flac
+, libvorbis, glew, libXrandr, libXrender, udev, xcbutilimage, IOKit, Foundation
+, AppKit, OpenAL }:
 
 stdenv.mkDerivation rec {
   pname = "sfml";
@@ -32,9 +15,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
-    ++ lib.optional stdenv.isLinux udev
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+    ++ lib.optional stdenv.isLinux udev ++ lib.optionals (!stdenv.isDarwin) [
+      libX11
+      libXrandr
+      libXrender
+      xcbutilimage
+    ] ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
 
   cmakeFlags = [
     "-DSFML_INSTALL_PKGCONFIG_FILES=yes"

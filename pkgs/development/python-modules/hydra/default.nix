@@ -20,10 +20,8 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   # test environment setup broken under Nix for a few tests:
-  disabledTests = [
-    "test_bash_completion_with_dot_in_path"
-    "test_install_uninstall"
-  ];
+  disabledTests =
+    [ "test_bash_completion_with_dot_in_path" "test_install_uninstall" ];
   disabledTestPaths = [ "tests/test_hydra.py" ];
 
   meta = with lib; {

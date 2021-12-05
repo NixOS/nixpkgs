@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
-}:
+{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand
+, makeWrapper, nixosTests, assetOverrides ? { } }:
 
 let
   version = "4.43.0";
@@ -20,7 +19,8 @@ let
       geoipRev = "202109300030";
       geoipSha256 = "1d2z3ljs0v9rd10cfj8cpiijz3ikkplsymr44f7y90g4dmniwqh0";
     in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
+      url =
+        "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
       sha256 = geoipSha256;
     };
 
@@ -29,15 +29,15 @@ let
       geositeRev = "20211001023210";
       geositeSha256 = "02d55i1pdndwvmi4v42hnncjng517s0k06gr3yn5krnj2qfjli2w";
     in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
+      url =
+        "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
       sha256 = geositeSha256;
     };
 
   } // assetOverrides;
 
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
+  assetsDrv = linkFarm "v2ray-assets"
+    (lib.mapAttrsToList (name: path: { inherit name path; }) assets);
 
   core = buildGoModule rec {
     pname = "v2ray-core";
@@ -61,7 +61,8 @@ let
 
     meta = {
       homepage = "https://www.v2fly.org/en_US/";
-      description = "A platform for building proxies to bypass network restrictions";
+      description =
+        "A platform for building proxies to bypass network restrictions";
       license = with lib.licenses; [ mit ];
       maintainers = with lib.maintainers; [ servalcatty ];
     };
@@ -76,9 +77,7 @@ in runCommand "v2ray-${version}" {
   passthru = {
     inherit core;
     updateScript = ./update.sh;
-    tests = {
-      simple-vmess-proxy-test = nixosTests.v2ray;
-    };
+    tests = { simple-vmess-proxy-test = nixosTests.v2ray; };
   };
 
 } ''

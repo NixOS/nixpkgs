@@ -1,7 +1,9 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper
+, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
 
 let
-  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
+  description =
+    "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
   desktopItem = makeDesktopItem {
     name = "Trilium";
     exec = "trilium";
@@ -22,12 +24,14 @@ let
   version = "0.48.7";
 
   desktopSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+    url =
+      "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
     sha256 = "16clrn89mq2n30hb50y45s6qn5l7n1hj4b124wjxrkmmwpdbjwad";
   };
 
   serverSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
+    url =
+      "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
     sha256 = "18zwplcai4s82pdy3l30862jdl22311qh78anrjz29fm6srx1y9l";
   };
 
@@ -44,16 +48,12 @@ in {
     # (they did special-case icon.png but we want the scalable svg)
     # Use the version here to ensure we get any changes.
     trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/icon.svg";
+      url =
+        "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/icon.svg";
       sha256 = "0sz3piskdlx267whx8r6afrdadn25bf0zmxplj1599zqkf7w7n0x";
     };
 
-
-    nativeBuildInputs = [
-      autoPatchelfHook
-      makeWrapper
-      wrapGAppsHook
-    ];
+    nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook ];
 
     buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
 
@@ -79,7 +79,6 @@ in {
     dontStrip = true;
   };
 
-
   trilium-server = stdenv.mkDerivation rec {
     pname = "trilium-server";
     inherit version;
@@ -87,13 +86,9 @@ in {
 
     src = fetchurl serverSource;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-    ];
+    nativeBuildInputs = [ autoPatchelfHook ];
 
-    buildInputs = [
-      stdenv.cc.cc.lib
-    ];
+    buildInputs = [ stdenv.cc.cc.lib ];
 
     patches = [
       # patch logger to use console instead of rolling files
@@ -118,8 +113,6 @@ in {
       chmod a+x $out/bin/trilium-server
     '';
 
-    passthru.tests = {
-      trilium-server = nixosTests.trilium-server;
-    };
+    passthru.tests = { trilium-server = nixosTests.trilium-server; };
   };
 }

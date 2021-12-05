@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.services.shiori;
+let cfg = config.services.shiori;
 in {
   options = {
     services.shiori = {
@@ -40,7 +39,10 @@ in {
       environment.SHIORI_DIR = "/var/lib/shiori";
 
       serviceConfig = {
-        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}'";
+        ExecStart =
+          "${package}/bin/shiori serve --address '${address}' --port '${
+            toString port
+          }'";
 
         DynamicUser = true;
         StateDirectory = "shiori";
@@ -86,7 +88,14 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@resources"
+          "~@setuid"
         ];
       };
     };

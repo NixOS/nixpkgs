@@ -5,7 +5,8 @@ let
   version = "0.5.3";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://update.flipperzero.one/builds/qFlipper/${version}/qFlipper-x86_64-${version}.AppImage";
+    url =
+      "https://update.flipperzero.one/builds/qFlipper/${version}/qFlipper-x86_64-${version}.AppImage";
     sha256 = "sha256-UFGFl1zb0t1y7FBd5EX1YS3npWM5slL/wLiTOF/CLNM=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
@@ -13,7 +14,8 @@ let
 in appimageTools.wrapType2 {
   inherit name src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs:
+    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/qFlipper

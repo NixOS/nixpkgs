@@ -16,7 +16,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-nFiBHhtvTu9Ya6n1KUF+pOXrksHMOph7ABVtGSWVWlo=";
 
   meta = with lib; {
-    description = "A Lightweight VPN Built on top of Libp2p for Truly Distributed Networks.";
+    description =
+      "A Lightweight VPN Built on top of Libp2p for Truly Distributed Networks.";
     homepage = "https://github.com/hyprspace/hyprspace";
     license = licenses.asl20;
     maintainers = with maintainers; [ yusdacra ];

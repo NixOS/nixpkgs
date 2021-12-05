@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchgit
-, automake
-, autoreconfHook
-, lv2
-, pkg-config
-, qt5
-, alsa-lib
-, libjack2
-}:
+{ lib, stdenv, fetchgit, automake, autoreconfHook, lv2, pkg-config, qt5
+, alsa-lib, libjack2 }:
 
 stdenv.mkDerivation rec {
   name = "qmidiarp";
@@ -19,19 +11,9 @@ stdenv.mkDerivation rec {
     rev = "qmidiarp-0.6.5";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config qt5.wrapQtAppsHook ];
 
-  buildInputs = [
-    alsa-lib
-    lv2
-    libjack2
-  ] ++ (with qt5; [
-    qttools
-  ]);
+  buildInputs = [ alsa-lib lv2 libjack2 ] ++ (with qt5; [ qttools ]);
 
   meta = with lib; {
     description = "An advanced MIDI arpeggiator";

@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    xorg.libX11 cairo lv2 libjack2 mesa
-  ];
+  buildInputs = [ xorg.libX11 cairo lv2 libjack2 mesa ];
 
   postPatch = ''
     patch -d dpf -p 1 -i "$src/resources/patch/DPF-bypass.patch"

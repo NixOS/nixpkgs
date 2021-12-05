@@ -1,9 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv, Security
-, pkg-config, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security, pkg-config
+, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-workspace";
@@ -23,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = "Sync personal and work git repositories from multiple providers";
+    description =
+      "Sync personal and work git repositories from multiple providers";
     homepage = "https://github.com/orf/git-workspace";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ misuzu ];

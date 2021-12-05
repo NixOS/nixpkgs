@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, docbook_xml_dtd_412
-, docbook_xsl
-, intltool
-, libxml2
-, libxslt
-, pkg-config
-, wrapGAppsHook
-, gtk2-x11
-, libX11
-, polkit
-, vala
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, docbook_xml_dtd_412
+, docbook_xsl, intltool, libxml2, libxslt, pkg-config, wrapGAppsHook, gtk2-x11
+, libX11, polkit, vala }:
 
 stdenv.mkDerivation rec {
   pname = "lxsession";
@@ -41,12 +27,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    gtk2-x11
-    libX11
-    polkit
-    vala
-  ];
+  buildInputs = [ gtk2-x11 libX11 polkit vala ];
 
   configureFlags = [
     "--enable-man"

@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, perl
-, gdb, cctools, xnu, bootstrap_cmds
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, perl, gdb, cctools, xnu
+, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
@@ -27,7 +25,8 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ]
+    ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ autoreconfHook perl ];
@@ -35,36 +34,37 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isDarwin (
-    let OSRELEASE = ''
+  preConfigure = lib.optionalString stdenv.isDarwin (let
+    OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
-    in ''
-      echo "Don't derive our xnu version using uname -r."
-      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+  in ''
+    echo "Don't derive our xnu version using uname -r."
+    substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
 
-      # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-      echo "getting rid of the \`-arch' GCC option..."
-      find -name Makefile\* -exec \
-        sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
+    # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
+    echo "getting rid of the \`-arch' GCC option..."
+    find -name Makefile\* -exec \
+      sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
 
-      sed -i coregrind/link_tool_exe_darwin.in \
-          -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
+    sed -i coregrind/link_tool_exe_darwin.in \
+        -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
-      substituteInPlace coregrind/m_debuginfo/readmacho.c \
-         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
+    substituteInPlace coregrind/m_debuginfo/readmacho.c \
+       --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
-      echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
-      substituteInPlace coregrind/link_tool_exe_darwin.in \
-        --replace /usr/bin/ld ${cctools}/bin/ld
-    '');
+    echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
+    substituteInPlace coregrind/link_tool_exe_darwin.in \
+      --replace /usr/bin/ld ${cctools}/bin/ld
+  '');
 
   # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
   postPatch = "";
 
-  configureFlags =
-    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
+  configureFlags = lib.optional (stdenv.hostPlatform.system == "x86_64-linux"
+    || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ lib.optional stdenv.hostPlatform.isDarwin
+    "--with-xcodedir=${xnu}/include";
 
   doCheck = true;
 
@@ -94,11 +94,16 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.unix;
     badPlatforms = [
-      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
-      "sparc-linux" "sparc64-linux"
-      "riscv32-linux" "riscv64-linux"
+      "armv5tel-linux"
+      "armv6l-linux"
+      "armv6m-linux"
+      "sparc-linux"
+      "sparc64-linux"
+      "riscv32-linux"
+      "riscv64-linux"
       "alpha-linux"
     ];
-    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.isDarwin
+      || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

@@ -1,15 +1,12 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, boost, zlib, botan2, libidn
-, lua, pcre, sqlite, perl, pkg-config, expect, less
-, bzip2, gmp, openssl
-, autoreconfHook, texinfo
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, boost, zlib, botan2, libidn, lua, pcre
+, sqlite, perl, pkg-config, expect, less, bzip2, gmp, openssl, autoreconfHook
+, texinfo }:
 
 let
   version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
-in
 
-assert perlVersion != "";
+in assert perlVersion != "";
 
 stdenv.mkDerivation rec {
   pname = "monotone";
@@ -40,8 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook texinfo ];
-  buildInputs = [ boost zlib botan2 libidn lua pcre sqlite expect
-    openssl gmp bzip2 perl ];
+  buildInputs =
+    [ boost zlib botan2 libidn lua pcre sqlite expect openssl gmp bzip2 perl ];
 
   postInstall = ''
     mkdir -p $out/share/${pname}-${version}

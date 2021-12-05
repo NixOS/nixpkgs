@@ -1,8 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
-, makeWrapper
-, gawk
-, glibc
-}:
+, makeWrapper, gawk, glibc }:
 
 buildGoModule rec {
   pname = "vault";
@@ -24,7 +21,8 @@ buildGoModule rec {
   tags = [ "vault" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
     "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
@@ -43,9 +41,16 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
-    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man ];
+    maintainers = with maintainers; [
+      rushmorem
+      lnl7
+      offline
+      pradeepchhetri
+      Chili-Man
+    ];
   };
 }

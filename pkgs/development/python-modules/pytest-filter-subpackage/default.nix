@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-cov
-, pytest-doctestplus
-, pytestCheckHook
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, pytest-doctestplus
+, pytestCheckHook, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
@@ -17,20 +10,13 @@ buildPythonPackage rec {
     sha256 = "1s4s2kd31yc65rfvl4xhy8xx806xhy59kc7668h6b6wq88xgrn5p";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    pytest-doctestplus
-    pytest-cov
-  ];
+  propagatedBuildInputs = [ pytest-doctestplus pytest-cov ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # missing some files
   disabledTests = [ "with_rst" ];

@@ -18,9 +18,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    description =
+      "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     homepage = "https://github.com/mimoo/cargo-dephell";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

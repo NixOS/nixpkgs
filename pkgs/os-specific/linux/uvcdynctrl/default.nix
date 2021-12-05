@@ -28,7 +28,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A simple interface for devices supported by the linux UVC driver";
+    description =
+      "A simple interface for devices supported by the linux UVC driver";
     homepage = "http://guvcview.sourceforge.net";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.puffnfresh ];

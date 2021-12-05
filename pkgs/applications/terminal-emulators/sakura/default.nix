@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, gtk3
-, makeWrapper
-, pcre2
-, perl
-, pkg-config
-, vte
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, glib, gtk3, makeWrapper, pcre2, perl
+, pkg-config, vte }:
 
 stdenv.mkDerivation rec {
   pname = "sakura";
@@ -22,19 +12,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-Sqo1gyCvCMlEv1rYqw6P3Dmu10osi/KqB7/WlgTTNAc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    perl
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config ];
 
-  buildInputs = [
-    glib
-    gtk3
-    pcre2
-    vte
-  ];
+  buildInputs = [ glib gtk3 pcre2 vte ];
 
   # Set path to gsettings-schemata so sakura knows where to find colorchooser,
   # fontchooser etc.
@@ -59,5 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ astsmtl codyopel AndersonTorres ];
     platforms = platforms.linux;
- };
+  };
 }

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2, pcre
-, darwin}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2, pcre, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "opencollada";
@@ -14,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
+  buildInputs =
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
 
   propagatedBuildInputs = [ libxml2 pcre ];
 

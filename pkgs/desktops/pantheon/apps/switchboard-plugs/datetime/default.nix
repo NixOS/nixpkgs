@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, substituteAll
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, libxml2
-, switchboard
-, tzdata
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, meson, ninja
+, substituteAll, pkg-config, vala, libgee, granite, gtk3, libxml2, switchboard
+, tzdata }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
@@ -28,9 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   patches = [
@@ -41,25 +25,15 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard-plug-datetime/pull/100
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-datetime/commit/a90639ed4f185f50d4ae448cd9503203dc24b3f4.patch";
+      url =
+        "https://github.com/elementary/switchboard-plug-datetime/commit/a90639ed4f185f50d4ae448cd9503203dc24b3f4.patch";
       sha256 = "0dz0s02ccnds62dqil44k652pc5icka2rfhcx0a5bj1wi5sifnp7";
     })
   ];
 
-  nativeBuildInputs = [
-    libxml2
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ libxml2 meson ninja pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    switchboard
-  ];
+  buildInputs = [ granite gtk3 libgee switchboard ];
 
   meta = with lib; {
     description = "Switchboard Date & Time Plug";

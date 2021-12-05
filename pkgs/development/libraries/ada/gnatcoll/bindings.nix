@@ -1,20 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gprbuild
-, gnatcoll-core
-, component
+{ stdenv, lib, fetchFromGitHub, gnat, gprbuild, gnatcoll-core, component
 # component dependencies
-, gmp
-, libiconv
-, xz
-, gcc-unwrapped
-, readline
-, zlib
-, python3
-, ncurses
-}:
+, gmp, libiconv, xz, gcc-unwrapped, readline, zlib, python3, ncurses }:
 
 let
   # omit python (2.7), no need to introduce a
@@ -28,10 +14,8 @@ let
     syslog = [ ];
     zlib = [ zlib ];
   };
-in
 
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
   version = "22.0.0";
 
@@ -42,29 +26,19 @@ stdenv.mkDerivation rec {
     sha256 = "0wbwnd6jccwfd4jdxbnzhc0jhm8ad4phz6y9b1gk8adykkk6jcz4";
   };
 
-  patches = [
-    ./omp-setup-text-mode.patch
-  ];
+  patches = [ ./omp-setup-text-mode.patch ];
 
-  nativeBuildInputs = [
-    gprbuild
-    gnat
-    python3
-  ];
+  nativeBuildInputs = [ gprbuild gnat python3 ];
 
   # propagate since gprbuild needs to find referenced .gpr files
   # and all dependency C libraries when statically linking a
   # downstream executable.
-  propagatedBuildInputs = [
-    gnatcoll-core
-  ] ++ libsFor."${component}" or [];
+  propagatedBuildInputs = [ gnatcoll-core ] ++ libsFor."${component}" or [ ];
 
   # explicit flag for GPL acceptance because upstreams
   # allows a gcc runtime exception for all bindings
   # except for readline (since it is GPL w/o exceptions)
-  buildFlags = lib.optionals (component == "readline") [
-    "--accept-gpl"
-  ];
+  buildFlags = lib.optionals (component == "readline") [ "--accept-gpl" ];
 
   buildPhase = ''
     runHook preBuild

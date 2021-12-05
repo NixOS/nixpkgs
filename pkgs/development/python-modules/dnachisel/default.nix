@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, biopython
-, docopt
-, flametree
-, numpy
-, proglog
-, pytestCheckHook
-, python-codon-tables
-, primer3
-, genome-collector
-, matplotlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, biopython, docopt, flametree, numpy
+, proglog, pytestCheckHook, python-codon-tables, primer3, genome-collector
+, matplotlib }:
 
 buildPythonPackage rec {
   pname = "dnachisel";
@@ -24,21 +13,10 @@ buildPythonPackage rec {
     sha256 = "17jldscmsq5lwp3pnjlxg56k3vfpr7rj4qbcbzkzhphifrfgm729";
   };
 
-  propagatedBuildInputs = [
-    biopython
-    docopt
-    flametree
-    numpy
-    proglog
-    python-codon-tables
-  ];
+  propagatedBuildInputs =
+    [ biopython docopt flametree numpy proglog python-codon-tables ];
 
-  checkInputs = [
-    primer3
-    genome-collector
-    matplotlib
-    pytestCheckHook
-  ];
+  checkInputs = [ primer3 genome-collector matplotlib pytestCheckHook ];
 
   # Disable tests which requires network access
   disabledTests = [
@@ -50,7 +28,7 @@ buildPythonPackage rec {
     "test_avoid_phage_blast_matches"
     "test_avoid_matches_with_list"
     "test_avoid_matches_with_phage"
-   ];
+  ];
   pythonImportsCheck = [ "dnachisel" ];
 
   meta = with lib; {

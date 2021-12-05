@@ -1,12 +1,6 @@
-{ lib
-, mkDerivation
-, makeDesktopItem
-, fetchFromGitLab
-, qmake
+{ lib, mkDerivation, makeDesktopItem, fetchFromGitLab, qmake
 # qt
-, qtbase
-, qtwebsockets
-}:
+, qtbase, qtwebsockets }:
 
 let
   desktopItem = makeDesktopItem {
@@ -28,13 +22,8 @@ in mkDerivation rec {
     sha256 = "0pl4ymdb36r0kwlclfjjp6b1qml3fm9ql7ag5inprny5y8vcjpzn";
   };
 
-  nativeBuildInputs = [
-    qmake
-  ];
-  buildInputs = [
-    qtbase
-    qtwebsockets
-  ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qtwebsockets ];
 
   qmakeFlags = [ "michabo.pro" "DESTDIR=${placeholder "out"}/bin" ];
 

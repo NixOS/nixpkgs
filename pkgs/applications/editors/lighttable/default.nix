@@ -1,15 +1,39 @@
-{ stdenv, lib, fetchurl, zlib, glib, alsa-lib, makeDesktopItem
-, dbus, gtk2, atk, pango, freetype, fontconfig, libgnome-keyring3, gdk-pixbuf
-, cairo, cups, expat, libgpg-error, nspr, gnome2, nss, xorg, systemd, libnotify
-}:
+{ stdenv, lib, fetchurl, zlib, glib, alsa-lib, makeDesktopItem, dbus, gtk2, atk
+, pango, freetype, fontconfig, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat
+, libgpg-error, nspr, gnome2, nss, xorg, systemd, libnotify }:
 
 let
   libPath = lib.makeLibraryPath [
-      stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3 nss
-      fontconfig gdk-pixbuf cairo cups expat libgpg-error alsa-lib nspr gnome2.GConf
-      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
-      xorg.libXcomposite xorg.libXi xorg.libXfixes libnotify xorg.libXrandr
-      xorg.libXcursor
+    stdenv.cc.cc
+    zlib
+    glib
+    dbus
+    gtk2
+    atk
+    pango
+    freetype
+    libgnome-keyring3
+    nss
+    fontconfig
+    gdk-pixbuf
+    cairo
+    cups
+    expat
+    libgpg-error
+    alsa-lib
+    nspr
+    gnome2.GConf
+    xorg.libXrender
+    xorg.libX11
+    xorg.libXext
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libXcomposite
+    xorg.libXi
+    xorg.libXfixes
+    libnotify
+    xorg.libXrandr
+    xorg.libXcursor
   ];
   desktopItem = makeDesktopItem {
     name = "LightTable";
@@ -18,18 +42,17 @@ let
     desktopName = "LightTable";
     genericName = "the next generation code editor";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lighttable";
   version = "0.8.1";
 
-  src =
-      fetchurl {
-        name = "LightTableLinux64.tar.gz";
-        url = "https://github.com/LightTable/LightTable/releases/download/${version}/${pname}-${version}-linux.tar.gz";
-        sha256 = "06fj725xfhf3fwrf7dya7ijmxq3v76kfmd4lr2067a92zhlwr5pv";
-      };
+  src = fetchurl {
+    name = "LightTableLinux64.tar.gz";
+    url =
+      "https://github.com/LightTable/LightTable/releases/download/${version}/${pname}-${version}-linux.tar.gz";
+    sha256 = "06fj725xfhf3fwrf7dya7ijmxq3v76kfmd4lr2067a92zhlwr5pv";
+  };
 
   dontConfigure = true;
 
@@ -45,7 +68,9 @@ stdenv.mkDerivation rec {
 
     mv $out/share/LightTable/light $out/bin/light
 
-    ln -sf ${lib.getLib systemd}/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
+    ln -sf ${
+      lib.getLib systemd
+    }/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
     substituteInPlace $out/bin/light \
         --replace "/usr/lib/x86_64-linux-gnu" "${lib.getLib systemd}/lib" \
         --replace "/lib/x86_64-linux-gnu" "$out/share/LightTable" \

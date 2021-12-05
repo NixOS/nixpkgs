@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, cryptopp
-, libusb1, qtbase, qttools, makeWrapper
-, qmake, withEspeak ? false, espeak ? null
-, qt5 }:
+{ lib, stdenv, fetchurl, pkg-config, cryptopp, libusb1, qtbase, qttools
+, makeWrapper, qmake, withEspeak ? false, espeak ? null, qt5 }:
 
-let inherit (lib) getDev; in
+let inherit (lib) getDev;
 
-stdenv.mkDerivation  rec {
+in stdenv.mkDerivation rec {
   pname = "rockbox-utility";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
+    url =
+      "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
     sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
   };
 
@@ -20,7 +19,9 @@ stdenv.mkDerivation  rec {
 
   postPatch = ''
     sed -i rbutil/rbutilqt/rbutilqt.pro \
-        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${
+          getDev qttools
+        }/bin/lrelease|'
   '';
 
   preConfigure = ''

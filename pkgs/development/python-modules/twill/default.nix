@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, nose
-, lxml
-, requests
-, pyparsing
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, lxml, requests, pyparsing }:
 buildPythonPackage rec {
   pname = "twill";
   version = "3.0";
@@ -14,18 +10,15 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [
-    lxml
-    requests
-    pyparsing
-  ];
+  propagatedBuildInputs = [ lxml requests pyparsing ];
 
-  doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
+  doCheck =
+    false; # pypi package comes without tests, other homepage does not provide all verisons
 
   meta = with lib; {
     homepage = "https://twill-tools.github.io/twill/";
     description = "A simple scripting language for Web browsing";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }

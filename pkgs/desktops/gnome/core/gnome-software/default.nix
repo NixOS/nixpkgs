@@ -1,51 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
-, wrapGAppsHook
-, packagekit
-, ostree
-, glib
-, appstream
-, libsoup
-, libhandy
-, polkit
-, isocodes
-, gspell
-, libxslt
-, gobject-introspection
-, flatpak
-, fwupd
-, gtk3
-, gsettings-desktop-schemas
-, gnome-desktop
-, libxmlb
-, json-glib
-, libsecret
-, valgrind-light
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, gtk-doc
-, desktop-file-utils
-, libsysprof-capture
-}:
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, meson, ninja, gettext, gnome
+, wrapGAppsHook, packagekit, ostree, glib, appstream, libsoup, libhandy, polkit
+, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd, gtk3
+, gsettings-desktop-schemas, gnome-desktop, libxmlb, json-glib, libsecret
+, valgrind-light, docbook-xsl-nons, docbook_xml_dtd_42, docbook_xml_dtd_43
+, gtk-doc, desktop-file-utils, libsysprof-capture }:
 
-let
-  withFwupd = stdenv.hostPlatform.isx86;
-in
+let withFwupd = stdenv.hostPlatform.isx86;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gnome-software";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-software/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "eil3Ziga8tvsyssQJMcT7ISYxoJ++RJG6d6Grpof4Xs=";
   };
 
@@ -89,17 +58,13 @@ stdenv.mkDerivation rec {
     flatpak
     libxmlb
     libsysprof-capture
-  ] ++ lib.optionals withFwupd [
-    fwupd
-  ];
+  ] ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     "-Dgudev=false"
     # FIXME: package malcontent parental controls
     "-Dmalcontent=false"
-  ] ++ lib.optionals (!withFwupd) [
-    "-Dfwupd=false"
-  ];
+  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -109,7 +74,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Software store that lets you install and update applications and system extensions";
+    description =
+      "Software store that lets you install and update applications and system extensions";
     homepage = "https://wiki.gnome.org/Apps/Software";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

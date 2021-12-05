@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, zip, love_11, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, zip, love_11, lua, makeWrapper, makeDesktopItem
+}:
 
 let
   pname = "mari0";
@@ -13,9 +14,7 @@ let
     categories = "Game";
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -28,8 +27,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love_11 zip ];
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
     zip -9 -r ${pname}.love ./*
     mv ${pname}.love $out/share/games/lovegames/${pname}.love

@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, qtbase, networkmanager-qt, modemmanager-qt }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, qtbase, networkmanager-qt
+, modemmanager-qt }:
 
 mkDerivation rec {
   pname = "nm-tray";

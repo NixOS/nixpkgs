@@ -1,25 +1,20 @@
-{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook, fetchurl
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, dbus, nspr, gdk-pixbuf
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, pango
-, gcc-unwrapped, udev
-}:
+{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems
+, wrapGAppsHook, fetchurl, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
+, gtk3, nss, glib, dbus, nspr, gdk-pixbuf, libX11, libXScrnSaver, libXcomposite
+, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
+, libXtst, libxcb, pango, gcc-unwrapped, udev }:
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
   version = "4.0.3";
 
   src = fetchurl {
-    url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
+    url =
+      "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
     sha256 = "13qk7ssfawjaa5p4mnml4ndzzsqs26qpi76hc9qaipi74ss3jih4";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook copyDesktopItems ];
 
   buildInputs = [
     alsa-lib
@@ -39,10 +34,32 @@ stdenv.mkDerivation rec {
   ];
 
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups
-    gdk-pixbuf glib gtk3 libX11 libXcomposite
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango libXScrnSaver udev
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    gdk-pixbuf
+    glib
+    gtk3
+    libX11
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    libXScrnSaver
+    udev
   ];
 
   dontWrapGApps = true;
@@ -79,7 +96,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
+    description =
+      "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
     homepage = "https://github.com/Snapmaker/Luban";
     license = licenses.gpl3;
     maintainers = [ maintainers.simonkampe ];

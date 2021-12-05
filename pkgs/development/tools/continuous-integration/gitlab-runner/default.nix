@@ -1,9 +1,7 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
-let
-  version = "14.5.0";
-in
-buildGoPackage rec {
+let version = "14.5.0";
+in buildGoPackage rec {
   inherit version;
   pname = "gitlab-runner";
   goPackagePath = "gitlab.com/gitlab-org/gitlab-runner";

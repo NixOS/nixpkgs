@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.5";
 
   src = fetchzip {
-    url = "https://github.com/Chris00/ocaml-csv/releases/download/${version}/csv-${version}.tar.gz";
+    url =
+      "https://github.com/Chris00/ocaml-csv/releases/download/${version}/csv-${version}.tar.gz";
     sha256 = "1ca7jgg58j24pccs5fshis726s06fdcjshnwza5kwxpjgdbvc63g";
   };
 

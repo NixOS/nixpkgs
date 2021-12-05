@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, IOKit}:
+{ lib, stdenv, fetchurl, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "libdvdcss";
@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.isDarwin IOKit;
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdcss/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "http://get.videolan.org/libdvdcss/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-IzzJL13AHF06lvWzWCvn1c7lo1pS06CBWHRdPYYHAHk=";
   };
 

@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, gnutls, libgcrypt, libuuid, fuse, boost }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, gnutls, libgcrypt
+, libuuid, fuse, boost }:
 
 let
   version = "1.3.7";
   src = fetchFromGitHub {
-    owner  = "Azure";
-    repo   = "azure-storage-fuse";
-    rev    = "blobfuse-${version}-Linux";
+    owner = "Azure";
+    repo = "azure-storage-fuse";
+    rev = "blobfuse-${version}-Linux";
     sha256 = "sha256-yihIuS4AG489U7eBi/p7H6S7Cg54kkQeNVCexxQZ60A=";
   };
   cpplite = stdenv.mkDerivation rec {

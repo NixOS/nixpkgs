@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-ipdb";
@@ -14,16 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-8gKP0QE9iviIFQ0DPuz3U3ZXpL434MzOqYAICZYetXc=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.ipdb"
-  ];
+  pythonImportsCheck = [ "pr2modules.ipdb" ];
 
   meta = with lib; {
     description = "Ipdb module for pyroute2";

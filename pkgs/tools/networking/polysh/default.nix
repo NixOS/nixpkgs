@@ -1,15 +1,13 @@
 { lib, fetchurl, python2Packages }:
 
-let
-  inherit (python2Packages) buildPythonApplication;
-in
-buildPythonApplication rec {
+let inherit (python2Packages) buildPythonApplication;
+in buildPythonApplication rec {
   pname = "polysh";
   version = "0.4";
   src = fetchurl {
-          url = "http://guichaz.free.fr/polysh/files/${pname}-${version}.tar.bz2";
-          sha256 = "0kxhp38c8a8hc8l86y53l2z5zpzxc4b8lx5zyzmq1badcrfc4mh4";
-        };
+    url = "http://guichaz.free.fr/polysh/files/${pname}-${version}.tar.bz2";
+    sha256 = "0kxhp38c8a8hc8l86y53l2z5zpzxc4b8lx5zyzmq1badcrfc4mh4";
+  };
 
   meta = with lib; {
     description = "A tool to aggregate several remote shells into one";

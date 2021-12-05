@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, pytest
-, Wand
-, webob
-, sqlalchemy
-, isPyPy
-, pkgs
-}:
+{ lib, buildPythonPackage, pytest, Wand, webob, sqlalchemy, isPyPy, pkgs }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy-ImageAttach";
@@ -30,13 +22,14 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  doCheck = !isPyPy;  # failures due to sqla version mismatch
+  doCheck = !isPyPy; # failures due to sqla version mismatch
 
   meta = with lib; {
     homepage = "https://github.com/dahlia/sqlalchemy-imageattach";
     description = "SQLAlchemy extension for attaching images to entity objects";
     license = licenses.mit;
-    broken = true; # Incompatible with sqlalchemy>=1.4 (https://github.com/dahlia/sqlalchemy-imageattach/issues/47)
+    broken =
+      true; # Incompatible with sqlalchemy>=1.4 (https://github.com/dahlia/sqlalchemy-imageattach/issues/47)
   };
 
 }

@@ -6,109 +6,112 @@ with types;
 let
 
   planDescription = ''
-      The znapzend backup plan to use for the source.
+    The znapzend backup plan to use for the source.
 
-      The plan specifies how often to backup and for how long to keep the
-      backups. It consists of a series of retention periodes to interval
-      associations:
+    The plan specifies how often to backup and for how long to keep the
+    backups. It consists of a series of retention periodes to interval
+    associations:
 
-      <literal>
-        retA=>intA,retB=>intB,...
-      </literal>
+    <literal>
+      retA=>intA,retB=>intB,...
+    </literal>
 
-      Both intervals and retention periods are expressed in standard units
-      of time or multiples of them. You can use both the full name or a
-      shortcut according to the following listing:
+    Both intervals and retention periods are expressed in standard units
+    of time or multiples of them. You can use both the full name or a
+    shortcut according to the following listing:
 
-      <literal>
-        second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
-      </literal>
+    <literal>
+      second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
+    </literal>
 
-      See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
+    See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
   '';
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
 
   # A type for a string of the form number{b|k|M|G}
   mbufferSizeType = str // {
-    check = x: str.check x && builtins.isList (builtins.match "^[0-9]+[bkMG]$" x);
+    check = x:
+      str.check x && builtins.isList (builtins.match "^[0-9]+[bkMG]$" x);
     description = "string of the form number{b|k|M|G}";
   };
 
-  enabledFeatures = concatLists (mapAttrsToList (name: enabled: optional enabled name) cfg.features);
+  enabledFeatures = concatLists
+    (mapAttrsToList (name: enabled: optional enabled name) cfg.features);
 
   # Type for a string that must contain certain other strings (the list parameter).
   # Note that these would need regex escaping.
-  stringContainingStrings = list: let
-    matching = s: map (str: builtins.match ".*${str}.*" s) list;
-  in str // {
-    check = x: str.check x && all isList (matching x);
-    description = "string containing all of the characters ${concatStringsSep ", " list}";
-  };
+  stringContainingStrings = list:
+    let matching = s: map (str: builtins.match ".*${str}.*" s) list;
+    in str // {
+      check = x: str.check x && all isList (matching x);
+      description =
+        "string containing all of the characters ${concatStringsSep ", " list}";
+    };
 
   timestampType = stringContainingStrings [ "%Y" "%m" "%d" "%H" "%M" "%S" ];
 
-  destType = srcConfig: submodule ({ name, ... }: {
-    options = {
+  destType = srcConfig:
+    submodule ({ name, ... }: {
+      options = {
 
-      label = mkOption {
-        type = str;
-        description = "Label for this destination. Defaults to the attribute name.";
+        label = mkOption {
+          type = str;
+          description =
+            "Label for this destination. Defaults to the attribute name.";
+        };
+
+        plan = mkOption {
+          type = str;
+          description = planDescription;
+          example = planExample;
+        };
+
+        dataset = mkOption {
+          type = str;
+          description = "Dataset name to send snapshots to.";
+          example = "tank/main";
+        };
+
+        host = mkOption {
+          type = nullOr str;
+          description = ''
+            Host to use for the destination dataset. Can be prefixed with
+            <literal>user@</literal> to specify the ssh user.
+          '';
+          default = null;
+          example = "john@example.com";
+        };
+
+        presend = mkOption {
+          type = nullOr str;
+          description = ''
+            Command to run before sending the snapshot to the destination.
+            Intended to run a remote script via <command>ssh</command> on the
+            destination, e.g. to bring up a backup disk or server or to put a
+            zpool online/offline. See also <option>postsend</option>.
+          '';
+          default = null;
+          example = "ssh root@bserv zpool import -Nf tank";
+        };
+
+        postsend = mkOption {
+          type = nullOr str;
+          description = ''
+            Command to run after sending the snapshot to the destination.
+            Intended to run a remote script via <command>ssh</command> on the
+            destination, e.g. to bring up a backup disk or server or to put a
+            zpool online/offline. See also <option>presend</option>.
+          '';
+          default = null;
+          example = "ssh root@bserv zpool export tank";
+        };
       };
 
-      plan = mkOption {
-        type = str;
-        description = planDescription;
-        example = planExample;
+      config = {
+        label = mkDefault name;
+        plan = mkDefault srcConfig.plan;
       };
-
-      dataset = mkOption {
-        type = str;
-        description = "Dataset name to send snapshots to.";
-        example = "tank/main";
-      };
-
-      host = mkOption {
-        type = nullOr str;
-        description = ''
-          Host to use for the destination dataset. Can be prefixed with
-          <literal>user@</literal> to specify the ssh user.
-        '';
-        default = null;
-        example = "john@example.com";
-      };
-
-      presend = mkOption {
-        type = nullOr str;
-        description = ''
-          Command to run before sending the snapshot to the destination.
-          Intended to run a remote script via <command>ssh</command> on the
-          destination, e.g. to bring up a backup disk or server or to put a
-          zpool online/offline. See also <option>postsend</option>.
-        '';
-        default = null;
-        example = "ssh root@bserv zpool import -Nf tank";
-      };
-
-      postsend = mkOption {
-        type = nullOr str;
-        description = ''
-          Command to run after sending the snapshot to the destination.
-          Intended to run a remote script via <command>ssh</command> on the
-          destination, e.g. to bring up a backup disk or server or to put a
-          zpool online/offline. See also <option>presend</option>.
-        '';
-        default = null;
-        example = "ssh root@bserv zpool export tank";
-      };
-    };
-
-    config = {
-      label = mkDefault name;
-      plan = mkDefault srcConfig.plan;
-    };
-  });
-
-
+    });
 
   srcType = submodule ({ name, config, ... }: {
     options = {
@@ -135,14 +138,14 @@ let
         port = mkOption {
           type = nullOr ints.u16;
           description = ''
-              Port to use for <command>mbuffer</command>.
+            Port to use for <command>mbuffer</command>.
 
-              If this is null, it will run <command>mbuffer</command> through
-              ssh.
+            If this is null, it will run <command>mbuffer</command> through
+            ssh.
 
-              If this is not null, it will run <command>mbuffer</command>
-              directly through TCP, which is not encrypted but faster. In that
-              case the given port needs to be open on the destination host.
+            If this is not null, it will run <command>mbuffer</command>
+            directly through TCP, which is not encrypted but faster. In that
+            case the given port needs to be open on the destination host.
           '';
           default = null;
         };
@@ -222,7 +225,7 @@ let
       destinations = mkOption {
         type = attrsOf (destType config);
         description = "Additional destinations.";
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             local = {
@@ -239,9 +242,7 @@ let
       };
     };
 
-    config = {
-      dataset = mkDefault name;
-    };
+    config = { dataset = mkDefault name; };
 
   });
 
@@ -253,45 +254,47 @@ let
   nullOff = b: if b == null then "off" else toString b;
   stripSlashes = replaceStrings [ "/" ] [ "." ];
 
-  attrsToFile = config: concatStringsSep "\n" (builtins.attrValues (
-    mapAttrs (n: v: "${n}=${v}") config));
+  attrsToFile = config:
+    concatStringsSep "\n"
+    (builtins.attrValues (mapAttrs (n: v: "${n}=${v}") config));
 
-  mkDestAttrs = dst: with dst;
+  mkDestAttrs = dst:
+    with dst;
     mapAttrs' (n: v: nameValuePair "dst_${label}${n}" v) ({
       "" = optionalString (host != null) "${host}:" + dataset;
       _plan = plan;
-    } // optionalAttrs (presend != null) {
-      _precmd = presend;
-    } // optionalAttrs (postsend != null) {
-      _pstcmd = postsend;
-    });
+    } // optionalAttrs (presend != null) { _precmd = presend; }
+      // optionalAttrs (postsend != null) { _pstcmd = postsend; });
 
-  mkSrcAttrs = srcCfg: with srcCfg; {
-    enabled = onOff enable;
-    # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
-    mbuffer = with mbuffer; if enable then "mbuffer"
-        + optionalString (port != null) ":${toString port}" else "off";
-    mbuffer_size = mbuffer.size;
-    post_znap_cmd = nullOff postsnap;
-    pre_znap_cmd = nullOff presnap;
-    recursive = onOff recursive;
-    src = dataset;
-    src_plan = plan;
-    tsformat = timestampFormat;
-    zend_delay = toString sendDelay;
-  } // foldr (a: b: a // b) {} (
-    map mkDestAttrs (builtins.attrValues destinations)
-  );
+  mkSrcAttrs = srcCfg:
+    with srcCfg;
+    {
+      enabled = onOff enable;
+      # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
+      mbuffer = with mbuffer;
+        if enable then
+          "mbuffer" + optionalString (port != null) ":${toString port}"
+        else
+          "off";
+      mbuffer_size = mbuffer.size;
+      post_znap_cmd = nullOff postsnap;
+      pre_znap_cmd = nullOff presnap;
+      recursive = onOff recursive;
+      src = dataset;
+      src_plan = plan;
+      tsformat = timestampFormat;
+      zend_delay = toString sendDelay;
+    } // foldr (a: b: a // b) { }
+    (map mkDestAttrs (builtins.attrValues destinations));
 
-  files = mapAttrs' (n: srcCfg: let
-    fileText = attrsToFile (mkSrcAttrs srcCfg);
-  in {
-    name = srcCfg.dataset;
-    value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
-  }) cfg.zetup;
+  files = mapAttrs' (n: srcCfg:
+    let fileText = attrsToFile (mkSrcAttrs srcCfg);
+    in {
+      name = srcCfg.dataset;
+      value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
+    }) cfg.zetup;
 
-in
-{
+in {
   options = {
     services.znapzend = {
       enable = mkEnableOption "ZnapZend ZFS backup daemon";
@@ -299,7 +302,7 @@ in
       logLevel = mkOption {
         default = "debug";
         example = "warning";
-        type = enum ["debug" "info" "warning" "err" "alert"];
+        type = enum [ "debug" "info" "warning" "err" "alert" ];
         description = ''
           The log level when logging to file. Any of debug, info, warning, err,
           alert. Default in daemonized form is debug.
@@ -324,13 +327,14 @@ in
       autoCreation = mkOption {
         type = bool;
         default = false;
-        description = "Automatically create the destination dataset if it does not exist.";
+        description =
+          "Automatically create the destination dataset if it does not exist.";
       };
 
       zetup = mkOption {
         type = attrsOf srcType;
         description = "Znapzend configuration.";
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "tank/home" = {
@@ -423,8 +427,8 @@ in
     systemd.services = {
       znapzend = {
         description = "ZnapZend - ZFS Backup System";
-        wantedBy    = [ "zfs.target" ];
-        after       = [ "zfs.target" ];
+        wantedBy = [ "zfs.target" ];
+        after = [ "zfs.target" ];
 
         path = with pkgs; [ zfs mbuffer openssh ];
 
@@ -455,9 +459,10 @@ in
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
-              (optionalString (enabledFeatures != [])
+              (optionalString (enabledFeatures != [ ])
                 "--features=${concatStringsSep "," enabledFeatures}")
-            ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
+            ];
+          in "${pkgs.znapzend}/bin/znapzend ${args}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";
         };

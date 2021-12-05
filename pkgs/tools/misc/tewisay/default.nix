@@ -28,7 +28,8 @@ buildGoPackage rec {
 
   meta = {
     homepage = "https://github.com/lucy/tewisay";
-    description = "Cowsay replacement with unicode and partial ansi escape support";
+    description =
+      "Cowsay replacement with unicode and partial ansi escape support";
     license = lib.licenses.cc0;
     maintainers = [ lib.maintainers.chiiruno ];
   };

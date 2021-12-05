@@ -14,9 +14,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-8VTrywlzrzoBEi/xOqkwhGW/R2B2oGqgh01Gv9FcW80=";
 
   meta = with lib; {
-    description = "This plugin evicts the given pod and is useful for testing pod disruption budget rules";
-    homepage    = "https://github.com/rajatjindal/kubectl-evict-pod";
-    license     = licenses.asl20;
+    description =
+      "This plugin evicts the given pod and is useful for testing pod disruption budget rules";
+    homepage = "https://github.com/rajatjindal/kubectl-evict-pod";
+    license = licenses.asl20;
     maintainers = [ maintainers.j4m3s ];
   };
 }

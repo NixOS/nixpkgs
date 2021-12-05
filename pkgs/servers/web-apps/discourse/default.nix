@@ -1,13 +1,11 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript, fetchFromGitHub
+, bundlerEnv, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
+, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, imagemagick
+, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead, libpsl, redis
+, postgresql, which, brotli, procps, rsync, nodePackages, v8
 
-, plugins ? []
-}@args:
+, plugins ? [ ] }@args:
 
 let
   version = "2.7.9";
@@ -30,8 +28,8 @@ let
 
     # Misc required system utils
     which
-    procps       # For ps and kill
-    util-linux   # For renice
+    procps # For ps and kill
+    util-linux # For renice
     gawk
 
     # Image optimization
@@ -51,34 +49,24 @@ let
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
 
-  mkDiscoursePlugin =
-    { name ? null
-    , pname ? null
-    , version ? null
-    , meta ? null
-    , bundlerEnvArgs ? {}
-    , preserveGemsDir ? false
-    , src
-    , ...
-    }@args:
+  mkDiscoursePlugin = { name ? null, pname ? null, version ? null, meta ? null
+    , bundlerEnvArgs ? { }, preserveGemsDir ? false, src, ... }@args:
     let
-      rubyEnv = bundlerEnv (bundlerEnvArgs // {
-        inherit name pname version ruby;
-      });
-    in
-      stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
-        pluginName = if name != null then name else "${pname}-${version}";
-        dontConfigure = true;
-        dontBuild = true;
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out
-          cp -r * $out/
-        '' + lib.optionalString (bundlerEnvArgs != {}) (
-          if preserveGemsDir then ''
-            cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+      rubyEnv =
+        bundlerEnv (bundlerEnvArgs // { inherit name pname version ruby; });
+    in stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
+      pluginName = if name != null then name else "${pname}-${version}";
+      dontConfigure = true;
+      dontBuild = true;
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out
+        cp -r * $out/
+      '' + lib.optionalString (bundlerEnvArgs != { })
+        (if preserveGemsDir then ''
+          cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+        '' else
           ''
-          else ''
             if [[ -e $out/gems ]]; then
               echo "Warning: The repo contains a 'gems' directory which will be removed!"
               echo "         If you need to preserve it, set 'preserveGemsDir = true'."
@@ -86,16 +74,18 @@ let
             fi
             ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
           '' + ''
-          runHook postInstall
-        '');
-      });
+            runHook postInstall
+          '');
+    });
 
-  rake = runCommand "discourse-rake" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
+  rake = runCommand "discourse-rake" { nativeBuildInputs = [ makeWrapper ]; } ''
     mkdir -p $out/bin
     makeWrapper ${rubyEnv}/bin/rake $out/bin/discourse-rake \
-        ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
+        ${
+          lib.concatStrings
+          (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ")
+            runtimeEnv)
+        } \
         --prefix PATH : ${lib.makeBinPath runtimeDeps} \
         --set RAKEOPT '-f ${discourse}/share/discourse/Rakefile' \
         --run 'cd ${discourse}/share/discourse'
@@ -105,50 +95,44 @@ let
     name = "discourse-ruby-env-${version}";
     inherit version ruby;
     gemdir = ./rubyEnv;
-    gemset =
-      let
-        gems = import ./rubyEnv/gemset.nix;
-      in
-        gems // {
-          libv8-node =
-            let
-              noopScript = writeShellScript "noop" "exit 0";
-              linkFiles = writeShellScript "link-files" ''
-                cd ../..
+    gemset = let gems = import ./rubyEnv/gemset.nix;
+    in gems // {
+      libv8-node = let
+        noopScript = writeShellScript "noop" "exit 0";
+        linkFiles = writeShellScript "link-files" ''
+          cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+          mkdir -p vendor/v8/out.gn/libv8/obj/
+          ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
 
-                ln -s ${v8}/include vendor/v8/include
+          ln -s ${v8}/include vendor/v8/include
 
-                mkdir -p ext/libv8-node
-                echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
-              '';
-            in gems.libv8-node // {
-              dontBuild = false;
-              postPatch = ''
-                cp ${noopScript} libexec/build-libv8
-                cp ${noopScript} libexec/build-monolith
-                cp ${noopScript} libexec/download-node
-                cp ${noopScript} libexec/extract-node
-                cp ${linkFiles} libexec/inject-libv8
-              '';
-            };
-          mini_suffix = gems.mini_suffix // {
-            propagatedBuildInputs = [ libpsl ];
-            dontBuild = false;
-            # Use our libpsl instead of the vendored one, which isn't
-            # available for aarch64. It has to be called
-            # libpsl.x86_64.so or it isn't found.
-            postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
-            '';
-          };
-        };
+          mkdir -p ext/libv8-node
+          echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
+        '';
+      in gems.libv8-node // {
+        dontBuild = false;
+        postPatch = ''
+          cp ${noopScript} libexec/build-libv8
+          cp ${noopScript} libexec/build-monolith
+          cp ${noopScript} libexec/download-node
+          cp ${noopScript} libexec/extract-node
+          cp ${linkFiles} libexec/inject-libv8
+        '';
+      };
+      mini_suffix = gems.mini_suffix // {
+        propagatedBuildInputs = [ libpsl ];
+        dontBuild = false;
+        # Use our libpsl instead of the vendored one, which isn't
+        # available for aarch64. It has to be called
+        # libpsl.x86_64.so or it isn't found.
+        postPatch = ''
+          cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+        '';
+      };
+    };
 
-    groups = [
-      "default" "assets" "development" "test"
-    ];
+    groups = [ "default" "assets" "development" "test" ];
   };
 
   assets = stdenv.mkDerivation {
@@ -204,7 +188,8 @@ let
       mkdir $NIX_BUILD_TOP/tmp_home
       export HOME=$NIX_BUILD_TOP/tmp_home
 
-      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
+      ${lib.concatMapStringsSep "\n"
+      (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
 
       export RAILS_ENV=production
 
@@ -233,9 +218,7 @@ let
     pname = "discourse";
     inherit version src;
 
-    buildInputs = [
-      rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler
-    ];
+    buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];
 
     patches = [
       # Load a separate NixOS site settings file
@@ -302,7 +285,9 @@ let
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
-      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
+      ${lib.concatMapStringsSep "\n"
+      (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}")
+      plugins}
 
       runHook postInstall
     '';
@@ -318,9 +303,12 @@ let
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
       enabledPlugins = plugins;
-      plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
+      plugins =
+        callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

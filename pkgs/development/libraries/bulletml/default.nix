@@ -3,11 +3,13 @@
 let
   version = "0.0.6";
   debianRevision = "7";
-  debianPatch = patchname: hash: fetchpatch {
-    name = "${patchname}.patch";
-    url = "https://sources.debian.org/data/main/b/bulletml/${version}-${debianRevision}/debian/patches/${patchname}.patch";
-    sha256 = hash;
-  };
+  debianPatch = patchname: hash:
+    fetchpatch {
+      name = "${patchname}.patch";
+      url =
+        "https://sources.debian.org/data/main/b/bulletml/${version}-${debianRevision}/debian/patches/${patchname}.patch";
+      sha256 = hash;
+    };
 
 in stdenv.mkDerivation {
   pname = "bulletml";
@@ -28,16 +30,18 @@ in stdenv.mkDerivation {
 
   patches = [
     (debianPatch "fixes" "0cnr968n0h50fjmjijx7idsa2pg2pv5cwy6nvfbkx9z8w2zf0mkl")
-    (debianPatch "bulletml_d" "03d1dgln3gkiw019pxn3gwgjkmvzisq8kp3n6fpn38yfwh4fp4hv")
+    (debianPatch "bulletml_d"
+      "03d1dgln3gkiw019pxn3gwgjkmvzisq8kp3n6fpn38yfwh4fp4hv")
     (debianPatch "d_cpp" "04g9c7c89w7cgrxw75mcbdhzxqmz1716li49mhl98znakchrlb9h")
-    (debianPatch "warnings" "18px79x4drvm6dy6w6js53nzlyvha7qaxhz5a99b97pyk3qc7i9g")
-    (debianPatch "makefile" "0z6yxanxmarx0s08gh12pk2wfqjk8g797wmfcqczdv1i6xc7nqzp")
-    (debianPatch "includes" "1n11j5695hs9pspslf748w2cq5d78s6bwhyl476wp6gcq6jw20bw")
+    (debianPatch "warnings"
+      "18px79x4drvm6dy6w6js53nzlyvha7qaxhz5a99b97pyk3qc7i9g")
+    (debianPatch "makefile"
+      "0z6yxanxmarx0s08gh12pk2wfqjk8g797wmfcqczdv1i6xc7nqzp")
+    (debianPatch "includes"
+      "1n11j5695hs9pspslf748w2cq5d78s6bwhyl476wp6gcq6jw20bw")
   ];
 
-  makeFlags = [
-    "-C src"
-  ];
+  makeFlags = [ "-C src" ];
   nativeBuildInputs = [ bison perl ];
   hardeningDisable = [ "format" ];
 

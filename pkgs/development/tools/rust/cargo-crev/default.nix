@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, perl
-, pkg-config
-, SystemConfiguration
-, Security
-, curl
-, libiconv
-, openssl
-, git
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, perl, pkg-config
+, SystemConfiguration, Security, curl, libiconv, openssl, git }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
@@ -32,12 +22,18 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security libiconv curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    SystemConfiguration
+    Security
+    libiconv
+    curl
+  ];
 
   checkInputs = [ git ];
 
   meta = with lib; {
-    description = "A cryptographically verifiable code review system for the cargo (Rust) package manager";
+    description =
+      "A cryptographically verifiable code review system for the cargo (Rust) package manager";
     homepage = "https://github.com/crev-dev/cargo-crev";
     license = with licenses; [ asl20 mit mpl20 ];
     maintainers = with maintainers; [ b4dm4n ];

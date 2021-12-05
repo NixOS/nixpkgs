@@ -1,31 +1,7 @@
-{ automake
-, cmake
-, exiv2
-, expat
-, fetchFromGitHub
-, fftw
-, fftwFloat
-, gettext
-, glib
-, gobject-introspection
-, gtkmm2
-, lcms2
-, lensfun
-, libexif
-, libiptcdata
-, libjpeg
-, libraw
-, libtiff
-, libxml2
-, ninja
-, openexr
-, pcre
-, pkg-config
-, pugixml
-, lib, stdenv
-, swig
-, vips
-}:
+{ automake, cmake, exiv2, expat, fetchFromGitHub, fftw, fftwFloat, gettext, glib
+, gobject-introspection, gtkmm2, lcms2, lensfun, libexif, libiptcdata, libjpeg
+, libraw, libtiff, libxml2, ninja, openexr, pcre, pkg-config, pugixml, lib
+, stdenv, swig, vips }:
 
 stdenv.mkDerivation rec {
   pname = "photoflow";
@@ -57,8 +33,8 @@ stdenv.mkDerivation rec {
     expat
     fftw
     fftwFloat
-    gtkmm2  # Could be build with gtk3 but proper UI theme is missing and therefore not very usable with gtk3
-            # See: https://discuss.pixls.us/t/help-needed-for-gtk3-theme/5803
+    gtkmm2 # Could be build with gtk3 but proper UI theme is missing and therefore not very usable with gtk3
+    # See: https://discuss.pixls.us/t/help-needed-for-gtk3-theme/5803
     lcms2
     lensfun
     libexif
@@ -72,14 +48,12 @@ stdenv.mkDerivation rec {
     vips
   ];
 
-  cmakeFlags = [
-    "-DBUNDLED_EXIV2=OFF"
-    "-DBUNDLED_LENSFUN=OFF"
-    "-DBUNDLED_GEXIV2=OFF"
-  ];
+  cmakeFlags =
+    [ "-DBUNDLED_EXIV2=OFF" "-DBUNDLED_LENSFUN=OFF" "-DBUNDLED_GEXIV2=OFF" ];
 
   meta = with lib; {
-    description = "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
+    description =
+      "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
     homepage = "https://aferrero2707.github.io/PhotoFlow/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.MtP ];

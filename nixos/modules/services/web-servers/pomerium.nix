@@ -2,17 +2,16 @@
 
 with lib;
 
-let
-  format = pkgs.formats.yaml {};
-in
-{
+let format = pkgs.formats.yaml { };
+in {
   options.services.pomerium = {
     enable = mkEnableOption "the Pomerium authenticating reverse proxy";
 
     configFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
+      description =
+        "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
     };
 
     useACMEHost = mkOption {
@@ -41,7 +40,7 @@ in
         configuration reference</link> for more information about what to put
         here.
       '';
-      default = {};
+      default = { };
       type = format.type;
     };
 
@@ -57,12 +56,17 @@ in
 
   config = let
     cfg = config.services.pomerium;
-    cfgFile = if cfg.configFile != null then cfg.configFile else (format.generate "pomerium.yaml" cfg.settings);
+    cfgFile = if cfg.configFile != null then
+      cfg.configFile
+    else
+      (format.generate "pomerium.yaml" cfg.settings);
   in mkIf cfg.enable ({
     systemd.services.pomerium = {
       description = "Pomerium authenticating reverse proxy";
-      wants = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
-      after = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+      wants = [ "network.target" ] ++ (optional (cfg.useACMEHost != null)
+        "acme-finished-${cfg.useACMEHost}.target");
+      after = [ "network.target" ] ++ (optional (cfg.useACMEHost != null)
+        "acme-finished-${cfg.useACMEHost}.target");
       wantedBy = [ "multi-user.target" ];
       environment = optionalAttrs (cfg.useACMEHost != null) {
         CERTIFICATE_FILE = "fullchain.pem";
@@ -75,8 +79,8 @@ in
         StateDirectory = [ "pomerium" ];
         ExecStart = "${pkgs.pomerium}/bin/pomerium -config ${cfgFile}";
 
-        PrivateUsers = false;  # breaks CAP_NET_BIND_SERVICE
-        MemoryDenyWriteExecute = false;  # breaks LuaJIT
+        PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
+        MemoryDenyWriteExecute = false; # breaks LuaJIT
 
         NoNewPrivileges = true;
         PrivateTmp = true;
@@ -99,7 +103,8 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 
-        WorkingDirectory = mkIf (cfg.useACMEHost != null) "$CREDENTIALS_DIRECTORY";
+        WorkingDirectory =
+          mkIf (cfg.useACMEHost != null) "$CREDENTIALS_DIRECTORY";
         LoadCredential = optionals (cfg.useACMEHost != null) [
           "fullchain.pem:/var/lib/acme/${cfg.useACMEHost}/fullchain.pem"
           "key.pem:/var/lib/acme/${cfg.useACMEHost}/key.pem"
@@ -114,17 +119,24 @@ in
     systemd.services.pomerium-config-reload = mkIf (cfg.useACMEHost != null) {
       # TODO(lukegb): figure out how to make config reloading work with credentials.
 
-      wantedBy = [ "acme-finished-${cfg.useACMEHost}.target" "multi-user.target" ];
+      wantedBy =
+        [ "acme-finished-${cfg.useACMEHost}.target" "multi-user.target" ];
       # Before the finished targets, after the renew services.
       before = [ "acme-finished-${cfg.useACMEHost}.target" ];
       after = [ "acme-${cfg.useACMEHost}.service" ];
       # Block reloading if not all certs exist yet.
-      unitConfig.ConditionPathExists = [ "${config.security.acme.certs.${cfg.useACMEHost}.directory}/fullchain.pem" ];
+      unitConfig.ConditionPathExists = [
+        "${
+          config.security.acme.certs.${cfg.useACMEHost}.directory
+        }/fullchain.pem"
+      ];
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;
-        ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active pomerium.service";
-        ExecStart = "/run/current-system/systemd/bin/systemctl restart pomerium.service";
+        ExecCondition =
+          "/run/current-system/systemd/bin/systemctl -q is-active pomerium.service";
+        ExecStart =
+          "/run/current-system/systemd/bin/systemctl restart pomerium.service";
       };
     };
   });

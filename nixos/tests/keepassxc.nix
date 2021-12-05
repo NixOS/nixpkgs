@@ -1,34 +1,29 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
-  name = "keepassxc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
-  };
-
-  machine = { ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
   {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+    name = "keepassxc";
+    meta = with pkgs.lib.maintainers; { maintainers = [ turion ]; };
 
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.keepassxc ];
-  };
+    machine = { ... }:
 
-  enableOCR = true;
+      {
+        imports = [ ./common/user-account.nix ./common/x11.nix ];
 
-  testScript = { nodes, ... }: ''
-    start_all()
-    machine.wait_for_x()
+        services.xserver.enable = true;
+        test-support.displayManager.auto.user = "alice";
+        environment.systemPackages = [ pkgs.keepassxc ];
+      };
 
-    # start KeePassXC window
-    machine.execute("su - alice -c keepassxc >&2 &")
+    enableOCR = true;
 
-    machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
-    machine.screenshot("KeePassXC")
-  '';
-})
+    testScript = { nodes, ... }: ''
+      start_all()
+      machine.wait_for_x()
+
+      # start KeePassXC window
+      machine.execute("su - alice -c keepassxc >&2 &")
+
+      machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
+      machine.screenshot("KeePassXC")
+    '';
+  })

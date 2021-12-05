@@ -69,9 +69,7 @@ let
     }
   ];
 
-in
-
-{
+in {
 
   inherit options;
 
@@ -97,7 +95,7 @@ in
       serviceConfig.LogsDirectory = "tsm-backup";
       serviceConfig.StateDirectory = "tsm-backup";
       serviceConfig.StateDirectoryMode = "0750";
-      startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
+      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 

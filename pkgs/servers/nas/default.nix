@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, imake, bison, flex, gccmakedep
-, xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
+{ lib, stdenv, fetchurl, imake, bison, flex, gccmakedep, xorgproto, libXau
+, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
 stdenv.mkDerivation rec {
   pname = "nas";

@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, autoreconfHook, ApplicationServices}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "duti";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
   };
 
-  nativeBuildInputs = [autoreconfHook];
-  buildInputs = [ApplicationServices];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ApplicationServices ];
   configureFlags = [
     "--with-macosx-sdk=/homeless-shelter"
 
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command-line tool to select default applications for document types and URL schemes on Mac OS X";
+    description =
+      "A command-line tool to select default applications for document types and URL schemes on Mac OS X";
     longDescription = ''
       duti is a command-line utility capable of setting default applications for
       various document types on Mac OS X, using Apple's Uniform Type Identifiers. A
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
       a Microsoft Word document has a UTI of com.microsoft.word.doc. Using duti, the
       user can change which application acts as the default handler for a given UTI.
     '';
-    maintainers = with maintainers; [matthewbauer];
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.darwin;
     license = licenses.publicDomain;
     homepage = "http://duti.org/";

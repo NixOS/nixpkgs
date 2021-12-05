@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, voluptuous
-, pyyaml
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, netifaces, voluptuous, pyyaml
+, pytest-asyncio, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "xknx";
@@ -23,20 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-GZ5FRPQn69+/Fnx10VKWSIAaVXCcVyfvQVH1JaMGRC0=";
   };
 
-  propagatedBuildInputs = [
-    voluptuous
-    netifaces
-    pyyaml
-  ];
+  propagatedBuildInputs = [ voluptuous netifaces pyyaml ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xknx"
-  ];
+  pythonImportsCheck = [ "xknx" ];
 
   meta = with lib; {
     description = "KNX Library Written in Python";

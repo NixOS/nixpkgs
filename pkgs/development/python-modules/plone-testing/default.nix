@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, zope_testing
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, six, zope_testing, setuptools }:
 
 buildPythonPackage rec {
   pname = "plone.testing";

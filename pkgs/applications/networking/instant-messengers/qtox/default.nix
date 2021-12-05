@@ -1,30 +1,7 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, perl
-, libtoxcore
-, libpthreadstubs
-, libXdmcp
-, libXScrnSaver
-, qtbase
-, qtsvg
-, qttools
-, qttranslations
-, ffmpeg
-, filter-audio
-, libexif
-, libsodium
-, libopus
-, libvpx
-, openal
-, pcre
-, qrencode
-, sqlcipher
-, AVFoundation
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, perl
+, libtoxcore, libpthreadstubs, libXdmcp, libXScrnSaver, qtbase, qtsvg, qttools
+, qttranslations, ffmpeg, filter-audio, libexif, libsodium, libopus, libvpx
+, openal, pcre, qrencode, sqlcipher, AVFoundation }:
 
 mkDerivation rec {
   pname = "qtox";

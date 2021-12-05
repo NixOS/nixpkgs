@@ -1,17 +1,5 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, python
-, buildPythonPackage
-, gfortran
-, hypothesis
-, pytest
-, blas
-, lapack
-, writeTextFile
-, cython
-, setuptoolsBuildHook
-, pythonOlder
+{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, gfortran, hypothesis
+, pytest, blas, lapack, writeTextFile, cython, setuptoolsBuildHook, pythonOlder
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -19,9 +7,10 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   cfg = writeTextFile {
     name = "site.cfg";
-    text = (lib.generators.toINI {} {
+    text = (lib.generators.toINI { } {
       ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        include_dirs =
+          "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
         runtime_library_dirs = "${blas}/lib:${lapack}/lib";
         libraries = "lapack,lapacke,blas,cblas";
@@ -75,10 +64,7 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [
-    pytest
-    hypothesis
-  ];
+  checkInputs = [ pytest hypothesis ];
 
   checkPhase = ''
     runHook preCheck
@@ -97,7 +83,7 @@ in buildPythonPackage rec {
 
   # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
+  NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

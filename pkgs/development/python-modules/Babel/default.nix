@@ -1,4 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytestCheckHook, freezegun }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytestCheckHook, freezegun
+}:
 
 buildPythonPackage rec {
   pname = "Babel";
@@ -17,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://babel.edgewall.org";
-    description = "A collection of tools for internationalizing Python applications";
+    description =
+      "A collection of tools for internationalizing Python applications";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

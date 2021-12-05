@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "paste";

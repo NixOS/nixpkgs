@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
-, passlib
-, peewee
-, python-jose
-, sqlalchemy
-, trio
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pydantic, starlette, pytestCheckHook
+, pytest-asyncio, aiosqlite, databases, flask, httpx, passlib, peewee
+, python-jose, sqlalchemy, trio }:
 
 buildPythonPackage rec {
   pname = "fastapi";
@@ -33,10 +19,7 @@ buildPythonPackage rec {
       --replace "starlette ==" "starlette >="
   '';
 
-  propagatedBuildInputs = [
-    starlette
-    pydantic
-  ];
+  propagatedBuildInputs = [ starlette pydantic ];
 
   checkInputs = [
     aiosqlite
@@ -72,7 +55,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
+    description =
+      "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

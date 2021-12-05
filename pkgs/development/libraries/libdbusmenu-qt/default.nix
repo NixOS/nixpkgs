@@ -5,9 +5,8 @@ let
   v = "0.9.2";
   homepage = "https://launchpad.net/${baseName}";
   name = "${baseName}-${v}";
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

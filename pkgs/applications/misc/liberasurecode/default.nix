@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    description = "Erasure Code API library written in C with pluggable Erasure Code backends";
+    description =
+      "Erasure Code API library written in C with pluggable Erasure Code backends";
     homepage = "https://github.com/openstack/liberasurecode";
     license = licenses.bsd2;
     maintainers = teams.openstack.members;

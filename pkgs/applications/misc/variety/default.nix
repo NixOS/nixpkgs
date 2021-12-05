@@ -1,16 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
-, python3Packages
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
-, intltool
-, gtk3
-, gexiv2
-, libnotify
-, gobject-introspection
-, hicolor-icon-theme
-, librsvg
-, wrapGAppsHook
-, makeWrapper
+{ stdenv, lib, fetchFromGitHub, python3Packages, fehSupport ? false, feh
+, imagemagickSupport ? true, imagemagick, intltool, gtk3, gexiv2, libnotify
+, gobject-introspection, hicolor-icon-theme, librsvg, wrapGAppsHook, makeWrapper
 }:
 
 with python3Packages;

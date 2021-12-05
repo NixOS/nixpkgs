@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, substituteAll
-, vala
-, gtk3
-, granite
-, libxml2
-, wingpanel
-, libgee
-, xorg
-, libgnomekbd
-, ibus
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, ninja, substituteAll, vala, gtk3, granite, libxml2, wingpanel, libgee, xorg
+, libgnomekbd, ibus }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-keyboard";
@@ -30,27 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    libxml2
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja libxml2 pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    ibus
-    libgee
-    wingpanel
-    xorg.xkeyboardconfig
-  ];
+  buildInputs = [ granite gtk3 ibus libgee wingpanel xorg.xkeyboardconfig ];
 
   patches = [
     (substituteAll {
@@ -60,7 +29,8 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/wingpanel-indicator-keyboard/pull/110
     (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-keyboard/commit/ea5df2f62a99a216ee5ed137268e710490a852a4.patch";
+      url =
+        "https://github.com/elementary/wingpanel-indicator-keyboard/commit/ea5df2f62a99a216ee5ed137268e710490a852a4.patch";
       sha256 = "0fmdz10xgzsryj0f0dnpjrh9yygjkb91a7pxg0rwddxbprhnr7j0";
     })
   ];

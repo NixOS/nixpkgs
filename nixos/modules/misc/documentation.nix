@@ -6,44 +6,44 @@ let
 
   cfg = config.documentation;
 
-  manualModules =
-    baseModules
+  manualModules = baseModules
     # Modules for which to show options even when not imported
     ++ [ ../virtualisation/qemu-vm.nix ]
     ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
 
   /* For the purpose of generating docs, evaluate options with each derivation
-    in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
-    It isn't perfect, but it seems to cover a vast majority of use cases.
-    Caveat: even if the package is reached by a different means,
-    the path above will be shown and not e.g. `${config.services.foo.package}`. */
+     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
+     It isn't perfect, but it seems to cover a vast majority of use cases.
+     Caveat: even if the package is reached by a different means,
+     the path above will be shown and not e.g. `${config.services.foo.package}`.
+  */
   manual = import ../../doc/manual rec {
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
-    options =
-      let
-        scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
-          args = (config._module.args) // { modules = [ ]; };
-          specialArgs = {
-            pkgs = scrubDerivations "pkgs" pkgs;
-            inherit modulesPath;
-          };
+    options = let
+      scrubbedEval = evalModules {
+        modules = [{ nixpkgs.localSystem = config.nixpkgs.localSystem; }]
+          ++ manualModules;
+        args = (config._module.args) // { modules = [ ]; };
+        specialArgs = {
+          pkgs = scrubDerivations "pkgs" pkgs;
+          inherit modulesPath;
         };
-        scrubDerivations = namePrefix: pkgSet: mapAttrs
-          (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
-              scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
-            else value
-          )
-          pkgSet;
-      in scrubbedEval.options;
+      };
+      scrubDerivations = namePrefix: pkgSet:
+        mapAttrs (name: value:
+          let wholeName = "${namePrefix}.${name}";
+          in if isAttrs value then
+            scrubDerivations wholeName value
+            // (optionalAttrs (isDerivation value) {
+              outPath = "\${${wholeName}}";
+            })
+          else
+            value) pkgSet;
+    in scrubbedEval.options;
   };
-
 
   nixos-help = let
     helpScript = pkgs.writeShellScriptBin "nixos-help" ''
@@ -72,25 +72,32 @@ let
       categories = "System";
     };
 
-    in pkgs.symlinkJoin {
-      name = "nixos-help";
-      paths = [
-        helpScript
-        desktopItem
-      ];
-    };
+  in pkgs.symlinkJoin {
+    name = "nixos-help";
+    paths = [ helpScript desktopItem ];
+  };
 
   # list of man outputs currently active intended for use as default values
   # for man-related options, thus "man" is included unconditionally.
   activeManOutputs = [ "man" ] ++ lib.optionals cfg.dev.enable [ "devman" ];
 
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
-    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRenamedOptionModule [ "programs" "info" "enable" ] [
+      "documentation"
+      "info"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [
+      "documentation"
+      "man"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [
+      "documentation"
+      "nixos"
+      "enable"
+    ])
   ];
 
   options = {
@@ -137,7 +144,8 @@ in
           extraOutputsToInstall = activeManOutputs;
           ignoreCollisions = true;
         };
-        defaultText = literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
+        defaultText = literalDocBook
+          "all man pages in <option>config.environment.systemPackages</option>";
         description = ''
           The manual pages to generate caches for if <option>generateCaches</option>
           is enabled. Must be a path to a directory with man pages under
@@ -231,31 +239,30 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = activeManOutputs;
-      environment.etc."man_db.conf".text =
-        let
-          manualCache = pkgs.runCommandLocal "man-cache" { } ''
-            echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
-          '';
-        in
-        ''
-          # Manual pages paths for NixOS
-          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
-          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+      environment.etc."man_db.conf".text = let
+        manualCache = pkgs.runCommandLocal "man-cache" { } ''
+          echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
+          ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+        '';
+      in ''
+        # Manual pages paths for NixOS
+        MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
+        MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
 
-          ${optionalString cfg.man.generateCaches ''
+        ${optionalString cfg.man.generateCaches ''
           # Generated manual pages cache for NixOS (immutable)
           MANDB_MAP /run/current-system/sw/share/man ${manualCache}
-          ''}
-          # Manual pages caches for NixOS
-          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
-        '';
+        ''}
+        # Manual pages caches for NixOS
+        MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
+      '';
     })
 
     (mkIf cfg.info.enable {
       environment.systemPackages = [ pkgs.texinfoInteractive ];
       environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable "devinfo";
+      environment.extraOutputsToInstall = [ "info" ]
+        ++ optional cfg.dev.enable "devinfo";
       environment.extraSetup = ''
         if [ -w $out/share/info ]; then
           shopt -s nullglob
@@ -268,19 +275,20 @@ in
 
     (mkIf cfg.doc.enable {
       environment.pathsToLink = [ "/share/doc" ];
-      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
+      environment.extraOutputsToInstall = [ "doc" ]
+        ++ optional cfg.dev.enable "devdoc";
     })
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
+      environment.systemPackages = [ ]
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
 
-      services.getty.helpLine = mkIf cfg.doc.enable (
-          "\nRun 'nixos-help' for the NixOS manual."
-      );
+      services.getty.helpLine = mkIf cfg.doc.enable (''
+
+        Run 'nixos-help' for the NixOS manual.'');
     })
 
   ]);

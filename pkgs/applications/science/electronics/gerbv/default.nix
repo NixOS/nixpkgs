@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, pkg-config, gettext, libtool, automake, autoconf, cairo, gtk2, autoreconfHook }:
+{ lib, stdenv, fetchgit, pkg-config, gettext, libtool, automake, autoconf, cairo
+, gtk2, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "gerbv";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ gettext libtool automake autoconf cairo gtk2 ];
 
-  configureFlags = ["--disable-update-desktop-database"];
+  configureFlags = [ "--disable-update-desktop-database" ];
 
   meta = with lib; {
     description = "A Gerber (RS-274X) viewer";

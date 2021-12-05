@@ -43,7 +43,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "File syncing and sharing software with file encryption and group sharing, emphasis on reliability and high performance";
+    description =
+      "File syncing and sharing software with file encryption and group sharing, emphasis on reliability and high performance";
     homepage = "https://github.com/haiwen/seafile-server";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

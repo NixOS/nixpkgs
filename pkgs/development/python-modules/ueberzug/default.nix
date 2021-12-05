@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, libX11, libXext
-, attrs, docopt, pillow, psutil, xlib }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, libX11, libXext, attrs, docopt
+, pillow, psutil, xlib }:
 
 buildPythonPackage rec {
   pname = "ueberzug";

@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-}:
+{ lib, stdenv, fetchFromGitHub, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
@@ -15,9 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-t3PydmS2+LU++2NcosgMr9KTXW0Qy1Re9+YcS3KMDi8=";
   };
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
 
   installPhase = ''
     mv usr $out # files get installed like so: msgfmt -o usr/share/locale/$lang/LC_MESSAGES/$dir.mo $file

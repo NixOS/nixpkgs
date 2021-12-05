@@ -34,7 +34,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.cs.unm.edu/~mccune/mace4/";
     license = licenses.gpl1;
-    description = "Automated theorem prover for first-order and equational logic";
+    description =
+      "Automated theorem prover for first-order and equational logic";
     longDescription = ''
       Prover9 is a resolution/paramodulation automated theorem prover
       for first-order and equational logic. Prover9 is a successor of

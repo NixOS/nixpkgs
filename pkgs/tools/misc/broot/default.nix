@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, libgit2
-, oniguruma
-, libiconv
-, Security
-, libxcb
-, zlib
-}:
+{ lib, stdenv, rustPlatform, fetchCrate, installShellFiles, makeWrapper
+, pkg-config, libgit2, oniguruma, libiconv, Security, libxcb, zlib }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
@@ -24,17 +12,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ndFymXT2hA4ZztePDFhAYlMh8Iwxi1/ULZYGq+W5vpE=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-    pkg-config
-  ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
 
-  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-    zlib
-  ];
+  buildInputs = [ libgit2 oniguruma libxcb ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security zlib ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -74,7 +55,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
+    description =
+      "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];

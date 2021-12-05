@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, certauth
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, certauth }:
 
 buildPythonPackage rec {
   pname = "wsgiprox";
@@ -17,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EquddaNrVceyJHuQMCajKHGZX2Q7ebR0Zhvi2pl2WEw=";
   };
 
-  propagatedBuildInputs = [
-    six
-    certauth
-  ];
+  propagatedBuildInputs = [ six certauth ];
 
   pythonImportsCheck = [ "wsgiprox" ];
 
@@ -28,7 +20,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python WSGI Middleware for adding HTTP/S proxy support to any WSGI Application";
+    description =
+      "Python WSGI Middleware for adding HTTP/S proxy support to any WSGI Application";
     homepage = "https://github.com/webrecorder/wsgiprox";
     license = licenses.asl20;
     maintainers = with maintainers; [ Luflosi ];

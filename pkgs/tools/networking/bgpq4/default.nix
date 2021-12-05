@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8r70tetbTq8GxxtFe71gDYy+wg8yBwYpl1gsu5aAHTA=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "BGP filtering automation tool";

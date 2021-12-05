@@ -1,16 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
+{ lib, stdenv, fetchFromGitHub, pkg-config
 
-, expat
-, libcdio
-, libcdio-paranoia
-, libpulseaudio
-, smooth
-, uriparser
-, zlib
-}:
+, expat, libcdio, libcdio-paranoia, libpulseaudio, smooth, uriparser, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "BoCA";
@@ -23,23 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ooLPpwTxG7QBAGhEGhta4T06ZDWlPysocHbb/Sq7Wyo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    expat
-    libcdio
-    libcdio-paranoia
-    libpulseaudio
-    smooth
-    uriparser
-    zlib
-  ];
+  buildInputs =
+    [ expat libcdio libcdio-paranoia libpulseaudio smooth uriparser zlib ];
 
-  makeFlags = [
-    "prefix=$(out)"
-  ];
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
     description = "A component library used by the fre:ac audio converter";

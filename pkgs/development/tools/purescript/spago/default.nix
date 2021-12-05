@@ -1,29 +1,19 @@
-{ haskell
-, haskellPackages
-, lib
+{ haskell, haskellPackages, lib
 
 # The following are only needed for the passthru.tests:
-, cacert
-, git
-, nodejs
-, purescript
-, runCommand
-}:
+, cacert, git, nodejs, purescript, runCommand }:
 
 let
-  spago =
-    haskell.lib.compose.justStaticExecutables
-      (haskell.lib.compose.overrideCabal (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
-          lib.maintainers.cdepillabout
-        ];
-        changelog =
-          "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
-      }) haskellPackages.spago);
-in
+  spago = haskell.lib.compose.justStaticExecutables
+    (haskell.lib.compose.overrideCabal (oldAttrs: {
+      maintainers = (oldAttrs.maintainers or [ ])
+        ++ [ lib.maintainers.cdepillabout ];
+      changelog =
+        "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
+    }) haskellPackages.spago);
 
-spago.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+in spago.overrideAttrs (oldAttrs: {
+  passthru = (oldAttrs.passthru or { }) // {
     updateScript = ./update.sh;
 
     # These tests can be run with the following command.  The tests access the
@@ -32,30 +22,20 @@ spago.overrideAttrs (oldAttrs: {
     #
     # $ sudo nix-build -A spago.passthru.tests --option sandbox relaxed
     #
-    tests =
-      runCommand
-        "spago-tests"
-        {
-          __noChroot = true;
-          nativeBuildInputs = [
-            cacert
-            git
-            nodejs
-            purescript
-            spago
-          ];
-        }
-        ''
-          # spago expects HOME to be set because it creates a cache file under
-          # home.
-          HOME=$(pwd)
+    tests = runCommand "spago-tests" {
+      __noChroot = true;
+      nativeBuildInputs = [ cacert git nodejs purescript spago ];
+    } ''
+      # spago expects HOME to be set because it creates a cache file under
+      # home.
+      HOME=$(pwd)
 
-          spago --verbose init
-          spago --verbose build
-          spago --verbose test
+      spago --verbose init
+      spago --verbose build
+      spago --verbose test
 
-          touch $out
-        '';
+      touch $out
+    '';
   };
 })
 

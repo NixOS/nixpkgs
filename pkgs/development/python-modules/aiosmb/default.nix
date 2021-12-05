@@ -1,17 +1,5 @@
-{ lib
-, asysocks
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, minikerberos
-, prompt-toolkit
-, pycryptodomex
-, pythonOlder
-, six
-, tqdm
-, winacl
-, winsspi
-}:
+{ lib, asysocks, buildPythonPackage, colorama, fetchFromGitHub, minikerberos
+, prompt-toolkit, pycryptodomex, pythonOlder, six, tqdm, winacl, winsspi }:
 
 buildPythonPackage rec {
   pname = "aiosmb";

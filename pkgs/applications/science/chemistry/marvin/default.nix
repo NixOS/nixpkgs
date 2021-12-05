@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, jre }:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused
+, jre }:
 
 with lib;
 
@@ -8,7 +9,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "marvin-${version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
+    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${
+        versions.majorMinor version
+      }.deb";
     sha256 = "sha256-T94SoHAZmBfbGaFiuYAKhuKgHaXcDZix//YTTq1oFIk=";
   };
 
@@ -34,12 +37,15 @@ stdenv.mkDerivation rec {
       wrapBin $out/opt/chemaxon/marvinsuite/bin/$name
     done
     ${concatStrings (map (name: ''
-      substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
+      substitute ${
+        ./. + "/${name}.desktop"
+      } $out/share/applications/${name}.desktop --subst-var out
     '') [ "LicenseManager" "MarvinSketch" "MarvinView" ])}
   '';
 
   meta = {
-    description = "A chemical modelling, analysis and structure drawing program";
+    description =
+      "A chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
     maintainers = with maintainers; [ fusion809 ];
     license = licenses.unfree;

@@ -3,7 +3,8 @@
 fetchzip {
   name = "vdrsymbols-20100612";
 
-  url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
+  url =
+    "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
 
   sha256 = "0wpxns8zqic98c84j18dr4zmj092v07yq07vwwgzblr0rw9n6gzr";
 

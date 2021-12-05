@@ -1,38 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, alsa-lib
-, acpid
-, bc
-, ddcutil
-, efl
-, pam
-, xkeyboard_config
-, udisks2
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, alsa-lib, acpid, bc
+, ddcutil, efl, pam, xkeyboard_config, udisks2
 
-, waylandSupport ? false, wayland-protocols, xwayland
-, bluetoothSupport ? true, bluez5
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-}:
+, waylandSupport ? false, wayland-protocols, xwayland, bluetoothSupport ? true
+, bluez5, pulseSupport ? !stdenv.isDarwin, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
   version = "0.24.2";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1wfz0rwwsx7c1mkswn4hc9xw1i6bsdirhxiycf7ha2vcipqy465y";
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ gettext meson ninja pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -43,11 +25,11 @@ stdenv.mkDerivation rec {
     pam
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting
-  ]
-  ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
-  ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
-  ++ lib.optionals waylandSupport [ wayland-protocols xwayland ]
-  ;
+  ] ++ lib.optional bluetoothSupport
+    bluez5 # for bluetooth configuration and control
+    ++ lib.optional pulseSupport
+    libpulseaudio # for proper audio device control and redirection
+    ++ lib.optionals waylandSupport [ wayland-protocols xwayland ];
 
   patches = [
     # Executables cannot be made setuid in nix store. They should be
@@ -62,9 +44,8 @@ stdenv.mkDerivation rec {
       --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
 
-  mesonFlags = [
-    "-D systemdunitdir=lib/systemd/user"
-  ] ++ lib.optional waylandSupport "-Dwl=true";
+  mesonFlags = [ "-D systemdunitdir=lib/systemd/user" ]
+    ++ lib.optional waylandSupport "-Dwl=true";
 
   passthru.providedSessions = [ "enlightenment" ];
 

@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "3.0.5";
+let version = "3.0.5";
 in fetchzip rec {
   name = "overpass-${version}";
 
-  url = "https://github.com/RedHatOfficial/Overpass/releases/download/v${version}/overpass-${version}.zip";
+  url =
+    "https://github.com/RedHatOfficial/Overpass/releases/download/v${version}/overpass-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts $out/share/doc

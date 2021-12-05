@@ -12,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "bcce022250ee97cfbb0ad07b02388ac90a226ef4b479ec84317152345a565614";
   };
 
-  pythonImportsCheck = [
-    "webargs"
-  ];
+  pythonImportsCheck = [ "webargs" ];
 
   propagatedBuildInputs = [ marshmallow ];
 
@@ -33,7 +31,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
+    description =
+      "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
     homepage = "https://github.com/marshmallow-code/webargs";
     license = licenses.mit;
     maintainers = with maintainers; [ cript0nauta ];

@@ -11,9 +11,7 @@
 with lib;
 
 {
-  meta = {
-    maintainers = [ maintainers.joachifm maintainers.emily ];
-  };
+  meta = { maintainers = [ maintainers.joachifm maintainers.emily ]; };
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
 
@@ -31,7 +29,8 @@ with lib;
   security.forcePageTableIsolation = mkDefault true;
 
   # This is required by podman to run containers in rootless mode.
-  security.unprivilegedUsernsClone = mkDefault config.virtualisation.containers.enable;
+  security.unprivilegedUsernsClone =
+    mkDefault config.virtualisation.containers.enable;
 
   security.virtualisation.flushL1DataCache = mkDefault "always";
 

@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, wrapQtAppsHook
-, pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, wrapQtAppsHook, pyface
+, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
@@ -26,9 +25,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
-    pyface pygments numpy vtk traitsui envisage apptools pyqt5
-  ];
+  propagatedBuildInputs =
+    [ pyface pygments numpy vtk traitsui envisage apptools pyqt5 ];
 
   doCheck = false; # Needs X server
   pythonImportsCheck = [ "mayavi" ];

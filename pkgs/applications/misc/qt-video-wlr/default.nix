@@ -1,12 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, gst_all_1, wrapQtAppsHook, qtbase, qtmultimedia }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, meson, ninja, wayland, pixman, cairo
+, librsvg, wayland-protocols, wlroots, libxkbcommon, gst_all_1, wrapQtAppsHook
+, qtbase, qtmultimedia }:
 let
- gstreamerPath = with gst_all_1; lib.makeSearchPath "lib/gstreamer-1.0" [
-     gstreamer
-     gst-plugins-base
-     gst-plugins-good
-     gst-plugins-bad
-     gst-plugins-ugly
- ];
+  gstreamerPath = with gst_all_1;
+    lib.makeSearchPath "lib/gstreamer-1.0" [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ];
 in stdenv.mkDerivation rec {
   pname = "qt-video-wlr";
   version = "2020-08-03";
@@ -20,24 +23,25 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja wrapQtAppsHook ];
   buildInputs = [
-      wayland
-      pixman
-      cairo
-      librsvg
-      wayland-protocols
-      wlroots
-      libxkbcommon
-      qtbase
-      qtmultimedia
+    wayland
+    pixman
+    cairo
+    librsvg
+    wayland-protocols
+    wlroots
+    libxkbcommon
+    qtbase
+    qtmultimedia
   ];
 
   qtWrapperArgs = [
-      "--prefix PATH : $out/bin/qt-video-wlr"
-      "--prefix GST_PLUGIN_PATH : ${gstreamerPath}"
+    "--prefix PATH : $out/bin/qt-video-wlr"
+    "--prefix GST_PLUGIN_PATH : ${gstreamerPath}"
   ];
 
   meta = with lib; {
-    description = "Qt pip-mode-like video player for wlroots-based wayland compositors";
+    description =
+      "Qt pip-mode-like video player for wlroots-based wayland compositors";
     homepage = "https://github.com/xdavidwu/qt-video-wlr";
     license = licenses.mit;
     maintainers = with maintainers; [ fionera ];

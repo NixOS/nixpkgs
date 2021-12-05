@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, mkDerivation
-, qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
-, python3, pyotherside
-, pcsclite, yubikey-personalization
+{ lib, stdenv, fetchurl, mkDerivation, qmake, qtbase, qtquickcontrols2
+, qtgraphicaleffects, python3, pyotherside, pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
 mkDerivation rec {
@@ -9,7 +7,8 @@ mkDerivation rec {
   version = "5.0.5";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
+    url =
+      "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
     sha256 = "05xs6xh9pi50h0668arirj0gnz11adpixgsdkds072077gasdm0g";
   };
 
@@ -35,7 +34,9 @@ mkDerivation rec {
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --prefix QML2_IMPORT_PATH : "${pyotherside}/${qtbase.qtQmlPrefix}" \
       --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so" \
-      --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.getLib pcsclite
+      }/lib:${yubikey-personalization}/lib"
 
       mkdir -p $out/share/applications
       cp resources/com.yubico.yubioath.desktop \
@@ -57,7 +58,8 @@ mkDerivation rec {
 
     homepage = "https://developers.yubico.com/yubioath-desktop";
     downloadPage = "https://developers.yubico.com/yubioath-desktop/Releases/";
-    changelog = "https://developers.yubico.com/yubioath-desktop/Release_Notes.html";
+    changelog =
+      "https://developers.yubico.com/yubioath-desktop/Release_Notes.html";
 
     license = lib.licenses.bsd2;
     maintainers = with maintainers; [ mic92 risson ];

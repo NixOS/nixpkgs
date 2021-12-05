@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchgit, bash-completion, cmake, pkg-config
-, libdrm, libpciaccess, llvmPackages, ncurses
-}:
+{ lib, stdenv, fetchgit, bash-completion, cmake, pkg-config, libdrm
+, libpciaccess, llvmPackages, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "umr";
@@ -14,13 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
 
-  buildInputs = [
-    bash-completion
-    libdrm
-    libpciaccess
-    llvmPackages.llvm
-    ncurses
-  ];
+  buildInputs =
+    [ bash-completion libdrm libpciaccess llvmPackages.llvm ncurses ];
 
   # Remove static libraries (there are no dynamic libraries in there)
   postInstall = ''
@@ -33,5 +27,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
- };
+  };
 }

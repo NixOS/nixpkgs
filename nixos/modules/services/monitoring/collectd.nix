@@ -30,10 +30,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  package =
-    if cfg.buildMinimalPackage
-    then minimalPackage
-    else cfg.package;
+  package = if cfg.buildMinimalPackage then minimalPackage else cfg.package;
 
   minimalPackage = cfg.package.override {
     enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
@@ -85,7 +82,7 @@ in {
     };
 
     include = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional paths to load config from.
       '';
@@ -93,8 +90,12 @@ in {
     };
 
     plugins = mkOption {
-      default = {};
-      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+      default = { };
+      example = {
+        cpu = "";
+        memory = "";
+        network = "Server 192.168.1.1 25826";
+      };
       description = ''
         Attribute set of plugin names to plugin config segments
       '';
@@ -112,9 +113,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} - - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' - ${cfg.user} - - -" ];
 
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
@@ -130,9 +129,7 @@ in {
     };
 
     users.users = optionalAttrs (cfg.user == "collectd") {
-      collectd = {
-        isSystemUser = true;
-      };
+      collectd = { isSystemUser = true; };
     };
   };
 }

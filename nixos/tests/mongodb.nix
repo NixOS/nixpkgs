@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
 
     nodes = {
-      node = {...}: {
+      node = { ... }: {
         environment.systemPackages = with pkgs; [
           mongodb-3_4
           mongodb-3_6
@@ -43,12 +43,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     testScript = ''
       node.start()
-    ''
-      + runMongoDBTest pkgs.mongodb-3_4
-      + runMongoDBTest pkgs.mongodb-3_6
-      + runMongoDBTest pkgs.mongodb-4_0
-      + runMongoDBTest pkgs.mongodb-4_2
-      + ''
+    '' + runMongoDBTest pkgs.mongodb-3_4 + runMongoDBTest pkgs.mongodb-3_6
+      + runMongoDBTest pkgs.mongodb-4_0 + runMongoDBTest pkgs.mongodb-4_2 + ''
         node.shutdown()
       '';
   })

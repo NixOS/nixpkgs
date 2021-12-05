@@ -1,10 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, bi
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, contrib, bi, lib }:
+build-idris-package {
   name = "trees";
   version = "2018-03-19";
 

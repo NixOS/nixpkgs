@@ -3,21 +3,21 @@
 let
 
   inherit (builtins) length map;
-  inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
+  inherit (lib.attrsets)
+    attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) concatStringsSep optionalString toLower;
-  inherit (lib.types) addCheck attrsOf lines nullOr package path port str strMatching submodule;
+  inherit (lib.types)
+    addCheck attrsOf lines nullOr package path port str strMatching submodule;
 
   # Checks if given list of strings contains unique
   # elements when compared without considering case.
   # Type: checkIUnique :: [string] -> bool
   # Example: checkIUnique ["foo" "Foo"] => false
   checkIUnique = lst:
-    let
-      lenUniq = l: length (lib.lists.unique l);
-    in
-      lenUniq lst == lenUniq (map toLower lst);
+    let lenUniq = l: length (lib.lists.unique l);
+    in lenUniq lst == lenUniq (map toLower lst);
 
   # TSM rejects servername strings longer than 64 chars.
   servernameType = strMatching ".{1,64}";
@@ -45,8 +45,8 @@ let
       '';
     };
     options.port = mkOption {
-      type = addCheck port (p: p<=32767);
-      default = 1500;  # official default
+      type = addCheck port (p: p <= 32767);
+      default = 1500; # official default
       description = ''
         TCP port of the IBM TSM server.
         The value will be used for the
@@ -108,10 +108,9 @@ let
       # TSM option keys are case insensitive;
       # we have to ensure there are no keys that
       # differ only by upper and lower case.
-      type = addCheck
-        (attrsOf (nullOr str))
-        (attrs: checkIUnique (attrNames attrs));
-      default = {};
+      type =
+        addCheck (attrsOf (nullOr str)) (attrs: checkIUnique (attrNames attrs));
+      default = { };
       example.compression = "yes";
       example.passwordaccess = null;
       description = ''
@@ -123,8 +122,7 @@ let
     };
     options.text = mkOption {
       type = lines;
-      example = literalExpression
-        ''lib.modules.mkAfter "compression no"'';
+      example = literalExpression ''lib.modules.mkAfter "compression no"'';
       description = ''
         Additional text lines for the server stanza.
         This option can be used if certion configuration keys
@@ -145,26 +143,22 @@ let
     config.name = mkDefault name;
     # Client system-options file directives are explained here:
     # https://www.ibm.com/support/knowledgecenter/SSEQVQ_8.1.8/client/c_opt_usingopts.html
-    config.extraConfig =
-      mapAttrs (lib.trivial.const mkDefault) (
-        {
-          commmethod = "v6tcpip";  # uses v4 or v6, based on dns lookup result
-          tcpserveraddress = config.server;
-          tcpport = builtins.toString config.port;
-          nodename = config.node;
-          passwordaccess = if config.genPasswd then "generate" else "prompt";
-          passworddir = ''"${config.passwdDir}"'';
-        } // optionalAttrs (config.includeExclude!="") {
-          inclexcl = ''"${pkgs.writeText "inclexcl.dsm.sys" config.includeExclude}"'';
-        }
-      );
-    config.text =
-      let
-        attrset = filterAttrs (k: v: v!=null) config.extraConfig;
-        mkLine = k: v: k + optionalString (v!="") "  ${v}";
-        lines = mapAttrsToList mkLine attrset;
-      in
-        concatStringsSep "\n" lines;
+    config.extraConfig = mapAttrs (lib.trivial.const mkDefault) ({
+      commmethod = "v6tcpip"; # uses v4 or v6, based on dns lookup result
+      tcpserveraddress = config.server;
+      tcpport = builtins.toString config.port;
+      nodename = config.node;
+      passwordaccess = if config.genPasswd then "generate" else "prompt";
+      passworddir = ''"${config.passwdDir}"'';
+    } // optionalAttrs (config.includeExclude != "") {
+      inclexcl =
+        ''"${pkgs.writeText "inclexcl.dsm.sys" config.includeExclude}"'';
+    });
+    config.text = let
+      attrset = filterAttrs (k: v: v != null) config.extraConfig;
+      mkLine = k: v: k + optionalString (v != "") "  ${v}";
+      lines = mapAttrsToList mkLine attrset;
+    in concatStringsSep "\n" lines;
     config.stanza = ''
       server  ${config.name}
       ${config.text}
@@ -179,7 +173,7 @@ let
     '';
     servers = mkOption {
       type = attrsOf (submodule [ serverOptions ]);
-      default = {};
+      default = { };
       example.mainTsmServer = {
         server = "tsmserver.company.com";
         node = "MY-TSM-NODE";
@@ -250,7 +244,8 @@ let
       '';
     }
     {
-      assertion = (cfg.defaultServername!=null)->(hasAttr cfg.defaultServername cfg.servers);
+      assertion = (cfg.defaultServername != null)
+        -> (hasAttr cfg.defaultServername cfg.servers);
       message = "TSM defaultServername not found in list of servers";
     }
   ];
@@ -261,14 +256,13 @@ let
     ****  Do not edit!
     ****  This file is generated by NixOS configuration.
 
-    ${optionalString (cfg.defaultServername!=null) "defaultserver  ${cfg.defaultServername}"}
+    ${optionalString (cfg.defaultServername != null)
+    "defaultserver  ${cfg.defaultServername}"}
 
     ${concatStringsSep "\n" (mapAttrsToList (k: v: v.stanza) cfg.servers)}
   '';
 
-in
-
-{
+in {
 
   inherit options;
 

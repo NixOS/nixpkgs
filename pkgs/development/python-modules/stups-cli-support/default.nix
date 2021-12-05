@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, clickclick
-, dnspython
-, requests
-, pytest
-, pytest-cov
-, isPy3k
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, clickclick, dnspython, requests
+, pytest, pytest-cov, isPy3k }:
 
 buildPythonPackage rec {
   pname = "stups-cli-support";
@@ -21,18 +13,11 @@ buildPythonPackage rec {
     sha256 = "1r6g29gd009p87m8a6wv4rzx7f0564zdv67qz5xys4wsgvc95bx0";
   };
 
-  propagatedBuildInputs = [
-    clickclick
-    dnspython
-    requests
-  ];
+  propagatedBuildInputs = [ clickclick dnspython requests ];
 
   preCheck = "export HOME=$TEMPDIR";
 
-  checkInputs = [
-    pytest
-    pytest-cov
-  ];
+  checkInputs = [ pytest pytest-cov ];
 
   meta = with lib; {
     description = "Helper library for all STUPS command line tools.";

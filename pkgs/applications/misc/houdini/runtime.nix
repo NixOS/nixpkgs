@@ -1,9 +1,7 @@
 { lib, stdenv, requireFile, bc }:
 
-let
-  license_dir = "~/.config/houdini";
-in
-stdenv.mkDerivation rec {
+let license_dir = "~/.config/houdini";
+in stdenv.mkDerivation rec {
   version = "18.5.596";
   pname = "houdini-runtime";
   src = requireFile rec {

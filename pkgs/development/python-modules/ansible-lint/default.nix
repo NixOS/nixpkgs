@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
-, ansible-base
-, enrich
-, flaky
-, pyyaml
-, rich
-, ruamel-yaml
-, tenacity
-, wcmatch
-, yamllint
-, pytest-xdist
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, setuptools-scm, ansible-base
+, enrich, flaky, pyyaml, rich, ruamel-yaml, tenacity, wcmatch, yamllint
+, pytest-xdist, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
@@ -27,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-LlaJQ6uZ9kdN8mK8NYCNiwVXVKprMgRknVeIRzO6zi4=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     ansible-base
@@ -43,14 +27,9 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-xdist pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "--numprocesses" "auto"
-  ];
+  pytestFlagsArray = [ "--numprocesses" "auto" ];
 
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't

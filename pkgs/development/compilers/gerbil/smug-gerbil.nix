@@ -6,10 +6,10 @@ gerbil-support.gerbilPackage {
   git-version = "95d60d4";
   gerbil-package = "drewc/smug";
   gerbil = gerbil-unstable;
-  gerbilInputs = [];
-  buildInputs = [];
+  gerbilInputs = [ ];
+  buildInputs = [ ];
   gambit-params = gambit-support.unstable-params;
-  version-path = ""; #"version";
+  version-path = ""; # "version";
   softwareName = "Smug-Gerbil";
   src = fetchFromGitHub {
     owner = "drewc";
@@ -19,9 +19,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Super Monadic Über Go-into : Parsers and Gerbil Scheme";
-    homepage    = "https://github.com/drewc/smug-gerbil";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
+    homepage = "https://github.com/drewc/smug-gerbil";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
   buildScript = ''

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, commentjson
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, commentjson, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "resolvelib";
@@ -21,10 +16,7 @@ buildPythonPackage rec {
     sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
   };
 
-  checkInputs = [
-    commentjson
-    pytestCheckHook
-  ];
+  checkInputs = [ commentjson pytestCheckHook ];
 
   meta = with lib; {
     description = "Resolve abstract dependencies into concrete ones";

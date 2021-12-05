@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/4a5bfe522ea5afd8203e804dc6a642d0871cd6dd/srcpkgs/fbv/patches/giflib-5.1.patch";
+      url =
+        "https://raw.githubusercontent.com/void-linux/void-packages/4a5bfe522ea5afd8203e804dc6a642d0871cd6dd/srcpkgs/fbv/patches/giflib-5.1.patch";
       sha256 = "00q1zcn92yvvyij68bnq0m1sr3a411w914f4nyp6mpz0j5xc6dc7";
     })
   ];

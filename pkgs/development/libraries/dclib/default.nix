@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libxml2, openssl, bzip2}:
+{ lib, stdenv, fetchurl, libxml2, openssl, bzip2 }:
 
 stdenv.mkDerivation {
   name = "dclib-0.3.7";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "02jdzm5hqzs1dv2rd596vgpcjaapm55pqqapz5m94l30v4q72rfc";
   };
 
-  buildInputs = [libxml2 openssl bzip2];
+  buildInputs = [ libxml2 openssl bzip2 ];
 
   meta = with lib; {
     description = "Peer-to-Peer file sharing client";

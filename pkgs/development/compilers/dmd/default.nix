@@ -1,28 +1,26 @@
-{ stdenv, lib, fetchFromGitHub
-, makeWrapper, unzip, which, writeTextFile
-, curl, tzdata, gdb, Foundation, git, callPackage
-, targetPackages, fetchpatch, bash
-, HOST_DMD? "${callPackage ./bootstrap.nix { }}/bin/dmd"
-, version? "2.097.2"
-, dmdSha256? "16ldkk32y7ln82n7g2ym5d1xf3vly3i31hf8600cpvimf6yhr6kb"
-, druntimeSha256? "1sayg6ia85jln8g28vb4m124c27lgbkd6xzg9gblss8ardb8dsp1"
-, phobosSha256? "0czg13h65b6qwhk9ibya21z3iv3fpk3rsjr3zbcrpc2spqjknfw5"
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, unzip, which, writeTextFile, curl
+, tzdata, gdb, Foundation, git, callPackage, targetPackages, fetchpatch, bash
+, HOST_DMD ? "${callPackage ./bootstrap.nix { }}/bin/dmd", version ? "2.097.2"
+, dmdSha256 ? "16ldkk32y7ln82n7g2ym5d1xf3vly3i31hf8600cpvimf6yhr6kb"
+, druntimeSha256 ? "1sayg6ia85jln8g28vb4m124c27lgbkd6xzg9gblss8ardb8dsp1"
+, phobosSha256 ? "0czg13h65b6qwhk9ibya21z3iv3fpk3rsjr3zbcrpc2spqjknfw5" }:
 
 let
   dmdConfFile = writeTextFile {
     name = "dmd.conf";
-    text = (lib.generators.toINI {} {
+    text = (lib.generators.toINI { } {
       Environment = {
-        DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
+        DFLAGS = "-I@out@/include/dmd -L-L@out@/lib -fPIC ${
+            lib.optionalString (!targetPackages.stdenv.cc.isClang)
+            "-L--export-dynamic"
+          }";
       };
     });
   };
 
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dmd";
   inherit version;
 
@@ -60,16 +58,18 @@ stdenv.mkDerivation rec {
   # Not using patches option to make it easy to patch, for example, dmd and
   # Phobos at same time if that's required
   patchPhase =
-  lib.optionalString (builtins.compareVersions version "2.092.1" <= 0) ''
-    patch -p1 -F3 --directory=druntime -i ${(fetchpatch {
-      url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
-      sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
-    })}
+    lib.optionalString (builtins.compareVersions version "2.092.1" <= 0) ''
+      patch -p1 -F3 --directory=druntime -i ${
+        (fetchpatch {
+          url =
+            "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
+          sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
+        })
+      }
 
-  '' + postPatch;
+    '' + postPatch;
 
-  postPatch =
-  ''
+  postPatch = ''
     patchShebangs .
 
   '' + lib.optionalString (version == "2.092.1") ''
@@ -99,11 +99,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdb curl tzdata ]
     ++ lib.optional stdenv.isDarwin [ Foundation gdb ];
 
-
-  osname = if stdenv.isDarwin then
-    "osx"
-  else
-    stdenv.hostPlatform.parsed.kernel.name;
+  osname =
+    if stdenv.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
   top = "$NIX_BUILD_TOP";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 

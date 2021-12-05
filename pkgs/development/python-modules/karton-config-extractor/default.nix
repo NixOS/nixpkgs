@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, malduck
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, karton-core, malduck }:
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1kq0gbfz9y0n0bcblyrmwv4la3lcf86lf80794sdvyvn49g0brny";
   };
 
-  propagatedBuildInputs = [
-    karton-core
-    malduck
-  ];
+  propagatedBuildInputs = [ karton-core malduck ];
 
   postPatch = ''
     substituteInPlace requirements.txt \

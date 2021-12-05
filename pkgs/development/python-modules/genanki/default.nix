@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytest-runner
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cached-property, frozendict
+, pystache, pyyaml, pytest, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "genanki";
@@ -11,13 +10,8 @@ buildPythonPackage rec {
     sha256 = "f2be87e3c2850bba21627d26728238f9655b448e564f8c70ab47caef558b63ef";
   };
 
-  propagatedBuildInputs = [
-    pytest-runner
-    cached-property
-    frozendict
-    pystache
-    pyyaml
-  ];
+  propagatedBuildInputs =
+    [ pytest-runner cached-property frozendict pystache pyyaml ];
 
   checkInputs = [ pytest ];
 

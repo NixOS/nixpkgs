@@ -1,5 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, qtscript, qmake, libjack2
-}:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, qtscript, qmake, libjack2 }:
 
 mkDerivation rec {
   pname = "jamulus";
@@ -17,8 +16,10 @@ mkDerivation rec {
   qmakeFlags = [ "CONFIG+=noupcasename" ];
 
   meta = {
-    description = "Enables musicians to perform real-time jam sessions over the internet";
-    longDescription = "You also need to enable JACK and should enable several real-time optimizations. See project website for details";
+    description =
+      "Enables musicians to perform real-time jam sessions over the internet";
+    longDescription =
+      "You also need to enable JACK and should enable several real-time optimizations. See project website for details";
     homepage = "https://github.com/corrados/jamulus/wiki";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

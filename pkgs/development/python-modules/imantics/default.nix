@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, numpy
-, opencv3
-, sphinx_rtd_theme
-, lxml
-, xmljson
-}:
+{ buildPythonPackage, fetchFromGitHub, lib, numpy, opencv3, sphinx_rtd_theme
+, lxml, xmljson }:
 
 buildPythonPackage rec {
   pname = "imantics";
@@ -19,13 +12,7 @@ buildPythonPackage rec {
     sha256 = "1zv2gj8cbakhh2fyr2611cbqhfk37a56x973ny9n43y70n26pzm8";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    opencv3
-    sphinx_rtd_theme
-    lxml
-    xmljson
-  ];
+  propagatedBuildInputs = [ numpy opencv3 sphinx_rtd_theme lxml xmljson ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -38,7 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "imantics" ];
 
   meta = with lib; {
-    description = "Convert and visualize many annotation formats for object dectection and localization";
+    description =
+      "Convert and visualize many annotation formats for object dectection and localization";
     homepage = "https://github.com/jsbroks/imantics";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.rakesh4g ];

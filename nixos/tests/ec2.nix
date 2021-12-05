@@ -1,7 +1,5 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -31,7 +29,7 @@ let
 
         # Needed by nixos-rebuild due to the lack of network
         # access. Determined by trial and error.
-        system.extraDependencies = with pkgs; ( [
+        system.extraDependencies = with pkgs; ([
           # Needed for a nixos-rebuild.
           busybox
           cloud-utils
@@ -55,7 +53,8 @@ let
       }
     ];
   }).config;
-  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
+  image =
+    "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
@@ -64,13 +63,14 @@ let
 
 in {
   boot-ec2-nixops = makeEc2Test {
-    name         = "nixops-userdata";
+    name = "nixops-userdata";
     inherit image;
-    sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
+    sshPublicKey =
+      snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       machine.start()
@@ -112,8 +112,9 @@ in {
   };
 
   boot-ec2-config = makeEc2Test {
-    name         = "config-userdata";
-    meta.broken = true; # amazon-init wants to download from the internet while building the system
+    name = "config-userdata";
+    meta.broken =
+      true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 

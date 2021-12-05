@@ -1,12 +1,10 @@
-{lib, stdenv, fetchFromGitHub, linuxHeaders}:
+{ lib, stdenv, fetchFromGitHub, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
   pname = "gfxtablet-uinput-driver";
 
-  buildInputs = [
-    linuxHeaders
-  ];
+  buildInputs = [ linuxHeaders ];
 
   src = fetchFromGitHub {
     owner = "rfc2822";
@@ -25,9 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Uinput driver for Android GfxTablet tablet-as-input-device app";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
+    description =
+      "Uinput driver for Android GfxTablet tablet-as-input-device app";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

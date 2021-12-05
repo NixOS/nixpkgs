@@ -6,16 +6,12 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
-  propagatedBuildInputs = [
-    zarith
-    ff-sig
-  ];
+  propagatedBuildInputs = [ zarith ff-sig ];
 
   meta = ff-sig.meta // {
-    description = "Property based testing library for finite fields over the package ff-sig";
+    description =
+      "Property based testing library for finite fields over the package ff-sig";
   };
 }

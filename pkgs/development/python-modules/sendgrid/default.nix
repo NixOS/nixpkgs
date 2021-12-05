@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, pytestCheckHook
-, python-http-client
-, pyyaml
-, starkbank-ecdsa
-, werkzeug
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, pytestCheckHook
+, python-http-client, pyyaml, starkbank-ecdsa, werkzeug }:
 
 buildPythonPackage rec {
   pname = "sendgrid";
@@ -21,27 +13,15 @@ buildPythonPackage rec {
     sha256 = "sha256-eqmYuVW912E8hiVReLAoclmNDc2+gOIcUo9lRUx9AwM=";
   };
 
-  propagatedBuildInputs = [
-    python-http-client
-    starkbank-ecdsa
-  ];
+  propagatedBuildInputs = [ python-http-client starkbank-ecdsa ];
 
-  checkInputs = [
-    flask
-    pytestCheckHook
-    pyyaml
-    werkzeug
-  ];
+  checkInputs = [ flask pytestCheckHook pyyaml werkzeug ];
 
   # Exclude tests that require network access
-  pytestFlagsArray = [
-    "--ignore test/test_sendgrid.py"
-    "--ignore live_test.py"
-  ];
+  pytestFlagsArray =
+    [ "--ignore test/test_sendgrid.py" "--ignore live_test.py" ];
 
-  pythonImportsCheck = [
-    "sendgrid"
-  ];
+  pythonImportsCheck = [ "sendgrid" ];
 
   meta = with lib; {
     description = "Python client for SendGrid";

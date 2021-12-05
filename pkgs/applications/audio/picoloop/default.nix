@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, libpulseaudio, SDL2, SDL2_image, SDL2_ttf, alsa-lib, libjack2 }:
+{ lib, stdenv, fetchFromGitHub, libpulseaudio, SDL2, SDL2_image, SDL2_ttf
+, alsa-lib, libjack2 }:
 
 stdenv.mkDerivation rec {
   pname = "picoloop";
@@ -11,15 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
   };
 
-  buildInputs = [
-    libpulseaudio
-    SDL2
-    SDL2.dev
-    SDL2_image
-    SDL2_ttf
-    alsa-lib
-    libjack2
-  ];
+  buildInputs =
+    [ libpulseaudio SDL2 SDL2.dev SDL2_image SDL2_ttf alsa-lib libjack2 ];
 
   sourceRoot = "source/picoloop";
 
@@ -42,7 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A synth and a stepsequencer (a clone of the famous nanoloop)";
+    description =
+      "A synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
     platforms = platforms.linux;
     license = licenses.bsd3;

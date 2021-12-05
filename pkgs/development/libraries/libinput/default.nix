@@ -1,32 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja
-, libevdev, mtdev, udev, libwacom
-, documentationSupport ? false, doxygen, graphviz # Documentation
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, libevdev, mtdev, udev
+, libwacom, documentationSupport ? false, doxygen, graphviz # Documentation
 , eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
-, testsSupport ? false, check, valgrind, python3
-, nixosTests
-}:
+, testsSupport ? false, check, valgrind, python3, nixosTests }:
 
 let
   mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
   sphinx-build = if documentationSupport then
     python3.pkgs.sphinx.overrideAttrs (super: {
-      propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
+      propagatedBuildInputs = super.propagatedBuildInputs
+        ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
 
       postFixup = super.postFixup or "" + ''
         # Do not propagate Python
         rm $out/nix-support/propagated-build-inputs
       '';
     })
-  else null;
-in
+  else
+    null;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "libinput";
   version = "1.19.1";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libinput/libinput-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/libinput/libinput-${version}.tar.xz";
     sha256 = "sha256-C9z1sXg7c3hUt68coi32e8Nqb+fJz6cfAekUn5IgRG0=";
   };
 
@@ -47,18 +46,16 @@ stdenv.mkDerivation rec {
     libevdev
     mtdev
     libwacom
-    (python3.withPackages (pp: with pp; [
-      pp.libevdev # already in scope
-      pyudev
-      pyyaml
-      setuptools
-    ]))
+    (python3.withPackages (pp:
+      with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]))
   ] ++ lib.optionals eventGUISupport [ cairo glib gtk3 ];
 
-  checkInputs = [
-    check
-    valgrind
-  ];
+  checkInputs = [ check valgrind ];
 
   propagatedBuildInputs = [ udev ];
 
@@ -77,15 +74,14 @@ stdenv.mkDerivation rec {
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  passthru.tests = {
-    libinput-module = nixosTests.libinput;
-  };
+  passthru.tests = { libinput-module = nixosTests.libinput; };
 
   meta = with lib; {
-    description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = "https://www.freedesktop.org/wiki/Software/libinput/";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    description =
+      "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
+    homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

@@ -21,20 +21,19 @@ buildPythonPackage rec {
   # Needs to be specified in pyproject.toml, e.g.:
   # [tool.sip.bindings.MODULE]
   # tags = [PLATFORM_TAG]
-  platform_tag =
-    if stdenv.targetPlatform.isLinux then
-      "WS_X11"
-    else if stdenv.targetPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.targetPlatform.isWindows then
-      "WS_WIN"
-    else
-      throw "unsupported platform";
+  platform_tag = if stdenv.targetPlatform.isLinux then
+    "WS_X11"
+  else if stdenv.targetPlatform.isDarwin then
+    "WS_MACX"
+  else if stdenv.targetPlatform.isWindows then
+    "WS_WIN"
+  else
+    throw "unsupported platform";
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
   };
 }

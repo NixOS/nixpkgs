@@ -1,11 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, ncurses6
-, openssl
-, sqlite
-}:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses6, openssl, sqlite }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ncgopher";
@@ -21,11 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-LA8LjY8oZslGFQhKR8fJ2heYxSBqUnmeejXKRvZXjIs=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    ncurses6
-    openssl
-    sqlite
-  ];
+  buildInputs = [ ncurses6 openssl sqlite ];
 
   meta = with lib; {
     description = "A gopher and gemini client for the modern internet";

@@ -1,15 +1,15 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
-, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
-, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype
+, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr
+, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss
+, nspr, alsa-lib, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
-# For a full list of available languages:
-# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
+  # For a full list of available languages:
+  # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 }:
 
 let
@@ -17,9 +17,12 @@ let
     let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
-      hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
+      hunspellDict = elemAt spellLangComponents 0 + "-"
+        + toLower (elemAt spellLangComponents 1);
     in lib.optionalString (spellcheckerLanguage != null) ''
-      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+      --set HUNSPELL_DICTIONARIES "${
+        hunspellDicts.${hunspellDict}
+      }/share/hunspell" \
       --set LC_MESSAGES "${spellcheckerLanguage}"'');
 
 in stdenv.mkDerivation rec {
@@ -33,15 +36,12 @@ in stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+    url =
+      "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
     sha256 = "0ql9rzxrisqms3plcrmf3fjinpxba10asmpsxvhn0zlfajy47d0a";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib
@@ -81,11 +81,7 @@ in stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    libnotify
-    libdbusmenu
-  ];
+  runtimeDependencies = [ (lib.getLib systemd) libnotify libdbusmenu ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -118,7 +114,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
       ${customLanguageWrapperArgs}
     )
 
@@ -139,10 +135,11 @@ in stdenv.mkDerivation rec {
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
     '';
-    homepage    = "https://signal.org/";
-    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.agpl3Only;
+    homepage = "https://signal.org/";
+    changelog =
+      "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

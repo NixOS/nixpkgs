@@ -1,11 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libressl
-, curl
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, libressl, curl
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
@@ -39,7 +33,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A utility that builds rust-generated WebAssembly package";
     homepage = "https://github.com/rustwasm/wasm-pack";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.dhkl ];
   };
 }

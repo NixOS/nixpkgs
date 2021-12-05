@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkg-config, libidn, expat
-}:
+, openssl, libpng, lua5, pkg-config, libidn, expat }:
 
 stdenv.mkDerivation rec {
   version = "0.9.7";
@@ -15,8 +14,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
-                  libidn expat lua5 ];
+  buildInputs = [
+    zlib
+    freetype
+    libjpeg
+    libtiff
+    fontconfig
+    openssl
+    libpng
+    libidn
+    expat
+    lua5
+  ];
 
   cmakeFlags = [
     "-DPODOFO_BUILD_SHARED=ON"

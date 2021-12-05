@@ -23,14 +23,9 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-    waitress
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook waitress ];
 
-  passthru.tests = {
-    inherit (nixosTests) radicale;
-  };
+  passthru.tests = { inherit (nixosTests) radicale; };
 
   meta = with lib; {
     homepage = "https://www.radicale.org/3.0.html";

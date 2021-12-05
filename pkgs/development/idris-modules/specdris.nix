@@ -1,8 +1,4 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-}:
+{ build-idris-package, fetchFromGitHub, effects, lib }:
 build-idris-package {
   name = "specdris";
   version = "2018-01-23";

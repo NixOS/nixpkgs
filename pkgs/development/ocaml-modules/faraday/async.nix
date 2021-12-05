@@ -8,7 +8,5 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ faraday core async ];
 
-  meta = faraday.meta // {
-    description = "Async support for Faraday";
-  };
+  meta = faraday.meta // { description = "Async support for Faraday"; };
 }

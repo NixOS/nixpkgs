@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, makeWrapper, writeText, runtimeShell, jdk11, perl, gradle_5, which }:
+{ stdenv, lib, fetchpatch, fetchFromGitHub, makeWrapper, writeText, runtimeShell
+, jdk11, perl, gradle_5, which }:
 
 let
   pname = "freeplane";

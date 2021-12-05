@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyperclip
-, urwid
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyperclip, urwid }:
 
 buildPythonPackage rec {
   pname = "upass";
@@ -17,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "0bgplq07dmlld3lp6jag1w055glqislfgwwq2k7cb2bzjgvysdnj";
   };
 
-  propagatedBuildInputs = [
-    pyperclip
-    urwid
-  ];
+  propagatedBuildInputs = [ pyperclip urwid ];
 
   # Projec thas no tests
   doCheck = false;
@@ -30,9 +22,7 @@ buildPythonPackage rec {
     mkdir $HOME/.config
   '';
 
-  pythonImportsCheck = [
-    "upass"
-  ];
+  pythonImportsCheck = [ "upass" ];
 
   meta = with lib; {
     description = "Console UI for pass";

@@ -7,7 +7,8 @@ buildGoModule rec {
 
   # go-ipfs makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
-    url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
+    url =
+      "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
     sha256 = "sha256-okfIxNoFoJZx1WCWe/6NcYhwU+ZzOyn01g8BGtXO3UQ=";
   };
 

@@ -9,10 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00647bp3m9n01ck6ilw6r24fk4mivmimamvm4hxp5p6wxh10zkj3";
   };
 
-  makeFlags = [
-    "prefix=$(out)"
-    "DESTDIR="
-  ];
+  makeFlags = [ "prefix=$(out)" "DESTDIR=" ];
 
   meta = with lib; {
     homepage = "https://dotat.at/prog/unifdef/";

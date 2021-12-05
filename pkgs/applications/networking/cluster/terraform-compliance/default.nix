@@ -1,19 +1,6 @@
-{ lib
-, GitPython
-, buildPythonApplication
-, emoji
-, fetchFromGitHub
-, filetype
-, ipython
-, junit-xml
-, lxml
-, mock
-, netaddr
-, pytestCheckHook
-, python3Packages
-, radish-bdd
-, semver
-}:
+{ lib, GitPython, buildPythonApplication, emoji, fetchFromGitHub, filetype
+, ipython, junit-xml, lxml, mock, netaddr, pytestCheckHook, python3Packages
+, radish-bdd, semver }:
 
 buildPythonApplication rec {
   pname = "terraform-compliance";
@@ -34,10 +21,8 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_which_success"
-    "test_readable_plan_file_is_not_json"
-  ];
+  disabledTests =
+    [ "test_which_success" "test_readable_plan_file_is_not_json" ];
 
   propagatedBuildInputs = [
     GitPython

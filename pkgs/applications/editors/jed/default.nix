@@ -1,31 +1,18 @@
-{ lib, stdenv, fetchzip
-, pkg-config
-, gpm
-, libXext
-, libXft
-, libXt
-, ncurses5
-, slang
-} :
+{ lib, stdenv, fetchzip, pkg-config, gpm, libXext, libXft, libXt, ncurses5
+, slang }:
 
 stdenv.mkDerivation rec {
   pname = "jed";
   version = "0.99-19";
 
   src = fetchzip {
-    url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.bz2";
+    url =
+      "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    gpm
-    libXext
-    libXft
-    libXt
-    ncurses5
-    slang
-  ];
+  buildInputs = [ gpm libXext libXft libXt ncurses5 slang ];
 
   configureFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -33,9 +20,7 @@ stdenv.mkDerivation rec {
     "JED_ROOT=${placeholder "out"}/share/jed"
   ];
 
-  makeFlags = [
-    "jed" "xjed" "rgrep"
-  ];
+  makeFlags = [ "jed" "xjed" "rgrep" ];
 
   postPatch = ''
     for i in autoconf/Makefile autoconf/Makefile.in \

@@ -1,6 +1,5 @@
-{ lib, pythonOlder, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch ? null
-, pytestCheckHook }:
+{ lib, pythonOlder, fetchFromGitHub, buildPythonPackage, six, enum34, pyasn1
+, cryptography, singledispatch ? null, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pgpy";
@@ -13,18 +12,10 @@ buildPythonPackage rec {
     sha256 = "03pch39y3hi4ici6y6lvz0j0zram8dw2wvnmq1zyjy3vyvm1ms4a";
   };
 
-  propagatedBuildInputs = [
-    six
-    pyasn1
-    cryptography
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    singledispatch
-    enum34
-  ];
+  propagatedBuildInputs = [ six pyasn1 cryptography ]
+    ++ lib.optionals (pythonOlder "3.4") [ singledispatch enum34 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/SecurityInnovation/PGPy";

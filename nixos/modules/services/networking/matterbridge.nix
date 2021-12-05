@@ -6,15 +6,12 @@ let
 
   cfg = config.services.matterbridge;
 
-  matterbridgeConfToml =
-    if cfg.configPath == null then
-      pkgs.writeText "matterbridge.toml" (cfg.configFile)
-    else
-      cfg.configPath;
+  matterbridgeConfToml = if cfg.configPath == null then
+    pkgs.writeText "matterbridge.toml" (cfg.configFile)
+  else
+    cfg.configPath;
 
-in
-
-{
+in {
   options = {
     services.matterbridge = {
       enable = mkEnableOption "Matterbridge chat platform bridge";
@@ -92,16 +89,15 @@ in
     warnings = optional options.services.matterbridge.configFile.isDefined
       "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.users = optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
-          group = "matterbridge";
-          isSystemUser = true;
-        };
+    users.users = optionalAttrs (cfg.user == "matterbridge") {
+      matterbridge = {
+        group = "matterbridge";
+        isSystemUser = true;
       };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
-      };
+    users.groups =
+      optionalAttrs (cfg.group == "matterbridge") { matterbridge = { }; };
 
     systemd.services.matterbridge = {
       description = "Matterbridge chat platform bridge";
@@ -111,7 +107,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
+        ExecStart =
+          "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
         Restart = "always";
         RestartSec = "10";
       };

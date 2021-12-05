@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   # Use the release tarball containing pre-downloaded dependencies sources
   src = fetchurl {
-    url = "https://github.com/howl-editor/howl/releases/download/${version}/howl-${version}.tgz";
+    url =
+      "https://github.com/howl-editor/howl/releases/download/${version}/howl-${version}.tgz";
     sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
   };
 
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://howl.io/";
-    description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
+    description =
+      "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];
 

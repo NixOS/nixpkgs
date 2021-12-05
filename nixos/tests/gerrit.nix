@@ -1,23 +1,20 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-let
-  lfs = pkgs.fetchurl {
-    url = "https://gerrit-ci.gerritforge.com/job/plugin-lfs-bazel-master/90/artifact/bazel-bin/plugins/lfs/lfs.jar";
-    sha256 = "023b0kd8djm3cn1lf1xl67yv3j12yl8bxccn42lkfmwxjwjfqw6h";
-  };
+  let
+    lfs = pkgs.fetchurl {
+      url =
+        "https://gerrit-ci.gerritforge.com/job/plugin-lfs-bazel-master/90/artifact/bazel-bin/plugins/lfs/lfs.jar";
+      sha256 = "023b0kd8djm3cn1lf1xl67yv3j12yl8bxccn42lkfmwxjwjfqw6h";
+    };
 
-in {
-  name = "gerrit";
+  in {
+    name = "gerrit";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ flokli zimbatm ];
-  };
+    meta = with pkgs.lib.maintainers; { maintainers = [ flokli zimbatm ]; };
 
-  nodes = {
-    server =
-      { config, pkgs, ... }: {
+    nodes = {
+      server = { config, pkgs, ... }: {
         networking.firewall.allowedTCPPorts = [ 80 2222 ];
-
 
         services.gerrit = {
           enable = true;
@@ -37,18 +34,16 @@ in {
         };
       };
 
-    client =
-      { ... }: {
-      };
-  };
+      client = { ... }: { };
+    };
 
-  testScript = ''
-    start_all()
-    server.wait_for_unit("gerrit.service")
-    server.wait_for_open_port(80)
-    client.succeed("curl http://server")
+    testScript = ''
+      start_all()
+      server.wait_for_unit("gerrit.service")
+      server.wait_for_open_port(80)
+      client.succeed("curl http://server")
 
-    server.wait_for_open_port(2222)
-    client.succeed("nc -z server 2222")
-  '';
-})
+      server.wait_for_open_port(2222)
+      client.succeed("nc -z server 2222")
+    '';
+  })

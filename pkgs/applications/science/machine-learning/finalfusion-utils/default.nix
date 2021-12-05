@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, blas
-, gfortran
-, lapack
-, Security
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, blas, gfortran
+, lapack, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "finalfusion-utils";
@@ -24,13 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    blas
-    gfortran.cc.lib
-    lapack
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = [ blas gfortran.cc.lib lapack ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # Enables build against a generic BLAS.
   buildFeatures = [ "netlib" ];
@@ -44,7 +31,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Utility for converting, quantizing, and querying word embeddings";
+    description =
+      "Utility for converting, quantizing, and querying word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-utils/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

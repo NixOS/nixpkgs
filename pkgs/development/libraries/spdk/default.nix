@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, fetchFromGitHub
-, ncurses
-, python3
-, cunit
-, dpdk
-, libaio
-, libbsd
-, libuuid
-, numactl
-, openssl
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ncurses, python3, cunit, dpdk, libaio
+, libbsd, libuuid, numactl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
@@ -29,13 +18,9 @@ stdenv.mkDerivation rec {
     ./ncurses-6.3.patch
   ];
 
-  nativeBuildInputs = [
-    python3
-  ];
+  nativeBuildInputs = [ python3 ];
 
-  buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
-  ];
+  buildInputs = [ cunit dpdk libaio libbsd libuuid numactl openssl ncurses ];
 
   postPatch = ''
     patchShebangs .
@@ -53,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
   };
 }

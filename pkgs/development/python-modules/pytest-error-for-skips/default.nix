@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytest-error-for-skips";

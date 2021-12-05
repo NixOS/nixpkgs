@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, ocaml
-, findlib
-, omake
-, graphicsmagick
-, libpng
-, libjpeg
-, libexif
-, libtiff
-, libXpm
-, freetype
-, giflib
-, ghostscript
-}:
+{ stdenv, lib, fetchFromGitLab, ocaml, findlib, omake, graphicsmagick, libpng
+, libjpeg, libexif, libtiff, libXpm, freetype, giflib, ghostscript }:
 
 assert lib.versionOlder ocaml.version "4.06";
 
@@ -29,23 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "17hvsql5dml7ialjcags8wphs7w6z88b2rgjir1382bg8vn62bkr";
   };
 
-  nativeBuildInputs = [
-    omake
-    ocaml
-    findlib
-    graphicsmagick
-  ];
+  nativeBuildInputs = [ omake ocaml findlib graphicsmagick ];
 
-  propagatedBuildInputs = [
-    libpng
-    libjpeg
-    libexif
-    libtiff
-    libXpm
-    freetype
-    giflib
-    ghostscript
-  ];
+  propagatedBuildInputs =
+    [ libpng libjpeg libexif libtiff libXpm freetype giflib ghostscript ];
 
   buildPhase = ''
     runHook preBuild
@@ -67,9 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = licenses.lgpl2Only;
-    maintainers = [
-      maintainers.vbgl
-      maintainers.sternenseemann
-    ];
+    maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
   };
 }

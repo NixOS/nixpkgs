@@ -1,37 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, desktop-file-utils
-, gettext
-, glibcLocales
-, itstool
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, cpio
-, file
-, glib
-, gnome
-, gtk3
-, json-glib
-, libarchive
-, libnotify
-, nautilus
-, pantheon
-, unzip
-, withPantheon ? false
-}:
+{ lib, stdenv, fetchurl, fetchpatch, desktop-file-utils, gettext, glibcLocales
+, itstool, libxml2, meson, ninja, pkg-config, python3, wrapGAppsHook, cpio, file
+, glib, gnome, gtk3, json-glib, libarchive, libnotify, nautilus, pantheon, unzip
+, withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "039w1dcpa5ypmv6sm634alk9vbcdkyvy595vkh5gn032jsiqca2a";
   };
 
@@ -39,7 +18,8 @@ stdenv.mkDerivation rec {
     # Make this respect dark mode settings from Pantheon
     # https://github.com/elementary/fileroller/
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/elementary/fileroller/f183eac36c68c9c9441e72294d4e305cf5fe36ed/fr-application-prefers-color-scheme.patch";
+      url =
+        "https://raw.githubusercontent.com/elementary/fileroller/f183eac36c68c9c9441e72294d4e305cf5fe36ed/fr-application-prefers-color-scheme.patch";
       sha256 = "sha256-d/sqf4Oen9UrzYqru7Ck15o/6g6WfxRDH/iAGFXgYAA=";
     })
   ];
@@ -69,11 +49,10 @@ stdenv.mkDerivation rec {
     libarchive
     libnotify
     nautilus
-  ] ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  ] ++ lib.optionals withPantheon [ pantheon.granite ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR =
+    "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
   postPatch = ''
     chmod +x postinstall.py # patchShebangs requires executable file

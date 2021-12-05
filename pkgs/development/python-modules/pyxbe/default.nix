@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyxbe";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "1cp9a5f41z8j7bzip6nhka8qnxs12v75cdf80sk2nzgf1k15wi2p";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # Update location for run with pytest
   preCheck = ''

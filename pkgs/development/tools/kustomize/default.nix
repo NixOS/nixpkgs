@@ -6,12 +6,8 @@ buildGoModule rec {
   # rev is the commit of the tag, mainly for kustomize version command output
   rev = "9e8e7a7fe99ec9fbf801463e8607928322fc5245";
 
-  ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
-    [
-      "-s"
-      "-X ${t}.version=${version}"
-      "-X ${t}.gitCommit=${rev}"
-    ];
+  ldflags = let t = "sigs.k8s.io/kustomize/api/provenance";
+  in [ "-s" "-X ${t}.version=${version}" "-X ${t}.gitCommit=${rev}" ];
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
@@ -37,6 +33,13 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
+    maintainers = with maintainers; [
+      carlosdagos
+      vdemeester
+      periklis
+      zaninime
+      Chili-Man
+      saschagrunert
+    ];
   };
 }

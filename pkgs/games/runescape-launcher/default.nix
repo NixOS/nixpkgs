@@ -1,9 +1,6 @@
-{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-, gnome2, xorg
-, libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
-, libpulseaudio
-, SDL2, xorg_sys_opengl, libGL
-}:
+{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook
+, fetchurl, wrapGAppsHook, gnome2, xorg, libSM, libXxf86vm, libX11, glib, pango
+, cairo, gtk2-x11, zlib, openssl, libpulseaudio, SDL2, xorg_sys_opengl, libGL }:
 let
 
   runescape = stdenv.mkDerivation rec {
@@ -11,15 +8,12 @@ let
     version = "2.2.9";
 
     src = fetchurl {
-      url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
+      url =
+        "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
       sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
     };
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      wrapGAppsHook
-      dpkg
-    ];
+    nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook dpkg ];
 
     buildInputs = [
       glibc
@@ -35,14 +29,8 @@ let
       openssl
     ];
 
-    runtimeDependencies = [
-      libpulseaudio
-      libGL
-      SDL2
-      xorg_sys_opengl
-      openssl
-      zlib
-    ];
+    runtimeDependencies =
+      [ libpulseaudio libGL SDL2 xorg_sys_opengl openssl zlib ];
 
     dontUnpack = true;
 
@@ -71,7 +59,6 @@ let
       rm -r $out/usr
     '';
 
-
     meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
@@ -81,23 +68,31 @@ let
     };
   };
 
-in
-
-  /*
-  * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
-  * For that we need use a buildFHSUserEnv.
-  * FHS simulates a classic linux shell
-  */
-  buildFHSUserEnv {
-   name = "RuneScape";
-   targetPkgs = pkgs: [
-     runescape
-     dpkg glibc gcc-unwrapped
-     libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl
-     libpulseaudio
-     xorg.libX11
-     SDL2 xorg_sys_opengl libGL
-   ];
-   multiPkgs = pkgs: [ libGL ];
-   runScript = "runescape-launcher";
+  # We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
+  # For that we need use a buildFHSUserEnv.
+  # FHS simulates a classic linux shell
+in buildFHSUserEnv {
+  name = "RuneScape";
+  targetPkgs = pkgs: [
+    runescape
+    dpkg
+    glibc
+    gcc-unwrapped
+    libSM
+    libXxf86vm
+    libX11
+    glib
+    pango
+    cairo
+    gtk2-x11
+    zlib
+    openssl
+    libpulseaudio
+    xorg.libX11
+    SDL2
+    xorg_sys_opengl
+    libGL
+  ];
+  multiPkgs = pkgs: [ libGL ];
+  runScript = "runescape-launcher";
 }

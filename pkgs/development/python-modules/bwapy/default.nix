@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, bwa
-, cffi
-, zlib
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, bwa, cffi, zlib }:
 
 buildPythonPackage rec {
   pname = "bwapy";

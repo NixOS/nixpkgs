@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, curl, libxml2, pam, sblim-sfcc }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, libxml2, pam
+, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
   pname = "openwsman";
   version = "2.7.0";
 
   src = fetchFromGitHub {
-    owner  = "Openwsman";
-    repo   = "openwsman";
-    rev    = "v${version}";
+    owner = "Openwsman";
+    repo = "openwsman";
+    rev = "v${version}";
     sha256 = "19dj38jyzhhhvk863cikcwk5awzlq3337pxmsaqqm4wrcygrkfmx";
   };
 
@@ -16,11 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libxml2 pam sblim-sfcc ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_RUBY_GEM=no"
-    "-DBUILD_PYTHON=no"
-    "-DBUILD_PYTHON3=yes"
-  ];
+  cmakeFlags =
+    [ "-DCMAKE_BUILD_RUBY_GEM=no" "-DBUILD_PYTHON=no" "-DBUILD_PYTHON3=yes" ];
 
   preConfigure = ''
     cmakeFlags="$cmakeFlags -DPACKAGE_ARCHITECTURE=$(uname -m)";
@@ -29,11 +26,12 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-more-warnings" ];
 
   meta = with lib; {
-    description  = "Openwsman server implementation and client API with bindings";
+    description =
+      "Openwsman server implementation and client API with bindings";
     downloadPage = "https://github.com/Openwsman/openwsman/releases";
-    homepage     = "https://openwsman.github.io";
-    license      = licenses.bsd3;
-    maintainers  = with maintainers; [ deepfire ];
-    platforms    = platforms.linux; # PAM is not available on Darwin
+    homepage = "https://openwsman.github.io";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ deepfire ];
+    platforms = platforms.linux; # PAM is not available on Darwin
   };
 }

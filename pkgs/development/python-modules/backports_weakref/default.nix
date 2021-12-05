@@ -1,10 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm
 # , backports
-, python
-}:
+, python }:
 
 buildPythonPackage rec {
   pname = "backports.weakref";
@@ -15,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools-scm ];
-#   checkInputs = [ backports ];
+  #   checkInputs = [ backports ];
 
   # Requires backports package
   doCheck = false;

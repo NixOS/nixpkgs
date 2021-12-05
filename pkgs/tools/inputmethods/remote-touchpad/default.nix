@@ -1,11 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libX11
-, libXi
-, libXt
-, libXtst
-}:
+{ buildGoModule, fetchFromGitHub, lib, libX11, libXi, libXt, libXtst }:
 
 buildGoModule rec {
   pname = "remote-touchpad";
@@ -24,7 +17,8 @@ buildGoModule rec {
   vendorSha256 = "1pgj0m67g759mcs4s34h4pq3mc7gni643z5cp6ffq4rrn8mdi060";
 
   meta = with lib; {
-    description = "Control mouse and keyboard from the webbrowser of a smartphone.";
+    description =
+      "Control mouse and keyboard from the webbrowser of a smartphone.";
     homepage = "https://github.com/unrud/remote-touchpad";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ schnusch ];

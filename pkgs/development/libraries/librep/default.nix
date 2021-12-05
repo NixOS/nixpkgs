@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gdbm
-, gmp
-, libffi
-, pkg-config
-, readline
-, texinfo
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, gdbm, gmp, libffi, pkg-config, readline
+, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "librep";
@@ -19,21 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1bmcjl1x1rdh514q9z3hzyjmjmwwwkziipjpjsl301bwmiwrd8a8";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    texinfo
-  ];
-  buildInputs = [
-    gdbm
-    gmp
-    libffi
-    readline
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  buildInputs = [ gdbm gmp libffi readline ];
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''

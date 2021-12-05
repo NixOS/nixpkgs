@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, http_signature
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, http_signature }:
 
 buildPythonPackage rec {
   pname = "smartdc";
@@ -17,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests http_signature ];
 
   meta = with lib; {
-    description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
+    description =
+      "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
     homepage = "https://github.com/atl/py-smartdc";
     license = licenses.mit;
   };

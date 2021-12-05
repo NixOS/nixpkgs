@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, cairo, gdk-pixbuf
-, wayland-scanner
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland
+, wayland-protocols, cairo, gdk-pixbuf, wayland-scanner }:
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
@@ -19,9 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 
-  mesonFlags = [
-    "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
-  ];
+  mesonFlags = [ "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled" ];
 
   meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";

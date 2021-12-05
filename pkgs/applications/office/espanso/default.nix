@@ -1,17 +1,5 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, extra-cmake-modules
-, libX11
-, libXi
-, libXtst
-, libnotify
-, openssl
-, xclip
-, xdotool
-, makeWrapper
-}:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, extra-cmake-modules, libX11
+, libXi, libXtst, libnotify, openssl, xclip, xdotool, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
@@ -26,21 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0ba5skn5s6qh0blf6bvivzvqc2l8v488l9n3x98pmf6nygrikfdb";
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ extra-cmake-modules pkg-config makeWrapper ];
 
-  buildInputs = [
-    libX11
-    libXtst
-    libXi
-    libnotify
-    xclip
-    openssl
-    xdotool
-  ];
+  buildInputs = [ libX11 libXtst libXi libnotify xclip openssl xdotool ];
 
   # Some tests require networking
   doCheck = false;

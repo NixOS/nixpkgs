@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.jackett;
+let cfg = config.services.jackett;
 
-in
-{
+in {
   options = {
     services.jackett = {
       enable = mkEnableOption "Jackett";
@@ -20,7 +18,8 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Jackett web interface.";
+        description =
+          "Open ports in the firewall for the Jackett web interface.";
       };
 
       user = mkOption {
@@ -45,9 +44,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.jackett = {
       description = "Jackett";
@@ -58,14 +56,13 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
+        ExecStart =
+          "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9117 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 9117 ]; };
 
     users.users = mkIf (cfg.user == "jackett") {
       jackett = {
@@ -75,8 +72,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "jackett") {
-      jackett.gid = config.ids.gids.jackett;
-    };
+    users.groups =
+      mkIf (cfg.group == "jackett") { jackett.gid = config.ids.gids.jackett; };
   };
 }

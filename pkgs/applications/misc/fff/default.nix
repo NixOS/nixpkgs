@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bashInteractive, xdg-utils, file, coreutils, w3m, xdotool }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bashInteractive, xdg-utils, file
+, coreutils, w3m, xdotool }:
 
 stdenv.mkDerivation rec {
   pname = "fff";

@@ -1,24 +1,7 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, Babel
-, cliff
-, iso8601
-, osc-lib
-, prettytable
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, keystoneauth1
-, python-swiftclient
-, pyyaml
-, requests
-, six
-, stestr
-, testscenarios
-, requests-mock
-}:
+{ lib, buildPythonApplication, fetchPypi, pbr, Babel, cliff, iso8601, osc-lib
+, prettytable, oslo-i18n, oslo-serialization, oslo-utils, keystoneauth1
+, python-swiftclient, pyyaml, requests, six, stestr, testscenarios
+, requests-mock }:
 
 buildPythonApplication rec {
   pname = "python-heatclient";
@@ -46,11 +29,7 @@ buildPythonApplication rec {
     six
   ];
 
-  checkInputs = [
-    stestr
-    testscenarios
-    requests-mock
-  ];
+  checkInputs = [ stestr testscenarios requests-mock ];
 
   checkPhase = ''
     stestr run -e <(echo "
@@ -61,7 +40,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "heatclient" ];
 
   meta = with lib; {
-    description = "A client library for Heat built on the Heat orchestration API";
+    description =
+      "A client library for Heat built on the Heat orchestration API";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

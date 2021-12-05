@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "191gi4c5jk8p9xvbm1cdhk5yi8q2cp2jvjq1sgxqw1ad0lppwhg2";
 
   meta = with lib; {
-    description = "A tool to output images as RGB ANSI graphics on the terminal";
+    description =
+      "A tool to output images as RGB ANSI graphics on the terminal";
     homepage = "https://github.com/trashhalo/imgcat";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];

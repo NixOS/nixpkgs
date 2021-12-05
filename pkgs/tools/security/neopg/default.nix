@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, sqlite
-, botan2
-, boost
-, curl
-, gettext
-, pkg-config
-, libusb1
-, gnutls }:
+{ lib, stdenv, fetchFromGitHub, cmake, sqlite, botan2, boost, curl, gettext
+, pkg-config, libusb1, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "neopg";
@@ -22,7 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [  cmake gettext pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config ];
 
   buildInputs = [ sqlite botan2 boost curl libusb1 gnutls ];
 
@@ -44,6 +35,7 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ erictapen ];
     platforms = platforms.linux;
-    broken = true; # fails to build with recent versions of botan. https://github.com/das-labor/neopg/issues/98
+    broken =
+      true; # fails to build with recent versions of botan. https://github.com/das-labor/neopg/issues/98
   };
 }

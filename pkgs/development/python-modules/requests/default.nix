@@ -1,20 +1,6 @@
-{ lib
-, brotli
-, brotlicffi
-, buildPythonPackage
-, certifi
-, chardet
-, charset-normalizer
-, fetchPypi
-, idna
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, urllib3
-, isPy27
-, isPy3k
-, trustme
-}:
+{ lib, brotli, brotlicffi, buildPythonPackage, certifi, chardet
+, charset-normalizer, fetchPypi, idna, pytest-mock, pytest-xdist
+, pytestCheckHook, urllib3, isPy27, isPy3k, trustme }:
 
 buildPythonPackage rec {
   pname = "requests";
@@ -35,24 +21,11 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace ",<3" ""
   '';
 
-  propagatedBuildInputs = [
-    certifi
-    idna
-    urllib3
-    chardet
-  ] ++ lib.optionals (isPy3k) [
-    brotlicffi
-    charset-normalizer
-  ] ++ lib.optionals (isPy27) [
-    brotli
-  ];
+  propagatedBuildInputs = [ certifi idna urllib3 chardet ]
+    ++ lib.optionals (isPy3k) [ brotlicffi charset-normalizer ]
+    ++ lib.optionals (isPy27) [ brotli ];
 
-  checkInputs = [
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    trustme
-  ];
+  checkInputs = [ pytest-mock pytest-xdist pytestCheckHook trustme ];
 
   # AttributeError: 'KeywordMapping' object has no attribute 'get'
   doCheck = !isPy27;

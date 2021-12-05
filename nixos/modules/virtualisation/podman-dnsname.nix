@@ -1,15 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib)
-    mkOption
-    mkIf
-    types
-    ;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.virtualisation.podman;
 
-in
-{
+in {
   options = {
     virtualisation.podman = {
 
@@ -25,7 +20,8 @@ in
   };
 
   config = {
-    virtualisation.containers.containersConf.cniPlugins = mkIf cfg.defaultNetwork.dnsname.enable [ pkgs.dnsname-cni ];
+    virtualisation.containers.containersConf.cniPlugins =
+      mkIf cfg.defaultNetwork.dnsname.enable [ pkgs.dnsname-cni ];
     virtualisation.podman.defaultNetwork.extraPlugins =
       lib.optional cfg.defaultNetwork.dnsname.enable {
         type = "dnsname";

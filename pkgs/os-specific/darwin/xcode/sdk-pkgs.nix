@@ -1,26 +1,17 @@
-{ targetPlatform
-, clang-unwrapped
-, binutils-unwrapped
-, runCommand
+{ targetPlatform, clang-unwrapped, binutils-unwrapped, runCommand
 
-, wrapBintoolsWith
-, wrapCCWith
-, buildIosSdk, targetIosSdkPkgs
-, xcode
-, lib
-}:
+, wrapBintoolsWith, wrapCCWith, buildIosSdk, targetIosSdkPkgs, xcode, lib }:
 
 let
 
-minSdkVersion = targetPlatform.minSdkVersion or "9.0";
+  minSdkVersion = targetPlatform.minSdkVersion or "9.0";
 
-in
-
-rec {
+in rec {
   sdk = rec {
     name = "ios-sdk";
     type = "derivation";
-    outPath = xcode + "/Contents/Developer/Platforms/${platform}.platform/Developer/SDKs/${platform}${version}.sdk";
+    outPath = xcode
+      + "/Contents/Developer/Platforms/${platform}.platform/Developer/SDKs/${platform}${version}.sdk";
 
     platform = targetPlatform.xcodePlatform;
     version = targetPlatform.sdkVer;
@@ -40,18 +31,19 @@ rec {
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
-      echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
-      ${lib.optionalString (lib.versionAtLeast sdk.version "14") "echo -isystem ${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 >> $out/nix-support/cc-cflags"}
+      echo "-isystem ${sdk}/usr/include${
+        lib.optionalString (lib.versionAtLeast "10" sdk.version)
+        " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"
+      }" >> $out/nix-support/cc-cflags
+      ${lib.optionalString (lib.versionAtLeast sdk.version "14")
+      "echo -isystem ${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 >> $out/nix-support/cc-cflags"}
     '';
   }) // {
     inherit sdk;
   };
 
-  libraries = let sdk = buildIosSdk; in runCommand "libSystem-prebuilt" {
-    passthru = {
-      inherit sdk;
-    };
-  } ''
+  libraries = let sdk = buildIosSdk;
+  in runCommand "libSystem-prebuilt" { passthru = { inherit sdk; }; } ''
     if ! [ -d ${sdk} ]; then
         echo "You must have version ${sdk.version} of the ${sdk.platform} sdk installed at ${sdk}" >&2
         exit 1

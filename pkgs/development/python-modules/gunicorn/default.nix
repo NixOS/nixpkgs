@@ -1,10 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, coverage
-, mock
-, pytest
-, pytest-cov
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, coverage, mock, pytest, pytest-cov
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "gunicorn";

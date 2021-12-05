@@ -1,7 +1,6 @@
 { lib, vscode-utils, jq, moreutils }:
 
-let
-  inherit (vscode-utils) buildVscodeMarketplaceExtension;
+let inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
 in buildVscodeMarketplaceExtension {
   mktplcRef = {
@@ -11,10 +10,7 @@ in buildVscodeMarketplaceExtension {
     sha256 = "1c5dgkk5yn6a8k3blbqakqdy8ppwgfbm0ciki7ix696bvlksbpdg";
   };
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
+  nativeBuildInputs = [ jq moreutils ];
 
   postPatch = ''
     # Patch 'packages.json' so that the expected '__metadata' field exists.

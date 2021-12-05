@@ -5,45 +5,27 @@
 , chromiumVersionAtLeast, versionRange
 
 # Native build inputs:
-, ninja, pkg-config
-, python3, perl
-, gnutar, which
-, llvmPackages
+, ninja, pkg-config, python3, perl, gnutar, which, llvmPackages
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
 , gnChromium
 
 # Build inputs:
-, libpng
-, bzip2, flac, speex, libopus
-, libevent, expat, libjpeg, snappy
-, libcap
-, xdg-utils, minizip, libwebp
-, libusb1, re2
-, ffmpeg, libxslt, libxml2
-, nasm
-, nspr, nss, systemd
-, util-linux, alsa-lib
-, bison, gperf, libkrb5
-, glib, gtk3, dbus-glib
-, libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
-, mesa
-, pciutils, protobuf, speechd, libXdamage, at-spi2-core
-, pipewire
-, libva
+, libpng, bzip2, flac, speex, libopus, libevent, expat, libjpeg, snappy, libcap
+, xdg-utils, minizip, libwebp, libusb1, re2, ffmpeg, libxslt, libxml2, nasm
+, nspr, nss, systemd, util-linux, alsa-lib, bison, gperf, libkrb5, glib, gtk3
+, dbus-glib, libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
+, mesa, pciutils, protobuf, speechd, libXdamage, at-spi2-core, pipewire, libva
 , libdrm, wayland, libxkbcommon # Ozone
-, curl
-, libepoxy
+, curl, libepoxy
 # postPatch:
 , glibc # gconv + locale
 
 # Package customization:
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
-, cupsSupport ? true, cups ? null
-, proprietaryCodecs ? true
-, pulseSupport ? false, libpulseaudio ? null
+, gnomeSupport ? false, gnome2 ? null, gnomeKeyringSupport ? false
+, libgnome-keyring3 ? null, cupsSupport ? true, cups ? null
+, proprietaryCodecs ? true, pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -54,11 +36,11 @@ buildFun:
 with lib;
 
 let
-  python3WithPackages = python3.withPackages(ps: with ps; [
-    ply jinja2 setuptools
-  ]);
+  python3WithPackages =
+    python3.withPackages (ps: with ps; [ ply jinja2 setuptools ]);
   clangFormatPython3 = fetchurl {
-    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
+    url =
+      "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
     sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
   };
 
@@ -66,25 +48,31 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = { commit, sha256, revert ? false }: fetchpatch {
-    url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit sha256 revert;
-  };
+  githubPatch = { commit, sha256, revert ? false }:
+    fetchpatch {
+      url = "https://github.com/chromium/chromium/commit/${commit}.patch";
+      inherit sha256 revert;
+    };
 
-  mkGnFlags =
-    let
-      # Serialize Nix types into GN types according to this document:
-      # https://source.chromium.org/gn/gn/+/master:docs/language.md
-      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
-      sanitize = value:
-        if value == true then "true"
-        else if value == false then "false"
-        else if isList value then "[${concatMapStringsSep ", " sanitize value}]"
-        else if isInt value then toString value
-        else if isString value then mkGnString value
-        else throw "Unsupported type for GN value `${value}'.";
-      toFlag = key: value: "${key}=${sanitize value}";
-    in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
+  mkGnFlags = let
+    # Serialize Nix types into GN types according to this document:
+    # https://source.chromium.org/gn/gn/+/master:docs/language.md
+    mkGnString = value: ''"${escape [ ''"'' "$" "\\" ] value}"'';
+    sanitize = value:
+      if value == true then
+        "true"
+      else if value == false then
+        "false"
+      else if isList value then
+        "[${concatMapStringsSep ", " sanitize value}]"
+      else if isInt value then
+        toString value
+      else if isString value then
+        mkGnString value
+      else
+        throw "Unsupported type for GN value `${value}'.";
+    toFlag = key: value: "${key}=${sanitize value}";
+  in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
@@ -99,9 +87,7 @@ let
     "opus"
   ];
 
-  opusWithCustomModes = libopus.override {
-    withCustomModes = true;
-  };
+  opusWithCustomModes = libopus.override { withCustomModes = true; };
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -119,36 +105,72 @@ let
     inherit packageName buildType buildPath;
 
     src = fetchurl {
-      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+      url =
+        "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
       inherit (upstream-info) sha256;
     };
 
     nativeBuildInputs = [
-      ninja pkg-config
-      python3WithPackages perl
-      gnutar which
+      ninja
+      pkg-config
+      python3WithPackages
+      perl
+      gnutar
+      which
       llvmPackages.bintools
     ];
 
     buildInputs = [
-      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-      bzip2 flac speex opusWithCustomModes
-      libevent expat libjpeg snappy
+      (libpng.override {
+        apngSupport = false;
+      }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      bzip2
+      flac
+      speex
+      opusWithCustomModes
+      libevent
+      expat
+      libjpeg
+      snappy
       libcap
-      xdg-utils minizip libwebp
-      libusb1 re2
-      ffmpeg libxslt libxml2
+      xdg-utils
+      minizip
+      libwebp
+      libusb1
+      re2
+      ffmpeg
+      libxslt
+      libxml2
       nasm
-      nspr nss systemd
-      util-linux alsa-lib
-      bison gperf libkrb5
-      glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
+      nspr
+      nss
+      systemd
+      util-linux
+      alsa-lib
+      bison
+      gperf
+      libkrb5
+      glib
+      gtk3
+      dbus-glib
+      libXScrnSaver
+      libXcursor
+      libXtst
+      libxshmfence
+      libGLU
+      libGL
       mesa # required for libgbm
-      pciutils protobuf speechd libXdamage at-spi2-core
+      pciutils
+      protobuf
+      speechd
+      libXdamage
+      at-spi2-core
       pipewire
       libva
-      libdrm wayland mesa.drivers libxkbcommon
+      libdrm
+      wayland
+      mesa.drivers
+      libxkbcommon
       curl
       libepoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
@@ -204,7 +226,9 @@ let
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${
+        lib.getLib systemd
+      }/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
@@ -305,15 +329,19 @@ let
       safe_browsing_mode = 0;
       use_official_google_api_keys = false;
       use_unofficial_version_number = false;
-    } // (extraAttrs.gnFlags or {}));
+    } // (extraAttrs.gnFlags or { }));
 
     configurePhase = ''
       runHook preConfigure
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${
+        toString gnSystemLibraries
+      }
+      ${gnChromium}/bin/gn gen --args=${
+        escapeShellArg gnFlags
+      } out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -336,7 +364,7 @@ let
           process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
         )
       '';
-      targets = extraAttrs.buildTargets or [];
+      targets = extraAttrs.buildTargets or [ ];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
 
@@ -349,13 +377,12 @@ let
 
     passthru = {
       updateScript = ./update.py;
-      chromiumDeps = {
-        gn = gnChromium;
-      };
+      chromiumDeps = { gn = gnChromium; };
     };
   };
 
-# Remove some extraAttrs we supplied to the base attributes already.
-in stdenv.mkDerivation (base // removeAttrs extraAttrs [
-  "name" "gnFlags" "buildTargets"
-] // { passthru = base.passthru // (extraAttrs.passthru or {}); })
+  # Remove some extraAttrs we supplied to the base attributes already.
+in stdenv.mkDerivation (base
+  // removeAttrs extraAttrs [ "name" "gnFlags" "buildTargets" ] // {
+    passthru = base.passthru // (extraAttrs.passthru or { });
+  })

@@ -1,8 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, matgeom
-}:
+{ buildOctavePackage, lib, fetchurl, matgeom }:
 
 buildOctavePackage rec {
   pname = "geometry";
@@ -13,9 +9,7 @@ buildOctavePackage rec {
     sha256 = "1zmd97xir62fr5v57xifh2cvna5fg67h9yb7bp2vm3ll04y41lhs";
   };
 
-  requiredOctavePackages = [
-    matgeom
-  ];
+  requiredOctavePackages = [ matgeom ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/geometry/index.html";

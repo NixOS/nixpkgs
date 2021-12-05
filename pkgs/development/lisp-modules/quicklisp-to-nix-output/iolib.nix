@@ -1,14 +1,39 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "iolib";
   version = "v0.8.4";
 
-  parasites = [ "iolib/multiplex" "iolib/os" "iolib/pathnames" "iolib/sockets" "iolib/streams" "iolib/syscalls" "iolib/tests" "iolib/trivial-sockets" "iolib/zstreams" ];
+  parasites = [
+    "iolib/multiplex"
+    "iolib/os"
+    "iolib/pathnames"
+    "iolib/sockets"
+    "iolib/streams"
+    "iolib/syscalls"
+    "iolib/tests"
+    "iolib/trivial-sockets"
+    "iolib/zstreams"
+  ];
 
   description = "I/O library.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."fiveam" args."idna" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."split-sequence" args."swap-bytes" args."trivial-features" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."fiveam"
+    args."idna"
+    args."iolib_dot_asdf"
+    args."iolib_dot_base"
+    args."iolib_dot_common-lisp"
+    args."iolib_dot_conf"
+    args."split-sequence"
+    args."swap-bytes"
+    args."trivial-features"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/iolib/2021-06-30/iolib-v0.8.4.tgz";
@@ -17,7 +42,7 @@ rec {
 
   packageName = "iolib";
 
-  asdFilesToKeep = ["iolib.asd"];
+  asdFilesToKeep = [ "iolib.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib DESCRIPTION I/O library. SHA256
@@ -44,4 +69,5 @@ rec {
     (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples)
     PARASITES
     (iolib/multiplex iolib/os iolib/pathnames iolib/sockets iolib/streams
-     iolib/syscalls iolib/tests iolib/trivial-sockets iolib/zstreams)) */
+     iolib/syscalls iolib/tests iolib/trivial-sockets iolib/zstreams))
+*/

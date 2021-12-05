@@ -1,6 +1,6 @@
-{ lib, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental, ipaddress, twisted
-, automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
-, GeoIP}:
+{ lib, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental
+, ipaddress, twisted, automat, zope_interface, idna, pyopenssl, service-identity
+, pytest, mock, lsof, GeoIP }:
 
 buildPythonPackage rec {
   pname = "txtorcon";
@@ -8,9 +8,14 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest mock lsof GeoIP ];
   propagatedBuildInputs = [
-    incremental twisted automat zope_interface
+    incremental
+    twisted
+    automat
+    zope_interface
     # extra dependencies required by twisted[tls]
-    idna pyopenssl service-identity
+    idna
+    pyopenssl
+    service-identity
   ] ++ lib.optionals (!isPy3k) [ ipaddress ];
 
   src = fetchPypi {
@@ -27,7 +32,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
+    description =
+      "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
     maintainers = with lib.maintainers; [ jluttine exarkun ];
     license = lib.licenses.mit;

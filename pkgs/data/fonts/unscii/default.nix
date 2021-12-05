@@ -1,13 +1,8 @@
-{ lib, stdenv, fetchurl, perl, bdftopcf
-, fontforge, SDL, SDL_image, mkfontscale
+{ lib, stdenv, fetchurl, perl, bdftopcf, fontforge, SDL, SDL_image, mkfontscale
 }:
 
-let
-  perlenv = perl.withPackages (p: with p; [
-    TextCharWidth
-  ]);
-in
-stdenv.mkDerivation rec {
+let perlenv = perl.withPackages (p: with p; [ TextCharWidth ]);
+in stdenv.mkDerivation rec {
   pname = "unscii";
   version = "1.1";
 
@@ -16,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
   };
 
-  nativeBuildInputs =
-    [ perlenv
-      bdftopcf fontforge SDL SDL_image
-      mkfontscale
-    ];
+  nativeBuildInputs = [ perlenv bdftopcf fontforge SDL SDL_image mkfontscale ];
 
   # Fixes shebang -> wrapper problem on Darwin
   postPatch = ''
@@ -30,9 +21,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preConfigure = ''
     patchShebangs .

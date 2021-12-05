@@ -2,12 +2,12 @@
 
 let
   meta_file = fetchurl {
-    url = "https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/META";
+    url =
+      "https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/META";
     sha256 = "0s2wsinycldk8y5p09xd0hsgbhckhy7bkghzl63bph6mwv64kq2d";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-FrontC-${version}";
   version = "3.4.1";
 
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.maurer ];
   };
 
-  patches = [ (fetchpatch {
-      url = "https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/opam.patch";
+  patches = [
+    (fetchpatch {
+      url =
+        "https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/opam.patch";
       sha256 = "0v4f6740jbj1kxg1y03dzfa3x3gsrhv06wpzdj30gl4ki5fvj4hs";
     })
   ];

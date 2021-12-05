@@ -1,36 +1,16 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, udisks2
-, libhandy
-, libsecret
-, libdvdread
-, meson
-, ninja
-, gtk3
-, glib
-, wrapGAppsHook
-, python3
-, libnotify
-, itstool
-, gnome
-, libxml2
-, gsettings-desktop-schemas
-, libcanberra-gtk3
-, libxslt
-, docbook-xsl-nons
-, libpwquality
-, systemd
-}:
+{ lib, stdenv, gettext, fetchurl, pkg-config, udisks2, libhandy, libsecret
+, libdvdread, meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
+, itstool, gnome, libxml2, gsettings-desktop-schemas, libcanberra-gtk3, libxslt
+, docbook-xsl-nons, libpwquality, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-disk-utility/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-h0PJj9ZWBi74YpM+/jDFvkxrMi7ALu4VTscNCO0Ild8=";
   };
 

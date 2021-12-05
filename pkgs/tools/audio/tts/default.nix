@@ -1,8 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-}:
+{ lib, python3, fetchFromGitHub, fetchpatch }:
 
 # USAGE:
 # $ tts-server --list_models
@@ -34,9 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       -e 's!umap-learn==[^"]*!umap-learn!'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    cython
-  ];
+  nativeBuildInputs = with python3.pkgs; [ cython ];
 
   propagatedBuildInputs = with python3.pkgs; [
     anyascii
@@ -74,10 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python3.pkgs; [
-    pytest-sugar
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytest-sugar pytestCheckHook ];
 
   disabledTests = [
     # RuntimeError: fft: ATen not compiled with MKL support
@@ -119,7 +110,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/coqui-ai/TTS";
     changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
-    description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
+    description =
+      "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa mic92 ];
   };

@@ -1,21 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gettext
-, gobject-introspection
-, gst-plugins-base
-, gst-plugins-bad
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, gettext
+, gobject-introspection, gst-plugins-base, gst-plugins-bad }:
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
   version = "1.18.4";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "153c78klvzlmi86d0gmdf7w9crv11rkd4y82b14a0wdr83gbhsx4";
   };
 
@@ -46,17 +38,13 @@ stdenv.mkDerivation rec {
     # TODO add hotdoc here
   ];
 
-  buildInputs = [
-    gst-plugins-base
-    gst-plugins-bad
-  ];
+  buildInputs = [ gst-plugins-base gst-plugins-bad ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "-Dintrospection=disabled" ];
 
   postPatch = ''
     patchShebangs \

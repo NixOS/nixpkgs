@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools, six }:
 
 buildPythonPackage rec {
   pname = "Genshi";
@@ -18,12 +13,11 @@ buildPythonPackage rec {
   # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
   doCheck = false;
 
-  propagatedBuildInputs = [
-    setuptools six
-  ];
+  propagatedBuildInputs = [ setuptools six ];
 
   meta = with lib; {
-    description = "Python components for parsing HTML, XML and other textual content";
+    description =
+      "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for
       parsing, generating, and processing HTML, XML or other textual

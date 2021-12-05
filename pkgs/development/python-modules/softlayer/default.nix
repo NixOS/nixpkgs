@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, prompt-toolkit
-, ptable
-, pygments
-, pytestCheckHook
-, pythonOlder
-, requests
-, sphinx
-, testtools
-, tkinter
-, urllib3
-}:
+{ lib, buildPythonPackage, click, fetchFromGitHub, mock, prompt-toolkit, ptable
+, pygments, pytestCheckHook, pythonOlder, requests, sphinx, testtools, tkinter
+, urllib3 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
@@ -27,22 +14,10 @@ buildPythonPackage rec {
     sha256 = "0zwhykrpckx3ln4w6vlgp0nrkkr8343ni1w43hxznm55qmrllrpg";
   };
 
-  propagatedBuildInputs = [
-    click
-    prompt-toolkit
-    ptable
-    pygments
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs =
+    [ click prompt-toolkit ptable pygments requests urllib3 ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    sphinx
-    testtools
-    tkinter
-  ];
+  checkInputs = [ mock pytestCheckHook sphinx testtools tkinter ];
 
   pythonImportsCheck = [ "SoftLayer" ];
 

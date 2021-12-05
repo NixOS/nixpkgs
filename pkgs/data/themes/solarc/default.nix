@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config,
-  gtk-engine-murrine, gtk3
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config
+, gtk-engine-murrine, gtk3 }:
 
 stdenv.mkDerivation {
   pname = "solarc-gtk-theme";

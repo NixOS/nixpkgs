@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, directfb, zlib, libjpeg, xorgproto }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, directfb, zlib
+, libjpeg, xorgproto }:
 
 stdenv.mkDerivation {
   pname = "directvnc";

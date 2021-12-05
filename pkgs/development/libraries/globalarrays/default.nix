@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, mpi
-} :
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, blas, gfortran
+, openssh, mpi }:
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";

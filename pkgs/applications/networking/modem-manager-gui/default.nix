@@ -1,18 +1,5 @@
-{ lib, stdenv
-, pkg-config
-, python3
-, fetchFromGitLab
-, gtk3
-, glib
-, gdbm
-, gtkspell3
-, ofono
-, itstool
-, libayatana-appindicator-gtk3
-, perlPackages
-, meson
-, ninja
-}:
+{ lib, stdenv, pkg-config, python3, fetchFromGitLab, gtk3, glib, gdbm, gtkspell3
+, ofono, itstool, libayatana-appindicator-gtk3, perlPackages, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager-gui";
@@ -26,30 +13,18 @@ stdenv.mkDerivation rec {
     sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-    perlPackages.Po4a
-    itstool
-    meson
-    ninja
-  ];
+  nativeBuildInputs =
+    [ pkg-config python3 perlPackages.Po4a itstool meson ninja ];
 
-  buildInputs = [
-    gtk3
-    glib
-    gdbm
-    gtkspell3
-    ofono
-    libayatana-appindicator-gtk3
-  ];
+  buildInputs = [ gtk3 glib gdbm gtkspell3 ofono libayatana-appindicator-gtk3 ];
 
   postPatch = ''
     patchShebangs man/manhelper.py
   '';
 
   meta = with lib; {
-    description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
+    description =
+      "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono
       system services able to control EDGE/3G/4G broadband modem specific

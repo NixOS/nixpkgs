@@ -1,26 +1,38 @@
-{ lib, stdenv, fetchurl, texinfo6_5, libXext, xorgproto, libX11
-, libXpm, libXt, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis
-, libXxf86dga, libXxf86misc
-, libXxf86vm, openal, libGLU, libGL }:
+{ lib, stdenv, fetchurl, texinfo6_5, libXext, xorgproto, libX11, libXpm, libXt
+, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis, libXxf86dga
+, libXxf86misc, libXxf86vm, openal, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version="4.4.3.1";
+  version = "4.4.3.1";
 
   src = fetchurl {
-    url = "https://github.com/liballeg/allegro5/releases/download/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/liballeg/allegro5/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1m6lz35nk07dli26kkwz3wa50jsrxs1kb6w1nj14a911l34xn6gc";
   };
 
-  patches = [
-    ./nix-unstable-sandbox-fix.patch
-    ./encoding.patch
-  ];
+  patches = [ ./nix-unstable-sandbox-fix.patch ./encoding.patch ];
 
   buildInputs = [
-    texinfo6_5 libXext xorgproto libX11 libXpm libXt libXcursor
-    alsa-lib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    libXxf86vm openal libGLU libGL
+    texinfo6_5
+    libXext
+    xorgproto
+    libX11
+    libXpm
+    libXt
+    libXcursor
+    alsa-lib
+    cmake
+    zlib
+    libpng
+    libvorbis
+    libXxf86dga
+    libXxf86misc
+    libXxf86vm
+    openal
+    libGLU
+    libGL
   ];
 
   hardeningDisable = [ "format" ];

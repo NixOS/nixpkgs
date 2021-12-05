@@ -4,7 +4,7 @@ with pythonPackages;
 
 let
 
-wsl_stub = writeShellScriptBin "wsl" "true";
+  wsl_stub = writeShellScriptBin "wsl" "true";
 
 in buildPythonPackage rec {
   pname = "tasklib";
@@ -15,16 +15,9 @@ in buildPythonPackage rec {
     sha256 = "b523bc12893d26c8173a6b8d84b16259c9a9c5acaaf8932bc018117f907b3bc5";
   };
 
-  propagatedBuildInputs = [
-    six
-    pytz
-    tzlocal
-  ];
+  propagatedBuildInputs = [ six pytz tzlocal ];
 
-  checkInputs = [
-    taskwarrior
-    wsl_stub
-  ];
+  checkInputs = [ taskwarrior wsl_stub ];
 
   meta = with lib; {
     homepage = "https://github.com/robgolding/tasklib";

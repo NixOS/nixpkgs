@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, perlPackages
-, pkg-config
-, gtk2
-, scrollkeeper
-, libglade
-, libXmu
-, libX11
-, libXext
-, gettext
-, lame
-, libXfixes
-, libXdamage
-}:
+{ lib, stdenv, fetchurl, perlPackages, pkg-config, gtk2, scrollkeeper, libglade
+, libXmu, libX11, libXext, gettext, lame, libXfixes, libXdamage }:
 
 stdenv.mkDerivation rec {
   pname = "xvidcap";

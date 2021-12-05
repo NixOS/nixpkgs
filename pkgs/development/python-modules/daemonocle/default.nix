@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, psutil
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, click, psutil, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "daemonocle";

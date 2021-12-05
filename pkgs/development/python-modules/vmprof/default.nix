@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, libunwind
-, pytz
-, requests
-, six
+{ lib, buildPythonPackage, fetchPypi, colorama, libunwind, pytz, requests, six
 }:
 
 buildPythonPackage rec {

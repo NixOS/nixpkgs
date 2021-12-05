@@ -1,11 +1,10 @@
 { configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
 
-# provide an option name, as a string literal.
+  # provide an option name, as a string literal.
 , testOption ? null
 
-# provide a list of option names, as string literals.
-, testOptions ? [ ]
-}:
+  # provide a list of option names, as string literals.
+, testOptions ? [ ] }:
 
 # This file is made to be used as follow:
 #
@@ -46,14 +45,13 @@ with import ../../lib;
 
 let
 
-  evalFun = {
-    specialArgs ? {}
-  }: import ../lib/eval-config.nix {
-       modules = [ configuration ];
-       inherit specialArgs;
-     };
+  evalFun = { specialArgs ? { } }:
+    import ../lib/eval-config.nix {
+      modules = [ configuration ];
+      inherit specialArgs;
+    };
 
-  eval = evalFun {};
+  eval = evalFun { };
   inherit (eval) pkgs;
 
   excludedTestOptions = [
@@ -74,26 +72,18 @@ let
 
   # for some reasons which we yet have to investigate, some options are
   # time-consuming to compute, thus we filter them out at the moment.
-  excludedOptions = [
-    "boot.systemd.services"
-    "systemd.services"
-    "kde.extraPackages"
-  ];
+  excludedOptions =
+    [ "boot.systemd.services" "systemd.services" "kde.extraPackages" ];
   excludeOptions = list:
     filter (opt: !(elem (showOption opt.loc) excludedOptions)) list;
 
-
   reportNewFailures = old: new:
     let
-      filterChanges =
-        filter ({fst, snd}:
-          !(fst.success -> snd.success)
-        );
+      filterChanges = filter ({ fst, snd }: !(fst.success -> snd.success));
 
-      keepNames =
-        map ({fst, snd}:
-          /* assert fst.name == snd.name; */ snd.name
-        );
+      keepNames = map ({ fst, snd }:
+        # assert fst.name == snd.name;
+        snd.name);
 
       # Use  tryEval (strict ...)  to know if there is any failure while
       # evaluating the option value.
@@ -103,86 +93,64 @@ let
       # each options.
       tryCollectOptions = moduleResult:
         forEach (excludeOptions (collect isOption moduleResult)) (opt:
-          { name = showOption opt.loc; } // builtins.tryEval (strict opt.value));
-     in
-       keepNames (
-         filterChanges (
-           zipLists (tryCollectOptions old) (tryCollectOptions new)
-         )
-       );
-
+          {
+            name = showOption opt.loc;
+          } // builtins.tryEval (strict opt.value));
+    in keepNames
+    (filterChanges (zipLists (tryCollectOptions old) (tryCollectOptions new)));
 
   # Create a list of modules where each module contains only one failling
   # options.
-  introspectionModules =
-    let
-      setIntrospection = opt: rec {
-        name = showOption opt.loc;
-        path = opt.loc;
-        config = setAttrByPath path
-          (throw "Usage introspection of '${name}' by forced failure.");
-      };
-    in
-      map setIntrospection (collect isOption eval.options);
+  introspectionModules = let
+    setIntrospection = opt: rec {
+      name = showOption opt.loc;
+      path = opt.loc;
+      config = setAttrByPath path
+        (throw "Usage introspection of '${name}' by forced failure.");
+    };
+  in map setIntrospection (collect isOption eval.options);
 
   overrideConfig = thrower:
-    recursiveUpdateUntil (path: old: new:
-      path == thrower.path
-    ) eval.config thrower.config;
+    recursiveUpdateUntil (path: old: new: path == thrower.path) eval.config
+    thrower.config;
 
+  graph = map (thrower: {
+    option = thrower.name;
+    usedBy = assert __trace "Investigate ${thrower.name}" true;
+      reportNewFailures eval.options
+      (evalFun { specialArgs = { config = overrideConfig thrower; }; }).options;
+  }) introspectionModules;
 
-  graph =
-    map (thrower: {
-      option = thrower.name;
-      usedBy = assert __trace "Investigate ${thrower.name}" true;
-        reportNewFailures eval.options (evalFun {
-          specialArgs = {
-            config = overrideConfig thrower;
-          };
-        }).options;
-    }) introspectionModules;
-
-  displayOptionsGraph =
-     let
-       checkList =
-         if testOption != null then [ testOption ]
-         else testOptions;
-       checkAll = checkList == [];
-     in
-       flip filter graph ({option, ...}:
-         (checkAll || elem option checkList)
-         && !(elem option excludedTestOptions)
-       );
+  displayOptionsGraph = let
+    checkList = if testOption != null then [ testOption ] else testOptions;
+    checkAll = checkList == [ ];
+  in flip filter graph ({ option, ... }:
+    (checkAll || elem option checkList) && !(elem option excludedTestOptions));
 
   graphToDot = graph: ''
     digraph "Option Usages" {
-      ${concatMapStrings ({option, usedBy}:
-          concatMapStrings (user: ''
-            "${option}" -> "${user}"''
-          ) usedBy
-        ) displayOptionsGraph}
+      ${
+        concatMapStrings ({ option, usedBy }:
+          concatMapStrings (user: ''"${option}" -> "${user}"'') usedBy)
+        displayOptionsGraph
+      }
     }
   '';
 
   graphToText = graph:
-    concatMapStrings ({usedBy, ...}:
-        concatMapStrings (user: ''
-          ${user}
-        '') usedBy
-      ) displayOptionsGraph;
+    concatMapStrings ({ usedBy, ... }:
+      concatMapStrings (user: ''
+        ${user}
+      '') usedBy) displayOptionsGraph;
 
-in
-
-rec {
+in rec {
   dotContent = graphToDot graph;
   dot = pkgs.writeTextFile {
     name = "option_usages.dot";
     text = dotContent;
   };
 
-  pdf = pkgs.texFunctions.dot2pdf {
-    dotGraph = dot;
-  };
+  pdf = pkgs.texFunctions.dot2pdf { dotGraph = dot; };
 
   txtContent = graphToText graph;
   txt = pkgs.writeTextFile {

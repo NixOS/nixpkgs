@@ -1,7 +1,4 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "dapper";
@@ -15,9 +12,9 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "sha256-kzjDhBmyB1Yf39bvdlGJ6EFtaviDqozf20mDaaaChSs=";
   };
-   patchPhase = ''
-     substituteInPlace main.go --replace 0.0.0 ${version}
-   '';
+  patchPhase = ''
+    substituteInPlace main.go --replace 0.0.0 ${version}
+  '';
 
   meta = with lib; {
     description = "Docker Build Wrapper";

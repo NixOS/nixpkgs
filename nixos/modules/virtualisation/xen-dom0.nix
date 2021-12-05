@@ -4,34 +4,35 @@
 
 with lib;
 
-let
-  cfg = config.virtualisation.xen;
-in
+let cfg = config.virtualisation.xen;
 
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ] "You don't need this option anymore, it will work without it.")
-    (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [ "virtualisation" "xen" "package-qemu" ])
+    (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ]
+      "You don't need this option anymore, it will work without it.")
+    (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [
+      "virtualisation"
+      "xen"
+      "package-qemu"
+    ])
   ];
 
   ###### interface
 
   options = {
 
-    virtualisation.xen.enable =
-      mkOption {
-        default = false;
-        type = types.bool;
-        description =
-          ''
-            Setting this option enables the Xen hypervisor, a
-            virtualisation technology that allows multiple virtual
-            machines, known as <emphasis>domains</emphasis>, to run
-            concurrently on the physical machine.  NixOS runs as the
-            privileged <emphasis>Domain 0</emphasis>.  This option
-            requires a reboot to take effect.
-          '';
-      };
+    virtualisation.xen.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Setting this option enables the Xen hypervisor, a
+        virtualisation technology that allows multiple virtual
+        machines, known as <emphasis>domains</emphasis>, to run
+        concurrently on the physical machine.  NixOS runs as the
+        privileged <emphasis>Domain 0</emphasis>.  This option
+        requires a reboot to take effect.
+      '';
+    };
 
     virtualisation.xen.package = mkOption {
       type = types.package;
@@ -50,110 +51,111 @@ in
       description = ''
         The package with qemu binaries for dom0 qemu and xendomains.
       '';
-      relatedPackages = [ "xen"
-                          { name = "qemu_xen-light"; comment = "For use with pkgs.xen-light."; }
-                        ];
+      relatedPackages = [
+        "xen"
+        {
+          name = "qemu_xen-light";
+          comment = "For use with pkgs.xen-light.";
+        }
+      ];
     };
 
-    virtualisation.xen.bootParams =
-      mkOption {
-        default = [];
-        type = types.listOf types.str;
-        description =
-          ''
-            Parameters passed to the Xen hypervisor at boot time.
-          '';
-      };
+    virtualisation.xen.bootParams = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Parameters passed to the Xen hypervisor at boot time.
+      '';
+    };
 
-    virtualisation.xen.domain0MemorySize =
-      mkOption {
-        default = 0;
-        example = 512;
-        type = types.addCheck types.int (n: n >= 0);
-        description =
-          ''
-            Amount of memory (in MiB) allocated to Domain 0 on boot.
-            If set to 0, all memory is assigned to Domain 0.
-          '';
-      };
+    virtualisation.xen.domain0MemorySize = mkOption {
+      default = 0;
+      example = 512;
+      type = types.addCheck types.int (n: n >= 0);
+      description = ''
+        Amount of memory (in MiB) allocated to Domain 0 on boot.
+        If set to 0, all memory is assigned to Domain 0.
+      '';
+    };
 
     virtualisation.xen.bridge = {
-        name = mkOption {
-          default = "xenbr0";
-          type = types.str;
-          description = ''
-              Name of bridge the Xen domUs connect to.
-            '';
-        };
-
-        address = mkOption {
-          type = types.str;
-          default = "172.16.0.1";
-          description = ''
-            IPv4 address of the bridge.
-          '';
-        };
-
-        prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= 32);
-          default = 16;
-          description = ''
-            Subnet mask of the bridge interface, specified as the number of
-            bits in the prefix (<literal>24</literal>).
-            A DHCP server will provide IP addresses for the whole, remaining
-            subnet.
-          '';
-        };
-
-        forwardDns = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If set to <literal>true</literal>, the DNS queries from the
-            hosts connected to the bridge will be forwarded to the DNS
-            servers specified in /etc/resolv.conf .
-            '';
-        };
-
+      name = mkOption {
+        default = "xenbr0";
+        type = types.str;
+        description = ''
+          Name of bridge the Xen domUs connect to.
+        '';
       };
 
-    virtualisation.xen.stored =
-      mkOption {
-        type = types.path;
-        description =
-          ''
-            Xen Store daemon to use. Defaults to oxenstored of the xen package.
-          '';
+      address = mkOption {
+        type = types.str;
+        default = "172.16.0.1";
+        description = ''
+          IPv4 address of the bridge.
+        '';
       };
+
+      prefixLength = mkOption {
+        type = types.addCheck types.int (n: n >= 0 && n <= 32);
+        default = 16;
+        description = ''
+          Subnet mask of the bridge interface, specified as the number of
+          bits in the prefix (<literal>24</literal>).
+          A DHCP server will provide IP addresses for the whole, remaining
+          subnet.
+        '';
+      };
+
+      forwardDns = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to <literal>true</literal>, the DNS queries from the
+          hosts connected to the bridge will be forwarded to the DNS
+          servers specified in /etc/resolv.conf .
+        '';
+      };
+
+    };
+
+    virtualisation.xen.stored = mkOption {
+      type = types.path;
+      description = ''
+        Xen Store daemon to use. Defaults to oxenstored of the xen package.
+      '';
+    };
 
     virtualisation.xen.domains = {
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description =
-            ''
-              Options defined here will override the defaults for xendomains.
-              The default options can be seen in the file included from
-              /etc/default/xendomains.
-            '';
-          };
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Options defined here will override the defaults for xendomains.
+          The default options can be seen in the file included from
+          /etc/default/xendomains.
+        '';
       };
+    };
 
     virtualisation.xen.trace = mkEnableOption "Xen tracing";
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [ {
-      assertion = pkgs.stdenv.isx86_64;
-      message = "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
-    } {
-      assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
-      message = "Xen currently does not support EFI boot";
-    } ];
+    assertions = [
+      {
+        assertion = pkgs.stdenv.isx86_64;
+        message =
+          "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
+      }
+      {
+        assertion = config.boot.loader.grub.enable
+          && (config.boot.loader.grub.efiSupport == false);
+        message = "Xen currently does not support EFI boot";
+      }
+    ];
 
     virtualisation.xen.package = mkDefault pkgs.xen;
     virtualisation.xen.package-qemu = mkDefault pkgs.xen;
@@ -161,13 +163,30 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    boot.kernelModules =
-      [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
-        "xen-pciback" "evtchn" "gntdev" "netbk" "blkbk" "xen-scsibk"
-        "usbbk" "pciback" "xen-acpi-processor" "blktap2" "tun" "netxen_nic"
-        "xen_wdt" "xen-acpi-processor" "xen-privcmd" "xen-scsiback"
-        "xenfs"
-      ];
+    boot.kernelModules = [
+      "xen-evtchn"
+      "xen-gntdev"
+      "xen-gntalloc"
+      "xen-blkback"
+      "xen-netback"
+      "xen-pciback"
+      "evtchn"
+      "gntdev"
+      "netbk"
+      "blkbk"
+      "xen-scsibk"
+      "usbbk"
+      "pciback"
+      "xen-acpi-processor"
+      "blktap2"
+      "tun"
+      "netxen_nic"
+      "xen_wdt"
+      "xen-acpi-processor"
+      "xen-privcmd"
+      "xen-scsiback"
+      "xenfs"
+    ];
 
     # The xenfs module is needed in system.activationScripts.xen, but
     # the modprobe command there fails silently. Include xenfs in the
@@ -181,63 +200,59 @@ in
     # Increase the number of loopback devices from the default (8),
     # which is way too small because every VM virtual disk requires a
     # loopback device.
-    boot.extraModprobeConfig =
-      ''
-        options loop max_loop=64
-      '';
+    boot.extraModprobeConfig = ''
+      options loop max_loop=64
+    '';
 
-    virtualisation.xen.bootParams = [] ++
-      optionals cfg.trace [ "loglvl=all" "guest_loglvl=all" ] ++
-      optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
+    virtualisation.xen.bootParams = [ ]
+      ++ optionals cfg.trace [ "loglvl=all" "guest_loglvl=all" ]
+      ++ optional (cfg.domain0MemorySize != 0)
+      "dom0_mem=${toString cfg.domain0MemorySize}M";
 
-    system.extraSystemBuilderCmds =
-      ''
-        ln -s ${cfg.package}/boot/xen.gz $out/xen.gz
-        echo "${toString cfg.bootParams}" > $out/xen-params
-      '';
+    system.extraSystemBuilderCmds = ''
+      ln -s ${cfg.package}/boot/xen.gz $out/xen.gz
+      echo "${toString cfg.bootParams}" > $out/xen-params
+    '';
 
     # Mount the /proc/xen pseudo-filesystem.
-    system.activationScripts.xen =
-      ''
-        if [ -d /proc/xen ]; then
-            ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
-            ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
-                ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
-        fi
-      '';
+    system.activationScripts.xen = ''
+      if [ -d /proc/xen ]; then
+          ${pkgs.kmod}/bin/modprobe xenfs 2> /dev/null
+          ${pkgs.util-linux}/bin/mountpoint -q /proc/xen || \
+              ${pkgs.util-linux}/bin/mount -t xenfs none /proc/xen
+      fi
+    '';
 
     # Domain 0 requires a pvops-enabled kernel.
-    system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isYes "XEN")
-        (isYes "X86_IO_APIC")
-        (isYes "ACPI")
-        (isYes "XEN_DOM0")
-        (isYes "PCI_XEN")
-        (isYes "XEN_DEV_EVTCHN")
-        (isYes "XENFS")
-        (isYes "XEN_COMPAT_XENFS")
-        (isYes "XEN_SYS_HYPERVISOR")
-        (isYes "XEN_GNTDEV")
-        (isYes "XEN_BACKEND")
-        (isModule "XEN_NETDEV_BACKEND")
-        (isModule "XEN_BLKDEV_BACKEND")
-        (isModule "XEN_PCIDEV_BACKEND")
-        (isYes "XEN_BALLOON")
-        (isYes "XEN_SCRUB_PAGES")
-      ];
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "XEN")
+      (isYes "X86_IO_APIC")
+      (isYes "ACPI")
+      (isYes "XEN_DOM0")
+      (isYes "PCI_XEN")
+      (isYes "XEN_DEV_EVTCHN")
+      (isYes "XENFS")
+      (isYes "XEN_COMPAT_XENFS")
+      (isYes "XEN_SYS_HYPERVISOR")
+      (isYes "XEN_GNTDEV")
+      (isYes "XEN_BACKEND")
+      (isModule "XEN_NETDEV_BACKEND")
+      (isModule "XEN_BLKDEV_BACKEND")
+      (isModule "XEN_PCIDEV_BACKEND")
+      (isYes "XEN_BALLOON")
+      (isYes "XEN_SCRUB_PAGES")
+    ];
 
+    environment.etc = {
+      "xen/xl.conf".source = "${cfg.package}/etc/xen/xl.conf";
+      "xen/scripts".source = "${cfg.package}/etc/xen/scripts";
+      "default/xendomains".text = ''
+        source ${cfg.package}/etc/default/xendomains
 
-    environment.etc =
-      {
-        "xen/xl.conf".source = "${cfg.package}/etc/xen/xl.conf";
-        "xen/scripts".source = "${cfg.package}/etc/xen/scripts";
-        "default/xendomains".text = ''
-          source ${cfg.package}/etc/default/xendomains
-
-          ${cfg.domains.extraConfig}
-        '';
-      }
-      // optionalAttrs (builtins.compareVersions cfg.package.version "4.10" >= 0) {
+        ${cfg.domains.extraConfig}
+      '';
+    } // optionalAttrs
+      (builtins.compareVersions cfg.package.version "4.10" >= 0) {
         # in V 4.10 oxenstored requires /etc/xen/oxenstored.conf to start
         "xen/oxenstored.conf".source = "${cfg.package}/etc/xen/oxenstored.conf";
       };
@@ -260,21 +275,25 @@ in
         mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
         mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
-        '';
-      serviceConfig = if (builtins.compareVersions cfg.package.version "4.8" < 0) then
-        { ExecStart = ''
-            ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
-            '';
+      '';
+      serviceConfig =
+        if (builtins.compareVersions cfg.package.version "4.8" < 0) then {
+          ExecStart = ''
+            ${cfg.stored}${
+              optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"
+            } --no-fork
+          '';
         } else {
           ExecStart = ''
             ${cfg.package}/etc/xen/scripts/launch-xenstore
-            '';
-          Type            = "notify";
+          '';
+          Type = "notify";
           RemainAfterExit = true;
-          NotifyAccess    = "all";
+          NotifyAccess = "all";
         };
       postStart = ''
-        ${optionalString (builtins.compareVersions cfg.package.version "4.8" < 0) ''
+        ${optionalString
+        (builtins.compareVersions cfg.package.version "4.8" < 0) ''
           time=0
           timeout=30
           # Wait for xenstored to actually come up, timing out after 30 seconds
@@ -291,20 +310,20 @@ in
         ''}
         echo "executing xen-init-dom0"
         ${cfg.package}/lib/xen/bin/xen-init-dom0
-        '';
+      '';
     };
 
     systemd.sockets.xen-store = {
       description = "XenStore Socket for userspace API";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = [ "/var/run/xenstored/socket" "/var/run/xenstored/socket_ro" ];
+        ListenStream =
+          [ "/var/run/xenstored/socket" "/var/run/xenstored/socket_ro" ];
         SocketMode = "0660";
         SocketUser = "root";
         SocketGroup = "root";
       };
     };
-
 
     systemd.services.xen-console = {
       description = "Xen Console Daemon";
@@ -315,16 +334,18 @@ in
         mkdir -p /var/run/xen
         ${optionalString cfg.trace "mkdir -p /var/log/xen"}
         grep -q control_d /proc/xen/capabilities
-        '';
+      '';
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/xenconsoled\
-            ${optionalString ((builtins.compareVersions cfg.package.version "4.8" >= 0)) " -i"}\
+            ${
+              optionalString
+              ((builtins.compareVersions cfg.package.version "4.8" >= 0)) " -i"
+            }\
             ${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
-          '';
+        '';
       };
     };
-
 
     systemd.services.xen-qemu = {
       description = "Xen Qemu Daemon";
@@ -335,9 +356,8 @@ in
         ${cfg.package-qemu}/${cfg.package-qemu.qemu-system-i386} \
            -xen-attach -xen-domid 0 -name dom0 -M xenpv \
            -nographic -monitor /dev/null -serial /dev/null -parallel /dev/null
-        '';
+      '';
     };
-
 
     systemd.services.xen-watchdog = {
       description = "Xen Watchdog Daemon";
@@ -349,7 +369,6 @@ in
       serviceConfig.Restart = "on-failure";
     };
 
-
     systemd.services.xen-bridge = {
       description = "Xen bridge";
       wantedBy = [ "multi-user.target" ];
@@ -360,14 +379,20 @@ in
         touch /var/run/xen/dnsmasq.etherfile
         touch /var/run/xen/dnsmasq.leasefile
 
-        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Usable\ range`
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${
+          toString cfg.bridge.prefixLength
+        } | grep Usable\ range`
         export XEN_BRIDGE_IP_RANGE_START="${"\${data[1]//[[:blank:]]/}"}"
         export XEN_BRIDGE_IP_RANGE_END="${"\${data[2]//[[:blank:]]/}"}"
 
-        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${
+          toString cfg.bridge.prefixLength
+        } | grep Network\ address`
         export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
 
-        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ mask`
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${
+          toString cfg.bridge.prefixLength
+        } | grep Network\ mask`
         export XEN_BRIDGE_NETMASK="${"\${data[1]//[[:blank:]]/}"}"
 
         echo "${cfg.bridge.address} host gw dns" > /var/run/xen/dnsmasq.hostsfile
@@ -378,7 +403,9 @@ in
         interface=${cfg.bridge.name}
         except-interface=lo
         bind-interfaces
-        auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength}
+        auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${
+          toString cfg.bridge.prefixLength
+        }
         domain=xen.local
         addn-hosts=/var/run/xen/dnsmasq.hostsfile
         expand-hosts
@@ -402,8 +429,12 @@ in
         EOF
 
         # DHCP
-        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${
+          toString cfg.bridge.prefixLength
+        } --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${
+          toString cfg.bridge.prefixLength
+        } --sport 68 --dport 67 -j ACCEPT
         # DNS
         ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
         ${pkgs.iptables}/bin/iptables -w -I INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -413,9 +444,12 @@ in
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} netmask $XEN_BRIDGE_NETMASK
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} up
       '';
-      serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";
+      serviceConfig.ExecStart =
+        "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";
       postStop = ''
-        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${
+          toString cfg.bridge.prefixLength
+        } | grep Network\ address`
         export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
 
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} down
@@ -425,14 +459,18 @@ in
         ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
         ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
         # DHCP
-        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${
+          toString cfg.bridge.prefixLength
+        } --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -w -D INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${
+          toString cfg.bridge.prefixLength
+        } --sport 68 --dport 67 -j ACCEPT
       '';
     };
 
-
     systemd.services.xen-domains = {
-      description = "Xen domains - automatically starts, saves and restores Xen domains";
+      description =
+        "Xen domains - automatically starts, saves and restores Xen domains";
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-bridge.service" "xen-qemu.service" ];
       requires = [ "xen-bridge.service" "xen-qemu.service" ];

@@ -1,12 +1,10 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
-let
-  cfg = config.services.monit;
-in
+let cfg = config.services.monit;
 
-{
+in {
   options.services.monit = {
 
     enable = mkEnableOption "Monit";

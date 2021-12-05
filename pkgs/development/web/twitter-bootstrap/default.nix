@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.1.0";
 
   src = fetchurl {
-    url = "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
+    url =
+      "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
     sha256 = "sha256-OVNCspdOM1BWDmV1LTaqtlc2UrEcxste95ouXoOtZLE=";
   };
 

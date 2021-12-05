@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
+{ lib, stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite
+, libgcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "purple-lurch";

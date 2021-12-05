@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, nix-prefetch-git
-, go
-}:
+{ lib, fetchFromGitHub, buildGoModule, makeWrapper, nix-prefetch-git, go }:
 
 buildGoModule {
   pname = "vgo2nix";
@@ -26,11 +20,14 @@ buildGoModule {
   allowGoReference = true;
 
   postInstall = ''
-    wrapProgram $out/bin/vgo2nix --prefix PATH : ${lib.makeBinPath [ nix-prefetch-git go ]}
+    wrapProgram $out/bin/vgo2nix --prefix PATH : ${
+      lib.makeBinPath [ nix-prefetch-git go ]
+    }
   '';
 
   meta = with lib; {
-    description = "Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files";
+    description =
+      "Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files";
     homepage = "https://github.com/nix-community/vgo2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis SuperSandro2000 ];

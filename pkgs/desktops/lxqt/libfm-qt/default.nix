@@ -1,18 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, pcre
-, libexif
-, xorg
-, libfm
-, menu-cache
-, qtx11extras
-, qttools
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, lxqt-build-tools, pcre
+, libexif, xorg, libfm, menu-cache, qtx11extras, qttools, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "libfm-qt";
@@ -25,11 +12,7 @@ mkDerivation rec {
     sha256 = "1kk2cv9cp2gdj2pzdgm72c009iyl3mhrvsiz05kdxd4v1kn38ci1";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     pcre

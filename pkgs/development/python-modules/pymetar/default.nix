@@ -22,7 +22,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A command-line tool to show the weather report by a given station ID";
+    description =
+      "A command-line tool to show the weather report by a given station ID";
     homepage = "https://github.com/klausman/pymetar";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erosennin ];

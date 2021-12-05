@@ -17,9 +17,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildInputs = with darwin.apple_sdk.frameworks; [
-    Cocoa
-  ];
+  buildInputs = with darwin.apple_sdk.frameworks; [ Cocoa ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

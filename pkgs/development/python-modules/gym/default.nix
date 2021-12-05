@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, cloudpickle
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, cloudpickle }:
 
 buildPythonPackage rec {
   pname = "gym";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-0O/s9OVNGQmeX9j8B1x63RxdI6dhqfTEJcgDH2jtCv4=";
   };
 
-  propagatedBuildInputs = [
-    cloudpickle
-    numpy
-  ];
+  propagatedBuildInputs = [ cloudpickle numpy ];
 
   # The test needs MuJoCo that is not free library.
   doCheck = false;
@@ -27,7 +19,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gym" ];
 
   meta = with lib; {
-    description = "A toolkit for developing and comparing your reinforcement learning agents";
+    description =
+      "A toolkit for developing and comparing your reinforcement learning agents";
     homepage = "https://gym.openai.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];

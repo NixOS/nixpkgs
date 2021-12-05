@@ -1,22 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, glib
-, icu
-, libxml2
-, ninja
-, perl
-, pkg-config
-, libical
-, python3
-, tzdata
-, fixDarwinDylibNames
+{ lib, stdenv, fetchFromGitHub, buildPackages, cmake, glib, icu, libxml2, ninja
+, perl, pkg-config, libical, python3, tzdata, fixDarwinDylibNames
 , introspectionSupport ? stdenv.buildPlatform == stdenv.hostPlatform
-, gobject-introspection
-, vala
-}:
+, gobject-introspection, vala }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
@@ -43,33 +28,24 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # provides ical-glib-src-generator that runs during build
     libical
-  ] ++ lib.optionals introspectionSupport [
-    gobject-introspection
-    vala
-  ] ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  ] ++ lib.optionals introspectionSupport [ gobject-introspection vala ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
   installCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
-      pygobject3
-    ]))
+    (python3.withPackages (pkgs: with pkgs; [ pygobject3 ]))
   ];
 
-  buildInputs = [
-    glib
-    libxml2
-    icu
-  ];
+  buildInputs = [ glib libxml2 icu ];
 
-  cmakeFlags = [
-    "-DENABLE_GTK_DOC=False"
-  ] ++ lib.optionals introspectionSupport [
-    "-DGOBJECT_INTROSPECTION=True"
-    "-DICAL_GLIB_VAPI=True"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
-  ];
+  cmakeFlags = [ "-DENABLE_GTK_DOC=False" ]
+    ++ lib.optionals introspectionSupport [
+      "-DGOBJECT_INTROSPECTION=True"
+      "-DICAL_GLIB_VAPI=True"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${
+        lib.getDev buildPackages.libical
+      }/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
+    ];
 
   patches = [
     # Will appear in 3.1.0
@@ -87,7 +63,8 @@ stdenv.mkDerivation rec {
         install_name_tool -change $lib $out/lib/$lib $testexe
       done
     done
-  '' else null;
+  '' else
+    null;
   installCheckPhase = ''
     runHook preInstallCheck
 

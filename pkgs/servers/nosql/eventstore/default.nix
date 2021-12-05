@@ -1,11 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeWrapper
-, dotnetCorePackages
-, mono
-, Nuget
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, dotnetCorePackages, mono
+, Nuget }:
 
 let
 
@@ -13,9 +7,7 @@ let
 
   deps = import ./deps.nix { inherit fetchurl; };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
 
   pname = "EventStore";
   version = "5.0.8";
@@ -27,12 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "021m610gzmrp2drywl1q3y6xxpy4qayn580d855ag952z9s6w9nj";
   };
 
-  buildInputs = [
-    makeWrapper
-    dotnet-sdk
-    mono
-    Nuget
-  ];
+  buildInputs = [ makeWrapper dotnet-sdk mono Nuget ];
 
   # that dependency seems to not be required for building, but pulls in libcurl which fails to be located.
   # see: https://github.com/EventStore/EventStore/issues/1897

@@ -1,12 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, gmp
-, libmpc
-, mpfr
-, openssl
-, pkg-config
-}:
+{ lib, fetchFromGitHub, rustPlatform, gmp, libmpc, mpfr, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "scryer-prolog";

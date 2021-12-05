@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, libzen, libmediainfo , jre8
-}:
+{ lib, stdenv, fetchurl, makeWrapper, libzen, libmediainfo, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "ums";
@@ -8,14 +6,17 @@ stdenv.mkDerivation rec {
 
   src = {
     i686-linux = fetchurl {
-      url =  "mirror://sourceforge/project/unimediaserver/${version}/" + lib.toUpper "${pname}-${version}" + "-x86.tgz";
+      url = "mirror://sourceforge/project/unimediaserver/${version}/"
+        + lib.toUpper "${pname}-${version}" + "-x86.tgz";
       sha256 = "0j3d5zcwwswlcr2vicmvnnr7n8cg3q46svz0mbmga4j3da4473i6";
     };
     x86_64-linux = fetchurl {
-      url =  "mirror://sourceforge/project/unimediaserver/${version}/" + lib.toUpper "${pname}-${version}" + "-x86_64.tgz";
+      url = "mirror://sourceforge/project/unimediaserver/${version}/"
+        + lib.toUpper "${pname}-${version}" + "-x86_64.tgz";
       sha256 = "06f96vkf593aasyfw458fa4x3rnai2k83vpgzc83hlwr0rw70qfn";
-   };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    };
+  }.${stdenv.hostPlatform.system} or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,14 +30,16 @@ stdenv.mkDerivation rec {
     rm -rf $out/jre8
 
     makeWrapper "$out/UMS.sh" "$out/bin/ums" \
-      --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath [ libzen libmediainfo] }" \
+      --prefix LD_LIBRARY_PATH ":" "${
+        lib.makeLibraryPath [ libzen libmediainfo ]
+      }" \
       --set JAVA_HOME "${jre8}"
   '';
 
   meta = {
-      description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
-      license = lib.licenses.gpl2;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ thall snicket2100 ];
+    description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thall snicket2100 ];
   };
 }

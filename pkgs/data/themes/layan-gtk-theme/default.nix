@@ -1,8 +1,4 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gtk-engine-murrine
-}:
+{ stdenv, fetchFromGitHub, lib, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "layan-gtk-theme";
@@ -29,7 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flat Material Design theme for GTK 3, GTK 2 and Gnome-Shell.";
+    description =
+      "A flat Material Design theme for GTK 3, GTK 2 and Gnome-Shell.";
     homepage = "https://github.com/vinceliuice/Layan-gtk-theme";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

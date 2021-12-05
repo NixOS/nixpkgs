@@ -1,9 +1,8 @@
-{lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
- autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc
-}:
+{ lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3
+, ncurses, readline, autoconf, automake, libtool, pkg-config, zlib, libaio
+, libxml2, acl, sqlite, liburcu, liburing, attr, makeWrapper, coreutils, gnused
+, gnugrep, which, openssh, gawk, findutils, util-linux, lvm2, btrfs-progs
+, e2fsprogs, xfsprogs, systemd, rsync, glibc, rpcsvc-proto, libtirpc }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
   #       new, or changed, Python scripts whose PYTHONPATH has to be set in
@@ -14,25 +13,36 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse bison flex_2_5_35 openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper util-linux libtirpc
+    fuse
+    bison
+    flex_2_5_35
+    openssl
+    ncurses
+    readline
+    autoconf
+    automake
+    libtool
+    pkg-config
+    zlib
+    libaio
+    libxml2
+    acl
+    sqlite
+    liburcu
+    attr
+    makeWrapper
+    util-linux
+    libtirpc
     liburing
-    (python3.withPackages (pkgs: [
-      pkgs.flask
-      pkgs.prettytable
-      pkgs.requests
-      pkgs.pyxattr
-    ]))
+    (python3.withPackages
+      (pkgs: [ pkgs.flask pkgs.prettytable pkgs.requests pkgs.pyxattr ]))
     # NOTE: `python3` has to be *AFTER* the above `python3.withPackages`,
     #       to ensure that the packages are available but the `toPythonPath`
     #       shell function used in `postFixup` is also still available.
     python3
   ];
   # Some of the headers reference acl
-  propagatedBuildInputs = [
-    acl
-  ];
+  propagatedBuildInputs = [ acl ];
   # Packages from which GlusterFS calls binaries at run-time from PATH,
   # with comments on which commands are known to be called by it.
   runtimePATHdeps = [
@@ -90,9 +100,7 @@ in stdenv.mkDerivation rec {
     export PYTHON=${python3}/bin/python
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--localstatedir=/var" ];
 
   nativeBuildInputs = [ rpcsvc-proto ];
 

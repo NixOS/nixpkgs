@@ -12,14 +12,11 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-eZLuNhLwMTtzpLGkymc9cLC83FQJWZ2ZT0iyz4sY4EA=";
   };
 
-  extraCMakeFlags = [
-    "-DMGBA_LIB=${mgba}/lib/retroarch/cores/mgba_libretro.so"
-  ];
+  extraCMakeFlags =
+    [ "-DMGBA_LIB=${mgba}/lib/retroarch/cores/mgba_libretro.so" ];
 
   extraBuildInputs = [ mgba ];
-  propagatedBuildInputs = [
-    libretro
-  ];
+  propagatedBuildInputs = [ libretro ];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-game/game.libretro.mgba";

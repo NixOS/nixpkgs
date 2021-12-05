@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, xorgproto, libXt, libX11
-, gifview ? false
-, static ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchurl, xorgproto, libXt, libX11, gifview ? false
+, static ? stdenv.hostPlatform.isStatic }:
 
 with lib;
 
@@ -26,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
+    description =
+      "Command-line tool for creating, editing, and getting information about GIF images and animations";
     homepage = "https://www.lcdf.org/gifsicle/";
     license = lib.licenses.gpl2;
     platforms = platforms.all;

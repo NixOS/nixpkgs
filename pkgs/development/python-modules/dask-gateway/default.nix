@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, dask
-, distributed
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, dask, distributed }:
 
 buildPythonPackage rec {
   pname = "dask-gateway";
@@ -16,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "743f3b88dabe7d1503ac08aadf399eb9205df786b12c5175ea2e10c6ded7df22";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    dask
-    distributed
-  ];
+  propagatedBuildInputs = [ aiohttp dask distributed ];
 
   # tests requires cluster for testing
   doCheck = false;

@@ -1,5 +1,4 @@
-{ callPackage, pkgs }:
-{
+{ callPackage, pkgs }: {
   #### CORE EFL
   efl = callPackage ./efl { };
 

@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pytest
-, pytest-arraydiff
-, pytest-astropy-header
-, pytest-doctestplus
-, pytest-filter-subpackage
-, pytest-mock
-, pytest-openfiles
-, pytest-remotedata
-, setuptools-scm
-, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, hypothesis, pytest, pytest-arraydiff
+, pytest-astropy-header, pytest-doctestplus, pytest-filter-subpackage
+, pytest-mock, pytest-openfiles, pytest-remotedata, setuptools-scm, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -24,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "7cdac1b2a5460f37477a329712c3a5d4af4ddf876b064731995663621be4308b";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     hypothesis

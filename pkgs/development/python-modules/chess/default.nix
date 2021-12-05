@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "chess";
@@ -25,7 +20,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A chess library for Python, with move generation, move validation, and support for common formats";
+    description =
+      "A chess library for Python, with move generation, move validation, and support for common formats";
     homepage = "https://github.com/niklasf/python-chess";
     maintainers = with maintainers; [ smancill ];
     license = licenses.gpl3Plus;

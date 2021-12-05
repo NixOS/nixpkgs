@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
 
   CLASSPATH = "lib/saxon.jar";
 
-  patches = [
-    ./no-git-during-build.patch
-  ];
+  patches = [ ./no-git-during-build.patch ];
 
   preBuild = "ant";
 

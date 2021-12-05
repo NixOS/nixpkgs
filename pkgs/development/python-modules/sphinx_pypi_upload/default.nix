@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "Sphinx-PyPI-upload";
@@ -13,7 +10,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Setuptools command for uploading Sphinx documentation to PyPI";
+    description =
+      "Setuptools command for uploading Sphinx documentation to PyPI";
     homepage = "https://bitbucket.org/jezdez/sphinx-pypi-upload/";
     license = licenses.bsd0;
   };

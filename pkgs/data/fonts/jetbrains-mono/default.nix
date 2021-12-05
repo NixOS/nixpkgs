@@ -1,12 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "2.242";
-in
-fetchzip {
+let version = "2.242";
+in fetchzip {
   name = "JetBrainsMono-${version}";
 
-  url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
+  url =
+    "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
 
   sha256 = "sha256-flaUqpHmgebUzwPq0d+I3p9yqPmsV0kap04eApOQxdI=";
 
@@ -18,7 +17,8 @@ fetchzip {
   meta = with lib; {
     description = "A typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
-    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
+    changelog =
+      "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
     license = licenses.ofl;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;

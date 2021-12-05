@@ -1,7 +1,5 @@
-{ lib, buildDunePackage, fetchurl
-, bos, fpath, rresult, ptime, mirage-crypto, x509, astring, logs
-, cacert, alcotest
-}:
+{ lib, buildDunePackage, fetchurl, bos, fpath, rresult, ptime, mirage-crypto
+, x509, astring, logs, cacert, alcotest }:
 
 buildDunePackage rec {
   pname = "ca-certs";
@@ -10,17 +8,19 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-v${version}.tbz";
     sha256 = "d43109496a5129feff967d557c556af96f8b10456896a405c43b7cf0c35d0af3";
   };
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ bos fpath rresult ptime mirage-crypto x509 astring logs ];
+  propagatedBuildInputs =
+    [ bos fpath rresult ptime mirage-crypto x509 astring logs ];
 
   doCheck = true;
   checkInputs = [
-    cacert    # for /etc/ssl/certs/ca-bundle.crt
+    cacert # for /etc/ssl/certs/ca-bundle.crt
     alcotest
   ];
 

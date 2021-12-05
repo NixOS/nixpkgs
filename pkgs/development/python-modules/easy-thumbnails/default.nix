@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
-  django, pillow
-}:
+{ lib, buildPythonPackage, fetchPypi, django, pillow }:
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";

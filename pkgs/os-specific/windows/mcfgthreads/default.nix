@@ -18,7 +18,5 @@ stdenv.mkDerivation {
     rm -r "$sourceRoot/debug" "$sourceRoot/release"
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 }

@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, enum34
-, fetchPypi
-, git
-, gnugrep
-, gnupg
-, nose
-, pbr
-, pexpect
-, pythonAtLeast
-, pythonOlder
-, substituteAll
-, tree
-, xclip
-}:
+{ lib, buildPythonPackage, click, colorama, enum34, fetchPypi, git, gnugrep
+, gnupg, nose, pbr, pexpect, pythonAtLeast, pythonOlder, substituteAll, tree
+, xclip }:
 
 # NOTE: pypass can also be used as an application, but probably the most
 # important usecase is as a library. So, let's use buildPythonPackage and
@@ -49,11 +34,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    click
-    colorama
-    pexpect
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [ click colorama pexpect ]
+    ++ lib.optional (pythonOlder "3.4") enum34;
 
   checkInputs = [ nose ];
 

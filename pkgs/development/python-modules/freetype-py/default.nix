@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, setuptools-scm
-, freetype
-, pytestCheckHook
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, setuptools-scm
+, freetype, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "freetype-py";
@@ -20,7 +13,8 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./library-paths.patch;
-      freetype = "${freetype.out}/lib/libfreetype${stdenv.hostPlatform.extensions.sharedLibrary}";
+      freetype =
+        "${freetype.out}/lib/libfreetype${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
@@ -32,11 +26,9 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck =  [ "freetype" ];
+  pythonImportsCheck = [ "freetype" ];
 
   meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";

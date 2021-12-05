@@ -1,10 +1,4 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, pytestCheckHook
-}:
+{ lib, pkgs, buildPythonPackage, fetchFromGitHub, pygame, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pygame-gui";
@@ -13,7 +7,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "v_${lib.replaceStrings ["."] [""] version}";
+    rev = "v_${lib.replaceStrings [ "." ] [ "" ] version}";
     sha256 = "4P2PT8/7oA5Q7H4+pm7BOET7w05pQYQltXVV3+YVrVE=";
   };
 

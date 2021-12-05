@@ -13,9 +13,10 @@ stdenv.mkDerivation {
   };
 
   # Related: https://github.com/Wikinaut/agrep/pull/11
-  prePatch = lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.isDarwin) ''
-    sed -i '1i#include <sys/stat.h>' checkfil.c newmgrep.c recursiv.c
-  '';
+  prePatch =
+    lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.isDarwin) ''
+      sed -i '1i#include <sys/stat.h>' checkfil.c newmgrep.c recursiv.c
+    '';
   installPhase = ''
     install -Dm 555 agrep -t "$out/bin"
     install -Dm 444 docs/* -t "$out/doc"

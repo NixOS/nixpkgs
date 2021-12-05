@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, makefun
-, decopatch
-, pythonOlder
-, pytest
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, makefun, decopatch, pythonOlder, pytest
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-cases";
@@ -20,18 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-JZfQI6dgYFHWUbCMuHD78eBi9svoV5zkX887V9xFLNw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    decopatch
-    makefun
-  ];
+  propagatedBuildInputs = [ decopatch makefun ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -43,9 +29,7 @@ buildPythonPackage rec {
   # makefun, pytest-*) have circular dependecies.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_cases"
-  ];
+  pythonImportsCheck = [ "pytest_cases" ];
 
   meta = with lib; {
     description = "Separate test code from test cases in pytest";

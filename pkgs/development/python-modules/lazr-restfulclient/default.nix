@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, distro
-, httplib2
-, oauthlib
-, setuptools
-, six
-, wadllib
-, fixtures
-, lazr-uri
-, pytestCheckHook
-, wsgi-intercept
+{ lib, buildPythonPackage, isPy27, fetchPypi, distro, httplib2, oauthlib
+, setuptools, six, wadllib, fixtures, lazr-uri, pytestCheckHook, wsgi-intercept
 }:
 
 buildPythonPackage rec {
@@ -34,7 +22,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lazr.restfulclient" ];
 
   meta = with lib; {
-    description = "A programmable client library that takes advantage of the commonalities among";
+    description =
+      "A programmable client library that takes advantage of the commonalities among";
     homepage = "https://launchpad.net/lazr.restfulclient";
     license = licenses.lgpl3;
     maintainers = [ maintainers.marsam ];

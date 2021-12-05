@@ -1,4 +1,5 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib
+, p7zip }:
 
 mkYarnPackage rec {
   pname = "vieb";

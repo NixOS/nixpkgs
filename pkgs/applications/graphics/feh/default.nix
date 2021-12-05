@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perl
+{ lib, stdenv, fetchurl, makeWrapper, xorg, imlib2, libjpeg, libpng, curl
+, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 with lib;
@@ -18,16 +17,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper xorg.libXt ];
 
-  buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
+  buildInputs =
+    [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0"
+  makeFlags = [ "PREFIX=${placeholder "out"}" "exif=1" ]
+    ++ optional stdenv.isDarwin "verscmp=0"
     ++ optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${makeBinPath [ libjpeg jpegexiforient ]}" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${
+      makeBinPath [ libjpeg jpegexiforient ]
+    }" \
                                --add-flags '--theme=feh'
   '';
 

@@ -1,7 +1,4 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
-}:
+{ build-idris-package, fetchFromGitHub, lib }:
 build-idris-package {
   name = "wl-pprint";
   version = "2017-03-13";

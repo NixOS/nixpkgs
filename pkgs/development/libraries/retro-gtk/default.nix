@@ -1,26 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, meson
-, ninja
-, pkg-config
-, libepoxy
-, glib
-, gtk3
-, libpulseaudio
-, libsamplerate
-, gobject-introspection
-, vala
-, gtk-doc
-}:
+{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, libepoxy, glib, gtk3
+, libpulseaudio, libsamplerate, gobject-introspection, vala, gtk-doc }:
 
 stdenv.mkDerivation rec {
   pname = "retro-gtk";
   version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/retro-gtk/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/retro-gtk/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1lnb7dwcj3lrrvdzd85dxwrlid28xf4qdbrgfjyg1wn1z6sv063i";
   };
 
@@ -29,22 +17,10 @@ stdenv.mkDerivation rec {
     ./gio-unix.patch
   ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    gtk-doc
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection gtk-doc meson ninja pkg-config vala ];
 
-  buildInputs = [
-    libepoxy
-    glib
-    gtk3
-    libpulseaudio
-    libsamplerate
-  ];
+  buildInputs = [ libepoxy glib gtk3 libpulseaudio libsamplerate ];
 
   meta = with lib; {
     description = "The GTK Libretro frontend framework";

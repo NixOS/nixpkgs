@@ -1,25 +1,6 @@
-{ lib
-, mkDerivation
-, fetchgit
-, gnuradio
-, cmake
-, pkg-config
-, log4cpp
-, mpir
-, boost
-, gmp
-, thrift
-, fftwFloat
-, python
-, swig
-, uhd
-, icu
-, airspy
-, hackrf
-, libbladeRF
-, rtl-sdr
-, soapysdr-with-plugins
-}:
+{ lib, mkDerivation, fetchgit, gnuradio, cmake, pkg-config, log4cpp, mpir, boost
+, gmp, thrift, fftwFloat, python, swig, uhd, icu, airspy, hackrf, libbladeRF
+, rtl-sdr, soapysdr-with-plugins }:
 
 let
   version = {
@@ -53,32 +34,25 @@ in mkDerivation {
     libbladeRF
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
-    uhd
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
-    thrift
-    python.pkgs.thrift
-  ];
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [ uhd ]
+    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+      thrift
+      python.pkgs.thrift
+    ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then
       "-DENABLE_PYTHON=ON"
     else
-      "-DENABLE_PYTHON=OFF"
-    )
+      "-DENABLE_PYTHON=OFF")
   ];
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    swig
-  ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
+  nativeBuildInputs = [ cmake pkg-config swig ]
+    ++ lib.optionals (gnuradio.hasFeature "python-support") [
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah
       else
-        python.pkgs.Mako
-      )
+        python.pkgs.Mako)
       python
-    ]
-  ;
+    ];
 
   meta = with lib; {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";

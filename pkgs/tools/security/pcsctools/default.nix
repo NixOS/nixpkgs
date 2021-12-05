@@ -1,22 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, pkg-config
-, systemd
-, dbus
-, pcsclite
-, wget
-, coreutils
-, perlPackages
-}:
+{ stdenv, lib, fetchurl, makeWrapper, pkg-config, systemd, dbus, pcsclite, wget
+, coreutils, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "pcsc-tools";
   version = "1.5.7";
 
   src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
+    url =
+      "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
     sha256 = "17b9jxvcxmn007lavan20l25v4jvm6dqc4x9dlqzbg6mjs28zsp0";
   };
 
@@ -35,7 +26,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
+      --set PERL5LIB "${
+        with perlPackages;
+        makePerlPath [
+          pcscperl
+          GlibObjectIntrospection
+          Glib
+          Gtk3
+          Pango
+          Cairo
+          CairoGObject
+        ]
+      }"
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \

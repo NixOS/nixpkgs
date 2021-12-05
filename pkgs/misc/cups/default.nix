@@ -1,24 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, removeReferencesTo
-, zlib
-, libjpeg
-, libpng
-, libtiff
-, pam
-, dbus
-, enableSystemd ? stdenv.isLinux
-, systemd
-, acl
-, gmp
-, darwin
-, libusb1 ? null
-, gnutls ? null
-, avahi ? null
-, libpaper ? null
-, coreutils
-}:
+{ lib, stdenv, fetchurl, pkg-config, removeReferencesTo, zlib, libjpeg, libpng
+, libtiff, pam, dbus, enableSystemd ? stdenv.isLinux, systemd, acl, gmp, darwin
+, libusb1 ? null, gnutls ? null, avahi ? null, libpaper ? null, coreutils }:
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
@@ -31,10 +13,12 @@ stdenv.mkDerivation rec {
   version = if stdenv.isDarwin then "2.2.6" else "2.3.3op2";
 
   src = fetchurl (if stdenv.isDarwin then {
-    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    url =
+      "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
   } else {
-    url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    url =
+      "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "1pwndz4gwkm7311wkhhzlw2diy7wbck7yy026jbaxh3rprdmgcyy";
   });
 
@@ -49,10 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
-    ++ optional enableSystemd systemd
-    ++ optionals stdenv.isDarwin (with darwin; [
-      configd apple_sdk.frameworks.ApplicationServices
-    ]);
+    ++ optional enableSystemd systemd ++ optionals stdenv.isDarwin
+    (with darwin; [ configd apple_sdk.frameworks.ApplicationServices ]);
 
   propagatedBuildInputs = [ gmp ];
 
@@ -73,7 +55,9 @@ stdenv.mkDerivation rec {
 
   # AR has to be an absolute path
   preConfigure = ''
-    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    export AR="${
+      getBin stdenv.cc.bintools.bintools
+    }/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.
@@ -84,56 +68,57 @@ stdenv.mkDerivation rec {
 
       "--with-systemd=$out/lib/systemd/system"
 
-      ${optionalString stdenv.isDarwin ''
-        "--with-bundledir=$out"
-      ''}
+      ${
+        optionalString stdenv.isDarwin ''
+          "--with-bundledir=$out"
+        ''
+      }
     )
   '';
 
-  installFlags =
-    [ # Don't try to write in /var at build time.
-      "CACHEDIR=$(TMPDIR)/dummy"
-      "LOGDIR=$(TMPDIR)/dummy"
-      "REQUESTS=$(TMPDIR)/dummy"
-      "STATEDIR=$(TMPDIR)/dummy"
-      # Idem for /etc.
-      "PAMDIR=$(out)/etc/pam.d"
-      "XINETD=$(out)/etc/xinetd.d"
-      "SERVERROOT=$(out)/etc/cups"
-      # Idem for /usr.
-      "MENUDIR=$(out)/share/applications"
-      "ICONDIR=$(out)/share/icons"
-      # Work around a Makefile bug.
-      "CUPS_PRIMARY_SYSTEM_GROUP=root"
-    ];
+  installFlags = [ # Don't try to write in /var at build time.
+    "CACHEDIR=$(TMPDIR)/dummy"
+    "LOGDIR=$(TMPDIR)/dummy"
+    "REQUESTS=$(TMPDIR)/dummy"
+    "STATEDIR=$(TMPDIR)/dummy"
+    # Idem for /etc.
+    "PAMDIR=$(out)/etc/pam.d"
+    "XINETD=$(out)/etc/xinetd.d"
+    "SERVERROOT=$(out)/etc/cups"
+    # Idem for /usr.
+    "MENUDIR=$(out)/share/applications"
+    "ICONDIR=$(out)/share/icons"
+    # Work around a Makefile bug.
+    "CUPS_PRIMARY_SYSTEM_GROUP=root"
+  ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-      libexec=${if stdenv.isDarwin then "libexec/cups" else "lib/cups"}
-      moveToOutput $libexec "$out"
+    libexec=${if stdenv.isDarwin then "libexec/cups" else "lib/cups"}
+    moveToOutput $libexec "$out"
 
-      # $lib contains references to $out/share/cups.
-      # CUPS is working without them, so they are not vital.
-      find "$lib" -type f -exec grep -q "$out" {} \; \
-           -printf "removing references from %p\n" \
-           -exec remove-references-to -t "$out" {} +
+    # $lib contains references to $out/share/cups.
+    # CUPS is working without them, so they are not vital.
+    find "$lib" -type f -exec grep -q "$out" {} \; \
+         -printf "removing references from %p\n" \
+         -exec remove-references-to -t "$out" {} +
 
-      # Delete obsolete stuff that conflicts with cups-filters.
-      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+    # Delete obsolete stuff that conflicts with cups-filters.
+    rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
-      moveToOutput bin/cups-config "$dev"
-      sed -e "/^cups_serverbin=/s|$lib|$out|" \
-          -i "$dev/bin/cups-config"
+    moveToOutput bin/cups-config "$dev"
+    sed -e "/^cups_serverbin=/s|$lib|$out|" \
+        -i "$dev/bin/cups-config"
 
-      for f in "$out"/lib/systemd/system/*; do
-        substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
-      done
-    '' + optionalString stdenv.isLinux ''
-      # Use xdg-open when on Linux
-      substituteInPlace "$out"/share/applications/cups.desktop \
-        --replace "Exec=htmlview" "Exec=xdg-open"
-    '';
+    for f in "$out"/lib/systemd/system/*; do
+      substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
+    done
+  '' + optionalString stdenv.isLinux ''
+    # Use xdg-open when on Linux
+    substituteInPlace "$out"/share/applications/cups.desktop \
+      --replace "Exec=htmlview" "Exec=xdg-open"
+  '';
 
   meta = {
     homepage = "https://openprinting.github.io/cups/";

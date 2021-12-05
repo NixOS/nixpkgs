@@ -1,25 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "litestream";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ jwygoda ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ jwygoda ]; };
 
-  machine =
-    { pkgs, ... }:
-    { services.litestream = {
-        enable = true;
-        settings = {
-          dbs = [
-            {
-              path = "/var/lib/grafana/data/grafana.db";
-              replicas = [{
-                url = "sftp://foo:bar@127.0.0.1:22/home/foo/grafana";
-              }];
-            }
-          ];
-        };
+  machine = { pkgs, ... }: {
+    services.litestream = {
+      enable = true;
+      settings = {
+        dbs = [{
+          path = "/var/lib/grafana/data/grafana.db";
+          replicas =
+            [{ url = "sftp://foo:bar@127.0.0.1:22/home/foo/grafana"; }];
+        }];
       };
-      systemd.services.grafana.serviceConfig.ExecStartPost = "+" + pkgs.writeShellScript "grant-grafana-permissions" ''
+    };
+    systemd.services.grafana.serviceConfig.ExecStartPost = "+"
+      + pkgs.writeShellScript "grant-grafana-permissions" ''
         timeout=10
 
         while [ ! -f /var/lib/grafana/data/grafana.db ];
@@ -37,29 +32,33 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         find /var/lib/grafana -type d -exec chmod -v 775 {} \;
         find /var/lib/grafana -type f -exec chmod -v 660 {} \;
       '';
-      services.openssh = {
-        enable = true;
-        allowSFTP = true;
-        listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
-      };
-      services.grafana = {
-        enable = true;
-        security = {
-          adminUser = "admin";
-          adminPassword = "admin";
-        };
-        addr = "localhost";
-        port = 3000;
-        extraOptions = {
-          DATABASE_URL = "sqlite3:///var/lib/grafana/data/grafana.db?cache=private&mode=rwc&_journal_mode=WAL";
-        };
-      };
-      users.users.foo = {
-        isNormalUser = true;
-        password = "bar";
-      };
-      users.users.litestream.extraGroups = [ "grafana" ];
+    services.openssh = {
+      enable = true;
+      allowSFTP = true;
+      listenAddresses = [{
+        addr = "127.0.0.1";
+        port = 22;
+      }];
     };
+    services.grafana = {
+      enable = true;
+      security = {
+        adminUser = "admin";
+        adminPassword = "admin";
+      };
+      addr = "localhost";
+      port = 3000;
+      extraOptions = {
+        DATABASE_URL =
+          "sqlite3:///var/lib/grafana/data/grafana.db?cache=private&mode=rwc&_journal_mode=WAL";
+      };
+    };
+    users.users.foo = {
+      isNormalUser = true;
+      password = "bar";
+    };
+    users.users.litestream.extraGroups = [ "grafana" ];
+  };
 
   testScript = ''
     start_all()

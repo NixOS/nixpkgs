@@ -1,10 +1,5 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast
-, fetchPypi
-, libmaxminddb
-, ipaddress
-, mock
-, nose
-}:
+{ stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast, fetchPypi
+, libmaxminddb, ipaddress, mock, nose }:
 
 buildPythonPackage rec {
   version = "2.2.0";

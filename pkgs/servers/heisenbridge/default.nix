@@ -14,7 +14,8 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # Compatibility with aiohttp 3.8.0
     (fetchpatch {
-      url = "https://github.com/hifi/heisenbridge/commit/cff5d33e0b617e6cf3a44dc00c72b98743175c9e.patch";
+      url =
+        "https://github.com/hifi/heisenbridge/commit/cff5d33e0b617e6cf3a44dc00c72b98743175c9e.patch";
       sha256 = "sha256-y5X4mWvX1bq0XNZNTYUc0iK3SzvaHpS7px53I7xC9c8=";
     })
   ];
@@ -31,9 +32,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
   ];
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A bouncer-style Matrix-IRC bridge.";

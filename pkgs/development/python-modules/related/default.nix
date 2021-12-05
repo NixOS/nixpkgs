@@ -1,13 +1,5 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, future
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pyyaml
-}:
+{ lib, attrs, buildPythonPackage, fetchPypi, future, pytestCheckHook
+, python-dateutil, pythonOlder, pyyaml }:
 
 buildPythonPackage rec {
   pname = "related";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "w0XmNWh1xF08qitH22lQgTRNqO6qyYrYd2dc6x3Fop0=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    future
-    python-dateutil
-    pyyaml
-  ];
+  propagatedBuildInputs = [ attrs future python-dateutil pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # Remove outdated setup.cfg
@@ -47,9 +32,7 @@ buildPythonPackage rec {
     "test_store_data_from_json"
   ];
 
-  pythonImportsCheck = [
-    "related"
-  ];
+  pythonImportsCheck = [ "related" ];
 
   meta = with lib; {
     description = "Nested Object Models in Python";

@@ -5,20 +5,15 @@ let
   fetchDebianPatch = { name, debname, sha256 }:
     fetchpatch {
       inherit sha256 name;
-      url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
+      url =
+        "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
     };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "audiofile-0.3.6";
 
-  buildInputs =
-    lib.optionals stdenv.isLinux [
-      alsa-lib
-    ] ++ lib.optionals stdenv.isDarwin [
-      CoreServices AudioUnit
-    ];
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit ];
 
   src = fetchurl {
     url = "https://audiofile.68k.org/${name}.tar.gz";
@@ -53,13 +48,15 @@ stdenv.mkDerivation rec {
       sha256 = "04qxl51i64c53v69q2kx61qdq474f4vapk8rq97cipj7yrar392m";
     })
     (fetchDebianPatch {
-      name = "CVE-2017-6827+CVE-2017-6828+CVE-2017-6832+CVE-2017-6835+CVE-2017-6837.patch";
+      name =
+        "CVE-2017-6827+CVE-2017-6828+CVE-2017-6832+CVE-2017-6835+CVE-2017-6837.patch";
       debname = "05_Always-check-the-number-of-coefficients.patch";
       sha256 = "1ih03kfkabffi6ymp6832q470i28rsds78941vzqlshnqjb2nnxw";
     })
     (fetchDebianPatch {
       name = "CVE-2017-6839.patch";
-      debname = "06_Check-for-multiplication-overflow-in-MSADPCM-decodeSam.patch";
+      debname =
+        "06_Check-for-multiplication-overflow-in-MSADPCM-decodeSam.patch";
       sha256 = "0a8s2z8rljlj03p7l1is9s4fml8vyzvyvfrh1m6xj5a8vbi635d0";
     })
     (fetchDebianPatch {
@@ -69,7 +66,8 @@ stdenv.mkDerivation rec {
     })
     (fetchDebianPatch {
       name = "audiofile-fix-multiplyCheckOverflow-signature.patch";
-      debname = "08_Fix-signature-of-multiplyCheckOverflow.-It-returns-a-b.patch";
+      debname =
+        "08_Fix-signature-of-multiplyCheckOverflow.-It-returns-a-b.patch";
       sha256 = "032p5jqp7q7jgc5axdnazz00zm7hd26z6m5j55ifs0sykr5lwldb";
     })
     (fetchDebianPatch {
@@ -85,10 +83,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Library for reading and writing audio files in various formats";
-    homepage    = "http://www.68k.org/~michael/audiofile/";
-    license     = licenses.lgpl21Plus;
+    description =
+      "Library for reading and writing audio files in various formats";
+    homepage = "http://www.68k.org/~michael/audiofile/";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

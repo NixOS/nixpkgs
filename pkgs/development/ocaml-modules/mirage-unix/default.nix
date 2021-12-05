@@ -1,4 +1,5 @@
-{ lib, buildDunePackage, fetchurl, ocaml_lwt, duration, mirage-runtime, io-page-unix }:
+{ lib, buildDunePackage, fetchurl, ocaml_lwt, duration, mirage-runtime
+, io-page-unix }:
 
 buildDunePackage rec {
   pname = "mirage-unix";
@@ -7,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    url =
+      "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
     sha256 = "0kyd83bkpjhn382b4mw3a4325xr8vms78znxqvifpcyfvfnlx7hj";
   };
 

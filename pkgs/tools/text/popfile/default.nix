@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, perlPackages,
-... }:
+{ lib, stdenv, fetchzip, makeWrapper, perlPackages, ... }:
 
 stdenv.mkDerivation rec {
   appname = "popfile";
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An email classification system that automatically sorts messages and fights spam";
+    description =
+      "An email classification system that automatically sorts messages and fights spam";
     homepage = "http://getpopfile.org";
     license = lib.licenses.gpl2;
 

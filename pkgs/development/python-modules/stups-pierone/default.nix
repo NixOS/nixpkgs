@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, stups-cli-support
-, stups-zign
-, pytest
-, pytest-cov
-, hypothesis
-, isPy3k
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, requests, stups-cli-support
+, stups-zign, pytest, pytest-cov, hypothesis, isPy3k }:
 
 buildPythonPackage rec {
   pname = "stups-pierone";
@@ -22,24 +13,15 @@ buildPythonPackage rec {
     sha256 = "1ggfizw27wpcagbbk15xpfrhq6b250cx4278b5d7y8s438g128cs";
   };
 
-  propagatedBuildInputs = [
-    requests
-    stups-cli-support
-    stups-zign
-  ];
+  propagatedBuildInputs = [ requests stups-cli-support stups-zign ];
 
-  preCheck = "
-    export HOME=$TEMPDIR
-  ";
+  preCheck = "\n    export HOME=$TEMPDIR\n  ";
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    hypothesis
-  ];
+  checkInputs = [ pytest pytest-cov hypothesis ];
 
   meta = with lib; {
-    description = "Convenient command line client for STUPS' Pier One Docker registry";
+    description =
+      "Convenient command line client for STUPS' Pier One Docker registry";
     homepage = "https://github.com/zalando-stups/pierone-cli";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

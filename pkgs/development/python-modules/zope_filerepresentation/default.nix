@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_schema
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, zope_schema, zope_interface }:
 
 buildPythonPackage rec {
   pname = "zope.filerepresentation";

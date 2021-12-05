@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
-, atWrapperPath ? "/run/wrappers/bin/at"
-}:
+, atWrapperPath ? "/run/wrappers/bin/at" }:
 
 stdenv.mkDerivation rec {
   pname = "at";
@@ -16,22 +15,26 @@ stdenv.mkDerivation rec {
   patches = [
     ./install.patch
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/riscv/riscv-poky/master/meta/recipes-extended/at/at/0001-remove-glibc-assumption.patch";
+      url =
+        "https://raw.githubusercontent.com/riscv/riscv-poky/master/meta/recipes-extended/at/at/0001-remove-glibc-assumption.patch";
       sha256 = "1rk4hskp0c1jqkanzdxf873i6jgki3xhrm609fsam8an8sl1njnm";
     })
   ];
 
-  nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
+  nativeBuildInputs = [
+    bison
+    flex
+    perl # for `prove` (tests)
+  ];
 
   buildInputs = [ pam ];
 
-  preConfigure =
-    ''
-      export SENDMAIL=${sendmailPath}
-      # Purity: force atd.pid to be placed in /var/run regardless of
-      # whether it exists now.
-      substituteInPlace ./configure --replace "test -d /var/run" "true"
-    '';
+  preConfigure = ''
+    export SENDMAIL=${sendmailPath}
+    # Purity: force atd.pid to be placed in /var/run regardless of
+    # whether it exists now.
+    substituteInPlace ./configure --replace "test -d /var/run" "true"
+  '';
 
   configureFlags = [
     "--with-etcdir=/etc/at"

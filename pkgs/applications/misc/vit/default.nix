@@ -1,8 +1,4 @@
-{ lib
-, python3Packages
-, taskwarrior
-, glibcLocales
-}:
+{ lib, python3Packages, taskwarrior, glibcLocales }:
 
 with python3Packages;
 
@@ -16,12 +12,7 @@ buildPythonApplication rec {
     sha256 = "fd34f0b827953dfdecdc39f8416d41c50c24576c33a512a047a71c1263eb3e0f";
   };
 
-  propagatedBuildInputs = [
-    pytz
-    tasklib
-    tzlocal
-    urwid
-  ];
+  propagatedBuildInputs = [ pytz tasklib tzlocal urwid ];
 
   checkInputs = [ glibcLocales ];
 

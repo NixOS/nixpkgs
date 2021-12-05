@@ -2,8 +2,7 @@
 let
   pname = "composer";
   version = "2.1.9";
-in
-mkDerivation {
+in mkDerivation {
   inherit pname version;
 
   src = fetchurl {

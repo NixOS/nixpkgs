@@ -9,11 +9,14 @@ let
   # This is to provide support for old configuration options (as much as is
   # reasonable). This can be removed after 18.03 was released.
   defaultConfig = {
-    libdefaults = optionalAttrs (cfg.defaultRealm != null)
-      { default_realm = cfg.defaultRealm; };
+    libdefaults = optionalAttrs (cfg.defaultRealm != null) {
+      default_realm = cfg.defaultRealm;
+    };
 
     realms = optionalAttrs (lib.all (value: value != null) [
-      cfg.defaultRealm cfg.kdc cfg.kerberosAdminServer
+      cfg.defaultRealm
+      cfg.kdc
+      cfg.kerberosAdminServer
     ]) {
       ${cfg.defaultRealm} = {
         kdc = cfg.kdc;
@@ -21,12 +24,11 @@ let
       };
     };
 
-    domain_realm = optionalAttrs (lib.all (value: value != null) [
-      cfg.domainRealm cfg.defaultRealm
-    ]) {
-      ".${cfg.domainRealm}" = cfg.defaultRealm;
-      ${cfg.domainRealm} = cfg.defaultRealm;
-    };
+    domain_realm = optionalAttrs
+      (lib.all (value: value != null) [ cfg.domainRealm cfg.defaultRealm ]) {
+        ".${cfg.domainRealm}" = cfg.defaultRealm;
+        ${cfg.domainRealm} = cfg.defaultRealm;
+      };
   };
 
   mergedConfig = (recursiveUpdate defaultConfig {
@@ -35,42 +37,47 @@ let
       extraConfig config;
   });
 
-  filterEmbeddedMetadata = value: if isAttrs value then
-    (filterAttrs
-      (attrName: attrValue: attrName != "_module" && attrValue != null)
-        value)
-    else value;
+  filterEmbeddedMetadata = value:
+    if isAttrs value then
+      (filterAttrs
+        (attrName: attrValue: attrName != "_module" && attrValue != null) value)
+    else
+      value;
 
   indent = "  ";
 
   mkRelation = name: value:
     if (isList value) then
       concatMapStringsSep "\n" (mkRelation name) value
-    else "${name} = ${mkVal value}";
+    else
+      "${name} = ${mkVal value}";
 
   mkVal = value:
-    if (value == true) then "true"
-    else if (value == false) then "false"
-    else if (isInt value) then (toString value)
+    if (value == true) then
+      "true"
+    else if (value == false) then
+      "false"
+    else if (isInt value) then
+      (toString value)
     else if (isAttrs value) then
-      let configLines = concatLists
-        (map (splitString "\n")
-          (mapAttrsToList mkRelation value));
-      in
-      (concatStringsSep "\n${indent}"
-        ([ "{" ] ++ configLines))
-      + "\n}"
-    else value;
+      let
+        configLines = concatLists
+          (map (splitString "\n") (mapAttrsToList mkRelation value));
+      in (concatStringsSep ''
 
-  mkMappedAttrsOrString = value: concatMapStringsSep "\n"
-    (line: if builtins.stringLength line > 0
-      then "${indent}${line}"
-      else line)
-    (splitString "\n"
-      (if isAttrs value then
-        concatStringsSep "\n"
-            (mapAttrsToList mkRelation value)
-        else value));
+        ${indent}'' ([ "{" ] ++ configLines)) + ''
+
+          }''
+    else
+      value;
+
+  mkMappedAttrsOrString = value:
+    concatMapStringsSep "\n"
+    (line: if builtins.stringLength line > 0 then "${indent}${line}" else line)
+    (splitString "\n" (if isAttrs value then
+      concatStringsSep "\n" (mapAttrsToList mkRelation value)
+    else
+      value));
 
 in {
 
@@ -78,7 +85,8 @@ in {
 
   options = {
     krb5 = {
-      enable = mkEnableOption "building krb5.conf, configuration file for Kerberos V";
+      enable =
+        mkEnableOption "building krb5.conf, configuration file for Kerberos V";
 
       kerberos = mkOption {
         type = types.package;
@@ -94,7 +102,7 @@ in {
 
       libdefaults = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         apply = attrs: filterEmbeddedMetadata attrs;
         example = literalExpression ''
           {
@@ -108,7 +116,7 @@ in {
 
       realms = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
@@ -126,7 +134,7 @@ in {
 
       domain_realm = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "example.com" = "EXAMPLE.COM";
@@ -141,7 +149,7 @@ in {
 
       capaths = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
@@ -160,7 +168,7 @@ in {
 
       appdefaults = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             pam = {
@@ -181,7 +189,7 @@ in {
 
       plugins = mkOption {
         type = with types; either attrs lines;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             ccselect = {
@@ -294,9 +302,10 @@ in {
 
     environment.systemPackages = [ cfg.kerberos ];
 
-    environment.etc."krb5.conf".text = if isString cfg.config
-      then cfg.config
-      else (''
+    environment.etc."krb5.conf".text = if isString cfg.config then
+      cfg.config
+    else
+      (''
         [libdefaults]
         ${mkMappedAttrsOrString mergedConfig.libdefaults}
 
@@ -315,7 +324,7 @@ in {
         [plugins]
         ${mkMappedAttrsOrString mergedConfig.plugins}
       '' + optionalString (mergedConfig.extraConfig != null)
-          ("\n" + mergedConfig.extraConfig));
+        ("\n" + mergedConfig.extraConfig));
 
     warnings = flatten [
       (optional (cfg.defaultRealm != null) ''
@@ -336,28 +345,45 @@ in {
     ];
 
     assertions = [
-      { assertion = !((builtins.any (value: value != null) [
-            cfg.defaultRealm cfg.domainRealm cfg.kdc cfg.kerberosAdminServer
-          ]) && ((builtins.any (value: value != {}) [
-              cfg.libdefaults cfg.realms cfg.domain_realm cfg.capaths
-              cfg.appdefaults cfg.plugins
-            ]) || (builtins.any (value: value != null) [
-              cfg.config cfg.extraConfig
-            ])));
+      {
+        assertion = !((builtins.any (value: value != null) [
+          cfg.defaultRealm
+          cfg.domainRealm
+          cfg.kdc
+          cfg.kerberosAdminServer
+        ]) && ((builtins.any (value: value != { }) [
+          cfg.libdefaults
+          cfg.realms
+          cfg.domain_realm
+          cfg.capaths
+          cfg.appdefaults
+          cfg.plugins
+        ]) || (builtins.any (value: value != null) [
+          cfg.config
+          cfg.extraConfig
+        ])));
         message = ''
           Configuration of krb5.conf by deprecated options is mutually exclusive
           with configuration by section.  Please migrate your config using the
           attributes suggested in the warnings.
         '';
       }
-      { assertion = !(cfg.config != null
-          && ((builtins.any (value: value != {}) [
-              cfg.libdefaults cfg.realms cfg.domain_realm cfg.capaths
-              cfg.appdefaults cfg.plugins
-            ]) || (builtins.any (value: value != null) [
-              cfg.extraConfig cfg.defaultRealm cfg.domainRealm cfg.kdc
-              cfg.kerberosAdminServer
-            ])));
+      {
+        assertion = !(cfg.config != null
+          && ((builtins.any (value: value != { }) [
+            cfg.libdefaults
+            cfg.realms
+            cfg.domain_realm
+            cfg.capaths
+            cfg.appdefaults
+            cfg.plugins
+          ]) || (builtins.any (value: value != null) [
+            cfg.extraConfig
+            cfg.defaultRealm
+            cfg.domainRealm
+            cfg.kdc
+            cfg.kerberosAdminServer
+          ])));
         message = ''
           Configuration of krb5.conf using krb.config is mutually exclusive with
           configuration by section.  If you want to mix the two, you can pass

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  cfg = config.services.hound;
+let cfg = config.services.hound;
 in {
   options = {
     services.hound = {
@@ -114,10 +113,10 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
-        ExecStart = "${cfg.package}/bin/houndd" +
-                    " -addr ${cfg.listen}" +
-                    " -conf ${pkgs.writeText "hound.json" cfg.config}";
+        ExecStartPre =
+          "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
+        ExecStart = "${cfg.package}/bin/houndd" + " -addr ${cfg.listen}"
+          + " -conf ${pkgs.writeText "hound.json" cfg.config}";
 
       };
       path = [ pkgs.git pkgs.mercurial pkgs.openssh ];

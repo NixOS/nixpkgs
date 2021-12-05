@@ -24,7 +24,8 @@ let
         version = "0.5.5";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3";
+          sha256 =
+            "72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3";
         };
       });
 
@@ -36,13 +37,14 @@ let
         };
       });
 
-      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0p5n3d6blgkncxdz00yxqav0cis87fisdkirjm0ljjh7rdfx7aiv";
-        };
-      });
+      semantic-version = super.semantic-version.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "2.5.0";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "0p5n3d6blgkncxdz00yxqav0cis87fisdkirjm0ljjh7rdfx7aiv";
+          };
+        });
 
       tabulate = super.tabulate.overridePythonAttrs (oldAttrs: rec {
         version = "0.7.5";
@@ -53,7 +55,8 @@ let
       });
     };
   };
-in with localPython.pkgs; buildPythonApplication rec {
+in with localPython.pkgs;
+buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.12.4";
 
@@ -62,15 +65,11 @@ in with localPython.pkgs; buildPythonApplication rec {
     sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
-  ];
+  checkInputs = [ pytest mock nose pathspec colorama requests docutils ];
 
   doCheck = false;
 
@@ -78,8 +77,20 @@ in with localPython.pkgs; buildPythonApplication rec {
     # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
     # Otherwise, awsebcli will try to install it using pip when using some
     # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket-client
+    blessed
+    botocore
+    cement
+    colorama
+    dockerpty
+    docopt
+    pathspec
+    pyyaml
+    requests
+    semantic-version
+    setuptools
+    tabulate
+    termcolor
+    websocket-client
   ];
 
   postInstall = ''

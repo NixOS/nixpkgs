@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, beautifulsoup4
-, isPy3k
-, backports_functools_lru_cache
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, beautifulsoup4, isPy3k
+, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
   pname = "soupsieve";

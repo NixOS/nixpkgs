@@ -1,26 +1,49 @@
-{ lib, stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora, libxml2
-, lzo, libdvdread, pkg-config, x264, libmpeg2, xvidcore }:
+{ lib, stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora
+, libxml2, lzo, libdvdread, pkg-config, x264, libmpeg2, xvidcore }:
 
 stdenv.mkDerivation rec {
   pname = "transcode";
   version = "1.1.7";
   src = fetchurl {
-    url = "https://bitbucket.org/france/transcode-tcforge/downloads/${pname}-${version}.tar.bz2";
+    url =
+      "https://bitbucket.org/france/transcode-tcforge/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1e4e72d8e0dd62a80b8dd90699f5ca64c9b0cb37a5c9325c184166a9654f0a92";
   };
 
-  buildInputs = [ flac lame zlib libjpeg libvorbis libtheora libxml2 lzo
-                  libdvdread pkg-config x264 libmpeg2 xvidcore ];
+  buildInputs = [
+    flac
+    lame
+    zlib
+    libjpeg
+    libvorbis
+    libtheora
+    libxml2
+    lzo
+    libdvdread
+    pkg-config
+    x264
+    libmpeg2
+    xvidcore
+  ];
   configureFlags = [
-    "--disable-ffmpeg" "--disable-libavcodec" "--disable-libavformat"
-    "--enable-lzo" "--enable-ogg" "--enable-vorbis" "--enable-theora" "--enable-libxml2"
-    "--enable-x264" "--enable-libmpeg2" "--enable-xvid"
+    "--disable-ffmpeg"
+    "--disable-libavcodec"
+    "--disable-libavformat"
+    "--enable-lzo"
+    "--enable-ogg"
+    "--enable-vorbis"
+    "--enable-theora"
+    "--enable-libxml2"
+    "--enable-x264"
+    "--enable-libmpeg2"
+    "--enable-xvid"
   ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Suite of command line utilities for transcoding video and audio codecs, and for converting between different container formats";
+    description =
+      "Suite of command line utilities for transcoding video and audio codecs, and for converting between different container formats";
     homepage = "http://www.transcoding.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

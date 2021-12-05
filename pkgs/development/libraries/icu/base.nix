@@ -1,15 +1,16 @@
-{ version, sha256, patches ? [], patchFlags ? [] }:
+{ version, sha256, patches ? [ ], patchFlags ? [ ] }:
 { stdenv, lib, fetchurl, fixDarwinDylibNames
-  # Cross-compiled icu4c requires a build-root of a native compile
-, buildRootOnly ? false, nativeBuildRoot
-}:
+# Cross-compiled icu4c requires a build-root of a native compile
+, buildRootOnly ? false, nativeBuildRoot }:
 
 let
   pname = "icu4c";
 
   baseAttrs = {
     src = fetchurl {
-      url = "https://github.com/unicode-org/icu/releases/download/release-${lib.replaceChars [ "." ] [ "-" ] version}/icu4c-${lib.replaceChars [ "." ] [ "_" ] version}-src.tgz";
+      url = "https://github.com/unicode-org/icu/releases/download/release-${
+          lib.replaceChars [ "." ] [ "-" ] version
+        }/icu4c-${lib.replaceChars [ "." ] [ "_" ] version}-src.tgz";
       inherit sha256;
     };
 
@@ -19,9 +20,12 @@ let
     '';
 
     # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1"
-      then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
-      else null; # won't find locale_t on darwin
+    postPatch = if (stdenv.hostPlatform.libc == "glibc"
+      || stdenv.hostPlatform.libc == "musl")
+    && lib.versionOlder version "62.1" then
+      "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
+    else
+      null; # won't find locale_t on darwin
 
     inherit patchFlags patches;
 
@@ -37,7 +41,8 @@ let
 
     configureFlags = [ "--disable-debug" ]
       ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
-      ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}";
+      ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+      "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 
@@ -57,20 +62,33 @@ let
 
     # FIXME: This fixes dylib references in the dylibs themselves, but
     # not in the programs in $out/bin.
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs =
+      lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall = lib.optionalString stdenv.isDarwin ''
       sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
     '' + (let
       replacements = [
-        { from = "\${prefix}/include"; to = "${placeholder "dev"}/include"; } # --cppflags-searchpath
-        { from = "\${pkglibdir}/Makefile.inc"; to = "${placeholder "dev"}/lib/icu/Makefile.inc"; } # --incfile
-        { from = "\${pkglibdir}/pkgdata.inc"; to = "${placeholder "dev"}/lib/icu/pkgdata.inc"; } # --incpkgdatafile
+        {
+          from = "\${prefix}/include";
+          to = "${placeholder "dev"}/include";
+        } # --cppflags-searchpath
+        {
+          from = "\${pkglibdir}/Makefile.inc";
+          to = "${placeholder "dev"}/lib/icu/Makefile.inc";
+        } # --incfile
+        {
+          from = "\${pkglibdir}/pkgdata.inc";
+          to = "${placeholder "dev"}/lib/icu/pkgdata.inc";
+        } # --incpkgdatafile
       ];
     in ''
       substituteInPlace "$dev/bin/icu-config" \
-        ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+        ${
+          lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'")
+          replacements
+        }
     '');
 
     postFixup = ''moveToOutput lib/icu "$dev" '';
@@ -93,8 +111,5 @@ let
     '';
   };
 
-  attrs = if buildRootOnly
-            then buildRootOnlyAttrs
-          else realAttrs;
-in
-stdenv.mkDerivation attrs
+  attrs = if buildRootOnly then buildRootOnlyAttrs else realAttrs;
+in stdenv.mkDerivation attrs

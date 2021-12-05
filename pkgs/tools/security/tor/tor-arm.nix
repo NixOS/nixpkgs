@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, python2Packages, ncurses, lsof, nettools
+{ lib, stdenv, fetchurl, makeWrapper, python2Packages, ncurses, lsof, nettools
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +46,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A terminal status monitor for Tor relays";
-    homepage    = "https://www.atagar.com/arm/";
-    license     = lib.licenses.gpl3;
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.atagar.com/arm/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, typing-extensions
-, dataclasses
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, setuptools, typing-extensions
+, dataclasses }:
 
 buildPythonPackage rec {
   pname = "simple_di";
@@ -17,16 +11,10 @@ buildPythonPackage rec {
     sha256 = "0wqbfbajnwmkzih0jl3mncalr7dslvmwhb5mk11asqvmbp1xhn30";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-    typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = [ setuptools typing-extensions ]
+    ++ lib.optional (pythonOlder "3.7") [ dataclasses ];
 
-  pythonImportsCheck = [
-    "simple_di"
-  ];
+  pythonImportsCheck = [ "simple_di" ];
 
   # pypi distribution contains no tests
   doCheck = false;

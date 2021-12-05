@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, construct
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
+{ lib, buildPythonPackage, construct, fetchFromGitHub, isPy3k, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "1jigdccdd7bffszim942mxcwxyznfjx7y3r5yklz3psl7zgbzd6c";
   };
 
-  propagatedBuildInputs = [
-    construct
-  ];
+  propagatedBuildInputs = [ construct ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "snapcast" ];
 

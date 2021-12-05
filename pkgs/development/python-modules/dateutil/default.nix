@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, six }:
 
 buildPythonPackage rec {
   pname = "python-dateutil";

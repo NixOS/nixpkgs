@@ -36,7 +36,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/ProtonMail/proton-bridge";
-    changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
+    changelog =
+      "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lightdiscord ];

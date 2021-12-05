@@ -1,4 +1,5 @@
-{ lib, stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook
+, zlib, fetchurl, undmg }:
 
 let
   pname = "radicle-upstream";
@@ -81,7 +82,4 @@ let
     maintainers = with maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

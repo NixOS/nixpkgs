@@ -15,9 +15,7 @@ let
         sha256 = "057b2f5f49p96lkh2wsr9w6yh2003x4a85irqsgbzp6igmk8imdn";
       };
 
-      propagatedBuildInputs = with python3Packages; [
-        netifaces
-      ];
+      propagatedBuildInputs = with python3Packages; [ netifaces ];
 
       installPhase = ''
         mkdir -p $out/lib/cura/plugins/OctoPrintPlugin
@@ -25,7 +23,8 @@ let
       '';
 
       meta = with lib; {
-        description = "Enables printing directly to OctoPrint and monitoring the process";
+        description =
+          "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = licenses.agpl3;
         maintainers = with maintainers; [ gebner ];
@@ -45,9 +44,7 @@ let
 
       nativeBuildInputs = [ jq ];
 
-      propagatedBuildInputs = with python3Packages; [
-        hidapi
-      ];
+      propagatedBuildInputs = with python3Packages; [ hidapi ];
 
       buildPhase = ''
         jq 'del(.devices) | .libspnav="${libspnav}/lib/libspnav.so"' \

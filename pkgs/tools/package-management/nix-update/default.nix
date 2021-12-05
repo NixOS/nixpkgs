@@ -1,11 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, nix
-, nix-prefetch
-, nixpkgs-fmt
-, nixpkgs-review
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, nix, nix-prefetch, nixpkgs-fmt
+, nixpkgs-review }:
 
 buildPythonApplication rec {
   pname = "nix-update";
@@ -19,7 +13,10 @@ buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch nixpkgs-fmt nixpkgs-review ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ nix nix-prefetch nixpkgs-fmt nixpkgs-review ])
   ];
 
   checkPhase = ''

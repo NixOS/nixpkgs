@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, garmintools, libgcrypt, libusb-compat-0_1, pkg-config, tinyxml, zlib }:
+{ lib, stdenv, fetchFromGitHub, garmintools, libgcrypt, libusb-compat-0_1
+, pkg-config, tinyxml, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "garmin-plugin";

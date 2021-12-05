@@ -1,15 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{ buildPythonPackage, fetchFromGitHub, lib
 
 # pythonPackages
-, click
-, pytest
-, pytest-cov
-, pytest-runner
-, pyyaml
-, six
-}:
+, click, pytest, pytest-cov, pytest-runner, pyyaml, six }:
 
 buildPythonPackage rec {
   pname = "cfn-flip";
@@ -22,17 +14,9 @@ buildPythonPackage rec {
     sha256 = "05fk725a1i3zl3idik2hxl3w6k1ln0j33j3jdq1gvy1sfyc79ifm";
   };
 
-  propagatedBuildInputs = [
-    click
-    pyyaml
-    six
-  ];
+  propagatedBuildInputs = [ click pyyaml six ];
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    pytest-runner
-  ];
+  checkInputs = [ pytest pytest-cov pytest-runner ];
 
   checkPhase = ''
     py.test \
@@ -44,12 +28,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
+    description =
+      "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
     homepage = "https://github.com/awslabs/aws-cfn-template-flip";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      kamadorueda
-      psyanticy
-    ];
+    maintainers = with maintainers; [ kamadorueda psyanticy ];
   };
 }

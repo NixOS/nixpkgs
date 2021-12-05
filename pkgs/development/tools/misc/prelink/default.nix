@@ -4,9 +4,8 @@ stdenv.mkDerivation rec {
   pname = "prelink";
   version = "20130503";
 
-  buildInputs = [
-    libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc)
-  ];
+  buildInputs =
+    [ libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc) ];
 
   src = fetchurl {
     url = "https://people.redhat.com/jakub/prelink/prelink-${version}.tar.bz2";

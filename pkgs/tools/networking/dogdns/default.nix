@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, openssl
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, pkg-config
+, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dogdns";

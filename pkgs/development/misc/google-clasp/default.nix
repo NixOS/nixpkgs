@@ -1,8 +1,6 @@
 { lib, stdenv, pkgs }:
-let
-  version = "2.2.1";
-in
-(import ./google-clasp.nix {
+let version = "2.2.1";
+in (import ./google-clasp.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
 })."@google/clasp-${version}".override {

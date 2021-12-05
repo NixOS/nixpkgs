@@ -19,9 +19,7 @@ buildPythonPackage rec {
   # No tests in repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "google.identity.accesscontextmanager"
-  ];
+  pythonImportsCheck = [ "google.identity.accesscontextmanager" ];
 
   meta = with lib; {
     description = "Protobufs for Google Access Context Manager";

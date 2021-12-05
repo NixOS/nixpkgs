@@ -1,15 +1,9 @@
-{ lib, perl, buildEnv, makeWrapper
-, extraLibs ? []
-, extraOutputsToInstall ? []
-, postBuild ? ""
-, ignoreCollisions ? false
-, requiredPerlModules
-}:
+{ lib, perl, buildEnv, makeWrapper, extraLibs ? [ ], extraOutputsToInstall ? [ ]
+, postBuild ? "", ignoreCollisions ? false, requiredPerlModules }:
 
 # Create a perl executable that knows about additional packages.
 let
-  env = let
-    paths = requiredPerlModules (extraLibs ++ [ perl ] );
+  env = let paths = requiredPerlModules (extraLibs ++ [ perl ]);
   in buildEnv {
     name = "${perl.name}-env";
 
@@ -42,7 +36,9 @@ let
       done
     '' + postBuild;
 
-    meta = perl.meta // { outputsToInstall = ["out"]; }; # remove "man" from meta.outputsToInstall. pkgs.buildEnv produces no "man", it puts everything to "out"
+    meta = perl.meta // {
+      outputsToInstall = [ "out" ];
+    }; # remove "man" from meta.outputsToInstall. pkgs.buildEnv produces no "man", it puts everything to "out"
 
     passthru = perl.passthru // {
       interpreter = "${env}/bin/perl";

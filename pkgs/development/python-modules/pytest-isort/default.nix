@@ -11,8 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ isort ];
 
-  checkInputs = [ pytest ]
-    ++ lib.optionals isPy27 [ mock ];
+  checkInputs = [ pytest ] ++ lib.optionals isPy27 [ mock ];
 
   checkPhase = ''
     py.test -vs --cache-clear

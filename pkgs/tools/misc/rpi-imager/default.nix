@@ -1,18 +1,6 @@
-{ mkDerivation,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  libarchive,
-  util-linux,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qttools,
-  qtquickcontrols2,
-  qtgraphicaleffects
-}:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake, curl, libarchive
+, util-linux, qtbase, qtdeclarative, qtsvg, qttools, qtquickcontrols2
+, qtgraphicaleffects }:
 
 mkDerivation rec {
   pname = "rpi-imager";
@@ -39,8 +27,9 @@ mkDerivation rec {
   ];
 
   /* By default, the builder checks for JSON support in lsblk by running "lsblk --json",
-    but that throws an error, as /sys/dev doesn't exist in the sandbox.
-    This patch removes the check. */
+     but that throws an error, as /sys/dev doesn't exist in the sandbox.
+     This patch removes the check.
+  */
   patches = [ ./lsblkCheckFix.patch ];
 
   meta = with lib; {

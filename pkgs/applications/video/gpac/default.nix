@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Open Source multimedia framework for research and academic purposes";
+    description =
+      "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.
       The project covers different aspects of multimedia, with a focus on presentation

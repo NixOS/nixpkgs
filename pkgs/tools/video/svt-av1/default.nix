@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
       activities.
     '';
     inherit (src.meta) homepage;
-    changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       bsd2
       {

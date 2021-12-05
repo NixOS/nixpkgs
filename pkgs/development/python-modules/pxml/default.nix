@@ -1,12 +1,5 @@
-{ lib
-, pythonAtLeast
-, buildPythonPackage
-, fetchPypi
-, blessings
-, six
-, nose
-, coverage
-}:
+{ lib, pythonAtLeast, buildPythonPackage, fetchPypi, blessings, six, nose
+, coverage }:
 
 buildPythonPackage rec {
   pname = "pxml";
@@ -29,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/metagriffin/pxml";
-    description = ''A python library and command-line tool to "prettify" and colorize XML.'';
+    description = ''
+      A python library and command-line tool to "prettify" and colorize XML.'';
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl3;
   };

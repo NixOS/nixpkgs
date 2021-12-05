@@ -1,11 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, enableModTool ? true
-, removeReferencesTo
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, python3, enableModTool ? true
+, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "volk";
@@ -24,11 +18,7 @@ stdenv.mkDerivation rec {
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
   '';
 
-  nativeBuildInputs = [
-    cmake
-    python3
-    python3.pkgs.Mako
-  ];
+  nativeBuildInputs = [ cmake python3 python3.pkgs.Mako ];
 
   doCheck = true;
 

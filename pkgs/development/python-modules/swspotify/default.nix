@@ -1,5 +1,5 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27 }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook
+, flask, flask-cors, dbus-python, mock, isPy27 }:
 
 buildPythonPackage rec {
   pname = "SwSpotify";
@@ -13,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-571knnY8LegIbqyPeKUfl+d0suTWAMQHYLN7edKFNdI=";
   };
 
-  propagatedBuildInputs = [
-    requests flask flask-cors dbus-python
-  ];
+  propagatedBuildInputs = [ requests flask flask-cors dbus-python ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -25,7 +23,9 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    pytest tests/test_spotify.py::${if stdenv.isDarwin then "DarwinTests" else "LinuxTests"}
+    pytest tests/test_spotify.py::${
+      if stdenv.isDarwin then "DarwinTests" else "LinuxTests"
+    }
   '';
 
   checkInputs = [ pytestCheckHook mock ];
@@ -34,7 +34,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/SwagLyrics/SwSpotify";
-    description = "Library to get the currently playing song and artist from Spotify";
+    description =
+      "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.unix;

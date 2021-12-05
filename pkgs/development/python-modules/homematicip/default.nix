@@ -1,18 +1,6 @@
-{ lib
-, aenum
-, aiohttp
-, aiohttp-wsgi
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pytest-aiohttp
-, pytest-asyncio
-, requests
-, websocket-client
-, websockets
-}:
+{ lib, aenum, aiohttp, aiohttp-wsgi, async-timeout, buildPythonPackage
+, fetchFromGitHub, pytestCheckHook, pythonOlder, pytest-aiohttp, pytest-asyncio
+, requests, websocket-client, websockets }:
 
 buildPythonPackage rec {
   pname = "homematicip";
@@ -26,21 +14,10 @@ buildPythonPackage rec {
     sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
 
-  propagatedBuildInputs = [
-    aenum
-    aiohttp
-    async-timeout
-    requests
-    websocket-client
-    websockets
-  ];
+  propagatedBuildInputs =
+    [ aenum aiohttp async-timeout requests websocket-client websockets ];
 
-  checkInputs = [
-    aiohttp-wsgi
-    pytest-aiohttp
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aiohttp-wsgi pytest-aiohttp pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # Assert issues with datetime

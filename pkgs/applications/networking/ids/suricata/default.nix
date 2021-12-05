@@ -1,54 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, clang
-, llvm
-, pkg-config
-, makeWrapper
-, file
-, hyperscan
-, jansson
-, libbpf
-, libcap_ng
-, libelf
-, libevent
-, libmaxminddb
-, libnet
-, libnetfilter_log
-, libnetfilter_queue
-, libnfnetlink
-, libpcap
-, libyaml
-, luajit
-, lz4
-, nspr
-, nss
-, pcre
-, python
-, zlib
-, redisSupport ? true, redis, hiredis
-, rustSupport ? true, rustc, cargo
-}: let
+{ stdenv, lib, fetchurl, clang, llvm, pkg-config, makeWrapper, file, hyperscan
+, jansson, libbpf, libcap_ng, libelf, libevent, libmaxminddb, libnet
+, libnetfilter_log, libnetfilter_queue, libnfnetlink, libpcap, libyaml, luajit
+, lz4, nspr, nss, pcre, python, zlib, redisSupport ? true, redis, hiredis
+, rustSupport ? true, rustc, cargo }:
+let
   libmagic = file;
-  hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
-in
-stdenv.mkDerivation rec {
+  hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system
+    == "i686-linux";
+in stdenv.mkDerivation rec {
   pname = "suricata";
   version = "6.0.4";
 
   src = fetchurl {
-    url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
+    url =
+      "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
     sha256 = "sha256-qPGX4z0WeGieu/e8Gr6Ek0xGXSLFBMR8LH6bdKoELQ0=";
   };
 
-  nativeBuildInputs = [
-    clang
-    llvm
-    makeWrapper
-    pkg-config
-  ]
-  ++ lib.optionals rustSupport [ rustc cargo ]
-  ;
+  nativeBuildInputs = [ clang llvm makeWrapper pkg-config ]
+    ++ lib.optionals rustSupport [ rustc cargo ];
 
   buildInputs = [
     jansson
@@ -71,10 +41,8 @@ stdenv.mkDerivation rec {
     pcre
     python
     zlib
-  ]
-  ++ lib.optional hyperscanSupport hyperscan
-  ++ lib.optionals redisSupport [ redis hiredis ]
-  ;
+  ] ++ lib.optional hyperscanSupport hyperscan
+    ++ lib.optionals redisSupport [ redis hiredis ];
 
   enableParallelBuilding = true;
 
@@ -108,16 +76,14 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--with-libnet-includes=${libnet}/include"
     "--with-libnet-libraries=${libnet}/lib"
-  ]
-  ++ lib.optionals hyperscanSupport [
+  ] ++ lib.optionals hyperscanSupport [
     "--with-libhs-includes=${hyperscan.dev}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
-  ]
-  ++ lib.optional redisSupport "--enable-hiredis"
-  ++ lib.optionals rustSupport [
-    "--enable-rust"
-    "--enable-rust-experimental"
-  ];
+  ] ++ lib.optional redisSupport "--enable-hiredis"
+    ++ lib.optionals rustSupport [
+      "--enable-rust"
+      "--enable-rust-experimental"
+    ];
 
   postConfigure = ''
     # Avoid unintended clousure growth.
@@ -149,7 +115,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free and open source, mature, fast and robust network threat detection engine";
+    description =
+      "A free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata-ids.org";
     license = licenses.gpl2;
     platforms = platforms.linux;

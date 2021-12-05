@@ -19,14 +19,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "usb1/testUSB1.py"
-  ];
+  pytestFlagsArray = [ "usb1/testUSB1.py" ];
 
   meta = with lib; {
-    homepage    = "https://github.com/vpelletier/python-libusb1";
+    homepage = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
-    license     = licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ prusnak rnhmjoj ];
   };
 }

@@ -13,11 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-3L3FtL/P+Jyvv0WESBvfSxJOl99v5QDyyzIqottB2EI=";
 
-  subPackages = [
-    "cmd/dyff"
-    "pkg/dyff"
-    "internal/cmd"
-  ];
+  subPackages = [ "cmd/dyff" "pkg/dyff" "internal/cmd" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,11 +23,8 @@ buildGoModule rec {
       --replace "version (development)" ${version}
   '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X=github.com/homeport/dyff/internal/cmd.version=${version}" ];
 
   postInstall = ''
     installShellCompletion --cmd dyff \

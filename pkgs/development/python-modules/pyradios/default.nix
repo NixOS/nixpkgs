@@ -8,10 +8,7 @@ buildPythonPackage rec {
     sha256 = "1bgfb8vz7jybswss16pdzns0qpqfrwa9f2g8qrh1r4mig4xh2dmi";
   };
 
-  propagatedBuildInputs = [
-    appdirs
-    requests
-  ];
+  propagatedBuildInputs = [ appdirs requests ];
 
   doCheck = false;
 

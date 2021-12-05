@@ -1,12 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, buildPackages
-, gzip, libiconv, nkf, perl, which
-, skk-dicts
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, buildPackages, gzip, libiconv, nkf
+, perl, which, skk-dicts }:
 
 let
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
-in
-stdenv.mkDerivation {
+  iconvBin = if stdenv.isDarwin then libiconv else buildPackages.stdenv.cc.libc;
+in stdenv.mkDerivation {
   pname = "cmigemo";
   version = "1.3e";
 
@@ -28,15 +25,19 @@ stdenv.mkDerivation {
   makeFlags = [ "INSTALL=install" ];
 
   preBuild = ''
-    makeFlagsArray+=(FILTER_UTF8="${lib.getBin iconvBin}/bin/iconv -t utf-8 -f cp932")
+    makeFlagsArray+=(FILTER_UTF8="${
+      lib.getBin iconvBin
+    }/bin/iconv -t utf-8 -f cp932")
   '';
 
   buildFlags = [ (if stdenv.isDarwin then "osx-all" else "gcc-all") ];
 
-  installTargets = [ (if stdenv.isDarwin then "osx-install" else "gcc-install") ];
+  installTargets =
+    [ (if stdenv.isDarwin then "osx-install" else "gcc-install") ];
 
   meta = with lib; {
-    description = "A tool that supports Japanese incremental search with Romaji";
+    description =
+      "A tool that supports Japanese incremental search with Romaji";
     homepage = "https://www.kaoriya.net/software/cmigemo";
     license = licenses.mit;
     maintainers = [ maintainers.cohei ];

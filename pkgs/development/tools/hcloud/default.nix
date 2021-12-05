@@ -17,7 +17,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/hetznercloud/cli/cli.Version=${version}" ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/hetznercloud/cli/cli.Version=${version}" ];
 
   postInstall = ''
     for shell in bash zsh; do
@@ -27,7 +28,8 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
+    description =
+      "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
     homepage = "https://github.com/hetznercloud/cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zauberpony ];

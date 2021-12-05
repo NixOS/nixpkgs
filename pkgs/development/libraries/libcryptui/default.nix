@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3
+, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   pname = "libcryptui";
   version = "3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0rh8wa5k2iwbwppyvij2jdxmnlfjbna7kbh2a5n7zw4nnjkx3ski";
   };
 

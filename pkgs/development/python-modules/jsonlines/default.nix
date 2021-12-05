@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six
-, flake8, pep8-naming, pytest, pytest-cov }:
+{ lib, fetchFromGitHub, buildPythonPackage, six, flake8, pep8-naming, pytest
+, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "jsonlines";
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python library to simplify working with jsonlines and ndjson data";
+    description =
+      "Python library to simplify working with jsonlines and ndjson data";
     homepage = "https://github.com/wbolster/jsonlines";
     maintainers = with maintainers; [ sondr3 ];
     license = licenses.bsd3;

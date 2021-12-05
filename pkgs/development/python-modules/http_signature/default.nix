@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pycrypto
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pycrypto }:
 
 buildPythonPackage rec {
   pname = "http_signature";
@@ -19,7 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/atl/py-http-signature";
-    description = "Simple secure signing for HTTP requests using http-signature";
+    description =
+      "Simple secure signing for HTTP requests using http-signature";
     license = licenses.mit;
   };
 

@@ -5,8 +5,10 @@ stdenv.mkDerivation rec {
   version = "3.14.2";
 
   src = fetchzip {
-    url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
-    sha512 = "sha512-wC2GhCjkRt/rmLAhe6nDCdF4PsfBpOo0T4BOSdw4wlBr7eCfo4Cibt9VvK6DNLuDk7EGkUfxvw9HI9sbRJlpCw==";
+    url =
+      "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
+    sha512 =
+      "sha512-wC2GhCjkRt/rmLAhe6nDCdF4PsfBpOo0T4BOSdw4wlBr7eCfo4Cibt9VvK6DNLuDk7EGkUfxvw9HI9sbRJlpCw==";
     stripRoot = false;
   };
 

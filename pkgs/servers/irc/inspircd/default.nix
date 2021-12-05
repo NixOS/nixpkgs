@@ -23,62 +23,40 @@ let
   # checking, only whitelist licenses used by notable
   # libcs in nixpkgs (musl and glibc).
   compatible = lib: drv:
-    lib.any (lic: lic == (drv.meta.license or {})) [
-      lib.licenses.mit        # musl
-      lib.licenses.lgpl2Plus  # glibc
+    lib.any (lic: lic == (drv.meta.license or { })) [
+      lib.licenses.mit # musl
+      lib.licenses.lgpl2Plus # glibc
     ];
 
   # compatible if libc is compatible
-  libcModules = [
-    "regex_posix"
-    "sslrehashsignal"
-  ];
+  libcModules = [ "regex_posix" "sslrehashsignal" ];
 
   # compatible if libc++ is compatible
   # TODO(sternenseemann):
   # we could enable "regex_stdlib" automatically, but only if
   # we are using libcxxStdenv which is compatible with GPLv2,
   # since the gcc libstdc++ license is GPLv2-incompatible
-  libcxxModules = [
-    "regex_stdlib"
-  ];
+  libcxxModules = [ "regex_stdlib" ];
 
-  compatibleModules = lib: stdenv: [
-    # GPLv2 compatible dependencies
-    "argon2"
-    "ldap"
-    "mysql"
-    "pgsql"
-    "regex_pcre"
-    "regex_re2"
-    "regex_tre"
-    "sqlite3"
-    "ssl_gnutls"
-  ] ++ lib.optionals (compatible lib stdenv.cc.libc) libcModules;
+  compatibleModules = lib: stdenv:
+    [
+      # GPLv2 compatible dependencies
+      "argon2"
+      "ldap"
+      "mysql"
+      "pgsql"
+      "regex_pcre"
+      "regex_re2"
+      "regex_tre"
+      "sqlite3"
+      "ssl_gnutls"
+    ] ++ lib.optionals (compatible lib stdenv.cc.libc) libcModules;
 
-in
-
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-, perl
-, pkg-config
-, libargon2
-, openldap
-, postgresql
-, libmysqlclient
-, pcre
-, tre
-, re2
-, sqlite
-, gnutls
-, libmaxminddb
-, openssl
-, mbedtls
+in { lib, stdenv, fetchFromGitHub, nixosTests, perl, pkg-config, libargon2
+, openldap, postgresql, libmysqlclient, pcre, tre, re2, sqlite, gnutls
+, libmaxminddb, openssl, mbedtls
 # For a full list of module names, see https://docs.inspircd.org/packaging/
-, extraModules ? compatibleModules lib stdenv
-}:
+, extraModules ? compatibleModules lib stdenv }:
 
 let
   extras = {
@@ -93,23 +71,23 @@ let
         };
       })
     ];
-    ldap            = [ openldap ];
-    mysql           = [ libmysqlclient ];
-    pgsql           = [ postgresql ];
-    regex_pcre      = [ pcre ];
-    regex_re2       = [ re2 ];
-    regex_tre       = [ tre ];
-    sqlite3         = [ sqlite ];
-    ssl_gnutls      = [ gnutls ];
+    ldap = [ openldap ];
+    mysql = [ libmysqlclient ];
+    pgsql = [ postgresql ];
+    regex_pcre = [ pcre ];
+    regex_re2 = [ re2 ];
+    regex_tre = [ tre ];
+    sqlite3 = [ sqlite ];
+    ssl_gnutls = [ gnutls ];
     # depends on stdenv.cc.libc
-    regex_posix     = [];
-    sslrehashsignal = [];
+    regex_posix = [ ];
+    sslrehashsignal = [ ];
     # depends on used libc++
-    regex_stdlib    = [];
+    regex_stdlib = [ ];
     # GPLv2 incompatible
-    geo_maxmind     = [ libmaxminddb ];
-    ssl_mbedtls     = [ mbedtls ];
-    ssl_openssl     = [ openssl ];
+    geo_maxmind = [ libmaxminddb ];
+    ssl_mbedtls = [ mbedtls ];
+    ssl_openssl = [ openssl ];
   };
 
   # buildInputs necessary for the enabled extraModules
@@ -119,28 +97,18 @@ let
 
   # if true, we can't provide a binary version of this
   # package without violating the GPL 2
-  gpl2Conflict =
-    let
-      allowed = compatibleModules lib stdenv;
-    in
-      !lib.all (lib.flip lib.elem allowed) extraModules;
+  gpl2Conflict = let allowed = compatibleModules lib stdenv;
+  in !lib.all (lib.flip lib.elem allowed) extraModules;
 
   # return list of the license(s) of the given derivation
   getLicenses = drv:
-    let
-      lics = drv.meta.license or [];
-    in
-      if lib.isAttrs lics || lib.isString lics
-      then [ lics ]
-      else lics;
+    let lics = drv.meta.license or [ ];
+    in if lib.isAttrs lics || lib.isString lics then [ lics ] else lics;
 
   # Whether any member of list1 is also member of list2, i. e. set intersection.
-  anyMembers = list1: list2:
-    lib.any (m1: lib.elem m1 list2) list1;
+  anyMembers = list1: list2: lib.any (m1: lib.elem m1 list2) list1;
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "inspircd";
   version = "3.11.0";
 
@@ -153,10 +121,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];
 
-  nativeBuildInputs = [
-    perl
-    pkg-config
-  ];
+  nativeBuildInputs = [ perl pkg-config ];
   buildInputs = extraInputs;
 
   configurePhase = ''
@@ -196,15 +161,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    nixos-test = nixosTests.inspircd;
-  };
+  passthru.tests = { nixos-test = nixosTests.inspircd; };
 
   meta = {
     description = "A modular C++ IRC server";
-    license = [ lib.licenses.gpl2Only ]
-      ++ lib.concatMap getLicenses extraInputs
-      ++ lib.optionals (anyMembers extraModules libcModules) (getLicenses stdenv.cc.libc)
+    license = [ lib.licenses.gpl2Only ] ++ lib.concatMap getLicenses extraInputs
+      ++ lib.optionals (anyMembers extraModules libcModules)
+      (getLicenses stdenv.cc.libc)
       # FIXME(sternenseemann): get license of used lib(std)c++ somehow
       ++ lib.optional (anyMembers extraModules libcxxModules) "Unknown"
       # Hack: Definitely prevent a hydra from building this package on
@@ -220,6 +183,6 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs gpl2Conflict {
     # make sure we never distribute a GPLv2-violating module
     # in binary form. They can be built locally of course.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

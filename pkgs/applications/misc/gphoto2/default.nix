@@ -1,12 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext
-, libexif
-, libgphoto2
-, libjpeg
-, libtool
-, popt
-, readline
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext, libexif
+, libgphoto2, libjpeg, libtool, popt, readline }:
 
 stdenv.mkDerivation rec {
   pname = "gphoto2";
@@ -19,20 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zzlyA2IedyBZ4/TdSmrqbe2le8rFMQ6tY6jF5skJ7l4=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    gettext
-    libtool
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext libtool ];
 
-  buildInputs = [
-    libexif
-    libgphoto2
-    libjpeg
-    popt
-    readline
-  ];
+  buildInputs = [ libexif libgphoto2 libjpeg popt readline ];
 
   meta = with lib; {
     description = "A ready to use set of digital camera software applications";

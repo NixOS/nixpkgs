@@ -1,27 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
-}:
+{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, writeShellScript, curl, jq
+, common-updater-scripts }:
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
   version = "2.5.2";
 
   src = fetchurl {
-    url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
+    url =
+      "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
     sha256 = "1RO5yabSNpIz5lWXngMOZ1S2vtnLEkXIj1ZoIinRrQ0=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
   dontUnpack = true;
 

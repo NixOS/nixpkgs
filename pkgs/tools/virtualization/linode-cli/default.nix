@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, buildPythonApplication
-, colorclass
-, installShellFiles
-, pyyaml
-, requests
-, setuptools
-, terminaltables
-}:
+{ lib, fetchFromGitHub, fetchurl, buildPythonApplication, colorclass
+, installShellFiles, pyyaml, requests, setuptools, terminaltables }:
 
 let
   sha256 = "1kvlf9qcl0i7g24s9f2pj25msmlj0cjicjwrnnc65q8qkmk2br9q";
@@ -16,13 +7,12 @@ let
   specVersion = "4.108.0";
   specSha256 = "17n9wjd0hpkzc2bvsawdvl8hc5285r0n19xq59h4amqb2fhp676w";
   spec = fetchurl {
-    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
+    url =
+      "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
     sha256 = specSha256;
   };
 
-in
-
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "linode-cli";
   version = "5.12.0";
 
@@ -39,13 +29,8 @@ buildPythonApplication rec {
       --replace "version=get_version()," "version='${version}',"
   '';
 
-  propagatedBuildInputs = [
-    colorclass
-    pyyaml
-    requests
-    setuptools
-    terminaltables
-  ];
+  propagatedBuildInputs =
+    [ colorclass pyyaml requests setuptools terminaltables ];
 
   postConfigure = ''
     python3 -m linodecli bake ${spec} --skip-config

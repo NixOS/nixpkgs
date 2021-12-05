@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, numpy
-, zlib
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, numpy, zlib }:
 
 buildPythonPackage rec {
   pname = "pyBigWig";
@@ -21,7 +15,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/deeptools/pyBigWig";
-    description = "File access to bigBed files, and read and write access to bigWig files";
+    description =
+      "File access to bigBed files, and read and write access to bigWig files";
     longDescription = ''
       A python extension, written in C, for quick access to bigBed files
       and access to and creation of bigWig files. This extension uses

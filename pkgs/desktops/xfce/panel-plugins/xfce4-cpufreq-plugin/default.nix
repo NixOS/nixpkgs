@@ -8,7 +8,5 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 
-  meta = {
-    description = "CPU Freq load plugin for Xfce panel";
-  };
+  meta = { description = "CPU Freq load plugin for Xfce panel"; };
 }

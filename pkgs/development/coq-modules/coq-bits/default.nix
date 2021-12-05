@@ -1,15 +1,16 @@
 { lib, mkCoqDerivation, coq, mathcomp, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib;
+mkCoqDerivation {
   pname = "coq-bits";
   repo = "bits";
   inherit version;
-  defaultVersion =
-    if versions.isGe "8.10" coq.version
-    then "1.1.0"
-    else if versions.isGe "8.7" coq.version
-    then "1.0.0"
-    else null;
+  defaultVersion = if versions.isGe "8.10" coq.version then
+    "1.1.0"
+  else if versions.isGe "8.7" coq.version then
+    "1.0.0"
+  else
+    null;
 
   release = {
     "1.0.0" = {

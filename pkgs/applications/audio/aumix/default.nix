@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, ncurses
-, gtkGUI ? false
-, pkg-config
-, gtk2
-}:
+{ lib, stdenv, fetchurl, gettext, ncurses, gtkGUI ? false, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "aumix";
@@ -17,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a8fwyxnc5qdxff8sl2sfsbnvgh6pkij4yafiln0fxgg6bal7knj";
   };
 
-  buildInputs = [ gettext ncurses ]
-    ++ lib.optionals gtkGUI [ pkg-config gtk2 ];
+  buildInputs = [ gettext ncurses ] ++ lib.optionals gtkGUI [ pkg-config gtk2 ];
 
   meta = with lib; {
     description = "Audio mixer for X and the console";

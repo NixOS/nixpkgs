@@ -1,65 +1,50 @@
-{ buildPackages
-, callPackage
-, perl
-, bison ? null
-, flex ? null
-, gmp ? null
-, libmpc ? null
-, mpfr ? null
-, lib
-, stdenv
+{ buildPackages, callPackage, perl, bison ? null, flex ? null, gmp ? null
+, libmpc ? null, mpfr ? null, lib, stdenv
 
 , # The kernel source tarball.
-  src
+src
 
 , # The kernel version.
-  version
+version
 
 , # Allows overriding the default defconfig
-  defconfig ? null
+defconfig ? null
 
 , # Legacy overrides to the intermediate kernel config, as string
-  extraConfig ? ""
+extraConfig ? ""
 
   # Additional make flags passed to kbuild
-, extraMakeFlags ? []
+, extraMakeFlags ? [ ]
 
 , # kernel intermediate config overrides, as a set
- structuredExtraConfig ? {}
+structuredExtraConfig ? { }
 
 , # The version number used for the module directory
-  modDirVersion ? version
+modDirVersion ? version
 
 , # An attribute set whose attributes express the availability of
-  # certain features in this kernel.  E.g. `{iwlwifi = true;}'
-  # indicates a kernel that provides Intel wireless support.  Used in
-  # NixOS to implement kernel-specific behaviour.
-  features ? {}
+# certain features in this kernel.  E.g. `{iwlwifi = true;}'
+# indicates a kernel that provides Intel wireless support.  Used in
+# NixOS to implement kernel-specific behaviour.
+features ? { }
 
 , # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
-  # automatically extended with extra per-version and per-config values.
-  randstructSeed ? ""
+# automatically extended with extra per-version and per-config values.
+randstructSeed ? ""
 
 , # A list of patches to apply to the kernel.  Each element of this list
-  # should be an attribute set {name, patch} where `name' is a
-  # symbolic name and `patch' is the actual patch.  The patch may
-  # optionally be compressed with gzip or bzip2.
-  kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
-                       stdenv.hostPlatform != stdenv.buildPlatform
-, extraMeta ? {}
+# should be an attribute set {name, patch} where `name' is a
+# symbolic name and `patch' is the actual patch.  The patch may
+# optionally be compressed with gzip or bzip2.
+kernelPatches ? [ ], ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name
+  != "pc" || stdenv.hostPlatform != stdenv.buildPlatform, extraMeta ? { }
 
-, isZen      ? false
-, isLibre    ? false
-, isHardened ? false
+, isZen ? false, isLibre ? false, isHardened ? false
 
-# easy overrides to stdenv.hostPlatform.linux-kernel members
+  # easy overrides to stdenv.hostPlatform.linux-kernel members
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
-, kernelArch ? stdenv.hostPlatform.linuxArch
-, kernelTests ? []
-, nixosTests
-, ...
+, kernelArch ? stdenv.hostPlatform.linuxArch, kernelTests ? [ ], nixosTests, ...
 }@args:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -78,12 +63,12 @@ let
   # and pings all maintainers.
   #
   # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
-  basicArgs = builtins.removeAttrs
-    args
-    (lib.filter (x: ! (builtins.elem x [ "version" "src" ])) (lib.attrNames args));
+  basicArgs = builtins.removeAttrs args
+    (lib.filter (x: !(builtins.elem x [ "version" "src" ]))
+      (lib.attrNames args));
 
   # Combine the `features' attribute sets of all the kernel patches.
-  kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
+  kernelFeatures = lib.foldr (x: y: (x.features or { }) // y) ({
     iwlwifi = true;
     efiBootStub = true;
     needsCifsUtils = true;
@@ -97,23 +82,25 @@ let
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
 
-  intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
+  intermediateNixConfig =
+    configfile.moduleStructuredConfig.intermediateNixConfig
     # extra config in legacy string format
-    + extraConfig
-    + stdenv.hostPlatform.linux-kernel.extraConfig or "";
+    + extraConfig + stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
-  structuredConfigFromPatches =
-        map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
+  structuredConfigFromPatches = map ({ extraStructuredConfig ? { }, ... }: {
+    settings = extraStructuredConfig;
+  }) kernelPatches;
 
   # appends kernel patches extraConfig
   kernelConfigFun = baseConfigStr:
     let
       configFromPatches =
-        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
+        map ({ extraConfig ? "", ... }: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([ baseConfigStr ] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch extraMakeFlags;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch
+      extraMakeFlags;
     pname = "linux-config";
     inherit version;
 
@@ -128,12 +115,15 @@ let
 
     platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+    kernelBaseConfig = if defconfig != null then
+      defconfig
+    else
+      stdenv.hostPlatform.linux-kernel.baseConfig;
     # e.g. "bzImage"
     kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
-    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
-      ++ extraMakeFlags;
+    makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags)
+      stdenv.hostPlatform.linux-kernel.makeFlags ++ extraMakeFlags;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -181,38 +171,52 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
-          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
-          { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
-        ]
-        ++  structuredConfigFromPatches
-        ;
+          {
+            settings = commonStructuredConfig;
+            _file = "pkgs/os-specific/linux/kernel/common-config.nix";
+          }
+          {
+            settings = structuredExtraConfig;
+            _file = "structuredExtraConfig";
+          }
+        ] ++ structuredConfigFromPatches;
       }).config;
 
       structuredConfig = moduleStructuredConfig.settings;
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) (basicArgs // {
-    inherit modDirVersion kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
-    pos = builtins.unsafeGetAttrPos "version" args;
+  kernel = (callPackage ./manual-config.nix { inherit buildPackages; })
+    (basicArgs // {
+      inherit modDirVersion kernelPatches randstructSeed lib stdenv
+        extraMakeFlags extraMeta configfile;
+      pos = builtins.unsafeGetAttrPos "version" args;
 
-    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-  });
+      config = {
+        CONFIG_MODULES = "y";
+        CONFIG_FW_LOADER = "m";
+      };
+    });
 
   passthru = basicArgs // {
     features = kernelFeatures;
-    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
-    isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen
+      isHardened isLibre modDirVersion;
+    isXen = lib.warn
+      "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled."
+      true;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
       overridableKernel = finalKernel // {
         override = args:
-          lib.warn (
-            "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
-          ) overridableKernel;
+          lib.warn
+          ("override is stubbed for NixOS kernel tests, not applying changes these arguments: "
+            + toString
+            (lib.attrNames (if lib.isAttrs args then args else args { })))
+          overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ]
+    ++ kernelTests;
   };
 
   finalKernel = lib.extendDerivation true passthru kernel;

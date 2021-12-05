@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, ecos
-, joblib
-, numexpr
-, numpy
-, osqp
-, pandas
-, scikit-learn
-, scipy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, ecos, joblib, numexpr, numpy, osqp
+, pandas, scikit-learn, scipy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "scikit-survival";
@@ -22,20 +10,10 @@ buildPythonPackage rec {
     sha256 = "d3573eb1df9d516c75994a8a82108b6c7a5ca7ea8a9af60b38f3f65c3e227fa7";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    ecos
-    joblib
-    numexpr
-    numpy
-    osqp
-    pandas
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs =
+    [ ecos joblib numexpr numpy osqp pandas scikit-learn scipy ];
 
   pythonImportsCheck = [ "sksurv" ];
 

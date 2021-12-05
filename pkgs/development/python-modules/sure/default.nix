@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rednose
-, six
-, mock
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchPypi, rednose, six, mock, isPyPy }:
 
 buildPythonPackage rec {
   pname = "sure";

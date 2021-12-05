@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
-, libxkbcommon, libepoxy, at-spi2-core, dbus, libdbusmenu
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk, glib, pcre
+, libappindicator, libpthreadstubs, libXdmcp, libxkbcommon, libepoxy
+, at-spi2-core, dbus, libdbusmenu, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gromit-mpx";
@@ -17,9 +15,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
   buildInputs = [
-    gtk glib pcre libappindicator libpthreadstubs
-    libXdmcp libxkbcommon libepoxy at-spi2-core
-    dbus libdbusmenu
+    gtk
+    glib
+    pcre
+    libappindicator
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    libepoxy
+    at-spi2-core
+    dbus
+    libdbusmenu
   ];
 
   meta = with lib; {

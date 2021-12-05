@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
-, libusb1, udev }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen
+, help2man, ncurses, tecla, libusb1, udev }:
 let
   # fetch submodule
   noos = fetchFromGitHub {
@@ -23,33 +23,33 @@ in stdenv.mkDerivation rec {
   # upstream master, it will be incorporated into the next release. The patch
   # fixes a (well-justified) compiler warning which breaks the build because
   # we compile with -Werror.
-  patches = [ (fetchpatch {
-    url = "https://github.com/Nuand/bladeRF/commit/163425d48a3b7d8c100d7295220d3648c050d0dd.patch";
-    sha256 = "1swsymlyxm3yk2k8l71z1fv0a5k2rmab02f0c7xkrvk683mq6yxw";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url =
+        "https://github.com/Nuand/bladeRF/commit/163425d48a3b7d8c100d7295220d3648c050d0dd.patch";
+      sha256 = "1swsymlyxm3yk2k8l71z1fv0a5k2rmab02f0c7xkrvk683mq6yxw";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config git doxygen help2man ];
   # ncurses used due to https://github.com/Nuand/bladeRF/blob/ab4fc672c8bab4f8be34e8917d3f241b1d52d0b8/host/utilities/bladeRF-cli/CMakeLists.txt#L208
-  buildInputs = [ tecla libusb1 ]
-    ++ lib.optionals stdenv.isLinux [ udev ]
+  buildInputs = [ tecla libusb1 ] ++ lib.optionals stdenv.isLinux [ udev ]
     ++ lib.optionals stdenv.isDarwin [ ncurses ];
-
 
   postUnpack = ''
     cp -r ${noos}/* source/thirdparty/analogdevicesinc/no-OS/
   '';
 
   # Fixup shebang
-  prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
+  prePatch =
+    "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
 
   # Let us avoid nettools as a dependency.
   postPatch = ''
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
-  cmakeFlags = [
-    "-DBUILD_DOCUMENTATION=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  cmakeFlags = [ "-DBUILD_DOCUMENTATION=ON" ] ++ lib.optionals stdenv.isLinux [
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
     "-DINSTALL_UDEV_RULES=ON"
     "-DBLADERF_GROUP=bladerf"

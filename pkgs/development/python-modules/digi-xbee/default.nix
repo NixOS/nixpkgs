@@ -34,7 +34,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python library to interact with Digi International's XBee radio frequency modules";
+    description =
+      "Python library to interact with Digi International's XBee radio frequency modules";
     homepage = "https://github.com/digidotcom/xbee-python";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jefflabonte ];

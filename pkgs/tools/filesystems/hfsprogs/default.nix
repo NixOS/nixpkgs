@@ -1,17 +1,22 @@
 { lib, stdenv, fetchurl, openssl, libbsd }:
 
-let version = "332.25";
-    package_name = "hfsprogs"; in
-stdenv.mkDerivation {
+let
+  version = "332.25";
+  package_name = "hfsprogs";
+in stdenv.mkDerivation {
   name = "${package_name}-${version}";
   srcs = [
     (fetchurl {
-      url = "http://ftp.de.debian.org/debian/pool/main/h/hfsprogs/${package_name}_${version}-11.debian.tar.gz";
-      sha256 = "62d9b8599c66ebffbc57ce5d776e20b41341130d9b27341d63bda08460ebde7c";
+      url =
+        "http://ftp.de.debian.org/debian/pool/main/h/hfsprogs/${package_name}_${version}-11.debian.tar.gz";
+      sha256 =
+        "62d9b8599c66ebffbc57ce5d776e20b41341130d9b27341d63bda08460ebde7c";
     })
     (fetchurl {
-      url = "https://opensource.apple.com/tarballs/diskdev_cmds/diskdev_cmds-${version}.tar.gz";
-      sha256 = "74c9aeca899ed7f4bf155c65fc45bf0f250c0f6d57360ea953b1d536d9aa45e6";
+      url =
+        "https://opensource.apple.com/tarballs/diskdev_cmds/diskdev_cmds-${version}.tar.gz";
+      sha256 =
+        "74c9aeca899ed7f4bf155c65fc45bf0f250c0f6d57360ea953b1d536d9aa45e6";
     })
   ];
 

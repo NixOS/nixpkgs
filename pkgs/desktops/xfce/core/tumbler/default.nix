@@ -1,12 +1,5 @@
-{ mkXfceDerivation
-, ffmpegthumbnailer
-, gdk-pixbuf
-, glib
-, freetype
-, libgsf
-, poppler
-, gst_all_1
-}:
+{ mkXfceDerivation, ffmpegthumbnailer, gdk-pixbuf, glib, freetype, libgsf
+, poppler, gst_all_1 }:
 
 # TODO: add libopenraw
 
@@ -32,7 +25,5 @@ mkXfceDerivation {
     wrapProgram $out/lib/tumbler-1/tumblerd "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = {
-    description = "A D-Bus thumbnailer service";
-  };
+  meta = { description = "A D-Bus thumbnailer service"; };
 }

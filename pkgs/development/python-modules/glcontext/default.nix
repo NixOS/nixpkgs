@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, libGL
-, libX11
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, libGL, libX11 }:
 
 buildPythonPackage rec {
   pname = "glcontext";

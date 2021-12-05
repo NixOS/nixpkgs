@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
-  gettext, glib, portaudio }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio
+, curl, gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
   pname = "opencpn-unstable";
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ gtk2 wxGTK30 libpulseaudio curl gettext
-                  glib portaudio ];
+  buildInputs = [ gtk2 wxGTK30 libpulseaudio curl gettext glib portaudio ];
 
   cmakeFlags = [
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"

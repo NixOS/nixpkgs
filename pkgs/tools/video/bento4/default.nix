@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "bento4";
   version = "1.6.0-639";

@@ -1,25 +1,6 @@
-{ lib
-, buildPythonPackage
-, capstone
-, crytic-compile
-, fetchFromGitHub
-, intervaltree
-, ply
-, prettytable
-, protobuf
-, pyelftools
-, pyevmasm
-, pysha3
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rlp
-, stdenv
-, unicorn
-, wasm
-, yices
-, z3
-}:
+{ lib, buildPythonPackage, capstone, crytic-compile, fetchFromGitHub
+, intervaltree, ply, prettytable, protobuf, pyelftools, pyevmasm, pysha3
+, pytestCheckHook, pythonOlder, pyyaml, rlp, stdenv, unicorn, wasm, yices, z3 }:
 
 buildPythonPackage rec {
   pname = "manticore";
@@ -46,20 +27,14 @@ buildPythonPackage rec {
     pyyaml
     rlp
     wasm
-  ] ++ lib.optionals (stdenv.isLinux) [
-    capstone
-    pyelftools
-    unicorn
-  ];
+  ] ++ lib.optionals (stdenv.isLinux) [ capstone pyelftools unicorn ];
 
   # Python API is not used in the code, only z3 from PATH
   postPatch = ''
     sed -ie s/z3-solver// setup.py
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH=${yices}/bin:${z3}/bin:$PATH
@@ -117,14 +92,14 @@ buildPythonPackage rec {
     "test_integration_resume"
   ];
 
-  pythonImportsCheck = [
-    "manticore"
-  ];
+  pythonImportsCheck = [ "manticore" ];
 
   meta = with lib; {
-    description = "Symbolic execution tool for analysis of smart contracts and binaries";
+    description =
+      "Symbolic execution tool for analysis of smart contracts and binaries";
     homepage = "https://github.com/trailofbits/manticore";
-    changelog = "https://github.com/trailofbits/manticore/releases/tag/${version}";
+    changelog =
+      "https://github.com/trailofbits/manticore/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];

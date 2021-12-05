@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ luajit openssl perl ];
 
-  makeFlags = [ "WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}" ];
+  makeFlags =
+    [ "WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}" ];
 
   preBuild = ''
     for f in src/*.h; do

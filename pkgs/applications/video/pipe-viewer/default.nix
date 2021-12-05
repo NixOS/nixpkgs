@@ -1,42 +1,28 @@
-{ lib
-, fetchFromGitHub
-, perl
-, buildPerlModule
-, makeWrapper
-, wrapGAppsHook
-, withGtk3 ? false
-, ffmpeg
-, gtk3
-, wget
-, xdg-utils
-, youtube-dl
-, yt-dlp
-, TestPod
-, Gtk3
-}:
+{ lib, fetchFromGitHub, perl, buildPerlModule, makeWrapper, wrapGAppsHook
+, withGtk3 ? false, ffmpeg, gtk3, wget, xdg-utils, youtube-dl, yt-dlp, TestPod
+, Gtk3 }:
 let
-  perlEnv = perl.withPackages (ps: with ps; [
-    AnyURIEscape
-    DataDump
-    Encode
-    FilePath
-    GetoptLong
-    HTTPMessage
-    JSON
-    JSONXS
-    LWPProtocolHttps
-    LWPUserAgentCached
-    Memoize
-    PathTools
-    ScalarListUtils
-    TermReadLineGnu
-    TextParsewords
-    UnicodeLineBreak
-  ] ++ lib.optionals withGtk3 [
-    FileShareDir
-  ]);
-in
-buildPerlModule rec {
+  perlEnv = perl.withPackages (ps:
+    with ps;
+    [
+      AnyURIEscape
+      DataDump
+      Encode
+      FilePath
+      GetoptLong
+      HTTPMessage
+      JSON
+      JSONXS
+      LWPProtocolHttps
+      LWPUserAgentCached
+      Memoize
+      PathTools
+      ScalarListUtils
+      TermReadLineGnu
+      TextParsewords
+      UnicodeLineBreak
+    ] ++ lib.optionals withGtk3 [ FileShareDir ]);
+in buildPerlModule rec {
   pname = "pipe-viewer";
   version = "0.1.4";
 
@@ -50,8 +36,10 @@ buildPerlModule rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals withGtk3 [ wrapGAppsHook ];
 
-  buildInputs = [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook to work correctly
+  buildInputs = [
+    perlEnv
+  ]
+  # Can't be in perlEnv for wrapGAppsHook to work correctly
     ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule
@@ -63,9 +51,7 @@ buildPerlModule rec {
     substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
   '';
 
-  checkInputs = [
-    TestPod
-  ];
+  checkInputs = [ TestPod ];
 
   dontWrapGApps = true;
   postFixup = ''
@@ -73,7 +59,9 @@ buildPerlModule rec {
       --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}"
   '' + lib.optionalString withGtk3 ''
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget xdg-utils youtube-dl yt-dlp ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [ ffmpeg wget xdg-utils youtube-dl yt-dlp ]
+      }"
   '';
 
   meta = with lib; {

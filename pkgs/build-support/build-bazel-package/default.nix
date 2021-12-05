@@ -1,22 +1,10 @@
-{ stdenv
-, bazel
-, cacert
-, lib
-}:
+{ stdenv, bazel, cacert, lib }:
 
-let
-  bazelPkg = bazel;
-in
+let bazelPkg = bazel;
 
-args@{
-  name ? "${args.pname}-${args.version}"
-, bazel ? bazelPkg
-, bazelFlags ? []
-, bazelBuildFlags ? []
-, bazelFetchFlags ? []
-, bazelTarget
-, buildAttrs
-, fetchAttrs
+in args@{ name ? "${args.pname}-${args.version}", bazel ? bazelPkg
+, bazelFlags ? [ ], bazelBuildFlags ? [ ], bazelFetchFlags ? [ ], bazelTarget
+, buildAttrs, fetchAttrs
 
 # Newer versions of Bazel are moving away from built-in rules_cc and instead
 # allow fetching it as an external dependency in a WORKSPACE file[1]. If
@@ -27,24 +15,20 @@ args@{
 # project depends on it via an external dependency.
 #
 # [1]: https://github.com/bazelbuild/rules_cc
-, removeRulesCC ? true
-, removeLocalConfigCc ? true
-, removeLocal ? true
+, removeRulesCC ? true, removeLocalConfigCc ? true, removeLocal ? true
 
-# Use build --nobuild instead of fetch. This allows fetching the dependencies
-# required for the build as configured, rather than fetching all the dependencies
-# which may not work in some situations (e.g. Java code which ends up relying on
-# Debian-specific /usr/share/java paths, but doesn't in the configured build).
+  # Use build --nobuild instead of fetch. This allows fetching the dependencies
+  # required for the build as configured, rather than fetching all the dependencies
+  # which may not work in some situations (e.g. Java code which ends up relying on
+  # Debian-specific /usr/share/java paths, but doesn't in the configured build).
 , fetchConfigured ? true
 
-# Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
-# NIX_LDFLAGS. This is necessary when using a custom toolchain which
-# Bazel wants all headers / libraries to come from, like when using
-# CROSSTOOL. Weirdly, we can still get the flags through the wrapped
-# compiler.
-, dontAddBazelOpts ? false
-, ...
-}:
+  # Don’t add Bazel --copt and --linkopt from NIX_CFLAGS_COMPILE /
+  # NIX_LDFLAGS. This is necessary when using a custom toolchain which
+  # Bazel wants all headers / libraries to come from, like when using
+  # CROSSTOOL. Weirdly, we can still get the flags through the wrapped
+  # compiler.
+, dontAddBazelOpts ? false, ... }:
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
@@ -60,7 +44,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
+    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [ ] ++ [ bazel ];
 
     preHook = fFetchAttrs.preHook or "" + ''
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
@@ -106,10 +90,19 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
-      ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
+      ${if removeRulesCC then
+        "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}"
+      else
+        ""}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}" else ""}
-      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}" else ""}
+      ${if removeLocalConfigCc then
+        "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}"
+      else
+        ""}
+      ${if removeLocal then
+        "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}"
+      else
+        ""}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
@@ -144,13 +137,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
     '';
 
     dontFixup = true;
-    allowedRequisites = [];
+    allowedRequisites = [ ];
 
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ]
+    ++ [ (bazel.override { enableNixHacks = true; }) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"

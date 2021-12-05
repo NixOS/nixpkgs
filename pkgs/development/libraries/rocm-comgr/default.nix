@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld
+, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
     "-DLLD_INCLUDE_DIRS=${lld.src}/include"
-    "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
+    ''-DLLVM_TARGETS_TO_BUILD="AMDGPU;X86"''
   ];
 
   # The comgr build tends to link against the static LLVM libraries
@@ -45,7 +46,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "APIs for compiling and inspecting AMDGPU code objects";
-    homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
+    homepage =
+      "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;

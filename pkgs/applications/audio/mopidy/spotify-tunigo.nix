@@ -16,7 +16,8 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Mopidy extension for providing the browse feature of Spotify";
+    description =
+      "Mopidy extension for providing the browse feature of Spotify";
     license = licenses.asl20;
     maintainers = [ maintainers.spwhitt ];
   };

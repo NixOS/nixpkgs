@@ -1,4 +1,5 @@
-{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
+{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl
+, makeDesktopItem }:
 let
   desktopItem = makeDesktopItem {
     name = "Write";
@@ -9,8 +10,7 @@ let
     genericName = "Write";
     categories = "Office;Graphics";
   };
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "write_stylus";
   version = "300";
 
@@ -37,12 +37,12 @@ mkDerivation rec {
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [
-      qtbase            # libQt5PrintSupport.so.5
-      qtsvg             # libQt5Svg.so.5
-      stdenv.cc.cc.lib  # libstdc++.so.6
-      libglvnd          # libGL.so.1
-      libX11            # libX11.so.6
-      libXi             # libXi.so.6
+      qtbase # libQt5PrintSupport.so.5
+      qtsvg # libQt5Svg.so.5
+      stdenv.cc.cc.lib # libstdc++.so.6
+      libglvnd # libGL.so.1
+      libX11 # libX11.so.6
+      libXi # libXi.so.6
     ];
   in ''
     patchelf \

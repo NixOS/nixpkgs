@@ -1,44 +1,15 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, arrow
-, nest-asyncio
-, qiskit-terra
-, requests
-, requests_ntlm
-, websocket-client
-  # Visualization inputs
-, withVisualization ? true
-, ipython
-, ipyvuetify
-, ipywidgets
-, matplotlib
-, plotly
-, pyperclip
-, seaborn
-  # check inputs
-, pytestCheckHook
-, nbconvert
-, nbformat
-, pproxy
-, qiskit-aer
-, websockets
-, vcrpy
-}:
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub, arrow, nest-asyncio
+, qiskit-terra, requests, requests_ntlm, websocket-client
+# Visualization inputs
+, withVisualization ? true, ipython, ipyvuetify, ipywidgets, matplotlib, plotly
+, pyperclip, seaborn
+# check inputs
+, pytestCheckHook, nbconvert, nbformat, pproxy, qiskit-aer, websockets, vcrpy }:
 
 let
-  visualizationPackages = [
-    ipython
-    ipyvuetify
-    ipywidgets
-    matplotlib
-    plotly
-    pyperclip
-    seaborn
-  ];
-in
-buildPythonPackage rec {
+  visualizationPackages =
+    [ ipython ipyvuetify ipywidgets matplotlib plotly pyperclip seaborn ];
+in buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
   version = "0.18.1";
 
@@ -51,29 +22,18 @@ buildPythonPackage rec {
     sha256 = "sha256-rySSCyI+62G7kL1ZRtjX1WeWj3LPXECvrlXAcIDINF4=";
   };
 
-  propagatedBuildInputs = [
-    arrow
-    nest-asyncio
-    qiskit-terra
-    requests
-    requests_ntlm
-    websocket-client
-  ] ++ lib.optionals withVisualization visualizationPackages;
+  propagatedBuildInputs =
+    [ arrow nest-asyncio qiskit-terra requests requests_ntlm websocket-client ]
+    ++ lib.optionals withVisualization visualizationPackages;
 
   postPatch = ''
     substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
   '';
 
   # Most tests require credentials to run on IBMQ
-  checkInputs = [
-    pytestCheckHook
-    nbconvert
-    nbformat
-    pproxy
-    qiskit-aer
-    vcrpy
-    websockets
-  ] ++ lib.optionals (!withVisualization) visualizationPackages;
+  checkInputs =
+    [ pytestCheckHook nbconvert nbformat pproxy qiskit-aer vcrpy websockets ]
+    ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
   # These disabled tests require internet connection, aren't skipped elsewhere
@@ -95,7 +55,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
+    description =
+      "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;

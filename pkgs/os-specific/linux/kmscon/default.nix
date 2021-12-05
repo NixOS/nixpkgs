@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtsm
-, systemd
-, libxkbcommon
-, libdrm
-, libGLU, libGL
-, pango
-, pixman
-, pkg-config
-, docbook_xsl
-, libxslt
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtsm, systemd, libxkbcommon
+, libdrm, libGLU, libGL, pango, pixman, pkg-config, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "kmscon";
@@ -24,22 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q62kjsvy2iwy8adfiygx2bfwlh83rphgxbis95ycspqidg9py87";
   };
 
-  buildInputs = [
-    libGLU libGL
-    libdrm
-    libtsm
-    libxkbcommon
-    libxslt
-    pango
-    pixman
-    systemd
-  ];
+  buildInputs =
+    [ libGLU libGL libdrm libtsm libxkbcommon libxslt pango pixman systemd ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xsl
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl pkg-config ];
 
   configureFlags = [
     "--enable-multi-seat"

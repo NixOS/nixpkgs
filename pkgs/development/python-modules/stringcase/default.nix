@@ -1,5 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib
-}:
+{ buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
   pname = "stringcase";
@@ -15,7 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/okunishinishi/python-stringcase";
-    description = "Convert string cases between camel case, pascal case, snake case etc…";
+    description =
+      "Convert string cases between camel case, pascal case, snake case etc…";
     license = licenses.mit;
     maintainers = with maintainers; [ alunduil ];
   };

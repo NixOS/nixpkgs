@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyramid
-}:
+{ lib, buildPythonPackage, fetchPypi, pyramid }:
 
 buildPythonPackage rec {
   pname = "pyramid_multiauth";
@@ -16,9 +12,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyramid ];
 
   meta = with lib; {
-    description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
+    description =
+      "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
     homepage = "https://github.com/mozilla-services/pyramid_multiauth";
     license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -16,11 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wzQtQuZxOcFluLEo0DO1yWiToTrF8lkzGQMVIU6HqUg=";
   };
 
-  configureFlags = [
-    "CPPFLAGS=-DNDEBUG"
-    "CFLAGS=-O3"
-    "CXXFLAGS=-O3"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  configureFlags = [ "CPPFLAGS=-DNDEBUG" "CFLAGS=-O3" "CXXFLAGS=-O3" ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "CXX=${stdenv.cc.targetPrefix}c++";
 
   setupHook = ./lzip-setup-hook.sh;

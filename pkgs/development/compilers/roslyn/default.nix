@@ -1,56 +1,47 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, mono
-, dotnet-sdk_5
-, makeWrapper
-, dotnetPackages
-, unzip
-, writeText
-, symlinkJoin
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, mono, dotnet-sdk_5, makeWrapper
+, dotnetPackages, unzip, writeText, symlinkJoin }:
 
 let
 
-  deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+  deps = map (package:
+    stdenv.mkDerivation (with package; {
+      pname = name;
+      inherit version src;
 
-    buildInputs = [ unzip ];
-    unpackPhase = ''
-      unzip -o $src
-      chmod -R u+r .
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
+      buildInputs = [ unzip ];
+      unpackPhase = ''
+        unzip -o $src
+        chmod -R u+r .
+        function traverseRename () {
+          for e in *
+          do
+            t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
+            [ "$t" != "$e" ] && mv -vn "$e" "$t"
+            if [ -d "$t" ]
+            then
+              cd "$t"
+              traverseRename
+              cd ..
+            fi
+          done
+        }
 
-      traverseRename
-    '';
+        traverseRename
+      '';
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
-      mkdir -p $package
-      cp -r . $package
-      echo "{}" > $package/.nupkg.metadata
+        package=$out/lib/dotnet/${name}/${version}
+        mkdir -p $package
+        cp -r . $package
+        echo "{}" > $package/.nupkg.metadata
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    dontFixup = true;
-  }))
-    (import ./deps.nix { inherit fetchurl; });
+      dontFixup = true;
+    })) (import ./deps.nix { inherit fetchurl; });
 
   nuget-config = writeText "NuGet.Config" ''
     <?xml version="1.0" encoding="utf-8"?>
@@ -61,7 +52,10 @@ let
     </configuration>
   '';
 
-  packages = symlinkJoin { name = "roslyn-deps"; paths = deps; };
+  packages = symlinkJoin {
+    name = "roslyn-deps";
+    paths = deps;
+  };
 
   packageVersion = "3.10.0";
 

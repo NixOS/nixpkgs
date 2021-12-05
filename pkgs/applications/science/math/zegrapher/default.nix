@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, boost }:
+{ lib, stdenv, fetchFromGitHub, qmake, wrapQtAppsHook, boost }:
 
 stdenv.mkDerivation rec {
   pname = "zegrapher";
@@ -15,13 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OSQXm0gDI1zM2MBM4iiY43dthJcAZJkprklolsNMEvk=";
   };
 
-  nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
-  ];
-  buildInputs = [
-    boost
-  ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  buildInputs = [ boost ];
 
   meta = with lib; {
     homepage = "https://zegrapher.com/";

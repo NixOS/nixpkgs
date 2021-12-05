@@ -16,7 +16,8 @@ buildGoPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/takanorig/mqtt-bench/pull/13.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/takanorig/mqtt-bench/pull/13.patch";
       name = "mqtt-paho-changes.patch";
       sha256 = "17c8ajrp5dmbsasj6njxrlhy0x08b65fignzm3yccqbhb4ijcvha";
     })

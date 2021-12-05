@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "judy";
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://judy.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
-    description = "State-of-the-art C library that implements a sparse dynamic array";
+    description =
+      "State-of-the-art C library that implements a sparse dynamic array";
     platforms = lib.platforms.unix;
   };
 }

@@ -3,15 +3,19 @@
 with lib;
 
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-    else throwSystem;
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "x64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "x86"
+  else
+    throwSystem;
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "0zy0jzvdqccfsg42m2lq1rj8r2c4iypd1h9vxl9824cbl92yim37"
-    else if stdenv.hostPlatform.system == "i686-linux" then "03ml9xv19km99f0z7fpr21b1zkxvw7q39kjzd8wpb2pds51wnc62"
-    else throwSystem;
+  sha256 = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "0zy0jzvdqccfsg42m2lq1rj8r2c4iypd1h9vxl9824cbl92yim37"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "03ml9xv19km99f0z7fpr21b1zkxvw7q39kjzd8wpb2pds51wnc62"
+  else
+    throwSystem;
   libraries = lib.makeLibraryPath [ stdenv.cc.cc ];
 
 in stdenv.mkDerivation rec {
@@ -36,7 +40,8 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
+    description =
+      "A hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
     homepage = "https://secure.logmein.com/products/hamachi/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ abbradar ];

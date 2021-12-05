@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, click, click-datetime, deprecation
-, pytest, voluptuous }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, click, click-datetime
+, deprecation, pytest, voluptuous }:
 
 buildPythonPackage rec {
   pname = "pyHS100";
@@ -14,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "0z98hzvkp6jmllyd4x4y0f5n6nnxrizw6g5l2clxdn93mifjavp0";
   };
 
-  propagatedBuildInputs = [
-    click
-    click-datetime
-    deprecation
-  ];
+  propagatedBuildInputs = [ click click-datetime deprecation ];
 
-  checkInputs = [
-    pytest
-    voluptuous
-  ];
+  checkInputs = [ pytest voluptuous ];
 
   checkPhase = ''
     py.test pyHS100

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, python3, alsa-utils, timidity }:
 
-  stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "20.12";
   pname = "mma";
 
@@ -61,8 +61,9 @@
   '';
 
   meta = {
-    description = "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
-    homepage =  "https://www.mellowood.ca/mma/index.html";
+    description =
+      "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
+    homepage = "https://www.mellowood.ca/mma/index.html";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkg-config
-, SDL, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkg-config, SDL
+, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
 
 let
 
@@ -17,9 +17,7 @@ let
     export GARGLKINI="$out/etc/garglk.ini"
   '');
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gargoyle";
   version = "2019.1.1";
 
@@ -30,31 +28,32 @@ stdenv.mkDerivation rec {
     sha256 = "0w54avmbp4i4zps2rb4acmpa641s6wvwbrln4vbdhcz97fx48nzz";
   };
 
-  nativeBuildInputs = [ jam pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ jam pkg-config ]
+    ++ lib.optional stdenv.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
     ++ lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
-  installPhase =
-  if stdenv.isDarwin then
-  (substituteAll {
-    inherit (stdenv) shell;
-    isExecutable = true;
-    src = ./darwin.sh;
-  })
-  else jamenv + ''
-    jam -j$NIX_BUILD_CORES install
-    mkdir -p "$out/bin"
-    ln -s ../libexec/gargoyle/gargoyle "$out/bin"
-    mkdir -p "$out/etc"
-    cp garglk/garglk.ini "$out/etc"
-    mkdir -p "$out/share/applications"
-    cp garglk/gargoyle.desktop "$out/share/applications"
-    mkdir -p "$out/share/icons/hicolor/32x32/apps"
-    cp garglk/gargoyle-house.png "$out/share/icons/hicolor/32x32/apps"
-  '';
+  installPhase = if stdenv.isDarwin then
+    (substituteAll {
+      inherit (stdenv) shell;
+      isExecutable = true;
+      src = ./darwin.sh;
+    })
+  else
+    jamenv + ''
+      jam -j$NIX_BUILD_CORES install
+      mkdir -p "$out/bin"
+      ln -s ../libexec/gargoyle/gargoyle "$out/bin"
+      mkdir -p "$out/etc"
+      cp garglk/garglk.ini "$out/etc"
+      mkdir -p "$out/share/applications"
+      cp garglk/gargoyle.desktop "$out/share/applications"
+      mkdir -p "$out/share/icons/hicolor/32x32/apps"
+      cp garglk/gargoyle-house.png "$out/share/icons/hicolor/32x32/apps"
+    '';
 
   enableParallelBuilding = true;
 

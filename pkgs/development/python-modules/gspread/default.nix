@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, google-auth
-, google-auth-oauthlib
-}:
+{ lib, buildPythonPackage, fetchPypi, requests, google-auth
+, google-auth-oauthlib }:
 
 buildPythonPackage rec {
   version = "4.0.1";

@@ -1,10 +1,5 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gnome-themes-extra
-, gtk-engine-murrine
-, gtk_engines
-}:
+{ stdenv, fetchFromGitHub, lib, gnome-themes-extra, gtk-engine-murrine
+, gtk_engines }:
 
 stdenv.mkDerivation rec {
   pname = "rose-pine-gtk-theme";

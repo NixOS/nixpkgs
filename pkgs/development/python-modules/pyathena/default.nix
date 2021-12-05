@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, botocore
-, pandas
-, tenacity
-}:
+{ lib, buildPythonPackage, fetchPypi, boto3, botocore, pandas, tenacity }:
 
 buildPythonPackage rec {
   pname = "pyathena";
@@ -22,12 +15,7 @@ buildPythonPackage rec {
   # https://github.com/laughingman7743/PyAthena/#testing
   doCheck = false;
 
-  propagatedBuildInputs = [
-    boto3
-    botocore
-    pandas
-    tenacity
-  ];
+  propagatedBuildInputs = [ boto3 botocore pandas tenacity ];
 
   meta = with lib; {
     homepage = "https://github.com/laughingman7743/PyAthena/";

@@ -1,13 +1,6 @@
-{ lib
-, fetchPypi
-, click
-, pyyaml
-, buildPythonPackage
-, isPy3k
-, fetchpatch
-}:
+{ lib, fetchPypi, click, pyyaml, buildPythonPackage, isPy3k, fetchpatch }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   version = "2.1.0";
   pname = "panflute";
 
@@ -21,7 +14,8 @@ buildPythonPackage rec{
     # Upstream has relaxed the version constaints for the click dependency
     # but there hasn't been a release since then
     (fetchpatch {
-      url = "https://github.com/sergiocorreia/panflute/commit/dee6c716a73072a968d67f8638a61de44025d8de.patch";
+      url =
+        "https://github.com/sergiocorreia/panflute/commit/dee6c716a73072a968d67f8638a61de44025d8de.patch";
       sha256 = "sha256-Kj/NTcXsSkevpfr8OwoIQi0p6ChXDM6YgYDPNHJtJZo=";
     })
   ];
@@ -29,7 +23,8 @@ buildPythonPackage rec{
   propagatedBuildInputs = [ click pyyaml ];
 
   meta = with lib; {
-    description = "A Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
+    description =
+      "A Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
     homepage = "http://scorreia.com/software/panflute";
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];

@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, gettext, kdoctools,
-  karchive, kconfig, kio
-}:
+{ mkDerivation, lib, extra-cmake-modules, gettext, kdoctools, karchive, kconfig
+, kio }:
 
 mkDerivation {
   pname = "ksystemlog";

@@ -1,15 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, poetry-core
+, pydantic, pytest-asyncio, pytestCheckHook, pythonOlder, yarl }:
 
 buildPythonPackage rec {
   pname = "vehicle";
@@ -25,21 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-3DkfS8gx3C1/Vj8+IE7uxZ5i0cKJk0mJpBWQqAgb2Xo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp pydantic yarl ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -48,9 +28,7 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [
-    "vehicle"
-  ];
+  pythonImportsCheck = [ "vehicle" ];
 
   meta = with lib; {
     description = "Python client providing RDW vehicle information";

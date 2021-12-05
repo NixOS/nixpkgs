@@ -1,11 +1,6 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, pkg-config, openssl, fuse, libxml2
-, cabextract ? null
-, cdrkit ? null
-, mtools ? null
-, ntfs3g ? null
-, syslinux ? null
-}:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, openssl, fuse, libxml2
+, cabextract ? null, cdrkit ? null, mtools ? null, ntfs3g ? null
+, syslinux ? null }:
 
 stdenv.mkDerivation rec {
   version = "1.13.4";
@@ -24,13 +19,13 @@ stdenv.mkDerivation rec {
       --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
-  postInstall = let
-    path = lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
-  in ''
-    for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : ${path}
-    done
-  '';
+  postInstall =
+    let path = lib.makeBinPath [ cabextract cdrkit mtools ntfs3g syslinux ];
+    in ''
+      for prog in $out/bin/*; do
+        wrapProgram $prog --prefix PATH : ${path}
+      done
+    '';
 
   doCheck = true;
 
@@ -40,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wimlib.net";
-    description = "A library and program to extract, create, and modify WIM files";
+    description =
+      "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;
     maintainers = with maintainers; [ andir ];
     license = with licenses; [ gpl3 lgpl3 cc0 ];

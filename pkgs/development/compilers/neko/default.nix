@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, boehmgc, zlib, sqlite, pcre, cmake, pkg-config
-, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
-}:
+, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2
+, libpthreadstubs }:
 
 stdenv.mkDerivation rec {
   pname = "neko";
@@ -14,12 +14,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config git ];
-  buildInputs =
-    [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
-      libmysqlclient mbedtls openssl libpthreadstubs ]
-      ++ lib.optional stdenv.isLinux gtk2
-      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
-                                                pkgs.darwin.apple_sdk.frameworks.Carbon];
+  buildInputs = [
+    boehmgc
+    zlib
+    sqlite
+    pcre
+    apacheHttpd
+    apr
+    aprutil
+    libmysqlclient
+    mbedtls
+    openssl
+    libpthreadstubs
+  ] ++ lib.optional stdenv.isLinux gtk2 ++ lib.optionals stdenv.isDarwin [
+    pkgs.darwin.apple_sdk.frameworks.Security
+    pkgs.darwin.apple_sdk.frameworks.Carbon
+  ];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
 
   installCheckPhase = ''
@@ -35,12 +45,12 @@ stdenv.mkDerivation rec {
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE
-      licenses.gpl2Plus    # nekoc, nekoml
-      licenses.lgpl21Plus  # mysql.ndll
-      licenses.bsd3        # regexp.ndll
-      licenses.zlib        # zlib.ndll
-      licenses.asl20       # mod_neko, mod_tora, mbedTLS
-      licenses.mit         # overall, other libs
+      licenses.gpl2Plus # nekoc, nekoml
+      licenses.lgpl21Plus # mysql.ndll
+      licenses.bsd3 # regexp.ndll
+      licenses.zlib # zlib.ndll
+      licenses.asl20 # mod_neko, mod_tora, mbedTLS
+      licenses.mit # overall, other libs
       "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
     ];
     maintainers = [ maintainers.marcweber maintainers.locallycompact ];

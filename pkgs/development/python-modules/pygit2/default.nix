@@ -1,4 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2
+, cached-property, pytestCheckHook, cffi, cacert }:
 
 buildPythonPackage rec {
   pname = "pygit2";
@@ -13,13 +14,9 @@ buildPythonPackage rec {
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  buildInputs = [
-    libgit2
-  ];
+  buildInputs = [ libgit2 ];
 
-  propagatedBuildInputs = [
-    cached-property
-  ] ++ lib.optional (!isPyPy) cffi;
+  propagatedBuildInputs = [ cached-property ] ++ lib.optional (!isPyPy) cffi;
 
   propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
 

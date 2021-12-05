@@ -11,13 +11,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gamin ];
 
-  patches = [./unused-variables.debian.patch];
+  patches = [ ./unused-variables.debian.patch ];
 
   doCheck = true;
 
   meta = {
     homepage = "https://www.nongnu.org/fileschanged/";
-    description = "A command-line utility that reports when files have been altered";
+    description =
+      "A command-line utility that reports when files have been altered";
     license = lib.licenses.gpl3Plus;
 
     longDescription = ''

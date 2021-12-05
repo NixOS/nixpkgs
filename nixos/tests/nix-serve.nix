@@ -1,16 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-{
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nix-serve";
   machine = { pkgs, ... }: {
     services.nix-serve.enable = true;
-    environment.systemPackages = [
-      pkgs.hello
-    ];
+    environment.systemPackages = [ pkgs.hello ];
   };
   testScript = let
-    pkgHash = builtins.head (
-      builtins.match "${builtins.storeDir}/([^-]+).+" (toString pkgs.hello)
-    );
+    pkgHash = builtins.head
+      (builtins.match "${builtins.storeDir}/([^-]+).+" (toString pkgs.hello));
   in ''
     start_all()
     machine.wait_for_unit("nix-serve.service")

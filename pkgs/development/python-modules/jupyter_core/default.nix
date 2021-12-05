@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, ipython
-, traitlets
-, glibcLocales
-, mock
-, pytest
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, ipython, traitlets, glibcLocales
+, mock, pytest, nose }:
 
 buildPythonPackage rec {
   pname = "jupyter_core";
@@ -30,7 +21,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Jupyter core package. A base package on which Jupyter projects rely";
+    description =
+      "Jupyter core package. A base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glibc
-, bison, curl, flex, gperftools, jansson, jemalloc, libkrb5, lua, libmysqlclient
-, ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
-, libaio, libedit, libtool, libui, libuuid, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glibc, bison, curl, flex
+, gperftools, jansson, jemalloc, libkrb5, lua, libmysqlclient, ncurses, openssl
+, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl, libaio, libedit, libtool, libui
+, libuuid, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "maxscale";
@@ -18,9 +17,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    bison curl flex gperftools jansson jemalloc libkrb5 lua libmysqlclient
-    ncurses openssl pcre pcre2 perl rabbitmq-c sqlite tcl
-    libaio libedit libtool libui libuuid zlib
+    bison
+    curl
+    flex
+    gperftools
+    jansson
+    jemalloc
+    libkrb5
+    lua
+    libmysqlclient
+    ncurses
+    openssl
+    pcre
+    pcre2
+    perl
+    rabbitmq-c
+    sqlite
+    tcl
+    libaio
+    libedit
+    libtool
+    libui
+    libuuid
+    zlib
   ];
 
   patches = [ ./getopt.patch ];
@@ -29,7 +48,7 @@ stdenv.mkDerivation rec {
     for i in `grep -l -R '#include <getopt.h>' .`; do
       substituteInPlace $i --replace "#include <getopt.h>" "#include <${glibc.dev}/include/getopt.h>"
     done
- '';
+  '';
 
   cmakeFlags = [
     "-DUSE_C99=YES"
@@ -78,11 +97,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-     description = "MaxScale database proxy extends MariaDB Server's high availability";
-     homepage = "https://mariadb.com/products/technology/maxscale";
-     license = licenses.bsl11;
-     platforms = platforms.linux;
-     maintainers = with maintainers; [ izorkin ];
-     broken = true;
- };
+    description =
+      "MaxScale database proxy extends MariaDB Server's high availability";
+    homepage = "https://mariadb.com/products/technology/maxscale";
+    license = licenses.bsl11;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ izorkin ];
+    broken = true;
+  };
 }

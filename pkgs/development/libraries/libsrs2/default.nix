@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "The next generation SRS library from the original designer of SRS";
+    description =
+      "The next generation SRS library from the original designer of SRS";
     license = with lib.licenses; [ gpl2 bsd3 ];
     homepage = "https://www.libsrs2.org/";
     platforms = lib.platforms.linux;

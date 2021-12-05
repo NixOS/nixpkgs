@@ -1,15 +1,7 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, libxml2
-, zlib
-}:
+{ lib, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib }:
 
-let
-  inherit (llvmPackages) stdenv;
-in
-stdenv.mkDerivation rec {
+let inherit (llvmPackages) stdenv;
+in stdenv.mkDerivation rec {
   pname = "zig";
   version = "0.8.1";
 
@@ -20,18 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-zMSOH8ZWcvzHRwOgGIbLO9Q6jf1P5QL5KCMD+frp+JA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.llvm.dev
-  ];
-  buildInputs = [
-    libxml2
-    zlib
-  ] ++ (with llvmPackages; [
-    libclang
-    lld
-    llvm
-  ]);
+  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
+  buildInputs = [ libxml2 zlib ] ++ (with llvmPackages; [ libclang lld llvm ]);
 
   preBuild = ''
     export HOME=$TMPDIR;
@@ -51,7 +33,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
+    broken =
+      stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
   };
 }
 

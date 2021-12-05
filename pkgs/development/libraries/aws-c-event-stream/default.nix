@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, aws-c-io, aws-checksums, s2n-tls, libexecinfo }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, aws-c-io
+, aws-checksums, s2n-tls, libexecinfo }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
@@ -16,12 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ aws-c-cal aws-c-common aws-c-io aws-checksums s2n-tls ]
     ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS:BOOL=ON" ];
 
   meta = with lib; {
-    description = "C99 implementation of the vnd.amazon.eventstream content-type";
+    description =
+      "C99 implementation of the vnd.amazon.eventstream content-type";
     homepage = "https://github.com/awslabs/aws-c-event-stream";
     license = licenses.asl20;
     platforms = platforms.unix;

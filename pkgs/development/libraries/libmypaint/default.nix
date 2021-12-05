@@ -1,14 +1,5 @@
-{ lib, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, glib
-, intltool
-, json_c
-, libtool
-, pkg-config
-, python3
-}:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, glib, intltool, json_c
+, libtool, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
@@ -23,23 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    intltool
-    libtool
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ autoconf automake intltool libtool pkg-config python3 ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
   # for libmypaint.pc
-  propagatedBuildInputs = [
-    json_c
-  ];
+  propagatedBuildInputs = [ json_c ];
 
   doCheck = true;
 
@@ -47,7 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://mypaint.org/";
-    description = "Library for making brushstrokes which is used by MyPaint and other projects";
+    description =
+      "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
     maintainers = with maintainers; [ goibhniu jtojnar ];
     platforms = platforms.unix;

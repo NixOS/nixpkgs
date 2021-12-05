@@ -1,53 +1,11 @@
-{ atk
-, cacert
-, fetchpatch
-, dbus
-, cinnamon-control-center
-, cinnamon-desktop
-, cinnamon-menus
-, cinnamon-session
-, cinnamon-translations
-, cjs
-, fetchFromGitHub
-, gdk-pixbuf
-, libgnomekbd
-, glib
-, gobject-introspection
-, gtk3
-, intltool
-, json-glib
-, callPackage
-, libsoup
-, libstartup_notification
-, libXtst
-, libXdamage
-, muffin
-, networkmanager
-, pkg-config
-, polkit
-, lib
-, stdenv
-, wrapGAppsHook
-, libxml2
-, gtk-doc
-, gnome
-, python3
-, keybinder3
-, cairo
-, xapps
-, upower
-, nemo
-, libnotify
-, accountsservice
-, gnome-online-accounts
-, glib-networking
-, pciutils
-, timezonemap
-, libnma
-, meson
-, ninja
-, gst_all_1
-}:
+{ atk, cacert, fetchpatch, dbus, cinnamon-control-center, cinnamon-desktop
+, cinnamon-menus, cinnamon-session, cinnamon-translations, cjs, fetchFromGitHub
+, gdk-pixbuf, libgnomekbd, glib, gobject-introspection, gtk3, intltool
+, json-glib, callPackage, libsoup, libstartup_notification, libXtst, libXdamage
+, muffin, networkmanager, pkg-config, polkit, lib, stdenv, wrapGAppsHook
+, libxml2, gtk-doc, gnome, python3, keybinder3, cairo, xapps, upower, nemo
+, libnotify, accountsservice, gnome-online-accounts, glib-networking, pciutils
+, timezonemap, libnma, meson, ninja, gst_all_1 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
@@ -65,14 +23,29 @@ stdenv.mkDerivation rec {
     ./libdir.patch
 
     (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/77ed66050f7df889fcb7a10b702c7b8bcdeaa130.patch";
+      url =
+        "https://github.com/linuxmint/cinnamon/commit/77ed66050f7df889fcb7a10b702c7b8bcdeaa130.patch";
       sha256 = "sha256-OegLxz6Xr/nxVwVOAd2oOY62ohZ3r6uYn1+YED5EBHQ=";
     })
   ];
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests ]))
+    (python3.withPackages (pp:
+      with pp; [
+        dbus-python
+        setproctitle
+        pygobject3
+        pycairo
+        xapp
+        pillow
+        pytz
+        tinycss2
+        python-pam
+        pexpect
+        distro
+        requests
+      ]))
     atk
     cacert
     cinnamon-control-center
@@ -113,14 +86,8 @@ stdenv.mkDerivation rec {
     glib-networking # for goa
   ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    meson
-    ninja
-    wrapGAppsHook
-    intltool
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection meson ninja wrapGAppsHook intltool gtk-doc ];
 
   # use locales from cinnamon-translations (not using --localedir because datadir is used)
   postInstall = ''
@@ -153,9 +120,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop
   '';
 
-  passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" ];
-  };
+  passthru = { providedSessions = [ "cinnamon" "cinnamon2d" ]; };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon";

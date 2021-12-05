@@ -3,8 +3,7 @@ with lib;
 let
   cfg = config.i18n.inputMethod.kime;
   yamlFormat = pkgs.formats.yaml { };
-in
-{
+in {
   options = {
     i18n.inputMethod.kime = {
       config = mkOption {
@@ -26,7 +25,7 @@ in
               };
             };
           }
-          '';
+        '';
         description = ''
           kime configuration. Refer to <link xlink:href="https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md"/> for details on supported values.
         '';
@@ -39,11 +38,12 @@ in
 
     environment.variables = {
       GTK_IM_MODULE = "kime";
-      QT_IM_MODULE  = "kime";
-      XMODIFIERS    = "@im=kime";
+      QT_IM_MODULE = "kime";
+      XMODIFIERS = "@im=kime";
     };
 
-    environment.etc."xdg/kime/config.yaml".text = replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
+    environment.etc."xdg/kime/config.yaml".text =
+      replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
   };
 }
 

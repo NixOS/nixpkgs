@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-, anki
-}:
+{ lib, fetchFromGitHub, python3, anki }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ankisyncd";
@@ -39,10 +35,7 @@ python3.pkgs.buildPythonApplication rec {
           --add-flags "$out/share/ankisyncctl.py"
   '';
 
-  checkInputs = with python3.pkgs; [
-    pytest
-    webtest
-  ];
+  checkInputs = with python3.pkgs; [ pytest webtest ];
 
   buildInputs = [ ];
 

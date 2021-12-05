@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ply
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, ply, nose }:
 
 buildPythonPackage rec {
   pname = "jmespath";
@@ -19,7 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/boto/jmespath";
-    description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
+    description =
+      "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
     license = "BSD";
   };
 

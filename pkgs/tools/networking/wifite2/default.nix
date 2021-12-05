@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
-, aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
-, hcxdumptool, pyrit, which, bully, pixiewps }:
+{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools, aircrack-ng
+, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools, hcxdumptool, pyrit
+, which, bully, pixiewps }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "2.5.7";
@@ -15,11 +15,13 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-aircrack-failing-test.patch";
+      url =
+        "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-aircrack-failing-test.patch";
       sha256 = "04qql8w27c1lqk59ghkr1n6r08jwdrb1dcam5k88szkk2bxv8yx1";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-two-failing-tests.patch";
+      url =
+        "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-two-failing-tests.patch";
       sha256 = "1sixcqz1kbkhxf38yq55pwycm54adjx22bq46dfnl44mg69nx356";
     })
   ];
@@ -40,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postFixup = let
-    sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
+    sitePackagesDir =
+      "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
   in ''
     mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
   '';

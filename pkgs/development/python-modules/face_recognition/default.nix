@@ -1,6 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, lib, flake8, pytest, glibcLocales
-}:
+, face_recognition_models, lib, flake8, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "face_recognition";
@@ -37,6 +36,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/ageitgey/face_recognition";
     maintainers = with maintainers; [ ma27 ];
-    description = "The world's simplest facial recognition api for Python and the command line";
+    description =
+      "The world's simplest facial recognition api for Python and the command line";
   };
 }

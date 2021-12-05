@@ -1,30 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, fetchurl
-, runCommand
-, fcft
-, freetype
-, pixman
-, libxkbcommon
-, fontconfig
-, wayland
-, meson
-, ninja
-, ncurses
-, scdoc
-, tllist
-, wayland-protocols
-, wayland-scanner
-, pkg-config
-, utf8proc
-, allowPgo ? true
-, python3  # for PGO
+{ stdenv, lib, fetchFromGitea, fetchurl, runCommand, fcft, freetype, pixman
+, libxkbcommon, fontconfig, wayland, meson, ninja, ncurses, scdoc, tllist
+, wayland-protocols, wayland-scanner, pkg-config, utf8proc, allowPgo ? true
+, python3 # for PGO
 # for clang stdenv check
-, foot
-, llvmPackages
-, llvmPackages_latest
-}:
+, foot, llvmPackages, llvmPackages_latest }:
 
 let
   version = "1.10.1";
@@ -39,7 +18,8 @@ let
     name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
-      url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
+      url =
+        "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
       sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
     };
 
@@ -63,12 +43,12 @@ let
       $out
   '';
 
-  compilerName =
-    if stdenv.cc.isClang
-    then "clang"
-    else if stdenv.cc.isGNU
-    then "gcc"
-    else "unknown";
+  compilerName = if stdenv.cc.isClang then
+    "clang"
+  else if stdenv.cc.isGNU then
+    "gcc"
+  else
+    "unknown";
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
@@ -89,8 +69,7 @@ let
     && compilerName != "unknown";
 
   terminfoDir = "${placeholder "terminfo"}/share/terminfo";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "foot";
   inherit version;
 
@@ -102,20 +81,10 @@ stdenv.mkDerivation rec {
     sha256 = "12n1v9by519fg40xvjf4v0g2phi08lcg0clz7rxs2i2xwlizz7nc";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    wayland-scanner
-    meson
-    ninja
-    ncurses
-    scdoc
-    pkg-config
-  ] ++ lib.optionals (compilerName == "clang") [
-    stdenv.cc.cc.libllvm.out
-  ];
+  nativeBuildInputs = [ wayland-scanner meson ninja ncurses scdoc pkg-config ]
+    ++ lib.optionals (compilerName == "clang") [ stdenv.cc.cc.libllvm.out ];
 
   buildInputs = [
     tllist
@@ -131,10 +100,7 @@ stdenv.mkDerivation rec {
 
   # recommended build flags for performance optimized foot builds
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
-  CFLAGS =
-    if !doPgo
-    then "-O3 -fno-plt"
-    else pgoCflags;
+  CFLAGS = if !doPgo then "-O3 -fno-plt" else pgoCflags;
 
   # ar with gcc plugins for lto objects
   preConfigure = ''
@@ -179,30 +145,26 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "terminfo" "themes" ];
 
   passthru.tests = {
-    clang-default-compilation = foot.override {
-      inherit (llvmPackages) stdenv;
-    };
+    clang-default-compilation =
+      foot.override { inherit (llvmPackages) stdenv; };
 
-    clang-latest-compilation = foot.override {
-      inherit (llvmPackages_latest) stdenv;
-    };
+    clang-latest-compilation =
+      foot.override { inherit (llvmPackages_latest) stdenv; };
 
-    noPgo = foot.override {
-      allowPgo = false;
-    };
+    noPgo = foot.override { allowPgo = false; };
 
     # By changing name, this will get rebuilt everytime we change version,
     # even if the hash stays the same. Consequently it'll fail if we introduce
     # a hash mismatch when updating.
-    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
-      name = "generate-alt-random-writes-${version}.py";
-    });
+    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs
+      (_: { name = "generate-alt-random-writes-${version}.py"; });
   };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
-    description = "A fast, lightweight and minimalistic Wayland terminal emulator";
+    description =
+      "A fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.linux;

@@ -31,7 +31,8 @@ in stdenv.mkDerivation rec {
       lib/svtplay_dl/tests/test_postprocess.py
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
+  makeFlags =
+    [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \
@@ -53,7 +54,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/spaam/svtplay-dl";
-    description = "Command-line tool to download videos from svtplay.se and other sites";
+    description =
+      "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
     platforms = lib.platforms.unix;
   };

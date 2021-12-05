@@ -1,6 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, isPy3k
-, opentimestamps, appdirs, GitPython, pysocks, fetchpatch, git
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, isPy3k, opentimestamps, appdirs
+, GitPython, pysocks, fetchpatch, git }:
 
 buildPythonApplication rec {
   pname = "opentimestamps-client";
@@ -19,7 +18,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];
 
   meta = {
-    description = "Command-line tool to create and verify OpenTimestamps proofs";
+    description =
+      "Command-line tool to create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/opentimestamps-client";
     license = lib.licenses.lgpl3;
   };

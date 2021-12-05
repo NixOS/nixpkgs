@@ -1,29 +1,14 @@
-{ lib
-, sqliteSupport ? true
-, postgresqlSupport ? true
-, mysqlSupport ? true
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, pkg-config
-, openssl
-, stdenv
-, Security
-, libiconv
-, sqlite
-, postgresql
-, mariadb
-, zlib
-}:
+{ lib, sqliteSupport ? true, postgresqlSupport ? true, mysqlSupport ? true
+, rustPlatform, fetchCrate, installShellFiles, pkg-config, openssl, stdenv
+, Security, libiconv, sqlite, postgresql, mariadb, zlib }:
 
-assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
+assert lib.assertMsg
+  (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
   "support for at least one database must be enabled";
 
-let
-  inherit (lib) optional optionals optionalString;
-in
+let inherit (lib) optional optionals optionalString;
 
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
   version = "1.4.1";
 
@@ -37,17 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
+  buildInputs = [ openssl ] ++ optional stdenv.isDarwin Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
-    ++ optional sqliteSupport sqlite
-    ++ optional postgresqlSupport postgresql
+    ++ optional sqliteSupport sqlite ++ optional postgresqlSupport postgresql
     ++ optionals mysqlSupport [ mariadb zlib ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = optional sqliteSupport "sqlite"
-    ++ optional postgresqlSupport "postgres"
-    ++ optional mysqlSupport "mysql";
+    ++ optional postgresqlSupport "postgres" ++ optional mysqlSupport "mysql";
 
   checkPhase = ''
     runHook preCheck
@@ -73,7 +55,8 @@ rustPlatform.buildRustPackage rec {
   NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
 
   meta = with lib; {
-    description = "Database tool for working with Rust projects that use Diesel";
+    description =
+      "Database tool for working with Rust projects that use Diesel";
     homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ ];

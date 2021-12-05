@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, irssi, gmp, automake, autoconf, libtool, openssl
+, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fish-irssi";
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
     license = lib.licenses.unfree; # I can't find any mention of license
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchbzr
-, pkg-config, systemd, autoreconfHook
-, glib, dbus-glib, json-glib
-, gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
+{ lib, stdenv, fetchbzr, pkg-config, systemd, autoreconfHook, glib, dbus-glib
+, json-glib, gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "indicator-application";
@@ -10,7 +8,8 @@ stdenv.mkDerivation rec {
   name = "${pname}-gtk3-${version}";
 
   src = fetchbzr {
-    url = "https://code.launchpad.net/~indicator-applet-developers/${pname}/trunk.17.04";
+    url =
+      "https://code.launchpad.net/~indicator-applet-developers/${pname}/trunk.17.04";
     rev = "260";
     sha256 = "1f0jdyqqb5g86zdpbcyn16x94yjigsfiv2kf73dvni5rp1vafbq1";
   };
@@ -18,8 +17,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    glib dbus-glib json-glib systemd
-    gtk3 libindicator-gtk3 libdbusmenu-gtk3 libappindicator-gtk3
+    glib
+    dbus-glib
+    json-glib
+    systemd
+    gtk3
+    libindicator-gtk3
+    libdbusmenu-gtk3
+    libappindicator-gtk3
   ];
 
   postPatch = ''
@@ -27,16 +32,10 @@ stdenv.mkDerivation rec {
       --replace "/etc/xdg/autostart" "$out/etc/xdg/autostart"
   '';
 
-  configureFlags = [
-    "CFLAGS=-Wno-error"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ];
+  configureFlags =
+    [ "CFLAGS=-Wno-error" "--sysconfdir=/etc" "--localstatedir=/var" ];
 
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-    "localstatedir=\${TMPDIR}"
-  ];
+  installFlags = [ "sysconfdir=\${out}/etc" "localstatedir=\${TMPDIR}" ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "$(out)/lib/systemd/user";
   PKG_CONFIG_INDICATOR3_0_4_INDICATORDIR = "$(out)/lib/indicators3/7/";
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Indicator to take menus from applications and place them in the panel";
+    description =
+      "Indicator to take menus from applications and place them in the panel";
     homepage = "https://launchpad.net/indicator-application";
     license = licenses.gpl3;
     platforms = platforms.linux;

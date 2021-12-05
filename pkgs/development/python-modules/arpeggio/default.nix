@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest-runner
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, pytest-runner
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Arpeggio";

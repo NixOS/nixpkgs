@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # add netdata support: https://github.com/koct9i/ioping/pull/41
     (fetchpatch {
-      url = "https://github.com/koct9i/ioping/commit/e7b818457ddb952cbcc13ae732ba0328f6eb73b3.patch";
+      url =
+        "https://github.com/koct9i/ioping/commit/e7b818457ddb952cbcc13ae732ba0328f6eb73b3.patch";
       sha256 = "122ivp4rqsnjszjfn33z8li6glcjhy7689bgipi8cgs5q55j99gf";
     })
   ];

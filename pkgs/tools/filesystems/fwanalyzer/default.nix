@@ -1,10 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, e2tools
-, makeWrapper
-, mtools
-}:
+{ lib, buildGoModule, fetchFromGitHub, e2tools, makeWrapper, mtools }:
 
 buildGoModule rec {
   pname = "fwanalyzer";
@@ -24,7 +18,9 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$out/bin/fwanalyzer" --prefix PATH : "${lib.makeBinPath [ e2tools mtools ]}"
+    wrapProgram "$out/bin/fwanalyzer" --prefix PATH : "${
+      lib.makeBinPath [ e2tools mtools ]
+    }"
   '';
 
   # The tests requires an additional setup (unpacking images, etc.)

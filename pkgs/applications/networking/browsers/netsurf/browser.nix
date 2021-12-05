@@ -10,50 +10,59 @@
 # uilib-specific dependencies
 , gtk2 # GTK 2
 , gtk3 # GTK 3
-, SDL  # Framebuffer
+, SDL # Framebuffer
 
 # Configuration
 , uilib
 
 # Netsurf-specific dependencies
-, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif
-, libnslog, libnspsl, libnsutils, libparserutils, libsvgtiny, libutf8proc
-, libwapcaplet, nsgenbind
+, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif, libnslog, libnspsl
+, libnsutils, libparserutils, libsvgtiny, libutf8proc, libwapcaplet, nsgenbind
 }:
 
-let
-  inherit (lib) optional optionals;
-in
-stdenv.mkDerivation rec {
+let inherit (lib) optional optionals;
+in stdenv.mkDerivation rec {
   pname = "netsurf";
   version = "3.10";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/netsurf/releases/source/${pname}-${version}-src.tar.gz";
+    url =
+      "http://download.netsurf-browser.org/netsurf/releases/source/${pname}-${version}-src.tar.gz";
     sha256 = "sha256-NkhEKeGTYUaFwv8kb1W9Cm3d8xoBi+5F4NH3wohRmV4=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    perl
-    perlPackages.HTMLParser
-    pkg-config
-    xxd
-  ]
-  ++ optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook
-  ;
+  nativeBuildInputs =
+    [ makeWrapper perl perlPackages.HTMLParser pkg-config xxd ]
+    ++ optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
 
   buildInputs = [
-    check curl libXcursor libXrandr libidn libjpeg libpng libwebp libxml2 openssl
+    check
+    curl
+    libXcursor
+    libXrandr
+    libidn
+    libjpeg
+    libpng
+    libwebp
+    libxml2
+    openssl
     # Netsurf-specific libraries
-    nsgenbind libnsfb libwapcaplet libparserutils libnslog libcss
-    libhubbub libdom libnsbmp libnsgif libsvgtiny libnsutils libnspsl
+    nsgenbind
+    libnsfb
+    libwapcaplet
+    libparserutils
+    libnslog
+    libcss
+    libhubbub
+    libdom
+    libnsbmp
+    libnsgif
+    libsvgtiny
+    libnsutils
+    libnspsl
     libutf8proc
-  ]
-  ++ optionals (uilib == "framebuffer") [ expat SDL ]
-  ++ optional (uilib == "gtk2") gtk2
-  ++ optional (uilib == "gtk3") gtk3
-  ;
+  ] ++ optionals (uilib == "framebuffer") [ expat SDL ]
+    ++ optional (uilib == "gtk2") gtk2 ++ optional (uilib == "gtk3") gtk3;
 
   preConfigure = ''
     cat <<EOF > Makefile.conf
@@ -62,10 +71,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "TARGET=${uilib}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "TARGET=${uilib}" ];
 
   meta = with lib; {
     homepage = "https://www.netsurf-browser.org/";

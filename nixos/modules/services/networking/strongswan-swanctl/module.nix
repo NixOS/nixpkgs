@@ -6,7 +6,7 @@ with (import ./param-lib.nix lib);
 let
   cfg = config.services.strongswan-swanctl;
   swanctlParams = import ./swanctl-params.nix lib;
-in  {
+in {
   options.services.strongswan-swanctl = {
     enable = mkEnableOption "strongswan-swanctl service";
 
@@ -32,18 +32,18 @@ in  {
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = !config.services.strongswan.enable;
-        message = "cannot enable both services.strongswan and services.strongswan-swanctl. Choose either one.";
-      }
-    ];
+    assertions = [{
+      assertion = !config.services.strongswan.enable;
+      message =
+        "cannot enable both services.strongswan and services.strongswan-swanctl. Choose either one.";
+    }];
 
     environment.etc."swanctl/swanctl.conf".text =
       paramsToConf cfg.swanctl swanctlParams;
 
     # The swanctl command complains when the following directories don't exist:
     # See: https://wiki.strongswan.org/projects/strongswan/wiki/Swanctldirectory
-    system.activationScripts.strongswan-swanctl-etc = stringAfter ["etc"] ''
+    system.activationScripts.strongswan-swanctl-etc = stringAfter [ "etc" ] ''
       mkdir -p '/etc/swanctl/x509'     # Trusted X.509 end entity certificates
       mkdir -p '/etc/swanctl/x509ca'   # Trusted X.509 Certificate Authority certificates
       mkdir -p '/etc/swanctl/x509ocsp'
@@ -62,8 +62,8 @@ in  {
     systemd.services.strongswan-swanctl = {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" ];
-      path     = with pkgs; [ kmod iproute2 iptables util-linux ];
+      after = [ "network-online.target" ];
+      path = with pkgs; [ kmod iproute2 iptables util-linux ];
       environment = {
         STRONGSWAN_CONF = pkgs.writeTextFile {
           name = "strongswan.conf";
@@ -71,13 +71,14 @@ in  {
         };
         SWANCTL_DIR = "/etc/swanctl";
       };
-      restartTriggers = [ config.environment.etc."swanctl/swanctl.conf".source ];
+      restartTriggers =
+        [ config.environment.etc."swanctl/swanctl.conf".source ];
       serviceConfig = {
-        ExecStart     = "${cfg.package}/sbin/charon-systemd";
-        Type          = "notify";
+        ExecStart = "${cfg.package}/sbin/charon-systemd";
+        Type = "notify";
         ExecStartPost = "${cfg.package}/sbin/swanctl --load-all --noprompt";
-        ExecReload    = "${cfg.package}/sbin/swanctl --reload";
-        Restart       = "on-abnormal";
+        ExecReload = "${cfg.package}/sbin/swanctl --reload";
+        Restart = "on-abnormal";
       };
     };
   };

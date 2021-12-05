@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, hypothesis
-, passlib
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, transitions
-, websockets
-}:
+{ lib, buildPythonPackage, docopt, fetchFromGitHub, hypothesis, passlib
+, poetry-core, pytest-asyncio, pytestCheckHook, pythonOlder, pyyaml, transitions
+, websockets }:
 
 buildPythonPackage rec {
   pname = "amqtt";
@@ -33,19 +22,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    docopt
-    passlib
-    pyyaml
-    transitions
-    websockets
-  ];
+  propagatedBuildInputs = [ docopt passlib pyyaml transitions websockets ];
 
-  checkInputs = [
-    hypothesis
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytest-asyncio pytestCheckHook ];
 
   disabledTestPaths = [
     # Test are not ported from hbmqtt yet

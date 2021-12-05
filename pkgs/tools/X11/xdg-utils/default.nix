@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub
-, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
-, w3m, gnugrep, gnused, coreutils, xset, perlPackages
+{ lib, stdenv, fetchgit, fetchFromGitHub, file, libxslt, docbook_xml_dtd_412
+, docbook_xsl, xmlto, w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk ? null }:
 
 assert mimiSupport -> gawk != null;
@@ -14,13 +13,10 @@ let
     sha256 = "15gw2nyrqmdsdin8gzxihpn77grhk9l97jp7s7pr7sl4n9ya2rpj";
   };
 
-  perlPath = with perlPackages; makePerlPath [
-    NetDBus XMLTwig XMLParser X11Protocol
-  ];
+  perlPath = with perlPackages;
+    makePerlPath [ NetDBus XMLTwig XMLParser X11Protocol ];
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "xdg-utils";
   version = "unstable-2020-10-21";
 
@@ -62,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
-    description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
+    description =
+      "A set of command line tools that assist applications with a variety of desktop integration tasks";
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;

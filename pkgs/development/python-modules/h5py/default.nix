@@ -1,6 +1,6 @@
-{ lib, fetchPypi, isPy27, buildPythonPackage, pythonOlder
-, numpy, hdf5, cython, six, pkgconfig, unittest2
-, mpi4py ? null, openssh, pytestCheckHook, cached-property }:
+{ lib, fetchPypi, isPy27, buildPythonPackage, pythonOlder, numpy, hdf5, cython
+, six, pkgconfig, unittest2, mpi4py ? null, openssh, pytestCheckHook
+, cached-property }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
 
@@ -29,7 +29,8 @@ in buildPythonPackage rec {
   postConfigure = ''
     # Needed to run the tests reliably. See:
     # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
-    ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
+    ${lib.optionalString mpiSupport
+    "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
@@ -38,9 +39,8 @@ in buildPythonPackage rec {
   doCheck = false;
   checkInputs = lib.optional isPy27 unittest2 ++ [ pytestCheckHook openssh ];
   nativeBuildInputs = [ pkgconfig cython ];
-  buildInputs = [ hdf5 ]
-    ++ lib.optional mpiSupport mpi;
-  propagatedBuildInputs = [ numpy six]
+  buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
+  propagatedBuildInputs = [ numpy six ]
     ++ lib.optionals mpiSupport [ mpi4py openssh ]
     ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 

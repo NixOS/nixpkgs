@@ -1,8 +1,4 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-}:
+{ llvmPackages, lib, fetchFromGitHub, cmake }:
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "cone";
@@ -17,9 +13,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    llvmPackages.llvm
-  ];
+  buildInputs = [ llvmPackages.llvm ];
 
   postPatch = ''
     sed -i CMakeLists.txt \

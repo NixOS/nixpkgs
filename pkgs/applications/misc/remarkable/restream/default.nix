@@ -1,13 +1,5 @@
-{ lib
-, bash
-, stdenv
-, lz4
-, ffmpeg-full
-, fetchFromGitHub
-, openssh
-, netcat
-, makeWrapper
-}:
+{ lib, bash, stdenv, lz4, ffmpeg-full, fetchFromGitHub, openssh, netcat
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "restream";

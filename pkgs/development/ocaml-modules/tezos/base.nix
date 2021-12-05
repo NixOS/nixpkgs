@@ -1,14 +1,5 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-crypto
-, tezos-hacl-glue-unix
-, tezos-micheline
-, tezos-test-helpers
-, ptime
-, ipaddr
-, bls12-381-unix
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-crypto, tezos-hacl-glue-unix
+, tezos-micheline, tezos-test-helpers, ptime, ipaddr, bls12-381-unix }:
 
 buildDunePackage {
   pname = "tezos-base";
@@ -32,6 +23,7 @@ buildDunePackage {
   doCheck = false;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: meta-package and pervasive type definitions for Tezos";
+    description =
+      "Tezos: meta-package and pervasive type definitions for Tezos";
   };
 }

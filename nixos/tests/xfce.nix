@@ -1,13 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "xfce";
 
-  machine =
-    { pkgs, ... }:
+  machine = { pkgs, ... }:
 
     {
-      imports = [
-        ./common/user-account.nix
-      ];
+      imports = [ ./common/user-account.nix ];
 
       services.xserver.enable = true;
 
@@ -21,13 +18,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       services.xserver.desktopManager.xfce.enable = true;
 
-      hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+      hardware.pulseaudio.enable =
+        true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
 
     };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
+  testScript = { nodes, ... }:
+    let user = nodes.machine.config.users.users.alice;
+    in ''
       machine.wait_for_x()
       machine.wait_for_file("${user.home}/.Xauthority")
       machine.succeed("xauth merge ${user.home}/.Xauthority")

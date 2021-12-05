@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.go-neb;
 
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.config;
 in {
   options.services.go-neb = {
@@ -47,7 +47,10 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.go-neb = let
-      finalConfigFile = if cfg.secretFile == null then configFile else "/var/run/go-neb/config.yaml";
+      finalConfigFile = if cfg.secretFile == null then
+        configFile
+      else
+        "/var/run/go-neb/config.yaml";
     in {
       description = "Extensible matrix bot written in Go";
       after = [ "network.target" ];

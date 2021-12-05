@@ -1,16 +1,6 @@
-{ lib
-, stdenv
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, python-didl-lite
-, pythonOlder
-, voluptuous
-}:
+{ lib, stdenv, aiohttp, async-timeout, buildPythonPackage, defusedxml
+, fetchFromGitHub, pytest-asyncio, pytestCheckHook, python-didl-lite
+, pythonOlder, voluptuous }:
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
@@ -24,18 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-fp7I0G6gljkTZ2slQJ8R9AJ9VKQOQi2cLiZ63seUajs=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-    defusedxml
-    python-didl-lite
-    voluptuous
-  ];
+  propagatedBuildInputs =
+    [ aiohttp async-timeout defusedxml python-didl-lite voluptuous ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ pytestCheckHook pytest-asyncio ];
 
   disabledTests = [
     # socket.gaierror: [Errno -2] Name or service not known
@@ -55,9 +37,7 @@ buildPythonPackage rec {
     "test_subscribe_manual_resubscribe"
     "test_subscribe_renew"
     "test_unsubscribe"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_deferred_callback_url"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_deferred_callback_url" ];
 
   pythonImportsCheck = [ "async_upnp_client" ];
 

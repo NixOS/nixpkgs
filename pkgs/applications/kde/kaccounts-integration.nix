@@ -1,4 +1,5 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, kcmutils, kcoreaddons, kwallet, accounts-qt, signond }:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, kcmutils, kcoreaddons
+, kwallet, accounts-qt, signond }:
 
 mkDerivation {
   pname = "kaccounts-integration";
@@ -9,15 +10,6 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    kcmutils
-    kcoreaddons
-    kdoctools
-    kwallet
-    accounts-qt
-    signond
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kcmutils kcoreaddons kdoctools kwallet accounts-qt signond ];
 }

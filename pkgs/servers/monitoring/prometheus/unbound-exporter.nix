@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "unbound-telemetry";
@@ -15,12 +16,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  passthru.tests = {
-    inherit (nixosTests.prometheus-exporters) unbound;
-  };
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) unbound; };
 
   meta = with lib; {
     description = "Prometheus exporter for Unbound DNS resolver";

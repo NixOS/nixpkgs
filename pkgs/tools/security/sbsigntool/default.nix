@@ -1,14 +1,13 @@
-{ lib, stdenv
-, fetchgit, autoconf, automake, pkg-config, help2man
-, openssl, libuuid, gnu-efi, libbfd
-}:
+{ lib, stdenv, fetchgit, autoconf, automake, pkg-config, help2man, openssl
+, libuuid, gnu-efi, libbfd }:
 
 stdenv.mkDerivation {
   pname = "sbsigntool";
   version = "0.9.1";
 
   src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
+    url =
+      "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
     rev = "v0.9.1";
     sha256 = "098gxmhjn8acxjw5bq59wq4xhgkpx1xn8kjvxwdzpqkwq9ivrsbp";
   };
@@ -35,19 +34,20 @@ stdenv.mkDerivation {
     automake --add-missing -Wno-portability
 
     ./configure --prefix=$out
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out
     make install
-    '';
+  '';
 
   meta = with lib; {
     description = "Tools for maintaining UEFI signature databases";
-    homepage    = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
+    homepage =
+      "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
     maintainers = [ maintainers.tstrobel ];
-    platforms   = [ "x86_64-linux" ]; # Broken on i686
-    license     = licenses.gpl3;
+    platforms = [ "x86_64-linux" ]; # Broken on i686
+    license = licenses.gpl3;
   };
 }
 

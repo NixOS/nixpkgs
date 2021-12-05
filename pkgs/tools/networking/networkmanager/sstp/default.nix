@@ -1,20 +1,6 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, file
-, glib
-, gnome
-, gtk3
-, intltool
-, libnma
-, libsecret
-, networkmanager
-, pkg-config
-, ppp
-, sstp
-, substituteAll
-, withGnome ? true }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch, file, glib, gnome
+, gtk3, intltool, libnma, libsecret, networkmanager, pkg-config, ppp, sstp
+, substituteAll, withGnome ? true }:
 
 let
   pname = "NetworkManager-sstp";

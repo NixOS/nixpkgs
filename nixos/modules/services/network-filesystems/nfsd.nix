@@ -8,12 +8,20 @@ let
 
   exports = pkgs.writeText "exports" cfg.exports;
 
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "nfs" "lockdPort" ] [ "services" "nfs" "server" "lockdPort" ])
-    (mkRenamedOptionModule [ "services" "nfs" "statdPort" ] [ "services" "nfs" "server" "statdPort" ])
+    (mkRenamedOptionModule [ "services" "nfs" "lockdPort" ] [
+      "services"
+      "nfs"
+      "server"
+      "lockdPort"
+    ])
+    (mkRenamedOptionModule [ "services" "nfs" "statdPort" ] [
+      "services"
+      "nfs"
+      "server"
+      "statdPort"
+    ])
   ];
 
   ###### interface
@@ -71,7 +79,8 @@ in
         createMountPoints = mkOption {
           type = types.bool;
           default = false;
-          description = "Whether to create the mount points in the exports file at startup time.";
+          description =
+            "Whether to create the mount points in the exports file at startup time.";
         };
 
         mountdPort = mkOption {
@@ -110,7 +119,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -122,7 +130,8 @@ in
       ${cfg.extraNfsdConfig}
 
       [mountd]
-      ${optionalString (cfg.mountdPort != null) "port=${toString cfg.mountdPort}"}
+      ${optionalString (cfg.mountdPort != null)
+      "port=${toString cfg.mountdPort}"}
 
       [statd]
       ${optionalString (cfg.statdPort != null) "port=${toString cfg.statdPort}"}
@@ -140,35 +149,31 @@ in
 
     environment.etc.exports.source = exports;
 
-    systemd.services.nfs-server =
-      { enable = true;
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.nfs-server = {
+      enable = true;
+      wantedBy = [ "multi-user.target" ];
 
-        preStart =
-          ''
-            mkdir -p /var/lib/nfs/v4recovery
-          '';
-      };
+      preStart = ''
+        mkdir -p /var/lib/nfs/v4recovery
+      '';
+    };
 
-    systemd.services.nfs-mountd =
-      { enable = true;
-        restartTriggers = [ exports ];
+    systemd.services.nfs-mountd = {
+      enable = true;
+      restartTriggers = [ exports ];
 
-        preStart =
-          ''
-            mkdir -p /var/lib/nfs
+      preStart = ''
+        mkdir -p /var/lib/nfs
 
-            ${optionalString cfg.createMountPoints
-              ''
-                # create export directories:
-                # skip comments, take first col which may either be a quoted
-                # "foo bar" or just foo (-> man export)
-                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-                | xargs -d '\n' mkdir -p
-              ''
-            }
-          '';
-      };
+        ${optionalString cfg.createMountPoints ''
+          # create export directories:
+          # skip comments, take first col which may either be a quoted
+          # "foo bar" or just foo (-> man export)
+          sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+          | xargs -d '\n' mkdir -p
+        ''}
+      '';
+    };
 
   };
 

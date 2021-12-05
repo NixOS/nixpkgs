@@ -12,11 +12,7 @@ buildKodiAddon rec {
     sha256 = "1ai8k55bamzkx7awk3dl8ksw93pan3h9b1xlylcldy7a0ddldzdg";
   };
 
-  propagatedBuildInputs = [
-    requests
-    requests-cache
-    routing
-  ];
+  propagatedBuildInputs = [ requests requests-cache routing ];
 
   meta = with lib; {
     homepage = "https://github.com/aanderse/plugin.program.steam.library";

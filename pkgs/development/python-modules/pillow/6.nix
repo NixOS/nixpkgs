@@ -1,7 +1,6 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
-, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
-}@args:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k, olefile, freetype
+, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11, openjpeg
+, libimagequant, pyroma, numpy, pytestCheckHook }@args:
 
 import ./generic.nix (rec {
   pname = "Pillow";
@@ -44,4 +43,4 @@ import ./generic.nix (rec {
       "CVE-2021-27923"
     ];
   };
-} // args )
+} // args)

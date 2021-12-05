@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
@@ -14,17 +10,11 @@ buildPythonPackage rec {
     sha256 = "sha256-28VgmShEoFn1bHwMalh5BOZdlWdAu/t+OViZgLyQVbg=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/*.py"
-  ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
-  pythonImportsCheck = [
-    "phonenumbers"
-  ];
+  pythonImportsCheck = [ "phonenumbers" ];
 
   meta = with lib; {
     description = "Python module for handling international phone numbers";

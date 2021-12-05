@@ -1,14 +1,5 @@
-{ mkDerivation
-, lib
-, cmake
-, extra-cmake-modules
-, pkg-config
-, SDL2
-, qttools
-, xorg
-, fetchFromGitHub
-, itstool
-}:
+{ mkDerivation, lib, cmake, extra-cmake-modules, pkg-config, SDL2, qttools, xorg
+, fetchFromGitHub, itstool }:
 
 mkDerivation rec {
   pname = "antimicrox";
@@ -22,11 +13,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config itstool ];
-  buildInputs = [
-    SDL2
-    qttools
-    xorg.libXtst
-  ];
+  buildInputs = [ SDL2 qttools xorg.libXtst ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

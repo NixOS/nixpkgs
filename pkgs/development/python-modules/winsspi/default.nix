@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, minikerberos
-}:
+{ lib, buildPythonPackage, fetchPypi, minikerberos }:
 
 buildPythonPackage rec {
   pname = "winsspi";

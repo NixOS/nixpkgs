@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, coverage
-, ghostscript
-, pillow
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytestCheckHook, coverage
+, ghostscript, pillow }:
 
 buildPythonPackage rec {
   pname = "pydyf";
@@ -24,16 +17,12 @@ buildPythonPackage rec {
       --replace "--isort --flake8 --cov --no-cov-on-fail" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    coverage
-    ghostscript
-    pillow
-  ];
+  checkInputs = [ pytestCheckHook coverage ghostscript pillow ];
 
   meta = with lib; {
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
-    description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
+    description =
+      "Low-level PDF generator written in Python and based on PDF specification 1.7";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rprecenth ];
   };

@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
-}:
+{ lib, buildPythonPackage, fetchPypi, matplotlib, pytestCheckHook, numpy, pandas
+, pythonOlder, scipy }:
 
 buildPythonPackage rec {
   pname = "seaborn";
@@ -21,20 +13,11 @@ buildPythonPackage rec {
     sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
   };
 
-  propagatedBuildInputs = [
-    matplotlib
-    numpy
-    pandas
-    scipy
-  ];
+  propagatedBuildInputs = [ matplotlib numpy pandas scipy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck= [
-    "seaborn"
-  ];
+  pythonImportsCheck = [ "seaborn" ];
 
   meta = {
     description = "Statisitical data visualization";

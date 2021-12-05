@@ -23,12 +23,11 @@ stdenv.mkDerivation rec {
                 'install -m 0755 -s --strip-program $(STRIP)'
   '';
 
-  installFlags = [
-    "PREFIX=$(out)"
-  ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "Provides a noise source using the CPU execution timing jitter";
+    description =
+      "Provides a noise source using the CPU execution timing jitter";
     homepage = "https://github.com/smuellerDD/jitterentropy-library";
     license = with lib.licenses; [ gpl2 bsd3 ];
     platforms = lib.platforms.linux;

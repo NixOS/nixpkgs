@@ -1,13 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, pkgs
-, fixDarwinDylibNames
-}:
+{ lib, stdenv, fetchurl, pkgs, fixDarwinDylibNames }:
 stdenv.mkDerivation rec {
   pname = "build2-bootstrap";
   version = "0.14.0";
   src = fetchurl {
-    url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
+    url =
+      "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
     sha256 = "sha256-GO/GstQUmPdRbnqKXJECP2GCyGfUI3kjmDkN0MAEz90=";
   };
   patches = [
@@ -23,9 +20,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  propagatedBuildInputs =
+    lib.optionals stdenv.targetPlatform.isDarwin [ fixDarwinDylibNames ];
 
   doCheck = true;
   checkPhase = ''

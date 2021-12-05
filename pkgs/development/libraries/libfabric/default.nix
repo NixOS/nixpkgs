@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enablePsm2 libpsm2;
 
-  configureFlags = [ (if enablePsm2 then "--enable-psm2=${libpsm2}" else "--disable-psm2") ];
+  configureFlags =
+    [ (if enablePsm2 then "--enable-psm2=${libpsm2}" else "--disable-psm2") ];
 
   meta = with lib; {
     homepage = "https://ofiwg.github.io/libfabric/";

@@ -5,14 +5,14 @@ let
   cfg = config.services.undervolt;
 
   mkPLimit = limit: window:
-    if (isNull limit && isNull window) then null
-    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+    if (isNull limit && isNull window) then
+      null
+    else
+      assert asserts.assertMsg (!isNull limit && !isNull window)
+        "Both power limit and window must be set";
       "${toString limit} ${toString window}";
-  cliArgs = lib.cli.toGNUCommandLine {} {
-    inherit (cfg)
-      verbose
-      temp
-      ;
+  cliArgs = lib.cli.toGNUCommandLine { } {
+    inherit (cfg) verbose temp;
     # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
     #
     #     Core or Cache offsets have no effect. It is not possible to set different offsets for
@@ -30,13 +30,12 @@ let
     power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
     power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
   };
-in
-{
+in {
   options.services.undervolt = {
     enable = mkEnableOption ''
-       Undervolting service for Intel CPUs.
+      Undervolting service for Intel CPUs.
 
-       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
+      Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
     '';
 
     verbose = mkOption {
@@ -170,7 +169,8 @@ in
 
       # Apply undervolt on boot, nixos generation switch and resume
       wantedBy = [ "multi-user.target" "post-resume.target" ];
-      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+      after =
+        [ "post-resume.target" ]; # Not sure why but it won't work without this
 
       serviceConfig = {
         Type = "oneshot";
@@ -180,7 +180,8 @@ in
     };
 
     systemd.timers.undervolt = mkIf cfg.useTimer {
-      description = "Undervolt timer to ensure voltage settings are always applied";
+      description =
+        "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {

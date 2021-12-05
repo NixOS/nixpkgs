@@ -1,32 +1,8 @@
-{ lib
-, stdenv
-, nix-update-script
-, appstream
-, appstream-glib
-, dbus
-, desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
-, fetchFromGitHub
-, flatpak
-, gettext
-, glib
-, granite
-, gtk3
-, json-glib
-, libgee
-, libhandy
-, libsoup
-, libxml2
-, meson
-, ninja
-, packagekit
-, pkg-config
-, python3
-, vala
-, polkit
-, wrapGAppsHook
-}:
+{ lib, stdenv, nix-update-script, appstream, appstream-glib, dbus
+, desktop-file-utils, elementary-gtk-theme, elementary-icon-theme
+, fetchFromGitHub, flatpak, gettext, glib, granite, gtk3, json-glib, libgee
+, libhandy, libsoup, libxml2, meson, ninja, packagekit, pkg-config, python3
+, vala, polkit, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
@@ -40,9 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [
@@ -75,10 +49,7 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
-  mesonFlags = [
-    "-Dpayments=false"
-    "-Dcurated=false"
-  ];
+  mesonFlags = [ "-Dpayments=false" "-Dcurated=false" ];
 
   postPatch = ''
     chmod +x meson/post_install.py
@@ -87,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
-    description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
+    description =
+      "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;

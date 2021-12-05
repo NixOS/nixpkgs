@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, attrs
-, isodate
-, python-dateutil
-, rfc3986
-, uritemplate
-, mock
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, attrs, isodate
+, python-dateutil, rfc3986, uritemplate, mock, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "csvw";
@@ -28,19 +17,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    isodate
-    python-dateutil
-    rfc3986
-    uritemplate
-  ];
+  propagatedBuildInputs = [ attrs isodate python-dateutil rfc3986 uritemplate ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ mock pytestCheckHook pytest-mock ];
 
   disabledTests = [
     # this test is flaky on darwin because it depends on the resolution of filesystem mtimes

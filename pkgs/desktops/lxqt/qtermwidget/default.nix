@@ -1,12 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, lxqt-build-tools
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools, lxqt-build-tools
+, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "qtermwidget";
@@ -19,15 +12,9 @@ mkDerivation rec {
     sha256 = "0i1w5wgac7r4p0jjrrswlvvwivkwrp1b88xh5ijjw6k9irjc7zf6";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [
-    qtbase
-    qttools
-  ];
+  buildInputs = [ qtbase qttools ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

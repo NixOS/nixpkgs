@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkg-config, boost }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkg-config
+, boost }:
 
 mkDerivation {
   pname = "twmn";

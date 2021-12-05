@@ -6,9 +6,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
 
-in
-
-{
+in {
   options = {
 
     services.xserver.desktopManager.lxqt.enable = mkOption {
@@ -18,10 +16,11 @@ in
     };
 
     environment.lxqt.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
-      description = "Which LXQt packages to exclude from the default environment";
+      description =
+        "Which LXQt packages to exclude from the default environment";
     };
 
   };
@@ -48,11 +47,9 @@ in
       '';
     };
 
-    environment.systemPackages =
-      pkgs.lxqt.preRequisitePackages ++
-      pkgs.lxqt.corePackages ++
-      (pkgs.gnome.removePackagesByName
-        pkgs.lxqt.optionalPackages
+    environment.systemPackages = pkgs.lxqt.preRequisitePackages
+      ++ pkgs.lxqt.corePackages
+      ++ (pkgs.gnome.removePackagesByName pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share

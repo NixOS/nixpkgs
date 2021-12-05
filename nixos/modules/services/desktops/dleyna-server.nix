@@ -18,7 +18,6 @@ with lib;
     };
   };
 
-
   ###### implementation
   config = mkIf config.services.dleyna-server.enable {
     environment.systemPackages = [ pkgs.dleyna-server ];

@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glslang
-, libX11
-, libxcb
-, libXrandr
-, spirv-headers
-, spirv-tools
-, vulkan-headers
-, wayland
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, glslang, libX11, libxcb, libXrandr
+, spirv-headers, spirv-tools, vulkan-headers, wayland }:
 
 let
   # vulkan-validation-layers requires a custom glslang & robin-hood-hashing
@@ -51,14 +40,13 @@ let
     rev = "3.11.3"; # pin
     sha256 = "1gm3lwjkh6h8m7lfykzd0jzhfqjmjchindkmxc008rwvxafsd1pl";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
   version = "1.2.189.1";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
-  outputs = ["out" "headers"];
+  outputs = [ "out" "headers" ];
   outputInclude = "headers";
 
   src = (assert version == vulkan-headers.version;
@@ -75,17 +63,9 @@ stdenv.mkDerivation rec {
     sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libX11
-    libxcb
-    libXrandr
-    vulkan-headers
-    wayland
-  ];
+  buildInputs = [ libX11 libxcb libXrandr vulkan-headers wayland ];
 
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
@@ -102,9 +82,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
-    homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

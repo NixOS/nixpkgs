@@ -246,7 +246,8 @@
   plasma-browser-integration = {
     version = "5.23.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.3/plasma-browser-integration-5.23.3.tar.xz";
+      url =
+        "${mirror}/stable/plasma/5.23.3/plasma-browser-integration-5.23.3.tar.xz";
       sha256 = "0r3sq6w73qn246nddf4f8lbym8k4wp2ycfr2laz888b5cjf9df97";
       name = "plasma-browser-integration-5.23.3.tar.xz";
     };
@@ -310,7 +311,8 @@
   plasma-phone-components = {
     version = "5.23.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.3/plasma-phone-components-5.23.3.tar.xz";
+      url =
+        "${mirror}/stable/plasma/5.23.3/plasma-phone-components-5.23.3.tar.xz";
       sha256 = "1w8yqczr0933vhca5id32vg1k2np6n6hkh58n4x3z3xpdxpb5d4c";
       name = "plasma-phone-components-5.23.3.tar.xz";
     };
@@ -366,7 +368,8 @@
   plasma-workspace-wallpapers = {
     version = "5.23.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.3/plasma-workspace-wallpapers-5.23.3.tar.xz";
+      url =
+        "${mirror}/stable/plasma/5.23.3/plasma-workspace-wallpapers-5.23.3.tar.xz";
       sha256 = "1kz4xqzgwnhp1wmqmgadn0jjc9033i2bm8hiycqkahhj603k552s";
       name = "plasma-workspace-wallpapers-5.23.3.tar.xz";
     };
@@ -422,7 +425,8 @@
   xdg-desktop-portal-kde = {
     version = "5.23.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.3/xdg-desktop-portal-kde-5.23.3.tar.xz";
+      url =
+        "${mirror}/stable/plasma/5.23.3/xdg-desktop-portal-kde-5.23.3.tar.xz";
       sha256 = "1aajlgccl1z9m49a016ixr2hiy231wyx6xnmpbvjx9h1b52b3rpz";
       name = "xdg-desktop-portal-kde-5.23.3.tar.xz";
     };

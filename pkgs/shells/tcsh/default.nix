@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, ncurses
-}:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
@@ -23,16 +18,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Tr6y8zYz0RXZU19VTGUahSMEDY2R5d4zP7LuBFuOAB4=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
-  patches = lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      name = "sysmalloc.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
-      sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
-    });
+  patches = lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+    name = "sysmalloc.patch";
+    url =
+      "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
+    sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
+  });
 
   meta = with lib; {
     homepage = "https://www.tcsh.org/";

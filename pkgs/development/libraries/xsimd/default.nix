@@ -39,12 +39,12 @@ in stdenv.mkDerivation {
   checkInputs = [ gtest ];
   checkTarget = "xtest";
   GTEST_FILTER = let
-      # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "error_gamma_test/sse_double.gamma"
-        "error_gamma_test/avx_double.gamma"
-      ];
-    in "-${builtins.concatStringsSep ":" filteredTests}";
+    # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
+    filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
+      "error_gamma_test/sse_double.gamma"
+      "error_gamma_test/avx_double.gamma"
+    ];
+  in "-${builtins.concatStringsSep ":" filteredTests}";
 
   meta = with lib; {
     description = "C++ wrappers for SIMD intrinsics";

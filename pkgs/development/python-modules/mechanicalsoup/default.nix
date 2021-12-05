@@ -1,21 +1,11 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, lxml
-, pytest-httpbin
-, pytest-mock
-, pytestCheckHook
-, requests
-, requests-mock
-}:
+{ lib, beautifulsoup4, buildPythonPackage, pythonAtLeast, fetchFromGitHub, lxml
+, pytest-httpbin, pytest-mock, pytestCheckHook, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
   version = "1.1.0";
 
-  disabled = ! pythonAtLeast "3.6";
+  disabled = !pythonAtLeast "3.6";
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
@@ -24,18 +14,9 @@ buildPythonPackage rec {
     sha256 = "1mly0ivai3rx64frk7a7ra6abhdxm9x3l6s6x7sgrl9qx1z8zsp3";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    lxml
-    requests
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 lxml requests ];
 
-  checkInputs = [
-    pytest-httpbin
-    pytest-mock
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ pytest-httpbin pytest-mock pytestCheckHook requests-mock ];
 
   postPatch = ''
     # Is in setup_requires but not used in setup.py

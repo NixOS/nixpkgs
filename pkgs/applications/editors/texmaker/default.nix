@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib
+, pkg-config, poppler }:
 
 mkDerivation rec {
   pname = "texmaker";
@@ -11,7 +12,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
   nativeBuildInputs = [ pkg-config poppler qmake ];
-  NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
+  NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [
     "DESKTOPDIR=${placeholder "out"}/share/applications"
@@ -21,7 +22,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       This editor is a full fledged IDE for TeX and
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.

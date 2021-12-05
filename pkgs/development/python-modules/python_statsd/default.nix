@@ -1,16 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, mock
-, nose
-, coverage
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mock, nose, coverage }:
 
 buildPythonPackage rec {
   pname = "python-statsd";
   version = "2.1.0";
-  disabled = isPy3k;  # next release will be py3k compatible
+  disabled = isPy3k; # next release will be py3k compatible
 
   src = fetchPypi {
     inherit pname version;

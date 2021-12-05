@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, jinja2
-, ply
-, verilog
-, pytest-pythonpath
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, jinja2, ply, verilog
+, pytest-pythonpath, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyverilog";
@@ -26,20 +18,14 @@ buildPythonPackage rec {
       --replace "iverilog = 'iverilog'" "iverilog = '${verilog}/bin/iverilog'"
   '';
 
-  propagatedBuildInputs = [
-    jinja2
-    ply
-    verilog
-  ];
+  propagatedBuildInputs = [ jinja2 ply verilog ];
 
-  checkInputs = [
-    pytest-pythonpath
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-pythonpath pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/PyHDI/Pyverilog";
-    description = "Python-based Hardware Design Processing Toolkit for Verilog HDL";
+    description =
+      "Python-based Hardware Design Processing Toolkit for Verilog HDL";
     license = licenses.asl20;
     maintainers = with maintainers; [ trepetti ];
   };

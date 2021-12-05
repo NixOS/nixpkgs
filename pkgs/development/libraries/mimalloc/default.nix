@@ -1,23 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja
-, secureBuild ? false
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, secureBuild ? false }:
 
-let
-  soext = stdenv.hostPlatform.extensions.sharedLibrary;
-in
-stdenv.mkDerivation rec {
-  pname   = "mimalloc";
+let soext = stdenv.hostPlatform.extensions.sharedLibrary;
+in stdenv.mkDerivation rec {
+  pname = "mimalloc";
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner  = "microsoft";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "microsoft";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-n4FGld3bq6ZOSLTzXcVlucCGbQ5/eSFbijU0dfBD/T0=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optional secureBuild [ "-DMI_SECURE=ON" ];
+  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ]
+    ++ lib.optional secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = let
     rel = lib.versions.majorMinor version;
@@ -41,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Compact, fast, general-purpose memory allocator";
-    homepage    = "https://github.com/microsoft/mimalloc";
-    license     = licenses.bsd2;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/microsoft/mimalloc";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

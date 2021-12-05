@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, python
-}:
+{ buildPythonPackage, fetchPypi, lib, python }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
@@ -27,8 +23,6 @@ buildPythonPackage rec {
     description = "Python style guide checker (formerly called pep8)";
     homepage = "https://pycodestyle.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

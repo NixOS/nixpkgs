@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, IOKit
-}:
+{ lib, stdenv, fetchFromGitHub, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "osx-cpu-temp";

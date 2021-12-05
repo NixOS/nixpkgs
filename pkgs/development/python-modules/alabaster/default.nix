@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments }:
+{ lib, buildPythonPackage, fetchPypi, pygments }:
 
 buildPythonPackage rec {
   pname = "alabaster";

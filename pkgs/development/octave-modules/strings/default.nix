@@ -1,8 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, pcre
-}:
+{ buildOctavePackage, lib, fetchurl, pcre }:
 
 buildOctavePackage rec {
   pname = "strings";
@@ -13,9 +9,7 @@ buildOctavePackage rec {
     sha256 = "1b0ravfvq3bxd0w3axjfsx13mmmkifmqz6pfdgyf2s8vkqnp1qng";
   };
 
-  buildInputs = [
-    pcre
-  ];
+  buildInputs = [ pcre ];
 
   # The gripes library no longer exists.
   # https://build.opensuse.org/package/view_file/openSUSE:Backports:SLE-15-SP3/octave-forge-strings/octave-forge-strings.spec
@@ -32,6 +26,7 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     # Claims to have a freebsd license, but I found none.
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Additional functions for manipulation and analysis of strings";
+    description =
+      "Additional functions for manipulation and analysis of strings";
   };
 }

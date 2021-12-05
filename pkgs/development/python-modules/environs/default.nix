@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, django-cache-url
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-}:
+{ lib, buildPythonPackage, dj-database-url, dj-email-url, django-cache-url
+, fetchFromGitHub, marshmallow, pytestCheckHook, python-dotenv, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "environs";
@@ -24,21 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-4jyqdA/xoIEsfouIneGs3A9++sNG2kRUhDzteN0Td6w=";
   };
 
-  propagatedBuildInputs = [
-    marshmallow
-    python-dotenv
-  ];
+  propagatedBuildInputs = [ marshmallow python-dotenv ];
 
-  checkInputs = [
-    dj-database-url
-    dj-email-url
-    django-cache-url
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ dj-database-url dj-email-url django-cache-url pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "environs"
-  ];
+  pythonImportsCheck = [ "environs" ];
 
   meta = with lib; {
     description = "Python modle for environment variable parsing";

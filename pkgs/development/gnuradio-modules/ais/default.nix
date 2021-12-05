@@ -1,20 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python
-, boost
-, cppunit
-, log4cpp
-, osmosdr
-, gmp
-, mpir
-, fftwFloat
-, icu
-, gnuradio
-, thrift
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, python, boost, cppunit
+, log4cpp, osmosdr, gmp, mpir, fftwFloat, icu, gnuradio, thrift }:
 
 mkDerivation rec {
   pname = "gr-ais";
@@ -27,15 +12,9 @@ mkDerivation rec {
   };
   disabledForGRafter = "3.9";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python
-  ];
+  nativeBuildInputs = [ cmake pkg-config python ];
 
-  cmakeFlags = [
-    "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
-  ];
+  cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-pthread" ];
 
   buildInputs = [
     cppunit

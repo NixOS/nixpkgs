@@ -1,10 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, autoconf, automake, libtool, pkg-config
-, bzip2, libpcap, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, bzip2
+, libpcap, flex, bison }:
 
-let version = "1.6.23"; in
+let version = "1.6.23";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "nfdump";
   inherit version;
 
@@ -24,12 +23,8 @@ stdenv.mkDerivation {
     LIBTOOLIZE=libtoolize ./autogen.sh
   '';
 
-  configureFlags = [
-    "--enable-nsel"
-    "--enable-sflow"
-    "--enable-readpcap"
-    "--enable-nfpcapd"
-  ];
+  configureFlags =
+    [ "--enable-nsel" "--enable-sflow" "--enable-readpcap" "--enable-nfpcapd" ];
 
   meta = with lib; {
     description = "Tools for working with netflow data";

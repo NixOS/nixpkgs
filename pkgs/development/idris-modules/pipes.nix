@@ -1,8 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, lib }:
+build-idris-package {
   name = "pipes";
   version = "2017-12-02";
 
@@ -14,7 +11,8 @@ build-idris-package  {
   };
 
   meta = {
-    description = "Composable and effectful production, transformation and consumption of streams of data";
+    description =
+      "Composable and effectful production, transformation and consumption of streams of data";
     homepage = "https://github.com/QuentinDuval/IdrisPipes";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];

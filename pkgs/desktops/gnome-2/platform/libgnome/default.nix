@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2
-, intltool, libbonobo, GConf, gnome_vfs, libtool, libogg
-}:
+{ stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2, intltool
+, libbonobo, GConf, gnome_vfs, libtool, libogg }:
 
 stdenv.mkDerivation rec {
   name = "libgnome-${minVer}.1";
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./new-glib.patch ];
-  /* There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums. */
+  # There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums.
   postPatch = "sed '/returns the true filename/d' -i libgnome/gnome-config.h";
 
   outputs = [ "out" "dev" ];

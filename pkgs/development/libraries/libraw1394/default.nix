@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Library providing direct access to the IEEE 1394 bus through the Linux 1394 subsystem's raw1394 user space interface";
-    homepage = "https://ieee1394.wiki.kernel.org/index.php/Libraries#libraw1394";
+    description =
+      "Library providing direct access to the IEEE 1394 bus through the Linux 1394 subsystem's raw1394 user space interface";
+    homepage =
+      "https://ieee1394.wiki.kernel.org/index.php/Libraries#libraw1394";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

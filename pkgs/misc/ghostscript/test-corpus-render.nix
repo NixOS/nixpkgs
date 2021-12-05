@@ -1,7 +1,4 @@
-{ stdenv
-, fetchgit
-, ghostscript
-}:
+{ stdenv, fetchgit, ghostscript }:
 
 stdenv.mkDerivation {
   pname = "ghostscript-test-corpus-render";

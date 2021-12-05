@@ -1,8 +1,4 @@
-{ boost
-, faust
-, lv2
-, qt4
-, which
+{ boost, faust, lv2, qt4, which
 
 }:
 

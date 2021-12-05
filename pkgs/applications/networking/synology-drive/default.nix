@@ -6,7 +6,8 @@ mkDerivation rec {
   version = "3.0.1-${subVersion}";
 
   src = fetchurl {
-    url = "https://global.download.synology.com/download/Utility/SynologyDriveClient/${version}/Ubuntu/Installer/x86_64/synology-drive-client-${subVersion}.x86_64.deb";
+    url =
+      "https://global.download.synology.com/download/Utility/SynologyDriveClient/${version}/Ubuntu/Installer/x86_64/synology-drive-client-${subVersion}.x86_64.deb";
     sha256 = "1yyv6zgszsym22kf4jvlan7n9lw09fw24fyrh7c8pzbb2029gp8a";
   };
 

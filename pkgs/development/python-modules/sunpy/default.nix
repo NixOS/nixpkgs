@@ -1,33 +1,8 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, asdf
-, astropy
-, setuptools-scm
-, astropy-helpers
-, astropy-extension-helpers
-, beautifulsoup4
-, drms
-, glymur
-, h5netcdf
-, hypothesis
-, matplotlib
-, numpy
-, pandas
-, parfive
-, pytestCheckHook
-, pytest-astropy
-, pytest-mock
-, python-dateutil
-, scikitimage
-, scipy
-, sqlalchemy
-, towncrier
-, tqdm
-, zeep
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, asdf, astropy
+, setuptools-scm, astropy-helpers, astropy-extension-helpers, beautifulsoup4
+, drms, glymur, h5netcdf, hypothesis, matplotlib, numpy, pandas, parfive
+, pytestCheckHook, pytest-astropy, pytest-mock, python-dateutil, scikitimage
+, scipy, sqlalchemy, towncrier, tqdm, zeep }:
 
 buildPythonPackage rec {
   pname = "sunpy";
@@ -39,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "c8fcd3700d8f4b7880a669f28c44f784422da1dbfe59fb175f155703817695ed";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    astropy-extension-helpers
-  ];
+  nativeBuildInputs = [ setuptools-scm astropy-extension-helpers ];
 
   propagatedBuildInputs = [
     numpy
@@ -65,12 +37,7 @@ buildPythonPackage rec {
     asdf
   ];
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-    pytest-astropy
-    pytest-mock
-  ];
+  checkInputs = [ hypothesis pytestCheckHook pytest-astropy pytest-mock ];
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
@@ -79,9 +46,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    "rst"
-  ];
+  disabledTests = [ "rst" ];
 
   disabledTestPaths = [
     "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml"

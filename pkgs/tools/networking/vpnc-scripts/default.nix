@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchgit
-, makeWrapper
-, nettools, gawk, systemd, openresolv, coreutils, gnugrep, iproute2
-}:
+{ lib, stdenv, fetchgit, makeWrapper, nettools, gawk, systemd, openresolv
+, coreutils, gnugrep, iproute2 }:
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
@@ -28,11 +26,15 @@ stdenv.mkDerivation {
       --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
   '' + ''
     wrapProgram $out/bin/vpnc-script \
-      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv iproute2 ])}"
+      --prefix PATH : "${
+        lib.makeBinPath ([ nettools gawk coreutils gnugrep ]
+          ++ lib.optionals stdenv.isLinux [ openresolv iproute2 ])
+      }"
   '';
 
   meta = with lib; {
-    description = "script for vpnc to configure the network routing and name service";
+    description =
+      "script for vpnc to configure the network routing and name service";
     homepage = "https://www.infradead.org/openconnect/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ jerith666 ];

@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.mtr;
+let cfg = config.programs.mtr;
 
 in {
   options = {

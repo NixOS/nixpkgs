@@ -13,12 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    glib
-    libbsd
-    check
-    pcre
-  ];
+  buildInputs = [ glib libbsd check pcre ];
 
   meta = with lib; {
     homepage = "https://github.com/n0la/rcon";

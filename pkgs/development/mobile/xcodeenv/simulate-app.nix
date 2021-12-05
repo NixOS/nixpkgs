@@ -1,15 +1,15 @@
-{stdenv, lib, composeXcodeWrapper}:
-{name, app ? null, bundleId ? null, ...}@args:
+{ stdenv, lib, composeXcodeWrapper }:
+{ name, app ? null, bundleId ? null, ... }@args:
 
 assert app != null -> bundleId != null;
 
 let
-  xcodewrapperArgs = builtins.intersectAttrs (builtins.functionArgs composeXcodeWrapper) args;
+  xcodewrapperArgs =
+    builtins.intersectAttrs (builtins.functionArgs composeXcodeWrapper) args;
 
   xcodewrapper = composeXcodeWrapper xcodewrapperArgs;
-in
-stdenv.mkDerivation {
-  name = lib.replaceChars [" "] [""] name;
+in stdenv.mkDerivation {
+  name = lib.replaceChars [ " " ] [ "" ] name;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"

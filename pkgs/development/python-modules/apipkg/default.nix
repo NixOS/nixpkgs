@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, pytest, setuptools-scm, isPy3k }:
 
 buildPythonPackage rec {
   pname = "apipkg";
@@ -27,8 +26,8 @@ buildPythonPackage rec {
       "test_aliasmodule_proxy_methods"
       "test_eagerload_on_bython"
     ];
-    testExpression = lib.optionalString (disabledTests != [])
-    "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
+    testExpression = lib.optionalString (disabledTests != [ ])
+      "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
   in ''
     py.test ${testExpression}
   '';

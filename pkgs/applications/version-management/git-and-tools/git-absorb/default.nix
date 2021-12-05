@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
   version = "0.6.6";
 
   src = fetchFromGitHub {
-    owner  = "tummychow";
-    repo   = pname;
-    rev    = "refs/tags/${version}";
+    owner = "tummychow";
+    repo = pname;
+    rev = "refs/tags/${version}";
     sha256 = "04v10bn24acify34vh5ayymsr1flcyb05f3az9k1s2m6nlxy5gb9";
   };
 

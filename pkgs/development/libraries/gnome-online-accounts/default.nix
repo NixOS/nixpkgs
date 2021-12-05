@@ -1,32 +1,8 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, vala
-, glib
-, meson
-, ninja
-, python3
-, libxslt
-, gtk3
-, webkitgtk
-, json-glib
-, librest
-, libsecret
-, gtk-doc
-, gobject-introspection
-, gettext
-, icu
-, glib-networking
-, libsoup
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, gnome
-, gcr
-, libkrb5
-, gvfs
-, dbus
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitLab, pkg-config, vala, glib, meson, ninja, python3
+, libxslt, gtk3, webkitgtk, json-glib, librest, libsecret, gtk-doc
+, gobject-introspection, gettext, icu, glib-networking, libsoup
+, docbook-xsl-nons, docbook_xml_dtd_412, gnome, gcr, libkrb5, gvfs, dbus
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";

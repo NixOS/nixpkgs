@@ -1,10 +1,4 @@
-{ lib, stdenv, llvm_meta
-, buildLlvmTools
-, src
-, cmake
-, libxml2
-, libllvm
-, version
+{ lib, stdenv, llvm_meta, buildLlvmTools, src, cmake, libxml2, libllvm, version
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +8,7 @@ stdenv.mkDerivation rec {
   inherit src;
   sourceRoot = "source/${pname}";
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   # On Darwin the llvm-config is perhaps not working fine as the
   # LLVM_MAIN_SRC_DIR is not getting set correctly, and the build fails as the
@@ -30,10 +22,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
-    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-  ];
+    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${
+      lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"
+    }"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen" ];
 
   outputs = [ "out" "lib" "dev" ];
 

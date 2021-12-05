@@ -1,7 +1,4 @@
-{ lib, stdenv, fetchhg
-, meson, pkg-config, ninja
-, wayland, obs-studio, libX11
-}:
+{ lib, stdenv, fetchhg, meson, pkg-config, ninja, wayland, obs-studio, libX11 }:
 
 stdenv.mkDerivation {
   pname = "wlrobs";
@@ -17,7 +14,8 @@ stdenv.mkDerivation {
   buildInputs = [ wayland obs-studio libX11 ];
 
   meta = with lib; {
-    description = "An obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";
+    description =
+      "An obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
     maintainers = with maintainers; [ grahamc V ];
     license = licenses.gpl3Plus;

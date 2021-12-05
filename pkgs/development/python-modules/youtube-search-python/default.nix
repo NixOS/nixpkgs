@@ -19,7 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Search for YouTube videos, channels & playlists & get video information using link WITHOUT YouTube Data API v3";
+    description =
+      "Search for YouTube videos, channels & playlists & get video information using link WITHOUT YouTube Data API v3";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

@@ -1,18 +1,5 @@
-{ lib, stdenv
-, cmake
-, fetchurl
-, perl
-, zlib
-, groff
-, withBzip2 ? false
-, bzip2
-, withLZMA ? false
-, xz
-, withOpenssl ? false
-, openssl
-, withZstd ? false
-, zstd
-}:
+{ lib, stdenv, cmake, fetchurl, perl, zlib, groff, withBzip2 ? false, bzip2
+, withLZMA ? false, xz, withOpenssl ? false, openssl, withZstd ? false, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
@@ -29,8 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib ];
   buildInputs = lib.optionals withLZMA [ xz ]
     ++ lib.optionals withBzip2 [ bzip2 ]
-    ++ lib.optionals withOpenssl [ openssl ]
-    ++ lib.optionals withZstd [ zstd ];
+    ++ lib.optionals withOpenssl [ openssl ] ++ lib.optionals withZstd [ zstd ];
 
   preCheck = ''
     # regress/runtest is a generated file
@@ -39,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libzip.org/";
-    description = "A C library for reading, creating and modifying zip archives";
+    description =
+      "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
     changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";

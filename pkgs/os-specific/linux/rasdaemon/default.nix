@@ -1,9 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, glibcLocales, kmod, coreutils, perl
-, dmidecode, hwdata, sqlite
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, glibcLocales, kmod, coreutils
+, perl, dmidecode, hwdata, sqlite, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "rasdaemon";
@@ -25,8 +21,7 @@ stdenv.mkDerivation rec {
     kmod
     sqlite
     (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
-  ]
-  ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
+  ] ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -44,8 +39,7 @@ stdenv.mkDerivation rec {
     "--enable-memory-failure"
     "--enable-memory-ce-pfa"
     "--enable-amp-ns-decode"
-  ]
-  ++ lib.optionals (stdenv.isAarch64) [ "--enable-arm" ];
+  ] ++ lib.optionals (stdenv.isAarch64) [ "--enable-arm" ];
 
   # The installation attempts to create the following directories:
   # /var/lib/rasdaemon
@@ -65,7 +59,7 @@ stdenv.mkDerivation rec {
   # therefore, stripping these from the generated Makefile
   # (needed in the config flags because those set where the tools look for these)
 
-# easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
+  # easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
 
   postConfigure = ''
     substituteInPlace Makefile \
@@ -83,8 +77,7 @@ stdenv.mkDerivation rec {
     # Fix dmidecode and modprobe paths
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
-  ''
-  + lib.optionalString (!stdenv.isAarch64) ''
+  '' + lib.optionalString (!stdenv.isAarch64) ''
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';
@@ -105,7 +98,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mchehab/rasdaemon";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
+    changelog =
+      "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ evils ];
   };
 }

@@ -8,13 +8,16 @@ let
   format = pkgs.formats.yaml { };
   configFile = format.generate "zigbee2mqtt.yaml" cfg.settings;
 
-in
-{
+in {
   meta.maintainers = with maintainers; [ sweber hexa ];
 
   imports = [
     # Remove warning before the 21.11 release
-    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [
+      "services"
+      "zigbee2mqtt"
+      "settings"
+    ])
   ];
 
   options.services.zigbee2mqtt = {
@@ -22,9 +25,7 @@ in
 
     package = mkOption {
       description = "Zigbee2mqtt package to use";
-      default = pkgs.zigbee2mqtt.override {
-        dataDir = cfg.dataDir;
-      };
+      default = pkgs.zigbee2mqtt.override { dataDir = cfg.dataDir; };
       defaultText = literalExpression ''
         pkgs.zigbee2mqtt {
           dataDir = services.zigbee2mqtt.dataDir
@@ -41,7 +42,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           homeassistant = config.services.home-assistant.enable;
@@ -88,14 +89,13 @@ in
 
         # Hardening
         CapabilityBoundingSet = "";
-        DeviceAllow = [
-          config.services.zigbee2mqtt.settings.serial.port
-        ];
+        DeviceAllow = [ config.services.zigbee2mqtt.settings.serial.port ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = false;
         NoNewPrivileges = true;
-        PrivateDevices = false; # prevents access to /dev/serial, because it is set 0700 root:root
+        PrivateDevices =
+          false; # prevents access to /dev/serial, because it is set 0700 root:root
         PrivateUsers = true;
         PrivateTmp = true;
         ProtectClock = true;
@@ -110,22 +110,13 @@ in
         ProtectSystem = "strict";
         ReadWritePaths = cfg.dataDir;
         RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SupplementaryGroups = [
-          "dialout"
-        ];
+        SupplementaryGroups = [ "dialout" ];
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
-        ];
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0077";
       };
       preStart = ''

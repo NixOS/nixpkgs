@@ -36,15 +36,15 @@ let
       '';
 
       meta = with lib; {
-        description = "Client for proxmark3, powerful general purpose RFID tool";
+        description =
+          "Client for proxmark3, powerful general purpose RFID tool";
         homepage = "http://www.proxmark.org";
         license = licenses.gpl2Plus;
         maintainers = with maintainers; [ fpletz ];
       };
     };
-in
 
-{
+in {
   proxmark3 = generic rec {
     pname = "proxmark3";
     version = "3.1.0";

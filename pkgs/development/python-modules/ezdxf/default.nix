@@ -19,7 +19,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyparsing ];
 
   meta = with lib; {
-    description = "Python package to read and write DXF drawings (interface to the DXF file format)";
+    description =
+      "Python package to read and write DXF drawings (interface to the DXF file format)";
     homepage = "https://github.com/mozman/ezdxf/";
     license = licenses.mit;
     maintainers = with maintainers; [ hodapp ];

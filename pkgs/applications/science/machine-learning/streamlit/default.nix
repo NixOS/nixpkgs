@@ -1,8 +1,6 @@
-{   lib, buildPythonApplication, fetchPypi
-  , altair, astor, base58, blinker, boto3, botocore, click, enum-compat
-  , future, pillow, protobuf, requests, toml, tornado_5, tzlocal, validators, watchdog
-  , jinja2, setuptools
-}:
+{ lib, buildPythonApplication, fetchPypi, altair, astor, base58, blinker, boto3
+, botocore, click, enum-compat, future, pillow, protobuf, requests, toml
+, tornado_5, tzlocal, validators, watchdog, jinja2, setuptools }:
 
 buildPythonApplication rec {
   pname = "streamlit";
@@ -15,13 +13,29 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    altair astor base58 blinker boto3 botocore click enum-compat
-    future pillow protobuf requests toml tornado_5 tzlocal validators watchdog
-    jinja2 setuptools
+    altair
+    astor
+    base58
+    blinker
+    boto3
+    botocore
+    click
+    enum-compat
+    future
+    pillow
+    protobuf
+    requests
+    toml
+    tornado_5
+    tzlocal
+    validators
+    watchdog
+    jinja2
+    setuptools
   ];
 
   postInstall = ''
-      rm $out/bin/streamlit.cmd # remove windows helper
+    rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
   meta = with lib; {

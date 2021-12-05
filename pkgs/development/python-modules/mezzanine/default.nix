@@ -1,23 +1,8 @@
 { lib
 
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pyflakes
-, pep8
-, django
-, django_contrib_comments
-, filebrowser_safe
-, grappelli_safe
-, bleach
-, tzlocal
-, beautifulsoup4
-, requests
-, requests_oauthlib
-, future
-, pillow
-, chardet
-}:
+, buildPythonPackage, fetchPypi, isPyPy, pyflakes, pep8, django
+, django_contrib_comments, filebrowser_safe, grappelli_safe, bleach, tzlocal
+, beautifulsoup4, requests, requests_oauthlib, future, pillow, chardet }:
 
 buildPythonPackage rec {
   version = "4.3.1";
@@ -32,7 +17,20 @@ buildPythonPackage rec {
     || lib.versionAtLeast django.version "2.0";
 
   buildInputs = [ pyflakes pep8 ];
-  propagatedBuildInputs = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];
+  propagatedBuildInputs = [
+    django
+    django_contrib_comments
+    filebrowser_safe
+    grappelli_safe
+    bleach
+    tzlocal
+    beautifulsoup4
+    requests
+    requests_oauthlib
+    future
+    pillow
+    chardet
+  ];
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
@@ -41,7 +39,7 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = ''
@@ -68,7 +66,8 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.unix;
     # mezzanine requires django-1.11. Consider overriding python package set to use django_1_11"
-    broken = versionOlder django.version "1.11" || versionAtLeast django.version "2.0";
+    broken = versionOlder django.version "1.11"
+      || versionAtLeast django.version "2.0";
   };
 
 }

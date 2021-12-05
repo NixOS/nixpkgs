@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] version}";
+    rev = "REL${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "15dygf8klx2a4kzpmc1qnch629gcaa43ba1p3cqk9r1db4ima24k";
   };
 

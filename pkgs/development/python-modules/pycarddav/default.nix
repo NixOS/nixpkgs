@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
-, vobject
-, lxml
-, requests
-, urwid
-, pyxdg
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isPyPy, vobject, lxml, requests
+, urwid, pyxdg }:
 
 buildPythonPackage rec {
   version = "0.7.0";

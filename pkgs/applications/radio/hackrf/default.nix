@@ -11,17 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2kEfTco95I9YLz/18nfjJSd7U/HE5sBCEioWL2t804k=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    libusb1
-    fftwSinglePrec
-  ];
+  buildInputs = [ libusb1 fftwSinglePrec ];
 
-  cmakeFlags = [ "-DUDEV_RULES_GROUP=plugdev" "-DUDEV_RULES_PATH=lib/udev/rules.d" ];
+  cmakeFlags =
+    [ "-DUDEV_RULES_GROUP=plugdev" "-DUDEV_RULES_PATH=lib/udev/rules.d" ];
 
   preConfigure = ''
     cd host

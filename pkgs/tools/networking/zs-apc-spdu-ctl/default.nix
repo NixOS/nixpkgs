@@ -1,11 +1,4 @@
-{ cmake
-, fetchFromGitHub
-, fping
-, lib
-, libowlevelzs
-, net-snmp
-, stdenv
-}:
+{ cmake, fetchFromGitHub, fping, lib, libowlevelzs, net-snmp, stdenv }:
 
 # TODO: add a services entry for the /etc/zs-apc-spdu.conf file
 stdenv.mkDerivation rec {

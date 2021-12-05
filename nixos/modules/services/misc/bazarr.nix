@@ -2,18 +2,18 @@
 
 with lib;
 
-let
-  cfg = config.services.bazarr;
-in
-{
+let cfg = config.services.bazarr;
+in {
   options = {
     services.bazarr = {
-      enable = mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
+      enable =
+        mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the bazarr web interface.";
+        description =
+          "Open ports in the firewall for the bazarr web interface.";
       };
 
       listenPort = mkOption {
@@ -58,20 +58,18 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.listenPort ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.listenPort ]; };
 
     users.users = mkIf (cfg.user == "bazarr") {
       bazarr = {
         isSystemUser = true;
         group = cfg.group;
-        home = "/var/lib/${config.systemd.services.bazarr.serviceConfig.StateDirectory}";
+        home =
+          "/var/lib/${config.systemd.services.bazarr.serviceConfig.StateDirectory}";
       };
     };
 
-    users.groups = mkIf (cfg.group == "bazarr") {
-      bazarr = {};
-    };
+    users.groups = mkIf (cfg.group == "bazarr") { bazarr = { }; };
   };
 }

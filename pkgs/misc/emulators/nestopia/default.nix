@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsa-lib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
-, libepoxy, gdk-pixbuf, gnome, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsa-lib, gtk3, makeWrapper
+, libGLU, libGL, libarchive, libao, unzip, xdg-utils, libepoxy, gdk-pixbuf
+, gnome, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   version = "1.47";
@@ -25,19 +24,15 @@ stdenv.mkDerivation rec {
     libepoxy
     gtk3
     gdk-pixbuf
-    libGLU libGL
+    libGLU
+    libGL
     libarchive
     libao
     xdg-utils
     gnome.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-    wrapGAppsHook
-    unzip
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper wrapGAppsHook unzip ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/nestopia}
@@ -45,10 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-     for f in $out/bin/*; do
-       wrapProgram $f \
-         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-     done
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   patches = [

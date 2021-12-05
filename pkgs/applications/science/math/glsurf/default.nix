@@ -1,21 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, ocamlPackages
-, makeWrapper
-, libGLU
-, libGL
-, freeglut
-, mpfr
-, gmp
-, pkgsHostTarget
-}:
+{ lib, stdenv, fetchurl, ocamlPackages, makeWrapper, libGLU, libGL, freeglut
+, mpfr, gmp, pkgsHostTarget }:
 
-let
-  inherit (pkgsHostTarget.targetPackages.stdenv) cc;
-in
+let inherit (pkgsHostTarget.targetPackages.stdenv) cc;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "glsurf";
   version = "3.3.1";
 
@@ -24,24 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ (with ocamlPackages; [
-    ocaml
-    findlib
-  ]);
+  nativeBuildInputs = [ makeWrapper ]
+    ++ (with ocamlPackages; [ ocaml findlib ]);
 
-  buildInputs = [
-    freeglut
-    libGL
-    libGLU
-    mpfr
-    gmp
-  ] ++ (with ocamlPackages; [
-    camlp4
-    lablgl
-    camlimages_4_2_4
-  ]);
+  buildInputs = [ freeglut libGL libGLU mpfr gmp ]
+    ++ (with ocamlPackages; [ camlp4 lablgl camlimages_4_2_4 ]);
 
   postPatch = ''
     for f in callbacks*/Makefile src/Makefile; do

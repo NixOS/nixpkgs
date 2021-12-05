@@ -1,4 +1,4 @@
-{ callPackage, ... } @ args:
+{ callPackage, ... }@args:
 
 callPackage ./generic.nix (args // {
   version = "2.2.14";

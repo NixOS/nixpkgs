@@ -1,8 +1,4 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-core
-}:
+{ pkgs, buildPythonPackage, fetchPypi, azure-core }:
 
 buildPythonPackage rec {
   version = "1.3.0";
@@ -14,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "3ffb7352b39e5495dccc2d2b47254f4d82747aff4735e8bf3267c335b0c9bb40";
   };
 
-  propagatedBuildInputs = [
-    azure-core
-  ];
+  propagatedBuildInputs = [ azure-core ];
 
   pythonNamespaces = "azure.mgmt";
 

@@ -1,25 +1,8 @@
-{ lib
-, pkg-config
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, gnupg
-, gnutar
-, squashfsTools
-, debootstrap
-}:
+{ lib, pkg-config, buildGoModule, fetchFromGitHub, makeWrapper, coreutils, gnupg
+, gnutar, squashfsTools, debootstrap }:
 
-let
-  bins = [
-    coreutils
-    gnupg
-    gnutar
-    squashfsTools
-    debootstrap
-  ];
-in
-buildGoModule rec {
+let bins = [ coreutils gnupg gnutar squashfsTools debootstrap ];
+in buildGoModule rec {
   pname = "distrobuilder";
   version = "2.0";
 
@@ -38,10 +21,7 @@ buildGoModule rec {
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ] ++ bins;
+  nativeBuildInputs = [ pkg-config makeWrapper ] ++ bins;
 
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}

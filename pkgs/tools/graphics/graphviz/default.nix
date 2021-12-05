@@ -1,32 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, cairo
-, expat
-, flex
-, fontconfig
-, gd
-, gts
-, libdevil
-, libjpeg
-, libpng
-, libtool
-, pango
-, bash
-, bison
-, fetchpatch
-, xorg
-, ApplicationServices
-, python3
-, withXorg ? true
-}:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
+, fontconfig, gd, gts, libdevil, libjpeg, libpng, libtool, pango, bash, bison
+, fetchpatch, xorg, ApplicationServices, python3, withXorg ? true }:
 
-let
-  inherit (lib) optional optionals optionalString;
-in
-stdenv.mkDerivation {
+let inherit (lib) optional optionals optionalString;
+in stdenv.mkDerivation {
   pname = "graphviz";
   version = "2.49.3";
 
@@ -43,31 +20,17 @@ stdenv.mkDerivation {
     # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
     # Remove when version > 2.49.3.
     (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
+      url =
+        "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
       sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
     })
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    python3
-    bison
-    flex
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 bison flex ];
 
-  buildInputs = [
-    libpng
-    libjpeg
-    expat
-    fontconfig
-    gd
-    gts
-    libdevil
-    pango
-    bash
-  ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = [ libpng libjpeg expat fontconfig gd gts libdevil pango bash ]
+    ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
+    ++ optionals stdenv.isDarwin [ ApplicationServices ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -86,7 +49,8 @@ stdenv.mkDerivation {
   #     --replace "/bin/ksh" "${mksh}/bin/mksh"
   # '';
 
-  doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
+  doCheck =
+    false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
   postPatch = ''
     for f in $(find . -name Makefile.in); do

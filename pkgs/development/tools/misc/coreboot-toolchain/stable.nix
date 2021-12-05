@@ -38,14 +38,16 @@
     name = "acpica-unix2-20210331.tar.gz";
     archive = fetchurl {
       sha256 = "1h98pvc9iy1c49cid0ppjwk5zsy2m1xbvfqb72pkwkrd4rn35arx";
-      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20210331.tar.gz";
+      url =
+        "https://acpica.org/sites/acpica/files/acpica-unix2-20210331.tar.gz";
     };
   }
   {
     name = "nasm-2.15.05.tar.bz2";
     archive = fetchurl {
       sha256 = "1l1gxs5ncdbgz91lsl4y7w5aapask3w02q9inayb2m5bwlwq6jrw";
-      url = "https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.bz2";
+      url =
+        "https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.bz2";
     };
   }
 ]

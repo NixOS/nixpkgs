@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_net
-, SDL2_ttf
-, boost
-, cmake
-, curl
-, doxygen
-, gettext
-, glew
-, graphviz
-, icu
-, installShellFiles
-, libpng
-, lua
-, python3
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+, boost, cmake, curl, doxygen, gettext, glew, graphviz, icu, installShellFiles
+, libpng, lua, python3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "widelands";

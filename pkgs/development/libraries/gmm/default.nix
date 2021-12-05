@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Generic C++ template library for sparse, dense and skyline matrices";
+    description =
+      "Generic C++ template library for sparse, dense and skyline matrices";
     homepage = "http://getfem.org/gmm.html";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;

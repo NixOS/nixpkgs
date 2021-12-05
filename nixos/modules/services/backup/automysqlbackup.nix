@@ -2,8 +2,11 @@
 
 let
 
-  inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExpression;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib)
+    concatMapStringsSep concatStringsSep isInt isList literalExpression;
+  inherit (lib)
+    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional
+    types;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -11,21 +14,26 @@ let
   group = "automysqlbackup";
 
   toStr = val:
-    if isList val then "( ${concatMapStringsSep " " (val: "'${val}'") val} )"
-    else if isInt val then toString val
-    else if true == val then "'yes'"
-    else if false == val then "'no'"
-    else "'${toString val}'";
+    if isList val then
+      "( ${concatMapStringsSep " " (val: "'${val}'") val} )"
+    else if isInt val then
+      toString val
+    else if true == val then
+      "'yes'"
+    else if false == val then
+      "'no'"
+    else
+      "'${toString val}'";
 
   configFile = pkgs.writeText "automysqlbackup.conf" ''
     #version=${pkg.version}
     # DONT'T REMOVE THE PREVIOUS VERSION LINE!
     #
-    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
+    ${concatStringsSep "\n"
+    (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
   '';
 
-in
-{
+in {
   # interface
   options = {
     services.automysqlbackup = {
@@ -42,7 +50,7 @@ in
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           automysqlbackup configuration. Refer to
           <filename>''${pkgs.automysqlbackup}/etc/automysqlbackup.conf</filename>
@@ -64,11 +72,11 @@ in
   # implementation
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = !config.services.mysqlBackup.enable;
-        message = "Please choose one of services.mysqlBackup or services.automysqlbackup.";
-      }
-    ];
+    assertions = [{
+      assertion = !config.services.mysqlBackup.enable;
+      message =
+        "Please choose one of services.mysqlBackup or services.automysqlbackup.";
+    }];
 
     services.automysqlbackup.config = mapAttrs (name: mkDefault) {
       mysql_dump_username = user;
@@ -106,14 +114,16 @@ in
     };
     users.groups.${group} = { };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -" ];
 
-    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
-      name = user;
-      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES"; };
-    };
+    services.mysql.ensureUsers = optional (config.services.mysql.enable
+      && cfg.config.mysql_dump_host == "localhost") {
+        name = user;
+        ensurePermissions = {
+          "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
+        };
+      };
 
   };
 }

@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchsvn, autoreconfHook,
-  autoconf, automake, libtool, flex, perl, check, pkg-config, python3,
-  version, rev, sha256, maps, arch }:
+{ stdenv, lib, fetchsvn, autoreconfHook, autoconf, automake, libtool, flex, perl
+, check, pkg-config, python3, version, rev, sha256, maps, arch }:
 
 stdenv.mkDerivation rec {
   pname = "crossfire-server";
@@ -12,7 +11,8 @@ stdenv.mkDerivation rec {
     rev = rev;
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python3 ];
+  nativeBuildInputs =
+    [ autoconf automake libtool flex perl check pkg-config python3 ];
   hardeningDisable = [ "format" ];
 
   preConfigure = ''

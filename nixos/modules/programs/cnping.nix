@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.programs.cnping;
-in
-{
+let cfg = config.programs.cnping;
+in {
   options = {
     programs.cnping = {
       enable = mkEnableOption "Whether to install a setcap wrapper for cnping";

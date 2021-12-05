@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, which
-, makeWrapper
-, libao
-, libbencodetools
-, sox
-, lame
-, flac
-, vorbis-tools
-}:
+{ lib, stdenv, fetchFromGitLab, pkg-config, which, makeWrapper, libao
+, libbencodetools, sox, lame, flac, vorbis-tools }:
 
 stdenv.mkDerivation {
   pname = "uade123";
@@ -30,24 +19,11 @@ stdenv.mkDerivation {
       --replace '/usr/local' "$out"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    which
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config which makeWrapper ];
 
-  buildInputs = [
-    libao
-    libbencodetools
-    sox
-    lame
-    flac
-    vorbis-tools
-  ];
+  buildInputs = [ libao libbencodetools sox lame flac vorbis-tools ];
 
-  configureFlags = [
-    "--bencode-tools-prefix=${libbencodetools}"
-  ];
+  configureFlags = [ "--bencode-tools-prefix=${libbencodetools}" ];
 
   enableParallelBuilding = true;
 
@@ -61,7 +37,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
+    description =
+      "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
     homepage = "https://zakalwe.fi/uade/";
     # It's a mix of licenses. "GPL", Public Domain, "LGPL", GPL2+, BSD, LGPL21+ and source code with unknown licenses. E.g.
     # - hippel-coso player is "[not] under any Open Source certified license"

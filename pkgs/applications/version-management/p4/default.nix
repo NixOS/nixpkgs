@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2020.1.2007551";
 
   src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r20.1/bin.linux26x86_64/helix-core-server.tgz";
+    url =
+      "https://cdist2.perforce.com/perforce/r20.1/bin.linux26x86_64/helix-core-server.tgz";
     sha256 = "0ly9b838zrpp6841fzapizdd3xmria55bwfrh2j29qwxiwzqj80y";
   };
 

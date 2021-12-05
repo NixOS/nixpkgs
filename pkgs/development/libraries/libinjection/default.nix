@@ -1,15 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, python2
-}:
+{ lib, stdenv, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
-  pname   = "libinjection";
+  pname = "libinjection";
   version = "3.10.0";
 
   src = fetchFromGitHub {
-    owner  = "client9";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
+    owner = "client9";
+    repo = pname;
+    rev = "refs/tags/v${version}";
     sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
   };
 
@@ -31,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SQL / SQLI tokenizer parser analyzer";
-    homepage    = "https://github.com/client9/libinjection";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://github.com/client9/libinjection";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

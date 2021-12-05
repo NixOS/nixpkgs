@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, ruby
-}:
+{ lib, stdenv, fetchFromGitHub, gcc-arm-embedded, binutils-arm-embedded, ruby }:
 
 stdenv.mkDerivation rec {
 
@@ -10,17 +8,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iNavFlight";
     repo = "inav";
-    rev = "a8415e89c2956d133d8175827c079bcf3bc3766c"; # Always use a commit id here!
+    rev =
+      "a8415e89c2956d133d8175827c079bcf3bc3766c"; # Always use a commit id here!
     sha256 = "15zai8qf43b06fmws1sbkmdgip51zp7gkfj7pp9b6gi8giarzq3y";
   };
 
-  nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
-    ruby
-  ];
+  nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded ruby ];
 
   postPatch = ''
-    sed -ri "s/REVISION.*=.*shell git.*/REVISION = ${builtins.substring 0 10 src.rev}/" Makefile # Simulate abbrev'd rev.
+    sed -ri "s/REVISION.*=.*shell git.*/REVISION = ${
+      builtins.substring 0 10 src.rev
+    }/" Makefile # Simulate abbrev'd rev.
     sed -ri "s/-j *[0-9]+//" Makefile # Eliminate parallel build args in submakes
     sed -ri "s/binary hex/hex/" Makefile # No need for anything besides .hex
 

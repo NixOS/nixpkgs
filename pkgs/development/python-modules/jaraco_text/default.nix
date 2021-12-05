@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, importlib-resources
-, jaraco_functools
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, importlib-resources
+, jaraco_functools, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "jaraco.text";
@@ -15,10 +12,9 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs =[ setuptools-scm ];
-  propagatedBuildInputs = [
-    jaraco_functools
-  ] ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ jaraco_functools ]
+    ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];
 
   # no tests in pypi package
   doCheck = false;

@@ -1,46 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, wxGTK
-, pkg-config
-, python3
-, gettext
-, file
-, libvorbis
-, libmad
-, libjack2
-, lv2
-, lilv
-, serd
-, sord
-, sqlite
-, sratom
-, suil
-, alsa-lib
-, libsndfile
-, soxr
-, flac
-, twolame
-, expat
-, libid3tag
-, libopus
-, ffmpeg
-, soundtouch
-, pcre /*, portaudio - given up fighting their portaudio.patch */
-, linuxHeaders
-, at-spi2-core
-, dbus
-, libepoxy
-, libXdmcp
-, libXtst
-, libpthreadstubs
-, libselinux
-, libsepol
-, libxkbcommon
-, util-linux
-}:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, wxGTK, pkg-config, python3
+, gettext, file, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sqlite
+, sratom, suil, alsa-lib, libsndfile, soxr, flac, twolame, expat, libid3tag
+, libopus, ffmpeg, soundtouch
+, pcre # , portaudio - given up fighting their portaudio.patch
+, linuxHeaders, at-spi2-core, dbus, libepoxy, libXdmcp, libXtst, libpthreadstubs
+, libselinux, libsepol, libxkbcommon, util-linux }:
 
 # TODO
 # 1. as of 3.0.2, GTK2 is still the recommended version ref https://www.audacityteam.org/download/source/ check if that changes in future versions
@@ -59,8 +23,7 @@ let
     };
   });
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "audacity";
   # nixpkgs-update: no auto update
   # Humans too! Let's wait to see how the situation with
@@ -80,7 +43,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/audacity/audacity/commit/7f8135e112a0e1e8e906abab9339680d1e491441.patch";
+      url =
+        "https://github.com/audacity/audacity/commit/7f8135e112a0e1e8e906abab9339680d1e491441.patch";
       sha256 = "0zp2iydd46analda9cfnbmzdkjphz5m7dynrdj5qdnmq6j3px9fw";
       name = "audacity_xdg_paths.patch";
     })
@@ -106,14 +70,8 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gettext
-    pkg-config
-    python3
-  ] ++ optionals stdenv.isLinux [
-    linuxHeaders
-  ];
+  nativeBuildInputs = [ cmake gettext pkg-config python3 ]
+    ++ optionals stdenv.isLinux [ linuxHeaders ];
 
   buildInputs = [
     alsa-lib

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, libGL
-, libX11
-, glcontext
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, libGL, libX11, glcontext }:
 
 buildPythonPackage rec {
   pname = "moderngl";

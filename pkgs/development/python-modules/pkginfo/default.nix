@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
@@ -14,13 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ZRdf+iyAciBnOkHDcVc6yaHqGxn/1e75FiePQoMZk08=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pkginfo"
-  ];
+  pythonImportsCheck = [ "pkginfo" ];
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";

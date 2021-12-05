@@ -1,30 +1,7 @@
-{ stdenv
-, lib
-, alsa-lib
-, autoPatchelfHook
-, buildFHSUserEnvBubblewrap
-, callPackage
-, copyDesktopItems
-, dbus
-, dpkg
-, expat
-, fontconfig
-, glib
-, libdrm
-, libglvnd
-, libpulseaudio
-, libudev0-shim
-, libxkbcommon
-, libxml2
-, libxslt
-, lndir
-, makeDesktopItem
-, makeWrapper
-, nspr
-, nss
-, requireFile
-, xorg
-}:
+{ stdenv, lib, alsa-lib, autoPatchelfHook, buildFHSUserEnvBubblewrap
+, callPackage, copyDesktopItems, dbus, dpkg, expat, fontconfig, glib, libdrm
+, libglvnd, libpulseaudio, libudev0-shim, libxkbcommon, libxml2, libxslt, lndir
+, makeDesktopItem, makeWrapper, nspr, nss, requireFile, xorg }:
 
 let
   version = "8.0.1";
@@ -35,8 +12,11 @@ let
 
     dontUnpack = true;
     src = requireFile {
-      name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-      sha256 = "77a25351b016faed7c78959819c16c7013caa89c6b1872cb888cd96edd259140";
+      name = "CiscoPacketTracer_${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_Ubuntu_64bit.deb";
+      sha256 =
+        "77a25351b016faed7c78959819c16c7013caa89c6b1872cb888cd96edd259140";
       url = "https://www.netacad.com";
     };
 

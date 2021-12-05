@@ -1,17 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, python3
-, libgudev
-, libmbim
-, libqrtr-glib
-}:
+{ lib, stdenv, fetchurl, pkg-config, gobject-introspection, gtk-doc
+, docbook-xsl-nons, docbook_xml_dtd_43, glib, python3, libgudev, libmbim
+, libqrtr-glib }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
@@ -20,7 +9,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
     sha256 = "sha256-vgHs4OosIZTL6ldEv1qvBsBLpft+x4h6ExFsdtEU/t0=";
   };
 
@@ -33,15 +23,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [
-    libgudev
-    libmbim
-  ];
+  buildInputs = [ libgudev libmbim ];
 
-  propagatedBuildInputs = [
-    glib
-    libqrtr-glib
-  ];
+  propagatedBuildInputs = [ glib libqrtr-glib ];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
@@ -64,6 +48,7 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
-    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
+    changelog =
+      "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
   };
 }

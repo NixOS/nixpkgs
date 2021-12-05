@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/stefanhaustein/TerminalImageViewer";
-    description = "Small C++ program to display images in a (modern) terminal using RGB ANSI codes and unicode block graphics characters";
+    description =
+      "Small C++ program to display images in a (modern) terminal using RGB ANSI codes and unicode block graphics characters";
     license = licenses.asl20;
     maintainers = with maintainers; [ magnetophon ];
     platforms = [ "x86_64-linux" ];

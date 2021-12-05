@@ -1,18 +1,18 @@
-{ stdenv, lib, makeWrapper, p7zip
-, gawk, util-linux, xorg, glib, dbus-glib, zlib
-, kernel ? null, libsOnly ? false
-, undmg, fetchurl
-}:
+{ stdenv, lib, makeWrapper, p7zip, gawk, util-linux, xorg, glib, dbus-glib, zlib
+, kernel ? null, libsOnly ? false, undmg, fetchurl }:
 
 assert (!libsOnly) -> kernel != null;
 
-let xorgFullVer = lib.getVersion xorg.xorgserver;
-    xorgVer = lib.versions.majorMinor xorgFullVer;
-    x64 = if stdenv.hostPlatform.system == "x86_64-linux" then true
-          else if stdenv.hostPlatform.system == "i686-linux" then false
-          else throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
-in
-stdenv.mkDerivation rec {
+let
+  xorgFullVer = lib.getVersion xorg.xorgserver;
+  xorgVer = lib.versions.majorMinor xorgFullVer;
+  x64 = if stdenv.hostPlatform.system == "x86_64-linux" then
+    true
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    false
+  else
+    throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
+in stdenv.mkDerivation rec {
   version = "${prl_major}.2.1-41615";
   prl_major = "12";
   pname = "prl-tools";
@@ -20,14 +20,17 @@ stdenv.mkDerivation rec {
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
-    url =  "https://download.parallels.com/desktop/v${prl_major}/${version}/ParallelsDesktop-${version}.dmg";
+    url =
+      "https://download.parallels.com/desktop/v${prl_major}/${version}/ParallelsDesktop-${version}.dmg";
     sha256 = "1jwzwif69qlhmfky9kigjaxpxfj0lyrl1iyrpqy4iwqvajdgbbym";
   };
 
   hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ p7zip undmg ]
+    ++ lib.optionals (!libsOnly) [ makeWrapper ]
+    ++ kernel.moduleBuildDependencies;
 
   inherit libsOnly;
 
@@ -39,12 +42,16 @@ stdenv.mkDerivation rec {
     if test -z "$libsOnly"; then
       ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
     fi
-    ( cd $sourceRoot/tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
+    ( cd $sourceRoot/tools; tar -xaf prltools${
+      if x64 then ".x64" else ""
+    }.tar.gz )
   '';
 
   kernelVersion = if libsOnly then "" else lib.getName kernel.name;
-  kernelDir = if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
-  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${util-linux}/bin" "${gawk}/bin" ]);
+  kernelDir =
+    if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
+  scriptPath = lib.concatStringsSep ":"
+    (lib.optionals (!libsOnly) [ "${util-linux}/bin" "${gawk}/bin" ]);
 
   buildPhase = ''
     if test -z "$libsOnly"; then
@@ -64,9 +71,9 @@ stdenv.mkDerivation rec {
   '';
 
   libPath = with xorg;
-            lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
-            ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
-
+    lib.makeLibraryPath
+    ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
+      ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
 
   installPhase = ''
     if test -z "$libsOnly"; then

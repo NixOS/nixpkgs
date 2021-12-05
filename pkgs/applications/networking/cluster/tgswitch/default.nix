@@ -13,7 +13,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/warrensbox/tgswitch";
 
   meta = with lib; {
-    description = "A command line tool to switch between different versions of terragrunt";
+    description =
+      "A command line tool to switch between different versions of terragrunt";
     homepage = "https://github.com/warrensbox/tgswitch";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];

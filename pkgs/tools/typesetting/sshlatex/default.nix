@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, inotify-tools, openssh, perl, gnutar, bash, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, inotify-tools, openssh, perl, gnutar, bash
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sshlatex";
@@ -13,13 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = let
-    binPath = lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];
-  in ''
-    mkdir -p $out/bin
-    cp sshlatex $out/bin
-    wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
-  '';
+  installPhase =
+    let binPath = lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];
+    in ''
+      mkdir -p $out/bin
+      cp sshlatex $out/bin
+      wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
+    '';
 
   meta = with lib; {
     description = "A collection of hacks to efficiently run LaTeX via ssh";
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
       purely local setting.
     '';
     homepage = "https://github.com/iblech/sshlatex";
-    license = lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
+    license =
+      lib.licenses.gpl3Plus; # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = lib.platforms.all;
     maintainers = [ maintainers.iblech ];
   };

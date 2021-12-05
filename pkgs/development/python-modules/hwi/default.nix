@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bitbox02
-, ecdsa
-, hidapi
-, libusb1
-, mnemonic
-, pyaes
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, bitbox02, ecdsa, hidapi, libusb1
+, mnemonic, pyaes, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "hwi";
@@ -21,15 +12,8 @@ buildPythonPackage rec {
     sha256 = "sha256-s0pKYqesZjHE6YndqsMwCuqLK7eE82oRiSXxBdUtEX4=";
   };
 
-  propagatedBuildInputs = [
-    bitbox02
-    ecdsa
-    hidapi
-    libusb1
-    mnemonic
-    pyaes
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [ bitbox02 ecdsa hidapi libusb1 mnemonic pyaes typing-extensions ];
 
   # make compatible with libusb1 2.x
   postPatch = ''

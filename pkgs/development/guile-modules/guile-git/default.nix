@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, guile
-, libgit2
-, scheme-bytestructures
-, autoreconfHook
-, pkg-config
-, texinfo
-}:
+{ lib, stdenv, fetchFromGitLab, guile, libgit2, scheme-bytestructures
+, autoreconfHook, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "guile-git";
@@ -25,15 +17,9 @@ stdenv.mkDerivation rec {
     sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
-  ];
-  buildInputs = [
-    guile
-  ];
-  propagatedBuildInputs = [
-    libgit2 scheme-bytestructures
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  buildInputs = [ guile ];
+  propagatedBuildInputs = [ libgit2 scheme-bytestructures ];
 
   enableParallelBuilding = true;
 

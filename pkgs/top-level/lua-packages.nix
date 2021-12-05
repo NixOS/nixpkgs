@@ -3,137 +3,138 @@
    them.  Also, because most Nix expressions for Lua packages are
    trivial, most are actually defined here.  I.e. there's no function
    for each package in a separate file: the call to the function would
-   be almost as must code as the function itself. */
+   be almost as must code as the function itself.
+*/
 
-{ fetchurl, stdenv, lua, unzip, pkg-config
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, autoreconfHook, gnum4
-, postgresql, cyrus_sasl
-, fetchFromGitHub, which, writeText
-, pkgs
-, lib
-}@args:
+{ fetchurl, stdenv, lua, unzip, pkg-config, pcre, oniguruma, gnulib, tre, glibc
+, sqlite, openssl, expat, autoreconfHook, gnum4, postgresql, cyrus_sasl
+, fetchFromGitHub, which, writeText, pkgs, lib }@args:
 
 let
-  packages = ( self:
+  packages = (self:
 
-let
-  callPackage = pkgs.newScope self;
+    let
+      callPackage = pkgs.newScope self;
 
-  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+      buildLuaApplication = args:
+        buildLuarocksPackage ({ namePrefix = ""; } // args);
 
-  buildLuarocksPackage = lib.makeOverridable(callPackage ../development/interpreters/lua-5/build-lua-package.nix {
-    inherit lua;
-    inherit (pkgs) lib;
-    inherit (luaLib) toLuaModule;
-  });
+      buildLuarocksPackage = lib.makeOverridable
+        (callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+          inherit lua;
+          inherit (pkgs) lib;
+          inherit (luaLib) toLuaModule;
+        });
 
-  luaLib = import ../development/lua-modules/lib.nix {
-    inherit (pkgs) lib;
-    inherit pkgs lua;
-  };
+      luaLib = import ../development/lua-modules/lib.nix {
+        inherit (pkgs) lib;
+        inherit pkgs lua;
+      };
 
-  #define build lua package function
-  buildLuaPackage = callPackage ../development/lua-modules/generic {
-    inherit writeText;
-  };
+      #define build lua package function
+      buildLuaPackage =
+        callPackage ../development/lua-modules/generic { inherit writeText; };
 
-  getPath = drv: pathListForVersion:
-    lib.concatMapStringsSep ";" (path: "${drv}/${path}") pathListForVersion;
+      getPath = drv: pathListForVersion:
+        lib.concatMapStringsSep ";" (path: "${drv}/${path}") pathListForVersion;
 
-in
-{
-  # helper functions for dealing with LUA_PATH and LUA_CPATH
-  lib = luaLib;
+    in {
+      # helper functions for dealing with LUA_PATH and LUA_CPATH
+      lib = luaLib;
 
-  getLuaPath = drv: getPath drv luaLib.luaPathList;
-  getLuaCPath = drv: getPath drv luaLib.luaCPathList;
+      getLuaPath = drv: getPath drv luaLib.luaPathList;
+      getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
-  inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
-    lua-setup-hook;
+      inherit (callPackage ../development/interpreters/lua-5/hooks {
+        inherit (args) lib;
+      })
+        lua-setup-hook;
 
-  inherit lua callPackage;
-  inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
-  inherit (luaLib) luaOlder luaAtLeast isLua51 isLua52 isLua53 isLuaJIT
-    requiredLuaModules toLuaModule hasLuaModule;
+      inherit lua callPackage;
+      inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
+      inherit (luaLib)
+        luaOlder luaAtLeast isLua51 isLua52 isLua53 isLuaJIT requiredLuaModules
+        toLuaModule hasLuaModule;
 
-  # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
-  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
-    inherit lua lib;
-    inherit (pkgs) makeSetupHook makeWrapper;
-  };
+      # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
+      wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+        inherit lua lib;
+        inherit (pkgs) makeSetupHook makeWrapper;
+      };
 
-  luarocks = callPackage ../development/tools/misc/luarocks {
-    inherit lua lib;
-  };
+      luarocks =
+        callPackage ../development/tools/misc/luarocks { inherit lua lib; };
 
-  luarocks-3_7 = callPackage ../development/tools/misc/luarocks/3.7.nix {
-    inherit lua lib;
-  };
+      luarocks-3_7 = callPackage ../development/tools/misc/luarocks/3.7.nix {
+        inherit lua lib;
+      };
 
-  # a fork of luarocks used to generate nix lua derivations from rockspecs
-  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+      # a fork of luarocks used to generate nix lua derivations from rockspecs
+      luarocks-nix =
+        callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luxio = buildLuaPackage {
-    pname = "luxio";
-    version = "13";
+      luxio = buildLuaPackage {
+        pname = "luxio";
+        version = "13";
 
-    src = fetchurl {
-      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
-      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
-    };
+        src = fetchurl {
+          url =
+            "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+          sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+        };
 
-    nativeBuildInputs = [ which pkg-config ];
+        nativeBuildInputs = [ which pkg-config ];
 
-    postPatch = ''
-      patchShebangs .
-    '';
+        postPatch = ''
+          patchShebangs .
+        '';
 
-    preBuild = ''
-      makeFlagsArray=(
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-        LUA_BINDIR="$out/bin"
-        INSTALL=install
-        );
-    '';
+        preBuild = ''
+          makeFlagsArray=(
+            INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+            INST_LUADIR="$out/share/lua/${lua.luaversion}"
+            LUA_BINDIR="$out/bin"
+            INSTALL=install
+            );
+        '';
 
-    meta = with lib; {
-      description = "Lightweight UNIX I/O and POSIX binding for Lua";
-      homepage = "https://www.gitano.org.uk/luxio/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ richardipsum ];
-      platforms = platforms.unix;
-    };
-  };
+        meta = with lib; {
+          description = "Lightweight UNIX I/O and POSIX binding for Lua";
+          homepage = "https://www.gitano.org.uk/luxio/";
+          license = licenses.mit;
+          maintainers = with maintainers; [ richardipsum ];
+          platforms = platforms.unix;
+        };
+      };
 
-  vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {
-    pname = "vicious";
-    version = "2.5.0";
+      vicious = luaLib.toLuaModule (stdenv.mkDerivation rec {
+        pname = "vicious";
+        version = "2.5.0";
 
-    src = fetchFromGitHub {
-      owner = "Mic92";
-      repo = "vicious";
-      rev = "v${version}";
-      sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
-    };
+        src = fetchFromGitHub {
+          owner = "Mic92";
+          repo = "vicious";
+          rev = "v${version}";
+          sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
+        };
 
-    buildInputs = [ lua ];
+        buildInputs = [ lua ];
 
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}/
-      cp -r . $out/lib/lua/${lua.luaversion}/vicious/
-      printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
-    '';
+        installPhase = ''
+          mkdir -p $out/lib/lua/${lua.luaversion}/
+          cp -r . $out/lib/lua/${lua.luaversion}/vicious/
+          printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
+        '';
 
-    meta = with lib; {
-      description = "A modular widget library for the awesome window manager";
-      homepage    = "https://github.com/Mic92/vicious";
-      license     = licenses.gpl2;
-      maintainers = with maintainers; [ makefu mic92 ];
-      platforms   = platforms.linux;
-    };
-  });
+        meta = with lib; {
+          description =
+            "A modular widget library for the awesome window manager";
+          homepage = "https://github.com/Mic92/vicious";
+          license = licenses.gpl2;
+          maintainers = with maintainers; [ makefu mic92 ];
+          platforms = platforms.linux;
+        };
+      });
 
-});
+    });
 in packages

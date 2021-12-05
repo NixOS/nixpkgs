@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, lockfile
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, cherrypy, fetchFromGitHub, lockfile, mock, msgpack
+, pytestCheckHook, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
@@ -24,21 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
   };
 
-  propagatedBuildInputs = [
-    msgpack
-    requests
-  ];
+  propagatedBuildInputs = [ msgpack requests ];
 
-  checkInputs = [
-    cherrypy
-    mock
-    lockfile
-    pytestCheckHook
-  ];
+  checkInputs = [ cherrypy mock lockfile pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cachecontrol"
-  ];
+  pythonImportsCheck = [ "cachecontrol" ];
 
   meta = with lib; {
     description = "Httplib2 caching for requests";

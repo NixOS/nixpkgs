@@ -1,35 +1,11 @@
-{ withGUI ? true
-, stdenv
-, lib
-, fetchpatch
-, fetchFromGitHub
-, wrapQtAppsHook
+{ withGUI ? true, stdenv, lib, fetchpatch, fetchFromGitHub, wrapQtAppsHook
 
-, cmake
-, openssl
-, pcre
-, util-linux
-, libselinux
-, libsepol
-, pkg-config
-, gdk-pixbuf
-, libnotify
-, qttools
-, xlibsWrapper
-, libX11
-, libXi
-, libXtst
-, libXrandr
-, xinput
+, cmake, openssl, pcre, util-linux, libselinux, libsepol, pkg-config, gdk-pixbuf
+, libnotify, qttools, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput
 , avahi-compat
 
 # macOS / darwin
-, ApplicationServices
-, Carbon
-, Cocoa
-, CoreServices
-, ScreenSaver
-}:
+, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
@@ -50,42 +26,36 @@ stdenv.mkDerivation rec {
       --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   '';
 
-  cmakeFlags = lib.optionals (!withGUI) [
-    "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.09"
-  ];
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+  cmakeFlags = lib.optionals (!withGUI) [ "-DSYNERGY_BUILD_LEGACY_GUI=OFF" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.09" ];
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
-  buildInputs = [
-    openssl
-    pcre
-  ] ++ lib.optionals withGUI [
-    qttools
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Carbon
-    Cocoa
-    CoreServices
-    ScreenSaver
-  ] ++ lib.optionals stdenv.isLinux [
-    util-linux
-    libselinux
-    libsepol
-    xlibsWrapper
-    libX11
-    libXi
-    libXtst
-    libXrandr
-    xinput
-    avahi-compat
-    gdk-pixbuf
-    libnotify
-  ];
+  buildInputs = [ openssl pcre ] ++ lib.optionals withGUI [ qttools ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Carbon
+      Cocoa
+      CoreServices
+      ScreenSaver
+    ] ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+      xlibsWrapper
+      libX11
+      libXi
+      libXtst
+      libXrandr
+      xinput
+      avahi-compat
+      gdk-pixbuf
+      libnotify
+    ];
 
   installPhase = ''
     mkdir -p $out/bin

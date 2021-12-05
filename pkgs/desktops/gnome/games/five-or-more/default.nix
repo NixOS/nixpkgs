@@ -6,17 +6,25 @@ stdenv.mkDerivation rec {
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/five-or-more/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/five-or-more/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "19pf8wzbf3ciqf2k4bj9sddvyhckfd62x86pnqr6s8h4vn9jc6ii";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gettext itstool libxml2 python3 wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    gettext
+    itstool
+    libxml2
+    python3
+    wrapGAppsHook
     vala
   ];
-  buildInputs = [
-    gtk3 librsvg libgnome-games-support gnome.adwaita-icon-theme
-  ];
+  buildInputs =
+    [ gtk3 librsvg libgnome-games-support gnome.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

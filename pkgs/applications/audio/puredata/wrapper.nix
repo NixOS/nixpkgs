@@ -1,7 +1,6 @@
 { symlinkJoin, puredata, makeWrapper, plugins }:
 
-let
-puredataFlags = map (x: "-path ${x}/") plugins;
+let puredataFlags = map (x: "-path ${x}/") plugins;
 in symlinkJoin {
   name = "puredata-with-plugins-${puredata.version}";
 

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, Security
-}:
+{ lib, stdenv, nixosTests, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
@@ -21,9 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  passthru.tests = {
-    inherit (nixosTests) libreddit;
-  };
+  passthru.tests = { inherit (nixosTests) libreddit; };
 
   meta = with lib; {
     description = "Private front-end for Reddit";

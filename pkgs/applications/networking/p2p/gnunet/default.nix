@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
-, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson, libsodium
+, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring, makeWrapper
+, ncurses, pkg-config, libxml2, sqlite, zlib, libpulseaudio, libopus, libogg
+, jansson, libsodium
 
 , postgresqlSupport ? false, postgresql }:
 
@@ -18,9 +18,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
-    adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
-    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
-    sqlite zlib libpulseaudio libopus libogg jansson
+    adns
+    curl
+    gmp
+    gnutls
+    libextractor
+    libgcrypt
+    libgnurl
+    libidn
+    libmicrohttpd
+    libunistring
+    libxml2
+    ncurses
+    gettext
+    libsodium
+    sqlite
+    zlib
+    libpulseaudio
+    libopus
+    libogg
+    jansson
   ] ++ lib.optional postgresqlSupport postgresql;
 
   preConfigure = ''
@@ -49,7 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
+    description =
+      "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
       GNUnet is a framework for secure peer-to-peer networking that

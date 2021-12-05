@@ -7,18 +7,26 @@ let
   pkg = pkgs.nzbget;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
-  configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}") cfg.settings);
+  configOpts = concatStringsSep " "
+    (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}")
+      cfg.settings);
   toStr = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if isInt v then toString v
-    else v;
-in
-{
+    if v == true then
+      "yes"
+    else if v == false then
+      "no"
+    else if isInt v then
+      toString v
+    else
+      v;
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ]
+      "The configuration of nzbget is now managed by users through the web interface.")
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ]
+      "The data directory for nzbget is now /var/lib/nzbget.")
+    (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ]
+      "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
   ];
 
   # interface
@@ -41,15 +49,13 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        default = { };
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
           <link xlink:href="https://github.com/nzbget/nzbget/blob/master/nzbget.conf"/>
           for details on supported values.
         '';
-        example = {
-          MainDir = "/data";
-        };
+        example = { MainDir = "/data"; };
       };
     };
   };
@@ -77,10 +83,7 @@ in
       description = "NZBGet Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [
-        unrar
-        p7zip
-      ];
+      path = with pkgs; [ unrar p7zip ];
 
       preStart = ''
         if [ ! -f ${configFile} ]; then
@@ -95,7 +98,8 @@ in
         Group = cfg.group;
         UMask = "0002";
         Restart = "on-failure";
-        ExecStart = "${pkg}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
+        ExecStart =
+          "${pkg}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
         ExecStop = "${pkg}/bin/nzbget --quit";
       };
     };
@@ -109,9 +113,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "nzbget") {
-      nzbget = {
-        gid = config.ids.gids.nzbget;
-      };
+      nzbget = { gid = config.ids.gids.nzbget; };
     };
   };
 }

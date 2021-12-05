@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, websockets
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, websockets }:
 
 buildPythonPackage rec {
   pname = "systembridge";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-AVMZBhf15eZM9oMUFyiHYs866P1v5z1pbTvX2Qpjzfc=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    websockets
-  ];
+  propagatedBuildInputs = [ aiohttp websockets ];
 
   # Project has no tests
   doCheck = false;

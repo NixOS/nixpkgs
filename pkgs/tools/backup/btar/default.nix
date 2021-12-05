@@ -5,13 +5,15 @@ stdenv.mkDerivation rec {
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${version}.tar.gz";
+    url =
+      "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${version}.tar.gz";
     sha256 = "0miklk4bqblpyzh1bni4x6lqn88fa8fjn15x1k1n8bxkx60nlymd";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/btar/btar-librsync.patch?rev=2";
+      url =
+        "https://build.opensuse.org/public/source/openSUSE:Factory/btar/btar-librsync.patch?rev=2";
       sha256 = "1awqny9489vsfffav19s73xxg26m7zrhvsgf1wxb8c2izazwr785";
     })
   ];

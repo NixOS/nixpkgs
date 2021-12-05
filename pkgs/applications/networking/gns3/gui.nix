@@ -3,11 +3,11 @@
 { lib, python3, fetchFromGitHub, wrapQtAppsHook }:
 
 let
-  defaultOverrides = commonOverrides ++ [
-  ];
+  defaultOverrides = commonOverrides ++ [ ];
 
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+    packageOverrides =
+      lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 in python.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
@@ -22,15 +22,20 @@ in python.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
   propagatedBuildInputs = with python.pkgs; [
-    sentry-sdk psutil jsonschema # tox for check
+    sentry-sdk
+    psutil
+    jsonschema # tox for check
     # Runtime dependencies
-    sip_4 (pyqt5.override { withWebSockets = true; }) distro setuptools
+    sip_4
+    (pyqt5.override { withWebSockets = true; })
+    distro
+    setuptools
   ];
 
   doCheck = false; # Failing
   dontWrapQtApps = true;
   postFixup = ''
-      wrapQtApp "$out/bin/gns3"
+    wrapQtApp "$out/bin/gns3"
   '';
 
   meta = with lib; {

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-}:
+{ lib, buildPythonPackage, fetchPypi, ipykernel }:
 
 buildPythonPackage rec {
   pname = "metakernel";

@@ -1,45 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, meson
-, ninja
-, pkg-config
-, libmnl
-, libuecc
-, libsodium
-, libcap
-, json_c
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, bison, meson, ninja, pkg-config, libmnl, libuecc
+, libsodium, libcap, json_c, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fastd";
   version = "22";
 
   src = fetchFromGitHub {
-    owner  = "Neoraider";
+    owner = "Neoraider";
     repo = "fastd";
     rev = "v${version}";
     sha256 = "0qni32j7d3za9f87m68wq8zgalvfxdrx1zxi6l4x7vvmpcw5nhpq";
   };
 
-  nativeBuildInputs = [
-    bison
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ bison meson ninja pkg-config ];
 
-  buildInputs = [
-    json_c
-    libcap
-    libsodium
-    libuecc
-    openssl
-  ] ++ lib.optionals (stdenv.isLinux) [
-    libmnl
-  ];
+  buildInputs = [ json_c libcap libsodium libuecc openssl ]
+    ++ lib.optionals (stdenv.isLinux) [ libmnl ];
 
   # some options are only available on x86
   mesonFlags = lib.optionals (!stdenv.hostPlatform.isx86) [

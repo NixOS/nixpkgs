@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-asyncio, pytest-cov
+, pytestCheckHook, pythonOlder, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "hydrawiser";
@@ -23,13 +15,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-cov
-    pytestCheckHook
-    requests
-    requests-mock
-  ];
+  checkInputs =
+    [ pytest-asyncio pytest-cov pytestCheckHook requests requests-mock ];
 
   pythonImportsCheck = [ "hydrawiser" ];
 

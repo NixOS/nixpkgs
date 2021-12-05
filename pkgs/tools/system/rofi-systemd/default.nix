@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, rofi, systemd, coreutils, util-linux, gawk, makeWrapper, jq
-}:
+{ lib, stdenv, fetchFromGitHub, rofi, systemd, coreutils, util-linux, gawk
+, makeWrapper, jq }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-systemd";
@@ -21,14 +21,8 @@ stdenv.mkDerivation rec {
     cp -a rofi-systemd $out/bin/rofi-systemd
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    coreutils
-    gawk
-    jq
-    rofi
-    systemd
-    util-linux
-  ];
+  wrapperPath = with lib;
+    makeBinPath [ coreutils gawk jq rofi systemd util-linux ];
 
   fixupPhase = ''
     patchShebangs $out/bin

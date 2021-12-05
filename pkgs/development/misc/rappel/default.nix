@@ -1,9 +1,4 @@
-{ fetchFromGitHub
-, libedit
-, makeWrapper
-, nasm
-, lib, stdenv
-}:
+{ fetchFromGitHub, libedit, makeWrapper, nasm, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "rappel";

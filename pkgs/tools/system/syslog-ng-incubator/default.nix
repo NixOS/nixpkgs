@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, syslogng
-, eventlog, perl, python, bison, protobufc, libivykis, libcap, czmq
-}:
+, eventlog, perl, python, bison, protobufc, libivykis, libcap, czmq }:
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng-incubator";
@@ -15,19 +14,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook bison ];
 
-  buildInputs = [
-    glib syslogng eventlog perl python protobufc libivykis libcap czmq
-  ];
+  buildInputs =
+    [ glib syslogng eventlog perl python protobufc libivykis libcap czmq ];
 
-  configureFlags = [
-    "--with-module-dir=$(out)/lib/syslog-ng"
-  ];
+  configureFlags = [ "--with-module-dir=$(out)/lib/syslog-ng" ];
 
   meta = with lib; {
     homepage = "https://github.com/balabit/syslog-ng-incubator";
     description = "A collection of tools and modules for syslog-ng";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
     broken = true; # 2018-05-12
   };

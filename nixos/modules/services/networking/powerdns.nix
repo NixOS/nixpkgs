@@ -28,10 +28,18 @@ in {
 
     systemd.services.pdns = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
+      after = [
+        "network.target"
+        "mysql.service"
+        "postgresql.service"
+        "openldap.service"
+      ];
 
       serviceConfig = {
-        ExecStart = [ "" "${pkgs.powerdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
+        ExecStart = [
+          ""
+          "${pkgs.powerdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no"
+        ];
       };
     };
 
@@ -41,7 +49,7 @@ in {
       description = "PowerDNS";
     };
 
-    users.groups.pdns = {};
+    users.groups.pdns = { };
 
   };
 }

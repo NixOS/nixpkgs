@@ -1,12 +1,5 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, bootstrapped-pip
-, lib
-, pipInstallHook
-, setuptoolsBuildHook
-}:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, bootstrapped-pip, lib
+, pipInstallHook, setuptoolsBuildHook }:
 
 let
   pname = "setuptools";
@@ -24,9 +17,7 @@ let
       name = "${pname}-${version}-source";
     };
 
-    patches = [
-      ./tag-date.patch
-    ];
+    patches = [ ./tag-date.patch ];
 
     buildPhase = ''
       ${python.pythonForBuild.interpreter} setup.py egg_info
@@ -54,8 +45,11 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     bootstrapped-pip
-    (pipInstallHook.override{pip=null;})
-    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+    (pipInstallHook.override { pip = null; })
+    (setuptoolsBuildHook.override {
+      setuptools = null;
+      wheel = null;
+    })
   ];
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''

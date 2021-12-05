@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ptyprocess
-}:
+{ lib, buildPythonPackage, fetchPypi, ptyprocess }:
 
 buildPythonPackage (rec {
   pname = "pexpect";
@@ -20,7 +16,8 @@ buildPythonPackage (rec {
 
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";
-    description = "Automate interactive console applications such as ssh, ftp, etc";
+    description =
+      "Automate interactive console applications such as ssh, ftp, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
 

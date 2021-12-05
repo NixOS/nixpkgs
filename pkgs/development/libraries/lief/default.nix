@@ -1,14 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, python, cmake }:
 
-let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ]);
-in
-stdenv.mkDerivation rec {
+let pyEnv = python.withPackages (ps: [ ps.setuptools ]);
+in stdenv.mkDerivation rec {
   pname = "lief";
   version = "0.11.5";
 
@@ -21,15 +14,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "py" ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   # Not a propagatedBuildInput because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = [
-    python
-  ];
+  buildInputs = [ python ];
 
   dontUseCmakeConfigure = true;
 

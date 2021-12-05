@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication rec {
   # Tests not included in pip package.
   doCheck = false;
 
-
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "rpl";
@@ -31,8 +30,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Replace strings in files";
-    homepage    = "https://github.com/rrthomas/rpl";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/rrthomas/rpl";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ teto ];
   };
 }

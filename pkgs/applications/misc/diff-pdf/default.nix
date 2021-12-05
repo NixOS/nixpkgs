@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler
+, wxGTK ? null, wxmac ? null, darwin ? null }:
 
 let
-  wxInputs =
-    if stdenv.isDarwin then
-      [ wxmac darwin.apple_sdk.frameworks.Cocoa ]
-    else
-      [ wxGTK ];
-in
-stdenv.mkDerivation rec {
+  wxInputs = if stdenv.isDarwin then [
+    wxmac
+    darwin.apple_sdk.frameworks.Cocoa
+  ] else
+    [ wxGTK ];
+in stdenv.mkDerivation rec {
   pname = "diff-pdf";
   version = "0.5";
 

@@ -1,10 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, astropy
-, dask
-, numpy
-}:
+{ lib, fetchPypi, buildPythonPackage, astropy, dask, numpy }:
 
 buildPythonPackage rec {
   pname = "casa-formats-io";

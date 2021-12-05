@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchgit
-, xorgproto
-, libX11
-, libXft
-, libXcomposite
-, libXdamage
-, libXext
-, libXinerama
-, libjpeg
-, giflib
-, pkg-config
-}:
+{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, libXcomposite, libXdamage
+, libXext, libXinerama, libjpeg, giflib, pkg-config }:
 let
   buildInputs = [
     xorgproto
@@ -25,8 +13,7 @@ let
     giflib
     pkg-config
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "unstable-2015-03-01";
   pname = "skippy-xd";
   inherit buildInputs;

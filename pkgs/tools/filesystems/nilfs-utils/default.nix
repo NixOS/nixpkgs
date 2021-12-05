@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix up hardcoded paths.
     substituteInPlace lib/cleaner_exec.c --replace /sbin/ $out/bin/
-    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${lib.getBin e2fsprogs}/bin/
+    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${
+      lib.getBin e2fsprogs
+    }/bin/
   '';
 
   # According to upstream, libmount should be detected automatically but the
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
     updateWalker = true;
   };

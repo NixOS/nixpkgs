@@ -1,15 +1,12 @@
-{ stdenv, lib, fetchurl, pkg-config, perl
-, libjpeg, udev
-, withUtils ? true
-, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
-}:
+{ stdenv, lib, fetchurl, pkg-config, perl, libjpeg, udev, withUtils ? true
+, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
 let
   withQt = withUtils && withGUI;
 
-# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+  # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 in stdenv.mkDerivation rec {
   pname = "v4l-utils";
   version = "1.20.0";
@@ -24,9 +21,8 @@ in stdenv.mkDerivation rec {
   configureFlags = (if withUtils then [
     "--with-localedir=${placeholder "lib"}/share/locale"
     "--with-udevdir=${placeholder "out"}/lib/udev"
-  ] else [
-    "--disable-v4l-utils"
-  ]);
+  ] else
+    [ "--disable-v4l-utils" ]);
 
   postFixup = ''
     # Create symlink for V4l1 compatibility
@@ -35,7 +31,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
+  buildInputs = [ udev ]
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
@@ -45,7 +42,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
+    description =
+      "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ codyopel ];

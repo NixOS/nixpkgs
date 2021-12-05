@@ -4,9 +4,5 @@ buildDunePackage {
   pname = "ezresto";
   inherit (resto) src version meta useDune2 doCheck;
 
-  propagatedBuildInputs = [
-    uri
-    resto
-    resto-json
-  ];
+  propagatedBuildInputs = [ uri resto resto-json ];
 }

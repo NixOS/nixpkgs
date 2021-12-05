@@ -1,6 +1,4 @@
-{ lib
-, python3Packages
-}:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
@@ -11,10 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    requests
-    pyquery
-  ];
+  propagatedBuildInputs = with python3Packages; [ requests pyquery ];
 
   # Tests require network access
   doCheck = false;

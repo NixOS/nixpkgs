@@ -4,12 +4,12 @@ with lib;
 
 let
   cfg = config.xdg.mime;
-  associationOptions = with types; attrsOf (
-    coercedTo (either (listOf str) str) (x: concatStringsSep ";" (toList x)) str
-  );
-in
+  associationOptions = with types;
+    attrsOf
+    (coercedTo (either (listOf str) str) (x: concatStringsSep ";" (toList x))
+      str);
 
-{
+in {
   meta = {
     maintainers = teams.freedesktop.members ++ (with maintainers; [ figsoda ]);
   };
@@ -27,7 +27,7 @@ in
 
     xdg.mime.addedAssociations = mkOption {
       type = associationOptions;
-      default = {};
+      default = { };
       example = {
         "application/pdf" = "firefox.desktop";
         "text/xml" = [ "nvim.desktop" "codium.desktop" ];
@@ -41,7 +41,7 @@ in
 
     xdg.mime.defaultApplications = mkOption {
       type = associationOptions;
-      default = {};
+      default = { };
       example = {
         "application/pdf" = "firefox.desktop";
         "image/png" = [ "sxiv.desktop" "gimp.desktop" ];
@@ -55,7 +55,7 @@ in
 
     xdg.mime.removedAssociations = mkOption {
       type = associationOptions;
-      default = {};
+      default = { };
       example = {
         "audio/mp3" = [ "mpv.desktop" "umpv.desktop" ];
         "inode/directory" = "codium.desktop";
@@ -69,17 +69,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc."xdg/mimeapps.list" = mkIf (
-      cfg.addedAssociations != {}
-      || cfg.defaultApplications != {}
-      || cfg.removedAssociations != {}
-    ) {
-      text = generators.toINI { } {
-        "Added Associations" = cfg.addedAssociations;
-        "Default Applications" = cfg.defaultApplications;
-        "Removed Associations" = cfg.removedAssociations;
+    environment.etc."xdg/mimeapps.list" = mkIf (cfg.addedAssociations != { }
+      || cfg.defaultApplications != { } || cfg.removedAssociations != { }) {
+        text = generators.toINI { } {
+          "Added Associations" = cfg.addedAssociations;
+          "Default Applications" = cfg.defaultApplications;
+          "Removed Associations" = cfg.removedAssociations;
+        };
       };
-    };
 
     environment.pathsToLink = [ "/share/mime" ];
 

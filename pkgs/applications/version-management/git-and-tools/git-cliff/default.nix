@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A highly customizable Changelog Generator that follows Conventional Commit specifications";
+    description =
+      "A highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ siraben ];

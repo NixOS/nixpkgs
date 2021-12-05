@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook , pytest-cov , numba
-, numpy
-, scikit-learn
-, scipy
-, matplotlib
-, seaborn
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook, pytest-cov
+, numba, numpy, scikit-learn, scipy, matplotlib, seaborn }:
 
 buildPythonPackage rec {
   pname = "hyppo";
@@ -23,19 +14,10 @@ buildPythonPackage rec {
     sha256 = "0izjc68rb6sr3x55c3zzraakzspgzh80qykfax9zj868zypfm365";
   };
 
-  propagatedBuildInputs = [
-    numba
-    numpy
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs = [ numba numpy scikit-learn scipy ];
 
   checkInputs = [ pytestCheckHook pytest-cov matplotlib seaborn ];
-  disabledTestPaths = [
-    "docs"
-    "benchmarks"
-    "examples"
-  ];
+  disabledTestPaths = [ "docs" "benchmarks" "examples" ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";

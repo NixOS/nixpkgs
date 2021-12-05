@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitLab
-, coq
-, cacert
-}:
+{ lib, fetchFromGitLab, coq, cacert }:
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
@@ -44,10 +40,7 @@ coq.ocamlPackages.buildDunePackage rec {
     cmdliner
   ];
 
-  checkInputs = [
-    cacert
-    coq.ocamlPackages.ca-certs
-  ];
+  checkInputs = [ cacert coq.ocamlPackages.ca-certs ];
 
   doCheck = true;
 

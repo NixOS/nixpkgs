@@ -1,11 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, flask
-, pymongo
-, vcversioner
-, lib
-, pytest
-}:
+{ buildPythonPackage, fetchPypi, flask, pymongo, vcversioner, lib, pytest }:
 
 buildPythonPackage rec {
   pname = "flask-pymongo";

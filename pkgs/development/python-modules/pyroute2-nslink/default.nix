@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-nslink";
@@ -14,16 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-KS5sKDKnNUTBxtW6cn9xF6qEflX4jXjpS31GB7KZmZ4=";
   };
 
-  propagatedBuildInputs = [
-    pyroute2-core
-  ];
+  propagatedBuildInputs = [ pyroute2-core ];
 
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.nslink"
-  ];
+  pythonImportsCheck = [ "pr2modules.nslink" ];
 
   meta = with lib; {
     description = "Nslink module for pyroute2";

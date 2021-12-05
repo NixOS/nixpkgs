@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, intltool, perl, gettext, libusb-compat-0_1, pkg-config, bluez
-, readline, pcsclite, libical, gtk2, glib, libXpm }:
+{ lib, stdenv, fetchurl, intltool, perl, gettext, libusb-compat-0_1, pkg-config
+, bluez, readline, pcsclite, libical, gtk2, glib, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "gnokii";
@@ -11,9 +11,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    perl intltool gettext libusb-compat-0_1
-    glib gtk2 pkg-config bluez readline
-    libXpm pcsclite libical
+    perl
+    intltool
+    gettext
+    libusb-compat-0_1
+    glib
+    gtk2
+    pkg-config
+    bluez
+    readline
+    libXpm
+    pcsclite
+    libical
   ];
 
   meta = {

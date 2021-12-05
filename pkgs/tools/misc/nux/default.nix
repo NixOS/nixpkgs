@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
-}:
+{ lib, fetchFromGitHub, rustPlatform, asciidoctor, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nux";

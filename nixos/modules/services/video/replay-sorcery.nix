@@ -4,9 +4,8 @@ with lib;
 
 let
   cfg = config.services.replay-sorcery;
-  configFile = generators.toKeyValue {} cfg.settings;
-in
-{
+  configFile = generators.toKeyValue { } cfg.settings;
+in {
   options = with types; {
     services.replay-sorcery = {
       enable = mkEnableOption "the ReplaySorcery service for instant-replays";
@@ -19,13 +18,15 @@ in
       autoStart = mkOption {
         type = bool;
         default = false;
-        description = "Automatically start ReplaySorcery when graphical-session.target starts.";
+        description =
+          "Automatically start ReplaySorcery when graphical-session.target starts.";
       };
 
       settings = mkOption {
         type = attrsOf (oneOf [ str int ]);
-        default = {};
-        description = "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
+        default = { };
+        description =
+          "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
         example = literalExpression ''
           {
             videoInput = "hwaccel"; # requires `services.replay-sorcery.enableSysAdminCapability = true`
@@ -66,7 +67,5 @@ in
     };
   };
 
-  meta = {
-    maintainers = with maintainers; [ kira-bruneau ];
-  };
+  meta = { maintainers = with maintainers; [ kira-bruneau ]; };
 }

@@ -16,9 +16,7 @@ let
     sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
   };
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyld";
   version = "1.0.5";
 

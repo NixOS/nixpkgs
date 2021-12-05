@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymongo
-}:
+{ lib, buildPythonPackage, fetchPypi, pymongo }:
 
 buildPythonPackage rec {
   pname = "mongodict";

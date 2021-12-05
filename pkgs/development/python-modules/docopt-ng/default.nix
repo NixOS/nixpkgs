@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "docopt-ng";
@@ -16,7 +13,8 @@ buildPythonPackage rec {
   doCheck = false; # no tests in the package
 
   meta = with lib; {
-    description = "More-magic command line arguments parser. Now with more maintenance!";
+    description =
+      "More-magic command line arguments parser. Now with more maintenance!";
     homepage = "https://github.com/bazaar-projects/docopt-ng";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

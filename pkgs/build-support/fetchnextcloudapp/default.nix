@@ -1,22 +1,12 @@
 { stdenv, gnutar, findutils, fetchurl, ... }:
-{ name
-, url
-, version
-, sha256
-, patches ? [ ]
-}:
+{ name, url, version, sha256, patches ? [ ] }:
 stdenv.mkDerivation {
   name = "nc-app-${name}";
   inherit version patches;
 
-  src = fetchurl {
-    inherit url sha256;
-  };
+  src = fetchurl { inherit url sha256; };
 
-  nativeBuildInputs = [
-    gnutar
-    findutils
-  ];
+  nativeBuildInputs = [ gnutar findutils ];
 
   unpackPhase = ''
     tar -xzpf $src

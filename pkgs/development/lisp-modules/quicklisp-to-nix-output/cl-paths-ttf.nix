@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-paths-ttf";
   version = "cl-vectors-20180228-git";
 
@@ -9,13 +8,14 @@ rec {
   deps = [ args."cl-paths" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-vectors/2018-02-28/cl-vectors-20180228-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-vectors/2018-02-28/cl-vectors-20180228-git.tgz";
     sha256 = "0fcypjfzqra8ryb4nx1vx1fqy7fwvyz3f443qkjg2z81akhkscly";
   };
 
   packageName = "cl-paths-ttf";
 
-  asdFilesToKeep = ["cl-paths-ttf.asd"];
+  asdFilesToKeep = [ "cl-paths-ttf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-paths-ttf DESCRIPTION cl-paths-ttf: vectorial paths manipulation
@@ -25,4 +25,5 @@ rec {
     cl-paths-ttf DEPS
     ((NAME cl-paths FILENAME cl-paths) (NAME zpb-ttf FILENAME zpb-ttf))
     DEPENDENCIES (cl-paths zpb-ttf) VERSION cl-vectors-20180228-git SIBLINGS
-    (cl-aa-misc cl-aa cl-paths cl-vectors) PARASITES NIL) */
+    (cl-aa-misc cl-aa cl-paths cl-vectors) PARASITES NIL)
+*/

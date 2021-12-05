@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gtk3
-, pango
-, cairo
-}:
+{ lib, stdenv, fetchurl, pkg-config, gtk3, pango, cairo }:
 
 stdenv.mkDerivation rec {
   pname = "gtkdatabox";

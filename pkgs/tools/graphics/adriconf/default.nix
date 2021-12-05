@@ -1,18 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cmake
-, pkg-config
-, libdrm
-, libGL
-, atkmm
-, pcre
-, gtkmm3
-, boost
-, libxmlxx3
-, mesa
-, pciutils
-}:
+{ stdenv, lib, fetchFromGitLab, cmake, pkg-config, libdrm, libGL, atkmm, pcre
+, gtkmm3, boost, libxmlxx3, mesa, pciutils }:
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
@@ -27,7 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm3 boost libxmlxx3 mesa pciutils ];
+  buildInputs =
+    [ libdrm libGL atkmm pcre gtkmm3 boost libxmlxx3 mesa pciutils ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 

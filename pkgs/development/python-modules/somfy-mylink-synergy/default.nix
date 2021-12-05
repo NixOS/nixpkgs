@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "somfy-mylink-synergy";

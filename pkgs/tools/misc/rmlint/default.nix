@@ -1,22 +1,6 @@
-{ lib, stdenv
-, cairo
-, fetchFromGitHub
-, gettext
-, glib
-, gobject-introspection
-, gtksourceview3
-, json-glib
-, libelf
-, makeWrapper
-, pango
-, pkg-config
-, polkit
-, python3
-, scons
-, sphinx
-, util-linux
-, wrapGAppsHook
-, withGui ? false }:
+{ lib, stdenv, cairo, fetchFromGitHub, gettext, glib, gobject-introspection
+, gtksourceview3, json-glib, libelf, makeWrapper, pango, pkg-config, polkit
+, python3, scons, sphinx, util-linux, wrapGAppsHook, withGui ? false }:
 
 assert withGui -> !stdenv.isDarwin;
 
@@ -32,21 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    sphinx
-    scons
-  ] ++ lib.optionals withGui [
-    makeWrapper
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config sphinx scons ]
+    ++ lib.optionals withGui [ makeWrapper wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    json-glib
-    libelf
-    util-linux
-  ] ++ lib.optionals withGui [
+  buildInputs = [ glib json-glib libelf util-linux ] ++ lib.optionals withGui [
     cairo
     gobject-introspection
     gtksourceview3
@@ -79,7 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
+    description =
+      "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
     platforms = platforms.unix;
     license = licenses.gpl3;

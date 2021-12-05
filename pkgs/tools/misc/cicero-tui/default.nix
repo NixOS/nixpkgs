@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, expat
-, fontconfig
-, freetype
-}:
+{ lib, rustPlatform, fetchFromGitHub, cmake, pkg-config, expat, fontconfig
+, freetype }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cicero-tui";
@@ -19,15 +12,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-5/yH5ZK/JgMsRUcJ0qQEShEqxrtKJa+P6pcHAn5Jx0c=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-  buildInputs = [
-    expat
-    fontconfig
-    freetype
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ expat fontconfig freetype ];
 
   cargoSha256 = "sha256-AraisWGTPEj+tHcLonEwfevBu+mMTPkq3O9zNYgI9X8=";
 

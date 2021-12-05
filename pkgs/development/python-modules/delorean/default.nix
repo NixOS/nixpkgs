@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, Babel
-, humanize
-, python-dateutil
-, tzlocal
+{ lib, buildPythonPackage, fetchPypi, Babel, humanize, python-dateutil, tzlocal
 }:
 
 buildPythonPackage rec {

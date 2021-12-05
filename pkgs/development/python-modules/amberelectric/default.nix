@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, urllib3
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest-mock, pytestCheckHook
+, python-dateutil, pythonOlder, urllib3 }:
 
 buildPythonPackage rec {
   pname = "amberelectric";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "1hsbk2v7j1nsa083j28jb7b3rv76flan0g9wav97qccp1gjds5b0";
   };
 
-  propagatedBuildInputs = [
-    urllib3
-    python-dateutil
-  ];
+  propagatedBuildInputs = [ urllib3 python-dateutil ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "amberelectric" ];
 

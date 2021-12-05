@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.programs.npm;
-in
+let cfg = config.programs.npm;
 
-{
+in {
   ###### interface
 
   options = {

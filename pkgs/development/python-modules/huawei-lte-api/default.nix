@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, requests
-, xmltodict
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pycryptodomex
+, pytestCheckHook, requests, xmltodict }:
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
@@ -26,15 +19,9 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [
-    pycryptodomex
-    requests
-    xmltodict
-  ];
+  propagatedBuildInputs = [ pycryptodomex requests xmltodict ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "huawei_lte_api.AuthorizedConnection"

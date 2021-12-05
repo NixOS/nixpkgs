@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch, glibcLocales, pandoc, python3 }:
 
-let
-  pythonPackages = python3.pkgs;
+let pythonPackages = python3.pkgs;
 
 in pythonPackages.buildPythonApplication rec {
   pname = "coursera-dl";
@@ -18,7 +17,16 @@ in pythonPackages.buildPythonApplication rec {
 
   buildInputs = with pythonPackages; [ glibcLocales ];
 
-  propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 configargparse keyring pyasn1 requests six urllib3 ];
+  propagatedBuildInputs = with pythonPackages; [
+    attrs
+    beautifulsoup4
+    configargparse
+    keyring
+    pyasn1
+    requests
+    six
+    urllib3
+  ];
 
   checkInputs = with pythonPackages; [ pytest mock ];
 

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchzip
-, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
   version = "4.2.6";
 
   src = fetchzip {
-    url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
+    url =
+      "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
     sha256 = "sha256-f4r0ODKvZrl+YBcP2T9Z+zEuCyvQm9W7GNiLTr4p278=";
   };
 

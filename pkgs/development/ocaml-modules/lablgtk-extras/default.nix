@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4, config-file, lablgtk
+, xmlm }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 
@@ -18,10 +19,11 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with lib.maintainers; [ vbgl ];
     homepage = "http://gtk-extras.forge.ocamlcore.org/";
-    description = "A collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
+    description =
+      "A collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
     license = lib.licenses.lgpl2Plus;
   };
 }

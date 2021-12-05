@@ -1,22 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, nixos-artwork
-}:
+{ stdenv, lib, fetchurl, glib, nixos-artwork }:
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
   version = "1.5.4";
 
   src = fetchurl {
-    url = "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz";
+    url =
+      "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz";
     hash = "sha256-ZRJK1fzIF36BdUlVhLwdFdfgQvN2ashzjgpCxoOIbK8=";
   };
 
-  nativeBuildInputs = [
-    glib
-  ];
+  nativeBuildInputs = [ glib ];
 
   installPhase = ''
     mkdir $out

@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, abc-verifier
-, bash
-, bison
-, fetchFromGitHub
-, flex
-, libffi
-, pkg-config
-, protobuf
-, python3
-, readline
-, tcl
-, verilog
-, zlib
-}:
+{ stdenv, lib, abc-verifier, bash, bison, fetchFromGitHub, flex, libffi
+, pkg-config, protobuf, python3, readline, tcl, verilog, zlib }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
 # automatically tags their repository Makefile with a new build number every
@@ -33,21 +19,21 @@
 # ultimately less confusing than using dates.
 
 stdenv.mkDerivation rec {
-  pname   = "yosys";
+  pname = "yosys";
   version = "0.11+52";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
-    repo  = "yosys";
-    rev   = "2be110cb0ba645f95f62ee01b6a6fa46a85d5b26";
-    hash  = "sha256-A1QKu6SbtpJJPF8/LA5SMUP3/+n5giM6rOYdc6vkl90=";
+    repo = "yosys";
+    rev = "2be110cb0ba645f95f62ee01b6a6fa46a85d5b26";
+    hash = "sha256-A1QKu6SbtpJJPF8/LA5SMUP3/+n5giM6rOYdc6vkl90=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ tcl readline libffi python3 protobuf zlib ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}" ];
 
   patches = [
     ./plugin-search-dirs.patch
@@ -62,8 +48,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild = let
-    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
+  preBuild = let shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
   in ''
     chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
@@ -94,16 +79,16 @@ stdenv.mkDerivation rec {
   #
   # add a symlink to fake things so that both variants work the same way. this
   # is also needed at build time for the test suite.
-  postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
+  postBuild = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
   postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
 
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "http://www.clifford.at/yosys/";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    homepage = "http://www.clifford.at/yosys/";
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
   };
 }

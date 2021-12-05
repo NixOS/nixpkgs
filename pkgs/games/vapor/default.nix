@@ -20,14 +20,12 @@ let
     categories = "Game;";
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url =
-    "https://github.com/josefnpat/${pname}/releases/download/${version}/${pname}_${commitid}.love";
+      "https://github.com/josefnpat/${pname}/releases/download/${version}/${pname}_${commitid}.love";
     sha256 = "0w2qkrrkzfy4h4jld18apypmbi8a8r89y2l11axlv808i2rg68fk";
   };
 
@@ -36,8 +34,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share
 

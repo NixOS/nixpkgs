@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, cffi, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cmarkgfm";

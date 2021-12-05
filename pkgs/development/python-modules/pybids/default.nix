@@ -1,17 +1,5 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, click
-, num2words
-, numpy
-, scipy
-, pandas
-, nibabel
-, patsy
-, bids-validator
-, sqlalchemy
-, pytestCheckHook
-}:
+{ buildPythonPackage, lib, fetchPypi, click, num2words, numpy, scipy, pandas
+, nibabel, patsy, bids-validator, sqlalchemy, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "0.13.2";

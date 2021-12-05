@@ -1,14 +1,11 @@
-{lib, buildPythonPackage, fetchPypi
-, geoip, nose}:
+{ lib, buildPythonPackage, fetchPypi, geoip, nose }:
 
 buildPythonPackage rec {
   pname = "GeoIP";
   version = "1.3.2";
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [
-    geoip
-  ];
+  propagatedBuildInputs = [ geoip ];
 
   src = fetchPypi {
     inherit pname version;

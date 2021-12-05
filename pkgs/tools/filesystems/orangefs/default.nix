@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, bison, flex, autoreconfHook
-, openssl, db, attr, perl, tcsh
-} :
+{ lib, stdenv, fetchurl, bison, flex, autoreconfHook, openssl, db, attr, perl
+, tcsh }:
 
 stdenv.mkDerivation rec {
   pname = "orangefs";
   version = "2.9.8";
 
   src = fetchurl {
-    url = "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
+    url =
+      "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
     sha256 = "0c2yla615j04ygclfavh8g5miqhbml2r0zs2c5mvkacf9in7p7sq";
   };
 
@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     "--with-ssl=${lib.getDev openssl}"
   ];
 
-
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -52,9 +51,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Scale-out network file system for use on high-end computing systems";
+    description =
+      "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
-    license = with licenses;  [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];
+    license = with licenses; [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markuskowa ];
   };

@@ -1,8 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, tarsnap
-}:
+{ lib, python3Packages, fetchFromGitHub, tarsnap }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tarsnapper";
@@ -21,9 +17,7 @@ python3Packages.buildPythonApplication rec {
     pexpect
   ];
 
-  checkInputs = with python3Packages; [
-    nose
-  ];
+  checkInputs = with python3Packages; [ nose ];
 
   patches = [
     # Remove standard module argparse from requirements

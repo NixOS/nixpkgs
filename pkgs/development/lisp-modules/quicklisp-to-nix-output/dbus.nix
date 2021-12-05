@@ -1,21 +1,48 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "dbus";
   version = "20211020-git";
 
   description = "A D-BUS client library for Common Lisp";
 
-  deps = [ args."alexandria" args."asdf-package-system" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-ppcre" args."cl-xmlspam" args."closure-common" args."cxml" args."flexi-streams" args."idna" args."ieee-floats" args."iolib" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."ironclad" args."puri" args."split-sequence" args."swap-bytes" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" ];
+  deps = [
+    args."alexandria"
+    args."asdf-package-system"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."cl-ppcre"
+    args."cl-xmlspam"
+    args."closure-common"
+    args."cxml"
+    args."flexi-streams"
+    args."idna"
+    args."ieee-floats"
+    args."iolib"
+    args."iolib_dot_asdf"
+    args."iolib_dot_base"
+    args."iolib_dot_common-lisp"
+    args."iolib_dot_conf"
+    args."ironclad"
+    args."puri"
+    args."split-sequence"
+    args."swap-bytes"
+    args."trivial-features"
+    args."trivial-garbage"
+    args."trivial-gray-streams"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/dbus/2021-10-20/dbus-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/dbus/2021-10-20/dbus-20211020-git.tgz";
     sha256 = "1h0qa609qplq3grjf3n31h1bcdj154ww2dn29mjxlkm76n5asz14";
   };
 
   packageName = "dbus";
 
-  asdFilesToKeep = ["dbus.asd"];
+  asdFilesToKeep = [ "dbus.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbus DESCRIPTION A D-BUS client library for Common Lisp SHA256
@@ -48,4 +75,5 @@ rec {
      ieee-floats iolib iolib.asdf iolib.base iolib.common-lisp iolib.conf
      ironclad puri split-sequence swap-bytes trivial-features trivial-garbage
      trivial-gray-streams)
-    VERSION 20211020-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20211020-git SIBLINGS NIL PARASITES NIL)
+*/

@@ -1,18 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
 , setuptools-scm
 # build inputs
-, appdirs
-, click
-, diskcache
-, jinja2
-, jsonschema
-, pyyaml
-, yamllint
-}:
+, appdirs, click, diskcache, jinja2, jsonschema, pyyaml, yamllint }:
 
 buildPythonPackage rec {
   pname = "glean_parser";
@@ -29,22 +18,11 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [
-    appdirs
-    click
-    diskcache
-    jinja2
-    jsonschema
-    pyyaml
-    yamllint
-  ];
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs =
+    [ appdirs click diskcache jinja2 jsonschema pyyaml yamllint ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
   disabledTests = [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668
     "test_validate_ping"
@@ -53,7 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "glean_parser" ];
 
   meta = with lib; {
-    description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
+    description =
+      "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
     homepage = "https://github.com/mozilla/glean_parser";
     license = licenses.mpl20;
     maintainers = [ maintainers.kvark ];

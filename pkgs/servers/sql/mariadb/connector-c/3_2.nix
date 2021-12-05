@@ -1,4 +1,4 @@
-{ callPackage, ... } @ args:
+{ callPackage, ... }@args:
 
 callPackage ./. (args // {
   version = "3.2.3";

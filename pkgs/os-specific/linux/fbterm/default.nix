@@ -1,21 +1,20 @@
-{ stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
+{ stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86
+}:
 let
   s = # Generated upstream information
     {
       version = "1.7.0";
       pname = "fbterm";
       hash = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
+      url =
+        "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
       sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
     };
   buildInputs = [ gpm freetype fontconfig ncurses ]
     ++ lib.optional stdenv.hostPlatform.isx86 libx86;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit (s) pname version;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+  src = fetchurl { inherit (s) url sha256; };
 
   nativeBuildInputs = [ pkg-config ncurses ];
   inherit buildInputs;
@@ -36,15 +35,18 @@ stdenv.mkDerivation {
   patches = [
     # fixes from Arch Linux package
     (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/gcc-6-build-fixes.patch";
+      url =
+        "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/gcc-6-build-fixes.patch";
       sha256 = "1kl9fjnrri6pamjdl4jpkqxk5wxcf6jcchv5801xz8vxp4542m40";
     })
     (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/insertmode-fix.patch";
+      url =
+        "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/insertmode-fix.patch";
       sha256 = "1bad9mqcfpqb94lpx23lsamlhplil73ahzin2xjva0gl3gr1038l";
     })
     (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
+      url =
+        "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
       sha256 = "1mjszji0jgs2jsagjp671fv0d1983wmxv009ff1jfhi9pbay6jd0";
     })
     ./select.patch

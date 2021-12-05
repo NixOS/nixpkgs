@@ -1,25 +1,6 @@
-{ stdenv
-, boost
-, coreutils
-, cppzmq
-, curl
-, libepoxy
-, fetchFromGitHub
-, glm
-, gtkmm3
-, lib
-, libgit2
-, librsvg
-, libuuid
-, libzip
-, opencascade
-, pkg-config
-, podofo
-, python3
-, sqlite
-, wrapGAppsHook
-, zeromq
-}:
+{ stdenv, boost, coreutils, cppzmq, curl, libepoxy, fetchFromGitHub, glm, gtkmm3
+, lib, libgit2, librsvg, libuuid, libzip, opencascade, pkg-config, podofo
+, python3, sqlite, wrapGAppsHook, zeromq }:
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
@@ -49,19 +30,12 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
-  nativeBuildInputs = [
-    boost.dev
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ boost.dev pkg-config wrapGAppsHook ];
 
   CASROOT = opencascade;
 
-  installFlags = [
-    "INSTALL=${coreutils}/bin/install"
-    "DESTDIR=$(out)"
-    "PREFIX="
-  ];
+  installFlags =
+    [ "INSTALL=${coreutils}/bin/install" "DESTDIR=$(out)" "PREFIX=" ];
 
   enableParallelBuilding = true;
 

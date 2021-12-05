@@ -1,12 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.084";
-in
-fetchzip {
+let version = "1.084";
+in fetchzip {
   name = "recursive-${version}";
 
-  url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
+  url =
+    "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/

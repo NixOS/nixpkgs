@@ -3,7 +3,8 @@
 with pkgs.lib;
 
 {
-  makeEc2Test = { name, image, userData, script, hostname ? "ec2-instance", sshPublicKey ? null, meta ? {} }:
+  makeEc2Test = { name, image, userData, script, hostname ? "ec2-instance"
+    , sshPublicKey ? null, meta ? { } }:
     let
       metaData = pkgs.stdenv.mkDerivation {
         name = "metadata";
@@ -14,12 +15,14 @@ with pkgs.lib;
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
         '' + optionalString (sshPublicKey != null) ''
           mkdir -p $out/1.0/meta-data/public-keys/0
-          ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
+          ln -s ${
+            pkgs.writeText "sshPublicKey" sshPublicKey
+          } $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
     in makeTest {
       name = "ec2-" + name;
-      nodes = {};
+      nodes = { };
       testScript = ''
         import os
         import subprocess

@@ -1,4 +1,5 @@
-{ lib, stdenv, makeDesktopItem, copyDesktopItems, fetchurl, SDL, SDL_image, SDL_mixer }:
+{ lib, stdenv, makeDesktopItem, copyDesktopItems, fetchurl, SDL, SDL_image
+, SDL_mixer }:
 
 stdenv.mkDerivation rec {
   pname = "gnujump";
@@ -13,14 +14,16 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lm";
 
-  desktopItems = [ (makeDesktopItem {
-    name = "gnujump";
-    exec = "gnujump";
-    icon = "gnujump";
-    desktopName = "GNUjump";
-    comment     = "Jump up the tower to survive";
-    categories  = "Game;ArcadeGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gnujump";
+      exec = "gnujump";
+      icon = "gnujump";
+      desktopName = "GNUjump";
+      comment = "Jump up the tower to survive";
+      categories = "Game;ArcadeGame;";
+    })
+  ];
 
   postInstall = ''
     install -Dm644 ${./gnujump.xpm} $out/share/pixmaps/gnujump.xpm

@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.mwm;
-in
-{
+let cfg = config.services.xserver.windowManager.mwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.mwm.enable = mkEnableOption "mwm";

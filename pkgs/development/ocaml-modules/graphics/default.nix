@@ -8,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/ocaml/graphics/releases/download/${version}/graphics-${version}.tbz";
+    url =
+      "https://github.com/ocaml/graphics/releases/download/${version}/graphics-${version}.tbz";
     sha256 = "sha256-KGyD497ZKHA2xeXHezmh3P1zoSlre1h5N9zjkAFmMo4=";
   };
 

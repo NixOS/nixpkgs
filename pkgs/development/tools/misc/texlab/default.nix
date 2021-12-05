@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, libiconv
-, Security
-, CoreServices
-, nix-update-script
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, libiconv
+, Security, CoreServices, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
@@ -26,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security CoreServices ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ libiconv Security CoreServices ];
 
   postInstall = ''
     installManPage texlab.1
@@ -39,9 +32,7 @@ rustPlatform.buildRustPackage rec {
     rmdir "$out/lib"
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

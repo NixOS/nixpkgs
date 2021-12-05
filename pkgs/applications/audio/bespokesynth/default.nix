@@ -1,10 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, fetchzip
-, libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
-, libGL, python3, ncurses, libusb1
-, gtk3, webkitgtk, curl, xvfb-run, makeWrapper
-  # "Debug", or "Release"
-, buildType ? "Release"
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, fetchzip, libjack2, alsa-lib
+, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor, libGL, python3
+, ncurses, libusb1, gtk3, webkitgtk, curl, xvfb-run, makeWrapper
+# "Debug", or "Release"
+, buildType ? "Release" }:
 
 let
   projucer = stdenv.mkDerivation rec {
@@ -15,13 +13,20 @@ let
       owner = "juce-framework";
       repo = "JUCE";
       rev = version;
-      sha256= "0qpiqfwwpcghk7ij6w4vy9ywr3ryg7ppg77bmd7783kxg6zbhj8h";
+      sha256 = "0qpiqfwwpcghk7ij6w4vy9ywr3ryg7ppg77bmd7783kxg6zbhj8h";
     };
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
-      freetype libX11 libXrandr libXinerama libXext gtk3 webkitgtk
-      libjack2 curl
+      freetype
+      libX11
+      libXrandr
+      libXinerama
+      libXext
+      gtk3
+      webkitgtk
+      libjack2
+      curl
     ];
     preBuild = ''
       cd extras/Projucer/Builds/LinuxMakefile
@@ -39,7 +44,8 @@ let
   vst-sdk = stdenv.mkDerivation rec {
     name = "vstsdk3610_11_06_2018_build_37";
     src = fetchzip {
-      url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
+      url =
+        "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
       sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
     };
     installPhase = ''
@@ -47,8 +53,7 @@ let
     '';
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "bespokesynth";
   version = "1.0.0";
 
@@ -75,9 +80,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ xvfb-run pkg-config python3 makeWrapper ];
 
   buildInputs = [
-    libX11 libXrandr libXinerama libXext libXcursor freetype libGL
-    ncurses libusb1
-    alsa-lib libjack2
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    freetype
+    libGL
+    ncurses
+    libusb1
+    alsa-lib
+    libjack2
   ];
 
   preBuild = ''
@@ -104,7 +117,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Software modular synth with controllers support, scripting and VST";
+    description =
+      "Software modular synth with controllers support, scripting and VST";
     homepage = "https://github.com/awwbees/BespokeSynth";
     license = with licenses; [
       gpl3Plus

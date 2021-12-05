@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchPypi
-, python
-, buildPythonPackage
-, cython
-, gfortran
-, pythran
-, nose
-, pytest
-, pytest-xdist
-, numpy
-, pybind11
-}:
+{ lib, stdenv, fetchPypi, python, buildPythonPackage, cython, gfortran, pythran
+, nose, pytest, pytest-xdist, numpy, pybind11 }:
 
 buildPythonPackage rec {
   pname = "scipy";
@@ -54,7 +42,8 @@ buildPythonPackage rec {
   #
   #         ldr     x0, [x0, ___stack_chk_guard];momd
   #
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable =
+    lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   checkPhase = ''
     runHook preCheck
@@ -64,16 +53,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  passthru = {
-    blas = numpy.blas;
-  };
+  passthru = { blas = numpy.blas; };
 
   setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = with lib; {
-    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
+    description =
+      "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.fridh ];

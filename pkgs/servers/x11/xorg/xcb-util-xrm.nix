@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "xcb-util-xrm";
 
   src = fetchurl {
-    url = "https://github.com/Airblader/xcb-util-xrm/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/Airblader/xcb-util-xrm/releases/download/v${version}/${pname}-${version}.tar.bz2";
     sha256 = "118cj1ybw86pgw0l5whn9vbg5n5b0ijcpx295mwahzi004vz671h";
   };
 

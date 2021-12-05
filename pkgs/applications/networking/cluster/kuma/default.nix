@@ -1,23 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, coredns
-, installShellFiles
-, isFull ? false
-, enableGateway ? false
-, pname ? "kuma"
-, components ? lib.optionals isFull [
-    "kumactl"
-    "kuma-cp"
-    "kuma-prometheus-sd"
-    "kuma-dp"
-  ]
-}:
+{ lib, fetchFromGitHub, buildGoModule, coredns, installShellFiles
+, isFull ? false, enableGateway ? false, pname ? "kuma", components ?
+  lib.optionals isFull [ "kumactl" "kuma-cp" "kuma-prometheus-sd" "kuma-dp" ] }:
 
 buildGoModule rec {
-  inherit pname ;
+  inherit pname;
   version = "1.4.0";
-  tags = lib.optionals enableGateway ["gateway"];
+  tags = lib.optionals enableGateway [ "gateway" ];
   vendorSha256 = "1fc5psvbd9bpc6c3y2cpx5dx8cgr2fcp7nln3kwfgbryahq2y8wl";
 
   src = fetchFromGitHub {
@@ -29,7 +17,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [installShellFiles] ++ lib.optionals isFull [coredns];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals isFull [ coredns ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -46,10 +34,10 @@ buildGoModule rec {
     ln -sLf ${coredns}/bin/coredns $out/bin
   '';
 
-  ldflags = let
-    prefix = "github.com/kumahq/kuma/pkg/version";
+  ldflags = let prefix = "github.com/kumahq/kuma/pkg/version";
   in [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${prefix}.version=${version}"
     "-X ${prefix}.gitTag=${version}"
     "-X ${prefix}.gitCommit=${version}"

@@ -1,31 +1,23 @@
-{ pname, version, meta, updateScript ? null
-, binaryName ? "firefox", application ? "browser"
-, src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
+{ pname, version, meta, updateScript ? null, binaryName ? "firefox"
+, application ? "browser", src, unpackPhase ? null, patches ? [ ]
+, extraNativeBuildInputs ? [ ], extraConfigureFlags ? [ ], extraMakeFlags ? [ ]
+, tests ? [ ] }:
 
-{ lib, stdenv, pkg-config, pango, perl, python3, zip
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss
-, yasm, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification
-, libvpx_1_8
-, icu69, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages
-, rust-cbindgen, nodejs, nasm, fetchpatch
-, gnum4
-, gtk3, wrapGAppsHook
-, debugBuild ? false
+{ lib, stdenv, pkg-config, pango, perl, python3, zip, libjpeg, zlib, dbus
+, dbus-glib, bzip2, xorg, freetype, fontconfig, file, nspr, nss, yasm, libGLU
+, libGL, sqlite, unzip, makeWrapper, hunspell, libevent, libstartup_notification
+, libvpx_1_8, icu69, libpng, glib, pciutils, autoconf213, which, gnused
+, rustPackages, rust-cbindgen, nodejs, nasm, fetchpatch, gnum4, gtk3
+, wrapGAppsHook, debugBuild ? false
 
-### optionals
+  ### optionals
 
-## optional libraries
+  ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
-, ffmpegSupport ? true
-, waylandSupport ? true, libxkbcommon, libdrm
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, gssSupport ? true, libkrb5
+, alsaSupport ? stdenv.isLinux, alsa-lib, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio, ffmpegSupport ? true, waylandSupport ? true, libxkbcommon
+, libdrm, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC
+, buildPackages, gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 # Workaround: disabled since currently jemalloc causes crashes with LLVM 13.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
@@ -35,20 +27,17 @@
 
 , privacySupport ? false
 
-# WARNING: NEVER set any of the options below to `true` by default.
-# Set to `!privacySupport` or `false`.
+  # WARNING: NEVER set any of the options below to `true` by default.
+  # Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? !privacySupport
-, geolocationSupport ? !privacySupport
-, googleAPISupport ? geolocationSupport
-, crashreporterSupport ? false
+  # webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
+, webrtcSupport ? !privacySupport, geolocationSupport ? !privacySupport
+, googleAPISupport ? geolocationSupport, crashreporterSupport ? false
 
-, safeBrowsingSupport ? false
-, drmSupport ? false
+, safeBrowsingSupport ? false, drmSupport ? false
 
-# macOS dependencies
+  # macOS dependencies
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
 , CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
 
@@ -74,27 +63,33 @@
 # > official branding.
 , enableOfficialBranding ? true
 
-# On 32bit platforms, we disable adding "-g" for easier linking.
-, enableDebugSymbols ? !stdenv.is32bit
-}:
+  # On 32bit platforms, we disable adding "-g" for easier linking.
+, enableDebugSymbols ? !stdenv.is32bit }:
 
 assert stdenv.cc.libc or null != null;
-assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
-assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
+assert pipewireSupport -> !waylandSupport || !webrtcSupport
+  -> throw "pipewireSupport requires both wayland and webrtc support.";
+assert ltoSupport -> stdenv.isDarwin
+  -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  flag = tf: x: [ (if tf then "--enable-${x}" else "--disable-${x}") ];
 
-  default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
+  default-toolkit = if stdenv.isDarwin then
+    "cairo-cocoa"
+  else
+    "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
 
-  binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
+  binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName)
+    + lib.substring 1 (-1) binaryName;
 
-  applicationName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
+  applicationName =
+    if stdenv.isDarwin then binaryNameCapitalized else binaryName;
 
-  execdir = if stdenv.isDarwin
-            then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
-            else "/bin";
+  execdir = if stdenv.isDarwin then
+    "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
+  else
+    "/bin";
 
   inherit (rustPackages) rustc cargo;
 
@@ -102,9 +97,7 @@ let
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
   llvmPackages0 =
-    if stdenv.isDarwin
-      then buildPackages.llvmPackages
-    else rustc.llvmPackages;
+    if stdenv.isDarwin then buildPackages.llvmPackages else rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -115,31 +108,30 @@ let
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
-                # LTO requires LLVM bintools including ld.lld and llvm-ar.
-                then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-                  inherit (llvmPackages) bintools;
-                })
-                else stdenv;
+  # LTO requires LLVM bintools including ld.lld and llvm-ar.
+  then
+    overrideCC llvmPackages.stdenv
+    (llvmPackages.stdenv.cc.override { inherit (llvmPackages) bintools; })
+  else
+    stdenv;
 
-in
-
-buildStdenv.mkDerivation ({
+in buildStdenv.mkDerivation ({
   name = "${pname}-unwrapped-${version}";
   inherit version;
 
   inherit src unpackPhase meta;
 
-  patches = [
-  ] ++
-  lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
-  lib.optional (lib.versionAtLeast version "90") ./no-buildconfig-ffx90.patch ++
-  # This fixes a race condition causing deadlock.
-  # https://phabricator.services.mozilla.com/D128657
-  lib.optional (lib.versionAtLeast version "94") (fetchpatch {
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/9c7f25d45bb1dd6b1a865780bc249cdaa619aa83/trunk/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch";
-    sha256 = "l4bMK/YDXcDpIjPy9DPuUSFyDpzVQca201A4h9eav5g=";
-  }) ++
-  patches;
+  patches = [ ] ++ lib.optional (lib.versionAtLeast version "86")
+    ./env_var_for_system_dir-ff86.patch
+    ++ lib.optional (lib.versionAtLeast version "90")
+    ./no-buildconfig-ffx90.patch ++
+    # This fixes a race condition causing deadlock.
+    # https://phabricator.services.mozilla.com/D128657
+    lib.optional (lib.versionAtLeast version "94") (fetchpatch {
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-packages/9c7f25d45bb1dd6b1a865780bc249cdaa619aa83/trunk/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch";
+      sha256 = "l4bMK/YDXcDpIjPy9DPuUSFyDpzVQca201A4h9eav5g=";
+    }) ++ patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
@@ -147,31 +139,63 @@ buildStdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gnum4 gtk3 perl zip libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
-    xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    xorg.pixman yasm libGLU libGL
+    gnum4
+    gtk3
+    perl
+    zip
+    libjpeg
+    zlib
+    bzip2
+    dbus
+    dbus-glib
+    pango
+    freetype
+    fontconfig
+    xorg.libXi
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXrender
+    xorg.libXft
+    xorg.libXt
+    file
+    xorg.pixman
+    yasm
+    libGLU
+    libGL
     xorg.xorgproto
     xorg.libXdamage
     xorg.libXext
-    libevent libstartup_notification /* cairo */
-    libpng glib
-    nasm icu69 libvpx_1_8
+    libevent
+    libstartup_notification # cairo
+    libpng
+    glib
+    nasm
+    icu69
+    libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
-  ]
-  ++ lib.optional  alsaSupport alsa-lib
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  gssSupport libkrb5
-  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  pipewireSupport pipewire
-  ++ lib.optional  jemallocSupport jemalloc
-  ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                          AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ];
+    nspr
+    nss
+  ] ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
+    ++ lib.optional gssSupport libkrb5
+    ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional jemallocSupport jemalloc
+    ++ lib.optionals buildStdenv.isDarwin [
+      CoreMedia
+      ExceptionHandling
+      Kerberos
+      AVFoundation
+      MediaToolbox
+      CoreLocation
+      Foundation
+      libobjc
+      AddressBook
+      cups
+    ];
 
   MACH_USE_SYSTEM_PYTHON = "1";
 
@@ -179,30 +203,29 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
- '';
+  '';
 
-  nativeBuildInputs =
-    [
-      autoconf213
-      cargo
-      gnused
-      llvmPackages.llvm # llvm-objdump
-      makeWrapper
-      nodejs
-      perl
-      pkg-config
-      python3
-      rust-cbindgen
-      rustc
-      which
-      unzip
-      wrapGAppsHook
-    ]
-    ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
+  nativeBuildInputs = [
+    autoconf213
+    cargo
+    gnused
+    llvmPackages.llvm # llvm-objdump
+    makeWrapper
+    nodejs
+    perl
+    pkg-config
+    python3
+    rust-cbindgen
+    rustc
+    which
+    unzip
+    wrapGAppsHook
+  ] ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
   separateDebugInfo = enableDebugSymbols;
-  setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
+  setOutputFlags =
+    false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
     # remove distributed configuration files
@@ -224,8 +247,20 @@ buildStdenv.mkDerivation ({
       $(< ${buildStdenv.cc}/nix-support/libc-cflags) \
       $(< ${buildStdenv.cc}/nix-support/cc-cflags) \
       $(< ${buildStdenv.cc}/nix-support/libcxx-cxxflags) \
-      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc.lib}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
-      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${lib.getDev buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
+      ${
+        lib.optionalString buildStdenv.cc.isClang
+        "-idirafter ${buildStdenv.cc.cc.lib}/lib/clang/${
+          lib.getVersion buildStdenv.cc.cc
+        }/include"
+      } \
+      ${
+        lib.optionalString buildStdenv.cc.isGNU
+        "-isystem ${lib.getDev buildStdenv.cc.cc}/include/c++/${
+          lib.getVersion buildStdenv.cc.cc
+        } -isystem ${buildStdenv.cc.cc}/include/c++/${
+          lib.getVersion buildStdenv.cc.cc
+        }/${buildStdenv.hostPlatform.config}"
+      } \
       $NIX_CFLAGS_COMPILE"
     ${
     # Bindgen doesn't like the flag added by `separateDebugInfo`.
@@ -267,37 +302,44 @@ buildStdenv.mkDerivation ({
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-system-nspr"
     "--with-system-nss"
-  ]
-  ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
-  ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
-  # LTO is done using clang and lld on Linux.
-  # Darwin needs to use the default linker as lld is not supported (yet?):
-  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
-  # elf-hack is broken when using clang+lld:
-  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional ltoSupport "--enable-lto=cross" # Cross-language LTO.
-  ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
+  ] ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
+    ++ lib.optional (!ltoSupport)
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+    # LTO is done using clang and lld on Linux.
+    # Darwin needs to use the default linker as lld is not supported (yet?):
+    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
+    # elf-hack is broken when using clang+lld:
+    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+    ++ lib.optional ltoSupport "--enable-lto=cross" # Cross-language LTO.
+    ++ lib.optional (ltoSupport
+      && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64))
+    "--disable-elf-hack"
+    ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
 
-  ++ flag alsaSupport "alsa"
-  ++ flag pulseaudioSupport "pulseaudio"
-  ++ flag ffmpegSupport "ffmpeg"
-  ++ flag jemallocSupport "jemalloc"
-  ++ flag gssSupport "negotiateauth"
-  ++ flag webrtcSupport "webrtc"
-  ++ flag crashreporterSupport "crashreporter"
-  ++ lib.optional drmSupport "--enable-eme=widevine"
+    ++ flag alsaSupport "alsa" ++ flag pulseaudioSupport "pulseaudio"
+    ++ flag ffmpegSupport "ffmpeg" ++ flag jemallocSupport "jemalloc"
+    ++ flag gssSupport "negotiateauth" ++ flag webrtcSupport "webrtc"
+    ++ flag crashreporterSupport "crashreporter"
+    ++ lib.optional drmSupport "--enable-eme=widevine"
 
-  ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-optimize" ])
-  # --enable-release adds -ffunction-sections & LTO that require a big amount of
-  # RAM and the 32-bit memory space cannot handle that linking
-  ++ flag (!debugBuild && !stdenv.is32bit) "release"
-  ++ flag enableDebugSymbols "debug-symbols"
-  ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
+    ++ (if debugBuild then [
+      "--enable-debug"
+      "--enable-profiling"
+    ] else [
+      "--disable-debug"
+      "--enable-optimize"
+    ])
+    # --enable-release adds -ffunction-sections & LTO that require a big amount of
+    # RAM and the 32-bit memory space cannot handle that linking
+    ++ flag (!debugBuild && !stdenv.is32bit) "release"
+    ++ flag enableDebugSymbols "debug-symbols"
+    ++ lib.optionals enableDebugSymbols [
+      "--disable-strip"
+      "--disable-install-strip"
+    ]
 
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
-  ++ extraConfigureFlags;
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ extraConfigureFlags;
 
   postConfigure = ''
     cd obj-*
@@ -311,7 +353,8 @@ buildStdenv.mkDerivation ({
   installPhase = if buildStdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -LR dist/${binaryNameCapitalized}.app $out/Applications
-  '' else null;
+  '' else
+    null;
 
   postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkg-config, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkg-config
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.homepage);
+    inherit (src.homepage)
+    ;
     description = "A FUSE-based filesystem that uses the p7zip library";
     longDescription = ''
       fuse-7z-ng is a FUSE file system that uses the p7zip

@@ -1,24 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, glib
-, libxml2
-, libsecret
-, poppler
-, itstool
-, hicolor-icon-theme
-, texlive
-, mate
-, wrapGAppsHook
-, enableEpub ? true, webkitgtk
-, enableDjvu ? true, djvulibre
-, enablePostScript ? true, libspectre
-, enableXps ? true, libgxps
-, enableImages ? false
-, mateUpdateScript
-}:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, glib, libxml2, libsecret
+, poppler, itstool, hicolor-icon-theme, texlive, mate, wrapGAppsHook
+, enableEpub ? true, webkitgtk, enableDjvu ? true, djvulibre
+, enablePostScript ? true, libspectre, enableXps ? true, libgxps
+, enableImages ? false, mateUpdateScript }:
 
 with lib;
 
@@ -27,15 +11,13 @@ stdenv.mkDerivation rec {
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0pz44k3axhjhhwfrfvnwvxak1dmjkwqs63rhrbcaagyymrp7cpki";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gettext
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
 
   buildInputs = [
     gtk3
@@ -47,16 +29,12 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
-    texlive.bin.core  # for synctex, used by the pdf back-end
-  ]
-  ++ optionals enableDjvu [ djvulibre ]
-  ++ optionals enableEpub [ webkitgtk ]
-  ++ optionals enablePostScript [ libspectre ]
-  ++ optionals enableXps [ libgxps ]
-  ;
+    texlive.bin.core # for synctex, used by the pdf back-end
+  ] ++ optionals enableDjvu [ djvulibre ] ++ optionals enableEpub [ webkitgtk ]
+    ++ optionals enablePostScript [ libspectre ]
+    ++ optionals enableXps [ libgxps ];
 
-  configureFlags = [ ]
-    ++ optionals (enableDjvu) [ "--enable-djvu" ]
+  configureFlags = [ ] ++ optionals (enableDjvu) [ "--enable-djvu" ]
     ++ optionals (enableEpub) [ "--enable-epub" ]
     ++ optionals (enablePostScript) [ "--enable-ps" ]
     ++ optionals (enableXps) [ "--enable-xps" ]

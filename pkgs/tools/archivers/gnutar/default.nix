@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.isSunOS) "1";
+  FORCE_UNSAFE_CONFIGURE = lib.optionalString
+    (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
   preConfigure = if stdenv.isCygwin then ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  '' else
+    null;
 
   doCheck = false; # fails
   doInstallCheck = false; # fails

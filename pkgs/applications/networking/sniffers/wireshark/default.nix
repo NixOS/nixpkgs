@@ -1,11 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
-, libssh, nghttp2, zlib, cmake, makeWrapper
-, withQt ? true, qt5 ? null
-, ApplicationServices, SystemConfiguration, gmp
-}:
+{ lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap
+, libnl, c-ares, gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3
+, libcap, glib, libssh, nghttp2, zlib, cmake, makeWrapper, withQt ? true
+, qt5 ? null, ApplicationServices, SystemConfiguration, gmp }:
 
-assert withQt  -> qt5  != null;
+assert withQt -> qt5 != null;
 
 with lib;
 
@@ -19,13 +17,16 @@ in stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
+    url =
+      "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
     sha256 = "sha256-iqfvSkSuYruNtGPPdh4swDuXMF4Od+1b5T+oNykYfO8=";
   };
 
   cmakeFlags = [
     "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-    "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
+    "-DENABLE_APPLICATION_BUNDLE=${
+      if withQt && stdenv.isDarwin then "ON" else "OFF"
+    }"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
@@ -33,13 +34,28 @@ in stdenv.mkDerivation {
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
+  nativeBuildInputs = [ bison cmake flex makeWrapper pkg-config ]
+    ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
-    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
-    libgpg-error gnutls geoip c-ares python3 glib zlib
-  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
-    ++ optionals stdenv.isLinux  [ libcap libnl ]
+    gettext
+    pcre
+    perl
+    libpcap
+    lua5
+    libssh
+    nghttp2
+    openssl
+    libgcrypt
+    libgpg-error
+    gnutls
+    geoip
+    c-ares
+    python3
+    glib
+    zlib
+  ] ++ optionals withQt (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+    ++ optionals stdenv.isLinux [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
     ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
 
@@ -66,21 +82,22 @@ in stdenv.mkDerivation {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-  '' else optionalString withQt ''
-    install -Dm644 -t $out/share/applications ../wireshark.desktop
+  '' else
+    optionalString withQt ''
+      install -Dm644 -t $out/share/applications ../wireshark.desktop
 
-    install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
-    mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
+      install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
+      mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
 
-    cp config.h $dev/include/wireshark/
-    cp ../ws_*.h $dev/include
-    cp ../epan/*.h $dev/include/epan/
-    cp ../epan/wmem/*.h $dev/include/epan/wmem/
-    cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
-    cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
-    cp ../wsutil/*.h $dev/include/wsutil/
-    cp ../wiretap/*.h $dev/include/wiretap
-  '');
+      cp config.h $dev/include/wireshark/
+      cp ../ws_*.h $dev/include
+      cp ../epan/*.h $dev/include/epan/
+      cp ../epan/wmem/*.h $dev/include/epan/wmem/
+      cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
+      cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
+      cp ../wsutil/*.h $dev/include/wsutil/
+      cp ../wiretap/*.h $dev/include/wiretap
+    '');
 
   dontFixCmake = true;
 
@@ -91,7 +108,8 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.wireshark.org/";
-    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
+    changelog =
+      "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
     description = "Powerful network protocol analyzer";
     license = licenses.gpl2Plus;
 

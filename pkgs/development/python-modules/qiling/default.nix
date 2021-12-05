@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, capstone
-, fetchFromGitHub
-, fetchPypi
-, gevent
-, keystone-engine
-, multiprocess
-, pefile
-, pyelftools
-, python-registry
-, unicorn
-}:
+{ lib, buildPythonPackage, capstone, fetchFromGitHub, fetchPypi, gevent
+, keystone-engine, multiprocess, pefile, pyelftools, python-registry, unicorn }:
 
 buildPythonPackage rec {
   pname = "qiling";
@@ -42,9 +31,7 @@ buildPythonPackage rec {
   # amongst other things)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qiling"
-  ];
+  pythonImportsCheck = [ "qiling" ];
 
   meta = with lib; {
     description = "Qiling Advanced Binary Emulation Framework";

@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, aalib
-, alsa-lib
-, libXext
-, libXxf86vm
-, libcaca
-, libpulseaudio
-, libsndfile
-, ncurses
-, openssl
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL2, aalib, alsa-lib, libXext
+, libXxf86vm, libcaca, libpulseaudio, libsndfile, ncurses, openssl, which }:
 
 stdenv.mkDerivation rec {
   pname = "zesarux";
@@ -26,9 +12,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-cxV2dAzGnIzJiCRdq8vN/Cl4AQeJqjmiCAahijIJQ9k=";
   };
 
-  nativeBuildInputs = [
-    which
-  ];
+  nativeBuildInputs = [ which ];
 
   buildInputs = [
     SDL2
@@ -47,7 +31,8 @@ stdenv.mkDerivation rec {
     # Patch the shell scripts; remove it when the next version arrives
     (fetchpatch {
       name = "000-fix-shebangs.patch";
-      url = "https://github.com/chernandezba/zesarux/commit/4493439b38f565c5be7c36239ecaf0cf80045627.diff";
+      url =
+        "https://github.com/chernandezba/zesarux/commit/4493439b38f565c5be7c36239ecaf0cf80045627.diff";
       sha256 = "sha256-f+21naPcPXdcVvqU8ymlGfl1WkYGOeOBe9B/WFUauTI=";
     })
   ];

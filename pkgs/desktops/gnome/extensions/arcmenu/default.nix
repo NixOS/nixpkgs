@@ -18,11 +18,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    glib gettext
-  ];
+  buildInputs = [ glib gettext ];
 
-  makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
+  makeFlags =
+    [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
 
   passthru = {
     extensionUuid = "arcmenu@arcmenu.com";
@@ -30,7 +29,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
+    description =
+      "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dkabot ];
     homepage = "https://gitlab.com/arcmenu/ArcMenu";

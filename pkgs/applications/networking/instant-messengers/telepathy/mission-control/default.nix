@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, dconf
-, telepathy-glib
-, python3
-, libxslt
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, pkg-config, dconf, telepathy-glib, python3, libxslt
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-mission-control";
@@ -15,23 +8,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0ibs575pfr0wmhfcw6ln6iz7gw2y45l3bah11rksf6g9jlwsxy1d";
   };
 
-  buildInputs = [
-    python3
-  ]; # ToDo: optional stuff missing
+  buildInputs = [ python3 ]; # ToDo: optional stuff missing
 
-  nativeBuildInputs = [
-    pkg-config
-    libxslt
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config libxslt makeWrapper ];
 
-  propagatedBuildInputs = [
-    telepathy-glib
-  ];
+  propagatedBuildInputs = [ telepathy-glib ];
 
   doCheck = true;
 
@@ -44,8 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An account manager and channel dispatcher for the Telepathy framework";
-    homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
+    description =
+      "An account manager and channel dispatcher for the Telepathy framework";
+    homepage =
+      "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

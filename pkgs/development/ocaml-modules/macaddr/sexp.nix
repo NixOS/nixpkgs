@@ -1,6 +1,4 @@
-{ lib, buildDunePackage
-, macaddr, ppx_sexp_conv, macaddr-cstruct, ounit
-}:
+{ lib, buildDunePackage, macaddr, ppx_sexp_conv, macaddr-cstruct, ounit }:
 
 buildDunePackage {
   pname = "macaddr-sexp";
@@ -15,6 +13,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = macaddr.meta // {
-    description = "A library for manipulation of MAC address representations using sexp";
+    description =
+      "A library for manipulation of MAC address representations using sexp";
   };
 }

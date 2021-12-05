@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, asciidoctor
-, openssl
-, Security
-, ansi2html
-, installShellFiles
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, asciidoctor, openssl
+, Security, ansi2html, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
@@ -22,8 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   cargoSha256 = "sha256-UgCFlzihBvZywDNir/92lub9R6yYPJSK8S4mlMk2sMk=";
 

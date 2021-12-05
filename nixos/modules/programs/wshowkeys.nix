@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.wshowkeys;
+let cfg = config.programs.wshowkeys;
 in {
   meta.maintainers = with maintainers; [ primeos ];
 
@@ -17,11 +16,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.wshowkeys =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.wshowkeys}/bin/wshowkeys";
-      };
+    security.wrappers.wshowkeys = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.wshowkeys}/bin/wshowkeys";
+    };
   };
 }

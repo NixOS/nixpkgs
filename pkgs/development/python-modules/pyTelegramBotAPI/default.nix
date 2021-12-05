@@ -13,7 +13,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
-    description = "A simple, but extensible Python implementation for the Telegram Bot API";
+    description =
+      "A simple, but extensible Python implementation for the Telegram Bot API";
     license = licenses.gpl2;
     maintainers = with maintainers; [ das_j ];
   };

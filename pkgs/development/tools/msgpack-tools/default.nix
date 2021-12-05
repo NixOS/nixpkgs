@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
   };
 
   rapidjson = fetchurl {
-    url = "https://github.com/miloyip/rapidjson/archive/99ba17bd66a85ec64a2f322b68c2b9c3b77a4391.tar.gz";
+    url =
+      "https://github.com/miloyip/rapidjson/archive/99ba17bd66a85ec64a2f322b68c2b9c3b77a4391.tar.gz";
     sha256 = "0jxgyy5n0lf9w36dycwwgz2wici4z9dnxlsn0z6m23zaa47g3wyw";
   };
 
   mpack = fetchurl {
-    url = "https://github.com/ludocode/mpack/archive/df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz";
+    url =
+      "https://github.com/ludocode/mpack/archive/df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz";
     sha256 = "1br8g3rf86h8z8wbqkd50aq40953862lgn0xk7cy68m07fhqc3pg";
   };
 
@@ -36,7 +38,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "Command-line tools for converting between MessagePack and JSON";
+    description =
+      "Command-line tools for converting between MessagePack and JSON";
     homepage = "https://github.com/ludocode/msgpack-tools";
     license = licenses.mit;
     platforms = platforms.linux;

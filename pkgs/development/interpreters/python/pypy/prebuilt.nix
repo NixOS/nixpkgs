@@ -1,24 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, python-setup-hook
-, self
-, which
+{ lib, stdenv, fetchurl, python-setup-hook, self, which
 # Dependencies
-, bzip2
-, zlib
-, openssl_1_0_2
-, expat
-, ncurses6
-, tcl-8_5
-, tk-8_5
+, bzip2, zlib, openssl_1_0_2, expat, ncurses6, tcl-8_5, tk-8_5
 # For the Python package set
-, packageOverrides ? (self: super: {})
-, sourceVersion
-, pythonVersion
-, sha256
-, passthruFun
-}:
+, packageOverrides ? (self: super: { }), sourceVersion, pythonVersion, sha256
+, passthruFun }:
 
 # This version of PyPy is primarily added to speed-up translation of
 # our PyPy source build when developing that expression.
@@ -38,30 +23,26 @@ let
     # Not possible to cross-compile with.
     pythonOnBuildForBuild = throw "${pname} does not support cross compilation";
     pythonOnBuildForHost = self;
-    pythonOnBuildForTarget = throw "${pname} does not support cross compilation";
+    pythonOnBuildForTarget =
+      throw "${pname} does not support cross compilation";
     pythonOnHostForHost = throw "${pname} does not support cross compilation";
-    pythonOnTargetForTarget = throw "${pname} does not support cross compilation";
+    pythonOnTargetForTarget =
+      throw "${pname} does not support cross compilation";
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
 
   majorVersion = substring 0 1 pythonVersion;
 
-  deps = [
-    bzip2
-    zlib
-    openssl_1_0_2
-    expat
-    ncurses6
-    tcl-8_5
-    tk-8_5
-  ];
+  deps = [ bzip2 zlib openssl_1_0_2 expat ncurses6 tcl-8_5 tk-8_5 ];
 
-in with passthru; stdenv.mkDerivation {
+in with passthru;
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+    url =
+      "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
     inherit sha256;
   };
 
@@ -85,7 +66,9 @@ in with passthru; stdenv.mkDerivation {
 
     pushd $out
     find {lib,lib_pypy*} -name "*.so" -exec patchelf --remove-needed libncursesw.so.6 --replace-needed libtinfow.so.6 libncursesw.so.6 {} \;
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${lib.makeLibraryPath deps}:$out/lib {} \;
+    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${
+      lib.makeLibraryPath deps
+    }:$out/lib {} \;
 
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
@@ -100,15 +83,8 @@ in with passthru; stdenv.mkDerivation {
 
   # Check whether importing of (extension) modules functions
   installCheckPhase = let
-    modules = [
-      "ssl"
-      "sys"
-      "curses"
-    ] ++ optionals (!isPy3k) [
-      "Tkinter"
-    ] ++ optionals isPy3k [
-      "tkinter"
-    ];
+    modules = [ "ssl" "sys" "curses" ] ++ optionals (!isPy3k) [ "Tkinter" ]
+      ++ optionals isPy3k [ "tkinter" ];
     imports = concatMapStringsSep "; " (x: "import ${x}") modules;
   in ''
     echo "Testing whether we can import modules"
@@ -124,7 +100,8 @@ in with passthru; stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://pypy.org/";
-    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    description =
+      "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
   };

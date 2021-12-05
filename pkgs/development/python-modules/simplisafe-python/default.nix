@@ -1,21 +1,6 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, backoff
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-, types-pytz
-, voluptuous
-, websockets
-}:
+{ lib, aiohttp, aresponses, asynctest, backoff, buildPythonPackage, docutils
+, fetchFromGitHub, poetry-core, pytest-aiohttp, pytest-asyncio, pytestCheckHook
+, pythonOlder, pytz, types-pytz, voluptuous, websockets }:
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
@@ -31,27 +16,13 @@ buildPythonPackage rec {
     sha256 = "sha256-5X2qvrACV9OTVYSZYxFncFOgrgywKvVDbC6IVFnJBtw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    backoff
-    docutils
-    pytz
-    types-pytz
-    voluptuous
-    websockets
-  ];
+  propagatedBuildInputs =
+    [ aiohttp backoff docutils pytz types-pytz voluptuous websockets ];
 
-  checkInputs = [
-    aresponses
-    asynctest
-    pytest-aiohttp
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aresponses asynctest pytest-aiohttp pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -69,9 +40,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "simplipy"
-  ];
+  pythonImportsCheck = [ "simplipy" ];
 
   __darwinAllowLocalNetworking = true;
 

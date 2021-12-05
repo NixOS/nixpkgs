@@ -1,10 +1,4 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, extra-cmake-modules
-, ki18n
-, qtlocation
-}:
+{ mkDerivation, lib, fetchFromGitLab, extra-cmake-modules, ki18n, qtlocation }:
 
 mkDerivation rec {
   pname = "kweathercore";
@@ -18,10 +12,7 @@ mkDerivation rec {
     sha256 = "08ipabskhsbspkzzdlpwl89r070q8d0vc9500ma6d5i9fnpmkz6d";
   };
 
-  buildInputs = [
-    ki18n
-    qtlocation
-  ];
+  buildInputs = [ ki18n qtlocation ];
 
   nativeBuildInputs = [ extra-cmake-modules ];
 

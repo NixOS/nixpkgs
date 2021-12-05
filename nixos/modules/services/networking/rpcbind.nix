@@ -25,7 +25,6 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.rpcbind.enable {
@@ -33,9 +32,7 @@ with lib;
 
     systemd.packages = [ pkgs.rpcbind ];
 
-    systemd.services.rpcbind = {
-      wantedBy = [ "multi-user.target" ];
-    };
+    systemd.services.rpcbind = { wantedBy = [ "multi-user.target" ]; };
 
     users.users.rpc = {
       group = "nogroup";

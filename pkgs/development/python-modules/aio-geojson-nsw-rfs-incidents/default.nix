@@ -1,14 +1,5 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-}:
+{ lib, aio-geojson-client, aiohttp, aresponses, asynctest, buildPythonPackage
+, fetchFromGitHub, pytest-asyncio, pytestCheckHook, pytz }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
@@ -21,24 +12,17 @@ buildPythonPackage rec {
     sha256 = "sha256-o9tuoJ7VZ6bg0rYeRWClKxdbxxj6wPgkSF7ZdOfmJew=";
   };
 
-  propagatedBuildInputs = [
-    aio-geojson-client
-    aiohttp
-    pytz
-  ];
+  propagatedBuildInputs = [ aio-geojson-client aiohttp pytz ];
 
-  checkInputs = [
-    aresponses
-    asynctest
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses asynctest pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "aio_geojson_nsw_rfs_incidents" ];
 
   meta = with lib; {
-    description = "Python module for accessing the NSW Rural Fire Service incidents feeds";
-    homepage = "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents";
+    description =
+      "Python module for accessing the NSW Rural Fire Service incidents feeds";
+    homepage =
+      "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

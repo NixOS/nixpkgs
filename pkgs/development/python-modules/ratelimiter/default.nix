@@ -1,10 +1,4 @@
-{
-  lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, glibcLocales
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "ratelimiter";

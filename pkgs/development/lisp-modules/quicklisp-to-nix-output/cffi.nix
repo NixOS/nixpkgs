@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cffi";
   version = "cffi_0.24.1";
 
@@ -8,7 +7,14 @@ rec {
 
   description = "The Common Foreign Function Interface";
 
-  deps = [ args."alexandria" args."babel" args."cl-json" args."cl-ppcre" args."trivial-features" args."uiop" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cl-json"
+    args."cl-ppcre"
+    args."trivial-features"
+    args."uiop"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
@@ -17,7 +23,7 @@ rec {
 
   packageName = "cffi";
 
-  asdFilesToKeep = ["cffi.asd"];
+  asdFilesToKeep = [ "cffi.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cffi DESCRIPTION The Common Foreign Function Interface SHA256
@@ -32,4 +38,5 @@ rec {
     VERSION cffi_0.24.1 SIBLINGS
     (cffi-examples cffi-grovel cffi-libffi cffi-tests cffi-toolchain
      cffi-uffi-compat)
-    PARASITES (cffi/c2ffi cffi/c2ffi-generator)) */
+    PARASITES (cffi/c2ffi cffi/c2ffi-generator))
+*/

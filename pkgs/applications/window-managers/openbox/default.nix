@@ -1,32 +1,29 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, python3
-, libxml2, libXinerama, libXcursor, libXau, libXrandr, libICE, libSM
-, imlib2, pango, libstartup_notification, makeWrapper }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, python3, libxml2
+, libXinerama, libXcursor, libXau, libXrandr, libICE, libSM, imlib2, pango
+, libstartup_notification, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "openbox";
   version = "3.6.1";
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    makeWrapper
-    python3.pkgs.wrapPython
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook pkg-config makeWrapper python3.pkgs.wrapPython ];
 
   buildInputs = [
     libxml2
-    libXinerama libXcursor libXau libXrandr libICE libSM
+    libXinerama
+    libXcursor
+    libXau
+    libXrandr
+    libICE
+    libSM
     libstartup_notification
     python3
   ];
 
-  propagatedBuildInputs = [
-    pango imlib2
-  ];
+  propagatedBuildInputs = [ pango imlib2 ];
 
-  pythonPath = with python3.pkgs; [
-    pyxdg
-  ];
+  pythonPath = with python3.pkgs; [ pyxdg ];
 
   src = fetchurl {
     url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";
@@ -42,12 +39,14 @@ stdenv.mkDerivation rec {
     # Use fetchurl to avoid "fetchpatch: ignores file renames" #32084
     # This patch adds python3 support
     (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/90cb57ef53d952bb6ab4c33a184f815bbe1791c0/openbox/trunk/py3.patch";
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-community/90cb57ef53d952bb6ab4c33a184f815bbe1791c0/openbox/trunk/py3.patch";
       sha256 = "1ks99awlkhd5ph9kz94s1r6m1bfvh42g4rmxd14dyg5b421p1ljc";
     })
   ];
 
-  postBuild = "gcc -O2 -o setlayout $(pkg-config --cflags --libs x11) $setlayoutSrc";
+  postBuild =
+    "gcc -O2 -o setlayout $(pkg-config --cflags --libs x11) $setlayoutSrc";
 
   # Openbox needs XDG_DATA_DIRS set or it can't find its default theme
   postInstall = ''

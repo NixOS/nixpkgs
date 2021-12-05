@@ -11,9 +11,7 @@ buildPythonApplication rec {
     sha256 = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
   };
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ unar ]}"
-  ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ unar ]}" ];
 
   postFixup = ''
     ln -s $out/bin/unrar_wrapper $out/bin/unrar

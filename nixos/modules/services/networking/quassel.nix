@@ -6,9 +6,8 @@ let
   cfg = config.services.quassel;
   quassel = cfg.package;
   user = if cfg.user != null then cfg.user else "quassel";
-in
 
-{
+in {
 
   ###### interface
 
@@ -81,14 +80,13 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.requireSSL -> cfg.certificateFile != null;
-        message = "Quassel needs a certificate file in order to require SSL";
-      }];
+    assertions = [{
+      assertion = cfg.requireSSL -> cfg.certificateFile != null;
+      message = "Quassel needs a certificate file in order to require SSL";
+    }];
 
     users.users = optionalAttrs (cfg.user == null) {
       quassel = {
@@ -106,29 +104,28 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${user} - - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' - ${user} - - -" ];
 
-    systemd.services.quassel =
-      { description = "Quassel IRC client daemon";
+    systemd.services.quassel = {
+      description = "Quassel IRC client daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ] ++ optional config.services.postgresql.enable "postgresql.service"
-                                     ++ optional config.services.mysql.enable "mysql.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ]
+        ++ optional config.services.postgresql.enable "postgresql.service"
+        ++ optional config.services.mysql.enable "mysql.service";
 
-        serviceConfig =
-        {
-          ExecStart = concatStringsSep " " ([
-            "${quassel}/bin/quasselcore"
-            "--listen=${concatStringsSep "," cfg.interfaces}"
-            "--port=${toString cfg.portNumber}"
-            "--configdir=${cfg.dataDir}"
-          ] ++ optional cfg.requireSSL "--require-ssl"
-            ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
-          User = user;
-        };
+      serviceConfig = {
+        ExecStart = concatStringsSep " " ([
+          "${quassel}/bin/quasselcore"
+          "--listen=${concatStringsSep "," cfg.interfaces}"
+          "--port=${toString cfg.portNumber}"
+          "--configdir=${cfg.dataDir}"
+        ] ++ optional cfg.requireSSL "--require-ssl"
+          ++ optional (cfg.certificateFile != null)
+          "--ssl-cert=${cfg.certificateFile}");
+        User = user;
       };
+    };
 
   };
 

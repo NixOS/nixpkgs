@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "drone-runner-exec";
@@ -17,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-ypYuQKxRhRQGX1HtaWt6F6BD9vBpD8AJwx/4esLrJsw=";
 
   meta = with lib; {
-    description = "Drone pipeline runner that executes builds directly on the host machine";
+    description =
+      "Drone pipeline runner that executes builds directly on the host machine";
     homepage = "https://github.com/drone-runners/drone-runner-exec";
     # https://polyformproject.org/licenses/small-business/1.0.0/
     license = licenses.unfree;

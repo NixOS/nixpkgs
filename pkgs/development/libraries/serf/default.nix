@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5
-, pkg-config, libiconv }:
+{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5, pkg-config
+, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "serf";

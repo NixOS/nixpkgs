@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, azure-common, azure-mgmt-core
+, msrest, msrestazure }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
@@ -16,12 +12,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-mgmt-core
-    msrest
-    msrestazure
-  ];
+  propagatedBuildInputs = [ azure-common azure-mgmt-core msrest msrestazure ];
 
   pythonImportsCheck = [ "azure.mgmt.synapse" ];
 

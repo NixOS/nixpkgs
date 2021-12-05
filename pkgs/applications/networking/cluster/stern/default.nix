@@ -1,8 +1,8 @@
-{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles
+}:
 let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "stern";
   version = "1.20.1";
 
@@ -19,13 +19,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags =
-    [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
 
   postInstall =
     let stern = if isCrossBuild then buildPackages.stern else "$out";
-    in
-    ''
+    in ''
       for shell in bash zsh; do
         ${stern}/bin/stern --completion $shell > stern.$shell
         installShellCompletion stern.$shell

@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchurl, perl, makeWrapper
-, version, sha256, patches ? [], extraBuildInputs ? []
-, ...
-}:
+{ lib, stdenv, fetchurl, perl, makeWrapper, version, sha256, patches ? [ ]
+, extraBuildInputs ? [ ], ... }:
 stdenv.mkDerivation rec {
   pname = "patchutils";
   inherit version patches;
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
+    url =
+      "http://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
     inherit sha256;
   };
 

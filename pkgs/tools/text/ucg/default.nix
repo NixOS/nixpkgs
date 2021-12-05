@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, pcre
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "ucg";
@@ -16,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    pcre
-  ];
+  buildInputs = [ pcre ];
 
   doInstallCheck = true;
   installCheckPhase = ''

@@ -29,7 +29,7 @@ let
     )
   '';
 
-  workspaceDir = runLocal "our_workspace" {} ''
+  workspaceDir = runLocal "our_workspace" { } ''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     mkdir $out/python

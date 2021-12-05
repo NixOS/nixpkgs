@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";
+    description =
+      "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";
     homepage = "https://git.sr.ht/~steef/snixembed";
     changelog = "https://git.sr.ht/~steef/snixembed/refs/${version}";
     license = licenses.isc;

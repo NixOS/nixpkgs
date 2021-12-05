@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew, xorg
+, ffmpeg, libjpeg, libpng, libtiff, eigen, Carbon ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {
   pname = "pangolin";
@@ -17,17 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config doxygen ];
 
-  buildInputs = [
-    libGL
-    glew
-    xorg.libX11
-    ffmpeg
-    libjpeg
-    libpng
-    libtiff
-    eigen
-  ]
-  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  buildInputs = [ libGL glew xorg.libX11 ffmpeg libjpeg libpng libtiff eigen ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
@@ -35,7 +24,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   meta = {
-    description = "A lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
+    description =
+      "A lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
     longDescription = ''
       Pangolin is a lightweight portable rapid development library for managing
       OpenGL display / interaction and abstracting video input. At its heart is

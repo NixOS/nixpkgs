@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pantheon
-, vala
-, pkg-config
-, meson
-, ninja
-, python3
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, libgee
-, libhandy
-, libsoup
-, json-glib
-, glib-networking
-, desktop-file-utils
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, vala, pkg-config
+, meson, ninja, python3, glib, gsettings-desktop-schemas, gtk3, libgee, libhandy
+, libsoup, json-glib, glib-networking, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "fondo";
@@ -31,15 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JiDbkVs+EZRWRohSiuh8xFFgEhbnMYZfnZtz5Z4Wdb0=";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 vala wrapGAppsHook ];
 
   buildInputs = [
     glib
@@ -58,15 +33,14 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { attrPath = pname; };
 
   meta = with lib; {
     homepage = "https://github.com/calo001/fondo";
     description = "Find the most beautiful wallpapers for your desktop";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    maintainers = with maintainers;
+      [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.calo001.fondo";
   };

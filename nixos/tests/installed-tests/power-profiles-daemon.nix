@@ -3,7 +3,5 @@
 makeInstalledTest {
   tested = pkgs.power-profiles-daemon;
 
-  testConfig = {
-    services.power-profiles-daemon.enable = true;
-  };
+  testConfig = { services.power-profiles-daemon.enable = true; };
 }

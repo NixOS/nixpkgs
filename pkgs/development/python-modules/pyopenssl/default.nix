@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, openssl
-, cryptography
-, pyasn1
-, idna
-, pytest
-, pretend
-, flaky
-, glibcLocales
-, six
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, openssl, cryptography, pyasn1
+, idna, pytest, pretend, flaky, glibcLocales, six }:
 
 let
   # https://github.com/pyca/pyopenssl/issues/791
@@ -47,22 +35,18 @@ let
     "test_fallback_default_verify_paths"
     # https://github.com/pyca/pyopenssl/issues/768
     "test_wantWriteError"
-  ] ++ (
-    lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) failingLibresslTests
-  ) ++ (
-    lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
-  ) ++ (
-    # https://github.com/pyca/pyopenssl/issues/974
-    lib.optionals stdenv.is32bit [ "test_verify_with_time" ]
-  );
+  ] ++ (lib.optionals (lib.hasPrefix "libressl" openssl.meta.name)
+    failingLibresslTests)
+    ++ (lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1")
+      failingOpenSSL_1_1Tests) ++ (
+        # https://github.com/pyca/pyopenssl/issues/974
+        lib.optionals stdenv.is32bit [ "test_verify_with_time" ]);
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = lib.optionalString (disabledTests != [])
+  testExpression = lib.optionalString (disabledTests != [ ])
     "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyopenssl";
   version = "20.0.1";
 

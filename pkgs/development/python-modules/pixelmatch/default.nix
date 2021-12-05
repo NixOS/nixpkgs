@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchgit, poetry-core, pytestCheckHook, pytest-benchmark, pytest-mypy, pillow }:
+{ lib, buildPythonPackage, fetchgit, poetry-core, pytestCheckHook
+, pytest-benchmark, pytest-mypy, pillow }:
 
 buildPythonPackage rec {
   pname = "pixelmatch";
@@ -13,21 +14,11 @@ buildPythonPackage rec {
     fetchLFS = true;
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-benchmark
-    pytest-mypy
-    pillow
-  ];
+  checkInputs = [ pytestCheckHook pytest-benchmark pytest-mypy pillow ];
 
-  pytestFlagsArray = [
-    "--mypy"
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--mypy" "--benchmark-disable" ];
 
   meta = with lib; {
     description = "A pixel-level image comparison library.";

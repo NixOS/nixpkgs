@@ -22,12 +22,13 @@ let
     }];
   };
 
-  confFile = pkgs.writeText "config.yml" (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
+  confFile = pkgs.writeText "config.yml"
+    (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
 
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] "Use services.parsoid.wikis instead")
+    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ]
+      "Use services.parsoid.wikis instead")
   ];
 
   ##### interface
@@ -79,7 +80,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra configuration to add to parsoid configuration.
         '';
@@ -98,7 +99,10 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${parsoid}/lib/node_modules/parsoid/bin/server.js -c ${confFile} -n ${toString cfg.workers}";
+        ExecStart =
+          "${parsoid}/lib/node_modules/parsoid/bin/server.js -c ${confFile} -n ${
+            toString cfg.workers
+          }";
 
         DynamicUser = true;
         User = "parsoid";

@@ -13,10 +13,9 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "VBU6Jg6Sq3RBy0ym5YbjLjvcfx/85f6wNMmkGVV0W88=";
+    outputHash = "VBU6Jg6Sq3RBy0ym5YbjLjvcfx/85f6wNMmkGVV0W88=";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 

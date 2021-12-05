@@ -1,12 +1,12 @@
 { fetchurl }:
 let
-  fetchTestInput = { res, sha256 }: fetchurl {
-    inherit sha256;
-    url = "https://www.mkgmap.org.uk/testinput/${res}";
-    name = builtins.replaceStrings [ "/" ] [ "__" ] res;
-  };
-in
-[
+  fetchTestInput = { res, sha256 }:
+    fetchurl {
+      inherit sha256;
+      url = "https://www.mkgmap.org.uk/testinput/${res}";
+      name = builtins.replaceStrings [ "/" ] [ "__" ] res;
+    };
+in [
   (fetchTestInput {
     res = "osm/lon1.osm.gz";
     sha256 = "1r8sl67hayjgybxy9crqwp7f1w0ljxvxh0apqcvr888yhsbb8drv";

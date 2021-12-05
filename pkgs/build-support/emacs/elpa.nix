@@ -4,22 +4,16 @@
 
 with lib;
 
-{ pname
-, version
-, src
-, meta ? {}
-, ...
-}@args:
+{ pname, version, src, meta ? { }, ... }@args:
 
 let
 
   defaultMeta = {
-    homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
+    homepage =
+      args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
   };
 
-in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
+in import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
   dontUnpack = true;
 
@@ -36,6 +30,4 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
   meta = defaultMeta // meta;
 }
 
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+  // removeAttrs args [ "files" "fileSpecs" "meta" ])

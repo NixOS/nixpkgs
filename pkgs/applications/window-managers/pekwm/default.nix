@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libXext
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libpng
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, libXext, libXft, libXinerama
+, libXpm, libXrandr, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "pekwm";
@@ -23,15 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    libXext
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
-    libjpeg
-    libpng
-  ];
+  buildInputs = [ libXext libXft libXinerama libXpm libXrandr libjpeg libpng ];
 
   meta = with lib; {
     description = "A lightweight window manager";
@@ -49,9 +31,9 @@ stdenv.mkDerivation rec {
         appear as they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-      homepage = "http://www.pekwm.org";
-      license = licenses.gpl2Plus;
-      maintainers = [ maintainers.AndersonTorres ];
-      platforms = platforms.linux;
+    homepage = "http://www.pekwm.org";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

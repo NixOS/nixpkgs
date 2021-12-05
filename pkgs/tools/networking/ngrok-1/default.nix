@@ -29,7 +29,5 @@ buildGoPackage rec {
 
   tags = [ "release" ];
 
-  meta = {
-    homepage = "https://ngrok.com/";
-  };
+  meta = { homepage = "https://ngrok.com/"; };
 }

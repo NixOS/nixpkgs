@@ -1,10 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, pkg-config
-}:
+{ lib, rustPlatform, fetchFromGitHub, cmake, llvmPackages, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
@@ -27,8 +21,10 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "cranelift" "jit" ];
   cargoBuildFlags = [
     # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+    "--manifest-path"
+    "lib/cli/Cargo.toml"
+    "--bin"
+    "wasmer"
   ];
 
   # Can't use test-jit:

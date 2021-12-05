@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     license = licenses.asl20;
     maintainers = with maintainers; [ cartr ];
-    platforms = [ "aarch64-linux" "armv7l-linux" "armv6l-linux" "x86_64-linux" ];
+    platforms =
+      [ "aarch64-linux" "armv7l-linux" "armv6l-linux" "x86_64-linux" ];
   };
 }

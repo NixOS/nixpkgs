@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "certifi";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-SFb/spVHK15b53ZG1P147DcTjs1dqR0+MBXzpE+CWpo=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "certifi" ];
 

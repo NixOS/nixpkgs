@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.openldap;
+let cfg = config.services.prometheus.exporters.openldap;
 in {
   port = 9330;
   extraOpts = {

@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
+{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl
+, mlgmpidl }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-apron-${version}";

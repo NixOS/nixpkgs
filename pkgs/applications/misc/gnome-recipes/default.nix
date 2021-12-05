@@ -1,25 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, gettext
-, itstool
-, python3
-, wrapGAppsHook
-, gtk3
-, glib
-, libsoup
-, gnome-online-accounts
-, librest
-, json-glib
-, gnome-autoar
-, gspell
-, libcanberra
-, nix-update-script
-}:
+{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config, desktop-file-utils
+, gettext, itstool, python3, wrapGAppsHook, gtk3, glib, libsoup
+, gnome-online-accounts, librest, json-glib, gnome-autoar, gspell, libcanberra
+, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-recipes";
@@ -63,11 +45,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Recipe management application for GNOME";

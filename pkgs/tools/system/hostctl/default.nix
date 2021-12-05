@@ -13,7 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-rGDWrivIdl5FTu/kNR8nAfE2+1hE4cm3uDg7oBobE9M=";
 
-  ldflags = [ "-s" "-w" "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''

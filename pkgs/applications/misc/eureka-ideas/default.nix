@@ -1,11 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eureka-ideas";
@@ -25,7 +18,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "CLI tool to input and store your ideas without leaving the terminal";
+    description =
+      "CLI tool to input and store your ideas without leaving the terminal";
     homepage = "https://github.com/simeg/eureka";
     changelog = "https://github.com/simeg/eureka/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

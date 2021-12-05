@@ -1,7 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-}:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urlscan";
@@ -14,9 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-Wg1QecSMyifID9uIvVWrmkHax4FbbwEcoXIZ8V8P3FU=";
   };
 
-  propagatedBuildInputs = [
-    python3Packages.urwid
-  ];
+  propagatedBuildInputs = [ python3Packages.urwid ];
 
   doCheck = false; # No tests available
 

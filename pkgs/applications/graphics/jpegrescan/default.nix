@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, libjpeg_turbo, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, libjpeg_turbo, perl, perlPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "jpegrescan";
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ perlPackages.FileSlurp ];
 
-  buildInputs = [
-    perl libjpeg_turbo makeWrapper
-  ];
+  buildInputs = [ perl libjpeg_turbo makeWrapper ];
 
   meta = with lib; {
     description = "losslessly shrink any JPEG file";

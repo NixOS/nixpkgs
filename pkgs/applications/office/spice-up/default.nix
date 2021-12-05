@@ -1,22 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, cmake
-, gdk-pixbuf
-, gtk3
-, vala
-, gettext
-, ninja
-, pantheon
-, pkg-config
-, json-glib
-, libgudev
-, libevdev
-, libgee
-, libsoup
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, fetchpatch, cmake, gdk-pixbuf
+, gtk3, vala, gettext, ninja, pantheon, pkg-config, json-glib, libgudev
+, libevdev, libgee, libsoup, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
@@ -31,14 +15,7 @@ stdenv.mkDerivation rec {
 
   USER = "pbuilder";
 
-  nativeBuildInputs = [
-    cmake
-    gettext
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake gettext ninja pkg-config vala wrapGAppsHook ];
 
   buildInputs = [
     pantheon.elementary-icon-theme
@@ -56,21 +33,19 @@ stdenv.mkDerivation rec {
     # Fix build with Vala 0.46
     # https://github.com/Philip-Scott/Spice-up/pull/288
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Philip-Scott/Spice-up/pull/288.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/Philip-Scott/Spice-up/pull/288.patch";
       sha256 = "0kyfd8v2sk4cvcq1j8ysp64snfjhnpr3iz7l04lx7if7h372xj39";
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Create simple and beautiful presentations";
     homepage = "https://github.com/Philip-Scott/Spice-up";
-    maintainers = with maintainers; [ samdroid-apps xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers;
+      [ samdroid-apps xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;

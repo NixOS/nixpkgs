@@ -1,25 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, wafHook
-, pkg-config
-, cmake
-, qtbase
-, python3
-, qtwebengine
-, qtsvg
-, ncurses6
-, kio
-, kauth
-, kiconthemes
-, kconfigwidgets
-, kxmlgui
-, kcoreaddons
-, kconfig
-, kwidgetsaddons
-, ki18n
-, sonnet
-, kdelibs4support
+{ lib, mkDerivation, fetchFromGitLab, wafHook, pkg-config, cmake, qtbase
+, python3, qtwebengine, qtsvg, ncurses6, kio, kauth, kiconthemes, kconfigwidgets
+, kxmlgui, kcoreaddons, kconfig, kwidgetsaddons, ki18n, sonnet, kdelibs4support
 }:
 
 mkDerivation rec {
@@ -53,10 +34,13 @@ mkDerivation rec {
       --replace @Qt5Svg_dev@ "${lib.getDev qtsvg}" \
       --replace @Qt5WebEngine@ "${qtwebengine}" \
       --replace @Qt5WebEngine_dev@ "${lib.getDev qtwebengine}" \
-      --replace /usr/include/KF5/KDELibs4Support "${lib.getDev kdelibs4support}/include/KF5/KDELibs4Support"
+      --replace /usr/include/KF5/KDELibs4Support "${
+        lib.getDev kdelibs4support
+      }/include/KF5/KDELibs4Support"
   '';
 
-  nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
+  nativeBuildInputs =
+    [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
 
   buildInputs = [
     qtbase
@@ -76,9 +60,7 @@ mkDerivation rec {
     kdelibs4support
   ];
 
-  wafConfigureFlags = [
-    "--qtlibs=${lib.getLib qtbase}/lib"
-  ];
+  wafConfigureFlags = [ "--qtlibs=${lib.getLib qtbase}/lib" ];
 
   meta = with lib; {
     description = "A mind-mapping application for KDE";

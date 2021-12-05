@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.feedbackd;
+let cfg = config.programs.feedbackd;
 in {
   options = {
     programs.feedbackd = {
@@ -28,6 +27,6 @@ in {
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    users.groups.feedbackd = {};
+    users.groups.feedbackd = { };
   };
 }

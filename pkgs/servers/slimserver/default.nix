@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, perlPackages
-, flac
-, faad2
-, sox
-, lame
-, monkeysAudio
-, wavpack
-}:
+{ lib, fetchFromGitHub, makeWrapper, perlPackages, flac, faad2, sox, lame
+, monkeysAudio, wavpack }:
 
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
@@ -72,7 +63,6 @@ perlPackages.buildPerlPackage rec {
     perlPackages.YAMLLibYAML
   ];
 
-
   prePatch = ''
     mkdir CPAN_used
     # slimserver doesn't work with current DBIx/SQL versions, use bundled copies
@@ -100,14 +90,17 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     cp -r . $out
     wrapProgram $out/slimserver.pl \
-      --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]
+      }"
   '';
 
   outputs = [ "out" ];
 
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
-    description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
+    description =
+      "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;

@@ -1,13 +1,5 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, python
-, azure-common
-, futures
-, python-dateutil
-, requests
-, isPy3k
-}:
+{ pkgs, buildPythonPackage, fetchPypi, python, azure-common, futures
+, python-dateutil, requests, isPy3k }:
 
 buildPythonPackage rec {
   version = "0.20.3";
@@ -20,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ azure-common python-dateutil requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+    ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   postInstall = ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py

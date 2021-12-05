@@ -1,10 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytest-asyncio
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "smhi-pkg";
@@ -17,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-tBNmfn2hBkS36B9zKDP+TgqeumbgzBVDiJ5L54RaSc8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # Disable tests that needs network access
@@ -40,7 +30,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing SMHI open forecast data";
     homepage = "https://github.com/joysoftware/pypi_smhi";
-    changelog = "https://github.com/joysoftware/pypi_smhi/releases/tag/${version}";
+    changelog =
+      "https://github.com/joysoftware/pypi_smhi/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

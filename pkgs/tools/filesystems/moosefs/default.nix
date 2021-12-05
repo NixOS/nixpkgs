@@ -1,11 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, fuse
-, pkg-config
-, libpcap
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, python3, fuse, pkg-config, libpcap, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
@@ -18,16 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/+l4BURvL1R6te6tlXRJx7YBDyYuMrGnzzhMc9XeXKc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ fuse libpcap zlib python3 ];
+  buildInputs = [ fuse libpcap zlib python3 ];
 
   strictDeps = true;
 
-  buildFlags = lib.optionals stdenv.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
+  buildFlags = lib.optionals stdenv.isDarwin
+    [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
 
   # Fix the build on macOS with macFUSE installed
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -49,7 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://moosefs.com";
-    description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
+    description =
+      "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = platforms.unix;
     license = licenses.gpl2;
     maintainers = [ maintainers.mfossen ];

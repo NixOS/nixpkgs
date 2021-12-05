@@ -2,16 +2,15 @@
 
 let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc alsa-lib libX11 libXi SDL2 ];
-  arch =
-    if stdenv.isAarch64
-    then "arm64"
-    else if stdenv.isAarch32
-    then "arm_armhf_raspberry_pi"
-    else if stdenv.is64bit
-    then "x86_64"
-    else "x86";
-in
-stdenv.mkDerivation rec {
+  arch = if stdenv.isAarch64 then
+    "arm64"
+  else if stdenv.isAarch32 then
+    "arm_armhf_raspberry_pi"
+  else if stdenv.is64bit then
+    "x86_64"
+  else
+    "x86";
+in stdenv.mkDerivation rec {
   pname = "SunVox";
   version = "1.9.6c";
 
@@ -39,7 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
+    description =
+      "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
     homepage = "http://www.warmplace.ru/soft/sunvox/";
     maintainers = with maintainers; [ puffnfresh ];

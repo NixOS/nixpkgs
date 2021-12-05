@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, numpy
-, scikit-learn
-, scipy
-, numba
-, pynndescent
-, tensorflow
-, pytestCheckHook
-, Keras
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose, numpy, scikit-learn, scipy
+, numba, pynndescent, tensorflow, pytestCheckHook, Keras }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
@@ -23,20 +12,9 @@ buildPythonPackage rec {
     sha256 = "0favphngcz5jvyqs06x07hk552lvl9qx3vka8r4x0xmv88gsg349";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scikit-learn
-    scipy
-    numba
-    pynndescent
-  ];
+  propagatedBuildInputs = [ numpy scikit-learn scipy numba pynndescent ];
 
-  checkInputs = [
-    nose
-    tensorflow
-    pytestCheckHook
-    Keras
-  ];
+  checkInputs = [ nose tensorflow pytestCheckHook Keras ];
 
   preCheck = ''
     export HOME=$TMPDIR

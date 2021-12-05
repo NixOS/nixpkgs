@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, buildGoPackage}:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "ical2org";
-  version="1.1.5";
+  version = "1.1.5";
 
   goPackagePath = "github.com/rjhorniii/ical2org";
 
@@ -17,7 +17,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "Convert an iCal file to org agenda format, optionally deduplicating entries";
+    description =
+      "Convert an iCal file to org agenda format, optionally deduplicating entries";
     homepage = "https://github.com/rjhorniii/ical2org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ swflint ];

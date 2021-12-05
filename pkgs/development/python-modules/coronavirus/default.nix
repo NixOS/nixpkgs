@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp }:
 
 buildPythonPackage rec {
   pname = "coronavirus";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0mx6ifp8irj3669c67hs9r79k8gar6j4aq7d4ji21pllyhyahdwm";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests are present
   doCheck = false;

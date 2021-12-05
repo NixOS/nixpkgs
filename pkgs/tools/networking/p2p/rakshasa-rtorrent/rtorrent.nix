@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, cppunit
-, curl
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, autoconf-archive
+, cppunit, curl, libsigcxx, libtool, libtorrent, ncurses, openssl, pkg-config
+, xmlrpc_c, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
@@ -27,28 +13,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-HTwAs8dfZVXfLRNiT6QpjKGnuahHfoMfYWqdKkedUL0=";
   };
 
-  nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf-archive autoreconfHook pkg-config ];
 
-  buildInputs = [
-    cppunit
-    curl
-    libsigcxx
-    libtool
-    libtorrent
-    ncurses
-    openssl
-    xmlrpc_c
-    zlib
-  ];
+  buildInputs =
+    [ cppunit curl libsigcxx libtool libtorrent ncurses openssl xmlrpc_c zlib ];
 
-  configureFlags = [
-    "--with-xmlrpc-c"
-    "--with-posix-fallocate"
-  ];
+  configureFlags = [ "--with-xmlrpc-c" "--with-posix-fallocate" ];
 
   enableParallelBuilding = true;
 
@@ -60,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rakshasa.github.io/rtorrent/";
-    description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    description =
+      "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry codyopel ];
     platforms = platforms.unix;

@@ -1,10 +1,8 @@
 { stdenv, lib, fetchurl, freetype, fontconfig, openssl, unzip }:
 
-let
-  platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-in
+let platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "phantomjs";
   version = "1.9.8";
 
@@ -14,33 +12,43 @@ stdenv.mkDerivation rec {
   # and no easy/nice way to use the system versions of these
 
   src = if stdenv.hostPlatform.system == "i686-linux" then
-          fetchurl {
-            url = "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-linux-i686.tar.bz2";
-            sha256 = "11fzmssz9pqf3arh4f36w06sl2nyz8l9h8iyxyd7w5aqnq5la0j1";
-          }
-        else
-          if stdenv.hostPlatform.system == "x86_64-linux" then
-            fetchurl {
-              url = "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-linux-x86_64.tar.bz2";
-              sha256 = "0fhnqxxsxhy125fmif1lwgnlhfx908spy7fx9mng4w72320n5nd1";
-            }
-          else # x86_64-darwin
-            fetchurl {
-              url = "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-macosx.zip";
-              sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
-            };
+    fetchurl {
+      url =
+        "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-linux-i686.tar.bz2";
+      sha256 = "11fzmssz9pqf3arh4f36w06sl2nyz8l9h8iyxyd7w5aqnq5la0j1";
+    }
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
+    fetchurl {
+      url =
+        "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-linux-x86_64.tar.bz2";
+      sha256 = "0fhnqxxsxhy125fmif1lwgnlhfx908spy7fx9mng4w72320n5nd1";
+    }
+  else # x86_64-darwin
+    fetchurl {
+      url =
+        "https://bitbucket.org/ariya/phantomjs/downloads/${pname}-${version}-macosx.zip";
+      sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
+    };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin unzip;
 
   buildPhase = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ freetype fontconfig stdenv.cc.cc stdenv.cc.cc openssl ]}" \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          freetype
+          fontconfig
+          stdenv.cc.cc
+          stdenv.cc.cc
+          openssl
+        ]
+      }" \
       bin/phantomjs
   '';
 
   dontPatchELF = true;
-  dontStrip    = true;
+  dontStrip = true;
 
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs

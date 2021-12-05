@@ -6,9 +6,7 @@ let
 
   cfg = config.services.teamviewer;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -30,7 +28,11 @@ in
       description = "TeamViewer remote control daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "NetworkManager-wait-online.service" "network.target" "dbus.service" ];
+      after = [
+        "NetworkManager-wait-online.service"
+        "network.target"
+        "dbus.service"
+      ];
       requires = [ "dbus.service" ];
       preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 

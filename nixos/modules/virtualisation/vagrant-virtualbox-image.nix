@@ -3,10 +3,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./vagrant-guest.nix
-    ./virtualbox-image.nix
-  ];
+  imports = [ ./vagrant-guest.nix ./virtualbox-image.nix ];
 
   virtualbox.params = {
     audio = "none";
@@ -23,10 +20,8 @@
 
   # generate the box v1 format which is much easier to generate
   # https://www.vagrantup.com/docs/boxes/format.html
-  system.build.vagrantVirtualbox = pkgs.runCommand
-    "virtualbox-vagrant.box"
-    {}
-    ''
+  system.build.vagrantVirtualbox =
+    pkgs.runCommand "virtualbox-vagrant.box" { } ''
       mkdir workdir
       cd workdir
 

@@ -20,7 +20,8 @@ buildGoModule rec {
   buildInputs = [ alsa-lib ];
 
   meta = with lib; {
-    description = "Tool for shell commands execution, visualization and alerting";
+    description =
+      "Tool for shell commands execution, visualization and alerting";
     homepage = "https://sampler.dev";
     license = licenses.gpl3;
     maintainers = with maintainers; [ uvnikita ];

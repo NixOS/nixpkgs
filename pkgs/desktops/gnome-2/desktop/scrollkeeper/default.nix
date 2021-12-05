@@ -1,4 +1,5 @@
-{stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, automake, gettext}:
+{ stdenv, fetchurl, pkg-config, perlPackages, libxml2, libxslt
+, docbook_xml_dtd_42, automake, gettext }:
 
 stdenv.mkDerivation {
   name = "scrollkeeper-0.3.14";
@@ -8,13 +9,12 @@ stdenv.mkDerivation {
   };
 
   # The fuloong2f is not supported by scrollkeeper-0.3.14 config.guess
-  preConfigure = "
-    substituteInPlace extract/dtds/Makefile.am --replace /usr/bin/xmlcatalog xmlcatalog
-    cp ${automake}/share/automake*/config.{sub,guess} .
-  ";
+  preConfigure =
+    "\n    substituteInPlace extract/dtds/Makefile.am --replace /usr/bin/xmlcatalog xmlcatalog\n    cp ${automake}/share/automake*/config.{sub,guess} .\n  ";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt gettext ]
     ++ (with perlPackages; [ perl XMLParser ]);
-  configureFlags = [ "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/catalog.xml" ];
+  configureFlags =
+    [ "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/catalog.xml" ];
 }

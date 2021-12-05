@@ -1,19 +1,6 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, poetry-core
-, pyjwt
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-, titlecase
-, types-pytz
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, freezegun
+, poetry-core, pyjwt, pytest-aiohttp, pytest-asyncio, pytestCheckHook
+, pythonOlder, pytz, titlecase, types-pytz }:
 
 buildPythonPackage rec {
   pname = "aioridwell";
@@ -29,16 +16,9 @@ buildPythonPackage rec {
     sha256 = "sha256-h89gfdZvk7H22xAczaPMscTYZu0YeFxvFfL6/Oz2cJw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    pyjwt
-    pytz
-    titlecase
-  ];
+  propagatedBuildInputs = [ aiohttp pyjwt pytz titlecase ];
 
   checkInputs = [
     aresponses
@@ -65,9 +45,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "aioridwell"
-  ];
+  pythonImportsCheck = [ "aioridwell" ];
 
   meta = with lib; {
     description = "Python library for interacting with Ridwell waste recycling";

@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://vlang.io/";
-    description = "Simple, fast, safe, compiled language for developing maintainable software";
+    description =
+      "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;

@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, nose, sortedcontainers }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, nose
+, sortedcontainers }:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";

@@ -1,27 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, alsa-lib
-, gtk3
-, gtksourceview3
-, libGL
-, libGLU
-, libX11
-, libXv
-, libao
-, libpulseaudio
-, openal
-, pkg-config
-, runtimeShell
+{ lib, stdenv, fetchFromGitHub, SDL2, alsa-lib, gtk3, gtksourceview3, libGL
+, libGLU, libX11, libXv, libao, libpulseaudio, openal, pkg-config, runtimeShell
 , udev
 # Darwin dependencies
-, libicns
-, Carbon
-, Cocoa
-, OpenAL
-, OpenGL
-}:
+, libicns, Carbon, Cocoa, OpenAL, OpenGL }:
 
 stdenv.mkDerivation rec {
   pname = "higan";
@@ -34,16 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-HZItJ97x20OjFKv2OVbMja7g+c1ZXcgcaC/XDe3vMZM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    libicns
-  ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [
-    SDL2
-    libao
-  ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [ SDL2 libao ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     gtk3
     gtksourceview3
@@ -54,12 +29,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     openal
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
-    OpenAL
-    OpenGL
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenAL OpenGL ];
 
   patches = [
     # Includes cmath header
@@ -97,14 +67,26 @@ stdenv.mkDerivation rec {
     install icarus/out/icarus -t ${placeholder "out"}/bin/
 
     install -d ${placeholder "out"}/share/applications
-    install higan-ui/resource/higan.desktop -t ${placeholder "out"}/share/applications/
-    install icarus/resource/icarus.desktop -t ${placeholder "out"}/share/applications/
+    install higan-ui/resource/higan.desktop -t ${
+      placeholder "out"
+    }/share/applications/
+    install icarus/resource/icarus.desktop -t ${
+      placeholder "out"
+    }/share/applications/
 
     install -d ${placeholder "out"}/share/pixmaps
-    install higan/higan/resource/higan.svg ${placeholder "out"}/share/pixmaps/higan-icon.svg
-    install higan/higan/resource/logo.png ${placeholder "out"}/share/pixmaps/higan-icon.png
-    install icarus/resource/icarus.svg ${placeholder "out"}/share/pixmaps/icarus-icon.svg
-    install icarus/resource/icarus.png ${placeholder "out"}/share/pixmaps/icarus-icon.png
+    install higan/higan/resource/higan.svg ${
+      placeholder "out"
+    }/share/pixmaps/higan-icon.svg
+    install higan/higan/resource/logo.png ${
+      placeholder "out"
+    }/share/pixmaps/higan-icon.png
+    install icarus/resource/icarus.svg ${
+      placeholder "out"
+    }/share/pixmaps/icarus-icon.svg
+    install icarus/resource/icarus.png ${
+      placeholder "out"
+    }/share/pixmaps/icarus-icon.png
   '') + ''
     install -d ${placeholder "out"}/share/higan
     cp -rd extras/ higan/System/ ${placeholder "out"}/share/higan/
@@ -116,23 +98,26 @@ stdenv.mkDerivation rec {
     # we create a first-run script to populate
     # $HOME with all the stuff needed at runtime
     let
-      dest = if stdenv.isDarwin
-           then "\\$HOME/Library/Application Support/higan"
-           else "\\$HOME/higan";
+      dest = if stdenv.isDarwin then
+        "\\$HOME/Library/Application Support/higan"
+      else
+        "\\$HOME/higan";
     in ''
-    mkdir -p ${placeholder "out"}/bin
-    cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
-    #!${runtimeShell}
+      mkdir -p ${placeholder "out"}/bin
+      cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
+      #!${runtimeShell}
 
-    cp --recursive --update ${placeholder "out"}/share/higan/System/ "${dest}"/
+      cp --recursive --update ${
+        placeholder "out"
+      }/share/higan/System/ "${dest}"/
 
-    EOF
+      EOF
 
-    chmod +x ${placeholder "out"}/bin/higan-init.sh
-  '') + ''
+      chmod +x ${placeholder "out"}/bin/higan-init.sh
+    '') + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/higan-emu/higan";

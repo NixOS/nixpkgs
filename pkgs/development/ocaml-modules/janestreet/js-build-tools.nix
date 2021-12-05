@@ -7,7 +7,8 @@ buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/janestreet/js-build-tools/archive/${version}.tar.gz";
+    url =
+      "https://github.com/janestreet/js-build-tools/archive/${version}.tar.gz";
     sha256 = "1nvgyp4gsnlnpix3li6kr90b12iin5ihichv298p03i6h2809dia";
   };
 
@@ -17,9 +18,10 @@ buildOcaml rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configurePhase = "./configure --prefix $prefix";
-  installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR js-build-tools.install";
+  installPhase =
+    "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR js-build-tools.install";
 
   patches = [ ./js-build-tools-darwin.patch ];
 

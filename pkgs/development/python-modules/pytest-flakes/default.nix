@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest
-, pyflakes
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, pyflakes }:
 
 buildPythonPackage rec {
   # upstream has abandoned project in favor of pytest-flake8

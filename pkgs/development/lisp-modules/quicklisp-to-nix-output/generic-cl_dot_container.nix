@@ -1,21 +1,48 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "generic-cl_dot_container";
   version = "generic-cl-20211020-git";
 
   description = "Generic container interface";
 
-  deps = [ args."agutil" args."alexandria" args."anaphora" args."arrows" args."cl-environments" args."cl-form-types" args."closer-mop" args."collectors" args."generic-cl_dot_comparison" args."generic-cl_dot_internal" args."generic-cl_dot_object" args."introspect-environment" args."iterate" args."lisp-namespace" args."optima" args."parse-declarations-1_dot_0" args."static-dispatch" args."symbol-munger" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_trivial" args."trivial-cltl2" args."type-i" ];
+  deps = [
+    args."agutil"
+    args."alexandria"
+    args."anaphora"
+    args."arrows"
+    args."cl-environments"
+    args."cl-form-types"
+    args."closer-mop"
+    args."collectors"
+    args."generic-cl_dot_comparison"
+    args."generic-cl_dot_internal"
+    args."generic-cl_dot_object"
+    args."introspect-environment"
+    args."iterate"
+    args."lisp-namespace"
+    args."optima"
+    args."parse-declarations-1_dot_0"
+    args."static-dispatch"
+    args."symbol-munger"
+    args."trivia"
+    args."trivia_dot_balland2006"
+    args."trivia_dot_level0"
+    args."trivia_dot_level1"
+    args."trivia_dot_level2"
+    args."trivia_dot_trivial"
+    args."trivial-cltl2"
+    args."type-i"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/generic-cl/2021-10-20/generic-cl-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/generic-cl/2021-10-20/generic-cl-20211020-git.tgz";
     sha256 = "0jryfmxwqhrarmpbb643b7iv5rlib5pcx4i4jcd6h2rscnrbj8sa";
   };
 
   packageName = "generic-cl.container";
 
-  asdFilesToKeep = ["generic-cl.container.asd"];
+  asdFilesToKeep = [ "generic-cl.container.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM generic-cl.container DESCRIPTION Generic container interface SHA256
@@ -57,4 +84,5 @@ rec {
      generic-cl.comparison generic-cl.internal generic-cl.iterator
      generic-cl.lazy-seq generic-cl.map generic-cl.math generic-cl.object
      generic-cl.sequence generic-cl.set generic-cl.util)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

@@ -1,6 +1,4 @@
-{ buildDunePackage, metrics
-, astring, duration, fmt, lwt
-}:
+{ buildDunePackage, metrics, astring, duration, fmt, lwt }:
 
 buildDunePackage rec {
   pname = "metrics-influx";

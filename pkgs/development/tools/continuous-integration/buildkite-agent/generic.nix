@@ -1,10 +1,7 @@
-{ lib, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
-, src, version, hasBootstrapScript, postPatch ? ""
-, ... }:
-let
-  goPackagePath = "github.com/buildkite/agent";
-in
-buildGoPackage {
+{ lib, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused
+, gnugrep, src, version, hasBootstrapScript, postPatch ? "", ... }:
+let goPackagePath = "github.com/buildkite/agent";
+in buildGoPackage {
   pname = "buildkite-agent";
   inherit version;
 
@@ -14,10 +11,10 @@ buildGoPackage {
 
   postInstall = ''
     ${lib.optionalString hasBootstrapScript ''
-    # Install bootstrap.sh
-    mkdir -p $out/libexec/buildkite-agent
-    cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $out/libexec/buildkite-agent
-    sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $out/libexec/buildkite-agent/bootstrap.sh
+      # Install bootstrap.sh
+      mkdir -p $out/libexec/buildkite-agent
+      cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $out/libexec/buildkite-agent
+      sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $out/libexec/buildkite-agent/bootstrap.sh
     ''}
 
     # Fix binary name
@@ -25,8 +22,13 @@ buildGoPackage {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      ${lib.optionalString hasBootstrapScript "--set BUILDKITE_BOOTSTRAP_SCRIPT_PATH $out/libexec/buildkite-agent/bootstrap.sh"} \
-      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      ${
+        lib.optionalString hasBootstrapScript
+        "--set BUILDKITE_BOOTSTRAP_SCRIPT_PATH $out/libexec/buildkite-agent/bootstrap.sh"
+      } \
+      --prefix PATH : '${
+        lib.makeBinPath [ openssh git coreutils gnused gnugrep ]
+      }'
   '';
 
   meta = with lib; {

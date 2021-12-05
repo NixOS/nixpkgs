@@ -23,11 +23,14 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "MODDESTDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
+    "MODDESTDIR=${
+      placeholder "out"
+    }/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
   meta = with lib; {
-    description = "Linux HWMON (lmsensors) sensors driver for various ASUS Ryzen and Threadripper motherboards";
+    description =
+      "Linux HWMON (lmsensors) sensors driver for various ASUS Ryzen and Threadripper motherboards";
     homepage = "https://github.com/electrified/asus-wmi-sensors";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];

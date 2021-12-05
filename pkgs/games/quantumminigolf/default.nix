@@ -1,24 +1,20 @@
-{lib, stdenv, fetchurl, fftwSinglePrec, freetype, SDL, SDL_ttf}:
+{ lib, stdenv, fetchurl, fftwSinglePrec, freetype, SDL, SDL_ttf }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="quantumminigolf";
-    version="1.1.1";
-    name="${baseName}-${version}";
-    hash="16av7fk0irhi5nd7y9h9vhb0kf0dk12p6976ai3f60m99qdd8wk3";
-    url="mirror://sourceforge/project/quantumminigolf/quantumminigolf/1.1.1/quantumminigolf-1.1.1.src.tar.gz";
-    sha256="16av7fk0irhi5nd7y9h9vhb0kf0dk12p6976ai3f60m99qdd8wk3";
-  };
-  buildInputs = [
-    fftwSinglePrec freetype SDL SDL_ttf
-  ];
-in
-stdenv.mkDerivation {
+    rec {
+      baseName = "quantumminigolf";
+      version = "1.1.1";
+      name = "${baseName}-${version}";
+      hash = "16av7fk0irhi5nd7y9h9vhb0kf0dk12p6976ai3f60m99qdd8wk3";
+      url =
+        "mirror://sourceforge/project/quantumminigolf/quantumminigolf/1.1.1/quantumminigolf-1.1.1.src.tar.gz";
+      sha256 = "16av7fk0irhi5nd7y9h9vhb0kf0dk12p6976ai3f60m99qdd8wk3";
+    };
+  buildInputs = [ fftwSinglePrec freetype SDL SDL_ttf ];
+in stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+  src = fetchurl { inherit (s) url sha256; };
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL -I${SDL_ttf}/include/SDL"
 
@@ -33,8 +29,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Quantum mechanics-based minigolf-like game";
-    license = lib.licenses.gpl2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,15 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, dnspython
-, geoip2
-, ipython
-, praw
-, pyenchant
-, pygeoip
-, pytestCheckHook
-, pytz
-, sqlalchemy
-, xmltodict
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, dnspython, geoip2, ipython, praw
+, pyenchant, pygeoip, pytestCheckHook, pytz, sqlalchemy, xmltodict }:
 
 buildPythonPackage rec {
   pname = "sopel";

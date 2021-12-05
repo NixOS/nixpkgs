@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, future
-, lib
-}:
+{ buildPythonPackage, fetchPypi, future, lib }:
 
 buildPythonPackage rec {
   pname = "monkeyhex";
@@ -22,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "monkeyhex" ];
 
   meta = with lib; {
-    description = "A small library to assist users of the python shell who work in contexts where printed numbers are more usefully viewed in hexadecimal";
+    description =
+      "A small library to assist users of the python shell who work in contexts where printed numbers are more usefully viewed in hexadecimal";
     homepage = "https://github.com/rhelmot/monkeyhex";
     license = licenses.mit;
     maintainers = [ maintainers.pamplemousse ];

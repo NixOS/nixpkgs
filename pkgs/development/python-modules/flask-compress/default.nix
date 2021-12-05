@@ -1,6 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, flask
-, brotli
-}:
+{ lib, fetchPypi, buildPythonPackage, flask, brotli }:
 
 buildPythonPackage rec {
   version = "1.10.1";

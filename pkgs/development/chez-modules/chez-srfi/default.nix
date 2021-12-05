@@ -23,7 +23,8 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with lib; {
-    description = "This package provides a collection of SRFI libraries for Chez Scheme";
+    description =
+      "This package provides a collection of SRFI libraries for Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-srfi/";
     maintainers = [ maintainers.jitwit ];
     license = licenses.free;

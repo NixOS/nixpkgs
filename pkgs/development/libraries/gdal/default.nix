@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
-, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
-, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
-, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
+, libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv
+, libxml2, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config
+}:
 
 with lib;
 

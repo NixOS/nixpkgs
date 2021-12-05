@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl, python, qmake,
-  qtwebengine, qtxmlpatterns,
-  qttools, unzip }:
+{ lib, stdenv, fetchurl, python, qmake, qtwebengine, qtxmlpatterns, qttools
+, unzip }:
 
 stdenv.mkDerivation rec {
   version = "3.2";
   pname = "python-qt";
 
   src = fetchurl {
-    url="mirror://sourceforge/pythonqt/PythonQt${version}.zip";
-    sha256="13hzprk58m3yj39sj0xn6acg8796lll1256mpd81kw0z3yykyl8c";
+    url = "mirror://sourceforge/pythonqt/PythonQt${version}.zip";
+    sha256 = "13hzprk58m3yj39sj0xn6acg8796lll1256mpd81kw0z3yykyl8c";
   };
 
   hardeningDisable = [ "all" ];
@@ -17,10 +16,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  qmakeFlags = [ "PythonQt.pro"
-                 "INCLUDEPATH+=${python}/include/python3.6"
-                 "PYTHON_PATH=${python}/bin"
-                 "PYTHON_LIB=${python}/lib"];
+  qmakeFlags = [
+    "PythonQt.pro"
+    "INCLUDEPATH+=${python}/include/python3.6"
+    "PYTHON_PATH=${python}/bin"
+    "PYTHON_LIB=${python}/lib"
+  ];
 
   dontWrapQtApps = true;
 
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications";
+    description =
+      "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications";
     homepage = "http://pythonqt.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.all;

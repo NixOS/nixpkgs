@@ -34,7 +34,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
+    description =
+      "A microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     downloadPage = "https://github.com/temporalio/temporal";
     homepage = "https://temporal.io";
     license = licenses.mit;

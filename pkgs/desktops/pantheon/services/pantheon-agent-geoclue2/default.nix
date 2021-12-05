@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, glib
-, gtk3
-, libgee
-, desktop-file-utils
-, geoclue2
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, glib, gtk3, libgee, desktop-file-utils, geoclue2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
@@ -26,25 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config vala wrapGAppsHook ];
 
-  buildInputs = [
-    geoclue2
-    gtk3
-    libgee
-  ];
+  buildInputs = [ geoclue2 gtk3 libgee ];
 
   # This should be provided by a post_install.py script - See -> https://github.com/elementary/pantheon-agent-geoclue2/pull/21
   postInstall = ''

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, pyptlib
-, twisted
-, pycrypto
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchgit, pyptlib, twisted, pycrypto, pyyaml }:
 
 buildPythonPackage rec {
   pname = "obfsproxy";
@@ -30,7 +23,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
-    repositories.git = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
+    repositories.git =
+      "https://git.torproject.org/pluggable-transports/obfsproxy.git";
     maintainers = with maintainers; [ phreedom thoughtpolice ];
   };
 

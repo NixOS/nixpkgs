@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, pytest
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, pytest, six }:
 buildPythonPackage rec {
   pname = "PyHamcrest";
   version = "2.0.2";
@@ -14,14 +11,12 @@ buildPythonPackage rec {
   checkInputs = [ mock pytest ];
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # pypi tarball does not include tests
+  doCheck = false; # pypi tarball does not include tests
 
   meta = with lib; {
     homepage = "https://github.com/hamcrest/PyHamcrest";
     description = "Hamcrest framework for matcher objects";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      alunduil
-    ];
+    maintainers = with maintainers; [ alunduil ];
   };
 }

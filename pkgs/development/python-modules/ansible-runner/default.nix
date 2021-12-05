@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
-, pexpect
-, python-daemon
-, pyyaml
-, six
-, stdenv
-, ansible
-, mock
-, openssh
-, pytest-mock
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, psutil, pexpect, python-daemon, pyyaml
+, six, stdenv, ansible, mock, openssh, pytest-mock, pytest-timeout, pytest-xdist
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
@@ -35,14 +21,7 @@ buildPythonPackage rec {
     openssh
   ];
 
-  propagatedBuildInputs = [
-    ansible
-    psutil
-    pexpect
-    python-daemon
-    pyyaml
-    six
-  ];
+  propagatedBuildInputs = [ ansible psutil pexpect python-daemon pyyaml six ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -53,16 +32,15 @@ buildPythonPackage rec {
     "test_env_accuracy"
     "test_large_stdout_blob" # times out on slower hardware
   ]
-    # test_process_isolation_settings is currently broken on Darwin Catalina
-    # https://github.com/ansible/ansible-runner/issues/413
-  ++ lib.optional stdenv.isDarwin "process_isolation_settings";
+  # test_process_isolation_settings is currently broken on Darwin Catalina
+  # https://github.com/ansible/ansible-runner/issues/413
+    ++ lib.optional stdenv.isDarwin "process_isolation_settings";
 
   disabledTestPaths = [
     # these tests unset PATH and then run executables like `bash` (see https://github.com/ansible/ansible-runner/pull/918)
     "test/integration/test_runner.py"
     "test/unit/test_runner.py"
-  ]
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # integration tests on Darwin are not regularly passing in ansible-runner's own CI
     "test/integration"
     # these tests write to `/tmp` which is not writable on Darwin

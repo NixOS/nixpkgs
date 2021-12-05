@@ -1,10 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gnupg
-, setuptools
-, pytestCheckHook
-}:
+{ lib, fetchPypi, buildPythonPackage, gnupg, setuptools, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pycoin";
@@ -34,7 +28,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
+    description =
+      "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

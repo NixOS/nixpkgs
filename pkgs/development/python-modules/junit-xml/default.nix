@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "junit-xml";
@@ -23,7 +18,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Creates JUnit XML test result documents that can be read by tools such as Jenkins";
+    description =
+      "Creates JUnit XML test result documents that can be read by tools such as Jenkins";
     homepage = "https://github.com/kyrus/python-junit-xml";
     maintainers = with maintainers; [ multun ];
     license = licenses.mit;

@@ -1,6 +1,4 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta";
@@ -12,7 +10,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    six click requests requests-hawk pytz tabulate
+    six
+    click
+    requests
+    requests-hawk
+    pytz
+    tabulate
   ];
 
   doCheck = false;

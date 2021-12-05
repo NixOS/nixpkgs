@@ -1,31 +1,12 @@
-{ lib
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, hypothesis
-, isPy3k
-, jbig2dec
-, lxml
-, mupdf
-, pillow
-, psutil
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, python-xmp-toolkit
-, qpdf
-, setuptools
-, setuptools-scm
-, setuptools-scm-git-archive
-, substituteAll
-}:
+{ lib, attrs, buildPythonPackage, defusedxml, fetchFromGitHub, hypothesis
+, isPy3k, jbig2dec, lxml, mupdf, pillow, psutil, pybind11, pytest-xdist
+, pytestCheckHook, python-dateutil, python-xmp-toolkit, qpdf, setuptools
+, setuptools-scm, setuptools-scm-git-archive, substituteAll }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
   version = "4.1.0";
-  disabled = ! isPy3k;
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -50,15 +31,9 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [
-    pybind11
-    qpdf
-  ];
+  buildInputs = [ pybind11 qpdf ];
 
-  nativeBuildInputs = [
-    setuptools-scm-git-archive
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm-git-archive setuptools-scm ];
 
   checkInputs = [
     attrs
@@ -70,12 +45,7 @@ buildPythonPackage rec {
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [
-    defusedxml
-    lxml
-    pillow
-    setuptools
-  ];
+  propagatedBuildInputs = [ defusedxml lxml pillow setuptools ];
 
   pythonImportsCheck = [ "pikepdf" ];
 
@@ -84,6 +54,7 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
+    changelog =
+      "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
   };
 }

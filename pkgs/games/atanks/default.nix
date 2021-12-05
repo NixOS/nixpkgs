@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "6.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/atanks/atanks/${pname}-${version}/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/atanks/atanks/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-vGse/J/H52JPrR2DUtcuknvg+6IWC7Jbtri9bGNwv0M=";
   };
 

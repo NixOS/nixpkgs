@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittest2
-, python
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, unittest2, python, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pyxl3";
@@ -19,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ unittest2 ];
 
   checkPhase = ''
-     ${python.interpreter} tests/test_basic.py
+    ${python.interpreter} tests/test_basic.py
   '';
 
   # tests require weird codec installation
@@ -27,7 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
+    description =
+      "Python 3 port of pyxl for writing structured and reusable inline HTML";
     homepage = "https://github.com/gvanrossum/pyxl3";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];

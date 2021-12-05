@@ -15,11 +15,7 @@ stdenvNoCC.mkDerivation {
     ${lndir}/bin/lndir -silent $msp430GccSupport/lib $out/${newlib.libdir}
   '';
 
-  passthru = {
-    inherit (newlib) incdir libdir;
-  };
+  passthru = { inherit (newlib) incdir libdir; };
 
-  meta = {
-    platforms = [ "msp430-none" ];
-  };
+  meta = { platforms = [ "msp430-none" ]; };
 }

@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, dockbarx
-, gobject-introspection
-, keybinder3
-, pkg-config
-, python3Packages
-, vala
-, wafHook
-, wrapGAppsHook
-, xfce
-}:
+{ lib, stdenv, fetchFromGitHub, bash, dockbarx, gobject-introspection
+, keybinder3, pkg-config, python3Packages, vala, wafHook, wrapGAppsHook, xfce }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
@@ -26,10 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VqtGcBRjvpCO9prVHOv6Gt1rAZtcAgkQkVCoR6ykC2k=";
   };
 
-  pythonPath = [
-    dockbarx
-    python3Packages.pygobject3
-  ];
+  pythonPath = [ dockbarx python3Packages.pygobject3 ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -40,13 +25,9 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    keybinder3
-    python3Packages.python
-    xfce.xfce4-panel
-    xfce.xfconf
-  ]
-  ++ pythonPath;
+  buildInputs =
+    [ keybinder3 python3Packages.python xfce.xfce4-panel xfce.xfconf ]
+    ++ pythonPath;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"

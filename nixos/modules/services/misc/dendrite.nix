@@ -4,8 +4,7 @@ let
   settingsFormat = pkgs.formats.yaml { };
   configurationYaml = settingsFormat.generate "dendrite.yaml" cfg.settings;
   workingDir = "/var/lib/dendrite";
-in
-{
+in {
   options.services.dendrite = {
     enable = lib.mkEnableOption "matrix.org dendrite";
     httpPort = lib.mkOption {
@@ -132,7 +131,8 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [{
-      assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
+      assertion = cfg.httpsPort != null
+        -> (cfg.tlsCert != null && cfg.tlsKey != null);
       message = ''
         If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
@@ -142,9 +142,7 @@ in
 
     systemd.services.dendrite = {
       description = "Dendrite Matrix homeserver";
-      after = [
-        "network.target"
-      ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
@@ -153,25 +151,25 @@ in
         WorkingDirectory = workingDir;
         RuntimeDirectory = "dendrite";
         RuntimeDirectoryMode = "0700";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStartPre =
-          if (cfg.environmentFile != null) then ''
-            ${pkgs.envsubst}/bin/envsubst \
-              -i ${configurationYaml} \
-              -o /run/dendrite/dendrite.yaml
-          '' else ''
-            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
-          '';
+        EnvironmentFile =
+          lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStartPre = if (cfg.environmentFile != null) then ''
+          ${pkgs.envsubst}/bin/envsubst \
+            -i ${configurationYaml} \
+            -o /run/dendrite/dendrite.yaml
+        '' else ''
+          ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
+        '';
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"
-        ] ++ lib.optionals (cfg.httpPort != null) [
-          "--http-bind-address :${builtins.toString cfg.httpPort}"
-        ] ++ lib.optionals (cfg.httpsPort != null) [
-          "--https-bind-address :${builtins.toString cfg.httpsPort}"
-          "--tls-cert ${cfg.tlsCert}"
-          "--tls-key ${cfg.tlsKey}"
-        ]);
+        ] ++ lib.optionals (cfg.httpPort != null)
+          [ "--http-bind-address :${builtins.toString cfg.httpPort}" ]
+          ++ lib.optionals (cfg.httpsPort != null) [
+            "--https-bind-address :${builtins.toString cfg.httpsPort}"
+            "--tls-cert ${cfg.tlsCert}"
+            "--tls-key ${cfg.tlsKey}"
+          ]);
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };

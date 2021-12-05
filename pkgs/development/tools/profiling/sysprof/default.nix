@@ -1,23 +1,6 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk3
-, json-glib
-, itstool
-, libdazzle
-, libxml2
-, meson, ninja
-, pango
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook
-, gnome
-}:
+{ stdenv, lib, desktop-file-utils, fetchurl, gettext, glib, gtk3, json-glib
+, itstool, libdazzle, libxml2, meson, ninja, pango, pkg-config, polkit
+, shared-mime-info, systemd, wrapGAppsHook, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
@@ -26,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "F5a4FATudf0eus9URkrXr/6/YvKFHu9STZ+OrAxKIAE=";
   };
 
@@ -43,19 +28,9 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    json-glib
-    pango
-    polkit
-    systemd
-    libdazzle
-  ];
+  buildInputs = [ glib gtk3 json-glib pango polkit systemd libdazzle ];
 
-  mesonFlags = [
-    "-Dsystemdunitdir=lib/systemd/system"
-  ];
+  mesonFlags = [ "-Dsystemdunitdir=lib/systemd/system" ];
 
   passthru = {
     updateScript = gnome.updateScript {

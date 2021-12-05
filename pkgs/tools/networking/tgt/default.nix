@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
-}:
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, docbook_xsl
+, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
@@ -17,14 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ systemd libaio ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "SD_NOTIFY=1"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "SD_NOTIFY=1" ];
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
@@ -35,7 +29,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/sbin/tgt-admin \
-      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
+      --replace "#!/usr/bin/perl" "#! ${
+        perl.withPackages (p: [ p.ConfigGeneral ])
+      }/bin/perl"
     wrapProgram $out/sbin/tgt-admin --prefix PATH : \
       ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
 

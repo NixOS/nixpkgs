@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libmpdclient
-, curl
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libmpdclient, curl }:
 
 stdenv.mkDerivation rec {
   pname = "mpdas";

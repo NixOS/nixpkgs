@@ -1,17 +1,31 @@
-pkgs: with pkgs.lib;
+pkgs:
+with pkgs.lib;
 
 rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
+  copyFile = filePath:
+    pkgs.runCommand
+    (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) { } ''
+      cp ${filePath} $out
+    '';
 
   # Check whenever fileSystem is needed for boot.  NOTE: Make sure
   # pathsNeededForBoot is closed under the parent relationship, i.e. if /a/b/c
   # is in the list, put /a and /a/b in as well.
-  pathsNeededForBoot = [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/var/lib/nixos" "/etc" "/usr" ];
-  fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
+  pathsNeededForBoot = [
+    "/"
+    "/nix"
+    "/nix/store"
+    "/var"
+    "/var/log"
+    "/var/lib"
+    "/var/lib/nixos"
+    "/etc"
+    "/usr"
+  ];
+  fsNeededForBoot = fs:
+    fs.neededForBoot || elem fs.mountPoint pathsNeededForBoot;
 
   # Check whenever `b` depends on `a` as a fileSystem
   fsBefore = a: b:
@@ -26,11 +40,14 @@ rec {
       # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
       # *not* a parent of b.device. If we add a slash at the end of each string,
       # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
-      normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-      normalise = mount: mount // { device = normalisePath (toString mount.device);
-                                    mountPoint = normalisePath mount.mountPoint;
-                                    depends = map normalisePath mount.depends;
-                                  };
+      normalisePath = path:
+        "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
+      normalise = mount:
+        mount // {
+          device = normalisePath (toString mount.device);
+          mountPoint = normalisePath mount.mountPoint;
+          depends = map normalisePath mount.depends;
+        };
 
       a' = normalise a;
       b' = normalise b;
@@ -42,8 +59,7 @@ rec {
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+    replaceChars [ "/" "-" " " ] [ "-" "\\x2d" "\\x20" ] (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:
@@ -82,11 +98,13 @@ rec {
         if item ? ${attr} then
           nameValuePair prefix item.${attr}
         else if isAttrs item then
-          map (name: recurse (prefix + "." + name) item.${name}) (attrNames item)
+          map (name: recurse (prefix + "." + name) item.${name})
+          (attrNames item)
         else if isList item then
-          imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
+          imap0 (index: item: recurse (prefix + "[${toString index}]") item)
+          item
         else
-          [];
+          [ ];
     in listToAttrs (flatten (recurse "" item));
 
   /* Takes an attrset and a file path and generates a bash snippet that
@@ -143,26 +161,19 @@ rec {
   # Like genJqSecretsReplacementSnippet, but allows the name of the
   # attr which identifies the secret to be changed.
   genJqSecretsReplacementSnippet' = attr: set: output:
-    let
-      secrets = recursiveGetAttrWithJqPrefix set attr;
+    let secrets = recursiveGetAttrWithJqPrefix set attr;
     in ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
-    ''
-    + concatStringsSep
-        "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
-               (attrNames secrets))
-    + "\n"
-    + "${pkgs.jq}/bin/jq >'${output}' '"
-    + concatStringsSep
-      " | "
-      (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
-    + ''
-      ' <<'EOF'
-      ${builtins.toJSON set}
-      EOF
-    '';
+    '' + concatStringsSep "\n" (imap1
+      (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+      (attrNames secrets)) + "\n" + "${pkgs.jq}/bin/jq >'${output}' '"
+    + concatStringsSep " | "
+    (imap1 (index: name: "${name} = $ENV.secret${toString index}")
+      (attrNames secrets)) + ''
+        ' <<'EOF'
+        ${builtins.toJSON set}
+        EOF
+      '';
 }

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pathpy
-, pathlib2
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pathpy, pathlib2, pythonOlder }:
 
 buildPythonPackage rec {
   version = "0.7.5";

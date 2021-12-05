@@ -1,19 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoPatchelfHook, makeWrapper
-, hexdump, exfat, dosfstools, e2fsprogs, xz, util-linux, bash, parted
-, withGtk3 ? true, gtk3
-, withQt5 ? false, qt5
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoPatchelfHook, makeWrapper, hexdump
+, exfat, dosfstools, e2fsprogs, xz, util-linux, bash, parted, withGtk3 ? true
+, gtk3, withQt5 ? false, qt5 }:
 
-let arch = {
-  x86_64-linux = "x86_64";
-  i686-linux = "i386";
-  aarch64-linux = "aarch64";
-  mipsel-linux = "mips64el";
-}.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-defaultGuiType = if withGtk3 then "gtk3"
-                 else if withQt5 then "qt5"
-                 else "";
+let
+  arch = {
+    x86_64-linux = "x86_64";
+    i686-linux = "i386";
+    aarch64-linux = "aarch64";
+    mipsel-linux = "mips64el";
+  }.${stdenv.hostPlatform.system} or (throw
+    "Unsupported platform ${stdenv.hostPlatform.system}");
+  defaultGuiType = if withGtk3 then "gtk3" else if withQt5 then "qt5" else "";
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
   version = "1.0.56";
@@ -21,18 +18,20 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
     ++ lib.optional withQt5 qt5.wrapQtAppsHook;
   buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ]
-    ++ lib.optional withGtk3 gtk3
-    ++ lib.optional withQt5 qt5.qtbase;
+    ++ lib.optional withGtk3 gtk3 ++ lib.optional withQt5 qt5.qtbase;
 
   src = fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+    url =
+      "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
     sha256 = "da53d51e653092a170c11dd560e0ad6fb27c497dd77ad0ba483c32935c069dea";
   };
   patches = [
     (fetchpatch {
       name = "sanitize.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=ventoy-bin&id=ce4c26c67a1de4b761f9448bf92e94ffae1c8148";
-      sha256 = "c00f9f9cd5b4f81c566267b7b2480fa94d28dda43a71b1e47d6fa86f764e7038";
+      url =
+        "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=ventoy-bin&id=ce4c26c67a1de4b761f9448bf92e94ffae1c8148";
+      sha256 =
+        "c00f9f9cd5b4f81c566267b7b2480fa94d28dda43a71b1e47d6fa86f764e7038";
     })
     ./fix-for-read-only-file-system.patch
   ];
@@ -93,7 +92,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open source tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
+    description =
+      "An open source tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
     longDescription = ''
       An open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the

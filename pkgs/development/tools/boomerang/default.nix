@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, qtbase, capstone, bison, flex }:
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, qtbase, capstone, bison
+, flex }:
 
 mkDerivation rec {
   pname = "boomerang";
@@ -19,7 +20,8 @@ mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "include-missing-cstdint.patch";
-      url = "https://github.com/BoomerangDecompiler/boomerang/commit/3342b0eac6b7617d9913226c06c1470820593e74.patch";
+      url =
+        "https://github.com/BoomerangDecompiler/boomerang/commit/3342b0eac6b7617d9913226c06c1470820593e74.patch";
       sha256 = "sha256-941IydcV3mqj7AWvXTM6GePW5VgawEcL0wrBCXqeWvc=";
     })
   ];

@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildGoPackage
-, btrfs-progs
-, go-md2man
-, installShellFiles
-, util-linux
-, nixosTests
-}:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man
+, installShellFiles, util-linux, nixosTests }:
 
 buildGoPackage rec {
   pname = "containerd";

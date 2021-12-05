@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkg-config, unixtools
-, dbus, libcap, polkit, systemd
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, unixtools
+, dbus, libcap, polkit, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "rtkit";
@@ -16,12 +14,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/heftig/rtkit/commit/7d62095b94f8df3891c984a1535026d2658bb177.patch";
+      url =
+        "https://github.com/heftig/rtkit/commit/7d62095b94f8df3891c984a1535026d2658bb177.patch";
       sha256 = "17acv549zqcgh7sgprfagbf6drqsr0zdwvf1dsqda7wlqc2h9zn7";
     })
 
     (fetchpatch {
-      url = "https://github.com/heftig/rtkit/commit/98f70edd8f534c371cb4308b9720739c5178918d.patch";
+      url =
+        "https://github.com/heftig/rtkit/commit/98f70edd8f534c371cb4308b9720739c5178918d.patch";
       sha256 = "18mnjjsdjfr184nkzi01xyphpdngi31ry4bmkv9ysjxf9wilv4nl";
     })
   ];

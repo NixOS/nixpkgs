@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, glib, gettext, readline, pkg-config }:
+{ lib, stdenv, fetchurl, glib, gettext, readline, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "pal";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "http://palcal.sourceforge.net/";
     description = "Command-line calendar program that can keep track of events";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

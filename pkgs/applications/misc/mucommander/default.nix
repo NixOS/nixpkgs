@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, gradle_6, perl, makeWrapper, jdk11, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, perl, makeWrapper, jdk11
+, gsettings-desktop-schemas }:
 
 let
   version = "0.9.3-3";

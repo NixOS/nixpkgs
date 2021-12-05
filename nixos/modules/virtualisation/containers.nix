@@ -5,36 +5,29 @@ let
   inherit (lib) literalExpression mkOption types;
 
   toml = pkgs.formats.toml { };
-in
-{
-  meta = {
-    maintainers = [] ++ lib.teams.podman.members;
-  };
-
+in {
+  meta = { maintainers = [ ] ++ lib.teams.podman.members; };
 
   imports = [
-    (
-      lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "users" ]
-      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
-    )
-    (
-      lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "containersConf" "extraConfig" ]
-      "Use virtualisation.containers.containersConf.settings instead."
-    )
+    (lib.mkRemovedOptionModule [ "virtualisation" "containers" "users" ]
+      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings.")
+    (lib.mkRemovedOptionModule [
+      "virtualisation"
+      "containers"
+      "containersConf"
+      "extraConfig"
+    ] "Use virtualisation.containers.containersConf.settings instead.")
   ];
 
   options.virtualisation.containers = {
 
-    enable =
-      mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          This option enables the common /etc/containers configuration module.
-        '';
-      };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        This option enables the common /etc/containers configuration module.
+      '';
+    };
 
     ociSeccompBpfHook.enable = mkOption {
       type = types.bool;
@@ -87,7 +80,7 @@ in
       };
 
       insecure = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of insecure repositories.
@@ -95,7 +88,7 @@ in
       };
 
       block = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of blocked repositories.
@@ -104,7 +97,7 @@ in
     };
 
     policy = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = literalExpression ''
         {
@@ -130,7 +123,8 @@ in
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
     virtualisation.containers.containersConf.settings = {
-      network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
+      network.cni_plugin_dirs =
+        map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
       engine = {
         init_path = "${pkgs.catatonit}/bin/catatonit";
       } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
@@ -144,13 +138,15 @@ in
     environment.etc."containers/storage.conf".source =
       toml.generate "storage.conf" cfg.storage.settings;
 
-    environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
-      registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
-    };
+    environment.etc."containers/registries.conf".source =
+      toml.generate "registries.conf" {
+        registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
+      };
 
-    environment.etc."containers/policy.json".source =
-      if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
+    environment.etc."containers/policy.json".source = if cfg.policy != { } then
+      pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
+    else
+      utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
 
 }

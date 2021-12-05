@@ -1,10 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, readline
-, gmp
-, zlib
+{ stdenv, lib, fetchurl, makeWrapper, readline, gmp, zlib
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -16,18 +10,12 @@
 # - "full" (~1.7G):
 #     Install all available packages. This takes a lot of space.
 , packageSet ? "standard"
-# Kept for backwards compatibility. Overrides packageSet to "full".
-, keepAllPackages ? false
-}:
+  # Kept for backwards compatibility. Overrides packageSet to "full".
+, keepAllPackages ? false }:
 let
   # packages absolutely required for gap to start
   # `*` represents the version where applicable
-  requiredPackages = [
-    "GAPDoc-*"
-    "primgrp-*"
-    "SmallGrp-*"
-    "transgrp"
-  ];
+  requiredPackages = [ "GAPDoc-*" "primgrp-*" "SmallGrp-*" "transgrp" ];
   # packages autoloaded by default if available
   autoloadedPackages = [
     "atlasrep"
@@ -46,42 +34,40 @@ let
     "tomlib-*"
   ];
   keepAll = keepAllPackages || (packageSet == "full");
-  packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
+  packagesToKeep = requiredPackages
+    ++ lib.optionals (packageSet == "standard") autoloadedPackages;
 
   # Generate bash script that removes all packages from the `pkg` subdirectory
   # that are not on the whitelist. The whitelist consists of strings expected by
   # `find`'s `-name`.
-  removeNonWhitelistedPkgs = whitelist: ''
-    find pkg -type d -maxdepth 1 -mindepth 1 \
-  '' + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist)) + ''
-    -exec echo "Removing package {}" \; \
-    -exec rm -r '{}' \;
-  '';
-in
-stdenv.mkDerivation rec {
+  removeNonWhitelistedPkgs = whitelist:
+    ''
+      find pkg -type d -maxdepth 1 -mindepth 1 \
+    '' + (lib.concatStringsSep "\n"
+      (map (str: "-not -name '${str}' \\") whitelist)) + ''
+        -exec echo "Removing package {}" \; \
+        -exec rm -r '{}' \;
+      '';
+in stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
   version = "4.11.1";
 
   src = fetchurl {
-    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    url =
+      "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
     sha256 = "sha256-ZjXF2n2CdV+DOUhrnKwzdm9YcS8pfoI0+6QIGJAuowQ=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
-  preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
-    patchShebangs .
-  '';
+  preConfigure =
+    lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
+      patchShebangs .
+    '';
 
-  buildInputs = [
-    readline
-    gmp
-    zlib
-  ];
+  buildInputs = [ readline gmp zlib ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
   # tests are run twice, once with all packages loaded and once without
@@ -115,10 +101,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  installTargets = [
-    "install-libgap"
-    "install-headers"
-  ];
+  installTargets = [ "install-libgap" "install-headers" ];
 
   # full `make install` is not yet implemented, just for libgap and headers
   postInstall = ''
@@ -141,12 +124,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Computational discrete algebra system";
-    maintainers = with maintainers;
-    [
-      raskin
-      chrisjefferson
-      timokau
-    ];
+    maintainers = with maintainers; [ raskin chrisjefferson timokau ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
     # keeping all packages increases the package size considerably, which is

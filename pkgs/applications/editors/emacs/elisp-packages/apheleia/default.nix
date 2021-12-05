@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, trivialBuild
-, fetchFromGitHub
-, emacs
-}:
+{ lib, stdenv, trivialBuild, fetchFromGitHub, emacs }:
 
 trivialBuild rec {
   pname = "apheleia";
@@ -16,9 +11,7 @@ trivialBuild rec {
     hash = "sha256-QwGlCdHBll16mbfQxGw1EORZFUxYCZSt8ThYTTGjRpo=";
   };
 
-  buildInputs = [
-    emacs
-  ];
+  buildInputs = [ emacs ];
 
   meta = with lib; {
     homepage = "https://github.com/raxod502/apheleia";

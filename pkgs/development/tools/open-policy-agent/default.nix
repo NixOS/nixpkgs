@@ -1,10 +1,6 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles
 
-, enableWasmEval ? false
-}:
+, enableWasmEval ? false }:
 
 buildGoModule rec {
   pname = "open-policy-agent";
@@ -22,14 +18,16 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/open-policy-agent/opa/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/opa/version.Version=${version}"
+  ];
 
-  tags = lib.optional enableWasmEval (
-    builtins.trace
-      ("Warning: enableWasmEval breaks reproducability, "
-        + "ensure you need wasm evaluation. "
-        + "`opa build` does not need this feature.")
-      "opa_wasm");
+  tags = lib.optional enableWasmEval (builtins.trace
+    ("Warning: enableWasmEval breaks reproducability, "
+      + "ensure you need wasm evaluation. "
+      + "`opa build` does not need this feature.") "opa_wasm");
 
   preCheck = ''
     # Feed in all but the e2e tests for testing
@@ -67,7 +65,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://www.openpolicyagent.org";
-    changelog = "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
     description = "General-purpose policy engine";
     longDescription = ''
       The Open Policy Agent (OPA, pronounced "oh-pa") is an open source, general-purpose policy engine that unifies

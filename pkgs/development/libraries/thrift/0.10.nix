@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, pkg-config, bison
-, flex
-}:
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, pkg-config
+, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
     sha256 = "02x1xw0l669idkn6xww39j60kqxzcbmim4mvpb5h9nz8wqnx1292";
   };
 
@@ -15,11 +15,17 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost zlib libevent openssl bison flex (python3.withPackages (ps: [ps.twisted]))
+    boost
+    zlib
+    libevent
+    openssl
+    bison
+    flex
+    (python3.withPackages (ps: [ ps.twisted ]))
   ];
 
   preConfigure = "export PY_PREFIX=$out";

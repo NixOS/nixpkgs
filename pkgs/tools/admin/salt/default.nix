@@ -1,10 +1,7 @@
-{ lib
-, python3
-, openssl
-  # Many Salt modules require various Python modules to be installed,
-  # passing them in this array enables Salt to find them.
-, extraInputs ? []
-}:
+{ lib, python3, openssl
+# Many Salt modules require various Python modules to be installed,
+# passing them in this array enables Salt to find them.
+, extraInputs ? [ ] }:
 
 let
   py = python3.override {
@@ -17,10 +14,9 @@ let
           sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
         };
       });
-   };
+    };
   };
-in
-py.pkgs.buildPythonApplication rec {
+in py.pkgs.buildPythonApplication rec {
   pname = "salt";
   version = "3004";
 
@@ -29,18 +25,19 @@ py.pkgs.buildPythonApplication rec {
     sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [
-    distro
-    jinja2
-    markupsafe
-    msgpack
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-    tornado
-  ] ++ extraInputs;
+  propagatedBuildInputs = with py.pkgs;
+    [
+      distro
+      jinja2
+      markupsafe
+      msgpack
+      psutil
+      pycryptodomex
+      pyyaml
+      pyzmq
+      requests
+      tornado
+    ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];
 
@@ -58,8 +55,10 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://saltproject.io/";
-    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
-    description = "Portable, distributed, remote execution and configuration management system";
+    changelog =
+      "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
+    description =
+      "Portable, distributed, remote execution and configuration management system";
     maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;
   };

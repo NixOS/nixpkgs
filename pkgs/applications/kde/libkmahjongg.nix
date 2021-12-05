@@ -1,9 +1,5 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n,
-  kwidgetsaddons
-}:
+{ mkDerivation, lib, kdepimTeam, extra-cmake-modules, kdoctools, kcompletion
+, kconfig, kconfigwidgets, kcoreaddons, ki18n, kwidgetsaddons }:
 
 mkDerivation {
   pname = "libkmahjongg";
@@ -12,7 +8,7 @@ mkDerivation {
     maintainers = with lib.maintainers; [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcompletion kconfig kconfigwidgets kcoreaddons ki18n
-    kwidgetsaddons ];
+  buildInputs =
+    [ kcompletion kconfig kconfigwidgets kcoreaddons ki18n kwidgetsaddons ];
   outputs = [ "out" "dev" ];
 }

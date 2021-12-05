@@ -6,15 +6,16 @@ stdenv.mkDerivation rec {
   version = "2020.0.0";
 
   src = fetchFromGitHub {
-    owner  = "att";
-    repo   = "ast";
-    rev    = version;
+    owner = "att";
+    repo = "ast";
+    rev = version;
     sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/att/ast/commit/11983a71f5e29df578b7e2184400728b4e3f451d.patch";
+      url =
+        "https://github.com/att/ast/commit/11983a71f5e29df578b7e2184400728b4e3f451d.patch";
       sha256 = "1n9558c4v2qpgpjb1vafs29n3qn3z0770wr1ayc0xjf5z5j4g3kv";
     })
   ];
@@ -39,7 +40,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 
-  passthru = {
-    shellPath = "/bin/ksh";
-  };
+  passthru = { shellPath = "/bin/ksh"; };
 }

@@ -1,18 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, Babel
-, docutils
-, pygments
-, pytz
-, jinja2
-, pysqlite
-, psycopg2
-, pymysql
-, git
-, setuptools
-}:
-
+{ lib, buildPythonApplication, fetchPypi, Babel, docutils, pygments, pytz
+, jinja2, pysqlite, psycopg2, pymysql, git, setuptools }:
 
 buildPythonApplication rec {
   pname = "trac";

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbr
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pbr, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "icmplib";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-4aq89Nw55OL7JQx3Ra6Ppp5yKLdS6Lc0YA8UJxVhz84=";
   };
 
-  propagatedBuildInputs = [
-    pbr
-    requests
-  ];
+  propagatedBuildInputs = [ pbr requests ];
 
   # Project has no tests
   doCheck = false;

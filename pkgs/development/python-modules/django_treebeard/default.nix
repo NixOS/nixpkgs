@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, django
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, django }:
 
 buildPythonPackage rec {
   pname = "django-treebeard";

@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, bluez
-, switchboard
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, meson, ninja
+, pkg-config, vala, libgee, granite, gtk3, bluez, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
@@ -29,31 +16,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard-plug-bluetooth/pull/182
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-bluetooth/commit/031dd5660b4bcb0bb4e82ebe6d8bcdaa1791c385.patch";
+      url =
+        "https://github.com/elementary/switchboard-plug-bluetooth/commit/031dd5660b4bcb0bb4e82ebe6d8bcdaa1791c385.patch";
       sha256 = "1g01ad6md7pqp1fx00avbra8yfnr8ipg8y6zhfg35fgjakj4aags";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    bluez
-    granite
-    gtk3
-    libgee
-    switchboard
-  ];
+  buildInputs = [ bluez granite gtk3 libgee switchboard ];
 
   meta = with lib; {
     description = "Switchboard Bluetooth Plug";

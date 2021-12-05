@@ -4,13 +4,10 @@
 # the project sources.
 with lib;
 
-let
-  cfg = config.power.ups;
-in
+let cfg = config.power.ups;
 
-let
-  upsOptions = {name, config, ...}:
-  {
+in let
+  upsOptions = { name, config, ... }: {
     options = {
       # This can be infered from the UPS model by looking at
       # /nix/store/nut/share/driver.list
@@ -62,7 +59,7 @@ let
       };
 
       directives = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of configuration directives for this UPS.
@@ -86,19 +83,14 @@ let
         ''desc = "${config.description}"''
         "sdorder = ${toString config.shutdownOrder}"
       ] ++ (optional (config.maxStartDelay != null)
-            "maxstartdelay = ${toString config.maxStartDelay}")
-      );
+        "maxstartdelay = ${toString config.maxStartDelay}"));
 
       summary =
-        concatStringsSep "\n      "
-          (["[${name}]"] ++ config.directives);
+        concatStringsSep "\n      " ([ "[${name}]" ] ++ config.directives);
     };
   };
 
-in
-
-
-{
+in {
   options = {
     # powerManagement.powerDownCommands
 
@@ -148,7 +140,6 @@ in
         '';
       };
 
-
       maxStartDelay = mkOption {
         default = 45;
         type = types.int;
@@ -162,7 +153,7 @@ in
       };
 
       ups = mkOption {
-        default = {};
+        default = { };
         # see nut/etc/ups.conf.sample
         description = ''
           This is where you configure all the UPSes that this system will be
@@ -215,49 +206,42 @@ in
     };
 
     environment.etc = {
-      "nut/nut.conf".source = pkgs.writeText "nut.conf"
-        ''
-          MODE = ${cfg.mode}
-        '';
-      "nut/ups.conf".source = pkgs.writeText "ups.conf"
-        ''
-          maxstartdelay = ${toString cfg.maxStartDelay}
+      "nut/nut.conf".source = pkgs.writeText "nut.conf" ''
+        MODE = ${cfg.mode}
+      '';
+      "nut/ups.conf".source = pkgs.writeText "ups.conf" ''
+        maxstartdelay = ${toString cfg.maxStartDelay}
 
-          ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
-
-          "}
-        '';
+        ${flip concatStringsSep
+        (forEach (attrValues cfg.ups) (ups: ups.summary)) "\n\n          "}
+      '';
       "nut/upssched.conf".source = cfg.schedulerRules;
       # These file are containing private informations and thus should not
       # be stored inside the Nix store.
-      /*
-      "nut/upsd.conf".source = "";
-      "nut/upsd.users".source = "";
-      "nut/upsmon.conf".source = "";
+      /* "nut/upsd.conf".source = "";
+         "nut/upsd.users".source = "";
+         "nut/upsmon.conf".source = "";
       */
     };
 
     power.ups.schedulerRules = mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
 
-    system.activationScripts.upsSetup = stringAfter [ "users" "groups" ]
-      ''
-        # Used to store pid files of drivers.
-        mkdir -p /var/state/ups
-      '';
+    system.activationScripts.upsSetup = stringAfter [ "users" "groups" ] ''
+      # Used to store pid files of drivers.
+      mkdir -p /var/state/ups
+    '';
 
+    /* users.users.nut =
+          { uid = 84;
+            home = "/var/lib/nut";
+            createHome = true;
+            group = "nut";
+            description = "UPnP A/V Media Server user";
+          };
 
-/*
-    users.users.nut =
-      { uid = 84;
-        home = "/var/lib/nut";
-        createHome = true;
-        group = "nut";
-        description = "UPnP A/V Media Server user";
-      };
-
-    users.groups."nut" =
-      { gid = 84; };
-*/
+        users.groups."nut" =
+          { gid = 84; };
+    */
 
   };
 }

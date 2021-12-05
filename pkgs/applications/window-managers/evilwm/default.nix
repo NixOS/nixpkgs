@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXext
-, libXrandr
-, libXrender
-, xorgproto
-, patches ? [ ]
-}:
+{ lib, stdenv, fetchurl, libX11, libXext, libXrandr, libXrender, xorgproto
+, patches ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "evilwm";
@@ -18,13 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "79589c296a5915ee0bae1d231e8912601fc794d9f0a9cacb6b648ff9a5f2602a";
   };
 
-  buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
-    xorgproto
-  ];
+  buildInputs = [ libX11 libXext libXrandr libXrender xorgproto ];
 
   postPatch = ''
     substituteInPlace ./Makefile \

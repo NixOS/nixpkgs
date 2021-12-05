@@ -1,15 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cppunit
-, swig
-, boost
-, log4cpp
-, python
-, libsodium
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, cppunit, swig, boost
+, log4cpp, python, libsodium }:
 
 mkDerivation {
   pname = "gr-nacl";
@@ -22,19 +12,9 @@ mkDerivation {
   };
   disabledForGRafter = "3.8";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    swig
-    python
-  ];
+  nativeBuildInputs = [ cmake pkg-config swig python ];
 
-  buildInputs = [
-    cppunit
-    log4cpp
-    boost
-    libsodium
-  ];
+  buildInputs = [ cppunit log4cpp boost libsodium ];
 
   meta = with lib; {
     description = "Gnuradio block for encryption";

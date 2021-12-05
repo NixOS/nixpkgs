@@ -5,7 +5,8 @@ python3Packages.buildPythonApplication rec {
   version = "11.0.0";
 
   src = fetchurl {
-    url = "mirror://pypi/n/nextcloud_news_updater/nextcloud_news_updater-${version}.tar.gz";
+    url =
+      "mirror://pypi/n/nextcloud_news_updater/nextcloud_news_updater-${version}.tar.gz";
     sha256 = "bc2055c16f0dbf610b7e17650508a18fa5a1de652ecdf69c5d4073c97376e9cf";
   };
 

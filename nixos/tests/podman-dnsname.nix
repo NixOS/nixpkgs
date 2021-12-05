@@ -1,13 +1,12 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
   let
     inherit (pkgs) writeTextDir python3 curl;
     webroot = writeTextDir "index.html" "<h1>Hi</h1>";
-  in
-  {
+  in {
     name = "podman-dnsname";
     meta = {
-      maintainers = with lib.maintainers; [ roberth ] ++ lib.teams.podman.members;
+      maintainers = with lib.maintainers;
+        [ roberth ] ++ lib.teams.podman.members;
     };
 
     nodes = {
@@ -38,5 +37,4 @@ import ./make-test-python.nix (
         podman.succeed("podman rm webserver")
 
     '';
-  }
-)
+  })

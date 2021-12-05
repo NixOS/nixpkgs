@@ -1,8 +1,4 @@
-{ lib
-, python3
-, groff
-, less
-}:
+{ lib, python3, groff, less }:
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -17,10 +13,11 @@ let
     };
   };
 
-in
-with py.pkgs; buildPythonApplication rec {
+in with py.pkgs;
+buildPythonApplication rec {
   pname = "awscli";
-  version = "1.20.54"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version =
+    "1.20.54"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
@@ -33,18 +30,8 @@ with py.pkgs; buildPythonApplication rec {
       --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
 
-  propagatedBuildInputs = [
-    botocore
-    bcdoc
-    s3transfer
-    six
-    colorama
-    docutils
-    rsa
-    pyyaml
-    groff
-    less
-  ];
+  propagatedBuildInputs =
+    [ botocore bcdoc s3transfer six colorama docutils rsa pyyaml groff less ];
 
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions

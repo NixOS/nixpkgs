@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyhamcrest
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pyhamcrest, pytest-benchmark
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "base58";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "c5d0cb3f5b6e81e8e35da5754388ddcc6d0d14b6c6a132cb93d69ed580a7278c";
   };
 
-  checkInputs = [
-    pyhamcrest
-    pytest-benchmark
-    pytestCheckHook
-  ];
+  checkInputs = [ pyhamcrest pytest-benchmark pytestCheckHook ];
 
   pythonImportsCheck = [ "base58" ];
 

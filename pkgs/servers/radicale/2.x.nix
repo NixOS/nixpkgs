@@ -25,10 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytest-runner
-    pytest
-  ];
+  checkInputs = with python3.pkgs; [ pytest-runner pytest ];
 
   meta = with lib; {
     homepage = "https://www.radicale.org/2.x.nix";

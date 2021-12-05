@@ -8,20 +8,19 @@ let
 
   mongodb = cfg.package;
 
-  mongoCnf = cfg: pkgs.writeText "mongodb.conf"
-  ''
-    net.bindIp: ${cfg.bind_ip}
-    ${optionalString cfg.quiet "systemLog.quiet: true"}
-    systemLog.destination: syslog
-    storage.dbPath: ${cfg.dbpath}
-    ${optionalString cfg.enableAuth "security.authorization: enabled"}
-    ${optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
-    ${cfg.extraConfig}
-  '';
+  mongoCnf = cfg:
+    pkgs.writeText "mongodb.conf" ''
+      net.bindIp: ${cfg.bind_ip}
+      ${optionalString cfg.quiet "systemLog.quiet: true"}
+      systemLog.destination: syslog
+      storage.dbPath: ${cfg.dbpath}
+      ${optionalString cfg.enableAuth "security.authorization: enabled"}
+      ${optionalString (cfg.replSetName != "")
+      "replication.replSetName: ${cfg.replSetName}"}
+      ${cfg.extraConfig}
+    '';
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -35,9 +34,7 @@ in
         default = pkgs.mongodb;
         defaultText = literalExpression "pkgs.mongodb";
         type = types.package;
-        description = "
-          Which MongoDB derivation to use.
-        ";
+        description = "\n          Which MongoDB derivation to use.\n        ";
       };
 
       user = mkOption {
@@ -61,7 +58,8 @@ in
       enableAuth = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable client authentication. Creates a default superuser with username root!";
+        description =
+          "Enable client authentication. Creates a default superuser with username root!";
       };
 
       initialRootPassword = mkOption {
@@ -111,56 +109,61 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.mongodb.enable {
-    assertions = [
-      { assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
-        message = "`enableAuth` requires `initialRootPassword` to be set.";
-      }
-    ];
+    assertions = [{
+      assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
+      message = "`enableAuth` requires `initialRootPassword` to be set.";
+    }];
 
-    users.users.mongodb = mkIf (cfg.user == "mongodb")
-      { name = "mongodb";
-        isSystemUser = true;
-        group = "mongodb";
-        description = "MongoDB server user";
-      };
-    users.groups.mongodb = mkIf (cfg.user == "mongodb") {};
+    users.users.mongodb = mkIf (cfg.user == "mongodb") {
+      name = "mongodb";
+      isSystemUser = true;
+      group = "mongodb";
+      description = "MongoDB server user";
+    };
+    users.groups.mongodb = mkIf (cfg.user == "mongodb") { };
 
     environment.systemPackages = [ mongodb ];
 
-    systemd.services.mongodb =
-      { description = "MongoDB server";
+    systemd.services.mongodb = {
+      description = "MongoDB server";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        serviceConfig = {
-          ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf cfg} --fork --pidfilepath ${cfg.pidFile}";
-          User = cfg.user;
-          PIDFile = cfg.pidFile;
-          Type = "forking";
-          TimeoutStartSec=120; # intial creating of journal can take some time
-          PermissionsStartOnly = true;
+      serviceConfig = {
+        ExecStart = "${mongodb}/bin/mongod --config ${
+            mongoCnf cfg
+          } --fork --pidfilepath ${cfg.pidFile}";
+        User = cfg.user;
+        PIDFile = cfg.pidFile;
+        Type = "forking";
+        TimeoutStartSec = 120; # intial creating of journal can take some time
+        PermissionsStartOnly = true;
+      };
+
+      preStart = let
+        cfg_ = cfg // {
+          enableAuth = false;
+          bind_ip = "127.0.0.1";
         };
-
-        preStart = let
-          cfg_ = cfg // { enableAuth = false; bind_ip = "127.0.0.1"; };
-        in ''
-          rm ${cfg.dbpath}/mongod.lock || true
-          if ! test -e ${cfg.dbpath}; then
-              install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
-              # See postStart!
-              touch ${cfg.dbpath}/.first_startup
-          fi
-          if ! test -e ${cfg.pidFile}; then
-              install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
-          fi '' + lib.optionalString cfg.enableAuth ''
+      in ''
+        rm ${cfg.dbpath}/mongod.lock || true
+        if ! test -e ${cfg.dbpath}; then
+            install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
+            # See postStart!
+            touch ${cfg.dbpath}/.first_startup
+        fi
+        if ! test -e ${cfg.pidFile}; then
+            install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
+        fi '' + lib.optionalString cfg.enableAuth ''
 
           if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
-            systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
+            systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${
+              mongoCnf cfg_
+            }
             # wait for mongodb
             while ! ${mongodb}/bin/mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
 
@@ -182,15 +185,20 @@ in
             systemctl stop mongodb-for-setup
           fi
         '';
-        postStart = ''
-            if test -e "${cfg.dbpath}/.first_startup"; then
-              ${optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo ${optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
-              ''}
-              rm -f "${cfg.dbpath}/.first_startup"
-            fi
-        '';
-      };
+      postStart = ''
+        if test -e "${cfg.dbpath}/.first_startup"; then
+          ${
+            optionalString (cfg.initialScript != null) ''
+              ${mongodb}/bin/mongo ${
+                optionalString (cfg.enableAuth)
+                "-u root -p ${cfg.initialRootPassword}"
+              } admin "${cfg.initialScript}"
+            ''
+          }
+          rm -f "${cfg.dbpath}/.first_startup"
+        fi
+      '';
+    };
 
   };
 

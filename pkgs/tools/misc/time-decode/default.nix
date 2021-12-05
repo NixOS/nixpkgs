@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "time-decode";
@@ -14,10 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1iwqdq1ail04hs8pkb6rxan4ng2jl2iar6pk72skj41xh4qhlyg6";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    colorama
-    python-dateutil
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ colorama python-dateutil ];
 
   # Project has no tests
   doCheck = false;

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pkg-config
-, ffmpeg
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pkg-config, ffmpeg }:
 
 buildPythonPackage rec {
   pname = "ha-av";
@@ -18,18 +12,11 @@ buildPythonPackage rec {
     sha256 = "sha256-txdi2/X6upqrACeHhHpEh4tGqgPpW/dyWda8y++7c3M=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    ffmpeg
-  ];
+  buildInputs = [ ffmpeg ];
 
-  pythonImportsCheck = [
-    "av"
-    "av._core"
-  ];
+  pythonImportsCheck = [ "av" "av._core" ];
 
   # tests fail to import av._core
   doCheck = false;

@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, requests
-, websocket-client
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, requests, websocket-client }:
 
 buildPythonPackage rec {
   pname = "samsungtvws";
@@ -13,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "431af8348164cbb56b62492c3fde7ab81911b7905c8009580ccc54bd3f50f7ee";
   };
 
-  propagatedBuildInputs = [
-    websocket-client
-    requests
-  ];
+  propagatedBuildInputs = [ websocket-client requests ];
 
   # no tests
   doCheck = false;

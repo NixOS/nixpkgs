@@ -9,7 +9,8 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://saf.bio.caltech.edu/pub/software/linux_or_unix_tools/beta-nettee-${version}.tar.gz";
+    url =
+      "http://saf.bio.caltech.edu/pub/software/linux_or_unix_tools/beta-nettee-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -39,7 +40,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ${cleanPackaging.commonFileActions {
+    ${
+      cleanPackaging.commonFileActions {
         docFiles = [
           "*.html"
           "*.TXT"
@@ -49,12 +51,9 @@ in stdenv.mkDerivation {
           "beowulf.master"
           "topology_info"
         ];
-        noiseFiles = [
-          "*.c"
-          "*.h"
-          "nettee"
-        ];
-      }} $doc/share/doc/nettee
+        noiseFiles = [ "*.c" "*.h" "nettee" ];
+      }
+    } $doc/share/doc/nettee
 
     mkdir -p $man/share/man/{man1,man3}
     mv nettee.1 $man/share/man/man1

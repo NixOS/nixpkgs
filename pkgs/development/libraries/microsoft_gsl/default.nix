@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, fetchurl
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "microsoft_gsl";
@@ -21,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Search for GoogleTest via pkg-config first, ref: https://github.com/NixOS/nixpkgs/pull/130525
     (fetchurl {
-      url = "https://github.com/microsoft/GSL/commit/f5cf01083baf7e8dc8318db3648bc6098dc32d67.patch";
+      url =
+        "https://github.com/microsoft/GSL/commit/f5cf01083baf7e8dc8318db3648bc6098dc32d67.patch";
       sha256 = "sha256-uouv35crtly8kYhKyvMyZkqwTKt1jXC6dZjw4sQ6uv0=";
     })
   ];

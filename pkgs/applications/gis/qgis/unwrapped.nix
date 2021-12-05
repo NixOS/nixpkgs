@@ -1,40 +1,8 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, ninja
-, flex
-, bison
-, proj
-, geos
-, xlibsWrapper
-, sqlite
-, gsl
-, qwt
-, fcgi
-, python3Packages
-, libspatialindex
-, libspatialite
-, postgresql
-, txt2tags
-, openssl
-, libzip
-, hdf5
-, netcdf
-, exiv2
-, protobuf
-, qtbase
-, qtsensors
-, qca-qt5
-, qtkeychain
-, qscintilla
-, qtserialport
-, qtxmlpatterns
-, withGrass ? true
-, grass
-, withWebKit ? true
-, qtwebkit
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
+, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
+, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
+, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
+, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
 
 let
   pythonBuildInputs = with python3Packages; [
@@ -96,8 +64,7 @@ in mkDerivation rec {
     qscintilla
     qtserialport
     qtxmlpatterns
-  ] ++ lib.optional withGrass grass
-    ++ lib.optional withWebKit qtwebkit
+  ] ++ lib.optional withGrass grass ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
   nativeBuildInputs = [ cmake flex bison ninja ];

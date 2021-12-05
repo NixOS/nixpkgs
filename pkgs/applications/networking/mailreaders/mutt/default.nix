@@ -1,27 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl
-, gdbm ? null
-, openssl ? null
-, cyrus_sasl ? null
-, gnupg ? null
-, gpgme ? null
-, libkrb5 ? null
-, headerCache  ? true
-, sslSupport   ? true
-, saslSupport  ? true
-, smimeSupport ? false
-, gpgSupport   ? false
-, gpgmeSupport ? true
-, imapSupport  ? true
-, withSidebar  ? true
-, gssSupport   ? true
-}:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl, gdbm ? null
+, openssl ? null, cyrus_sasl ? null, gnupg ? null, gpgme ? null, libkrb5 ? null
+, headerCache ? true, sslSupport ? true, saslSupport ? true
+, smimeSupport ? false, gpgSupport ? false, gpgmeSupport ? true
+, imapSupport ? true, withSidebar ? true, gssSupport ? true }:
 
-assert headerCache  -> gdbm       != null;
-assert sslSupport   -> openssl    != null;
-assert saslSupport  -> cyrus_sasl != null;
-assert smimeSupport -> openssl    != null;
-assert gpgSupport   -> gnupg      != null;
-assert gpgmeSupport -> gpgme      != null && openssl != null;
+assert headerCache -> gdbm != null;
+assert sslSupport -> openssl != null;
+assert saslSupport -> cyrus_sasl != null;
+assert smimeSupport -> openssl != null;
+assert gpgSupport -> gnupg != null;
+assert gpgmeSupport -> gpgme != null && openssl != null;
 
 with lib;
 
@@ -35,23 +23,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = optional smimeSupport (fetchpatch {
-    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+    url =
+      "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
-  buildInputs =
-    [ ncurses which perl ]
-    ++ optional headerCache  gdbm
-    ++ optional sslSupport   openssl
-    ++ optional gssSupport   libkrb5
-    ++ optional saslSupport  cyrus_sasl
-    ++ optional gpgmeSupport gpgme;
+  buildInputs = [ ncurses which perl ] ++ optional headerCache gdbm
+    ++ optional sslSupport openssl ++ optional gssSupport libkrb5
+    ++ optional saslSupport cyrus_sasl ++ optional gpgmeSupport gpgme;
 
   configureFlags = [
-    (enableFeature headerCache  "hcache")
+    (enableFeature headerCache "hcache")
     (enableFeature gpgmeSupport "gpgme")
-    (enableFeature imapSupport  "imap")
-    (enableFeature withSidebar  "sidebar")
+    (enableFeature imapSupport "imap")
+    (enableFeature withSidebar "sidebar")
     "--enable-smtp"
     "--enable-pop"
     "--with-mailpath="
@@ -66,8 +51,7 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ optional sslSupport  "--with-ssl"
-    ++ optional gssSupport  "--with-gss"
+  ] ++ optional sslSupport "--with-ssl" ++ optional gssSupport "--with-gss"
     ++ optional saslSupport "--with-sasl";
 
   postPatch = optionalString (smimeSupport || gpgmeSupport) ''

@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Suite of tools for addressing questions arising in genomics studies";
+    description =
+      "Suite of tools for addressing questions arising in genomics studies";
     homepage = "https://github.com/bedops/bedops";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ jbedo ];

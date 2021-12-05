@@ -6,38 +6,34 @@
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
-  patchelf = libPath :
-    if stdenv.isDarwin
-      then ""
-      else
-        ''
-          chmod u+w $PURS
-          patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
-          chmod u-w $PURS
-        '';
+  patchelf = libPath:
+    if stdenv.isDarwin then
+      ""
+    else ''
+      chmod u+w $PURS
+      patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
+      chmod u-w $PURS
+    '';
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
   version = "0.14.5";
 
   # These hashes can be updated automatically by running the ./update.sh script.
-  src =
-    if stdenv.isDarwin
-    then
+  src = if stdenv.isDarwin then
     fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+      url =
+        "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
       sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
     }
-    else
+  else
     fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
+      url =
+        "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
       sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
     };
 
-
-  buildInputs = [ zlib
-                  gmp
-                  ncurses5 ];
+  buildInputs = [ zlib gmp ncurses5 ];
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
@@ -54,18 +50,18 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = {
-      minimal-module = pkgs.callPackage ./test-minimal-module {};
-    };
+    tests = { minimal-module = pkgs.callPackage ./test-minimal-module { }; };
   };
 
   meta = with lib; {
-    description = "A strongly-typed functional programming language that compiles to JavaScript";
+    description =
+      "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";
-    changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
+    changelog =
+      "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }

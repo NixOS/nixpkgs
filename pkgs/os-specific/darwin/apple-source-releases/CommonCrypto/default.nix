@@ -36,7 +36,7 @@ appleDerivation' stdenvNoCC {
 
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

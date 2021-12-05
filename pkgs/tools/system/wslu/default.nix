@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     owner = "wslutilities";
     repo = pname;
     rev = "v${version}";
-    sha512 = "2mkvdl65hnwflmi635ngmsm1aqsablz2gypn3a1adby1mwwdc57xym8kkg5359g3mvksac6n43ji2z48lfpvlay64z793q2v0z6by02";
+    sha512 =
+      "2mkvdl65hnwflmi635ngmsm1aqsablz2gypn3a1adby1mwwdc57xym8kkg5359g3mvksac6n43ji2z48lfpvlay64z793q2v0z6by02";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, databases
-, typesystem
-, aiosqlite
-, pytestCheckHook
-, pytest-cov
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, databases, typesystem, aiosqlite
+, pytestCheckHook, pytest-cov, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "orm";
@@ -20,17 +12,9 @@ buildPythonPackage rec {
     sha256 = "1g70cr0559iyqfzidwh6n2qq6d4dcnrr4sg0jkn1s4qzka828mj7";
   };
 
-  propagatedBuildInputs = [
-    databases
-    typesystem
-  ];
+  propagatedBuildInputs = [ databases typesystem ];
 
-  checkInputs = [
-    aiosqlite
-    pytestCheckHook
-    pytest-cov
-    typing-extensions
-  ];
+  checkInputs = [ aiosqlite pytestCheckHook pytest-cov typing-extensions ];
 
   pythonImportsCheck = [ "orm" ];
 

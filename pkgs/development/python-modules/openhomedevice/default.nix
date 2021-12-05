@@ -1,9 +1,4 @@
-{ lib
-, async-upnp-client
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
+{ lib, async-upnp-client, buildPythonPackage, fetchFromGitHub, lxml, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-BQgwXg15+xEGfPm0HJWpKXbNuCgc0VcAD5AuVSDXd8g=";
   };
 
-  propagatedBuildInputs = [
-    async-upnp-client
-    lxml
-  ];
+  propagatedBuildInputs = [ async-upnp-client lxml ];
 
   # Tests are currently outdated
   # https://github.com/bazwilliams/openhomedevice/issues/20

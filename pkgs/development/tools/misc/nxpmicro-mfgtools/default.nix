@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, bzip2
-, installShellFiles
-, libusb1
-, libzip
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, installShellFiles
+, libusb1, libzip, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";

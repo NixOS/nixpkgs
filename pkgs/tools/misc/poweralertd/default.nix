@@ -14,23 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    substituteInPlace meson.build --replace "systemd.get_pkgconfig_variable('systemduserunitdir')" "'${placeholder "out"}/lib/systemd/user'"
+    substituteInPlace meson.build --replace "systemd.get_pkgconfig_variable('systemduserunitdir')" "'${
+      placeholder "out"
+    }/lib/systemd/user'"
   '';
 
-  buildInputs = [
-    systemd
-  ];
+  buildInputs = [ systemd ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  depsBuildBuild = [
-    scdoc
-    pkg-config
-  ];
+  depsBuildBuild = [ scdoc pkg-config ];
 
   meta = with lib; {
     description = "UPower-powered power alerter";

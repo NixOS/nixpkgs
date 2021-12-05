@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, unzip
-, bdftopcf, mkfontscale, fonttosfnt
-}:
+{ lib, stdenv, fetchurl, unzip, bdftopcf, mkfontscale, fonttosfnt }:
 
 stdenv.mkDerivation {
   pname = "dina-font";
@@ -13,8 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
   };
 
-  nativeBuildInputs =
-    [ unzip bdftopcf mkfontscale fonttosfnt ];
+  nativeBuildInputs = [ unzip bdftopcf mkfontscale fonttosfnt ];
 
   postPatch = ''
     sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf

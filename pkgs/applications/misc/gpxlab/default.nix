@@ -1,6 +1,5 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll
-, qmake, qttools, qttranslations
-}:
+{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll, qmake, qttools
+, qttranslations }:
 
 mkDerivation rec {
   pname = "gpxlab";

@@ -1,34 +1,32 @@
-{ lib, fetchFromGitHub, stdenv
-, findlib, ocaml, ocamlbuild
-}:
+{ lib, fetchFromGitHub, stdenv, findlib, ocaml, ocamlbuild }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
-then throw "sosa is not available for OCaml ${ocaml.version}"
+if !lib.versionAtLeast ocaml.version "4.02" then
+  throw "sosa is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-sosa-${version}";
-  version = "0.3.0";
+  stdenv.mkDerivation rec {
+    name = "ocaml${ocaml.version}-sosa-${version}";
+    version = "0.3.0";
 
-  src = fetchFromGitHub {
-    owner = "hammerlab";
-    repo = "sosa";
-    rev = "sosa.${version}";
-    sha256 = "053hdv6ww0q4mivajj4iyp7krfvgq8zajq9d8x4mia4lid7j0dyk";
-  };
+    src = fetchFromGitHub {
+      owner = "hammerlab";
+      repo = "sosa";
+      rev = "sosa.${version}";
+      sha256 = "053hdv6ww0q4mivajj4iyp7krfvgq8zajq9d8x4mia4lid7j0dyk";
+    };
 
-  buildInputs = [ ocaml ocamlbuild findlib ];
+    buildInputs = [ ocaml ocamlbuild findlib ];
 
-  buildPhase = "make build";
+    buildPhase = "make build";
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  doCheck = true;
+    doCheck = true;
 
-  meta = with lib; {
-    homepage = "http://www.hammerlab.org/docs/sosa/master/index.html";
-    description = "Sane OCaml String API";
-    license = licenses.isc;
-    maintainers = [ maintainers.alexfmpe ];
-  };
-}
+    meta = with lib; {
+      homepage = "http://www.hammerlab.org/docs/sosa/master/index.html";
+      description = "Sane OCaml String API";
+      license = licenses.isc;
+      maintainers = [ maintainers.alexfmpe ];
+    };
+  }

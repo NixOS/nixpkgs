@@ -1,15 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
+{ lib, buildDunePackage, fetchurl
 
-, ppx_fields_conv
-, ppx_sexp_conv
+, ppx_fields_conv, ppx_sexp_conv
 
-, cohttp-lwt
-, ezjsonm
-, hmap
-, sexplib
-}:
+, cohttp-lwt, ezjsonm, hmap, sexplib }:
 
 buildDunePackage rec {
   pname = "opium_kernel";
@@ -20,19 +13,16 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.04.1";
 
   src = fetchurl {
-    url = "https://github.com/rgrinberg/opium/releases/download/${version}/opium-${version}.tbz";
+    url =
+      "https://github.com/rgrinberg/opium/releases/download/${version}/opium-${version}.tbz";
     sha256 = "0a2y9gw55psqhqli3a5ps9mfdab8r46fnbj882r2sp366sfcy37q";
   };
 
   doCheck = true;
 
-  buildInputs = [
-    ppx_sexp_conv ppx_fields_conv
-  ];
+  buildInputs = [ ppx_sexp_conv ppx_fields_conv ];
 
-  propagatedBuildInputs = [
-    hmap cohttp-lwt ezjsonm sexplib
-  ];
+  propagatedBuildInputs = [ hmap cohttp-lwt ezjsonm sexplib ];
 
   meta = {
     description = "Sinatra like web toolkit for OCaml based on cohttp & lwt";

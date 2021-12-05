@@ -1,38 +1,15 @@
-{ lib
-, ailment
-, archinfo
-, buildPythonPackage
-, cachetools
-, capstone
-, cffi
-, claripy
-, cle
-, cppheaderparser
-, dpkt
-, fetchFromGitHub
-, GitPython
-, itanium_demangler
-, mulpyplexer
-, nampa
-, networkx
-, progressbar2
-, protobuf
-, psutil
-, pycparser
-, pythonOlder
-, pyvex
-, sqlalchemy
-, rpyc
-, sortedcontainers
-, unicorn
-}:
+{ lib, ailment, archinfo, buildPythonPackage, cachetools, capstone, cffi
+, claripy, cle, cppheaderparser, dpkt, fetchFromGitHub, GitPython
+, itanium_demangler, mulpyplexer, nampa, networkx, progressbar2, protobuf
+, psutil, pycparser, pythonOlder, pyvex, sqlalchemy, rpyc, sortedcontainers
+, unicorn }:
 
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
     pname = "unicorn";
     version = "1.0.2-rc4";
-    src =  fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "unicorn-engine";
       repo = pname;
       rev = version;
@@ -40,9 +17,8 @@ let
     };
     doCheck = false;
   });
-in
 
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "angr";
   version = "9.0.10689";
   disabled = pythonOlder "3.6";
@@ -86,13 +62,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   # See http://angr.io/api-doc/
-  pythonImportsCheck = [
-    "angr"
-    "claripy"
-    "cle"
-    "pyvex"
-    "archinfo"
-  ];
+  pythonImportsCheck = [ "angr" "claripy" "cle" "pyvex" "archinfo" ];
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";

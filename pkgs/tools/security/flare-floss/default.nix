@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
@@ -23,19 +20,14 @@ python3.pkgs.buildPythonPackage rec {
     viv-utils
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     # test data is in a submodule
     "test_main"
   ];
 
-  pythonImportsCheck = [
-    "floss"
-    "floss.plugins"
-  ];
+  pythonImportsCheck = [ "floss" "floss.plugins" ];
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";

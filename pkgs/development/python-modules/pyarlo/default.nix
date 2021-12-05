@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, requests-mock
-, sseclient-py
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook, requests
+, requests-mock, sseclient-py }:
 
 buildPythonPackage rec {
   pname = "pyarlo";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "0pp7y2llk4xnf6zh57j5xas0gw5zqm42qaqssd8p4qa3g5rds8k3";
   };
 
-  propagatedBuildInputs = [
-    requests
-    sseclient-py
-  ];
+  propagatedBuildInputs = [ requests sseclient-py ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    requests-mock
-  ];
+  checkInputs = [ pytestCheckHook mock requests-mock ];
 
   pythonImportsCheck = [ "pyarlo" ];
 

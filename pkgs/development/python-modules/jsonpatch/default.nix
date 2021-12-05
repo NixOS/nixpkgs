@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonpointer
-}:
+{ lib, buildPythonPackage, fetchPypi, jsonpointer }:
 
 buildPythonPackage rec {
   pname = "jsonpatch";

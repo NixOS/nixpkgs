@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, factory_boy
-, fetchFromGitHub
-, inflection
-, mock
-, pytest
-, pytestcache
-, pytestCheckHook
-, pytest-cov
-}:
+{ lib, buildPythonPackage, factory_boy, fetchFromGitHub, inflection, mock
+, pytest, pytestcache, pytestCheckHook, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "pytest-factoryboy";
@@ -23,17 +14,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    factory_boy
-    inflection
-  ];
+  propagatedBuildInputs = [ factory_boy inflection ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytestcache
-    pytest-cov
-  ];
+  checkInputs = [ mock pytestCheckHook pytestcache pytest-cov ];
 
   pytestFlagsArray = [ "--ignore=docs" ];
   pythonImportsCheck = [ "pytest_factoryboy" ];

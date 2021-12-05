@@ -8,7 +8,8 @@ mkDerivation {
     rev = "80f15d85ee71e1663c9b53903f2b5b2aa444a3be";
     fetchSubmodules = true;
   };
-  postUnpack = "sourceRoot+=/elm-format-markdown; echo source root reset to $sourceRoot";
+  postUnpack =
+    "sourceRoot+=/elm-format-markdown; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [ base containers mtl text ];
   doHaddock = false;
   description = "Markdown parsing for Elm documentation comments";

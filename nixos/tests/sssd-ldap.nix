@@ -6,12 +6,10 @@ let
   ldapRootPassword = "foobar";
 
   testUser = "alice";
-in import ./make-test-python.nix ({pkgs, ...}: {
+in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "sssd-ldap";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ bbigras ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ bbigras ]; };
 
   machine = { pkgs, ... }: {
     services.openldap = {

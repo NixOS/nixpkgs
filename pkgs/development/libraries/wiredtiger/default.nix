@@ -2,19 +2,21 @@
 
 # Optional Dependencies
 , lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
-, gperftools ? null, leveldb ? null
-}:
+, gperftools ? null, leveldb ? null }:
 
 with lib;
 let
-  mkFlag = trueStr: falseStr: cond: name: val: "--"
-    + (if cond then trueStr else falseStr)
-    + name
+  mkFlag = trueStr: falseStr: cond: name: val:
+    "--" + (if cond then trueStr else falseStr) + name
     + optionalString (val != null && cond != false) "=${val}";
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
 
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg = pkg:
+    if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then
+      pkg
+    else
+      null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;
@@ -23,8 +25,7 @@ let
   optDb = shouldUsePkg db;
   optGperftools = shouldUsePkg gperftools;
   optLeveldb = shouldUsePkg leveldb;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "wiredtiger";
   version = "3.2.1";
 
@@ -36,22 +37,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ automake autoconf libtool ];
-  buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
+  buildInputs =
+    [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
 
   configureFlags = [
-    (mkWith   false                   "attach"     null)
-    (mkWith   true                    "builtins"   "")
-    (mkEnable (optBzip2 != null)      "bzip2"      null)
-    (mkEnable false                   "diagnostic" null)
-    (mkEnable false                   "java"       null)
-    (mkEnable (optLeveldb != null)    "leveldb"    null)
-    (mkEnable false                   "python"     null)
-    (mkEnable (optSnappy != null)     "snappy"     null)
-    (mkEnable (optLz4 != null)        "lz4"        null)
-    (mkEnable (optGperftools != null) "tcmalloc"   null)
-    (mkEnable (optZlib != null)       "zlib"       null)
-    (mkWith   (optDb != null)         "berkeleydb" optDb)
-    (mkWith   false                   "helium"     null)
+    (mkWith false "attach" null)
+    (mkWith true "builtins" "")
+    (mkEnable (optBzip2 != null) "bzip2" null)
+    (mkEnable false "diagnostic" null)
+    (mkEnable false "java" null)
+    (mkEnable (optLeveldb != null) "leveldb" null)
+    (mkEnable false "python" null)
+    (mkEnable (optSnappy != null) "snappy" null)
+    (mkEnable (optLz4 != null) "lz4" null)
+    (mkEnable (optGperftools != null) "tcmalloc" null)
+    (mkEnable (optZlib != null) "zlib" null)
+    (mkWith (optDb != null) "berkeleydb" optDb)
+    (mkWith false "helium" null)
   ];
 
   preConfigure = ''

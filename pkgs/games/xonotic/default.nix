@@ -1,33 +1,26 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
-, xonotic-data, copyDesktopItems
-, # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
-, # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
-, # sdl
-  SDL2
-, # blind
-  gmp
+, xonotic-data, copyDesktopItems, # required for both
+unzip, libjpeg, zlib, libvorbis, curl, # glx
+libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib, # sdl
+SDL2, # blind
+gmp
 
-, withSDL ? true
-, withGLX ? false
-, withDedicated ? true
-}:
+, withSDL ? true, withGLX ? false, withDedicated ? true }:
 
 let
   pname = "xonotic";
   version = "0.8.2";
   name = "${pname}-${version}";
-  variant =
-    if withSDL && withGLX then
-      ""
-    else if withSDL then
-      "-sdl"
-    else if withGLX then
-      "-glx"
-    else if withDedicated then
-      "-dedicated"
-    else "-what-even-am-i";
+  variant = if withSDL && withGLX then
+    ""
+  else if withSDL then
+    "-sdl"
+  else if withGLX then
+    "-glx"
+  else if withDedicated then
+    "-dedicated"
+  else
+    "-what-even-am-i";
 
   meta = {
     description = "A free fast-paced first-person shooter";
@@ -65,9 +58,15 @@ let
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ libjpeg zlib libvorbis curl gmp ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
-      ++ lib.optional withSDL [ SDL2.dev ];
+    buildInputs = [ libjpeg zlib libvorbis curl gmp ] ++ lib.optional withGLX [
+      libX11.dev
+      libGLU.dev
+      libGL.dev
+      libXpm.dev
+      libXext.dev
+      libXxf86vm.dev
+      alsa-lib.dev
+    ] ++ lib.optional withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 
@@ -142,7 +141,7 @@ in rec {
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';
-    meta.hydraPlatforms = [];
+    meta.hydraPlatforms = [ ];
     passthru.version = version;
   };
 
@@ -152,9 +151,7 @@ in rec {
     desktopItems = [ desktopItem ];
     passthru = {
       inherit version;
-      meta = meta // {
-        hydraPlatforms = [];
-      };
+      meta = meta // { hydraPlatforms = [ ]; };
     };
   } (''
     mkdir -p $out/bin

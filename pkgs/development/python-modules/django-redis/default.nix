@@ -1,27 +1,15 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
+{ lib, fetchFromGitHub, pythonOlder, buildPythonPackage
 
 # propagated
-, django
-, hiredis
-, lz4
-, msgpack
-, redis
+, django, hiredis, lz4, msgpack, redis
 
 # testing
-, pkgs
-, pytest-django
-, pytest-mock
-, pytestCheckHook
-}:
+, pkgs, pytest-django, pytest-mock, pytestCheckHook }:
 
 let
   pname = "django-redis";
   version = "5.1.0";
-in
-buildPythonPackage {
+in buildPythonPackage {
   inherit pname version;
   format = "setuptools";
   disabled = pythonOlder "3.6";
@@ -37,17 +25,9 @@ buildPythonPackage {
     sed -i '/-cov/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    django
-    hiredis
-    lz4
-    msgpack
-    redis
-  ];
+  propagatedBuildInputs = [ django hiredis lz4 msgpack redis ];
 
-  pythonImportsCheck = [
-    "django_redis"
-  ];
+  pythonImportsCheck = [ "django_redis" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings.sqlite";
 
@@ -55,11 +35,7 @@ buildPythonPackage {
     ${pkgs.redis}/bin/redis-server &
   '';
 
-  checkInputs = [
-    pytest-django
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-django pytest-mock pytestCheckHook ];
 
   disabledTests = [
     # ModuleNotFoundError: No module named 'test_cache_options'

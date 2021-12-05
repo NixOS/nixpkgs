@@ -1,12 +1,5 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitLab
-, makeDesktopItem
-, installShellFiles
-, dejavu_fonts
-, SDL2
-, SDL2_ttf
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitLab, makeDesktopItem, installShellFiles
+, dejavu_fonts, SDL2, SDL2_ttf }:
 let
   pname = "freenukum";
   description = "Clone of the original Duke Nukum 1 Jump'n Run game";
@@ -24,8 +17,7 @@ let
     fileValidation = false;
   };
 
-in
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   inherit pname;
   version = "0.3.5";
 
@@ -38,14 +30,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1nss5zbdvxkr1mfb6vi6yjxcih99w836kvfr4r3n5dvzlkvga2vf";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    SDL2
-    SDL2_ttf
-  ];
+  buildInputs = [ SDL2 SDL2_ttf ];
 
   postPatch = ''
     substituteInPlace src/graphics.rs \

@@ -1,7 +1,4 @@
-{ lib
-, python3
-, qt5
-}:
+{ lib, python3, qt5 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "patray";
@@ -18,12 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i '/pyside2/d' requirements/production.in
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pulsectl
-    loguru
-    cock
-    pyside2
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pulsectl loguru cock pyside2 ];
 
   doCheck = false;
 
@@ -31,8 +23,6 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = ''
     wrapQtApp $out/bin/patray
   '';
-
-
 
   meta = with lib; {
     description = "Yet another tray pulseaudio frontend";

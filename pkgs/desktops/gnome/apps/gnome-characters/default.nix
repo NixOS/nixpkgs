@@ -1,31 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, gnome
-, glib
-, gtk3
-, pango
-, wrapGAppsHook
-, python3
-, gobject-introspection
-, gjs
-, libunistring
-, libhandy
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, gnome-desktop
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, gnome, glib, gtk3
+, pango, wrapGAppsHook, python3, gobject-introspection, gjs, libunistring
+, libhandy, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-characters/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0yw6mimfwn0fij8zncjb4rg8bnazd1z47rmzq85lk6807nlyqag1";
   };
 
@@ -38,7 +22,6 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
   ];
-
 
   buildInputs = [
     adwaita-icon-theme
@@ -80,7 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Characters";
-    description = "Simple utility application to find and insert unusual characters";
+    description =
+      "Simple utility application to find and insert unusual characters";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

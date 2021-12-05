@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, ocaml-syntax-shims, alcotest, result, bigstringaf, ppx_let }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, ocaml-syntax-shims, alcotest
+, result, bigstringaf, ppx_let }:
 
 buildDunePackage rec {
   pname = "angstrom";
@@ -8,9 +9,9 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
-    owner  = "inhabitedtype";
-    repo   = pname;
-    rev    = version;
+    owner = "inhabitedtype";
+    repo = pname;
+    rev = version;
     sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
   };
 
@@ -21,7 +22,8 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";
-    description = "OCaml parser combinators built for speed and memory efficiency";
+    description =
+      "OCaml parser combinators built for speed and memory efficiency";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };

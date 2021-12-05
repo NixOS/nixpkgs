@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, requests
-, requests-toolbelt
-, pyparsing
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, requests-toolbelt
+, pyparsing }:
 
 buildPythonPackage rec {
   pname = "cloudscraper";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "1wnzv2k8cm8q1x18r4zg8pcnpm4gsdp82hywwjimp2v2qll918nx";
   };
 
-  propagatedBuildInputs = [
-    requests
-    requests-toolbelt
-    pyparsing
-  ];
+  propagatedBuildInputs = [ requests requests-toolbelt pyparsing ];
 
   # The tests require several other dependencies, some of which aren't in
   # nixpkgs yet, and also aren't included in the PyPI bundle.  TODO.

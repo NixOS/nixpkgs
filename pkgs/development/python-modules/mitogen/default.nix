@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "mitogen";
@@ -20,7 +17,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mitogen" ];
 
   meta = with lib; {
-    description = "Python Library for writing distributed self-replicating programs";
+    description =
+      "Python Library for writing distributed self-replicating programs";
     homepage = "https://github.com/mitogen-hq/mitogen";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

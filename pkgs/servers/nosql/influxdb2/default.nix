@@ -1,15 +1,5 @@
-{ buildGoModule
-, buildGoPackage
-, fetchFromGitHub
-, fetchurl
-, go-bindata
-, lib
-, llvmPackages
-, pkg-config
-, rustPlatform
-, stdenv
-, libiconv
-}:
+{ buildGoModule, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, lib
+, llvmPackages, pkg-config, rustPlatform, stdenv, libiconv }:
 
 # Note for maintainers: use ./update-influxdb2.sh to update the Yarn
 # dependencies nix expression.
@@ -27,7 +17,8 @@ let
   };
 
   ui = fetchurl {
-    url = "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
+    url =
+      "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
     # https://github.com/influxdata/ui/releases/download/OSS-v${version}/sha256.txt
     sha256 = "94965ae999a1098c26128141fbb849be3da9a723d509118eb6e0db4384ee01fc";
   };

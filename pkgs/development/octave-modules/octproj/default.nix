@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, proj # >= 6.3.0
+{ buildOctavePackage, lib, fetchurl, proj # >= 6.3.0
 }:
 
 buildOctavePackage rec {
@@ -19,14 +16,13 @@ buildOctavePackage rec {
     sed -i s/"warning(errorText)"/"warning(\"%s\", errorText)"/g src/*.cc
   '';
 
-  propagatedBuildInputs = [
-    proj
-  ];
+  propagatedBuildInputs = [ proj ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/octproj/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "GNU Octave bindings to PROJ library for cartographic projections and CRS transformations";
+    description =
+      "GNU Octave bindings to PROJ library for cartographic projections and CRS transformations";
   };
 }

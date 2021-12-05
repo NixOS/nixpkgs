@@ -1,10 +1,13 @@
-{ lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome, plugins ? null}:
+{ lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome, plugins ? null }:
 
 let
-allPlugins = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues gimpPlugins);
-selectedPlugins = lib.filter (pkg: pkg != gimpPlugins.gimp) (if plugins == null then allPlugins else plugins);
-extraArgs = map (x: x.wrapArgs or "") selectedPlugins;
-versionBranch = lib.versions.majorMinor gimp.version;
+  allPlugins =
+    lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false)
+    (lib.attrValues gimpPlugins);
+  selectedPlugins = lib.filter (pkg: pkg != gimpPlugins.gimp)
+    (if plugins == null then allPlugins else plugins);
+  extraArgs = map (x: x.wrapArgs or "") selectedPlugins;
+  versionBranch = lib.versions.majorMinor gimp.version;
 
 in symlinkJoin {
   name = "gimp-with-plugins-${gimp.version}";

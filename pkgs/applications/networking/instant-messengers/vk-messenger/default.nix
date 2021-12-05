@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsa-lib, udev, libnotify
-, wrapGAppsHook }:
+{ stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook, xorg, gtk3, gnome2
+, nss, alsa-lib, udev, libnotify, wrapGAppsHook }:
 
 let
   pname = "vk-messenger";
@@ -16,7 +15,8 @@ let
       sha256 = "1m6saanpv1k5wc5s58jpf0wsgjsj7haabx8nycm1fjyhky1chirb";
     };
     x86_64-darwin = fetchurl {
-      url = "https://web.archive.org/web/20210310071550/https://desktop.userapi.com/mac/master/vk.dmg";
+      url =
+        "https://web.archive.org/web/20210310071550/https://desktop.userapi.com/mac/master/vk.dmg";
       sha256 = "0j5qsr0fyl55d0x46xm4h2ykwr4y9z1dsllhqx5lnc15nc051s9b";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
@@ -26,16 +26,15 @@ let
     homepage = "https://vk.com/messenger";
     license = licenses.unfree;
     maintainers = [ ];
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 
   linux = stdenv.mkDerivation {
     inherit pname version src meta;
 
     nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
-    buildInputs = (with xorg; [
-      libXdamage libXtst libXScrnSaver libxkbfile
-    ]) ++ [ gtk3 nss alsa-lib ];
+    buildInputs = (with xorg; [ libXdamage libXtst libXScrnSaver libxkbfile ])
+      ++ [ gtk3 nss alsa-lib ];
 
     runtimeDependencies = [ (lib.getLib udev) libnotify ];
 

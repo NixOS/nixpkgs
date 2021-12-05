@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp }:
 
 buildPythonPackage rec {
   pname = "aiohue";
@@ -13,14 +9,9 @@ buildPythonPackage rec {
     sha256 = "sha256-zpwkDKPrE5TFZQO0A1ifTQ7n+TRFpXi3jai3h5plyGM=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "aiohue"
-    "aiohue.discovery"
-  ];
+  pythonImportsCheck = [ "aiohue" "aiohue.discovery" ];
 
   # Project has no tests
   doCheck = false;

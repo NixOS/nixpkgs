@@ -2,14 +2,16 @@
 
 let
 
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
+  packageName = with lib;
+    concatStrings (map (entry:
+      (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry)))
+      (importJSON ./package.json));
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-in
-nodePackages.newman.override {
+in nodePackages.newman.override {
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "A command-line collection runner for Postman";

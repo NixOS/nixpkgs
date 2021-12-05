@@ -1,42 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, glib
-, expat
-, pam
-, meson
-, ninja
-, perl
-, rsync
-, python3
-, fetchpatch
-, gettext
-, spidermonkey_78
-, gobject-introspection
-, libxslt
-, docbook-xsl-nons
-, dbus
-, docbook_xml_dtd_412
-, gtk-doc
-, coreutils
-, useSystemd ? stdenv.isLinux
-, systemd
-, elogind
+{ lib, stdenv, fetchFromGitLab, pkg-config, glib, expat, pam, meson, ninja, perl
+, rsync, python3, fetchpatch, gettext, spidermonkey_78, gobject-introspection
+, libxslt, docbook-xsl-nons, dbus, docbook_xml_dtd_412, gtk-doc, coreutils
+, useSystemd ? stdenv.isLinux, systemd, elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
 # or being unrelated to that.
-, doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
-}:
+, doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl) }:
 
 let
   system = "/run/current-system/sw";
   setuid = "/run/wrappers/bin";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "polkit";
   version = "0.120";
 
@@ -55,7 +32,8 @@ stdenv.mkDerivation rec {
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
+      url =
+        "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
@@ -64,7 +42,8 @@ stdenv.mkDerivation rec {
     # We use the version of the patch that Alpine uses successfully.
     (fetchpatch {
       name = "make-innetgr-optional.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/polkit/make-innetgr-optional.patch?id=424ecbb6e9e3a215c978b58c05e5c112d88dddfc";
+      url =
+        "https://git.alpinelinux.org/aports/plain/community/polkit/make-innetgr-optional.patch?id=424ecbb6e9e3a215c978b58c05e5c112d88dddfc";
       sha256 = "0iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
     })
   ];
@@ -78,13 +57,14 @@ stdenv.mkDerivation rec {
     ninja
     perl
     rsync
-    (python3.withPackages (pp: with pp; [
-      dbus-python
-      (python-dbusmock.overridePythonAttrs (attrs: {
-        # Avoid dependency cycle.
-        doCheck = false;
-      }))
-    ]))
+    (python3.withPackages (pp:
+      with pp; [
+        dbus-python
+        (python-dbusmock.overridePythonAttrs (attrs: {
+          # Avoid dependency cycle.
+          doCheck = false;
+        }))
+      ]))
 
     # man pages
     libxslt
@@ -92,37 +72,31 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  buildInputs = [
-    expat
-    pam
-    spidermonkey_78
-  ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [ expat pam spidermonkey_78 ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemd else elogind)
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  ] ++ lib.optionals withIntrospection [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
   ];
 
-  checkInputs = [
-    dbus
-  ];
+  checkInputs = [ dbus ];
 
   mesonFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
+    "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
     "-Dgtk_doc=${lib.boolToString true}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
-    "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
+    "-Dsession_tracking=${
+      if useSystemd then "libsystemd-login" else "libelogind"
+    }"
   ];
 
   # HACK: We want to install policy files files to $out/share but polkit
@@ -159,7 +133,9 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     # tests need access to the system bus
-    dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS meson test --print-errorlogs'
+    dbus-run-session --config-file=${
+      ./system_bus.conf
+    } -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS meson test --print-errorlogs'
 
     runHook postCheck
   '';
@@ -183,7 +159,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/polkit";
-    description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
+    description =
+      "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);

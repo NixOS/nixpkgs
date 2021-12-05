@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, python3
-, sqlite
-, gdk-pixbuf
-, gnome
-, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, python3, sqlite
+, gdk-pixbuf, gnome, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "gom";
@@ -18,30 +8,22 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "py" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
   };
 
-  patches = [
-    ./longer-stress-timeout.patch
-  ];
+  patches = [ ./longer-stress-timeout.patch ];
 
-  nativeBuildInputs = [
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config ];
 
-  buildInputs = [
-    gdk-pixbuf
-    glib
-    sqlite
-    python3.pkgs.pygobject3
-  ];
+  buildInputs = [ gdk-pixbuf glib sqlite python3.pkgs.pygobject3 ];
 
   mesonFlags = [
-    "-Dpygobject-override-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
+    "-Dpygobject-override-dir=${
+      placeholder "py"
+    }/${python3.sitePackages}/gi/overrides"
   ];
 
   # Success is more likely on x86_64

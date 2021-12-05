@@ -1,45 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libsndfile
-, libtool
-, makeWrapper
-, perlPackages
-, xorg
-, libcap
-, alsa-lib
-, glib
-, dconf
-, avahi
-, libjack2
-, libasyncns
-, lirc
-, dbus
-, sbc
-, bluez5
-, udev
-, openssl
-, fftwFloat
-, soxr
-, speexdsp
-, systemd
-, webrtc-audio-processing
-, gtk3
-, tdb
-, orc
-, check
-, gettext
-, gst_all_1
-, libopenaptx
+{ lib, stdenv, fetchurl, fetchFromGitLab, meson, ninja, pkg-config, libsndfile
+, libtool, makeWrapper, perlPackages, xorg, libcap, alsa-lib, glib, dconf, avahi
+, libjack2, libasyncns, lirc, dbus, sbc, bluez5, udev, openssl, fftwFloat, soxr
+, speexdsp, systemd, webrtc-audio-processing, gtk3, tdb, orc, check, gettext
+, gst_all_1, libopenaptx
 
 , x11Support ? true
 
 , # Whether to support the JACK sound system as a backend.
-  jackaudioSupport ? false
+jackaudioSupport ? false
 
 , airtunesSupport ? true
 
@@ -50,15 +18,12 @@
 , zeroconfSupport ? true
 
 , # Whether to build only the library.
-  libOnly ? false
+libOnly ? false
 
-# Building from Git source
+  # Building from Git source
 , fromGit ? true
 
-, CoreServices
-, AudioUnit
-, Cocoa
-}:
+, CoreServices, AudioUnit, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "${if libOnly then "lib" else ""}pulseaudio-hsphfpd";
@@ -75,10 +40,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vc0i5rzkns3xw6y2q0c94p2qdi5k3mgjvhicgq1b0py2qxmji16";
   };
 
-  patches = [
-    ./add-option-for-installation-sysconfdir.patch
-    ./correct-ldflags.patch
-  ];
+  patches =
+    [ ./add-option-for-installation-sysconfdir.patch ./correct-ldflags.patch ];
 
   # Says it should be v${version} but it's parsing logic is broken
   preConfigure = lib.optionalString fromGit ''
@@ -95,9 +58,7 @@ stdenv.mkDerivation rec {
     perlPackages.XMLParser
   ];
 
-  checkInputs = [
-    check
-  ];
+  checkInputs = [ check ];
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libcap;
 
@@ -112,38 +73,24 @@ stdenv.mkDerivation rec {
     tdb
     sbc
     gst_all_1.gst-plugins-base
-  ] ++ lib.optionals bluetoothSupport [
-    bluez5
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus
-    glib
-    gtk3
-    libasyncns
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioUnit
-    Cocoa
-    CoreServices
-  ] ++ lib.optionals (!libOnly) (
-    lib.optionals x11Support [
-      xorg.libXi
-      xorg.libXtst
-      xorg.xlibsWrapper
-    ] ++ lib.optionals stdenv.isLinux [
-      alsa-lib
-      systemd
-      udev
-    ] ++ lib.optional airtunesSupport openssl
-    ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional remoteControlSupport lirc
-    ++ lib.optional zeroconfSupport avahi
-    ++ [ webrtc-audio-processing ]
-  );
+  ] ++ lib.optionals bluetoothSupport [ bluez5 ]
+    ++ lib.optionals stdenv.isLinux [ dbus glib gtk3 libasyncns ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
+    ++ lib.optionals (!libOnly)
+    (lib.optionals x11Support [ xorg.libXi xorg.libXtst xorg.xlibsWrapper ]
+      ++ lib.optionals stdenv.isLinux [ alsa-lib systemd udev ]
+      ++ lib.optional airtunesSupport openssl
+      ++ lib.optional jackaudioSupport libjack2
+      ++ lib.optional remoteControlSupport lirc
+      ++ lib.optional zeroconfSupport avahi ++ [ webrtc-audio-processing ]);
 
   mesonFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Daccess_group=audio"
-    "-Dbashcompletiondir=${placeholder "out"}/share/bash-completions/completions"
+    "-Dbashcompletiondir=${
+      placeholder "out"
+    }/share/bash-completions/completions"
     "-Dman=false" # TODO: needs xmltoman; also doesn't check for this
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -182,7 +129,8 @@ stdenv.mkDerivation rec {
   # after the seventh)
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreServices -framework Cocoa -framework AudioUnit";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
+    "-framework CoreServices -framework Cocoa -framework AudioUnit";
 
   postInstall = ''
     moveToOutput lib/cmake "$dev"
@@ -197,9 +145,7 @@ stdenv.mkDerivation rec {
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
-  passthru = {
-    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
-  };
+  passthru = { pulseDir = "lib/pulse-" + lib.versions.majorMinor version; };
 
   meta = with lib; {
     description = "A featureful, general-purpose sound server";

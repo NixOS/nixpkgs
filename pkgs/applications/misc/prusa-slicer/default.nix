@@ -1,17 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem
+, pkg-config, wrapGAppsHook, boost, cereal, cgal_5, curl, dbus, eigen, expat
+, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme, ilmbase, libpng, mpfr, nlopt
+, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg }:
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
   version = "2.3.3";
 
-  nativeBuildInputs = [
-    cmake
-    copyDesktopItems
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake copyDesktopItems pkg-config wrapGAppsHook ];
 
   buildInputs = [
     boost
@@ -73,10 +68,7 @@ stdenv.mkDerivation rec {
     rev = "version_${version}";
   };
 
-  cmakeFlags = [
-    "-DSLIC3R_FHS=1"
-    "-DSLIC3R_GTK=3"
-  ];
+  cmakeFlags = [ "-DSLIC3R_FHS=1" "-DSLIC3R_GTK=3" ];
 
   postInstall = ''
     ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, requests_oauthlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "twitterapi";
@@ -17,17 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-3Ho8iw//X+eB7B/Q9TJGeoxAYjUJ96qsI1T3WYqZOpM=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ requests requests_oauthlib ];
 
   # Tests are interacting with the Twitter API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "TwitterAPI"
-  ];
+  pythonImportsCheck = [ "TwitterAPI" ];
 
   meta = with lib; {
     description = "Python wrapper for Twitter's REST and Streaming APIs";

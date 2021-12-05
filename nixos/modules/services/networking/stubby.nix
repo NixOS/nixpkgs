@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -84,9 +84,8 @@ let
     upstream_recursive_servers:
     ${cfg.upstreamServers}
   '';
-in
 
-{
+in {
   options = {
     services.stubby = {
 
@@ -94,11 +93,12 @@ in
 
       fallbackProtocols = mkOption {
         default = [ "GETDNS_TRANSPORT_TLS" ];
-        type = with types; listOf (enum [
-          "GETDNS_TRANSPORT_TLS"
-          "GETDNS_TRANSPORT_TCP"
-          "GETDNS_TRANSPORT_UDP"
-        ]);
+        type = with types;
+          listOf (enum [
+            "GETDNS_TRANSPORT_TLS"
+            "GETDNS_TRANSPORT_TCP"
+            "GETDNS_TRANSPORT_UDP"
+          ]);
         description = ''
           Ordered list composed of one or more transport protocols.
           Strict mode should only use <literal>GETDNS_TRANSPORT_TLS</literal>.
@@ -141,8 +141,9 @@ in
       idleTimeout = mkOption {
         default = 10000;
         type = types.int;
-        description = "EDNS0 option for keepalive idle timeout expressed in
-        milliseconds.";
+        description = ''
+          EDNS0 option for keepalive idle timeout expressed in
+                  milliseconds.'';
       };
 
       listenAddresses = mkOption {
@@ -208,7 +209,9 @@ in
         Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
+        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${
+            optionalString cfg.debugLogging "-l"
+          }";
         DynamicUser = true;
         CacheDirectory = "stubby";
       };

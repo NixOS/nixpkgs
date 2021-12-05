@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, Babel
-, pytz
-, nine
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, Babel, pytz, nine, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "kajiki";

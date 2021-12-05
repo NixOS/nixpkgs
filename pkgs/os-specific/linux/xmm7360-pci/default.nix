@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wdb0phqg9rj9g9ycqdya0m7lx24kzjlh25yw0ifp898ddxrrr0c";
   };
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags =
+    [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   INSTALL_MOD_PATH = placeholder "out";
@@ -19,7 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/xmm7360/xmm7360-pci";
-    description = "PCI driver for Fibocom L850-GL modem based on Intel XMM7360 modem";
+    description =
+      "PCI driver for Fibocom L850-GL modem based on Intel XMM7360 modem";
     downloadPage = "https://github.com/xmm7360/xmm7360-pci";
     license = licenses.isc;
     maintainers = with maintainers; [ flokli hexa ];

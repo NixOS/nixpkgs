@@ -1,13 +1,12 @@
-{ stdenv
-, lib
-, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "intel2200BGFirmware";
   version = "3.1";
 
   src = fetchurl {
-    url = "https://src.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-${version}.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-${version}.tgz";
+    url =
+      "https://src.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-${version}.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-${version}.tgz";
     hash = "sha256-xoGMEcGMwDDVX/g/ZLK62P7vSF53QvhPlKYdgRpiWL0=";
   };
 

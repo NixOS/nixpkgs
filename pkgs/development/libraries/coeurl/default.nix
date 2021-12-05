@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, ninja
-, pkg-config
-, meson
-, libevent
-, curl
-, spdlog
+{ lib, stdenv, fetchFromGitLab, ninja, pkg-config, meson, libevent, curl, spdlog
 }:
 
 stdenv.mkDerivation rec {

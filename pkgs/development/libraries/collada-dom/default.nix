@@ -18,12 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-    libxml2
-    minizip
-    readline
-  ];
+  buildInputs = [ boost libxml2 minizip readline ];
 
   meta = with lib; {
     description = "Lightweight version of collada-dom, with only the parser.";

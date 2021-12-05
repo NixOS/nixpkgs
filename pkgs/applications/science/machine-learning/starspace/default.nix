@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost165 zlib ];
 
-  makeFlags = [
-    "CXX=${stdenv.cc.targetPrefix}c++"
-    "BOOST_DIR=${boost165.dev}/include"
-  ];
+  makeFlags =
+    [ "CXX=${stdenv.cc.targetPrefix}c++" "BOOST_DIR=${boost165.dev}/include" ];
 
   preBuild = ''
     cp makefile_compress makefile
@@ -28,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "General-purpose neural model for efficient learning of entity embeddings";
+    description =
+      "General-purpose neural model for efficient learning of entity embeddings";
     homepage = "https://ai.facebook.com/tools/starspace/";
     license = licenses.mit;
     platforms = platforms.unix;

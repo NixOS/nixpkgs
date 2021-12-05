@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   version = "12.0.1.1012";
 
   src = fetchurl {
-    url = "http://download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/04/852bb503-de7b-4810-a7dd-cbab62742f09_7cf83a4c194116648d17707ae37d564f9c70bec2.cab";
+    url =
+      "http://download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/04/852bb503-de7b-4810-a7dd-cbab62742f09_7cf83a4c194116648d17707ae37d564f9c70bec2.cab";
     sha256 = "1b1qjwxjk4y91l3iz157kms8601n0mmiik32cs6w9b1q4sl4pxx9";
   };
 
@@ -38,7 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";
-    homepage = "https://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
+    homepage =
+      "https://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

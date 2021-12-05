@@ -17,22 +17,27 @@ let
   };
 
   setTensorflowSourceRoot = dir: drv:
-    (overrideCabal (drv: { src = tensorflow-haskell; }) drv)
-      .overrideAttrs (_oldAttrs: {sourceRoot = "source/${dir}";});
-in
-{
-  tensorflow-proto = doJailbreak (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
+    (overrideCabal (drv: { src = tensorflow-haskell; }) drv).overrideAttrs
+    (_oldAttrs: { sourceRoot = "source/${dir}"; });
+in {
+  tensorflow-proto = doJailbreak
+    (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
 
-  tensorflow = (setTensorflowSourceRoot "tensorflow" super.tensorflow).override {
-    # the "regular" Python package does not seem to include the binary library
-    libtensorflow = pkgs.libtensorflow-bin;
-  };
+  tensorflow =
+    (setTensorflowSourceRoot "tensorflow" super.tensorflow).override {
+      # the "regular" Python package does not seem to include the binary library
+      libtensorflow = pkgs.libtensorflow-bin;
+    };
 
-  tensorflow-core-ops = setTensorflowSourceRoot "tensorflow-core-ops" super.tensorflow-core-ops;
+  tensorflow-core-ops =
+    setTensorflowSourceRoot "tensorflow-core-ops" super.tensorflow-core-ops;
 
-  tensorflow-logging = setTensorflowSourceRoot "tensorflow-logging" super.tensorflow-logging;
+  tensorflow-logging =
+    setTensorflowSourceRoot "tensorflow-logging" super.tensorflow-logging;
 
-  tensorflow-opgen = setTensorflowSourceRoot "tensorflow-opgen" super.tensorflow-opgen;
+  tensorflow-opgen =
+    setTensorflowSourceRoot "tensorflow-opgen" super.tensorflow-opgen;
 
-  tensorflow-ops = setTensorflowSourceRoot "tensorflow-ops" super.tensorflow-ops;
+  tensorflow-ops =
+    setTensorflowSourceRoot "tensorflow-ops" super.tensorflow-ops;
 }

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, alsa-lib, bluez, glib, sbc, dbus
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, alsa-lib, bluez
+, glib, sbc, dbus
 
 # optional, but useful utils
 , readline, libbsd, ncurses
@@ -24,19 +24,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = [
-    alsa-lib bluez glib sbc dbus
-    readline libbsd ncurses
-  ]
-  ++ optional aacSupport fdk_aac;
+  buildInputs = [ alsa-lib bluez glib sbc dbus readline libbsd ncurses ]
+    ++ optional aacSupport fdk_aac;
 
   configureFlags = [
     "--with-alsaplugindir=${placeholder "out"}/lib/alsa-lib"
     "--with-dbusconfdir=${placeholder "out"}/share/dbus-1/system.d"
     "--enable-rfcomm"
     "--enable-hcitop"
-  ]
-  ++ optional aacSupport "--enable-aac";
+  ] ++ optional aacSupport "--enable-aac";
 
   meta = {
     description = "Bluez 5 Bluetooth Audio ALSA Backend";

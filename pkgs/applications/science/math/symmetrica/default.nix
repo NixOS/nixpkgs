@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, autoreconfHook
-}:
+{ stdenv, lib, fetchFromGitLab, fetchpatch, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "symmetrica";
   version = "3.0.1";
@@ -20,14 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0wfmrzw82f5i91d7rf24mcdqcj2fmgrgy02pw4pliz7ncwaq14w3";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A collection of routines for representation theory and combinatorics";
+    description =
+      "A collection of routines for representation theory and combinatorics";
     license = licenses.isc;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
+{ stdenv, lib, fetchFromGitLab, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A program and library for changing the tempo, pitch and playback rate of audio";
+    description =
+      "A program and library for changing the tempo, pitch and playback rate of audio";
     homepage = "https://www.surina.net/soundtouch/";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;

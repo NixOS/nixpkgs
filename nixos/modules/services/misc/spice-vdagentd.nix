@@ -1,10 +1,8 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-let
-  cfg = config.services.spice-vdagentd;
-in
-{
+let cfg = config.services.spice-vdagentd;
+in {
   options = {
     services.spice-vdagentd = {
       enable = mkEnableOption "Spice guest vdagent daemon";

@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, characteristic, six, twisted
-}:
+{ lib, buildPythonPackage, fetchPypi, python, characteristic, six, twisted }:
 
 buildPythonPackage rec {
   pname = "tubes";
@@ -21,9 +19,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tubes" ];
 
   meta = with lib; {
-    description = "a data-processing and flow-control engine for event-driven programs";
-    homepage    = "https://github.com/twisted/tubes";
-    license     = licenses.mit;
+    description =
+      "a data-processing and flow-control engine for event-driven programs";
+    homepage = "https://github.com/twisted/tubes";
+    license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
   };
 }

@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   inherit (mod_ca) configureFlags installFlags;
 
   meta = with lib; {
-    description = "RedWax CA service module for handling the Netscape keygen requests. ";
+    description =
+      "RedWax CA service module for handling the Netscape keygen requests. ";
 
     homepage = "https://redwax.eu";
     license = licenses.asl20;

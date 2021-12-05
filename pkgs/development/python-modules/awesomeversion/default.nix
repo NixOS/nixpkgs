@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "awesomeversion";
@@ -25,13 +20,9 @@ buildPythonPackage rec {
       --replace "main" ${version}
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "awesomeversion"
-  ];
+  pythonImportsCheck = [ "awesomeversion" ];
 
   meta = with lib; {
     description = "Python module to deal with versions";

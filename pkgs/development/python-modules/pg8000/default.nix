@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, passlib
-, pythonOlder
-, scramp
-}:
+{ lib, buildPythonPackage, fetchPypi, passlib, pythonOlder, scramp }:
 
 buildPythonPackage rec {
   pname = "pg8000";
@@ -18,17 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-pBPgAUE0KBOiykfot7BUn/M4zKAryBkHa21w8S11XHk=";
   };
 
-  propagatedBuildInputs = [
-    passlib
-    scramp
-  ];
+  propagatedBuildInputs = [ passlib scramp ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pg8000"
-  ];
+  pythonImportsCheck = [ "pg8000" ];
 
   meta = with lib; {
     description = "Python driver for PostgreSQL";

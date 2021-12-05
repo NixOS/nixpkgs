@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, openssh
-}:
+{ lib, fetchFromGitHub, buildGoModule, makeWrapper, openssh }:
 
 buildGoModule rec {
   pname = "bosh-cli";
@@ -36,7 +31,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A command line interface to CloudFoundry BOSH";
     homepage = "https://bosh.io";
-    changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
+    changelog =
+      "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ris ];
   };

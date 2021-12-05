@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-, wireshark-cli
-}:
+{ lib, fetchFromGitHub, python3, wireshark-cli }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hfinger";
@@ -16,12 +12,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-QKnrprDDBq+D8N1brkqgcfK4E+6ssvgPtRaSxkF0C84=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    fnvhash
-    python_magic
-  ] ++ [
-    wireshark-cli
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [ fnvhash python_magic ] ++ [ wireshark-cli ];
 
   # Project has no tests
   doCheck = false;

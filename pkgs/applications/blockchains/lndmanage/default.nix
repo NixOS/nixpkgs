@@ -36,7 +36,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Channel management tool for lightning network daemon (LND) operators";
+    description =
+      "Channel management tool for lightning network daemon (LND) operators";
     homepage = "https://github.com/bitromortac/lndmanage";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];

@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
-, toml
-, importlib-metadata
-, cssselect
-, lxml
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, setuptools-scm, toml
+, importlib-metadata, cssselect, lxml, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cssutils";
@@ -22,21 +12,12 @@ buildPythonPackage rec {
     sha256 = "sha256-stOxYEfKroLlxZADaTW6+htiHPRcLziIWvS+SDjw/QA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    toml
-  ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    cssselect
-    lxml
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ cssselect lxml mock pytestCheckHook ];
 
   disabledTests = [
     # access network
@@ -55,7 +36,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
+    changelog =
+      "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

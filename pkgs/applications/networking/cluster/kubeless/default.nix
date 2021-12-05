@@ -18,7 +18,9 @@ buildGoPackage rec {
   subPackages = [ "cmd/kubeless" ];
 
   ldflags = [
-    "-s" "-w" "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
   ];
 
   postInstall = ''
@@ -32,7 +34,7 @@ buildGoPackage rec {
     homepage = "https://kubeless.io";
     description = "The Kubernetes Native Serverless Framework";
     license = licenses.asl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

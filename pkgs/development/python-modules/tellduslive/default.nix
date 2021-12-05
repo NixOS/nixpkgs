@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, requests
-, requests_oauthlib
+{ lib, buildPythonPackage, docopt, fetchFromGitHub, requests, requests_oauthlib
 }:
 
 buildPythonPackage rec {
@@ -17,11 +12,7 @@ buildPythonPackage rec {
     sha256 = "0aqhj6fq2z2qb4jyk23ygjicf5nlj8lkya7blkyqb7jra5k1gyg0";
   };
 
-  propagatedBuildInputs = [
-    docopt
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ docopt requests requests_oauthlib ];
 
   # Project has no tests
   doCheck = false;

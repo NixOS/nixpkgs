@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, aiodns
-, aiohttp
-, fetchPypi
-, gnupg
-, isPy3k
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, substituteAll
-}:
+{ lib, buildPythonPackage, aiodns, aiohttp, fetchPypi, gnupg, isPy3k, pyasn1
+, pyasn1-modules, pytestCheckHook, substituteAll }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
@@ -29,12 +19,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    aiodns
-    aiohttp
-    pyasn1
-    pyasn1-modules
-  ];
+  propagatedBuildInputs = [ aiodns aiohttp pyasn1 pyasn1-modules ];
 
   checkInputs = [ pytestCheckHook ];
 

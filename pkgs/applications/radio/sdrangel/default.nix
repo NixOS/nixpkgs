@@ -1,35 +1,8 @@
-{ airspy
-, boost
-, cm256cc
-, cmake
-, codec2
-, fetchFromGitHub
-, fftwFloat
-, glew
-, hackrf
-, lib
-, ffmpeg
-, libiio
-, libopus
-, libpulseaudio
-, libusb1
-, limesuite
-, libbladeRF
-, mkDerivation
-, ocl-icd
-, opencv3
-, pkg-config
-, qtcharts
-, qtlocation
-, qtmultimedia
-, qtserialport
-, qtspeech
-, qtwebsockets
-, rtl-sdr
-, serialdv
-, soapysdr-with-plugins
-, uhd
-}:
+{ airspy, boost, cm256cc, cmake, codec2, fetchFromGitHub, fftwFloat, glew
+, hackrf, lib, ffmpeg, libiio, libopus, libpulseaudio, libusb1, limesuite
+, libbladeRF, mkDerivation, ocl-icd, opencv3, pkg-config, qtcharts, qtlocation
+, qtmultimedia, qtserialport, qtspeech, qtwebsockets, rtl-sdr, serialdv
+, soapysdr-with-plugins, uhd }:
 
 mkDerivation rec {
   pname = "sdrangel";

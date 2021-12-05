@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, liblxi, readline, lua
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, liblxi, readline
+, lua }:
 
 stdenv.mkDerivation rec {
   pname = "lxi-tools";

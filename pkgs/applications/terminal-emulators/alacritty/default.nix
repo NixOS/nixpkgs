@@ -1,40 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
+{ stdenv, lib, fetchFromGitHub, fetchpatch, rustPlatform
 
-, cmake
-, gzip
-, installShellFiles
-, makeWrapper
-, ncurses
-, pkg-config
-, python3
+, cmake, gzip, installShellFiles, makeWrapper, ncurses, pkg-config, python3
 
-, expat
-, fontconfig
-, freetype
-, libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXxf86vm
-, libxcb
-, libxkbcommon
-, wayland
-, xdg-utils
+, expat, fontconfig, freetype, libGL, libX11, libXcursor, libXi, libXrandr
+, libXxf86vm, libxcb, libxkbcommon, wayland, xdg-utils
 
-  # Darwin Frameworks
-, AppKit
-, CoreGraphics
-, CoreServices
-, CoreText
-, Foundation
-, libiconv
-, OpenGL
-}:
+# Darwin Frameworks
+, AppKit, CoreGraphics, CoreServices, CoreText, Foundation, libiconv, OpenGL }:
 let
   rpathLibs = [
     expat
@@ -47,12 +19,8 @@ let
     libXrandr
     libXxf86vm
     libxcb
-  ] ++ lib.optionals stdenv.isLinux [
-    libxkbcommon
-    wayland
-  ];
-in
-rustPlatform.buildRustPackage rec {
+  ] ++ lib.optionals stdenv.isLinux [ libxkbcommon wayland ];
+in rustPlatform.buildRustPackage rec {
   pname = "alacritty";
   version = "0.9.0";
 
@@ -65,18 +33,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
 
-  nativeBuildInputs = [
-    cmake
-    gzip
-    installShellFiles
-    makeWrapper
-    ncurses
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs =
+    [ cmake gzip installShellFiles makeWrapper ncurses pkg-config python3 ];
 
-  buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = rpathLibs ++ lib.optionals stdenv.isDarwin [
     AppKit
     CoreGraphics
     CoreServices
@@ -91,7 +51,8 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Handle PTY EIO error for Rust 1.55+
     (fetchpatch {
-      url = "https://github.com/alacritty/alacritty/commit/58985a4dcbe464230b5d2566ee68e2d34a1788c8.patch";
+      url =
+        "https://github.com/alacritty/alacritty/commit/58985a4dcbe464230b5d2566ee68e2d34a1788c8.patch";
       sha256 = "sha256-Z6589yRrQtpx3/vNqkMiGgGsLysd/QyfaX7trqX+k5c=";
     })
   ];
@@ -101,24 +62,22 @@ rustPlatform.buildRustPackage rec {
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
-  postInstall = (
-    if stdenv.isDarwin then ''
-      mkdir $out/Applications
-      cp -r extra/osx/Alacritty.app $out/Applications
-      ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
-    '' else ''
-      install -D extra/linux/Alacritty.desktop -t $out/share/applications/
-      install -D extra/linux/io.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
-      install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
+  postInstall = (if stdenv.isDarwin then ''
+    mkdir $out/Applications
+    cp -r extra/osx/Alacritty.app $out/Applications
+    ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
+  '' else ''
+    install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+    install -D extra/linux/io.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
+    install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
 
-      # patchelf generates an ELF that binutils' "strip" doesn't like:
-      #    strip: not enough room for program headers, try linking with -N
-      # As a workaround, strip manually before running patchelf.
-      strip -S $out/bin/alacritty
+    # patchelf generates an ELF that binutils' "strip" doesn't like:
+    #    strip: not enough room for program headers, try linking with -N
+    # As a workaround, strip manually before running patchelf.
+    strip -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
-    ''
-  ) + ''
+    patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+  '') + ''
 
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash
@@ -143,6 +102,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne mic92 ma27 ];
     platforms = platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };
 }

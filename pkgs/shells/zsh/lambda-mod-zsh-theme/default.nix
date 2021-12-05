@@ -16,7 +16,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A ZSH theme optimized for people who use Git & Unicode-compatible fonts and terminals";
+    description =
+      "A ZSH theme optimized for people who use Git & Unicode-compatible fonts and terminals";
     homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
     license = licenses.mit;
     platforms = platforms.all;

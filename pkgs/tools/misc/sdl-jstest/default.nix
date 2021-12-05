@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, cmake, pkg-config, SDL, SDL2, ncurses, docbook_xsl, git }:
+{ lib, stdenv, fetchgit, cmake, pkg-config, SDL, SDL2, ncurses, docbook_xsl, git
+}:
 
 stdenv.mkDerivation {
   pname = "sdl-jstest";

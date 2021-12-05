@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonOlder
-, matplotlib
-, numpy
-, pandas
-, pillow
-, pytest
-, pytest-datadir
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder, matplotlib, numpy
+, pandas, pillow, pytest, pytest-datadir, pytestCheckHook, pyyaml
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
@@ -30,7 +18,8 @@ buildPythonPackage rec {
     # Make pytest-regressions compatible with NumPy 1.20.
     # Should be part of the next release.
     (fetchpatch {
-      url = "https://github.com/ESSS/pytest-regressions/commit/ffad2c7fd1d110f420f4e3ca3d39d90cae18a972.patch";
+      url =
+        "https://github.com/ESSS/pytest-regressions/commit/ffad2c7fd1d110f420f4e3ca3d39d90cae18a972.patch";
       sha256 = "sha256-bUna7MnMV6u9oEaZMsFnr4gE28rz/c0O2+Hyk291+l0=";
     })
   ];

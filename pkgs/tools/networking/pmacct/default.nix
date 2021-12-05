@@ -1,19 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libtool
-, libpcap
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, libtool, libpcap
 , libcdada
 # Optional Dependencies
-, withJansson ? true, jansson
-, withNflog ? true, libnetfilter_log
-, withSQLite ? true, sqlite
-, withPgSQL ? true, postgresql
-, withMysql ? true, libmysqlclient, zlib
-, gnutlsSupport ? false, gnutls
-}:
+, withJansson ? true, jansson, withNflog ? true, libnetfilter_log
+, withSQLite ? true, sqlite, withPgSQL ? true, postgresql, withMysql ? true
+, libmysqlclient, zlib, gnutlsSupport ? false, gnutls }:
 
 stdenv.mkDerivation rec {
   version = "1.7.6";
@@ -26,34 +16,27 @@ stdenv.mkDerivation rec {
     sha256 = "0x1i75hwz44siqvn4i58jgji0zwrqgn6ayv89s9m9nh3b423nsiv";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    libtool
-  ];
-  buildInputs = [
-    libcdada
-    libpcap
-  ] ++ lib.optional withJansson jansson
-  ++ lib.optional withNflog libnetfilter_log
-  ++ lib.optional withSQLite sqlite
-  ++ lib.optional withPgSQL postgresql
-  ++ lib.optionals withMysql [ libmysqlclient zlib ]
-  ++ lib.optional gnutlsSupport gnutls;
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
+  buildInputs = [ libcdada libpcap ] ++ lib.optional withJansson jansson
+    ++ lib.optional withNflog libnetfilter_log ++ lib.optional withSQLite sqlite
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optionals withMysql [ libmysqlclient zlib ]
+    ++ lib.optional gnutlsSupport gnutls;
 
-  MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
+  MYSQL_CONFIG = lib.optionalString withMysql
+    "${lib.getDev libmysqlclient}/bin/mysql_config";
 
-  configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-  ] ++ lib.optional withJansson "--enable-jansson"
-  ++ lib.optional withNflog "--enable-nflog"
-  ++ lib.optional withSQLite "--enable-sqlite3"
-  ++ lib.optional withPgSQL "--enable-pgsql"
-  ++ lib.optional withMysql "--enable-mysql"
-  ++ lib.optional gnutlsSupport "--enable-gnutls";
+  configureFlags = [ "--with-pcap-includes=${libpcap}/include" ]
+    ++ lib.optional withJansson "--enable-jansson"
+    ++ lib.optional withNflog "--enable-nflog"
+    ++ lib.optional withSQLite "--enable-sqlite3"
+    ++ lib.optional withPgSQL "--enable-pgsql"
+    ++ lib.optional withMysql "--enable-mysql"
+    ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   meta = with lib; {
-    description = "A small set of multi-purpose passive network monitoring tools";
+    description =
+      "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]

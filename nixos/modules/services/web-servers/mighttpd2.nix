@@ -94,11 +94,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = cfg.routing != "";
-          message = "You need at least one rule in mighttpd2.routing";
-        }
-      ];
+    assertions = [{
+      assertion = cfg.routing != "";
+      message = "You need at least one rule in mighttpd2.routing";
+    }];
     systemd.services.mighttpd2 = {
       description = "Mighttpd2 web server";
       after = [ "network-online.target" ];

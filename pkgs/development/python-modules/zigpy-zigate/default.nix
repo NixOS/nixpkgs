@@ -1,14 +1,6 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pyusb
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy }:
+{ lib, asynctest, buildPythonPackage, fetchFromGitHub, pyserial
+, pyserial-asyncio, pyusb, pytest-asyncio, pytestCheckHook, pythonOlder, zigpy
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
@@ -25,18 +17,9 @@ buildPythonPackage rec {
     sha256 = "0xl8qgljvmypi602f52m89iv9pcrzsdal3jw619vrcavp40rc04d";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-    pyserial-asyncio
-    pyusb
-    zigpy
-  ];
+  propagatedBuildInputs = [ pyserial pyserial-asyncio pyusb zigpy ];
 
-  checkInputs = [
-    asynctest
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytest-asyncio pytestCheckHook ];
 
   meta = with lib; {
     description = "A library which communicates with ZiGate radios for zigpy";

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run Windows programs with Proton";
-    changelog = "https://github.com/caverym/proton-caller/releases/tag/${version}";
+    changelog =
+      "https://github.com/caverym/proton-caller/releases/tag/${version}";
     homepage = "https://github.com/caverym/proton-caller";
     license = licenses.mit;
     maintainers = with maintainers; [ kho-dialga ];

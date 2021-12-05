@@ -16,7 +16,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pathvalidate" ];
 
   meta = with lib; {
-    description = "A Python library to sanitize/validate a string such as filenames/file-paths/etc";
+    description =
+      "A Python library to sanitize/validate a string such as filenames/file-paths/etc";
     homepage = "https://github.com/thombashi/pathvalidate";
     license = licenses.mit;
     maintainers = with maintainers; [ oxalica ];

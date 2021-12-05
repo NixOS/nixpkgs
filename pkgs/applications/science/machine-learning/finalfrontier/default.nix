@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libiconv
-, openssl
-, Security
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, pkg-config
+, libiconv, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "finalfrontier";
@@ -22,15 +14,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0lhcazcih48gc23q484h344bzz7p3lh189ljhswdyph2i11caarp";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     installManPage man/*.1

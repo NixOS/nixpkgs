@@ -1,13 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, commoncode
-, pluggy
-, pytestCheckHook
-, pytest-xdist
-}:
+{ lib, fetchPypi, buildPythonPackage, setuptools-scm, click, commoncode, pluggy
+, pytestCheckHook, pytest-xdist }:
 buildPythonPackage rec {
   pname = "plugincode";
   version = "21.1.21";
@@ -19,27 +11,17 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    click
-    commoncode
-    pluggy
-  ];
+  propagatedBuildInputs = [ click commoncode pluggy ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ];
+  checkInputs = [ pytestCheckHook pytest-xdist ];
 
-  pythonImportsCheck = [
-    "plugincode"
-  ];
+  pythonImportsCheck = [ "plugincode" ];
 
   meta = with lib; {
-    description = "A library that provides plugin functionality for ScanCode toolkit";
+    description =
+      "A library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;

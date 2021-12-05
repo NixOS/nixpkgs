@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IRCv3 server designed to be highly scalable";
-    homepage    = "https://github.com/charybdis-ircd/charybdis";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/charybdis-ircd/charybdis";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus fpletz ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

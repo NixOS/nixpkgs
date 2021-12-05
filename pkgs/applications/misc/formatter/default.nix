@@ -1,23 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, substituteAll
-, glib
-, gtk3
-, dosfstools
-, e2fsprogs
-, exfat
-, hfsprogs
-, ntfs3g
-, libgee
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, vala
+, pkg-config, pantheon, python3, substituteAll, glib, gtk3, dosfstools
+, e2fsprogs, exfat, hfsprogs, ntfs3g, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "formatter";
@@ -41,32 +24,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    vala
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja vala pkg-config python3 wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    gtk3
-    libgee
-    pantheon.granite
-  ];
+  buildInputs = [ glib gtk3 libgee pantheon.granite ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "A simple formatter designed for elementary OS";

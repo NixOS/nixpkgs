@@ -1,13 +1,5 @@
-{ lib, stdenv
-, autoPatchelfHook
-, buildFHSUserEnv
-, dpkg
-, fetchurl
-, gcc-unwrapped
-, ocl-icd
-, zlib
-, extraPkgs ? []
-}:
+{ lib, stdenv, autoPatchelfHook, buildFHSUserEnv, dpkg, fetchurl, gcc-unwrapped
+, ocl-icd, zlib, extraPkgs ? [ ] }:
 let
   majMin = lib.versions.majorMinor version;
   version = "7.6.13";
@@ -17,31 +9,22 @@ let
     pname = "fahclient";
 
     src = fetchurl {
-      url = "https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${majMin}/fahclient_${version}_amd64.deb";
+      url =
+        "https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${majMin}/fahclient_${version}_amd64.deb";
       sha256 = "1j2cnsyassvifp6ymwd9kxwqw09hks24834gf7nljfncyy9g4g0i";
     };
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      dpkg
-    ];
+    nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
-    buildInputs = [
-      gcc-unwrapped.lib
-      zlib
-    ];
+    buildInputs = [ gcc-unwrapped.lib zlib ];
 
     unpackPhase = "dpkg-deb -x ${src} ./";
     installPhase = "cp -ar usr $out";
   };
-in
-buildFHSUserEnv {
+in buildFHSUserEnv {
   name = fahclient.name;
 
-  targetPkgs = pkgs': [
-    fahclient
-    ocl-icd
-  ] ++ extraPkgs;
+  targetPkgs = pkgs': [ fahclient ocl-icd ] ++ extraPkgs;
 
   runScript = "/bin/FAHClient";
 

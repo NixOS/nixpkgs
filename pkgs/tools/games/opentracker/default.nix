@@ -1,17 +1,6 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, autoPatchelfHook
-, wrapGAppsHook
-, dotnetCorePackages
-, fontconfig
-, gtk3
-, openssl
-, libX11
-, libXi
-, xinput
-}:
+{ lib, stdenv, buildDotnetModule, fetchFromGitHub, autoPatchelfHook
+, wrapGAppsHook, dotnetCorePackages, fontconfig, gtk3, openssl, libX11, libXi
+, xinput }:
 
 buildDotnetModule rec {
   pname = "opentracker";
@@ -33,26 +22,15 @@ buildDotnetModule rec {
   doCheck = true;
   dotnet-test-sdk = dotnetCorePackages.sdk_3_1;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    fontconfig
-  ];
+  buildInputs = [ stdenv.cc.cc.lib fontconfig ];
 
-  runtimeDeps = [
-    gtk3
-    openssl
-    libX11
-    libXi
-    xinput
-  ];
+  runtimeDeps = [ gtk3 openssl libX11 libXi xinput ];
 
   autoPatchelfIgnoreMissingDeps = true; # Attempts to patchelf unneeded SOs
-  dontWrapGApps = true; # gappsWrapperArgs gets included when wrapping the application for dotnet.
+  dontWrapGApps =
+    true; # gappsWrapperArgs gets included when wrapping the application for dotnet.
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";

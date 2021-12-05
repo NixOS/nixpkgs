@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, SDL2, lua5_1, minizip, x264 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, SDL2, lua5_1
+, minizip, x264 }:
 
 stdenv.mkDerivation rec {
   pname = "fceux";

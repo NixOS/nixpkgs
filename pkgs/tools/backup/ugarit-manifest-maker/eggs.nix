@@ -1,5 +1,4 @@
-{ eggDerivation, fetchegg }:
-rec {
+{ eggDerivation, fetchegg }: rec {
   blob-utils = eggDerivation {
     name = "blob-utils-1.0.3";
 
@@ -9,10 +8,7 @@ rec {
       sha256 = "17vdn02fnxnjx5ixgqimln93lqvzyq4y9w02fw7xnbdcjzqm0xml";
     };
 
-    buildInputs = [
-      setup-helper
-      string-utils
-    ];
+    buildInputs = [ setup-helper string-utils ];
   };
 
   check-errors = eggDerivation {
@@ -24,9 +20,7 @@ rec {
       sha256 = "12a0sn82n98jybh72zb39fdddmr5k4785xglxb16750fhy8rmjwi";
     };
 
-    buildInputs = [
-      setup-helper
-    ];
+    buildInputs = [ setup-helper ];
   };
 
   crypto-tools = eggDerivation {
@@ -39,7 +33,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -53,7 +47,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -66,9 +60,7 @@ rec {
       sha256 = "07nvyadhkd52q0kkvch1a5d7ivpmrhmyg295s4mxb1nw4wz46gfz";
     };
 
-    buildInputs = [
-      matchable
-    ];
+    buildInputs = [ matchable ];
   };
 
   lookup-table = eggDerivation {
@@ -80,13 +72,8 @@ rec {
       sha256 = "1nzly6rhynawlvzlyilk8z8cxz57cf9n5iv20glkhh28pz2izmrb";
     };
 
-    buildInputs = [
-      setup-helper
-      check-errors
-      miscmacros
-      record-variants
-      synch
-    ];
+    buildInputs =
+      [ setup-helper check-errors miscmacros record-variants synch ];
   };
 
   lru-cache = eggDerivation {
@@ -98,9 +85,7 @@ rec {
       sha256 = "0z6g3106c4j21v968hfzy9nnbfq2d83y0nyd20aifpq4g55c0d40";
     };
 
-    buildInputs = [
-      record-variants
-    ];
+    buildInputs = [ record-variants ];
   };
 
   matchable = eggDerivation {
@@ -113,7 +98,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -146,7 +131,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -160,7 +145,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -173,11 +158,7 @@ rec {
       sha256 = "1vsbx4dk1240gzq02slzmavd1jrq04qj7ssnvg15h8xh81xwhbbz";
     };
 
-    buildInputs = [
-      stty
-      srfi-71
-      miscmacros
-    ];
+    buildInputs = [ stty srfi-71 miscmacros ];
   };
 
   pathname-expand = eggDerivation {
@@ -190,7 +171,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -204,7 +185,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -218,7 +199,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -232,7 +213,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -246,7 +227,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -259,10 +240,7 @@ rec {
       sha256 = "1mh3hpsibq2gxcpjaycqa4ckznj268xpfzsa6pn0i6iac6my3qra";
     };
 
-    buildInputs = [
-      lru-cache
-      foreigners
-    ];
+    buildInputs = [ lru-cache foreigners ];
   };
 
   srfi-37 = eggDerivation {
@@ -275,7 +253,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -289,7 +267,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -302,9 +280,7 @@ rec {
       sha256 = "0qhnghhx1wrvav4s7l780mspwlh8s6kzq4bl0cslwp1km90fx9bk";
     };
 
-    buildInputs = [
-      matchable
-    ];
+    buildInputs = [ matchable ];
   };
 
   string-utils = eggDerivation {
@@ -316,12 +292,7 @@ rec {
       sha256 = "07alvghg0dahilrm4jg44bndl0x69sv1zbna9l20cbdvi35i0jp1";
     };
 
-    buildInputs = [
-      setup-helper
-      miscmacros
-      lookup-table
-      check-errors
-    ];
+    buildInputs = [ setup-helper miscmacros lookup-table check-errors ];
   };
 
   stty = eggDerivation {
@@ -333,10 +304,7 @@ rec {
       sha256 = "09jmjpdsd3yg6d0f0imcihmn49i28x09lgl60i2dllffs25k22s4";
     };
 
-    buildInputs = [
-      setup-helper
-      foreigners
-    ];
+    buildInputs = [ setup-helper foreigners ];
   };
 
   synch = eggDerivation {
@@ -348,10 +316,7 @@ rec {
       sha256 = "1m9mnbq0m5jsxmd1a3rqpwpxj0l1b7vn1fknvxycc047pmlcyl00";
     };
 
-    buildInputs = [
-      setup-helper
-      check-errors
-    ];
+    buildInputs = [ setup-helper check-errors ];
   };
 
   tiger-hash = eggDerivation {
@@ -363,9 +328,7 @@ rec {
       sha256 = "0j9dsbjp9cw0y4w4srg0qwgh53jw2v3mx4y4h040ds0fkxlzzknx";
     };
 
-    buildInputs = [
-      message-digest
-    ];
+    buildInputs = [ message-digest ];
   };
 
   ugarit = eggDerivation {
@@ -403,14 +366,7 @@ rec {
       sha256 = "1jv8lhn4s5a3qphqd3zfwl1py0m5cmqj1h55ys0935m5f422547q";
     };
 
-    buildInputs = [
-      matchable
-      srfi-37
-      fnmatch
-      miscmacros
-      ugarit
-      numbers
-    ];
+    buildInputs = [ matchable srfi-37 fnmatch miscmacros ugarit numbers ];
   };
 
   variable-item = eggDerivation {
@@ -422,10 +378,7 @@ rec {
       sha256 = "19b3mhb8kr892sz9yyzq79l0vv28dgilw9cf415kj6aq16yp4d5n";
     };
 
-    buildInputs = [
-      setup-helper
-      check-errors
-    ];
+    buildInputs = [ setup-helper check-errors ];
   };
 }
 

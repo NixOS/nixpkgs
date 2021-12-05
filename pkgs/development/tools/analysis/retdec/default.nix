@@ -1,28 +1,6 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, lib
-, callPackage
-, openssl
-, cmake
-, autoconf
-, automake
-, libtool
-, pkg-config
-, bison
-, flex
-, groff
-, perl
-, python3
-, time
-, upx
-, ncurses
-, libffi
-, libxml2
-, zlib
-, withPEPatterns ? false
-}:
+{ stdenv, fetchFromGitHub, fetchpatch, fetchzip, lib, callPackage, openssl
+, cmake, autoconf, automake, libtool, pkg-config, bison, flex, groff, perl
+, python3, time, upx, ncurses, libffi, libxml2, zlib, withPEPatterns ? false }:
 
 let
   capstone = fetchFromGitHub {
@@ -67,7 +45,8 @@ let
     rev = "v1.1.0";
     sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
   };
-  yaracpp = callPackage ./yaracpp.nix {}; # is its own package because it needs a patch
+  yaracpp =
+    callPackage ./yaracpp.nix { }; # is its own package because it needs a patch
   yaramod = fetchFromGitHub {
     owner = "avast-tl";
     repo = "yaramod";
@@ -94,18 +73,23 @@ let
   };
 
   retdec-support = let
-    version = "2018-02-08"; # make sure to adjust both hashes (once with withPEPatterns=true and once withPEPatterns=false)
+    version =
+      "2018-02-08"; # make sure to adjust both hashes (once with withPEPatterns=true and once withPEPatterns=false)
   in fetchzip {
-    url = "https://github.com/avast-tl/retdec-support/releases/download/${version}/retdec-support_${version}.tar.xz";
-    sha256 = if withPEPatterns then "148i8flbyj1y4kfdyzsz7jsj38k4h97npjxj18h6v4wksd4m4jm7"
-                               else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
+    url =
+      "https://github.com/avast-tl/retdec-support/releases/download/${version}/retdec-support_${version}.tar.xz";
+    sha256 = if withPEPatterns then
+      "148i8flbyj1y4kfdyzsz7jsj38k4h97npjxj18h6v4wksd4m4jm7"
+    else
+      "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
     stripRoot = false;
     # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
     extraPostFetch = lib.optionalString (!withPEPatterns) ''
       rm -r "$out/generic/yara_patterns/static-code/pe"
     '';
   } // {
-    inherit version; # necessary to check the version against the expected version
+    inherit
+      version; # necessary to check the version against the expected version
   };
 
   # patch CMakeLists.txt for a dependency and compare the versions to the ones expected by upstream
@@ -153,13 +137,7 @@ in stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    openssl
-    ncurses
-    libffi
-    libxml2
-    zlib
-  ];
+  buildInputs = [ openssl ncurses libffi libxml2 zlib ];
 
   cmakeFlags = [
     "-DRETDEC_TESTS=ON" # build tests
@@ -186,12 +164,14 @@ in stdenv.mkDerivation rec {
   patches = [
     # 2.1.2 -> 2.2.1
     (fetchpatch {
-      url = "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
+      url =
+        "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
       sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
     })
     # 2.2.1 -> 2.2.2
     (fetchpatch {
-      url = "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
+      url =
+        "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
       sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
     })
   ];
@@ -228,6 +208,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://retdec.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill timokau ];
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

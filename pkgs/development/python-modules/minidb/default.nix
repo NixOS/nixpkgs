@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, nose
-, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, nose, pytest }:
 
 buildPythonPackage rec {
   pname = "minidb";

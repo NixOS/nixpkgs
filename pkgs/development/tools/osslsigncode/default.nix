@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, curl
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
@@ -24,7 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";
-    description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
+    description =
+      "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mmahut prusnak ];
     platforms = platforms.all;

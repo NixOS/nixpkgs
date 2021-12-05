@@ -1,10 +1,4 @@
-{ mkXfceDerivation
-, lib
-, intltool
-, libxfce4ui
-, xfce4-panel
-, gettext
-}:
+{ mkXfceDerivation, lib, intltool, libxfce4ui, xfce4-panel, gettext }:
 
 mkXfceDerivation {
   category = "panel-plugins";
@@ -14,18 +8,13 @@ mkXfceDerivation {
   rev-prefix = "xfce4-datetime-plugin-";
   sha256 = "sha256-qmZit7cCGnVTzdzPTiAiruBWlMLWzZEXJtFqAesaARo=";
 
-  nativeBuildInputs = [
-    gettext
-    intltool
-  ];
+  nativeBuildInputs = [ gettext intltool ];
 
-  buildInputs = [
-    libxfce4ui
-    xfce4-panel
-  ];
+  buildInputs = [ libxfce4ui xfce4-panel ];
 
   meta = with lib; {
-    description = "Shows the date and time in the panel, and a calendar appears when you left-click on it";
+    description =
+      "Shows the date and time in the panel, and a calendar appears when you left-click on it";
     maintainers = [ ];
   };
 }

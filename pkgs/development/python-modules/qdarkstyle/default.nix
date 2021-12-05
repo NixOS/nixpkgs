@@ -1,9 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, helpdev
-, qtpy
-}:
+{ lib, fetchPypi, buildPythonPackage, helpdev, qtpy }:
 
 buildPythonPackage rec {
   pname = "qdarkstyle";

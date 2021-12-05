@@ -1,30 +1,8 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-settings-daemon
-, cinnamon-translations
-, dbus-glib
-, docbook_xsl
-, docbook_xml_dtd_412
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, libcanberra
-, libxslt
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, systemd
-, wrapGAppsHook
-, xapps
-, xmlto
-, xorg
-, libexecinfo
-, pango
-}:
+{ fetchFromGitHub, cinnamon-desktop, cinnamon-settings-daemon
+, cinnamon-translations, dbus-glib, docbook_xsl, docbook_xml_dtd_412, glib
+, gsettings-desktop-schemas, gtk3, libcanberra, libxslt, makeWrapper, meson
+, ninja, pkg-config, python3, lib, stdenv, systemd, wrapGAppsHook, xapps, xmlto
+, xorg, libexecinfo, pango }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
@@ -37,9 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-E5ascwLnpa5NSBAPo9dXRhoraUntzDPHVV32uDU4U8k=";
   };
 
-  patches = [
-    ./0001-Use-dbus_glib-instead-of-elogind.patch
-  ];
+  patches = [ ./0001-Use-dbus_glib-instead-of-elogind.patch ];
 
   buildInputs = [
     # meson.build

@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests
-, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
-, mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
-}:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests, boost, libyamlcpp
+, libsodium, sqlite, protobuf, openssl, systemd, mysql57, postgresql, lua
+, openldap, geoip, curl, unixODBC }:
 
 stdenv.mkDerivation rec {
   pname = "powerdns";
@@ -22,8 +21,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl unixODBC openssl systemd
+    boost
+    mysql57.connector-c
+    postgresql
+    lua
+    openldap
+    sqlite
+    protobuf
+    geoip
+    libyamlcpp
+    libsodium
+    curl
+    unixODBC
+    openssl
+    systemd
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -45,9 +56,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  passthru.tests = {
-    nixos = nixosTests.powerdns;
-  };
+  passthru.tests = { nixos = nixosTests.powerdns; };
 
   meta = with lib; {
     description = "Authoritative DNS server";

@@ -1,27 +1,6 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, callPackage
-, autoconf
-, automake
-, binutils
-, cmake
-, file
-, gdb
-, git
-, libtool
-, nasm
-, ocaml
-, ocamlPackages
-, openssl
-, perl
-, python3
-, texinfo
-, validatePkgConfig
-, writeShellScript
-, writeText
-}:
+{ lib, stdenv, fetchzip, fetchFromGitHub, callPackage, autoconf, automake
+, binutils, cmake, file, gdb, git, libtool, nasm, ocaml, ocamlPackages, openssl
+, perl, python3, texinfo, validatePkgConfig, writeShellScript, writeText }:
 with lib;
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
@@ -37,28 +16,28 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  postUnpack =
-    let
-      optlibName = "optimized_libs_${versionTag}.tar.gz";
-      optimizedLibs = fetchzip {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/${optlibName}";
-        hash = "sha256-FjNhNV9+KDMvBYdWXZbua6qYOc3Z1/jtcF4j52TSxQY=";
-        stripRoot = false;
-      };
-      sgxIPPCryptoHeader = "${optimizedLibs}/external/ippcp_internal/inc/sgx_ippcp.h";
-    in
-    ''
-      # Make sure this is the right version of linux-sgx
-      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+  postUnpack = let
+    optlibName = "optimized_libs_${versionTag}.tar.gz";
+    optimizedLibs = fetchzip {
+      url =
+        "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/${optlibName}";
+      hash = "sha256-FjNhNV9+KDMvBYdWXZbua6qYOc3Z1/jtcF4j52TSxQY=";
+      stripRoot = false;
+    };
+    sgxIPPCryptoHeader =
+      "${optimizedLibs}/external/ippcp_internal/inc/sgx_ippcp.h";
+  in ''
+    # Make sure this is the right version of linux-sgx
+    grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
+      || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
 
-      # Make sure we use the correct version to build IPP Crypto
-      grep -q 'optlib_name=${optlibName}' "$src/download_prebuilt.sh" \
-        || (echo "Could not find expected optimized libs ${optlibName} in linux-sgx source" >&2 && exit 1)
+    # Make sure we use the correct version to build IPP Crypto
+    grep -q 'optlib_name=${optlibName}' "$src/download_prebuilt.sh" \
+      || (echo "Could not find expected optimized libs ${optlibName} in linux-sgx source" >&2 && exit 1)
 
-      # Add missing sgx_ippcp.h: https://github.com/intel/linux-sgx/pull/752
-      ln -s ${sgxIPPCryptoHeader} "$sourceRoot/external/ippcp_internal/inc/sgx_ippcp.h"
-    '';
+    # Add missing sgx_ippcp.h: https://github.com/intel/linux-sgx/pull/752
+    ln -s ${sgxIPPCryptoHeader} "$sourceRoot/external/ippcp_internal/inc/sgx_ippcp.h"
+  '';
 
   postPatch = ''
     # https://github.com/intel/linux-sgx/pull/730
@@ -90,57 +69,52 @@ stdenv.mkDerivation rec {
     validatePkgConfig
   ];
 
-  buildInputs = [
-    libtool
-    openssl
-  ];
+  buildInputs = [ libtool openssl ];
 
   BINUTILS_DIR = "${binutils}/bin";
 
   # Build external/ippcp_internal first. The Makefile is rewritten to make the
   # build faster by splitting different versions of ipp-crypto builds and to
   # avoid patching the Makefile for reproducibility issues.
-  preBuild =
-    let
-      ipp-crypto-no_mitigation = callPackage ./ipp-crypto.nix { };
+  preBuild = let
+    ipp-crypto-no_mitigation = callPackage ./ipp-crypto.nix { };
 
-      sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
+    sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
 
-      nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
-      ipp-crypto-cve_2020_0551_load = callPackage ./ipp-crypto.nix {
-        extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
-      };
+    nasm-load = writeShellScript "nasm-load"
+      "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
+    ipp-crypto-cve_2020_0551_load = callPackage ./ipp-crypto.nix {
+      extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
+    };
 
-      nasm-cf = writeShellScript "nasm-cf" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
-      ipp-crypto-cve_2020_0551_cf = callPackage ./ipp-crypto.nix {
-        extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
-      };
-    in
-    ''
-      header "Setting up IPP crypto build artifacts"
+    nasm-cf = writeShellScript "nasm-cf"
+      "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
+    ipp-crypto-cve_2020_0551_cf = callPackage ./ipp-crypto.nix {
+      extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
+    };
+  in ''
+    header "Setting up IPP crypto build artifacts"
 
-      pushd 'external/ippcp_internal'
+    pushd 'external/ippcp_internal'
 
-      install ${ipp-crypto-no_mitigation}/include/* inc/
+    install ${ipp-crypto-no_mitigation}/include/* inc/
 
-      install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
-        lib/linux/intel64/no_mitigation/libippcp.a
-      install -D -m a+rw ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a \
-        lib/linux/intel64/cve_2020_0551_load/libippcp.a
-      install -D -m a+rw ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a \
-        lib/linux/intel64/cve_2020_0551_cf/libippcp.a
+    install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
+      lib/linux/intel64/no_mitigation/libippcp.a
+    install -D -m a+rw ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a \
+      lib/linux/intel64/cve_2020_0551_load/libippcp.a
+    install -D -m a+rw ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a \
+      lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
-      rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp20u3.patch -o inc/ippcp.h
+    rm inc/ippcp.h
+    patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp20u3.patch -o inc/ippcp.h
 
-      install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
+    install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
-      popd
-    '';
+    popd
+  '';
 
-  buildFlags = [
-    "sdk_install_pkg"
-  ];
+  buildFlags = [ "sdk_install_pkg" ];
 
   enableParallelBuilding = true;
 
@@ -209,7 +183,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
 
   preFixup = ''
     header "Strip sgxsdk prefix"

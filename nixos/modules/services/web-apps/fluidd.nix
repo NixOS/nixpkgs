@@ -3,10 +3,10 @@ with lib;
 let
   cfg = config.services.fluidd;
   moonraker = config.services.moonraker;
-in
-{
+in {
   options.services.fluidd = {
-    enable = mkEnableOption "Fluidd, a Klipper web interface for managing your 3d printer";
+    enable = mkEnableOption
+      "Fluidd, a Klipper web interface for managing your 3d printer";
 
     package = mkOption {
       type = types.package;
@@ -37,7 +37,9 @@ in
   config = mkIf cfg.enable {
     services.nginx = {
       enable = true;
-      upstreams.fluidd-apiserver.servers."${moonraker.address}:${toString moonraker.port}" = { };
+      upstreams.fluidd-apiserver.servers."${moonraker.address}:${
+        toString moonraker.port
+      }" = { };
       virtualHosts."${cfg.hostName}" = mkMerge [
         cfg.nginx
         {

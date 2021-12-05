@@ -1,75 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, SDL2
-, alsa-lib
-, bullet
-, check
-, curl
-, dbus
-, doxygen
-, expat
-, fontconfig
-, freetype
-, fribidi
-, ghostscript
-, giflib
-, glib
-, gst_all_1
-, gtk3
-, harfbuzz
-, hicolor-icon-theme
-, ibus
-, jbig2dec
-, libGL
-, libdrm
-, libinput
-, libjpeg
-, libpng
-, libpulseaudio
-, libraw
-, librsvg
-, libsndfile
-, libspectre
-, libtiff
-, libwebp
-, libxkbcommon
-, luajit
-, lz4
-, mesa
-, mint-x-icons
-, openjpeg
-, openssl
-, poppler
-, python3Packages
-, systemd
-, udev
-, util-linux
-, wayland
-, wayland-protocols
-, writeText
-, xorg
-, zlib
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, SDL2, alsa-lib, bullet, check
+, curl, dbus, doxygen, expat, fontconfig, freetype, fribidi, ghostscript, giflib
+, glib, gst_all_1, gtk3, harfbuzz, hicolor-icon-theme, ibus, jbig2dec, libGL
+, libdrm, libinput, libjpeg, libpng, libpulseaudio, libraw, librsvg, libsndfile
+, libspectre, libtiff, libwebp, libxkbcommon, luajit, lz4, mesa, mint-x-icons
+, openjpeg, openssl, poppler, python3Packages, systemd, udev, util-linux
+, wayland, wayland-protocols, writeText, xorg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
   version = "1.25.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
     sha256 = "0svybbrvpf6q955y6fclxh3md64z0dgmh0x54x2j60503hhs071m";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gtk3
-    pkg-config
-    check
-  ];
+  nativeBuildInputs = [ meson ninja gtk3 pkg-config check ];
 
   buildInputs = [
     fontconfig
@@ -157,9 +104,7 @@ stdenv.mkDerivation rec {
     "-D drm=true"
   ];
 
-  patches = [
-    ./efl-elua.patch
-  ];
+  patches = [ ./efl-elua.patch ];
 
   postPatch = ''
     patchShebangs src/lib/elementary/config_embed

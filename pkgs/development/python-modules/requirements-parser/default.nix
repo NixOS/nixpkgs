@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 buildPythonPackage rec {
   pname = "requirements-parser";
   version = "0.2.0";
@@ -12,17 +8,13 @@ buildPythonPackage rec {
     sha256 = "5963ee895c2d05ae9f58d3fc641082fb38021618979d6a152b6b1398bd7d4ed4";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  pythonImportsCheck = [
-    "requirements"
-  ];
+  pythonImportsCheck = [ "requirements" ];
 
   meta = with lib; {
     description = "A Pip requirements file parser";

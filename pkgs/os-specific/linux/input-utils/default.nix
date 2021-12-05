@@ -15,16 +15,13 @@ stdenv.mkDerivation rec {
     substituteInPlace ./lirc.sh --replace "/usr/include/linux/" "${linuxHeaders}/include/linux/"
   '';
 
-  makeFlags = [
-    "prefix=$(out)"
-    "STRIP="
-  ];
+  makeFlags = [ "prefix=$(out)" "STRIP=" ];
 
   meta = with lib; {
     description = "Input layer utilities, includes lsinput";
-    homepage    = "https://www.kraxel.org/blog/linux/input/";
-    license     = licenses.gpl2;
+    homepage = "https://www.kraxel.org/blog/linux/input/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ samueldr ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

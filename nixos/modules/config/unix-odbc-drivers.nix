@@ -18,7 +18,7 @@ in {
   options = {
     environment.unixODBCDrivers = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
@@ -31,8 +31,10 @@ in {
 
   ###### implementation
 
-  config = mkIf (config.environment.unixODBCDrivers != []) {
-    environment.etc."odbcinst.ini".text = concatMapStringsSep "\n" iniDescription config.environment.unixODBCDrivers;
+  config = mkIf (config.environment.unixODBCDrivers != [ ]) {
+    environment.etc."odbcinst.ini".text =
+      concatMapStringsSep "\n" iniDescription
+      config.environment.unixODBCDrivers;
   };
 
 }

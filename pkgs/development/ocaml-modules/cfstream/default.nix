@@ -10,8 +10,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     sha256 = "0qnxfp6y294gjsccx7ksvwn9x5q20hi8sg24rjypzsdkmlphgdnd";
   };
 
@@ -25,7 +25,8 @@ buildDunePackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Simple Core-inspired wrapper for standard library Stream module";
+    description =
+      "Simple Core-inspired wrapper for standard library Stream module";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl21;
   };

@@ -1,11 +1,9 @@
 { lib, callPackage, Foundation }:
 
 let
-  mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
-    inherit Foundation;
-  };
-in
-{
+  mkGraal = opts:
+    callPackage (import ./mkGraal.nix opts) { inherit Foundation; };
+in {
   inherit mkGraal;
 
   graalvm11-ce = mkGraal rec {

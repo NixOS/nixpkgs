@@ -14,7 +14,13 @@ perlPackages.buildPerlPackage rec {
   # perl packages by default get devdoc which isn't present
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP IOSocketInet6 ];
+  buildInputs = with perlPackages; [
+    IOSocketSSL
+    DigestSHA1
+    DataValidateIP
+    JSONPP
+    IOSocketInet6
+  ];
 
   # Use iproute2 instead of ifconfig
   preConfigure = ''

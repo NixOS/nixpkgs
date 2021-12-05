@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
+  buildInputs =
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
 
   installTargets = [ "install_hdrs" "install_shared_lib" ];
 
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/cctz";
-    description = "C++ library for translating between absolute and civil times";
+    description =
+      "C++ library for translating between absolute and civil times";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;

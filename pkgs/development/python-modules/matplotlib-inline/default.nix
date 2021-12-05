@@ -1,10 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi
-, matplotlib
-, traitlets
+{ lib, buildPythonPackage, fetchPypi, matplotlib, traitlets
 
 # tests
-, ipython
-}:
+, ipython }:
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";

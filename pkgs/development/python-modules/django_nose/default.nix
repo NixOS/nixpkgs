@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, django
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, django }:
 
 buildPythonPackage rec {
   pname = "django-nose";

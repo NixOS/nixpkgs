@@ -2,14 +2,10 @@
 
 with lib;
 
-let
-  cfg = config.services.sundtek;
+let cfg = config.services.sundtek;
 
-in
-{
-  options.services.sundtek = {
-    enable = mkEnableOption "Sundtek driver";
-  };
+in {
+  options.services.sundtek = { enable = mkEnableOption "Sundtek driver"; };
 
   config = mkIf cfg.enable {
 
@@ -24,7 +20,7 @@ in
         ExecStart = ''
           ${pkgs.sundtek}/bin/mediasrv -d -v -p ${pkgs.sundtek}/bin ;\
           ${pkgs.sundtek}/bin/mediaclient --start --wait-for-devices
-          '';
+        '';
         ExecStop = "${pkgs.sundtek}/bin/mediaclient --shutdown";
         RemainAfterExit = true;
       };

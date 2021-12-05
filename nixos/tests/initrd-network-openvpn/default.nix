@@ -1,10 +1,9 @@
-import ../make-test-python.nix ({ lib, ...}:
+import ../make-test-python.nix ({ lib, ... }:
 
-{
-  name = "initrd-network-openvpn";
+  {
+    name = "initrd-network-openvpn";
 
-  nodes =
-    let
+    nodes = let
 
       # Inlining of the shared secret for the
       # OpenVPN server and client
@@ -13,100 +12,87 @@ import ../make-test-python.nix ({ lib, ...}:
         <secret>
         ${lib.readFile ./shared.key}
         </secret>
-        '';
+      '';
 
-    in
-    {
+    in {
 
       # Minimal test case to check a successful boot, even with invalid config
-      minimalboot =
-        { ... }:
-        {
-          boot.initrd.network = {
+      minimalboot = { ... }: {
+        boot.initrd.network = {
+          enable = true;
+          openvpn = {
             enable = true;
-            openvpn = {
-              enable = true;
-              configuration = "/dev/null";
-            };
+            configuration = "/dev/null";
           };
         };
+      };
 
       # initrd VPN client
-      ovpnclient =
-        { ... }:
-        {
-          virtualisation.useBootLoader = true;
-          virtualisation.vlans = [ 1 ];
+      ovpnclient = { ... }: {
+        virtualisation.useBootLoader = true;
+        virtualisation.vlans = [ 1 ];
 
-          boot.initrd = {
-            # This command does not fork to keep the VM in the state where
-            # only the initramfs is loaded
-            preLVMCommands =
-            ''
-              /bin/nc -p 1234 -lke /bin/echo TESTVALUE
+        boot.initrd = {
+          # This command does not fork to keep the VM in the state where
+          # only the initramfs is loaded
+          preLVMCommands = ''
+            /bin/nc -p 1234 -lke /bin/echo TESTVALUE
+          '';
+
+          network = {
+            enable = true;
+
+            # Work around udhcpc only getting a lease on eth0
+            postCommands = ''
+              /bin/ip addr add 192.168.1.2/24 dev eth1
             '';
 
-            network = {
+            # Example configuration for OpenVPN
+            # This is the main reason for this test
+            openvpn = {
               enable = true;
-
-              # Work around udhcpc only getting a lease on eth0
-              postCommands = ''
-                /bin/ip addr add 192.168.1.2/24 dev eth1
-              '';
-
-              # Example configuration for OpenVPN
-              # This is the main reason for this test
-              openvpn = {
-                enable = true;
-                configuration = "${./initrd.ovpn}";
-              };
+              configuration = "${./initrd.ovpn}";
             };
           };
         };
+      };
 
       # VPN server and gateway for ovpnclient between vlan 1 and 2
-      ovpnserver =
-        { ... }:
-        {
-          virtualisation.vlans = [ 1 2 ];
+      ovpnserver = { ... }: {
+        virtualisation.vlans = [ 1 2 ];
 
-          # Enable NAT and forward port 12345 to port 1234
-          networking.nat = {
-            enable = true;
-            internalInterfaces = [ "tun0" ];
-            externalInterface = "eth2";
-            forwardPorts = [ { destination = "10.8.0.2:1234";
-                               sourcePort = 12345; } ];
-          };
-
-          # Trust tun0 and allow the VPN Server to be reached
-          networking.firewall = {
-            trustedInterfaces = [ "tun0" ];
-            allowedUDPPorts = [ 1194 ];
-          };
-
-          # Minimal OpenVPN server configuration
-          services.openvpn.servers.testserver =
-          {
-            config = ''
-              dev tun0
-              ifconfig 10.8.0.1 10.8.0.2
-              ${secretblock}
-            '';
-          };
+        # Enable NAT and forward port 12345 to port 1234
+        networking.nat = {
+          enable = true;
+          internalInterfaces = [ "tun0" ];
+          externalInterface = "eth2";
+          forwardPorts = [{
+            destination = "10.8.0.2:1234";
+            sourcePort = 12345;
+          }];
         };
+
+        # Trust tun0 and allow the VPN Server to be reached
+        networking.firewall = {
+          trustedInterfaces = [ "tun0" ];
+          allowedUDPPorts = [ 1194 ];
+        };
+
+        # Minimal OpenVPN server configuration
+        services.openvpn.servers.testserver = {
+          config = ''
+            dev tun0
+            ifconfig 10.8.0.1 10.8.0.2
+            ${secretblock}
+          '';
+        };
+      };
 
       # Client that resides in the "external" VLAN
-      testclient =
-        { ... }:
-        {
-          virtualisation.vlans = [ 2 ];
-        };
-  };
+      testclient = { ... }: { virtualisation.vlans = [ 2 ]; };
+    };
 
-
-  testScript =
-    ''
+    testScript = ''
       # Minimal test case, checks whether enabling (with invalid config) harms
       # the boot process
       with subtest("Check for successful boot with broken openvpn config"):
@@ -142,4 +128,4 @@ import ../make-test-python.nix ({ lib, ...}:
           # Check that ovpnclient is reachable from testclient over the gateway
           testclient.succeed("nc -w 2 192.168.2.3 12345 | grep -q TESTVALUE")
     '';
-})
+  })

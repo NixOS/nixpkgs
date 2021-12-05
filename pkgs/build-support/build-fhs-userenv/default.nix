@@ -1,27 +1,30 @@
 { callPackage, runCommandLocal, writeScript, stdenv, coreutils }:
 
-let buildFHSEnv = callPackage ./env.nix { }; in
+let buildFHSEnv = callPackage ./env.nix { };
 
-args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
+in args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? { }
+, passthru ? { }, ... }:
 
 let
-  env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
+  env = buildFHSEnv
+    (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  chrootenv = callPackage ./chrootenv {};
+  chrootenv = callPackage ./chrootenv { };
 
-  init = run: writeScript "${name}-init" ''
-    #! ${stdenv.shell}
-    for i in ${env}/* /host/*; do
-      path="/''${i##*/}"
-      [ -e "$path" ] || ${coreutils}/bin/ln -s "$i" "$path"
-    done
+  init = run:
+    writeScript "${name}-init" ''
+      #! ${stdenv.shell}
+      for i in ${env}/* /host/*; do
+        path="/''${i##*/}"
+        [ -e "$path" ] || ${coreutils}/bin/ln -s "$i" "$path"
+      done
 
-    [ -d "$1" ] && [ -r "$1" ] && cd "$1"
-    shift
+      [ -d "$1" ] && [ -r "$1" ] && cd "$1"
+      shift
 
-    source /etc/profile
-    exec ${run} "$@"
-  '';
+      source /etc/profile
+      exec ${run} "$@"
+    '';
 
 in runCommandLocal name {
   inherit meta;

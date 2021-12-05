@@ -1,19 +1,14 @@
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
-, curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
-, harfbuzzFull, glib, fontconfig, pcre
-, libX11, libXext, libXcursor, libXxf86vm, libGL
-, unfree ? false
-, cmark
-}:
+{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja
+, pkg-config, curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml
+, zlib, harfbuzzFull, glib, fontconfig, pcre, libX11, libXext, libXcursor
+, libXxf86vm, libGL, unfree ? false, cmark }:
 
 # Unfree version is not redistributable:
 # https://dev.aseprite.org/2016/09/01/new-source-code-license/
 # Consider supporting the developer: https://aseprite.org/#buy
 
-let
-  skia = callPackage ./skia.nix {};
-in
-stdenv.mkDerivation rec {
+let skia = callPackage ./skia.nix { };
+in stdenv.mkDerivation rec {
   pname = "aseprite";
   version = if unfree then "1.2.16.3" else "1.1.7";
 
@@ -22,33 +17,49 @@ stdenv.mkDerivation rec {
     repo = "aseprite";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = if unfree
-      then "16yn7y9xdc5jd50cq7bmsm320gv23pp71lr8hg2nmynzc8ibyda8"
-      else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
+    sha256 = if unfree then
+      "16yn7y9xdc5jd50cq7bmsm320gv23pp71lr8hg2nmynzc8ibyda8"
+    else
+      "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
-  nativeBuildInputs = [
-    cmake pkg-config
-  ] ++ lib.optionals unfree [ ninja ];
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals unfree [ ninja ];
 
   buildInputs = [
-    curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
-    libX11 libXext libXcursor libXxf86vm
+    curl
+    freetype
+    giflib
+    libjpeg
+    libpng
+    libwebp
+    pixman
+    tinyxml
+    zlib
+    libX11
+    libXext
+    libXcursor
+    libXxf86vm
   ] ++ lib.optionals unfree [
     cmark
-    harfbuzzFull glib fontconfig pcre
-    skia libGL
+    harfbuzzFull
+    glib
+    fontconfig
+    pcre
+    skia
+    libGL
   ];
 
-  patches = if !unfree then [
-    ./allegro-glibc-2.30.patch
-  ] else [
+  patches = if !unfree then
+    [ ./allegro-glibc-2.30.patch ]
+  else [
     (fetchpatch {
-      url = "https://github.com/lfont/aseprite/commit/f1ebc47012d3fed52306ed5922787b4b98cc0a7b.patch";
+      url =
+        "https://github.com/lfont/aseprite/commit/f1ebc47012d3fed52306ed5922787b4b98cc0a7b.patch";
       sha256 = "03xg7x6b9iv7z18vzlqxhcfphmx4v3qhs9f5rgf38ppyklca5jyw";
     })
     (fetchpatch {
-      url = "https://github.com/orivej/aseprite/commit/ea87e65b357ad0bd65467af5529183b5a48a8c17.patch";
+      url =
+        "https://github.com/orivej/aseprite/commit/ea87e65b357ad0bd65467af5529183b5a48a8c17.patch";
       sha256 = "1vwn8ivap1pzdh444sdvvkndp55iz146nhmd80xbm8cyzn3qmg91";
     })
   ];
@@ -102,21 +113,20 @@ stdenv.mkDerivation rec {
     homepage = "https://www.aseprite.org/";
     description = "Animated sprite editor & pixel art tool";
     license = if unfree then licenses.unfree else licenses.gpl2;
-    longDescription =
-      ''Aseprite is a program to create animated sprites. Its main features are:
+    longDescription = ''
+      Aseprite is a program to create animated sprites. Its main features are:
 
-          - Sprites are composed by layers & frames (as separated concepts).
-          - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
-          - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
-          - Export/import animations to/from Sprite Sheets.
-          - Tiled drawing mode, useful to draw patterns and textures.
-          - Undo/Redo for every operation.
-          - Real-time animation preview.
-          - Multiple editors support.
-          - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
-          - Onion skinning.
-      '' + lib.optionalString unfree
-      ''
+                - Sprites are composed by layers & frames (as separated concepts).
+                - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
+                - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
+                - Export/import animations to/from Sprite Sheets.
+                - Tiled drawing mode, useful to draw patterns and textures.
+                - Undo/Redo for every operation.
+                - Real-time animation preview.
+                - Multiple editors support.
+                - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
+                - Onion skinning.
+            '' + lib.optionalString unfree ''
         This version is not redistributable: https://dev.aseprite.org/2016/09/01/new-source-code-license/
         Consider supporting the developer: https://aseprite.org/#buy
       '';

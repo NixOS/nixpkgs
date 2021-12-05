@@ -1,8 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyeverlights";
@@ -22,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyeverlights" ];
 
   meta = with lib; {
-    description = "Python module for interfacing with an EverLights control box";
+    description =
+      "Python module for interfacing with an EverLights control box";
     homepage = "https://github.com/joncar/pyeverlights";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

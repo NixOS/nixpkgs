@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytest-cov, pytest-xprocess, pytestcache }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytest-cov
+, pytest-xprocess, pytestcache }:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";

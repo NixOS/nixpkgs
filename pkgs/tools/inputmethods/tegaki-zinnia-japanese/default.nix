@@ -5,7 +5,8 @@ stdenv.mkDerivation {
   version = "0.3";
 
   src = fetchurl {
-    url = "http://www.tegaki.org/releases/0.3/models/tegaki-zinnia-japanese-0.3.zip";
+    url =
+      "http://www.tegaki.org/releases/0.3/models/tegaki-zinnia-japanese-0.3.zip";
     sha256 = "1nmg9acxhcqly9gwkyb9m0hpy76fll91ywk4b1q4xms0ajxip1h7";
   };
 

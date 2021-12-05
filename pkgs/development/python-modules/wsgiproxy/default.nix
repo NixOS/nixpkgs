@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paste
-, six
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, paste, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "WSGIProxy";
@@ -19,7 +13,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ paste six ];
 
   meta = with lib; {
-    description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
+    description =
+      "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
     homepage = "http://pythonpaste.org/wsgiproxy/";
     license = licenses.mit;
   };

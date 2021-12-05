@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, six, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, six, flask, pygments
+, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
 
 buildPythonPackage rec {
   pname = "klaus";
@@ -16,13 +17,10 @@ buildPythonPackage rec {
       --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
 
-  propagatedBuildInputs = [
-    six flask pygments dulwich httpauth humanize
-  ];
+  propagatedBuildInputs = [ six flask pygments dulwich httpauth humanize ];
 
-  checkInputs = [
-    pytest requests python-ctags3
-  ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ pytest requests python-ctags3 ]
+    ++ lib.optional (!isPy3k) mock;
 
   checkPhase = ''
     ./runtests.sh
@@ -33,8 +31,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The first Git web viewer that Just Works";
-    homepage    = "https://github.com/jonashaag/klaus";
-    license     = licenses.isc;
+    homepage = "https://github.com/jonashaag/klaus";
+    license = licenses.isc;
     maintainers = with maintainers; [ pSub ];
   };
 }

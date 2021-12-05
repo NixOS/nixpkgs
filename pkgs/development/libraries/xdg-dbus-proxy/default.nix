@@ -1,40 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_43
-, dbus
-, glib
-}:
+{ lib, stdenv, fetchurl, pkg-config, libxslt, docbook_xsl, docbook_xml_dtd_43
+, dbus, glib }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-dbus-proxy";
   version = "0.1.2";
 
   src = fetchurl {
-    url = "https://github.com/flatpak/xdg-dbus-proxy/releases/download/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/flatpak/xdg-dbus-proxy/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "03sj1h0c2l08xa8phw013fnxr4fgav7l2mkjhzf9xk3dykwxcj8p";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    libxslt
-    docbook_xsl
-    docbook_xml_dtd_43
-  ];
+  nativeBuildInputs = [ pkg-config libxslt docbook_xsl docbook_xml_dtd_43 ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  checkInputs = [
-    dbus
-  ];
+  checkInputs = [ dbus ];
 
-  configureFlags = [
-    "--enable-man"
-  ];
+  configureFlags = [ "--enable-man" ];
 
   # dbus[2345]: Failed to start message bus: Failed to open "/etc/dbus-1/session.conf": No such file or directory
   doCheck = false;

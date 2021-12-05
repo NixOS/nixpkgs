@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-}:
+{ buildOctavePackage, lib, fetchurl }:
 
 buildOctavePackage rec {
   pname = "mvn";
@@ -16,6 +13,7 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/mvn/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Multivariate normal distribution clustering and utility functions";
+    description =
+      "Multivariate normal distribution clustering and utility functions";
   };
 }

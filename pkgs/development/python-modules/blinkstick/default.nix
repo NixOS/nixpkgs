@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyusb
-}:
+{ lib, buildPythonPackage, fetchPypi, pyusb }:
 
 buildPythonPackage rec {
   pname = "BlinkStick";

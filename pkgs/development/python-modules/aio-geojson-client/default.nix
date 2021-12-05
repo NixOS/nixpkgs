@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, haversine
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, aiohttp, aresponses, asynctest, buildPythonPackage, fetchFromGitHub
+, geojson, haversine, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
@@ -21,18 +12,9 @@ buildPythonPackage rec {
     sha256 = "0sbzrzmny7x4bkbg6z0cjn4d10r50nxdyaq7g6lagwd8ijpkg8l3";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    geojson
-    haversine
-  ];
+  propagatedBuildInputs = [ aiohttp geojson haversine ];
 
-  checkInputs = [
-    aresponses
-    asynctest
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses asynctest pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "aio_geojson_client" ];
 

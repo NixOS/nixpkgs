@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg libjpeg libpng ];
 
-  makeFlags = [ "DESTDIR=$(out)" "libdir=\"/lib\"" ];
+  makeFlags = [ "DESTDIR=$(out)" ''libdir="/lib"'' ];
 
   postInstall = ''
     mkdir -p $out/bin

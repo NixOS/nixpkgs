@@ -1,13 +1,5 @@
-{ elk6Version
-, enableUnfree ? true
-, lib, stdenv
-, fetchurl
-, makeWrapper
-, jre_headless
-, util-linux, gnugrep, coreutils
-, autoPatchelfHook
-, zlib
-}:
+{ elk6Version, enableUnfree ? true, lib, stdenv, fetchurl, makeWrapper
+, jre_headless, util-linux, gnugrep, coreutils, autoPatchelfHook, zlib }:
 
 with lib;
 
@@ -16,11 +8,12 @@ stdenv.mkDerivation (rec {
   pname = "elasticsearch${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}.tar.gz";
-    sha256 =
-      if enableUnfree
-      then "09dy3iyzk460vra6na6vk7d3mzpbv4cl0pl7kjmybxy947j7hh42"
-      else "0s04xz3j4psyhawvy503sp2nl5s0gswmpd9wfvwnavgcrr23wk39";
+    url =
+      "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}.tar.gz";
+    sha256 = if enableUnfree then
+      "09dy3iyzk460vra6na6vk7d3mzpbv4cl0pl7kjmybxy947j7hh42"
+    else
+      "0s04xz3j4psyhawvy503sp2nl5s0gswmpd9wfvwnavgcrr23wk39";
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -36,8 +29,7 @@ stdenv.mkDerivation (rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ]
-             ++ optional enableUnfree zlib;
+  buildInputs = [ jre_headless util-linux ] ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out

@@ -1,6 +1,5 @@
 { buildPythonPackage, lib, glibcLocales, mock, nose, isPy3k, jinja2, six
-, fetchPypi
-}:
+, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "mr-bob";

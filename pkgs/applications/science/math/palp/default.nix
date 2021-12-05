@@ -1,25 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, dimensions ? 6 # works for <= dimensions dimensions, but is only optimized for that exact value
-, doSymlink ? true # symlink the executables to the default location (without dimension postfix)
+{ lib, stdenv, fetchurl, dimensions ?
+  6 # works for <= dimensions dimensions, but is only optimized for that exact value
+, doSymlink ?
+  true # symlink the executables to the default location (without dimension postfix)
 }:
 
-let
-  dim = toString dimensions;
-in
-stdenv.mkDerivation rec {
+let dim = toString dimensions;
+in stdenv.mkDerivation rec {
   pname = "palp";
   version = "2.20";
 
   src = fetchurl {
-    url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/${pname}-${version}.tar.gz";
+    url =
+      "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/${pname}-${version}.tar.gz";
     sha256 = "1q1cl3vpdir16szy0jcadysydcrjp48hqxyx42kr8g9digkqjgkj";
   };
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc

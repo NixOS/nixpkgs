@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchgit
-, wrapLisp
-, sbcl
-, openssl
-}:
+{ lib, stdenv, fetchgit, wrapLisp, sbcl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "clpm";
@@ -17,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UhaLmbdsIPj6O+s262HUMxuz/5t43JR+TlOjq8Y2CDs=";
   };
 
-  buildInputs = [
-    (wrapLisp sbcl)
-  ];
+  buildInputs = [ (wrapLisp sbcl) ];
 
-  propagatedBuildInputs = [
-    openssl
-  ];
+  propagatedBuildInputs = [ openssl ];
 
   postPatch = ''
     # patch cl-plus-ssl to ensure that it finds libssl and libcrypto

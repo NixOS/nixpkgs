@@ -1,23 +1,9 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, cerberus
-, configparser
-, deepdiff
-, geoip2
-, jinja2
-, openpyxl
-, tabulate
-, yangson
-, pytestCheckHook
-, pyyaml
+{ lib, buildPythonPackage, callPackage, fetchFromGitHub, cerberus, configparser
+, deepdiff, geoip2, jinja2, openpyxl, tabulate, yangson, pytestCheckHook, pyyaml
 }:
 
-let
-  ttp_templates = callPackage ./templates.nix { };
-in
-buildPythonPackage rec {
+let ttp_templates = callPackage ./templates.nix { };
+in buildPythonPackage rec {
   pname = "ttp";
   version = "0.7.2";
   format = "setuptools";
@@ -44,15 +30,9 @@ buildPythonPackage rec {
     yangson
   ];
 
-  pythonImportsCheck = [
-    "ttp"
-  ];
+  pythonImportsCheck = [ "ttp" ];
 
-  checkInputs = [
-    pytestCheckHook
-    pyyaml
-    ttp_templates
-  ];
+  checkInputs = [ pytestCheckHook pyyaml ttp_templates ];
 
   disabledTestPaths = [
     # missing package n2g
@@ -83,9 +63,7 @@ buildPythonPackage rec {
     "test_n2g_formatter"
   ];
 
-  pytestFlagsArray = [
-    "test/pytest"
-  ];
+  pytestFlagsArray = [ "test/pytest" ];
 
   meta = with lib; {
     description = "Template Text Parser";

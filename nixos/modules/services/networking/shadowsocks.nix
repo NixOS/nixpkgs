@@ -15,15 +15,12 @@ let
   } // optionalAttrs (cfg.plugin != null) {
     plugin = cfg.plugin;
     plugin_opts = cfg.pluginOpts;
-  } // optionalAttrs (cfg.password != null) {
-    password = cfg.password;
-  } // cfg.extraConfig;
+  } // optionalAttrs (cfg.password != null) { password = cfg.password; }
+    // cfg.extraConfig;
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -98,7 +95,8 @@ in
       plugin = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = literalExpression ''"''${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin"'';
+        example = literalExpression
+          ''"''${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin"'';
         description = ''
           SIP003 plugin for shadowsocks
         '';
@@ -115,10 +113,8 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
-        example = {
-          nameserver = "8.8.8.8";
-        };
+        default = { };
+        example = { nameserver = "8.8.8.8"; };
         description = ''
           Additional configuration for shadowsocks that is not covered by the
           provided options. The provided attrset will be serialized to JSON and
@@ -132,26 +128,33 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = singleton
-      { assertion = cfg.password == null || cfg.passwordFile == null;
-        message = "Cannot use both password and passwordFile for shadowsocks-libev";
-      };
+    assertions = singleton {
+      assertion = cfg.password == null || cfg.passwordFile == null;
+      message =
+        "Cannot use both password and passwordFile for shadowsocks-libev";
+    };
 
     systemd.services.shadowsocks-libev = {
       description = "shadowsocks-libev Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.shadowsocks-libev ] ++ optional (cfg.plugin != null) cfg.plugin ++ optional (cfg.passwordFile != null) pkgs.jq;
+      path = [ pkgs.shadowsocks-libev ]
+        ++ optional (cfg.plugin != null) cfg.plugin
+        ++ optional (cfg.passwordFile != null) pkgs.jq;
       serviceConfig.PrivateTmp = true;
       script = ''
         ${optionalString (cfg.passwordFile != null) ''
           cat ${configFile} | jq --arg password "$(cat "${cfg.passwordFile}")" '. + { password: $password }' > /tmp/shadowsocks.json
         ''}
-        exec ss-server -c ${if cfg.passwordFile != null then "/tmp/shadowsocks.json" else configFile}
+        exec ss-server -c ${
+          if cfg.passwordFile != null then
+            "/tmp/shadowsocks.json"
+          else
+            configFile
+        }
       '';
     };
   };

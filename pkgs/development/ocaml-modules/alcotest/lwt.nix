@@ -1,6 +1,4 @@
-{ lib, buildDunePackage, alcotest, logs, ocaml_lwt, fmt
-, re, cmdliner
-}:
+{ lib, buildDunePackage, alcotest, logs, ocaml_lwt, fmt, re, cmdliner }:
 
 buildDunePackage {
   pname = "alcotest-lwt";
@@ -12,8 +10,6 @@ buildDunePackage {
   doCheck = true;
   checkInputs = [ re cmdliner ];
 
-  meta = alcotest.meta // {
-    description = "Lwt-based helpers for Alcotest";
-  };
+  meta = alcotest.meta // { description = "Lwt-based helpers for Alcotest"; };
 
 }

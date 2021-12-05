@@ -9,18 +9,18 @@ buildGoPackage rec {
 
   src = fetchgit {
     inherit rev;
-    url    = "https://github.com/DataDog/gohai";
+    url = "https://github.com/DataDog/gohai";
     sha256 = "15hdw195f6ayrmj1nbyfpfswdai1r1z3qjw927mbma7rwql24dkr";
   };
 
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description      = "System information collector";
-    homepage         = "https://github.com/DataDog/gohai";
-    license          = licenses.mit;
-    maintainers      = [ maintainers.tazjin ];
-    platforms        = platforms.unix;
+    description = "System information collector";
+    homepage = "https://github.com/DataDog/gohai";
+    license = licenses.mit;
+    maintainers = [ maintainers.tazjin ];
+    platforms = platforms.unix;
     repositories.git = "git://github.com/DataDog/gohai.git";
 
     longDescription = ''

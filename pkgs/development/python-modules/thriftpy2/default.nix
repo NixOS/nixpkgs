@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pythonOlder
-, ply
-, six
-, tornado
-}:
+{ lib, buildPythonPackage, cython, fetchFromGitHub, pythonOlder, ply, six
+, tornado }:
 
 buildPythonPackage rec {
   pname = "thriftpy2";
@@ -21,15 +14,9 @@ buildPythonPackage rec {
     sha256 = "17f57vsbym4c9yax128bhrwg2zjxcsgl3ja6422y8hyb38v5mdc3";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    ply
-    six
-    tornado
-  ];
+  propagatedBuildInputs = [ ply six tornado ];
 
   # Not all needed files seems to be present
   doCheck = false;

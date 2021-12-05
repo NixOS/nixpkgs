@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.7.6";
 
   src = fetchurl {
-    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
+    url =
+      "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
     sha256 = "sha256-IjbuCCwcAOlCM2XbM5qBGjaGn8xNNDjoyJmCzP5JF/Q=";
   };
 
@@ -20,7 +21,9 @@ stdenv.mkDerivation rec {
     cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${
+        lib.makeLibraryPath [ swt xorg.libXtst ]
+      }" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications

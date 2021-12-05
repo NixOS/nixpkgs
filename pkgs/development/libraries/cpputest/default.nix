@@ -1,11 +1,12 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "cpputest";
   version = "4.0";
 
   src = fetchurl {
-    url = "https://github.com/cpputest/cpputest/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/cpputest/cpputest/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1xslavlb1974y5xvs8n1j9zkk05dlw8imy4saasrjlmibl895ii1";
   };
 

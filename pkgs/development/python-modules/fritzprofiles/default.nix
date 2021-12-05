@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, lxml, requests }:
 
 buildPythonPackage rec {
   pname = "fritzprofiles";
@@ -15,20 +10,16 @@ buildPythonPackage rec {
     sha256 = "sha256-VoKgLJWF9x8dW8A6CNwLtK+AmehtgZP41nUGQO819es=";
   };
 
-  propagatedBuildInputs = [
-    lxml
-    requests
-  ];
+  propagatedBuildInputs = [ lxml requests ];
 
-  pythonImportsCheck = [
-    "fritzprofiles"
-  ];
+  pythonImportsCheck = [ "fritzprofiles" ];
 
   # no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "Tool to switch the online time of profiles in the AVM Fritz!Box";
+    description =
+      "Tool to switch the online time of profiles in the AVM Fritz!Box";
     homepage = "https://github.com/AaronDavidSchneider/fritzprofiles";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

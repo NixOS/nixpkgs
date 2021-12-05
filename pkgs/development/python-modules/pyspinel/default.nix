@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyserial, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyspinel";
@@ -18,16 +13,12 @@ buildPythonPackage rec {
     sha256 = "0s2r00zb909cq3dd28i91qbl0nz8cga3g98z84gq5jqkjpiy8269";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   # Tests are out-dated
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spinel"
-  ];
+  pythonImportsCheck = [ "spinel" ];
 
   meta = with lib; {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";

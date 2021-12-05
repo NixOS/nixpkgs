@@ -1,12 +1,5 @@
-{ lib
-, autoconf
-, automake
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, stdenv
-}:
+{ lib, autoconf, automake, autoreconfHook, fetchFromGitHub, fetchpatch, openssl
+, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "ike-scan";
@@ -19,10 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mbfg8p3y4aKoXpmLuF9GXAMPEqV5CsvetwGCRDJ9UNY=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    openssl
-  ];
+  nativeBuildInputs = [ autoreconfHook openssl ];
 
   configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
@@ -30,7 +20,8 @@ stdenv.mkDerivation rec {
     # Using the same patches as for the Fedora RPM
     (fetchpatch {
       # Memory leaks, https://github.com/royhills/ike-scan/pull/15
-      url = "https://github.com/royhills/ike-scan/pull/15/commits/d864811de08dcddd65ac9b8d0f2acf5d7ddb9dea.patch";
+      url =
+        "https://github.com/royhills/ike-scan/pull/15/commits/d864811de08dcddd65ac9b8d0f2acf5d7ddb9dea.patch";
       sha256 = "0wbrq89dl8js7cdivd0c45hckmflan33cpgc3qm5s3az6r4mjljm";
     })
   ];

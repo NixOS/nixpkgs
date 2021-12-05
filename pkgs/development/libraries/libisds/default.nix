@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, expat
-, gpgme
-, libgcrypt
-, libxml2
-, libxslt
-, curl
-, docbook_xsl
-}:
+{ lib, stdenv, fetchurl, expat, gpgme, libgcrypt, libxml2, libxslt, curl
+, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "libisds";
@@ -18,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "1n1vl05p78fksv6dm926rngd3wag41gyfbq76ajzcmq08j32y7y1";
   };
 
-  configureFlags = [
-    "--with-docbook-xsl-stylesheets=${docbook_xsl}/xml/xsl/docbook"
-  ];
+  configureFlags =
+    [ "--with-docbook-xsl-stylesheets=${docbook_xsl}/xml/xsl/docbook" ];
 
   buildInputs = [ expat gpgme libgcrypt libxml2 libxslt curl docbook_xsl ];
 
   meta = with lib; {
-    description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
+    description =
+      "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
     homepage = "http://xpisar.wz.cz/libisds/";
     license = licenses.lgpl3;
     maintainers = [ maintainers.mmahut ];

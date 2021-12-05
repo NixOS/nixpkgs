@@ -1,13 +1,14 @@
 { lib, stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
-, fltk, libXinerama, libXpm, libjpeg
-}:
+, fltk, libXinerama, libXpm, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "mup";
   version = "6.8";
 
   src = fetchurl {
-    url = "http://www.arkkra.com/ftp/pub/unix/mup${builtins.replaceStrings ["."] [""] version}src.tar.gz";
+    url = "http://www.arkkra.com/ftp/pub/unix/mup${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }src.tar.gz";
     sha256 = "06bv5nyl8rcibyb83zzrfdq6x6f93g3rgnv47i5gsjcaw5w6l31y";
   };
 
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
       --replace /usr/share/doc $out/share/doc
   '';
 
-  enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
+  enableParallelBuilding =
+    false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 
   meta = with lib; {
     homepage = "http://www.arkkra.com/";

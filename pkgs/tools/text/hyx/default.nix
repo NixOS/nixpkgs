@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "2020-06-09";
 
   src = fetchurl {
-    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
+    url = "https://yx7.cc/code/hyx/hyx-${
+        lib.replaceStrings [ "-" ] [ "." ] version
+      }.tar.xz";
     sha256 = "1x8dmll93hrnj24kn5knpwj36y6r1v2ygwynpjwrg2hwd4c1a8hi";
   };
 

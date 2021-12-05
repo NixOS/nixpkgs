@@ -1,29 +1,7 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, blis
-, catalogue
-, cymem
-, cython
-, Accelerate
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, pythonOlder
-, preshed
-, pydantic
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pytestCheckHook, blis, catalogue
+, cymem, cython, Accelerate, CoreFoundation, CoreGraphics, CoreVideo, hypothesis
+, mock, murmurhash, numpy, plac, pythonOlder, preshed, pydantic, srsly, tqdm
+, typing-extensions, wasabi }:
 
 buildPythonPackage rec {
   pname = "thinc";
@@ -36,8 +14,7 @@ buildPythonPackage rec {
     hash = "sha256-teTbjSTmvopfHkoXhUdyt5orVgIkUZ9Qoh85UcokAB8=";
   };
 
-  buildInputs = [ cython ]
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics
@@ -58,18 +35,12 @@ buildPythonPackage rec {
     wasabi
   ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
-  checkInputs = [
-    hypothesis
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis mock pytestCheckHook ];
 
   # Cannot find cython modules.
   doCheck = false;
 
-  pytestFlagsArray = [
-    "thinc/tests"
-  ];
+  pytestFlagsArray = [ "thinc/tests" ];
 
   pythonImportsCheck = [ "thinc" ];
 

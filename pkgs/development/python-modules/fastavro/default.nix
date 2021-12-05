@@ -1,17 +1,5 @@
-{ buildPythonPackage
-, cython
-, fetchFromGitHub
-, isPy38
-, lib
-, lz4
-, numpy
-, pandas
-, pytestCheckHook
-, python-dateutil
-, python-snappy
-, pythonOlder
-, zstandard
-}:
+{ buildPythonPackage, cython, fetchFromGitHub, isPy38, lib, lz4, numpy, pandas
+, pytestCheckHook, python-dateutil, python-snappy, pythonOlder, zstandard }:
 
 buildPythonPackage rec {
   pname = "fastavro";

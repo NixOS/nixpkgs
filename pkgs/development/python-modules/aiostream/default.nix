@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pytest-cov
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, pytest-cov, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "aiostream";

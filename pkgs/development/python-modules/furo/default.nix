@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, sphinx
-, beautifulsoup4
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, sphinx, beautifulsoup4 }:
 
 buildPythonPackage rec {
   pname = "furo";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-K6pCoi7ePm6Vxhgqs2S6wuwVt5vH+cp/sJ/ZrsSzVAw=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ sphinx beautifulsoup4 ];
 
   pythonImportsCheck = [ "furo" ];
 

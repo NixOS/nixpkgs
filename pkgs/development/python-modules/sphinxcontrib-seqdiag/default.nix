@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, blockdiag
-, seqdiag
-}:
+{ lib, buildPythonPackage, fetchPypi, sphinx, blockdiag, seqdiag }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-seqdiag";

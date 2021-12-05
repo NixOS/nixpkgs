@@ -4,7 +4,7 @@ let
   self = haxePackages;
   haxePackages = with self; {
 
-    withCommas = lib.replaceChars ["."] [","];
+    withCommas = lib.replaceChars [ "." ] [ "," ];
 
     # simulate "haxelib dev $libname ."
     simulateHaxelibDev = libname: ''
@@ -17,20 +17,17 @@ let
     installLibHaxe = { libname, version, files ? "*" }: ''
       mkdir -p "$out/lib/haxe/${withCommas libname}/${withCommas version}"
       echo -n "${version}" > $out/lib/haxe/${withCommas libname}/.current
-      cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${withCommas version}/"
+      cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${
+        withCommas version
+      }/"
     '';
 
-    buildHaxeLib = {
-      libname,
-      version,
-      sha256,
-      meta,
-      ...
-    } @ attrs:
+    buildHaxeLib = { libname, version, sha256, meta, ... }@attrs:
       stdenv.mkDerivation (attrs // {
         name = "${libname}-${version}";
 
-        buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
+        buildInputs = (attrs.buildInputs or [ ])
+          ++ [ haxe neko ]; # for setup-hook.sh to work
         src = fetchzip rec {
           name = "${libname}-${version}";
           url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
@@ -64,10 +61,14 @@ let
       version = "4.1.15";
       sha256 = "1ybxcvwi4655563fjjgy6xv5c78grjxzadmi3l1ghds48k1rh50p";
       postFixup = ''
-        for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
+        for f in $out/lib/haxe/${withCommas libname}/${
+          withCommas version
+        }/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
           patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
-          patchelf --set-rpath ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
+          patchelf --set-rpath ${
+            lib.makeLibraryPath [ stdenv.cc.cc ]
+          }  "$f" || true
         done
       '';
       meta.description = "Runtime support library for the Haxe C++ backend";
@@ -77,7 +78,8 @@ let
       libname = "hxjava";
       version = "3.2.0";
       sha256 = "1vgd7qvsdxlscl3wmrrfi5ipldmr4xlsiwnj46jz7n6izff5261z";
-      meta.description = "Support library for the Java backend of the Haxe compiler";
+      meta.description =
+        "Support library for the Java backend of the Haxe compiler";
       propagatedBuildInputs = [ jdk ];
     };
 
@@ -85,7 +87,8 @@ let
       libname = "hxcs";
       version = "3.4.0";
       sha256 = "0f5vgp2kqnpsbbkn2wdxmjf7xkl0qhk9lgl9kb8d5wdy89nac6q6";
-      meta.description = "Support library for the C# backend of the Haxe compiler";
+      meta.description =
+        "Support library for the C# backend of the Haxe compiler";
       propagatedBuildInputs = [ mono ];
     };
 

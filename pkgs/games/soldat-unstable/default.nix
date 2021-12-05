@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fpc, zip, makeWrapper
-, SDL2, freetype, physfs, openal, gamenetworkingsockets
-, xorg, autoPatchelfHook, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, fpc, zip, makeWrapper, SDL2, freetype, physfs
+, openal, gamenetworkingsockets, xorg, autoPatchelfHook, cmake }:
 
 let
   base = stdenv.mkDerivation rec {
@@ -35,9 +33,7 @@ let
     };
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "soldat";
   version = "unstable-2021-11-01";
 

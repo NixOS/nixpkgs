@@ -14,7 +14,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/vsergeev/python-periphery";
-    description = "Linux Peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) with Python 2 & 3";
+    description =
+      "Linux Peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) with Python 2 & 3";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bandresen ];
   };

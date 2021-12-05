@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-oZvKr61lyu7CmXP2A/xtYng1FIUPyveVJMqUuv6UnaM=";
   };
 
-  propagatedBuildInputs = [mopidy];
+  propagatedBuildInputs = [ mopidy ];
 
   # no tests implemented
   doCheck = false;

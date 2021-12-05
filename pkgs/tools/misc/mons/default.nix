@@ -23,10 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ help2man ];
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
-  ];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   meta = with lib; {
     description = "POSIX Shell script to quickly manage 2-monitors display";

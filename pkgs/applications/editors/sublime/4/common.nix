@@ -1,18 +1,21 @@
 { buildVersion, aarch64sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
-, writeShellScript, common-updater-scripts, curl
-, openssl, bzip2, bash, unzip, zip
-}:
+{ fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango
+, makeWrapper, wrapGAppsHook, writeShellScript, common-updater-scripts, curl
+, openssl, bzip2, bash, unzip, zip }:
 
 let
   pname = "sublimetext4";
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" "crash_reporter" ];
+  binaries =
+    [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" "crash_reporter" ];
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime4" ];
-  downloadUrl = "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
-  versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
+  downloadUrl =
+    "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
+  versionUrl = "https://download.sublimetext.com/latest/${
+      if dev then "dev" else "stable"
+    }";
   versionFile = builtins.toString ./packages.nix;
   archSha256 = {
     "aarch64-linux" = aarch64sha256;
@@ -23,7 +26,16 @@ let
     "x86_64-linux" = "x64";
   }.${stdenv.hostPlatform.system};
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [
+    xorg.libX11
+    xorg.libXtst
+    glib
+    libglvnd
+    openssl
+    gtk3
+    cairo
+    pango
+  ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
@@ -60,10 +72,12 @@ in let
     buildPhase = ''
       runHook preBuild
 
-      for binary in ${ builtins.concatStringsSep " " binaries }; do
+      for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${
+            lib.optionalString stdenv.is64bit "64"
+          } \
           $binary
       done
 
@@ -86,7 +100,8 @@ in let
       runHook postInstall
     '';
 
-    dontWrapGApps = true; # non-standard location, need to wrap the executables manually
+    dontWrapGApps =
+      true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
       sed -i 's#/usr/bin/pkexec#pkexec\x00\x00\x00\x00\x00\x00\x00\x00\x00#g' "$out/${primaryBinary}"
@@ -109,7 +124,9 @@ in stdenv.mkDerivation (rec {
   installPhase = ''
     mkdir -p "$out/bin"
     makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
+  '' + builtins.concatStringsSep "" (map (binaryAlias: ''
+    ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}
+  '') primaryBinaryAliases) + ''
     mkdir -p "$out/share/applications"
     substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
     for directory in ''$${primaryBinary}/Icon/*; do

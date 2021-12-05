@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-4.1/debian/patches/05-CVE-2017-11110.patch";
+      url =
+        "https://sources.debian.org/data/main/c/catdoc/1:0.95-4.1/debian/patches/05-CVE-2017-11110.patch";
       sha256 = "1ljnwvssvzig94hwx8843b88p252ww2lbxh8zybcwr3kwwlcymx7";
     })
   ];
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

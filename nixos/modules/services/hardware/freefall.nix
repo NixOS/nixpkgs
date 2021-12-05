@@ -41,8 +41,8 @@ in {
 
     mkService = dev:
       assert dev != "";
-      let dev' = utils.escapeSystemdPath dev; in
-      nameValuePair "freefall-${dev'}" {
+      let dev' = utils.escapeSystemdPath dev;
+      in nameValuePair "freefall-${dev'}" {
         description = "Free-fall protection for ${dev}";
         after = [ "${dev'}.device" ];
         wantedBy = [ "${dev'}.device" ];

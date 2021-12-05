@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, pythonOlder
-, xmltodict
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub
+, pytest-asyncio, pytest-raises, pytestCheckHook, pythonOlder, xmltodict }:
 
 buildPythonPackage rec {
   pname = "aioemonitor";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "0h8zqqy8v8r1fl9bp3m8icr2sy44p0mbfl1hbb0zni17r9r50dhn";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    xmltodict
-  ];
+  propagatedBuildInputs = [ aiohttp xmltodict ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytest-raises
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytest-asyncio pytest-raises pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""

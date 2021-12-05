@@ -1,23 +1,19 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-let
-  dataDir = "/var/lib/foobar";
+  let dataDir = "/var/lib/foobar";
 
-in {
+  in {
     name = "etebase-server";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ felschr ];
-    };
+    meta = with pkgs.lib.maintainers; { maintainers = [ felschr ]; };
 
-    machine = { pkgs, ... }:
-      {
-        services.etebase-server = {
-          inherit dataDir;
-          enable = true;
-          settings.global.secret_file =
-            toString (pkgs.writeText "secret" "123456");
-        };
+    machine = { pkgs, ... }: {
+      services.etebase-server = {
+        inherit dataDir;
+        enable = true;
+        settings.global.secret_file =
+          toString (pkgs.writeText "secret" "123456");
       };
+    };
 
     testScript = ''
       machine.wait_for_unit("etebase-server.service")
@@ -46,5 +42,4 @@ in {
               "etebase-server createsuperuser --no-input --username admin --email root@localhost"
           )
     '';
-  }
-)
+  })

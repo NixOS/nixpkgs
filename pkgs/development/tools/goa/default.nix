@@ -18,7 +18,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage = "https://goa.design";
-    description = "A framework for building microservices in Go using a unique design-first approach";
+    description =
+      "A framework for building microservices in Go using a unique design-first approach";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];
   };

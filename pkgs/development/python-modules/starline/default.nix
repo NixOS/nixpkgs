@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, requests
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, aiohttp, requests }:
 
 buildPythonPackage rec {
   pname = "starline";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1753f5fcd2a6976aed775afb03f8392159f040c673917cc0c634510d95c13cb9";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    requests
-  ];
+  propagatedBuildInputs = [ aiohttp requests ];
 
   # no tests implemented
   doCheck = false;

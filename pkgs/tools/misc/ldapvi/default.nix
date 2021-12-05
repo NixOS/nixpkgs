@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkg-config, cyrus_sasl, autoconf, automake }:
+{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline
+, pkg-config, cyrus_sasl, autoconf, automake }:
 
 stdenv.mkDerivation {
   pname = "ldapvi";
@@ -11,7 +12,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openldap openssl popt glib ncurses readline cyrus_sasl autoconf automake ];
+  buildInputs = [
+    openldap
+    openssl
+    popt
+    glib
+    ncurses
+    readline
+    cyrus_sasl
+    autoconf
+    automake
+  ];
 
   preConfigure = ''
     cd ldapvi

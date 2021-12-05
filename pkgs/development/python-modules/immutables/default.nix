@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, mypy
-, typing-extensions
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder, mypy
+, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "immutables";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "1f6nlpvrs41cjrnikx48qd0rlf7d89h6dzlr5zcndzsim7fgsmgz";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  checkInputs = [
-    mypy
-    pytestCheckHook
-  ];
+  checkInputs = [ mypy pytestCheckHook ];
 
   disabledTests = [
     # Version mismatch

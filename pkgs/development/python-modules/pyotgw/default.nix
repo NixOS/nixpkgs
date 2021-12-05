@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyserial-asyncio, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyotgw";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "0zckd85dmzpz0drcgx16ly6kzh1f1slcxb9lrcf81wh1p4q9bcaa";
   };
 
-  propagatedBuildInputs = [
-    pyserial-asyncio
-  ];
+  propagatedBuildInputs = [ pyserial-asyncio ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
 

@@ -1,14 +1,13 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config
-, qttools, qtx11extras, drumstick
-, docbook-xsl-nons
-}:
+{ mkDerivation, lib, fetchurl, cmake, pkg-config, qttools, qtx11extras
+, drumstick, docbook-xsl-nons }:
 
 mkDerivation rec {
   pname = "vmpk";
   version = "0.8.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-SSdD8dyn6abti8qkd7N5n8EYr5yMW+EPYUnRm7S9CE4=";
   };
 

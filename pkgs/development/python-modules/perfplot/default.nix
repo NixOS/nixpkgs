@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dufte
-, matplotlib
-, numpy
-, pipdate
-, tqdm
-, rich
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, dufte, matplotlib, numpy, pipdate
+, tqdm, rich, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "perfplot";
@@ -24,18 +14,9 @@ buildPythonPackage rec {
   };
   format = "pyproject";
 
-  propagatedBuildInputs = [
-    dufte
-    matplotlib
-    numpy
-    pipdate
-    rich
-    tqdm
-  ];
+  propagatedBuildInputs = [ dufte matplotlib numpy pipdate rich tqdm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "perfplot" ];
 

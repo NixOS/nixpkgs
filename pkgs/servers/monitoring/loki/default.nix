@@ -1,10 +1,4 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, systemd
+{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, nixosTests, systemd
 }:
 
 buildGoModule rec {
@@ -38,7 +32,8 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let t = "github.com/grafana/loki/pkg/util/build";
+  in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"

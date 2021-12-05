@@ -15,7 +15,8 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "backport_django_2_2.patch";
-      url = "https://github.com/django-compressor/django-appconf/commit/1526a842ee084b791aa66c931b3822091a442853.patch";
+      url =
+        "https://github.com/django-compressor/django-appconf/commit/1526a842ee084b791aa66c931b3822091a442853.patch";
       sha256 = "1vl2s6vlf15089s8p4c3g4d5iqm8jva66bdw683r8440f80ixgmw";
     })
   ];
@@ -27,7 +28,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A helper class for handling configuration defaults of packaged apps gracefully";
+    description =
+      "A helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];

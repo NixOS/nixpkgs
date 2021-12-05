@@ -9,19 +9,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0dpzicv0ksyda2lprldkj452c23qycl5c9avca6x7f7rbqry9pnd";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    click
-    prometheus-client
-  ];
+  propagatedBuildInputs = with python3Packages; [ click prometheus-client ];
 
   checkPhase = ''
     $out/bin/kea-exporter --help > /dev/null
     $out/bin/kea-exporter --version | grep -q ${version}
   '';
 
-  passthru.tests = {
-    inherit (nixosTests.prometheus-exporters) kea;
-  };
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) kea; };
 
   meta = with lib; {
     description = "Export Kea Metrics in the Prometheus Exposition Format";

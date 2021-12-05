@@ -1,10 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, impacket
-, ldap3
-, pyyaml
-, samba
+{ lib, buildPythonApplication, fetchFromGitHub, impacket, ldap3, pyyaml, samba
 }:
 
 buildPythonApplication rec {
@@ -18,12 +12,7 @@ buildPythonApplication rec {
     sha256 = "0fk6hzmvxb5y3nb41qr6dssxhdahkh5nxhbx480x42fhnqpssir5";
   };
 
-  propagatedBuildInputs = [
-    impacket
-    ldap3
-    pyyaml
-    samba
-  ];
+  propagatedBuildInputs = [ impacket ldap3 pyyaml samba ];
 
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;

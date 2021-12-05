@@ -1,8 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
-}:
+{ lib, buildGoModule, fetchFromGitHub, libpcap }:
 
 buildGoModule rec {
   pname = "sx-go";
@@ -17,9 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0n1h9jch0zfafli8djjr6wkgfxxpnh4q873d5mr1xg8a25qhlifr";
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   postFixup = ''
     # Rename binary to avoid conflict with sx

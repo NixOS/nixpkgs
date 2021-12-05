@@ -1,5 +1,5 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2 }:
+{ lib, buildDunePackage, fetchFromGitHub, menhir, ppxlib, ppx_deriving, re, uutf
+, uucp, ounit2 }:
 
 buildDunePackage rec {
   pname = "jingoo";
@@ -20,7 +20,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];
   checkInputs = [ ounit2 ];
   doCheck = true;
-
 
   meta = with lib; {
     homepage = "https://github.com/tategakibunko/jingoo";

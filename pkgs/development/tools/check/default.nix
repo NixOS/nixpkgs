@@ -1,7 +1,4 @@
-{ buildGoPackage
-, lib
-, fetchFromGitLab
-}:
+{ buildGoPackage, lib, fetchFromGitLab }:
 
 buildGoPackage rec {
   pname = "check-unstable";

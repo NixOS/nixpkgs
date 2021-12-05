@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, requests
-, lxml
-, pandas
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, requests, lxml, pandas }:
 
 buildPythonPackage rec {
   pname = "pytrends";

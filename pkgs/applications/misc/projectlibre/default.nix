@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/projectlibre/code";
-    rev = "0c939507cc63e9eaeb855437189cdec79e9386c2"; # version 1.7.0 was not tagged
+    rev =
+      "0c939507cc63e9eaeb855437189cdec79e9386c2"; # version 1.7.0 was not tagged
     sha256 = "0vy5vgbp45ai957gaby2dj1hvmbxfdlfnwcanwqm9f8q16qipdbq";
   };
 

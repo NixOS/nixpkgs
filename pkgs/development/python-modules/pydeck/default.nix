@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, ipykernel, ipywidgets, pythonOlder, pytestCheckHook, pandas }:
+{ lib, buildPythonPackage, fetchPypi, ipykernel, ipywidgets, pythonOlder
+, pytestCheckHook, pandas }:
 
 buildPythonPackage rec {
   pname = "pydeck";
@@ -17,10 +18,7 @@ buildPythonPackage rec {
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];
 
-  propagatedBuildInputs = [
-    ipykernel
-    ipywidgets
-  ];
+  propagatedBuildInputs = [ ipykernel ipywidgets ];
 
   meta = with lib; {
     homepage = "https://github.com/visgl/deck.gl/tree/master/bindings/pydeck";

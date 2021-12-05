@@ -1,21 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_ttf
-, alsa-lib
-, freetype
-, glew
-, libGL
-, libogg
-, libpng
-, libtheora
-, libvorbis
-, python
-, tcl
-, zlib
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, SDL2_image, SDL2_ttf, alsa-lib
+, freetype, glew, libGL, libogg, libpng, libtheora, libvorbis, python, tcl, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -25,15 +9,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
-    rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}";
+    rev = "RELEASE_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-9PdUNahJZ2O6ASkzLW/uudP3hiIzTDpxzFy6Pjb8JiU=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python
-  ];
+  nativeBuildInputs = [ pkg-config python ];
 
   buildInputs = [
     SDL2
@@ -59,7 +40,7 @@ stdenv.mkDerivation rec {
 
   # Many thanks @mthuurne from OpenMSX project for providing support to
   # Nixpkgs! :)
-  TCL_CONFIG="${tcl}/lib/";
+  TCL_CONFIG = "${tcl}/lib/";
 
   meta = with lib; {
     homepage = "https://openmsx.org";

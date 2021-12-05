@@ -1,36 +1,18 @@
-{ lib
-, python3Packages
-, gtk3
-, cairo
-, gnome
-, librsvg
-, xvfb-run
-, dbus
-, libnotify
-, wrapGAppsHook
-, fetchFromGitLab
-, which
-, gettext
-, gobject-introspection
-, gdk-pixbuf
-, texlive
-, imagemagick
-, perlPackages
-}:
+{ lib, python3Packages, gtk3, cairo, gnome, librsvg, xvfb-run, dbus, libnotify
+, wrapGAppsHook, fetchFromGitLab, which, gettext, gobject-introspection
+, gdk-pixbuf, texlive, imagemagick, perlPackages }:
 
 let
   documentation_deps = [
-    (texlive.combine {
-      inherit (texlive) scheme-small wrapfig was;
-    })
+    (texlive.combine { inherit (texlive) scheme-small wrapfig was; })
     xvfb-run
     imagemagick
     perlPackages.Po4a
   ];
-in
 
-python3Packages.buildPythonApplication rec {
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
+in python3Packages.buildPythonApplication rec {
+  inherit (import ./src.nix { inherit fetchFromGitLab; })
+    version src sample_documents;
   pname = "paperwork";
 
   sourceRoot = "source/paperwork-gtk";
@@ -85,13 +67,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf # for the setup hook
   ] ++ documentation_deps;
 
-  buildInputs = [
-    gnome.adwaita-icon-theme
-    libnotify
-    librsvg
-    gtk3
-    cairo
-  ];
+  buildInputs = [ gnome.adwaita-icon-theme libnotify librsvg gtk3 cairo ];
 
   dontWrapGApps = true;
 

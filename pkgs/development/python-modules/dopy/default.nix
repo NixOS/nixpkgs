@@ -1,8 +1,4 @@
-{ pkgs
-, buildPythonPackage
-, requests
-, six
-}:
+{ pkgs, buildPythonPackage, requests, six }:
 
 buildPythonPackage {
   pname = "dopy";

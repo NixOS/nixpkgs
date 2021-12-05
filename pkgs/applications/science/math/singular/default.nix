@@ -1,24 +1,10 @@
-{ stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
-, lib
-, fetchpatch
-, autoreconfHook
-, sharutils
-, file
-, flint
-, ntl
-, cddlib
-, gfan
-, lrcalc
-, doxygen
-, graphviz
+{ stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils
+, pkg-config, lib, fetchpatch, autoreconfHook, sharutils, file, flint, ntl
+, cddlib, gfan, lrcalc, doxygen, graphviz
 # upstream generates docs with texinfo 4. later versions of texinfo
 # use letters instead of numbers for post-appendix chapters, and we
 # want it to match the upstream format because sage depends on it.
-, texinfo4
-, texlive
-, enableDocs ? true
-, enableGfanlib ? true
-}:
+, texinfo4, texlive, enableDocs ? true, enableGfanlib ? true }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
@@ -62,7 +48,8 @@ stdenv.mkDerivation rec {
     # https://github.com/Singular/Singular/issues/1086
     (fetchpatch {
       name = "schubert-lib-fails-with-too-many-cpus.patch";
-      url = "https://github.com/Singular/Singular/commit/3cda50c00a849455efa2502e56596955491a353a.patch";
+      url =
+        "https://github.com/Singular/Singular/commit/3cda50c00a849455efa2502e56596955491a353a.patch";
       sha256 = "sha256-fgYd+2vT32w5Ki8kKx6PfZn2e4QSJcYWOwEFXtc+lSA=";
     })
   ] ++ lib.optionals enableDocs [
@@ -76,19 +63,15 @@ stdenv.mkDerivation rec {
     # fix some non-ascii characters in doc/decodegb.doc
     (fetchpatch {
       name = "decodegb-ascii.patch";
-      url = "https://github.com/Singular/Singular/commit/36966d9009de572ee4dbc487f3e5744098fe91be.patch";
+      url =
+        "https://github.com/Singular/Singular/commit/36966d9009de572ee4dbc487f3e5744098fe91be.patch";
       sha256 = "sha256-9WcEov/oOQRC584ag6WVHFwY2aCjbM75HWyvZoEwppw=";
     })
   ];
 
-  configureFlags = [
-    "--with-ntl=${ntl}"
-    "--disable-pyobject-module"
-  ] ++ lib.optionals enableDocs [
-    "--enable-doc-build"
-  ] ++ lib.optionals enableGfanlib [
-    "--enable-gfanlib"
-  ];
+  configureFlags = [ "--with-ntl=${ntl}" "--disable-pyobject-module" ]
+    ++ lib.optionals enableDocs [ "--enable-doc-build" ]
+    ++ lib.optionals enableGfanlib [ "--enable-gfanlib" ];
 
   prePatch = ''
     # don't let the tests depend on `hostname`
@@ -110,9 +93,7 @@ stdenv.mkDerivation rec {
     flint
     lrcalc
     gfan
-  ] ++ lib.optionals enableGfanlib [
-    cddlib
-  ];
+  ] ++ lib.optionals enableGfanlib [ cddlib ];
   nativeBuildInputs = [
     bison
     perl
@@ -159,15 +140,12 @@ stdenv.mkDerivation rec {
   # singular tests are a bit complicated, see
   # https://github.com/Singular/Singular/tree/spielwiese/Tst
   # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
-  testsToRun = [
-    "Old/universal.lst"
-    "Buch/buch.lst"
-    "Plural/short.lst"
-    "Old/factor.tst"
-  ] ++ lib.optionals enableGfanlib [
-    # tests that require gfanlib
-    "Short/ok_s.lst"
-  ];
+  testsToRun =
+    [ "Old/universal.lst" "Buch/buch.lst" "Plural/short.lst" "Old/factor.tst" ]
+    ++ lib.optionals enableGfanlib [
+      # tests that require gfanlib
+      "Short/ok_s.lst"
+    ];
 
   # simple test to make sure singular starts and finds its libraries
   doInstallCheck = true;
@@ -209,6 +187,7 @@ stdenv.mkDerivation rec {
     platforms = subtractLists platforms.i686 platforms.unix;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = "http://www.singular.uni-kl.de";
-    downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
+    downloadPage =
+      "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
   };
 }

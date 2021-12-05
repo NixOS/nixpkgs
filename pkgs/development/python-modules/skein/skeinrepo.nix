@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
 
     archs="${
-      if stdenv.isLinux
-      then "linux-x86_32 linux-x86_64"
-      else "osx-x86_64"
+      if stdenv.isLinux then "linux-x86_32 linux-x86_64" else "osx-x86_64"
     }"
 
     for arch in $archs
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
       mvn -Dmaven.repo.local=$out dependency:get -Dartifact=io.grpc:protoc-gen-grpc-java:1.16.0:exe:$arch
     done
 
-    if ${ lib.boolToString stdenv.isLinux }
+    if ${lib.boolToString stdenv.isLinux}
     then
       autoPatchelf $out
     fi
@@ -37,8 +35,9 @@ stdenv.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = if stdenv.isLinux
-    then "12f0q3444qw6y4f6qsa9540a0fz4cgi844zzi8z1phqn3k4dnl6v"
-    else "0bjbwiv17cary1isxca0m2hsvgs1i5fh18z247h1hky73lnhbrz8";
+  outputHash = if stdenv.isLinux then
+    "12f0q3444qw6y4f6qsa9540a0fz4cgi844zzi8z1phqn3k4dnl6v"
+  else
+    "0bjbwiv17cary1isxca0m2hsvgs1i5fh18z247h1hky73lnhbrz8";
 
 } // lib.optionalAttrs stdenv.isLinux { dontAutoPatchelf = true; }

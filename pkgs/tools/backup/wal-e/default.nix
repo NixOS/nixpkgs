@@ -16,18 +16,13 @@ python3Packages.buildPythonApplication rec {
   # needs tox
   doCheck = false;
 
-  propagatedBuildInputs = (with python3Packages; [
-    boto
-    gevent
-    google-cloud-storage
-  ]) ++ [
-    postgresql
-    lzop
-    pv
-  ];
+  propagatedBuildInputs =
+    (with python3Packages; [ boto gevent google-cloud-storage ])
+    ++ [ postgresql lzop pv ];
 
   meta = {
-    description = "A Postgres WAL-shipping disaster recovery and replication toolkit";
+    description =
+      "A Postgres WAL-shipping disaster recovery and replication toolkit";
     homepage = "https://github.com/wal-e/wal-e";
     maintainers = [ ];
     license = lib.licenses.bsd3;

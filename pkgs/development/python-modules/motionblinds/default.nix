@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodomex
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pycryptodomex, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "motionblinds";
@@ -19,16 +14,12 @@ buildPythonPackage rec {
     sha256 = "6aSwUuH5IpfcuVGXWVmb0DHglsUtGh/ATOe6iih6fXk=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "motionblinds"
-  ];
+  pythonImportsCheck = [ "motionblinds" ];
 
   meta = with lib; {
     description = "Python library for interfacing with Motion Blinds";

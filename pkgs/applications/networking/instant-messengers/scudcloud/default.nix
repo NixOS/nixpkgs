@@ -11,7 +11,11 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-b8+MVjYKbSpnfM2ow2MNVY6MiT+urpNYDkFR/yUC7ik=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit dbus-python jsmin ];
+  propagatedBuildInputs = with python3Packages; [
+    pyqt5_with_qtwebkit
+    dbus-python
+    jsmin
+  ];
 
   meta = with lib; {
     description = "Non-official desktop client for Slack";

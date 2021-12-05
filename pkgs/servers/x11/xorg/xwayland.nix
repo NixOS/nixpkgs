@@ -1,44 +1,9 @@
-{ egl-wayland
-, libepoxy
-, fetchurl
-, fontutil
-, lib
-, libGL
-, libGLU
-, libX11
-, libXau
-, libXaw
-, libXdmcp
-, libXext
-, libXfixes
-, libXfont2
-, libXmu
-, libXpm
-, libXrender
-, libXres
-, libXt
-, libdrm
-, libtirpc
-, libunwind
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, ninja
-, openssl
-, pkg-config
-, pixman
-, stdenv
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, zlib
-, defaultFontPath ? "" }:
+{ egl-wayland, libepoxy, fetchurl, fontutil, lib, libGL, libGLU, libX11, libXau
+, libXaw, libXdmcp, libXext, libXfixes, libXfont2, libXmu, libXpm, libXrender
+, libXres, libXt, libdrm, libtirpc, libunwind, libxcb, libxkbfile, libxshmfence
+, mesa, meson, ninja, openssl, pkg-config, pixman, stdenv, wayland
+, wayland-protocols, wayland-scanner, xkbcomp, xkeyboard_config, xorgproto
+, xtrans, zlib, defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
 
@@ -49,15 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-68J1fzn9TH2xZU/YZZFYnCEaogFy1DpU93rlZ87b+KI=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    wayland-scanner
-  ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [
     egl-wayland
     libepoxy
@@ -101,7 +59,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An X server for interfacing X11 apps with the Wayland protocol";
+    description =
+      "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];

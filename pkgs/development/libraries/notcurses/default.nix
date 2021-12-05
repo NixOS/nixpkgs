@@ -1,15 +1,5 @@
-{ stdenv
-, cmake
-, pkg-config
-, pandoc
-, libunistring
-, ncurses
-, zlib
-, ffmpeg
-, fetchFromGitHub
-, lib
-, multimediaSupport ? true
-}:
+{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, zlib, ffmpeg
+, fetchFromGitHub, lib, multimediaSupport ? true }:
 
 stdenv.mkDerivation rec {
   pname = "notcurses";

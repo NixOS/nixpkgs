@@ -1,17 +1,5 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, qmake
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtserialport
-, boost
-, libgit2
-, quazip
-}:
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, qmake, pkg-config, qtbase
+, qtsvg, qttools, qtserialport, boost, libgit2, quazip }:
 
 let
   # SHA256 of the fritzing-parts HEAD on the master branch,
@@ -24,9 +12,8 @@ let
     rev = partsSha;
     sha256 = "sha256-4S65eX4LCnXCFQAOxmdvr8d0nAgTWcJooE2SpLYpcXI=";
   };
-in
 
-mkDerivation rec {
+in mkDerivation rec {
   pname = "fritzing";
   version = "unstable-2021-09-22";
 
@@ -43,7 +30,8 @@ mkDerivation rec {
   patches = [
     # Add support for QuaZip 1.x
     (fetchpatch {
-      url = "https://github.com/fritzing/fritzing-app/commit/ef83ebd9113266bb31b3604e3e9d0332bb48c999.patch";
+      url =
+        "https://github.com/fritzing/fritzing-app/commit/ef83ebd9113266bb31b3604e3e9d0332bb48c999.patch";
       sha256 = "sha256-J43E6iBRIVbsuuo82gPk3Q7tyLhNkuuyYwtH8hUfcPU=";
     })
   ];
@@ -60,11 +48,8 @@ mkDerivation rec {
     cp -a ${parts}/* parts/
   '';
 
-  qmakeFlags = [
-    "phoenix.pro"
-    "DEFINES=QUAZIP_INSTALLED"
-    "DEFINES+=QUAZIP_1X"
-  ];
+  qmakeFlags =
+    [ "phoenix.pro" "DEFINES=QUAZIP_INSTALLED" "DEFINES+=QUAZIP_1X" ];
 
   postFixup = ''
     # generate the parts.db file

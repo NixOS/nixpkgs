@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
+{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid
+, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "syslinux";
@@ -23,12 +24,14 @@ stdenv.mkDerivation {
       sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
     })
     (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0005-gnu-efi-version-compatibility.patch";
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0005-gnu-efi-version-compatibility.patch";
       name = "0005-gnu-efi-version-compatibility.patch";
       sha256 = "1mz2idg8cwn0mvd3jixxynhkn7rhmi5fp8cc8zznh5f0ysfra446";
     })
     (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0025-reproducible-build.patch";
+      url =
+        "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0025-reproducible-build.patch";
       name = "0025-reproducible-build.patch";
       sha256 = "0qk6wc6z3648828y3961pn4pi7xhd20a6fqn6z1mnj22bbvzcxls";
     })
@@ -66,7 +69,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ nasm perl python3 makeWrapper ];
   buildInputs = [ libuuid ];
 
-  enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
+  enableParallelBuilding =
+    false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
   stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
@@ -78,8 +82,7 @@ stdenv.mkDerivation {
     "MANDIR=$(out)/share/man"
     "PERL=perl"
     "HEXDATE=0x00000000"
-  ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 

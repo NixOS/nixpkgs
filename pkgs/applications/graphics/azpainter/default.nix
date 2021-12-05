@@ -1,9 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11, libXext, libXi
-, freetype, fontconfig
-, libpng, libjpeg
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, libX11, libXext, libXi, freetype, fontconfig
+, libpng, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
@@ -16,12 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i5g67s4ysnvbaxmi7dhan0hfcfk8an14xykkafl47pqfx33npva";
   };
 
-  buildInputs = [
-    libX11 libXext libXi
-    freetype fontconfig
-    libpng libjpeg
-    zlib
-  ];
+  buildInputs =
+    [ libX11 libXext libXi freetype fontconfig libpng libjpeg zlib ];
 
   meta = with lib; {
     description = "Full color painting software for illustration drawing";

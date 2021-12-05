@@ -1,7 +1,5 @@
-{ lib, fetchurl, makeDesktopItem, ffmpeg
-, qmake, qttools, mkDerivation
-, qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
-}:
+{ lib, fetchurl, makeDesktopItem, ffmpeg, qmake, qttools, mkDerivation, qtbase
+, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine }:
 
 mkDerivation rec {
   pname = "clipgrab";
@@ -13,13 +11,21 @@ mkDerivation rec {
     url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
 
-  buildInputs = [ ffmpeg qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];
+  buildInputs = [
+    ffmpeg
+    qtbase
+    qtdeclarative
+    qtlocation
+    qtquickcontrols2
+    qtwebchannel
+    qtwebengine
+  ];
   nativeBuildInputs = [ qmake qttools ];
 
   postPatch = lib.optionalString (ffmpeg != null) ''
-  substituteInPlace converter_ffmpeg.cpp \
-    --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-    --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+    substituteInPlace converter_ffmpeg.cpp \
+      --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
+      --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
   '';
 
   qmakeFlags = [ "clipgrab.pro" ];

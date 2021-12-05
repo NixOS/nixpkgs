@@ -1,15 +1,12 @@
-{ lib, stdenv
-, buildPythonPackage
-, pkgs
-, isPy3k
-}:
+{ lib, stdenv, buildPythonPackage, pkgs, isPy3k }:
 
 buildPythonPackage rec {
   pname = "CDDB";
   version = "1.4";
   disabled = isPy3k;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
 
   src = pkgs.fetchurl {
     url = "http://cddb-py.sourceforge.net/${pname}-${version}.tar.gz";

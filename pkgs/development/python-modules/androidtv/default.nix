@@ -1,13 +1,5 @@
-{ lib
-, adb-shell
-, aiofiles
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, mock
-, pure-python-adb
-, pytestCheckHook
-}:
+{ lib, adb-shell, aiofiles, buildPythonPackage, fetchFromGitHub, isPy3k, mock
+, pure-python-adb, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "androidtv";
@@ -24,10 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ adb-shell pure-python-adb ]
     ++ lib.optionals (isPy3k) [ aiofiles ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "androidtv" ];
 

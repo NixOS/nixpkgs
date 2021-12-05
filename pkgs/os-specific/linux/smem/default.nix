@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "smemcap" ];
 
-  installPhase =
-    ''
-      install -Dm555 -t $out/bin/ smem smemcap
-      install -Dm444 -t $out/share/man/man8/ smem.8
-    '';
+  installPhase = ''
+    install -Dm555 -t $out/bin/ smem smemcap
+    install -Dm444 -t $out/share/man/man8/ smem.8
+  '';
 
   meta = {
     homepage = "https://www.selenic.com/smem/";
-    description = "A memory usage reporting tool that takes shared memory into account";
+    description =
+      "A memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.gpl2Plus;

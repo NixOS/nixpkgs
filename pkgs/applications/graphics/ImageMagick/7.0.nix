@@ -1,22 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
-, ApplicationServices
-, Foundation
-, testVersion, imagemagick
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, bzip2, zlib, libX11
+, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre, lcms2
+, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg
+, libwebp, libheif, ApplicationServices, Foundation, testVersion, imagemagick }:
 
 let
-  arch =
-    if stdenv.hostPlatform.system == "i686-linux" then "i686"
-    else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
-    else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
-    else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else null;
-in
+  arch = if stdenv.hostPlatform.system == "i686-linux" then
+    "i686"
+  else if stdenv.hostPlatform.system == "x86_64-linux"
+  || stdenv.hostPlatform.system == "x86_64-darwin" then
+    "x86-64"
+  else if stdenv.hostPlatform.system == "armv7l-linux" then
+    "armv7l"
+  else if stdenv.hostPlatform.system == "aarch64-linux"
+  || stdenv.hostPlatform.system == "aarch64-darwin" then
+    "aarch64"
+  else if stdenv.hostPlatform.system == "powerpc64le-linux" then
+    "ppc64le"
+  else
+    null;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "imagemagick";
   version = "7.1.0-16";
 
@@ -32,44 +35,51 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-frozenpaths" ]
-    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
-    ++ lib.optional (librsvg != null) "--with-rsvg"
+  configureFlags = [ "--with-frozenpaths" ] ++ (if arch != null then
+    [ "--with-gcc-arch=${arch}" ]
+  else
+    [ "--without-gcc-arch" ]) ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optional (liblqr1 != null) "--with-lqr"
     # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
     # let's disable it for now to unbreak the imagemagick build.
     ++ lib.optional (libjxl != null && !stdenv.isAarch64) "--with-jxl"
-    ++ lib.optionals (ghostscript != null)
-      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
-        "--with-gslib"
-      ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW
-      [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-    ;
+    ++ lib.optionals (ghostscript != null) [
+      "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+      "--with-gslib"
+    ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "--enable-static"
+      "--disable-shared"
+    ] # due to libxml2 being without DLLs ATM
+  ;
 
   nativeBuildInputs = [ pkg-config libtool ];
 
-  buildInputs =
-    [ zlib fontconfig freetype ghostscript
-      liblqr1 libpng libraw libtiff libxml2 libheif djvulibre
-    ]
-    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
-    # let's disable it for now to unbreak the imagemagick build.
-    ++ lib.optionals (!stdenv.isAarch64)
-      [ libjxl ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ openexr librsvg openjpeg ]
-    ++ lib.optionals stdenv.isDarwin [
-      ApplicationServices
-      Foundation
-    ];
+  buildInputs = [
+    zlib
+    fontconfig
+    freetype
+    ghostscript
+    liblqr1
+    libpng
+    libraw
+    libtiff
+    libxml2
+    libheif
+    djvulibre
+  ]
+  # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
+  # let's disable it for now to unbreak the imagemagick build.
+    ++ lib.optionals (!stdenv.isAarch64) [ libjxl ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ openexr librsvg openjpeg ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
-  propagatedBuildInputs =
-    [ bzip2 freetype libjpeg lcms2 ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ libX11 libXext libXt libwebp ]
-    ;
+  propagatedBuildInputs = [ bzip2 freetype libjpeg lcms2 ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      libX11
+      libXext
+      libXt
+      libwebp
+    ];
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -85,12 +95,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.version =
-    testVersion { package = imagemagick; };
+  passthru.tests.version = testVersion { package = imagemagick; };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    description =
+      "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ erictapen dotlambda ];
     license = licenses.asl20;

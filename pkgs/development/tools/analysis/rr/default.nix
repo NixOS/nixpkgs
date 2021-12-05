@@ -1,4 +1,5 @@
-{ lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config
+, python3Packages, which, procps, gdb, capnproto }:
 
 gcc9Stdenv.mkDerivation rec {
   version = "5.5.0";
@@ -19,11 +20,18 @@ gcc9Stdenv.mkDerivation rec {
 
   # TODO: remove this preConfigure hook after 5.2.0 since it is fixed upstream
   # see https://github.com/mozilla/rr/issues/2269
-  preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
+  preConfigure =
+    ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
 
   nativeBuildInputs = [ cmake pkg-config which ];
   buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm
+    zlib
+    python3Packages.python
+    python3Packages.pexpect
+    procps
+    gdb
+    capnproto
   ];
   propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [
@@ -44,7 +52,8 @@ gcc9Stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://rr-project.org/";
-    description = "Records nondeterministic executions and debugs them deterministically";
+    description =
+      "Records nondeterministic executions and debugs them deterministically";
     longDescription = ''
       rr aspires to be your primary debugging tool, replacing -- well,
       enhancing -- gdb. You record a failure once, then debug the

@@ -7,9 +7,8 @@
 let
   serverUrl = "localhost:8153/go/api/agents";
   header = "Accept: application/vnd.go.cd.v2+json";
-in
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "gocd-agent";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ grahamc swarren83 ];
@@ -20,17 +19,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    agent =
-      { ... }:
-      {
-        virtualisation.memorySize = 2046;
-        services.gocd-agent = {
-          enable = true;
-        };
-        services.gocd-server = {
-          enable = true;
-        };
-      };
+    agent = { ... }: {
+      virtualisation.memorySize = 2046;
+      services.gocd-agent = { enable = true; };
+      services.gocd-server = { enable = true; };
+    };
   };
 
   testScript = ''

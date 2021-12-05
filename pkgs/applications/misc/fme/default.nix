@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, bc
-, fluxbox
-, gettext
-, glibmm
-, gtkmm2
-, libglademm
-, libsigcxx
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, bc, fluxbox, gettext, glibmm
+, gtkmm2, libglademm, libsigcxx, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fme";
@@ -24,20 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P67OmExBdWM6NZhDyYceVJOZiy8RC+njk/QvgQcWZeQ=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    gettext
-    pkg-config
-  ];
-  buildInputs = [
-    bc
-    fluxbox
-    glibmm
-    gtkmm2
-    libglademm
-    libsigcxx
-  ];
+  nativeBuildInputs = [ autoconf automake gettext pkg-config ];
+  buildInputs = [ bc fluxbox glibmm gtkmm2 libglademm libsigcxx ];
 
   preConfigure = ''
     ./autogen.sh

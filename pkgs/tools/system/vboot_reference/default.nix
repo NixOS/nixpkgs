@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   pname = "vboot_reference";
 
   src = fetchFromGitiles {
-    url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
+    url =
+      "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     rev = checkout;
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
@@ -31,10 +32,8 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
-  ];
+  makeFlags =
+    [ "DESTDIR=$(out)" "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}" ];
 
   postInstall = ''
     mkdir -p $out/share/vboot

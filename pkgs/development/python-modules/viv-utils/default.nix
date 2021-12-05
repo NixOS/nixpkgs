@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, funcy
-, pefile
-, vivisect
-, intervaltree
-, setuptools
-}:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, funcy, pefile, vivisect
+, intervaltree, setuptools }:
 buildPythonPackage rec {
   pname = "viv-utils";
   version = "0.3.17";
@@ -25,20 +17,12 @@ buildPythonPackage rec {
     sed '/"argparse",/d' -i setup.py
   '';
 
-  propagatedBuildInputs = [
-    funcy
-    pefile
-    vivisect
-    intervaltree
-    setuptools
-  ];
+  propagatedBuildInputs = [ funcy pefile vivisect intervaltree setuptools ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "viv_utils"
-  ];
+  pythonImportsCheck = [ "viv_utils" ];
 
   meta = with lib; {
     description = "Utilities for working with vivisect";

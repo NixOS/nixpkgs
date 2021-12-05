@@ -1,8 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, alembic, boto, cornice, hawkauthlib, mozsvc, paste, pybrowserid, pyfxa
-, pymysql, pymysqlsa, sqlalchemy, testfixtures, tokenlib, umemcache
-, mock, nose, unittest2, webtest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, alembic, boto, cornice, hawkauthlib
+, mozsvc, paste, pybrowserid, pyfxa, pymysql, pymysqlsa, sqlalchemy
+, testfixtures, tokenlib, umemcache, mock, nose, unittest2, webtest }:
 
 buildPythonPackage rec {
   pname = "tokenserver";
@@ -16,13 +14,23 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    alembic boto cornice hawkauthlib mozsvc paste pybrowserid pyfxa
-    pymysql pymysqlsa sqlalchemy testfixtures tokenlib umemcache
+    alembic
+    boto
+    cornice
+    hawkauthlib
+    mozsvc
+    paste
+    pybrowserid
+    pyfxa
+    pymysql
+    pymysqlsa
+    sqlalchemy
+    testfixtures
+    tokenlib
+    umemcache
   ];
 
-  checkInputs = [
-    mock nose unittest2 webtest
-  ];
+  checkInputs = [ mock nose unittest2 webtest ];
 
   # Requires virtualenv, MySQL, ...
   doCheck = false;

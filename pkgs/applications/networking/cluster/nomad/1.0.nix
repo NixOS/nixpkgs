@@ -1,8 +1,4 @@
-{ callPackage
-, buildGoPackage
-, nvidia_x11
-, nvidiaGpuSupport
-}:
+{ callPackage, buildGoPackage, nvidia_x11, nvidiaGpuSupport }:
 
 callPackage ./generic.nix {
   inherit buildGoPackage nvidia_x11 nvidiaGpuSupport;

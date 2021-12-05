@@ -1,9 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, effects, lib }:
+build-idris-package {
   name = "farrp";
   version = "2018-02-13";
 
@@ -17,7 +13,8 @@ build-idris-package  {
   };
 
   meta = {
-    description = "Arrowized FRP library for Idris with static safety guarantees";
+    description =
+      "Arrowized FRP library for Idris with static safety guarantees";
     homepage = "https://github.com/lambda-11235/FarRP";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkg-config }:
+{ lib, stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkg-config
+}:
 
 stdenv.mkDerivation {
   pname = "kmscube";

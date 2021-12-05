@@ -1,29 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, m4
-, gperf
-, getent
-, libcap
-, gettext
-, pkg-config
-, udev
-, eudev
-, libxslt
-, python3
-, docbook5
-, docbook_xsl
-, docbook_xsl_ns
-, docbook_xml_dtd_42
-, docbook_xml_dtd_45
+{ stdenv, lib, fetchFromGitHub, meson, ninja, m4, gperf, getent, libcap, gettext
+, pkg-config, udev, eudev, libxslt, python3, docbook5, docbook_xsl
+, docbook_xsl_ns, docbook_xml_dtd_42, docbook_xml_dtd_45
 
 # Defaulting to false because usually the rationale for using elogind is to
 # use it in situation where a systemd dependency does not work (especially
 # when building with musl, which elogind explicitly supports).
-, enableSystemd ? false
-}:
+, enableSystemd ? false }:
 
 with lib;
 
@@ -48,12 +30,19 @@ stdenv.mkDerivation rec {
     libcap
     gettext
     libxslt.bin # xsltproc
-    docbook5 docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 docbook_xml_dtd_45 # needed for docbook without Internet
-    (python3.withPackages (p: with p; [ lxml ]))  # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
+    docbook5
+    docbook_xsl
+    docbook_xsl_ns
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45 # needed for docbook without Internet
+    (python3.withPackages (p:
+      with p;
+      [
+        lxml
+      ])) # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
   ];
 
-  buildInputs =
-    if enableSystemd then [ udev ] else [ eudev ];
+  buildInputs = if enableSystemd then [ udev ] else [ eudev ];
 
   # Inspired by the systemd `preConfigure`.
   # Conceptually we should patch all files required during the build, but not scripts
@@ -74,7 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/elogind/elogind";
-    description = ''The systemd project's "logind", extracted to a standalone package'';
+    description =
+      ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ nh2 ];

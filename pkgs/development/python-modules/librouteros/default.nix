@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, pytest-xdist
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook
+, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "librouteros";
@@ -20,10 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Zo9HCjYe9cCkqXhikAjDQKQXGkrMni3f+9KoqhZskNk=";
   };
 
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-xdist pytestCheckHook ];
 
   disabledTests = [
     # Disable tests which require QEMU to run
@@ -35,9 +27,7 @@ buildPythonPackage rec {
     "test_generator_ditch"
   ];
 
-  pythonImportsCheck = [
-    "librouteros"
-  ];
+  pythonImportsCheck = [ "librouteros" ];
 
   meta = with lib; {
     description = "Python implementation of the MikroTik RouterOS API";

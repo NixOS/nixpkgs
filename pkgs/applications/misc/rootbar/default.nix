@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchhg
-, pkg-config
-, meson
-, ninja
-, gtk3
-, json_c
-, libpulseaudio
-, wayland
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchhg, pkg-config, meson, ninja, gtk3, json_c, libpulseaudio
+, wayland, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rootbar";
@@ -20,16 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t6oDIYCVaCxaYy4bS1vxESaFDNxsx5JQLQK77eVuafE=";
   };
 
-  nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    json_c
-    libpulseaudio
-    wayland
-  ];
+  buildInputs = [ gtk3 json_c libpulseaudio wayland ];
 
   meta = with lib; {
     homepage = "https://hg.sr.ht/~scoopta/rootbar";

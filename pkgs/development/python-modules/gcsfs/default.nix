@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, google-auth
-, google-auth-oauthlib
-, google-cloud-storage
-, requests
-, decorator
-, fsspec
-, ujson
-, aiohttp
-, crcmod
-, pytest-vcr
-, vcrpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, google-auth, google-auth-oauthlib, google-cloud-storage, requests, decorator
+, fsspec, ujson, aiohttp, crcmod, pytest-vcr, vcrpy }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
@@ -41,20 +27,14 @@ buildPythonPackage rec {
     ujson
   ];
 
-  checkInputs = [
-    pytest-vcr
-    pytestCheckHook
-    vcrpy
-  ];
+  checkInputs = [ pytest-vcr pytestCheckHook vcrpy ];
 
   disabledTests = [
     # Tests wants to communicate with the Link-local address
     "test_GoogleCredentials_None"
   ];
 
-  pythonImportsCheck = [
-    "gcsfs"
-  ];
+  pythonImportsCheck = [ "gcsfs" ];
 
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";

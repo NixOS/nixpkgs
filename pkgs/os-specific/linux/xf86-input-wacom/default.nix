@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, xorgproto
-, libX11
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, ncurses
-, pixman
-, pkg-config
-, udev
-, utilmacros
-, xorgserver
-}:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, xorgproto, libX11, libXext
+, libXi, libXinerama, libXrandr, libXrender, ncurses, pixman, pkg-config, udev
+, utilmacros, xorgserver }:
 
 stdenv.mkDerivation rec {
   pname = "xf86-input-wacom";

@@ -1,18 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, bash-completion
-, gst-plugins-base
-, gst-plugins-bad
-, gst-devtools
-, libxml2
-, flex
-, gettext
-, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, bash-completion
+, gst-plugins-base, gst-plugins-bad, gst-devtools, libxml2, flex, gettext
+, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
@@ -25,13 +13,12 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "010xg960qsh5dwmf0y9l1q13h0cymmrgapzla2zsw66ylxqbi1s6";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
+  patches = [ ./fix_pkgconfig_includedir.patch ];
 
   nativeBuildInputs = [
     meson
@@ -47,21 +34,14 @@ stdenv.mkDerivation rec {
     # TODO add hotdoc here
   ];
 
-  buildInputs = [
-    bash-completion
-    libxml2
-  ];
+  buildInputs = [ bash-completion libxml2 ];
 
-  propagatedBuildInputs = [
-    gst-plugins-base
-    gst-plugins-bad
-  ];
+  propagatedBuildInputs = [ gst-plugins-base gst-plugins-bad ];
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "-Dintrospection=disabled" ];
 
   postPatch = ''
     patchShebangs \

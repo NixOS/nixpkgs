@@ -1,10 +1,10 @@
 { lib, fetchurl, perlPackages, wrapGAppsHook,
-  # libs
-  librsvg, sane-backends, sane-frontends,
-  # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
-  # test dependencies
-  xvfb-run, liberation_ttf, file, tesseract }:
+# libs
+librsvg, sane-backends, sane-frontends,
+# runtime dependencies
+imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+# test dependencies
+xvfb-run, liberation_ttf, file, tesseract }:
 
 with lib;
 
@@ -13,15 +13,15 @@ perlPackages.buildPerlPackage rec {
   version = "2.12.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
+    url =
+      "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-UrBt0QkSk7IP4mZYFoxFNJQ1Qmcb53CemvlYfsxjZ/s=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs =
-    [ librsvg sane-backends sane-frontends ] ++
-    (with perlPackages; [
+  buildInputs = [ librsvg sane-backends sane-frontends ]
+    ++ (with perlPackages; [
       Gtk3
       Gtk3ImageView
       Gtk3SimpleList
@@ -53,7 +53,8 @@ perlPackages.buildPerlPackage rec {
     ]);
 
   postPatch = let
-    fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
+    fontSubstitute =
+      "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
   in ''
     # Required for the program to properly load its SVG assets
     substituteInPlace bin/gscan2pdf \
@@ -97,9 +98,7 @@ perlPackages.buildPerlPackage rec {
     xvfb-run
     file
     tesseract # tests are expecting tesseract 3.x precisely
-  ] ++ (with perlPackages; [
-    TestPod
-  ]);
+  ] ++ (with perlPackages; [ TestPod ]);
 
   checkPhase = ''
     # Temporarily disable a dubiously failing test:

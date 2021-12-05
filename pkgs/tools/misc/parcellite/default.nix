@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, gtk2, hicolor-icon-theme, intltool, pkg-config
-, which, wrapGAppsHook, xdotool }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk2, hicolor-icon-theme
+, intltool, pkg-config, which, wrapGAppsHook, xdotool }:
 
 stdenv.mkDerivation rec {
   pname = "parcellite";

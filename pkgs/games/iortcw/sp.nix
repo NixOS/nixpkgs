@@ -25,15 +25,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "copyfiles" ];
 
-  buildInputs = [
-    opusfile libogg SDL2 freetype libjpeg openal curl
-  ];
+  buildInputs = [ opusfile libogg SDL2 freetype libjpeg openal curl ];
   nativeBuildInputs = [ makeWrapper ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${opusfile}/include/opus"
-  ];
+  NIX_CFLAGS_COMPILE =
+    [ "-I${SDL2.dev}/include/SDL2" "-I${opusfile}/include/opus" ];
   NIX_CFLAGS_LINK = [ "-lSDL2" ];
 
   postInstall = ''
@@ -43,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Single player version of game engine for Return to Castle Wolfenstein";
+    description =
+      "Single player version of game engine for Return to Castle Wolfenstein";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;

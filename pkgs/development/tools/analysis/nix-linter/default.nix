@@ -1,23 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fixplate
-, tasty
-, tasty-hunit
-, tasty-th
-, streamly
-, mtl
-, path
-, pretty-terminal
-, text
-, base
-, aeson
-, path-io
-, cmdargs
-, containers
-, hnix
-, bytestring
-}:
+{ lib, mkDerivation, fetchFromGitHub, fixplate, tasty, tasty-hunit, tasty-th
+, streamly, mtl, path, pretty-terminal, text, base, aeson, path-io, cmdargs
+, containers, hnix, bytestring }:
 
 mkDerivation rec {
   pname = "nix-linter";
@@ -33,7 +16,20 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [ fixplate ];
-  executableHaskellDepends = [ streamly mtl path pretty-terminal text base aeson cmdargs containers hnix bytestring path-io ];
+  executableHaskellDepends = [
+    streamly
+    mtl
+    path
+    pretty-terminal
+    text
+    base
+    aeson
+    cmdargs
+    containers
+    hnix
+    bytestring
+    path-io
+  ];
   testHaskellDepends = [ tasty tasty-hunit tasty-th ];
 
   description = "Linter for Nix(pkgs), based on hnix";

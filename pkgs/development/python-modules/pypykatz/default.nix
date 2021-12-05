@@ -1,13 +1,5 @@
-{ lib
-, aiosmb
-, aiowinreg
-, buildPythonPackage
-, fetchPypi
-, minidump
-, minikerberos
-, msldap
-, winsspi
-}:
+{ lib, aiosmb, aiowinreg, buildPythonPackage, fetchPypi, minidump, minikerberos
+, msldap, winsspi }:
 
 buildPythonPackage rec {
   pname = "pypykatz";
@@ -18,14 +10,8 @@ buildPythonPackage rec {
     sha256 = "1lyvypi1g4l9fq1f9q05bdn6vq8y5y9ghmb6ziqdycr0lxn7lfdd";
   };
 
-  propagatedBuildInputs = [
-    aiosmb
-    aiowinreg
-    minikerberos
-    msldap
-    winsspi
-    minidump
-  ];
+  propagatedBuildInputs =
+    [ aiosmb aiowinreg minikerberos msldap winsspi minidump ];
 
   # Project doesn't have tests
   doCheck = false;

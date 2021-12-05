@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, colored
-, boto
-, pkgs
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, colored, boto, pkgs }:
 
 buildPythonPackage rec {
   pname = "lsi";
@@ -22,7 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CLI for querying and SSHing onto AWS EC2 instances";
     homepage = "https://github.com/NarrativeScience/lsi";
-    maintainers = [maintainers.adnelson];
+    maintainers = [ maintainers.adnelson ];
     license = licenses.mit;
   };
 

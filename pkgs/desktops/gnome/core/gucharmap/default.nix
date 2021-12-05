@@ -1,47 +1,21 @@
-{ stdenv
-, lib
-, intltool
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, gtk3
-, adwaita-icon-theme
-, glib
-, desktop-file-utils
-, gtk-doc
-, wrapGAppsHook
-, itstool
-, libxml2
-, yelp-tools
-, docbook_xsl
-, docbook_xml_dtd_412
-, gsettings-desktop-schemas
-, callPackage
-, unzip
-, unicode-character-database
-, unihan-database
-, runCommand
-, symlinkJoin
-, gobject-introspection
-, nix-update-script
-}:
+{ stdenv, lib, intltool, fetchFromGitLab, meson, ninja, pkg-config, python3
+, gtk3, adwaita-icon-theme, glib, desktop-file-utils, gtk-doc, wrapGAppsHook
+, itstool, libxml2, yelp-tools, docbook_xsl, docbook_xml_dtd_412
+, gsettings-desktop-schemas, callPackage, unzip, unicode-character-database
+, unihan-database, runCommand, symlinkJoin, gobject-introspection
+, nix-update-script }:
 
 let
   # TODO: make upstream patch allowing to use the uncompressed file,
   # preferably from XDG_DATA_DIRS.
   # https://gitlab.gnome.org/GNOME/gucharmap/issues/13
-  unihanZip = runCommand "unihan" {} ''
+  unihanZip = runCommand "unihan" { } ''
     mkdir -p $out/share/unicode
     ln -s ${unihan-database.src} $out/share/unicode/Unihan.zip
   '';
   ucd = symlinkJoin {
     name = "ucd+unihan";
-    paths = [
-      unihanZip
-      unicode-character-database
-    ];
+    paths = [ unihanZip unicode-character-database ];
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
@@ -75,17 +49,9 @@ in stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk3
-    glib
-    gsettings-desktop-schemas
-    adwaita-icon-theme
-  ];
+  buildInputs = [ gtk3 glib gsettings-desktop-schemas adwaita-icon-theme ];
 
-  mesonFlags = [
-    "-Ducd_path=${ucd}/share/unicode"
-    "-Dvapi=false"
-  ];
+  mesonFlags = [ "-Ducd_path=${ucd}/share/unicode" "-Dvapi=false" ];
 
   doCheck = true;
 
@@ -94,13 +60,12 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.gucharmap";
-    };
+    updateScript = nix-update-script { attrPath = "gnome.gucharmap"; };
   };
 
   meta = with lib; {
-    description = "GNOME Character Map, based on the Unicode Character Database";
+    description =
+      "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;

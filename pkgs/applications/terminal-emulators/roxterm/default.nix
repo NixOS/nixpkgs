@@ -1,8 +1,7 @@
 { at-spi2-core, cmake, dbus, dbus-glib, docbook_xsl, libepoxy, fetchFromGitHub
-, glib, gtk3, harfbuzz, libXdmcp, libXtst, libpthreadstubs
-, libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2
-, pkg-config, lib, stdenv, util-linuxMinimal, vte, wrapGAppsHook, xmlto
-}:
+, glib, gtk3, harfbuzz, libXdmcp, libXtst, libpthreadstubs, libselinux, libsepol
+, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2, pkg-config, lib, stdenv
+, util-linuxMinimal, vte, wrapGAppsHook, xmlto }:
 
 stdenv.mkDerivation rec {
   pname = "roxterm";
@@ -17,11 +16,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook libxslt ];
 
-  buildInputs =
-    [ gtk3 dbus dbus-glib vte pcre2 harfbuzz libpthreadstubs libXdmcp
-      util-linuxMinimal glib docbook_xsl xmlto libselinux
-      libsepol libxkbcommon libepoxy at-spi2-core libXtst libtasn1 p11-kit
-    ];
+  buildInputs = [
+    gtk3
+    dbus
+    dbus-glib
+    vte
+    pcre2
+    harfbuzz
+    libpthreadstubs
+    libXdmcp
+    util-linuxMinimal
+    glib
+    docbook_xsl
+    xmlto
+    libselinux
+    libsepol
+    libxkbcommon
+    libepoxy
+    at-spi2-core
+    libXtst
+    libtasn1
+    p11-kit
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/realh/roxterm";

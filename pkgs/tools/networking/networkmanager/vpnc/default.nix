@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkg-config, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome, glib, kmod, file, fetchpatch, libnma }:
+{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkg-config
+, networkmanager, libsecret, gtk3, withGnome ? true, gnome, glib, kmod, file
+, fetchpatch, libnma }:
 let
   pname = "NetworkManager-vpnc";
   version = "1.2.6";
@@ -7,7 +8,9 @@ in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1js5lwcsqws4klgypfxl4ikmakv7v7xgddij1fj6b0y0qicx0kyy";
   };
 
@@ -18,7 +21,8 @@ in stdenv.mkDerivation {
     })
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/merge_requests/5.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/merge_requests/5.patch";
       sha256 = "0z0x5vqmrsap3ynamhya7gh6c6k5grhj2vqpy76alnv9xns8dzi6";
     })
   ];

@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, gettext
-, sassc
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, gettext, sassc
 }:
 
 stdenv.mkDerivation rec {
@@ -21,21 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gciBn5MQ5Cu+dROL5kCt2GCbNA7W4HOWXyjMBd4OP+8=";
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    sassc
-  ];
+  nativeBuildInputs = [ gettext meson ninja sassc ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {
-    description = "GTK theme designed to be smooth, attractive, fast, and usable";
+    description =
+      "GTK theme designed to be smooth, attractive, fast, and usable";
     homepage = "https://github.com/elementary/stylesheet";
     license = licenses.gpl3;
     platforms = platforms.linux;

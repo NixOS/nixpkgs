@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl,
-  pkg-config, pure, haskellPackages }:
+{ lib, stdenv, fetchurl, pkg-config, pure, haskellPackages }:
 
 stdenv.mkDerivation rec {
   baseName = "gen";
@@ -11,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "cfadd99a378b296325937d2492347611cc1e1d9f24594f91f3c2293eca01a4a8";
   };
 
-  hsEnv = haskellPackages.ghcWithPackages (hsPkgs : [hsPkgs.language-c]);
+  hsEnv = haskellPackages.ghcWithPackages (hsPkgs: [ hsPkgs.language-c ]);
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ hsEnv pure ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-gen.html";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [ asppsa ];
   };
 }

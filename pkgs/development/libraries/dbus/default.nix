@@ -1,21 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
-, systemd
-, audit
-, libapparmor
-, libX11 ? null
-, libICE ? null
-, libSM ? null
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
-, dbus
-, docbook_xml_dtd_44
-, docbook-xsl-nons
-, xmlto
-}:
+{ stdenv, lib, fetchurl, pkg-config, expat
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, audit, libapparmor, libX11 ? null, libICE ? null, libSM ? null
+, x11Support ? (stdenv.isLinux || stdenv.isDarwin), dbus, docbook_xml_dtd_44
+, docbook-xsl-nons, xmlto }:
 
 stdenv.mkDerivation rec {
   pname = "dbus";
@@ -41,32 +28,22 @@ stdenv.mkDerivation rec {
       --replace 'installcheck-local:' 'disabled:'
     substituteInPlace bus/Makefile.in \
       --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
-  '' + /* cleanup of runtime references */ ''
-    substituteInPlace ./dbus/dbus-sysdeps-unix.c \
-      --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
-    substituteInPlace ./tools/dbus-launch.c \
-      --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
-  '';
+  '' + # cleanup of runtime references
+    ''
+      substituteInPlace ./dbus/dbus-sysdeps-unix.c \
+        --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
+      substituteInPlace ./tools/dbus-launch.c \
+        --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+    '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    docbook_xml_dtd_44
-    docbook-xsl-nons
-    xmlto
-  ];
+  nativeBuildInputs = [ pkg-config docbook_xml_dtd_44 docbook-xsl-nons xmlto ];
 
-  propagatedBuildInputs = [
-    expat
-  ];
+  propagatedBuildInputs = [ expat ];
 
-  buildInputs =
-    lib.optionals x11Support [
-      libX11
-      libICE
-      libSM
-    ] ++ lib.optional enableSystemd systemd
+  buildInputs = lib.optionals x11Support [ libX11 libICE libSM ]
+    ++ lib.optional enableSystemd systemd
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
@@ -84,7 +61,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
+    ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
 
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
 

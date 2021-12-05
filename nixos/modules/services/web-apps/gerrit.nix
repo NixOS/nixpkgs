@@ -13,13 +13,11 @@ let
       supersectionType = lazyAttrsOf (either multipleType sectionType);
     in lazyAttrsOf supersectionType;
 
-  gerritConfig = pkgs.writeText "gerrit.conf" (
-    lib.generators.toGitINI cfg.settings
-  );
+  gerritConfig =
+    pkgs.writeText "gerrit.conf" (lib.generators.toGitINI cfg.settings);
 
-  replicationConfig = pkgs.writeText "replication.conf" (
-    lib.generators.toGitINI cfg.replicationSettings
-  );
+  replicationConfig = pkgs.writeText "replication.conf"
+    (lib.generators.toGitINI cfg.replicationSettings);
 
   # Wrap the gerrit java with all the java options so it can be called
   # like a normal CLI app
@@ -35,12 +33,8 @@ let
       "$@"
   '';
 
-  gerrit-plugins = pkgs.runCommand
-    "gerrit-plugins"
-    {
-      buildInputs = [ gerrit-cli ];
-    }
-    ''
+  gerrit-plugins =
+    pkgs.runCommand "gerrit-plugins" { buildInputs = [ gerrit-cli ]; } ''
       shopt -s nullglob
       mkdir $out
 
@@ -55,8 +49,7 @@ let
         ln -sf "$file" $out/$name
       done
     '';
-in
-{
+in {
   options = {
     services.gerrit = {
       enable = mkEnableOption "Gerrit service";
@@ -104,7 +97,7 @@ in
 
       settings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Gerrit configuration. This will be generated to the
           <literal>etc/gerrit.config</literal> file.
@@ -113,7 +106,7 @@ in
 
       replicationSettings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Replication configuration. This will be generated to the
           <literal>etc/replication.config</literal> file.
@@ -122,7 +115,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           List of plugins to add to Gerrit. Each derivation is a jar file
           itself where the name of the derivation is the name of plugin.
@@ -131,7 +124,7 @@ in
 
       builtinPlugins = mkOption {
         type = types.listOf (types.enum cfg.package.passthru.plugins);
-        default = [];
+        default = [ ];
         description = ''
           List of builtins plugins to install. Those are shipped in the
           <literal>gerrit.war</literal> file.
@@ -152,12 +145,12 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      {
-        assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
-        message = "Gerrit replicationSettings require enabling the replication plugin";
-      }
-    ];
+    assertions = [{
+      assertion = cfg.replicationSettings != { }
+        -> elem "replication" cfg.builtinPlugins;
+      message =
+        "Gerrit replicationSettings require enabling the replication plugin";
+    }];
 
     services.gerrit.settings = {
       cache.directory = "/var/cache/gerrit";
@@ -185,13 +178,7 @@ in
       requires = [ "gerrit.socket" ];
       after = [ "gerrit.socket" "network.target" ];
 
-      path = [
-        gerrit-cli
-        pkgs.bash
-        pkgs.coreutils
-        pkgs.git
-        pkgs.openssh
-      ];
+      path = [ gerrit-cli pkgs.bash pkgs.coreutils pkgs.git pkgs.openssh ];
 
       environment = {
         GERRIT_HOME = "%S/gerrit";
@@ -220,8 +207,7 @@ in
         # install the plugins
         rm -rf plugins
         ln -sv ${gerrit-plugins} plugins
-      ''
-      ;
+      '';
 
       serviceConfig = {
         CacheDirectory = "gerrit";

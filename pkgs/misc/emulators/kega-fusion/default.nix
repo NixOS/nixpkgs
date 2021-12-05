@@ -1,7 +1,19 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsa-lib, libSM, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
+{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsa-lib, libSM
+, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsa-lib libSM libX11 gdk-pixbuf pango libXinerama ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libGLU
+    glib
+    gtk2
+    alsa-lib
+    libSM
+    libX11
+    gdk-pixbuf
+    pango
+    libXinerama
+  ];
 
 in stdenv.mkDerivation {
   pname = "kega-fusion";
@@ -42,7 +54,9 @@ in stdenv.mkDerivation {
     libmpg123path=${lib.getLib mpg123}/lib/libmpg123.so.0
     EOF
     else
-      sed -i 's,^\(libmpg123path=\).*,\1${lib.getLib mpg123}/lib/libmpg123.so.0,' "$kega_localdir/Fusion.ini"
+      sed -i 's,^\(libmpg123path=\).*,\1${
+        lib.getLib mpg123
+      }/lib/libmpg123.so.0,' "$kega_localdir/Fusion.ini"
     fi
 
     # here we go!
@@ -69,7 +83,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
+    description =
+      "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
     homepage = "https://www.carpeludum.com/kega-fusion/";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.unfreeRedistributable;

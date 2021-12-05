@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, Babel
-, markupsafe
-, pytestCheckHook
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, Babel, markupsafe
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
@@ -18,18 +11,13 @@ buildPythonPackage rec {
     sha256 = "827a0e32839ab1600d4eb1c4c33ec5a8edfbc5cb42dafa13b81f182f97784b45";
   };
 
-  propagatedBuildInputs = [
-    Babel
-    markupsafe
-  ];
+  propagatedBuildInputs = [ Babel markupsafe ];
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.is32bit;
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # Avoid failure due to deprecation warning

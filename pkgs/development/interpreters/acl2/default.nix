@@ -1,8 +1,6 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper, substituteAll
-, sbcl, bash, which, perl, hostname
-, openssl, glucose, minisat, abc-verifier, z3, python
-, certifyBooks ? true
-} @ args:
+{ lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper
+, substituteAll, sbcl, bash, which, perl, hostname, openssl, glucose, minisat
+, abc-verifier, z3, python, certifyBooks ? true }@args:
 
 let
   # Disable immobile space so we don't run out of memory on large books, and
@@ -33,22 +31,34 @@ in stdenv.mkDerivation rec {
   # $IPASIR_SHARED_LIBRARY environment variable.
   libipasir = callPackage ./libipasirglucose4 { };
 
-  patches = [(substituteAll {
-    src = ./0001-Fix-some-paths-for-Nix-build.patch;
-    libipasir = "${libipasir}/lib/${libipasir.libname}";
-    libssl = "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
-    libcrypto = "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
-  })];
+  patches = [
+    (substituteAll {
+      src = ./0001-Fix-some-paths-for-Nix-build.patch;
+      libipasir = "${libipasir}/lib/${libipasir.libname}";
+      libssl =
+        "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libcrypto =
+        "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
     sbcl
   ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl hostname makeWrapper
+    which
+    perl
+    hostname
+    makeWrapper
     # Some of the books require one or more of these external tools:
-    openssl.out glucose minisat abc-verifier libipasir
-    z3 (python.withPackages (ps: [ ps.z3 ]))
+    openssl.out
+    glucose
+    minisat
+    abc-verifier
+    libipasir
+    z3
+    (python.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -88,7 +98,8 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
   '';
 
-  preDistPhases = [ (if certifyBooks then "certifyBooksPhase" else "removeBooksPhase") ];
+  preDistPhases =
+    [ (if certifyBooks then "certifyBooksPhase" else "removeBooksPhase") ];
 
   certifyBooksPhase = ''
     # Certify the community books
@@ -132,14 +143,20 @@ in stdenv.mkDerivation rec {
     '');
     homepage = "https://www.cs.utexas.edu/users/moore/acl2/";
     downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
-    license = with licenses; [
-      # ACL2 itself is bsd3
-      bsd3
-    ] ++ optionals certifyBooks [
-      # The community books are mostly bsd3 or mit but with a few
-      # other things thrown in.
-      mit gpl2 llgpl21 cc0 publicDomain unfreeRedistributable
-    ];
+    license = with licenses;
+      [
+        # ACL2 itself is bsd3
+        bsd3
+      ] ++ optionals certifyBooks [
+        # The community books are mostly bsd3 or mit but with a few
+        # other things thrown in.
+        mit
+        gpl2
+        llgpl21
+        cc0
+        publicDomain
+        unfreeRedistributable
+      ];
     maintainers = with maintainers; [ kini raskin ];
     platforms = platforms.all;
   };

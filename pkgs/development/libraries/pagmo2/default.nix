@@ -1,21 +1,14 @@
-{ fetchFromGitHub
-, lib, stdenv
-, cmake
-, eigen
-, nlopt
-, ipopt
-, boost
-}:
+{ fetchFromGitHub, lib, stdenv, cmake, eigen, nlopt, ipopt, boost }:
 
 stdenv.mkDerivation rec {
   pname = "pagmo2";
   version = "2.9";
 
   src = fetchFromGitHub {
-     owner = "esa";
-     repo = "pagmo2";
-     rev = "v${version}";
-     sha256 = "0al2i59m5qr83wz5n5408zvys0b3mc40rszf0l5b9a0gp1axj400";
+    owner = "esa";
+    repo = "pagmo2";
+    rev = "v${version}";
+    sha256 = "0al2i59m5qr83wz5n5408zvys0b3mc40rszf0l5b9a0gp1axj400";
   };
 
   nativeBuildInputs = [ cmake ];

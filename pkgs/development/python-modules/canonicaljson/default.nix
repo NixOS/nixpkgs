@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, frozendict
-, pytestCheckHook
-, pythonOlder
-, simplejson
-}:
+{ lib, buildPythonPackage, fetchPypi, frozendict, pytestCheckHook, pythonOlder
+, simplejson }:
 
 buildPythonPackage rec {
   pname = "canonicaljson";
@@ -18,22 +12,13 @@ buildPythonPackage rec {
     sha256 = "sha256-Xr3c10xbBm7mjsylZGUzjpsTgEZ+CpBvR5dpfJ+zgeI=";
   };
 
-  propagatedBuildInputs = [
-    frozendict
-    simplejson
-  ];
+  propagatedBuildInputs = [ frozendict simplejson ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_frozen_dict"
-  ];
+  disabledTests = [ "test_frozen_dict" ];
 
-  pythonImportsCheck = [
-    "canonicaljson"
-  ];
+  pythonImportsCheck = [ "canonicaljson" ];
 
   meta = with lib; {
     description = "Encodes objects and arrays as RFC 7159 JSON";

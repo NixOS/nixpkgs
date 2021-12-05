@@ -1,54 +1,55 @@
-{ lib, stdenv, alsa-lib, atk, at-spi2-core, cairo, cups, dbus, dpkg, expat, fetchurl
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3,  libdrm, libX11
+{ lib, stdenv, alsa-lib, atk, at-spi2-core, cairo, cups, dbus, dpkg, expat
+, fetchurl, fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3, libdrm, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
-, libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
-, libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, mesa, nspr, nss
-, pango, systemd }:
+, libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx, libnotify
+, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, mesa, nspr, nss, pango
+, systemd }:
 
-let gitterDirectorySuffix = "opt/gitter";
-   libPath = lib.makeLibraryPath [
-     alsa-lib
-     atk
-     at-spi2-core
-     cairo
-     cups
-     dbus
-     expat
-     fontconfig
-     freetype
-     gdk-pixbuf
-     glib
-     gnome2.GConf
-     gtk3
-     libX11
-     libXScrnSaver
-     libXcomposite
-     libXcursor
-     libXdamage
-     libXext
-     libXfixes
-     libXi
-     libXrandr
-     libXrender
-     libXtst
-     libappindicator-gtk3
-     libcxx
-     libdrm
-     libnotify
-     libpulseaudio
-     libxcb
-     mesa
-     nspr
-     nss
-     pango
-     stdenv.cc.cc
-     systemd
+let
+  gitterDirectorySuffix = "opt/gitter";
+  libPath = lib.makeLibraryPath [
+    alsa-lib
+    atk
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gnome2.GConf
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libappindicator-gtk3
+    libcxx
+    libdrm
+    libnotify
+    libpulseaudio
+    libxcb
+    mesa
+    nspr
+    nss
+    pango
+    stdenv.cc.cc
+    systemd
   ];
-    doELFPatch = target: ''
-      patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-         --set-rpath "$out/${gitterDirectorySuffix}/lib:${libPath}" \
-         $out/${gitterDirectorySuffix}/${target}
-       '';
+  doELFPatch = target: ''
+    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+       --set-rpath "$out/${gitterDirectorySuffix}/lib:${libPath}" \
+       $out/${gitterDirectorySuffix}/${target}
+     '';
 in stdenv.mkDerivation rec {
   pname = "gitter";
   version = "5.0.1";

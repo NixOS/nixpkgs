@@ -1,28 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libX11
-, gtk2
-, fig2dev
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, pkg-config, libX11, gtk2, fig2dev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "chemtool";
   version = "1.6.14";
 
   src = fetchurl {
-    url = "http://ruby.chemie.uni-freiburg.de/~martin/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "http://ruby.chemie.uni-freiburg.de/~martin/${pname}/${pname}-${version}.tar.gz";
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-  buildInputs = [
-    libX11
-    gtk2
-    fig2dev
-  ];
+  buildInputs = [ libX11 gtk2 fig2dev ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")

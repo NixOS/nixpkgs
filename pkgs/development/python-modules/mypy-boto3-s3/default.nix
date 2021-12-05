@@ -1,10 +1,4 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, typing-extensions
-}:
+{ lib, boto3, buildPythonPackage, fetchPypi, pythonOlder, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
@@ -17,18 +11,13 @@ buildPythonPackage rec {
     sha256 = "sha256-7Zw8NxOEXDRmLChxHQXVU/HzR8z6HuLxX8bB3pZuCqc=";
   };
 
-  propagatedBuildInputs = [
-    boto3
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ boto3 ]
+    ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mypy_boto3_s3"
-  ];
+  pythonImportsCheck = [ "mypy_boto3_s3" ];
 
   meta = with lib; {
     description = "Type annotations for boto3";

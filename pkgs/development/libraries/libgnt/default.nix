@@ -1,8 +1,5 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config
-, gtk-doc, docbook-xsl-nons
-, glib, ncurses, libxml2
-, buildDocs ? true
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, gtk-doc, docbook-xsl-nons
+, glib, ncurses, libxml2, buildDocs ? true }:
 stdenv.mkDerivation rec {
   pname = "libgnt";
   version = "2.14.1";
@@ -28,7 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An ncurses toolkit for creating text-mode graphical user interfaces";
+    description =
+      "An ncurses toolkit for creating text-mode graphical user interfaces";
     homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

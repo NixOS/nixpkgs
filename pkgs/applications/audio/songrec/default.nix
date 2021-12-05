@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gtk3
-, openssl
-, alsa-lib
-, pkg-config
-, ffmpeg
-}:
+{ lib, rustPlatform, fetchFromGitHub, gtk3, openssl, alsa-lib, pkg-config
+, ffmpeg }:
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";

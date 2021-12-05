@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, future, python-dateutil, six, pytest, mock, parameterized }:
+{ lib, buildPythonPackage, fetchPypi, future, python-dateutil, six, pytest, mock
+, parameterized }:
 
 buildPythonPackage rec {
   pname = "vertica-python";

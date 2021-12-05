@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, future
-, fetchFromGitHub
-, setuptools-scm
-, pythonOlder
+{ lib, buildPythonPackage, future, fetchFromGitHub, setuptools-scm, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,13 +13,9 @@ buildPythonPackage rec {
     sha256 = "0sr17rmqpr874m8rpkp8xdz8kjshhimbfgq13qy4lscaiznmlf0d";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
   # Test data encrypted
   doCheck = false;
@@ -32,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pefile" ];
 
   meta = with lib; {
-    description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
+    description =
+      "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
     license = licenses.mit;
     maintainers = [ maintainers.pamplemousse ];

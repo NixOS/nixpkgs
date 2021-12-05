@@ -13,10 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python3Packages.psutil ];
 
-  checkInputs = with python3Packages; [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ mock pytestCheckHook ];
 
   doInstallCheck = true;
   installCheckPhase = ''

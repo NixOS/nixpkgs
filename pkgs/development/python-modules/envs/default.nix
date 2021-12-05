@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, click
-, jinja2
-, terminaltables
-, mock
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, click, jinja2, terminaltables
+, mock, nose }:
 
 buildPythonPackage rec {
   pname = "envs";
@@ -21,21 +13,15 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/capless/envs/pull/19
     (fetchpatch {
-      url = "https://github.com/capless/envs/commit/6947043fa9120a7b17094fd43ee0e1edf808f42b.patch";
+      url =
+        "https://github.com/capless/envs/commit/6947043fa9120a7b17094fd43ee0e1edf808f42b.patch";
       sha256 = "0zswg8kp2g922mkc7x34ps37qli1d1mjwna2jfrbnsq2fg4mk818";
     })
   ];
 
-  propagatedBuildInputs = [
-    click
-    jinja2
-    terminaltables
-  ];
+  propagatedBuildInputs = [ click jinja2 terminaltables ];
 
-  checkInputs = [
-    mock
-    nose
-  ];
+  checkInputs = [ mock nose ];
 
   checkPhase = ''
     runHook preCheck

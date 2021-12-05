@@ -60,7 +60,7 @@ let
 
   };
 
-  swapCfg = {config, options, ...}: {
+  swapCfg = { config, options, ... }: {
 
     options = {
 
@@ -107,7 +107,8 @@ let
           cipher = "serpent-xts-plain64";
           source = "/dev/random";
         };
-        type = types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
+        type = types.coercedTo types.bool randomEncryptionCoerce
+          (types.submodule randomEncryptionOpts);
         description = ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
@@ -126,7 +127,7 @@ let
       discardPolicy = mkOption {
         default = null;
         example = "once";
-        type = types.nullOr (types.enum ["once" "pages" "both" ]);
+        type = types.nullOr (types.enum [ "once" "pages" "both" ]);
         description = ''
           Specify the discard policy for the swap device. If "once", then the
           whole swap space is discarded at swapon invocation. If "pages",
@@ -158,24 +159,26 @@ let
     };
 
     config = rec {
-      device = mkIf options.label.isDefined
-        "/dev/disk/by-label/${config.label}";
-      deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
-      realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
+      device =
+        mkIf options.label.isDefined "/dev/disk/by-label/${config.label}";
+      deviceName =
+        lib.replaceChars [ "\\" ] [ "" ] (escapeSystemdPath config.device);
+      realDevice = if config.randomEncryption.enable then
+        "/dev/mapper/${deviceName}"
+      else
+        config.device;
     };
 
   };
 
-in
-
-{
+in {
 
   ###### interface
 
   options = {
 
     swapDevices = mkOption {
-      default = [];
+      default = [ ];
       example = [
         { device = "/dev/hda7"; }
         { device = "/var/swapfile"; }
@@ -198,51 +201,62 @@ in
 
   config = mkIf ((length config.swapDevices) != 0) {
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "SWAP")
-    ];
+    system.requiredKernelConfig = with config.lib.kernelConfig;
+      [ (isYes "SWAP") ];
 
     # Create missing swapfiles.
-    systemd.services =
-      let
+    systemd.services = let
 
-        createSwapDevice = sw:
-          assert sw.device != "";
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-label" sw.device);
-          let realDevice' = escapeSystemdPath sw.realDevice;
-          in nameValuePair "mkswap-${sw.deviceName}"
-          { description = "Initialisation of swap device ${sw.device}";
-            wantedBy = [ "${realDevice'}.swap" ];
-            before = [ "${realDevice'}.swap" ];
-            path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+      createSwapDevice = sw:
+        assert sw.device != "";
+        assert !(sw.randomEncryption.enable
+          && lib.hasPrefix "/dev/disk/by-uuid" sw.device);
+        assert !(sw.randomEncryption.enable
+          && lib.hasPrefix "/dev/disk/by-label" sw.device);
+        let realDevice' = escapeSystemdPath sw.realDevice;
+        in nameValuePair "mkswap-${sw.deviceName}" {
+          description = "Initialisation of swap device ${sw.device}";
+          wantedBy = [ "${realDevice'}.swap" ];
+          before = [ "${realDevice'}.swap" ];
+          path = [ pkgs.util-linux ]
+            ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
-            script =
-              ''
-                ${optionalString (sw.size != null) ''
-                  currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
-                  if [ "${toString sw.size}" != "$currentSize" ]; then
-                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                    chmod 0600 ${sw.device}
-                    ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
-                  fi
-                ''}
-                ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
-                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
-                  mkswap ${sw.realDevice}
-                ''}
-              '';
+          script = ''
+            ${optionalString (sw.size != null) ''
+              currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
+              if [ "${toString sw.size}" != "$currentSize" ]; then
+                dd if=/dev/zero of="${sw.device}" bs=1M count=${
+                  toString sw.size
+                }
+                chmod 0600 ${sw.device}
+                ${
+                  optionalString (!sw.randomEncryption.enable)
+                  "mkswap ${sw.realDevice}"
+                }
+              fi
+            ''}
+            ${optionalString sw.randomEncryption.enable ''
+              cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
+                ${
+                  optionalString sw.randomEncryption.allowDiscards
+                  "--allow-discards"
+                } ${sw.device} ${sw.deviceName}
+              mkswap ${sw.realDevice}
+            ''}
+          '';
 
-            unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
-            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = sw.randomEncryption.enable;
-            serviceConfig.ExecStop = optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
-            restartIfChanged = false;
-          };
+          unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
+          unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = sw.randomEncryption.enable;
+          serviceConfig.ExecStop = optionalString sw.randomEncryption.enable
+            "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+          restartIfChanged = false;
+        };
 
-      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
+    in listToAttrs (map createSwapDevice
+      (filter (sw: sw.size != null || sw.randomEncryption.enable)
+        config.swapDevices));
 
   };
 

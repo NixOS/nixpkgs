@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libffi
-, llvm_6
-, doCheck ? false
-, perl
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libffi, llvm_6
+, doCheck ? false, perl }:
 
 stdenv.mkDerivation {
   pname = "dale";

@@ -6,7 +6,12 @@ buildGoModule rec {
 
   excludedPackages = [ "website" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}" "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}"
+    "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true"
+  ];
 
   src = fetchFromGitHub {
     owner = "elves";
@@ -31,7 +36,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ vrthra AndersonTorres ];
   };
 
-  passthru = {
-    shellPath = "/bin/elvish";
-  };
+  passthru = { shellPath = "/bin/elvish"; };
 }

@@ -1,12 +1,8 @@
 import ./make-test-python.nix ({ pkgs, ... }:
-  let
-    homeserverUrl = "http://homeserver:8448";
-  in
-  {
+  let homeserverUrl = "http://homeserver:8448";
+  in {
     name = "matrix-appservice-irc";
-    meta = {
-      maintainers = pkgs.matrix-appservice-irc.meta.maintainers;
-    };
+    meta = { maintainers = pkgs.matrix-appservice-irc.meta.maintainers; };
 
     nodes = {
       homeserver = { pkgs, ... }: {
@@ -25,8 +21,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
                 "bind_address" = "";
                 "port" = 8448;
                 "resources" = [
-                  { "compress" = true; "names" = [ "client" ]; }
-                  { "compress" = false; "names" = [ "federation" ]; }
+                  {
+                    "compress" = true;
+                    "names" = [ "client" ];
+                  }
+                  {
+                    "compress" = false;
+                    "names" = [ "federation" ];
+                  }
                 ];
                 "tls" = false;
                 "type" = "http";
@@ -84,8 +86,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       client = { pkgs, ... }: {
         environment.systemPackages = [
-          (pkgs.writers.writePython3Bin "do_test"
-          {
+          (pkgs.writers.writePython3Bin "do_test" {
             libraries = [ pkgs.python3Packages.matrix-nio ];
             flakeIgnore = [
               # We don't live in the dark ages anymore.
@@ -94,92 +95,91 @@ import ./make-test-python.nix ({ pkgs, ... }:
               "E501"
             ];
           } ''
-              import sys
-              import socket
-              import functools
-              from time import sleep
-              import asyncio
+            import sys
+            import socket
+            import functools
+            from time import sleep
+            import asyncio
 
-              from nio import AsyncClient, RoomMessageText, JoinResponse
-
-
-              async def matrix_room_message_text_callback(matrix: AsyncClient, msg: str, _r, e):
-                  print("Received matrix text message: ", e)
-                  if msg in e.body:
-                      print("Received hi from IRC")
-                      await matrix.close()
-                      exit(0)  # Actual exit point
+            from nio import AsyncClient, RoomMessageText, JoinResponse
 
 
-              class IRC:
-                  def __init__(self):
-                      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                      sock.connect(("ircd", 6667))
-                      sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-                      sock.send(b"USER bob bob bob :bob\n")
-                      sock.send(b"NICK bob\n")
-                      self.sock = sock
-
-                  def join(self, room: str):
-                      self.sock.send(f"JOIN {room}\n".encode())
-
-                  def privmsg(self, room: str, msg: str):
-                      self.sock.send(f"PRIVMSG {room} :{msg}\n".encode())
-
-                  def expect_msg(self, body: str):
-                      buffer = ""
-                      while True:
-                          buf = self.sock.recv(1024).decode()
-                          buffer += buf
-                          if body in buffer:
-                              return
+            async def matrix_room_message_text_callback(matrix: AsyncClient, msg: str, _r, e):
+                print("Received matrix text message: ", e)
+                if msg in e.body:
+                    print("Received hi from IRC")
+                    await matrix.close()
+                    exit(0)  # Actual exit point
 
 
-              async def run(homeserver: str):
-                  irc = IRC()
+            class IRC:
+                def __init__(self):
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.connect(("ircd", 6667))
+                    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                    sock.send(b"USER bob bob bob :bob\n")
+                    sock.send(b"NICK bob\n")
+                    self.sock = sock
 
-                  matrix = AsyncClient(homeserver)
-                  response = await matrix.register("alice", "foobar")
-                  print("Matrix register response: ", response)
+                def join(self, room: str):
+                    self.sock.send(f"JOIN {room}\n".encode())
 
-                  response = await matrix.join("#irc_#test:homeserver")
-                  print("Matrix join room response:", response)
-                  assert isinstance(response, JoinResponse)
-                  room_id = response.room_id
+                def privmsg(self, room: str, msg: str):
+                    self.sock.send(f"PRIVMSG {room} :{msg}\n".encode())
 
-                  irc.join("#test")
-                  # FIXME: what are we waiting on here? Matrix? IRC? Both?
-                  # 10s seem bad for busy hydra machines.
-                  sleep(10)
-
-                  # Exchange messages
-                  print("Sending text message to matrix room")
-                  response = await matrix.room_send(
-                      room_id=room_id,
-                      message_type="m.room.message",
-                      content={"msgtype": "m.text", "body": "hi from matrix"},
-                  )
-                  print("Matrix room send response: ", response)
-                  irc.privmsg("#test", "hi from irc")
-
-                  print("Waiting for the matrix message to appear on the IRC side...")
-                  irc.expect_msg("hi from matrix")
-
-                  callback = functools.partial(
-                      matrix_room_message_text_callback, matrix, "hi from irc"
-                  )
-                  matrix.add_event_callback(callback, RoomMessageText)
-
-                  print("Waiting for matrix message...")
-                  await matrix.sync_forever()
-
-                  exit(1)  # Unreachable
+                def expect_msg(self, body: str):
+                    buffer = ""
+                    while True:
+                        buf = self.sock.recv(1024).decode()
+                        buffer += buf
+                        if body in buffer:
+                            return
 
 
-              if __name__ == "__main__":
-                  asyncio.run(run(sys.argv[1]))
-            ''
-          )
+            async def run(homeserver: str):
+                irc = IRC()
+
+                matrix = AsyncClient(homeserver)
+                response = await matrix.register("alice", "foobar")
+                print("Matrix register response: ", response)
+
+                response = await matrix.join("#irc_#test:homeserver")
+                print("Matrix join room response:", response)
+                assert isinstance(response, JoinResponse)
+                room_id = response.room_id
+
+                irc.join("#test")
+                # FIXME: what are we waiting on here? Matrix? IRC? Both?
+                # 10s seem bad for busy hydra machines.
+                sleep(10)
+
+                # Exchange messages
+                print("Sending text message to matrix room")
+                response = await matrix.room_send(
+                    room_id=room_id,
+                    message_type="m.room.message",
+                    content={"msgtype": "m.text", "body": "hi from matrix"},
+                )
+                print("Matrix room send response: ", response)
+                irc.privmsg("#test", "hi from irc")
+
+                print("Waiting for the matrix message to appear on the IRC side...")
+                irc.expect_msg("hi from matrix")
+
+                callback = functools.partial(
+                    matrix_room_message_text_callback, matrix, "hi from irc"
+                )
+                matrix.add_event_callback(callback, RoomMessageText)
+
+                print("Waiting for matrix message...")
+                await matrix.sync_forever()
+
+                exit(1)  # Unreachable
+
+
+            if __name__ == "__main__":
+                asyncio.run(run(sys.argv[1]))
+          '')
         ];
       };
     };

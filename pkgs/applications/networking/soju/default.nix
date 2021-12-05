@@ -13,16 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-60b0jhyXQg9RG0mkvUOmJOEGv96FZq/Iwv1S9c6C35c=";
 
-  subPackages = [
-    "cmd/soju"
-    "cmd/sojuctl"
-    "contrib/znc-import.go"
-  ];
+  subPackages = [ "cmd/soju" "cmd/sojuctl" "contrib/znc-import.go" ];
 
-  nativeBuildInputs = [
-    scdoc
-    installShellFiles
-  ];
+  nativeBuildInputs = [ scdoc installShellFiles ];
 
   postInstall = ''
     scdoc < doc/soju.1.scd > doc/soju.1

@@ -1,22 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin ? null
-, fontconfig ? null
-, freetype ? null
-, libX11
-, libXext ? null
-, libXt ? null
-, perl ? null  # For building web manuals
-, which
-, xorgproto ? null
-}:
+{ lib, stdenv, fetchFromGitHub, darwin ? null, fontconfig ? null
+, freetype ? null, libX11, libXext ? null, libXt ? null
+, perl ? null # For building web manuals
+, which, xorgproto ? null }:
 
 stdenv.mkDerivation {
   pname = "plan9port";
   version = "2021-10-19";
 
-  src =  fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
     rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
@@ -44,9 +35,7 @@ stdenv.mkDerivation {
       --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
-  buildInputs = [
-    perl
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  buildInputs = [ perl ] ++ lib.optionals (!stdenv.isDarwin) [
     fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam
     libX11

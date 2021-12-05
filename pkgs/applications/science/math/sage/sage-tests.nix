@@ -1,15 +1,11 @@
-{ stdenv
-, lib
-, sage-with-env
-, makeWrapper
+{ stdenv, lib, sage-with-env, makeWrapper
 , files ? null # "null" means run all tests
 , longTests ? true # run tests marked as "long time" (roughly doubles runtime)
-# Run as many tests as possible in approximately n seconds. This will give each
-# file to test a "time budget" and stop tests if it is exceeded. 300 is the
-# upstream default value.
-# https://trac.sagemath.org/ticket/25270 for details.
-, timeLimit ? null
-}:
+  # Run as many tests as possible in approximately n seconds. This will give each
+  # file to test a "time budget" and stop tests if it is exceeded. 300 is the
+  # upstream default value.
+  # https://trac.sagemath.org/ticket/25270 for details.
+, timeLimit ? null }:
 
 # for a quick test of some source files:
 # nix-build -E 'with (import ./. {}); sage.tests.override { files = [ "src/sage/misc/cython.py" ];}'
@@ -19,19 +15,17 @@ let
   runAllTests = files == null;
   testArgs = if runAllTests then "--all" else testFileList;
   patienceSpecifier = if longTests then "--long" else "";
-  timeSpecifier = if timeLimit == null then "" else "--short ${toString timeLimit}";
-  relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
+  timeSpecifier =
+    if timeLimit == null then "" else "--short ${toString timeLimit}";
+  relpathToArg = relpath:
+    lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   version = src.version;
   pname = "sage-tests";
   inherit src;
 
-  buildInputs = [
-    makeWrapper
-    sage-with-env
-  ];
+  buildInputs = [ makeWrapper sage-with-env ];
 
   dontUnpack = true;
   configurePhase = "#do nothing";

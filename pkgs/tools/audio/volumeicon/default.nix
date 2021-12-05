@@ -5,7 +5,8 @@ stdenv.mkDerivation {
   version = "0.5.1";
 
   src = fetchurl {
-    url = "http://softwarebakery.com/maato/files/volumeicon/volumeicon-0.5.1.tar.gz";
+    url =
+      "http://softwarebakery.com/maato/files/volumeicon/volumeicon-0.5.1.tar.gz";
     sha256 = "182xl2w8syv6ky2h2bc9imc6ap8pzh0p7rp63hh8nw0xm38c3f14";
   };
 

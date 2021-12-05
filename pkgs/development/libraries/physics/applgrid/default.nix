@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   # For some reason zlib was only needed after bump to gfortran8
   buildInputs = [ hoppet lhapdf root5 zlib ];
 
-  patches = [
-    ./bad_code.patch
-  ];
+  patches = [ ./bad_code.patch ];
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \
@@ -24,7 +22,8 @@ stdenv.mkDerivation rec {
   '' + (if stdenv.isDarwin then ''
     substituteInPlace src/Makefile.in \
       --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
-  '' else "");
+  '' else
+    "");
 
   enableParallelBuilding = false; # broken
 
@@ -36,10 +35,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
-    license     = licenses.gpl3;
-    homepage    = "http://applgrid.hepforge.org";
-    platforms   = platforms.unix;
+    description =
+      "The APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
+    license = licenses.gpl3;
+    homepage = "http://applgrid.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

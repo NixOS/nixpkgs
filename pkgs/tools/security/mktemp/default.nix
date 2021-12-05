@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Simple tool to make temporary file handling in shells scripts safe and simple";
+    description =
+      "Simple tool to make temporary file handling in shells scripts safe and simple";
     homepage = "https://www.mktemp.org";
     license = licenses.isc;
     platforms = platforms.unix;

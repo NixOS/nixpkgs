@@ -1,7 +1,7 @@
-{ fetchurl }:
-{
+{ fetchurl }: {
   fastutil = fetchurl {
-    url = "http://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
+    url =
+      "http://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
     sha256 = "0d88m0rpi69wgxhnj5zh924q4zsvxq8m4ybk7m9mr3gz1hx0yx8c";
   };
   osmpbf = fetchurl {
@@ -9,7 +9,8 @@
     sha256 = "0zb4pqkwly5z30ww66qhhasdhdrzwmrw00347yrbgyk2ii4wjad3";
   };
   protobuf = fetchurl {
-    url = "mirror://maven/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar";
+    url =
+      "mirror://maven/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar";
     sha256 = "0x6c4pbsizvk3lm6nxcgi1g2iqgrxcna1ip74lbn01f0fm2wdhg0";
   };
   xpp3 = fetchurl {

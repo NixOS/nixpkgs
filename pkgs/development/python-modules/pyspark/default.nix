@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py4j
-}:
+{ lib, buildPythonPackage, fetchPypi, py4j }:
 
 buildPythonPackage rec {
   pname = "pyspark";
@@ -21,16 +17,12 @@ buildPythonPackage rec {
       --replace py4j==0.10.9.2 'py4j>=0.10.9,<0.11'
   '';
 
-  propagatedBuildInputs = [
-    py4j
-  ];
+  propagatedBuildInputs = [ py4j ];
 
   # Tests assume running spark instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyspark"
-  ];
+  pythonImportsCheck = [ "pyspark" ];
 
   meta = with lib; {
     description = "Python bindings for Apache Spark";

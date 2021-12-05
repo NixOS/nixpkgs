@@ -7,7 +7,8 @@ buildGoPackage rec {
   goPackagePath = "golang.zx2c4.com/wireguard";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
+    url =
+      "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
     sha256 = "RUUueSsfEi1H+ckrnPKqbVlWONhCplMMftlyAmwK+ss=";
   };
 

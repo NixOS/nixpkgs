@@ -1,41 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, python3Packages
-, wrapGAppsHook
-, glib
-, libxml2
-, libxslt
-, sqlite
-, libsoup
-, webkitgtk
-, json-glib
-, gst_all_1
-, libnotify
-, gtk3
-, gsettings-desktop-schemas
-, libpeas
-, libsecret
-, gobject-introspection
-, glib-networking
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, python3Packages, wrapGAppsHook
+, glib, libxml2, libxslt, sqlite, libsoup, webkitgtk, json-glib, gst_all_1
+, libnotify, gtk3, gsettings-desktop-schemas, libpeas, libsecret
+, gobject-introspection, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "liferea";
   version = "1.12.9";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
     sha256 = "06ybr1wjlfir8iqjx6x0v1knd4b2hsy30qmkk4kssy6ky2ahc66q";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    python3Packages.wrapPython
-    intltool
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ wrapGAppsHook python3Packages.wrapPython intltool pkg-config ];
 
   buildInputs = [
     glib
@@ -59,10 +38,7 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [
-    pygobject3
-    pycairo
-  ];
+  pythonPath = with python3Packages; [ pygobject3 pycairo ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"

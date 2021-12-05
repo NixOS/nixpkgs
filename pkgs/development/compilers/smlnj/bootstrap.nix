@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   version = "110.91";
 
   src = fetchurl {
-    url = "http://smlnj.cs.uchicago.edu/dist/working/${version}/smlnj-x86-${version}.pkg";
+    url =
+      "http://smlnj.cs.uchicago.edu/dist/working/${version}/smlnj-x86-${version}.pkg";
     sha256 = "12jn50h5jz0ac1vzld2mb94p1dyc8h0mk0hip2wj5xqk1dbzwxl4";
   };
 
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compiler for the Standard ML '97 programming language";
-    homepage    = "http://www.smlnj.org";
-    license     = lib.licenses.free;
-    platforms   = lib.platforms.darwin;
+    homepage = "http://www.smlnj.org";
+    license = lib.licenses.free;
+    platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.jwiegley ];
   };
 }

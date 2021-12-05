@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems
+, perl, writeText, runtimeShell, makeWrapper }:
 let
   pname = "scenic-view";
   version = "11.0.2";
@@ -29,7 +30,7 @@ let
         | sh
     '';
 
-    outputHashAlgo =  "sha256";
+    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "0d6qs0wg2nfxyq85q46a8dcdqknz9pypb2qmvc8k2w8vcdac1y7n";
   };
@@ -65,7 +66,8 @@ let
     name = pname;
     desktopName = pname;
     exec = pname;
-    comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+    comment =
+      "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
     mimeType = "application/java;application/java-vm;application/java-archive";
     categories = "Development";
   };
@@ -81,7 +83,7 @@ in stdenv.mkDerivation rec {
     gradle --offline --no-daemon --info --init-script ${gradleInit} build
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -96,7 +98,8 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+    description =
+      "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
     longDescription = ''
       A JavaFX application designed to make it simple to understand the current state of your application scenegraph
       and to also easily manipulate properties of the scenegraph without having to keep editing your code.

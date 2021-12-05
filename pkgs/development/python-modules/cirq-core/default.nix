@@ -1,32 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, duet
-, matplotlib
-, networkx
-, numpy
-, pandas
-, requests
-, scipy
-, sortedcontainers
-, sympy
-, tqdm
-, typing-extensions
-  # Contrib requirements
-, withContribRequires ? false
-, autoray ? null
-, opt-einsum
-, ply
-, pylatex ? null
-, pyquil ? null
-, quimb ? null
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, fetchpatch, duet
+, matplotlib, networkx, numpy, pandas, requests, scipy, sortedcontainers, sympy
+, tqdm, typing-extensions
+# Contrib requirements
+, withContribRequires ? false, autoray ? null, opt-einsum, ply, pylatex ? null
+, pyquil ? null, quimb ? null
   # test inputs
-, pytestCheckHook
-, freezegun
-, pytest-asyncio
-}:
+, pytestCheckHook, freezegun, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "cirq-core";
@@ -47,13 +26,15 @@ buildPythonPackage rec {
     # present in upstream master - remove after 0.13.1
     (fetchpatch {
       name = "fix-test-tolerances.part-1.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
+      url =
+        "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
       sha256 = "0ka24v6dfxnap9p07ni32z9zccbmw0lbrp5mcknmpsl12hza98xm";
       stripLen = 1;
     })
     (fetchpatch {
       name = "fix-test-tolerances.part-2.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
+      url =
+        "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
       sha256 = "0k2dqsm4ydn6556d40kc8j04jgjn59z4wqqg1jn1r916a7yxw493";
       stripLen = 1;
     })
@@ -87,11 +68,7 @@ buildPythonPackage rec {
     quimb
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    freezegun
-  ];
+  checkInputs = [ pytestCheckHook pytest-asyncio freezegun ];
 
   pytestFlagsArray = lib.optionals (!withContribRequires) [
     # requires external (unpackaged) libraries, so untested.
@@ -103,7 +80,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
+    description =
+      "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;

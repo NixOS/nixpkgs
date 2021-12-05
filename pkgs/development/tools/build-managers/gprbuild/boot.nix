@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, which
-, xmlada # for src
+{ stdenv, lib, fetchFromGitHub, gnat, which, xmlada # for src
 }:
 
 let
@@ -16,9 +11,8 @@ let
     rev = "v${version}";
     sha256 = "0zvd0v5cz0zd1hfnhdd91c6sr3bbv1w715j2gvzx3vxlpx1c2q4n";
   };
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "gprbuild-boot";
   inherit version;
 
@@ -30,10 +24,7 @@ stdenv.mkDerivation {
     sha256 = "0rv0ha0kxzab5hhv0jzkjkmchhlvlx8fci8xalnngrgb9nd4r3v8";
   };
 
-  nativeBuildInputs = [
-    gnat
-    which
-  ];
+  nativeBuildInputs = [ gnat which ];
 
   postPatch = ''
     # The Makefile uses gprbuild to build gprbuild which

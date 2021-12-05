@@ -7,7 +7,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/holochain/holochain-proto";
 
-
   src = fetchFromGitHub {
     inherit rev;
     owner = "holochain";
@@ -19,7 +18,8 @@ buildGoPackage rec {
 
   meta = {
     description = "core implementation of validating DHT dApps in go";
-    longDescription = "Holographic storage for distributed applications -- a validating monotonic DHT backed by authoritative hashchains for data provenance";
+    longDescription =
+      "Holographic storage for distributed applications -- a validating monotonic DHT backed by authoritative hashchains for data provenance";
     homepage = "https://holochain.org/";
     downloadPage = "https://developer.holochain.org/";
     license = lib.licenses.gpl3;

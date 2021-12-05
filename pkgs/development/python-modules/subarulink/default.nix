@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, stdiomask
-}:
+{ lib, aiohttp, asynctest, buildPythonPackage, cryptography, fetchFromGitHub
+, pytest-asyncio, pytestCheckHook, pythonOlder, stdiomask }:
 
 buildPythonPackage rec {
   pname = "subarulink";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-akDccWkiFwTwq7dvUxm34BFNS5PnQowqnxVvkPFzxLM=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    stdiomask
-  ];
+  propagatedBuildInputs = [ aiohttp stdiomask ];
 
-  checkInputs = [
-    asynctest
-    cryptography
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest cryptography pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg --replace "--cov=subarulink" ""

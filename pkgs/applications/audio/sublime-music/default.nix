@@ -1,17 +1,7 @@
-{ fetchFromGitLab
-, lib
-, python3Packages
-, gobject-introspection
-, gtk3
-, pango
-, wrapGAppsHook
-, xvfb-run
-, chromecastSupport ? false
-, serverSupport ? false
-, keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
-}:
+{ fetchFromGitLab, lib, python3Packages, gobject-introspection, gtk3, pango
+, wrapGAppsHook, xvfb-run, chromecastSupport ? false, serverSupport ? false
+, keyringSupport ? true, notifySupport ? true, libnotify, networkSupport ? true
+, networkmanager }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
@@ -25,37 +15,27 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    python3Packages.poetry-core
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gobject-introspection python3Packages.poetry-core wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    pango
-  ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
-  ;
+  buildInputs = [ gtk3 pango ] ++ lib.optional notifySupport libnotify
+    ++ lib.optional networkSupport networkmanager;
 
-  propagatedBuildInputs = with python3Packages; [
-    bleach
-    dataclasses-json
-    deepdiff
-    fuzzywuzzy
-    mpv
-    peewee
-    pygobject3
-    python-Levenshtein
-    python-dateutil
-    requests
-    semver
-  ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
-  ;
+  propagatedBuildInputs = with python3Packages;
+    [
+      bleach
+      dataclasses-json
+      deepdiff
+      fuzzywuzzy
+      mpv
+      peewee
+      pygobject3
+      python-Levenshtein
+      python-dateutil
+      requests
+      semver
+    ] ++ lib.optional chromecastSupport PyChromecast
+    ++ lib.optional keyringSupport keyring ++ lib.optional serverSupport bottle;
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
@@ -66,17 +46,13 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  checkInputs = with python3Packages; [
-    pytest
-  ];
+  checkInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     ${xvfb-run}/bin/xvfb-run pytest
   '';
 
-  pythonImportsCheck = [
-    "sublime_music"
-  ];
+  pythonImportsCheck = [ "sublime_music" ];
 
   postInstall = ''
     install -Dm444 sublime-music.desktop      -t $out/share/applications

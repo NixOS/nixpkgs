@@ -1,13 +1,5 @@
-{ lib
-, buildPythonApplication
-, dataclasses
-, fetchPypi
-, libX11
-, libXinerama
-, libXrandr
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonApplication, dataclasses, fetchPypi, libX11, libXinerama
+, libXrandr, pytestCheckHook, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
@@ -20,19 +12,11 @@ buildPythonApplication rec {
     sha256 = "12a97c3527e3544ac5dbd7c1204283e2653d655cbd15844c990a83b1b13ef500";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
-  buildInputs = [
-    libX11
-    libXinerama
-    libXrandr
-  ];
+  buildInputs = [ libX11 libXinerama libXrandr ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # We don't have a screen

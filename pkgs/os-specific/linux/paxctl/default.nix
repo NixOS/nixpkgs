@@ -17,18 +17,15 @@ stdenv.mkDerivation rec {
       -e '/CC:=gcc/d'
   '';
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "MANDIR=share/man/man1"
-  ];
+  makeFlags = [ "DESTDIR=$(out)" "MANDIR=share/man/man1" ];
 
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "A tool for controlling PaX flags on a per binary basis";
-    homepage    = "https://pax.grsecurity.net";
-    license     = licenses.gpl2;
-    platforms   = platforms.all;
+    homepage = "https://pax.grsecurity.net";
+    license = licenses.gpl2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "keepalive";
@@ -16,7 +13,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive";
+    description =
+      "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive";
     homepage = "https://github.com/wikier/keepalive";
     license = licenses.asl20;
   };

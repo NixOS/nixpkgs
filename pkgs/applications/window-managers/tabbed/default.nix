@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
+{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null
+, patches ? [ ] }:
 
 stdenv.mkDerivation {
   pname = "tabbed";
@@ -18,9 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ xorgproto libX11 libXft ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/tabbed";

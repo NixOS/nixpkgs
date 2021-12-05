@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "1.1.5";
+let version = "1.1.5";
 in fetchzip rec {
   name = "liberastika-${version}";
 
@@ -21,7 +20,7 @@ in fetchzip rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = [ maintainers.volth ];
   };
 }

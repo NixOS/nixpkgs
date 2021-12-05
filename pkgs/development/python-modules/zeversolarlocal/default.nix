@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, httpx
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, flit-core, httpx, pytest-asyncio
+, pytest-mock, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "zeversolarlocal";
@@ -21,19 +13,11 @@ buildPythonPackage rec {
     sha256 = "ExZy5k5RE7k+D0lGmuIkGWrWQ+m24K2oqbUEg4BAVuY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-mock pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -45,9 +29,7 @@ buildPythonPackage rec {
     "test_httpx_timeout"
   ];
 
-  pythonImportsCheck = [
-    "zeversolarlocal"
-  ];
+  pythonImportsCheck = [ "zeversolarlocal" ];
 
   meta = with lib; {
     description = "Python module to interact with Zeversolar inverters";

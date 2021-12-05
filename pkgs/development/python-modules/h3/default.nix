@@ -1,15 +1,5 @@
-{ autoPatchelfHook
-, buildPythonPackage
-, cmake
-, cython
-, fetchFromGitHub
-, h3
-, lib
-, numpy
-, pytestCheckHook
-, scikit-build
-, stdenv
-}:
+{ autoPatchelfHook, buildPythonPackage, cmake, cython, fetchFromGitHub, h3, lib
+, numpy, pytestCheckHook, scikit-build, stdenv }:
 
 buildPythonPackage rec {
   pname = "h3";
@@ -27,14 +17,13 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  nativeBuildInputs = [
-    scikit-build cmake cython
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # On Linux the .so files ends up referring to libh3.so instead of the full
-    # Nix store path. I'm not sure why this is happening! On Darwin it works
-    # fine.
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ scikit-build cmake cython ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # On Linux the .so files ends up referring to libh3.so instead of the full
+      # Nix store path. I'm not sure why this is happening! On Darwin it works
+      # fine.
+      autoPatchelfHook
+    ];
 
   # This is not needed per-se, it's only added for autoPatchelfHook to work
   # correctly. See the note above ^^
@@ -46,16 +35,15 @@ buildPythonPackage rec {
   #
   # - Remove the h3lib submodule.
   # - Patch CMakeLists to avoid building h3lib, and use h3 instead.
-  prePatch =
-    let
-      cmakeCommands = ''
-        include_directories(${h3}/include/h3)
-        link_directories(${h3}/lib)
-      '';
-    in ''
-      rm -r src/h3lib
-      substituteInPlace CMakeLists.txt --replace "add_subdirectory(src/h3lib)" "${cmakeCommands}"
+  prePatch = let
+    cmakeCommands = ''
+      include_directories(${h3}/include/h3)
+      link_directories(${h3}/lib)
     '';
+  in ''
+    rm -r src/h3lib
+    substituteInPlace CMakeLists.txt --replace "add_subdirectory(src/h3lib)" "${cmakeCommands}"
+  '';
 
   # Extra check to make sure we can import it from Python
   pythonImportsCheck = [ "h3" ];

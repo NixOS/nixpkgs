@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, defusedxml
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, defusedxml, pytest }:
 
 buildPythonPackage rec {
   pname = "odfpy";

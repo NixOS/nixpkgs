@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytest-aiohttp
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "zwave-js-server-python";
@@ -21,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-0hAksizQSIOg+hbSq/OZqFqlBBdpa0bSf+puWfD9TSg=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "zwave_js_server"
-  ];
+  pythonImportsCheck = [ "zwave_js_server" ];
 
   meta = with lib; {
     description = "Python wrapper for zwave-js-server";

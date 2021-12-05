@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_interface
-, zope_testing
-}:
+{ lib, buildPythonPackage, fetchPypi, zope_interface, zope_testing }:
 
 buildPythonPackage rec {
   pname = "tl-eggdeps";
@@ -21,7 +16,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool which computes a dependency graph between active Python eggs";
+    description =
+      "A tool which computes a dependency graph between active Python eggs";
     homepage = "http://thomas-lotze.de/en/software/eggdeps/";
     license = licenses.zpl20;
   };

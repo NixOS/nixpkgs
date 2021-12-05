@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
+      url =
+        "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
       sha256 = "1k3qp3jj0dksjr4dnppv6dvkwslrgk9c7p2n9vipqildpxgqp7w2";
     })
   ];
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.t2-project.org/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, demjson
-, fetchPypi
-, pythonOlder
-, requests
+{ lib, buildPythonPackage, colorlog, demjson, fetchPypi, pythonOlder, requests
 }:
 
 buildPythonPackage rec {
@@ -19,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "0cpamb1fp84psiqm7xr156zi4f2fv2wijbjjyk6w87z8fl2aw8xc";
   };
 
-  propagatedBuildInputs = [
-    colorlog
-    demjson
-    requests
-  ];
+  propagatedBuildInputs = [ colorlog demjson requests ];
 
   # Project has no tests
   doCheck = false;

@@ -1,10 +1,9 @@
-{ lib, stdenv, fetchzip
-, boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
+{ lib, stdenv, fetchzip, boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg
+, libpng, libtiff, libwebp, libxml2, proj, python3, python ? python3, sqlite
+, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
-, postgresql ? null
-}:
+, postgresql ? null }:
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
@@ -12,7 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     # this one contains all git submodules and is cheaper than fetchgit
-    url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
+    url =
+      "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
     sha256 = "sha256-qqPqN4vs3ZsqKgnx21yQhX8OzHca/0O+3mvQ/vnC5EY=";
   };
 
@@ -22,8 +22,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 ];
 
   buildInputs = [
-    boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-    libwebp proj python sqlite zlib
+    boost
+    cairo
+    freetype
+    gdal
+    harfbuzz
+    icu
+    libjpeg
+    libpng
+    libtiff
+    libwebp
+    proj
+    python
+    sqlite
+    zlib
 
     # optional inputs
     postgresql
@@ -53,11 +65,15 @@ stdenv.mkDerivation rec {
   #    NIX_CFLAGS_COMPILE expression can be removed.
 
   NIX_CFLAGS_COMPILE =
-    if version != "3.1.0" && lib.versionAtLeast version "3.1.0"
-    then throw "The mapnik compatibility workaround for proj 6 may no longer be required. Remove workaround after checking."
-    else if lib.versionAtLeast (lib.getVersion proj) "8"
-    then throw ("mapnik currently requires a version of proj less than 8, but proj version is: " + (lib.getVersion proj))
-    else "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
+    if version != "3.1.0" && lib.versionAtLeast version "3.1.0" then
+      throw
+      "The mapnik compatibility workaround for proj 6 may no longer be required. Remove workaround after checking."
+    else if lib.versionAtLeast (lib.getVersion proj) "8" then
+      throw
+      ("mapnik currently requires a version of proj less than 8, but proj version is: "
+        + (lib.getVersion proj))
+    else
+      "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   configureFlags = [
     "BOOST_INCLUDES=${boost.dev}/include"
@@ -86,9 +102,7 @@ stdenv.mkDerivation rec {
     "XMLPARSER=libxml2"
   ];
 
-  buildFlags = [
-    "JOBS=$(NIX_BUILD_CORES)"
-  ];
+  buildFlags = [ "JOBS=$(NIX_BUILD_CORES)" ];
 
   meta = with lib; {
     description = "An open source toolkit for developing mapping applications";

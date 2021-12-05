@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jinja2
-, selenium
-, six
-, setuptools
+{ lib, buildPythonPackage, fetchPypi, pytest, jinja2, selenium, six, setuptools
 }:
 
 buildPythonPackage rec {

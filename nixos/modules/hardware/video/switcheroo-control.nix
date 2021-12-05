@@ -6,7 +6,8 @@ let
   cfg = config.services.switcherooControl;
 in {
   options.services.switcherooControl = {
-    enable = mkEnableOption "switcheroo-control, a D-Bus service to check the availability of dual-GPU";
+    enable = mkEnableOption
+      "switcheroo-control, a D-Bus service to check the availability of dual-GPU";
   };
 
   config = mkIf cfg.enable {

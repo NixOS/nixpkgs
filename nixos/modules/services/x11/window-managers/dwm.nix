@@ -6,9 +6,7 @@ let
 
   cfg = config.services.xserver.windowManager.dwm;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -16,19 +14,17 @@ in
     services.xserver.windowManager.dwm.enable = mkEnableOption "dwm";
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "dwm";
-        start =
-          ''
-            dwm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "dwm";
+      start = ''
+        dwm &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ pkgs.dwm ];
 

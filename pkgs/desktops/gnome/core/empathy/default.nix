@@ -1,61 +1,20 @@
-{ lib, stdenv
-, intltool
-, fetchurl
-, webkitgtk
-, pkg-config
-, gtk3
-, glib
-, file
-, librsvg
-, gnome
-, gdk-pixbuf
-, python3
-, telepathy-glib
-, telepathy-farstream
-, clutter-gtk
-, clutter-gst
-, gst_all_1
-, cogl
-, gnome-online-accounts
-, gcr
-, libsecret
-, folks
-, libpulseaudio
-, telepathy-mission-control
-, telepathy-logger
-, libnotify
-, clutter
-, libsoup
-, gnutls
-, evolution-data-server
-, yelp-xsl
-, libcanberra-gtk3
-, p11-kit
-, farstream
-, libtool
-, shared-mime-info
-, wrapGAppsHook
-, itstool
-, libxml2
-, libxslt
-, icu
-, libgee
-, gsettings-desktop-schemas
-, isocodes
-, enchant
-, libchamplain
-, geoclue2
-, geocode-glib
-, cheese
-, libgudev
-}:
+{ lib, stdenv, intltool, fetchurl, webkitgtk, pkg-config, gtk3, glib, file
+, librsvg, gnome, gdk-pixbuf, python3, telepathy-glib, telepathy-farstream
+, clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts, gcr
+, libsecret, folks, libpulseaudio, telepathy-mission-control, telepathy-logger
+, libnotify, clutter, libsoup, gnutls, evolution-data-server, yelp-xsl
+, libcanberra-gtk3, p11-kit, farstream, libtool, shared-mime-info, wrapGAppsHook
+, itstool, libxml2, libxslt, icu, libgee, gsettings-desktop-schemas, isocodes
+, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {
   pname = "empathy";
   version = "3.25.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/empathy/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/empathy/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
@@ -139,7 +98,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Empathy";
-    description = "Messaging program which supports text, voice, video chat, and file transfers over many different protocols";
+    description =
+      "Messaging program which supports text, voice, video chat, and file transfers over many different protocols";
     maintainers = teams.gnome.members;
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;

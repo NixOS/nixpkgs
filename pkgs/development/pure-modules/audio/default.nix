@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, portaudio, fftw, libsndfile, libsamplerate }:
+{ lib, stdenv, fetchurl, pkg-config, pure, portaudio, fftw, libsndfile
+, libsamplerate }:
 
 stdenv.mkDerivation rec {
   baseName = "audio";

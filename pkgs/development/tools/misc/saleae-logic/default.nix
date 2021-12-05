@@ -8,21 +8,35 @@
 
 { lib, stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
-, freetype, libXinerama, libxcb, zlib, pciutils
-, makeDesktopItem, xkeyboardconfig, dbus, runtimeShell, libGL
-}:
+, freetype, libXinerama, libxcb, zlib, pciutils, makeDesktopItem
+, xkeyboardconfig, dbus, runtimeShell, libGL }:
 
 let
 
   libPath = lib.makeLibraryPath [
-    glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
-    libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc.lib
-    dbus libGL
+    glib
+    libSM
+    libICE
+    gtk2
+    libXext
+    libXft
+    fontconfig
+    libXrender
+    libXfixes
+    libX11
+    libXi
+    libXrandr
+    libXcursor
+    freetype
+    libXinerama
+    libxcb
+    zlib
+    stdenv.cc.cc.lib
+    dbus
+    libGL
   ];
 
-in
-
-assert stdenv.hostPlatform.system == "x86_64-linux";
+in assert stdenv.hostPlatform.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
@@ -30,7 +44,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
-    url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    url =
+      "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
     sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 
@@ -65,7 +80,9 @@ stdenv.mkDerivation rec {
 
     # Build the LD_PRELOAD library that makes Logic work from a read-only directory
     mkdir -p "$out/lib"
-    gcc -shared -fPIC -DOUT=\"$out\" "${./preload.c}" -o "$out/lib/preload.so" -ldl
+    gcc -shared -fPIC -DOUT=\"$out\" "${
+      ./preload.c
+    }" -o "$out/lib/preload.so" -ldl
 
     # Make wrapper script that uses the LD_PRELOAD library
     mkdir -p "$out/bin"

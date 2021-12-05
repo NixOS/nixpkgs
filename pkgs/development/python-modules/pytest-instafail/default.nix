@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytestCheckHook
-}:
+{ buildPythonPackage, fetchPypi, lib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytest-instafail";
@@ -16,7 +12,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pytest_instafail" ];
   meta = {
-    description = "pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
+    description =
+      "pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.jacg ];

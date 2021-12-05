@@ -1,11 +1,5 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, aiohttp
-, azure-common
-, azure-core
-, cryptography
-, msrest
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, aiohttp, azure-common, azure-core
+, cryptography, msrest, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
@@ -18,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "7792ad0d5e63ad9eafa68bdce5de91b3ffcc7ca7a6afdc576785e6a2793caed0";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-core
-    msrest
-    cryptography
-  ];
+  propagatedBuildInputs = [ azure-common azure-core msrest cryptography ];
 
   pythonNamespaces = [ "azure.keyvault" ];
 

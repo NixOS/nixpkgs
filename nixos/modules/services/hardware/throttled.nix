@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.throttled;
+let cfg = config.services.throttled;
 in {
   options = {
     services.throttled = {
@@ -22,10 +21,10 @@ in {
     # The upstream package has this in Install, but that's not enough, see the NixOS manual
     systemd.services.lenovo_fix.wantedBy = [ "multi-user.target" ];
 
-    environment.etc."lenovo_fix.conf".source =
-      if cfg.extraConfig != ""
-      then pkgs.writeText "lenovo_fix.conf" cfg.extraConfig
-      else "${pkgs.throttled}/etc/lenovo_fix.conf";
+    environment.etc."lenovo_fix.conf".source = if cfg.extraConfig != "" then
+      pkgs.writeText "lenovo_fix.conf" cfg.extraConfig
+    else
+      "${pkgs.throttled}/etc/lenovo_fix.conf";
 
     # Kernel 5.9 spams warnings whenever userspace writes to CPU MSRs.
     # See https://github.com/erpalma/throttled/issues/215

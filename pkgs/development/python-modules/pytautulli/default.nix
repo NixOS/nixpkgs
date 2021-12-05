@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pytautulli";
@@ -29,19 +22,11 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytautulli"
-  ];
+  pythonImportsCheck = [ "pytautulli" ];
 
   meta = with lib; {
     description = "Python module to get information from Tautulli";

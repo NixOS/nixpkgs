@@ -1,5 +1,5 @@
-{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib,
-    freetype, fontconfig, xorg, libusb-compat-0_1 }:
+{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib
+, freetype, fontconfig, xorg, libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
   pname = "diamond";
@@ -97,8 +97,16 @@ stdenv.mkDerivation {
   '';
 
   libPath = lib.makeLibraryPath [
-    glib zlib freetype fontconfig
-    xorg.libSM xorg.libICE xorg.libXrender xorg.libXext xorg.libX11 xorg.libXt
+    glib
+    zlib
+    freetype
+    fontconfig
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    xorg.libXext
+    xorg.libX11
+    xorg.libXt
     libusb-compat-0_1
   ];
 

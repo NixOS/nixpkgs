@@ -15,9 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_input_output"
-  ];
+  disabledTests = [ "test_input_output" ];
 
   meta = with lib; {
     description = "Simple VTXXX-compatible linux terminal emulator";

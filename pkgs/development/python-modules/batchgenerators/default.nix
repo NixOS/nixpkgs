@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-, unittest2
-, future
-, numpy
-, pillow
-, scipy
-, scikit-learn
-, scikitimage
-, threadpoolctl
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook, unittest2
+, future, numpy, pillow, scipy, scikit-learn, scikitimage, threadpoolctl }:
 
 buildPythonPackage rec {
   pname = "batchgenerators";
@@ -27,9 +15,8 @@ buildPythonPackage rec {
 
   };
 
-  propagatedBuildInputs = [
-    future numpy pillow scipy scikit-learn scikitimage threadpoolctl
-  ];
+  propagatedBuildInputs =
+    [ future numpy pillow scipy scikit-learn scikitimage threadpoolctl ];
 
   checkInputs = [ pytestCheckHook unittest2 ];
 

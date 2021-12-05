@@ -1,7 +1,5 @@
-{ lib, buildGoModule, fetchFromSourcehut
-, ncurses, notmuch, scdoc
-, python3, w3m, dante
-}:
+{ lib, buildGoModule, fetchFromSourcehut, ncurses, notmuch, scdoc, python3, w3m
+, dante }:
 
 buildGoModule rec {
   pname = "aerc";
@@ -19,26 +17,16 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [
-    scdoc
-    python3.pkgs.wrapPython
-  ];
+  nativeBuildInputs = [ scdoc python3.pkgs.wrapPython ];
 
-  patches = [
-    ./runtime-sharedir.patch
-  ];
+  patches = [ ./runtime-sharedir.patch ];
 
-  pythonPath = [
-    python3.pkgs.colorama
-  ];
+  pythonPath = [ python3.pkgs.colorama ];
 
   buildInputs = [ python3 notmuch ];
 
-  buildPhase = "
-    runHook preBuild
-    # we use make instead of go build
-    runHook postBuild
-  ";
+  buildPhase =
+    "\n    runHook preBuild\n    # we use make instead of go build\n    runHook postBuild\n  ";
 
   installPhase = ''
     runHook preInstall

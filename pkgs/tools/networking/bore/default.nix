@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, Libsystem, SystemConfiguration, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, Libsystem
+, SystemConfiguration, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bore";
@@ -21,12 +22,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isDarwin llvmPackages.libclang;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Libsystem
-    SystemConfiguration
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Libsystem SystemConfiguration ];
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1

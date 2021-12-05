@@ -11,10 +11,11 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "oxidized";
 
   meta = with lib; {
-    description = "A network device configuration backup tool. It's a RANCID replacement!";
-    homepage    = "https://github.com/ytti/oxidized";
-    license     = licenses.asl20;
+    description =
+      "A network device configuration backup tool. It's a RANCID replacement!";
+    homepage = "https://github.com/ytti/oxidized";
+    license = licenses.asl20;
     maintainers = with maintainers; [ willibutz nicknovitski ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -1,25 +1,6 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gst-plugins-base
-, orc
-, gettext
-, a52dec
-, libcdio
-, libdvdread
-, libmad
-, libmpeg2
-, x264
-, libintl
-, lib
-, opencore-amr
-, IOKit
-, CoreFoundation
-, DiskArbitration
-}:
+{ stdenv, fetchurl, meson, ninja, pkg-config, python3, gst-plugins-base, orc
+, gettext, a52dec, libcdio, libdvdread, libmad, libmpeg2, x264, libintl, lib
+, opencore-amr, IOKit, CoreFoundation, DiskArbitration }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
@@ -28,17 +9,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "0g6i4db1883q3j0l2gdv46fcqwiiaw63n6mhvsfcms1i1p7g1391";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ meson ninja gettext pkg-config python3 ];
 
   buildInputs = [
     gst-plugins-base
@@ -51,11 +27,7 @@ stdenv.mkDerivation rec {
     x264
     libintl
     opencore-amr
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-    CoreFoundation
-    DiskArbitration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreFoundation DiskArbitration ];
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing

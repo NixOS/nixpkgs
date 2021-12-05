@@ -13,11 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
-  buildInputs = [
-    libuv
-    raft-canonical.dev
-    sqlite-replication
-  ];
+  buildInputs = [ libuv raft-canonical.dev sqlite-replication ];
 
   enableParallelBuilding = true;
 

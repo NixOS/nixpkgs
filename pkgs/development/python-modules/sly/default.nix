@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "sly";

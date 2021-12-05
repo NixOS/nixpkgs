@@ -1,16 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, oauthlib
-, python-dateutil
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, oauthlib, python-dateutil
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
   version = "2.3.12";
-
 
   src = fetchFromGitHub {
     owner = "joalla";
@@ -19,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "0y553x8rkgmqqg980n62pwdxbp75xalkhlb6k5g0cms42ggy5fsc";
   };
 
-  propagatedBuildInputs = [
-    requests
-    oauthlib
-    python-dateutil
-  ];
+  propagatedBuildInputs = [ requests oauthlib python-dateutil ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "discogs_client" ];
 

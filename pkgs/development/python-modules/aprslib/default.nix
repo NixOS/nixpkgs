@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mox3
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mox3, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "aprslib";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1569v74ym2r8vxx3dnjcs5fr7rdrfb0i9sycny5frw2zgms4ag6b";
   };
 
-  checkInputs = [
-    mox3
-    pytestCheckHook
-  ];
+  checkInputs = [ mox3 pytestCheckHook ];
 
   pythonImportsCheck = [ "aprslib" ];
 

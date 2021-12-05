@@ -1,7 +1,4 @@
-{ mkDerivation
-, extra-cmake-modules
-, qtbase, qtx11extras, wayland
-}:
+{ mkDerivation, extra-cmake-modules, qtbase, qtx11extras, wayland }:
 
 mkDerivation {
   name = "kguiaddons";

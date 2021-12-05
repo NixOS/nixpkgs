@@ -1,11 +1,4 @@
-{ stdenv
-, fetchFromGitHub
-, poco
-, pkg-config
-, gnome2
-, gtkmm2
-, lib
-}:
+{ stdenv, fetchFromGitHub, poco, pkg-config, gnome2, gtkmm2, lib }:
 
 stdenv.mkDerivation rec {
   pname = "timekeeper";
@@ -19,20 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "03rvzkygnn7igcindbb5bcmfy0l83n0awkzprsnhlb6ndxax3k9w";
   };
 
-  nativeBuildInputs = [
-    poco
-    pkg-config
-  ];
+  nativeBuildInputs = [ poco pkg-config ];
 
-  buildInputs = [
-    gtkmm2
-    gnome2.libglademm
-    gnome2.libglade
-  ];
+  buildInputs = [ gtkmm2 gnome2.libglademm gnome2.libglade ];
 
   installPhase = ''
     install -Dm755 TimeKeeper/TimeKeeper $out/bin/timekeeper
-    '';
+  '';
 
   meta = with lib; {
     description = "Log hours worked and make reports";

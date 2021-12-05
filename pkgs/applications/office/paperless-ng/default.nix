@@ -1,17 +1,5 @@
-{ lib
-, fetchurl
-, nixosTests
-, python3
-, ghostscript
-, imagemagick
-, jbig2enc
-, optipng
-, pngquant
-, qpdf
-, tesseract4
-, unpaper
-, liberation_ttf
-}:
+{ lib, fetchurl, nixosTests, python3, ghostscript, imagemagick, jbig2enc
+, optipng, pngquant, qpdf, tesseract4, unpaper, liberation_ttf }:
 
 let
   py = python3.override {
@@ -43,14 +31,23 @@ let
     };
   };
 
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
-in
-py.pkgs.pythonPackages.buildPythonApplication rec {
+  path = lib.makeBinPath [
+    ghostscript
+    imagemagick
+    jbig2enc
+    optipng
+    pngquant
+    qpdf
+    tesseract4
+    unpaper
+  ];
+in py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ng";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
     sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
   };
 
@@ -194,7 +191,8 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
+    description =
+      "A supercharged version of paperless: scan, index, and archive all of your physical documents";
     homepage = "https://paperless-ng.readthedocs.io/en/latest/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ earvstedt Flakebi ];

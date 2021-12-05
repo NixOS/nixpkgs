@@ -1,17 +1,6 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pysmb
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, asynctest, buildPythonPackage, fetchFromGitHub
+, numpy, poetry-core, pysmb, pytest-aiohttp, pytest-asyncio, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyairvisual";
@@ -27,32 +16,19 @@ buildPythonPackage rec {
     sha256 = "sha256-Wj+ReRTYsP/XMrr74XPHrkHYT0sXfqcW/shbG3zNuH0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    numpy
-    pysmb
-  ];
+  propagatedBuildInputs = [ aiohttp numpy pysmb ];
 
-  checkInputs = [
-    aresponses
-    asynctest
-    pytest-aiohttp
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aresponses asynctest pytest-aiohttp pytest-asyncio pytestCheckHook ];
 
   disabledTestPaths = [
     # Ignore the examples directory as the files are prefixed with test_.
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyairvisual"
-  ];
+  pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {
     description = "Python library for interacting with AirVisual";

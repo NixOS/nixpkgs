@@ -1,8 +1,5 @@
-{ lib, stdenv, buildPackages
-, fetchurl, pkg-config
-, libbfd, popt, zlib, linuxHeaders, libiberty_static
-, withGUI ? false, qt4 ? null
-}:
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, libbfd, popt, zlib
+, linuxHeaders, libiberty_static, withGUI ? false, qt4 ? null }:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
@@ -27,10 +24,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
-      "--with-kernel=${linuxHeaders}"
-      "--disable-shared"   # needed because only the static libbfd is available
-    ]
-    ++ lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
+    "--with-kernel=${linuxHeaders}"
+    "--disable-shared" # needed because only the static libbfd is available
+  ] ++ lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
 
   meta = {
     description = "System-wide profiler for Linux";

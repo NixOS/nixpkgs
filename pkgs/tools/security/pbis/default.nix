@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison, curl,
-  pam, popt, libiconv, libuuid, openssl_1_0_2, cyrus_sasl, sqlite, tdb, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison
+, curl, pam, popt, libiconv, libuuid, openssl_1_0_2, cyrus_sasl, sqlite, tdb
+, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "pbis-open";
@@ -12,14 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "081jm34sf488nwz5wzs55d6rxx3sv566x6p4h1yqcjaw36174m8v";
   };
 
-  nativeBuildInputs = [
-    autoconf automake libtool perl flex bison
-  ];
+  nativeBuildInputs = [ autoconf automake libtool perl flex bison ];
 
   # curl must be placed after openssl_1_0_2, because it pulls openssl 1.1 dependency.
   buildInputs = [
-    pam popt libiconv libuuid openssl_1_0_2 cyrus_sasl
-    curl sqlite popt tdb libxml2 /*libglade2 for gtk*/
+    pam
+    popt
+    libiconv
+    libuuid
+    openssl_1_0_2
+    cyrus_sasl
+    curl
+    sqlite
+    popt
+    tdb
+    libxml2 # libglade2 for gtk
   ];
 
   postPatch = ''
@@ -33,7 +41,9 @@ stdenv.mkDerivation rec {
     if [ $CC = gcc ]; then
             NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=format-overflow -Wno-error=address-of-packed-member"
     fi
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libxml2}/include/libxml2 -Wno-error=array-bounds -Wno-error=pointer-sign -Wno-error=deprecated-declarations -Wno-error=unused-variable"
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${
+      lib.getDev libxml2
+    }/include/libxml2 -Wno-error=array-bounds -Wno-error=pointer-sign -Wno-error=deprecated-declarations -Wno-error=unused-variable"
   '';
   configureScript = "../configure";
   configureFlags = [
@@ -47,7 +57,11 @@ stdenv.mkDerivation rec {
     "--fail-on-warn=no"
     # "--debug=yes"
   ]; # ^ See https://github.com/BeyondTrust/pbis-open/issues/124
-  configureFlagsArray = [ "--lw-bundled-libs=linenoise-mob tomlc99 opensoap krb5 cyrus-sasl curl openldap ${ if libuuid == null then "libuuid" else "" }" ];
+  configureFlagsArray = [
+    "--lw-bundled-libs=linenoise-mob tomlc99 opensoap krb5 cyrus-sasl curl openldap ${
+      if libuuid == null then "libuuid" else ""
+    }"
+  ];
   # ^ it depends on old krb5 version 1.9 (issue #228)
   # linenoise-mod, tomlc99, opensoap is not in nixpkgs.
   # krb5 must be old one, and cyrus-sasl and openldap have dependency to newer libkrb5 that cause runtime error
@@ -62,7 +76,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "sys" ];
 
   meta = with lib; {
-    description = "BeyondTrust AD Bridge Open simplifies the process of joining non-Microsoft hosts to Active Directory domains";
+    description =
+      "BeyondTrust AD Bridge Open simplifies the process of joining non-Microsoft hosts to Active Directory domains";
     homepage = "https://github.com/BeyondTrust/pbis-open";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = [ "x86_64-linux" ];

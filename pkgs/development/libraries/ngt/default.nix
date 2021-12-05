@@ -1,9 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, enableAVX ? stdenv.hostPlatform.avxSupport
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages
+, enableAVX ? stdenv.hostPlatform.avxSupport }:
 
 stdenv.mkDerivation rec {
   pname = "NGT";
@@ -19,12 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.openmp ];
 
-  NIX_ENFORCE_NO_NATIVE = ! enableAVX;
+  NIX_ENFORCE_NO_NATIVE = !enableAVX;
   __AVX2__ = if enableAVX then 1 else 0;
 
   meta = with lib; {
     homepage = "https://github.com/yahoojapan/NGT";
-    description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
+    description =
+      "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     maintainers = with maintainers; [ tomberek ];

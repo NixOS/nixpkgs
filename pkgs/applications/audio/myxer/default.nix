@@ -1,12 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libpulseaudio
-, glib
-, pango
-, gtk3
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, libpulseaudio, glib, pango
+, gtk3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "myxer";

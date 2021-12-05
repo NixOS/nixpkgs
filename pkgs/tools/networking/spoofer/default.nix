@@ -2,26 +2,27 @@
 , withGUI ? false, qt5 }:
 
 let inherit (lib) optional;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "spoofer";
   version = "1.4.7";
 
   src = fetchurl {
-    url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
+    url =
+      "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
     sha256 = "sha256-6ov1dZbxmBRIhfIzUaxiaHUeiU6SbNKhiQX1W4lmhD8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf libpcap traceroute ]
-                ++ optional withGUI qt5.qtbase ;
+    ++ optional withGUI qt5.qtbase;
 
   dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://www.caida.org/projects/spoofer";
-    description = "Assess and report on deployment of source address validation";
+    description =
+      "Assess and report on deployment of source address validation";
     longDescription = ''
       Spoofer is a new client-server system for Windows, MacOS, and
       UNIX-like systems that periodically tests a network's ability to
@@ -36,6 +37,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars];
+    maintainers = with lib.maintainers; [ leenaars ];
   };
 }

@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, unixODBC
-, icu
-}:
+{ lib, fetchFromGitHub, buildGoModule, unixODBC, icu }:
 
 buildGoModule rec {
   pname = "usql";
@@ -34,11 +29,8 @@ buildGoModule rec {
     "no_adodb"
   ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/xo/usql/text.CommandVersion=${version}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/xo/usql/text.CommandVersion=${version}" ];
 
   # All the checks currently require docker instances to run the databases.
   doCheck = false;

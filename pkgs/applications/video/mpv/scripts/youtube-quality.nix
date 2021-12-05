@@ -1,8 +1,4 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, oscSupport ? false
-}:
+{ lib, stdenvNoCC, fetchFromGitHub, oscSupport ? false }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-youtube-quality";
@@ -30,7 +26,8 @@ stdenvNoCC.mkDerivation rec {
   passthru.scriptName = "youtube-quality.lua";
 
   meta = with lib; {
-    description = "A userscript for MPV that allows you to change youtube video quality (ytdl-format) on the fly";
+    description =
+      "A userscript for MPV that allows you to change youtube video quality (ytdl-format) on the fly";
     homepage = "https://github.com/jgreco/mpv-youtube-quality";
     license = licenses.unfree;
     platforms = platforms.all;

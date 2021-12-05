@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
-    description = "Adds zero-cost stack overflow protection to your embedded programs";
+    description =
+      "Adds zero-cost stack overflow protection to your embedded programs";
     homepage = "https://github.com/knurling-rs/flip-link";
     license = with licenses; [ asl20 mit ];
     maintainers = [ maintainers.FlorianFranzen ];

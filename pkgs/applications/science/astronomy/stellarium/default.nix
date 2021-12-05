@@ -1,8 +1,6 @@
-{ stdenv, lib, mkDerivation, fetchFromGitHub
-, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
-, qtscript, qtserialport, qttools
-, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
-}:
+{ stdenv, lib, mkDerivation, fetchFromGitHub, cmake, freetype, libpng, libGLU
+, libGL, openssl, perl, libiconv, qtscript, qtserialport, qttools, qtmultimedia
+, qtlocation, qtbase, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "stellarium";
@@ -18,14 +16,26 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
-    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase
+    freetype
+    libpng
+    libGLU
+    libGL
+    openssl
+    libiconv
+    qtscript
+    qtserialport
+    qttools
+    qtmultimedia
+    qtlocation
+    qtbase
   ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
-                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+                'SET(CMAKE_INSTALL_PREFIX "${
+                  placeholder "out"
+                }/Stellarium.app/Contents")'
   '';
 
   meta = with lib; {

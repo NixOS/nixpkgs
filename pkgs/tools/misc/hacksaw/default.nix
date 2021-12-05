@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1rykc06lq3bkblsrj68rbil63yqdnvxkxlppq1w74wf0d6cwjc08";
 
   meta = with lib; {
-    description = "Lightweight selection tool for usage in screenshot scripts etc";
+    description =
+      "Lightweight selection tool for usage in screenshot scripts etc";
     homepage = "https://github.com/neXromancers/hacksaw";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ TethysSvensson ];

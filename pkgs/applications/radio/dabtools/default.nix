@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libusb1, rtl-sdr, fftw
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, rtl-sdr, fftw }:
 
 stdenv.mkDerivation {
   pname = "dabtools";

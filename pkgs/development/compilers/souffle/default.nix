@@ -1,21 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, perl, ncurses, zlib, sqlite, libffi
-, autoreconfHook, mcpp, bison, flex, doxygen, graphviz
-, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, ncurses, zlib, sqlite, libffi
+, autoreconfHook, mcpp, bison, flex, doxygen, graphviz, makeWrapper }:
 
-
-let
-  toolsPath = lib.makeBinPath [ mcpp ];
-in
-stdenv.mkDerivation rec {
+let toolsPath = lib.makeBinPath [ mcpp ];
+in stdenv.mkDerivation rec {
   pname = "souffle";
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner  = "souffle-lang";
-    repo   = "souffle";
-    rev    = version;
+    owner = "souffle-lang";
+    repo = "souffle";
+    rev = version;
     sha256 = "1fa6yssgndrln8qbbw2j7j199glxp63irfrz1c2y424rq82mm2r5";
   };
 
@@ -24,12 +18,14 @@ stdenv.mkDerivation rec {
     #  https://github.com/souffle-lang/souffle/pull/2134
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/souffle-lang/souffle/commit/9e4bdf86d051ef2e1b1a1be64aff7e498fd5dd20.patch";
+      url =
+        "https://github.com/souffle-lang/souffle/commit/9e4bdf86d051ef2e1b1a1be64aff7e498fd5dd20.patch";
       sha256 = "0jw1b6qfdf49dx2qlzn1b2yzrgpnkil4w9y3as1m28w8ws7iphpa";
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
+  nativeBuildInputs =
+    [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ ncurses zlib sqlite libffi ];
 
   # these propagated inputs are needed for the compiled Souffle mode to work,
@@ -54,10 +50,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ];
 
   meta = with lib; {
-    description = "A translator of declarative Datalog programs into the C++ language";
-    homepage    = "https://souffle-lang.github.io/";
-    platforms   = platforms.unix;
+    description =
+      "A translator of declarative Datalog programs into the C++ language";
+    homepage = "https://souffle-lang.github.io/";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];
-    license     = licenses.upl;
+    license = licenses.upl;
   };
 }

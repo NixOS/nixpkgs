@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytest-cov, pytest-mock, fake-useragent, faker, scrapy }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytest-cov
+, pytest-mock, fake-useragent, faker, scrapy }:
 
 buildPythonPackage rec {
   pname = "scrapy-fake-useragent";

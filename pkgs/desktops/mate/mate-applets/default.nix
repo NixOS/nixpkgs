@@ -1,22 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, dbus-glib, glib, gtk3, gtksourceview3
-, gucharmap, libmateweather, libnl, libwnck, libgtop, libxml2, libnotify, mate-panel, polkit
-, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, dbus-glib, glib, gtk3
+, gtksourceview3, gucharmap, libmateweather, libnl, libwnck, libgtop, libxml2
+, libnotify, mate-panel, polkit, upower, wirelesstools, mate, hicolor-icon-theme
+, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0xy9dwiqvmimqshbfq80jxq65aznlgx491lqq8rl4x8c9sdl7q5p";
   };
 
-  nativeBuildInputs = [
-    gettext
-    itstool
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext itstool pkg-config wrapGAppsHook ];
 
   buildInputs = [
     dbus-glib

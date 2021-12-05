@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "brotli";
@@ -19,13 +16,9 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "python/tests"
-  ];
+  pytestFlagsArray = [ "python/tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";

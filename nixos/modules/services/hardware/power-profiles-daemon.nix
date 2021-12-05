@@ -5,9 +5,8 @@ with lib;
 let
   cfg = config.services.power-profiles-daemon;
   package = pkgs.power-profiles-daemon;
-in
 
-{
+in {
 
   ###### interface
 
@@ -28,19 +27,17 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = !config.services.tlp.enable;
-        message = ''
-          You have set services.power-profiles-daemon.enable = true;
-          which conflicts with services.tlp.enable = true;
-        '';
-      }
-    ];
+    assertions = [{
+      assertion = !config.services.tlp.enable;
+      message = ''
+        You have set services.power-profiles-daemon.enable = true;
+        which conflicts with services.tlp.enable = true;
+      '';
+    }];
 
     environment.systemPackages = [ package ];
 

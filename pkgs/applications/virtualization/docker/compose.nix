@@ -19,7 +19,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Docker CLI plugin to define and run multi-container applications with Docker";
+    description =
+      "Docker CLI plugin to define and run multi-container applications with Docker";
     license = licenses.asl20;
     maintainers = [ maintainers.babariviere ];
   };

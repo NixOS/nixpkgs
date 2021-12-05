@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch } :
+{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "target-isns";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
     # fix gcc 10 compiler warning, remove with next update
     (fetchpatch {
-      url = "https://github.com/open-iscsi/target-isns/commit/3d0c47dd89bcf83d828bcc22ecaaa5f58d78b58e.patch";
+      url =
+        "https://github.com/open-iscsi/target-isns/commit/3d0c47dd89bcf83d828bcc22ecaaa5f58d78b58e.patch";
       sha256 = "1x2bkc1ff15621svhpq1r11m0q4ajv0j4fng6hm7wkkbr2s6d1vx";
     })
   ];

@@ -9,7 +9,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/andreas/ocaml-graphql-server/releases/download/${version}/graphql-${version}.tbz";
+    url =
+      "https://github.com/andreas/ocaml-graphql-server/releases/download/${version}/graphql-${version}.tbz";
     sha256 = "0gb5y99ph0nz5y3pc1gxq1py4wji2hyf2ydbp0hv23v00n50hpsm";
   };
 

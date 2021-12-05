@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, cmake
-, obs-studio
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, fetchurl, cmake, obs-studio }:
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
@@ -40,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Plugin for OBS Studio to move source to a new position during scene transition";
+    description =
+      "Plugin for OBS Studio to move source to a new position during scene transition";
     homepage = "https://github.com/exeldro/obs-move-transition";
     maintainers = with maintainers; [ starcraft66 ];
     license = licenses.gpl2Plus;

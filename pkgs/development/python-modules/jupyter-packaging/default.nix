@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecation
-, pythonOlder
-, packaging
-, pytestCheckHook
-, tomlkit
-}:
+{ lib, buildPythonPackage, fetchPypi, deprecation, pythonOlder, packaging
+, pytestCheckHook, tomlkit }:
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";

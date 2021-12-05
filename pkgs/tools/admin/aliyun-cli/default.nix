@@ -13,7 +13,7 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256:0dklq78bqfidcda8pwd6qwaycah3gndmq9s90h1pqx1isw4frckk";
 
-  subPackages = ["aliyun-openapi-meta" "main"];
+  subPackages = [ "aliyun-openapi-meta" "main" ];
 
   ldFlags = "-X 'github.com/aliyun/${pname}/cli.Version=${version}'";
 
@@ -22,7 +22,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Tool to manage and use Alibaba Cloud resources through a command line interface.";
+    description =
+      "Tool to manage and use Alibaba Cloud resources through a command line interface.";
     homepage = "https://github.com/aliyun/aliyun-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ ornxka ];

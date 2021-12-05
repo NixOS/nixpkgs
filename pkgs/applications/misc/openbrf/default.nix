@@ -1,5 +1,5 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
-
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU
+, libGL }:
 
 mkDerivation {
   pname = "openbrf";
@@ -28,7 +28,9 @@ mkDerivation {
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
 
     patchelf  \
-      --set-rpath "${lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU libGL ]}" \
+      --set-rpath "${
+        lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU libGL ]
+      }" \
       $out/share/openBrf/openBrf
 
     mkdir -p "$out/bin"

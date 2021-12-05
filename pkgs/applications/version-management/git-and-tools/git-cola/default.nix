@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
 
-let
-  inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify;
+let inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify;
 
 in buildPythonApplication rec {
   pname = "git-cola";

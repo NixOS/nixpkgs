@@ -1,13 +1,5 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-}:
+{ fetchFromGitHub, glib, gobject-introspection, meson, ninja, pkg-config, lib
+, stdenv, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
@@ -20,17 +12,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-ioluv/GdWCNGP2jQqsyEbHncCFm8iu69yR8QVKQTJk8=";
   };
 
-  buildInputs = [
-    glib
-    gobject-introspection
-  ];
+  buildInputs = [ glib gobject-introspection ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    wrapGAppsHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja wrapGAppsHook pkg-config ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-menus";

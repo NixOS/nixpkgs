@@ -1,31 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, glib
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, libepoxy
-, gtk4
-, zbar
-, tiffSupport ? true
-, libraw
-, jpgSupport ? true
-, graphicsmagick
-, exiftool
-}:
+{ stdenv, lib, fetchFromGitLab, glib, meson, ninja, pkg-config, wrapGAppsHook
+, libepoxy, gtk4, zbar, tiffSupport ? true, libraw, jpgSupport ? true
+, graphicsmagick, exiftool }:
 
 assert jpgSupport -> tiffSupport;
 
 let
   inherit (lib) makeBinPath optional optionals optionalString;
-  runtimePath = makeBinPath (
-    optional tiffSupport libraw
-    ++ optionals jpgSupport [ graphicsmagick exiftool ]
-  );
-in
-stdenv.mkDerivation rec {
+  runtimePath = makeBinPath (optional tiffSupport libraw
+    ++ optionals jpgSupport [ graphicsmagick exiftool ]);
+in stdenv.mkDerivation rec {
   pname = "megapixels";
   version = "1.4.2";
 
@@ -36,19 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ebeKbAo03+jeMveySSIz36gbwslWVMRLj+/adW8rlEQ=";
   };
 
-  nativeBuildInputs = [
-    glib
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ glib meson ninja pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    libepoxy
-    gtk4
-    zbar
-  ];
+  buildInputs = [ libepoxy gtk4 zbar ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
@@ -61,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GTK4 camera application that knows how to deal with the media request api";
+    description =
+      "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://gitlab.com/postmarketOS/megapixels";
     changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${version}";
     license = licenses.gpl3Only;

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, zlib, SDL, readline, libGLU, libGL, libX11 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, SDL, readline, libGLU
+, libGL, libX11 }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
-    rev = "ATARI800_${replaceChars ["."] ["_"] version}";
+    rev = "ATARI800_${replaceChars [ "." ] [ "_" ] version}";
     sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
   };
 

@@ -13,9 +13,7 @@ let
     categories = "Game";
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -28,8 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ zip makeWrapper ];
   buildInputs = [ love_0_7 ];
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
     zip -9 -r ${pname}.love ./*
     mv ${pname}.love $out/share/games/lovegames/${pname}.love

@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "3.046";
+let version = "3.046";
 in fetchzip {
   name = "source-sans-${version}";
 

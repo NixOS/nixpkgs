@@ -1,12 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, kconfig
-, kio
-, mauikit
-}:
+{ lib, mkDerivation, fetchFromGitLab, cmake, extra-cmake-modules, kconfig, kio
+, mauikit }:
 
 mkDerivation rec {
   pname = "mauikit-filebrowsing";
@@ -20,16 +13,9 @@ mkDerivation rec {
     sha256 = "sha256-j6VoNtMkDB5BSET/RUiQlWdL0D1dAHlW929WNCDC+PE=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    kconfig
-    kio
-    mauikit
-  ];
+  buildInputs = [ kconfig kio mauikit ];
 
   meta = with lib; {
     homepage = "https://invent.kde.org/maui/mauikit-filebrowsing";

@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, clasp
-, cmake
-, gringo
-, re2c
-}:
+{ lib, stdenv, fetchFromGitHub, boost, clasp, cmake, gringo, re2c }:
 
 stdenv.mkDerivation rec {
   version = "1.9.5";

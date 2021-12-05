@@ -15,9 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [
-    "-X github.com/Dreamacro/clash/constant.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/Dreamacro/clash/constant.Version=${version}" ];
 
   meta = with lib; {
     description = "A rule-based tunnel in Go";

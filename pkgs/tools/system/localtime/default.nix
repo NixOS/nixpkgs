@@ -15,10 +15,8 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ m4 ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "BINDIR=${placeholder "out"}/bin"
-  ];
+  makeFlags =
+    [ "PREFIX=${placeholder "out"}" "BINDIR=${placeholder "out"}/bin" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
@@ -30,7 +28,8 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "A daemon for keeping the system timezone up-to-date based on the current location";
+    description =
+      "A daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

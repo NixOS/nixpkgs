@@ -1,22 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, lxqt-globalkeys
-, qtx11extras
-, menu-cache
-, muparser
-, pcre
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, lxqt-build-tools
+, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys
+, qtx11extras, menu-cache, muparser, pcre, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-runner";
@@ -29,11 +13,7 @@ mkDerivation rec {
     sha256 = "06b7l2jkh0h4ikddh82nxkz7qhg5ap7l016klg3jl2x659z59hpj";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     qtbase

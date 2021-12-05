@@ -1,13 +1,5 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, platformdirs
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-}:
+{ lib, appdirs, buildPythonPackage, fetchFromGitHub, platformdirs, pytest-mock
+, pytestCheckHook, pythonOlder, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "platformdirs";
@@ -23,20 +15,15 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    appdirs
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ appdirs pytest-mock pytestCheckHook ];
 
- pythonImportsCheck = [ "platformdirs" ];
+  pythonImportsCheck = [ "platformdirs" ];
 
   meta = with lib; {
-    description = "Python module for determining appropriate platform-specific directories";
+    description =
+      "Python module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

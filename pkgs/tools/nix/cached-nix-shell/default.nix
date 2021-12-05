@@ -39,7 +39,10 @@ in rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Instant startup time for nix-shell";
     homepage = "https://github.com/xzfc/cached-nix-shell";
-    license = with licenses; [ unlicense /* or */ mit ];
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = with maintainers; [ xzfc ];
     platforms = platforms.linux;
   };

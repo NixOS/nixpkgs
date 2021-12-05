@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pyutilib
-, appdirs
-, ply
-, six
-, nose
+{ lib, buildPythonPackage, fetchPypi, isPy27, pyutilib, appdirs, ply, six, nose
 }:
 
 buildPythonPackage rec {
@@ -21,12 +13,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [
-    pyutilib
-    appdirs
-    ply
-    six
-  ];
+  propagatedBuildInputs = [ pyutilib appdirs ply six ];
 
   checkPhase = ''
     rm pyomo/bilevel/tests/test_blp.py \

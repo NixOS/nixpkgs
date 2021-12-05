@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, future
-, isPy3k
-, python
-, hypothesis
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, future, isPy3k, python
+, hypothesis }:
 
 buildPythonPackage rec {
   version = "0.1.1";

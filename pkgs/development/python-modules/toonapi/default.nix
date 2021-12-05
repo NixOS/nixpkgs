@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, yarl
-}:
+{ lib, aiohttp, backoff, buildPythonPackage, fetchFromGitHub, yarl }:
 
 buildPythonPackage rec {
   pname = "toonapi";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "10jh6p0ww51cb9f8amd9jq3lmvby6n2k08qwcr2n8ijbbgyp0ibf";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    backoff
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp backoff yarl ];
 
   # Project has no tests
   doCheck = false;

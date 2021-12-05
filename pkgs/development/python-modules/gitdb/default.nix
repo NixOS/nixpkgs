@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, smmap
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, smmap, isPy3k }:
 
 buildPythonPackage rec {
   pname = "gitdb";

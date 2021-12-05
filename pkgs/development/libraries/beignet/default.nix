@@ -1,30 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libclang
-, libllvm
-, libdrm
-, libX11
-, libpthreadstubs
-, libXdmcp
-, libXdamage
-, libXext
-, python3
-, ocl-icd
-, libGL
-, makeWrapper
-, beignet
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libclang, libllvm, libdrm
+, libX11, libpthreadstubs, libXdmcp, libXdamage, libXext, python3, ocl-icd
+, libGL, makeWrapper, beignet }:
 
 stdenv.mkDerivation rec {
   pname = "beignet";
   version = "unstable-2018.08.20";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "beignet";
-    rev    = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
+    owner = "intel";
+    repo = "beignet";
+    rev = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
     sha256 = "1z64v69w7f52jrskh1jfyh1x46mzfhjrqxj9hhgzh3xxv9yla32h";
   };
 
@@ -50,11 +35,7 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   passthru.utests = stdenv.mkDerivation {
     pname = "beignet-utests";
@@ -64,16 +45,9 @@ stdenv.mkDerivation rec {
       cd utests
     '';
 
-    nativeBuildInputs = [
-      cmake
-      python3
-      pkg-config
-      makeWrapper
-    ];
+    nativeBuildInputs = [ cmake python3 pkg-config makeWrapper ];
 
-    buildInputs = [
-      ocl-icd
-    ];
+    buildInputs = [ ocl-icd ];
 
     installPhase = ''
       wrapBin() {

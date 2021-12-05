@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.22.3";
 
   src = fetchurl {
-    url = "https://github.com/dani-garcia/bw_web_builds/releases/download/v${version}/bw_web_v${version}.tar.gz";
+    url =
+      "https://github.com/dani-garcia/bw_web_builds/releases/download/v${version}/bw_web_v${version}.tar.gz";
     sha256 = "sha256-cPyh6Hyvqw6ygmOP+qiyhSNAwdryC4nowm8n2ULOJxs=";
   };
 

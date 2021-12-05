@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, bison, flac, flex, id3v2, vorbis-tools
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flac, flex, id3v2
+, vorbis-tools }:
 
 stdenv.mkDerivation rec {
   pname = "cuetools";

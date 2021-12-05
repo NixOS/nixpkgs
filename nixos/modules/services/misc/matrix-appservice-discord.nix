@@ -5,10 +5,12 @@ with lib;
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
+  appDir =
+    "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
-  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json"
+    (builtins.toJSON cfg.settings);
 
 in {
   options = {
@@ -20,9 +22,7 @@ in {
         type = types.attrs;
         apply = recursiveUpdate default;
         default = {
-          database = {
-            filename = "${dataDir}/discord.db";
-          };
+          database = { filename = "${dataDir}/discord.db"; };
 
           # empty values necessary for registration file generation
           # actual values defined in environmentFile
@@ -81,7 +81,8 @@ in {
 
       port = mkOption {
         type = types.port;
-        default = 9005; # from https://github.com/Half-Shot/matrix-appservice-discord/blob/master/package.json#L11
+        default =
+          9005; # from https://github.com/Half-Shot/matrix-appservice-discord/blob/master/package.json#L11
         description = ''
           Port number on which the bridge should listen for internal communication with the Matrix homeserver.
         '';
@@ -97,7 +98,8 @@ in {
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable
+          "matrix-synapse.service";
         description = ''
           List of Systemd services to require and wait for when starting the application service,
           such as the Matrix homeserver if it's running on the same host.
@@ -119,7 +121,10 @@ in {
           ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
             --generate-registration \
             --url=${escapeShellArg cfg.url} \
-            ${optionalString (cfg.localpart != null) "--localpart=${escapeShellArg cfg.localpart}"} \
+            ${
+              optionalString (cfg.localpart != null)
+              "--localpart=${escapeShellArg cfg.localpart}"
+            } \
             --config='${settingsFile}' \
             --file='${registrationFile}'
         fi
@@ -139,7 +144,7 @@ in {
         PrivateTmp = true;
         WorkingDirectory = appDir;
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = 27;
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''

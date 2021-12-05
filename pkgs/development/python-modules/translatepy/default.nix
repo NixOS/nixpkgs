@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, beautifulsoup4
-, pyuseragents
-, inquirer
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, beautifulsoup4
+, pyuseragents, inquirer, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "translatepy";
@@ -19,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "rnt4nmDgQXSgzwNCcsZwbQn2bv83DFhL86kebeiSosc=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    beautifulsoup4
-    pyuseragents
-    inquirer
-  ];
+  propagatedBuildInputs = [ requests beautifulsoup4 pyuseragents inquirer ];
 
   checkInputs = [ pytestCheckHook ];
   disabledTestPaths = [

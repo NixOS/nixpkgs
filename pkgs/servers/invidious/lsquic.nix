@@ -1,4 +1,5 @@
-{ lib, boringssl, stdenv, fetchgit, fetchFromGitHub, cmake, zlib, perl, libevent }:
+{ lib, boringssl, stdenv, fetchgit, fetchFromGitHub, cmake, zlib, perl, libevent
+}:
 let
   # lsquic requires a specific boringssl version (noted in its README)
   boringssl' = boringssl.overrideAttrs (old: rec {
@@ -9,8 +10,7 @@ let
       sha256 = "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A=";
     };
   });
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lsquic";
   version = "2.18.1";
 
@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     description = "A library for QUIC and HTTP/3 (version for Invidious)";
     homepage = "https://github.com/litespeedtech/lsquic";
     maintainers = with maintainers; [ infinisil sbruder ];
-    license = with licenses; [ openssl isc mit bsd3 ]; # statically links against boringssl, so has to include its licenses
+    license = with licenses; [
+      openssl
+      isc
+      mit
+      bsd3
+    ]; # statically links against boringssl, so has to include its licenses
   };
 }

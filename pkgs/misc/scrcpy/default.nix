@@ -1,22 +1,15 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, meson
-, ninja
-, pkg-config
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper, meson, ninja, pkg-config
 
-, platform-tools
-, ffmpeg
-, libusb1
-, SDL2
-}:
+, platform-tools, ffmpeg, libusb1, SDL2 }:
 
 let
   version = "1.21";
   prebuilt_server = fetchurl {
-    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
+    url =
+      "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
     sha256 = "sha256-28zKtSPuJnluVeozZSZJ5LevSY7a6ap15NTXhpwKuEg=";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "scrcpy";
   inherit version;
 
@@ -38,9 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
-  buildInputs = [ ffmpeg SDL2 ] ++ lib.optionals stdenv.isLinux [
-    libusb1
-  ];
+  buildInputs = [ ffmpeg SDL2 ] ++ lib.optionals stdenv.isLinux [ libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''

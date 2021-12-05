@@ -1,13 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, urllib3
-, geojson
-, isPy3k
-, sqlalchemy
-, pytestCheckHook
-, stdenv
-}:
+{ lib, fetchPypi, buildPythonPackage, urllib3, geojson, isPy3k, sqlalchemy
+, pytestCheckHook, stdenv }:
 
 buildPythonPackage rec {
   pname = "crate";
@@ -19,20 +11,13 @@ buildPythonPackage rec {
     sha256 = "6f650c2efe250b89bf35f8fe3211eb37ebc8d76f7a9c09bd73db3076708fa2fc";
   };
 
-  propagatedBuildInputs = [
-    urllib3
-    sqlalchemy
-    geojson
-  ];
+  propagatedBuildInputs = [ urllib3 sqlalchemy geojson ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "RequestsCaBundleTest"
-  ];
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "src/crate/client/test_http.py" ];
+  disabledTests = [ "RequestsCaBundleTest" ];
+  disabledTestPaths =
+    lib.optionals stdenv.isDarwin [ "src/crate/client/test_http.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
@@ -44,6 +29,6 @@ buildPythonPackage rec {
     # And also re-enable tests in pythonPackages.agate-sql.
     # The version string below is intentionally split, so nixpkgs-update does
     # not change it. That would make this warning pretty useless.
-    broken = assert version == "0.2"+"6.0"; true;
+    broken = assert version == "0.2" + "6.0"; true;
   };
 }

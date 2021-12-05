@@ -1,12 +1,9 @@
 { lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
-, cmake, pkg-config, zlib, libpng, makeWrapper
-, enableGSL ? true, gsl
-, enableGhostScript ? true, ghostscript
-, enableMuPDF ? true, mupdf_1_17
-, enableDJVU ? true, djvulibre
-, enableGOCR ? false, gocr # Disabled by default due to crashes
-, enableTesseract ? true, leptonica, tesseract4
-}:
+, cmake, pkg-config, zlib, libpng, makeWrapper, enableGSL ? true, gsl
+, enableGhostScript ? true, ghostscript, enableMuPDF ? true, mupdf_1_17
+, enableDJVU ? true, djvulibre, enableGOCR ? false
+, gocr # Disabled by default due to crashes
+, enableTesseract ? true, leptonica, tesseract4 }:
 
 with lib;
 
@@ -36,20 +33,21 @@ with lib;
 
 let
   # Create a patch against src based on changes applied in patchCommands
-  mkPatch = { name, src, patchCommands }: runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
-    source $stdenv/setup
-    unpackPhase
+  mkPatch = { name, src, patchCommands }:
+    runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
+      source $stdenv/setup
+      unpackPhase
 
-    orig=$sourceRoot
-    new=$sourceRoot-modded
-    cp -r $orig/. $new/
+      orig=$sourceRoot
+      new=$sourceRoot-modded
+      cp -r $orig/. $new/
 
-    pushd $new >/dev/null
-    ${patchCommands}
-    popd >/dev/null
+      pushd $new >/dev/null
+      ${patchCommands}
+      popd >/dev/null
 
-    diff -Naur $orig $new > $out || true
-  '';
+      diff -Naur $orig $new > $out || true
+    '';
 
   pname = "k2pdfopt";
   version = "2.53";
@@ -61,9 +59,7 @@ in stdenv.mkDerivation rec {
   inherit pname version;
   src = k2pdfopt_src;
 
-  patches = [
-    ./0001-Fix-CMakeLists.patch
-  ];
+  patches = [ ./0001-Fix-CMakeLists.patch ];
 
   postPatch = ''
     substituteInPlace willuslib/bmpdjvu.c \
@@ -72,8 +68,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
-  buildInputs =
-  let
+  buildInputs = let
     # We use specific versions of these sources below to match the versions
     # used in the k2pdfopt source. Note that this does _not_ need to match the
     # version used elsewhere in nixpkgs, since it is only used to create the
@@ -89,7 +84,7 @@ in stdenv.mkDerivation rec {
         cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./source/pdf/
       '';
     };
-    mupdf_modded = mupdf_1_17.overrideAttrs ({ patches ? [], ... }: {
+    mupdf_modded = mupdf_1_17.overrideAttrs ({ patches ? [ ], ... }: {
       patches = patches ++ [ mupdf_patch ];
       # This function is missing in font.c, see font-win32.c
       postPatch = ''
@@ -105,9 +100,8 @@ in stdenv.mkDerivation rec {
       };
       patchCommands = "cp -r ${k2pdfopt_src}/leptonica_mod/. ./src/";
     };
-    leptonica_modded = leptonica.overrideAttrs ({ patches ? [], ... }: {
-      patches = patches ++ [ leptonica_patch ];
-    });
+    leptonica_modded = leptonica.overrideAttrs
+      ({ patches ? [ ], ... }: { patches = patches ++ [ leptonica_patch ]; });
 
     tesseract_patch = mkPatch {
       name = "tesseract";
@@ -128,24 +122,21 @@ in stdenv.mkDerivation rec {
       '';
     };
     tesseract_modded = tesseract4.override {
-      tesseractBase = tesseract4.tesseractBase.overrideAttrs ({ patches ? [], ... }: {
-        patches = patches ++ [ tesseract_patch ];
-        # Additional compilation fixes
-        postPatch = ''
-          echo libtesseract_api_la_SOURCES += tesscapi.cpp >> src/api/Makefile.am
-          substituteInPlace src/api/tesseract.h \
-            --replace "#include <leptonica.h>" "//#include <leptonica.h>"
-        '';
-      });
+      tesseractBase = tesseract4.tesseractBase.overrideAttrs
+        ({ patches ? [ ], ... }: {
+          patches = patches ++ [ tesseract_patch ];
+          # Additional compilation fixes
+          postPatch = ''
+            echo libtesseract_api_la_SOURCES += tesscapi.cpp >> src/api/Makefile.am
+            substituteInPlace src/api/tesseract.h \
+              --replace "#include <leptonica.h>" "//#include <leptonica.h>"
+          '';
+        });
     };
-  in
-    [ zlib libpng ] ++
-    optional enableGSL gsl ++
-    optional enableGhostScript ghostscript ++
-    optional enableMuPDF mupdf_modded ++
-    optional enableDJVU djvulibre ++
-    optional enableGOCR gocr ++
-    optionals enableTesseract [ leptonica_modded tesseract_modded ];
+  in [ zlib libpng ] ++ optional enableGSL gsl
+  ++ optional enableGhostScript ghostscript ++ optional enableMuPDF mupdf_modded
+  ++ optional enableDJVU djvulibre ++ optional enableGOCR gocr
+  ++ optionals enableTesseract [ leptonica_modded tesseract_modded ];
 
   dontUseCmakeBuildDir = true;
 
@@ -162,7 +153,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
+    description =
+      "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
     homepage = "http://www.willus.com/k2pdfopt";
     license = licenses.gpl3;
     platforms = platforms.linux;

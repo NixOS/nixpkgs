@@ -1,12 +1,5 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, scikit-learn
-, pytestCheckHook
-, pytest-randomly
-}:
+{ lib, isPy27, buildPythonPackage, fetchFromGitHub, fetchpatch, scikit-learn
+, pytestCheckHook, pytest-randomly }:
 
 buildPythonPackage rec {
   pname = "mlrose";
@@ -23,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     # Fixes compatibility with scikit-learn 0.24.1
     (fetchpatch {
-      url = "https://github.com/gkhayes/mlrose/pull/55/commits/19caf8616fc194402678aa67917db334ad02852a.patch";
+      url =
+        "https://github.com/gkhayes/mlrose/pull/55/commits/19caf8616fc194402678aa67917db334ad02852a.patch";
       sha256 = "1nivz3bn21nd21bxbcl16a6jmy7y5j8ilz90cjmd0xq4v7flsahf";
     })
   ];
@@ -42,8 +36,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Machine Learning, Randomized Optimization and SEarch";
-    homepage    = "https://github.com/gkhayes/mlrose";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/gkhayes/mlrose";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];
   };
 }

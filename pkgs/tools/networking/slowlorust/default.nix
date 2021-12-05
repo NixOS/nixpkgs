@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "slowlorust";

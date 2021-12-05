@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, slicerator
-, scikitimage
-, six
-, numpy
-, tifffile
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, slicerator, scikitimage, six, numpy
+, tifffile, nose }:
 
 buildPythonPackage rec {
   version = "0.5";
@@ -27,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/soft-matter/pims";
-    description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
+    description =
+      "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,50 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchgit
-, SDL2
-, cmake
-, espeak
-, ffmpeg
-, file
-, freetype
-, harfbuzz
-, leptonica
-, libGL
-, libX11
-, libXau
-, libXcomposite
-, libXdmcp
-, libXfixes
-, libdrm
-, libffi
-, libusb1
-, libuvc
-, libvlc
-, libvncserver
-, libxcb
-, libxkbcommon
-, lua
-, luajit
-, makeWrapper
-, mesa
-, openal
-, pkg-config
-, sqlite
-, tesseract
-, valgrind
-, wayland
-, wayland-protocols
-, xcbutil
-, xcbutilwm
-, xz
-, buildManPages ? true, ruby
-, useBuiltinLua ? true
-, useStaticFreetype ? false
-, useStaticLibuvc ? false
-, useStaticOpenAL ? true
-, useStaticSqlite ? false
-}:
+{ lib, stdenv, fetchFromGitHub, fetchgit, SDL2, cmake, espeak, ffmpeg, file
+, freetype, harfbuzz, leptonica, libGL, libX11, libXau, libXcomposite, libXdmcp
+, libXfixes, libdrm, libffi, libusb1, libuvc, libvlc, libvncserver, libxcb
+, libxkbcommon, lua, luajit, makeWrapper, mesa, openal, pkg-config, sqlite
+, tesseract, valgrind, wayland, wayland-protocols, xcbutil, xcbutilwm, xz
+, buildManPages ? true, ruby, useBuiltinLua ? true, useStaticFreetype ? false
+, useStaticLibuvc ? false, useStaticOpenAL ? true, useStaticSqlite ? false }:
 
 stdenv.mkDerivation rec {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
@@ -57,13 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-2do4+6KB0AAcJk22mN0IA/e/bPaeGipLjI4RSTPqLBg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    pkg-config
-  ] ++ lib.optionals buildManPages [
-    ruby
-  ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ]
+    ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -113,29 +68,23 @@ stdenv.mkDerivation rec {
   postUnpack = let
     inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
       letoram-openal-src freetype-src libuvc-src luajit-src;
-  in
-    ''
-      pushd $sourceRoot/external/git/
-    ''
-    + (lib.optionalString useStaticOpenAL ''
-      cp -a ${letoram-openal-src}/ openal
-      chmod --recursive 744 openal
-    '')
-    + (lib.optionalString useStaticFreetype ''
-      cp -a ${freetype-src}/ freetype
-      chmod --recursive 744 freetype
-    '')
-    + (lib.optionalString useStaticLibuvc ''
-      cp -a ${libuvc-src}/ libuvc
-      chmod --recursive 744 libuvc
-    '')
-    + (lib.optionalString useBuiltinLua ''
-      cp -a ${luajit-src}/ luajit
-      chmod --recursive 744 luajit
-    '') +
-    ''
-      popd
-    '';
+  in ''
+    pushd $sourceRoot/external/git/
+  '' + (lib.optionalString useStaticOpenAL ''
+    cp -a ${letoram-openal-src}/ openal
+    chmod --recursive 744 openal
+  '') + (lib.optionalString useStaticFreetype ''
+    cp -a ${freetype-src}/ freetype
+    chmod --recursive 744 freetype
+  '') + (lib.optionalString useStaticLibuvc ''
+    cp -a ${libuvc-src}/ libuvc
+    chmod --recursive 744 libuvc
+  '') + (lib.optionalString useBuiltinLua ''
+    cp -a ${luajit-src}/ luajit
+    chmod --recursive 744 luajit
+  '') + ''
+    popd
+  '';
 
   postPatch = ''
     substituteInPlace ./src/platform/posix/paths.c \
@@ -168,9 +117,7 @@ stdenv.mkDerivation rec {
     "../src"
   ];
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     homepage = "https://arcan-fe.com/";

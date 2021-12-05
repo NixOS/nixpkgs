@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, granite
-, gtk3
-, libgee
-, wingpanel
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, meson, ninja
+, pkg-config, python3, vala, granite, gtk3, libgee, wingpanel }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-a11y";
@@ -29,31 +16,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/wingpanel-indicator-a11y/pull/48
     (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-a11y/commit/fb8412d56bc1c42b70e8ee41b837e8024e1297f7.patch";
+      url =
+        "https://github.com/elementary/wingpanel-indicator-a11y/commit/fb8412d56bc1c42b70e8ee41b837e8024e1297f7.patch";
       sha256 = "0619npdw9wvaz1zk2lzikczyjdqba8v8c9ry9zizvvl4j1i1ad7k";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    wingpanel
-  ];
+  buildInputs = [ granite gtk3 libgee wingpanel ];
 
   postPatch = ''
     chmod +x meson/post_install.py

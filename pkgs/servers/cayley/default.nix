@@ -15,9 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  ldflags = [
-    "-X=main.Version=${version}"
-  ];
+  ldflags = [ "-X=main.Version=${version}" ];
 
   meta = {
     homepage = "https://cayley.io/";

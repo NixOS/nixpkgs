@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, enum34, pycodestyle, pytest, flake8, pylama }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, enum34, pycodestyle, pytest
+, flake8, pylama }:
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Flake8 and pylama plugin that checks the ordering of import statements";
+    description =
+      "Flake8 and pylama plugin that checks the ordering of import statements";
     homepage = "https://github.com/PyCQA/flake8-import-order";
     license = with licenses; [ lgpl3 mit ];
   };

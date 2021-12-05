@@ -1,35 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, wrapGAppsHook
-, makeWrapper
-, pkg-config
-, meson
-, ninja
-, cmake
-, gobject-introspection
-, desktop-file-utils
-, python3
-, gtk3
-, libdazzle
-, libappindicator-gtk3
-, libnotify
-, nvidia_x11
- }:
+{ lib, stdenv, fetchFromGitLab, wrapGAppsHook, makeWrapper, pkg-config, meson
+, ninja, cmake, gobject-introspection, desktop-file-utils, python3, gtk3
+, libdazzle, libappindicator-gtk3, libnotify, nvidia_x11 }:
 
 let
- pythonEnv = python3.withPackages (pypkgs: with pypkgs; [
-   injector
-   matplotlib
-   peewee
-   pynvml
-   pygobject3
-   xlib
-   pyxdg
-   requests
-   rx
-   gtk3
- ]);
+  pythonEnv = python3.withPackages (pypkgs:
+    with pypkgs; [
+      injector
+      matplotlib
+      peewee
+      pynvml
+      pygobject3
+      xlib
+      pyxdg
+      requests
+      rx
+      gtk3
+    ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";
   version = "0.15.3";
@@ -61,12 +47,7 @@ in stdenv.mkDerivation rec {
     pythonEnv
   ];
 
-  buildInputs = [
-    gtk3
-    libdazzle
-    libappindicator-gtk3
-    libnotify
-  ];
+  buildInputs = [ gtk3 libdazzle libappindicator-gtk3 libnotify ];
 
   postInstall = ''
     mv $out/bin/gwe $out/lib/gwe-bin
@@ -74,13 +55,19 @@ in stdenv.mkDerivation rec {
     makeWrapper ${pythonEnv}/bin/python $out/bin/gwe \
       --add-flags "$out/lib/gwe-bin" \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib" \
-      --prefix PATH : "${builtins.concatStringsSep ":" [ (lib.makeBinPath [ nvidia_x11 nvidia_x11.settings ]) "/run/wrappers/bin" ]}" \
+      --prefix PATH : "${
+        builtins.concatStringsSep ":" [
+          (lib.makeBinPath [ nvidia_x11 nvidia_x11.settings ])
+          "/run/wrappers/bin"
+        ]
+      }" \
       --unset "SHELL" \
       ''${gappsWrapperArgs[@]}
   '';
 
   meta = with lib; {
-    description = "System utility designed to provide information, control the fans and overclock your NVIDIA card";
+    description =
+      "System utility designed to provide information, control the fans and overclock your NVIDIA card";
     homepage = "https://gitlab.com/leinardi/gwe";
     platforms = platforms.linux;
     license = licenses.gpl3Only;

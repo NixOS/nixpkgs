@@ -49,7 +49,5 @@ appleDerivation' stdenvNoCC {
     sys/qos_private.h
   '';
 
-  meta = {
-    platforms = lib.platforms.darwin;
-  };
+  meta = { platforms = lib.platforms.darwin; };
 }

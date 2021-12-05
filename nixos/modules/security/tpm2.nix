@@ -7,12 +7,12 @@ let
   # the tssGroup is only allowed to access the kernel resource manager
   # Therefore, if either of the two are null, the respective part isn't generated
   udevRules = tssUser: tssGroup: ''
-    ${lib.optionalString (tssUser != null) ''KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${tssUser}"''}
+    ${lib.optionalString (tssUser != null)
+    ''KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${tssUser}"''}
     ${lib.optionalString (tssUser != null || tssGroup != null)
-      ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
-      + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
-      + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
-     }
+    ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
+    + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
+    + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''}
   '';
 
 in {
@@ -26,7 +26,8 @@ in {
       '';
       type = lib.types.nullOr lib.types.str;
       default = if cfg.abrmd.enable then "tss" else "root";
-      defaultText = lib.literalExpression ''if config.security.tpm2.abrmd.enable then "tss" else "root"'';
+      defaultText = lib.literalExpression
+        ''if config.security.tpm2.abrmd.enable then "tss" else "root"'';
     };
 
     tssGroup = lib.mkOption {
@@ -139,27 +140,24 @@ in {
         (lib.getLib cfg.pkcs11.package)
       ];
 
-      services.udev.extraRules = lib.mkIf cfg.applyUdevRules
-        (udevRules cfg.tssUser cfg.tssGroup);
+      services.udev.extraRules =
+        lib.mkIf cfg.applyUdevRules (udevRules cfg.tssUser cfg.tssGroup);
 
       # Create the tss user and group only if the default value is used
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
         isSystemUser = true;
         group = "tss";
       };
-      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
+      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") { };
 
-      environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
-        lib.attrsets.genAttrs [
-          "TPM2TOOLS_TCTI"
-          "TPM2_PKCS11_TCTI"
-        ] (_: ''${cfg.tctiEnvironment.interface}:${
-          if cfg.tctiEnvironment.interface == "tabrmd" then
-            cfg.tctiEnvironment.tabrmdConf
-          else
-            cfg.tctiEnvironment.deviceConf
-        }'')
-      );
+      environment.variables = lib.mkIf cfg.tctiEnvironment.enable
+        (lib.attrsets.genAttrs [ "TPM2TOOLS_TCTI" "TPM2_PKCS11_TCTI" ] (_:
+          "${cfg.tctiEnvironment.interface}:${
+            if cfg.tctiEnvironment.interface == "tabrmd" then
+              cfg.tctiEnvironment.tabrmdConf
+            else
+              cfg.tctiEnvironment.deviceConf
+          }"));
     }
 
     (lib.mkIf cfg.abrmd.enable {

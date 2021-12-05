@@ -1,4 +1,5 @@
-{lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{ lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils
+, writeScriptBin, bzip2 }:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -10,9 +11,8 @@
 # known impurity: test cases seem to bu using /tmp/storeBackup.lock ..
 
 let dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
 
   version = "3.5";
 
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
+    url =
+      "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
     sha256 = "0y4gzssc93x6y93mjsxm5b5cdh68d7ffa43jf6np7s7c99xxxz78";
   };
 
@@ -37,7 +38,9 @@ stdenv.mkDerivation rec {
     find $out -name "*.pl" | xargs sed -i \
       -e 's@/bin/pwd@${coreutils}/bin/pwd@' \
       -e 's@/bin/sync@${coreutils}/bin/sync@' \
-      -e '1 s@/usr/bin/env perl@${perl.withPackages (p: [ p.DBFile ])}/bin/perl@'
+      -e '1 s@/usr/bin/env perl@${
+        perl.withPackages (p: [ p.DBFile ])
+      }/bin/perl@'
 
     for p in $out/bin/*
       do wrapProgram "$p" --prefix PATH ":" "${lib.makeBinPath [ which bzip2 ]}"
@@ -104,7 +107,7 @@ stdenv.mkDerivation rec {
     description = "A backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = lib.licenses.gpl3Plus;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-cov, pytestCheckHook
+, requests }:
 
 buildPythonPackage rec {
   pname = "brottsplatskartan";
@@ -19,10 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "brottsplatskartan" ];
 

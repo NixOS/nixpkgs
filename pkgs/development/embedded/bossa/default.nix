@@ -12,8 +12,7 @@ let
     installPhase = "mkdir -p $out/bin; cp bin2c $out/bin/";
   };
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "bossa";
   version = "1.8";
 
@@ -38,7 +37,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
+    description =
+      "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
       flash-based ARM microcontrollers. The motivation behind BOSSA is

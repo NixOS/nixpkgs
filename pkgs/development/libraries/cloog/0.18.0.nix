@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "cloog-0.18.0";
 
   src = fetchurl {
-    url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
+    url =
+      "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
     sha256 = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228";
   };
 
@@ -56,7 +57,6 @@ stdenv.mkDerivation rec {
        with preprocessed source if appropriate.
        See <URL:http://cygwin.com/problems.html> for instructions.
        make[3]: *** [Box.lo] Error 1
-
     */
     platforms = lib.platforms.unix; # Once had cygwin problems
   };

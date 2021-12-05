@@ -3,12 +3,12 @@ with lib;
 let
   cfg = config.services.nomad;
   format = pkgs.formats.json { };
-in
-{
+in {
   ##### interface
   options = {
     services.nomad = {
-      enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
+      enable = mkEnableOption
+        "Nomad, a distributed, highly available, datacenter-aware scheduler";
 
       package = mkOption {
         type = types.package;
@@ -70,7 +70,6 @@ in
           [ "<pluginDir>" "pkgs.<plugins-name>"]
         '';
       };
-
 
       settings = mkOption {
         type = format.type;
@@ -139,9 +138,10 @@ in
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
+          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json"
+            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + concatMapStrings (path: " -plugin-dir=${path}/bin")
+            cfg.extraSettingsPlugins;
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;
@@ -165,12 +165,12 @@ in
       };
     };
 
-    assertions = [
-      {
-        assertion = cfg.dropPrivileges -> cfg.settings.data_dir == "/var/lib/nomad";
-        message = "settings.data_dir must be equal to \"/var/lib/nomad\" if dropPrivileges is true";
-      }
-    ];
+    assertions = [{
+      assertion = cfg.dropPrivileges -> cfg.settings.data_dir
+        == "/var/lib/nomad";
+      message = ''
+        settings.data_dir must be equal to "/var/lib/nomad" if dropPrivileges is true'';
+    }];
 
     # Docker support requires the Docker daemon to be running.
     virtualisation.docker.enable = mkIf cfg.enableDocker true;

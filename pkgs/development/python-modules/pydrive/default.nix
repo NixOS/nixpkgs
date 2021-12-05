@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-python-client
-, oauth2client
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-python-client, oauth2client
+, pyyaml }:
 
 buildPythonPackage rec {
   pname = "pydrive";
@@ -16,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "11q7l94mb34hfh9wkdwfrh5xw99y13wa33ba7xp1q23q4b60v2c3";
   };
 
-  propagatedBuildInputs = [
-    google-api-python-client
-    oauth2client
-    pyyaml
-  ];
+  propagatedBuildInputs = [ google-api-python-client oauth2client pyyaml ];
 
   # requires client_secrets.json
   doCheck = false;

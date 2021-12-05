@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, yarl, aresponses
+, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "sonarr";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "0gi34951qhzzrq59hj93mnkid8cvvknlamkhir6ya9mb23fr7bya";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "sonarr" ];
 

@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, six, pathpy, zetup, pytest
-, decorator }:
+{ lib, buildPythonPackage, fetchPypi, six, pathpy, zetup, pytest, decorator }:
 
 buildPythonPackage rec {
   pname = "moretools";

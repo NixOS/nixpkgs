@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, bubblewrap
-, makeWrapper
-}:
+{ lib, fetchFromGitHub, rustPlatform, bubblewrap, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pipr";
@@ -20,7 +15,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
-    wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
+    wrapProgram "$out/bin/pipr" --prefix PATH : ${
+      lib.makeBinPath [ bubblewrap ]
+    }
   '';
 
   meta = with lib; {

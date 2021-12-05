@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asn1crypto
-, asysocks
-, minikerberos
-, prompt-toolkit
-, tqdm
-, winacl
-, winsspi
-}:
+{ lib, buildPythonPackage, fetchPypi, asn1crypto, asysocks, minikerberos
+, prompt-toolkit, tqdm, winacl, winsspi }:
 
 buildPythonPackage rec {
   pname = "msldap";
@@ -19,15 +10,8 @@ buildPythonPackage rec {
     sha256 = "sha256-fX+W1Bq4F0/6DyxWeA6zvoswFQCdDpSk29g7nq1cYYE=";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-    asysocks
-    minikerberos
-    prompt-toolkit
-    tqdm
-    winacl
-    winsspi
-  ];
+  propagatedBuildInputs =
+    [ asn1crypto asysocks minikerberos prompt-toolkit tqdm winacl winsspi ];
 
   # Project doesn't have tests
   doCheck = false;

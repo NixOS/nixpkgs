@@ -23,39 +23,43 @@ let
   '';
 
   nixos-gsettings-desktop-schemas = let
-    defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome.gnome-shell ];
-  in
-  pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
-    ''
-     mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+    defaultPackages = with pkgs; [
+      gsettings-desktop-schemas
+      gnome.gnome-shell
+    ];
+  in pkgs.runCommand "nixos-gsettings-desktop-schemas" {
+    preferLocalBuild = true;
+  } ''
+    mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
-     ${concatMapStrings
-        (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
-        (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
+    ${concatMapStrings (pkg: ''
+      cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+    '') (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
-     cp -f ${pkgs.gnome.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+    cp -f ${pkgs.gnome.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
-     ${optionalString flashbackEnabled ''
-       cp -f ${pkgs.gnome.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     ''}
+    ${optionalString flashbackEnabled ''
+      cp -f ${pkgs.gnome.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+    ''}
 
-     chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
-     cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
-       [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
+    chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
+    cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
+      [org.gnome.desktop.background]
+      picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
 
-       [org.gnome.desktop.screensaver]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
+      [org.gnome.desktop.screensaver]
+      picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
-       ${cfg.favoriteAppsOverride}
+      ${cfg.favoriteAppsOverride}
 
-       ${cfg.extraGSettingsOverrides}
-     EOF
+      ${cfg.extraGSettingsOverrides}
+    EOF
 
-     ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
-    '';
+    ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
+  '';
 
-  flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
+  flashbackEnabled = cfg.flashback.enableMetacity
+    || length cfg.flashback.customSessions > 0;
   flashbackWms = optional cfg.flashback.enableMetacity {
     wmName = "metacity";
     wmLabel = "Metacity";
@@ -63,11 +67,10 @@ let
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 
-  notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome.excludePackages));
+  notExcluded = pkg:
+    mkDefault (!(lib.elem pkg config.environment.gnome.excludePackages));
 
-in
-
-{
+in {
 
   meta = {
     doc = ./gnome.xml;
@@ -76,62 +79,108 @@ in
 
   imports = [
     # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "core-os-services" "enable" ]
-      [ "services" "gnome" "core-os-services" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "core-shell" "enable" ]
-      [ "services" "gnome" "core-shell" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "core-utilities" "enable" ]
-      [ "services" "gnome" "core-utilities" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "core-developer-tools" "enable" ]
-      [ "services" "gnome" "core-developer-tools" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "games" "enable" ]
-      [ "services" "gnome" "games" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "experimental-features" "realtime-scheduling" ]
-      [ "services" "gnome" "experimental-features" "realtime-scheduling" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "enable" ]
-      [ "services" "xserver" "desktopManager" "gnome" "enable" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "sessionPath" ]
-      [ "services" "xserver" "desktopManager" "gnome" "sessionPath" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "favoriteAppsOverride" ]
-      [ "services" "xserver" "desktopManager" "gnome" "favoriteAppsOverride" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "extraGSettingsOverrides" ]
-      [ "services" "xserver" "desktopManager" "gnome" "extraGSettingsOverrides" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "extraGSettingsOverridePackages" ]
-      [ "services" "xserver" "desktopManager" "gnome" "extraGSettingsOverridePackages" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "debug" ]
-      [ "services" "xserver" "desktopManager" "gnome" "debug" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "gnome3" "flashback" ]
-      [ "services" "xserver" "desktopManager" "gnome" "flashback" ]
-    )
-    (mkRenamedOptionModule
-      [ "environment" "gnome3" "excludePackages" ]
-      [ "environment" "gnome" "excludePackages" ]
-    )
+    (mkRenamedOptionModule [ "services" "gnome3" "core-os-services" "enable" ] [
+      "services"
+      "gnome"
+      "core-os-services"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "gnome3" "core-shell" "enable" ] [
+      "services"
+      "gnome"
+      "core-shell"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "gnome3" "core-utilities" "enable" ] [
+      "services"
+      "gnome"
+      "core-utilities"
+      "enable"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "gnome3"
+      "core-developer-tools"
+      "enable"
+    ] [ "services" "gnome" "core-developer-tools" "enable" ])
+    (mkRenamedOptionModule [ "services" "gnome3" "games" "enable" ] [
+      "services"
+      "gnome"
+      "games"
+      "enable"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "gnome3"
+      "experimental-features"
+      "realtime-scheduling"
+    ] [ "services" "gnome" "experimental-features" "realtime-scheduling" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "enable"
+    ] [ "services" "xserver" "desktopManager" "gnome" "enable" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "sessionPath"
+    ] [ "services" "xserver" "desktopManager" "gnome" "sessionPath" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "favoriteAppsOverride"
+    ] [ "services" "xserver" "desktopManager" "gnome" "favoriteAppsOverride" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "extraGSettingsOverrides"
+    ] [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome"
+      "extraGSettingsOverrides"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "extraGSettingsOverridePackages"
+    ] [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome"
+      "extraGSettingsOverridePackages"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "debug"
+    ] [ "services" "xserver" "desktopManager" "gnome" "debug" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "gnome3"
+      "flashback"
+    ] [ "services" "xserver" "desktopManager" "gnome" "flashback" ])
+    (mkRenamedOptionModule [ "environment" "gnome3" "excludePackages" ] [
+      "environment"
+      "gnome"
+      "excludePackages"
+    ])
   ];
 
   options = {
@@ -184,7 +233,7 @@ in
       };
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
@@ -193,7 +242,8 @@ in
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++ [ pkgs.gnome.gnome-shell pkgs.gnome.gnome-shell-extensions ];
+        apply = list:
+          list ++ [ pkgs.gnome.gnome-shell pkgs.gnome.gnome-shell-extensions ];
       };
 
       favoriteAppsOverride = mkOption {
@@ -206,7 +256,8 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description =
+          "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -216,7 +267,7 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -224,7 +275,8 @@ in
       debug = mkEnableOption "gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
+        enableMetacity =
+          mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
           type = types.listOf (types.submodule {
@@ -237,25 +289,28 @@ in
 
               wmLabel = mkOption {
                 type = types.str;
-                description = "The name of the window manager to show in the session chooser.";
+                description =
+                  "The name of the window manager to show in the session chooser.";
                 example = "XMonad";
               };
 
               wmCommand = mkOption {
                 type = types.str;
                 description = "The executable of the window manager to use.";
-                example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
+                example = literalExpression
+                  ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
               };
 
               enableGnomePanel = mkOption {
                 type = types.bool;
                 default = true;
                 example = false;
-                description = "Whether to enable the GNOME panel in this session.";
+                description =
+                  "Whether to enable the GNOME panel in this session.";
               };
             };
           });
-          default = [];
+          default = [ ];
           description = "Other GNOME Flashback sessions to enable.";
         };
 
@@ -273,10 +328,11 @@ in
     };
 
     environment.gnome.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.gnome.totem ]";
       type = types.listOf types.package;
-      description = "Which packages gnome should exclude from the default environment";
+      description =
+        "Which packages gnome should exclude from the default environment";
     };
 
   };
@@ -294,7 +350,8 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
+      services.xserver.displayManager.sessionPackages =
+        [ pkgs.gnome.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -314,39 +371,36 @@ in
       environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
       # Override GSettings schemas
-      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR =
+        "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-       # If gnome is installed, build vim for gtk3 too.
+      # If gnome is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.sessionPackages =
-        let
-          wmNames = map (wm: wm.wmName) flashbackWms;
-          namesAreUnique = lib.unique wmNames == wmNames;
-        in
-          assert (assertMsg namesAreUnique "Flashback WM names must be unique.");
-          map
-            (wm:
-              pkgs.gnome.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
-                inherit (cfg.flashback) panelModulePackages;
-              }
-            ) flashbackWms;
+      services.xserver.displayManager.sessionPackages = let
+        wmNames = map (wm: wm.wmName) flashbackWms;
+        namesAreUnique = lib.unique wmNames == wmNames;
+      in assert (assertMsg namesAreUnique "Flashback WM names must be unique.");
+      map (wm:
+        pkgs.gnome.gnome-flashback.mkSessionForWm {
+          inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
+          inherit (cfg.flashback) panelModulePackages;
+        }) flashbackWms;
 
-      security.pam.services.gnome-flashback = {
-        enableGnomeKeyring = true;
-      };
+      security.pam.services.gnome-flashback = { enableGnomeKeyring = true; };
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-flashback
-      ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      systemd.packages = with pkgs.gnome;
+        [ gnome-flashback ]
+        ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
       # gnome-panel needs these for menu applet
-      environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome.gnome-flashback}/share" ];
+      environment.sessionVariables.XDG_DATA_DIRS =
+        [ "${pkgs.gnome.gnome-flashback}/share" ];
       # TODO: switch to sessionVariables (resolve conflict)
-      environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome.gnome-flashback}/etc/xdg" ];
+      environment.variables.XDG_CONFIG_DIRS =
+        [ "${pkgs.gnome.gnome-flashback}/etc/xdg" ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {
@@ -369,7 +423,8 @@ in
       services.packagekit.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
+      services.xserver.libinput.enable = mkDefault
+        true; # for controlling touchpad settings via gnome control center
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
@@ -393,9 +448,7 @@ in
 
       # gnome has a custom alert theme but it still
       # inherits from the freedesktop theme.
-      environment.systemPackages = with pkgs; [
-        sound-theme-freedesktop
-      ];
+      environment.systemPackages = with pkgs; [ sound-theme-freedesktop ];
 
       # Needed for themes and backgrounds
       environment.pathsToLink = [
@@ -413,28 +466,26 @@ in
       services.gnome.gnome-user-share.enable = mkDefault true;
       services.gnome.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.system-config-printer.enable =
+        (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-session
-        gnome-shell
-      ];
+      systemd.packages = with pkgs.gnome; [ gnome-session gnome-shell ];
 
-      services.udev.packages = with pkgs.gnome; [
-        # Force enable KMS modifiers for devices that require them.
-        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
-        mutter
-      ];
+      services.udev.packages = with pkgs.gnome;
+        [
+          # Force enable KMS modifiers for devices that require them.
+          # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+          mutter
+        ];
 
       services.avahi.enable = mkDefault true;
 
-      xdg.portal.extraPortals = [
-        pkgs.gnome.gnome-shell
-      ];
+      xdg.portal.extraPortals = [ pkgs.gnome.gnome-shell ];
 
       services.geoclue2.enable = mkDefault true;
-      services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
+      services.geoclue2.enableDemoAgent =
+        false; # GNOME has its own geoclue agent
 
       services.geoclue2.appConfig.gnome-datetime-panel = {
         isAllowed = true;
@@ -490,54 +541,52 @@ in
       };
 
       systemd.user.services.gnome-shell-wayland = let
-        gnomeShellRT = with pkgs.gnome; pkgs.runCommand "gnome-shell-rt" {} ''
-          mkdir -p $out/bin/
-          cp ${gnome-shell}/bin/gnome-shell $out/bin
-          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
-        '';
+        gnomeShellRT = with pkgs.gnome;
+          pkgs.runCommand "gnome-shell-rt" { } ''
+            mkdir -p $out/bin/
+            cp ${gnome-shell}/bin/gnome-shell $out/bin
+            sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+          '';
       in {
         # Note we need to clear ExecStart before overriding it
-        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
+        serviceConfig.ExecStart = [ "" "${gnomeShellRT}/bin/gnome-shell" ];
         # Do not use the default environment, it provides a broken PATH
-        environment = mkForce {};
+        environment = mkForce { };
       };
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
-      environment.systemPackages =
-        with pkgs.gnome;
-        removePackagesByName
-          ([
-            baobab
-            cheese
-            eog
-            epiphany
-            gedit
-            gnome-calculator
-            gnome-calendar
-            gnome-characters
-            gnome-clocks
-            gnome-contacts
-            gnome-font-viewer
-            gnome-logs
-            gnome-maps
-            gnome-music
-            pkgs.gnome-photos
-            gnome-screenshot
-            gnome-system-monitor
-            gnome-weather
-            nautilus
-            pkgs.gnome-connections
-            simple-scan
-            totem
-            yelp
-          ] ++ lib.optionals config.services.flatpak.enable [
-            # Since PackageKit Nix support is not there yet,
-            # only install gnome-software if flatpak is enabled.
-            gnome-software
-          ])
-          config.environment.gnome.excludePackages;
+      environment.systemPackages = with pkgs.gnome;
+        removePackagesByName ([
+          baobab
+          cheese
+          eog
+          epiphany
+          gedit
+          gnome-calculator
+          gnome-calendar
+          gnome-characters
+          gnome-clocks
+          gnome-contacts
+          gnome-font-viewer
+          gnome-logs
+          gnome-maps
+          gnome-music
+          pkgs.gnome-photos
+          gnome-screenshot
+          gnome-system-monitor
+          gnome-weather
+          nautilus
+          pkgs.gnome-connections
+          simple-scan
+          totem
+          yelp
+        ] ++ lib.optionals config.services.flatpak.enable [
+          # Since PackageKit Nix support is not there yet,
+          # only install gnome-software if flatpak is enabled.
+          gnome-software
+        ]) config.environment.gnome.excludePackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -553,52 +602,53 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+      environment.sessionVariables.NAUTILUS_EXTENSION_DIR =
+        "${config.system.path}/lib/nautilus/extensions-3.0";
 
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
-      environment.pathsToLink = [
-        "/share/nautilus-python/extensions"
-      ];
+      environment.pathsToLink = [ "/share/nautilus-python/extensions" ];
     })
 
     (mkIf serviceCfg.games.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
-        aisleriot
-        atomix
-        five-or-more
-        four-in-a-row
-        gnome-chess
-        gnome-klotski
-        gnome-mahjongg
-        gnome-mines
-        gnome-nibbles
-        gnome-robots
-        gnome-sudoku
-        gnome-taquin
-        gnome-tetravex
-        hitori
-        iagno
-        lightsoff
-        quadrapassel
-        swell-foop
-        tali
-      ] config.environment.gnome.excludePackages);
+      environment.systemPackages = (with pkgs.gnome;
+        removePackagesByName [
+          aisleriot
+          atomix
+          five-or-more
+          four-in-a-row
+          gnome-chess
+          gnome-klotski
+          gnome-mahjongg
+          gnome-mines
+          gnome-nibbles
+          gnome-robots
+          gnome-sudoku
+          gnome-taquin
+          gnome-tetravex
+          hitori
+          iagno
+          lightsoff
+          quadrapassel
+          swell-foop
+          tali
+        ] config.environment.gnome.excludePackages);
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
     (mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
-        dconf-editor
-        devhelp
-        pkgs.gnome-builder
-        # boxes would make sense in this option, however
-        # it doesn't function well enough to be included
-        # in default configurations.
-        # https://github.com/NixOS/nixpkgs/issues/60908
-        /* gnome-boxes */
-      ] config.environment.gnome.excludePackages);
+      environment.systemPackages = (with pkgs.gnome;
+        removePackagesByName [
+          dconf-editor
+          devhelp
+          pkgs.gnome-builder
+          # boxes would make sense in this option, however
+          # it doesn't function well enough to be included
+          # in default configurations.
+          # https://github.com/NixOS/nixpkgs/issues/60908
+          # gnome-boxes
+        ] config.environment.gnome.excludePackages);
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

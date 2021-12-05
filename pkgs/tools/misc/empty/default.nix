@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patches = [
-    ./0.6-Makefile.patch
-  ];
+  patches = [ ./0.6-Makefile.patch ];
 
   nativeBuildInputs = [ which ];
 

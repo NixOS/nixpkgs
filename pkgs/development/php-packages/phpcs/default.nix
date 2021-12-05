@@ -2,12 +2,12 @@
 let
   pname = "phpcs";
   version = "3.6.0";
-in
-mkDerivation {
+in mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
+    url =
+      "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
     sha256 = "0sdi78hrwd3r5p1b38qmp89m41kfszh2qn4n5zhq2dmhsjdhjziz";
   };
 

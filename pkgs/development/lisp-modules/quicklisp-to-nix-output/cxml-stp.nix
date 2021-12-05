@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cxml-stp";
   version = "20200325-git";
 
@@ -8,16 +7,32 @@ rec {
 
   description = "System lacks description";
 
-  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."cxml_slash_test" args."parse-number" args."puri" args."rt" args."trivial-features" args."trivial-gray-streams" args."xpath" args."xpath_slash_test" args."yacc" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cl-ppcre"
+    args."closure-common"
+    args."cxml"
+    args."cxml_slash_test"
+    args."parse-number"
+    args."puri"
+    args."rt"
+    args."trivial-features"
+    args."trivial-gray-streams"
+    args."xpath"
+    args."xpath_slash_test"
+    args."yacc"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cxml-stp/2020-03-25/cxml-stp-20200325-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cxml-stp/2020-03-25/cxml-stp-20200325-git.tgz";
     sha256 = "1y26bksmysvxifqx4lslpbsdvmcqkf7di36a3yyqnjgrb5r0jv1n";
   };
 
   packageName = "cxml-stp";
 
-  asdFilesToKeep = ["cxml-stp.asd"];
+  asdFilesToKeep = [ "cxml-stp.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cxml-stp DESCRIPTION System lacks description SHA256
@@ -36,4 +51,5 @@ rec {
     DEPENDENCIES
     (alexandria babel cl-ppcre closure-common cxml cxml/test parse-number puri
      rt trivial-features trivial-gray-streams xpath xpath/test yacc)
-    VERSION 20200325-git SIBLINGS NIL PARASITES (cxml-stp/test)) */
+    VERSION 20200325-git SIBLINGS NIL PARASITES (cxml-stp/test))
+*/

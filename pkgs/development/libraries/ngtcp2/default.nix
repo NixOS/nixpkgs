@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file
-, jemalloc, libev, nghttp3, quictls
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, cunit, file
+, jemalloc, libev, nghttp3, quictls }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
@@ -28,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization.";
+    description =
+      "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization.";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

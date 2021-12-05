@@ -4,38 +4,34 @@ let
   cfg = config.services.packagekit;
 
   inherit (lib)
-    mkEnableOption mkOption mkIf mkRemovedOptionModule types
-    listToAttrs recursiveUpdate;
+    mkEnableOption mkOption mkIf mkRemovedOptionModule types listToAttrs
+    recursiveUpdate;
 
   iniFmt = pkgs.formats.ini { };
 
   confFiles = [
-    (iniFmt.generate "PackageKit.conf" (recursiveUpdate
-      {
-        Daemon = {
-          DefaultBackend = "test_nop";
-          KeepCache = false;
-        };
-      }
-      cfg.settings))
+    (iniFmt.generate "PackageKit.conf" (recursiveUpdate {
+      Daemon = {
+        DefaultBackend = "test_nop";
+        KeepCache = false;
+      };
+    } cfg.settings))
 
-    (iniFmt.generate "Vendor.conf" (recursiveUpdate
-      {
-        PackagesNotFound = rec {
-          DefaultUrl = "https://github.com/NixOS/nixpkgs";
-          CodecUrl = DefaultUrl;
-          HardwareUrl = DefaultUrl;
-          FontUrl = DefaultUrl;
-          MimeUrl = DefaultUrl;
-        };
-      }
-      cfg.vendorSettings))
+    (iniFmt.generate "Vendor.conf" (recursiveUpdate {
+      PackagesNotFound = rec {
+        DefaultUrl = "https://github.com/NixOS/nixpkgs";
+        CodecUrl = DefaultUrl;
+        HardwareUrl = DefaultUrl;
+        FontUrl = DefaultUrl;
+        MimeUrl = DefaultUrl;
+      };
+    } cfg.vendorSettings))
   ];
 
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "The only backend that doesn't blow up is `test_nop`.")
+    (mkRemovedOptionModule [ "services" "packagekit" "backend" ]
+      "The only backend that doesn't blow up is `test_nop`.")
   ];
 
   options.services.packagekit = {
@@ -48,13 +44,15 @@ in
     settings = mkOption {
       type = iniFmt.type;
       default = { };
-      description = "Additional settings passed straight through to PackageKit.conf";
+      description =
+        "Additional settings passed straight through to PackageKit.conf";
     };
 
     vendorSettings = mkOption {
       type = iniFmt.type;
       default = { };
-      description = "Additional settings passed straight through to Vendor.conf";
+      description =
+        "Additional settings passed straight through to Vendor.conf";
     };
   };
 
@@ -64,9 +62,8 @@ in
 
     systemd.packages = with pkgs; [ packagekit ];
 
-    environment.etc = listToAttrs (map
-      (e:
-        lib.nameValuePair "PackageKit/${e.name}" { source = e; })
-      confFiles);
+    environment.etc = listToAttrs
+      (map (e: lib.nameValuePair "PackageKit/${e.name}" { source = e; })
+        confFiles);
   };
 }

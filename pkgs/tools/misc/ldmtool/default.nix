@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkg-config, libuuid,
-  libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl
-, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkg-config, libuuid
+, libtool, readline, gobject-introspection, json-glib, lvm2, libxslt
+, docbook_xsl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "ldmtool";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Remove useage of deprecrated G_PARAM_PRIVATE
     (fetchpatch {
-      url = "https://github.com/mdbooth/libldm/commit/ee1b37a034038f09d61b121cc8b3651024acc46f.patch";
+      url =
+        "https://github.com/mdbooth/libldm/commit/ee1b37a034038f09d61b121cc8b3651024acc46f.patch";
       sha256 = "02y34kbcpcpffvy1n9yqngvdldmxmvdkha1v2xjqvrnclanpigcp";
     })
   ];
@@ -32,12 +33,22 @@ stdenv.mkDerivation rec {
   configureScript = "sh autogen.sh";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake gtk-doc lvm2 libxslt.bin
-    libtool readline gobject-introspection json-glib libuuid
+  buildInputs = [
+    autoconf
+    automake
+    gtk-doc
+    lvm2
+    libxslt.bin
+    libtool
+    readline
+    gobject-introspection
+    json-glib
+    libuuid
   ];
 
   meta = with lib; {
-    description = "Tool and library for managing Microsoft Windows Dynamic Disks";
+    description =
+      "Tool and library for managing Microsoft Windows Dynamic Disks";
     homepage = "https://github.com/mdbooth/libldm";
     maintainers = with maintainers; [ jensbin ];
     license = licenses.gpl3;

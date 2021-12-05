@@ -1,28 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
-, nose
-, pygments
-, testpath
-, isPy27
-, mock
+, nose, pygments, testpath, isPy27, mock
 # Runtime dependencies
-, backports_shutil_get_terminal_size
-, decorator
-, pathlib2
-, pickleshare
-, requests
-, simplegeneric
-, traitlets
-, prompt-toolkit
-, pexpect
-, appnope
-}:
+, backports_shutil_get_terminal_size, decorator, pathlib2, pickleshare, requests
+, simplegeneric, traitlets, prompt-toolkit, pexpect, appnope }:
 
 buildPythonPackage rec {
   pname = "ipython";
@@ -41,7 +24,8 @@ buildPythonPackage rec {
     # Use the proper pygments lexer for python2 (https://github.com/ipython/ipython/pull/12095)
     (fetchpatch {
       name = "python2-lexer.patch";
-      url = "https://github.com/ipython/ipython/pull/12095/commits/8805293b5e4bce9150cc2ad9c5d6d984849ae447.patch";
+      url =
+        "https://github.com/ipython/ipython/pull/12095/commits/8805293b5e4bce9150cc2ad9c5d6d984849ae447.patch";
       sha256 = "16p4gl7a49v76w33j39ih7yspy6x2d14p9bh4wdpg9cafhw9nbc0";
     })
   ];
@@ -51,11 +35,18 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
   propagatedBuildInputs = [
-    backports_shutil_get_terminal_size decorator pickleshare prompt-toolkit
-    simplegeneric traitlets requests pathlib2 pexpect
+    backports_shutil_get_terminal_size
+    decorator
+    pickleshare
+    prompt-toolkit
+    simplegeneric
+    traitlets
+    requests
+    pathlib2
+    pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 

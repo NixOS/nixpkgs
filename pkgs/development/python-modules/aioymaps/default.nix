@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aioymaps";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8U8I2pqvvm87IW1hhR4CGyIWdM/jsRPRP6u2yYGXdBw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

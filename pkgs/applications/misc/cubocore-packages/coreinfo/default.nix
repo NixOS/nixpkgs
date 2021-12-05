@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libzen, libmediainfo, zlib, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, libzen, libmediainfo, zlib, cmake
+, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "coreinfo";
@@ -11,19 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-kLBOvvulHE1+4TyZVEVZwEA+Id7+w8fI3ll+QL2ukr0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    libzen
-    libmediainfo
-    zlib
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase libzen libmediainfo zlib libcprime libcsys ];
 
   meta = with lib; {
     description = "A file information tool from the C Suite";

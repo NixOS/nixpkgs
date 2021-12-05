@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.nginx;
-in
-{
+let cfg = config.services.prometheus.exporters.nginx;
+in {
   port = 9113;
   extraOpts = {
     scrapeUri = mkOption {
@@ -32,11 +30,8 @@ in
     };
     constLabels = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [
-        "label1=value1"
-        "label2=value2"
-      ];
+      default = [ ];
+      example = [ "label1=value1" "label2=value2" ];
       description = ''
         A list of constant labels that will be used in every metric.
       '';
@@ -54,15 +49,20 @@ in
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
-  }] ++ [(mkIf config.services.nginx.enable {
-    after = [ "nginx.service" ];
-    requires = [ "nginx.service" ];
-  })]);
+  }] ++ [
+    (mkIf config.services.nginx.enable {
+      after = [ "nginx.service" ];
+      requires = [ "nginx.service" ];
+    })
+  ]);
   imports = [
     (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
     (mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify'.
     '')
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

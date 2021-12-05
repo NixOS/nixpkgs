@@ -1,23 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
-, enum34
-, glibcLocales
-, matplotlib
-, monty
-, networkx
-, numpy
-, palettable
-, pandas
-, plotly
-, pydispatcher
-, requests
-, ruamel-yaml
-, scipy
-, six
-, spglib
-, sympy
-, tabulate
-, uncertainties
-}:
+{ lib, buildPythonPackage, fetchPypi, enum34, glibcLocales, matplotlib, monty
+, networkx, numpy, palettable, pandas, plotly, pydispatcher, requests
+, ruamel-yaml, scipy, six, spglib, sympy, tabulate, uncertainties }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
@@ -55,7 +38,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
-    description = "A robust materials analysis code that defines core object representations for structures and molecules";
+    description =
+      "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];

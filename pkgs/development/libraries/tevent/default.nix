@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, talloc
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, which
-, wafHook
-}:
+{ lib, stdenv, fetchurl, python3, pkg-config, readline, talloc, libxslt
+, docbook-xsl-nons, docbook_xml_dtd_42, which, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "tevent";
@@ -38,13 +28,12 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
-    "--bundled-libraries=NONE"
-    "--builtin-libraries=replace"
-  ];
+  wafConfigureFlags =
+    [ "--bundled-libraries=NONE" "--builtin-libraries=replace" ];
 
   meta = with lib; {
-    description = "An event system based on the talloc memory management library";
+    description =
+      "An event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;

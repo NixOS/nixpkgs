@@ -14,13 +14,15 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # to fix the test suite (can be removed as soon as #33 is merged).
     (fetchpatch {
-      url = "https://github.com/NerdyPepper/eva/commit/cacf51dbb9748b1dbe97b35f3c593a0a272bd4db.patch";
+      url =
+        "https://github.com/NerdyPepper/eva/commit/cacf51dbb9748b1dbe97b35f3c593a0a272bd4db.patch";
       sha256 = "11q7dkz2x1888f3awnlr1nbbxzzfjrr46kd0kk6sgjdkyfh50cvv";
     })
 
     # to fix `cargo test -- --test-threads $NIX_BUILD_CORES`
     (fetchpatch {
-      url = "https://github.com/NerdyPepper/eva/commit/ccfb3d327567dbaf03b2283c7e684477e2e84590.patch";
+      url =
+        "https://github.com/NerdyPepper/eva/commit/ccfb3d327567dbaf03b2283c7e684477e2e84590.patch";
       sha256 = "003yxqlyi8jna0rf05q2a006r2pkz6pcwwfl3dv8zb6p83kk1kgj";
     })
   ];

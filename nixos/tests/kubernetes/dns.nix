@@ -1,4 +1,5 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; }
+}:
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
@@ -11,7 +12,7 @@ let
     spec.containers = [{
       name = "redis";
       image = "redis";
-      args = ["--bind" "0.0.0.0"];
+      args = [ "--bind" "0.0.0.0" ];
       imagePullPolicy = "Never";
       ports = [{
         name = "redis-server";
@@ -25,8 +26,11 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     spec = {
-      ports = [{port = 6379; targetPort = 6379;}];
-      selector = {name = "redis";};
+      ports = [{
+        port = 6379;
+        targetPort = 6379;
+      }];
+      selector = { name = "redis"; };
     };
   });
 
@@ -34,7 +38,7 @@ let
     name = "redis";
     tag = "latest";
     contents = [ pkgs.redis pkgs.bind.host ];
-    config.Entrypoint = ["/bin/redis-server"];
+    config.Entrypoint = [ "/bin/redis-server" ];
   };
 
   probePod = pkgs.writeText "probe-pod.json" (builtins.toJSON {
@@ -55,7 +59,7 @@ let
     name = "probe";
     tag = "latest";
     contents = [ pkgs.bind.host pkgs.busybox ];
-    config.Entrypoint = ["/bin/tail"];
+    config.Entrypoint = [ "/bin/tail" ];
   };
 
   extraConfiguration = { config, pkgs, lib, ... }: {

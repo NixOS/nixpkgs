@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchzip, makeWrapper, jdk8, python3Packages, extraPythonPackages ? [], coreutils, hadoop
-, RSupport? true, R
-}:
+{ lib, stdenv, fetchzip, makeWrapper, jdk8, python3Packages
+, extraPythonPackages ? [ ], coreutils, hadoop, RSupport ? true, R }:
 
 with lib;
 
@@ -9,8 +8,7 @@ let
     stdenv.mkDerivation rec {
       inherit pname version src;
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk8 python3Packages.python ]
-        ++ extraPythonPackages
+      buildInputs = [ jdk8 python3Packages.python ] ++ extraPythonPackages
         ++ optional RSupport R;
 
       untarDir = "${pname}-${version}";
@@ -45,11 +43,17 @@ let
       '';
 
       meta = {
-        description      = "Apache Spark is a fast and general engine for large-scale data processing";
-        homepage         = "http://spark.apache.org";
-        license          = lib.licenses.asl20;
-        platforms        = lib.platforms.all;
-        maintainers      = with maintainers; [ thoughtpolice offline kamilchm illustris ];
+        description =
+          "Apache Spark is a fast and general engine for large-scale data processing";
+        homepage = "http://spark.apache.org";
+        license = lib.licenses.asl20;
+        platforms = lib.platforms.all;
+        maintainers = with maintainers; [
+          thoughtpolice
+          offline
+          kamilchm
+          illustris
+        ];
         repositories.git = "git://git.apache.org/spark.git";
       };
     };
@@ -59,7 +63,8 @@ in {
     version = "3.1.2";
 
     src = fetchzip {
-      url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+      url =
+        "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
     };
   };
@@ -68,7 +73,8 @@ in {
     version = "2.4.8";
 
     src = fetchzip {
-      url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+      url =
+        "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
     };
   };

@@ -1,24 +1,9 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 
-, anthy
-, hunspell
-, libchewing
-, libpinyin
-, maliit-framework
-, pcre
-, presage
-, qtfeedback
-, qtmultimedia
-, qtquickcontrols2
-, qtgraphicaleffects
+, anthy, hunspell, libchewing, libpinyin, maliit-framework, pcre, presage
+, qtfeedback, qtmultimedia, qtquickcontrols2, qtgraphicaleffects
 
-, cmake
-, pkg-config
-, wrapGAppsHook
-}:
+, cmake, pkg-config, wrapGAppsHook }:
 
 mkDerivation rec {
   pname = "maliit-keyboard";
@@ -34,7 +19,8 @@ mkDerivation rec {
   patches = [
     (fetchpatch {
       # https://github.com/maliit/keyboard/pull/34
-      url = "https://github.com/maliit/keyboard/commit/9848a73b737ad46b5790ebf713a559d340c91b82.patch";
+      url =
+        "https://github.com/maliit/keyboard/commit/9848a73b737ad46b5790ebf713a559d340c91b82.patch";
       sha256 = "0qrsga0npahjrgbl6mycvl6d6vjm0d17i5jadcn7y6khbhq2y6rg";
     })
   ];
@@ -63,11 +49,7 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
   postInstall = ''
     glib-compile-schemas "$out"/share/glib-2.0/schemas

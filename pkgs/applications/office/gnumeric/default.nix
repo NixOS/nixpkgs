@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome, wrapGAppsHook, gtk3, bison, python3Packages
-, itstool
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages, goffice, gnome
+, wrapGAppsHook, gtk3, bison, python3Packages, itstool }:
 
-let
-  inherit (python3Packages) python pygobject3;
+let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
   version = "1.12.50";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "dYgZuhvWmDgp+efG1xp/ogzXWjZSonHluwA9XYvMFLg=";
   };
 
@@ -19,10 +18,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook ];
 
   # ToDo: optional libgda, introspection?
-  buildInputs = [
-    goffice gtk3 gnome.adwaita-icon-theme
-    python pygobject3
-  ] ++ (with perlPackages; [ perl XMLParser ]);
+  buildInputs = [ goffice gtk3 gnome.adwaita-icon-theme python pygobject3 ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 

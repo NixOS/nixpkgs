@@ -5,14 +5,12 @@ stdenv.mkDerivation rec {
   version = "20191128";
 
   src = fetchurl {
-    url    = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    url =
+      "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
     sha256 = "1ygahl3r26r38ai8yyblq9nhf3v5i6n6r6672p5wf88wg5h9n0rz";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "DESTDIR=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "DESTDIR=$(out)" ];
 
   prePatch = ''
     sed -i 's@usb_modeswitch@${usb-modeswitch}/lib/udev/usb_modeswitch@g' 40-usb_modeswitch.rules
@@ -23,7 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ tcl ];
 
   meta = with lib; {
-    description = "Device database and the rules file for 'multi-mode' USB devices";
+    description =
+      "Device database and the rules file for 'multi-mode' USB devices";
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };
 }

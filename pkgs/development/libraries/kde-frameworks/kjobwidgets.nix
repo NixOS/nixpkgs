@@ -1,8 +1,5 @@
-{
-  mkDerivation,
-  extra-cmake-modules, qttools,
-  kcoreaddons, kwidgetsaddons, qtx11extras
-}:
+{ mkDerivation, extra-cmake-modules, qttools, kcoreaddons, kwidgetsaddons
+, qtx11extras }:
 
 mkDerivation {
   name = "kjobwidgets";

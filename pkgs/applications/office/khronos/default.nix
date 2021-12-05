@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, desktop-file-utils
-, python3
-, glib
-, gtk4
-, json-glib
-, libadwaita
-, libgee
-, wrapGAppsHook4
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, vala
+, pkg-config, desktop-file-utils, python3, glib, gtk4, json-glib, libadwaita
+, libgee, wrapGAppsHook4 }:
 
 stdenv.mkDerivation rec {
   pname = "khronos";
@@ -27,34 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+gZy8cdekM26J1ujqFmfBXTctXc9E//EY42ZoLq9rBs=";
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    vala
-    pkg-config
-    python3
-    wrapGAppsHook4
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja vala pkg-config python3 wrapGAppsHook4 ];
 
-  buildInputs = [
-    glib
-    gtk4
-    json-glib
-    libadwaita
-    libgee
-  ];
+  buildInputs = [ glib gtk4 json-glib libadwaita libgee ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Track each task's time in a simple inobtrusive way";

@@ -1,29 +1,7 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, SDL
-, ffmpeg
-, frei0r
-, libjack2
-, libdv
-, libsamplerate
-, libvorbis
-, libxml2
-, movit
-, pkg-config
-, sox
-, qtbase
-, qtsvg
-, fftw
-, vid-stab
-, opencv3
-, ladspa-sdk
-, genericUpdater
-, common-updater-scripts
-, ladspaPlugins
-, mkDerivation
-, which
-}:
+{ lib, fetchFromGitHub, cmake, SDL, ffmpeg, frei0r, libjack2, libdv
+, libsamplerate, libvorbis, libxml2, movit, pkg-config, sox, qtbase, qtsvg, fftw
+, vid-stab, opencv3, ladspa-sdk, genericUpdater, common-updater-scripts
+, ladspaPlugins, mkDerivation, which }:
 
 mkDerivation rec {
   pname = "mlt";
@@ -66,18 +44,18 @@ mkDerivation rec {
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
-  passthru = {
-    inherit ffmpeg;
-  };
+  passthru = { inherit ffmpeg; };
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 
   meta = with lib; {
-    description = "Open source multimedia framework, designed for television broadcasting";
+    description =
+      "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

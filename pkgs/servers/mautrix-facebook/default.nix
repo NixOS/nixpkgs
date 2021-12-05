@@ -1,9 +1,4 @@
-{ enableSystemd ? stdenv.isLinux
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
-}:
+{ enableSystemd ? stdenv.isLinux, fetchFromGitHub, lib, python3, stdenv }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
@@ -16,21 +11,22 @@ python3.pkgs.buildPythonPackage rec {
     sha256 = "1n7gshm2nir6vgjkj36lq9m2bclkgy0y236xi8zvdlvfcb2m596f";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
-    aiohttp
-    asyncpg
-    mautrix
-    paho-mqtt
-    pillow
-    prometheus-client
-    pycryptodome
-    python-olm
-    python_magic
-    ruamel-yaml
-    unpaddedbase64
-    yarl
-  ] ++ lib.optional enableSystemd systemd;
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      CommonMark
+      aiohttp
+      asyncpg
+      mautrix
+      paho-mqtt
+      pillow
+      prometheus-client
+      pycryptodome
+      python-olm
+      python_magic
+      ruamel-yaml
+      unpaddedbase64
+      yarl
+    ] ++ lib.optional enableSystemd systemd;
 
   doCheck = false;
 

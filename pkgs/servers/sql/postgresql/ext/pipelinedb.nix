@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, zeromq, openssl, libsodium, libkrb5 }:
+{ lib, stdenv, fetchFromGitHub, postgresql, zeromq, openssl, libsodium, libkrb5
+}:
 
 stdenv.mkDerivation rec {
   pname = "pipelinedb";

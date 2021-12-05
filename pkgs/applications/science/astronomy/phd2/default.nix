@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30-gtk3
-, curl, gettext, glib, indi-full, libnova, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30-gtk3, curl
+, gettext, glib, indi-full, libnova, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "phd2";
@@ -12,25 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2ZiPjhlguWXFcC53xG1aqAode7twtoHWszFUMQkK5xU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    wxGTK30-gtk3
-    curl
-    gettext
-    glib
-    indi-full
-    libnova
-  ];
+  buildInputs = [ gtk3 wxGTK30-gtk3 curl gettext glib indi-full libnova ];
 
-  cmakeFlags = [
-    "-DOPENSOURCE_ONLY=1"
-  ];
+  cmakeFlags = [ "-DOPENSOURCE_ONLY=1" ];
 
   # Fix broken wrapped name scheme by moving wrapped binary to where wrapper expects it
   postFixup = ''
@@ -40,7 +26,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://openphdguiding.org/";
     description = "Telescope auto-guidance application";
-    changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
+    changelog =
+      "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.linux;

@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, authlib
-, requests
-, nose
-, pytz
-, responses
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, authlib, requests, nose, pytz
+, responses }:
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
@@ -19,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "17d6g7zfhlgd2n4mimjarl2x4hl7ww2lb4izidlns1hzqm8igg4y";
   };
 
-  propagatedBuildInputs = [
-    authlib
-    requests
-  ];
+  propagatedBuildInputs = [ authlib requests ];
 
-  checkInputs = [
-    nose
-    pytz
-    responses
-  ];
+  checkInputs = [ nose pytz responses ];
 
   checkPhase = ''
     runHook preCheck

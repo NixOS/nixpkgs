@@ -26,12 +26,13 @@ let
   full-ttf = stdenv.mkDerivation {
     pname = "dejavu-fonts-full";
     inherit version;
-    nativeBuildInputs = [fontforge perl perlPackages.IOString perlPackages.FontTTF];
+    nativeBuildInputs =
+      [ fontforge perl perlPackages.IOString perlPackages.FontTTF ];
 
     src = fetchFromGitHub {
       owner = "dejavu-fonts";
       repo = "dejavu-fonts";
-      rev = "version_${lib.replaceStrings ["."] ["_"] version}";
+      rev = "version_${lib.replaceStrings [ "." ] [ "_" ] version}";
       sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
     };
 

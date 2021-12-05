@@ -1,12 +1,5 @@
-{ autoreconfHook
-, fetchFromGitHub
-, gensio
-, lib
-, libyaml
-, nix-update-script
-, pkg-config
-, stdenv
-}:
+{ autoreconfHook, fetchFromGitHub, gensio, lib, libyaml, nix-update-script
+, pkg-config, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
@@ -19,11 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-J95WDF6x6nHF+r+97E4WdTkXWF98/lx1OSauZTy1/3Q=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 

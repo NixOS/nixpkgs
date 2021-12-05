@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests
+}:
 
 stdenv.mkDerivation {
   pname = "wmderland";
@@ -11,9 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0npmlnybblp82mfpinjbz7dhwqgpdqc1s63wc1zs8mlcs19pdh98";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeBuildType = "MinSizeRel";
 
@@ -24,10 +23,7 @@ stdenv.mkDerivation {
       --replace "notify-send" "${libnotify}/bin/notify-send"
   '';
 
-  buildInputs = [
-    libX11
-    xorgproto
-  ];
+  buildInputs = [ libX11 xorgproto ];
 
   postInstall = ''
     install -Dm0644 -t $out/share/wmderland/contrib $src/example/config

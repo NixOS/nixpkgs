@@ -7,7 +7,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/mdlayher/unifi_exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "mdlayher";
     repo = "unifi_exporter";
@@ -15,7 +15,8 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "Prometheus exporter that exposes metrics from a Ubiquiti UniFi Controller and UniFi devices";
+    description =
+      "Prometheus exporter that exposes metrics from a Ubiquiti UniFi Controller and UniFi devices";
     homepage = "https://github.com/mdlayher/unifi_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ bachp globin ];

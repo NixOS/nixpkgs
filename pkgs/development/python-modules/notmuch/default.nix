@@ -1,9 +1,6 @@
 { lib
 
-, buildPythonPackage
-, notmuch
-, python
-}:
+, buildPythonPackage, notmuch, python }:
 
 buildPythonPackage {
   inherit (notmuch) pname version src;

@@ -5,13 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.13";
 
   src = fetchurl {
-    url = "https://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
+    url =
+      "https://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
     sha256 = "0z1z4wqbqwgppkh2bm89fgy07a0y2m6g4lvcyzs09sm1ysklk2dh";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [
-    ocaml findlib camlp5 lablgtk ]);
+  buildInputs = [ ncurses ]
+    ++ (with ocamlPackages; [ ocaml findlib camlp5 lablgtk ]);
 
   dontAddPrefix = true;
   configureFlags = [ "--prefix" "$(out)" ];

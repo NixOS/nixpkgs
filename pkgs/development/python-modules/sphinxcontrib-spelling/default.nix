@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, sphinx
-, pyenchant
-, pbr
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, importlib-metadata, sphinx
+, pyenchant, pbr }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";

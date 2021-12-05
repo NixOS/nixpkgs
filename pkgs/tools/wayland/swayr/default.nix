@@ -13,9 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-vExZzJ3Rw+MiU4ikEqzIo51qZW0sxwE/zoVEdUKLXwY=";
 
-  patches = [
-    ./icon-paths.patch
-  ];
+  patches = [ ./icon-paths.patch ];
 
   preCheck = ''
     export HOME=$TMPDIR

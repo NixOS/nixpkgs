@@ -1,12 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, mock
-, purl
-, requests
-, six
-, testrepository
-, testtools
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, python, mock, purl, requests, six
+, testrepository, testtools, pytest }:
 
 buildPythonPackage rec {
   pname = "requests-mock";

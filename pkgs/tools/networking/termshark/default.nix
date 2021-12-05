@@ -19,12 +19,12 @@ buildGoModule rec {
   doCheck = false;
 
   postFixup = ''
-    wrapProgram $out/bin/termshark --prefix PATH : ${lib.makeBinPath [ wireshark-cli ]}
+    wrapProgram $out/bin/termshark --prefix PATH : ${
+      lib.makeBinPath [ wireshark-cli ]
+    }
   '';
 
-  ldflags = [
-    "-X github.com/gcla/termshark.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/gcla/termshark.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://termshark.io/";

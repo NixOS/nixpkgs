@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libjpeg
-, libpng
-, ncurses
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, bash-completion
-}:
+{ lib, stdenv, fetchFromGitHub, libjpeg, libpng, ncurses, autoreconfHook
+, autoconf-archive, pkg-config, bash-completion }:
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -23,12 +14,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
-    pkg-config
-    bash-completion
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook autoconf-archive pkg-config bash-completion ];
   buildInputs = [ libjpeg libpng ncurses ];
 
   installFlags = [ "bashcompdir=\${out}/share/bash-completion/completions" ];

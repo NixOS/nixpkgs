@@ -1,16 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, installShellFiles
-, pkg-config
-, python3
-, dbus
-, glib
-, gpgme
-, gtk3
-, libxcb
-, libxkbcommon
-}:
+{ lib, rustPlatform, fetchFromGitLab, installShellFiles, pkg-config, python3
+, dbus, glib, gpgme, gtk3, libxcb, libxkbcommon }:
 
 rustPlatform.buildRustPackage rec {
   pname = "prs";
@@ -35,14 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ gpgme installShellFiles pkg-config python3 ];
 
-  buildInputs = [
-    dbus
-    glib
-    gpgme
-    gtk3
-    libxcb
-    libxkbcommon
-  ];
+  buildInputs = [ dbus glib gpgme gtk3 libxcb libxkbcommon ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -51,12 +33,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Secure, fast & convenient password manager CLI using GPG and git to sync";
+    description =
+      "Secure, fast & convenient password manager CLI using GPG and git to sync";
     homepage = "https://gitlab.com/timvisee/prs";
-    changelog = "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       lgpl3Only # lib
-      gpl3Only  # everything else
+      gpl3Only # everything else
     ];
     maintainers = with maintainers; [ dotlambda ];
   };

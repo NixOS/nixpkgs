@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "documize";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ ma27 ]; };
 
   machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];
@@ -11,7 +9,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       enable = true;
       port = 3000;
       dbtype = "postgresql";
-      db = "host=localhost port=5432 sslmode=disable user=documize password=documize dbname=documize";
+      db =
+        "host=localhost port=5432 sslmode=disable user=documize password=documize dbname=documize";
     };
 
     systemd.services.documize-server = {

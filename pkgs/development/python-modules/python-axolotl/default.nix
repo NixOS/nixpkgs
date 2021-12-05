@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519, protobuf }:
+{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519
+, protobuf }:
 
 buildPythonPackage rec {
   pname = "python-axolotl";

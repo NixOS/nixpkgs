@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.0.rc15";
 
   src = fetchurl {
-    url = "https://people.redhat.com/~heinzm/sw/dmraid/src/old/dmraid-${version}.tar.bz2";
+    url =
+      "https://people.redhat.com/~heinzm/sw/dmraid/src/old/dmraid-${version}.tar.bz2";
     sha256 = "01bcaq0sc329ghgj7f182xws7jgjpdc41bvris8fsiprnxc7511h";
   };
 

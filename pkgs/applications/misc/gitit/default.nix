@@ -4,23 +4,21 @@
 # into its runtime closure. Only enable if you really need
 # that feature. But if you do you’ll want to use gitit
 # as a library anyway.
-, pluginSupport ? false
-}:
+, pluginSupport ? false }:
 
 # this is similar to what we do with the pandoc executable
 
 let
   plain = haskellPackages.gitit;
-  plugins =
-    if pluginSupport
-    then plain
-    else haskell.lib.compose.disableCabalFlag "plugins" plain;
+  plugins = if pluginSupport then
+    plain
+  else
+    haskell.lib.compose.disableCabalFlag "plugins" plain;
   static = haskell.lib.compose.justStaticExecutables plugins;
 
-in
-  (haskell.lib.compose.overrideCabal (drv: {
-    buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
-  }) static).overrideAttrs (drv: {
+in (haskell.lib.compose.overrideCabal
+  (drv: { buildTools = (drv.buildTools or [ ]) ++ [ removeReferencesTo ]; })
+  static).overrideAttrs (drv: {
 
     # These libraries are still referenced, because they generate
     # a `Paths_*` module for figuring out their version.
@@ -55,7 +53,7 @@ in
     '';
 
     meta = drv.meta // {
-      maintainers = drv.meta.maintainers or []
+      maintainers = drv.meta.maintainers or [ ]
         ++ [ lib.maintainers.Profpatsch ];
     };
   })

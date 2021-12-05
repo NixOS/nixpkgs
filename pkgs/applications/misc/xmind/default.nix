@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper
+, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
@@ -38,9 +39,10 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = let
-    targetDir = if stdenv.hostPlatform.system == "i686-linux"
-      then "XMind_i386"
-      else "XMind_amd64";
+    targetDir = if stdenv.hostPlatform.system == "i686-linux" then
+      "XMind_i386"
+    else
+      "XMind_amd64";
   in ''
     mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
     cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec

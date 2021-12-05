@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook
+, pytest-trio, which }:
 
 buildPythonPackage rec {
   pname = "pyfuse3";
@@ -15,12 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ trio ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-trio
-    which
-    fuse3
-  ];
+  checkInputs = [ pytestCheckHook pytest-trio which fuse3 ];
 
   # Checks if a /usr/bin directory exists, can't work on NixOS
   disabledTests = [ "test_listdir" ];

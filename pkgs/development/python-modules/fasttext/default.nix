@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, numpy, pkgs, pybind11 }:
+{ lib, buildPythonPackage, numpy, pkgs, pybind11 }:
 
 buildPythonPackage rec {
   inherit (pkgs.fasttext) pname version src;
@@ -14,7 +14,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python module for text classification and representation learning";
+    description =
+      "Python module for text classification and representation learning";
     homepage = "https://fasttext.cc/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

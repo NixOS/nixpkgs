@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.18";
 
   src = fetchurl {
-    url = "https://download.libsodium.org/libsodium/releases/${pname}-${version}.tar.gz";
+    url =
+      "https://download.libsodium.org/libsodium/releases/${pname}-${version}.tar.gz";
     sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
   };
 
@@ -18,11 +19,15 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;
-  hardeningDisable = lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32) "stackprotector";
+  hardeningDisable = lib.optional
+    (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32)
+    "stackprotector";
 
   # FIXME: the hardeingDisable attr above does not seems effective, so
   # the need to disable stackprotector via configureFlags
-  configureFlags = lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32) "--disable-ssp";
+  configureFlags = lib.optional
+    (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32)
+    "--disable-ssp";
 
   doCheck = true;
 

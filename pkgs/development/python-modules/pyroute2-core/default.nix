@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
-}:
+{ lib, buildPythonPackage, fetchPypi, pyroute2-core }:
 
 buildPythonPackage rec {
   pname = "pyroute2-core";
@@ -17,11 +13,8 @@ buildPythonPackage rec {
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pr2modules.common"
-    "pr2modules.config"
-    "pr2modules.proxy"
-  ];
+  pythonImportsCheck =
+    [ "pr2modules.common" "pr2modules.config" "pr2modules.proxy" ];
 
   meta = with lib; {
     description = "Core module for pyroute2";

@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-}:
+{ lib, buildPythonPackage, fetchgit }:
 
 buildPythonPackage {
   pname = "pyfantom";

@@ -1,16 +1,12 @@
-{ mkDerivation
-, lib
-, fetchurl
-, cmake
-, qtbase
-}:
+{ mkDerivation, lib, fetchurl, cmake, qtbase }:
 
 mkDerivation rec {
   pname = "kdsoap";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
+    url =
+      "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
     sha256 = "sha256-0YljEE+m99ArBEYxzdvnjxj3DgbGB69oDHrOBNbPBO4=";
   };
 

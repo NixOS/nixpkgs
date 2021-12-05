@@ -3,13 +3,12 @@ let
   inherit (lib) types;
   cfg = config.services.croc;
   rootDir = "/run/croc";
-in
-{
+in {
   options.services.croc = {
     enable = lib.mkEnableOption "croc relay";
     ports = lib.mkOption {
       type = with types; listOf port;
-      default = [9009 9010 9011 9012 9013];
+      default = [ 9009 9010 9011 9012 9013 ];
       description = "Ports of the relay.";
     };
     pass = lib.mkOption {
@@ -17,7 +16,8 @@ in
       default = "pass123";
       description = "Password or passwordfile for the relay.";
     };
-    openFirewall = lib.mkEnableOption "opening of the peer port(s) in the firewall";
+    openFirewall =
+      lib.mkEnableOption "opening of the peer port(s) in the firewall";
     debug = lib.mkEnableOption "debug logs";
   };
 
@@ -26,7 +26,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.croc}/bin/croc --pass '${cfg.pass}' ${lib.optionalString cfg.debug "--debug"} relay --ports ${lib.concatMapStringsSep "," toString cfg.ports}";
+        ExecStart = "${pkgs.croc}/bin/croc --pass '${cfg.pass}' ${
+            lib.optionalString cfg.debug "--debug"
+          } relay --ports ${lib.concatMapStringsSep "," toString cfg.ports}";
         # The following options are only for optimizing:
         # systemd-analyze security croc
         AmbientCapabilities = "";
@@ -61,18 +63,24 @@ in
         RootDirectory = rootDir;
         # Avoid mounting rootDir in the own rootDir of ExecStart='s mount namespace.
         InaccessiblePaths = [ "-+${rootDir}" ];
-        BindReadOnlyPaths = [
-          builtins.storeDir
-        ] ++ lib.optional (types.path.check cfg.pass) cfg.pass;
+        BindReadOnlyPaths = [ builtins.storeDir ]
+          ++ lib.optional (types.path.check cfg.pass) cfg.pass;
         # This is for BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "700";
         SystemCallFilter = [
           "@system-service"
-          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@setuid" "~@sync" "~@timer"
+          "~@aio"
+          "~@keyring"
+          "~@memlock"
+          "~@privileged"
+          "~@resources"
+          "~@setuid"
+          "~@sync"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";

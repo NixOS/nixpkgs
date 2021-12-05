@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cffi
-, pytestCheckHook
-, pyserial
-, fetchpatch
-}:
+{ lib, buildPythonPackage, fetchPypi, cffi, pytestCheckHook, pyserial
+, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "smbus-cffi";
@@ -19,7 +13,8 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/bivab/smbus-cffi/pull/24
     (fetchpatch {
-      url = "https://github.com/bivab/smbus-cffi/commit/ba79ae174a9d84e767d95f165c43ee212b1bbb92.patch";
+      url =
+        "https://github.com/bivab/smbus-cffi/commit/ba79ae174a9d84e767d95f165c43ee212b1bbb92.patch";
       sha256 = "sha256-WtRuK5y6fWDEhm0Xy5XqS5yCkn7vXXYtjlOjS90gla4=";
     })
   ];
@@ -40,7 +35,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook pyserial ];
 
   meta = with lib; {
-    description = "Python module for SMBus access through Linux I2C /dev interface";
+    description =
+      "Python module for SMBus access through Linux I2C /dev interface";
     homepage = "https://github.com/bivab/smbus-cffi";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 ];

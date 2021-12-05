@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.2";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jujuutils/jujuutils-${version}.tar.gz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jujuutils/jujuutils-${version}.tar.gz";
     sha256 = "1r74m7s7rs9d6y7cffi7mdap3jf96qwm1v6jcw53x5cikgmfxn4x";
   };
 
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/cladisch/linux-firewire-utils";
-    description = "Utilities around FireWire devices connected to a Linux computer";
+    description =
+      "Utilities around FireWire devices connected to a Linux computer";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };

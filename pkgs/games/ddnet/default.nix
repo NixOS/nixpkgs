@@ -1,22 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, curl
-, freetype
-, libGLU
-, libnotify
-, libogg
-, libX11
-, opusfile
-, pcre
-, python3
-, SDL2
-, sqlite
-, wavpack
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, curl, freetype, libGLU
+, libnotify, libogg, libX11, opusfile, pcre, python3, SDL2, sqlite, wavpack }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
@@ -46,11 +29,7 @@ stdenv.mkDerivation rec {
     wavpack
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DAUTOUPDATE=OFF"
-    "-GNinja"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DAUTOUPDATE=OFF" "-GNinja" ];
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -58,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Teeworlds modification with a unique cooperative gameplay.";
+    description =
+      "A Teeworlds modification with a unique cooperative gameplay.";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
       a Teeworlds modification with a unique cooperative gameplay.

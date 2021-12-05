@@ -1,10 +1,4 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, buildGoModule
-, sqlite
-, callPackage
-}:
+{ lib, buildGoPackage, fetchFromGitHub, buildGoModule, sqlite, callPackage }:
 
 buildGoModule rec {
   pname = "gotify-server";
@@ -37,20 +31,17 @@ buildGoModule rec {
     cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && go run hack/packr/packr.go
   '';
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru = { updateScript = ./update.sh; };
 
   # Otherwise, all other subpackages are built as well and from some reason,
   # produce binaries which panic when executed and are not interesting at all
   subPackages = [ "." ];
 
-  ldflags = [
-    "-X main.Version=${version}" "-X main.Mode=prod"
-  ];
+  ldflags = [ "-X main.Version=${version}" "-X main.Mode=prod" ];
 
   meta = with lib; {
-    description = "A simple server for sending and receiving messages in real-time per WebSocket";
+    description =
+      "A simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

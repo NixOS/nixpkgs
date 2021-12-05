@@ -18,9 +18,9 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-  installShellCompletion --cmd eksctl \
-    --bash <($out/bin/kfctl completion bash) \
-    --zsh <($out/bin/kfctl completion zsh)
+    installShellCompletion --cmd eksctl \
+      --bash <($out/bin/kfctl completion bash) \
+      --zsh <($out/bin/kfctl completion zsh)
   '';
 
   meta = with lib; {

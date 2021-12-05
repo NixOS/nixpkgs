@@ -1,21 +1,6 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools-scm
-, idna
-, sniffio
-, typing-extensions
-, curio
-, hypothesis
-, mock
-, pytest-mock
-, pytestCheckHook
-, trio
-, trustme
-, uvloop
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pythonOlder, setuptools-scm
+, idna, sniffio, typing-extensions, curio, hypothesis, mock, pytest-mock
+, pytestCheckHook, trio, trustme, uvloop }:
 
 buildPythonPackage rec {
   pname = "anyio";
@@ -34,28 +19,14 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ idna sniffio ]
+    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
-    curio
-    hypothesis
-    pytest-mock
-    pytestCheckHook
-    trio
-    trustme
-    uvloop
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    mock
-  ];
+  checkInputs =
+    [ curio hypothesis pytest-mock pytestCheckHook trio trustme uvloop ]
+    ++ lib.optionals (pythonOlder "3.8") [ mock ];
 
   disabledTests = [
     # block devices access
@@ -73,7 +44,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anyio" ];
 
   meta = with lib; {
-    description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
+    description =
+      "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

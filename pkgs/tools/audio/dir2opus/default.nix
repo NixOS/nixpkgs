@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, python, mutagen, wrapPython, opusTools, mpg123 }:
+{ lib, stdenv, fetchFromGitHub, python, mutagen, wrapPython, opusTools, mpg123
+}:
 
-let version = "0.12.2"; in
-stdenv.mkDerivation rec {
+let version = "0.12.2";
+in stdenv.mkDerivation rec {
   pname = "dir2opus";
   inherit version;
 
@@ -16,14 +17,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZEsXwqxikWxFOz99wTI3rEK/rEYA+BSWGrCwW4q+FFc=";
   };
 
-  postPatch = "sed -i -e 's|#!/usr/bin/python|#!${python}/bin/python|' dir2opus";
+  postPatch =
+    "sed -i -e 's|#!/usr/bin/python|#!${python}/bin/python|' dir2opus";
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/share/man/man1
-      cp dir2opus $out/bin
-      cp dir2opus.1 $out/share/man/man1
-    '';
+  installPhase = ''
+    mkdir -p $out/bin $out/share/man/man1
+    cp dir2opus $out/bin
+    cp dir2opus.1 $out/share/man/man1
+  '';
 
   postFixup = "wrapPythonPrograms";
 

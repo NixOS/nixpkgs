@@ -1,14 +1,7 @@
-
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy37
-, lib
+{ buildPythonPackage, fetchFromGitHub, isPy37, lib
 
 # Python Dependencies
-, mock
-, pytest
-, six
-}:
+, mock, pytest, six }:
 
 buildPythonPackage rec {
   pname = "mixpanel";
@@ -22,14 +15,9 @@ buildPythonPackage rec {
     sha256 = "1hlc717wcn71i37ngsfb3c605rlyjhsn3v6b5bplq00373r4d39z";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    mock
-    pytest
-  ];
+  checkInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test
@@ -39,8 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mixpanel/mixpanel-python";
     description = "Official Mixpanel Python library";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

@@ -1,21 +1,51 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "djula";
   version = "20211020-git";
 
   description = "An implementation of Django templates for Common Lisp.";
 
-  deps = [ args."access" args."alexandria" args."anaphora" args."arnesi" args."babel" args."cl-annot" args."cl-interpol" args."cl-locale" args."cl-ppcre" args."cl-slice" args."cl-syntax" args."cl-syntax-annot" args."cl-unicode" args."closer-mop" args."collectors" args."flexi-streams" args."gettext" args."iterate" args."let-plus" args."local-time" args."named-readtables" args."parser-combinators" args."split-sequence" args."symbol-munger" args."trivial-backtrace" args."trivial-features" args."trivial-gray-streams" args."trivial-types" args."yacc" ];
+  deps = [
+    args."access"
+    args."alexandria"
+    args."anaphora"
+    args."arnesi"
+    args."babel"
+    args."cl-annot"
+    args."cl-interpol"
+    args."cl-locale"
+    args."cl-ppcre"
+    args."cl-slice"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."cl-unicode"
+    args."closer-mop"
+    args."collectors"
+    args."flexi-streams"
+    args."gettext"
+    args."iterate"
+    args."let-plus"
+    args."local-time"
+    args."named-readtables"
+    args."parser-combinators"
+    args."split-sequence"
+    args."symbol-munger"
+    args."trivial-backtrace"
+    args."trivial-features"
+    args."trivial-gray-streams"
+    args."trivial-types"
+    args."yacc"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/djula/2021-10-20/djula-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/djula/2021-10-20/djula-20211020-git.tgz";
     sha256 = "1izz1bl5yjcfx7hldj2scdwwr6fybxrw2h4wwkpkwisadh42b648";
   };
 
   packageName = "djula";
 
-  asdFilesToKeep = ["djula.asd"];
+  asdFilesToKeep = [ "djula.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM djula DESCRIPTION
@@ -51,4 +81,5 @@ rec {
      named-readtables parser-combinators split-sequence symbol-munger
      trivial-backtrace trivial-features trivial-gray-streams trivial-types
      yacc)
-    VERSION 20211020-git SIBLINGS (djula-demo djula-test) PARASITES NIL) */
+    VERSION 20211020-git SIBLINGS (djula-demo djula-test) PARASITES NIL)
+*/

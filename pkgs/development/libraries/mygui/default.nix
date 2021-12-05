@@ -1,8 +1,7 @@
-{  lib, stdenv, fetchFromGitHub, libX11, cmake, ois, freetype, libuuid,
-   boost, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
+{ lib, stdenv, fetchFromGitHub, libX11, cmake, ois, freetype, libuuid, boost
+, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null }:
 
-let
-  renderSystem = if withOgre then "3" else "4";
+let renderSystem = if withOgre then "3" else "4";
 in stdenv.mkDerivation rec {
   pname = "mygui";
   version = "3.4.0";
@@ -19,7 +18,11 @@ in stdenv.mkDerivation rec {
     ++ (if withOgre then [ ogre ] else [ libGL libGLU ]);
 
   # Tools are disabled due to compilation failures.
-  cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];
+  cmakeFlags = [
+    "-DMYGUI_BUILD_TOOLS=OFF"
+    "-DMYGUI_BUILD_DEMOS=OFF"
+    "-DMYGUI_RENDERSYSTEM=${renderSystem}"
+  ];
 
   meta = with lib; {
     homepage = "http://mygui.info/";

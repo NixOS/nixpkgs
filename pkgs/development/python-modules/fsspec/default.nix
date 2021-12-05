@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, aiohttp
-, pytest-vcr
-, requests
-, paramiko
-, smbprotocol
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, numpy, aiohttp, pytest-vcr, requests, paramiko, smbprotocol }:
 
 buildPythonPackage rec {
   pname = "fsspec";
@@ -24,18 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-LgrOHBXKs2bEgtgrdHb1OEhOeQ5Rbgr6X5YtgiqiCH0=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    paramiko
-    requests
-    smbprotocol
-  ];
+  propagatedBuildInputs = [ aiohttp paramiko requests smbprotocol ];
 
-  checkInputs = [
-    numpy
-    pytest-vcr
-    pytestCheckHook
-  ];
+  checkInputs = [ numpy pytest-vcr pytestCheckHook ];
 
   __darwinAllowLocalNetworking = true;
 

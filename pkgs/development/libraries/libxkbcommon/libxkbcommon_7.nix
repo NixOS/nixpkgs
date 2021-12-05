@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, xkeyboard_config, libxcb, libX11 }:
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, xkeyboard_config, libxcb
+, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "libxkbcommon-0.7.2";

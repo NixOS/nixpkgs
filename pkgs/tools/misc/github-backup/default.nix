@@ -1,8 +1,4 @@
-{ lib
-, python3
-, git
-, git-lfs
-}:
+{ lib, python3, git, git-lfs }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
@@ -13,9 +9,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-Qrj0+4WXlW0UgG2xV/P8e0QgUG3VurY4HIAiiUF3LW8=";
   };
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ])
-  ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ]) ];
 
   # has no unit tests
   doCheck = false;
@@ -23,7 +17,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
-    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
+    changelog =
+      "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

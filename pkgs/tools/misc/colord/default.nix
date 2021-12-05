@@ -1,31 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, nixosTests
-, bash-completion
-, glib
-, polkit
-, pkg-config
-, gettext
-, gusb
-, lcms2
-, sqlite
-, systemd
-, dbus
-, gobject-introspection
-, argyllcms
-, meson
-, ninja
-, vala
-, libgudev
-, wrapGAppsHook
-, shared-mime-info
-, sane-backends
-, docbook_xsl
-, docbook_xsl_ns
-, docbook_xml_dtd_412
-, gtk-doc
-, libxslt
-}:
+{ lib, stdenv, fetchurl, nixosTests, bash-completion, glib, polkit, pkg-config
+, gettext, gusb, lcms2, sqlite, systemd, dbus, gobject-introspection, argyllcms
+, meson, ninja, vala, libgudev, wrapGAppsHook, shared-mime-info, sane-backends
+, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_412, gtk-doc, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "colord";
@@ -34,7 +10,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
     sha256 = "05sydi6qqqx1rrqwnga1vbg9srkf89wdcfw5w4p4m7r37m2flx5p";
   };
 
@@ -92,20 +69,22 @@ stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR =
+    "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR =
+    "${placeholder "out"}/lib/systemd/user";
   PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR =
+    "${placeholder "out"}/share/bash-completion/completions";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.colord;
-    };
+    tests = { installedTests = nixosTests.installed-tests.colord; };
   };
 
   meta = with lib; {
-    description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
+    description =
+      "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;

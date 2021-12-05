@@ -1,7 +1,4 @@
-{ mkDerivation, lib, fetchurl
-, pkg-config, libtool, qmake
-, rsync, ssh
-}:
+{ mkDerivation, lib, fetchurl, pkg-config, libtool, qmake, rsync, ssh }:
 
 with lib;
 mkDerivation rec {
@@ -9,7 +6,8 @@ mkDerivation rec {
   version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/luckybackup/${version}/source/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/luckybackup/${version}/source/${pname}-${version}.tar.gz";
     sha256 = "0nwjsk1j33pm8882jbj8h6nxn6n5ab9dxqpqkay65pfbhcjay0g8";
   };
 

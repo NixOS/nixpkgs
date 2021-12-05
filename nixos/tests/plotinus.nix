@@ -1,13 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "plotinus";
-  meta = {
-    maintainers = pkgs.plotinus.meta.maintainers;
-  };
+  meta = { maintainers = pkgs.plotinus.meta.maintainers; };
 
-  machine =
-    { pkgs, ... }:
+  machine = { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;
       environment.systemPackages = [ pkgs.gnome.gnome-calculator pkgs.xdotool ];
     };

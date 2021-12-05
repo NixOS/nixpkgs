@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose
-, lxml
-, requests
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, nose, lxml, requests, six }:
 
 buildPythonPackage rec {
   pname = "pyxnat";
@@ -18,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "22524120d744b50d25ef6bfc7052637e4ead9e2afac92563231ec89848f5adf5";
   };
 
-  propagatedBuildInputs = [
-    lxml
-    requests
-    six
-  ];
+  propagatedBuildInputs = [ lxml requests six ];
 
   # future is not used, and pathlib is installed part of python38+
   # w/o an external package
@@ -34,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";
-  doCheck = false;  # requires a docker container running an XNAT server
+  doCheck = false; # requires a docker container running an XNAT server
 
   pythonImportsCheck = [ "pyxnat" ];
 

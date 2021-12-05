@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, click
-, gtts-token
-, mock
-, pytest
-, requests
-, six
-, testfixtures
-, twine
-, urllib3
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, beautifulsoup4, click, gtts-token
+, mock, pytest, requests, six, testfixtures, twine, urllib3 }:
 
 buildPythonPackage rec {
   pname = "gtts";
@@ -24,15 +12,8 @@ buildPythonPackage rec {
     sha256 = "1pj7lyd1r72nxs3sgd78awpbsz41g4idjvbsjjp4chfq4qnsq0ji";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    click
-    gtts-token
-    requests
-    six
-    urllib3
-    twine
-  ];
+  propagatedBuildInputs =
+    [ beautifulsoup4 click gtts-token requests six urllib3 twine ];
 
   checkInputs = [ pytest mock testfixtures ];
 
@@ -45,7 +26,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gtts" ];
 
   meta = with lib; {
-    description = "A Python library and CLI tool to interface with Google Translate text-to-speech API";
+    description =
+      "A Python library and CLI tool to interface with Google Translate text-to-speech API";
     homepage = "https://gtts.readthedocs.io";
     changelog = "https://gtts.readthedocs.io/en/latest/changelog.html";
     license = licenses.mit;

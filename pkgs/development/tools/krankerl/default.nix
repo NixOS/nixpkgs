@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, gzip
-, makeWrapper
-}:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, dbus, sqlite, file
+, gzip, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "krankerl";
@@ -23,21 +14,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-bPcKe3vE3VIjLJ4iYdF3Gt0sID09gRpxG5TpTGWhnPs=";
 
-  nativeBuildInputs = [
-    pkg-config
-    gzip
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
-  buildInputs = [
-    openssl
-    dbus
-    sqlite
-  ];
+  buildInputs = [ openssl dbus sqlite ];
 
-  checkInputs = [
-    file
-  ];
+  checkInputs = [ file ];
 
   meta = with lib; {
     description = "A CLI helper to manage, package and publish Nextcloud apps";

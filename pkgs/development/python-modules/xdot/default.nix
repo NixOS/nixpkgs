@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb-run
-, wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb-run, wrapGAppsHook
+, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
 
 buildPythonPackage rec {
   pname = "xdot";
@@ -12,11 +12,14 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
   nativeBuildInputs = [ wrapGAppsHook ];
-  propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gtk3 numpy ];
+  propagatedBuildInputs =
+    [ gobject-introspection pygobject3 graphviz gtk3 numpy ];
   checkInputs = [ xvfb-run ];
 
   postInstall = ''
-    wrapProgram "$out/bin/xdot" --prefix PATH : "${lib.makeBinPath [ graphviz ]}"
+    wrapProgram "$out/bin/xdot" --prefix PATH : "${
+      lib.makeBinPath [ graphviz ]
+    }"
   '';
 
   checkPhase = ''

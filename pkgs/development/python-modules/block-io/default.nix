@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
+{ lib, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "block-io";
@@ -9,14 +10,7 @@ buildPythonPackage rec {
     sha256 = "af70c3be444f2f2d07c0603cef547b51bbd9f4fbd4aadebd8f1e8ee73ccbc5e5";
   };
 
-  propagatedBuildInputs = [
-    base58
-    ecdsa
-    pycryptodome
-    requests
-    six
-    setuptools
-  ];
+  propagatedBuildInputs = [ base58 ecdsa pycryptodome requests six setuptools ];
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -31,7 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "block_io" ];
 
   meta = with lib; {
-    description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
+    description =
+      "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
     homepage = "https://github.com/BlockIo/block_io-python";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

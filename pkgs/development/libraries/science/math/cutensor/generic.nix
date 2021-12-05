@@ -1,43 +1,29 @@
-{ stdenv
-, lib
-, libPath
-, cudatoolkit
-, fetchurl
-, autoPatchelfHook
+{ stdenv, lib, libPath, cudatoolkit, fetchurl, autoPatchelfHook
 , addOpenGLRunpath
 
-, version
-, sha256
-}:
+, version, sha256 }:
 
 let
   mostOfVersion = builtins.concatStringsSep "."
     (lib.take 3 (lib.versions.splitVersion version));
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "cudatoolkit-${cudatoolkit.majorVersion}-cutensor";
   inherit version;
 
   src = fetchurl {
-    url = "https://developer.download.nvidia.com/compute/cutensor/${mostOfVersion}/local_installers/libcutensor-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}-${version}.tar.gz";
+    url =
+      "https://developer.download.nvidia.com/compute/cutensor/${mostOfVersion}/local_installers/libcutensor-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}-${version}.tar.gz";
     inherit sha256;
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ autoPatchelfHook addOpenGLRunpath ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-  ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
+  propagatedBuildInputs = [ cudatoolkit ];
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
@@ -60,7 +46,8 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
+    description =
+      "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
     homepage = "https://developer.nvidia.com/cutensor";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

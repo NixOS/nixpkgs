@@ -1,18 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, blessed
-, keyring
-, keyrings-alt
-, lxml
-, measurement
-, python-dateutil
-, requests
-, six
-, rich
-, pytestCheckHook
-, mock
-, nose
+{ lib, fetchPypi, buildPythonPackage, blessed, keyring, keyrings-alt, lxml
+, measurement, python-dateutil, requests, six, rich, pytestCheckHook, mock, nose
 }:
 
 # TODO: Define this package in "all-packages.nix" using "toPythonApplication".
@@ -40,11 +27,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  checkInputs = [
-    mock
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ mock nose pytestCheckHook ];
 
   postPatch = ''
     # Remove overly restrictive version constraints
@@ -56,12 +39,11 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "myfitnesspal"
-  ];
+  pythonImportsCheck = [ "myfitnesspal" ];
 
   meta = with lib; {
-    description = "Python module to access meal tracking data stored in MyFitnessPal";
+    description =
+      "Python module to access meal tracking data stored in MyFitnessPal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

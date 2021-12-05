@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     sha256 = "0a6lz9wadm47cmva136q6wd0lw03bmymf9ispnzb091a7skwacry";
   };
 
-
   installPhase = ''
     mkdir -p $out/lib/firmware
     cp ./firmware/rt5677_elf_vad $out/lib/firmware

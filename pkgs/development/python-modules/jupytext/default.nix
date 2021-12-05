@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, GitPython
-, jupyter-client
-, jupyter-packaging
-, jupyterlab
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, GitPython, jupyter-client
+, jupyter-packaging, jupyterlab, markdown-it-py, mdit-py-plugins, nbformat
+, notebook, pytestCheckHook, pythonOlder, pyyaml, toml }:
 
 buildPythonPackage rec {
   pname = "jupytext";
@@ -29,25 +16,12 @@ buildPythonPackage rec {
     sha256 = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
   };
 
-  buildInputs = [
-    jupyter-packaging
-    jupyterlab
-  ];
+  buildInputs = [ jupyter-packaging jupyterlab ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-    mdit-py-plugins
-    nbformat
-    pyyaml
-    toml
-  ];
+  propagatedBuildInputs =
+    [ markdown-it-py mdit-py-plugins nbformat pyyaml toml ];
 
-  checkInputs = [
-    GitPython
-    jupyter-client
-    notebook
-    pytestCheckHook
-  ];
+  checkInputs = [ GitPython jupyter-client notebook pytestCheckHook ];
 
   postPatch = ''
     # https://github.com/mwouts/jupytext/pull/885
@@ -65,13 +39,11 @@ buildPythonPackage rec {
     "--ignore-glob='tests/test_pre_commit_*.py'"
   ];
 
-  pythonImportsCheck = [
-    "jupytext"
-    "jupytext.cli"
-  ];
+  pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
 
   meta = with lib; {
-    description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
+    description =
+      "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];

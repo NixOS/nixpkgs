@@ -1,27 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, Babel
-, cssselect
-, python-dateutil
-, feedparser
-, futures ? null
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, Babel, cssselect, python-dateutil
+, feedparser, futures ? null, gdata, gnupg, google-api-python-client, html2text
+, libyaml, lxml, mechanize, nose, pdfminer, pillow, prettytable, pyqt5, pyyaml
+, requests, simplejson, termcolor, unidecode }:
 
 buildPythonPackage rec {
   pname = "weboob";
@@ -78,7 +58,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "http://weboob.org";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
+    description =
+      "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = lib.licenses.agpl3;
   };
 }

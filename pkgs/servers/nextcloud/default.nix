@@ -1,37 +1,37 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
 let
-  generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
-    pname = "nextcloud";
-    inherit version;
+  generic = { version, sha256, eol ? false, extraVulnerabilities ? [ ] }:
+    stdenv.mkDerivation rec {
+      pname = "nextcloud";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      src = fetchurl {
+        url =
+          "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
+        inherit sha256;
+      };
+
+      passthru.tests = nixosTests.nextcloud;
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/
+        cp -R . $out/
+        runHook postInstall
+      '';
+
+      meta = with lib; {
+        description =
+          "Sharing solution for files, calendars, contacts and more";
+        homepage = "https://nextcloud.com";
+        maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+        license = licenses.agpl3Plus;
+        platforms = with platforms; unix;
+        knownVulnerabilities = extraVulnerabilities
+          ++ (optional eol "Nextcloud version ${version} is EOL");
+      };
     };
-
-    passthru.tests = nixosTests.nextcloud;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/
-      cp -R . $out/
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Sharing solution for files, calendars, contacts and more";
-      homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
-      license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
-      knownVulnerabilities = extraVulnerabilities
-        ++ (optional eol "Nextcloud version ${version} is EOL");
-    };
-  };
 in {
   nextcloud20 = throw ''
     Nextcloud v20 has been removed from `nixpkgs` as the support for it was dropped

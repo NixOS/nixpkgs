@@ -1,25 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, intltool
-, libfm
-, libX11
-, pango
-, pkg-config
-, wrapGAppsHook
-, gnome
-, withGtk3 ? true
-, gtk2
-, gtk3
-}:
+{ lib, stdenv, fetchurl, glib, intltool, libfm, libX11, pango, pkg-config
+, wrapGAppsHook, gnome, withGtk3 ? true, gtk2, gtk3 }:
 
 let
   libfm' = libfm.override { inherit withGtk3; };
   gtk = if withGtk3 then gtk3 else gtk2;
   inherit (lib) optional;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "pcmanfm";
   version = "1.3.2";
 

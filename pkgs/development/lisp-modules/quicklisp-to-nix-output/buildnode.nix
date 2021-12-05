@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "buildnode";
   version = "20170403-git";
 
@@ -8,16 +7,39 @@ rec {
 
   description = "Tool for building up an xml dom nicely.";
 
-  deps = [ args."alexandria" args."babel" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."buildnode-xhtml"
+    args."cl-interpol"
+    args."cl-ppcre"
+    args."cl-unicode"
+    args."closer-mop"
+    args."closure-common"
+    args."closure-html"
+    args."collectors"
+    args."cxml"
+    args."flexi-streams"
+    args."iterate"
+    args."lisp-unit2"
+    args."named-readtables"
+    args."puri"
+    args."split-sequence"
+    args."swank"
+    args."symbol-munger"
+    args."trivial-features"
+    args."trivial-gray-streams"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/buildnode/2017-04-03/buildnode-20170403-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/buildnode/2017-04-03/buildnode-20170403-git.tgz";
     sha256 = "1gb3zsp4g31iscvvhvb99z0i7lfn1g3493q6sgpr46fmn2vdwwb6";
   };
 
   packageName = "buildnode";
 
-  asdFilesToKeep = ["buildnode.asd"];
+  asdFilesToKeep = [ "buildnode.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM buildnode DESCRIPTION Tool for building up an xml dom nicely. SHA256
@@ -47,4 +69,5 @@ rec {
     VERSION 20170403-git SIBLINGS
     (buildnode-excel buildnode-html5 buildnode-kml buildnode-xhtml
      buildnode-xul)
-    PARASITES (buildnode-test)) */
+    PARASITES (buildnode-test))
+*/

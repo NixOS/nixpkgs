@@ -1,55 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gprbuild
-, which
-, gnatcoll-core
-, xmlada
+{ stdenv, lib, fetchFromGitHub, gnat, gprbuild, which, gnatcoll-core, xmlada
 , component
 # components built by this derivation other components depend on
-, gnatcoll-sql
-, gnatcoll-sqlite
-, gnatcoll-xref
+, gnatcoll-sql, gnatcoll-sqlite, gnatcoll-xref
 # component specific extra dependencies
-, gnatcoll-iconv
-, gnatcoll-readline
-, sqlite
-, postgresql
-}:
+, gnatcoll-iconv, gnatcoll-readline, sqlite, postgresql }:
 
 let
   libsFor = {
-    gnatcoll_db2ada = [
-      gnatcoll-sql
-    ];
-    gnatinspect = [
-      gnatcoll-sqlite
-      gnatcoll-readline
-      gnatcoll-xref
-    ];
-    postgres = [
-      gnatcoll-sql
-      postgresql
-    ];
-    sqlite = [
-      gnatcoll-sql
-      sqlite
-    ];
-    xref = [
-      gnatcoll-iconv
-      gnatcoll-sqlite
-    ];
+    gnatcoll_db2ada = [ gnatcoll-sql ];
+    gnatinspect = [ gnatcoll-sqlite gnatcoll-readline gnatcoll-xref ];
+    postgres = [ gnatcoll-sql postgresql ];
+    sqlite = [ gnatcoll-sql sqlite ];
+    xref = [ gnatcoll-iconv gnatcoll-sqlite ];
   };
 
   # These components are just tools and don't install a library
-  onlyExecutable = builtins.elem component [
-    "gnatcoll_db2ada"
-    "gnatinspect"
-  ];
-in
+  onlyExecutable = builtins.elem component [ "gnatcoll_db2ada" "gnatinspect" ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
   version = "22.0.0";
 
@@ -75,22 +43,18 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [
-    gnat
-    gprbuild
-    which
-  ];
+  nativeBuildInputs = [ gnat gprbuild which ];
 
   # Propagate since GPRbuild needs to find referenced .gpr files
   # and other libraries to link against when static linking is used.
   # For executables this is of course not relevant and we can reduce
   # the closure size dramatically
-  ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} = [
-    gnatcoll-core
-  ] ++ libsFor."${component}" or [];
+  ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} =
+    [ gnatcoll-core ] ++ libsFor."${component}" or [ ];
 
   makeFlags = [
-    "-C" component
+    "-C"
+    component
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"

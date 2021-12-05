@@ -1,49 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, boost
-, cmake
-, chromaprint
-, gettext
-, gst_all_1
-, liblastfm
-, qtbase
-, qtx11extras
-, qttools
-, taglib
-, fftw
-, glew
-, qjson
-, sqlite
-, libgpod
-, libplist
-, usbmuxd
-, libmtp
-, libpulseaudio
-, gvfs
-, libcdio
-, libechonest
-, libspotify
-, pcre
-, projectm
-, protobuf
-, qca2
-, pkg-config
-, sparsehash
-, config
-, makeWrapper
-, gst_plugins
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint
+, gettext, gst_all_1, liblastfm, qtbase, qtx11extras, qttools, taglib, fftw
+, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp, libpulseaudio, gvfs
+, libcdio, libechonest, libspotify, pcre, projectm, protobuf, qca2, pkg-config
+, sparsehash, config, makeWrapper, gst_plugins
 
-, util-linux
-, libunwind
-, libselinux
-, elfutils
-, libsepol
-, orc
+, util-linux, libunwind, libselinux, elfutils, libsepol, orc
 
-, alsa-lib
-}:
+, alsa-lib }:
 
 let
   withIpod = config.clementine.ipod or false;
@@ -66,7 +29,8 @@ let
     (fetchpatch {
       # "short-term" fix for execution on wayland (1.4.0rc1-131-g2179027a6)
       # for https://github.com/clementine-player/Clementine/issues/6587
-      url = "https://github.com/clementine-player/Clementine/commit/2179027a6d97530c857e43be873baacd696ff332.patch";
+      url =
+        "https://github.com/clementine-player/Clementine/commit/2179027a6d97530c857e43be873baacd696ff332.patch";
       sha256 = "0344bfcyvjim5ph8w4km6zkg96rj5g9ybp9x14qgyw2gkdksimn6";
     })
   ];
@@ -108,11 +72,9 @@ let
     taglib
 
     alsa-lib
-  ]
-  ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  ] ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
+    ++ lib.optionals (withMTP) [ libmtp ] ++ lib.optionals (withCD) [ libcdio ]
+    ++ lib.optionals (withCloud) [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -135,10 +97,7 @@ let
       rm -rf ext/{,lib}clementine-spotifyblob
     '';
 
-    cmakeFlags = [
-      "-DUSE_SYSTEM_PROJECTM=ON"
-      "-DSPOTIFY_BLOB=OFF"
-    ];
+    cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" "-DSPOTIFY_BLOB=OFF" ];
 
     passthru.unfree = unfree;
 
@@ -192,5 +151,4 @@ let
     };
   };
 
-in
-free
+in free

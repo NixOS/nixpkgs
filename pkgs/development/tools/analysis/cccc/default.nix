@@ -3,8 +3,7 @@
 let
   name = "cccc";
   version = "3.1.4";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {

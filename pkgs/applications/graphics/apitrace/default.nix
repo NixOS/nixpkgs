@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
+{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase
+, qtwebkit, wrapQtAppsHook, libglvnd }:
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
@@ -52,7 +53,9 @@ stdenv.mkDerivation rec {
     for i in $out/bin/eglretrace $out/bin/glretrace
     do
       echo "Patching RPath for $i"
-      patchelf --set-rpath "${lib.makeLibraryPath [libglvnd]}:$(patchelf --print-rpath $i)" $i
+      patchelf --set-rpath "${
+        lib.makeLibraryPath [ libglvnd ]
+      }:$(patchelf --print-rpath $i)" $i
     done
 
     wrapQtApp $out/bin/qapitrace
@@ -60,7 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apitrace.github.io";
-    description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
+    description =
+      "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
     license = licenses.mit;
     platforms = platforms.linux;
   };

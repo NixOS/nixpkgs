@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, substituteAll
-, graphvizPkgs
-, graphviz
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, substituteAll, graphvizPkgs
+, graphviz, mock }:
 
 buildPythonPackage rec {
   pname = "objgraph";

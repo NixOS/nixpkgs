@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytest-asyncio
+, pytest-httpserver, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "vt-py";
@@ -22,24 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-PpgN9adGNZOorOUigsBVOb//ZafUaYHfo/Fv1IZf/XA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-httpserver
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-httpserver pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
   '';
 
-  pythonImportsCheck = [
-    "vt"
-  ];
+  pythonImportsCheck = [ "vt" ];
 
   meta = with lib; {
     description = "Python client library for VirusTotal";

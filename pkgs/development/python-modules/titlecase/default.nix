@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, regex
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder, regex
 }:
 
 buildPythonPackage rec {
@@ -20,24 +15,17 @@ buildPythonPackage rec {
     sha256 = "169ywzn5wfzwyknqavspkdpwbx31nycxsxkl7iywwk71gs1lskkw";
   };
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "titlecase/tests.py"
-  ];
+  pytestFlagsArray = [ "titlecase/tests.py" ];
 
-  pythonImportsCheck = [
-    "titlecase"
-  ];
+  pythonImportsCheck = [ "titlecase" ];
 
   meta = with lib; {
-    description = "Python library to capitalize strings as specified by the New York Times";
+    description =
+      "Python library to capitalize strings as specified by the New York Times";
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

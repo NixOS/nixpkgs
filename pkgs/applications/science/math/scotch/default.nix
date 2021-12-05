@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, mpi, flex, zlib}:
+{ lib, stdenv, fetchurl, bison, mpi, flex, zlib }:
 
 stdenv.mkDerivation rec {
   version = "6.1.1";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison mpi flex zlib ];
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
+    url =
+      "https://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
     sha256 = "sha256-OQUvWf9HSkppzvwlzzyvhClACIneugEO5kA8oYj4sxE=";
   };
 
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=\${out}" ];
 
   meta = {
-    description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
+    description =
+      "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
     longDescription = ''
       Scotch is a software package for graph and mesh/hypergraph partitioning, graph clustering,
       and sparse matrix ordering.

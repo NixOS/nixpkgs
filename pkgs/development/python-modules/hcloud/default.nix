@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, requests
-, python-dateutil
-, flake8
-, isort
-, mock
-, pytest
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, future, requests, python-dateutil, flake8
+, isort, mock, pytest, isPy27 }:
 
 buildPythonPackage rec {
   pname = "hcloud";

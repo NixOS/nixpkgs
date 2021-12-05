@@ -1,8 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline
-, withReadline ? true
-, enableEmu ? true
-, enableSpy ? true
-}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline, withReadline ? true
+, enableEmu ? true, enableSpy ? true }:
 
 stdenv.mkDerivation {
   pname = "ngadmin";
@@ -15,14 +12,11 @@ stdenv.mkDerivation {
     sha256 = "15vixhwqcpbjdxlaznans9w63kwl29mdkds6spvbv2i7l33qnhq4";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optional withReadline readline;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withReadline readline;
   enableParallelBuild = true;
   configureFlags = with lib;
     optional (!withReadline) "--without-readline"
-    ++ optional enableEmu "--enable-emu"
-    ++ optional enableSpy "--enable-spy";
+    ++ optional enableEmu "--enable-emu" ++ optional enableSpy "--enable-spy";
 
   meta = with lib; {
     description = "Netgear switch (NSDP) administration tool";

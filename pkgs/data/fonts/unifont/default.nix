@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, mkfontscale
-, libfaketime, fonttosfnt
-}:
+{ lib, stdenv, fetchurl, mkfontscale, libfaketime, fonttosfnt }:
 
 stdenv.mkDerivation rec {
   pname = "unifont";
@@ -20,26 +18,24 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildPhase =
-    ''
-      # convert pcf font to otb
-      faketime -f "1970-01-01 00:00:01" \
-      fonttosfnt -g 2 -m 2 -v -o "unifont.otb" "${pcf}"
-    '';
+  buildPhase = ''
+    # convert pcf font to otb
+    faketime -f "1970-01-01 00:00:01" \
+    fonttosfnt -g 2 -m 2 -v -o "unifont.otb" "${pcf}"
+  '';
 
-  installPhase =
-    ''
-      # install otb fonts
-      install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
-      mkfontdir "$out/share/fonts"
+  installPhase = ''
+    # install otb fonts
+    install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
+    mkfontdir "$out/share/fonts"
 
-      # install pcf and ttf fonts
-      install -m 644 -D ${pcf} $out/share/fonts/unifont.pcf.gz
-      install -m 644 -D ${ttf} $out/share/fonts/truetype/unifont.ttf
-      cd "$out/share/fonts"
-      mkfontdir
-      mkfontscale
-    '';
+    # install pcf and ttf fonts
+    install -m 644 -D ${pcf} $out/share/fonts/unifont.pcf.gz
+    install -m 644 -D ${ttf} $out/share/fonts/truetype/unifont.ttf
+    cd "$out/share/fonts"
+    mkfontdir
+    mkfontscale
+  '';
 
   meta = with lib; {
     description = "Unicode font for Base Multilingual Plane";

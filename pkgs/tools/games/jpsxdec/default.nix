@@ -1,17 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, jdk
-/*
- * jPSXdec needs to be built with no later than JDK8, but
- * should be run with the latest to get HiDPI fixes, etc.
- */
-, jre ? jdk
-, ant
-, unoconv
-, makeWrapper
-, makeDesktopItem
-}:
+{ stdenv, lib, fetchFromGitHub, jdk
+# jPSXdec needs to be built with no later than JDK8, but
+# should be run with the latest to get HiDPI fixes, etc.
+, jre ? jdk, ant, unoconv, makeWrapper, makeDesktopItem }:
 let
   pname = "jpsxdec";
   version = "1.05";
@@ -26,8 +16,7 @@ let
     desktopName = "jPSXdec";
     categories = "AudioVideo;Utility;";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -40,9 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ant jdk unoconv makeWrapper ];
   buildInputs = [ jre ];
 
-  patches = [
-    ./0001-jpsxdec-hackfix-build-with-newer-JDKs.patch
-  ];
+  patches = [ ./0001-jpsxdec-hackfix-build-with-newer-JDKs.patch ];
 
   buildPhase = ''
     runHook preBuild
@@ -76,7 +63,8 @@ stdenv.mkDerivation rec {
     homepage = "https://jpsxdec.blogspot.com/";
     platforms = platforms.all;
     license = {
-      url = "https://raw.githubusercontent.com/m35/jpsxdec/readme/.github/LICENSE.md";
+      url =
+        "https://raw.githubusercontent.com/m35/jpsxdec/readme/.github/LICENSE.md";
       free = true;
     };
     maintainers = with maintainers; [ zane ];

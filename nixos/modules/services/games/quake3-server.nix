@@ -25,14 +25,14 @@ let
       $services.quake3-server.baseq3/.q3a/
     '';
   };
-  home = pkgs.runCommand "quake3-home" {} ''
-      mkdir -p $out/.q3a/baseq3
+  home = pkgs.runCommand "quake3-home" { } ''
+    mkdir -p $out/.q3a/baseq3
 
-      for file in ${cfg.baseq3}/*; do
-        ln -s $file $out/.q3a/baseq3/$(basename $file)
-      done
+    for file in ${cfg.baseq3}/*; do
+      ln -s $file $out/.q3a/baseq3/$(basename $file)
+    done
 
-      ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
+    ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
   '';
 in {
   options = {
@@ -81,8 +81,7 @@ in {
     };
   };
 
-  config = let
-    baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
+  config = let baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
   in mkIf cfg.enable {
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
@@ -100,7 +99,8 @@ in {
 
         # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
         ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
-        ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
+        ExecStartPre = optionalString (!baseq3InStore)
+          "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
         ExecStart = "${pkgs.ioquake3}/ioq3ded.x86_64 +exec nix.cfg";
       };

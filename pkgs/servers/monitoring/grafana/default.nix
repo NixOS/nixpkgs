@@ -4,7 +4,8 @@ buildGo117Module rec {
   pname = "grafana";
   version = "8.3.0";
 
-  excludedPackages = "\\(alert_webhook_listener\\|clean-swagger\\|release_publisher\\|slow_proxy\\|slow_proxy_mac\\|macaron\\)";
+  excludedPackages =
+    "\\(alert_webhook_listener\\|clean-swagger\\|release_publisher\\|slow_proxy\\|slow_proxy_mac\\|macaron\\)";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -14,7 +15,8 @@ buildGo117Module rec {
   };
 
   srcStatic = fetchurl {
-    url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
+    url =
+      "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
     sha256 = "sha256-o8uw9VRuK93IbZgcZmFmZ2zbgKdryGbeaPAlQr8wJXw=";
   };
 
@@ -44,9 +46,7 @@ buildGo117Module rec {
     rm -r scripts/go
   '';
 
-  ldflags = [
-    "-s" "-w" "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
@@ -67,10 +67,18 @@ buildGo117Module rec {
   passthru.tests = { inherit (nixosTests) grafana; };
 
   meta = with lib; {
-    description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
+    description =
+      "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "grafana-server";
   };

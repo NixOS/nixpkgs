@@ -1,23 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, abseil-cpp
-, bzip2
-, zlib
-, lsb-release
-, which
-, protobuf
-, cbc
-, ensureNewerSourcesForZipFilesHook
-, python
-, swig4
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, abseil-cpp, bzip2, zlib, lsb-release
+, which, protobuf, cbc, ensureNewerSourcesForZipFilesHook, python, swig4 }:
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
   version = "9.1";
-  disabled = python.pythonOlder "3.6";  # not supported upstream
+  disabled = python.pythonOlder "3.6"; # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";
@@ -88,11 +75,7 @@ stdenv.mkDerivation rec {
     python.pkgs.setuptools
     python.pkgs.wheel
   ];
-  buildInputs = [
-    zlib
-    bzip2
-    python
-  ];
+  buildInputs = [ zlib bzip2 python ];
   propagatedBuildInputs = [
     abseil-cpp
     protobuf

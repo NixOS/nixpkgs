@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-eFfAU9Q3nYAJK+kKP1Y6ONjOIfkuYTlelrFrEW9IJ8c=";
 
   meta = {
-    description = "Purely-functional configuration language that helps you define JSON data";
+    description =
+      "Purely-functional configuration language that helps you define JSON data";
     maintainers = with lib.maintainers; [ lach ];
     license = lib.licenses.mit;
     homepage = "https://github.com/CertainLach/jrsonnet";

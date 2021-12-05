@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, requests }:
 
 buildPythonPackage rec {
   pname = "pynuki";

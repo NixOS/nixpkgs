@@ -1,16 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plotly
-, flask
-, flask-compress
-, dash-core-components
-, dash-html-components
-, dash-table
-, pytest-mock
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, plotly, flask, flask-compress
+, dash-core-components, dash-html-components, dash-table, pytest-mock, mock
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dash";
@@ -32,11 +22,7 @@ buildPythonPackage rec {
     dash-table
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-    mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock mock ];
 
   disabledTestPaths = [
     "tests/unit/test_browser.py"

@@ -1,8 +1,5 @@
-{
-  lib, stdenv, fetchFromGitHub, docbook_xsl,
-  docbook_xml_dtd_45, python, pygments,
-  libxslt
-}:
+{ lib, stdenv, fetchFromGitHub, docbook_xsl, docbook_xml_dtd_45, python
+, pygments, libxslt }:
 
 stdenv.mkDerivation {
   pname = "csound-manual";

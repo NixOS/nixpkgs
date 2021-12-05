@@ -1,24 +1,24 @@
 { lib, fetchFromGitHub, python }:
 
 let
-py = python.override {
-  packageOverrides = self: super: {
-    click = super.click.overridePythonAttrs (oldAttrs: rec {
-      version = "6.7";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
-      };
-      doCheck = false;
-      postPatch = "";
-    });
+  py = python.override {
+    packageOverrides = self: super: {
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "6.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 =
+            "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+        };
+        doCheck = false;
+        postPatch = "";
+      });
+    };
   };
-};
-in
 
-with py.pkgs;
+in with py.pkgs;
 buildPythonApplication rec {
-  pname   = "elasticsearch-curator";
+  pname = "elasticsearch-curator";
   version = "5.8.1";
 
   src = fetchFromGitHub {
@@ -42,13 +42,7 @@ buildPythonApplication rec {
     boto3
   ];
 
-  checkInputs = [
-    nosexcover
-    coverage
-    nose
-    mock
-    funcsigs
-  ];
+  checkInputs = [ nosexcover coverage nose mock funcsigs ];
 
   postPatch = ''
     sed -i s/pyyaml==3.13/pyyaml/g setup.cfg setup.py

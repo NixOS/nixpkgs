@@ -1,9 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, wl-clipboard
-, makeWrapper
-}:
+{ buildGoModule, fetchFromGitHub, lib, wl-clipboard, makeWrapper }:
 
 buildGoModule rec {
   pname = "clipman";

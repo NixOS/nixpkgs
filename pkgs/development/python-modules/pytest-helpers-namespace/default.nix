@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, isPy27
-, lib
-, setuptools
-, setuptools-declarative-requirements
-, setuptools-scm
-}:
+{ buildPythonPackage, fetchPypi, pytestCheckHook, isPy27, lib, setuptools
+, setuptools-declarative-requirements, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-helpers-namespace";
@@ -18,7 +11,8 @@ buildPythonPackage rec {
     sha256 = "183524e3db4e2a1fea92e0ca3662a624ba44c9f3568da15679d7535ba6838a6a";
   };
 
-  nativeBuildInputs = [ setuptools setuptools-declarative-requirements setuptools-scm ];
+  nativeBuildInputs =
+    [ setuptools setuptools-declarative-requirements setuptools-scm ];
 
   checkInputs = [ pytestCheckHook ];
 

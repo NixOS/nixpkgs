@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
+{ lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl }:
 
 stdenv.mkDerivation rec {
   pname = "cdrkit";
@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
-  patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
+  patches = [
+    ./include-path.patch
+    ./cdrkit-1.1.9-efi-boot.patch
+    ./cdrkit-1.1.11-fno-common.patch
+  ];
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
@@ -23,10 +27,11 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
-  makeFlags = [ "PREFIX=\$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";
+    description =
+      "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";
 
     longDescription = ''
       Cdrkit is a suite of programs for recording CDs and DVDs,

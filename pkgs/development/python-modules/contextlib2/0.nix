@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittest2
-}:
+{ lib, buildPythonPackage, fetchPypi, unittest2 }:
 
 buildPythonPackage rec {
   pname = "contextlib2";

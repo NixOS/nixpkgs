@@ -1,15 +1,5 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, idna
-, ipaddress
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, attrs, buildPythonPackage, cryptography, fetchFromGitHub, idna, ipaddress
+, pyasn1, pyasn1-modules, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "service-identity";
@@ -22,19 +12,10 @@ buildPythonPackage rec {
     sha256 = "sha256-pWc2rU3ULqEukMhd1ySY58lTm3s8f/ayQ7CY4nG24AQ=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    cryptography
-    idna
-    pyasn1
-    pyasn1-modules
-  ] ++ lib.optionals (pythonOlder "3.3") [
-    ipaddress
-  ];
+  propagatedBuildInputs = [ attrs cryptography idna pyasn1 pyasn1-modules ]
+    ++ lib.optionals (pythonOlder "3.3") [ ipaddress ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "service_identity" ];
 

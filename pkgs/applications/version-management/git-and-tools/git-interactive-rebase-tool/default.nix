@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     # update git2 crate to fix a compile error
     (fetchpatch {
-      url = "https://github.com/MitMaro/git-interactive-rebase-tool/commit/f4d3026f23118d29a263bbca6c83f963e76c34c4.patch";
+      url =
+        "https://github.com/MitMaro/git-interactive-rebase-tool/commit/f4d3026f23118d29a263bbca6c83f963e76c34c4.patch";
       sha256 = "sha256-6ErPRcPbPRXbEslNiNInbbUhbOWb9ZRll7ZDRgTpWS4=";
     })
   ];
@@ -35,8 +36,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
-    description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
-    changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
+    description =
+      "Native cross platform full feature terminal based sequence editor for git interactive rebase";
+    changelog =
+      "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ masaeedu SuperSandro2000 zowoq ];
   };

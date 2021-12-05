@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "flashtext";
@@ -17,7 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://github.com/vi3k6i5/flashtext";
-    description = "Python package to replace keywords in sentences or extract keywords from sentences";
+    description =
+      "Python package to replace keywords in sentences or extract keywords from sentences";
     maintainers = with maintainers; [ aanderse ];
     license = with licenses; [ mit ];
   };

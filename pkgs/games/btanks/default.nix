@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkg-config, SDL, libGL, zlib, smpeg
-, SDL_image, libvorbis, expat, zip, lua }:
+{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkg-config, SDL, libGL, zlib
+, smpeg, SDL_image, libvorbis, expat, zip, lua }:
 
 stdenv.mkDerivation rec {
   pname = "btanks";
@@ -25,11 +25,13 @@ stdenv.mkDerivation rec {
       name = "lua52.patch";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/games-team/btanks/raw/master/debian/patches/gcc-4.7.patch";
+      url =
+        "https://salsa.debian.org/games-team/btanks/raw/master/debian/patches/gcc-4.7.patch";
       sha256 = "1dxlk1xh69gj10sqcsyckiakb8an3h41206wby4z44mpmvxc7pi4";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/games-team/btanks/raw/master/debian/patches/pow10f.patch";
+      url =
+        "https://salsa.debian.org/games-team/btanks/raw/master/debian/patches/pow10f.patch";
       sha256 = "1h45790v2dpdbccfn6lwfgl8782q54i14cz9gpipkaghcka4y0g9";
     })
   ];

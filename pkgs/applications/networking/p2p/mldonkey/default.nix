@@ -14,13 +14,7 @@ stdenv.mkDerivation rec {
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 
-  buildInputs = (with ocamlPackages; [
-    ocaml
-    camlp4
-    num
-  ]) ++ [
-    zlib
-  ];
+  buildInputs = (with ocamlPackages; [ ocaml camlp4 num ]) ++ [ zlib ];
 
   meta = {
     description = "Client for many p2p networks, with multiple frontends";

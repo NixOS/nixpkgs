@@ -1,9 +1,4 @@
-{ stdenv
-, jdk
-, lib
-, callPackage
-, modules ? [ "java.base" ]
-}:
+{ stdenv, jdk, lib, callPackage, modules ? [ "java.base" ] }:
 
 let
   jre = stdenv.mkDerivation {
@@ -21,7 +16,9 @@ let
     buildPhase = ''
       runHook preBuild
 
-      jlink --module-path ${jdk}/lib/openjdk/jmods --add-modules ${lib.concatStringsSep "," modules} --output $out
+      jlink --module-path ${jdk}/lib/openjdk/jmods --add-modules ${
+        lib.concatStringsSep "," modules
+      } --output $out
 
       runHook postBuild
     '';
@@ -31,8 +28,8 @@ let
     passthru = {
       home = "${jre}";
       tests = [
-        (callPackage ./tests/test_jre_minimal.nix {})
-        (callPackage ./tests/test_jre_minimal_with_logging.nix {})
+        (callPackage ./tests/test_jre_minimal.nix { })
+        (callPackage ./tests/test_jre_minimal_with_logging.nix { })
       ];
     };
   };

@@ -1,4 +1,5 @@
-{ lib, stdenv, autoreconfHook, buildEnv, fetchFromGitHub, perl, perlPackages, makeWrapper, gnupg, openssl }:
+{ lib, stdenv, autoreconfHook, buildEnv, fetchFromGitHub, perl, perlPackages
+, makeWrapper, gnupg, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "rt";
@@ -12,109 +13,108 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./dont-check-users_groups.patch  # needed for "make testdeps" to work in the build
+    ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     makeWrapper
     perl
     (buildEnv {
       name = "rt-perl-deps";
-      paths = with perlPackages; (requiredPerlModules [
-        ApacheSession
-        BusinessHours
-        CGIEmulatePSGI
-        CGIPSGI
-        CSSMinifierXS
-        CSSSquish
-        ConvertColor
-        CryptEksblowfish
-        CryptSSLeay
-        CryptX509
-        DBDPg
-        DBIxSearchBuilder
-        DataGUID
-        DataICal
-        DataPage
-        DataPagePageset
-        DateExtract
-        DateManip
-        DateTimeFormatNatural
-        DevelGlobalDestruction
-        EmailAddress
-        EmailAddressList
-        EncodeDetect
-        EncodeHanExtra
-        FCGI
-        FCGIProcManager
-        FileShareDir
-        FileWhich
-        GD
-        GDGraph
-        GnuPGInterface
-        GraphViz
-        HTMLFormatExternal
-        HTMLFormatTextWithLinks
-        HTMLFormatTextWithLinksAndTables
-        HTMLGumbo
-        HTMLMason
-        HTMLMasonPSGIHandler
-        HTMLQuoted
-        HTMLRewriteAttributes
-        HTMLScrubber
-        IPCRun
-        IPCRun3
-        JSON
-        JavaScriptMinifierXS
-        LWP
-        LWPProtocolHttps
-        LocaleMaketextFuzzy
-        LocaleMaketextLexicon
-        LogDispatch
-        MIMETools
-        MIMETypes
-        MailTools
-        ModulePath
-        ModuleRefresh
-        ModuleVersionsReport
-        Moose
-        MooseXNonMoose
-        MooseXRoleParameterized
-        MozillaCA
-        NetCIDR
-        NetIP
-        PathDispatcher
-        PerlIOeol
-        Plack
-        PodParser
-        RegexpCommon
-        RegexpCommonnetCIDR
-        RegexpIPv6
-        RoleBasic
-        ScopeUpper
-        Starlet
-        Starman
-        StringShellQuote
-        SymbolGlobalName
-        TermReadKey
-        TextPasswordPronounceable
-        TextQuoted
-        TextTemplate
-        TextWikiFormat
-        TextWordDiff
-        TextWrapper
-        TimeParseDate
-        TreeSimple
-        UNIVERSALrequire
-        WebMachine
-        XMLRSS
-        perlldap
-      ]);
+      paths = with perlPackages;
+        (requiredPerlModules [
+          ApacheSession
+          BusinessHours
+          CGIEmulatePSGI
+          CGIPSGI
+          CSSMinifierXS
+          CSSSquish
+          ConvertColor
+          CryptEksblowfish
+          CryptSSLeay
+          CryptX509
+          DBDPg
+          DBIxSearchBuilder
+          DataGUID
+          DataICal
+          DataPage
+          DataPagePageset
+          DateExtract
+          DateManip
+          DateTimeFormatNatural
+          DevelGlobalDestruction
+          EmailAddress
+          EmailAddressList
+          EncodeDetect
+          EncodeHanExtra
+          FCGI
+          FCGIProcManager
+          FileShareDir
+          FileWhich
+          GD
+          GDGraph
+          GnuPGInterface
+          GraphViz
+          HTMLFormatExternal
+          HTMLFormatTextWithLinks
+          HTMLFormatTextWithLinksAndTables
+          HTMLGumbo
+          HTMLMason
+          HTMLMasonPSGIHandler
+          HTMLQuoted
+          HTMLRewriteAttributes
+          HTMLScrubber
+          IPCRun
+          IPCRun3
+          JSON
+          JavaScriptMinifierXS
+          LWP
+          LWPProtocolHttps
+          LocaleMaketextFuzzy
+          LocaleMaketextLexicon
+          LogDispatch
+          MIMETools
+          MIMETypes
+          MailTools
+          ModulePath
+          ModuleRefresh
+          ModuleVersionsReport
+          Moose
+          MooseXNonMoose
+          MooseXRoleParameterized
+          MozillaCA
+          NetCIDR
+          NetIP
+          PathDispatcher
+          PerlIOeol
+          Plack
+          PodParser
+          RegexpCommon
+          RegexpCommonnetCIDR
+          RegexpIPv6
+          RoleBasic
+          ScopeUpper
+          Starlet
+          Starman
+          StringShellQuote
+          SymbolGlobalName
+          TermReadKey
+          TextPasswordPronounceable
+          TextQuoted
+          TextTemplate
+          TextWikiFormat
+          TextWordDiff
+          TextWrapper
+          TimeParseDate
+          TreeSimple
+          UNIVERSALrequire
+          WebMachine
+          XMLRSS
+          perlldap
+        ]);
     })
   ];
 
@@ -157,7 +157,5 @@ stdenv.mkDerivation rec {
     ln -s /var/lib/rt/gpg $out/var/data/gpg
   '';
 
-  meta = {
-    platforms = lib.platforms.unix;
-  };
+  meta = { platforms = lib.platforms.unix; };
 }

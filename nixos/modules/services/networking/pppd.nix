@@ -2,13 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.pppd;
-in
-{
-  meta = {
-    maintainers = with maintainers; [ danderson ];
-  };
+let cfg = config.services.pppd;
+in {
+  meta = { maintainers = with maintainers; [ danderson ]; };
 
   options = {
     services.pppd = {
@@ -22,40 +18,40 @@ in
       };
 
       peers = mkOption {
-        default = {};
+        default = { };
         description = "pppd peers.";
-        type = types.attrsOf (types.submodule (
-          { name, ... }:
-          {
-            options = {
-              name = mkOption {
-                type = types.str;
-                default = name;
-                example = "dialup";
-                description = "Name of the PPP peer.";
-              };
-
-              enable = mkOption {
-                type = types.bool;
-                default = true;
-                example = false;
-                description = "Whether to enable this PPP peer.";
-              };
-
-              autostart = mkOption {
-                type = types.bool;
-                default = true;
-                example = false;
-                description = "Whether the PPP session is automatically started at boot time.";
-              };
-
-              config = mkOption {
-                type = types.lines;
-                default = "";
-                description = "pppd configuration for this peer, see the pppd(8) man page.";
-              };
+        type = types.attrsOf (types.submodule ({ name, ... }: {
+          options = {
+            name = mkOption {
+              type = types.str;
+              default = name;
+              example = "dialup";
+              description = "Name of the PPP peer.";
             };
-          }));
+
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              example = false;
+              description = "Whether to enable this PPP peer.";
+            };
+
+            autostart = mkOption {
+              type = types.bool;
+              default = true;
+              example = false;
+              description =
+                "Whether the PPP session is automatically started at boot time.";
+            };
+
+            config = mkOption {
+              type = types.lines;
+              default = "";
+              description =
+                "pppd configuration for this peer, see the pppd(8) man page.";
+            };
+          };
+        }));
       };
     };
   };
@@ -71,7 +67,8 @@ in
     mkSystemd = peerCfg: {
       name = "pppd-${peerCfg.name}";
       value = {
-        restartTriggers = [ config.environment.etc."ppp/peers/${peerCfg.name}".source ];
+        restartTriggers =
+          [ config.environment.etc."ppp/peers/${peerCfg.name}".source ];
         before = [ "network.target" ];
         wants = [ "network.target" ];
         after = [ "network-pre.target" ];
@@ -83,15 +80,12 @@ in
           NIX_REDIRECTS = "/var/run=/run/pppd";
         };
         serviceConfig = let
-          capabilities = [
-            "CAP_BPF"
-            "CAP_SYS_TTY_CONFIG"
-            "CAP_NET_ADMIN"
-            "CAP_NET_RAW"
-          ];
-        in
-        {
-          ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
+          capabilities =
+            [ "CAP_BPF" "CAP_SYS_TTY_CONFIG" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        in {
+          ExecStart = "${
+              getBin cfg.package
+            }/sbin/pppd call ${peerCfg.name} nodetach nolog";
           Restart = "always";
           RestartSec = 5;
 

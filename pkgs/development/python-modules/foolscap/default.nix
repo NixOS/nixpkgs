@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, service-identity
-, twisted
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, pyopenssl, pytestCheckHook
+, service-identity, twisted }:
 
 buildPythonPackage rec {
   pname = "foolscap";
@@ -17,16 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
   };
 
-  propagatedBuildInputs = [
-    mock
-    twisted
-    pyopenssl
-    service-identity
-  ];
+  propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Not all dependencies are present
@@ -36,7 +22,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "foolscap" ];
 
   meta = with lib; {
-    description = "RPC protocol for Python that follows the distributed object-capability model";
+    description =
+      "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol, intended to
       replace Perspective Broker (part of Twisted). Foolscap is a protocol to

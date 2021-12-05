@@ -2,10 +2,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     backend = { pkgs, ... }: {
       services.nginx.enable = true;
-      services.nginx.virtualHosts."backend".root = pkgs.runCommand "webroot" {} ''
-        mkdir $out
-        echo hi >$out/hi.txt
-      '';
+      services.nginx.virtualHosts."backend".root =
+        pkgs.runCommand "webroot" { } ''
+          mkdir $out
+          echo hi >$out/hi.txt
+        '';
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
     service = { ... }: {
@@ -24,16 +25,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         key = "/root/service-key.pem";
         cacert = "/root/ca.pem";
         target = "backend:80";
-        allowCN = ["client"];
+        allowCN = [ "client" ];
         unsafeTarget = true;
       };
       networking.firewall.allowedTCPPorts = [ 443 1443 ];
     };
-    client = { pkgs, ... }: {
-      environment.systemPackages = [
-        pkgs.curl
-      ];
-    };
+    client = { pkgs, ... }: { environment.systemPackages = [ pkgs.curl ]; };
   };
 
   testScript = ''
@@ -97,7 +94,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client.fail("bash -c 'diff <(curl -v --no-progress-meter --cacert /root/ca.pem https://service:1443/hi.txt) <(echo hi)'")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [
-    roberth
-  ];
+  meta.maintainers = with pkgs.lib.maintainers; [ roberth ];
 })

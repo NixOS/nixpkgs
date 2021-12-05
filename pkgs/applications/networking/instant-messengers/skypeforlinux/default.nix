@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
-, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
+{ lib, stdenv, fetchurl, dpkg, alsa-lib, atk, cairo, cups, curl, dbus, expat
+, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome, gtk3
+, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss
+, pango, systemd, wrapGAppsHook, xorg, at-spi2-atk, libuuid, at-spi2-core
+, libdrm, mesa, libxkbcommon, libxshmfence }:
 
 let
 
@@ -61,18 +62,17 @@ let
     xorg.libxcb
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        urls = [
-          "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-          "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-          "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-        ];
-        sha256 = "sha256-0u1fpKJrsEgbvTwdkqJZ/SwCRDmJwEi9IXHbMmY8MJI=";
-      }
-    else
-      throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
+    fetchurl {
+      urls = [
+        "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+        "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+        "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+      ];
+      sha256 = "sha256-0u1fpKJrsEgbvTwdkqJZ/SwCRDmJwEi9IXHbMmY8MJI=";
+    }
+  else
+    throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   pname = "skypeforlinux";

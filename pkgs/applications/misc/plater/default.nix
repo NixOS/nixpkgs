@@ -1,12 +1,5 @@
-{ mkDerivation
-, cmake
-, fetchFromGitHub
-, lib
-, libGLU
-, makeDesktopItem
-, qtbase
-, wrapQtAppsHook
-}:
+{ mkDerivation, cmake, fetchFromGitHub, lib, libGLU, makeDesktopItem, qtbase
+, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "plater";

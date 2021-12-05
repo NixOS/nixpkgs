@@ -5,14 +5,15 @@ buildGoModule rec {
   version = "0.25.7";
 
   src = fetchFromGitHub {
-    owner  = "derailed";
-    repo   = "k9s";
-    rev    = "v${version}";
+    owner = "derailed";
+    repo = "k9s";
+    rev = "v${version}";
     sha256 = "sha256-CFXPo8dpefrrBxCGpcGtZfLdfMYCBL/eQhHqZggK/yA=";
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/derailed/k9s/cmd.version=${version}"
     "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
   ];

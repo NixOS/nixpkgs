@@ -6,27 +6,28 @@ let
 
   cfg = config.services.mattermost;
 
-  defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
-    (readFile "${pkgs.mattermost}/config/config.json")
-  );
+  defaultConfig = builtins.fromJSON
+    (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
+      (readFile "${pkgs.mattermost}/config/config.json"));
 
-  database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
+  database =
+    "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
-  mattermostConf = foldl recursiveUpdate defaultConfig
-    [ { ServiceSettings.SiteURL = cfg.siteUrl;
-        ServiceSettings.ListenAddress = cfg.listenAddress;
-        TeamSettings.SiteName = cfg.siteName;
-        SqlSettings.DriverName = "postgres";
-        SqlSettings.DataSource = database;
-      }
-      cfg.extraConfig
-    ];
+  mattermostConf = foldl recursiveUpdate defaultConfig [
+    {
+      ServiceSettings.SiteURL = cfg.siteUrl;
+      ServiceSettings.ListenAddress = cfg.listenAddress;
+      TeamSettings.SiteName = cfg.siteName;
+      SqlSettings.DriverName = "postgres";
+      SqlSettings.DataSource = database;
+    }
+    cfg.extraConfig
+  ];
 
-  mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json" (builtins.toJSON mattermostConf);
+  mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json"
+    (builtins.toJSON mattermostConf);
 
-in
-
-{
+in {
   options = {
     services.mattermost = {
       enable = mkEnableOption "Mattermost chat server";
@@ -207,14 +208,15 @@ in
           PermissionsStartOnly = true;
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.mattermost}/bin/mattermost" +
-            (lib.optionalString (!cfg.mutableConfig) " -c ${database}");
+          ExecStart = "${pkgs.mattermost}/bin/mattermost"
+            + (lib.optionalString (!cfg.mutableConfig) " -c ${database}");
           WorkingDirectory = "${cfg.statePath}";
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
         };
-        unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
+        unitConfig.JoinsNamespaceOf =
+          mkIf cfg.localDatabaseCreate "postgresql.service";
       };
     })
     (mkIf cfg.matterircd.enable {
@@ -224,7 +226,9 @@ in
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";
-          ExecStart = "${pkgs.matterircd}/bin/matterircd ${concatStringsSep " " cfg.matterircd.parameters}";
+          ExecStart = "${pkgs.matterircd}/bin/matterircd ${
+              concatStringsSep " " cfg.matterircd.parameters
+            }";
           WorkingDirectory = "/tmp";
           PrivateTmp = true;
           Restart = "always";

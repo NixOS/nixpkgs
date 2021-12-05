@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, isPy27
-, pythonAtLeast
-, pinqSupport ? false, sqlalchemy
-, pyxlSupport ? false, pyxl3
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, isPy27, pythonAtLeast
+, pinqSupport ? false, sqlalchemy, pyxlSupport ? false, pyxl3 }:
 
 buildPythonPackage rec {
   # https://github.com/lihaoyi/macropy/issues/94
@@ -22,8 +15,7 @@ buildPythonPackage rec {
   };
 
   # js_snippets extra only works with python2
-  propagatedBuildInputs = [ ]
-    ++ lib.optional pinqSupport sqlalchemy
+  propagatedBuildInputs = [ ] ++ lib.optional pinqSupport sqlalchemy
     ++ lib.optional pyxlSupport pyxl3;
 
   checkPhase = ''
@@ -35,6 +27,7 @@ buildPythonPackage rec {
     description = "Macros in Python: quasiquotes, case classes, LINQ and more";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    broken = pythonAtLeast "3.8"; # see https://github.com/lihaoyi/macropy/issues/103
+    broken =
+      pythonAtLeast "3.8"; # see https://github.com/lihaoyi/macropy/issues/103
   };
 }

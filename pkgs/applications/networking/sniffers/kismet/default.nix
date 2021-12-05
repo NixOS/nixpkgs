@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, libpcap, pcre, libnl, zlib, libmicrohttpd
 , sqlite, protobuf, protobufc, libusb1, libcap, binutils, elfutils
-, withNetworkManager ? false, glib, networkmanager
-, withPython ? false, python3
-, withSensors ? false, lm_sensors}:
+, withNetworkManager ? false, glib, networkmanager, withPython ? false, python3
+, withSensors ? false, lm_sensors }:
 
 # couldn't get python modules to build correctly,
 # waiting for some other volunteer to fix it
@@ -20,15 +19,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libpcap pcre libmicrohttpd libnl zlib sqlite protobuf protobufc
-    libusb1 libcap binutils elfutils
+    libpcap
+    pcre
+    libmicrohttpd
+    libnl
+    zlib
+    sqlite
+    protobuf
+    protobufc
+    libusb1
+    libcap
+    binutils
+    elfutils
   ] ++ lib.optionals withNetworkManager [ networkmanager glib ]
-    ++ lib.optional withSensors lm_sensors
-    ++ lib.optional withPython (python3.withPackages(ps: [ ps.setuptools ps.protobuf
-                                                                  ps.numpy ps.pyserial ]));
+    ++ lib.optional withSensors lm_sensors ++ lib.optional withPython
+    (python3.withPackages
+      (ps: [ ps.setuptools ps.protobuf ps.numpy ps.pyserial ]));
 
-  configureFlags = []
-    ++ lib.optional (!withNetworkManager) "--disable-libnm"
+  configureFlags = [ ] ++ lib.optional (!withNetworkManager) "--disable-libnm"
     ++ lib.optional (!withPython) "--disable-python-tools"
     ++ lib.optional (!withSensors) "--disable-lmsensors";
 

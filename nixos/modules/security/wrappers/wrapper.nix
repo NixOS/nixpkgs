@@ -6,13 +6,8 @@ stdenv.mkDerivation {
   buildInputs = [ linuxHeaders ];
   dontUnpack = true;
   hardeningEnable = [ "pie" ];
-  CFLAGS = [
-    ''-DWRAPPER_DIR="${parentWrapperDir}"''
-  ] ++ (if debug then [
-    "-Werror" "-Og" "-g"
-  ] else [
-    "-Wall" "-O2"
-  ]);
+  CFLAGS = [ ''-DWRAPPER_DIR="${parentWrapperDir}"'' ]
+    ++ (if debug then [ "-Werror" "-Og" "-g" ] else [ "-Wall" "-O2" ]);
   dontStrip = debug;
   installPhase = ''
     mkdir -p $out/bin

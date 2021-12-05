@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
-, dbus-glib, autoreconfHook, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, dbus, gdk-pixbuf, glib
+, libX11, gtk2, librsvg, dbus-glib, autoreconfHook, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   pname = "volnoti-unstable";
@@ -24,9 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
 
-  buildInputs = [
-    dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg
-  ];
+  buildInputs = [ dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg ];
 
   meta = with lib; {
     description = "Lightweight volume notification for Linux";

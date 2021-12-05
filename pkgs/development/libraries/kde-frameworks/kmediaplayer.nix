@@ -1,8 +1,4 @@
-{ mkDerivation
-, extra-cmake-modules
-, kparts
-, kxmlgui
-}:
+{ mkDerivation, extra-cmake-modules, kparts, kxmlgui }:
 
 mkDerivation {
   name = "kmediaplayer";

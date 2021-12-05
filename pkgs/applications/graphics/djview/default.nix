@@ -1,14 +1,5 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, pkg-config
-, djvulibre
-, qtbase
-, qttools
-, xorg
-, libtiff
-, darwin
-}:
+{ lib, stdenv, mkDerivation, fetchurl, pkg-config, djvulibre, qtbase, qttools
+, xorg, libtiff, darwin }:
 
 mkDerivation rec {
   pname = "djview";
@@ -19,17 +10,10 @@ mkDerivation rec {
     sha256 = "08bwv8ppdzhryfcnifgzgdilb12jcnivl4ig6hd44f12d76z6il4";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    qttools
-  ];
+  nativeBuildInputs = [ pkg-config qttools ];
 
-  buildInputs = [
-    djvulibre
-    qtbase
-    xorg.libXt
-    libtiff
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+  buildInputs = [ djvulibre qtbase xorg.libXt libtiff ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
 
   configureFlags = [
     "--disable-silent-rules"
@@ -39,9 +23,7 @@ mkDerivation rec {
     # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
   ] ++ lib.optional stdenv.isDarwin "--enable-mac";
 
-  passthru = {
-    mozillaPlugin = "/lib/mozilla/plugins";
-  };
+  passthru = { mozillaPlugin = "/lib/mozilla/plugins"; };
 
   meta = with lib; {
     description = "A portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";

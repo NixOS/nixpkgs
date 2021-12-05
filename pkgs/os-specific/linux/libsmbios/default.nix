@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, help2man, gettext
 , libxml2, perl, python3, doxygen }:
 
-
 stdenv.mkDerivation rec {
   pname = "libsmbios";
   version = "2.4.3";
@@ -13,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkg-config ];
+  nativeBuildInputs =
+    [ autoreconfHook doxygen gettext libxml2 help2man perl pkg-config ];
 
   buildInputs = [ python3 ];
 

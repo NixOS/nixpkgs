@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, common-updater-scripts
-, genericUpdater
-, writers
-, makeWrapper
-, bash
-, nodejs
-, nodePackages
-, gzip
-, jq
-}:
+{ lib, stdenv, fetchFromGitHub, common-updater-scripts, genericUpdater, writers
+, makeWrapper, bash, nodejs, nodePackages, gzip, jq }:
 
 let
   # NOTE: use updateScript to bump the package version
@@ -50,10 +39,8 @@ let
       patch -p1 ${./use-mysql-over-domain-socket.patch}
     '';
 
-    postInstall = let
-      runtimeDeps = [ nodejs bash ];
-    in
-    ''
+    postInstall = let runtimeDeps = [ nodejs bash ];
+    in ''
       mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
 
       pushd $out/lib/node_modules/EPGStation
@@ -93,13 +80,7 @@ let
     passthru.updateScript = import ./update.nix {
       inherit lib;
       inherit (src.meta) homepage;
-      inherit
-        pname
-        version
-        common-updater-scripts
-        genericUpdater
-        writers
-        jq;
+      inherit pname version common-updater-scripts genericUpdater writers jq;
     };
 
     # nodePackages.epgstation is a stub package to fetch npm dependencies and
@@ -110,14 +91,14 @@ let
     # without doing the same for all the other node packages.
     meta = drv.meta // { broken = false; };
   });
-in
-pkg // {
+in pkg // {
   name = "${pname}-${version}";
 
-  meta = with lib; pkg.meta // {
-    maintainers = with maintainers; [ midchildan ];
+  meta = with lib;
+    pkg.meta // {
+      maintainers = with maintainers; [ midchildan ];
 
-    # NOTE: updateScript relies on this being correct
-    position = toString ./default.nix + ":1";
-  };
+      # NOTE: updateScript relies on this being correct
+      position = toString ./default.nix + ":1";
+    };
 }

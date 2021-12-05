@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${spooles}/include/spooles";
 
-  patches = [
-    ./calculix.patch
-  ];
+  patches = [ ./calculix.patch ];
 
   postPatch = ''
     cd ccx*/src

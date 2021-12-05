@@ -5,24 +5,18 @@ with lib;
 let
   cfg = config.services.mailhog;
 
-  args = lib.concatStringsSep " " (
-    [
-      "-api-bind-addr :${toString cfg.apiPort}"
-      "-smtp-bind-addr :${toString cfg.smtpPort}"
-      "-ui-bind-addr :${toString cfg.uiPort}"
-      "-storage ${cfg.storage}"
-    ] ++ lib.optional (cfg.storage == "maildir")
-      "-maildir-path $STATE_DIRECTORY"
-    ++ cfg.extraArgs
-  );
+  args = lib.concatStringsSep " " ([
+    "-api-bind-addr :${toString cfg.apiPort}"
+    "-smtp-bind-addr :${toString cfg.smtpPort}"
+    "-ui-bind-addr :${toString cfg.uiPort}"
+    "-storage ${cfg.storage}"
+  ] ++ lib.optional (cfg.storage == "maildir") "-maildir-path $STATE_DIRECTORY"
+    ++ cfg.extraArgs);
 
-in
-{
+in {
   ###### interface
 
-  imports = [
-    (mkRemovedOptionModule [ "services" "mailhog" "user" ] "")
-  ];
+  imports = [ (mkRemovedOptionModule [ "services" "mailhog" "user" ] "") ];
 
   options = {
 
@@ -55,12 +49,12 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = "List of additional arguments to pass to the MailHog process.";
+        default = [ ];
+        description =
+          "List of additional arguments to pass to the MailHog process.";
       };
     };
   };
-
 
   ###### implementation
 

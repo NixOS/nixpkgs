@@ -1,13 +1,7 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config
-, withPerl ? false, perl
-, withPython ? false, python3
-, withTcl ? false, tcl
-, withCyrus ? true, cyrus_sasl
-, withUnicode ? true, icu
-, withZlib ? true, zlib
-, withIPv6 ? true
-, withDebug ? false
-}:
+{ lib, stdenv, fetchurl, openssl, pkg-config, withPerl ? false, perl
+, withPython ? false, python3, withTcl ? false, tcl, withCyrus ? true
+, cyrus_sasl, withUnicode ? true, icu, withZlib ? true, zlib, withIPv6 ? true
+, withDebug ? false }:
 
 with lib;
 
@@ -22,12 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ optional withPerl perl
-    ++ optional withPython python3
-    ++ optional withTcl tcl
-    ++ optional withCyrus cyrus_sasl
-    ++ optional withUnicode icu
+  buildInputs = [ openssl ] ++ optional withPerl perl
+    ++ optional withPython python3 ++ optional withTcl tcl
+    ++ optional withCyrus cyrus_sasl ++ optional withUnicode icu
     ++ optional withZlib zlib;
 
   configureFlags = [

@@ -1,5 +1,6 @@
-{ lib, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkg-config
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
+{ lib, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper
+, pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
+, qttranslations, qtsvg }:
 
 mkDerivation rec {
   pname = "qdigidoc";
@@ -13,7 +14,8 @@ mkDerivation rec {
   };
 
   tsl = fetchurl {
-    url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
+    url =
+      "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
     sha256 = "0klz9blrp0jjhlr9k1i266afp44pqmii1x0y8prk0417ia3fxpli";
   };
 

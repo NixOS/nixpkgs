@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, libjack2, libsndfile, xorg, freetype, libxkbcommon
-, cairo, glib, gnome, flac, libogg, libvorbis, libopus
-, cmake, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
+, libxkbcommon, cairo, glib, gnome, flac, libogg, libvorbis, libopus, cmake
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
@@ -41,14 +39,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
-  substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-    --replace '"/usr/bin/zenity' '"${gnome.zenity}/bin/zenity'
+    substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
+      --replace '"/usr/bin/zenity' '"${gnome.zenity}/bin/zenity'
   '';
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DSFIZZ_TESTS=ON"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DSFIZZ_TESTS=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";

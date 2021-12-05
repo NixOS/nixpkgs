@@ -3,12 +3,14 @@
 with lib;
 
 {
-  meta = {
-    maintainers = [ maintainers.joachifm ];
-  };
+  meta = { maintainers = [ maintainers.joachifm ]; };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+    (lib.mkRenamedOptionModule [
+      "security"
+      "virtualization"
+      "flushL1DataCache"
+    ] [ "security" "virtualisation" "flushL1DataCache" ])
   ];
 
   options = {
@@ -122,11 +124,12 @@ with lib;
       # at any time.
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
-      assertions = [
-        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
-          message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
-        }
-      ];
+      assertions = [{
+        assertion = config.nix.useSandbox
+          -> config.security.allowUserNamespaces;
+        message =
+          "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
+      }];
     })
 
     (mkIf config.security.unprivilegedUsernsClone {
@@ -149,7 +152,9 @@ with lib;
     })
 
     (mkIf (config.security.virtualisation.flushL1DataCache != null) {
-      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
+      boot.kernelParams = [
+        "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}"
+      ];
     })
   ];
 }

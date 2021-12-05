@@ -1,4 +1,5 @@
-{ buildGoModule, cdrtools, fetchFromGitHub, lib, libvirt, makeWrapper, pkg-config }:
+{ buildGoModule, cdrtools, fetchFromGitHub, lib, libvirt, makeWrapper
+, pkg-config }:
 
 # USAGE:
 # install the following package globally or in nix-shell:
@@ -41,7 +42,7 @@ in buildGoModule {
   # Terraform allow checking the provider versions, but this breaks
   # if the versions are not provided via file paths.
   postBuild = "mv $GOPATH/bin/terraform-provider-libvirt{,_v${version}}";
-  
+
   ldflags = [ "-X main.version=${version}" ];
   passthru.provider-source-address = "registry.terraform.io/dmacvicar/libvirt";
 

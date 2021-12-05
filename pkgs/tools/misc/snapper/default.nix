@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, json_c, nixosTests
-, ncurses }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, docbook_xsl, libxslt
+, docbook_xml_dtd_45, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs
+, libxml2, lvm2, pam, python, util-linux, json_c, nixosTests, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
@@ -15,13 +13,23 @@ stdenv.mkDerivation rec {
     sha256 = "1ci5mdsph2n5cqad51zf4sank35yj741adsqy2gg7vqwxrhpm8mj";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook pkg-config
-    docbook_xsl libxslt docbook_xml_dtd_45
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook pkg-config docbook_xsl libxslt docbook_xml_dtd_45 ];
   buildInputs = [
-    acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c ncurses
+    acl
+    attr
+    boost
+    btrfs-progs
+    dbus
+    diffutils
+    e2fsprogs
+    libxml2
+    lvm2
+    pam
+    python
+    util-linux
+    json_c
+    ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "--disable-ext4" # requires patched kernel & e2fsprogs
   ];
 
   enableParallelBuilding = true;

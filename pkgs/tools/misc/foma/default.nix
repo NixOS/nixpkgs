@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin darwin.cctools;
   buildInputs = [ zlib readline ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   patchPhase = ''
     substituteInPlace Makefile \
@@ -28,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
+    description =
+      "A multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
     homepage = "https://github.com/mhulden/foma";
     license = licenses.asl20;
     maintainers = [ maintainers.tckmn ];

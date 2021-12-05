@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytest
-, setuptools
-, six
-, testtools
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, aiocontextvars, boltons
+, hypothesis, pyrsistent, pytest, setuptools, six, testtools, zope_interface }:
 
 buildPythonPackage rec {
   pname = "eliot";
@@ -23,20 +11,10 @@ buildPythonPackage rec {
     sha256 = "5760194b308a7ab35514ae1b942d88e9f2359071556d82580383f09ca586fff7";
   };
 
-  checkInputs = [
-    hypothesis
-    testtools
-    pytest
-   ];
+  checkInputs = [ hypothesis testtools pytest ];
 
-  propagatedBuildInputs = [
-    aiocontextvars
-    boltons
-    pyrsistent
-    setuptools
-    six
-    zope_interface
-  ];
+  propagatedBuildInputs =
+    [ aiocontextvars boltons pyrsistent setuptools six zope_interface ];
 
   pythonImportsCheck = [ "eliot" ];
 

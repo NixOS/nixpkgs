@@ -15,10 +15,11 @@ mkDerivation rec {
   buildInputs = [ qtbase qttools qtsvg qwt ];
 
   meta = {
-    description = "Open source EDA software focused on easy of use and portability";
+    description =
+      "Open source EDA software focused on easy of use and portability";
     homepage = "http://caneda.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

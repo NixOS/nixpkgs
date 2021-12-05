@@ -1,21 +1,6 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, pkg-config
-, cstruct
-, lwt
-, shared-memory-ring-lwt
-, xenstore
-, lwt-dllist
-, mirage-profile
-, mirage-runtime
-, logs
-, fmt
-, ocaml-freestanding
-, bheap
-, duration
-, io-page
-}:
+{ lib, buildDunePackage, fetchurl, pkg-config, cstruct, lwt
+, shared-memory-ring-lwt, xenstore, lwt-dllist, mirage-profile, mirage-runtime
+, logs, fmt, ocaml-freestanding, bheap, duration, io-page }:
 
 buildDunePackage rec {
   pname = "mirage-xen";
@@ -24,14 +9,12 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-xen/releases/download/v${version}/mirage-xen-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-xen/releases/download/v${version}/mirage-xen-v${version}.tbz";
     sha256 = "f991e972059b27993c287ad010d9281fee061efaa1dd475d0955179f93710fbd";
   };
 
-  patches = [
-    ./makefile-no-opam.patch
-    ./pkg-config.patch
-  ];
+  patches = [ ./makefile-no-opam.patch ./pkg-config.patch ];
 
   # can't handle OCAMLFIND_DESTDIR with substituteAll
   postPatch = ''
@@ -42,9 +25,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [
     cstruct

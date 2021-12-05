@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-sHsmHCMuHc56Mkqk2NUtZgC0RGyqhPvW1fKHkEAhqYk=";
 
   meta = with lib; {
-    description = "The CLI text viewer tool that works like less command on small pane within the terminal window";
+    description =
+      "The CLI text viewer tool that works like less command on small pane within the terminal window";
     license = licenses.mit;
     homepage = "https://github.com/ryochack/peep";
     maintainers = with maintainers; [ ];

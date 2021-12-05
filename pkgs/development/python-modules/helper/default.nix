@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, pytestCheckHook
-, mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "helper";
@@ -17,22 +11,15 @@ buildPythonPackage rec {
     sha256 = "0zypjv8rncvrsgl200v7d3bn08gs48dwqvgamfqv71h07cj6zngp";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ];
+  checkInputs = [ pytestCheckHook mock ];
 
-  pythonImportsCheck = [
-    "helper"
-    "helper.config"
-  ];
+  pythonImportsCheck = [ "helper" "helper.config" ];
 
   meta = with lib; {
-    description = "Development library for quickly writing configurable applications and daemons";
+    description =
+      "Development library for quickly writing configurable applications and daemons";
     homepage = "https://helper.readthedocs.org/";
     license = licenses.bsd3;
   };

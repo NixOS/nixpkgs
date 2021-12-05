@@ -5,10 +5,9 @@
 # contain.
 
 { # Args just for stdenvs' usage
-  lib
-  # Args to pass on to the pkgset builder, too
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
-} @ args:
+lib
+# Args to pass on to the pkgset builder, too
+, localSystem, crossSystem, config, overlays, crossOverlays ? [ ] }@args:
 
 let
   # The native (i.e., impure) build environment.  This one uses the
@@ -35,10 +34,12 @@ let
   stagesCustom = import ./custom args;
 
   # Select the appropriate stages for the platform `system'.
-in
-  if crossSystem != localSystem || crossOverlays != [] then stagesCross
-  else if config ? replaceStdenv then stagesCustom
-  else { # switch
+in if crossSystem != localSystem || crossOverlays != [ ] then
+  stagesCross
+else if config ? replaceStdenv then
+  stagesCustom
+else
+  { # switch
     i686-linux = stagesLinux;
     x86_64-linux = stagesLinux;
     armv5tel-linux = stagesLinux;
@@ -53,7 +54,8 @@ in
     armv8m-linux = stagesLinux;
     aarch64-linux = stagesLinux;
     mipsel-linux = stagesLinux;
-    powerpc-linux = /* stagesLinux */ stagesNative;
+    powerpc-linux = # stagesLinux
+      stagesNative;
     powerpc64-linux = stagesLinux;
     powerpc64le-linux = stagesLinux;
     x86_64-darwin = stagesDarwin;

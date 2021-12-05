@@ -1,14 +1,6 @@
-{ mkDerivation
-  , lib
-  , fetchFromGitHub
+{ mkDerivation, lib, fetchFromGitHub
 
-  , cmake
-  , pkg-config
-  , qtbase
-  , qttools
-  , qtx11extras
-  , qttranslations
-}:
+, cmake, pkg-config, qtbase, qttools, qtx11extras, qttranslations }:
 
 mkDerivation rec {
   pname = "birdtray";
@@ -27,9 +19,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    qtbase qttools qtx11extras
-  ];
+  buildInputs = [ qtbase qttools qtx11extras ];
 
   postPatch = ''
     substituteInPlace src/birdtrayapp.cpp \

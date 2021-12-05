@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, mkDerivation, qtbase, cmake, extra-cmake-modules, icecream, libcap_ng, lzo, zstd, libarchive, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, mkDerivation, qtbase, cmake, extra-cmake-modules
+, icecream, libcap_ng, lzo, zstd, libarchive, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "icemon";

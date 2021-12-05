@@ -1,12 +1,10 @@
-import ./make-test-python.nix ({ lib, ...} : {
+import ./make-test-python.nix ({ lib, ... }: {
   name = "flannel";
 
-  meta = with lib.maintainers; {
-    maintainers = [ offline ];
-  };
+  meta = with lib.maintainers; { maintainers = [ offline ]; };
 
   nodes = let
-    flannelConfig = { pkgs, ... } : {
+    flannelConfig = { pkgs, ... }: {
       services.flannel = {
         enable = true;
         backend = {
@@ -15,7 +13,7 @@ import ./make-test-python.nix ({ lib, ...} : {
         };
         network = "10.1.0.0/16";
         iface = "eth1";
-        etcd.endpoints = ["http://etcd:2379"];
+        etcd.endpoints = [ "http://etcd:2379" ];
       };
 
       networking.firewall.allowedUDPPorts = [ 8285 ];
@@ -25,11 +23,13 @@ import ./make-test-python.nix ({ lib, ...} : {
       services = {
         etcd = {
           enable = true;
-          listenClientUrls = ["http://0.0.0.0:2379"]; # requires ip-address for binding
-          listenPeerUrls = ["http://0.0.0.0:2380"]; # requires ip-address for binding
-          advertiseClientUrls = ["http://etcd:2379"];
-          initialAdvertisePeerUrls = ["http://etcd:2379"];
-          initialCluster = ["etcd=http://etcd:2379"];
+          listenClientUrls =
+            [ "http://0.0.0.0:2379" ]; # requires ip-address for binding
+          listenPeerUrls =
+            [ "http://0.0.0.0:2380" ]; # requires ip-address for binding
+          advertiseClientUrls = [ "http://etcd:2379" ];
+          initialAdvertisePeerUrls = [ "http://etcd:2379" ];
+          initialCluster = [ "etcd=http://etcd:2379" ];
         };
       };
 

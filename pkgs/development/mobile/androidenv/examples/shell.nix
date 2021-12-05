@@ -1,20 +1,20 @@
 {
-  # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
-  /*nixpkgsSource ? (builtins.fetchTarball {
-    name = "nixpkgs-20.09";
-    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
-  }),
-  pkgs ? import nixpkgsSource {},
-  pkgs_i686 ? import nixpkgsSource { system = "i686-linux"; },*/
+# If you copy this example out of nixpkgs, use these lines instead of the next.
+# This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
+/* nixpkgsSource ? (builtins.fetchTarball {
+     name = "nixpkgs-20.09";
+     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
+     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+   }),
+   pkgs ? import nixpkgsSource {},
+   pkgs_i686 ? import nixpkgsSource { system = "i686-linux"; },
+*/
 
-  # If you want to use the in-tree version of nixpkgs:
-  pkgs ? import ../../../../.. {},
-  pkgs_i686 ? import ../../../../.. { system = "i686-linux"; },
+# If you want to use the in-tree version of nixpkgs:
+pkgs ? import ../../../../.. { }
+, pkgs_i686 ? import ../../../../.. { system = "i686-linux"; },
 
-  config ? pkgs.config
-}:
+config ? pkgs.config }:
 
 # Copy this file to your Android project.
 let
@@ -33,22 +33,23 @@ let
       emulator = "30.6.3";
     };
 
-    platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
-    abis = ["armeabi-v7a" "arm64-v8a"];
-    extras = ["extras;google;gcm"];
+    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" ];
+    abis = [ "armeabi-v7a" "arm64-v8a" ];
+    extras = [ "extras;google;gcm" ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
-  /*androidEnvNixpkgs = fetchTarball {
-    name = "androidenv";
-    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
-    sha256 = "<fill me in with nix-prefetch-url --unpack>";
-  };
+  /* androidEnvNixpkgs = fetchTarball {
+       name = "androidenv";
+       url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
+       sha256 = "<fill me in with nix-prefetch-url --unpack>";
+     };
 
-  androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs pkgs_i686;
-    licenseAccepted = true;
-  };*/
+     androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
+       inherit config pkgs pkgs_i686;
+       licenseAccepted = true;
+     };
+  */
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
@@ -59,7 +60,7 @@ let
   androidComposition = androidEnv.composeAndroidPackages {
     toolsVersion = android.versions.tools;
     platformToolsVersion = android.versions.platformTools;
-    buildToolsVersions = [android.versions.buildTools];
+    buildToolsVersions = [ android.versions.buildTools ];
     platformVersions = android.platforms;
     abiVersions = android.abis;
 
@@ -70,7 +71,7 @@ let
 
     includeNDK = true;
     ndkVersions = android.versions.ndk;
-    cmakeVersions = [android.versions.cmake];
+    cmakeVersions = [ android.versions.cmake ];
 
     useGoogleAPIs = true;
     includeExtras = android.extras;
@@ -79,18 +80,19 @@ let
     # repoJson = ../repo.json;
 
     # If you want to use custom repo XMLs:
-    /*repoXmls = {
-      packages = [ ../xml/repository2-1.xml ];
-      images = [
-        ../xml/android-sys-img2-1.xml
-        ../xml/android-tv-sys-img2-1.xml
-        ../xml/android-wear-sys-img2-1.xml
-        ../xml/android-wear-cn-sys-img2-1.xml
-        ../xml/google_apis-sys-img2-1.xml
-        ../xml/google_apis_playstore-sys-img2-1.xml
-      ];
-      addons = [ ../xml/addon2-1.xml ];
-    };*/
+    /* repoXmls = {
+         packages = [ ../xml/repository2-1.xml ];
+         images = [
+           ../xml/android-sys-img2-1.xml
+           ../xml/android-tv-sys-img2-1.xml
+           ../xml/android-wear-sys-img2-1.xml
+           ../xml/android-wear-cn-sys-img2-1.xml
+           ../xml/google_apis-sys-img2-1.xml
+           ../xml/google_apis_playstore-sys-img2-1.xml
+         ];
+         addons = [ ../xml/addon2-1.xml ];
+       };
+    */
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -112,8 +114,7 @@ let
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
   jdk = pkgs.jdk;
-in
-pkgs.mkShell rec {
+in pkgs.mkShell rec {
   name = "androidenv-demo";
   packages = [ androidSdk platformTools jdk pkgs.android-studio ];
 
@@ -126,20 +127,21 @@ pkgs.mkShell rec {
   ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
 
   # Ensures that we don't have to use a FHS env by using the nix store's aapt2.
-  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${android.versions.buildTools}/aapt2";
+  GRADLE_OPTS =
+    "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${android.versions.buildTools}/aapt2";
 
   shellHook = ''
-    # Add cmake to the path.
-    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
-    export PATH="$cmake_root/bin:$PATH"
+        # Add cmake to the path.
+        cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
+        export PATH="$cmake_root/bin:$PATH"
 
-    # Write out local.properties for Android Studio.
-    cat <<EOF > local.properties
-# This file was automatically generated by nix-shell.
-sdk.dir=$ANDROID_SDK_ROOT
-ndk.dir=$ANDROID_NDK_ROOT
-cmake.dir=$cmake_root
-EOF
-  '';
+        # Write out local.properties for Android Studio.
+        cat <<EOF > local.properties
+    # This file was automatically generated by nix-shell.
+    sdk.dir=$ANDROID_SDK_ROOT
+    ndk.dir=$ANDROID_NDK_ROOT
+    cmake.dir=$cmake_root
+    EOF
+      '';
 }
 

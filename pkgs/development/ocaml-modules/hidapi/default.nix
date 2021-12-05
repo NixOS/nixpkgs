@@ -1,6 +1,5 @@
 { pkgs, lib, fetchurl, buildDunePackage, pkg-config, dune-configurator
-, bigstring,
-}:
+, bigstring, }:
 
 buildDunePackage rec {
   pname = "hidapi";
@@ -9,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/vbmithr/ocaml-hidapi/releases/download/${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/vbmithr/ocaml-hidapi/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "1j7rd7ajrzla76r3sxljx6fb18f4f4s3jd7vhv59l2ilxyxycai2";
   };
 

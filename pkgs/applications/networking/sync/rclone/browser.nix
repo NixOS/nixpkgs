@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # patch for Qt 5.15, https://github.com/kapitainsky/RcloneBrowser/pull/126
     (fetchpatch {
-      url = "https://github.com/kapitainsky/RcloneBrowser/commit/ce9cf52e9c584a2cc85a5fa814b0fd7fa9cf0152.patch";
+      url =
+        "https://github.com/kapitainsky/RcloneBrowser/commit/ce9cf52e9c584a2cc85a5fa814b0fd7fa9cf0152.patch";
       sha256 = "0nm42flmaq7mva9j4dpp18i1xcv8gr08zfyb9apz1zwn79h1w0c8";
     })
   ];

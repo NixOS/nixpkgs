@@ -1,16 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, geopy
-, imageio
-, lxml
-, pillow
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, voluptuous
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, geopy, imageio, lxml
+, pillow, pytestCheckHook, python-dateutil, pythonOlder, voluptuous }:
 
 buildPythonPackage rec {
   pname = "env-canada";
@@ -26,19 +15,10 @@ buildPythonPackage rec {
     sha256 = "sha256-viuBuyGzAUcfb4qSecZsDvoAU++FNhuwNJET/s0qyOI=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    geopy
-    imageio
-    lxml
-    pillow
-    python-dateutil
-    voluptuous
-  ];
+  propagatedBuildInputs =
+    [ aiohttp geopy imageio lxml pillow python-dateutil voluptuous ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -53,9 +33,7 @@ buildPythonPackage rec {
     "test_ecradar"
   ];
 
-  pythonImportsCheck = [
-    "env_canada"
-  ];
+  pythonImportsCheck = [ "env_canada" ];
 
   meta = with lib; {
     description = "Python library to get Environment Canada weather data";

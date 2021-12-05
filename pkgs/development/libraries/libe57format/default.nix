@@ -1,11 +1,4 @@
-{
-  lib, stdenv,
-  cmake,
-  fetchFromGitHub,
-  boost,
-  xercesc,
-  icu,
-}:
+{ lib, stdenv, cmake, fetchFromGitHub, boost, xercesc, icu, }:
 
 stdenv.mkDerivation rec {
   pname = "libe57format";
@@ -18,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "15l23spjvak5h3n7aj3ggy0c3cwcg8mvnc9jlbd9yc2ra43bx7bp";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-    icu
-  ];
+  buildInputs = [ boost icu ];
 
   propagatedBuildInputs = [
     # Necessary for projects that try to find libE57Format via CMake
@@ -55,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/asmaloney/libE57Format";
     license = licenses.boost;
     maintainers = with maintainers; [ chpatrick nh2 ];
-    platforms = platforms.linux; # because of the .so buiding in `postInstall` above
+    platforms =
+      platforms.linux; # because of the .so buiding in `postInstall` above
   };
 }

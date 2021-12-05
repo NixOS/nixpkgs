@@ -1,6 +1,7 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, qtmultimedia, kcompletion, kconfig
-, kcrash, kiconthemes, kio, audiofile, libsamplerate, alsa-lib, libpulseaudio, flac, id3lib
-, libogg, libmad, libopus, libvorbis, fftw, librsvg, qtbase }:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, qtmultimedia, kcompletion
+, kconfig, kcrash, kiconthemes, kio, audiofile, libsamplerate, alsa-lib
+, libpulseaudio, flac, id3lib, libogg, libmad, libopus, libvorbis, fftw, librsvg
+, qtbase }:
 
 mkDerivation {
   pname = "kwave";
@@ -13,9 +14,7 @@ mkDerivation {
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     alsa-lib
     audiofile

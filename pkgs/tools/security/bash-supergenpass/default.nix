@@ -1,10 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, makeWrapper
-, openssl
-, coreutils
-, gnugrep }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, makeWrapper, openssl
+, coreutils, gnugrep }:
 
 stdenv.mkDerivation {
   pname = "bash-supergenpass";
@@ -21,7 +16,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -m755 -D supergenpass.sh "$out/bin/supergenpass"
-    wrapProgram "$out/bin/supergenpass" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnugrep ]}"
+    wrapProgram "$out/bin/supergenpass" --prefix PATH : "${
+      lib.makeBinPath [ openssl coreutils gnugrep ]
+    }"
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -29,7 +26,8 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Bash shell-script implementation of SuperGenPass password generation";
+    description =
+      "Bash shell-script implementation of SuperGenPass password generation";
     longDescription = ''
       Bash shell-script implementation of SuperGenPass password generation
       Usage: ./supergenpass.sh <domain> [ <length> ]

@@ -1,11 +1,7 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{ buildPythonPackage, fetchPypi, lib
 
 # pythonPackages
-, pyjwt
-, requests
-}:
+, pyjwt, requests }:
 
 buildPythonPackage rec {
   pname = "msal";
@@ -16,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "240fb04dba46a27fd6a3178db8334412d0d02e0be85166f9e05bb45d03399084";
   };
 
-  propagatedBuildInputs = [
-    pyjwt
-    requests
-  ];
+  propagatedBuildInputs = [ pyjwt requests ];
 
   # we already have cryptography included, version bounds are causing issues
   postPatch = ''
@@ -35,8 +28,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "msal" ];
 
   meta = with lib; {
-    description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect";
-    homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-python";
+    description =
+      "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect";
+    homepage =
+      "https://github.com/AzureAD/microsoft-authentication-library-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

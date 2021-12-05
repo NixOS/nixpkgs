@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ aws-c-common ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with lib; {
     description = "HW accelerated CRC32c and CRC32";

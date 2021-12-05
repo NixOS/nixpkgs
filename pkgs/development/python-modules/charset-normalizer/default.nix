@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0pv6yf5ialc82iimsjbq3gp5hh02pg4a7sdma48gd81h4h8qd627";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

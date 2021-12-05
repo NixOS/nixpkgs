@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdaemon ];
 
   # Needed for cross-compilation
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   meta = with lib; {
     homepage = "http://www.litech.org/radvd/";

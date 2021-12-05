@@ -1,27 +1,11 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, libxslt
-, docbook-xsl-nons
-, gettext
-, gtk3
-, systemd
-, pango
-, cairo
-, libdrm
-}:
+{ lib, stdenv, fetchpatch, fetchFromGitLab, pkg-config, autoreconfHook, libxslt
+, docbook-xsl-nons, gettext, gtk3, systemd, pango, cairo, libdrm }:
 
 stdenv.mkDerivation rec {
   pname = "plymouth";
   version = "unstable-2021-10-18";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -31,21 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+AP4ALOFdYFt/8MDXjMaHptkogCwK1iXKuza1zfMaws=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook-xsl-nons
-    gettext
-    libxslt
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook docbook-xsl-nons gettext libxslt pkg-config ];
 
-  buildInputs = [
-    cairo
-    gtk3
-    libdrm
-    pango
-    systemd
-  ];
+  buildInputs = [ cairo gtk3 libdrm pango systemd ];
 
   postPatch = ''
     sed -i \
@@ -76,7 +49,9 @@ stdenv.mkDerivation rec {
     "--with-systemdunitdir=${placeholder "out"}/etc/systemd/system"
     "--without-rhgb-compat-link"
     "--without-system-root-install"
-    "ac_cv_path_SYSTEMD_ASK_PASSWORD_AGENT=${lib.getBin systemd}/bin/systemd-tty-ask-password-agent"
+    "ac_cv_path_SYSTEMD_ASK_PASSWORD_AGENT=${
+      lib.getBin systemd
+    }/bin/systemd-tty-ask-password-agent"
   ];
 
   installFlags = [

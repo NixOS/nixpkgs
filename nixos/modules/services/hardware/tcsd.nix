@@ -27,8 +27,7 @@ let
     #all_platform_classes = pc_11,pc_12,mobile_12
   '';
 
-in
-{
+in {
 
   ###### interface
 
@@ -153,6 +152,6 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "tss") { tss = {}; };
+    users.groups = optionalAttrs (cfg.group == "tss") { tss = { }; };
   };
 }

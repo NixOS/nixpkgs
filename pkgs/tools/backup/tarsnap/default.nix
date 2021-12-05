@@ -2,11 +2,11 @@
 
 let
   zshCompletion = fetchurl {
-    url = "https://gist.githubusercontent.com/thoughtpolice/daa9431044883d3896f6/raw/282360677007db9739e5bf229873d3b231eb303a/tarsnap.zsh";
+    url =
+      "https://gist.githubusercontent.com/thoughtpolice/daa9431044883d3896f6/raw/282360677007db9739e5bf229873d3b231eb303a/tarsnap.zsh";
     sha256 = "0pawqwichzpz29rva7mh8lpx4zznnrh2rqyzzj6h7z98l0dxpair";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tarsnap";
   version = "1.0.39";
 
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib ] ++ lib.optional stdenv.isLinux e2fsprogs ;
+  buildInputs = [ openssl zlib ] ++ lib.optional stdenv.isLinux e2fsprogs;
 
   meta = {
     description = "Online backups for the truly paranoid";
-    homepage    = "http://www.tarsnap.com/";
-    license     = lib.licenses.unfree;
-    platforms   = lib.platforms.unix;
+    homepage = "http://www.tarsnap.com/";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
   };
 }

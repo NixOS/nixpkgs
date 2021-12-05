@@ -1,5 +1,5 @@
-{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, fuse
-, util-linux, makeWrapper
+{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man
+, fuse, util-linux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
 with lib;
@@ -21,11 +21,8 @@ stdenv.mkDerivation rec {
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
   '';
 
-  configureFlags = [
-    "--with-init-script=systemd"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ];
+  configureFlags =
+    [ "--with-init-script=systemd" "--sysconfdir=/etc" "--localstatedir=/var" ];
 
   installFlags = [ "SYSTEMD_UNIT_DIR=\${out}/lib/systemd" ];
 

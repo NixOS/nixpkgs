@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.skydns;
+let cfg = config.services.skydns;
 
 in {
   options.services.skydns = {
@@ -50,8 +49,9 @@ in {
     nameservers = mkOption {
       default = map (n: n + ":53") config.networking.nameservers;
       type = types.listOf types.str;
-      description = "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
-      example = ["8.8.8.8:53" "8.8.4.4:53"];
+      description =
+        "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
+      example = [ "8.8.8.8:53" "8.8.4.4:53" ];
     };
 
     package = mkOption {
@@ -62,9 +62,10 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.str;
-      description = "Skydns attribute set of extra config options passed as environment variables.";
+      description =
+        "Skydns attribute set of extra config options passed as environment variables.";
     };
   };
 
@@ -82,9 +83,7 @@ in {
         SKYDNS_DOMAIN = cfg.domain;
         SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
       };
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/skydns";
-      };
+      serviceConfig = { ExecStart = "${cfg.package}/bin/skydns"; };
     };
 
     environment.systemPackages = [ cfg.package ];

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "qnap-qsw";
@@ -19,16 +14,12 @@ buildPythonPackage rec {
     sha256 = "WP1bGt7aAtSVFOMJgPXKqVSbi5zj9K7qoIVrYCrPGqk=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qnap_qsw"
-  ];
+  pythonImportsCheck = [ "qnap_qsw" ];
 
   meta = with lib; {
     description = "Python library to interact with the QNAP QSW API";

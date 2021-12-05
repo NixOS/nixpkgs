@@ -1,5 +1,4 @@
-{ lib, fetchurl, buildDunePackage, alcotest
-, uri, xmlm, omd, ezjsonm }:
+{ lib, fetchurl, buildDunePackage, alcotest, uri, xmlm, omd, ezjsonm }:
 
 buildDunePackage rec {
   useDune2 = true;
@@ -9,7 +8,8 @@ buildDunePackage rec {
   pname = "cow";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-v${version}.tbz";
     sha256 = "1x77lwpskda4zyikwxh500xjn90pgdwz6jm7ca7f36pyav4vl6zx";
   };
 

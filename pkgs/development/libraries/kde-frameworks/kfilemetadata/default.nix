@@ -1,18 +1,5 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, attr
-, ebook_tools
-, exiv2
-, ffmpeg
-, karchive
-, kcoreaddons
-, ki18n
-, poppler
-, qtbase
-, qtmultimedia
-, taglib
-}:
+{ mkDerivation, lib, extra-cmake-modules, attr, ebook_tools, exiv2, ffmpeg
+, karchive, kcoreaddons, ki18n, poppler, qtbase, qtmultimedia, taglib }:
 
 mkDerivation {
   name = "kfilemetadata";
@@ -30,7 +17,5 @@ mkDerivation {
     qtmultimedia
     taglib
   ];
-  patches = [
-    ./cmake-install-paths.patch
-  ];
+  patches = [ ./cmake-install-paths.patch ];
 }

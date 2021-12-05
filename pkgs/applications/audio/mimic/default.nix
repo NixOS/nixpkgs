@@ -13,19 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
-  buildInputs = [
-    alsa-lib
-    alsa-plugins
-    libtool
-    icu
-    pcre2
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs = [ alsa-lib alsa-plugins libtool icu pcre2 ]
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   postInstall = ''
     wrapProgram $out/bin/mimic \

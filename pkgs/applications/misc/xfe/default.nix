@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
+{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool
+, file, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "xfe";

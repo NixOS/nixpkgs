@@ -1,12 +1,9 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "jitsi-meet";
-  meta = with pkgs.lib; {
-    maintainers = teams.jitsi.members;
-  };
+  meta = with pkgs.lib; { maintainers = teams.jitsi.members; };
 
   nodes = {
-    client = { nodes, pkgs, ... }: {
-    };
+    client = { nodes, pkgs, ... }: { };
     server = { config, pkgs, ... }: {
       services.jitsi-meet = {
         enable = true;

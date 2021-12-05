@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ace
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, ace }:
 
 stdenv.mkDerivation rec {
   pname = "yarp";

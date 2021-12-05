@@ -1,7 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub
-, qtbase, qtmultimedia, qtsvg, qtx11extras
-, pkg-config, cmake, gettext
-}:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qtmultimedia, qtsvg, qtx11extras
+, pkg-config, cmake, gettext }:
 
 mkDerivation rec {
   pname = "kvirc";
@@ -14,13 +12,9 @@ mkDerivation rec {
     sha256 = "1dq7v6djw0gz56rvghs4r5gfhzx4sfg60rnv6b9zprw0vlvcxbn4";
   };
 
-  buildInputs = [
-    qtbase qtmultimedia qtsvg qtx11extras
-  ];
+  buildInputs = [ qtbase qtmultimedia qtsvg qtx11extras ];
 
-  nativeBuildInputs = [
-    pkg-config cmake gettext
-  ];
+  nativeBuildInputs = [ pkg-config cmake gettext ];
 
   meta = with lib; {
     description = "Advanced IRC Client";

@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, networkmanager
-, libnma
-, wingpanel
-, libgee
+{ lib, stdenv, fetchFromGitHub, nix-update-script, substituteAll, pkg-config
+, meson, ninja, vala, gtk3, granite, networkmanager, libnma, wingpanel, libgee
 }:
 
 stdenv.mkDerivation rec {
@@ -26,26 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4Fg8/Gm9mUqaL3wEc8h+/pMvOfD75ILjo7LhLz6LQmo=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    networkmanager
-    libnma
-    wingpanel
-  ];
+  buildInputs = [ granite gtk3 libgee networkmanager libnma wingpanel ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

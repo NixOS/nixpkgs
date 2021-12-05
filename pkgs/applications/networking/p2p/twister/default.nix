@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, python2
-, boost, db, openssl, geoip, libiconv, miniupnpc
-, srcOnly, fetchgit
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool
+, pkg-config, python2, boost, db, openssl, geoip, libiconv, miniupnpc, srcOnly
+, fetchgit }:
 
 let
   twisterHTML = srcOnly {
@@ -37,8 +36,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoconf automake libtool python2
-    boostPython db openssl geoip miniupnpc libiconv
+    autoconf
+    automake
+    libtool
+    python2
+    boostPython
+    db
+    openssl
+    geoip
+    miniupnpc
+    libiconv
   ];
 
   postPatch = ''

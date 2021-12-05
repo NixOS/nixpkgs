@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatically change sway workspace names based on their contents";
+    description =
+      "Automatically change sway workspace names based on their contents";
     longDescription = ''
       Automatically sets the workspace names to match the windows on the workspace.
       The chosen name for a workspace is a composite of the app_id or WM_CLASS X11

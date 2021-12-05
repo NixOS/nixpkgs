@@ -63,19 +63,19 @@ in {
       };
     };
 
-    users.users.serviio =
-      { group = "serviio";
-        home = cfg.dataDir;
-        description = "Serviio Media Server User";
-        createHome = true;
-        isSystemUser = true;
-      };
+    users.users.serviio = {
+      group = "serviio";
+      home = cfg.dataDir;
+      description = "Serviio Media Server User";
+      createHome = true;
+      isSystemUser = true;
+    };
 
     users.groups.serviio = { };
 
     networking.firewall = {
       allowedTCPPorts = [
-        8895  # serve UPnP responses
+        8895 # serve UPnP responses
         23423 # console
         23424 # mediabrowser
       ];

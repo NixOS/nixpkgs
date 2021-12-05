@@ -1,19 +1,7 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, pythonOlder, rustPlatform, fetchFromGitHub
 , libiconv
-  # Check inputs
-, pytestCheckHook
-, fixtures
-, graphviz
-, matplotlib
-, networkx
-, numpy
-, pydot
-}:
+# Check inputs
+, pytestCheckHook, fixtures, graphviz, matplotlib, networkx, numpy, pydot }:
 
 buildPythonPackage rec {
   pname = "retworkx";
@@ -39,15 +27,8 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "retworkx" ];
-  checkInputs = [
-    pytestCheckHook
-    fixtures
-    graphviz
-    matplotlib
-    networkx
-    numpy
-    pydot
-  ];
+  checkInputs =
+    [ pytestCheckHook fixtures graphviz matplotlib networkx numpy pydot ];
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)

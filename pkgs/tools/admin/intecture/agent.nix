@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, rustPlatform
-, openssl, zeromq, czmq, pkg-config, cmake, zlib }:
+{ lib, fetchFromGitHub, rustPlatform, openssl, zeromq, czmq, pkg-config, cmake
+, zlib }:
 
 with rustPlatform;
 

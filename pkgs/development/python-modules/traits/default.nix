@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, python
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, python, numpy }:
 
 buildPythonPackage rec {
   pname = "traits";

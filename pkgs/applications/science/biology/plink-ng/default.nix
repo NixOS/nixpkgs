@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib, blas, lapack, darwin}:
+{ lib, stdenv, fetchFromGitHub, zlib, blas, lapack, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "plink-ng";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
   };
 
-  buildInputs = [ zlib ] ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Accelerate ] else [ blas lapack ]) ;
+  buildInputs = [ zlib ] ++ (if stdenv.isDarwin then
+    [ darwin.apple_sdk.frameworks.Accelerate ]
+  else [
+    blas
+    lapack
+  ]);
 
   preBuild = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h
@@ -31,7 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A comprehensive update to the PLINK association analysis toolset";
+    description =
+      "A comprehensive update to the PLINK association analysis toolset";
     homepage = "https://www.cog-genomics.org/plink2";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

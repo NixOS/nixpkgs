@@ -1,9 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-let
-  sources = (import ./sources.nix) { inherit fetchFromGitHub; };
-in
-buildGoModule {
+let sources = (import ./sources.nix) { inherit fetchFromGitHub; };
+in buildGoModule {
   inherit (sources) pname version src;
 
   modRoot = "src/hockeypuck/";

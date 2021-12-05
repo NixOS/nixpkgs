@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   passthru.extensionUuid = "TopIcons@phocean.net";
 
   meta = with lib; {
-    description = "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
+    description =
+      "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eperuffo ];
     homepage = "https://github.com/phocean/TopIcons-plus";

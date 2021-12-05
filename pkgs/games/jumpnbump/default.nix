@@ -1,18 +1,14 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchzip
-, SDL2, SDL2_mixer, SDL2_net
-, gtk3, gobject-introspection
-, python3Packages
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitLab, fetchzip, SDL2, SDL2_mixer, SDL2_net, gtk3
+, gobject-introspection, python3Packages, wrapGAppsHook }:
 
-let data = fetchzip {
-  url = "https://mirandir.pagesperso-orange.fr/files/additional-levels.tar.xz";
-  sha256 = "167hisscsbldrwrs54gq6446shl8h26qdqigmfg0lq3daynqycg2";
-}; in
+let
+  data = fetchzip {
+    url =
+      "https://mirandir.pagesperso-orange.fr/files/additional-levels.tar.xz";
+    sha256 = "167hisscsbldrwrs54gq6446shl8h26qdqigmfg0lq3daynqycg2";
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "jumpnbump";
   version = "1.70-dev";
 
@@ -47,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "cute, true multiplayer platform game with bunnies";
-    homepage    = "https://libregames.gitlab.io/jumpnbump/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://libregames.gitlab.io/jumpnbump/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

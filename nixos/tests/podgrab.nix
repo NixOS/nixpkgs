@@ -1,14 +1,11 @@
 let
   defaultPort = 8080;
   customPort = 4242;
-in
-import ./make-test-python.nix ({ pkgs, ... }: {
+in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "podgrab";
 
   nodes = {
-    default = { ... }: {
-      services.podgrab.enable = true;
-    };
+    default = { ... }: { services.podgrab.enable = true; };
 
     customized = { ... }: {
       services.podgrab = {

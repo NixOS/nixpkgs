@@ -1,26 +1,29 @@
 # integration tests for brscan5 sane driver
 #
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "brscan5";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mattchrist ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ mattchrist ]; };
 
-  machine = { pkgs, ... }:
-    {
-      nixpkgs.config.allowUnfree = true;
-      hardware.sane = {
+  machine = { pkgs, ... }: {
+    nixpkgs.config.allowUnfree = true;
+    hardware.sane = {
+      enable = true;
+      brscan5 = {
         enable = true;
-        brscan5 = {
-          enable = true;
-          netDevices = {
-            "a" = { model="ADS-1200"; nodename="BRW0080927AFBCE"; };
-            "b" = { model="ADS-1200"; ip="192.168.1.2"; };
+        netDevices = {
+          "a" = {
+            model = "ADS-1200";
+            nodename = "BRW0080927AFBCE";
+          };
+          "b" = {
+            model = "ADS-1200";
+            ip = "192.168.1.2";
           };
         };
       };
     };
+  };
 
   testScript = ''
     # sane loads libsane-brother5.so.1 successfully, and scanimage doesn't die

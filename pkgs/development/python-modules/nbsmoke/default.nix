@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jupyter-client
-, ipykernel
-, holoviews
-, nbformat
-, nbconvert
-, pyflakes
-, requests
-, beautifulsoup4
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, jupyter-client, ipykernel
+, holoviews, nbformat, nbconvert, pyflakes, requests, beautifulsoup4 }:
 
 buildPythonPackage rec {
   pname = "nbsmoke";

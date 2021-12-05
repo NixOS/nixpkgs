@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchgit,
-  fetchHex, erlang, makeWrapper,
-  writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
+{ lib, stdenv, fetchFromGitHub, fetchgit, fetchHex, erlang, makeWrapper
+, writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix
+}:
 
 let
   version = "3.17.0";
@@ -52,7 +52,8 @@ let
 
     meta = {
       homepage = "https://github.com/rebar/rebar3";
-      description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
+      description =
+        "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
       longDescription = ''
         rebar is a self-contained Erlang script, so it's easy to distribute or
@@ -61,7 +62,7 @@ let
         of build configuration work. rebar also provides dependency management,
         enabling application writers to easily re-use common libraries from a
         variety of locations (hex.pm, git, hg, and so on).
-        '';
+      '';
 
       platforms = lib.platforms.unix;
       maintainers = lib.teams.beam.members;
@@ -78,7 +79,7 @@ let
           git
           gnused
           nix
-          (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
+          (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
       latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
@@ -96,7 +97,8 @@ let
   };
   rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
     let
-      pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
+      pluginLibDirs =
+        map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
       globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
       rebar3Patched = (rebar3.overrideAttrs (old: {
 
@@ -131,7 +133,9 @@ let
         erlc -o $out/lib/rebar/ebin rebar_ignore_deps.erl
         mkdir -p $out/bin
         makeWrapper ${erlang}/bin/erl $out/bin/rebar3 \
-          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames} rebar_ignore_deps" \
+          --set REBAR_GLOBAL_PLUGINS "${
+            toString globalPluginNames
+          } rebar_ignore_deps" \
           --suffix-each ERL_LIBS ":" "$out/lib ${toString pluginLibDirs}" \
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';

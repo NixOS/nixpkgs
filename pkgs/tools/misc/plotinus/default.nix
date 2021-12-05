@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gettext
-, libxml2
-, pkg-config
-, gtk3
-, cmake
-, ninja
-, vala
-, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, gettext, libxml2, pkg-config, gtk3, cmake, ninja
+, vala, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "plotinus";
@@ -20,21 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "19k6f6ivg4ab57m62g6fkg85q9sv049snmzq1fyqnqijggwshxfz";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook
-    vala
-    cmake
-    ninja
-    gettext
-    libxml2
-  ];
-  buildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs =
+    [ pkg-config wrapGAppsHook vala cmake ninja gettext libxml2 ];
+  buildInputs = [ gtk3 ];
 
   meta = with lib; {
-    description = "A searchable command palette in every modern GTK application";
+    description =
+      "A searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

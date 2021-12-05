@@ -1,21 +1,8 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-, h5py
-, hickle
-, numpy
-, pandas
-, pillow
-, six
-, pytorch
-, torchvision
-, tqdm
-, lib
-}:
+{ buildPythonPackage, fetchFromGitHub, pythonOlder, pytest, h5py, hickle, numpy
+, pandas, pillow, six, pytorch, torchvision, tqdm, lib }:
 
 buildPythonPackage rec {
-  pname   = "pywick";
+  pname = "pywick";
   version = "0.5.6";
 
   disabled = pythonOlder "3.6";
@@ -27,9 +14,8 @@ buildPythonPackage rec {
     sha256 = "1gmlifnv9kji0d1jwg1pa8d96zg48w17qg0sgxwy1y1jf3hn37bm";
   };
 
-  propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
-  ];
+  propagatedBuildInputs =
+    [ h5py hickle numpy pandas pillow six pytorch torchvision tqdm ];
 
   checkInputs = [ pytest ];
 

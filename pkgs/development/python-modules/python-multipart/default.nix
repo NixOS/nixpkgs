@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-cov
-, mock
-, pyyaml
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock, pyyaml, six }:
 
 buildPythonPackage rec {
   pname = "python-multipart";
@@ -17,16 +9,9 @@ buildPythonPackage rec {
     sha256 = "f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43";
   };
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    mock
-    pyyaml
-  ];
+  checkInputs = [ pytest pytest-cov mock pyyaml ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     pytest

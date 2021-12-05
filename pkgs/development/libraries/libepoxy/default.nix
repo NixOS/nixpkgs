@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, utilmacros, python3
-, libGL, libX11
-}:
+, libGL, libX11 }:
 
 with lib;
 

@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchurl, SDL2, ftgl, pkg-config, libpng, libjpeg, pcre, SDL2_image, glew
-, libGLU, libGL, boost, glm, freetype }:
+{ lib, stdenv, fetchurl, SDL2, ftgl, pkg-config, libpng, libjpeg, pcre
+, SDL2_image, glew, libGLU, libGL, boost, glm, freetype }:
 
 stdenv.mkDerivation rec {
   pname = "logstalgia";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1agwjlwzp1c86hqb1p7rmzqzhd3wpnyh8whsfq4sbx01wj0l0gzd";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU libGL boost
-                  glm freetype ];
+  buildInputs = [
+    glew
+    SDL2
+    ftgl
+    libpng
+    libjpeg
+    pcre
+    SDL2_image
+    libGLU
+    libGL
+    boost
+    glm
+    freetype
+  ];
 
   meta = with lib; {
     homepage = "https://logstalgia.io/";

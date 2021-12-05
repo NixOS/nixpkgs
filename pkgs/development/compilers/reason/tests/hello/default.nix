@@ -8,9 +8,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
-    reason
-  ];
+  buildInputs = [ reason ];
 
   doCheck = true;
 

@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails, doesn't work well too, btw
 
   meta = with lib; {
-    description = "Filesystem for accessing FTP hosts based on FUSE and libcurl";
+    description =
+      "Filesystem for accessing FTP hosts based on FUSE and libcurl";
     homepage = "http://curlftpfs.sourceforge.net";
     license = licenses.gpl2Only;
     platforms = platforms.unix;

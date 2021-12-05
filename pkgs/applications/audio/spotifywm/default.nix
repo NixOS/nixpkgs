@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   version = "2016-11-28";
 
   src = fetchFromGitHub {
-    owner  = "dasJ";
-    repo   = "spotifywm";
-    rev    = "91dd5532ffb7a398d775abe94fe7781904ab406f";
+    owner = "dasJ";
+    repo = "spotifywm";
+    rev = "91dd5532ffb7a398d775abe94fe7781904ab406f";
     sha256 = "01z088i83410bpx1vbp7c6cq01r431v55l7340x3izp53lnpp379";
   };
 
@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/dasJ/spotifywm";
-    description = "Wrapper around Spotify that correctly sets class name before opening the window";
+    description =
+      "Wrapper around Spotify that correctly sets class name before opening the window";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jqueiroz ];

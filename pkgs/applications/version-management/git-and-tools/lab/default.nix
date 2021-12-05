@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles
+, git }:
 
 buildGoModule rec {
   pname = "lab";
@@ -22,7 +23,9 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
+    wrapProgram $out/bin/lab --prefix PATH ":" "${
+      lib.makeBinPath [ git xdg-utils ]
+    }";
     for shell in bash fish zsh; do
       $out/bin/lab completion $shell > lab.$shell
       installShellCompletion lab.$shell
@@ -30,7 +33,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
+    description =
+      "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
     maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];

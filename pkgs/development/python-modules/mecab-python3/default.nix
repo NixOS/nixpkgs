@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mecab
-, swig
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, mecab, swig, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "mecab-python3";
@@ -27,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python wrapper for mecab: Morphological Analysis engine";
-    homepage =  "https://github.com/SamuraiT/mecab-python3";
+    homepage = "https://github.com/SamuraiT/mecab-python3";
     license = with licenses; [ gpl2 lgpl21 bsd3 ]; # any of the three
     maintainers = with maintainers; [ ixxie ];
   };

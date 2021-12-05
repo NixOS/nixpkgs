@@ -1,14 +1,5 @@
-{ fetchFromGitHub
-, lib
-, buildPythonPackage
-, attrs
-, click
-, effect
-, git
-, pytestCheckHook
-, pytest-cov
-, pythonOlder
-}:
+{ fetchFromGitHub, lib, buildPythonPackage, attrs, click, effect, git
+, pytestCheckHook, pytest-cov, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
@@ -23,11 +14,7 @@ buildPythonPackage rec {
     sha256 = "g5G818Gq5EGyRIyg/ZW7guxMS0IyJ4nYaRjG/CtGhuc=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    click
-    effect
-  ];
+  propagatedBuildInputs = [ attrs click effect ];
 
   checkInputs = [ pytestCheckHook pytest-cov git ];
 

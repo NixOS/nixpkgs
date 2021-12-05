@@ -1,5 +1,5 @@
-{lib, stdenv, substituteAll, fetchFromGitHub, libtool, pkg-config, intltool, glib, gtk3
-, libpulseaudio, mplayer, gnome_mplayer }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, libtool, pkg-config, intltool
+, glib, gtk3, libpulseaudio, mplayer, gnome_mplayer }:
 
 stdenv.mkDerivation rec {
   pname = "gmtk";

@@ -1,20 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, openfortivpn
-, gettext
-, pkg-config
-, file
-, glib
-, gtk3
-, networkmanager
-, ppp
-, libsecret
-, withGnome ? true
-, gnome
-, fetchpatch
-, libnma
-}:
+{ lib, stdenv, fetchurl, substituteAll, openfortivpn, gettext, pkg-config, file
+, glib, gtk3, networkmanager, ppp, libsecret, withGnome ? true, gnome
+, fetchpatch, libnma }:
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-fortisslvpn";
@@ -22,7 +8,9 @@ stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1sw66cxgs4in4cjp1cm95c5ijsk8xbbmq4ykg2jwqwgz6cf2lr3s";
   };
 
@@ -34,27 +22,16 @@ stdenv.mkDerivation rec {
 
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/NetworkManager-fortisslvpn/merge_requests/11.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/NetworkManager-fortisslvpn/merge_requests/11.patch";
       sha256 = "0l7l2r1njh62lh2pf497ibf99sgkvjsj58xr76qx3jxgq9zfw6n9";
     })
   ];
 
-  nativeBuildInputs = [
-    gettext
-    pkg-config
-    file
-  ];
+  nativeBuildInputs = [ gettext pkg-config file ];
 
-  buildInputs = [
-    openfortivpn
-    networkmanager
-    ppp
-    glib
-  ] ++ lib.optionals withGnome [
-    gtk3
-    libsecret
-    libnma
-  ];
+  buildInputs = [ openfortivpn networkmanager ppp glib ]
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"

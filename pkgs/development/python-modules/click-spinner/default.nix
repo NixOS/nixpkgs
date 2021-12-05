@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, click, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "click-spinner";
@@ -15,14 +9,11 @@ buildPythonPackage rec {
     sha256 = "h+rPnXKYlzol12Fe9X1Hgq6/kTpTK7pLKKN+Nm6XXa8=";
   };
 
-  checkInputs = [
-    click
-    six
-    pytestCheckHook
-  ];
+  checkInputs = [ click six pytestCheckHook ];
 
   meta = with lib; {
-    description = "Add support for showwing that command line app is active to Click";
+    description =
+      "Add support for showwing that command line app is active to Click";
     homepage = "https://github.com/click-contrib/click-spinner";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];

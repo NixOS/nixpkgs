@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, libgee
-, libxml2
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, ninja, vala, gtk3, granite, wingpanel, libgee, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-nightlight";
@@ -29,31 +16,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/wingpanel-indicator-nightlight/pull/91
     (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-nightlight/commit/4e15f71ed958df3569b2f1e224b9fb18613281f1.patch";
+      url =
+        "https://github.com/elementary/wingpanel-indicator-nightlight/commit/4e15f71ed958df3569b2f1e224b9fb18613281f1.patch";
       sha256 = "07awmswyy0988pm6ggyz22mllja675cbdzrjdqc1xd4knwcgy77v";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    libxml2
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ libxml2 meson ninja pkg-config vala ];
 
-  buildInputs = [
-    granite
-    gtk3
-    libgee
-    wingpanel
-  ];
+  buildInputs = [ granite gtk3 libgee wingpanel ];
 
   meta = with lib; {
     description = "Night Light Indicator for Wingpanel";

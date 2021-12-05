@@ -1,32 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, SDL
-, SDL_mixer
-, libpng
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, SDL, SDL_mixer, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "powermanga";
   version = "0.93.1";
 
   src = fetchurl {
-    url = "https://linux.tlk.fr/games/Powermanga/download/powermanga-${version}.tgz";
+    url =
+      "https://linux.tlk.fr/games/Powermanga/download/powermanga-${version}.tgz";
     sha256 = "sha256-2nU/zoOQWm2z/Y6mXHDFfWYjYshsQp1saVRBcUT5Q+g=";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
+  nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [
-    SDL
-    SDL_mixer
-    libpng
-  ];
+  buildInputs = [ SDL SDL_mixer libpng ];
 
   preConfigure = ''
     ./bootstrap

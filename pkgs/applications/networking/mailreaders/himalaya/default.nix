@@ -1,14 +1,6 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
+{ lib, rustPlatform, fetchFromGitHub, stdenv
 , enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installShellFiles
-, pkg-config
-, Security
-, libiconv
-, openssl
-}:
+, installShellFiles, pkg-config, Security, libiconv, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
@@ -27,12 +19,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   buildInputs =
-    if stdenv.hostPlatform.isDarwin then [
-      Security
-      libiconv
-    ] else [
-      openssl
-    ];
+    if stdenv.hostPlatform.isDarwin then [ Security libiconv ] else [ openssl ];
 
   postInstall = lib.optionalString enableCompletions ''
     # Install shell function
@@ -45,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI email client written in Rust";
     homepage = "https://github.com/soywod/himalaya";
-    changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yanganto ];
   };

@@ -1,15 +1,6 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-mockup-registration
-, tezos-proxy
-, tezos-signer-backends
-, tezos-protocol-010-PtGRANAD-parameters
-, tezos-protocol-plugin-010-PtGRANAD
-, alcotest-lwt
-, ppx_inline_test
-, cacert
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-mockup-registration, tezos-proxy
+, tezos-signer-backends, tezos-protocol-010-PtGRANAD-parameters
+, tezos-protocol-plugin-010-PtGRANAD, alcotest-lwt, ppx_inline_test, cacert }:
 
 buildDunePackage {
   pname = "tezos-client-010-PtGRANAD";
@@ -25,14 +16,12 @@ buildDunePackage {
     ppx_inline_test
   ];
 
-  checkInputs = [
-    alcotest-lwt
-    cacert
-  ];
+  checkInputs = [ alcotest-lwt cacert ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: protocol specific library for `tezos-client`";
+    description =
+      "Tezos/Protocol: protocol specific library for `tezos-client`";
   };
 }

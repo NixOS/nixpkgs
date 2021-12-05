@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, nose
-, pep8
-, pylint
-, mccabe
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, nose, pep8, pylint, mccabe }:
 
 buildPythonPackage rec {
   version = "3.0.1";

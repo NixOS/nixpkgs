@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.1.0";
 
   src = fetchurl {
-    url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-${version}.tar.gz";
+    url =
+      "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-${version}.tar.gz";
     sha256 = "1cjxgh41r8k6j029yxs8msp3z6lcnpm16g5pvckk35kc7zhfpykn";
   };
 

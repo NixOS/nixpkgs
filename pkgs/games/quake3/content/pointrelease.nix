@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl }:
 
-let
-  version = "1.32b-3";
+let version = "1.32b-3";
 in stdenv.mkDerivation {
   pname = "quake3-pointrelease";
   inherit version;
 
   src = fetchurl {
-    url = "https://ftp.gwdg.de/pub/misc/ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-${version}.x86.run";
+    url =
+      "https://ftp.gwdg.de/pub/misc/ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-${version}.x86.run";
     sha256 = "11piyksfqyxwl9mpgbc71w9sacsh4d3cdsgia0cy0dbbap2k4qf3";
   };
 

@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.radarr;
+let cfg = config.services.radarr;
 
-in
-{
+in {
   options = {
     services.radarr = {
       enable = mkEnableOption "Radarr";
@@ -20,7 +18,8 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Radarr web interface.";
+        description =
+          "Open ports in the firewall for the Radarr web interface.";
       };
 
       user = mkOption {
@@ -38,9 +37,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.radarr = {
       description = "Radarr";
@@ -51,14 +49,13 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
+        ExecStart =
+          "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 7878 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 7878 ]; };
 
     users.users = mkIf (cfg.user == "radarr") {
       radarr = {
@@ -68,8 +65,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "radarr") {
-      radarr.gid = config.ids.gids.radarr;
-    };
+    users.groups =
+      mkIf (cfg.group == "radarr") { radarr.gid = config.ids.gids.radarr; };
   };
 }

@@ -1,19 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, django
-, factory_boy
-, glibcLocales
-, mock
-, pygments
-, pytest
-, pytest-cov
-, pytest-django
-, python-dateutil
-, shortuuid
-, six
-, tox
-, typing ? null
-, vobject
-, werkzeug
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, django, factory_boy
+, glibcLocales, mock, pygments, pytest, pytest-cov, pytest-django
+, python-dateutil, shortuuid, six, tox, typing ? null, vobject, werkzeug }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
@@ -29,8 +16,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
 
   checkInputs = [
     django

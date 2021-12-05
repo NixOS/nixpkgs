@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mqtlxQDIFee93wpdn8oNWmMPDyjYTCmVqF6IJvJbRBM=";
   };
 
-  patches = [
-    ./fix-aarch64.patch
-  ];
+  patches = [ ./fix-aarch64.patch ];
 
   buildInputs = [ openssl libsamplerate ]
     ++ lib.optional stdenv.isLinux alsa-lib
@@ -34,7 +32,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
+    description =
+      "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];

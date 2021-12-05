@@ -1,23 +1,24 @@
-{ stdenv, lib, fetchurl
-, linuxHeaders ? null
-, useBSDCompatHeaders ? true
-}:
+{ stdenv, lib, fetchurl, linuxHeaders ? null, useBSDCompatHeaders ? true }:
 let
   cdefs_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
+    url =
+      "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
     sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
   };
   queue_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
+    url =
+      "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
     sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
   };
   tree_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
+    url =
+      "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
   stack_chk_fail_local_c = fetchurl {
-    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?h=3.10-stable";
+    url =
+      "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?h=3.10-stable";
     sha256 = "1nhkzzy9pklgjcq2yg89d3l18jif331srd3z3vhy5qwxl1spv6i9";
   };
 
@@ -27,23 +28,24 @@ let
   # https://git.alpinelinux.org/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
   iconv_c = fetchurl {
     name = "iconv.c";
-    url = "https://git.alpinelinux.org/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    url =
+      "https://git.alpinelinux.org/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
 
-  arch = if stdenv.hostPlatform.isx86_64
-    then "x86_64"
-    else if stdenv.hostPlatform.isx86_32
-      then "i386"
-      else null;
+  arch = if stdenv.hostPlatform.isx86_64 then
+    "x86_64"
+  else if stdenv.hostPlatform.isx86_32 then
+    "i386"
+  else
+    null;
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "musl";
   version = "1.2.2";
 
   src = fetchurl {
-    url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    url = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1p8r6bac64y98ln0wzmnixysckq3crca69ys7p16sy9d04i975lv";
   };
 
@@ -64,7 +66,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Minor touchup to build system making dynamic linker symlink relative
     (fetchurl {
-      url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
+      url =
+        "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
   ];
@@ -88,13 +91,13 @@ stdenv.mkDerivation rec {
   NIX_DONT_SET_RPATH = true;
 
   preBuild = ''
-    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
-    "# the -x c flag is required since the file extension confuses gcc
-    # that detect the file as a linker script.
-    $CC -x c -c ${stack_chk_fail_local_c} -o __stack_chk_fail_local.o
-    $AR r libssp_nonshared.a __stack_chk_fail_local.o"
-      else ""
-    }
+    ${if (stdenv.targetPlatform.libc == "musl"
+      && stdenv.targetPlatform.isx86_32) then ''
+        # the -x c flag is required since the file extension confuses gcc
+            # that detect the file as a linker script.
+            $CC -x c -c ${stack_chk_fail_local_c} -o __stack_chk_fail_local.o
+            $AR r libssp_nonshared.a __stack_chk_fail_local.o'' else
+      ""}
   '';
 
   postInstall = ''
@@ -107,11 +110,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
 
-    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
-      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a
-      $STRIP -S $out/lib/libssp_nonshared.a"
-      else ""
-    }
+    ${if (stdenv.targetPlatform.libc == "musl"
+      && stdenv.targetPlatform.isx86_32) then ''
+        install -D libssp_nonshared.a $out/lib/libssp_nonshared.a
+              $STRIP -S $out/lib/libssp_nonshared.a'' else
+      ""}
 
     # Create 'ldd' symlink, builtin
     ln -rs $out/lib/libc.so $out/bin/ldd
@@ -144,10 +147,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "https://musl.libc.org/";
-    changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://musl.libc.org/";
+    changelog =
+      "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, boto3
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, boto3 }:
 
 buildPythonApplication rec {
   pname = "aws-mfa";
@@ -15,15 +11,11 @@ buildPythonApplication rec {
     sha256 = "1blcpa13zgyac3v8inc7fh9szxq2avdllx6w5ancfmyh5spc66ay";
   };
 
-  propagatedBuildInputs = [
-    boto3
-  ];
+  propagatedBuildInputs = [ boto3 ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "awsmfa"
-  ];
+  pythonImportsCheck = [ "awsmfa" ];
 
   meta = with lib; {
     description = "Manage AWS MFA Security Credentials";

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, fuse, zlib
-, withFuse ? true }:
+{ lib, stdenv, fetchurl, fuse, zlib, withFuse ? true }:
 
 stdenv.mkDerivation {
   pname = "sqlar";
   version = "2018-01-07";
 
   src = fetchurl {
-    url = "https://www.sqlite.org/sqlar/tarball/4824e73896/sqlar-src-4824e73896.tar.gz";
+    url =
+      "https://www.sqlite.org/sqlar/tarball/4824e73896/sqlar-src-4824e73896.tar.gz";
     sha256 = "09pikkbp93gqypn3da9zi0dzc47jyypkwc9vnmfzhmw7kpyv8nm9";
   };
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation {
       --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
-  buildInputs = [ zlib ]
-    ++ lib.optional withFuse fuse;
+  buildInputs = [ zlib ] ++ lib.optional withFuse fuse;
 
   buildFlags = [ "CFLAGS=-Wno-error" "sqlar" ]
     ++ lib.optional withFuse "sqlarfs";

@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gettext
-, pkg-config
-, wrapGAppsHook
-, sqlite
-, libpinyin
-, db
-, ibus
-, glib
-, gtk3
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gettext, pkg-config
+, wrapGAppsHook, sqlite, libpinyin, db, ibus, glib, gtk3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
@@ -24,22 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fEEiwRoGGFAki1DMQvGuzjz2NAjhExyH11l8KTwjjsI=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gettext
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook ];
 
   buildInputs = [
     ibus
     glib
     sqlite
     libpinyin
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages
+      (pypkgs: with pypkgs; [ pygobject3 (toPythonModule ibus) ]))
     gtk3
     db
   ];

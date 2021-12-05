@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, boost, numpy, pytestCheckHook, pytest-benchmark }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, boost, numpy, pytestCheckHook
+, pytest-benchmark }:
 
 buildPythonPackage rec {
   pname = "boost-histogram";

@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, isPy3k
-, rustPlatform
-, setuptools-rust
-, libiconv
-}:
+{ lib, stdenv, fetchPypi, fetchpatch, buildPythonPackage, isPy3k, rustPlatform
+, setuptools-rust, libiconv }:
 
 buildPythonPackage rec {
   pname = "spacy-alignments";
@@ -30,19 +22,15 @@ buildPythonPackage rec {
     # Add Cargo.lock, from upstream PR:
     # https://github.com/explosion/spacy-alignments/pull/3
     (fetchpatch {
-      url = "https://github.com/explosion/spacy-alignments/commit/7b0ba13ff0d245bfbbe344a36fb7bbd311dd4906.diff";
+      url =
+        "https://github.com/explosion/spacy-alignments/commit/7b0ba13ff0d245bfbbe344a36fb7bbd311dd4906.diff";
       sha256 = "sha256-jx97SSC+3z+ByInNs8Uq58H50eCo4fDCwEi6VKxRs2k=";
       excludes = [ ".gitignore" ];
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [ setuptools-rust ]
+    ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

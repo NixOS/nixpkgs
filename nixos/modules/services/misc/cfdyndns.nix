@@ -2,13 +2,10 @@
 
 with lib;
 
-let
-  cfg = config.services.cfdyndns;
-in
-{
+let cfg = config.services.cfdyndns;
+in {
   imports = [
-    (mkRemovedOptionModule
-      [ "services" "cfdyndns" "apikey" ]
+    (mkRemovedOptionModule [ "services" "cfdyndns" "apikey" ]
       "Use services.cfdyndns.apikeyFile instead.")
   ];
 
@@ -33,7 +30,7 @@ in
       };
 
       records = mkOption {
-        default = [];
+        default = [ ];
         example = [ "host.tld" ];
         type = types.listOf types.str;
         description = ''
@@ -55,8 +52,8 @@ in
         Group = config.ids.gids.cfdyndns;
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_EMAIL = "${cfg.email}";
+        CLOUDFLARE_RECORDS = "${concatStringsSep "," cfg.records}";
       };
       script = ''
         ${optionalString (cfg.apikeyFile != null) ''
@@ -73,10 +70,6 @@ in
       };
     };
 
-    users.groups = {
-      cfdyndns = {
-        gid = config.ids.gids.cfdyndns;
-      };
-    };
+    users.groups = { cfdyndns = { gid = config.ids.gids.cfdyndns; }; };
   };
 }

@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, werkzeug
-}:
+{ buildPythonPackage, lib, fetchPypi, werkzeug }:
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
@@ -20,7 +16,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_localserver" ];
 
   meta = with lib; {
-    description = "Plugin for the pytest testing framework to test server connections locally";
+    description =
+      "Plugin for the pytest testing framework to test server connections locally";
     homepage = "https://pypi.python.org/pypi/pytest-localserver";
     license = licenses.mit;
     maintainers = with maintainers; [ siriobalmelli ];

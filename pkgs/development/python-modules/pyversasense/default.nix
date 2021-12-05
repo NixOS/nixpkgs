@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, asynctest, buildPythonPackage, fetchFromGitHub, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyversasense";
@@ -22,19 +15,11 @@ buildPythonPackage rec {
     sha256 = "vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    asynctest
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytest-asyncio pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   disabledTests = [
     # Tests are not properly mocking network requests
@@ -44,9 +29,7 @@ buildPythonPackage rec {
     "test_samples"
   ];
 
-  pythonImportsCheck = [
-    "pyversasense"
-  ];
+  pythonImportsCheck = [ "pyversasense" ];
 
   meta = with lib; {
     description = "Python library to communicate with the VersaSense API";

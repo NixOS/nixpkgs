@@ -1,25 +1,9 @@
-{ buildPythonPackage
-, lib
-, python
-, fetchFromGitHub
-, pyopenssl
-, webcolors
-, future
-, atomicwrites
-, attrs
-, Logbook
-, pygments
-, matrix-nio
-, aiohttp
-, requests
-}:
+{ buildPythonPackage, lib, python, fetchFromGitHub, pyopenssl, webcolors, future
+, atomicwrites, attrs, Logbook, pygments, matrix-nio, aiohttp, requests }:
 
 let
-  scriptPython = python.withPackages (ps: with ps; [
-    aiohttp
-    requests
-    python_magic
-  ]);
+  scriptPython =
+    python.withPackages (ps: with ps; [ aiohttp requests python_magic ]);
 
   version = "0.3.0";
 in buildPythonPackage {
@@ -77,7 +61,8 @@ in buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
+    description =
+      "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
     platforms = platforms.unix;

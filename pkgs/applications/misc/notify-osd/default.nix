@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libwnck, libnotify, dbus-glib, makeWrapper, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libwnck, libnotify, dbus-glib
+, makeWrapper, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "notify-osd";
   version = "0.9.34";
 
   src = fetchurl {
-    url = "https://launchpad.net/notify-osd/precise/${version}/+download/notify-osd-${version}.tar.gz";
+    url =
+      "https://launchpad.net/notify-osd/precise/${version}/+download/notify-osd-${version}.tar.gz";
     sha256 = "0g5a7a680b05x27apz0y1ldl5csxpp152wqi42s107jymbp0s20j";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
-    gsettings-desktop-schemas
-  ];
+  buildInputs =
+    [ glib libwnck libnotify dbus-glib makeWrapper gsettings-desktop-schemas ];
 
   configureFlags = [ "--libexecdir=$(out)/bin" ];
 

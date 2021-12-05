@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.unbound;
-in
-{
+let cfg = config.services.prometheus.exporters.unbound;
+in {
   port = 9167;
   extraOpts = {
     fetchType = mkOption {
@@ -46,7 +44,10 @@ in
           ${cfg.fetchType} \
           --bind ${cfg.listenAddress}:${toString cfg.port} \
           --path ${cfg.telemetryPath} \
-          ${optionalString (cfg.controlInterface != null) "--control-interface ${cfg.controlInterface}"} \
+          ${
+            optionalString (cfg.controlInterface != null)
+            "--control-interface ${cfg.controlInterface}"
+          } \
           ${toString cfg.extraFlags}
       '';
       RestrictAddressFamilies = [

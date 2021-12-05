@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, docbook2x, libarchive, libcap_ng, lzo, zstd, docbook_xml_dtd_45 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, docbook2x, libarchive, libcap_ng
+, lzo, zstd, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   pname = "icecream";
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libarchive libcap_ng lzo zstd docbook_xml_dtd_45 ];
 
   meta = with lib; {
-    description = "Distributed compiler with a central scheduler to share build load";
+    description =
+      "Distributed compiler with a central scheduler to share build load";
     inherit (src.meta) homepage;
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];

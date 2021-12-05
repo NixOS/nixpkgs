@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, flask, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, flask, pyyaml }:
 
 buildPythonPackage rec {
   version = "0.2.14";
@@ -13,10 +12,7 @@ buildPythonPackage rec {
   # No Tests
   doCheck = false;
 
-  propagatedBuildInputs = [
-    flask
-    pyyaml
-  ];
+  propagatedBuildInputs = [ flask pyyaml ];
 
   meta = with lib; {
     homepage = "https://github.com/gangverk/flask-swagger";

@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, sassc
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, gnome
-, gtk-engine-murrine
-, optipng
-, inkscape
-, cinnamon
-}:
+{ lib, stdenv, fetchFromGitHub, sassc, meson, ninja, pkg-config, gtk3, glib
+, gnome, gtk-engine-murrine, optipng, inkscape, cinnamon }:
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
@@ -35,10 +23,7 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-resources
   ];
 
-  propagatedUserEnvPkgs = [
-    gnome.gnome-themes-extra
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gnome.gnome-themes-extra gtk-engine-murrine ];
 
   preBuild = ''
     # Shut up inkscape's warnings about creating profile directory
@@ -56,7 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
+    description =
+      "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
     homepage = "https://github.com/jnsh/arc-theme";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

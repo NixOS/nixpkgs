@@ -1,24 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, libxml2
-, meson
-, ninja
-, pkg-config
-, gnome
-, libsysprof-capture
-, gnomeSupport ? true
-, sqlite
-, glib-networking
+{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome
+, libsysprof-capture, gnomeSupport ? true, sqlite, glib-networking
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
-, libpsl
-, python3
-, brotli
-}:
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform, vala
+, withVala ? stdenv.buildPlatform == stdenv.hostPlatform, libpsl, python3
+, brotli }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
@@ -27,35 +12,20 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-3CejuPowvI/5ULWnWVh1fSJC4+UeTi2cTmI+9195O/g=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals withVala [
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config glib ]
+    ++ lib.optionals withIntrospection [ gobject-introspection ]
+    ++ lib.optionals withVala [ vala ];
 
-  buildInputs = [
-    python3
-    sqlite
-    libpsl
-    glib.out
-    brotli
-  ] ++ lib.optionals stdenv.isLinux [
-    libsysprof-capture
-  ];
+  buildInputs = [ python3 sqlite libpsl glib.out brotli ]
+    ++ lib.optionals stdenv.isLinux [ libsysprof-capture ];
 
-  propagatedBuildInputs = [
-    glib
-    libxml2
-  ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
@@ -64,22 +34,19 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsysprof=disabled"
-  ];
+  ] ++ lib.optionals (!stdenv.isLinux) [ "-Dsysprof=disabled" ];
 
   NIX_CFLAGS_COMPILE = "-lpthread";
 
-  doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
+  doCheck =
+    false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
 
   postPatch = ''
     patchShebangs libsoup/
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
+    propagatedUserEnvPackages = [ glib-networking.out ];
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";

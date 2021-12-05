@@ -1,26 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchzip
-, cmake
-, boost
-, catch2
-, inchi
-, cairo
-, eigen
-, python
-, rapidjson
-, maeparser
-, coordgenlibs
-, numpy
-, pandas
-, pillow
-, git
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchzip, cmake, boost, catch2
+, inchi, cairo, eigen, python, rapidjson, maeparser, coordgenlibs, numpy, pandas
+, pillow, git }:
 let
   external = {
     avalon = fetchzip {
-      url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
+      url =
+        "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
       sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
       stripRoot = false;
     };
@@ -30,29 +15,24 @@ let
       rev = "1b13b52e2738a77715b1bad876e3b4e93f2b5269";
       sha256 = "1jp7wz8win4mgwxkaz2gnrgsaaqgln04n2lwgfr96isdv1klf62d";
     };
-    freesasa = fetchFromGitHub
-      {
-        owner = "mittinatten";
-        repo = "freesasa";
-        rev = "2.0.3";
-        sha256 = "0x686zm9fpyg5647fdgxnxgbwav99nc6ymh4bmkr2063yyda4kzc";
-      };
+    freesasa = fetchFromGitHub {
+      owner = "mittinatten";
+      repo = "freesasa";
+      rev = "2.0.3";
+      sha256 = "0x686zm9fpyg5647fdgxnxgbwav99nc6ymh4bmkr2063yyda4kzc";
+    };
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "rdkit";
   version = "2020.09.5";
 
-  src =
-    let
-      versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
-    in
-    fetchFromGitHub {
-      owner = pname;
-      repo = pname;
-      rev = "Release_${versionTag}";
-      sha256 = "1ycbjia223d0w9xiwk36x2vkdidsx198rzkfyxz48cbax9vvklzq";
-    };
+  src = let versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
+  in fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "Release_${versionTag}";
+    sha256 = "1ycbjia223d0w9xiwk36x2vkdidsx198rzkfyxz48cbax9vvklzq";
+  };
 
   unpackPhase = ''
     mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
@@ -73,20 +53,9 @@ buildPythonPackage rec {
     git # required by freesasa
   ];
 
-  buildInputs = [
-    boost
-    catch2
-    inchi
-    eigen
-    cairo
-    rapidjson
-  ];
+  buildInputs = [ boost catch2 inchi eigen cairo rapidjson ];
 
-  propagatedBuildInputs = [
-    numpy
-    pandas
-    pillow
-  ];
+  propagatedBuildInputs = [ numpy pandas pillow ];
 
   hardeningDisable = [ "format" ]; # required by yaehmop
 
@@ -142,11 +111,7 @@ buildPythonPackage rec {
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 
-  pythonImportsCheck = [
-     "rdkit"
-     "rdkit.Chem"
-     "rdkit.Chem.AllChem"
-  ];
+  pythonImportsCheck = [ "rdkit" "rdkit.Chem" "rdkit.Chem.AllChem" ];
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";

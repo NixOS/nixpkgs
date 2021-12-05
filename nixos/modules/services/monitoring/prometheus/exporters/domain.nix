@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.domain;
-in
-{
+let cfg = config.services.prometheus.exporters.domain;
+in {
   port = 9222;
   serviceOpts = {
     serviceConfig = {

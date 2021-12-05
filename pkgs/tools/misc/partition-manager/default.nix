@@ -1,10 +1,8 @@
-{ mkDerivation, fetchurl, lib, makeWrapper
-, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
-, kconfig, kcrash, kinit, kpmcore
-, cryptsetup, lvm2, mdadm, smartmontools, systemdMinimal, util-linux
-, btrfs-progs, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs
-, jfsutils, nilfs-utils, ntfs3g, reiser4progs, reiserfsprogs, udftools, xfsprogs, zfs
-}:
+{ mkDerivation, fetchurl, lib, makeWrapper, extra-cmake-modules, kdoctools
+, wrapGAppsHook, wrapQtAppsHook, kconfig, kcrash, kinit, kpmcore, cryptsetup
+, lvm2, mdadm, smartmontools, systemdMinimal, util-linux, btrfs-progs
+, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs, jfsutils
+, nilfs-utils, ntfs3g, reiser4progs, reiserfsprogs, udftools, xfsprogs, zfs }:
 
 let
   # External programs are resolved by `partition-manager` and then
@@ -44,11 +42,13 @@ in mkDerivation rec {
   version = "4.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
     hash = "sha256-6Qlt1c47Eek6TkWWBzTyBZYJ1jfhtwsC9X5q5h6IhPg=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook makeWrapper ];
+  nativeBuildInputs =
+    [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook makeWrapper ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
 

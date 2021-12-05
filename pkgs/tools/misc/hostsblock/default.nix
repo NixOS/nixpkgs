@@ -1,6 +1,5 @@
 { lib, coreutils, curl, fetchFromGitHub, unzip, p7zip, gnused, gnugrep, stdenv
-, blacklist ? [ "adwords.google.com" ]
-, whitelist ? [
+, blacklist ? [ "adwords.google.com" ], whitelist ? [
   ".dropbox.com"
   " www.malwaredomainlists.com"
   " www.arcamax.com"
@@ -40,8 +39,12 @@ stdenv.mkDerivation {
 
     mkdir -p $out/etc
     install -Dm644 conf/hostsblock.conf $out/etc/
-    ${lib.concatMapStrings (d: "echo ${d} >> $out/etc/black.list\n") blacklist}
-    ${lib.concatMapStrings (d: "echo ${d} >> $out/etc/white.list\n") whitelist}
+    ${lib.concatMapStrings (d: ''
+      echo ${d} >> $out/etc/black.list
+    '') blacklist}
+    ${lib.concatMapStrings (d: ''
+      echo ${d} >> $out/etc/white.list
+    '') whitelist}
     install -Dm644 conf/hosts.head $out/etc/
 
     for f in $out/bin/* $out/lib/* $out/etc/hostsblock.conf; do

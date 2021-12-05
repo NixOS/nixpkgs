@@ -1,8 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols2
-, qtsvg, qttools, qtquick1, qtcharts
-, qmake
-}:
+, qtsvg, qttools, qtquick1, qtcharts, qmake }:
 
 let
   breakpad_lss = fetchFromGitiles {
@@ -11,9 +9,7 @@ let
     sha256 = "1ryshs2nyxwa0kn3rlbnd5b3fhna9vqm560yviddcfgdm2jyg0hz";
   };
 
-in
-
-mkDerivation rec {
+in mkDerivation rec {
   pname = "redis-desktop-manager";
   version = "0.9.1";
 
@@ -27,8 +23,16 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
-    libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols2 qtsvg qttools qtcharts
+    libssh2
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtimageformats
+    qtquick1
+    qtquickcontrols2
+    qtsvg
+    qttools
+    qtcharts
   ];
 
   dontUseQmakeConfigure = true;
@@ -42,31 +46,31 @@ mkDerivation rec {
   '';
 
   buildPhase = ''
-    srcdir=$PWD
+        srcdir=$PWD
 
-    cat <<EOF > src/version.h
-#ifndef RDM_VERSION
-    #define RDM_VERSION "${version}-120"
-#endif // !RDM_VERSION
-EOF
+        cat <<EOF > src/version.h
+    #ifndef RDM_VERSION
+        #define RDM_VERSION "${version}-120"
+    #endif // !RDM_VERSION
+    EOF
 
-    cd $srcdir/3rdparty/gbreakpad
-    cp -r ${breakpad_lss} src/third_party/lss
-    chmod +w -R src/third_party/lss
-    touch README
+        cd $srcdir/3rdparty/gbreakpad
+        cp -r ${breakpad_lss} src/third_party/lss
+        chmod +w -R src/third_party/lss
+        touch README
 
-    cd $srcdir/3rdparty/crashreporter
-    qmake CONFIG+=release DESTDIR="$srcdir/rdm/bin/linux/release" QMAKE_LFLAGS_RPATH=""
-    make
+        cd $srcdir/3rdparty/crashreporter
+        qmake CONFIG+=release DESTDIR="$srcdir/rdm/bin/linux/release" QMAKE_LFLAGS_RPATH=""
+        make
 
-    cd $srcdir/3rdparty/gbreakpad
-    ./configure
-    make
+        cd $srcdir/3rdparty/gbreakpad
+        ./configure
+        make
 
-    cd $srcdir/src
-    qmake
-    make
-  '';
+        cd $srcdir/src
+        qmake
+        make
+      '';
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,9 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, dbus, pytest, pytest-cov, pytest-asyncio, pytest-timeout
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, dbus, pytest, pytest-cov
+, pytest-asyncio, pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "dbus-next";
@@ -16,13 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
-  checkInputs = [
-    dbus
-    pytest
-    pytest-cov
-    pytest-asyncio
-    pytest-timeout
-  ];
+  checkInputs = [ dbus pytest pytest-cov pytest-asyncio pytest-timeout ];
 
   # test_peer_interface hits a timeout
   checkPhase = ''
@@ -33,7 +23,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/altdesktop/python-dbus-next";
-    description = "A zero-dependency DBus library for Python with asyncio support";
+    description =
+      "A zero-dependency DBus library for Python with asyncio support";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
   };

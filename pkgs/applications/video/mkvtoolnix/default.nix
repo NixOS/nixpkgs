@@ -1,51 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, qmake
-, rake
-, boost
-, cmark
-, docbook_xsl
-, expat
-, file
-, flac
-, fmt
-, gettext
-, gmp
-, gtest
-, libdvdread
-, libebml
-, libiconv
-, libmatroska
-, libogg
-, libvorbis
-, libxslt
-, nlohmann_json
-, pugixml
-, qtbase
-, qtmultimedia
-, xdg-utils
-, zlib
-, withGUI ? true
-, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoreconfHook, qmake, rake, boost
+, cmark, docbook_xsl, expat, file, flac, fmt, gettext, gmp, gtest, libdvdread
+, libebml, libiconv, libmatroska, libogg, libvorbis, libxslt, nlohmann_json
+, pugixml, qtbase, qtmultimedia, xdg-utils, zlib, withGUI ? true, wrapQtAppsHook
 }:
 
 let
   inherit (lib) enableFeature optional optionals optionalString;
 
-  phase = name: args:
-    ''
-      runHook pre${name}
+  phase = name: args: ''
+    runHook pre${name}
 
-      rake ${args}
+    rake ${args}
 
-      runHook post${name}
-    '';
+    runHook post${name}
+  '';
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
   version = "63.0.0";
 
@@ -56,16 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "0jniy2kkg4fkrgyw2k8jcpq872qzkrxkbpbc7ksadm2rdygsa3xh";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xsl
-    gettext
-    gtest
-    libxslt
-    pkg-config
-    rake
-  ]
-  ++ optional withGUI wrapQtAppsHook;
+  nativeBuildInputs =
+    [ autoreconfHook docbook_xsl gettext gtest libxslt pkg-config rake ]
+    ++ optional withGUI wrapQtAppsHook;
 
   # 1. qtbase and qtmultimedia are needed without the GUI
   # 2. we have utf8cpp in nixpkgs but it doesn't find it
@@ -87,9 +50,7 @@ stdenv.mkDerivation rec {
     qtmultimedia
     xdg-utils
     zlib
-  ]
-  ++ optional withGUI cmark
-  ++ optional stdenv.isDarwin libiconv;
+  ] ++ optional withGUI cmark ++ optional stdenv.isDarwin libiconv;
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

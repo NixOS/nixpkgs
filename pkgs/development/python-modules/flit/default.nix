@@ -1,16 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, docutils
-, requests
-, requests_download
-, zipfile36
-, pythonOlder
-, pytest
-, testpath
-, responses
-, flit-core
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, docutils, requests
+, requests_download, zipfile36, pythonOlder, pytest, testpath, responses
+, flit-core }:
 
 # Flit is actually an application to build universal wheels.
 # It requires Python 3 and should eventually be moved outside of
@@ -29,18 +19,10 @@ buildPythonPackage rec {
     sha256 = "sha256-zN+/oAyXBo6Ho7n/xhOQ2mjtPGKA1anCvl3sVf7t+Do=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    docutils
-    requests
-    requests_download
-    flit-core
-  ] ++ lib.optionals (pythonOlder "3.6") [
-    zipfile36
-  ];
+  propagatedBuildInputs = [ docutils requests requests_download flit-core ]
+    ++ lib.optionals (pythonOlder "3.6") [ zipfile36 ];
 
   checkInputs = [ pytest testpath responses ];
 

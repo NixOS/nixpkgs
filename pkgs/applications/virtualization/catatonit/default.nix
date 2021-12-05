@@ -16,13 +16,15 @@ stdenv.mkDerivation rec {
     #  https://github.com/openSUSE/catatonit/pull/18
     (fetchpatch {
       name = "automake-1.16.5.patch";
-      url = "https://github.com/openSUSE/catatonit/commit/99bb9048f532257f3a2c3856cfa19fe957ab6cec.patch";
+      url =
+        "https://github.com/openSUSE/catatonit/commit/99bb9048f532257f3a2c3856cfa19fe957ab6cec.patch";
       sha256 = "sha256-ooxVjtWXJddQiBvO9I5aRyLeL8y3ecxW/Kvtfg/bpRA=";
     })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -32,7 +34,8 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
-    description = "A container init that is so simple it's effectively brain-dead";
+    description =
+      "A container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;

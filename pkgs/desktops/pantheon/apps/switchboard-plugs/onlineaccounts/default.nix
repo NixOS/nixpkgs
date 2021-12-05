@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, evolution-data-server
-, glib
-, granite
-, gtk3
-, libgdata
-, libhandy
-, sqlite
-, switchboard
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config
+, vala, evolution-data-server, glib, granite, gtk3, libgdata, libhandy, sqlite
+, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
@@ -27,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-L1SL8YbsYKdE+mvRW/fxjNoiyXRXTyV2ru7/tZzgTfM=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
   buildInputs = [
     evolution-data-server
@@ -46,9 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

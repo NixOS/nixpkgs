@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, httpx
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, poetry-core, httpx
+, pytest-asyncio, pytest-httpx, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "luftdaten";
@@ -23,19 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-httpx
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-httpx pytestCheckHook ];
 
   pythonImportsCheck = [ "luftdaten" ];
 

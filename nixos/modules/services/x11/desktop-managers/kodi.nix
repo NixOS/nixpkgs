@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.desktopManager.kodi;
-in
+let cfg = config.services.xserver.desktopManager.kodi;
 
-{
+in {
   options = {
     services.xserver.desktopManager.kodi = {
       enable = mkOption {
@@ -19,7 +17,8 @@ in
         type = types.package;
         default = pkgs.kodi;
         defaultText = literalExpression "pkgs.kodi";
-        example = literalExpression "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
+        example = literalExpression
+          "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
         description = ''
           Package that should be used for Kodi.
         '';

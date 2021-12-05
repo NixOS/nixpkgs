@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy3k
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, python, isPy3k, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "zipfile36";
@@ -24,7 +18,8 @@ buildPythonPackage rec {
   disabled = !(isPy3k && (pythonOlder "3.6"));
 
   meta = {
-    description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
+    description =
+      "Read and write ZIP files - backport of the zipfile module from Python 3.6";
     homepage = "https://gitlab.com/takluyver/zipfile36";
     license = lib.licenses.psfl;
     maintainers = lib.maintainers.fridh;

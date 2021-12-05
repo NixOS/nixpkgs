@@ -1,29 +1,19 @@
-{ lib
-, ddcutil
-, gjs
-, gnome
-, gobject-introspection
-, xprop
-, touchegg
-, vte
-, wrapGAppsHook
-}:
+{ lib, ddcutil, gjs, gnome, gobject-introspection, xprop, touchegg, vte
+, wrapGAppsHook }:
 let
   # Helper method to reduce redundancy
-  patchExtension = name: override: super: (super // {
-    ${name} = super.${name}.overrideAttrs override;
-  });
-in
-# A set of overrides for automatically packaged extensions that require some small fixes.
-# The input must be an attribute set with the extensions' UUIDs as keys and the extension
-# derivations as values. Output is the same, but with patches applied.
-#
-# Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
-# the upstream repository's sources.
-super: lib.trivial.pipe super [
-  (patchExtension "caffeine@patapon.info" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo ];
-  }))
+  patchExtension = name: override: super:
+    (super // { ${name} = super.${name}.overrideAttrs override; });
+  # A set of overrides for automatically packaged extensions that require some small fixes.
+  # The input must be an attribute set with the extensions' UUIDs as keys and the extension
+  # derivations as values. Output is the same, but with patches applied.
+  #
+  # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
+  # the upstream repository's sources.
+in super:
+lib.trivial.pipe super [
+  (patchExtension "caffeine@patapon.info"
+    (old: { meta.maintainers = with lib.maintainers; [ eperuffo ]; }))
 
   (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];

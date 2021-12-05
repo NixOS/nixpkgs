@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sstp-client/sstp-client/sstp-client-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/sstp-client/sstp-client/sstp-client-${version}.tar.gz";
     sha256 = "sha256-r74U/RIveHX0+tDtmC0XRRNtLmbMNrl/cu8aERF4TKE=";
   };
 

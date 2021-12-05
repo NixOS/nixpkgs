@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     opaline -prefix $out
   ''
-  # There is `emacsPackages.ott-mode` for this now.
-  + ''
-    rm -r $out/share/emacs
-  '';
+    # There is `emacsPackages.ott-mode` for this now.
+    + ''
+      rm -r $out/share/emacs
+    '';
 
   meta = {
     description = "A tool for the working semanticist";

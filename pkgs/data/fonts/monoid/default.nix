@@ -13,16 +13,13 @@ stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/larsenwork/monoid/pull/233/commits/f84f2ed61301ee84dadd16351314394f22ebed2f.patch";
+      url =
+        "https://github.com/larsenwork/monoid/pull/233/commits/f84f2ed61301ee84dadd16351314394f22ebed2f.patch";
       sha256 = "sha256-CxfFHlR7TB64pvrfzVfUDkPwuRO2UdGOhXwW98c+oQU=";
     })
   ];
 
-  nativeBuildInputs = [
-    (python3.withPackages (pp: with pp; [
-      fontforge
-    ]))
-  ];
+  nativeBuildInputs = [ (python3.withPackages (pp: with pp; [ fontforge ])) ];
 
   buildPhase = ''
     local _d=""
@@ -41,7 +38,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://larsenwork.com/monoid";
-    description = "Customisable coding font with alternates, ligatures and contextual positioning";
+    description =
+      "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [ licenses.ofl licenses.mit ];
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

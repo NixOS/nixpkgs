@@ -1,4 +1,4 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs ? (import ./.. { }), nixpkgs ? { } }:
 let
   lib = pkgs.lib;
   doc-support = import ./doc-support { inherit pkgs nixpkgs; };

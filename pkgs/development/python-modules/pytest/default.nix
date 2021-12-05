@@ -1,21 +1,6 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, atomicwrites
-, attrs
-, hypothesis
-, iniconfig
-, more-itertools
-, packaging
-, pathlib2
-, pluggy
-, py
-, pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy, atomicwrites
+, attrs, hypothesis, iniconfig, more-itertools, packaging, pathlib2, pluggy, py
+, pygments, setuptools, setuptools-scm, six, toml, wcwidth, writeText }:
 
 buildPythonPackage rec {
   pname = "pytest";
@@ -48,10 +33,7 @@ buildPythonPackage rec {
     wcwidth
   ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
-  checkInputs = [
-    hypothesis
-    pygments
-  ];
+  checkInputs = [ hypothesis pygments ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
@@ -97,9 +79,7 @@ buildPythonPackage rec {
     preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";

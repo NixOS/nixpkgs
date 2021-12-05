@@ -3,8 +3,7 @@
 with lib;
 
 let cfg = config.services.prometheus.exporters.fastly;
-in
-{
+in {
   port = 9118;
   extraOpts = {
     debug = mkEnableOption "Debug logging mode for fastly-exporter";

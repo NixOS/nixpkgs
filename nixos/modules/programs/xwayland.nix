@@ -2,15 +2,13 @@
 
 with lib;
 
-let
-  cfg = config.programs.xwayland;
+let cfg = config.programs.xwayland;
 
-in
-
-{
+in {
   options.programs.xwayland = {
 
-    enable = mkEnableOption "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)";
+    enable = mkEnableOption
+      "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)";
 
     defaultFontPath = mkOption {
       type = types.str;
@@ -26,9 +24,8 @@ in
 
     package = mkOption {
       type = types.path;
-      default = pkgs.xwayland.override (oldArgs: {
-        inherit (cfg) defaultFontPath;
-      });
+      default =
+        pkgs.xwayland.override (oldArgs: { inherit (cfg) defaultFontPath; });
       defaultText = literalExpression ''
         pkgs.xwayland.override (oldArgs: {
           inherit (config.programs.xwayland) defaultFontPath;

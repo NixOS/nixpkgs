@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, libelf
-, libcap
-, libseccomp
-, rpcsvc-proto
-, libtirpc
-, makeWrapper
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, libelf, libcap, libseccomp
+, rpcsvc-proto, libtirpc, makeWrapper }:
 let
   modp-ver = "450.57";
   nvidia-modprobe = fetchFromGitHub {
@@ -17,8 +8,7 @@ let
     rev = modp-ver;
     sha256 = "0r4f6lpbbqqs9932xd2mr7bxn6a3xdalcwq332fc1amrrkgzfyv7";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "libnvidia-container";
   version = "1.5.0";
 

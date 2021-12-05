@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, azure-common, azure-mgmt-core
+, msrest, msrestazure }:
 
 buildPythonPackage rec {
   version = "5.1.0";
@@ -16,12 +12,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-mgmt-core
-    msrest
-    msrestazure
-  ];
+  propagatedBuildInputs = [ azure-common azure-mgmt-core msrest msrestazure ];
 
   # no tests included
   doCheck = false;
@@ -29,7 +20,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "azure.common" "azure.mgmt.netapp" ];
 
   meta = with lib; {
-    description = "Microsoft Azure NetApp Files Management Client Library for Python";
+    description =
+      "Microsoft Azure NetApp Files Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

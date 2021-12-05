@@ -1,46 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
+{ lib, stdenv, fetchFromGitHub, callPackage
 
-  # Required build tools
-, cmake
-, makeWrapper
-, pkg-config
+# Required build tools
+, cmake, makeWrapper, pkg-config
 
-  # Required dependencies
-, fftw
-, liblo
-, minixml
-, zlib
+# Required dependencies
+, fftw, liblo, minixml, zlib
 
-  # Optional dependencies
-, alsaSupport ? true
-, alsa-lib
-, dssiSupport ? false
-, dssi
-, ladspaH
-, jackSupport ? true
-, libjack2
-, lashSupport ? false
-, lash
-, ossSupport ? true
-, portaudioSupport ? true
-, portaudio
+# Optional dependencies
+, alsaSupport ? true, alsa-lib, dssiSupport ? false, dssi, ladspaH
+, jackSupport ? true, libjack2, lashSupport ? false, lash, ossSupport ? true
+, portaudioSupport ? true, portaudio
 
-  # Optional GUI dependencies
-, guiModule ? "off"
-, cairo
-, fltk13
-, libGL
-, libjpeg
-, libX11
-, libXpm
-, ntk
+# Optional GUI dependencies
+, guiModule ? "off", cairo, fltk13, libGL, libjpeg, libX11, libXpm, ntk
 
-  # Test dependencies
-, cxxtest
-}:
+# Test dependencies
+, cxxtest }:
 
 assert builtins.any (g: guiModule == g) [ "fltk" "ntk" "zest" "off" ];
 
@@ -79,9 +54,11 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals (guiModule == "ntk") [ ntk cairo libXpm ]
     ++ lib.optionals (guiModule == "zest") [ libGL libX11 ];
 
-  cmakeFlags = [ "-DGuiModule=${guiModule}" ]
-    # OSS library is included in glibc.
-    # Must explicitly disable if support is not wanted.
+  cmakeFlags = [
+    "-DGuiModule=${guiModule}"
+  ]
+  # OSS library is included in glibc.
+  # Must explicitly disable if support is not wanted.
     ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
     # Find FLTK without requiring an OpenGL library in buildInputs
     ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
@@ -92,10 +69,8 @@ in stdenv.mkDerivation rec {
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
   checkPhase = let
     # Tests fail on aarch64
-    disabledTests = lib.optionals stdenv.isAarch64 [
-      "MessageTest"
-      "UnisonTest"
-    ];
+    disabledTests =
+      lib.optionals stdenv.isAarch64 [ "MessageTest" "UnisonTest" ];
   in ''
     runHook preCheck
     ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
@@ -118,10 +93,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High quality software synthesizer (${guiName} GUI)";
-    homepage =
-      if guiModule == "zest"
-      then "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
-      else "https://zynaddsubfx.sourceforge.io";
+    homepage = if guiModule == "zest" then
+      "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
+    else
+      "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2;
     maintainers = with maintainers; [ goibhniu kira-bruneau ];

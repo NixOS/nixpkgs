@@ -11,18 +11,17 @@ let
   sessionFile = "${homeDir}/aria2.session";
   downloadDir = "${homeDir}/Downloads";
 
-  rangesToStringList = map (x: builtins.toString x.from +"-"+ builtins.toString x.to);
+  rangesToStringList =
+    map (x: builtins.toString x.from + "-" + builtins.toString x.to);
 
-  settingsFile = pkgs.writeText "aria2.conf"
-  ''
+  settingsFile = pkgs.writeText "aria2.conf" ''
     dir=${cfg.downloadDir}
     listen-port=${concatStringsSep "," (rangesToStringList cfg.listenPortRange)}
     rpc-listen-port=${toString cfg.rpcListenPort}
     rpc-secret=${cfg.rpcSecret}
   '';
 
-in
-{
+in {
   options = {
     services.aria2 = {
       enable = mkOption {
@@ -55,7 +54,10 @@ in
       };
       listenPortRange = mkOption {
         type = types.listOf types.attrs;
-        default = [ { from = 6881; to = 6999; } ];
+        default = [{
+          from = 6881;
+          to = 6999;
+        }];
         description = ''
           Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.
         '';
@@ -63,7 +65,8 @@ in
       rpcListenPort = mkOption {
         type = types.int;
         default = 6800;
-        description = "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
+        description =
+          "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
       };
       rpcSecret = mkOption {
         type = types.str;
@@ -121,7 +124,8 @@ in
 
       serviceConfig = {
         Restart = "on-abort";
-        ExecStart = "${pkgs.aria2}/bin/aria2c --enable-rpc --conf-path=${settingsDir}/aria2.conf ${config.services.aria2.extraArguments} --save-session=${sessionFile}";
+        ExecStart =
+          "${pkgs.aria2}/bin/aria2c --enable-rpc --conf-path=${settingsDir}/aria2.conf ${config.services.aria2.extraArguments} --save-session=${sessionFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "aria2";
         Group = "aria2";

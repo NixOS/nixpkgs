@@ -1,8 +1,5 @@
-{ lib, fetchurl, buildDunePackage
-, dune-configurator
-, bos, ctypes, fmt, logs, rresult
-, mdx, alcotest, crowbar, junit_alcotest, ezjsonm
-}:
+{ lib, fetchurl, buildDunePackage, dune-configurator, bos, ctypes, fmt, logs
+, rresult, mdx, alcotest, crowbar, junit_alcotest, ezjsonm }:
 
 buildDunePackage rec {
   pname = "yaml";
@@ -11,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-v${version}.tbz";
+    url =
+      "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-v${version}.tbz";
     sha256 = "1iws6lbnrrd5hhmm7lczfvqp0aidx5xn7jlqk2s5rjfmj9qf4j2c";
   };
 

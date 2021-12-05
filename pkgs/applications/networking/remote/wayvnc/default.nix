@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc, wayland-scanner
-, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam
-}:
+, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";

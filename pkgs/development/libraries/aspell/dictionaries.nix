@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, aspell, which, writeScript}:
+{ lib, stdenv, fetchurl, aspell, which, writeScript }:
 
 with lib;
 
@@ -28,85 +28,86 @@ with lib;
    * Check that `aspell -a` starts without errors.
    * (optional) Check your config with `aspell dump config | grep -vE '^(#|$)'`.
    * Enjoy.
-
 */
 
 let
 
   /* Function to compile an Aspell dictionary.  Fortunately, they all
-     build in the exact same way. */
-  buildDict =
-    {shortName, fullName, ...}@args:
+     build in the exact same way.
+  */
+  buildDict = { shortName, fullName, ... }@args:
 
     stdenv.mkDerivation ({
       name = "aspell-dict-${shortName}";
 
-      buildInputs = [aspell which];
+      buildInputs = [ aspell which ];
 
       dontAddPrefix = true;
 
-      preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
+      preBuild =
+        "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
 
       meta = {
         description = "Aspell dictionary for ${fullName}";
         platforms = lib.platforms.all;
-      } // (args.meta or {});
+      } // (args.meta or { });
     } // removeAttrs args [ "meta" ]);
 
-
   buildOfficialDict =
-    {language, version, filename, fullName, sha256, ...}@args:
-    let buildArgs = {
-      shortName = "${language}-${version}";
+    { language, version, filename, fullName, sha256, ... }@args:
+    let
+      buildArgs = {
+        shortName = "${language}-${version}";
 
-      src = fetchurl {
-        url = "mirror://gnu/aspell/dict/${language}/${filename}-${language}-${version}.tar.bz2";
-        inherit sha256;
-      };
+        src = fetchurl {
+          url =
+            "mirror://gnu/aspell/dict/${language}/${filename}-${language}-${version}.tar.bz2";
+          inherit sha256;
+        };
 
-      /* Remove any instances of u-deva.cmap and u-deva.cset since
-         they are included in the main aspell package and can
-         cause conflicts otherwise. */
-      postInstall = ''
-        rm -f $out/lib/aspell/u-deva.{cmap,cset}
-      '';
+        /* Remove any instances of u-deva.cmap and u-deva.cset since
+           they are included in the main aspell package and can
+           cause conflicts otherwise.
+        */
+        postInstall = ''
+          rm -f $out/lib/aspell/u-deva.{cmap,cset}
+        '';
 
-      passthru.updateScript = writeScript "update-aspellDict-${language}" ''
-        #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p nix curl gnused common-updater-scripts
-        set -eu -o pipefail
+        passthru.updateScript = writeScript "update-aspellDict-${language}" ''
+          #!/usr/bin/env nix-shell
+          #!nix-shell -i bash -p nix curl gnused common-updater-scripts
+          set -eu -o pipefail
 
-        # List tarballs in the dictionary's subdirectory via HTTPS and
-        # the simple list method of Apache's mod_autoindex.
-        #
-        # Catalan dictionary has an exception where an earlier version
-        # compares as newer because the versioning scheme has changed.
-        versions=$(
-            echo '[';
-            curl -s 'https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0' | \
-                sed -r 's/.* href="${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2".*/"\1"/;t;d' | \
-                if [ '${language}' = "ca" ]; then grep -v 20040130-1; else cat; fi; \
-            echo ']')
+          # List tarballs in the dictionary's subdirectory via HTTPS and
+          # the simple list method of Apache's mod_autoindex.
+          #
+          # Catalan dictionary has an exception where an earlier version
+          # compares as newer because the versioning scheme has changed.
+          versions=$(
+              echo '[';
+              curl -s 'https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0' | \
+                  sed -r 's/.* href="${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2".*/"\1"/;t;d' | \
+                  if [ '${language}' = "ca" ]; then grep -v 20040130-1; else cat; fi; \
+              echo ']')
 
-        # Sort versions in descending order using Nix's and take the first as the latest.
-        sortVersions="(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))"
-        # nix-instantiate outputs Nix strings (with quotes), so remove them to get
-        # a result similar to `nix eval --raw`.
-        latestVersion=$(nix-instantiate --eval --expr "$sortVersions" | tr -d '"')
+          # Sort versions in descending order using Nix's and take the first as the latest.
+          sortVersions="(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))"
+          # nix-instantiate outputs Nix strings (with quotes), so remove them to get
+          # a result similar to `nix eval --raw`.
+          latestVersion=$(nix-instantiate --eval --expr "$sortVersions" | tr -d '"')
 
-        update-source-version aspellDicts.${language} "$latestVersion"
-      '';
+          update-source-version aspellDicts.${language} "$latestVersion"
+        '';
 
-      meta = {
-        homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
-      } // (args.meta or {});
+        meta = {
+          homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
+        } // (args.meta or { });
 
-    } // removeAttrs args [ "language" "filename" "sha256" "meta" ];
+      } // removeAttrs args [ "language" "filename" "sha256" "meta" ];
     in buildDict buildArgs;
 
-  /* Function to compile txt dict files into Aspell dictionaries. */
-  buildTxtDict =
-    {langInputs ? [], ...}@args:
+  # Function to compile txt dict files into Aspell dictionaries.
+  buildTxtDict = { langInputs ? [ ], ... }@args:
     buildDict ({
       propagatedUserEnvPackages = langInputs;
 
@@ -912,9 +913,7 @@ in rec {
     '';
     installPhase = "aspell-install en-computers";
 
-    meta = {
-      homepage = "https://mrsatterly.com/spelling.html";
-    };
+    meta = { homepage = "https://mrsatterly.com/spelling.html"; };
   };
 
   en-science = buildTxtDict {
@@ -942,7 +941,8 @@ in rec {
     installPhase = "aspell-install en_US-science en_GB-science";
 
     meta = {
-      homepage = "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
+      homepage =
+        "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
     };
 
   };

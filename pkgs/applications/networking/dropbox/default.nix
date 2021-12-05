@@ -1,8 +1,8 @@
 { stdenv, lib, buildFHSUserEnv, writeScript, makeDesktopItem }:
 
-let platforms = [ "i686-linux" "x86_64-linux" ]; in
+let platforms = [ "i686-linux" "x86_64-linux" ];
 
-assert lib.elem stdenv.hostPlatform.system platforms;
+in assert lib.elem stdenv.hostPlatform.system platforms;
 
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
@@ -11,13 +11,13 @@ let
 
   arch = {
     x86_64-linux = "x86_64";
-    i686-linux   = "x86";
+    i686-linux = "x86";
   }.${stdenv.hostPlatform.system};
 
-  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
-in
+  installer =
+    "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
 
-let
+in let
   desktopItem = makeDesktopItem {
     name = "dropbox";
     exec = "dropbox";
@@ -28,17 +28,41 @@ let
     startupNotify = "false";
     icon = "dropbox";
   };
-in
 
-buildFHSUserEnv {
+in buildFHSUserEnv {
   name = "dropbox";
 
-  targetPkgs = pkgs: with pkgs; with xorg; [
-    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
-    libXxf86vm libxcb xkeyboardconfig
-    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
-    procps zlib mesa libxshmfence libpthreadstubs libappindicator
-  ];
+  targetPkgs = pkgs:
+    with pkgs;
+    with xorg; [
+      libICE
+      libSM
+      libX11
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libXrender
+      libXxf86vm
+      libxcb
+      xkeyboardconfig
+      curl
+      dbus
+      firefox-bin
+      fontconfig
+      freetype
+      gcc
+      glib
+      gnutar
+      libxml2
+      libxslt
+      procps
+      zlib
+      mesa
+      libxshmfence
+      libpthreadstubs
+      libappindicator
+    ];
 
   extraInstallCommands = ''
     mkdir -p "$out/share/applications"
@@ -78,9 +102,9 @@ buildFHSUserEnv {
 
   meta = with lib; {
     description = "Online stored folders (daemon version)";
-    homepage    = "http://www.dropbox.com/";
-    license     = licenses.unfree;
+    homepage = "http://www.dropbox.com/";
+    license = licenses.unfree;
     maintainers = with maintainers; [ ttuegel ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

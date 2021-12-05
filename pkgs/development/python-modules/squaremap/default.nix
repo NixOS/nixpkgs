@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, six
-, wxPython
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, six, wxPython }:
 
 buildPythonPackage rec {
   pname = "squaremap";

@@ -1,56 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, autoreconfHook
-, pkg-config
-, intltool
-, babl
-, gegl
-, gtk2
-, glib
-, gdk-pixbuf
-, isocodes
-, pango
-, cairo
-, freetype
-, fontconfig
-, lcms
-, libpng
-, libjpeg
-, poppler
-, poppler_data
-, libtiff
-, libmng
-, librsvg
-, libwmf
-, zlib
-, libzip
-, ghostscript
-, aalib
-, shared-mime-info
-, python2
-, libexif
-, gettext
-, makeWrapper
-, gtk-doc
-, xorg
-, glib-networking
-, libmypaint
-, gexiv2
-, harfbuzz
-, mypaint-brushes1
-, libwebp
-, libheif
-, libgudev
-, openexr
-, AppKit
-, Cocoa
-, gtk-mac-integration-gtk2
-}:
+{ stdenv, lib, fetchurl, substituteAll, autoreconfHook, pkg-config, intltool
+, babl, gegl, gtk2, glib, gdk-pixbuf, isocodes, pango, cairo, freetype
+, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff, libmng
+, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info, python2
+, libexif, gettext, makeWrapper, gtk-doc, xorg, glib-networking, libmypaint
+, gexiv2, harfbuzz, mypaint-brushes1, libwebp, libheif, libgudev, openexr
+, AppKit, Cocoa, gtk-mac-integration-gtk2 }:
 
-let
-  python = python2.withPackages (pp: [ pp.pygtk ]);
+let python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
   version = "2.10.28";
@@ -58,7 +14,9 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "http://download.gimp.org/pub/gimp/v${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "T03CLP8atfAm/qoqtV4Fd1s6EeGYGGtHvat5y/oHiCY=";
   };
 
@@ -120,18 +78,11 @@ in stdenv.mkDerivation rec {
     glib-networking
     libmypaint
     mypaint-brushes1
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    gtk-mac-integration-gtk2
-  ] ++ lib.optionals stdenv.isLinux [
-    libgudev
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration-gtk2 ]
+    ++ lib.optionals stdenv.isLinux [ libgudev ];
 
   # needed by gimp-2.0.pc
-  propagatedBuildInputs = [
-    gegl
-  ];
+  propagatedBuildInputs = [ gegl ];
 
   configureFlags = [
     "--without-webkit" # old version is required
@@ -149,7 +100,8 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
   # Check if librsvg was built with --disable-pixbuf-loader.
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR =
+    "${librsvg}/${gdk-pixbuf.moduleDir}";
 
   preConfigure = ''
     # The check runs before glib-networking is registered

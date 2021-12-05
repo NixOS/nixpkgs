@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl
-, pkg-config, buildPackages
-, CoreAudio, alsa-lib, libjack2, ncurses
-}:
+{ lib, stdenv, fetchurl, pkg-config, buildPackages, CoreAudio, alsa-lib
+, libjack2, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "timidity";
@@ -15,32 +13,23 @@ stdenv.mkDerivation rec {
   patches = [ ./timidity-iA-Oj.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libjack2
-    ncurses
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-  ];
+  buildInputs = [ libjack2 ncurses ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ CoreAudio ];
 
-  configureFlags = [
-    "--enable-ncurses"
-    "lib_cv_va_copy=yes"
-    "lib_cv___va_copy=yes"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--enable-audio=oss,alsa,jack"
-    "--enable-alsaseq"
-    "--with-default-output=alsa"
-    "lib_cv_va_val_copy=yes"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--enable-audio=darwin,jack"
-    "lib_cv_va_val_copy=no"
-  ];
+  configureFlags =
+    [ "--enable-ncurses" "lib_cv_va_copy=yes" "lib_cv___va_copy=yes" ]
+    ++ lib.optionals stdenv.isLinux [
+      "--enable-audio=oss,alsa,jack"
+      "--enable-alsaseq"
+      "--with-default-output=alsa"
+      "lib_cv_va_val_copy=yes"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "--enable-audio=darwin,jack"
+      "lib_cv_va_val_copy=no"
+    ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   NIX_LDFLAGS = "-ljack -L${libjack2}/lib";
 

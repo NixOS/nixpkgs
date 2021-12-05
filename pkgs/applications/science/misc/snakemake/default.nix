@@ -34,7 +34,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "199a86c8d1fcfdb88c4271a1507b0ab371a15bc407f2dad9b0ab8c43438adff8";
   };
 
-  doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+  doCheck =
+    false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";

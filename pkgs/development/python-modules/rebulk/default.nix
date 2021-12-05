@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner, six, regex}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner, six, regex }:
 
 buildPythonPackage rec {
   pname = "rebulk";

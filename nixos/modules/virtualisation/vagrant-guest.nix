@@ -15,8 +15,7 @@ let
       chmod 0600 ~/.ssh/authorized_keys
     fi
   '';
-in
-{
+in {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
@@ -31,14 +30,14 @@ in
   ];
 
   users.extraUsers.vagrant = {
-    isNormalUser    = true;
-    createHome      = true;
-    description     = "Vagrant user account";
-    extraGroups     = [ "users" "wheel" ];
-    home            = "/home/vagrant";
-    password        = "vagrant";
+    isNormalUser = true;
+    createHome = true;
+    description = "Vagrant user account";
+    extraGroups = [ "users" "wheel" ];
+    home = "/home/vagrant";
+    password = "vagrant";
     useDefaultShell = true;
-    uid             = 1000;
+    uid = 1000;
   };
 
   systemd.services.install-vagrant-ssh-key = {

@@ -1,62 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, pkg-config
-, intltool
-, babl
-, gegl
-, gtk2
-, glib
-, gdk-pixbuf
-, isocodes
-, pango
-, cairo
-, freetype
-, fontconfig
-, lcms
-, libpng
-, libjpeg
-, poppler
-, poppler_data
-, libtiff
-, libmng
-, librsvg
-, libwmf
-, zlib
-, libzip
-, ghostscript
-, aalib
-, shared-mime-info
-, python2
-, libexif
-, gettext
-, xorg
-, glib-networking
-, libmypaint
-, gexiv2
-, harfbuzz
-, mypaint-brushes1
-, libwebp
-, libheif
-, libgudev
-, openexr
-, AppKit
-, Cocoa
-, gtk-mac-integration-gtk2
-, libxslt
-, automake
-, autoconf
-, libtool
-, makeWrapper
-, autoreconfHook
-, gtk-doc
-, graphviz
-}:
-let
-  python = python2.withPackages (pp: [ pp.pygtk ]);
-in
-stdenv.mkDerivation rec {
+{ stdenv, lib, fetchFromGitHub, substituteAll, pkg-config, intltool, babl, gegl
+, gtk2, glib, gdk-pixbuf, isocodes, pango, cairo, freetype, fontconfig, lcms
+, libpng, libjpeg, poppler, poppler_data, libtiff, libmng, librsvg, libwmf, zlib
+, libzip, ghostscript, aalib, shared-mime-info, python2, libexif, gettext, xorg
+, glib-networking, libmypaint, gexiv2, harfbuzz, mypaint-brushes1, libwebp
+, libheif, libgudev, openexr, AppKit, Cocoa, gtk-mac-integration-gtk2, libxslt
+, automake, autoconf, libtool, makeWrapper, autoreconfHook, gtk-doc, graphviz }:
+let python = python2.withPackages (pp: [ pp.pygtk ]);
+in stdenv.mkDerivation rec {
   pname = "glimpse";
   version = "0.2.0";
 
@@ -132,21 +82,15 @@ stdenv.mkDerivation rec {
     glib-networking
     libmypaint
     mypaint-brushes1
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    gtk-mac-integration-gtk2
-  ] ++ lib.optionals stdenv.isLinux [
-    libgudev
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration-gtk2 ]
+    ++ lib.optionals stdenv.isLinux [ libgudev ];
 
   # needed by gimp-2.0.pc
-  propagatedBuildInputs = [
-    gegl
-  ];
+  propagatedBuildInputs = [ gegl ];
 
   # Check if librsvg was built with --disable-pixbuf-loader.
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR =
+    "${librsvg}/${gdk-pixbuf.moduleDir}";
 
   preAutoreconf = ''
     # The check runs before glib-networking is registered
@@ -156,7 +100,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/glimpse-${lib.versions.majorMinor version} \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix PATH ":" ${ lib.makeBinPath [ graphviz ] }
+      --prefix PATH ":" ${lib.makeBinPath [ graphviz ]}
   '';
 
   passthru = rec {
@@ -187,7 +131,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An open source image editor based on the GNU Image Manipulation Program";
+    description =
+      "An open source image editor based on the GNU Image Manipulation Program";
     longDescription = ''
       Glimpse is an open source image editor based on the GNU Image Manipulation Program (GIMP). The goal is to experiment with new ideas and expand the use of free software.
     '';

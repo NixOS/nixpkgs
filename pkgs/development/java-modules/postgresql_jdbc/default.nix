@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jdbc.postgresql.org/";
-    description = "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
+    description =
+      "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
     license = licenses.bsd2;
     platforms = platforms.unix;
   };

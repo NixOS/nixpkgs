@@ -1,8 +1,7 @@
 { stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, jackSupport ? false, libjack2
-}:
+, jackSupport ? false, libjack2 }:
 
 stdenv.mkDerivation rec {
   pname = "scream";
@@ -16,8 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = lib.optional pulseSupport libpulseaudio
-    ++ lib.optional jackSupport libjack2
-    ++ lib.optional alsaSupport alsa-lib;
+    ++ lib.optional jackSupport libjack2 ++ lib.optional alsaSupport alsa-lib;
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [

@@ -1,10 +1,4 @@
-{ lib
-, asn1crypto
-, asysocks
-, buildPythonPackage
-, fetchPypi
-, oscrypto
-}:
+{ lib, asn1crypto, asysocks, buildPythonPackage, fetchPypi, oscrypto }:
 
 buildPythonPackage rec {
   pname = "minikerberos";
@@ -15,11 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-MND7r4Gkx9RnEMgEl62QXFYr1NEloihQ2HeU9hyhsx8=";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-    asysocks
-    oscrypto
-  ];
+  propagatedBuildInputs = [ asn1crypto asysocks oscrypto ];
 
   # no tests are published: https://github.com/skelsec/minikerberos/pull/5
   doCheck = false;

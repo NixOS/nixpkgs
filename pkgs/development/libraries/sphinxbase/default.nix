@@ -1,10 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, bison
-, pkg-config
-, python27 # >= 2.6
+{ lib, stdenv, fetchurl, bison, pkg-config, python27 # >= 2.6
 , swig2 # 2.0
-, multipleOutputs ? false #Uses incomplete features of nix!
+, multipleOutputs ? false # Uses incomplete features of nix!
 }:
 
 stdenv.mkDerivation (rec {

@@ -1,7 +1,8 @@
 { callPackage }:
 
 {
-  autocomplete-all-the-things = callPackage ./urxvt-autocomplete-all-the-things { };
+  autocomplete-all-the-things =
+    callPackage ./urxvt-autocomplete-all-the-things { };
 
   bidi = callPackage ./urxvt-bidi { };
 

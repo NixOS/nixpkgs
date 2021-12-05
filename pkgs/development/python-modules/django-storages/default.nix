@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, django
-}:
+{ lib, buildPythonPackage, fetchPypi, django }:
 
 buildPythonPackage rec {
   pname = "django-storages";

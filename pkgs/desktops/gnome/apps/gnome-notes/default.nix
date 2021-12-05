@@ -1,34 +1,16 @@
-{ lib, stdenv
-, meson
-, ninja
-, gettext
-, fetchurl
-, pkg-config
-, wrapGAppsHook
-, itstool
-, desktop-file-utils
-, python3
-, glib
-, gtk3
-, evolution-data-server
-, gnome-online-accounts
-, json-glib
-, libuuid
-, curl
-, libhandy
-, webkitgtk
-, gnome
-, libxml2
-, gsettings-desktop-schemas
-, tracker
-}:
+{ lib, stdenv, meson, ninja, gettext, fetchurl, pkg-config, wrapGAppsHook
+, itstool, desktop-file-utils, python3, glib, gtk3, evolution-data-server
+, gnome-online-accounts, json-glib, libuuid, curl, libhandy, webkitgtk, gnome
+, libxml2, gsettings-desktop-schemas, tracker }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
   version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
+    url = "mirror://gnome/sources/bijiben/${
+        lib.versions.major version
+      }/bijiben-${version}.tar.xz";
     sha256 = "1gvvb2klkzbmyzwkjgmscdiqcl8lyz9b0rxb4igjz079csq6z805";
   };
 
@@ -66,9 +48,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  mesonFlags = [
-    "-Dupdate_mimedb=false"
-  ];
+  mesonFlags = [ "-Dupdate_mimedb=false" ];
 
   passthru = {
     updateScript = gnome.updateScript {

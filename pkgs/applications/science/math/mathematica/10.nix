@@ -1,29 +1,13 @@
-{ lib, stdenv
-, coreutils
-, patchelf
-, requireFile
-, alsa-lib
-, fontconfig
-, freetype
-, gcc
-, glib
-, ncurses
-, opencv2
-, openssl
-, unixODBC
-, xorg
-, libxml2
-, libuuid
-}:
+{ lib, stdenv, coreutils, patchelf, requireFile, alsa-lib, fontconfig, freetype
+, gcc, glib, ncurses, opencv2, openssl, unixODBC, xorg, libxml2, libuuid }:
 
 let
-  platform =
-    if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then
-      "Linux"
-    else
-      throw "Mathematica requires i686-linux or x86_64 linux";
-in
-stdenv.mkDerivation rec {
+  platform = if stdenv.hostPlatform.system == "i686-linux"
+  || stdenv.hostPlatform.system == "x86_64-linux" then
+    "Linux"
+  else
+    throw "Mathematica requires i686-linux or x86_64 linux";
+in stdenv.mkDerivation rec {
   version = "10.0.2";
 
   pname = "mathematica";
@@ -71,7 +55,7 @@ stdenv.mkDerivation rec {
 
   ldpath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+    (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 

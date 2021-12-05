@@ -1,13 +1,5 @@
-{ fetchFromGitHub
-, lib
-, gobject-introspection
-, gtk3
-, python3Packages
-, wrapGAppsHook
-, gdk-pixbuf
-, libappindicator
-, librsvg
-}:
+{ fetchFromGitHub, lib, gobject-introspection, gtk3, python3Packages
+, wrapGAppsHook, gdk-pixbuf, libappindicator, librsvg }:
 
 # Although we copy in the udev rules here, you probably just want to use
 # logitech-udev-rules instead of adding this to services.udev.packages on NixOS

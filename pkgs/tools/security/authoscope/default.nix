@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libcap
-, openssl
-, pkg-config
-, rustPlatform
-, Security
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, libcap, openssl, pkg-config
+, rustPlatform, Security, zlib }:
 
 rustPlatform.buildRustPackage rec {
   pname = "authoscope";
@@ -23,16 +14,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "13x7i52i3k88vkfvk2smy2aqfg3na4317scvw7ali1rv545nbxds";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [
-    libcap
-    zlib
-    openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ libcap zlib openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     installManPage docs/${pname}.1

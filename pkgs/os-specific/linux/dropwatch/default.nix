@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libbfd
-, libnl
-, libpcap
-, ncurses
-, readline
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libbfd, libnl
+, libpcap, ncurses, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "dropwatch";
@@ -22,18 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0axx0zzrs7apqnl0r70jyvmgk7cs5wk185id479mapgngibwkyxy";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-  buildInputs = [
-    libbfd
-    libnl
-    libpcap
-    ncurses
-    readline
-    zlib
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libbfd libnl libpcap ncurses readline zlib ];
 
   enableParallelBuilding = true;
 

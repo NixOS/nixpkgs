@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, tomli
-, pytestCheckHook
-, python-dateutil
-}:
+{ buildPythonPackage, tomli, pytestCheckHook, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "tomli-tests";
@@ -13,9 +9,5 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    pytestCheckHook
-    python-dateutil
-    tomli
-  ];
+  checkInputs = [ pytestCheckHook python-dateutil tomli ];
 }

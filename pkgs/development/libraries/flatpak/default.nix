@@ -1,56 +1,11 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, docbook_xml_dtd_45
-, docbook-xsl-nons
-, which
-, libxml2
-, gobject-introspection
-, gtk-doc
-, intltool
-, libxslt
-, pkg-config
-, xmlto
-, appstream-glib
-, substituteAll
-, bison
-, xdg-dbus-proxy
-, p11-kit
-, bubblewrap
-, bzip2
-, dbus
-, glib
-, gpgme
-, json-glib
-, libarchive
-, libcap
-, libseccomp
-, coreutils
-, socat
-, gettext
-, hicolor-icon-theme
-, shared-mime-info
-, desktop-file-utils
-, gtk3
-, fuse
-, nixosTests
-, libsoup
-, xz
-, zstd
-, ostree
-, polkit
-, python3
-, systemd
-, xorg
-, valgrind
-, glib-networking
-, wrapGAppsNoGuiHook
-, dconf
-, gsettings-desktop-schemas
-, librsvg
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, docbook_xml_dtd_45
+, docbook-xsl-nons, which, libxml2, gobject-introspection, gtk-doc, intltool
+, libxslt, pkg-config, xmlto, appstream-glib, substituteAll, bison
+, xdg-dbus-proxy, p11-kit, bubblewrap, bzip2, dbus, glib, gpgme, json-glib
+, libarchive, libcap, libseccomp, coreutils, socat, gettext, hicolor-icon-theme
+, shared-mime-info, desktop-file-utils, gtk3, fuse, nixosTests, libsoup, xz
+, zstd, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking
+, wrapGAppsNoGuiHook, dconf, gsettings-desktop-schemas, librsvg, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
@@ -60,8 +15,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "df1eb464f9142c11627f99f04f6a5c02c868bbb145489b8902cb6c105e774b75"; # Taken from https://github.com/flatpak/flatpak/releases/
+    url =
+      "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 =
+      "df1eb464f9142c11627f99f04f6a5c02c868bbb145489b8902cb6c105e774b75"; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -101,7 +58,8 @@ stdenv.mkDerivation rec {
     # Tests don't respect the FLATPAK_BINARY override that was added, this is a workaround.
     # https://github.com/flatpak/flatpak/pull/4496 (Can be removed once included).
     (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/96dbe28cfa96e80b23fa1d8072eb36edad41279c.patch";
+      url =
+        "https://github.com/flatpak/flatpak/commit/96dbe28cfa96e80b23fa1d8072eb36edad41279c.patch";
       sha256 = "1jczk06ymfs98h3nsg245g0jwxvml7wg2x6pb7mrfpsdmrpz2czd";
     })
   ];
@@ -147,14 +105,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Required by flatpak.pc
-  propagatedBuildInputs = [
-    glib
-    ostree
-  ];
+  propagatedBuildInputs = [ glib ostree ];
 
-  checkInputs = [
-    valgrind
-  ];
+  checkInputs = [ valgrind ];
 
   # TODO: some issues with temporary files
   doCheck = false;
@@ -173,18 +126,21 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/flatpak"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
+    "installed_testdir=${
+      placeholder "installedTests"
+    }/libexec/installed-tests/flatpak"
+    "installed_test_metadir=${
+      placeholder "installedTests"
+    }/share/installed-tests/flatpak"
   ];
 
-  postPatch = let
-    vsc-py = python3.withPackages (pp: [
-      pp.pyparsing
-    ]);
+  postPatch = let vsc-py = python3.withPackages (pp: [ pp.pyparsing ]);
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+    PATH=${
+      lib.makeBinPath [ vsc-py ]
+    }:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
   '';
 
   preFixup = ''
@@ -195,9 +151,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.flatpak;
-    };
+    tests = { installedTests = nixosTests.installed-tests.flatpak; };
   };
 
   meta = with lib; {

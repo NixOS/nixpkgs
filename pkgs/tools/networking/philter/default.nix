@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateInfo = {
-      downloadPage = "http://philter.sourceforge.net/";
-    };
+    updateInfo = { downloadPage = "http://philter.sourceforge.net/"; };
   };
 }

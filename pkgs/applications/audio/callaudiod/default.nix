@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
-, alsa-lib
-, libpulseaudio
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, glib, alsa-lib
+, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "callaudiod";
@@ -22,18 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config glib ];
 
-  buildInputs = [
-    alsa-lib
-    libpulseaudio
-    glib
-  ];
+  buildInputs = [ alsa-lib libpulseaudio glib ];
 
   meta = with lib; {
     description = "Daemon for dealing with audio routing during phone calls";

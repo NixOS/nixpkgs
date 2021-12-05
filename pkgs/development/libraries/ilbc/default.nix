@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
     cd ${name}
     ${gawk}/bin/gawk -f ${script} ${rfc3951}
     cp -v ${./CMakeLists.txt} CMakeLists.txt
-    '';
+  '';
 
-  meta = {
-    platforms = lib.platforms.unix;
-  };
+  meta = { platforms = lib.platforms.unix; };
 }

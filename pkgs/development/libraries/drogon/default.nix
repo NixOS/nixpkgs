@@ -2,10 +2,9 @@
 # optional but of negligible size
 , openssl, brotli, c-ares
 # optional databases
-, sqliteSupport ? true, sqlite
-, postgresSupport ? false, postgresql
-, redisSupport ? false, hiredis
-, mysqlSupport ? false, libmysqlclient, mariadb }:
+, sqliteSupport ? true, sqlite, postgresSupport ? false, postgresql
+, redisSupport ? false, hiredis, mysqlSupport ? false, libmysqlclient, mariadb
+}:
 
 stdenv.mkDerivation rec {
   pname = "drogon";
@@ -26,16 +25,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_EXAMPLES=OFF"
   ];
 
-  propagatedBuildInputs = [
-    jsoncpp
-    libossp_uuid
-    zlib
-    openssl
-    brotli
-    c-ares
-  ] ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresSupport postgresql
-    ++ lib.optional redisSupport hiredis
+  propagatedBuildInputs = [ jsoncpp libossp_uuid zlib openssl brotli c-ares ]
+    ++ lib.optional sqliteSupport sqlite
+    ++ lib.optional postgresSupport postgresql ++ lib.optional redisSupport
+    hiredis
     # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
     ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
 

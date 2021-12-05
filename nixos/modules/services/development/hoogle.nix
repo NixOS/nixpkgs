@@ -26,7 +26,7 @@ in {
 
     packages = mkOption {
       type = types.functionTo (types.listOf types.package);
-      default = hp: [];
+      default = hp: [ ];
       defaultText = literalExpression "hp: []";
       example = literalExpression "hp: with hp; [ text lens ]";
       description = ''
@@ -65,7 +65,9 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
+        ExecStart = "${hoogleEnv}/bin/hoogle server --local --port ${
+            toString cfg.port
+          } --home ${cfg.home} --host ${cfg.host}";
 
         DynamicUser = true;
 

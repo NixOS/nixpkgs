@@ -5,9 +5,7 @@ let
   version = "0.8";
   name = "${baseName}-${version}-${kernel.version}";
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchFromGitHub {

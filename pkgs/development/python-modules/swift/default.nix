@@ -1,25 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, cryptography
-, eventlet
-, greenlet
-, iana-etc
-, libredirect
-, lxml
-, mock
-, netifaces
-, pastedeploy
-, pbr
-, pyeclib
-, requests
-, setuptools
-, six
-, stestr
-, swiftclient
-, xattr
-}:
+{ lib, buildPythonPackage, fetchPypi, boto3, cryptography, eventlet, greenlet
+, iana-etc, libredirect, lxml, mock, netifaces, pastedeploy, pbr, pyeclib
+, requests, setuptools, six, stestr, swiftclient, xattr }:
 
 buildPythonPackage rec {
   pname = "swift";
@@ -51,12 +32,7 @@ buildPythonPackage rec {
     xattr
   ];
 
-  checkInputs = [
-    boto3
-    mock
-    stestr
-    swiftclient
-  ];
+  checkInputs = [ boto3 mock stestr swiftclient ];
 
   # a lot of tests currently fail while establishing a connection
   doCheck = false;

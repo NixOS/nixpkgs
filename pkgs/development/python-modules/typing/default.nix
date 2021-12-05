@@ -1,8 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python
 , pythonAtLeast }:
 
-let
-  testDir = if isPy3k then "src" else "python2";
+let testDir = if isPy3k then "src" else "python2";
 
 in buildPythonPackage rec {
   pname = "typing";

@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, ruby
-, bundlerEnv
-}:
+{ lib, fetchFromGitHub, stdenv, ruby, bundlerEnv }:
 
 let
   env = bundlerEnv {
@@ -43,7 +38,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "(An early version of) a DocBook to AsciiDoc converter written in Ruby";
+    description =
+      "(An early version of) a DocBook to AsciiDoc converter written in Ruby";
     homepage = "https://asciidoctor.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

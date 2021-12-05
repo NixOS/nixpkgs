@@ -1,7 +1,5 @@
-{ mkDerivation, lib, fetchurl, pkg-config, libjack2
-, alsa-lib, liblo, libsndfile, lv2, qtbase, qttools
-, rubberband
-}:
+{ mkDerivation, lib, fetchurl, pkg-config, libjack2, alsa-lib, liblo, libsndfile
+, lv2, qtbase, qttools, rubberband }:
 
 mkDerivation rec {
   pname = "samplv1";
@@ -17,7 +15,8 @@ mkDerivation rec {
   buildInputs = [ libjack2 alsa-lib liblo libsndfile lv2 qtbase rubberband ];
 
   meta = with lib; {
-    description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";
+    description =
+      "An old-school all-digital polyphonic sampler synthesizer with stereo fx";
     homepage = "http://samplv1.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, python
-, py
-, isPyPy
-}:
+{ lib, stdenv, buildPythonPackage, python, py, isPyPy }:
 
 buildPythonPackage {
   pname = "tkinter";

@@ -1,8 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi
-, mock
-, pytest
-, setuptools
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, mock, pytest, setuptools }:
 
 buildPythonPackage rec {
   pname = "supervisor";

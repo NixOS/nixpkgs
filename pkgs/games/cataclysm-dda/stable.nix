@@ -1,8 +1,5 @@
 { lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
-, debug ? false
-, useXdgDir ? false
-}:
+, tiles ? true, Cocoa, debug ? false, useXdgDir ? false }:
 
 let
   common = callPackage ./common.nix {
@@ -26,9 +23,8 @@ let
 
     meta = common.meta // {
       maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ skeidel ];
+        common.meta.maintainers ++ [ skeidel ];
     };
   });
-in
 
-attachPkgs pkgs self
+in attachPkgs pkgs self

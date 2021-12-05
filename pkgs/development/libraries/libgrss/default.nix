@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, vala, gobject-introspection, gtk-doc
-, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome, buildPackages
-}:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, vala, gobject-introspection
+, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome
+, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libgrss";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1nalslgyglvhpva3px06fj6lv5zgfg0qmj0sbxyyl5d963vc02b7";
   };
 
@@ -17,7 +19,8 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "CVE-2016-20011.patch";
       # https://gitlab.gnome.org/GNOME/libgrss/-/merge_requests/7, not yet merged!
-      url = "https://gitlab.gnome.org/GNOME/libgrss/-/commit/2c6ea642663e2a44efc8583fae7c54b7b98f72b3.patch";
+      url =
+        "https://gitlab.gnome.org/GNOME/libgrss/-/commit/2c6ea642663e2a44efc8583fae7c54b7b98f72b3.patch";
       sha256 = "1ijvq2jl97vphcvrbrqxvszdmv6yyjfygdca9vyaijpafwyzzb18";
     })
   ];
@@ -31,17 +34,12 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  buildInputs = [
-    glib
-    libxml2
-    libsoup
-  ];
+  buildInputs = [ glib libxml2 libsoup ];
 
   configureFlags = [
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    "--enable-gtk-doc"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform)
+    [ "--enable-gtk-doc" ];
 
   doCheck = true;
 
@@ -53,7 +51,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Glib abstaction to handle feeds in RSS, Atom and other formats";
+    description =
+      "Glib abstaction to handle feeds in RSS, Atom and other formats";
     homepage = "https://wiki.gnome.org/Projects/Libgrss";
     license = licenses.lgpl3Plus;
     maintainers = teams.gnome.members;

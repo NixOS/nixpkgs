@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       extend the functionality of some other protocol either in Wayland core,
       or some other protocol in wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license     = licenses.mit; # See file headers
-    platforms   = platforms.linux;
+    homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
+    license = licenses.mit; # See file headers
+    platforms = platforms.linux;
     maintainers = with maintainers; [ twitchyliquid64 ];
   };
 }

@@ -12,11 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 
-  configureFlags = [
-    "--enable-shared"
-    "--with-system-libffi"
-    "--with-gmp"
-  ];
+  configureFlags = [ "--enable-shared" "--with-system-libffi" "--with-gmp" ];
 
   src = fetchFromGitHub {
     owner = "polyml";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyserial, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyrfxtrx";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "0nzgy56b2v3bnn9idlb67qkzj4cj5j9v1436ri1y305fqwjy48nm";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Library to communicate with the RFXtrx family of devices";

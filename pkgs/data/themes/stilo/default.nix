@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg
+, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "stilo-themes";

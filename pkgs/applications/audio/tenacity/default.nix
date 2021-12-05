@@ -1,49 +1,9 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, cmake
-, wxGTK
-, pkg-config
-, python3
-, gettext
-, glib
-, file
-, lame
-, libvorbis
-, libmad
-, libjack2
-, lv2
-, lilv
-, makeWrapper
-, serd
-, sord
-, sqlite
-, sratom
-, suil
-, alsa-lib
-, libsndfile
-, soxr
-, flac
-, twolame
-, expat
-, libid3tag
-, libopus
-, ffmpeg
-, soundtouch
-, pcre
-, portaudio
-, linuxHeaders
-, at-spi2-core
-, dbus
-, libepoxy
-, libXdmcp
-, libXtst
-, libpthreadstubs
-, libselinux
-, libsepol
-, libxkbcommon
-, util-linux
-}:
+{ stdenv, lib, fetchFromSourcehut, cmake, wxGTK, pkg-config, python3, gettext
+, glib, file, lame, libvorbis, libmad, libjack2, lv2, lilv, makeWrapper, serd
+, sord, sqlite, sratom, suil, alsa-lib, libsndfile, soxr, flac, twolame, expat
+, libid3tag, libopus, ffmpeg, soundtouch, pcre, portaudio, linuxHeaders
+, at-spi2-core, dbus, libepoxy, libXdmcp, libXtst, libpthreadstubs, libselinux
+, libsepol, libxkbcommon, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
@@ -72,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
+  NIX_CFLAGS_COMPILE = ''-D GIT_DESCRIBE=""'';
 
   # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
   NIX_LDFLAGS = toString [
@@ -87,15 +47,8 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gettext
-    makeWrapper
-    pkg-config
-    python3
-  ] ++ lib.optionals stdenv.isLinux [
-    linuxHeaders
-  ];
+  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config python3 ]
+    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
 
   buildInputs = [
     alsa-lib

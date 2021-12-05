@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-let cfg = config.services.victoriametrics; in
-{
+let cfg = config.services.victoriametrics;
+in {
   options.services.victoriametrics = with lib; {
     enable = mkEnableOption "victoriametrics";
     package = mkOption {
@@ -27,7 +27,7 @@ let cfg = config.services.victoriametrics; in
     };
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra options to pass to VictoriaMetrics. See the README: <link
         xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md" />
@@ -64,15 +64,17 @@ let cfg = config.services.victoriametrics; in
       };
       wantedBy = [ "multi-user.target" ];
 
-      postStart =
-        let
-          bindAddr = (lib.optionalString (lib.hasPrefix ":" cfg.listenAddress) "127.0.0.1") + cfg.listenAddress;
-        in
-        lib.mkBefore ''
-          until ${lib.getBin pkgs.curl}/bin/curl -s -o /dev/null http://${bindAddr}/ping; do
-            sleep 1;
-          done
-        '';
+      postStart = let
+        bindAddr =
+          (lib.optionalString (lib.hasPrefix ":" cfg.listenAddress) "127.0.0.1")
+          + cfg.listenAddress;
+      in lib.mkBefore ''
+        until ${
+          lib.getBin pkgs.curl
+        }/bin/curl -s -o /dev/null http://${bindAddr}/ping; do
+          sleep 1;
+        done
+      '';
     };
   };
 }

@@ -21,7 +21,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";
-    description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
+    description =
+      "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     license = licenses.gpl3;
     maintainers = with maintainers; [ valodim ];
     broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing

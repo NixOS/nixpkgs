@@ -1,4 +1,5 @@
-{ lib, stdenv, makeWrapper, binutils-unwrapped, cctools, llvm, clang-unwrapped }:
+{ lib, stdenv, makeWrapper, binutils-unwrapped, cctools, llvm, clang-unwrapped
+}:
 
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same targetPrefix.
@@ -7,14 +8,22 @@ assert binutils-unwrapped.targetPrefix == cctools.targetPrefix;
 let
   inherit (binutils-unwrapped) targetPrefix;
   cmds = [
-    "ar" "ranlib" "as" "install_name_tool"
-    "ld" "strip" "otool" "lipo" "nm" "strings" "size"
+    "ar"
+    "ranlib"
+    "as"
+    "install_name_tool"
+    "ld"
+    "strip"
+    "otool"
+    "lipo"
+    "nm"
+    "strings"
+    "size"
     "codesign_allocate"
   ];
-in
 
-# TODO: loop over targetPrefixed binaries too
-stdenv.mkDerivation {
+  # TODO: loop over targetPrefixed binaries too
+in stdenv.mkDerivation {
   pname = "${targetPrefix}cctools-binutils-darwin";
   inherit (cctools) version;
   outputs = [ "out" "man" ];
@@ -33,7 +42,9 @@ stdenv.mkDerivation {
     # - strip: the binutils one seems to break mach-o files
     # - lipo: gcc build assumes it exists
     # - nm: the gnu one doesn't understand many new load commands
-    for i in ${lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)}; do
+    for i in ${
+      lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)
+    }; do
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
@@ -51,21 +62,19 @@ stdenv.mkDerivation {
       done
     done
   ''
-  # On aarch64-darwin we must use clang, because "as" from cctools just doesn't
-  # handle the arch. Proxying calls to clang produces quite a bit of warnings,
-  # and using clang directly here is a better option than relying on cctools.
-  # On x86_64-darwin the Clang version is too old to support this mode.
-  + lib.optionalString stdenv.isAarch64 ''
-    rm $out/bin/${targetPrefix}as
-    makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
-      --add-flags "-x assembler -integrated-as -c"
-  '';
+    # On aarch64-darwin we must use clang, because "as" from cctools just doesn't
+    # handle the arch. Proxying calls to clang produces quite a bit of warnings,
+    # and using clang directly here is a better option than relying on cctools.
+    # On x86_64-darwin the Clang version is too old to support this mode.
+    + lib.optionalString stdenv.isAarch64 ''
+      rm $out/bin/${targetPrefix}as
+      makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
+        --add-flags "-x assembler -integrated-as -c"
+    '';
 
   nativeBuildInputs = lib.optionals stdenv.isAarch64 [ makeWrapper ];
 
-  passthru = {
-    inherit targetPrefix;
-  };
+  passthru = { inherit targetPrefix; };
 
   meta = {
     maintainers = with lib.maintainers; [ matthewbauer ];

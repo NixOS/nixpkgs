@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, aiohttp
-, async_generator
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pyyaml
-, pytestCheckHook
-, pythonOlder
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiofiles, aiohttp, async_generator
+, pypubsub, pyserial, pyserial-asyncio, pyyaml, pytestCheckHook, pythonOlder
+, pytest-cov, pytest-asyncio, pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
@@ -37,12 +24,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-cov
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-cov pytest-timeout pytestCheckHook ];
 
   pythonImportsCheck = [ "pyinsteon" ];
 

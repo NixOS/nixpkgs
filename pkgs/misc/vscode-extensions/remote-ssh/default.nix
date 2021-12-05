@@ -1,7 +1,4 @@
-{ lib
-, vscode-utils
-, useLocalExtensions ? false
-}:
+{ lib, vscode-utils, useLocalExtensions ? false }:
 # Note that useLocalExtensions requires that vscode-server is not running
 # on host. If it is, you'll need to remove $HOME/.vscode-server,
 # and redo the install by running "Connect to host" on client
@@ -13,13 +10,13 @@ let
   # links to local node if version is 12
   patch = ''
     f="$HOME/.vscode-server/bin/$COMMIT_ID/node"
-    localNodePath=''$(which node)
-    if [ -x "''$localNodePath" ]; then
-      localNodeVersion=''$(node -v)
+    localNodePath=$(which node)
+    if [ -x "$localNodePath" ]; then
+      localNodeVersion=$(node -v)
       if [ "\''${localNodeVersion:1:2}" = "12" ]; then
-        echo PATCH: replacing ''$f with ''$localNodePath
-        rm ''$f
-        ln -s ''$localNodePath ''$f
+        echo PATCH: replacing $f with $localNodePath
+        rm $f
+        ln -s $localNodePath $f
       fi
     fi
     ${lib.optionalString useLocalExtensions ''
@@ -32,8 +29,7 @@ let
       fi
     ''}
   '';
-in
-buildVscodeMarketplaceExtension {
+in buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "remote-ssh";
     publisher = "ms-vscode-remote";
@@ -47,7 +43,8 @@ buildVscodeMarketplaceExtension {
   '';
 
   meta = with lib; {
-    description = "Use any remote machine with a SSH server as your development environment.";
+    description =
+      "Use any remote machine with a SSH server as your development environment.";
     license = licenses.unfree;
     maintainers = with maintainers; [ SuperSandro2000 tbenst ];
   };

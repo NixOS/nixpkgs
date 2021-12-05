@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, catalogue
-, mock
-, numpy
-, pytest
-, ruamel-yaml
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, cython, catalogue, mock
+, numpy, pytest, ruamel-yaml }:
 
 buildPythonPackage rec {
   pname = "srsly";
@@ -25,12 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ catalogue ];
 
-  checkInputs = [
-    mock
-    numpy
-    pytest
-    ruamel-yaml
-  ];
+  checkInputs = [ mock numpy pytest ruamel-yaml ];
 
   pythonImportsCheck = [ "srsly" ];
 

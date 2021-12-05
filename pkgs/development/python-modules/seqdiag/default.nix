@@ -1,6 +1,5 @@
 { lib, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
-, blockdiag
-}:
+, blockdiag }:
 
 buildPythonPackage rec {
   pname = "seqdiag";
@@ -22,7 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
+    description =
+      "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;

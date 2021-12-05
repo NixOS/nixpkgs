@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, lz4
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, lz4 }:
 
 let
   kaitai_compress = fetchFromGitHub {
@@ -12,8 +7,7 @@ let
     rev = "434fb42220ff58778bb9fbadb6152cad7e4f5dd0";
     sha256 = "zVnkVl3amUDOB+pnw5SkMGSrVL/dTQ82E8IWfJvKC4Q=";
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "kaitaistruct";
   version = "0.9";
 
@@ -27,17 +21,12 @@ buildPythonPackage rec {
     sed '28ipackages = kaitai/compress' -i setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    lz4
-  ];
+  propagatedBuildInputs = [ lz4 ];
 
   # no tests
   dontCheck = true;
 
-  pythonImportsCheck = [
-    "kaitaistruct"
-    "kaitai.compress"
-  ];
+  pythonImportsCheck = [ "kaitaistruct" "kaitai.compress" ];
 
   meta = with lib; {
     description = "Kaitai Struct: runtime library for Python";

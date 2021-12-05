@@ -1,27 +1,26 @@
 { stdenv, lib, fetchzip, cups, autoPatchelfHook
 
-  # Can either be "EU" or "Global"; it's unclear what the difference is
-  , region ? "Global", qt4
-}:
+# Can either be "EU" or "Global"; it's unclear what the difference is
+, region ? "Global", qt4 }:
 
 let
-  platform =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "64bit"
-    else if stdenv.hostPlatform.system == "i686-linux" then "32bit"
-         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  debPlatform =
-    if platform == "64bit" then "amd64"
-    else "i386";
+  platform = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "64bit"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "32bit"
+  else
+    throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  debPlatform = if platform == "64bit" then "amd64" else "i386";
   debRegion = if region == "EU" then "EU." else "";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cups-kyodialog3";
   version = "8.1601";
 
   dontStrip = true;
 
   src = fetchzip {
-    url = "https://la.kyoceradocumentsolutions.com/content/dam/kdc/kdag/downloads/technical/executables/drivers/kyoceradocumentsolutions/lad/en/Kyocera_Linux_PPD_Ver_${version}.tar.gz";
+    url =
+      "https://la.kyoceradocumentsolutions.com/content/dam/kdc/kdag/downloads/technical/executables/drivers/kyoceradocumentsolutions/lad/en/Kyocera_Linux_PPD_Ver_${version}.tar.gz";
     sha256 = "11znnlkfssakml7w80gxlz1k59f3nvhph91fkzzadnm9i7a8yjal";
   };
 

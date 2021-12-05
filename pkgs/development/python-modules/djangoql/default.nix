@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, django, ply }:
+{ lib, buildPythonPackage, fetchPypi, python, django, ply }:
 
 buildPythonPackage rec {
   pname = "djangoql";

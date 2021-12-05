@@ -7,12 +7,7 @@ buildDunePackage {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    hacl-star-raw
-    zarith
-  ];
+  propagatedBuildInputs = [ hacl-star-raw zarith ];
 
-  buildInputs = [
-    cppo
-  ];
+  buildInputs = [ cppo ];
 }

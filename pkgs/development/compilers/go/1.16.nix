@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, tzdata
-, iana-etc
-, runCommand
-, perl
-, which
-, pkg-config
-, patch
-, procps
-, pcre
-, cacert
-, Security
-, Foundation
-, xcbuild
-, mailcap
-, runtimeShell
-, buildPackages
-, pkgsBuildTarget
-, callPackage
-}:
+{ lib, stdenv, fetchurl, tzdata, iana-etc, runCommand, perl, which, pkg-config
+, patch, procps, pcre, cacert, Security, Foundation, xcbuild, mailcap
+, runtimeShell, buildPackages, pkgsBuildTarget, callPackage }:
 
 let
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
@@ -32,24 +13,24 @@ let
     cp -rf $out/bin/* $out/share/go/bin/
   '';
 
-  goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
-    "powerpc64le" = "ppc64le";
-    "mips" = "mips";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+  goarch = platform:
+    {
+      "i686" = "386";
+      "x86_64" = "amd64";
+      "aarch64" = "arm64";
+      "arm" = "arm";
+      "armv5tel" = "arm";
+      "armv6l" = "arm";
+      "armv7l" = "arm";
+      "powerpc64le" = "ppc64le";
+      "mips" = "mips";
+    }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "go";
   version = "1.16.10";
 
@@ -62,11 +43,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc")
+    [ stdenv.cc.libc.static ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated =
+    lib.optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
 
@@ -171,9 +154,10 @@ stdenv.mkDerivation rec {
     ./go_no_vendor_checks-1.16.patch
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    (if stdenv.isAarch32
-    then ./skip-test-extra-files-on-aarch32-1.14.patch
-    else ./skip-test-extra-files-on-386-1.14.patch)
+    (if stdenv.isAarch32 then
+      ./skip-test-extra-files-on-aarch32-1.14.patch
+    else
+      ./skip-test-extra-files-on-386-1.14.patch)
   ];
 
   postPatch = ''
@@ -190,18 +174,21 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
-    else
-      null;
-  CXX_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
-    else
-      null;
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    "${targetCC}/bin/${targetCC.targetPrefix}cc"
+  else
+    null;
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    "${targetCC}/bin/${targetCC.targetPrefix}c++"
+  else
+    null;
 
-  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
+  GOARM = toString
+    (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [
+      "5"
+      "6"
+      "7"
+    ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -221,9 +208,9 @@ stdenv.mkDerivation rec {
     export PATH=$(pwd)/bin:$PATH
 
     ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
-    # Independent from host/target, CC should produce code for the building system.
-    # We only set it when cross-compiling.
-    export CC=${buildPackages.stdenv.cc}/bin/cc
+      # Independent from host/target, CC should produce code for the building system.
+      # We only set it when cross-compiling.
+      export CC=${buildPackages.stdenv.cc}/bin/cc
     ''}
     ulimit -a
   '';
@@ -256,7 +243,8 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
-  '' else "");
+  '' else
+    "");
 
   installPhase = ''
     runHook preInstall

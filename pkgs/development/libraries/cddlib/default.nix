@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gmp
-, autoreconfHook
-, texlive
-}:
+{ lib, stdenv, fetchFromGitHub, gmp, autoreconfHook, texlive }:
 
 stdenv.mkDerivation rec {
   pname = "cddlib";
@@ -14,7 +9,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "09s8323h5w9j6mpl1yc6lm770dkskfxd2ayyafkcjllmnncxzfa0";
   };
-  buildInputs = [gmp];
+  buildInputs = [ gmp ];
   nativeBuildInputs = [
     autoreconfHook
     texlive.combined.scheme-small # for building the documentation
@@ -23,7 +18,8 @@ stdenv.mkDerivation rec {
   # Requested here: https://github.com/cddlib/cddlib/issues/25
   doCheck = true;
   meta = with lib; {
-    description = "An implementation of the Double Description Method for generating all vertices of a convex polyhedron";
+    description =
+      "An implementation of the Double Description Method for generating all vertices of a convex polyhedron";
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

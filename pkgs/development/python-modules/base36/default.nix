@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "base36";
@@ -27,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "base36" ];
 
   meta = with lib; {
-    description = "Python implementation for the positional numeral system using 36 as the radix";
+    description =
+      "Python implementation for the positional numeral system using 36 as the radix";
     homepage = "https://github.com/tonyseek/python-base36";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

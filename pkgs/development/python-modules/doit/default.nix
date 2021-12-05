@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, mock
-, pytestCheckHook
-, cloudpickle
-, pyinotify
-, macfsevents
-}:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, mock, pytestCheckHook
+, cloudpickle, pyinotify, macfsevents }:
 
 buildPythonPackage rec {
   pname = "doit";

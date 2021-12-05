@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, xmltodict
-, jq
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, substituteAll, argcomplete, pyyaml
+, xmltodict, jq, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "yq";
@@ -30,15 +22,9 @@ buildPythonPackage rec {
       --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
   '';
 
-  propagatedBuildInputs = [
-    pyyaml
-    xmltodict
-    argcomplete
-  ];
+  propagatedBuildInputs = [ pyyaml xmltodict argcomplete ];
 
-  checkInputs = [
-   pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test/test.py" ];
 

@@ -1,6 +1,6 @@
 # Thunderbolt 3 device manager
 
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 

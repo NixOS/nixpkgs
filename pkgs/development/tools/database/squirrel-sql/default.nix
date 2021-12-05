@@ -1,15 +1,14 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
-, jre
-, drivers ? []
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, jre, drivers ? [ ]
 }:
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
   version = "4.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
+    url =
+      "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
     sha256 = "sha256-pNcmIey50nWZghoXVGnm0EFzGoqBpAaJ2lhYvVzjWto=";
   };
 

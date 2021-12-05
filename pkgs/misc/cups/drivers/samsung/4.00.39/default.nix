@@ -15,14 +15,14 @@
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
-let
-  cups' = lib.getLib cups;
+let cups' = lib.getLib cups;
 in stdenv.mkDerivation rec {
   pname = "samsung-UnifiedLinuxDriver";
   version = "4.00.39";
 
   src = fetchurl {
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    url =
+      "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
     sha256 = "144b4xggbzjfq7ga5nza7nra2cf6qn63z5ls7ba1jybkx1vm369k";
   };
 
@@ -35,10 +35,12 @@ in stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   meta = with lib; {
-    description = "Samsung's Linux printing drivers; includes binaries without source code";
+    description =
+      "Samsung's Linux printing drivers; includes binaries without source code";
     homepage = "http://www.samsung.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    broken = true;   # libscmssc.so and libmfp.so can't find their library dependencies at run-time
+    broken =
+      true; # libscmssc.so and libmfp.so can't find their library dependencies at run-time
   };
 }

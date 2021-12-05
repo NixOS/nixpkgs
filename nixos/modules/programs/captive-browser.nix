@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.programs.captive-browser;
-in
-{
+let cfg = config.programs.captive-browser;
+in {
   ###### interface
 
   options = {
@@ -20,7 +18,8 @@ in
 
       interface = mkOption {
         type = types.str;
-        description = "your public network interface (wlp3s0, wlan0, eth0, ...)";
+        description =
+          "your public network interface (wlp3s0, wlan0, eth0, ...)";
       };
 
       # the options below are the same as in "captive-browser.toml"
@@ -28,15 +27,15 @@ in
         type = types.str;
         default = concatStringsSep " " [
           ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-          ''${pkgs.chromium}/bin/chromium''
-          ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
+          "${pkgs.chromium}/bin/chromium"
+          "--user-data-dir=\${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive"
           ''--proxy-server="socks5://$PROXY"''
           ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-          ''--no-first-run''
-          ''--new-window''
-          ''--incognito''
-          ''-no-default-browser-check''
-          ''http://cache.nixos.org/''
+          "--no-first-run"
+          "--new-window"
+          "--incognito"
+          "-no-default-browser-check"
+          "http://cache.nixos.org/"
         ];
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
@@ -83,26 +82,30 @@ in
 
   config = mkIf cfg.enable {
 
-    programs.captive-browser.dhcp-dns =
-      let
-        iface = prefixes:
-          optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
-      in
-      mkOptionDefault (
-        if config.networking.networkmanager.enable then
-          "${pkgs.networkmanager}/bin/nmcli dev show ${iface []} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
-        else if config.networking.dhcpcd.enable then
-          "${pkgs.dhcpcd}/bin/dhcpcd ${iface ["-U"]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
-        else if config.networking.useNetworkd then
-          "${cfg.package}/bin/systemd-networkd-dns ${iface []}"
-        else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface ["-i"]} -O dns --script ${
-          pkgs.writeShellScript "udhcp-script" ''
-            if [ "$1" = bound ]; then
-              echo "$dns"
-            fi
-          ''}"
-      );
+    programs.captive-browser.dhcp-dns = let
+      iface = prefixes:
+        optionalString cfg.bindInterface
+        (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+    in mkOptionDefault (if config.networking.networkmanager.enable then
+      "${pkgs.networkmanager}/bin/nmcli dev show ${
+        iface [ ]
+      } | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
+    else if config.networking.dhcpcd.enable then
+      "${pkgs.dhcpcd}/bin/dhcpcd ${
+        iface [ "-U" ]
+      } | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
+    else if config.networking.useNetworkd then
+      "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
+    else
+      "${config.security.wrapperDir}/udhcpc --quit --now -f ${
+        iface [ "-i" ]
+      } -O dns --script ${
+        pkgs.writeShellScript "udhcp-script" ''
+          if [ "$1" = bound ]; then
+            echo "$dns"
+          fi
+        ''
+      }");
 
     security.wrappers.udhcpc = {
       owner = "root";
@@ -117,14 +120,16 @@ in
       capabilities = "cap_net_raw+p";
       source = pkgs.writeShellScript "captive-browser" ''
         export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
-        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-                                  browser = """${cfg.browser}"""
-                                  dhcp-dns = """${cfg.dhcp-dns}"""
-                                  socks5-addr = """${cfg.socks5-addr}"""
-                                  ${optionalString cfg.bindInterface ''
-                                    bind-device = """${cfg.interface}"""
-                                  ''}
-                                ''}
+        export XDG_CONFIG_HOME=${
+          pkgs.writeTextDir "captive-browser.toml" ''
+            browser = """${cfg.browser}"""
+            dhcp-dns = """${cfg.dhcp-dns}"""
+            socks5-addr = """${cfg.socks5-addr}"""
+            ${optionalString cfg.bindInterface ''
+              bind-device = """${cfg.interface}"""
+            ''}
+          ''
+        }
         exec ${cfg.package}/bin/captive-browser
       '';
     };

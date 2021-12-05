@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml, findlib, perl }:
+{ lib, stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml
+, findlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-libvirt";
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libvirt.org/ocaml/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

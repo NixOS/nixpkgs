@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, libopus
-, pynacl
-, pythonOlder
-, withVoice ? true
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, libopus, pynacl
+, pythonOlder, withVoice ? true }:
 
 buildPythonPackage rec {
   pname = "discord.py";
@@ -22,12 +15,8 @@ buildPythonPackage rec {
     sha256 = "sha256-eKXCzGFSzxpdZed4/4G6uJ96s5yCm6ci8K8XYR1zQlE=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionalString withVoice [
-    libopus
-    pynacl
-  ];
+  propagatedBuildInputs = [ aiohttp ]
+    ++ lib.optionalString withVoice [ libopus pynacl ];
 
   patchPhase = ''
     substituteInPlace "discord/opus.py" \

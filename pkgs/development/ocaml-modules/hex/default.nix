@@ -9,7 +9,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/hex-v${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/hex-v${version}.tbz";
     sha256 = "07b9y0lmnflsslkrm6xilkj40n8sf2hjqkyqghnk7sw5l0plkqsp";
   };
 

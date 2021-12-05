@@ -1,15 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, chart-studio
-, colorlover
-, ipython
-, ipywidgets
-, pytest
-, nose
-, numpy
-, pandas
-, six
-, statsmodels
-}:
+{ lib, buildPythonPackage, fetchPypi, chart-studio, colorlover, ipython
+, ipywidgets, pytest, nose, numpy, pandas, six, statsmodels }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
@@ -20,16 +10,8 @@ buildPythonPackage rec {
     sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };
 
-  propagatedBuildInputs = [
-    chart-studio
-    colorlover
-    ipython
-    ipywidgets
-    numpy
-    pandas
-    six
-    statsmodels
-  ];
+  propagatedBuildInputs =
+    [ chart-studio colorlover ipython ipywidgets numpy pandas six statsmodels ];
 
   checkInputs = [ pytest nose ];
 

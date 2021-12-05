@@ -1,20 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, click, click-log
+, click-threading, requests-toolbelt, requests
 , requests_oauthlib # required for google oauth sync
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-localserver
-, pytest-subtesthack
-, setuptools-scm
-}:
+, atomicwrites, hypothesis, pytestCheckHook, pytest-localserver
+, pytest-subtesthack, setuptools-scm }:
 
 buildPythonPackage rec {
   version = "0.18.0";
@@ -36,16 +24,10 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-    pytest-localserver
-    pytest-subtesthack
-  ];
+  checkInputs =
+    [ hypothesis pytestCheckHook pytest-localserver pytest-subtesthack ];
 
   postPatch = ''
     sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg

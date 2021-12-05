@@ -1,15 +1,13 @@
-{ lib, fetchurl, python2Packages
-, gnutar, unzip, lhasa, rpm, binutils, cpio, gzip, p7zip, cabextract, unrar, unshield
-, bzip2, xz, lzip
+{ lib, fetchurl, python2Packages, gnutar, unzip, lhasa, rpm, binutils, cpio
+, gzip, p7zip, cabextract, unrar, unshield, bzip2, xz, lzip
 # unzip is handled by p7zip
-, unzipSupport ? false
-, unrarSupport ? false }:
+, unzipSupport ? false, unrarSupport ? false }:
 
 let
-  archivers = lib.makeBinPath ([ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield ]
-  ++ lib.optional (unzipSupport) unzip
-  ++ lib.optional (unrarSupport) unrar
-  ++ [ bzip2 xz lzip ]);
+  archivers = lib.makeBinPath
+    ([ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield ]
+      ++ lib.optional (unzipSupport) unzip ++ lib.optional (unrarSupport) unrar
+      ++ [ bzip2 xz lzip ]);
 
 in python2Packages.buildPythonApplication rec {
   pname = "dtrx";
@@ -28,15 +26,14 @@ in python2Packages.buildPythonApplication rec {
     python2 tests/compare.py
   '';
 
-  checkInputs = with python2Packages; [
-    pyyaml
-  ];
+  checkInputs = with python2Packages; [ pyyaml ];
 
   # custom test suite fails
   doCheck = false;
 
   meta = with lib; {
-    description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
+    description =
+      "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
     homepage = "https://brettcsmith.org/2007/dtrx/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.spwhitt ];

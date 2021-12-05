@@ -7,7 +7,8 @@ stdenv.mkDerivation {
   # The url can be determined by booting an "Amazon Linux 2" and running:
   # > yumdownloader --urls ec2-utils
   src = fetchurl {
-    url = "http://amazonlinux.ap-northeast-1.amazonaws.com/blobstore/a3b4d2c35c2300518fe10381a05b3bd7936ff5cdd3d351143a11bf84073d9e00/ec2-utils-0.5-1.amzn2.0.1.noarch.rpm";
+    url =
+      "http://amazonlinux.ap-northeast-1.amazonaws.com/blobstore/a3b4d2c35c2300518fe10381a05b3bd7936ff5cdd3d351143a11bf84073d9e00/ec2-utils-0.5-1.amzn2.0.1.noarch.rpm";
     sha256 = "004y7l3q9gqi78a53lykrpsnz4yp7dds1083w67m2013bk1x5d53";
   };
 

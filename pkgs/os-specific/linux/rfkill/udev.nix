@@ -25,12 +25,11 @@
 # in the rfkill package.
 
 let
-  rfkillHook =
-    substituteAll {
-      inherit (stdenv) shell;
-      isExecutable = true;
-      src = ./rfkill-hook.sh;
-    };
+  rfkillHook = substituteAll {
+    inherit (stdenv) shell;
+    isExecutable = true;
+    src = ./rfkill-hook.sh;
+  };
 in stdenv.mkDerivation {
   name = "rfkill-udev";
 

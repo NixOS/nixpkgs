@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, cmake
-, symengine
-, pytest
-, sympy
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, cmake, symengine, pytest
+, sympy, python }:
 
 buildPythonPackage rec {
   pname = "symengine";
@@ -37,7 +29,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [
     "--symengine-dir=${symengine}/"
-    "--define=\"CYTHON_BIN=${cython}/bin/cython\""
+    ''--define="CYTHON_BIN=${cython}/bin/cython"''
   ];
 
   checkPhase = ''

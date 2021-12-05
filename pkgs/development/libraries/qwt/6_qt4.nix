@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hf0mpca248xlqn7xnzkfj8drf19gdyg5syzklvq8pibxiixwxj0";
   };
 
-  buildInputs = [
-    qt4
-  ] ++ lib.optionals stdenv.isDarwin [ AGL ];
+  buildInputs = [ qt4 ] ++ lib.optionals stdenv.isDarwin [ AGL ];
 
   nativeBuildInputs = [ qmake4Hook ];
 
@@ -21,11 +19,10 @@ stdenv.mkDerivation rec {
   '';
 
   # qwt.framework output includes a relative reference to itself, which breaks dependents
-  preFixup =
-    lib.optionalString stdenv.isDarwin ''
-      echo "Attempting to repair qwt"
-      install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
-    '';
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    echo "Attempting to repair qwt"
+    install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
+  '';
 
   qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
 

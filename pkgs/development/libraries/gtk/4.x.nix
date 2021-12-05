@@ -1,51 +1,13 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchurl
-, pkg-config
-, gettext
-, graphene
-, gi-docgen
-, meson
-, ninja
-, python3
-, makeWrapper
-, shared-mime-info
-, isocodes
-, glib
-, cairo
-, pango
-, pandoc
-, gdk-pixbuf
-, gobject-introspection
-, fribidi
-, harfbuzz
-, xorg
-, libepoxy
-, libxkbcommon
-, libxml2
-, gnome
-, gsettings-desktop-schemas
-, gst_all_1
-, sassc
-, trackerSupport ? stdenv.isLinux
-, tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
-, libGL
+{ lib, stdenv, substituteAll, fetchurl, pkg-config, gettext, graphene, gi-docgen
+, meson, ninja, python3, makeWrapper, shared-mime-info, isocodes, glib, cairo
+, pango, pandoc, gdk-pixbuf, gobject-introspection, fribidi, harfbuzz, xorg
+, libepoxy, libxkbcommon, libxml2, gnome, gsettings-desktop-schemas, gst_all_1
+, sassc, trackerSupport ? stdenv.isLinux, tracker, x11Support ? stdenv.isLinux
+, waylandSupport ? stdenv.isLinux, libGL
 # experimental and can cause crashes in inspector
-, vulkanSupport ? false
-, vulkan-loader
-, vulkan-headers
-, wayland
-, wayland-protocols
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
-, cups
-, AppKit
-, Cocoa
-, broadwaySupport ? true
-}:
+, vulkanSupport ? false, vulkan-loader, vulkan-headers, wayland
+, wayland-protocols, xineramaSupport ? stdenv.isLinux
+, cupsSupport ? stdenv.isLinux, cups, AppKit, Cocoa, broadwaySupport ? true }:
 
 let
 
@@ -55,22 +17,19 @@ let
     gtk_binary_version = "4.0.0";
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gtk4";
   version = "4.4.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
 
-  setupHooks = [
-    ./hooks/drop-icon-theme-cache.sh
-    gtkCleanImmodulesCache
-  ];
+  setupHooks = [ ./hooks/drop-icon-theme-cache.sh gtkCleanImmodulesCache ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk/${
+        lib.versions.majorMinor version
+      }/gtk-${version}.tar.xz";
     sha256 = "D6ramD3GsLxAnLNMFxPB8yZ+Z8CT+GseOxfbYQCj3fQ=";
   };
 
@@ -87,40 +46,23 @@ stdenv.mkDerivation rec {
     libxml2 # for xmllint
   ] ++ setupHooks;
 
-  buildInputs = [
-    libxkbcommon
-    libepoxy
-    isocodes
-  ] ++ lib.optionals vulkanSupport [
-    vulkan-headers
-  ] ++ [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    fribidi
-    harfbuzz
-  ] ++ (with xorg; [
-    libICE
-    libSM
-    libXcursor
-    libXdamage
-    libXi
-    libXrandr
-    libXrender
-  ]) ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ] ++ lib.optionals trackerSupport [
-    tracker
-  ] ++ lib.optionals waylandSupport [
-    libGL
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
-  ] ++ lib.optionals cupsSupport [
-    cups
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs = [ libxkbcommon libepoxy isocodes ]
+    ++ lib.optionals vulkanSupport [ vulkan-headers ]
+    ++ [ gst_all_1.gst-plugins-base gst_all_1.gst-plugins-bad fribidi harfbuzz ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libXcursor
+      libXdamage
+      libXi
+      libXrandr
+      libXrender
+    ]) ++ lib.optionals stdenv.isDarwin [ AppKit ]
+    ++ lib.optionals trackerSupport [ tracker ]
+    ++ lib.optionals waylandSupport [ libGL wayland wayland-protocols ]
+    ++ lib.optionals xineramaSupport [ xorg.libXinerama ]
+    ++ lib.optionals cupsSupport [ cups ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
   #TODO: colord?
 
   propagatedBuildInputs = [
@@ -130,9 +72,7 @@ stdenv.mkDerivation rec {
     glib
     graphene
     pango
-  ] ++ lib.optionals vulkanSupport [
-    vulkan-loader
-  ] ++ [
+  ] ++ lib.optionals vulkanSupport [ vulkan-loader ] ++ [
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook.
     gsettings-desktop-schemas
@@ -144,15 +84,11 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=false"
     "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
     "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
-  ] ++ lib.optionals vulkanSupport [
-    "-Dvulkan=enabled"
-  ] ++ lib.optionals (!cupsSupport) [
-    "-Dprint-cups=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
-  ] ++ lib.optionals (!x11Support) [
-    "-Dx11-backend=false"
-  ];
+  ] ++ lib.optionals vulkanSupport [ "-Dvulkan=enabled" ]
+    ++ lib.optionals (!cupsSupport) [ "-Dprint-cups=disabled" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
+    ] ++ lib.optionals (!x11Support) [ "-Dx11-backend=false" ];
 
   doCheck = false; # needs X11
 
@@ -204,7 +140,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
     for program in ''${demos[@]}; do
@@ -222,7 +158,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description =
+      "A multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform

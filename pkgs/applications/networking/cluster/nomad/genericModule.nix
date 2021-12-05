@@ -1,14 +1,5 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, version
-, sha256
-, vendorSha256
-, nvidiaGpuSupport
-, patchelf
-, nvidia_x11
-, nixosTests
-}:
+{ lib, buildGoModule, fetchFromGitHub, version, sha256, vendorSha256
+, nvidiaGpuSupport, patchelf, nvidia_x11, nixosTests }:
 
 buildGoModule rec {
   pname = "nomad";
@@ -25,9 +16,7 @@ buildGoModule rec {
 
   inherit vendorSha256;
 
-  nativeBuildInputs = lib.optionals nvidiaGpuSupport [
-    patchelf
-  ];
+  nativeBuildInputs = lib.optionals nvidiaGpuSupport [ patchelf ];
 
   # ui:
   #  Nomad release commits include the compiled version of the UI, but the file
@@ -49,6 +38,11 @@ buildGoModule rec {
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
     platforms = platforms.unix;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey ];
+    maintainers = with maintainers; [
+      rushmorem
+      pradeepchhetri
+      endocrimes
+      maxeaubrey
+    ];
   };
 }

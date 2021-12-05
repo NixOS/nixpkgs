@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, copyDesktopItems
-, fetchFromGitHub
-, makeDesktopItem
-, makeWrapper
-, fontconfig
-, freetype
-, glib
-, gtk3
-, jdk
-, libX11
-, libXrender
-, libXtst
-, zlib
-, maven
-}:
+{ lib, stdenv, copyDesktopItems, fetchFromGitHub, makeDesktopItem, makeWrapper
+, fontconfig, freetype, glib, gtk3, jdk, libX11, libXrender, libXtst, zlib
+, maven }:
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
@@ -31,11 +17,10 @@ stdenv.mkDerivation rec {
     name = "dbeaver-${version}-maven-deps";
     inherit src;
 
-    buildInputs = [
-      maven
-    ];
+    buildInputs = [ maven ];
 
-    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
+    buildPhase =
+      "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
@@ -53,23 +38,10 @@ stdenv.mkDerivation rec {
     outputHash = "7Sm1hAoi5xc4MLONOD8ySLLkpao0qmlMRRva/8zR210=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-    maven
-  ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper maven ];
 
-  buildInputs = [
-    fontconfig
-    freetype
-    glib
-    gtk3
-    jdk
-    libX11
-    libXrender
-    libXtst
-    zlib
-  ];
+  buildInputs =
+    [ fontconfig freetype glib gtk3 jdk libX11 libXrender libXtst zlib ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -91,57 +63,60 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase =
-    let
-      productTargetPath = "product/community/target/products/org.jkiss.dbeaver.core.product";
+  installPhase = let
+    productTargetPath =
+      "product/community/target/products/org.jkiss.dbeaver.core.product";
 
-      platformMap = {
-        aarch64-linux = "aarch64";
-        x86_64-darwin = "x86_64";
-        x86_64-linux  = "x86_64";
-      };
+    platformMap = {
+      aarch64-linux = "aarch64";
+      x86_64-darwin = "x86_64";
+      x86_64-linux = "x86_64";
+    };
 
-      systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
-    in
-    if stdenv.isDarwin then ''
-      runHook preInstall
+    systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw
+      "dbeaver not supported on ${stdenv.hostPlatform.system}");
+  in if stdenv.isDarwin then ''
+    runHook preInstall
 
-      mkdir -p $out/Applications $out/bin
-      cp -r ${productTargetPath}/macosx/cocoa/${systemPlatform}/DBeaver.app $out/Applications
+    mkdir -p $out/Applications $out/bin
+    cp -r ${productTargetPath}/macosx/cocoa/${systemPlatform}/DBeaver.app $out/Applications
 
-      sed -i "/^-vm/d; /bin\/java/d" $out/Applications/DBeaver.app/Contents/Eclipse/dbeaver.ini
+    sed -i "/^-vm/d; /bin\/java/d" $out/Applications/DBeaver.app/Contents/Eclipse/dbeaver.ini
 
-      ln -s $out/Applications/DBeaver.app/Contents/MacOS/dbeaver $out/bin/dbeaver
+    ln -s $out/Applications/DBeaver.app/Contents/MacOS/dbeaver $out/bin/dbeaver
 
-      wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
-        --prefix JAVA_HOME : ${jdk.home} \
-        --prefix PATH : ${jdk}/bin
+    wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
+      --prefix JAVA_HOME : ${jdk.home} \
+      --prefix PATH : ${jdk}/bin
 
-      runHook postInstall
-    '' else ''
-      runHook preInstall
+    runHook postInstall
+  '' else ''
+    runHook preInstall
 
-      mkdir -p $out/
-      cp -r ${productTargetPath}/linux/gtk/${systemPlatform}/dbeaver $out/dbeaver
+    mkdir -p $out/
+    cp -r ${productTargetPath}/linux/gtk/${systemPlatform}/dbeaver $out/dbeaver
 
-      # Patch binaries.
-      interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
-      patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
+    # Patch binaries.
+    interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
+    patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
 
-      makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
-        --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
+      --prefix PATH : ${jdk}/bin \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath ([ glib gtk3 libXtst ])
+      } \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
-      mkdir -p $out/share/pixmaps
-      ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
+    mkdir -p $out/share/pixmaps
+    ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://dbeaver.io/";
-    description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
+    description =
+      "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
       administrators and analysts. Supports all popular databases: MySQL,

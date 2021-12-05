@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, installShellFiles
-, pixman
-, xcbutil
-, xcbutilimage
-, libseccomp
-, libjpeg
-, libpng
-, libXpm
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, installShellFiles
+, pixman, xcbutil, xcbutilimage, libseccomp, libjpeg, libpng, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
@@ -24,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook installShellFiles ];
-  buildInputs = [ pixman xcbutilimage xcbutil libseccomp libjpeg libpng libXpm ];
+  buildInputs =
+    [ pixman xcbutilimage xcbutil libseccomp libjpeg libpng libXpm ];
 
   postInstall = ''
     installShellCompletion --zsh _xwallpaper

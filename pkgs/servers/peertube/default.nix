@@ -1,11 +1,11 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, esbuild, fixup_yarn_lock, jq, nodejs, yarn
-, nodePackages, youtube-dl
-}:
+{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule
+, fetchYarnDeps, nixosTests, esbuild, fixup_yarn_lock, jq, nodejs, yarn
+, nodePackages, youtube-dl }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
-    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "linux-x64"
+  else
+    throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
   version = "3.4.1";
 
@@ -33,13 +33,15 @@ let
 
   bcrypt_version = "5.0.1";
   bcrypt_lib = fetchurl {
-    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
+    url =
+      "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
     sha256 = "3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
   };
 
   wrtc_version = "0.4.7";
   wrtc_lib = fetchurl {
-    url = "https://node-webrtc.s3.amazonaws.com/wrtc/v${wrtc_version}/Release/${arch}.tar.gz";
+    url =
+      "https://node-webrtc.s3.amazonaws.com/wrtc/v${wrtc_version}/Release/${arch}.tar.gz";
     sha256 = "1zd3jlwq3lc2vhmr3bs1h6mrzyswdp3y20vb4d9s67ir9q7jn1zf";
   };
 
@@ -152,6 +154,12 @@ in stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ immae izorkin matthiasbeyer mohe2015 stevenroose ];
+    maintainers = with maintainers; [
+      immae
+      izorkin
+      matthiasbeyer
+      mohe2015
+      stevenroose
+    ];
   };
 }

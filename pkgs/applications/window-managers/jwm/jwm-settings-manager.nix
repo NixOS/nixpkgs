@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk
+, hicolor-icon-theme, glib, gnome2, which }:
 
 stdenv.mkDerivation rec {
   pname = "jwm-settings-manager";
@@ -10,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yqc1ac2pbkc88z7p1qags1jygdlr5y1rhc5mx6gapcf54bk0lmi";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    gettext
-  ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
 
   buildInputs = [
     libXpm

@@ -2,15 +2,15 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.knot;
+let cfg = config.services.prometheus.exporters.knot;
 in {
   port = 9433;
   extraOpts = {
     knotLibraryPath = mkOption {
       type = types.str;
       default = "${pkgs.knot-dns.out}/lib/libknot.so";
-      defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
+      defaultText =
+        literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
         Path to the library of <package>knot-dns</package>.
       '';

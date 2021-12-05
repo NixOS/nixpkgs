@@ -20,13 +20,16 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X main.Version=${version}" "-X main.Commit=${version}" "-X main.BuildDate=1970-01-01"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+    "-X main.BuildDate=1970-01-01"
   ];
 
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/gotify/cli";
-    description = "A command line interface for pushing messages to gotify/server";
+    description =
+      "A command line interface for pushing messages to gotify/server";
     maintainers = with maintainers; [ ma27 ];
   };
 }

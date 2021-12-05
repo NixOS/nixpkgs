@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome, darwin, meson, ninja }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome, darwin
+, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
   version = "2.66.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-sqTNe5rph3lMu1ob7MEM7LZRgrm7hBhoYl1ruxI+2x0=";
   };
 
@@ -19,9 +22,8 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-  ]);
+  buildInputs =
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
   doCheck = false; # fails. one test needs the net, another /etc/fstab
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

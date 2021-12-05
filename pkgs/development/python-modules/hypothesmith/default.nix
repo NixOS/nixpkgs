@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark-parser, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, lark-parser, libcst, black
+, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
@@ -16,7 +17,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hypothesmith" ];
 
   meta = with lib; {
-    description = "Hypothesis strategies for generating Python programs, something like CSmith";
+    description =
+      "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
     license = licenses.mpl20;
     maintainers = with maintainers; [ SuperSandro2000 ];

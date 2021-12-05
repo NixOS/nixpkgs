@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, zope_component
-, hupper
-, pastedeploy
-, plaster
-, plaster-pastedeploy
-, repoze_lru
-, translationstring
-, venusian
-, webob
-, zope_deprecation
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, webtest, zope_component, hupper
+, pastedeploy, plaster, plaster-pastedeploy, repoze_lru, translationstring
+, venusian, webob, zope_deprecation, zope_interface }:
 
 buildPythonPackage rec {
   pname = "pyramid";
@@ -26,7 +13,18 @@ buildPythonPackage rec {
 
   checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
+  propagatedBuildInputs = [
+    hupper
+    pastedeploy
+    plaster
+    plaster-pastedeploy
+    repoze_lru
+    translationstring
+    venusian
+    webob
+    zope_deprecation
+    zope_interface
+  ];
 
   pythonImportsCheck = [ "pyramid" ];
 

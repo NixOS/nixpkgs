@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.7.5";
 
   src = fetchurl {
-    url = "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
+    url =
+      "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
     sha256 = "0qqklhncd4khqmgp7jg7wap2rzkrg8b6dflmz0wmm5zxxp5vcy1c";
     name = "${pname}-${version}.AppImage";
   };

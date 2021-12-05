@@ -1,21 +1,31 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "fast-http";
   version = "20191007-git";
 
   description = "A fast HTTP protocol parser in Common Lisp";
 
-  deps = [ args."alexandria" args."babel" args."cl-utilities" args."flexi-streams" args."proc-parse" args."smart-buffer" args."trivial-features" args."trivial-gray-streams" args."xsubseq" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cl-utilities"
+    args."flexi-streams"
+    args."proc-parse"
+    args."smart-buffer"
+    args."trivial-features"
+    args."trivial-gray-streams"
+    args."xsubseq"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz";
     sha256 = "00qnl56cfss2blm4pp03dwv84bmkyd0kbarhahclxbn8f7pgwf32";
   };
 
   packageName = "fast-http";
 
-  asdFilesToKeep = ["fast-http.asd"];
+  asdFilesToKeep = [ "fast-http.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fast-http DESCRIPTION A fast HTTP protocol parser in Common Lisp
@@ -33,4 +43,5 @@ rec {
     DEPENDENCIES
     (alexandria babel cl-utilities flexi-streams proc-parse smart-buffer
      trivial-features trivial-gray-streams xsubseq)
-    VERSION 20191007-git SIBLINGS (fast-http-test) PARASITES NIL) */
+    VERSION 20191007-git SIBLINGS (fast-http-test) PARASITES NIL)
+*/

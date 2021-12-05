@@ -1,57 +1,49 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, mono6
-, msbuild
-, dotnetCorePackages
-, makeWrapper
-, unzip
-, writeText
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, mono6, msbuild, dotnetCorePackages
+, makeWrapper, unzip, writeText }:
 
 let
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
-  deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+  deps = map (package:
+    stdenv.mkDerivation (with package; {
+      pname = name;
+      inherit version src;
 
-    buildInputs = [ unzip ];
-    unpackPhase = ''
-      unzip $src
-      chmod -R u+r .
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
+      buildInputs = [ unzip ];
+      unpackPhase = ''
+        unzip $src
+        chmod -R u+r .
+        function traverseRename () {
+          for e in *
+          do
+            t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
+            [ "$t" != "$e" ] && mv -vn "$e" "$t"
+            if [ -d "$t" ]
+            then
+              cd "$t"
+              traverseRename
+              cd ..
+            fi
+          done
+        }
 
-      traverseRename
-    '';
+        traverseRename
+      '';
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
-      mkdir -p $package
-      cp -r . $package
-      echo "{}" > $package/.nupkg.metadata
+        package=$out/lib/dotnet/${name}/${version}
+        mkdir -p $package
+        cp -r . $package
+        echo "{}" > $package/.nupkg.metadata
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    dontFixup = true;
-  }))
-    (import ./deps.nix { inherit fetchurl; });
+      dontFixup = true;
+    })) (import ./deps.nix { inherit fetchurl; });
 
   nuget-config = writeText "NuGet.Config" ''
     <?xml version="1.0" encoding="utf-8"?>
@@ -60,7 +52,11 @@ let
         <clear />
       </packageSources>
       <fallbackPackageFolders>
-        ${lib.concatStringsSep "\n" (map (package: "<add key=\"${package}\" value=\"${package}/lib/dotnet\"/>") deps)}
+        ${
+          lib.concatStringsSep "\n" (map
+            (package: ''<add key="${package}" value="${package}/lib/dotnet"/>'')
+            deps)
+        }
       </fallbackPackageFolders>
     </configuration>
   '';

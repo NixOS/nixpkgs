@@ -1,20 +1,6 @@
-{ boto3
-, buildPythonPackage
-, crc32c
-, fetchFromGitHub
-, lib
-, matplotlib
-, moto
-, numpy
-, pillow
-, protobuf
-, pytestCheckHook
-, pytorch
-, six
-, soundfile
-, tensorflow-tensorboard
-, torchvision
-}:
+{ boto3, buildPythonPackage, crc32c, fetchFromGitHub, lib, matplotlib, moto
+, numpy, pillow, protobuf, pytestCheckHook, pytorch, six, soundfile
+, tensorflow-tensorboard, torchvision }:
 
 buildPythonPackage rec {
   pname = "tensorboardx";
@@ -34,13 +20,7 @@ buildPythonPackage rec {
       "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
   '';
 
-  propagatedBuildInputs = [
-    crc32c
-    numpy
-    protobuf
-    six
-    soundfile
-  ];
+  propagatedBuildInputs = [ crc32c numpy protobuf six soundfile ];
 
   checkInputs = [
     boto3

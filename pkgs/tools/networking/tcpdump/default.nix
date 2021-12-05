@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  configureFlags = lib.optional
-    (stdenv.hostPlatform != stdenv.buildPlatform)
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "ac_cv_linux_vers=2";
 
   meta = with lib; {

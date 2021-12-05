@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, convertdate
-, python-dateutil
-, fetchPypi
-, hijri-converter
-, korean-lunar-calendar
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, convertdate, python-dateutil, fetchPypi
+, hijri-converter, korean-lunar-calendar, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "holidays";
@@ -21,20 +13,12 @@ buildPythonPackage rec {
     sha256 = "sha256-SFWv4Ov0KO+8+EhHeCi4ifhRW+f08VriZoKRk2nZJ3Q=";
   };
 
-  propagatedBuildInputs = [
-    convertdate
-    python-dateutil
-    hijri-converter
-    korean-lunar-calendar
-  ];
+  propagatedBuildInputs =
+    [ convertdate python-dateutil hijri-converter korean-lunar-calendar ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "holidays"
-  ];
+  pythonImportsCheck = [ "holidays" ];
 
   meta = with lib; {
     description = "Generate and work with holidays in Python";

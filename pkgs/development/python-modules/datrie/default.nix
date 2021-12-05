@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, pytestCheckHook
-, hypothesis
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, hypothesis }:
 
 buildPythonPackage rec {
   pname = "datrie";
@@ -15,14 +9,9 @@ buildPythonPackage rec {
     sha256 = "sha256-UlsI9jjVz2EV32zNgY5aASmM0jCy2skcj/LmSZ0Ydl0=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  buildInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  buildInputs = [ hypothesis pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner", ' ""

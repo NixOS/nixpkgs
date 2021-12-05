@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "udatetime";

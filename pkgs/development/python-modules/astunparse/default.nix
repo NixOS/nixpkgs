@@ -1,13 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, wheel
- }:
+{ lib, fetchPypi, buildPythonPackage, six, wheel }:
 
 buildPythonPackage rec {
   pname = "astunparse";
-  version =  "1.6.3";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +15,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is a factored out version of unparse found in the Python source distribution";
+    description =
+      "This is a factored out version of unparse found in the Python source distribution";
     homepage = "https://github.com/simonpercivall/astunparse";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];

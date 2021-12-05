@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, gtk-doc}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, gtk-doc }:
 
 stdenv.mkDerivation rec {
   name = "libsmartcols";
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "smart column output alignment library";
-    homepage = "https://github.com/karelzak/util-linux/tree/master/libsmartcols";
+    homepage =
+      "https://github.com/karelzak/util-linux/tree/master/libsmartcols";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ rb2k ];

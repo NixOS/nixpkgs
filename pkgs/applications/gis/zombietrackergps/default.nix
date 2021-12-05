@@ -1,13 +1,5 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qmake
-, qtcharts
-, qtsvg
-, marble
-, qtwebengine
-, ldutils
-}:
+{ mkDerivation, lib, fetchFromGitLab, qmake, qtcharts, qtsvg, marble
+, qtwebengine, ldutils }:
 
 mkDerivation rec {
   pname = "zombietrackergps";
@@ -20,17 +12,9 @@ mkDerivation rec {
     sha256 = "1rmdy6kijmcxamm4mqmz8638xqisijlnpv8mimgxywpf90h9rrwq";
   };
 
-  buildInputs = [
-    ldutils
-    qtcharts
-    qtsvg
-    marble.dev
-    qtwebengine
-  ];
+  buildInputs = [ ldutils qtcharts qtsvg marble.dev qtwebengine ];
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
   prePatch = ''
     sed -ie "s,INCLUDEPATH += /usr/include/libldutils,INCLUDEPATH += ${ldutils}," ZombieTrackerGPS.pro

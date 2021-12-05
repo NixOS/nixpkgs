@@ -1,7 +1,4 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-}:
+{ lib, trivialBuild, fetchFromGitHub }:
 
 trivialBuild {
   pname = "bqn-mode";

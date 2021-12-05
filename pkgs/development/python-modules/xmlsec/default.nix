@@ -1,17 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, libxslt
-, libxml2
-, libtool
-, pkg-config
-, xmlsec
-, pkgconfig
-, setuptools-scm
-, lxml
-, hypothesis
-}:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, libxslt, libxml2, libtool
+, pkg-config, xmlsec, pkgconfig, setuptools-scm, lxml, hypothesis }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
@@ -23,9 +11,7 @@ buildPythonPackage rec {
   };
 
   # https://github.com/mehcode/python-xmlsec/issues/84#issuecomment-632930116
-  patches = [
-    ./reset-lxml-in-tests.patch
-  ];
+  patches = [ ./reset-lxml-in-tests.patch ];
 
   nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
 

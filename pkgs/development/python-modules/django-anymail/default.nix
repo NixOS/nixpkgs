@@ -1,14 +1,5 @@
-{
-    lib,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, requests, django, boto3, python
+, mock, }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
@@ -21,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "08ac24hrafkk1jg3milfjky3qni1cz5qggp1rgzq9r7ina4akjma";
   };
 
-  propagatedBuildInputs = [
-    six
-    requests
-    django
-    boto3
-  ];
+  propagatedBuildInputs = [ six requests django boto3 ];
 
   checkInputs = [ mock ];
   checkPhase = ''

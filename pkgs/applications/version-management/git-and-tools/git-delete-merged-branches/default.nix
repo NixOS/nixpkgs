@@ -11,13 +11,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-swAc8ObZY78nVQyjTrVG81xBqTYnWHVDFpiUApbowqU=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    clintermission
-  ];
+  propagatedBuildInputs = with python3Packages; [ colorama clintermission ];
 
-  checkInputs = [ git ]
-    ++ (with python3Packages; [ parameterized ]);
+  checkInputs = [ git ] ++ (with python3Packages; [ parameterized ]);
 
   meta = with lib; {
     description = "Command-line tool to delete merged Git branches";

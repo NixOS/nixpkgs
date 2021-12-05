@@ -1,20 +1,16 @@
-{ lib, stdenv, fetchgit
-, cmake, pkgconfig
-, python
-, mpi ? null
-}:
+{ lib, stdenv, fetchgit, cmake, pkgconfig, python, mpi ? null }:
 
-let components = {
-     cgcmm = true;
-     depreciated = true;
-     hpmc = true;
-     md = true;
-     metal = true;
-   };
-   onOffBool = b: if b then "ON" else "OFF";
-   withMPI = (mpi != null);
-in
-stdenv.mkDerivation rec {
+let
+  components = {
+    cgcmm = true;
+    depreciated = true;
+    hpmc = true;
+    md = true;
+    metal = true;
+  };
+  onOffBool = b: if b then "ON" else "OFF";
+  withMPI = (mpi != null);
+in stdenv.mkDerivation rec {
   version = "2.3.4";
   pname = "hoomd-blue";
 
@@ -24,23 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "0in49f1dvah33nl5n2qqbssfynb31pw1ds07j8ziryk9w252j1al";
   };
 
-  passthru = {
-    inherit components mpi;
-  };
+  passthru = { inherit components mpi; };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = lib.optionals withMPI [ mpi ];
   propagatedBuildInputs = [ python.pkgs.numpy ]
-   ++ lib.optionals withMPI [ python.pkgs.mpi4py ];
+    ++ lib.optionals withMPI [ python.pkgs.mpi4py ];
 
   dontAddPrefix = true;
   cmakeFlags = [
-       "-DENABLE_MPI=${onOffBool withMPI}"
-       "-DBUILD_CGCMM=${onOffBool components.cgcmm}"
-       "-DBUILD_DEPRECIATED=${onOffBool components.depreciated}"
-       "-DBUILD_HPMC=${onOffBool components.hpmc}"
-       "-DBUILD_MD=${onOffBool components.md}"
-       "-DBUILD_METAL=${onOffBool components.metal}"
+    "-DENABLE_MPI=${onOffBool withMPI}"
+    "-DBUILD_CGCMM=${onOffBool components.cgcmm}"
+    "-DBUILD_DEPRECIATED=${onOffBool components.depreciated}"
+    "-DBUILD_HPMC=${onOffBool components.hpmc}"
+    "-DBUILD_MD=${onOffBool components.md}"
+    "-DBUILD_METAL=${onOffBool components.metal}"
   ];
 
   preConfigure = ''

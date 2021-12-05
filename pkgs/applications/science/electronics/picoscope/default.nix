@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper , mono, gtk-sharp-3_0
-, glib, libusb1 , zlib, gtk3-x11, callPackage
-, scopes ? [
+{ stdenv, lib, fetchurl, dpkg, makeWrapper, mono, gtk-sharp-3_0, glib, libusb1
+, zlib, gtk3-x11, callPackage, scopes ? [
   "picocv"
   "ps2000"
   "ps2000a"
@@ -47,8 +46,9 @@ let
 
   # If we don't have a platform available, put a dummy version here, so at
   # least evaluation succeeds.
-  sources =
-    (lib.importJSON ./sources.json).${stdenv.system} or { picoscope.version = "unknown"; };
+  sources = (lib.importJSON ./sources.json).${stdenv.system} or {
+    picoscope.version = "unknown";
+  };
 
   scopePkg = name:
     { url, version, sha256 }:
@@ -87,14 +87,7 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
   scopeLibs = lib.attrVals (map (x: "lib${x}") scopes) scopePkgs;
   MONO_PATH = "${gtk-sharp-3_0}/lib/mono/gtk-sharp-3.0:" + (lib.makeLibraryPath
-    ([
-      glib
-      gtk3-x11
-      gtk-sharp-3_0
-      libusb1
-      zlib
-      libpicoipp
-    ] ++ scopeLibs));
+    ([ glib gtk3-x11 gtk-sharp-3_0 libusb1 zlib libpicoipp ] ++ scopeLibs));
 
   installPhase = ''
     runHook preInstall

@@ -1,26 +1,7 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
-, android-backup
-, importlib-metadata
-, croniter
-, defusedxml
-, pytestCheckHook
-, pytest-mock
-, pyyaml
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, poetry, click, cryptography
+, construct, zeroconf, attrs, pytz, appdirs, tqdm, netifaces, android-backup
+, importlib-metadata, croniter, defusedxml, pytestCheckHook, pytest-mock, pyyaml
 }:
-
 
 buildPythonPackage rec {
   pname = "python-miio";
@@ -41,9 +22,7 @@ buildPythonPackage rec {
       --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry
-  ];
+  nativeBuildInputs = [ poetry ];
 
   propagatedBuildInputs = [
     android-backup
@@ -61,10 +40,7 @@ buildPythonPackage rec {
     zeroconf
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
   pythonImportsCheck = [ "miio" ];
 

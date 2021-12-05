@@ -1,14 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{ lib, stdenv, fetchurl
 
-, pkg-config
-, cmake
+, pkg-config, cmake
 
-, libdeflate
-, libjpeg
-, xz
-, zlib
-}:
+, libdeflate, libjpeg, xz, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
@@ -34,9 +28,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs =
+    [ libjpeg xz zlib ]; # TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs =
+    [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
 
   enableParallelBuilding = true;
 
@@ -44,7 +40,8 @@ stdenv.mkDerivation rec {
   installCheckTarget = "test";
 
   meta = with lib; {
-    description = "Library and utilities for working with the TIFF image file format";
+    description =
+      "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
     license = licenses.libtiff;

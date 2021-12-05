@@ -1,12 +1,5 @@
-{ callPackage
-, cmake
-, fetchFromGitHub
-, lib
-, protobuf
-, python3
-, stdenv
-, buildPackages
-}:
+{ callPackage, cmake, fetchFromGitHub, lib, protobuf, python3, stdenv
+, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "nanopb";
@@ -40,10 +33,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    simple-proto2 = callPackage ./test-simple-proto2 {};
-    simple-proto3 = callPackage ./test-simple-proto3 {};
-    message-with-annotations = callPackage ./test-message-with-annotations {};
-    message-with-options = callPackage ./test-message-with-options {};
+    simple-proto2 = callPackage ./test-simple-proto2 { };
+    simple-proto3 = callPackage ./test-simple-proto3 { };
+    message-with-annotations = callPackage ./test-message-with-annotations { };
+    message-with-options = callPackage ./test-message-with-options { };
   };
 
   meta = with lib; {

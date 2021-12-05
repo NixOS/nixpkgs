@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "token-bucket";
@@ -17,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "0a703y2d09kvv2l9vq7vc97l4pi2wwq1f2hq783mbw2238jymb3m";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pytest-runner ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Token Bucket Implementation for Python Web Apps";

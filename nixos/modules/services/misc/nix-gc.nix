@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.nix.gc;
-in
+let cfg = config.nix.gc;
 
-{
+in {
 
   ###### interface
 
@@ -17,7 +15,8 @@ in
       automatic = mkOption {
         default = false;
         type = types.bool;
-        description = "Automatically run the garbage collector at a specific time.";
+        description =
+          "Automatically run the garbage collector at a specific time.";
       };
 
       dates = mkOption {
@@ -77,14 +76,14 @@ in
 
   };
 
-
   ###### implementation
 
   config = {
 
     systemd.services.nix-gc = {
       description = "Nix Garbage Collector";
-      script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      script =
+        "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       startAt = optional cfg.automatic cfg.dates;
     };
 

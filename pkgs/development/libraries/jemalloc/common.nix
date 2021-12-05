@@ -5,9 +5,7 @@
 # option should remove the prefix and give us a working jemalloc.
 # Causes segfaults with some software (ex. rustc), but defaults to true for backward
 # compatibility.
-, stripPrefix ? stdenv.hostPlatform.isDarwin
-, disableInitExecTls ? false
-}:
+, stripPrefix ? stdenv.hostPlatform.isDarwin, disableInitExecTls ? false }:
 
 with lib;
 
@@ -16,13 +14,13 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/jemalloc/jemalloc/releases/download/${version}/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 
   # see the comment on stripPrefix
-  configureFlags = []
-    ++ optional stripPrefix "--with-jemalloc-prefix="
+  configureFlags = [ ] ++ optional stripPrefix "--with-jemalloc-prefix="
     ++ optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
     # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
@@ -30,8 +28,7 @@ stdenv.mkDerivation rec {
     ++ optionals (stdenv.isAarch32 && versionOlder version "5") [
       "--disable-thp"
       "je_cv_thp=no"
-    ]
-  ;
+    ];
 
   doCheck = true;
 

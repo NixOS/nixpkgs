@@ -1,9 +1,6 @@
-/*
+/* This file is for NixOS-specific options and configs.
 
-  This file is for NixOS-specific options and configs.
-
-  Code that is shared with nix-darwin goes in common.nix.
-
+   Code that is shared with nix-darwin goes in common.nix.
 */
 
 { pkgs, config, lib, ... }:
@@ -15,11 +12,16 @@ let
   command = "${cfg.package}/bin/hercules-ci-agent --config ${cfg.tomlFile}";
   testCommand = "${command} --test-configuration";
 
-in
-{
+in {
   imports = [
     ./common.nix
-    (lib.mkRenamedOptionModule [ "services" "hercules-ci-agent" "user" ] [ "systemd" "services" "hercules-ci-agent" "serviceConfig" "User" ])
+    (lib.mkRenamedOptionModule [ "services" "hercules-ci-agent" "user" ] [
+      "systemd"
+      "services"
+      "hercules-ci-agent"
+      "serviceConfig"
+      "User"
+    ])
   ];
 
   config = mkIf cfg.enable {
@@ -44,7 +46,8 @@ in
       wantedBy = [ "hercules-ci-agent.service" ];
       pathConfig = {
         Unit = "hercules-ci-agent-restarter.service";
-        PathChanged = [ cfg.settings.clusterJoinTokenPath cfg.settings.binaryCachesPath ];
+        PathChanged =
+          [ cfg.settings.clusterJoinTokenPath cfg.settings.binaryCachesPath ];
       };
     };
     systemd.services.hercules-ci-agent-restarter = {
@@ -67,22 +70,21 @@ in
 
     # Trusted user allows simplified configuration and better performance
     # when operating in a cluster.
-    nix.trustedUsers = [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
+    nix.trustedUsers =
+      [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
     services.hercules-ci-agent = {
       settings = {
         nixUserIsTrusted = true;
-        labels =
-          let
-            mkIfNotNull = x: mkIf (x != null) x;
-          in
-          {
-            nixos.configurationRevision = mkIfNotNull config.system.configurationRevision;
-            nixos.release = config.system.nixos.release;
-            nixos.label = mkIfNotNull config.system.nixos.label;
-            nixos.codeName = config.system.nixos.codeName;
-            nixos.tags = config.system.nixos.tags;
-            nixos.systemName = mkIfNotNull config.system.name;
-          };
+        labels = let mkIfNotNull = x: mkIf (x != null) x;
+        in {
+          nixos.configurationRevision =
+            mkIfNotNull config.system.configurationRevision;
+          nixos.release = config.system.nixos.release;
+          nixos.label = mkIfNotNull config.system.nixos.label;
+          nixos.codeName = config.system.nixos.codeName;
+          nixos.tags = config.system.nixos.tags;
+          nixos.systemName = mkIfNotNull config.system.name;
+        };
       };
     };
 

@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gnome-themes-extra
-, gtk-engine-murrine
-, librsvg
-, sassc
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, gnome-themes-extra
+, gtk-engine-murrine, librsvg, sassc, which }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
@@ -20,10 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ri2dh34vw2pfv0lxzk9f4755v0d4ilnr6fzj3raw9b5fp5zzi91";
   };
 
-  nativeBuildInputs = [
-    sassc
-    which
-  ];
+  nativeBuildInputs = [ sassc which ];
 
   buildInputs = [
     gdk-pixbuf # pixbuf engine for Gtk2

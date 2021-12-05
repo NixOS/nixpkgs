@@ -1,15 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
-, execnet
-, glob2
-, Mako
-, mock
-, parse
-, parse-type
-, py
-, pytest
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, execnet, glob2, Mako
+, mock, parse, parse-type, py, pytest, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
@@ -26,11 +16,11 @@ buildPythonPackage rec {
   patches = [
     # Fixed compatibility with pytest > 6.1
     (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-bdd/commit/e1dc0cad9a1c1ba563ccfbc24f9993d83ac59293.patch";
+      url =
+        "https://github.com/pytest-dev/pytest-bdd/commit/e1dc0cad9a1c1ba563ccfbc24f9993d83ac59293.patch";
       sha256 = "1p3gavh6nir2a8crd5wdf0prfrg0hmgar9slvn8a21ils3k5pm5y";
     })
   ];
-
 
   buildInputs = [ pytest ];
 

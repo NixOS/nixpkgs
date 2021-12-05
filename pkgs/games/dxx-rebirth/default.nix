@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, scons
-, pkg-config
-, SDL
-, SDL_mixer
-, libGLU
-, libGL
-, libpng
-, physfs
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch, scons, pkg-config, SDL
+, SDL_mixer, libGLU, libGL, libpng, physfs }:
 
 let
   music = fetchurl {
@@ -18,8 +7,7 @@ let
     sha256 = "05mz77vml396mff43dbs50524rlm4fyds6widypagfbh5hc55qdc";
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
   version = "0.59.20200202";
 
@@ -36,10 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-format-nonliteral"
-    "-Wno-format-truncation"
-  ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-format-nonliteral" "-Wno-format-truncation" ];
 
   postInstall = ''
     install -Dm644 ${music} $out/share/games/dxx-rebirth/${music.name}

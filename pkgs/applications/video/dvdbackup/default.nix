@@ -13,10 +13,13 @@ stdenv.mkDerivation rec {
 
   # see https://bugs.launchpad.net/dvdbackup/+bug/1869226
   patchFlags = [ "-p0" ];
-  patches = [ (fetchpatch {
-    url = "https://git.slackbuilds.org/slackbuilds/plain/multimedia/dvdbackup/patches/dvdbackup-dvdread-6.1.patch";
-    sha256 = "1v3xl01bwq1592i5x5dyh95r0mmm1zvvwf92fgjc0smr0k3davfz";
-  })];
+  patches = [
+    (fetchpatch {
+      url =
+        "https://git.slackbuilds.org/slackbuilds/plain/multimedia/dvdbackup/patches/dvdbackup-dvdread-6.1.patch";
+      sha256 = "1v3xl01bwq1592i5x5dyh95r0mmm1zvvwf92fgjc0smr0k3davfz";
+    })
+  ];
 
   meta = {
     description = "A tool to rip video DVDs from the command line";

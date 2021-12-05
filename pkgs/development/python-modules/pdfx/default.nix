@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pdfx";
@@ -22,7 +23,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
+    description =
+      "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];
   };

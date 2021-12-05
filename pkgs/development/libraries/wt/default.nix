@@ -1,11 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
-, pcre, harfbuzz
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full
+, libharu, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick
+, glew, openssl, pcre, harfbuzz }:
 
 let
-  generic =
-    { version, sha256 }:
+  generic = { version, sha256 }:
     stdenv.mkDerivation {
       pname = "wt";
       inherit version;
@@ -19,20 +17,27 @@ let
 
       nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
-        boost doxygen qt48Full libharu
-        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre harfbuzz
+        boost
+        doxygen
+        qt48Full
+        libharu
+        pango
+        fcgi
+        firebird
+        libmysqlclient
+        postgresql
+        graphicsmagick
+        glew
+        openssl
+        pcre
+        harfbuzz
       ];
 
-      cmakeFlags = [
-        "-DWT_CPP_11_MODE=-std=c++11"
-        "--no-warn-unused-cli"
-      ]
-      ++ lib.optionals (graphicsmagick != null) [
-        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
-        "-DGM_PREFIX=${graphicsmagick}"
-      ]
-      ++ lib.optional (libmysqlclient != null)
+      cmakeFlags = [ "-DWT_CPP_11_MODE=-std=c++11" "--no-warn-unused-cli" ]
+        ++ lib.optionals (graphicsmagick != null) [
+          "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+          "-DGM_PREFIX=${graphicsmagick}"
+        ] ++ lib.optional (libmysqlclient != null)
         "-DMYSQL_PREFIX=${libmysqlclient}";
 
       meta = with lib; {

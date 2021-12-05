@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, python-dateutil
-, fetchPypi
-, isPy3k
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, python-dateutil, fetchPypi, isPy3k, mock
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "aniso8601";
@@ -16,13 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-cuMRdmfu32aVG7LZP0KWpWuUsHioqVkFoFJhH7PxuXM=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-  ];
+  propagatedBuildInputs = [ python-dateutil ];
 
-  checkInputs = [
-    pytestCheckHook
-  ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ pytestCheckHook ] ++ lib.optional (!isPy3k) mock;
 
   pythonImportsCheck = [ "aniso8601" ];
 

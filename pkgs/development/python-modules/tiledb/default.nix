@@ -1,17 +1,5 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pybind11
-, tiledb
-, numpy
-, wheel
-, isPy3k
-, setuptools-scm
-, psutil
-, pandas
-}:
+{ lib, python, buildPythonPackage, fetchFromGitHub, cython, pybind11, tiledb
+, numpy, wheel, isPy3k, setuptools-scm, psutil, pandas }:
 
 buildPythonPackage rec {
   pname = "tiledb";
@@ -25,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "0b2kn1xyf7d994kz29dpqiaf8yzvx0axw4yqi854c54pl22ddgzl";
   };
 
-  nativeBuildInputs = [
-    cython
-    pybind11
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ cython pybind11 setuptools-scm ];
 
-  buildInputs = [
-    tiledb
-  ];
+  buildInputs = [ tiledb ];
 
   propagatedBuildInputs = [
     numpy

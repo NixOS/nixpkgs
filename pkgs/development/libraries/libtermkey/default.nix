@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   version = "0.22";
 
   src = fetchzip {
-    url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
+    url =
+      "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
     sha256 = "02dks6bj7n23lj005yq41azf95wh3hapmgc2lzyh12vigkjh67rg";
   };
 

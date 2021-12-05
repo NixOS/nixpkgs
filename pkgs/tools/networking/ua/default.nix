@@ -1,7 +1,4 @@
-{ lib, buildGoPackage, fetchgit
-, pkg-config
-, glib, libxml2
-}:
+{ lib, buildGoPackage, fetchgit, pkg-config, glib, libxml2 }:
 
 buildGoPackage rec {
   pname = "ua-unstable";

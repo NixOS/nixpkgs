@@ -1,21 +1,8 @@
-{ pname
-, channel
-, writeScript
-, xidel
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, runtimeShell
-, baseName ? "firefox"
-, basePath ? "pkgs/applications/networking/browsers/firefox-bin"
-, baseUrl
-}:
+{ pname, channel, writeScript, xidel, coreutils, gnused, gnugrep, curl, gnupg
+, runtimeShell, baseName ? "firefox"
+, basePath ? "pkgs/applications/networking/browsers/firefox-bin", baseUrl }:
 
-let
-  isBeta =
-    channel != "release";
+let isBeta = channel != "release";
 
 in writeScript "update-${pname}" ''
   #!${runtimeShell}
@@ -46,7 +33,11 @@ in writeScript "update-${pname}" ''
            grep "^[0-9]" | \
            sort --version-sort | \
            grep -v "funnelcake" | \
-           grep -e "${if isBeta then "b" else ""}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${if isBeta then "" else "grep -v \"b\" |"} \
+           grep -e "${
+             if isBeta then "b" else ""
+           }\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${
+             if isBeta then "" else ''grep -v "b" |''
+           } \
            tail -1`
 
   curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"

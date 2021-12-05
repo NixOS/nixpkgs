@@ -1,6 +1,4 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ocamlbuild
-}:
+{ buildDunePackage, js_of_ocaml-compiler, ocamlbuild }:
 
 buildDunePackage {
   pname = "js_of_ocaml-ocamlbuild";

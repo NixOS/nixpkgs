@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dacite";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "0nv2bnj3bq2v08ac4p583cnpjq2d6bv5isycgji5i5wg1y082a3d";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dacite" ];
 

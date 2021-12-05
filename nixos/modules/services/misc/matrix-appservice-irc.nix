@@ -8,11 +8,12 @@ let
   pkg = pkgs.matrix-appservice-irc;
   bin = "${pkg}/bin/matrix-appservice-irc";
 
-  jsonType = (pkgs.formats.json {}).type;
+  jsonType = (pkgs.formats.json { }).type;
 
   configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
     # Because this program will be run at build time, we need `nativeBuildInputs`
-    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
+    nativeBuildInputs =
+      [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
     preferLocalBuild = true;
 
     config = builtins.toJSON cfg.settings;
@@ -38,7 +39,8 @@ in {
 
     needBindingCap = mkOption {
       type = bool;
-      description = "Whether the daemon needs to bind to ports below 1024 (e.g. for the ident service)";
+      description =
+        "Whether the daemon needs to bind to ports below 1024 (e.g. for the ident service)";
       default = false;
     };
 
@@ -70,21 +72,22 @@ in {
         <link xlink:href="https://github.com/matrix-org/matrix-appservice-irc/blob/${pkgs.matrix-appservice-irc.version}/config.sample.yaml"/>
         for supported values
       '';
-      default = {};
+      default = { };
       type = submodule {
         freeformType = jsonType;
 
         options = {
           homeserver = mkOption {
             description = "Homeserver configuration";
-            default = {};
+            default = { };
             type = submodule {
               freeformType = jsonType;
 
               options = {
                 url = mkOption {
                   type = str;
-                  description = "The URL to the home server for client-server API calls";
+                  description =
+                    "The URL to the home server for client-server API calls";
                 };
 
                 domain = mkOption {
@@ -99,7 +102,7 @@ in {
           };
 
           database = mkOption {
-            default = {};
+            default = { };
             description = "Configuration for the database";
             type = submodule {
               freeformType = jsonType;
@@ -116,14 +119,15 @@ in {
                   type = str;
                   description = "The database connection string";
                   default = "nedb://var/lib/matrix-appservice-irc/data";
-                  example = "postgres://username:password@host:port/databasename";
+                  example =
+                    "postgres://username:password@host:port/databasename";
                 };
               };
             };
           };
 
           ircService = mkOption {
-            default = {};
+            default = { };
             description = "IRC bridge configuration";
             type = submodule {
               freeformType = jsonType;
@@ -152,7 +156,9 @@ in {
   config = mkIf cfg.enable {
     systemd.services.matrix-appservice-irc = {
       description = "Matrix-IRC bridge";
-      before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
+      before = [
+        "matrix-synapse.service"
+      ]; # So the registration can be used by Synapse
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
@@ -163,7 +169,9 @@ in {
               -out "${cfg.settings.ircService.passwordEncryptionKeyPath}" \
               -outform PEM \
               -algorithm RSA \
-              -pkeyopt "rsa_keygen_bits:${toString cfg.passwordEncryptionKeyLength}"
+              -pkeyopt "rsa_keygen_bits:${
+                toString cfg.passwordEncryptionKeyLength
+              }"
         fi
         # Generate registration file
         if ! [ -f "${registrationFile}" ]; then
@@ -184,7 +192,9 @@ in {
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
         # Allow synapse access to the registration
-        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+        if ${
+          getBin pkgs.glibc
+        }/bin/getent group matrix-synapse > /dev/null; then
           chgrp matrix-synapse ${registrationFile}
           chmod g+r ${registrationFile}
         fi
@@ -192,7 +202,10 @@ in {
 
       serviceConfig = rec {
         Type = "simple";
-        ExecStart = "${bin} --config ${configFile} --file ${registrationFile} --port ${toString cfg.port}";
+        ExecStart =
+          "${bin} --config ${configFile} --file ${registrationFile} --port ${
+            toString cfg.port
+          }";
 
         ProtectHome = true;
         PrivateDevices = true;
@@ -205,21 +218,23 @@ in {
         User = "matrix-appservice-irc";
         Group = "matrix-appservice-irc";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = [ "CAP_CHOWN" ]
+          ++ optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
 
         LockPersonality = true;
         RestrictRealtime = true;
         PrivateMounts = true;
-        SystemCallFilter = "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
+        SystemCallFilter =
+          "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
         SystemCallArchitectures = "native";
         # AF_UNIX is required to connect to a postgres socket.
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
     };
 
-    users.groups.matrix-appservice-irc = {};
+    users.groups.matrix-appservice-irc = { };
     users.users.matrix-appservice-irc = {
       description = "Service user for the Matrix-IRC bridge";
       group = "matrix-appservice-irc";

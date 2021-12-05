@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.16.1";
 
   src = fetchurl {
-    url = "https://pgbouncer.github.io/downloads/files/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://pgbouncer.github.io/downloads/files/${version}/${pname}-${version}.tar.gz";
     sha256 = "1z7p3ghpmbp5qv1bz9s186jn0hfnr300dc5p0hmh6vbnwklpfx08";
   };
 

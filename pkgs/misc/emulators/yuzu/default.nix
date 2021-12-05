@@ -1,6 +1,5 @@
 { branch ? "mainline", libsForQt5, fetchFromGitHub }:
-let
-  inherit libsForQt5 fetchFromGitHub;
+let inherit libsForQt5 fetchFromGitHub;
 in {
   mainline = libsForQt5.callPackage ./base.nix rec {
     pname = "yuzu-mainline";

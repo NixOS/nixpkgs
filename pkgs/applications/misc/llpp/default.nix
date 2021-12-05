@@ -1,5 +1,6 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
-libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps }:
+{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11
+, jbig2dec, openjpeg, libjpeg, lcms2, harfbuzz, libGLU, libGL, gumbo, freetype
+, zlib, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
@@ -20,7 +21,21 @@ stdenv.mkDerivation rec {
   });
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
+  buildInputs = [
+    ocaml
+    mupdf
+    libX11
+    libGLU
+    libGL
+    freetype
+    zlib
+    gumbo
+    jbig2dec
+    openjpeg
+    libjpeg
+    lcms2
+    harfbuzz
+  ];
 
   dontStrip = true;
 

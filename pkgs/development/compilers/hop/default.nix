@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, bigloo }:
 
 # Compute the “release” version of bigloo (before the first dash, if any)
-let bigloo-release =
-  let inherit (lib) head splitString; in
-  head (splitString "-" (builtins.parseDrvName bigloo.name).version)
-; in
+let
+  bigloo-release = let inherit (lib) head splitString;
+  in head (splitString "-" (builtins.parseDrvName bigloo.name).version);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "hop";
   version = "3.4.4";
   src = fetchurl {
@@ -26,7 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
+    description =
+      "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
     homepage = "http://hop.inria.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

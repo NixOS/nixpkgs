@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, scipy
-, pims
-, scikitimage
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, dask, scipy, pims, scikitimage
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "0.6.0";
@@ -23,10 +16,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--flake8" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    scikitimage
-  ];
+  checkInputs = [ pytestCheckHook scikitimage ];
 
   pythonImportsCheck = [ "dask_image" ];
 

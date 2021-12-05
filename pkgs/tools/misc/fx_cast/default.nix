@@ -8,7 +8,8 @@
 # nix run nixpkgs.nodePackages.node2nix -c node2nix -l package-lock.json -d
 # cp -v node-*.nix package*.json ~/p/nixpkgs/pkgs/tools/misc/fx_cast/app
 # ```
-{ pkgs, stdenv }: let
+{ pkgs, stdenv }:
+let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) nodejs stdenv lib python2 runCommand writeTextFile;
     inherit pkgs;
@@ -17,10 +18,9 @@
   nodePackages = import ./node-packages.nix {
     inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
     inherit nodeEnv;
-    globalBuildInputs = [pkgs.avahi-compat];
+    globalBuildInputs = [ pkgs.avahi-compat ];
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "fx_cast_bridge";
   version = "0.1.2";
 
@@ -31,9 +31,7 @@ stdenv.mkDerivation rec {
     hash = "sha256:1prgk9669xgwkdl39clq0l75n0gnkkpn27gp9rbgl4bafrhvmg9a";
   };
 
-  buildInputs = with pkgs; [
-    nodejs
-  ];
+  buildInputs = with pkgs; [ nodejs ];
 
   buildPhase = ''
     ln -vs ${nodePackages.nodeDependencies}/lib/node_modules app/node_modules
@@ -56,7 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with pkgs.lib; {
-    description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
+    description =
+      "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill kevincox ];

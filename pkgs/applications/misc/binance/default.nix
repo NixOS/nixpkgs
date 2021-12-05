@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, mesa, nss, popt }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron, alsa-lib
+, gtk3, libxshmfence, mesa, nss, popt }:
 
 stdenv.mkDerivation rec {
   pname = "binance";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://github.com/binance/desktop/releases/download/v${version}/${pname}-${version}-amd64-linux.deb";
+    url =
+      "https://github.com/binance/desktop/releases/download/v${version}/${pname}-${version}-amd64-linux.deb";
     sha256 = "sha256-UNqz/0IQ1nWANk83X7IVwvZTJayqNO5xPS6oECCgqHI=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss popt ];
 

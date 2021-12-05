@@ -1,21 +1,12 @@
-{ lib, stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, xz
+{ lib, stdenv, substituteAll, fetchurl, zlib ? null, zlibSupport ? true, bzip2
+, pkg-config, libffi, libunwind, Security, sqlite, openssl, ncurses, python
+, expat, tcl, tk, tix, xlibsWrapper, libX11, self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
-, packageOverrides ? (self: super: {})
-, pkgsBuildBuild
-, pkgsBuildHost
-, pkgsBuildTarget
-, pkgsHostHost
-, pkgsTargetTarget
-, sourceVersion
-, pythonVersion
-, sha256
-, passthruFun
-, pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
-}:
+, packageOverrides ? (self: super: { }), pkgsBuildBuild, pkgsBuildHost
+, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget, sourceVersion, pythonVersion
+, sha256, passthruFun, pythonAttr ?
+  "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}" }:
 
 assert zlibSupport -> zlib != null;
 
@@ -35,32 +26,41 @@ let
     pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
     pythonOnHostForHost = pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
   pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
 
-in with passthru; stdenv.mkDerivation rec {
+in with passthru;
+stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
+    url =
+      "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
     inherit sha256;
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
-  ]  ++ optionals isPy3k [
-    xz
-  ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
-    stdenv.cc.libc
-  ] ++ optionals zlibSupport [
-    zlib
-  ] ++ optionals stdenv.isDarwin [
-    libunwind Security
-  ];
+    bzip2
+    openssl
+    pythonForPypy
+    libffi
+    ncurses
+    expat
+    sqlite
+    tk
+    tcl
+    xlibsWrapper
+    libX11
+    gdbm
+    db
+  ] ++ optionals isPy3k [ xz ]
+    ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [ stdenv.cc.libc ]
+    ++ optionals zlibSupport [ zlib ]
+    ++ optionals stdenv.isDarwin [ libunwind Security ];
 
   hardeningDisable = optional stdenv.isi686 "pic";
 
@@ -70,7 +70,8 @@ in with passthru; stdenv.mkDerivation rec {
 
   C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  LD_LIBRARY_PATH = makeLibraryPath
+    (filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
     ./dont_fetch_vendored_deps.patch
@@ -94,7 +95,9 @@ in with passthru; stdenv.mkDerivation rec {
     substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
-    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    substituteInPlace "lib-python/${
+      if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"
+    }" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   buildPhase = ''
@@ -138,7 +141,9 @@ in with passthru; stdenv.mkDerivation rec {
     export TERM="xterm";
     export HOME="$TMPDIR";
 
-    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
+    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${
+      concatStringsSep " or " disabledTests
+    })' lib-python
   '';
 
   installPhase = ''
@@ -150,25 +155,39 @@ in with passthru; stdenv.mkDerivation rec {
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/${executable}-c/include $out/include/${libPrefix}
-    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+    ln -s $out/${executable}-c/lib-python/${
+      if isPy3k then "3" else pythonVersion
+    } $out/lib/${libPrefix}
 
     ${lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change @rpath/libpypy${optionalString isPy3k "3"}-c.dylib $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib $out/bin/${executable}
+      install_name_tool -change @rpath/libpypy${
+        optionalString isPy3k "3"
+      }-c.dylib $out/lib/libpypy${
+        optionalString isPy3k "3"
+      }-c.dylib $out/bin/${executable}
     ''}
 
     # verify cffi modules
-    $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
+    $out/bin/${executable} -c ${
+      if isPy3k then
+        "'import tkinter;import sqlite3;import curses;import lzma'"
+      else
+        "'import Tkinter;import sqlite3;import curses'"
+    }
 
     # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
+    cp ${
+      ../sitecustomize.py
+    } $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
   '';
 
   inherit passthru;
-  enableParallelBuilding = true;  # almost no parallelization without STM
+  enableParallelBuilding = true; # almost no parallelization without STM
 
   meta = with lib; {
     homepage = "http://pypy.org/";
-    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    description =
+      "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ andersk ];

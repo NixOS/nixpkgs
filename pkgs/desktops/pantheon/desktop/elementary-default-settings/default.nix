@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, nixos-artwork
-, glib
-, pkg-config
-, dbus
-, polkit
-, accountsservice
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, nixos-artwork
+, glib, pkg-config, dbus, polkit, accountsservice, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
@@ -52,7 +40,9 @@ stdenv.mkDerivation rec {
     # Install our override for plank dockitems as Appcenter is not ready to be preinstalled.
     # See: https://github.com/NixOS/nixpkgs/issues/70214.
     schema_dir=$out/share/glib-2.0/schemas
-    install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
+    install -D ${
+      ./overrides/plank-dockitems.gschema.override
+    } $schema_dir/plank-dockitems.gschema.override
 
     # Our launchers that use paths at /run/current-system/sw/bin
     mkdir -p $out/etc/skel/.config/plank/dock1
@@ -66,9 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

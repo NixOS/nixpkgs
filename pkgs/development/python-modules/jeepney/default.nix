@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, async-timeout
-, dbus
-, pytest
-, pytest-trio
-, pytest-asyncio
-, testpath
-, trio
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, async-timeout, dbus, pytest
+, pytest-trio, pytest-asyncio, testpath, trio }:
 
 buildPythonPackage rec {
   pname = "jeepney";
@@ -22,15 +12,8 @@ buildPythonPackage rec {
     sha256 = "fa9e232dfa0c498bd0b8a3a73b8d8a31978304dcef0515adc859d4e096f96f4f";
   };
 
-  checkInputs = [
-    async-timeout
-    dbus
-    pytest
-    pytest-trio
-    pytest-asyncio
-    testpath
-    trio
-  ];
+  checkInputs =
+    [ async-timeout dbus pytest pytest-trio pytest-asyncio testpath trio ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,5 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools-scm, pytest-forked, filelock, psutil, six, isPy3k }:
+{ lib, fetchPypi, buildPythonPackage, execnet, pytest, setuptools-scm
+, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
@@ -28,7 +28,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+    description =
+      "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

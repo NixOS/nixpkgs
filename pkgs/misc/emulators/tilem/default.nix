@@ -1,14 +1,5 @@
-{ stdenv
-, fetchurl
-, lib
-, pkg-config
-, glib
-, gtk2
-, libticonv
-, libtifiles2
-, libticables2
-, libticalcs2
-}:
+{ stdenv, fetchurl, lib, pkg-config, glib, gtk2, libticonv, libtifiles2
+, libticables2, libticalcs2 }:
 
 stdenv.mkDerivation rec {
   pname = "tilem";
@@ -22,7 +13,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-lm" ];
   meta = with lib; {
     homepage = "http://lpg.ticalc.org/prj_tilem/";
-    description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
+    description =
+      "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben luc65r ];
     platforms = platforms.linux ++ platforms.darwin;

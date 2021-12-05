@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/mdds/mdds";
-    description = "A collection of multi-dimensional data structure and indexing algorithm";
+    description =
+      "A collection of multi-dimensional data structure and indexing algorithm";
     platforms = platforms.all;
     license = licenses.mit;
   };

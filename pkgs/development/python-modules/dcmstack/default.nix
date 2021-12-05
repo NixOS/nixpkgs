@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, nose
-, nibabel
-, pydicom
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, nose, nibabel
+, pydicom }:
 
 buildPythonPackage rec {
   pname = "dcmstack";

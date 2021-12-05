@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, django
-, setuptools-scm
-, django-configurations
-, pytest-xdist
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, django, setuptools-scm
+, django-configurations, pytest-xdist, six }:
 buildPythonPackage rec {
   pname = "pytest-django";
   version = "4.4.0";

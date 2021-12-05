@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, zlib, ffmpeg, glew, pcre
-, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, xz, nasm
-, llvm, glibmm
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, zlib, ffmpeg, glew
+, pcre, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, xz, nasm, llvm
+, glibmm }:
 
 stdenv.mkDerivation rec {
   pname = "lightspark";
@@ -21,8 +20,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [
-    curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
-    pango xz nasm llvm glibmm
+    curl
+    zlib
+    ffmpeg
+    glew
+    pcre
+    rtmpdump
+    cairo
+    boost
+    SDL2
+    SDL2_mixer
+    libjpeg
+    pango
+    xz
+    nasm
+    llvm
+    glibmm
   ];
 
   meta = with lib; {

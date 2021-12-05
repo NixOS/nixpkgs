@@ -1,15 +1,12 @@
-{ lib
-, fetchpatch
-, fetchFromGitHub
+{ lib, fetchpatch, fetchFromGitHub
 # Haskell deps
 , mkDerivation, aeson, ansi-terminal, base, base16-bytestring, binary, brick
 , bytestring, cborg, containers, data-dword, data-has, deepseq, directory
 , exceptions, filepath, hashable, hevm, hpack, lens, lens-aeson, megaparsec
 , MonadRandom, mtl, optparse-applicative, process, random, stm, tasty
-, tasty-hunit, tasty-quickcheck, temporary, text, transformers , unix, unliftio
+, tasty-hunit, tasty-quickcheck, temporary, text, transformers, unix, unliftio
 , unliftio-core, unordered-containers, vector, vector-instances, vty
-, wl-pprint-annotated, word8, yaml , extra, ListLike, semver
-}:
+, wl-pprint-annotated, word8, yaml, extra, ListLike, semver }:
 mkDerivation rec {
   pname = "echidna";
   version = "1.7.2";
@@ -24,7 +21,8 @@ mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "update-hevm-to-0.47.0.patch";
-      url = "https://github.com/crytic/echidna/commit/25dfdad93d0e0dd822f22a1c1e63a0ecf2b22a23.patch";
+      url =
+        "https://github.com/crytic/echidna/commit/25dfdad93d0e0dd822f22a1c1e63a0ecf2b22a23.patch";
       sha256 = "sha256-dj3Ie+Z4zE1fgROE/KuWZXaH9knsXJi1ai3gu5zyw/E=";
     })
   ];
@@ -32,18 +30,52 @@ mkDerivation rec {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson ansi-terminal base base16-bytestring binary brick bytestring cborg
-    containers data-dword data-has deepseq directory exceptions filepath
-    hashable hevm lens lens-aeson megaparsec MonadRandom mtl
-    optparse-applicative process random stm temporary text transformers unix
-    unliftio unliftio-core unordered-containers vector vector-instances vty
-    wl-pprint-annotated word8 yaml extra ListLike semver
+    aeson
+    ansi-terminal
+    base
+    base16-bytestring
+    binary
+    brick
+    bytestring
+    cborg
+    containers
+    data-dword
+    data-has
+    deepseq
+    directory
+    exceptions
+    filepath
+    hashable
+    hevm
+    lens
+    lens-aeson
+    megaparsec
+    MonadRandom
+    mtl
+    optparse-applicative
+    process
+    random
+    stm
+    temporary
+    text
+    transformers
+    unix
+    unliftio
+    unliftio-core
+    unordered-containers
+    vector
+    vector-instances
+    vty
+    wl-pprint-annotated
+    word8
+    yaml
+    extra
+    ListLike
+    semver
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = libraryHaskellDepends;
-  testHaskellDepends = [
-    tasty tasty-hunit tasty-quickcheck
-  ];
+  testHaskellDepends = [ tasty tasty-hunit tasty-quickcheck ];
   preConfigure = ''
     hpack
     # re-enable dynamic build for Linux

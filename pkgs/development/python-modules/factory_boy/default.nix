@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, django
-, faker
-, fetchPypi
-, flask
-, flask_sqlalchemy
-, mongoengine
-, pytestCheckHook
-, sqlalchemy
-}:
+{ lib, buildPythonPackage, django, faker, fetchPypi, flask, flask_sqlalchemy
+, mongoengine, pytestCheckHook, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "factory-boy";
@@ -21,27 +12,15 @@ buildPythonPackage rec {
     sha256 = "sha256-qY0newwEfHXrbkq4UIp/gfsD0sshmG9ieRNUbveipV4=";
   };
 
-  propagatedBuildInputs = [
-    faker
-  ];
+  propagatedBuildInputs = [ faker ];
 
-  checkInputs = [
-    django
-    flask
-    flask_sqlalchemy
-    mongoengine
-    pytestCheckHook
-    sqlalchemy
-  ];
+  checkInputs =
+    [ django flask flask_sqlalchemy mongoengine pytestCheckHook sqlalchemy ];
 
   # Checks for MongoDB requires an a running DB
-  disabledTests = [
-    "MongoEngineTestCase"
-  ];
+  disabledTests = [ "MongoEngineTestCase" ];
 
-  pythonImportsCheck = [
-    "factory"
-  ];
+  pythonImportsCheck = [ "factory" ];
 
   meta = with lib; {
     description = "Python package to create factories for complex objects";

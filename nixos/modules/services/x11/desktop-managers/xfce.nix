@@ -2,40 +2,62 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.desktopManager.xfce;
-in
+let cfg = config.services.xserver.desktopManager.xfce;
 
-{
+in {
 
-  meta = {
-    maintainers = with maintainers; [ ];
-  };
+  meta = { maintainers = with maintainers; [ ]; };
 
   imports = [
     # added 2019-08-18
     # needed to preserve some semblance of UI familarity
     # with original XFCE module
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "extraSessionCommands" ]
-      [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce4-14"
+      "extraSessionCommands"
+    ] [ "services" "xserver" "displayManager" "sessionCommands" ])
 
     # added 2019-11-04
     # xfce4-14 module removed and promoted to xfce.
     # Needed for configs that used xfce4-14 module to migrate to this one.
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "enable" ]
-      [ "services" "xserver" "desktopManager" "xfce" "enable" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "noDesktop" ]
-      [ "services" "xserver" "desktopManager" "xfce" "noDesktop" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "enableXfwm" ]
-      [ "services" "xserver" "desktopManager" "xfce" "enableXfwm" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
-      [ "services" "xserver" "displayManager" "sessionCommands" ])
-    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce4-14"
+      "enable"
+    ] [ "services" "xserver" "desktopManager" "xfce" "enable" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce4-14"
+      "noDesktop"
+    ] [ "services" "xserver" "desktopManager" "xfce" "noDesktop" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce4-14"
+      "enableXfwm"
+    ] [ "services" "xserver" "desktopManager" "xfce" "enableXfwm" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce"
+      "extraSessionCommands"
+    ] [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "xfce"
+      "screenLock"
+    ] "")
   ];
 
   options = {
@@ -47,7 +69,7 @@ in
       };
 
       thunarPlugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.xfce.thunar-archive-plugin ]";
         description = ''
@@ -58,7 +80,8 @@ in
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = "Don't install XFCE desktop components (xfdesktop and panel).";
+        description =
+          "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
@@ -70,43 +93,44 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs.xfce // pkgs; [
-      glib # for gsettings
-      gtk3.out # gtk-update-icon-cache
+    environment.systemPackages = with pkgs.xfce // pkgs;
+      [
+        glib # for gsettings
+        gtk3.out # gtk-update-icon-cache
 
-      gnome.gnome-themes-extra
-      gnome.adwaita-icon-theme
-      hicolor-icon-theme
-      tango-icon-theme
-      xfce4-icon-theme
+        gnome.gnome-themes-extra
+        gnome.adwaita-icon-theme
+        hicolor-icon-theme
+        tango-icon-theme
+        xfce4-icon-theme
 
-      desktop-file-utils
-      shared-mime-info # for update-mime-database
+        desktop-file-utils
+        shared-mime-info # for update-mime-database
 
-      # For a polkit authentication agent
-      polkit_gnome
+        # For a polkit authentication agent
+        polkit_gnome
 
-      # Needed by Xfce's xinitrc script
-      xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        # Needed by Xfce's xinitrc script
+        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
-      exo
-      garcon
-      libxfce4ui
-      xfconf
+        exo
+        garcon
+        libxfce4ui
+        xfconf
 
-      mousepad
-      parole
-      ristretto
-      xfce4-appfinder
-      xfce4-notifyd
-      xfce4-screenshooter
-      xfce4-session
-      xfce4-settings
-      xfce4-taskmanager
-      xfce4-terminal
+        mousepad
+        parole
+        ristretto
+        xfce4-appfinder
+        xfce4-notifyd
+        xfce4-screenshooter
+        xfce4-session
+        xfce4-settings
+        xfce4-taskmanager
+        xfce4-terminal
 
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
-    ] # TODO: NetworkManager doesn't belong here
+        (thunar.override { thunarPlugins = cfg.thunarPlugins; })
+      ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
       ++ optionals config.hardware.pulseaudio.enable [
@@ -116,13 +140,8 @@ in
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
         (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
-        xfdesktop
-      ];
+      ] ++ optionals cfg.enableXfwm [ xfwm4 xfwm4-themes ]
+      ++ optionals (!cfg.noDesktop) [ xfce4-panel xfdesktop ];
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -152,8 +171,10 @@ in
     services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
-    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.system-config-printer.enable =
+      (mkIf config.services.printing.enable (mkDefault true));
+    services.xserver.libinput.enable =
+      mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs
     programs.dconf.enable = true;

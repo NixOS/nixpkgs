@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     # Pull upstreal fix for parallel testing.
     (fetchpatch {
       name = "parallel-tests.patch";
-      url = "https://github.com/google/re2/commit/9262284a7edc1b83e7172f4ec2d7967d695e7420.patch";
+      url =
+        "https://github.com/google/re2/commit/9262284a7edc1b83e7172f4ec2d7967d695e7420.patch";
       sha256 = "1knhfx9cs4841r09jw4ha6mdx9qwpvlcxvd04i8vr84kd0lilqms";
     })
   ];
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
+  installTargets =
+    lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";

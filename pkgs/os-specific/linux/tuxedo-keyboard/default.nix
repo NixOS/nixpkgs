@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ linuxHeaders ];
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags =
+    [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"

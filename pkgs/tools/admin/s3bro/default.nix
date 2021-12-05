@@ -9,7 +9,12 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0k25g3vch0q772f29jlghda5mjvps55h5lgwhwwbd5g2nlnrrspq";
   };
 
-  propagatedBuildInputs = with python3Packages; [ boto3 botocore click termcolor ];
+  propagatedBuildInputs = with python3Packages; [
+    boto3
+    botocore
+    click
+    termcolor
+  ];
 
   # No tests
   doCheck = false;

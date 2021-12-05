@@ -1,16 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, gtk3
-, docutils
-, gtksourceview
-, gtkspell3
-, librsvg
-, pygobject3
-, webkitgtk
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+, gobject-introspection, gtk3, docutils, gtksourceview, gtkspell3, librsvg
+, pygobject3, webkitgtk }:
 
 buildPythonApplication rec {
   pname = "formiko";
@@ -23,11 +13,7 @@ buildPythonApplication rec {
     sha256 = "0n7w585gbrpn2xcd5n04hivrjarpr2wj260y2kpxpgh93vn52sdi";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    gobject-introspection
-    gtk3
-  ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection gtk3 ];
   propagatedBuildInputs = [
     docutils
     gobject-introspection

@@ -1,7 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL, msaClientID ? "" }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper
+, xorg, libpulseaudio, qtbase, libGL, msaClientID ? "" }:
 
 let
-  libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio libGL ];
+  libpath = with xorg;
+    lib.makeLibraryPath [
+      libX11
+      libXext
+      libXcursor
+      libXrandr
+      libXxf86vm
+      libpulseaudio
+      libGL
+    ];
 in mkDerivation rec {
   pname = "multimc";
   version = "unstable-2021-09-08";
@@ -50,7 +60,7 @@ in mkDerivation rec {
     license = licenses.asl20;
     # upstream don't want us to re-distribute this application:
     # https://github.com/NixOS/nixpkgs/issues/131983
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }

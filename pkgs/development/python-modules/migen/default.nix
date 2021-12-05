@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, colorama
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, colorama }:
 
 buildPythonPackage rec {
   pname = "migen";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "32UjaIam/B7Gx6XbPcR067LcXfokJH2mATG9mU38a6o=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
   pythonImportsCheck = [ "migen" ];
 

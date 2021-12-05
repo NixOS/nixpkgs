@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/liboggz/${pname}-${version}.tar.gz";
+    url =
+      "https://downloads.xiph.org/releases/liboggz/${pname}-${version}.tar.gz";
     sha256 = "0nj17lhnsw4qbbk8jy4j6a78w6v2llhqdwq46g44mbm9w2qsvbvb";
   };
 
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://xiph.org/oggz/";
-    description = "A C library and tools for manipulating with Ogg files and streams";
+    description =
+      "A C library and tools for manipulating with Ogg files and streams";
     longDescription = ''
       Oggz comprises liboggz and the tool oggz, which provides commands to
       inspect, edit and validate Ogg files. The oggz-chop tool can also be used

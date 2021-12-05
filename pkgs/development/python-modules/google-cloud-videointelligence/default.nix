@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, google-api-core
-, google-cloud-testutils
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, google-api-core
+, google-cloud-testutils, proto-plus, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";

@@ -1,7 +1,6 @@
 { lib, stdenv, fetchpatch, fetchurl, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -9,9 +8,7 @@
 # linear algebra
 , blas, lapack, arpack
 # Darwin frameworks
-, CoreServices, ApplicationServices
-}:
-
+, CoreServices, ApplicationServices }:
 
 let
   majorVersion = "1";
@@ -24,18 +21,21 @@ let
 
   dsfmtVersion = "2.2.3";
   dsfmt = fetchurl {
-    url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmtVersion}.tar.gz";
+    url =
+      "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmtVersion}.tar.gz";
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
   libuv = fetchurl {
-    url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
+    url =
+      "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
     sha256 = libuvSha256;
   };
 
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
-    url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
+    url =
+      "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
     sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
 
@@ -47,7 +47,8 @@ let
 
   libwhichVersion = "81e9723c0273d78493dc8c8ed570f68d9ce7e89e";
   libwhich = fetchurl {
-    url = "https://api.github.com/repos/vtjnash/libwhich/tarball/${libwhichVersion}";
+    url =
+      "https://api.github.com/repos/vtjnash/libwhich/tarball/${libwhichVersion}";
     sha256 = "1p7zg31kpmpbmh1znrk1xrbd074agx13b9q4dcw8n2zrwwdlbz3b";
   };
 
@@ -59,37 +60,48 @@ let
 
   suitesparseVersion = "4.4.5";
   suitesparse = fetchurl {
-    url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${suitesparseVersion}.tar.gz";
+    url =
+      "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${suitesparseVersion}.tar.gz";
     sha256 = "1jcbxb8jx5wlcixzf6n5dca2rcfx6mlcms1k2rl5gp67ay3bix43";
   };
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
   src = fetchzip {
-    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = src_sha256;
   };
 
-  nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs =
+    [ cmake curl gfortran m4 makeWrapper patchelf perl python2 which ];
   # cmake is only used to build the bundled deps
   dontUseCmakeConfigure = true;
 
   # We assert that compatible blas and lapack are used.
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev blas lapack openlibm openspecfun readline utf8proc
-    zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
-  ;
+  buildInputs = assert (blas.isILP64 == lapack.isILP64);
+    [
+      arpack
+      fftw
+      fftwSinglePrec
+      gmp
+      libgit2
+      libunwind
+      mpfr
+      pcre2.dev
+      blas
+      lapack
+      openlibm
+      openspecfun
+      readline
+      utf8proc
+      zlib
+    ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
 
-  patches = [
-    ./patches/1.0/use-system-utf8proc-julia-1.0.patch
-  ];
+  patches = [ ./patches/1.0/use-system-utf8proc-julia-1.0.patch ];
 
   postPatch = ''
     patchShebangs . contrib
@@ -113,57 +125,68 @@ stdenv.mkDerivation rec {
     cp "${suitesparse}" "./deps/srccache/SuiteSparse-${suitesparseVersion}.tar.gz"
   '';
 
-  makeFlags =
-    let
-      arch = lib.head (lib.splitString "-" stdenv.system);
-      march = {
-        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
-        i686 = "pentium4";
-        aarch64 = "armv8-a";
-      }.${arch}
-              or (throw "unsupported architecture: ${arch}");
-      # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "generic"; }.${arch}
-                  or (throw "unsupported architecture: ${arch}");
-    in [
-      "ARCH=${arch}"
-      "MARCH=${march}"
-      "JULIA_CPU_TARGET=${cpuTarget}"
-      "PREFIX=$(out)"
-      "prefix=$(out)"
-      "SHELL=${stdenv.shell}"
+  makeFlags = let
+    arch = lib.head (lib.splitString "-" stdenv.system);
+    march = {
+      x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
+      i686 = "pentium4";
+      aarch64 = "armv8-a";
+    }.${arch} or (throw "unsupported architecture: ${arch}");
+    # Julia requires Pentium 4 (SSE2) or better
+    cpuTarget = {
+      x86_64 = "x86-64";
+      i686 = "pentium4";
+      aarch64 = "generic";
+    }.${arch} or (throw "unsupported architecture: ${arch}");
+  in [
+    "ARCH=${arch}"
+    "MARCH=${march}"
+    "JULIA_CPU_TARGET=${cpuTarget}"
+    "PREFIX=$(out)"
+    "prefix=$(out)"
+    "SHELL=${stdenv.shell}"
 
-      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
-      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
+    (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
+    "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
-      "USE_SYSTEM_LAPACK=1"
+    "USE_SYSTEM_LAPACK=1"
 
-      "USE_SYSTEM_ARPACK=1"
-      "USE_SYSTEM_FFTW=1"
-      "USE_SYSTEM_GMP=1"
-      "USE_SYSTEM_LIBGIT2=1"
-      "USE_SYSTEM_LIBUNWIND=1"
+    "USE_SYSTEM_ARPACK=1"
+    "USE_SYSTEM_FFTW=1"
+    "USE_SYSTEM_GMP=1"
+    "USE_SYSTEM_LIBGIT2=1"
+    "USE_SYSTEM_LIBUNWIND=1"
 
-      # We will probably never do that
-      #"USE_SYSTEM_LLVM=1"
-      "LLVM_VER=6.0.0"
+    # We will probably never do that
+    #"USE_SYSTEM_LLVM=1"
+    "LLVM_VER=6.0.0"
 
-      "USE_SYSTEM_MPFR=1"
-      "USE_SYSTEM_OPENLIBM=1"
-      "USE_SYSTEM_OPENSPECFUN=1"
-      "USE_SYSTEM_PATCHELF=1"
-      "USE_SYSTEM_PCRE=1"
-      "PCRE_CONFIG=${pcre2.dev}/bin/pcre2-config"
-      "PCRE_INCL_PATH=${pcre2.dev}/include/pcre2.h"
-      "USE_SYSTEM_READLINE=1"
-      "USE_SYSTEM_UTF8PROC=1"
-      "USE_SYSTEM_ZLIB=1"
-    ];
+    "USE_SYSTEM_MPFR=1"
+    "USE_SYSTEM_OPENLIBM=1"
+    "USE_SYSTEM_OPENSPECFUN=1"
+    "USE_SYSTEM_PATCHELF=1"
+    "USE_SYSTEM_PCRE=1"
+    "PCRE_CONFIG=${pcre2.dev}/bin/pcre2-config"
+    "PCRE_INCL_PATH=${pcre2.dev}/include/pcre2.h"
+    "USE_SYSTEM_READLINE=1"
+    "USE_SYSTEM_UTF8PROC=1"
+    "USE_SYSTEM_ZLIB=1"
+  ];
 
-  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (lib.makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr blas lapack openlibm
-    openspecfun pcre2
-  ]);
+  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64);
+    (lib.makeLibraryPath [
+      arpack
+      fftw
+      fftwSinglePrec
+      gmp
+      libgit2
+      mpfr
+      blas
+      lapack
+      openlibm
+      openspecfun
+      pcre2
+    ]);
 
   doCheck = !stdenv.isDarwin;
   checkTarget = "testall";
@@ -185,7 +208,9 @@ stdenv.mkDerivation rec {
     # as using a wrapper with LD_LIBRARY_PATH causes segmentation
     # faults when program returns an error:
     #   $ julia -e 'throw(Error())'
-    find $(echo $LD_LIBRARY_PATH | sed 's|:| |g') -maxdepth 1 -name '*.${if stdenv.isDarwin then "dylib" else "so"}*' | while read lib; do
+    find $(echo $LD_LIBRARY_PATH | sed 's|:| |g') -maxdepth 1 -name '*.${
+      if stdenv.isDarwin then "dylib" else "so"
+    }*' | while read lib; do
       if [[ ! -e $out/lib/julia/$(basename $lib) ]]; then
         ln -sv $lib $out/lib/julia/$(basename $lib)
       fi
@@ -198,7 +223,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "High-level performance-oriented dynamical language for technical computing";
+    description =
+      "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin rob garrison ];

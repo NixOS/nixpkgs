@@ -1,6 +1,4 @@
-{ lib
-, fetchFromGitHub
-}: rec {
+{ lib, fetchFromGitHub }: rec {
   version = "3.1.0";
   src = fetchFromGitHub {
     owner = "openrazer";

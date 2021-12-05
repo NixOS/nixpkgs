@@ -1,22 +1,29 @@
 { lib, buildDunePackage, fetchFromGitHub, which, ocaml, lwt_react, ssl, lwt_ssl
-, bigstringaf, lwt, cstruct, mirage-crypto, zarith, mirage-crypto-ec, ptime, mirage-crypto-rng, mtime, ca-certs
-, cohttp, cohttp-lwt-unix, hmap
-, lwt_log, ocaml_pcre, cryptokit, xml-light, ipaddr
-, pgocaml, camlzip, ocaml_sqlite3
-, makeWrapper
-}:
+, bigstringaf, lwt, cstruct, mirage-crypto, zarith, mirage-crypto-ec, ptime
+, mirage-crypto-rng, mtime, ca-certs, cohttp, cohttp-lwt-unix, hmap, lwt_log
+, ocaml_pcre, cryptokit, xml-light, ipaddr, pgocaml, camlzip, ocaml_sqlite3
+, makeWrapper }:
 
-let mkpath = p:
-  "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
-in
+let mkpath = p: "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
-let caml_ld_library_path =
-  lib.concatMapStringsSep ":" mkpath [
-    bigstringaf lwt ssl cstruct mirage-crypto zarith mirage-crypto-ec ptime mirage-crypto-rng mtime ca-certs cryptokit ocaml_pcre
-  ]
-; in
+in let
+  caml_ld_library_path = lib.concatMapStringsSep ":" mkpath [
+    bigstringaf
+    lwt
+    ssl
+    cstruct
+    mirage-crypto
+    zarith
+    mirage-crypto-ec
+    ptime
+    mirage-crypto-rng
+    mtime
+    ca-certs
+    cryptokit
+    ocaml_pcre
+  ];
 
-buildDunePackage rec {
+in buildDunePackage rec {
   version = "4.0.1";
   pname = "ocsigenserver";
 
@@ -33,25 +40,32 @@ buildDunePackage rec {
   nativeBuildInputs = [ makeWrapper which ];
   buildInputs = [ lwt_react pgocaml camlzip ocaml_sqlite3 ];
 
-  propagatedBuildInputs = [ cohttp cohttp-lwt-unix cryptokit hmap ipaddr lwt_log lwt_ssl
-    ocaml_pcre xml-light
+  propagatedBuildInputs = [
+    cohttp
+    cohttp-lwt-unix
+    cryptokit
+    hmap
+    ipaddr
+    lwt_log
+    lwt_ssl
+    ocaml_pcre
+    xml-light
   ];
 
   configureFlags = [ "--root $(out)" "--prefix /" ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   postConfigure = ''
     make -C src confs
   '';
 
-  postFixup =
-  ''
-  rm -rf $out/var/run
-  wrapProgram $out/bin/ocsigenserver \
-    --suffix CAML_LD_LIBRARY_PATH : "${caml_ld_library_path}"
+  postFixup = ''
+    rm -rf $out/var/run
+    wrapProgram $out/bin/ocsigenserver \
+      --suffix CAML_LD_LIBRARY_PATH : "${caml_ld_library_path}"
   '';
 
   dontPatchShebangs = true;
@@ -59,11 +73,11 @@ buildDunePackage rec {
   meta = {
     homepage = "http://ocsigen.org/ocsigenserver/";
     description = "A full featured Web server";
-    longDescription =''
+    longDescription = ''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
-      '';
+    '';
     license = lib.licenses.lgpl21Only;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 

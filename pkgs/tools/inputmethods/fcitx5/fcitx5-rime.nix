@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, gettext
-, fcitx5
-, librime
-, brise
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules, gettext
+, fcitx5, librime, brise }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
@@ -20,21 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1djakg17rxc38smja4y76i0p4gwdj3lgwym8kybkaspk7lxr62zy";
   };
 
-  cmakeFlags = [
-    "-DRIME_DATA_DIR=${brise}/share/rime-data"
-  ];
+  cmakeFlags = [ "-DRIME_DATA_DIR=${brise}/share/rime-data" ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    pkg-config
-    gettext
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config gettext ];
 
-  buildInputs = [
-    fcitx5
-    librime
-  ];
+  buildInputs = [ fcitx5 librime ];
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

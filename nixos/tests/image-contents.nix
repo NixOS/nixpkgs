@@ -1,9 +1,7 @@
 # Tests the contents attribute of nixos/lib/make-disk-image.nix
 # including its user, group, and mode attributes.
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;

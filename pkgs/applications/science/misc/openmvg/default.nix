@@ -1,10 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, libjpeg ? null
-, zlib ? null
-, libpng ? null
-, eigen ? null
-, libtiff ? null
-, enableExamples ? false
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, libjpeg ? null, zlib ? null
+, libpng ? null, eigen ? null, libtiff ? null, enableExamples ? false
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +35,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   meta = {
-    description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
+    description =
+      "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;

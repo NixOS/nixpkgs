@@ -1,21 +1,28 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "esrap-peg";
   version = "20191007-git";
 
-  description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
+  description =
+    "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
 
-  deps = [ args."alexandria" args."cl-unification" args."esrap" args."iterate" args."trivial-with-current-source-form" ];
+  deps = [
+    args."alexandria"
+    args."cl-unification"
+    args."esrap"
+    args."iterate"
+    args."trivial-with-current-source-form"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/esrap-peg/2019-10-07/esrap-peg-20191007-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/esrap-peg/2019-10-07/esrap-peg-20191007-git.tgz";
     sha256 = "0285ngcm73rpzmr0ydy6frps2b4q6n4jymjv3ncwsh81x5blfvis";
   };
 
   packageName = "esrap-peg";
 
-  asdFilesToKeep = ["esrap-peg.asd"];
+  asdFilesToKeep = [ "esrap-peg.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM esrap-peg DESCRIPTION
@@ -30,4 +37,5 @@ rec {
       trivial-with-current-source-form))
     DEPENDENCIES
     (alexandria cl-unification esrap iterate trivial-with-current-source-form)
-    VERSION 20191007-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20191007-git SIBLINGS NIL PARASITES NIL)
+*/

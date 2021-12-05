@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "yapesdl";
@@ -16,12 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-51P6wNaSfVA3twu+yRUKXguEmVBvuuEnHxH1Zl1vsCc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    SDL2
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ SDL2 ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 

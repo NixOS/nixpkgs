@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "3.0.7";
 
   src = fetchurl {
-    url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
+    url =
+      "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
     sha256 = "1xdpjqx7qaq0syw448b32q36g12pgh1hn6knyqi3k5isp0f09qmr";
   };
 

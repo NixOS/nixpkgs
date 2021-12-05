@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
+{ lib, stdenv, fetchurl, bison, flex, libusb-compat-0_1, libelf, libftdi1
+, readline
 # docSupport is a big dependency, disabled by default
-, docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
-}:
+, docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null }:
 
 assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals docSupport [ texLive texinfo texi2html ];
 
   meta = with lib; {
-    description = "Command-line tool for programming Atmel AVR microcontrollers";
+    description =
+      "Command-line tool for programming Atmel AVR microcontrollers";
     longDescription = ''
       AVRDUDE (AVR Downloader/UploaDEr) is an utility to
       download/upload/manipulate the ROM and EEPROM contents of AVR

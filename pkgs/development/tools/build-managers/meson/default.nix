@@ -1,11 +1,6 @@
-{ lib
-, python3
+{ lib, python3
 
-, writeTextDir
-, substituteAll
-, fetchpatch
-, installShellFiles
-}:
+, writeTextDir, substituteAll, fetchpatch, installShellFiles }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
@@ -87,7 +82,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    description =
+      "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
     maintainers = with maintainers; [ jtojnar mbe ];
     platforms = platforms.all;

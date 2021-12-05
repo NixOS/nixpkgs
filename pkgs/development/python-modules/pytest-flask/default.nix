@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm
+, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
@@ -14,10 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    flask
-    werkzeug
-  ];
+  propagatedBuildInputs = [ flask werkzeug ];
 
   nativeBuildInputs = [ setuptools-scm ];
 

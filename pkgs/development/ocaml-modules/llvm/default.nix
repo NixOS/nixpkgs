@@ -1,8 +1,8 @@
 { stdenv, lib, python, cmake, libllvm, ocaml, findlib, ctypes }:
 
-let version = lib.getVersion libllvm; in
+let version = lib.getVersion libllvm;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "ocaml-llvm";
   inherit version;
 
@@ -30,13 +30,11 @@ stdenv.mkDerivation {
     mv $OCAMLFIND_DESTDIR/llvm/stublibs $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  passthru = {
-    inherit libllvm;
-  };
+  passthru = { inherit libllvm; };
 
   meta = {
     inherit (libllvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "OCaml bindings distributed with LLVM";
     maintainers = with lib.maintainers; [ vbgl ];
   };

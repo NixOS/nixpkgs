@@ -1,20 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, appstream-glib
-, clutter
-, gjs
-, glib
-, gobject-introspection
-, gtk3
-, meson
-, mutter
-, ninja
-, pango
-, pkg-config
-, vala
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, appstream-glib, clutter, gjs, glib
+, gobject-introspection, gtk3, meson, mutter, ninja, pango, pkg-config, vala
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   version = "3.42.1";
@@ -27,9 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yoJ/k9cXXF5ELKF0JXGtxsUjfQ/S1sccLRQOQG7YMXo=";
   };
 
-  patches = [
-    ./fix-paths.patch
-  ];
+  patches = [ ./fix-paths.patch ];
 
   # TODO: switch to substituteAll with placeholder
   # https://github.com/NixOS/nix/issues/1846
@@ -39,7 +23,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
+      --subst-var-by gschemasCompiled ${
+        glib.makeSchemaPath (placeholder "out") "${pname}-${version}"
+      }
   '';
 
   nativeBuildInputs = [
@@ -62,7 +48,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
+    "-Dcontrol-center-keybindings-dir=${
+      placeholder "out"
+    }/share/gnome-control-center/keybindings"
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];

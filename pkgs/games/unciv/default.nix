@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, libpulseaudio
-, libXxf86vm
-}:
+{ stdenv, lib, fetchurl, copyDesktopItems, makeDesktopItem, makeWrapper, jre
+, libpulseaudio, libXxf86vm }:
 let
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -17,18 +9,15 @@ let
     categories = "Game;";
   };
 
-  envLibPath = lib.makeLibraryPath [
-    libpulseaudio
-    libXxf86vm
-  ];
+  envLibPath = lib.makeLibraryPath [ libpulseaudio libXxf86vm ];
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "unciv";
   version = "3.15.9";
 
   src = fetchurl {
-    url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
+    url =
+      "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
     sha256 = "sha256-ONp7M6nMlVjxNnsIveDpqV7/WahydphP16DFDrcjY4E=";
   };
 

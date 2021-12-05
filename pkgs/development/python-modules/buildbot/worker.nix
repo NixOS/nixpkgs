@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
-  future, coreutils, nixosTests }:
+{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted
+, future, coreutils, nixosTests }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
@@ -19,9 +19,7 @@ buildPythonPackage (rec {
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.buildbot;
-  };
+  passthru.tests = { smoke-test = nixosTests.buildbot; };
 
   meta = with lib; {
     homepage = "https://buildbot.net/";

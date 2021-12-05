@@ -1,9 +1,4 @@
-{ buildah-unwrapped
-, runCommand
-, makeWrapper
-, lib
-, extraPackages ? []
-, buildah
+{ buildah-unwrapped, runCommand, makeWrapper, lib, extraPackages ? [ ], buildah
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
@@ -11,23 +6,16 @@
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , util-linux # nsenter
 , cni-plugins # not added to path
-, iptables
-}:
+, iptables }:
 
 let
   buildah = buildah-unwrapped;
 
   preferLocalBuild = true;
 
-  binPath = lib.makeBinPath ([
-    runc
-    crun
-    conmon
-    slirp4netns
-    fuse-overlayfs
-    util-linux
-    iptables
-  ] ++ extraPackages);
+  binPath = lib.makeBinPath
+    ([ runc crun conmon slirp4netns fuse-overlayfs util-linux iptables ]
+      ++ extraPackages);
 
 in runCommand buildah.name {
   name = "${buildah.pname}-wrapper-${buildah.version}";
@@ -35,14 +23,9 @@ in runCommand buildah.name {
 
   meta = builtins.removeAttrs buildah.meta [ "outputsToInstall" ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
 } ''
   ln -s ${buildah.man} $man

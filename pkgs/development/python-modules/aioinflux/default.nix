@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, ciso8601
-, pandas
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, ciso8601, pandas }:
 
 buildPythonPackage rec {
   pname = "aioinflux";

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, async-timeout
-, aioresponses
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, aiohttp, async-timeout
+, aioresponses, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "foobot-async";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "fa557a22de925139cb4a21034ffdbcd01d28bf166c0e680eaf84a99206327f40";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
-  checkInputs = [
-    aioresponses
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses pytestCheckHook ];
 
   pythonImportsCheck = [ "foobot_async" ];
 

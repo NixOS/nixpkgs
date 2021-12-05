@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libyamlcpp
-, pkg-config
-, procps
-, coreutils
-, smartSupport ? false, libatasmart
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkg-config, procps, coreutils
+, smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
   pname = "thinkfan";

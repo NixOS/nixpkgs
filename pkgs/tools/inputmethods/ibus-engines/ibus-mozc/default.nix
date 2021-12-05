@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, which, ninja, pkg-config, protobuf
-, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, which, ninja, pkg-config, protobuf, ibus, gtk2
+, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-mozc";
@@ -14,8 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    which ninja python3Packages.python python3Packages.six
-    python3Packages.gyp pkg-config qt5.wrapQtAppsHook
+    which
+    ninja
+    python3Packages.python
+    python3Packages.six
+    python3Packages.gyp
+    pkg-config
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];

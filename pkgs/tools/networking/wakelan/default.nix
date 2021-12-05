@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Send a wake-on-lan packet";
 
-    longDescription =
-      '' WakeLan sends a properly formatted UDP packet across the
-         network which will cause a wake-on-lan enabled computer to
-         power on.
-      '';
+    longDescription = ''
+      WakeLan sends a properly formatted UDP packet across the
+              network which will cause a wake-on-lan enabled computer to
+              power on.
+           '';
 
     license = lib.licenses.gpl2Plus;
 

@@ -1,23 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, mock
-, numpy
-, multipledispatch
-, python-dateutil
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, mock, numpy
+, multipledispatch, python-dateutil }:
 
 let
   # Fetcher function looks similar to fetchPypi.
   # Allows for easier overriding, without having to know
   # how the source is actually fetched.
-  fetcher = {pname, version, sha256}: fetchFromGitHub {
-    owner = "blaze";
-    repo = pname;
-    rev = version;
-    inherit sha256;
-  };
+  fetcher = { pname, version, sha256 }:
+    fetchFromGitHub {
+      owner = "blaze";
+      repo = pname;
+      rev = version;
+      inherit sha256;
+    };
 
 in buildPythonPackage rec {
   pname = "datashape";

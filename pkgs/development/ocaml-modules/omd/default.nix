@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/omd/releases/download/${version}/omd-${version}.tar.gz";
+    url =
+      "https://github.com/Chris00/omd/releases/download/${version}/omd-${version}.tar.gz";
     sha256 = "1sgdgzpx96br7npj8mh91cli5mqmzsjpngwm7x4212n3k1d0ivwa";
   };
 

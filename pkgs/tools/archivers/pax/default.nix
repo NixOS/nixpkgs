@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "20201030";
 
   src = fetchurl {
-    url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
+    url =
+      "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
     sha256 = "1p18nxijh323f4i1s2pg7pcr0557xljl5avv8ll5s9nfr34r5j0w";
   };
 

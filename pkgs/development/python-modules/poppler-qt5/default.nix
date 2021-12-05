@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, sip
-, qtbase
-, qmake
-, pyqt5
-, pyqt-builder
-, poppler
-, pkg-config
-, fetchpatch
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, sip, qtbase, qmake, pyqt5
+, pyqt-builder, poppler, pkg-config, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "python-poppler-qt5";
@@ -26,7 +15,8 @@ buildPythonPackage rec {
   patches = [
     # Fix for https://github.com/frescobaldi/python-poppler-qt5/issues/43 (from PR #45)
     (fetchpatch {
-      url = "https://github.com/frescobaldi/python-poppler-qt5/commit/40e71ad88173d02648bceb2438bc0567e60dacd5.patch";
+      url =
+        "https://github.com/frescobaldi/python-poppler-qt5/commit/40e71ad88173d02648bceb2438bc0567e60dacd5.patch";
       sha256 = "0c93d0k7b1n2s2njl8g92x6vw3z96da1fczah9qx07x08iw8dzi5";
     })
   ];

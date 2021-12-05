@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "-p rustc-demangle-capi";
   postInstall = ''
     mkdir -p $out/lib
-    cp target/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc_demangle.so $out/lib
+    cp target/${
+      rust.toRustTargetSpec stdenv.hostPlatform
+    }/release/librustc_demangle.so $out/lib
     cp -R crates/capi/include $out
   '';
 

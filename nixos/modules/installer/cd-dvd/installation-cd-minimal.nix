@@ -4,9 +4,7 @@
 { ... }:
 
 {
-  imports =
-    [ ./installation-cd-base.nix
-    ];
+  imports = [ ./installation-cd-base.nix ];
 
   isoImage.edition = "minimal";
 

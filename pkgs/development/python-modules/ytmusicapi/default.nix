@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
@@ -17,15 +12,11 @@ buildPythonPackage rec {
     sha256 = "sha256-haZe5afwkU8wD8s2lrmHJuVo6TO3CcQ/0TuJbHPmqvU=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   doCheck = false; # requires network access
 
-  pythonImportsCheck = [
-    "ytmusicapi"
-  ];
+  pythonImportsCheck = [ "ytmusicapi" ];
 
   meta = with lib; {
     description = "Python API for YouTube Music";

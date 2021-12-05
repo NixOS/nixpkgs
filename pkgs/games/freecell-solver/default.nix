@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, perl, gmp, libtap, gperf
+{ lib, stdenv, fetchurl, pkg-config, cmake, perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
 with lib;
@@ -9,20 +8,20 @@ stdenv.mkDerivation rec {
   version = "4.18.0";
 
   src = fetchurl {
-    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
+    url =
+      "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
     sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
   };
 
-  nativeBuildInputs = [
-    cmake perl pkg-config
-  ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
-    GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
-  ]);
+  nativeBuildInputs = [ cmake perl pkg-config ] ++ (with perlPackages;
+    TaskFreecellSolverTesting.buildInputs ++ [
+      GamesSolitaireVerify
+      StringShellQuote
+      TaskFreecellSolverTesting
+      TemplateToolkit
+    ]);
 
-  buildInputs = [
-    gmp libtap gperf
-    python3 python3.pkgs.random2
-  ];
+  buildInputs = [ gmp libtap gperf python3 python3.pkgs.random2 ];
 
   # "ninja t/CMakeFiles/delta-states-test.t.exe.dir/__/delta_states.c.o" fails
   # to depend on the generated "is_king.h".

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, python
-, pkg-config
-, imagemagick
-, autoreconfHook
-, boost
-, isPy3k
-, pythonImportsCheckHook
-}:
+{ lib, buildPythonPackage, fetchurl, python, pkg-config, imagemagick
+, autoreconfHook, boost, isPy3k, pythonImportsCheckHook }:
 
 buildPythonPackage rec {
   pname = "pythonmagick";
@@ -29,15 +20,14 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config autoreconfHook pythonImportsCheckHook ];
   buildInputs = [ python boost imagemagick ];
 
-  pythonImportsCheck = [
-    "PythonMagick"
-  ];
+  pythonImportsCheck = [ "PythonMagick" ];
 
   disabled = isPy3k;
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/script/api.php";
     license = licenses.imagemagick;
-    description = "PythonMagick provides object oriented bindings for the ImageMagick Library.";
+    description =
+      "PythonMagick provides object oriented bindings for the ImageMagick Library.";
   };
 }

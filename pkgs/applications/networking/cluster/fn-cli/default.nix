@@ -13,11 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = ["."];
+  subPackages = [ "." ];
 
-  buildInputs = [
-    docker
-  ];
+  buildInputs = [ docker ];
 
   preBuild = ''
     export HOME=$TMPDIR

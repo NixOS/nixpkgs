@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pymemcache";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-O2qmcLWCUSc1f32irelIZOOuOziOUQXFGcuQJBXPvvM=";
   };
 
-  checkInputs = [
-    future
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ future mock pytestCheckHook ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg

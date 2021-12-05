@@ -1,11 +1,4 @@
-{ buildDunePackage
-, fetchzip
-, findlib
-, lib
-, menhir
-, ocaml
-, re
-}:
+{ buildDunePackage, fetchzip, findlib, lib, menhir, ocaml, re }:
 
 buildDunePackage rec {
   pname = "coin";
@@ -13,7 +6,8 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.03";
 
   src = fetchzip {
-    url = "https://github.com/mirage/coin/releases/download/v${version}/coin-v${version}.tbz";
+    url =
+      "https://github.com/mirage/coin/releases/download/v${version}/coin-v${version}.tbz";
     sha256 = "06bfidvglyp9hzvr2xwbdx8wf26is2xrzc31fldzjf5ab0vd076p";
   };
 

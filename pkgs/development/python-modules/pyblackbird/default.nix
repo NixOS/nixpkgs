@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyserial, pyserial-asyncio }:
 
 buildPythonPackage rec {
   pname = "pyblackbird";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "0m1yd1cb3z8011x7nicxpf091bdcwghcphn0l21c65f71rabzg6s";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-    pyserial-asyncio
-  ];
+  propagatedBuildInputs = [ pyserial pyserial-asyncio ];
 
   # Test setup try to create a serial port
   doCheck = false;

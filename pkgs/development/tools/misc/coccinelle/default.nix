@@ -5,14 +5,21 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://coccinelle.gitlabpages.inria.fr/website/distrib/${pname}-${version}.tar.gz";
+    url =
+      "https://coccinelle.gitlabpages.inria.fr/website/distrib/${pname}-${version}.tar.gz";
     sha256 = "0k0x4qnxzj8fymkp6y9irggcah070hj7hxq8l6ddj8ccpmjbhnsb";
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
-    ocaml_pcre parmap stdcompat
-    python3 ncurses pkg-config
+    ocaml
+    findlib
+    menhir
+    ocaml_pcre
+    parmap
+    stdcompat
+    python3
+    ncurses
+    pkg-config
   ];
 
   doCheck = false;

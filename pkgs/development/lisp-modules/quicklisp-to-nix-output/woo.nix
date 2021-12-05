@@ -1,21 +1,45 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "woo";
   version = "20210630-git";
 
   description = "An asynchronous HTTP server written in Common Lisp";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-utilities" args."clack-socket" args."fast-http" args."fast-io" args."flexi-streams" args."lev" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."swap-bytes" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."vom" args."xsubseq" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."cl-utilities"
+    args."clack-socket"
+    args."fast-http"
+    args."fast-io"
+    args."flexi-streams"
+    args."lev"
+    args."proc-parse"
+    args."quri"
+    args."smart-buffer"
+    args."split-sequence"
+    args."static-vectors"
+    args."swap-bytes"
+    args."trivial-features"
+    args."trivial-gray-streams"
+    args."trivial-utf-8"
+    args."vom"
+    args."xsubseq"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/woo/2021-06-30/woo-20210630-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/woo/2021-06-30/woo-20210630-git.tgz";
     sha256 = "0znpjcrw2gskcgf8ipgvqg87b9b2n4x6jkm25rizj6h7bms6v21r";
   };
 
   packageName = "woo";
 
-  asdFilesToKeep = ["woo.asd"];
+  asdFilesToKeep = [ "woo.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp
@@ -44,4 +68,5 @@ rec {
      cl-utilities clack-socket fast-http fast-io flexi-streams lev proc-parse
      quri smart-buffer split-sequence static-vectors swap-bytes
      trivial-features trivial-gray-streams trivial-utf-8 vom xsubseq)
-    VERSION 20210630-git SIBLINGS (clack-handler-woo woo-test) PARASITES NIL) */
+    VERSION 20210630-git SIBLINGS (clack-handler-woo woo-test) PARASITES NIL)
+*/

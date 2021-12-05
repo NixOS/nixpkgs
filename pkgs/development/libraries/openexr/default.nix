@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
-, ilmbase
-, fetchpatch
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, zlib, ilmbase, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
@@ -23,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix pkg-config paths
     (fetchpatch {
-      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/2f19a01923885fda75ec9d19332de080ec7102bd.patch";
+      url =
+        "https://github.com/AcademySoftwareFoundation/openexr/commit/2f19a01923885fda75ec9d19332de080ec7102bd.patch";
       sha256 = "1yxmrdzq1x1911wdzwnzr29jmg2r4wd4yx3vhjn0y5dpny0ri5y5";
     })
   ];

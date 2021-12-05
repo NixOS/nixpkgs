@@ -1,7 +1,4 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-}:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "merriweather-sans";
@@ -26,7 +23,8 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/SorkinType/Merriweather-Sans";
-    description = "Merriweather Sans is a low-contrast semi-condensed sans-serif text typeface family designed to be pleasant to read at very small sizes";
+    description =
+      "Merriweather Sans is a low-contrast semi-condensed sans-serif text typeface family designed to be pleasant to read at very small sizes";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ emily ];

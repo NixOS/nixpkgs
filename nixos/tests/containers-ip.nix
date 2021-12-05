@@ -17,17 +17,14 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
-  machine =
-    { pkgs, ... }: {
-      imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      virtualisation = {
-        writableStore = true;
-      };
+  machine = { pkgs, ... }: {
+    imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    virtualisation = { writableStore = true; };
 
-      containers.webserver4 = webserverFor "10.231.136.1" "10.231.136.2";
-      containers.webserver6 = webserverFor "fc00::2" "fc00::1";
-      virtualisation.additionalPaths = [ pkgs.stdenv ];
-    };
+    containers.webserver4 = webserverFor "10.231.136.1" "10.231.136.2";
+    containers.webserver6 = webserverFor "fc00::2" "fc00::1";
+    virtualisation.additionalPaths = [ pkgs.stdenv ];
+  };
 
   testScript = { nodes, ... }: ''
     import time

@@ -1,7 +1,6 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config
-, alsa-lib, fftw, flac, lame, libjack2, libmad, libpulseaudio
-, libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
-}:
+{ mkDerivation, lib, fetchurl, cmake, pkg-config, alsa-lib, fftw, flac, lame
+, libjack2, libmad, libpulseaudio, libsamplerate, libsndfile, libvorbis
+, portaudio, qtbase, wavpack }:
 mkDerivation {
   pname = "traverso";
   version = "0.49.6";
@@ -12,16 +11,34 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ alsa-lib fftw flac.dev libjack2 lame
-                  libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
-                  portaudio qtbase wavpack ];
+  buildInputs = [
+    alsa-lib
+    fftw
+    flac.dev
+    libjack2
+    lame
+    libmad
+    libpulseaudio
+    libsamplerate.dev
+    libsndfile.dev
+    libvorbis
+    portaudio
+    qtbase
+    wavpack
+  ];
 
-  cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0" ];
+  cmakeFlags = [
+    "-DWANT_PORTAUDIO=1"
+    "-DWANT_PULSEAUDIO=1"
+    "-DWANT_MP3_ENCODE=1"
+    "-DWANT_LV2=0"
+  ];
 
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "Cross-platform multitrack audio recording and audio editing suite";
+    description =
+      "Cross-platform multitrack audio recording and audio editing suite";
     homepage = "https://traverso-daw.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.all;

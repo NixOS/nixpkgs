@@ -1,7 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, asn1crypto, oscrypto
-, cacert
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, asn1crypto, oscrypto, cacert }:
 
 buildPythonPackage rec {
   pname = "certvalidator";

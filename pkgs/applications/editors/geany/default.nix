@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, gtk3
-, which
-, pkg-config
-, intltool
-, file
-, libintl
-, hicolor-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, gtk3, which, pkg-config, intltool, file, libintl
+, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "geany";
@@ -21,19 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "abff176e4d48bea35ee53037c49c82f90b6d4c23e69aed6e4a5ca8ccd3aad546";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-    libintl
-    which
-    file
-    hicolor-icon-theme
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config intltool libintl which file hicolor-icon-theme wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   doCheck = true;
 

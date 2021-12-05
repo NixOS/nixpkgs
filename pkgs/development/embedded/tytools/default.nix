@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook , qtbase}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "tytools";
@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   meta = with lib; {
     description = "Collection of tools to manage Teensy boards";

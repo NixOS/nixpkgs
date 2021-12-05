@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, alsa-lib, fftw, libjack2, libsamplerate
-, libsndfile, pkg-config, python3, wafHook
-}:
+{ lib, stdenv, fetchurl, alsa-lib, fftw, libjack2, libsamplerate, libsndfile
+, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "aubio-0.4.9";

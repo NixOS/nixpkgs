@@ -1,4 +1,5 @@
-{ lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
+{ lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools
+, qtserialport, libGLU }:
 mkDerivation rec {
   pname = "OSCAR";
   version = "1.2.0";
@@ -36,7 +37,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";
-    description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
+    description =
+      "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
     license = licenses.gpl3;
     maintainers = [ maintainers.roconnor ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.

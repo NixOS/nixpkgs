@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "6.001";
+let version = "6.001";
 in fetchzip rec {
   name = "gentium-${version}";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+  url =
+    "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -27,7 +27,8 @@ in fetchzip rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
-    description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
+    description =
+      "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups
       around the world who use the Latin, Cyrillic and Greek scripts to produce

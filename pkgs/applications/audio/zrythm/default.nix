@@ -1,63 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, SDL2
-, alsa-lib
-, libaudec
-, bash
-, bash-completion
-, breeze-icons
-, carla
-, chromaprint
-, cmake
-, curl
-, dconf
-, libepoxy
-, ffmpeg
-, fftw
-, fftwFloat
-, flex
-, glib
-, gtk3
-, gtksourceview3
-, guile
-, graphviz
-, help2man
-, json-glib
-, jq
-, libbacktrace
-, libcyaml
-, libgtop
-, libjack2
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libsoundio
-, libxml2
-, libyaml
-, lilv
-, lv2
-, meson
-, ninja
-, pandoc
-, pcre
-, pcre2
-, pkg-config
-, python3
-, reproc
-, rtaudio
-, rtmidi
-, rubberband
-, serd
-, sord
-, sratom
-, texi2html
-, wrapGAppsHook
-, xdg-utils
-, xxHash
-, vamp-plugin-sdk
-, zstd
-}:
+{ stdenv, lib, fetchFromGitHub, SDL2, alsa-lib, libaudec, bash, bash-completion
+, breeze-icons, carla, chromaprint, cmake, curl, dconf, libepoxy, ffmpeg, fftw
+, fftwFloat, flex, glib, gtk3, gtksourceview3, guile, graphviz, help2man
+, json-glib, jq, libbacktrace, libcyaml, libgtop, libjack2, libpulseaudio
+, libsamplerate, libsndfile, libsoundio, libxml2, libyaml, lilv, lv2, meson
+, ninja, pandoc, pcre, pcre2, pkg-config, python3, reproc, rtaudio, rtmidi
+, rubberband, serd, sord, sratom, texi2html, wrapGAppsHook, xdg-utils, xxHash
+, vamp-plugin-sdk, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, pytest
-, pytest-runner
-, cffi
-, secp256k1
-}:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, pytest, pytest-runner, cffi
+, secp256k1 }:
 
 buildPythonPackage rec {
   pname = "secp256k1";

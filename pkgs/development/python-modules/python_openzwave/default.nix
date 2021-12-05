@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pkg-config
-, systemd, libyaml, openzwave, cython, pyserial
-, six, pydispatcher, urwid }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pkg-config, systemd, libyaml
+, openzwave, cython, pyserial, six, pydispatcher, urwid }:
 
 buildPythonPackage rec {
   pname = "python_openzwave";

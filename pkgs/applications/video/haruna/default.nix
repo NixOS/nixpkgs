@@ -1,29 +1,7 @@
-{ lib
-, fetchFromGitLab
-, mkDerivation
-, breeze-icons
-, breeze-qt5
-, cmake
-, extra-cmake-modules
-, ffmpeg-full
-, kcodecs
-, kconfig
-, kcoreaddons
-, kfilemetadata
-, ki18n
-, kiconthemes
-, kio
-, kio-extras
-, kirigami2
-, kxmlgui
-, mpv
-, pkg-config
-, qqc2-desktop-style
-, qtbase
-, qtquickcontrols2
-, qtwayland
-, youtube-dl
-}:
+{ lib, fetchFromGitLab, mkDerivation, breeze-icons, breeze-qt5, cmake
+, extra-cmake-modules, ffmpeg-full, kcodecs, kconfig, kcoreaddons, kfilemetadata
+, ki18n, kiconthemes, kio, kio-extras, kirigami2, kxmlgui, mpv, pkg-config
+, qqc2-desktop-style, qtbase, qtquickcontrols2, qtwayland, youtube-dl }:
 
 mkDerivation rec {
   pname = "haruna";
@@ -59,11 +37,7 @@ mkDerivation rec {
     youtube-dl
   ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   meta = with lib; {
     homepage = "https://github.com/g-fb/haruna";

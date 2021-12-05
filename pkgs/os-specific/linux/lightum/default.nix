@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config, systemd }:
+{ lib, stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config
+, systemd }:
 
 stdenv.mkDerivation {
   pname = "lightum";
@@ -9,15 +10,7 @@ stdenv.mkDerivation {
     sha256 = "01x24rcrkgksyvqpgkr9zafg3jgs8nqng8yf0hx0kbmcimar8dbp";
   };
 
-  buildInputs = [
-    dbus
-    glib
-    libX11
-    libXScrnSaver
-    libXext
-    pkg-config
-    systemd
-  ];
+  buildInputs = [ dbus glib libX11 libXScrnSaver libXext pkg-config systemd ];
 
   patchPhase = ''
     substituteInPlace Makefile \

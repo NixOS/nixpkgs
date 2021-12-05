@@ -1,7 +1,4 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ppxlib
-, js_of_ocaml
-}:
+{ buildDunePackage, js_of_ocaml-compiler, ppxlib, js_of_ocaml }:
 
 buildDunePackage {
   pname = "js_of_ocaml-ppx";

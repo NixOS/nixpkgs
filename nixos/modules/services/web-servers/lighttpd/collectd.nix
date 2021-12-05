@@ -10,21 +10,22 @@ let
     libdir: "${config.services.collectd.package}/lib/collectd"
   '';
 
-  defaultCollectionCgi = config.services.collectd.package.overrideDerivation(old: {
-    name = "collection.cgi";
-    dontConfigure = true;
-    buildPhase = "true";
-    installPhase = ''
-      substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
-      cp contrib/collection.cgi $out
-    '';
-  });
-in
-{
+  defaultCollectionCgi = config.services.collectd.package.overrideDerivation
+    (old: {
+      name = "collection.cgi";
+      dontConfigure = true;
+      buildPhase = "true";
+      installPhase = ''
+        substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
+        cp contrib/collection.cgi $out
+      '';
+    });
+in {
 
   options.services.lighttpd.collectd = {
 
-    enable = mkEnableOption "collectd subservice accessible at http://yourserver/collectd";
+    enable = mkEnableOption
+      "collectd subservice accessible at http://yourserver/collectd";
 
     collectionCgi = mkOption {
       type = types.path;
@@ -48,7 +49,10 @@ in
           "/collectd" => "${cfg.collectionCgi}"
         )
         setenv.add-environment = (
-          "PERL5LIB" => "${with pkgs.perlPackages; makePerlPath [ CGI HTMLParser URI pkgs.rrdtool ]}",
+          "PERL5LIB" => "${
+            with pkgs.perlPackages;
+            makePerlPath [ CGI HTMLParser URI pkgs.rrdtool ]
+          }",
           "COLLECTION_CONF" => "${collectionConf}"
         )
       }

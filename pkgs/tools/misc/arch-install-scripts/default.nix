@@ -1,14 +1,5 @@
-{ lib
-, resholvePackage
-, fetchFromGitHub
-, asciidoc
-, bash
-, coreutils
-, gawk
-, gnum4
-, testVersion
-, util-linux
-}:
+{ lib, resholvePackage, fetchFromGitHub, asciidoc, bash, coreutils, gawk, gnum4
+, testVersion, util-linux }:
 
 resholvePackage rec {
   pname = "arch-install-scripts";
@@ -55,15 +46,11 @@ resholvePackage rec {
 
       # TODO: no good way to resolve mount/umount in Nix builds for now
       # see https://github.com/abathur/resholve/issues/29
-      fake = {
-        external = [ "mount" "umount" ];
-      };
+      fake = { external = [ "mount" "umount" ]; };
 
       # TODO: remove the execer lore override below after
       # https://github.com/abathur/binlore/issues/1
-      execer = [
-        "cannot:${util-linux}/bin/unshare"
-      ];
+      execer = [ "cannot:${util-linux}/bin/unshare" ];
     };
   };
 

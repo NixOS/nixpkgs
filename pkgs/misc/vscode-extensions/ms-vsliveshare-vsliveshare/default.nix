@@ -1,11 +1,9 @@
 # Based on previous attempts:
 #  -  <https://github.com/msteen/nixos-vsliveshare/blob/master/pkgs/vsliveshare/default.nix>
 #  -  <https://github.com/NixOS/nixpkgs/issues/41189>
-{ lib, gccStdenv, vscode-utils
-, jq, autoPatchelfHook, bash, makeWrapper
-, dotnet-sdk_3, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust, openssl, util-linux, zlib
-, desktop-file-utils, xprop, xsel
-}:
+{ lib, gccStdenv, vscode-utils, jq, autoPatchelfHook, bash, makeWrapper
+, dotnet-sdk_3, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust
+, openssl, util-linux, zlib, desktop-file-utils, xprop, xsel }:
 
 with lib;
 
@@ -34,20 +32,18 @@ let
     util-linux # libuuid
   ];
 
-in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtension {
+in ((vscode-utils.override {
+  stdenv = gccStdenv;
+}).buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
     version = "1.0.5043";
     sha256 = "OdFOFvidUV/trySHvF8iELPNVP2kq8+vZQ4q4Nf7SiQ=";
   };
-}).overrideAttrs({ nativeBuildInputs ? [], buildInputs ? [], ... }: {
-  nativeBuildInputs = nativeBuildInputs ++ [
-    bash
-    jq
-    autoPatchelfHook
-    makeWrapper
-  ];
+}).overrideAttrs ({ nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
+  nativeBuildInputs = nativeBuildInputs
+    ++ [ bash jq autoPatchelfHook makeWrapper ];
   buildInputs = buildInputs ++ libs;
 
   # Using a patch file won't work, because the file changes too often, causing the patch to fail on most updates.
@@ -125,7 +121,8 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
   '';
 
   meta = {
-    description = "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
+    description =
+      "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
     homepage = "https://aka.ms/vsls-docs";
     license = licenses.unfree;
     maintainers = with maintainers; [ jraygauthier V ];

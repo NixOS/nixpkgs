@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pam
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pam }:
 
 buildPythonPackage rec {
   pname = "python-pam";
@@ -15,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "0gp7vzd332j7jwndcnz7kc9j283d6lyv32bndd1nqv9ghzv69sxp";
   };
 
-  buildInputs = [
-    pam
-  ];
+  buildInputs = [ pam ];
 
   postPatch = ''
     sed "s|find_library(\"pam\")|\"${pam}/lib/libpam.so\"|g" -i pam.py

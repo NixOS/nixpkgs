@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, typing-extensions, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
@@ -19,18 +14,15 @@ buildPythonPackage rec {
     sha256 = "sha256-vjOhfEsAldTjROFUer1SgEX1KxnNM/WwtLsCB9ZV1WM=";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "asyncstdlib" ];
 
   meta = with lib; {
-    description = "Python library that extends the Python asyncio standard library";
+    description =
+      "Python library that extends the Python asyncio standard library";
     homepage = "https://asyncstdlib.readthedocs.io/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,10 +1,8 @@
 { lib, python3Packages }:
 
-let
-  pypkgs = python3Packages;
+let pypkgs = python3Packages;
 
-in
-pypkgs.buildPythonApplication rec {
+in pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
   version = "1.9.2";
 
@@ -16,12 +14,7 @@ pypkgs.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = with pypkgs; [
-    click
-    colorama
-    kaptan
-    libtmux
-  ];
+  propagatedBuildInputs = with pypkgs; [ click colorama kaptan libtmux ];
 
   meta = with lib; {
     description = "Manage tmux workspaces from JSON and YAML";

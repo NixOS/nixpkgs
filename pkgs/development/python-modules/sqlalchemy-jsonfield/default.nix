@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, setuptools-scm
-, setuptools
-, tox
-, sphinx
-, pytest
-, pytest-cov
-, pytest-html
-, pytest-sugar
-, coverage
-, pymysql
-, psycopg2 }:
+{ lib, buildPythonPackage, fetchFromGitHub, sqlalchemy, setuptools-scm
+, setuptools, tox, sphinx, pytest, pytest-cov, pytest-html, pytest-sugar
+, coverage, pymysql, psycopg2 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
@@ -29,7 +17,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ sqlalchemy setuptools ];
-  checkInputs = [ tox sphinx pytest pytest-cov pytest-html pytest-sugar coverage pymysql psycopg2 ];
+  checkInputs = [
+    tox
+    sphinx
+    pytest
+    pytest-cov
+    pytest-html
+    pytest-sugar
+    coverage
+    pymysql
+    psycopg2
+  ];
 
   checkPhase = ''
     TOX_TESTENV_PASSENV="PYTHONPATH SETUPTOOLS_SCM_PRETEND_VERSION" tox -e functional
@@ -37,7 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
-    description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
+    description =
+      "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
     license = licenses.asl20;
     maintainers = [ maintainers.ivan-tkatchev ];
   };

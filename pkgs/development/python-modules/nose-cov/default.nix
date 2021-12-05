@@ -14,7 +14,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pypi.org/project/nose-cov/";
     license = licenses.mit;
-    description = "This plugin produces coverage reports. It also supports coverage of subprocesses.";
+    description =
+      "This plugin produces coverage reports. It also supports coverage of subprocesses.";
     maintainers = with maintainers; [ ];
   };
 }

@@ -1,12 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-}:
+{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which
+, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib
+, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
+, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap, setJavaClassPath
+, headless ? false, enableJavaFX ? openjfx.meta.available, openjfx
+, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf }:
 
 let
   major = "11";
@@ -27,11 +24,38 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
+      cpio
+      file
+      which
+      zip
+      perl
+      zlib
+      cups
+      freetype
+      alsa-lib
+      libjpeg
+      giflib
+      libpng
+      zlib
+      lcms2
+      libX11
+      libICE
+      libXrender
+      libXext
+      libXtst
+      libXt
+      libXtst
+      libXi
+      libXinerama
+      libXcursor
+      libXrandr
+      fontconfig
+      openjdk11-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+      gtk3
+      gnome_vfs
+      GConf
+      glib
     ];
 
     patches = [
@@ -40,9 +64,8 @@ let
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
       ./fix-library-path-jdk11.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
-    ];
+    ] ++ lib.optionals (!headless && enableGnome2)
+      [ ./swing-use-gtk-jdk10.patch ];
 
     preConfigure = ''
       chmod +x configure
@@ -62,16 +85,24 @@ let
       "--with-stdc++lib=dynamic"
     ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+      ++ lib.optional (!headless && enableJavaFX)
+      "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
     NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-3"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     # -j flag is explicitly rejected by the build system:

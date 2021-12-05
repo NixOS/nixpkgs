@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "korean-lunar-calendar";
@@ -17,7 +14,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "korean_lunar_calendar" ];
 
   meta = with lib; {
-    description = "A library to convert Korean lunar-calendar to Gregorian calendar.";
+    description =
+      "A library to convert Korean lunar-calendar to Gregorian calendar.";
     homepage = "https://github.com/usingsky/korean_lunar_calendar_py";
     license = licenses.mit;
     maintainers = [ maintainers.ris ];

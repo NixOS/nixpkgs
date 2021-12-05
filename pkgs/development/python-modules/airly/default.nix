@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, aiounittest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, aiohttp, aioresponses, aiounittest, buildPythonPackage, fetchFromGitHub
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "airly";
@@ -20,25 +14,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aioresponses
-    aiounittest
-    pytestCheckHook
-  ];
+  checkInputs = [ aioresponses aiounittest pytestCheckHook ];
 
   preCheck = ''
     cd tests
   '';
 
-  disabledTests = [
-    "InstallationsLoaderTestCase"
-    "MeasurementsSessionTestCase"
-  ];
+  disabledTests =
+    [ "InstallationsLoaderTestCase" "MeasurementsSessionTestCase" ];
 
   pythonImportsCheck = [ "airly" ];
 
   meta = with lib; {
-    description = "Python module for getting air quality data from Airly sensors";
+    description =
+      "Python module for getting air quality data from Airly sensors";
     homepage = "https://github.com/ak-ambi/python-airly";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

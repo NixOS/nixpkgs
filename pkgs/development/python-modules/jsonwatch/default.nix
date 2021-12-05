@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, isPyPy }:
 
 buildPythonPackage rec {
   pname = "jsonwatch";

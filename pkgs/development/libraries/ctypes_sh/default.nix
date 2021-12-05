@@ -1,8 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook, pkg-config
-, zlib, libffi, elfutils, libdwarf
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, libffi
+, elfutils, libdwarf }:
 
 stdenv.mkDerivation rec {
   pname = "ctypes.sh";

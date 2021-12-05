@@ -1,21 +1,40 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-cuda";
   version = "20210807-git";
 
-  description = "Cl-cuda is a library to use NVIDIA CUDA in Common Lisp programs.";
+  description =
+    "Cl-cuda is a library to use NVIDIA CUDA in Common Lisp programs.";
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-annot" args."cl-pattern" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."external-program" args."named-readtables" args."osicat" args."split-sequence" args."trivial-features" args."trivial-types" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."cl-annot"
+    args."cl-pattern"
+    args."cl-ppcre"
+    args."cl-reexport"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."external-program"
+    args."named-readtables"
+    args."osicat"
+    args."split-sequence"
+    args."trivial-features"
+    args."trivial-types"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-cuda/2021-08-07/cl-cuda-20210807-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-cuda/2021-08-07/cl-cuda-20210807-git.tgz";
     sha256 = "0q974qrjxdn7c53frpac0hz9wnxhnf3lf8xngrc8zkphp1windc0";
   };
 
   packageName = "cl-cuda";
 
-  asdFilesToKeep = ["cl-cuda.asd"];
+  asdFilesToKeep = [ "cl-cuda.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-cuda DESCRIPTION
@@ -42,4 +61,5 @@ rec {
      named-readtables osicat split-sequence trivial-features trivial-types)
     VERSION 20210807-git SIBLINGS
     (cl-cuda-examples cl-cuda-interop-examples cl-cuda-interop cl-cuda-misc)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

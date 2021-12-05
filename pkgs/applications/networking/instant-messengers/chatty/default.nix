@@ -1,29 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, evolution-data-server
-, feedbackd
-, glibmm
-, gspell
-, gtk3
-, json-glib
-, libgcrypt
-, libhandy
-, libphonenumber
-, modemmanager
-, olm
-, pidgin
-, protobuf
-, sqlite
-, plugins ? [ ]
-}:
+{ lib, stdenv, fetchFromGitLab, appstream-glib, desktop-file-utils, meson, ninja
+, pkg-config, python3, wrapGAppsHook, evolution-data-server, feedbackd, glibmm
+, gspell, gtk3, json-glib, libgcrypt, libhandy, libphonenumber, modemmanager
+, olm, pidgin, protobuf, sqlite, plugins ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "chatty";

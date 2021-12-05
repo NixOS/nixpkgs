@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, cmake
-, openmw
-, fetchFromGitHub
-, formats
-, luajit
-, makeWrapper
-, symlinkJoin
-, mygui
-, crudini
-, bullet
-}:
+{ lib, stdenv, cmake, openmw, fetchFromGitHub, formats, luajit, makeWrapper
+, symlinkJoin, mygui, crudini, bullet }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
@@ -71,8 +60,9 @@ let
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
 
-    buildInputs = (builtins.map (x: if x.pname or "" == "bullet" then bullet else x) oldAttrs.buildInputs)
-      ++ [ luajit ];
+    buildInputs =
+      (builtins.map (x: if x.pname or "" == "bullet" then bullet else x)
+        oldAttrs.buildInputs) ++ [ luajit ];
 
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DBUILD_OPENCS=OFF"
@@ -115,8 +105,7 @@ let
     Plugins.home = "${coreScripts}/share/openmw-tes3mp/CoreScripts";
   };
 
-in
-symlinkJoin rec {
+in symlinkJoin rec {
   name = "openmw-tes3mp-${unwrapped.version}";
   inherit (unwrapped) version meta;
 

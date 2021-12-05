@@ -1,7 +1,5 @@
-{ lib, buildDunePackage, fetchurl
-, fmt, mirage-flow, result, rresult, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf, bigarray-compat
-}:
+{ lib, buildDunePackage, fetchurl, fmt, mirage-flow, result, rresult, cstruct
+, logs, ke, lwt, alcotest, alcotest-lwt, bigstringaf, bigarray-compat }:
 
 buildDunePackage rec {
   pname = "mimic";
@@ -11,28 +9,16 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
+    url =
+      "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
     sha256 = "e4743cd2e4f8242eb1ce9d8086fd2affba0eb6a62131309ffa279108bd3dbbcb";
   };
 
-  propagatedBuildInputs = [
-    fmt
-    lwt
-    mirage-flow
-    result
-    rresult
-    logs
-  ];
+  propagatedBuildInputs = [ fmt lwt mirage-flow result rresult logs ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-    alcotest-lwt
-    bigstringaf
-    bigarray-compat
-    cstruct
-    ke
-  ];
+  checkInputs =
+    [ alcotest alcotest-lwt bigstringaf bigarray-compat cstruct ke ];
 
   meta = with lib; {
     description = "A simple protocol dispatcher";

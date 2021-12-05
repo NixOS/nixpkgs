@@ -1,11 +1,5 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
-}:
+{ lib, beautifulsoup4, buildPythonPackage, fetchFromGitHub, python-dateutil
+, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "socid-extractor";
@@ -21,18 +15,12 @@ buildPythonPackage rec {
     sha256 = "kHF9CBlUKrD/DRVwJveenpFMr7pIrxEBNkFHHLa46KQ=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    python-dateutil
-    requests
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 python-dateutil requests ];
 
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "socid_extractor"
-  ];
+  pythonImportsCheck = [ "socid_extractor" ];
 
   meta = with lib; {
     description = "Python module to extract details from personal pages";

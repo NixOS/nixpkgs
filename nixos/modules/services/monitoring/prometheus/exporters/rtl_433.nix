@@ -1,13 +1,12 @@
 { config, lib, pkgs, options }:
 
-let
-  cfg = config.services.prometheus.exporters.rtl_433;
-in
-{
+let cfg = config.services.prometheus.exporters.rtl_433;
+in {
   port = 9550;
 
   extraOpts = let
-    mkMatcherOptionType = field: description: with lib.types;
+    mkMatcherOptionType = field: description:
+      with lib.types;
       listOf (submodule {
         options = {
           name = lib.mkOption {
@@ -24,8 +23,7 @@ in
           };
         };
       });
-  in
-  {
+  in {
     rtl433Flags = lib.mkOption {
       type = lib.types.str;
       default = "-C si";
@@ -37,20 +35,24 @@ in
     };
     channels = lib.mkOption {
       type = mkMatcherOptionType "channel" "Channel to match.";
-      default = [];
-      example = [
-        { name = "Acurite"; channel = 6543; location = "Kitchen"; }
-      ];
+      default = [ ];
+      example = [{
+        name = "Acurite";
+        channel = 6543;
+        location = "Kitchen";
+      }];
       description = ''
         List of channel matchers to export.
       '';
     };
     ids = lib.mkOption {
       type = mkMatcherOptionType "id" "ID to match.";
-      default = [];
-      example = [
-        { name = "Nexus"; id = 1; location = "Bedroom"; }
-      ];
+      default = [ ];
+      example = [{
+        name = "Nexus";
+        id = 1;
+        location = "Bedroom";
+      }];
       description = ''
         List of ID matchers to export.
       '';
@@ -68,10 +70,11 @@ in
 
       ExecStart = let
         matchers = (map (m:
-          "--channel_matcher '${m.name},${toString m.channel},${m.location}'"
-        ) cfg.channels) ++ (map (m:
-          "--id_matcher '${m.name},${toString m.id},${m.location}'"
-        ) cfg.ids); in ''
+          "--channel_matcher '${m.name},${toString m.channel},${m.location}'")
+          cfg.channels)
+          ++ (map (m: "--id_matcher '${m.name},${toString m.id},${m.location}'")
+            cfg.ids);
+      in ''
         ${pkgs.prometheus-rtl_433-exporter}/bin/rtl_433_prometheus \
           -listen ${cfg.listenAddress}:${toString cfg.port} \
           -subprocess "${pkgs.rtl_433}/bin/rtl_433 -F json ${cfg.rtl433Flags}" \

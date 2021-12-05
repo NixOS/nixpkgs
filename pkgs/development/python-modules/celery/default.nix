@@ -1,7 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
-, billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
-, boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
-}:
+{ lib, buildPythonPackage, fetchPypi, billiard, click, click-didyoumean
+, click-plugins, click-repl, kombu, pytz, vine, boto3, case, moto, pytest
+, pytest-celery, pytest-subtests, pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "celery";
@@ -21,9 +20,19 @@ buildPythonPackage rec {
       --replace "click>=7.0,<8.0" click
   '';
 
-  propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
+  propagatedBuildInputs = [
+    billiard
+    click
+    click-didyoumean
+    click-plugins
+    click-repl
+    kombu
+    pytz
+    vine
+  ];
 
-  checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
+  checkInputs =
+    [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
 
   # ignore test that's incompatible with pytest5
   # test_eventlet touches network

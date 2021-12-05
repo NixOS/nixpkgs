@@ -1,11 +1,5 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, enableGoogle ? false
-, enableAWS ? false
-, enableAzure ? false
-, enableSSH ? false
-}:
+{ lib, python3Packages, fetchFromGitHub, enableGoogle ? false, enableAWS ? false
+, enableAzure ? false, enableSSH ? false }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -40,11 +34,10 @@ buildPythonApplication rec {
     asciimatics
     distro
     appdirs
-  ]
-  ++ lib.optional enableGoogle google-cloud-storage
-  ++ lib.optional enableAWS boto3
-  ++ lib.optional enableAzure azure-storage-blob
-  ++ lib.optional enableSSH paramiko;
+  ] ++ lib.optional enableGoogle google-cloud-storage
+    ++ lib.optional enableAWS boto3
+    ++ lib.optional enableAzure azure-storage-blob
+    ++ lib.optional enableSSH paramiko;
 
   # tests require access to real cloud services
   # nix build tests have to be isolated and run locally

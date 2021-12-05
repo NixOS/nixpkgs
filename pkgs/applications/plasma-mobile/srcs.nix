@@ -118,7 +118,8 @@
   plasma-phonebook = {
     version = "21.08";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/21.08/plasma-phonebook-21.08.tar.xz";
+      url =
+        "${mirror}/stable/plasma-mobile/21.08/plasma-phonebook-21.08.tar.xz";
       sha256 = "09gr5mkwhayx6k6bhm29bmcvdlqqw8jj7gydh5fz40g9z98c84km";
       name = "plasma-phonebook-21.08.tar.xz";
     };

@@ -28,7 +28,8 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "${cfg.package}/share/crossfire";
-      defaultText = literalExpression ''"''${config.services.crossfire.package}/share/crossfire"'';
+      defaultText = literalExpression
+        ''"''${config.services.crossfire.package}/share/crossfire"'';
       description = ''
         Where to load readonly data from -- maps, archetypes, treasure tables,
         and the like. If you plan to edit the data on the live server (rather
@@ -99,32 +100,32 @@ in {
           ''';
         }
       '';
-      default = {};
+      default = { };
     };
   };
 
   config = mkIf cfg.enable {
     users.users.crossfire = {
-      description     = "Crossfire server daemon user";
-      home            = cfg.stateDir;
-      createHome      = false;
-      isSystemUser    = true;
-      group           = "crossfire";
+      description = "Crossfire server daemon user";
+      home = cfg.stateDir;
+      createHome = false;
+      isSystemUser = true;
+      group = "crossfire";
     };
-    users.groups.crossfire = {};
+    users.groups.crossfire = { };
 
     # Merge the cfg.configFiles setting with the default files shipped with
     # Crossfire.
     # For most files this consists of reading ${crossfire}/etc/crossfire/${name}
     # and appending the user setting to it; the motd, news, and rules are handled
     # specially, with user-provided values completely replacing the original.
-    environment.etc = lib.attrsets.mapAttrs'
-      (name: value: lib.attrsets.nameValuePair "crossfire/${name}" {
+    environment.etc = lib.attrsets.mapAttrs' (name: value:
+      lib.attrsets.nameValuePair "crossfire/${name}" {
         mode = "0644";
-        text =
-          (optionalString (!elem name ["motd" "news" "rules"])
-            (fileContents "${cfg.package}/etc/crossfire/${name}"))
-          + "\n${value}";
+        text = (optionalString (!elem name [ "motd" "news" "rules" ])
+          (fileContents "${cfg.package}/etc/crossfire/${name}")) + ''
+
+            ${value}'';
       }) ({
         ban_file = "";
         dm_file = "";
@@ -139,13 +140,14 @@ in {
       } // cfg.configFiles);
 
     systemd.services.crossfire-server = {
-      description   = "Crossfire Server Daemon";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Crossfire Server Daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = mkMerge [
         {
-          ExecStart = "${cfg.package}/bin/crossfire-server -conf /etc/crossfire -local '${cfg.stateDir}' -data '${cfg.dataDir}'";
+          ExecStart =
+            "${cfg.package}/bin/crossfire-server -conf /etc/crossfire -local '${cfg.stateDir}' -data '${cfg.dataDir}'";
           Restart = "always";
           User = "crossfire";
           Group = "crossfire";
@@ -172,8 +174,7 @@ in {
       '';
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ serverPort ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ serverPort ]; };
   };
 }

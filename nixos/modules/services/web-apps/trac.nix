@@ -34,7 +34,7 @@ in {
         default = "/var/lib/trac";
         type = types.path;
         description = ''
-            The directory for storing the Trac data.
+          The directory for storing the Trac data.
         '';
       };
 
@@ -71,9 +71,8 @@ in {
       '';
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.listen.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.listen.port ]; };
 
   };
 }

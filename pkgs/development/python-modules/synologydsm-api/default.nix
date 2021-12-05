@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, requests
-, urllib3
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, fetchpatch, poetry-core
+, requests, urllib3, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "synologydsm-api";
@@ -28,23 +20,17 @@ buildPythonPackage rec {
     # https://github.com/hacf-fr/synologydsm-api/pull/84
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
-      url = "https://github.com/hacf-fr/synologydsm-api/commit/f1ea2be927388bdff6d43d09027b82a854635e34.patch";
+      url =
+        "https://github.com/hacf-fr/synologydsm-api/commit/f1ea2be927388bdff6d43d09027b82a854635e34.patch";
       sha256 = "120pdgp2i4ds6y3rf9j372f9zdcf4y8rsgl1xjbkgdhkp76bkkgr";
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs = [ requests urllib3 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "synology_dsm" ];
 

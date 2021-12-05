@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, getopt
-, ip2location-c
-, openssl
-, perl
-, libmaxminddb ? null
-, geolite-legacy ? null
-}:
+{ lib, stdenv, fetchFromGitHub, getopt, ip2location-c, openssl, perl
+, libmaxminddb ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
@@ -20,14 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1iis7qw803k9z52j30hn9sv8c3b0xyr9v7kb4fvcyiry1iaxcgfk";
   };
 
-  buildInputs = [
-    libmaxminddb
-    geolite-legacy
-    getopt
-    ip2location-c
-    openssl
-    perl
-  ];
+  buildInputs =
+    [ libmaxminddb geolite-legacy getopt ip2location-c openssl perl ];
 
   postPatch = ''
     patchShebangs *.sh */*.sh
@@ -43,13 +29,10 @@ stdenv.mkDerivation rec {
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ lib.optional (libmaxminddb != null) [
-    "--enable-mmdb"
-  ] ++ lib.optional (geolite-legacy != null) [
-    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ lib.optional (ip2location-c != null) [
-    "--enable-ip2location"
-  ];
+  ] ++ lib.optional (libmaxminddb != null) [ "--enable-mmdb" ]
+    ++ lib.optional (geolite-legacy != null)
+    [ "--with-geoip-db=${geolite-legacy}/share/GeoIP" ]
+    ++ lib.optional (ip2location-c != null) [ "--enable-ip2location" ];
 
   enableParallelBuilding = true;
 

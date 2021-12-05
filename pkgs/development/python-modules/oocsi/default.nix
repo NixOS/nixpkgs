@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "oocsi";
@@ -19,9 +15,7 @@ buildPythonPackage rec {
   # Tests are not shipped
   doCheck = false;
 
-  pythonImportsCheck = [
-    "oocsi"
-  ];
+  pythonImportsCheck = [ "oocsi" ];
 
   meta = with lib; {
     description = "OOCSI library for Python";

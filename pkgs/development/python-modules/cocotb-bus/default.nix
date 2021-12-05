@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "cocotb-bus";
@@ -26,7 +23,8 @@ buildPythonPackage rec {
   # '';
 
   meta = with lib; {
-    description = "Pre-packaged testbenching tools and reusable bus interfaces for cocotb";
+    description =
+      "Pre-packaged testbenching tools and reusable bus interfaces for cocotb";
     homepage = "https://github.com/cocotb/cocotb-bus";
     license = licenses.bsd3;
     maintainers = with maintainers; [ prusnak ];

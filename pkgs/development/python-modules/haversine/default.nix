@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "haversine";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-tHA1Ff/J1mfSnER2X/8e0QyQkuRz1mn8MeGlThVQaSg=";
   };
 
-  checkInputs = [
-    numpy
-    pytestCheckHook
-  ];
+  checkInputs = [ numpy pytestCheckHook ];
 
   pythonImportsCheck = [ "haversine" ];
 

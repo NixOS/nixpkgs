@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, SDL2
-, SDL2_mixer
-, libGLU
-, libconfig
-, meson
-, ninja
-, pkg-config
-, fetchFromGitHub
-}:
+{ stdenv, lib, SDL2, SDL2_mixer, libGLU, libconfig, meson, ninja, pkg-config
+, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "MAR1D";
@@ -23,12 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    SDL2
-    SDL2_mixer
-    libconfig
-    libGLU
-  ];
+  buildInputs = [ SDL2 SDL2_mixer libconfig libGLU ];
 
   meta = with lib; {
     description = "First person Super Mario Bros";

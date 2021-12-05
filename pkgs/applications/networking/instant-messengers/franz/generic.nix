@@ -1,34 +1,10 @@
-{ stdenv
-, lib
-, makeWrapper
-, wrapGAppsHook
-, autoPatchelfHook
-, dpkg
-, xorg
-, atk
-, glib
-, pango
-, gdk-pixbuf
-, cairo
-, freetype
-, fontconfig
-, gtk3
-, gnome2
-, dbus
-, nss
-, nspr
-, alsa-lib
-, cups
-, expat
-, udev
-, libnotify
-, xdg-utils
-, mesa
-}:
+{ stdenv, lib, makeWrapper, wrapGAppsHook, autoPatchelfHook, dpkg, xorg, atk
+, glib, pango, gdk-pixbuf, cairo, freetype, fontconfig, gtk3, gnome2, dbus, nss
+, nspr, alsa-lib, cups, expat, udev, libnotify, xdg-utils, mesa }:
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta, extraBuildInputs ? [] }:
+{ pname, name, version, src, meta, extraBuildInputs ? [ ] }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -50,7 +26,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXScrnSaver
   ]) ++ [
-    mesa #libgbm
+    mesa # libgbm
     gtk3
     atk
     glib

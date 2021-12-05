@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config
-, bzip2, lz4, lzo, xz, zlib, zstd
-}:
+{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config, bzip2, lz4, lzo
+, xz, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "squashfs-tools-ng";
   version = "1.1.3";
 
   src = fetchurl {
-    url = "https://infraroot.at/pub/squashfs/squashfs-tools-ng-${version}.tar.xz";
+    url =
+      "https://infraroot.at/pub/squashfs/squashfs-tools-ng-${version}.tar.xz";
     sha256 = "sha256-q84Pz5qK4cM1Lk5eh+Gwd/VEEdpRczLqg7XnzpSN1w0=";
   };
 

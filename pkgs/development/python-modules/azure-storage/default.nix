@@ -1,13 +1,5 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, cryptography
-, futures ? null
-, python-dateutil
-, requests
-, isPy3k
-}:
+{ pkgs, buildPythonPackage, fetchPypi, azure-common, cryptography
+, futures ? null, python-dateutil, requests, isPy3k }:
 
 buildPythonPackage rec {
   version = "0.36.0";
@@ -19,7 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ azure-common cryptography python-dateutil requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+    ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   postPatch = ''
     rm azure_bdist_wheel.py

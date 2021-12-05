@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "pyobihai";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "1vvf5if57dfd091a7fb5rvx63hvf0isrx28j72nj2aav1as460qp";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;

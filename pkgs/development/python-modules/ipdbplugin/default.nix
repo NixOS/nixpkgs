@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, ipython
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, ipython }:
 
 buildPythonPackage rec {
   pname = "ipdbplugin";

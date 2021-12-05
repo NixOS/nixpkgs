@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pexpect
-, pyserial
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, nose, pexpect, pyserial
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pygatt";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "1zdfxidiw0l8n498sy0l33n90lz49n25x889cx6jamjr7frlcihd";
   };
 
-  propagatedBuildInputs = [
-    pexpect
-    pyserial
-  ];
+  propagatedBuildInputs = [ pexpect pyserial ];
 
-  checkInputs = [
-    mock
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ mock nose pytestCheckHook ];
 
   postPatch = ''
     # Not support for Python < 3.4

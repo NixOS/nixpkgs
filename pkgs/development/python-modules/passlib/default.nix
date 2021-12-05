@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, nose
-, bcrypt
-, argon2_cffi
-}:
+{ buildPythonPackage, fetchPypi, nose, bcrypt, argon2_cffi }:
 
 buildPythonPackage rec {
   pname = "passlib";
@@ -20,6 +15,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A password hashing library for Python";
-    homepage    = "https://code.google.com/p/passlib/";
+    homepage = "https://code.google.com/p/passlib/";
   };
 }

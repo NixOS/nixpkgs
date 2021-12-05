@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, attrs, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "eternalegypt";
@@ -20,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "0wi2cqd81irqm873npkqg3mvdrb57idqdsp8qw8h0s7lk0kil1wi";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    attrs
-  ];
+  propagatedBuildInputs = [ aiohttp attrs ];
 
   # Project has no tests
   doCheck = false;

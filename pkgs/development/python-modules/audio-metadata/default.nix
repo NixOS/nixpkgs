@@ -1,11 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, attrs
-, bidict
-, bitstruct
-, more-itertools
-, pprintpp
-, tbm-utils
-}:
+{ lib, buildPythonPackage, fetchPypi, attrs, bidict, bitstruct, more-itertools
+, pprintpp, tbm-utils }:
 
 buildPythonPackage rec {
   pname = "audio-metadata";
@@ -21,21 +15,16 @@ buildPythonPackage rec {
       --replace "'attrs>=18.2,<19.4'" "'attrs'"
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    bidict
-    bitstruct
-    more-itertools
-    pprintpp
-    tbm-utils
-  ];
+  propagatedBuildInputs =
+    [ attrs bidict bitstruct more-itertools pprintpp tbm-utils ];
 
   # No tests
   doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/thebigmunch/audio-metadata";
-    description = "A library for reading and, in the future, writing metadata from audio files";
+    description =
+      "A library for reading and, in the future, writing metadata from audio files";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

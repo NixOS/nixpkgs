@@ -1,23 +1,7 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, which
-, pkg-config
-, python
-, isPy27
-, doxygen
-, cairo
-, ncurses
-, pango
-, wxGTK
-, pillow
-, numpy
-}:
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
-in
-buildPythonPackage rec {
+{ lib, stdenv, fetchPypi, buildPythonPackage, which, pkg-config, python, isPy27
+, doxygen, cairo, ncurses, pango, wxGTK, pillow, numpy }:
+let dynamic-linker = stdenv.cc.bintools.dynamicLinker;
+in buildPythonPackage rec {
   pname = "wxPython";
   version = "4.1.0";
   disabled = isPy27;
@@ -33,10 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ which doxygen wxGTK pkg-config ];
 
-  buildInputs = [
-    wxGTK.gtk
-    ncurses
-  ];
+  buildInputs = [ wxGTK.gtk ncurses ];
 
   propagatedBuildInputs = [ pillow numpy ];
 

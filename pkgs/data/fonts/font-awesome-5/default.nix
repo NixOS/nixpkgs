@@ -1,32 +1,32 @@
 { lib, fetchFromGitHub }:
 let
-  font-awesome = { version, sha256, rev ? version}: fetchFromGitHub {
-    name = "font-awesome-${version}";
+  font-awesome = { version, sha256, rev ? version }:
+    fetchFromGitHub {
+      name = "font-awesome-${version}";
 
+      owner = "FortAwesome";
+      repo = "Font-Awesome";
+      inherit rev;
 
-    owner = "FortAwesome";
-    repo = "Font-Awesome";
-    inherit rev;
-
-    postFetch = ''
-      tar xf $downloadedFile --strip=1
-      install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
-    '';
-
-    inherit sha256;
-
-    meta = with lib; {
-      description = "Font Awesome - OTF font";
-      longDescription = ''
-        Font Awesome gives you scalable vector icons that can instantly be customized.
-        This package includes only the OTF font. For full CSS etc. see the project website.
+      postFetch = ''
+        tar xf $downloadedFile --strip=1
+        install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
       '';
-      homepage = "http://fortawesome.github.io/Font-Awesome/";
-      license = licenses.ofl;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abaldeau johnazoidberg ];
+
+      inherit sha256;
+
+      meta = with lib; {
+        description = "Font Awesome - OTF font";
+        longDescription = ''
+          Font Awesome gives you scalable vector icons that can instantly be customized.
+          This package includes only the OTF font. For full CSS etc. see the project website.
+        '';
+        homepage = "http://fortawesome.github.io/Font-Awesome/";
+        license = licenses.ofl;
+        platforms = platforms.all;
+        maintainers = with maintainers; [ abaldeau johnazoidberg ];
+      };
     };
-  };
 in {
   # Keeping version 4 because version 5 is incompatible for some icons. That
   # means that projects which depend on it need to actively convert the

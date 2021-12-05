@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib, libpng
-, pcre, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib
+, libpng, pcre, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
 
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 SDL2_mixer alsa-lib libpng pcre ];
 
-  hardeningDisable = ["all"];
+  hardeningDisable = [ "all" ];
 
   # Enable wizard mode
-  cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];
+  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DWIZARD" ];
 
   # Help CMake find SDL_mixer.h
   NIX_CFLAGS_COMPILE = "-I${SDL2_mixer}/include/SDL2";
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [ freepotion ];
   };
 }

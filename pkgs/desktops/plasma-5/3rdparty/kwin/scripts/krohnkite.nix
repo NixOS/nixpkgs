@@ -1,5 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub
-, kcoreaddons, kwindowsystem, plasma-framework, systemsettings }:
+{ lib, mkDerivation, fetchFromGitHub, kcoreaddons, kwindowsystem
+, plasma-framework, systemsettings }:
 
 mkDerivation rec {
   pname = "krohnkite";
@@ -12,9 +12,7 @@ mkDerivation rec {
     sha256 = "0j3rm1w6d545qlmx02xs72b5zsigm48hp7lp7yh30z3cjqm00aap";
   };
 
-  buildInputs = [
-    kcoreaddons kwindowsystem plasma-framework systemsettings
-  ];
+  buildInputs = [ kcoreaddons kwindowsystem plasma-framework systemsettings ];
 
   dontBuild = true;
 

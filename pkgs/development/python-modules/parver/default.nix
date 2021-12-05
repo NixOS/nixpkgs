@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, attrs
-, pytest
-, hypothesis
-, pretend
-, arpeggio
-}:
+{ lib, buildPythonPackage, fetchPypi, six, attrs, pytest, hypothesis, pretend
+, arpeggio }:
 
 buildPythonPackage rec {
   pname = "parver";
@@ -22,7 +14,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest hypothesis pretend ];
 
   meta = {
-    description = "parver allows parsing and manipulation of PEP 440 version numbers.";
+    description =
+      "parver allows parsing and manipulation of PEP 440 version numbers.";
     license = lib.licenses.mit;
   };
 }

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "11.0.0.0";
 
   srcAmr = fetchurl {
-    url = "http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip";
+    url =
+      "http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip";
     sha256 = "1v4zhs6f1mf1xkrzhljh05890in0rpr5d5pcak9h4igxhd2c91f8";
   };
 

@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, zlib
-, expat
-, cmake
-, which
-, libxml2
-, python3
-, gettext
-, doxygen
-, graphviz
-, libxslt
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, zlib, expat, cmake, which, libxml2, python3
+, gettext, doxygen, graphviz, libxslt, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
@@ -21,41 +9,22 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "exiv2";
-    repo  = "exiv2";
+    repo = "exiv2";
     rev = "v${version}";
     sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    gettext
-    graphviz
-    libxslt
-  ];
+  nativeBuildInputs = [ cmake doxygen gettext graphviz libxslt ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  propagatedBuildInputs = [
-    expat
-    zlib
-  ];
+  propagatedBuildInputs = [ expat zlib ];
 
-  checkInputs = [
-    libxml2.bin
-    python3
-    which
-  ];
+  checkInputs = [ libxml2.bin python3 which ];
 
-  cmakeFlags = [
-    "-DEXIV2_ENABLE_NLS=ON"
-    "-DEXIV2_BUILD_DOC=ON"
-  ];
+  cmakeFlags = [ "-DEXIV2_ENABLE_NLS=ON" "-DEXIV2_BUILD_DOC=ON" ];
 
-  buildFlags = [
-    "all"
-    "doc"
-  ];
+  buildFlags = [ "all" "doc" ];
 
   doCheck = true;
 
@@ -79,7 +48,7 @@ stdenv.mkDerivation rec {
       rm -f ../tests/bugfixes/redmine/test_issue_460.py
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
       rm -f ../tests/bugfixes/github/test_issue_1046.py
-     ''}
+    ''}
   '';
 
   # With CMake we have to enable samples or there won't be

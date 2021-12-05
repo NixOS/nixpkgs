@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, ecdsa
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, cryptography, ecdsa, pytest-cov
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
@@ -19,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-+6ROeJi7yhYKKytQH0koJPyDgkhdOm8Rul0MGTfOYTA=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    ecdsa
-  ];
+  propagatedBuildInputs = [ cryptography ecdsa ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "jwt" ];
 

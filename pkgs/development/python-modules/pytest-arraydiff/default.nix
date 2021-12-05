@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, six
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-arraydiff";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    numpy
-    six
-  ];
+  propagatedBuildInputs = [ numpy six ];
 
   # The tests requires astropy, which itself requires
   # pytest-arraydiff. This causes an infinite recursion if the tests
@@ -28,7 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Pytest plugin to help with comparing array output from tests";
+    description =
+      "Pytest plugin to help with comparing array output from tests";
     homepage = "https://github.com/astrofrog/pytest-arraydiff";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

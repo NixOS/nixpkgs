@@ -1,15 +1,12 @@
-{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl
+, python3, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4
+, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-, util-linuxMinimal ? null
-, buildPackages
+, util-linuxMinimal ? null, buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, doCheck ? config.doCheckByDefault or false
-, coreutils, dbus, libxml2, tzdata
-, desktop-file-utils, shared-mime-info
-, darwin, fetchpatch
-}:
+, doCheck ? config.doCheckByDefault or false, coreutils, dbus, libxml2, tzdata
+, desktop-file-utils, shared-mime-info, darwin, fetchpatch }:
 
 with lib;
 
@@ -21,12 +18,11 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
 #     Possible solution: disable compilation of this example somehow
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
-/*
-  * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests runned by Hydra
-      (they should test an already installed package)
-      https://wiki.gnome.org/GnomeGoals/InstalledTests
-  * Support org.freedesktop.Application, including D-Bus activation from desktop files
+/* * Use --enable-installed-tests for GNOME-related packages,
+       and use them as a separately installed tests runned by Hydra
+       (they should test an already installed package)
+       https://wiki.gnome.org/GnomeGoals/InstalledTests
+   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
   # Some packages don't get "Cflags" from pkg-config correctly
@@ -41,14 +37,15 @@ let
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "glib";
   version = "2.70.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/glib/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "+be85/UXU6H0OFO7ysqL8J4V6ZQmjinP16dvZWNiY8A=";
   };
 
@@ -92,13 +89,21 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf setupHook pcre
-    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    libelf
+    setupHook
+    pcre
+    bash
+    gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
+    AppKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    CoreServices
+    Foundation
   ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
@@ -115,7 +120,16 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
+    meson
+    ninja
+    pkg-config
+    perl
+    python3
+    gettext
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -191,7 +205,8 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
-    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
+    makeSchemaPath = dir: name:
+      "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     inherit flattenInclude;
     updateScript = gnome.updateScript { packageName = "glib"; };
@@ -199,10 +214,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
-    license     = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
-    platforms   = platforms.unix;
+    homepage = "https://www.gtk.org/";
+    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members
+      ++ (with maintainers; [ lovek323 raskin ]);
+    platforms = platforms.unix;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

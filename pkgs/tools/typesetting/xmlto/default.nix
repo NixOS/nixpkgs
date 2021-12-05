@@ -1,5 +1,4 @@
-{ fetchurl, lib, stdenv, libxml2, libxslt
-, docbook_xml_dtd_45, docbook_xsl, w3m
+{ fetchurl, lib, stdenv, libxml2, libxslt, docbook_xml_dtd_45, docbook_xsl, w3m
 , bash, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {

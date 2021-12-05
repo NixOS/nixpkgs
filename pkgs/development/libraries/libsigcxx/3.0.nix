@@ -1,26 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gnome
-}:
+{ stdenv, lib, fetchurl, pkg-config, meson, ninja, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
   version = "3.0.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "v76RwNCU6mu8bL05CbfZjGVh7qi22cDCWt2Qam6D1zM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   doCheck = true;
 

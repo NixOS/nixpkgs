@@ -1,8 +1,7 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
-, libdbiDrivers, guile, perl, perlPackages
-}:
+, libdbiDrivers, guile, perl, perlPackages }:
 
 let
 
@@ -22,9 +21,7 @@ let
     '';
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gnucash";
   version = "4.6";
 
@@ -37,7 +34,8 @@ stdenv.mkDerivation rec {
     # Fixes a warning about an initialized variable that kills enableDebugging gnucash builds on nix.
     # This will most likely be part of the 4.7 release, it will be safe to remove then.
     (fetchpatch {
-      url = "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
+      url =
+        "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
       sha256 = "092957c8jqj4v70fv0ia1wpgl6x34hbwjrichxfbk5ja8l6535gc";
     })
   ];
@@ -45,10 +43,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
-    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
-    libdbiDrivers guile
-    perlWrapper perl
+    boost
+    icu
+    libxml2
+    libxslt
+    gettext
+    isocodes
+    gtk3
+    glibcLocales
+    webkitgtk
+    dconf
+    libofx
+    aqbanking
+    gwenhywfar
+    libdbi
+    libdbiDrivers
+    guile
+    perlWrapper
+    perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];
@@ -93,7 +105,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "Personal and small-business financial-accounting application";
+    description =
+      "Personal and small-business financial-accounting application";
 
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,

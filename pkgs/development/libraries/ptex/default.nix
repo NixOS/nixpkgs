@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "ptex";
   version = "2.3.2";
 

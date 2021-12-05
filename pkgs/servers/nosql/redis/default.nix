@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 # dependency ordering is broken at the moment when building with openssl
-, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
-}:
+, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "redis";
@@ -26,16 +25,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ lua ]
-    ++ lib.optional withSystemd systemd
+  buildInputs = [ lua ] ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
   # More cross-compiling fixes.
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
-    ++ lib.optional withSystemd [ "USE_SYSTEMD=yes" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+      "MALLOC=libc"
+    ] ++ lib.optional withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;

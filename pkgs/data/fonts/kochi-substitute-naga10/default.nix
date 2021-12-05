@@ -1,8 +1,7 @@
 { lib, fetchzip }:
 
 let version = "20030809";
-in
-fetchzip {
+in fetchzip {
   name = "kochi-substitute-naga10-${version}";
 
   url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
@@ -17,7 +16,8 @@ fetchzip {
   sha256 = "1bjb5cr3wf3d5y7xj1ly2mkv4ndwvg615rb1ql6lsqc2icjxk7j9";
 
   meta = {
-    description = "Japanese font, non-free replacement for MS Gothic and MS Mincho";
+    description =
+      "Japanese font, non-free replacement for MS Gothic and MS Mincho";
     longDescription = ''
       Kochi Gothic and Kochi Mincho were developed as free replacements for the
       MS Gothic and MS Mincho fonts from Microsoft. This version of the fonts

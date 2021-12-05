@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-asyncio, pytestCheckHook
+, pythonOlder }:
 
 # This package provides a binary "apython" which sometimes invokes
 # [sys.executable, '-m', 'aioconsole'] as a subprocess. If apython is
@@ -26,10 +21,7 @@ buildPythonPackage rec {
     sha256 = "1hjdhj1y9xhq1i36r7g2lccsicbvgm7lzkyrxygs16dw11ah46mx";
   };
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

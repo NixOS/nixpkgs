@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.14.3";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.xz";
+    url =
+      "https://www.spice-space.org/download/releases/${pname}-${version}.tar.xz";
     sha256 = "0yj8k7gcirrsf21w0q6146n5g4nzn2pqky4p90n5760m5ayfb1pr";
   };
 

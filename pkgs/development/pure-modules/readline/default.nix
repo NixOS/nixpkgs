@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "A trivial wrapper around GNU readline, which gives Pure scripts access to the most important facilities of the readline interface";
+    description =
+      "A trivial wrapper around GNU readline, which gives Pure scripts access to the most important facilities of the readline interface";
     homepage = "http://puredocs.bitbucket.org/pure-readline.html";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;

@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, perl
-, pkg-config
-, rustPlatform
-, sqlite
-, fixDarwinDylibNames
-, CoreFoundation
-, Security
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, perl, pkg-config, rustPlatform
+, sqlite, fixDarwinDylibNames, CoreFoundation, Security, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
@@ -36,34 +24,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-MiSGJMXe8vouv4XEHXq274FHEvBMtd7IX6DyNJIWYeU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-  ]) ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs = [ cmake perl pkg-config ]
+    ++ (with rustPlatform; [ cargoSetupHook rust.cargo ])
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
-  buildInputs = [
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-    libiconv
-  ];
+  buildInputs = [ openssl sqlite ]
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  checkInputs = with rustPlatform; [
-    cargoCheckHook
-  ];
+  checkInputs = with rustPlatform; [ cargoCheckHook ];
 
   meta = with lib; {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
-    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/deltachat/deltachat-core-rust/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

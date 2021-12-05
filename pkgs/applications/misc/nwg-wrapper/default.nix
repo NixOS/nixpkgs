@@ -1,4 +1,5 @@
-{ lib, python3Packages, fetchFromGitHub, gtk-layer-shell, gtk3, gobject-introspection, wrapGAppsHook, wlr-randr }:
+{ lib, python3Packages, fetchFromGitHub, gtk-layer-shell, gtk3
+, gobject-introspection, wrapGAppsHook, wlr-randr }:
 
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
@@ -33,7 +34,8 @@ python3Packages.buildPythonPackage rec {
   pythonImportsCheck = [ "nwg_wrapper" ];
 
   meta = with lib; {
-    description = "Wrapper to display a script output or a text file content on the desktop in sway or other wlroots-based compositors";
+    description =
+      "Wrapper to display a script output or a text file content on the desktop in sway or other wlroots-based compositors";
     homepage = "https://github.com/nwg-piotr/nwg-wrapper/";
     license = licenses.mit;
     maintainers = with maintainers; [ artturin ];

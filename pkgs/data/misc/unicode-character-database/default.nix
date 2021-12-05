@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "unicode-character-database";
@@ -12,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ld97ppkb5f8d5b3mlkxfwnr6f3inijyqias9xc4bbin9lxrfxig";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   setSourceRoot = ''
     sourceRoot=$PWD

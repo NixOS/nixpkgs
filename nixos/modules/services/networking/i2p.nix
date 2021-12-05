@@ -20,7 +20,8 @@ in {
     };
     users.groups.i2p.gid = config.ids.gids.i2p;
     systemd.services.i2p = {
-      description = "I2P router with administration interface for hidden services";
+      description =
+        "I2P router with administration interface for hidden services";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

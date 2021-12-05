@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, pendulum
-, pprintpp
-, wrapt
-}:
+{ lib, buildPythonPackage, fetchPypi, attrs, pendulum, pprintpp, wrapt }:
 
 buildPythonPackage rec {
   pname = "tbm-utils";

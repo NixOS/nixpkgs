@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.collectd;
-in
-{
+let cfg = config.services.prometheus.exporters.collectd;
+in {
   port = 9103;
   extraOpts = {
     collectdBinary = {
@@ -20,7 +18,8 @@ in
       port = mkOption {
         type = types.int;
         default = 25826;
-        description = "Network address on which to accept collectd binary network packets.";
+        description =
+          "Network address on which to accept collectd binary network packets.";
       };
 
       listenAddress = mkOption {
@@ -28,11 +27,11 @@ in
         default = "0.0.0.0";
         description = ''
           Address to listen on for binary network packets.
-          '';
+        '';
       };
 
       securityLevel = mkOption {
-        type = types.enum ["None" "Sign" "Encrypt"];
+        type = types.enum [ "None" "Sign" "Encrypt" ];
         default = "None";
         description = ''
           Minimum required security level for accepted packets.
@@ -50,7 +49,7 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error" "fatal"];
+      type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
@@ -59,9 +58,12 @@ in
   };
   serviceOpts = let
     collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
-      --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
+      --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${
+        toString cfg.collectdBinary.port
+      } \
       --collectd.security-level ${cfg.collectdBinary.securityLevel} \
-    '' else "";
+    '' else
+      "";
   in {
     serviceConfig = {
       ExecStart = ''

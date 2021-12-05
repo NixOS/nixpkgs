@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, ocaml, makeWrapper, ncurses }:
 
-let version = "0.92"; in
-stdenv.mkDerivation {
+let version = "0.92";
+in stdenv.mkDerivation {
   pname = "megam";
   inherit version;
 
@@ -26,22 +26,21 @@ stdenv.mkDerivation {
     cp -Rv megam $out/bin
   '';
 
-
   meta = {
     description = "MEGA Model Optimization Package";
 
-    longDescription =
-      ''  The software here is an implementation of maximum likelihood
-          and maximum a posterior optimization of the parameters of
-          these models.  The algorithms used are much more efficient
-          than the iterative scaling techniques used in almost every
-          other maxent package out there.  '';
+    longDescription = ''
+      The software here is an implementation of maximum likelihood
+              and maximum a posterior optimization of the parameters of
+              these models.  The algorithms used are much more efficient
+              than the iterative scaling techniques used in almost every
+              other maxent package out there.  '';
 
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
 
     license = "non-commercial";
 
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

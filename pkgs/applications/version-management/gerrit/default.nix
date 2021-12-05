@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.4.1";
 
   src = fetchurl {
-    url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
+    url =
+      "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
     sha256 = "sha256-pHomYKYpV60SIKLoST5y9i3FprMV1VGy+5GjhpRhBUo=";
   };
 
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;
-    description = "A web based code review and repository management for the git version control system";
+    description =
+      "A web based code review and repository management for the git version control system";
     maintainers = with maintainers; [ flokli jammerful zimbatm ];
     platforms = platforms.unix;
   };

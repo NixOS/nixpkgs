@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl_plus_ssl";
   version = "cl+ssl-20211020-git";
 
@@ -8,16 +7,29 @@ rec {
 
   description = "Common Lisp interface to OpenSSL.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."uiop" args."usocket" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."flexi-streams"
+    args."split-sequence"
+    args."trivial-features"
+    args."trivial-garbage"
+    args."trivial-gray-streams"
+    args."uiop"
+    args."usocket"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl+ssl/2021-10-20/cl+ssl-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl+ssl/2021-10-20/cl+ssl-20211020-git.tgz";
     sha256 = "05yzc736lnsaniv76753flsbzvip0sma4jy3fl124r704gknsvsl";
   };
 
   packageName = "cl+ssl";
 
-  asdFilesToKeep = ["cl+ssl.asd"];
+  asdFilesToKeep = [ "cl+ssl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl+ssl DESCRIPTION Common Lisp interface to OpenSSL. SHA256
@@ -36,4 +48,5 @@ rec {
     (alexandria babel bordeaux-threads cffi flexi-streams split-sequence
      trivial-features trivial-garbage trivial-gray-streams uiop usocket)
     VERSION cl+ssl-20211020-git SIBLINGS (cl+ssl.test) PARASITES
-    (cl+ssl/config)) */
+    (cl+ssl/config))
+*/

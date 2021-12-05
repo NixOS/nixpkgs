@@ -1,15 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, click, gmpy2, numpy } :
+{ lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, click, gmpy2, numpy }:
 
 let
   pname = "phe";
   version = "1.4.0";
-in
 
-buildPythonPackage {
+in buildPythonPackage {
   inherit pname version;
 
   # https://github.com/n1analytics/python-paillier/issues/51
-  disabled = isPyPy || ! isPy3k;
+  disabled = isPyPy || !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

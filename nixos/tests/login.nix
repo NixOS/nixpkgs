@@ -1,18 +1,16 @@
 import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 
-{
-  name = "login";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
+  {
+    name = "login";
+    meta = with pkgs.lib.maintainers; { maintainers = [ eelco ]; };
 
-  machine =
-    { pkgs, lib, ... }:
-    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
-      sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+    machine = { pkgs, lib, ... }: {
+      boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+      sound.enable =
+        true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     };
 
-  testScript = ''
+    testScript = ''
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
       machine.screenshot("postboot")
@@ -55,5 +53,5 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
       with subtest("Check whether ctrl-alt-delete works"):
           machine.send_key("ctrl-alt-delete")
           machine.wait_for_shutdown()
-  '';
-})
+    '';
+  })

@@ -1,12 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
+{ buildPythonPackage, fetchFromGitHub, isPy3k, lib
 
 # pythonPackages
-, coverage
-, pytest
-}:
+, coverage, pytest }:
 
 buildPythonPackage rec {
   pname = "pyhcl";
@@ -25,10 +20,7 @@ buildPythonPackage rec {
     echo '__version__ = "${version}"' > ./src/hcl/version.py
   '';
 
-  checkInputs = [
-    coverage
-    pytest
-  ];
+  checkInputs = [ coverage pytest ];
 
   # https://github.com/virtuald/pyhcl/blob/51a7524b68fe21e175e157b8af931016d7a357ad/tests/run_tests.sh#L4
   checkPhase = ''
@@ -36,11 +28,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "HCL is a configuration language. pyhcl is a python parser for it";
+    description =
+      "HCL is a configuration language. pyhcl is a python parser for it";
     homepage = "https://github.com/virtuald/pyhcl";
     license = licenses.mpl20;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

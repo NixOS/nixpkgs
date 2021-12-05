@@ -8,19 +8,18 @@ let
 
   cfg = config.programs.gnome-terminal;
 
-in
+in {
 
-{
-
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   # Added 2019-08-19
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-terminal-server" "enable" ]
-      [ "programs" "gnome-terminal" "enable" ])
+    (mkRenamedOptionModule [
+      "services"
+      "gnome3"
+      "gnome-terminal-server"
+      "enable"
+    ] [ "programs" "gnome-terminal" "enable" ])
   ];
 
   options = {

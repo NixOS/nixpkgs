@@ -1,8 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, lib }:
+build-idris-package {
   name = "quantities";
   version = "2018-04-17";
 
@@ -14,7 +11,8 @@ build-idris-package  {
   };
 
   meta = {
-    description = "Type-safe physical computations and unit conversions in Idris";
+    description =
+      "Type-safe physical computations and unit conversions in Idris";
     homepage = "https://github.com/timjb/quantities";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ imuli ];

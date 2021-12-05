@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, FormEncode
-, pastedeploy
-, paste
-, pydispatcher
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, FormEncode, pastedeploy
+, paste, pydispatcher }:
 
 buildPythonPackage rec {
   pname = "SQLObject";
@@ -22,7 +15,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Object Relational Manager for providing an object interface to your database";
+    description =
+      "Object Relational Manager for providing an object interface to your database";
     homepage = "http://www.sqlobject.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ];

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chameleon
-, pyramid
-, zope_interface
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, chameleon, pyramid, zope_interface
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "pyramid_chameleon";

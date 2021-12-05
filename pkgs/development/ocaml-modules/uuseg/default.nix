@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
+}:
 
 let
   pname = "uuseg";
   webpage = "https://erratique.ch/software/${pname}";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
   version = "14.0.0";

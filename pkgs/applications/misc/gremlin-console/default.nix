@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "gremlin-console";
   version = "3.5.0";
   src = fetchzip {
-    url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
+    url =
+      "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
     sha256 = "sha256-aVhDbOYhgYaWjttGjJvBKbov7OGWh2/llBTePFPGXDM=";
   };
 

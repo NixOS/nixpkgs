@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, expects
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, yarl
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, fetchFromGitHub, expects
+, pytest-asyncio, pytest-mock, pytestCheckHook, yarl }:
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
@@ -21,18 +12,10 @@ buildPythonPackage rec {
     sha256 = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
-  checkInputs = [
-    aioresponses
-    expects
-    pytestCheckHook
-    pytest-asyncio
-    pytest-mock
-  ];
+  checkInputs =
+    [ aioresponses expects pytestCheckHook pytest-asyncio pytest-mock ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

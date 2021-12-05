@@ -1,6 +1,5 @@
-{ lib, stdenv, csound, desktop-file-utils,
-  fetchFromGitHub, python, python-qt, qmake,
-  qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
+{ lib, stdenv, csound, desktop-file-utils, fetchFromGitHub, python, python-qt
+, qmake, qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "csound-qt";
@@ -16,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "examplepath.patch";
-      url = "https://github.com/CsoundQt/CsoundQt/commit/09f2d515bff638cbcacb450979d66e273a59fdec.diff";
+      url =
+        "https://github.com/CsoundQt/CsoundQt/commit/09f2d515bff638cbcacb450979d66e273a59fdec.diff";
       sha256 = "0y23kf8m1mh9mklsvf908b2b8m2w2rji8qvws44paf1kpwnwdmgm";
     })
     ./rtmidipath.patch
@@ -26,24 +26,29 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ csound desktop-file-utils rtmidi ];
 
-  qmakeFlags = [ "qcs.pro" "CONFIG+=rtmidi" "CONFIG+=pythonqt"
-                 "CONFIG+=record_support" "CONFIG+=html_webengine"
-                 "CSOUND_INCLUDE_DIR=${csound}/include/csound"
-                 "CSOUND_LIBRARY_DIR=${csound}/lib"
-                 "RTMIDI_DIR=${rtmidi.src}"
-                 "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
-                 "PYTHONQT_LIB_DIR=${python-qt}/lib"
-                 "LIBS+=-L${python-qt}/lib"
-                 "INCLUDEPATH+=${python-qt}/include/PythonQt"
-                 "INCLUDEPATH+=${python}/include/python2.7"
-                 "INSTALL_DIR=${placeholder "out"}"
-                 "SHARE_DIR=${placeholder "out"}/share"
-                 ];
+  qmakeFlags = [
+    "qcs.pro"
+    "CONFIG+=rtmidi"
+    "CONFIG+=pythonqt"
+    "CONFIG+=record_support"
+    "CONFIG+=html_webengine"
+    "CSOUND_INCLUDE_DIR=${csound}/include/csound"
+    "CSOUND_LIBRARY_DIR=${csound}/lib"
+    "RTMIDI_DIR=${rtmidi.src}"
+    "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
+    "PYTHONQT_LIB_DIR=${python-qt}/lib"
+    "LIBS+=-L${python-qt}/lib"
+    "INCLUDEPATH+=${python-qt}/include/PythonQt"
+    "INCLUDEPATH+=${python}/include/python2.7"
+    "INSTALL_DIR=${placeholder "out"}"
+    "SHARE_DIR=${placeholder "out"}/share"
+  ];
 
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
+    description =
+      "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
     homepage = "https://csoundqt.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;

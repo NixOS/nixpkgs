@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, stdenv
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, stdenv }:
 
 buildPythonPackage rec {
   pname = "pyelftools";
@@ -26,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "elftools" ];
 
   meta = with lib; {
-    description = "Python library for analyzing ELF files and DWARF debugging information";
+    description =
+      "Python library for analyzing ELF files and DWARF debugging information";
     homepage = "https://github.com/eliben/pyelftools";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ igsha pamplemousse ];

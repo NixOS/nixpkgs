@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description= "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
+    description =
+      "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";
     license = licenses.lgpl21;
     platforms = platforms.unix;

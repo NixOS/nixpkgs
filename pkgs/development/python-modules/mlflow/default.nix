@@ -1,26 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, alembic
-, click
-, cloudpickle
-, requests
-, six
-, flask
-, numpy
-, pandas
-, python-dateutil
-, protobuf
-, GitPython
-, pyyaml
-, querystring_parser
-, simplejson
-, docker
-, databricks-cli
-, entrypoints
-, sqlparse
-, sqlalchemy
-, gorilla
-, gunicorn
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, alembic, click, cloudpickle
+, requests, six, flask, numpy, pandas, python-dateutil, protobuf, GitPython
+, pyyaml, querystring_parser, simplejson, docker, databricks-cli, entrypoints
+, sqlparse, sqlalchemy, gorilla, gunicorn }:
 
 buildPythonPackage rec {
   pname = "mlflow";

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.6";
 
   src = fetchurl {
-    url = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/geteltorito-${version}.tar.gz";
+    url =
+      "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/geteltorito-${version}.tar.gz";
     sha256 = "1gkbm9ahj2mgqrkrfpibzclsriqgsbsvjh19fr815vpd9f6snkxv";
   };
 
@@ -39,8 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Extract the initial/default boot image from a CD image if existent";
-    homepage = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/";
+    description =
+      "Extract the initial/default boot image from a CD image if existent";
+    homepage =
+      "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/";
     maintainers = [ maintainers.Profpatsch ];
     license = licenses.gpl2;
   };

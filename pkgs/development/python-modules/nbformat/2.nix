@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, glibcLocales
-, ipython_genutils
-, traitlets
-, testpath
-, jsonschema
-, jupyter_core
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, ipython_genutils
+, traitlets, testpath, jsonschema, jupyter_core }:
 
 buildPythonPackage rec {
   pname = "nbformat";
@@ -19,10 +10,11 @@ buildPythonPackage rec {
     sha256 = "f7494ef0df60766b7cabe0a3651556345a963b74dbc16bc7c18479041170d402";
   };
 
-  LC_ALL="en_US.utf8";
+  LC_ALL = "en_US.utf8";
 
   checkInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
+  propagatedBuildInputs =
+    [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
 
   preCheck = ''
     mkdir tmp

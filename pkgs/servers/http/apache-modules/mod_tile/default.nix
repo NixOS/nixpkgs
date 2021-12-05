@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo
+, iniparser, mapnik }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];
 
-  configureFlags = [
-    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-  ];
+  configureFlags = [ "--with-apxs=${apacheHttpd.dev}/bin/apxs" ];
 
   installPhase = ''
     mkdir -p $out/modules
@@ -27,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";
-    description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
+    description =
+      "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jglukasik ];
     platforms = platforms.linux;

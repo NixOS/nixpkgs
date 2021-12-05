@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, wxGTK31
-, meson
-, ninja
-}:
+{ lib, stdenv, fetchFromGitHub, wxGTK31, meson, ninja }:
 
 stdenv.mkDerivation {
   pname = "wxFormBuilder";
@@ -17,14 +12,9 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    ninja
-    meson
-  ];
+  nativeBuildInputs = [ ninja meson ];
 
-  buildInputs = [
-    wxGTK31
-  ];
+  buildInputs = [ wxGTK31 ];
 
   meta = with lib; {
     description = "RAD tool for wxWidgets GUI design";

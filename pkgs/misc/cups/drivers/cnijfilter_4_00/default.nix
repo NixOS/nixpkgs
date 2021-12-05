@@ -1,15 +1,17 @@
-{ stdenv, lib, fetchzip,
-  autoconf, automake, libtool,
-  cups, popt, libtiff, libpng,
-  ghostscript, glib, libusb1, libxml2 }:
+{ stdenv, lib, fetchzip, autoconf, automake, libtool, cups, popt, libtiff
+, libpng, ghostscript, glib, libusb1, libxml2 }:
 
 /* this derivation is basically just a transcription of the rpm .spec
-   file included in the tarball */
+   file included in the tarball
+*/
 
-let arch =
-  if stdenv.hostPlatform.system == "x86_64-linux" then "64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "32"
-    else throw "Unsupported system ${stdenv.hostPlatform.system}";
+let
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "32"
+  else
+    throw "Unsupported system ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   pname = "cnijfilter";
@@ -22,17 +24,29 @@ in stdenv.mkDerivation {
      instead, if you want to include another version supporting your
      printer, you should try to abstract out the common things (which
      should be pretty much everything except the version and the 'pr'
-     and 'pr_id' values to loop over). */
+     and 'pr_id' values to loop over).
+  */
   version = "4.00";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
+    url =
+      "http://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
-  buildInputs = [ autoconf libtool automake
-                  cups popt libtiff libpng
-                  ghostscript glib libusb1 libxml2 ];
+  buildInputs = [
+    autoconf
+    libtool
+    automake
+    cups
+    popt
+    libtiff
+    libpng
+    ghostscript
+    glib
+    libusb1
+    libxml2
+  ];
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [
@@ -138,12 +152,15 @@ in stdenv.mkDerivation {
      don't list each other in the DT_NEEDED section.  so, if the
      standard 'patchelf --shrink-rpath' (from
      pkgs/development/tools/misc/patchelf/setup-hook.sh) is run on
-     them, it undoes the --set-rpath.  this prevents that. */
+     them, it undoes the --set-rpath.  this prevents that.
+  */
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series";
-    homepage = "https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072";
+    description =
+      "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series";
+    homepage =
+      "https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chpatrick ];

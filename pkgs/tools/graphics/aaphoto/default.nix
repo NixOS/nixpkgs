@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jasper
-, libpng
-, libjpeg
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, jasper, libpng, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "aaphoto";
@@ -18,12 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-qngWWqV2vLm1gO0KJ0uHOCf2IoEAs1oiygpJtDvt3s8=";
   };
 
-  buildInputs = [
-    jasper
-    libpng
-    libjpeg
-    zlib
-  ];
+  buildInputs = [ jasper libpng libjpeg zlib ];
 
   postInstall = ''
     install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/${pname}
@@ -45,6 +33,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # aaphoto.c:237:10: fatal error: 'omp.h' file not found
+    broken =
+      stdenv.isDarwin; # aaphoto.c:237:10: fatal error: 'omp.h' file not found
   };
 }

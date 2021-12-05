@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, pidgin } :
+{ lib, stdenv, fetchFromGitHub, pidgin }:
 
-let
-  version = "0.8";
-in
-stdenv.mkDerivation {
+let version = "0.8";
+in stdenv.mkDerivation {
   pname = "pidgin-xmpp-receipts";
   inherit version;
 

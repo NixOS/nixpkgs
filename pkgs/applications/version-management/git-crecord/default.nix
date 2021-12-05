@@ -15,7 +15,8 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/andrewshadura/git-crecord";
-    description = "Git subcommand to interactively select changes to commit or stage";
+    description =
+      "Git subcommand to interactively select changes to commit or stage";
     license = lib.licenses.gpl2Plus;
   };
 }

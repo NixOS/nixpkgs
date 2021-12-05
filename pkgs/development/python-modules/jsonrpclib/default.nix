@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cjson
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, cjson, isPy3k }:
 
 buildPythonPackage rec {
   pname = "jsonrpclib";

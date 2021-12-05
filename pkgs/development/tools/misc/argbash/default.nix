@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "argbash";

@@ -18,9 +18,7 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkBuildInputs = with python.pkgs; [
-    pytest
-  ];
+  checkBuildInputs = with python.pkgs; [ pytest ];
 
   # test_integration.py requires Chrome browser session
   checkPhase = ''

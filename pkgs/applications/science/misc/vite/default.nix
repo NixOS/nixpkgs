@@ -8,8 +8,7 @@ let
     sha256 = "1a422n3dp72v4visq5b1i21cf8sj12903sgg5v2hah3sgk02dnyz";
     inherit rev;
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "vite";
   version = "1.2pre${rev}";
 
@@ -30,7 +29,8 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = "-lGLU";
 
   meta = {
-    description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";
+    description =
+      "Visual Trace Explorer (ViTE), a tool to visualize execution traces";
 
     longDescription = ''
       ViTE is a trace explorer. It is a tool to visualize execution

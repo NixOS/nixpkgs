@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1xn6scc8nrb9xk89hsp9v67jvyww23rjaq5fcagpbqdwf5dvg4ja";
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs =
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Testing this project requires sudo, Docker and network access, etc.
   doCheck = false;

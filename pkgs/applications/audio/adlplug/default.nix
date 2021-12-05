@@ -1,29 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, fmt
-, liblo
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, libobjc
-, Cocoa
-, CoreServices
-, WebKit
-, DiscRecording
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, fmt, liblo
+, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
+, libobjc, Cocoa, CoreServices, WebKit, DiscRecording
 
-  # Enabling JACK requires a JACK server at runtime, no fallback mechanism
+# Enabling JACK requires a JACK server at runtime, no fallback mechanism
 , withJack ? false, jack
 
-, type ? "ADL"
-}:
+, type ? "ADL" }:
 
 assert lib.assertOneOf "type" type [ "ADL" "OPN" ];
 let
@@ -32,8 +14,7 @@ let
     OPN = "OPN2";
   }.${type};
   mainProgram = "${type}plug";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "${lib.strings.toLower type}plug";
   version = "1.0.2";
 
@@ -47,7 +28,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/jpcima/ADLplug/83636c55bec1b86cabf634b9a6d56d07f00ecc61/resources/patch/juce-gcc9.patch";
+      url =
+        "https://raw.githubusercontent.com/jpcima/ADLplug/83636c55bec1b86cabf634b9a6d56d07f00ecc61/resources/patch/juce-gcc9.patch";
       sha256 = "15hkdb76n9lgjsrpczj27ld9b4804bzrgw89g95cj4sc8wwkplyy";
       extraPrefix = "thirdparty/JUCE/";
       stripLen = 1;
@@ -60,19 +42,14 @@ stdenv.mkDerivation rec {
     "-DADLplug_Jack=${if withJack then "ON" else "OFF"}"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers"
-  ]);
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString
+    [
+      "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers"
+    ]);
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    fmt
-    liblo
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [ fmt liblo ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     freetype
     libX11

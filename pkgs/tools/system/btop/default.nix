@@ -1,7 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
@@ -19,7 +16,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
-    changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rmcgibbo ];

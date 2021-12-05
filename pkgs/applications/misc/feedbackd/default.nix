@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, libxslt
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook
-, glib
-, gsound
-, json-glib
-, libgudev
-, dbus
-}:
+{ lib, stdenv, fetchFromGitLab, docbook-xsl-nons, gobject-introspection, gtk-doc
+, libxslt, meson, ninja, pkg-config, vala, wrapGAppsHook, glib, gsound
+, json-glib, libgudev, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "feedbackd";
@@ -45,18 +30,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gsound
-    json-glib
-    libgudev
-  ];
+  buildInputs = [ glib gsound json-glib libgudev ];
 
   mesonFlags = [ "-Dgtk_doc=true" "-Dman=true" ];
 
-  checkInputs = [
-    dbus
-  ];
+  checkInputs = [ dbus ];
 
   doCheck = true;
 
@@ -66,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A daemon to provide haptic (and later more) feedback on events";
+    description =
+      "A daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pacman99 ];

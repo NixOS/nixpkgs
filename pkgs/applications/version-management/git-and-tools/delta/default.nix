@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, DiskArbitration
-, Foundation
-, libiconv
-, Security
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, installShellFiles, DiskArbitration
+, Foundation, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
@@ -24,7 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    DiskArbitration
+    Foundation
+    libiconv
+    Security
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name delta.bash etc/completion/completion.bash

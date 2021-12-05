@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openal ];
 
   meta = with lib; {
-    description = "A utility library to help manage common tasks with OpenAL applications";
+    description =
+      "A utility library to help manage common tasks with OpenAL applications";
     homepage = "https://github.com/kcat/alure";
     license = licenses.mit;
     platforms = platforms.linux;

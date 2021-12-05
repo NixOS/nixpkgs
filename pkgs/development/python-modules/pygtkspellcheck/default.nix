@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, gobject-introspection, gtk3, pyenchant, pygobject3 }:
+{ lib, buildPythonPackage, fetchPypi, gobject-introspection, gtk3, pyenchant
+, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "pygtkspellcheck";
@@ -17,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/koehlma/pygtkspellcheck";
-    description = "A Python spell-checking library for GtkTextViews based on Enchant";
+    description =
+      "A Python spell-checking library for GtkTextViews based on Enchant";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix ];
   };

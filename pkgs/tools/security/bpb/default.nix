@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, Security
-}:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bpb";
@@ -24,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "Tool to automatically sign git commits, replacing gpg for that purpose";
+    description =
+      "Tool to automatically sign git commits, replacing gpg for that purpose";
     homepage = "https://github.com/withoutboats/bpb";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];

@@ -9,14 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0sgbgv7ljfr0lwwwrb9wsnav7mw7jmr3k8mygwza15icass6dsdq";
   };
 
-  configureFlags = [
-    "--enable-dddmp"
-    "--enable-obj"
-  ];
+  configureFlags = [ "--enable-dddmp" "--enable-obj" ];
 
-  patches = [
-    ./cudd.patch
-  ];
+  patches = [ ./cudd.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

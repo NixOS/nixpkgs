@@ -15,12 +15,9 @@ let
       plexusCompilerManager_2_4
     ];
 
-    meta = {
-      description = "Java indexer for Sourcetrail";
-    };
+    meta = { description = "Java indexer for Sourcetrail"; };
   };
-in
-javaIndexer.overrideAttrs (drv: {
+in javaIndexer.overrideAttrs (drv: {
   postUnpack = ''
     export sourceRoot=''${sourceRoot}/java_indexer
   '';

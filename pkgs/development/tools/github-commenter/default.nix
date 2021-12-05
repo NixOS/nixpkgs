@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-H1SnNG+/ALYs7h/oT8zWBhAXOuCFY0Sto2ATBBZg2ek=";
 
   meta = with lib; {
-    description = "Command line utility for creating GitHub comments on Commits, Pull Request Reviews or Issues";
+    description =
+      "Command line utility for creating GitHub comments on Commits, Pull Request Reviews or Issues";
     license = licenses.asl20;
     homepage = "https://github.com/cloudposse/github-commenter";
     maintainers = [ maintainers.mmahut ];

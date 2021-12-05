@@ -1,15 +1,5 @@
-{ lib
-, buildBazelPackage
-, fetchFromGitHub
-, stdenv
-, cmake
-, gn
-, go
-, jdk
-, ninja
-, python3
-, nixosTests
-}:
+{ lib, buildBazelPackage, fetchFromGitHub, stdenv, cmake, gn, go, jdk, ninja
+, python3, nixosTests }:
 
 let
   srcVer = {
@@ -20,8 +10,7 @@ let
     version = "1.17.3";
     commit = "46bf743b97d0d3f01ff437b2f10cc0bd9cdfe6e4";
   };
-in
-buildBazelPackage rec {
+in buildBazelPackage rec {
   pname = "envoy";
   version = srcVer.version;
   src = fetchFromGitHub {
@@ -43,19 +32,12 @@ buildBazelPackage rec {
     sed -i '/javabase=/d' .bazelrc
     # Patch paths to build tools, and disable gold because it just segfaults.
     substituteInPlace bazel/external/wee8.genrule_cmd \
-      --replace '"''$$gn"' '"''$$(command -v gn)"' \
-      --replace '"''$$ninja"' '"''$$(command -v ninja)"' \
-      --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
+      --replace '"$$gn"' '"$$(command -v gn)"' \
+      --replace '"$$ninja"' '"$$(command -v ninja)"' \
+      --replace '"$$WEE8_BUILD_ARGS"' '"$$WEE8_BUILD_ARGS use_gold=false"'
   '';
 
-  nativeBuildInputs = [
-    cmake
-    python3
-    gn
-    go
-    jdk
-    ninja
-  ];
+  nativeBuildInputs = [ cmake python3 gn go jdk ninja ];
 
   fetchAttrs = {
     sha256 = "sha256:1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
@@ -126,6 +108,8 @@ buildBazelPackage rec {
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Other platforms will generate different fetch hashes.
+    platforms = [
+      "x86_64-linux"
+    ]; # Other platforms will generate different fetch hashes.
   };
 }

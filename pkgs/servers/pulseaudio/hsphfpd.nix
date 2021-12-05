@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
-let
-  perlLibs = with perlPackages; [ NetDBus XMLTwig XMLParser ];
-in
-stdenv.mkDerivation {
+let perlLibs = with perlPackages; [ NetDBus XMLTwig XMLParser ];
+in stdenv.mkDerivation {
   pname = "hsphfpd";
   version = "2020-12-05";
 

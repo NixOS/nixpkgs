@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, attrs
-, colorlog
-, csvw
-, python-dateutil
-, tabulate
-, mock
-, postgresql
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, attrs, colorlog, csvw
+, python-dateutil, tabulate, mock, postgresql, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "clldutils";
@@ -29,20 +17,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 
-  propagatedBuildInputs = [
-    python-dateutil
-    tabulate
-    colorlog
-    attrs
-    csvw
-  ];
+  propagatedBuildInputs = [ python-dateutil tabulate colorlog attrs csvw ];
 
-  checkInputs = [
-    mock
-    postgresql
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ mock postgresql pytestCheckHook pytest-mock ];
 
   meta = with lib; {
     description = "CSV on the Web";

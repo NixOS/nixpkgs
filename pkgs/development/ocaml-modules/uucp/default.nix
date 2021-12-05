@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf, uucd }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf
+, uucd }:
 
 let
   pname = "uucp";
@@ -6,46 +7,48 @@ let
   webpage = "https://erratique.ch/software/${pname}";
   minimumOCamlVersion = "4.03";
   doCheck = true;
-in
 
-if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
-then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
+in if !(lib.versionAtLeast ocaml.version minimumOCamlVersion) then
+  builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
 else
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+    name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
-  };
+    src = fetchurl {
+      url = "${webpage}/releases/${pname}-${version}.tbz";
+      sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
+    };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
+    buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
 
-  propagatedBuildInputs = [ uchar ];
+    propagatedBuildInputs = [ uchar ];
 
-  buildPhase = ''
-    runHook preBuild
-    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
-    runHook postBuild
-  '';
+    buildPhase = ''
+      runHook preBuild
+      ${topkg.buildPhase} --with-cmdliner false --tests ${
+        lib.boolToString doCheck
+      }
+      runHook postBuild
+    '';
 
-  inherit (topkg) installPhase;
+    inherit (topkg) installPhase;
 
-  inherit doCheck;
-  checkPhase = ''
-    runHook preCheck
-    ${topkg.run} test
-    runHook postCheck
-  '';
-  checkInputs = [ uucd ];
+    inherit doCheck;
+    checkPhase = ''
+      runHook preCheck
+      ${topkg.run} test
+      runHook postCheck
+    '';
+    checkInputs = [ uucd ];
 
-  meta = with lib; {
-    description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
-    homepage = webpage;
-    inherit (ocaml.meta) platforms;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
-  };
-}
+    meta = with lib; {
+      description =
+        "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
+      homepage = webpage;
+      inherit (ocaml.meta) platforms;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.vbgl ];
+    };
+  }

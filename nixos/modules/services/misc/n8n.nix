@@ -4,10 +4,9 @@ with lib;
 
 let
   cfg = config.services.n8n;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
   configFile = format.generate "n8n.json" cfg.settings;
-in
-{
+in {
   options.services.n8n = {
 
     enable = mkEnableOption "n8n server";
@@ -20,7 +19,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Configuration for n8n, see <link xlink:href="https://docs.n8n.io/reference/configuration.html"/>
         for supported values.
@@ -66,13 +65,13 @@ in
         RestrictNamespaces = "yes";
         RestrictRealtime = "yes";
         RestrictSUIDSGID = "yes";
-        MemoryDenyWriteExecute = "no"; # v8 JIT requires memory segments to be Writable-Executable.
+        MemoryDenyWriteExecute =
+          "no"; # v8 JIT requires memory segments to be Writable-Executable.
         LockPersonality = "yes";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
 }

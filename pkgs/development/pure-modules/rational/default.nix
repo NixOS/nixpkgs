@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "A collection of utility functions for rational numbers, and a module for doing interval arithmetic in Pure";
+    description =
+      "A collection of utility functions for rational numbers, and a module for doing interval arithmetic in Pure";
     homepage = "http://puredocs.bitbucket.org/pure-rational.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

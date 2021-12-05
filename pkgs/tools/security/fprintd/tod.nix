@@ -1,14 +1,10 @@
-{ fetchFromGitLab
-, fprintd
-, libfprint-tod
-}:
+{ fetchFromGitLab, fprintd, libfprint-tod }:
 
 (fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (oldAttrs:
   let
     pname = "fprintd-tod";
     version = "1.90.9";
-  in
-  {
+  in {
     inherit pname version;
 
     src = fetchFromGitLab {

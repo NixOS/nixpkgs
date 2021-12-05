@@ -1,12 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numpy
-, scipy
-, scikit-learn
-, llvmPackages ? null
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, cmake, numpy, scipy, scikit-learn
+, llvmPackages ? null }:
 
 buildPythonPackage rec {
   pname = "lightgbm";
@@ -17,18 +10,12 @@ buildPythonPackage rec {
     sha256 = "5b9f31759ab4e94d9409deb03104c55b0a40058a6ccea804022046d926bc4904";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   dontUseCmakeConfigure = true;
 
   buildInputs = lib.optional stdenv.cc.isClang [ llvmPackages.openmp ];
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    scikit-learn
-  ];
+  propagatedBuildInputs = [ numpy scipy scikit-learn ];
 
   postConfigure = ''
     export HOME=$(mktemp -d)
@@ -41,7 +28,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lightgbm" ];
 
   meta = with lib; {
-    description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
+    description =
+      "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
     license = licenses.mit;
     maintainers = with maintainers; [ teh costrouc ];

@@ -48,13 +48,8 @@ buildPythonApplication rec {
     waitress
   ];
 
-  checkInputs = [
-    beautifulsoup4
-    nginx
-    pytestCheckHook
-    pytest-flake8
-    webtest
-  ] ++ lib.optionals isPy27 [ mock ];
+  checkInputs = [ beautifulsoup4 nginx pytestCheckHook pytest-flake8 webtest ]
+    ++ lib.optionals isPy27 [ mock ];
 
   # root_passwd_hash tries to write to store
   # TestMirrorIndexThings tries to write to /var through ngnix
@@ -71,14 +66,11 @@ buildPythonApplication rec {
     "--ignore=test_devpi_server/test_streaming_nginx.py"
     "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
   ];
-  disabledTests = [
-    "root_passwd_hash_option"
-    "TestMirrorIndexThings"
-  ];
+  disabledTests = [ "root_passwd_hash_option" "TestMirrorIndexThings" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     license = licenses.mit;

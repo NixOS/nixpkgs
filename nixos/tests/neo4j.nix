@@ -2,8 +2,7 @@ import ./make-test-python.nix {
   name = "neo4j";
 
   nodes = {
-    master =
-      { ... }:
+    master = { ... }:
 
       {
         services.neo4j.enable = true;

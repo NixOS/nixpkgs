@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.boot;
-in
-{
+let cfg = config.boot;
+in {
 
   ###### interface
 
@@ -23,7 +21,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-         Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
+        Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
       '';
     };
 
@@ -43,16 +41,22 @@ in
   config = {
 
     # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
-    systemd.mounts = mkIf cfg.tmpOnTmpfs [
-      {
-        what = "tmpfs";
-        where = "/tmp";
-        type = "tmpfs";
-        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=${toString cfg.tmpOnTmpfsSize}" ];
-      }
-    ];
+    systemd.mounts = mkIf cfg.tmpOnTmpfs [{
+      what = "tmpfs";
+      where = "/tmp";
+      type = "tmpfs";
+      mountConfig.Options = [
+        "mode=1777"
+        "strictatime"
+        "rw"
+        "nosuid"
+        "nodev"
+        "size=${toString cfg.tmpOnTmpfsSize}"
+      ];
+    }];
 
-    systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
+    systemd.tmpfiles.rules =
+      optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
 
   };
 

@@ -1,21 +1,28 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-pattern";
   version = "20140713-git";
 
   description = "System lacks description";
 
-  deps = [ args."alexandria" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."named-readtables" args."trivial-types" ];
+  deps = [
+    args."alexandria"
+    args."cl-annot"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."named-readtables"
+    args."trivial-types"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-pattern/2014-07-13/cl-pattern-20140713-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-pattern/2014-07-13/cl-pattern-20140713-git.tgz";
     sha256 = "08z7jccjcq41i3i5zdsgixqnijgyrb4q7hm7gq8l5xb1sr3kj72v";
   };
 
   packageName = "cl-pattern";
 
-  asdFilesToKeep = ["cl-pattern.asd"];
+  asdFilesToKeep = [ "cl-pattern.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-pattern DESCRIPTION System lacks description SHA256
@@ -31,4 +38,5 @@ rec {
     DEPENDENCIES
     (alexandria cl-annot cl-syntax cl-syntax-annot named-readtables
      trivial-types)
-    VERSION 20140713-git SIBLINGS (cl-pattern-benchmark) PARASITES NIL) */
+    VERSION 20140713-git SIBLINGS (cl-pattern-benchmark) PARASITES NIL)
+*/

@@ -8,10 +8,10 @@
 let
   stdenv = stdenvNoCC;
 
-  darwinCodeSign = stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64;
-in
+  darwinCodeSign = stdenv.targetPlatform.isDarwin
+    && stdenv.targetPlatform.isAarch64;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "remove-references-to";
 
   dontUnpack = true;

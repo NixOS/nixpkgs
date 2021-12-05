@@ -4,7 +4,8 @@ let
   flreSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "flre";
-    rev = "5aa8a9e032feff7a5790104f2d53fa74c70bb1d9"; # latest as of 0.9.8 release date
+    rev =
+      "5aa8a9e032feff7a5790104f2d53fa74c70bb1d9"; # latest as of 0.9.8 release date
     sha256 = "1zny494jm92fjgfirzwmxff988j4yygblaxmaclkkmcvzkjrzs05";
   };
   synapseSrc = fetchsvn {
@@ -15,13 +16,15 @@ let
   rcmdlineSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "rcmdline";
-    rev = "96859e574e82d76eae49d5552a8c5aa7574a5987"; # latest as of 0.9.8 release date
+    rev =
+      "96859e574e82d76eae49d5552a8c5aa7574a5987"; # latest as of 0.9.8 release date
     sha256 = "0vwvpwrxsy9axicbck143yfxxrdifc026pv9c2lzqxzskf9fd78b";
   };
   internettoolsSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "internettools";
-    rev = "c9c5cc3a87271180d4fb5bb0b17040763d2cfe06"; # latest as of 0.9.8 release date
+    rev =
+      "c9c5cc3a87271180d4fb5bb0b17040763d2cfe06"; # latest as of 0.9.8 release date
     sha256 = "057hn7cb1vy827gvim3b6vwgfdh2ckjy8h9yj1ry7lv6hw8ynx6n";
   };
 in stdenv.mkDerivation rec {
@@ -84,7 +87,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
+    description =
+      "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
     homepage = "https://www.videlibri.de/xidel.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,9 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, effects, lib }:
+build-idris-package {
   name = "lightyear";
   version = "2017-09-10";
 

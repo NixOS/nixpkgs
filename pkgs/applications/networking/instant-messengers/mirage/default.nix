@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, libXScrnSaver
-, olm
-, pkg-config
-, pyotherside
-, python3Packages
-, qmake
-, qtbase
-, qtgraphicaleffects
-, qtkeychain
-, qtmultimedia
-, qtquickcontrols2
-, wrapQtAppsHook
-}:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, libXScrnSaver, olm, pkg-config
+, pyotherside, python3Packages, qmake, qtbase, qtgraphicaleffects, qtkeychain
+, qtmultimedia, qtquickcontrols2, wrapQtAppsHook }:
 
 mkDerivation rec {
   pname = "mirage";
@@ -28,12 +14,8 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python3Packages.wrapPython
-    qmake
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config python3Packages.wrapPython qmake wrapQtAppsHook ];
 
   buildInputs = [
     libXScrnSaver
@@ -65,10 +47,7 @@ mkDerivation rec {
     watchgod
   ];
 
-  qmakeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "CONFIG+=qtquickcompiler"
-  ];
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=qtquickcompiler" ];
 
   dontWrapQtApps = true;
   postInstall = ''
@@ -80,7 +59,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mirukana/mirage";
-    description = "A fancy, customizable, keyboard-operable Qt/QML+Python Matrix chat client for encrypted and decentralized communication";
+    description =
+      "A fancy, customizable, keyboard-operable Qt/QML+Python Matrix chat client for encrypted and decentralized communication";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ colemickens AndersonTorres ];
     inherit (qtbase.meta) platforms;

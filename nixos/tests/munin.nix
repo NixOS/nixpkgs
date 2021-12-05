@@ -1,35 +1,32 @@
 # This test runs basic munin setup with node and cron job running on the same
 # machine.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "munin";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ domenkozar eelco ]; };
 
   nodes = {
-    one =
-      { config, ... }:
-        {
-          services = {
-            munin-node = {
-              enable = true;
-              # disable a failing plugin to prevent irrelevant error message, see #23049
-              disabledPlugins = [ "apc_nis" ];
-            };
-            munin-cron = {
-             enable = true;
-             hosts = ''
-               [${config.networking.hostName}]
-               address localhost
-             '';
-            };
-          };
-
-          # increase the systemd timer interval so it fires more often
-          systemd.timers.munin-cron.timerConfig.OnCalendar = pkgs.lib.mkForce "*:*:0/10";
+    one = { config, ... }: {
+      services = {
+        munin-node = {
+          enable = true;
+          # disable a failing plugin to prevent irrelevant error message, see #23049
+          disabledPlugins = [ "apc_nis" ];
         };
+        munin-cron = {
+          enable = true;
+          hosts = ''
+            [${config.networking.hostName}]
+            address localhost
+          '';
+        };
+      };
+
+      # increase the systemd timer interval so it fires more often
+      systemd.timers.munin-cron.timerConfig.OnCalendar =
+        pkgs.lib.mkForce "*:*:0/10";
     };
+  };
 
   testScript = ''
     start_all()

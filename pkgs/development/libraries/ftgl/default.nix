@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, freeglut
-, freetype
-, GLUT
-, libGL
-, libGLU
-, OpenGL
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, freeglut, freetype
+, GLUT, libGL, libGLU, OpenGL, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ftgl";
@@ -23,25 +12,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    doxygen
-    pkg-config
-  ];
-  buildInputs = [
-    freetype
-  ] ++ (if stdenv.isDarwin then [
-    OpenGL
-    GLUT
-  ] else [
-    libGL
-    libGLU
-    freeglut
-  ]);
+  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
+  buildInputs = [ freetype ]
+    ++ (if stdenv.isDarwin then [ OpenGL GLUT ] else [ libGL libGLU freeglut ]);
 
-  configureFlags = [
-    "--with-ft-prefix=${lib.getDev freetype}"
-  ];
+  configureFlags = [ "--with-ft-prefix=${lib.getDev freetype}" ];
 
   enableParallelBuilding = true;
 

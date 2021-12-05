@@ -1,31 +1,7 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, doxygen
-, fetchFromGitHub
-, ffmpeg
-, freeimage
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, lsb-release
-, mkDerivation
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, sqlite
-, swig
-, unzip
-, wget
-}:
+{ lib, stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen
+, fetchFromGitHub, ffmpeg, freeimage, libmediainfo, libraw, libsodium, libtool
+, libuv, libzen, lsb-release, mkDerivation, pkg-config, qtbase, qttools
+, qtx11extras, sqlite, swig, unzip, wget }:
 mkDerivation rec {
   pname = "megasync";
   version = "4.6.1.0";

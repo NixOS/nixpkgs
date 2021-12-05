@@ -1,38 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, acl
-, cyrus_sasl
-, docbook_xsl
-, libepoxy
-, gettext
-, gobject-introspection
-, gst_all_1
-, gtk-doc
-, gtk3
-, json-glib
-, libcacard
-, libdrm
-, libjpeg_turbo
-, libopus
-, libsoup
-, libusb1
-, lz4
-, meson
-, ninja
-, openssl
-, perl
-, phodav
-, pixman
-, pkg-config
-, polkit
-, python3
-, spice-protocol
-, usbredir
-, usbutils
-, vala
-, zlib
-, withPolkit ? true
-}:
+{ lib, stdenv, fetchurl, acl, cyrus_sasl, docbook_xsl, libepoxy, gettext
+, gobject-introspection, gst_all_1, gtk-doc, gtk3, json-glib, libcacard, libdrm
+, libjpeg_turbo, libopus, libsoup, libusb1, lz4, meson, ninja, openssl, perl
+, phodav, pixman, pkg-config, polkit, python3, spice-protocol, usbredir
+, usbutils, vala, zlib, withPolkit ? true }:
 
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
@@ -62,7 +32,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.bz2";
+    url =
+      "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.bz2";
     sha256 = "1drvj8y35gnxbnrxsipwi15yh0vs9ixzv4wslz6r3lra8w3bfa0z";
   };
 
@@ -88,9 +59,8 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-  ];
+  propagatedBuildInputs =
+    [ gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
   buildInputs = [
     cyrus_sasl
@@ -109,9 +79,10 @@ stdenv.mkDerivation rec {
     spice-protocol
     usbredir
     zlib
-  ] ++ lib.optionals withPolkit [ polkit acl usbutils ] ;
+  ] ++ lib.optionals withPolkit [ polkit acl usbutils ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR =
+    "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
     "-Dcelt051=disabled"

@@ -1,8 +1,4 @@
-{ lib
-, python3
-, stdenv
-, fetchurl
-}:
+{ lib, python3, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "http2tcp";
@@ -13,11 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "34fb83c091689dee398ca80db76487e0c39abb17cef390d845ffd888009a5caa";
   };
 
-  buildInputs = [
-    (python3.withPackages (ps: [
-      ps.wsgitools
-    ]))
-  ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.wsgitools ])) ];
 
   dontBuild = true;
 

@@ -1,18 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, flask
-, httpx
-, mypy-boto3-s3
-, numpy
-, scipy
-, pydantic
-, pytestCheckHook
-, pyyaml
-, six
-}:
+{ lib, aiohttp, buildPythonPackage, fastapi, fetchFromGitHub, flask, httpx
+, mypy-boto3-s3, numpy, scipy, pydantic, pytestCheckHook, pyyaml, six }:
 
 buildPythonPackage rec {
   pname = "dependency-injector";
@@ -25,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-2qe4A2T3EagNCh1zSbPWblVN7p9NH8rNwQQVyESJTdk=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   checkInputs = [
     aiohttp

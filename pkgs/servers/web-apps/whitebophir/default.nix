@@ -1,9 +1,4 @@
-{ stdenv
-, pkgs
-, lib
-, nodejs
-, runtimeShell
-}:
+{ stdenv, pkgs, lib, nodejs, runtimeShell }:
 
 let
   nodePackages = import ./node-packages.nix {
@@ -26,12 +21,12 @@ let
     '';
 
     meta = with lib; {
-      description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
+      description =
+        "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
       license = licenses.agpl3Plus;
       homepage = "https://github.com/lovasoa/whitebophir";
       maintainers = with maintainers; [ iblech ];
       platforms = platforms.unix;
     };
   };
-in
-  combined
+in combined

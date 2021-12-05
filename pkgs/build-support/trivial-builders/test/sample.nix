@@ -1,14 +1,9 @@
-{ pkgs ? import ../../../.. { config = { }; overlays = [ ]; } }:
-let
-  inherit (pkgs)
-    figlet
-    zlib
-    hello
-    writeText
-    runCommand
-    ;
-in
-{
+{ pkgs ? import ../../../.. {
+  config = { };
+  overlays = [ ];
+} }:
+let inherit (pkgs) figlet zlib hello writeText runCommand;
+in {
   hello = hello;
   figlet = figlet;
   zlib = zlib;
@@ -20,10 +15,7 @@ in
   path = ./invoke-writeReferencesToFile.nix;
   pathLike.outPath = ./invoke-writeReferencesToFile.nix;
   helloFigletRef = writeText "hi" "hello ${hello} ${figlet}";
-  selfRef = runCommand "self-ref-1" {} "echo $out >$out";
-  selfRef2 = runCommand "self-ref-2" {} ''echo "${figlet}, $out" >$out'';
-  inherit (pkgs)
-    emptyFile
-    emptyDirectory
-  ;
+  selfRef = runCommand "self-ref-1" { } "echo $out >$out";
+  selfRef2 = runCommand "self-ref-2" { } ''echo "${figlet}, $out" >$out'';
+  inherit (pkgs) emptyFile emptyDirectory;
 }

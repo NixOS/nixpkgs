@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, git
-, gnupg
-, xclip
-, wl-clipboard
-, passAlias ? false
-}:
+{ lib, stdenv, makeWrapper, buildGoModule, fetchFromGitHub, installShellFiles
+, git, gnupg, xclip, wl-clipboard, passAlias ? false }:
 
 buildGoModule rec {
   pname = "gopass";
@@ -30,15 +20,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
+  ldflags =
+    [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
-  wrapperPath = lib.makeBinPath (
-    [
-      git
-      gnupg
-      xclip
-    ] ++ lib.optional stdenv.isLinux wl-clipboard
-  );
+  wrapperPath = lib.makeBinPath
+    ([ git gnupg xclip ] ++ lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
     installManPage gopass.1
@@ -56,11 +42,13 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
+    description =
+      "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
-    changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

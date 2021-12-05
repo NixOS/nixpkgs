@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnum4
-, glib
-, libsigcxx30
-, gnome
-, Cocoa
-, meson
-, ninja
-}:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx30, gnome, Cocoa
+, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
@@ -18,7 +8,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-gAj9iu3cyGej+X8RPeYl9ulu+Yz3hgN5gTqcD+/9tSA=";
   };
 
@@ -30,14 +22,9 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  propagatedBuildInputs = [
-    glib
-    libsigcxx30
-  ];
+  propagatedBuildInputs = [ glib libsigcxx30 ];
 
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 

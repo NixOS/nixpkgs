@@ -1,11 +1,4 @@
-{ lib, stdenv, fetchurl
-, libiconv
-, libpng
-, ncurses
-, pcre
-, readline
-, zlib
-}:
+{ lib, stdenv, fetchurl, libiconv, libpng, ncurses, pcre, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "slang";
@@ -35,12 +28,8 @@ stdenv.mkDerivation rec {
     "--with-z=${zlib.dev}"
   ];
 
-  buildInputs = [
-    libpng
-    pcre
-    readline
-    zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
+  buildInputs = [ libpng pcre readline zlib ]
+    ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 

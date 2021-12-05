@@ -2,15 +2,11 @@
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
-, libid3tag
-, freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
+, libid3tag, freetype, bzip2, pkg-config, x11Support ? true, xlibsWrapper ? null
 }:
 
-let
-  inherit (lib) optional;
-in
-stdenv.mkDerivation rec {
+let inherit (lib) optional;
+in stdenv.mkDerivation rec {
   pname = "imlib2";
   version = "1.7.3";
 
@@ -19,10 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FY0LjCC8ESIa+ed6ZKEW/KcFGwPN6ixPMdMfRpOC+Zc=";
   };
 
-  buildInputs = [
-    libjpeg libtiff giflib libpng libwebp
-    bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+  buildInputs =
+    [ libjpeg libtiff giflib libpng libwebp bzip2 freetype libid3tag ]
+    ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkg-config ];
 

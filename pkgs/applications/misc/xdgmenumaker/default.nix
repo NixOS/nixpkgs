@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, txt2tags, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
+{ lib, fetchFromGitHub, txt2tags, python3Packages, glib, gobject-introspection
+, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
@@ -15,31 +16,19 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
-  nativeBuildInputs = [
-    gobject-introspection
-    txt2tags
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gobject-introspection txt2tags wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  pythonPath = with python3Packages; [
-    pyxdg
-    pygobject3
-  ];
+  pythonPath = with python3Packages; [ pyxdg pygobject3 ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installFlags = [
-    "DESTDIR="
-  ];
+  installFlags = [ "DESTDIR=" ];
 
   meta = with lib; {
-    description = "Command line tool that generates XDG menus for several window managers";
+    description =
+      "Command line tool that generates XDG menus for several window managers";
     homepage = "https://github.com/gapan/xdgmenumaker";
     license = licenses.gpl2Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch

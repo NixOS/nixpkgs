@@ -13,14 +13,9 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/ipc-client";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libX11
-    xorgproto
-  ];
+  buildInputs = [ libX11 xorgproto ];
 
   meta = with lib; {
     description = "A tiny program to interact with wmderland";

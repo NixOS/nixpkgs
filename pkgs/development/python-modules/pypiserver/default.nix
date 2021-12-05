@@ -23,11 +23,8 @@ buildPythonPackage rec {
   checkInputs = [ passlib pytestCheckHook twine webtest ];
 
   # These tests try to use the network
-  disabledTests = [
-    "test_pipInstall_openOk"
-    "test_pipInstall_authedOk"
-    "test_hash_algos"
-  ];
+  disabledTests =
+    [ "test_pipInstall_openOk" "test_pipInstall_authedOk" "test_hash_algos" ];
 
   pythonImportsCheck = [ "pypiserver" ];
 

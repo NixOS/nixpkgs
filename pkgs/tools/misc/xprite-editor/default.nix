@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, gtk3
-, AppKit
-, pkg-config
-, python3
+{ lib, stdenv, fetchFromGitHub, rustPlatform, gtk3, AppKit, pkg-config, python3
 }:
 
 rustPlatform.buildRustPackage rec {

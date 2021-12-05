@@ -1,8 +1,7 @@
 # Tested with simple dump and restore -i, but complains that
 # /nix/store/.../etc/dumpdates doesn't exist.
 
-{ lib, stdenv, fetchurl, pkg-config,
-  e2fsprogs, ncurses, readline }:
+{ lib, stdenv, fetchurl, pkg-config, e2fsprogs, ncurses, readline }:
 
 stdenv.mkDerivation rec {
   pname = "dump";

@@ -1,21 +1,31 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "dbd-mysql";
   version = "cl-dbi-20211020-git";
 
   description = "Database driver for MySQL.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-mysql" args."closer-mop" args."dbi" args."split-sequence" args."trivial-features" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cl-mysql"
+    args."closer-mop"
+    args."dbi"
+    args."split-sequence"
+    args."trivial-features"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-dbi/2021-10-20/cl-dbi-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-dbi/2021-10-20/cl-dbi-20211020-git.tgz";
     sha256 = "1khvf4b2pa9wv8blcwb77byi5nyb8g8bnaq4ml20g674iwgvvvmr";
   };
 
   packageName = "dbd-mysql";
 
-  asdFilesToKeep = ["dbd-mysql.asd"];
+  asdFilesToKeep = [ "dbd-mysql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbd-mysql DESCRIPTION Database driver for MySQL. SHA256
@@ -32,4 +42,5 @@ rec {
     (alexandria babel bordeaux-threads cffi cl-mysql closer-mop dbi
      split-sequence trivial-features)
     VERSION cl-dbi-20211020-git SIBLINGS
-    (cl-dbi dbd-postgres dbd-sqlite3 dbi-test dbi) PARASITES NIL) */
+    (cl-dbi dbd-postgres dbd-sqlite3 dbi-test dbi) PARASITES NIL)
+*/

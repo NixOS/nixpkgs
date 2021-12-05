@@ -1,18 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, pkg-config
-, file
-, ncurses
-, readline
-, which
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config, file
+, ncurses, readline, which
 # options
-, conf ? null
-, withIcons ? false
-, withNerdIcons ? false
-}:
+, conf ? null, withIcons ? false, withNerdIcons ? false }:
 
 # Mutually exclusive options
 assert withIcons -> withNerdIcons == false;

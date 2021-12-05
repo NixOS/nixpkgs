@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "smbus2";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "0xgqs7bzhr8y3irc9gq3dnw1l3f5gc1yv4r2v4qxj95i3vvzpg5s";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck
@@ -28,9 +21,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "smbus2"
-  ];
+  pythonImportsCheck = [ "smbus2" ];
 
   meta = with lib; {
     description = "Drop-in replacement for smbus-cffi/smbus-python";

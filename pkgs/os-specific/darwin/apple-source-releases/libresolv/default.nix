@@ -1,6 +1,5 @@
 { lib, appleDerivation', stdenv, stdenvNoCC, Libinfo, configd, mDNSResponder
-, headersOnly ? false
-}:
+, headersOnly ? false }:
 
 appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   buildInputs = lib.optionals (!headersOnly) [ Libinfo configd mDNSResponder ];

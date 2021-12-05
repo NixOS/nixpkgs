@@ -5,18 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.6.15";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.tar.xz";
+    url =
+      "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.tar.xz";
     sha256 = "19ja47468s3jfabvakq9wknyfclfr31a9vd11p3mhapfq8jv9g4x";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ gnome.adwaita-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

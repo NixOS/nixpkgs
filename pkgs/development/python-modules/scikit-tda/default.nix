@@ -1,21 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, scikit-learn
-, matplotlib
-, numba
-, umap-learn
-, cython
-, ripser
-, persim
-, pillow
-, kmapper
-, tadasets
-, pytest
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, scikit-learn
+, matplotlib, numba, umap-learn, cython, ripser, persim, pillow, kmapper
+, tadasets, pytest, isPy27 }:
 
 buildPythonPackage rec {
   pname = "scikit-tda";
@@ -44,9 +29,7 @@ buildPythonPackage rec {
     tadasets
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest test

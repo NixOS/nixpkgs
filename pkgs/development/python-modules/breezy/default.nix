@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, patiencediff
-, six
-, fastimport
-, dulwich
-, launchpadlib
-, testtools
-}:
+{ lib, buildPythonPackage, fetchPypi, configobj, patiencediff, six, fastimport
+, dulwich, launchpadlib, testtools }:
 
 buildPythonPackage rec {
   pname = "breezy";
@@ -19,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
   };
 
-  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
+  propagatedBuildInputs =
+    [ configobj patiencediff six fastimport dulwich launchpadlib ];
 
   checkInputs = [ testtools ];
 

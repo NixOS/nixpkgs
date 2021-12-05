@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, httpx, poetry-core, pytest-asyncio
+, pytest-httpx, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
@@ -23,23 +15,13 @@ buildPythonPackage rec {
     sha256 = "EVqnrMatOk2I6hiCkiT5FOWvMY9LEK8LlSHqi0x9kuQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-httpx
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-httpx pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aiocurrencylayer"
-  ];
+  pythonImportsCheck = [ "aiocurrencylayer" ];
 
   meta = with lib; {
     description = "Python API for interacting with currencylayer";

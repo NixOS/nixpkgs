@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper,
-  libllvm, gmp, mpfr, readline, bison, flex }:
+{ lib, stdenv, fetchurl, makeWrapper, libllvm, gmp, mpfr, readline, bison, flex
+}:
 
 stdenv.mkDerivation rec {
-  baseName="pure";
-  version="0.68";
-  name="${baseName}-${version}";
+  baseName = "pure";
+  version = "0.68";
+  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url="https://github.com/agraef/pure-lang/releases/download/${name}/${name}.tar.gz";
-    sha256="0px6x5ivcdbbp2pz5n1r1cwg1syadklhjw8piqhl63n91i4r7iyb";
+    url =
+      "https://github.com/agraef/pure-lang/releases/download/${name}/${name}.tar.gz";
+    sha256 = "0px6x5ivcdbbp2pz5n1r1cwg1syadklhjw8piqhl63n91i4r7iyb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,14 +33,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A modern-style functional programming language based on term rewriting";
-    maintainers = with lib.maintainers;
-    [
-      raskin
-      asppsa
-    ];
-    platforms = with lib.platforms;
-      linux;
+    description =
+      "A modern-style functional programming language based on term rewriting";
+    maintainers = with lib.maintainers; [ raskin asppsa ];
+    platforms = with lib.platforms; linux;
     license = lib.licenses.gpl3Plus;
     broken = true;
   };

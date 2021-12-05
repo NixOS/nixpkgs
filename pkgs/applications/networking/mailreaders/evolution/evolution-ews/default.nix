@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
-, sqlite, gtk3, webkitgtk, libgdata, libmspack }:
+{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config
+, evolution-data-server, evolution, sqlite, gtk3, webkitgtk, libgdata, libmspack
+}:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
   version = "3.42.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "nCvGMSfDS0GUQfF8zomVq+gKf9H72X896zptRy9/Xy0=";
   };
 
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
 
   buildInputs = [
-    evolution-data-server evolution
-    sqlite libgdata
-    gtk3 webkitgtk
+    evolution-data-server
+    evolution
+    sqlite
+    libgdata
+    gtk3
+    webkitgtk
     libmspack
   ];
 
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DFORCE_INSTALL_PREFIX=ON"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = gnome.updateScript {
       packageName = "evolution-ews";
       versionPolicy = "odd-unstable";
@@ -36,7 +42,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
-    license = "LGPL-2.1-only OR LGPL-3.0-only"; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
+    license =
+      "LGPL-2.1-only OR LGPL-3.0-only"; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
     maintainers = [ maintainers.dasj19 ];
     platforms = platforms.linux;
   };

@@ -11,7 +11,7 @@ with lib;
   options = {
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -103,7 +103,7 @@ with lib;
 
     fastcgiParams = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx
         configuration file, overriding only some default parameters

@@ -1,20 +1,31 @@
-{ fetchurl, lib, stdenv, pkg-config, gettext, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
+{ fetchurl, lib, stdenv, pkg-config, gettext, python3, SDL, SDL_image, SDL_gfx
+, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
 
-let
-  version = "0.16.1";
+let version = "0.16.1";
 in stdenv.mkDerivation {
   pname = "freedroidrpg";
   inherit version;
 
   src = fetchurl {
-    url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${lib.versions.majorMinor version}/freedroidRPG-${version}.tar.gz";
+    url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${
+        lib.versions.majorMinor version
+      }/freedroidRPG-${version}.tar.gz";
     sha256 = "0n4kn38ncmcy3lrxmq8fjry6c1z50z4q1zcqfig0j4jb0dsz2va2";
   };
 
   nativeBuildInputs = [ pkg-config gettext python3 ];
 
   buildInputs = [
-    SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib
+    SDL
+    SDL_image
+    SDL_gfx
+    SDL_mixer
+    libogg
+    libvorbis
+    lua5_3
+    libjpeg
+    libpng
+    zlib
   ] ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {

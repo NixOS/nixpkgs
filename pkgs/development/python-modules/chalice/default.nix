@@ -1,25 +1,6 @@
-{ lib
-, attrs
-, botocore
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, hypothesis
-, inquirer
-, jmespath
-, mock
-, mypy-extensions
-, pip
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, six
-, typing
-, watchdog
-, websocket-client
-, wheel
+{ lib, attrs, botocore, buildPythonPackage, click, fetchFromGitHub, hypothesis
+, inquirer, jmespath, mock, mypy-extensions, pip, pytestCheckHook, pythonOlder
+, pyyaml, requests, setuptools, six, typing, watchdog, websocket-client, wheel
 }:
 
 buildPythonPackage rec {
@@ -46,17 +27,9 @@ buildPythonPackage rec {
     six
     wheel
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ typing ];
 
-  checkInputs = [
-    hypothesis
-    mock
-    pytestCheckHook
-    requests
-    websocket-client
-  ];
+  checkInputs = [ hypothesis mock pytestCheckHook requests websocket-client ];
 
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"

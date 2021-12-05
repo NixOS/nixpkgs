@@ -1,25 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, enableMail ? false
-, mailutils
-, inetutils
-, IOKit
-, ApplicationServices
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, enableMail ? false, mailutils
+, inetutils, IOKit, ApplicationServices }:
 
 let
   dbrev = "5171";
   drivedbBranch = "RELEASE_7_2_DRIVEDB";
   driverdb = fetchurl {
-    url = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
+    url =
+      "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
     sha256 = "0vncr98xagbcfsxgfgxsip2qrl9q3y8va19qhv6yknlwbdfap4mn";
     name = "smartmontools-drivedb.h";
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "smartmontools";
   version = "7.2";
 
@@ -36,7 +28,8 @@ stdenv.mkDerivation rec {
     cp -v ${driverdb} drivedb.h
   '';
 
-  configureFlags = lib.optional enableMail "--with-scriptpath=${lib.makeBinPath [ inetutils mailutils ]}";
+  configureFlags = lib.optional enableMail
+    "--with-scriptpath=${lib.makeBinPath [ inetutils mailutils ]}";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];

@@ -1,20 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, gdb
-, flask
-, six
-, bidict
-, python-engineio
-, python-socketio
-, flask-socketio
-, flask-compress
-, pygdbmi
-, pygments
-, gevent
-, gevent-websocket
-, eventlet
-, }:
+{ lib, buildPythonApplication, fetchPypi, gdb, flask, six, bidict
+, python-engineio, python-socketio, flask-socketio, flask-compress, pygdbmi
+, pygments, gevent, gevent-websocket, eventlet, }:
 
 let
   # gdbgui only works with the latest previous major version of flask-socketio,
@@ -49,8 +35,7 @@ let
     propagatedBuildInputs = [ flask python-socketio' ];
     doCheck = false;
   });
-in
-buildPythonApplication rec {
+in buildPythonApplication rec {
   pname = "gdbgui";
   version = "0.14.0.2";
 

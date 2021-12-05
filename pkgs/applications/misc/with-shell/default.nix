@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "with";
@@ -26,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mchav/With";
-    description = "Command prefixing for continuous workflow using a single tool";
+    description =
+      "Command prefixing for continuous workflow using a single tool";
     longDescription = ''
       with is a Bash script that starts an interactive shell with where every
       command is prefixed using <program>.

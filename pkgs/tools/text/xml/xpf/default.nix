@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, python2, libxml2}:
+{ lib, stdenv, fetchurl, python2, libxml2 }:
 
 assert libxml2.pythonSupport == true;
 
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python2 libxml2 ];
 
   meta = {
-    description = "XML Pipes and Filters - command line tools for manipulating and querying XML data";
+    description =
+      "XML Pipes and Filters - command line tools for manipulating and querying XML data";
     homepage = "http://www.cs.uu.nl/wiki/bin/view/Martin/XmlPipesAndFilters";
     platforms = lib.platforms.unix;
   };

@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cloudpickle
-, dask
-, numpy, toolz # dask[array]
-, multipledispatch
-, setuptools-scm
-, scipy
-, scikit-learn
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, cloudpickle, dask, numpy
+, toolz # dask[array]
+, multipledispatch, setuptools-scm, scipy, scikit-learn, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "0.2.0";
@@ -22,7 +13,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikit-learn ];
+  propagatedBuildInputs =
+    [ cloudpickle dask numpy toolz multipledispatch scipy scikit-learn ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-glm/";

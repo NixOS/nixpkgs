@@ -1,14 +1,7 @@
-{
-  curl,
-  netlify-cli,
-  runCommand,
-}:
+{ curl, netlify-cli, runCommand, }:
 
 runCommand "netlify-cli-test" {
-  nativeBuildInputs = [
-    netlify-cli
-    curl
-  ];
+  nativeBuildInputs = [ netlify-cli curl ];
   meta.timeout = 600;
 } ''
   mkdir home

@@ -1,31 +1,8 @@
-{ lib
-, stdenv
-, botocore
-, buildPythonPackage
-, cryptography
-, cssselect
-, fetchPypi
-, fetchpatch
-, glibcLocales
-, installShellFiles
-, itemadapter
-, itemloaders
-, jmespath
-, lxml
-, parsel
-, protego
-, pydispatcher
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, queuelib
-, service-identity
-, sybil
-, testfixtures
-, twisted
-, w3lib
-, zope_interface
-}:
+{ lib, stdenv, botocore, buildPythonPackage, cryptography, cssselect, fetchPypi
+, fetchpatch, glibcLocales, installShellFiles, itemadapter, itemloaders
+, jmespath, lxml, parsel, protego, pydispatcher, pyopenssl, pytestCheckHook
+, pythonOlder, queuelib, service-identity, sybil, testfixtures, twisted, w3lib
+, zope_interface }:
 
 buildPythonPackage rec {
   pname = "scrapy";
@@ -38,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "13af6032476ab4256158220e530411290b3b934dd602bb6dacacbf6d16141f49";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     cryptography
@@ -59,26 +34,22 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
-    botocore
-    glibcLocales
-    jmespath
-    pytestCheckHook
-    sybil
-    testfixtures
-  ];
+  checkInputs =
+    [ botocore glibcLocales jmespath pytestCheckHook sybil testfixtures ];
 
   patches = [
     # Require setuptools, https://github.com/scrapy/scrapy/pull/5122
     (fetchpatch {
       name = "add-setuptools.patch";
-      url = "https://github.com/scrapy/scrapy/commit/4f500342c8ad4674b191e1fab0d1b2ac944d7d3e.patch";
+      url =
+        "https://github.com/scrapy/scrapy/commit/4f500342c8ad4674b191e1fab0d1b2ac944d7d3e.patch";
       sha256 = "14030sfv1cf7dy4yww02b49mg39cfcg4bv7ys1iwycfqag3xcjda";
     })
     # Make Twisted[http2] installation optional, https://github.com/scrapy/scrapy/pull/5113
     (fetchpatch {
       name = "remove-h2.patch";
-      url = "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
+      url =
+        "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
       sha256 = "0sa39yx9my4nqww8a12bk9zagx7b56vwy7xpxm4xgjapjl6mcc0k";
       excludes = [ "tox.ini" ];
     })
@@ -110,7 +81,7 @@ buildPythonPackage rec {
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
-    "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"

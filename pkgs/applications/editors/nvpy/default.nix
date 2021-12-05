@@ -1,7 +1,6 @@
 { pkgs, fetchurl, python2Packages }:
 
-let
-  pythonPackages = python2Packages;
+let pythonPackages = python2Packages;
 in pythonPackages.buildPythonApplication rec {
   version = "0.9.7";
   pname = "nvpy";
@@ -11,11 +10,7 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "1rd3vlaqkg16iz6qcw6rkbq0jmyvc0843wa3brnvn1nz0kla243f";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    markdown
-    tkinter
-    docutils
-  ];
+  propagatedBuildInputs = with pythonPackages; [ markdown tkinter docutils ];
 
   # No tests
   doCheck = false;
@@ -29,7 +24,8 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with pkgs.lib; {
-    description = "A simplenote-syncing note-taking tool inspired by Notational Velocity";
+    description =
+      "A simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
     platforms = platforms.linux;
     license = licenses.bsd3;

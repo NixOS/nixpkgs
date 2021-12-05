@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pass, rofi, coreutils, util-linux, xdotool, gnugrep
-, libnotify, pwgen, findutils, gawk, gnused, xclip, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, pass, rofi, coreutils, util-linux, xdotool
+, gnugrep, libnotify, pwgen, findutils, gawk, gnused, xclip, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-pass";
@@ -25,20 +24,21 @@ stdenv.mkDerivation rec {
     cp -a config.example $out/share/doc/rofi-pass/config.example
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    coreutils
-    findutils
-    gawk
-    gnugrep
-    gnused
-    libnotify
-    (pass.withExtensions (ext: [ ext.pass-otp ]))
-    pwgen
-    rofi
-    util-linux
-    xclip
-    xdotool
-  ];
+  wrapperPath = with lib;
+    makeBinPath [
+      coreutils
+      findutils
+      gawk
+      gnugrep
+      gnused
+      libnotify
+      (pass.withExtensions (ext: [ ext.pass-otp ]))
+      pwgen
+      rofi
+      util-linux
+      xclip
+      xdotool
+    ];
 
   fixupPhase = ''
     patchShebangs $out/bin

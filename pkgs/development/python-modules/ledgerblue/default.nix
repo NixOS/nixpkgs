@@ -1,7 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, hidapi
-, pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
-, websocket-client
-}:
+{ lib, fetchPypi, buildPythonPackage, hidapi, pycrypto, pillow, protobuf, future
+, ecpy, python-u2flib-host, pycryptodomex, websocket-client }:
 
 buildPythonPackage rec {
   pname = "ledgerblue";
@@ -13,7 +11,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket-client
+    hidapi
+    pycrypto
+    pillow
+    protobuf
+    future
+    ecpy
+    python-u2flib-host
+    pycryptodomex
+    websocket-client
   ];
 
   # No tests

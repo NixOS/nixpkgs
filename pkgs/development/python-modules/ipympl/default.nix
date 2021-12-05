@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, ipywidgets
-}:
+{ lib, buildPythonPackage, fetchPypi, ipykernel, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "ipympl";
@@ -14,7 +9,6 @@ buildPythonPackage rec {
     inherit pname version format;
     sha256 = "0509gzm5557lyxx8k3qqgp14ifnmfx796cfc8f592mv97pxkyibl";
   };
-
 
   propagatedBuildInputs = [ ipykernel ipywidgets ];
 

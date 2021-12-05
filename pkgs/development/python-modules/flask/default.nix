@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asgiref
-, click
-, itsdangerous
-, jinja2
-, python-dotenv
-, werkzeug
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, asgiref, click, itsdangerous, jinja2
+, python-dotenv, werkzeug, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "2.0.2";
@@ -19,18 +10,10 @@ buildPythonPackage rec {
     sha256 = "7b2fb8e934ddd50731893bdcdb00fc8c0315916f9fcd50d22c7cc1a95ab634e2";
   };
 
-  propagatedBuildInputs = [
-    asgiref
-    python-dotenv
-    click
-    itsdangerous
-    jinja2
-    werkzeug
-  ];
+  propagatedBuildInputs =
+    [ asgiref python-dotenv click itsdangerous jinja2 werkzeug ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "http://flask.pocoo.org/";

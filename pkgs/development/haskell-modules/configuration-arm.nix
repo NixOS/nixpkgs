@@ -21,13 +21,12 @@
 # solve, so refactors and updates to this file are less tedious.
 { pkgs, haskellLib }:
 
-let
-  inherit (pkgs) lib;
-in
+let inherit (pkgs) lib;
 
-with haskellLib;
+in with haskellLib;
 
-self: super: {
+self: super:
+{
   # COMMON ARM OVERRIDES
 
   # moved here from configuration-common.nix, no reason given.
@@ -101,7 +100,6 @@ self: super: {
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;

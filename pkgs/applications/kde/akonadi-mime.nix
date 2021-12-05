@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info,
-  akonadi, kdbusaddons, ki18n, kio, kitemmodels, kmime
-}:
+{ mkDerivation, lib, kdepimTeam, extra-cmake-modules, shared-mime-info, akonadi
+, kdbusaddons, ki18n, kio, kitemmodels, kmime }:
 
 mkDerivation {
   pname = "akonadi-mime";

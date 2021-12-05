@@ -1,14 +1,5 @@
-{
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  gtk-sharp-3_0,
-  lib,
-  libxslt,
-  mono,
-  pkg-config,
-  webkitgtk,
-}:
+{ stdenv, autoreconfHook, fetchFromGitHub, gtk-sharp-3_0, lib, libxslt, mono
+, pkg-config, webkitgtk, }:
 
 stdenv.mkDerivation rec {
   pname = "webkit2-sharp";
@@ -21,24 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:0a7vx81zvzn2wq4q2mqrxvlps1mqk28lm1gpfndqryxm4iiw28vc";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    libxslt
-    mono
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook libxslt mono pkg-config ];
 
-  buildInputs = [
-    gtk-sharp-3_0
-    webkitgtk
-  ];
+  buildInputs = [ gtk-sharp-3_0 webkitgtk ];
 
   ac_cv_path_MONODOCER = "no";
-  installFlagsArray = ["GAPIXMLDIR=/tmp/gapixml"];
+  installFlagsArray = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
-  passthru = {
-    inherit webkitgtk;
-  };
+  passthru = { inherit webkitgtk; };
 
   meta = {
     description = "C# bindings for WebKit 2 with GTK+ 3";

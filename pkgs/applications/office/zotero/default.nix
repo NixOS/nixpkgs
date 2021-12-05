@@ -1,37 +1,8 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
-, atk
-, cairo
-, coreutils
-, curl
-, cups
-, dbus-glib
-, dbus
-, dconf
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk3
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXt
-, libnotify
-, gnome
-, libGLU, libGL
-, nspr
-, nss
-, pango
-, gsettings-desktop-schemas
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem, atk, cairo, coreutils
+, curl, cups, dbus-glib, dbus, dconf, fontconfig, freetype, gdk-pixbuf, glib
+, glibc, gtk3, libX11, libXScrnSaver, libxcb, libXcomposite, libXcursor
+, libXdamage, libXext, libXfixes, libXi, libXinerama, libXrender, libXt
+, libnotify, gnome, libGLU, libGL, nspr, nss, pango, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
@@ -39,52 +10,53 @@ stdenv.mkDerivation rec {
   version = "5.0.96.3";
 
   src = fetchurl {
-    url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
+    url =
+      "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
     sha256 = "sha256-eqSNzmkGNopGJ7VByvUffFEPJz3WHS7b5+jgUAW/hU4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+  buildInputs =
+    [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk3
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXt
-      libnotify
-      libGLU libGL
-      nspr
-      nss
-      pango
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    atk
+    cairo
+    curl
+    cups
+    dbus-glib
+    dbus
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    glibc
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libxcb
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXrender
+    libXt
+    libnotify
+    libGLU
+    libGL
+    nspr
+    nss
+    pango
+  ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
   postPatch = ''
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js

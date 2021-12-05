@@ -1,8 +1,9 @@
-{ lib, fetchFromGitHub, wrapGAppsHook, gettext
-, python3Packages, gnome, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
+{ lib, fetchFromGitHub, wrapGAppsHook, gettext, python3Packages, gnome, gtk3
+, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
-  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
+  inherit (python3Packages)
+    buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
   version = "1.7.0";
@@ -16,28 +17,14 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext gobject-introspection wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    gnome.adwaita-icon-theme
-    gsettings-desktop-schemas
-    gtk3
-    gdk-pixbuf
-  ];
+  buildInputs =
+    [ glib gnome.adwaita-icon-theme gsettings-desktop-schemas gtk3 gdk-pixbuf ];
 
   # The optional tagpy dependency (for editing metadata) is not yet
   # included because it's difficult to build.
-  pythonPath = [
-    dbus-python
-    mpd2
-    pygobject3
-    setuptools
-  ];
+  pythonPath = [ dbus-python mpd2 pygobject3 setuptools ];
 
   # Otherwise the setup hook for gobject-introspection is not run:
   # https://github.com/NixOS/nixpkgs/issues/56943

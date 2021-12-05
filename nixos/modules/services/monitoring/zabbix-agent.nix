@@ -4,7 +4,8 @@ let
   cfg = config.services.zabbixAgent;
 
   inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
+  inherit (lib)
+    attrValues concatMapStringsSep literalExpression optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
@@ -15,13 +16,13 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
+  configFile = pkgs.writeText "zabbix_agent.conf"
+    (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
-in
-
-{
+in {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ] "Use services.zabbixAgent.settings instead.")
+    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ]
+      "Use services.zabbixAgent.settings instead.")
   ];
 
   # interface
@@ -52,7 +53,7 @@ in
       modules = mkOption {
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
@@ -104,7 +105,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int str (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           Zabbix Agent configuration. Refer to
           <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
@@ -130,7 +131,7 @@ in
         Server = cfg.server;
         ListenPort = cfg.listen.port;
       }
-      (mkIf (cfg.modules != {}) {
+      (mkIf (cfg.modules != { }) {
         LoadModule = builtins.attrNames cfg.modules;
         LoadModulePath = "${moduleEnv}/lib";
       })
@@ -140,9 +141,8 @@ in
       (mkIf (cfg.listen.ip != "0.0.0.0") { ListenIP = cfg.listen.ip; })
     ];
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.listen.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.listen.port ]; };
 
     users.users.${user} = {
       description = "Zabbix Agent daemon user";
@@ -163,7 +163,8 @@ in
       path = with pkgs; [ bash "/run/wrappers" ] ++ cfg.extraPackages;
 
       serviceConfig = {
-        ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";
+        ExecStart =
+          "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";
         Restart = "always";
         RestartSec = 2;
 

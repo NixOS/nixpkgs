@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libX11, imake, gccmakedep}:
+{ lib, stdenv, fetchurl, libX11, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
   pname = "xskat";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 imake ];
 
   src = fetchurl {
-    url = "http://www.xskat.de/xskat-${version }.tar.gz";
+    url = "http://www.xskat.de/xskat-${version}.tar.gz";
     sha256 = "8ba52797ccbd131dce69b96288f525b0d55dee5de4008733f7a5a51deb831c10";
   };
 
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     description = "Famous german card game";
     platforms = platforms.unix;
     license = licenses.free;
-    longDescription = "Play the german card game Skat against the AI or over IRC.";
+    longDescription =
+      "Play the german card game Skat against the AI or over IRC.";
     homepage = "http://www.xskat.de/";
   };
 }

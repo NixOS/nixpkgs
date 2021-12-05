@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, twisted
-, qtpy
-, pyqt5
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, twisted, qtpy, pyqt5 }:
 
 buildPythonPackage rec {
   pname = "qreactor-unstable";
@@ -20,17 +13,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.0";
 
-  propagatedBuildInputs = [
-    twisted qtpy
-  ];
+  propagatedBuildInputs = [ twisted qtpy ];
 
-  checkInputs = [
-    pyqt5
-  ];
+  checkInputs = [ pyqt5 ];
 
-  pythonImportsCheck = [
-    "qreactor"
-  ];
+  pythonImportsCheck = [ "qreactor" ];
 
   meta = with lib; {
     homepage = "https://github.com/frmdstryr/qt-reactor";

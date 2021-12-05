@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
-, kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
+{ lib, stdenv, fetchurl, which, autoconf, automake, flex, bison, kernel, glibc
+, perl, libtool_2, libkrb5, fetchpatch }:
 
-with (import ./srcs.nix {
-  inherit fetchurl;
-});
+with (import ./srcs.nix { inherit fetchurl; });
 
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
@@ -18,7 +16,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ libkrb5 ];
 
-  patches = [];
+  patches = [ ];
 
   hardeningDisable = [ "pic" ];
 
@@ -58,6 +56,7 @@ in stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18" || kernel.kernelAtLeast "5.15" || kernel.isHardened;
+    broken = versionOlder kernel.version "3.18" || kernel.kernelAtLeast "5.15"
+      || kernel.isHardened;
   };
 }

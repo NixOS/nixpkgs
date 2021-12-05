@@ -1,8 +1,4 @@
-{ stdenv
-, libusb-compat-0_1
-, fetchFromGitHub
-, lib
-}:
+{ stdenv, libusb-compat-0_1, fetchFromGitHub, lib }:
 stdenv.mkDerivation rec {
   pname = "micronucleus";
   version = "2.04";

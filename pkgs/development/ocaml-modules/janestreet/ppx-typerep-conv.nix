@@ -1,5 +1,4 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_tools, ppx_type_conv, typerep}:
+{ lib, buildOcamlJane, ppx_core, ppx_tools, ppx_type_conv, typerep }:
 
 buildOcamlJane {
   pname = "ppx_typerep_conv";

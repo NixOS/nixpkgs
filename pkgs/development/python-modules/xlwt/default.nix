@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, nose
-, lib
-}:
+{ buildPythonPackage, fetchPypi, nose, lib }:
 
 buildPythonPackage rec {
   pname = "xlwt";

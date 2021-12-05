@@ -13,6 +13,7 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/omarkohl/pytest-datafiles";
-    description = "py.test plugin to create a 'tmpdir' containing predefined files/directories.";
+    description =
+      "py.test plugin to create a 'tmpdir' containing predefined files/directories.";
   };
 }

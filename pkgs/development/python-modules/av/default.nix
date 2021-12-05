@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, numpy
-, ffmpeg
-, pkg-config
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, numpy, ffmpeg, pkg-config }:
 
 buildPythonPackage rec {
   pname = "av";

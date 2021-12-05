@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
     # https://github.com/TheDarkBug/uwufetch/pull/150
     (fetchpatch {
-      url = "https://github.com/lourkeur/uwufetch/commit/de561649145b57d8750843555e4ffbc1cbcb01f0.patch";
+      url =
+        "https://github.com/lourkeur/uwufetch/commit/de561649145b57d8750843555e4ffbc1cbcb01f0.patch";
       sha256 = "sha256-KR81zxGlmthcadYBdsiVwxa5+lZUtqP7w0O4uFuputE=";
     })
   ];

@@ -1,24 +1,18 @@
-{ stdenv
-, lib
-, perlPackages
-, makeWrapper
-, shortenPerlShebang
-, mysqlSupport ? false
-, postgresqlSupport ? false
-}:
+{ stdenv, lib, perlPackages, makeWrapper, shortenPerlShebang
+, mysqlSupport ? false, postgresqlSupport ? false }:
 
 let
   sqitch = perlPackages.AppSqitch;
-  modules = with perlPackages; [ ]
-    ++ lib.optional mysqlSupport DBDmysql
+  modules = with perlPackages;
+    [ ] ++ lib.optional mysqlSupport DBDmysql
     ++ lib.optional postgresqlSupport DBDPg;
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "sqitch";
   version = sqitch.version;
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional stdenv.isDarwin shortenPerlShebang;
 
   src = sqitch;
   dontBuild = true;
@@ -37,10 +31,10 @@ stdenv.mkDerivation {
   '';
   dontStrip = true;
   postFixup = ''
-    wrapProgram $out/bin/sqitch --prefix PERL5LIB : ${perlPackages.makeFullPerlPath modules}
+    wrapProgram $out/bin/sqitch --prefix PERL5LIB : ${
+      perlPackages.makeFullPerlPath modules
+    }
   '';
 
-  meta = {
-    inherit (sqitch.meta) description homepage license platforms;
-  };
+  meta = { inherit (sqitch.meta) description homepage license platforms; };
 }

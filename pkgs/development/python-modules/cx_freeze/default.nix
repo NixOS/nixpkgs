@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata
+}:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
@@ -25,7 +26,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A set of scripts and modules for freezing Python scripts into executables";
+    description =
+      "A set of scripts and modules for freezing Python scripts into executables";
     homepage = "http://cx-freeze.sourceforge.net/";
     license = licenses.psfl;
   };

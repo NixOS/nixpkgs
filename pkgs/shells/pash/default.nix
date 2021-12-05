@@ -23,7 +23,5 @@ buildDotnetPackage {
     license = with licenses; [ bsd3 gpl3 ];
   };
 
-  passthru = {
-    shellPath = "/bin/pash";
-  };
+  passthru = { shellPath = "/bin/pash"; };
 }

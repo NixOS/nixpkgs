@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, wrapQtAppsHook
-, SDL2
-, qtbase
-, qtmultimedia
-, boost17x
-, libpulseaudio
-, pkg-config
-, libusb1
-, zstd
-, libressl
-, alsa-lib
-, rapidjson
-, aacHleDecoding ? true
-, fdk_aac
-, ffmpeg-full
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, wrapQtAppsHook, SDL2, qtbase
+, qtmultimedia, boost17x, libpulseaudio, pkg-config, libusb1, zstd, libressl
+, alsa-lib, rapidjson, aacHleDecoding ? true, fdk_aac, ffmpeg-full }:
 
 stdenv.mkDerivation {
   pname = "citra";
@@ -43,13 +26,11 @@ stdenv.mkDerivation {
     rapidjson # for discord-rpc
   ] ++ lib.optional aacHleDecoding [ fdk_aac ffmpeg-full ];
 
-  cmakeFlags = [
-    "-DUSE_SYSTEM_BOOST=ON"
-    "-DUSE_DISCORD_PRESENCE=ON"
-  ] ++ lib.optionals aacHleDecoding [
-    "-DENABLE_FFMPEG_AUDIO_DECODER=ON"
-    "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
-  ];
+  cmakeFlags = [ "-DUSE_SYSTEM_BOOST=ON" "-DUSE_DISCORD_PRESENCE=ON" ]
+    ++ lib.optionals aacHleDecoding [
+      "-DENABLE_FFMPEG_AUDIO_DECODER=ON"
+      "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
+    ];
 
   postPatch = ''
     # we already know the submodules are present

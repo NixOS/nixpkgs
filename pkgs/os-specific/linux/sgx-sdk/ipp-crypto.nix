@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, nasm
-, extraCmakeFlags ? [ ]
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, nasm, extraCmakeFlags ? [ ] }:
 
 stdenv.mkDerivation rec {
   pname = "ipp-crypto";

@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
+{ stdenv, lib, fetchFromGitHub, cmake, zlib, libxml2, eigen, python, cairo, pcre
+, pkg-config, swig, rapidjson }:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -7,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openbabel";
     repo = "openbabel";
-    rev = "openbabel-${lib.replaceStrings ["."] ["-"] version}";
+    rev = "openbabel-${lib.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "sha256-wQpgdfCyBAoh4pmj9j7wPTlMtraJ62w/EShxi/olVMY=";
   };
 
@@ -15,12 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  pythonMajorMinor = "${python.sourceVersion.major}.${python.sourceVersion.minor}";
+  pythonMajorMinor =
+    "${python.sourceVersion.major}.${python.sourceVersion.minor}";
 
-  cmakeFlags = [
-    "-DRUN_SWIG=ON"
-    "-DPYTHON_BINDINGS=ON"
-  ];
+  cmakeFlags = [ "-DRUN_SWIG=ON" "-DPYTHON_BINDINGS=ON" ];
 
   postFixup = ''
     cat <<EOF > $out/lib/python$pythonMajorMinor/site-packages/setup.py
@@ -36,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A toolbox designed to speak the many languages of chemical data";
+    description =
+      "A toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

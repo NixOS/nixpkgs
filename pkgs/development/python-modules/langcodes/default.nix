@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, marisa-trie
-, pythonOlder
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, marisa-trie, pythonOlder, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "langcodes";
@@ -25,8 +19,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A toolkit for working with and comparing the standardized codes for languages, such as ‘en’ for English or ‘es’ for Spanish";
-    homepage =  "https://github.com/LuminosoInsight/langcodes";
+    description =
+      "A toolkit for working with and comparing the standardized codes for languages, such as ‘en’ for English or ‘es’ for Spanish";
+    homepage = "https://github.com/LuminosoInsight/langcodes";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

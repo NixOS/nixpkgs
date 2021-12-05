@@ -1,24 +1,6 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, libgnomekbd
-, gdk-pixbuf
-, cairo
-, xorg
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, vala
-, wrapGAppsHook
-, inxi
-, mate
-, dbus
-, libdbusmenu-gtk3
-}:
+{ fetchFromGitHub, glib, gobject-introspection, gtk3, libgnomekbd, gdk-pixbuf
+, cairo, xorg, meson, ninja, pkg-config, python3, lib, stdenv, vala
+, wrapGAppsHook, inxi, mate, dbus, libdbusmenu-gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "xapps";
@@ -34,25 +16,17 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = [
-    "-I${glib.dev}/include/gio-unix-2.0"
-  ];
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 vala wrapGAppsHook ];
 
   buildInputs = [
     gobject-introspection
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      setproctitle # mate applet
-    ]))
+    (python3.withPackages (ps:
+      with ps; [
+        pygobject3
+        setproctitle # mate applet
+      ]))
     libgnomekbd
     gdk-pixbuf
     xorg.libxkbfile
@@ -63,14 +37,12 @@ stdenv.mkDerivation rec {
   ];
 
   # Requires in xapp.pc
-  propagatedBuildInputs = [
-    gtk3
-    cairo
-    glib
-  ];
+  propagatedBuildInputs = [ gtk3 cairo glib ];
 
   mesonFlags = [
-    "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+    "-Dpy-overrides-dir=${
+      placeholder "out"
+    }/${python3.sitePackages}/gi/overrides"
   ];
 
   postPatch = ''

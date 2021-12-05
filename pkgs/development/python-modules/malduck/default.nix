@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, capstone
-, click
-, cryptography
-, fetchFromGitHub
-, pefile
-, pycryptodomex
-, pyelftools
-, pythonOlder
-, typing-extensions
-, yara-python
+{ lib, buildPythonPackage, capstone, click, cryptography, fetchFromGitHub
+, pefile, pycryptodomex, pyelftools, pythonOlder, typing-extensions, yara-python
 }:
 
 buildPythonPackage rec {

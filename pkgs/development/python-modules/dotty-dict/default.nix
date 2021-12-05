@@ -1,8 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-}:
+{ lib, fetchPypi, buildPythonPackage, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "dotty_dict";

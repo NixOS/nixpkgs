@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, llvmPackages, rapidjson, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "ccls";
@@ -33,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A c/c++ language server powered by clang";
-    homepage    = "https://github.com/MaskRay/ccls";
-    license     = licenses.asl20;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/MaskRay/ccls";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mic92 tobim ];
   };
 }

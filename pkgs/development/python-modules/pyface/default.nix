@@ -1,6 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
-, importlib-metadata, importlib-resources, six, traits
-}:
+{ lib, fetchPypi, buildPythonPackage, importlib-metadata, importlib-resources
+, six, traits }:
 
 buildPythonPackage rec {
   pname = "pyface";

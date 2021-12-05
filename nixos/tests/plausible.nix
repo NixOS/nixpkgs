@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "plausible";
-  meta = with lib.maintainers; {
-    maintainers = [ ma27 ];
-  };
+  meta = with lib.maintainers; { maintainers = [ ma27 ]; };
 
   machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
@@ -15,7 +13,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
       server = {
         baseUrl = "http://localhost:8000";
-        secretKeybaseFile = "${pkgs.writeText "dont-try-this-at-home" "nannannannannannannannannannannannannannannannannannannan_batman!"}";
+        secretKeybaseFile = "${pkgs.writeText "dont-try-this-at-home"
+          "nannannannannannannannannannannannannannannannannannannan_batman!"}";
       };
     };
   };

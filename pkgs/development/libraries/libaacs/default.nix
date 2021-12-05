@@ -9,10 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libaacs";
-  version  = "0.11.0";
+  version = "0.11.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libaacs/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "http://get.videolan.org/libaacs/${version}/${pname}-${version}.tar.bz2";
     sha256 = "11skjqjlldmbjkyxdcz4fmcn6y4p95r1xagbcnjy4ndnzf0l723d";
   };
 

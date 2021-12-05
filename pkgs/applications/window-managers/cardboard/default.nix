@@ -1,30 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchurl
-, fetchgit
-, ffmpeg
-, libGL
-, libX11
-, libcap
-, libdrm
-, libinput
-, libpng
-, libxcb
-, libxkbcommon
-, mesa
-, meson
-, ninja
-, pandoc
-, pixman
-, pkg-config
-, unzip
-, wayland
-, wayland-protocols
-, xcbutilerrors
-, xcbutilimage
-, xcbutilwm
-}:
+{ lib, stdenv, fetchFromGitLab, fetchurl, fetchgit, ffmpeg, libGL, libX11
+, libcap, libdrm, libinput, libpng, libxcb, libxkbcommon, mesa, meson, ninja
+, pandoc, pixman, pkg-config, unzip, wayland, wayland-protocols, xcbutilerrors
+, xcbutilimage, xcbutilwm }:
 
 let
   # cereal.wrap
@@ -54,8 +31,7 @@ let
     rev = "0.12.0";
     sha256 = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cardboard";
   version = "0.pre+unstable=2021-05-10";
 
@@ -66,13 +42,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pandoc
-    pkg-config
-    unzip
-  ];
+  nativeBuildInputs = [ meson ninja pandoc pkg-config unzip ];
   buildInputs = [
     ffmpeg
     libGL

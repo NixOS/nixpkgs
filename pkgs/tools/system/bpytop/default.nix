@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, makeWrapper
-}:
+{ lib, stdenv, python3Packages, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bpytop";

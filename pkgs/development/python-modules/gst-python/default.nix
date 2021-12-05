@@ -1,16 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, meson
-, ninja
+{ lib, buildPythonPackage, fetchurl, meson, ninja
 
-, pkg-config
-, python3
-, pygobject3
-, gobject-introspection
-, gst-plugins-base
-, isPy3k
-}:
+, pkg-config, python3, pygobject3, gobject-introspection, gst-plugins-base
+, isPy3k }:
 
 buildPythonPackage rec {
   pname = "gst-python";
@@ -28,22 +19,15 @@ buildPythonPackage rec {
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    gobject-introspection
-    gst-plugins-base
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config python3 gobject-introspection gst-plugins-base ];
 
-  propagatedBuildInputs = [
-    gst-plugins-base
-    pygobject3
-  ];
+  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
 
   mesonFlags = [
-    "-Dpygi-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+    "-Dpygi-overrides-dir=${
+      placeholder "out"
+    }/${python3.sitePackages}/gi/overrides"
   ];
 
   doCheck = true;

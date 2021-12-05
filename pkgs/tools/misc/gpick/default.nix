@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, glib, boost, pkg-config, gtk3, ragel, lua, lib }:
+{ stdenv, fetchFromGitHub, cmake, glib, boost, pkg-config, gtk3, ragel, lua, lib
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpick";

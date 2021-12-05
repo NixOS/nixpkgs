@@ -1,10 +1,7 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
-, qtquickcontrols2, qtscript, qtsvg, qttools
-, qtwebengine, qtxmlpatterns
-, nixosTests
-}:
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, freetype
+, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis, portaudio
+, portmidi, qtbase, qtdeclarative, qtgraphicaleffects, qtquickcontrols2
+, qtscript, qtsvg, qttools, qtwebengine, qtxmlpatterns, nixosTests }:
 
 mkDerivation rec {
   pname = "musescore";
@@ -17,14 +14,10 @@ mkDerivation rec {
     sha256 = "sha256-GBGAD/qdOhoNfDzI+O0EiKgeb86GFJxpci35T6tZ+2s=";
   };
 
-  patches = [
-    ./remove_qtwebengine_install_hack.patch
-  ];
+  patches = [ ./remove_qtwebengine_install_hack.patch ];
 
-  cmakeFlags = [
-    "-DMUSESCORE_BUILD_CONFIG=release"
-    "-DUSE_SYSTEM_FREETYPE=ON"
-  ];
+  cmakeFlags =
+    [ "-DMUSESCORE_BUILD_CONFIG=release" "-DUSE_SYSTEM_FREETYPE=ON" ];
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
@@ -37,10 +30,25 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
-    portaudio portmidi # tesseract
-    qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
-    qtscript qtsvg qttools qtwebengine qtxmlpatterns
+    alsa-lib
+    libjack2
+    freetype
+    lame
+    libogg
+    libpulseaudio
+    libsndfile
+    libvorbis
+    portaudio
+    portmidi # tesseract
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtquickcontrols2
+    qtscript
+    qtsvg
+    qttools
+    qtwebengine
+    qtxmlpatterns
   ];
 
   passthru.tests = nixosTests.musescore;

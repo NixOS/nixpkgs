@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, callPackage
-, nodePackages, cmake, nodejs, unzip, python3
-}:
+, nodePackages, cmake, nodejs, unzip, python3 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
@@ -16,7 +15,7 @@ let
     sha256 = "sha256-/2iyWJfNjvk5n7KwWIu2gc24/21KWibU6IAPN/tJ8Q4=";
   };
 
-  lldb = callPackage ./lldb.nix {};
+  lldb = callPackage ./lldb.nix { };
 
   adapter = rustPlatform.buildRustPackage {
     pname = "${pname}-adapter";
@@ -33,16 +32,14 @@ let
 
     buildFeatures = [ "weak-linkage" ];
 
-    cargoBuildFlags = [
-      "--lib"
-      "--bin=codelldb"
-    ];
+    cargoBuildFlags = [ "--lib" "--bin=codelldb" ];
 
     # Tests are linked to liblldb but it is not available here.
     doCheck = false;
   };
 
-  nodeDeps = nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
+  nodeDeps =
+    nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -90,9 +87,7 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "${python3}/lib"
   '';
 
-  passthru = {
-    inherit lldb adapter;
-  };
+  passthru = { inherit lldb adapter; };
 
   meta = with lib; {
     description = "A native debugger extension for VSCode based on LLDB";

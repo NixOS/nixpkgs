@@ -1,23 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, buildPythonPackage
-, pkgsStatic
-, openssl_1_1
-, openssl_1_0_2
-, invoke
-, tls-parser
-, cacert
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, fetchFromGitHub, fetchurl, buildPythonPackage, pkgsStatic, openssl_1_1
+, openssl_1_0_2, invoke, tls-parser, cacert, pytestCheckHook, pythonOlder }:
 
 let
-  zlibStatic = (pkgsStatic.zlib.override {
-    splitStaticOutput = false;
-  }).overrideAttrs (oldAttrs: {
-    NIX_CFLAGS_COMPILE = "${oldAttrs.NIX_CFLAGS_COMPILE} -fPIC";
-  });
+  zlibStatic =
+    (pkgsStatic.zlib.override { splitStaticOutput = false; }).overrideAttrs
+    (oldAttrs: {
+      NIX_CFLAGS_COMPILE = "${oldAttrs.NIX_CFLAGS_COMPILE} -fPIC";
+    });
   nasslOpensslArgs = {
     static = true;
     enableSSL2 = true;
@@ -37,22 +26,19 @@ let
     "enable-mdc2"
     "-fPIC"
   ];
-  opensslStatic = (openssl_1_1.override nasslOpensslArgs).overrideAttrs (
-    oldAttrs: rec {
+  opensslStatic = (openssl_1_1.override nasslOpensslArgs).overrideAttrs
+    (oldAttrs: rec {
       name = "openssl-${version}";
       version = "1.1.1h";
       src = fetchurl {
         url = "https://www.openssl.org/source/${name}.tar.gz";
         sha256 = "1ncmcnh5bmxkwrvm0m1q4kdcjjfpwvlyjspjhibkxc6p9dvsi72w";
       };
-      configureFlags = oldAttrs.configureFlags ++ nasslOpensslFlagsCommon ++ [
-        "enable-weak-ssl-ciphers"
-        "enable-tls1_3"
-        "no-async"
-      ];
-      patches = builtins.filter (
-        p: (builtins.baseNameOf (toString p)) != "macos-yosemite-compat.patch"
-      ) oldAttrs.patches;
+      configureFlags = oldAttrs.configureFlags ++ nasslOpensslFlagsCommon
+        ++ [ "enable-weak-ssl-ciphers" "enable-tls1_3" "no-async" ];
+      patches = builtins.filter
+        (p: (builtins.baseNameOf (toString p)) != "macos-yosemite-compat.patch")
+        oldAttrs.patches;
       buildInputs = oldAttrs.buildInputs ++ [ zlibStatic cacert ];
       meta = oldAttrs.meta // {
         knownVulnerabilities = [
@@ -65,10 +51,9 @@ let
           "CVE-2021-3712"
         ];
       };
-    }
-  );
-  opensslLegacyStatic = (openssl_1_0_2.override nasslOpensslArgs).overrideAttrs (
-    oldAttrs: rec {
+    });
+  opensslLegacyStatic = (openssl_1_0_2.override nasslOpensslArgs).overrideAttrs
+    (oldAttrs: rec {
       name = "openssl-${version}";
       version = "1.0.2e";
       src = fetchurl {
@@ -76,16 +61,14 @@ let
         sha256 = "1zqb1rff1wikc62a7vj5qxd1k191m8qif5d05mwdxz2wnzywlg72";
       };
       configureFlags = oldAttrs.configureFlags ++ nasslOpensslFlagsCommon;
-      patches = builtins.filter (
-        p: (builtins.baseNameOf (toString p)) == "darwin64-arm64.patch"
-      ) oldAttrs.patches;
+      patches = builtins.filter
+        (p: (builtins.baseNameOf (toString p)) == "darwin64-arm64.patch")
+        oldAttrs.patches;
       buildInputs = oldAttrs.buildInputs ++ [ zlibStatic ];
       # openssl_1_0_2 needs `withDocs = false`
       outputs = lib.remove "doc" oldAttrs.outputs;
-    }
-  );
-in
-buildPythonPackage rec {
+    });
+in buildPythonPackage rec {
   pname = "nassl";
   version = "4.0.1";
   disabled = pythonOlder "3.7";
@@ -98,8 +81,10 @@ buildPythonPackage rec {
   };
 
   postPatch = let
-    legacyOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslLegacyStatic.version;
-    modernOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslStatic.version;
+    legacyOpenSSLVersion =
+      lib.replaceStrings [ "." ] [ "_" ] opensslLegacyStatic.version;
+    modernOpenSSLVersion =
+      lib.replaceStrings [ "." ] [ "_" ] opensslStatic.version;
     zlibVersion = zlibStatic.version;
   in ''
     mkdir -p deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
@@ -135,9 +120,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "Online"
-  ];
+  disabledTests = [ "Online" ];
 
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/nassl";

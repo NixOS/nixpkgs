@@ -1,14 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, glibcLocales
-, urwid
-, fetchpatch
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, glibcLocales, urwid, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "urwidtrees";
-  version  = "1.0.3";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "pazz";
@@ -21,13 +15,14 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/pazz/urwidtrees/commit/ed39dbc4fc67b0e0249bf108116a88cd18543aa9.patch";
-    sha256 = "sha256-fA+30d2uVaoNCg4rtoWLNPvrZtq41Co4vcmM80hkURs=";
+      url =
+        "https://github.com/pazz/urwidtrees/commit/ed39dbc4fc67b0e0249bf108116a88cd18543aa9.patch";
+      sha256 = "sha256-fA+30d2uVaoNCg4rtoWLNPvrZtq41Co4vcmM80hkURs=";
     })
   ];
 
   checkInputs = [ glibcLocales ];
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "Tree widgets for urwid";

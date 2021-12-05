@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, getmac
-, pythonOlder
-, requests
-, zeroconf
-}:
+{ lib, buildPythonPackage, cryptography, fetchFromGitHub, getmac, pythonOlder
+, requests, zeroconf }:
 
 buildPythonPackage rec {
   pname = "boschshcpy";
@@ -22,22 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-hvanimPWTKzOHRwJhynzO/4Z1jGlLopk4ogU3KHTEyc=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    getmac
-    requests
-    zeroconf
-  ];
+  propagatedBuildInputs = [ cryptography getmac requests zeroconf ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "boschshcpy"
-  ];
+  pythonImportsCheck = [ "boschshcpy" ];
 
   meta = with lib; {
-    description = "Python module to work with the Bosch Smart Home Controller API";
+    description =
+      "Python module to work with the Bosch Smart Home Controller API";
     homepage = "https://github.com/tschamm/boschshcpy";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

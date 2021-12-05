@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.fluxbox;
-in
-{
+let cfg = config.services.xserver.windowManager.fluxbox;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";

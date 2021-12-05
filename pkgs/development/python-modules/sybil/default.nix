@@ -1,9 +1,4 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pytest
-, nose
-}:
+{ lib, buildPythonApplication, fetchPypi, pytest, nose }:
 
 buildPythonApplication rec {
   pname = "sybil";

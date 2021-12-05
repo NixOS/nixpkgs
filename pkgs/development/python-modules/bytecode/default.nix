@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "bytecode";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-aY19qMYW7KziiXVY3lxdnHk7OCAJaNh+aTvlQyJWmDw=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bytecode" ];
 

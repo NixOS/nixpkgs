@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytestCheckHook
-, pythonOlder
-, morphys
-, six
-, varint
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytestCheckHook
+, pythonOlder, morphys, six, varint }:
 
 buildPythonPackage rec {
   pname = "py-multicodec";
@@ -27,19 +19,11 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
   '';
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pytest-runner ];
 
-  propagatedBuildInputs = [
-    varint
-    six
-    morphys
-  ];
+  propagatedBuildInputs = [ varint six morphys ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multicodec" ];
 

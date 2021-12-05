@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "18230bg4rq9pmm5f8f65j444jpq56rld4fhmpham8q3vr1c1bdjh";
   };
 
-  patches = [
-    ./gcc10.patch
-  ];
+  patches = [ ./gcc10.patch ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -27,7 +25,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Experimental range library for C++11/14/17";
     homepage = "https://github.com/ericniebler/range-v3";
-    changelog = "https://github.com/ericniebler/range-v3/releases/tag/${version}";
+    changelog =
+      "https://github.com/ericniebler/range-v3/releases/tag/${version}";
     license = licenses.boost;
     platforms = platforms.all;
     maintainers = with maintainers; [ primeos ];

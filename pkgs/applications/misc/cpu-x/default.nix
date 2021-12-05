@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses, libcpuid
+, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
-  buildInputs = [
-    gtk3 ncurses libcpuid pciutils procps
-  ];
+  buildInputs = [ gtk3 ncurses libcpuid pciutils procps ];
 
   postInstall = ''
     wrapProgram $out/bin/cpu-x \
@@ -23,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Free software that gathers information on CPU, motherboard and more";
+    description =
+      "Free software that gathers information on CPU, motherboard and more";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];

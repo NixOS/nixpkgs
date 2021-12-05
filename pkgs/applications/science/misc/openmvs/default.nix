@@ -1,20 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, eigen
-, opencv
-, ceres-solver
-, cgal
-, boost
-, vcg
-, gmp
-, mpfr
-, glog
-, gflags
-, libjpeg_turbo
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, eigen, opencv, ceres-solver
+, cgal, boost, vcg, gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
 stdenv.mkDerivation {
   pname = "openmvs";
@@ -27,7 +12,19 @@ stdenv.mkDerivation {
     sha256 = "12dgkwwfdp24581y3i41gsd1k9hq0aw917q0ja5s0if4qbmc8pni";
   };
 
-  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
+  buildInputs = [
+    eigen
+    opencv
+    ceres-solver
+    cgal
+    boost
+    vcg
+    gmp
+    mpfr
+    glog
+    gflags
+    libjpeg_turbo
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -66,7 +63,8 @@ stdenv.mkDerivation {
   dontUseCmakeBuildDir = true;
 
   meta = with lib; {
-    description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
+    description =
+      "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
     homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
     platforms = platforms.linux;

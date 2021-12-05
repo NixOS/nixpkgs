@@ -17,9 +17,7 @@ let
     sha256 = "0h34cikch98sb7nsqjnb9wl384c8ndln3m6yb1172l4y89qjg9rr";
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "email-git";
   version = "unstable-2016-01-31";
   src = eMailSrc;

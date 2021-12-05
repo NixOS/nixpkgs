@@ -1,24 +1,9 @@
-{ stdenv
-, fetchurl
-, lib
+{ stdenv, fetchurl, lib
 
-, autoreconfHook
-, bzip2
-, cfitsio
-, exiv2
-, gettext
-, gtk2
-, gtkimageview
-, lcms2
-, lensfun
-, libjpeg
-, libtiff
-, perl
-, pkg-config
-, zlib
+, autoreconfHook, bzip2, cfitsio, exiv2, gettext, gtk2, gtkimageview, lcms2
+, lensfun, libjpeg, libtiff, perl, pkg-config, zlib
 
-, addThumbnailer ? false
-}:
+, addThumbnailer ? false }:
 
 stdenv.mkDerivation rec {
   pname = "nufraw";
@@ -44,14 +29,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  configureFlags = [
-    "--enable-contrast"
-    "--enable-dst-correction"
-  ];
+  configureFlags = [ "--enable-contrast" "--enable-dst-correction" ];
 
   postInstall = lib.optionalString addThumbnailer ''
     mkdir -p $out/share/thumbnailers
-    substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/${pname}.thumbnailer
+    substituteAll ${
+      ./nufraw.thumbnailer
+    } $out/share/thumbnailers/${pname}.thumbnailer
   '';
 
   # Fixes an upstream issue where headers with templates were included in an extern-C scope
@@ -60,16 +44,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://nufraw.sourceforge.io/";
-    description = "Utility to read and manipulate raw images from digital cameras";
-    longDescription =
-      ''
-        A new version of the popular raw digital images manipulator ufraw.
-        Forks from the version 0.23 of ufraw (that's why the first nufraw version is the 0.24).
-        Nufraw offers the same features (gimp plugin, batch, ecc) and the same quality of
-        ufraw in a brand new improved user interface.
-      '';
+    description =
+      "Utility to read and manipulate raw images from digital cameras";
+    longDescription = ''
+      A new version of the popular raw digital images manipulator ufraw.
+      Forks from the version 0.23 of ufraw (that's why the first nufraw version is the 0.24).
+      Nufraw offers the same features (gimp plugin, batch, ecc) and the same quality of
+      ufraw in a brand new improved user interface.
+    '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ asbachb ];
-    platforms   = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

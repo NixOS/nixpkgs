@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mozfile
-, mozlog
-}:
+{ lib, buildPythonPackage, fetchPypi, mozfile, mozlog }:
 
 buildPythonPackage rec {
   pname = "mozcrash";

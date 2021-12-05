@@ -1,14 +1,14 @@
-{ lib } :
+{ lib }:
 
 with lib;
-with lib.types;
-{
+with lib.types; {
   options = {
 
     script = mkOption {
       type = str;
       example = literalExpression ''"''${pkgs.curl} -f http://localhost:80"'';
-      description = "(Path of) Script command to execute followed by args, i.e. cmd [args]...";
+      description =
+        "(Path of) Script command to execute followed by args, i.e. cmd [args]...";
     };
 
     interval = mkOption {
@@ -50,13 +50,15 @@ with lib.types;
     group = mkOption {
       type = nullOr str;
       default = null;
-      description = "Name of group to run the script under. Defaults to user group.";
+      description =
+        "Name of group to run the script under. Defaults to user group.";
     };
 
     extraConfig = mkOption {
       type = lines;
       default = "";
-      description = "Extra lines to be added verbatim to the vrrp_script section.";
+      description =
+        "Extra lines to be added verbatim to the vrrp_script section.";
     };
 
   };

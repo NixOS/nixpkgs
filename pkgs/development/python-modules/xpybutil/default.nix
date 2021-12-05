@@ -20,9 +20,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "xpybutil"
-  ];
+  pythonImportsCheck = [ "xpybutil" ];
 
   meta = with lib; {
     homepage = "https://github.com/BurntSushi/xpybutil";

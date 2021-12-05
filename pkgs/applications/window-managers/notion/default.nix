@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, lua, gettext, which, groff, xmessage, xterm
-, readline, fontconfig, libX11, libXext, libSM
-, libXinerama, libXrandr, libXft
-, xlibsWrapper, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, lua, gettext, which, groff, xmessage
+, xterm, readline, fontconfig, libX11, libXext, libSM, libXinerama, libXrandr
+, libXft, xlibsWrapper, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "notion";
@@ -17,8 +14,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper groff ];
-  buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
-                  libXinerama libXrandr libXft xlibsWrapper ];
+  buildInputs = [
+    lua
+    gettext
+    which
+    readline
+    fontconfig
+    libX11
+    libXext
+    libSM
+    libXinerama
+    libXrandr
+    libXft
+    xlibsWrapper
+  ];
 
   buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
 
@@ -32,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tiling tabbed window manager";
     homepage = "https://notionwm.net";
-    license   = licenses.lgpl21;
+    license = licenses.lgpl21;
     maintainers = with maintainers; [ jfb AndersonTorres raboof ];
     platforms = platforms.linux;
   };

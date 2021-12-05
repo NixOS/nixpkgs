@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, meson
-, ninja
-, openssl
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, libpcap, meson, ninja, openssl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libsrtp";
@@ -21,16 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    libpcap
-    openssl
-  ];
+  buildInputs = [ libpcap openssl ];
 
   # rtpw tests hang
   preConfigure = ''

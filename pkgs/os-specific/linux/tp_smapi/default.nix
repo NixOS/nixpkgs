@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
-}:
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq
+, curl, common-updater-scripts, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "tp_smapi-${version}-${kernel.version}";
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = import ./update.nix {
-    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts runtimeShell;
+    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts
+      runtimeShell;
   };
 
   meta = {

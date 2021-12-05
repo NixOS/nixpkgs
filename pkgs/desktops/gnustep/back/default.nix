@@ -1,12 +1,5 @@
-{ gsmakeDerivation
-, cairo
-, fetchzip
-, base, gui
-, xlibsWrapper
-, freetype
-, pkg-config
-, libXmu
-}:
+{ gsmakeDerivation, cairo, fetchzip, base, gui, xlibsWrapper, freetype
+, pkg-config, libXmu }:
 
 gsmakeDerivation rec {
   pname = "gnustep-back";
@@ -19,7 +12,5 @@ gsmakeDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo base gui freetype xlibsWrapper libXmu ];
-  meta = {
-    description = "A generic backend for GNUstep";
-  };
+  meta = { description = "A generic backend for GNUstep"; };
 }

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre
+, gtk2, glib, xorg, Cocoa }:
 
 let
   _version = "2.10.0";
@@ -6,10 +7,14 @@ let
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
-  swtSystem = if stdenv.hostPlatform.system == "i686-linux" then "linux"
-  else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-  else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
-  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  swtSystem = if stdenv.hostPlatform.system == "i686-linux" then
+    "linux"
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
+    "linux64"
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    "macos64"
+  else
+    throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "jameica";
@@ -19,18 +24,18 @@ let
     genericName = "Jameica";
     categories = "Office;";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit name version;
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
-                ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
+    rev =
+      "V_${builtins.replaceStrings [ "." ] [ "_" ] _version}_BUILD_${_build}";
     sha256 = "0rzhbskzzvr9aan6fwxd2kmzg79ranx7aym5yn1i37z3ra67d1nz";
   };
 
@@ -55,7 +60,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/${name}/* ${
-        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
+        lib.optionalString stdenv.isDarwin
+        ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run "cd $out/share/java/"

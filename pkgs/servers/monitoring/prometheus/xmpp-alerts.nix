@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, prometheus-alertmanager
-}:
+{ lib, fetchFromGitHub, python3Packages, prometheus-alertmanager }:
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
@@ -15,18 +11,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0qmmmlcanbrhyyxi32gy3gibgvj7jdjwpa8cf5ci9czvbyxg4rld";
   };
 
-  propagatedBuildInputs = [
-    prometheus-alertmanager
-  ] ++ (with python3Packages; [
-    aiohttp
-    slixmpp
-    prometheus-client
-    pyyaml
-  ]);
+  propagatedBuildInputs = [ prometheus-alertmanager ]
+    ++ (with python3Packages; [ aiohttp slixmpp prometheus-client pyyaml ]);
 
-  checkInputs = with python3Packages; [
-    pytz
-  ];
+  checkInputs = with python3Packages; [ pytz ];
 
   checkPhase = ''
     ${python3Packages.python.interpreter} -m unittest discover

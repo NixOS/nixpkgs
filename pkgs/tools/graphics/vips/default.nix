@@ -1,40 +1,10 @@
-{ lib
-, stdenv
-, pkg-config
-, glib
-, libxml2
-, expat
-, ApplicationServices
-, Foundation
-, python3
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, gtk-doc
+{ lib, stdenv, pkg-config, glib, libxml2, expat, ApplicationServices, Foundation
+, python3, fetchFromGitHub, fetchpatch, autoreconfHook, gtk-doc
 , gobject-introspection
-  # Optional dependencies
-, libjpeg
-, libexif
-, librsvg
-, poppler
-, libgsf
-, libtiff
-, fftw
-, lcms2
-, libpng
-, libimagequant
-, imagemagick
-, pango
-, orc
-, matio
-, cfitsio
-, libwebp
-, openexr
-, openjpeg
-, libjxl
-, openslide
-, libheif
-}:
+# Optional dependencies
+, libjpeg, libexif, librsvg, poppler, libgsf, libtiff, fftw, lcms2, libpng
+, libimagequant, imagemagick, pango, orc, matio, cfitsio, libwebp, openexr
+, openjpeg, libjxl, openslide, libheif }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
@@ -54,12 +24,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    gtk-doc
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [ pkg-config autoreconfHook gtk-doc gobject-introspection ];
 
   buildInputs = [
     glib
@@ -91,9 +57,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   autoreconfPhase = ''
     NOCONFIGURE=1 ./autogen.sh

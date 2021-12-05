@@ -1,13 +1,5 @@
-{ python3Packages
-, lib
-, fetchFromGitHub
-, makeDesktopItem
-, wrapGAppsHook
-, gtk3
-, gobject-introspection
-, sox
-, pulseaudio
-}:
+{ python3Packages, lib, fetchFromGitHub, makeDesktopItem, wrapGAppsHook, gtk3
+, gobject-introspection, sox, pulseaudio }:
 let
   desktopItem = makeDesktopItem {
     name = "lyrebird";
@@ -17,8 +9,7 @@ let
     genericName = "Voice Changer";
     categories = "AudioVideo;Audio;";
   };
-in
-python3Packages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   pname = "lyrebird";
   version = "1.1.0";
 
@@ -54,7 +45,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Simple and powerful voice changer for Linux, written in GTK 3";
+    description =
+      "Simple and powerful voice changer for Linux, written in GTK 3";
     homepage = "https://github.com/chxrlt/lyrebird";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];

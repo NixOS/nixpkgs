@@ -1,8 +1,4 @@
-{ lib
-, python
-, fetchPypi
-, buildPythonPackage
-, postgresql }:
+{ lib, python, fetchPypi, buildPythonPackage, postgresql }:
 
 buildPythonPackage rec {
   pname = "pgsanity";

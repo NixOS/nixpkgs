@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv
+, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "man-db";
@@ -13,8 +14,11 @@ stdenv.mkDerivation rec {
   outputMan = "out"; # users will want `man man` to work
 
   nativeBuildInputs = [ pkg-config makeWrapper groff ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  checkInputs = [ libiconv /* for 'iconv' binary */ ];
+  buildInputs =
+    [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
+  checkInputs = [
+    libiconv # for 'iconv' binary
+  ];
 
   patches = [ ./systemwide-man-db-conf.patch ];
 
@@ -71,11 +75,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
+  doCheck = !stdenv.hostPlatform.isMusl # iconv binary
+    && !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
-    description = "An implementation of the standard Unix documentation system accessed using the man command";
+    description =
+      "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
     platforms = lib.platforms.unix;
     mainProgram = "man";

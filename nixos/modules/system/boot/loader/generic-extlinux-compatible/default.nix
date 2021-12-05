@@ -12,9 +12,9 @@ let
   # The builder used to write during system activation
   builder = import ./extlinux-conf-builder.nix { inherit pkgs; };
   # The builder exposed in populateCmd, which runs on the build architecture
-  populateBuilder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
-in
-{
+  populateBuilder =
+    import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
+in {
   options = {
     boot.loader.generic-extlinux-compatible = {
       enable = mkOption {
@@ -54,12 +54,13 @@ in
   };
 
   config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
-  in
-    mkIf cfg.enable {
-      system.build.installBootLoader = "${builder} ${builderArgs} -c";
-      system.boot.loader.id = "generic-extlinux-compatible";
+    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+      + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
+  in mkIf cfg.enable {
+    system.build.installBootLoader = "${builder} ${builderArgs} -c";
+    system.boot.loader.id = "generic-extlinux-compatible";
 
-      boot.loader.generic-extlinux-compatible.populateCmd = "${populateBuilder} ${builderArgs}";
-    };
+    boot.loader.generic-extlinux-compatible.populateCmd =
+      "${populateBuilder} ${builderArgs}";
+  };
 }

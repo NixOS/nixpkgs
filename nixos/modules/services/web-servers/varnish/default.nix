@@ -1,19 +1,24 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.varnish;
 
-  commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}" +
-      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
-in
-{
+  commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}"
+    + optionalString (cfg.extraModules != [ ]) " -p vmod_path='${
+       makeSearchPathOutput "lib" "lib/varnish/vmods"
+       ([ cfg.package ] ++ cfg.extraModules)
+     }' -r vmod_path";
+in {
   options = {
     services.varnish = {
       enable = mkEnableOption "Varnish Server";
 
-      enableConfigCheck = mkEnableOption "checking the config during build time" // { default = true; };
+      enableConfigCheck = mkEnableOption "checking the config during build time"
+        // {
+          default = true;
+        };
 
       package = mkOption {
         type = types.package;
@@ -27,42 +32,35 @@ in
       http_address = mkOption {
         type = types.str;
         default = "*:6081";
-        description = "
-          HTTP listen address and port.
-        ";
+        description = "\n          HTTP listen address and port.\n        ";
       };
 
       config = mkOption {
         type = types.lines;
-        description = "
-          Verbatim default.vcl configuration.
-        ";
+        description =
+          "\n          Verbatim default.vcl configuration.\n        ";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
-        description = "
-          Directory holding all state for Varnish to run.
-        ";
+        description =
+          "\n          Directory holding all state for Varnish to run.\n        ";
       };
 
       extraModules = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.varnishPackages.geoip ]";
-        description = "
-          Varnish modules (except 'std').
-        ";
+        description = "\n          Varnish modules (except 'std').\n        ";
       };
 
       extraCommandLine = mkOption {
         type = types.str;
         default = "";
         example = "-s malloc,256M";
-        description = "
-          Command line switches for varnishd (run 'varnishd -?' to get list of options)
-        ";
+        description =
+          "\n          Command line switches for varnishd (run 'varnishd -?' to get list of options)\n        ";
       };
     };
 
@@ -84,7 +82,8 @@ in
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
+        ExecStart =
+          "${cfg.package}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
         Restart = "always";
         RestartSec = "5s";
         User = "varnish";
@@ -99,7 +98,7 @@ in
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
     system.extraDependencies = mkIf cfg.enableConfigCheck [
-      (pkgs.runCommand "check-varnish-syntax" {} ''
+      (pkgs.runCommand "check-varnish-syntax" { } ''
         ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
       '')
     ];

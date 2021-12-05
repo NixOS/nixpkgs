@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib
+, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "munge";
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am --replace "etc \\" "\\"
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--localstatedir=/var" ];
 
   meta = with lib; {
     description = ''

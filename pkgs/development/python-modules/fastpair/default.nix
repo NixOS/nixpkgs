@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest, scipy, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest, scipy
+, pytestCheckHook }:
 
 buildPythonPackage {
   pname = "fastpair";
@@ -15,9 +16,7 @@ buildPythonPackage {
 
   checkInputs = [ pytest pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    scipy
-  ];
+  propagatedBuildInputs = [ scipy ];
 
   meta = with lib; {
     homepage = "https://github.com/carsonfarmer/fastpair";

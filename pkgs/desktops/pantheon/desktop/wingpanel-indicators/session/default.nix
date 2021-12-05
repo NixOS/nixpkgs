@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, accountsservice
-, libgee
-, libhandy
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, fetchpatch, pkg-config, meson
+, ninja, vala, gtk3, granite, wingpanel, accountsservice, libgee, libhandy }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
@@ -30,32 +16,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/wingpanel-indicator-session/pull/162
     (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-session/commit/e85032da8e923df4589dc75ccded10026b6c1cd7.patch";
+      url =
+        "https://github.com/elementary/wingpanel-indicator-session/commit/e85032da8e923df4589dc75ccded10026b6c1cd7.patch";
       sha256 = "139b2zbc6qjaw41nwfjkqv4npahkzryv4p5m6v10273clv6l72ng";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    accountsservice
-    granite
-    gtk3
-    libgee
-    libhandy
-    wingpanel
-  ];
+  buildInputs = [ accountsservice granite gtk3 libgee libhandy wingpanel ];
 
   meta = with lib; {
     description = "Session Indicator for Wingpanel";

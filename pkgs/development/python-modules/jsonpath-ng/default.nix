@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchFromGitHub
-, ply
-, pytestCheckHook
-, six
+{ lib, buildPythonPackage, decorator, fetchFromGitHub, ply, pytestCheckHook, six
 }:
 
 buildPythonPackage rec {
@@ -18,11 +12,7 @@ buildPythonPackage rec {
     sha256 = "1cxjwhx0nj85a3awnl7j6afnk07awzv45qfwxl5jqbbc9cxh5bd6";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    ply
-    six
-  ];
+  propagatedBuildInputs = [ decorator ply six ];
 
   checkInputs = [ pytestCheckHook ];
 

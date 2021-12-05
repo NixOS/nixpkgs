@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook
-}:
+, openbabel, qttools, wrapQtAppsHook }:
 
 let
   avogadroI18N = fetchFromGitHub {
@@ -27,13 +26,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
-  buildInputs = [
-    avogadrolibs
-    molequeue
-    eigen
-    hdf5
-    qttools
-  ];
+  buildInputs = [ avogadrolibs molequeue eigen hdf5 qttools ];
 
   propagatedBuildInputs = [ openbabel ];
 

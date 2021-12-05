@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pkg-config
-, igraph
-, texttable
-, python
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pkg-config, igraph
+, texttable, python }:
 
 buildPythonPackage rec {
   pname = "igraph";
@@ -21,18 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-RtvT5/LZ/xP68yBB7DDKJGeNCiX4HyPTCuk+Ijd2nFs=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    igraph
-    igraph.dev
-  ];
+  buildInputs = [ igraph igraph.dev ];
 
-  propagatedBuildInputs = [
-    texttable
-  ];
+  propagatedBuildInputs = [ texttable ];
 
   # NB: We want to use our igraph, not vendored igraph, but even with
   # pkg-config on the PATH, their custom setup.py still needs to be explicitly

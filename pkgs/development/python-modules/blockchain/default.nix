@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-}:
+{ lib, buildPythonPackage, fetchPypi, future }:
 
 buildPythonPackage rec {
   pname = "blockchain";
@@ -17,9 +13,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "enum-compat" ""
   '';
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
   # tests are interacting with the API and not mocking the calls
   doCheck = false;

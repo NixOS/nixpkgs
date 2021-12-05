@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, glib
-}:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "poly2tri-c";
@@ -19,22 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  NIX_CFLAGS_COMPILE = [
-    "--std=gnu99"
-    "-Wno-error"
-  ];
+  NIX_CFLAGS_COMPILE = [ "--std=gnu99" "-Wno-error" ];
 
   meta = with lib; {
-    description = "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
+    description =
+      "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
     homepage = "https://code.google.com/archive/p/poly2tri-c/";
     license = licenses.bsd3;
     maintainers = with lib.maintainers; [ jtojnar ];

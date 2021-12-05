@@ -1,12 +1,11 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, installShellFiles, nixosTests,
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder, attrs
+, aiohttp, appdirs, click, keyring, Logbook, peewee, janus, prompt-toolkit
+, matrix-nio, dbus-python, pydbus, notify2, pygobject3, setuptools
+, installShellFiles, nixosTests,
 
-  pytest, faker, pytest-aiohttp, aioresponses,
+pytest, faker, pytest-aiohttp, aioresponses,
 
-  enableDbusUi ? true
-}:
+enableDbusUi ? true }:
 
 buildPythonApplication rec {
   pname = "pantalaimon";
@@ -34,23 +33,11 @@ buildPythonApplication rec {
     peewee
     prompt-toolkit
     setuptools
-  ] ++ lib.optional enableDbusUi [
-      dbus-python
-      notify2
-      pygobject3
-      pydbus
-  ];
+  ] ++ lib.optional enableDbusUi [ dbus-python notify2 pygobject3 pydbus ];
 
-  checkInputs = [
-    pytest
-    faker
-    pytest-aiohttp
-    aioresponses
-  ];
+  checkInputs = [ pytest faker pytest-aiohttp aioresponses ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # darwin has difficulty communicating with server, fails some integration tests
   doCheck = !stdenv.isDarwin;
@@ -63,9 +50,7 @@ buildPythonApplication rec {
     installManPage docs/man/*.[1-9]
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pantalaimon;
-  };
+  passthru.tests = { inherit (nixosTests) pantalaimon; };
 
   meta = with lib; {
     description = "An end-to-end encryption aware Matrix reverse proxy daemon";

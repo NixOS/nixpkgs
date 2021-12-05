@@ -23,7 +23,8 @@ buildGoModule rec {
   passthru.provider-source-address = "gravitational.com/teleport/teleport";
 
   meta = with lib; {
-    description = "Provider for managing resources in Teleport, a SSH CA management suite";
+    description =
+      "Provider for managing resources in Teleport, a SSH CA management suite";
     homepage = "https://github.com/gravitational/teleport-plugins";
     license = licenses.asl20;
     maintainers = with maintainers; [ justinas ];

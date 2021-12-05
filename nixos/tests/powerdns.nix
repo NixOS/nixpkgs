@@ -16,14 +16,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       enable = true;
       package = pkgs.mariadb;
       ensureDatabases = [ "powerdns" ];
-      ensureUsers = lib.singleton
-        { name = "pdns";
-          ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
-        };
+      ensureUsers = lib.singleton {
+        name = "pdns";
+        ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
+      };
     };
 
-    environment.systemPackages = with pkgs;
-      [ dnsutils powerdns mariadb ];
+    environment.systemPackages = with pkgs; [ dnsutils powerdns mariadb ];
   };
 
   testScript = ''

@@ -1,24 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
-, substituteAll
-, autoreconfHook
-, pkg-config
-, libxml2
-, glib
-, pipewire
-, flatpak
-, gsettings-desktop-schemas
-, acl
-, dbus
-, fuse
-, libportal
-, geoclue2
-, json-glib
-, wrapGAppsHook
-}:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, nixosTests, substituteAll
+, autoreconfHook, pkg-config, libxml2, glib, pipewire, flatpak
+, gsettings-desktop-schemas, acl, dbus, fuse, libportal, geoclue2, json-glib
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
@@ -42,17 +25,13 @@ stdenv.mkDerivation rec {
     # Fixes the issue in https://github.com/flatpak/xdg-desktop-portal/issues/636
     # Remove it when the next stable release arrives
     (fetchpatch {
-      url = "https://github.com/flatpak/xdg-desktop-portal/commit/d7622e15ff8fef114a6759dde564826d04215a9f.patch";
+      url =
+        "https://github.com/flatpak/xdg-desktop-portal/commit/d7622e15ff8fef114a6759dde564826d04215a9f.patch";
       sha256 = "sha256-vmfxK4ddG6Xon//rpiz6OiBsDLtT0VG5XyBJG3E4PPs=";
     })
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    libxml2
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libxml2 wrapGAppsHook ];
 
   buildInputs = [
     glib
@@ -67,19 +46,19 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  configureFlags = [
-    "--enable-installed-tests"
-  ];
+  configureFlags = [ "--enable-installed-tests" ];
 
   makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
+    "installed_testdir=${
+      placeholder "installedTests"
+    }/libexec/installed-tests/xdg-desktop-portal"
+    "installed_test_metadir=${
+      placeholder "installedTests"
+    }/share/installed-tests/xdg-desktop-portal"
   ];
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.xdg-desktop-portal;
-    };
+    tests = { installedTests = nixosTests.installed-tests.xdg-desktop-portal; };
   };
 
   meta = with lib; {

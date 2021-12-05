@@ -1,10 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, borgbackup
-, qt5
-}:
+{ lib, python3Packages, fetchFromGitHub, wrapQtAppsHook, borgbackup, qt5 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
@@ -52,11 +46,7 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python3Packages; [
-    pytest-qt
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytest-qt pytest-mock pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

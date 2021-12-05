@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pygments
-, pytestCheckHook
-, pytest-cov
-, uvloop
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pygments
+, pytestCheckHook, pytest-cov, uvloop }:
 
 buildPythonPackage rec {
   pname = "aiorun";
@@ -21,15 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-aehYPZ1+GEO+bNSsE5vVgjtVo4MRMH+vNurk+bJ1/Io=";
   };
 
-  propagatedBuildInputs = [
-    pygments
-  ];
+  propagatedBuildInputs = [ pygments ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    uvloop
-  ];
+  checkInputs = [ pytestCheckHook pytest-cov uvloop ];
 
   # allow for writable directory for darwin
   preBuild = ''

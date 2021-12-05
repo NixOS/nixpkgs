@@ -17,10 +17,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/swagger" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version}" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version}"
+    "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}"
+  ];
 
   meta = with lib; {
-    description = "Golang implementation of Swagger 2.0, representation of your RESTful API";
+    description =
+      "Golang implementation of Swagger 2.0, representation of your RESTful API";
     homepage = "https://github.com/go-swagger/go-swagger";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
 
   meta = {
-    description = "Spiking neural interface between iCub and a spiking neural simulator";
+    description =
+      "Spiking neural interface between iCub and a spiking neural simulator";
     homepage = "https://sourceforge.net/projects/ispike/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;

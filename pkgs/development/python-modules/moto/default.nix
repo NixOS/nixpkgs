@@ -1,30 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
-, aws-xray-sdk
-, backports_tempfile
-, boto3
-, botocore
-, cfn-lint
-, docker
-, flask
-, freezegun
-, jinja2
-, jsondiff
-, mock
-, pyaml
-, python-jose
-, pytz
-, requests
-, responses
-, six
-, sshpubkeys
-, sure
-, werkzeug
-, xmltodict
-, parameterized
-, idna
-, nose
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch, aws-xray-sdk
+, backports_tempfile, boto3, botocore, cfn-lint, docker, flask, freezegun
+, jinja2, jsondiff, mock, pyaml, python-jose, pytz, requests, responses, six
+, sshpubkeys, sure, werkzeug, xmltodict, parameterized, idna, nose
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "moto";
@@ -48,12 +26,14 @@ buildPythonPackage rec {
     # last 18 months. These patches should be included in the next moto release
     # after 1.3.16
     (fetchpatch {
-      url = "https://github.com/spulec/moto/pull/3503/commits/ae85c539fd57034c4d5cfd0f95af41ff19862dd1.patch";
+      url =
+        "https://github.com/spulec/moto/pull/3503/commits/ae85c539fd57034c4d5cfd0f95af41ff19862dd1.patch";
       sha256 = "16hr2py6q701d8ih6zcvs3lbanshpbk15ixckgdqngjf160k5m9p";
-      excludes = ["tests/test_ec2/test_ec2_cloudformation.py"];
+      excludes = [ "tests/test_ec2/test_ec2_cloudformation.py" ];
     })
     (fetchpatch {
-      url = "https://github.com/spulec/moto/pull/3468/commits/6ee39bd7fda4d3623569e10dcd9561bf2cd1d0bd.patch";
+      url =
+        "https://github.com/spulec/moto/pull/3468/commits/6ee39bd7fda4d3623569e10dcd9561bf2cd1d0bd.patch";
       sha256 = "10m3xdqxgys7spav9mkbhcn4z0124rlprwxnw6ysb10610xlna0i";
     })
   ];

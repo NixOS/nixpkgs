@@ -1,26 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, desktop-file-utils
-, libcanberra
-, gst_all_1
-, vala
-, gtk3
-, gom
-, sqlite
-, libxml2
-, glib
-, gobject-introspection
-, libpeas
-, gsettings-desktop-schemas
-, gettext
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, fetchpatch, meson, ninja
+, pkg-config, wrapGAppsHook, desktop-file-utils, libcanberra, gst_all_1, vala
+, gtk3, gom, sqlite, libxml2, glib, gobject-introspection, libpeas
+, gsettings-desktop-schemas, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
@@ -44,7 +25,8 @@ stdenv.mkDerivation rec {
     # Fix error reporting code.
     # https://github.com/gnome-pomodoro/gnome-pomodoro/pull/591
     (fetchpatch {
-      url = "https://github.com/gnome-pomodoro/gnome-pomodoro/commit/133bd62f15653856d9705b66188b42c20d81719e.patch";
+      url =
+        "https://github.com/gnome-pomodoro/gnome-pomodoro/commit/133bd62f15653856d9705b66188b42c20d81719e.patch";
       sha256 = "A20K+57A6/lYH2Buri2+wrCQgz6EGBdYg2xQbHPSkYc=";
     })
   ];
@@ -76,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
-    description = "Time management utility for GNOME based on the pomodoro technique";
+    description =
+      "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.

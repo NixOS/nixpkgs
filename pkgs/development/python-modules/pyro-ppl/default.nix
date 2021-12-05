@@ -1,5 +1,5 @@
-{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
-, graphviz, networkx, six, opt-einsum, tqdm, pyro-api }:
+{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2, graphviz, networkx
+, six, opt-einsum, tqdm, pyro-api }:
 
 buildPythonPackage rec {
   version = "1.7.0";
@@ -24,12 +24,8 @@ buildPythonPackage rec {
   ];
 
   # pyro not shipping tests do simple smoke test instead
-  pythonImportsCheck = [
-    "pyro"
-    "pyro.distributions"
-    "pyro.infer"
-    "pyro.optim"
-  ];
+  pythonImportsCheck =
+    [ "pyro" "pyro.distributions" "pyro.infer" "pyro.optim" ];
 
   doCheck = false;
 

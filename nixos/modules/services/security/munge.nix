@@ -6,9 +6,7 @@ let
 
   cfg = config.services.munge;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -36,12 +34,12 @@ in
     environment.systemPackages = [ pkgs.munge ];
 
     users.users.munge = {
-      description   = "Munge daemon user";
-      isSystemUser  = true;
-      group         = "munge";
+      description = "Munge daemon user";
+      isSystemUser = true;
+      group = "munge";
     };
 
-    users.groups.munge = {};
+    users.groups.munge = { };
 
     systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];
@@ -51,7 +49,8 @@ in
 
       serviceConfig = {
         ExecStartPre = "+${pkgs.coreutils}/bin/chmod 0400 ${cfg.password}";
-        ExecStart = "${pkgs.munge}/bin/munged --syslog --key-file ${cfg.password}";
+        ExecStart =
+          "${pkgs.munge}/bin/munged --syslog --key-file ${cfg.password}";
         PIDFile = "/run/munge/munged.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "munge";

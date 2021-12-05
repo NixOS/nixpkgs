@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, isPy27, pythonAtLeast
-, pylev, pastel, typing ? null, enum34 ? null, crashtest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast, pylev, pastel
+, typing ? null, enum34 ? null, crashtest }:
 
 buildPythonPackage rec {
   pname = "clikit";
@@ -11,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "0ngdkmb73gkp5y00q7r9k1cdlfn0wyzws2wrqlshc4hlkbdyabj4";
   };
 
-  propagatedBuildInputs = [
-    pylev pastel
-  ]
+  propagatedBuildInputs = [ pylev pastel ]
     ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
     ++ lib.optionals isPy27 [ typing enum34 ];
 
@@ -24,7 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/clikit";
-    description = "A group of utilities to build beautiful and testable command line interfaces";
+    description =
+      "A group of utilities to build beautiful and testable command line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

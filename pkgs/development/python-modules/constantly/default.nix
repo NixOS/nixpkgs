@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "constantly";
   version = "15.1.0";

@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, fixtures
-, future
-, pbr
-, subunit
-, testtools
-, voluptuous
-, callPackage
-}:
+{ lib, buildPythonPackage, fetchPypi, cliff, fixtures, future, pbr, subunit
+, testtools, voluptuous, callPackage }:
 
 buildPythonPackage rec {
   pname = "stestr";
@@ -26,22 +16,13 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    cliff
-    fixtures
-    future
-    pbr
-    subunit
-    testtools
-    voluptuous
-  ];
+  propagatedBuildInputs =
+    [ cliff fixtures future pbr subunit testtools voluptuous ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
 
-  passthru.tests = {
-    tests = callPackage ./tests.nix { };
-  };
+  passthru.tests = { tests = callPackage ./tests.nix { }; };
 
   pythonImportsCheck = [ "stestr" ];
 

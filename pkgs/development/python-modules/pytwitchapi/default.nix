@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, python-dateutil
-, requests
-, websockets
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aiohttp
+, python-dateutil, requests, websockets }:
 
 buildPythonPackage rec {
   pname = "pytwitchapi";
@@ -20,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "0sbzl9a4zxnvnvkmmmfc9c157dgq7y6qfb2cid5nym6jhxkixnqk";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    python-dateutil
-    requests
-    websockets
-  ];
+  propagatedBuildInputs = [ aiohttp python-dateutil requests websockets ];
 
   # Project has no tests.
   doCheck = false;
@@ -33,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "twitchAPI" ];
 
   meta = with lib; {
-    description = "Python implementation of the Twitch Helix API, its Webhook and PubSub";
+    description =
+      "Python implementation of the Twitch Helix API, its Webhook and PubSub";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];

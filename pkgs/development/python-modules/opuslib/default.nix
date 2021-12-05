@@ -1,11 +1,5 @@
-{ buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  libopus,
-  nose,
-  lib, stdenv,
-  substituteAll,
-}:
+{ buildPythonPackage, fetchFromGitHub, isPy27, libopus, nose, lib, stdenv
+, substituteAll, }:
 
 buildPythonPackage rec {
   pname = "opuslib";
@@ -23,7 +17,8 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./opuslib-paths.patch;
-      opusLibPath = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
+      opusLibPath =
+        "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

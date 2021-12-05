@@ -1,9 +1,4 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, unzip
-, dfVersion
-}:
+{ stdenvNoCC, lib, fetchurl, unzip, dfVersion }:
 
 with lib;
 
@@ -58,22 +53,20 @@ let
     };
   };
 
-  release =
-    if hasAttr dfVersion twbt-releases
-    then getAttr dfVersion twbt-releases
-    else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
-in
+  release = if hasAttr dfVersion twbt-releases then
+    getAttr dfVersion twbt-releases
+  else
+    throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
 
-stdenvNoCC.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "twbt";
   version = release.twbtRelease;
 
   src = fetchurl {
-    url =
-      if version == "6.xx" then
-        "https://github.com/thurin/df-twbt/releases/download/${release.dfhackRelease}/twbt-${version}-linux64-${release.dfhackRelease}.zip"
-      else
-        "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
+    url = if version == "6.xx" then
+      "https://github.com/thurin/df-twbt/releases/download/${release.dfhackRelease}/twbt-${version}-linux64-${release.dfhackRelease}.zip"
+    else
+      "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
     sha256 = release.sha256;
   };
 
@@ -91,7 +84,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
+    description =
+      "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;

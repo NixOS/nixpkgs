@@ -4,28 +4,23 @@ with lib;
 
 let
   cfg = config.services.mautrix-facebook;
-  settingsFormat = pkgs.formats.json {};
-  settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
+  settingsFormat = pkgs.formats.json { };
+  settingsFile =
+    settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
-  puppetRegex = concatStringsSep
-    ".*"
-    (map
-      escapeRegex
-      (splitString
-        "{userid}"
-        cfg.settings.bridge.username_template));
+  puppetRegex = concatStringsSep ".*" (map escapeRegex
+    (splitString "{userid}" cfg.settings.bridge.username_template));
 in {
   options = {
     services.mautrix-facebook = {
-      enable = mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
+      enable = mkEnableOption
+        "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
 
       settings = mkOption rec {
         apply = recursiveUpdate default;
         type = settingsFormat.type;
         default = {
-          homeserver = {
-            address = "http://localhost:8008";
-          };
+          homeserver = { address = "http://localhost:8008"; };
 
           appservice = rec {
             address = "http://${hostname}:${toString port}";
@@ -58,7 +53,7 @@ in {
             };
             root = {
               level = "INFO";
-              handlers = ["journal"];
+              handlers = [ "journal" ];
             };
           };
         };
@@ -108,7 +103,7 @@ in {
 
       registrationData = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
@@ -125,7 +120,7 @@ in {
     };
 
     services.postgresql = mkIf cfg.configurePostgresql {
-      ensureDatabases = ["mautrix-facebook"];
+      ensureDatabases = [ "mautrix-facebook" ];
       ensureUsers = [{
         name = "mautrix-facebook";
         ensurePermissions = {
@@ -136,9 +131,9 @@ in {
 
     systemd.services.mautrix-facebook = rec {
       wantedBy = [ "multi-user.target" ];
-      wants = [
-        "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      wants = [ "network-online.target" ]
+        ++ optional config.services.matrix-synapse.enable
+        "matrix-synapse.service"
         ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
@@ -171,14 +166,16 @@ in {
           users = [
             {
               exclusive = true;
-              regex = escapeRegex "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
+              regex = escapeRegex
+                "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
             }
             {
               exclusive = true;
-              regex = "@${puppetRegex}:${escapeRegex cfg.settings.homeserver.domain}";
+              regex =
+                "@${puppetRegex}:${escapeRegex cfg.settings.homeserver.domain}";
             }
           ];
-          aliases = [];
+          aliases = [ ];
         };
 
         url = cfg.settings.appservice.address;

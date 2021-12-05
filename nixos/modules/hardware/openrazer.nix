@@ -8,7 +8,8 @@ let
 
   toPyBoolStr = b: if b then "True" else "False";
 
-  daemonExe = "${pkgs.openrazer-daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
+  daemonExe =
+    "${pkgs.openrazer-daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
 
   daemonConfFile = pkgs.writeTextFile {
     name = "razer.conf";
@@ -45,8 +46,7 @@ let
     "razermug"
     "razercore"
   ];
-in
-{
+in {
   options = {
     hardware.openrazer = {
       enable = mkEnableOption ''
@@ -97,7 +97,7 @@ in
 
       users = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.
@@ -120,27 +120,23 @@ in
     # A user must be a member of the openrazer group in order to start
     # the openrazer-daemon. Therefore we make sure that the group
     # exists.
-    users.groups.openrazer = {
-      members = cfg.users;
-    };
+    users.groups.openrazer = { members = cfg.users; };
 
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };
 
-  meta = {
-    maintainers = with lib.maintainers; [ roelvandijk ];
-  };
+  meta = { maintainers = with lib.maintainers; [ roelvandijk ]; };
 }

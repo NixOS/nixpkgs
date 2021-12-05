@@ -1,15 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
-, alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
-, libSM, libICE, libXext, factorio-utils
-, releaseType
-, mods ? []
-, username ? "", token ? "" # get/reset token at https://factorio.com/profile
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, alsa-lib, libpulseaudio
+, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL, libSM, libICE
+, libXext, factorio-utils, releaseType, mods ? [ ], username ? ""
+, token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
 }:
 
-assert releaseType == "alpha"
-    || releaseType == "headless"
-    || releaseType == "demo";
+assert releaseType == "alpha" || releaseType == "headless" || releaseType
+  == "demo";
 
 let
 
@@ -42,7 +39,7 @@ let
 
       releaseType=alpha
       version=0.17.74
-      nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+      nix-prefetch-url file://\$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
   '';
@@ -64,50 +61,50 @@ let
   versions = importJSON ./versions.json;
   binDists = makeBinDists versions;
 
-  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
+  actual =
+    binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw
+      "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
 
   makeBinDists = versions:
-    let f = path: name: value:
-      if builtins.isAttrs value then
-        if value ? "name" then
-          makeBinDist value
+    let
+      f = path: name: value:
+        if builtins.isAttrs value then
+          if value ? "name" then
+            makeBinDist value
+          else
+            builtins.mapAttrs (f (path ++ [ name ])) value
         else
-          builtins.mapAttrs (f (path ++ [ name ])) value
-      else
-        throw "expected attrset at ${toString path} - got ${toString value}";
-    in
-      builtins.mapAttrs (f []) versions;
+          throw "expected attrset at ${toString path} - got ${toString value}";
+    in builtins.mapAttrs (f [ ]) versions;
   makeBinDist = { name, version, tarDirectory, url, sha256, needsAuth }: {
     inherit version tarDirectory;
-    src =
-      if !needsAuth then
-        fetchurl { inherit name url sha256; }
-      else
-        (lib.overrideDerivation
-          (fetchurl {
-            inherit name url sha256;
-            curlOpts = [
-              "--get"
-              "--data-urlencode" "username@username"
-              "--data-urlencode" "token@token"
-            ];
-          })
-          (_: { # This preHook hides the credentials from /proc
-                preHook =
-                  if username != "" && token != "" then ''
-                    echo -n "${username}" >username
-                    echo -n "${token}"    >token
-                  '' else ''
-                    # Deliberately failing since username/token was not provided, so we can't fetch.
-                    # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
-                    exit 1
-                  '';
-                failureHook = ''
-                  cat <<EOF
-                  ${helpMsg}
-                  EOF
-                '';
-              }));
+    src = if !needsAuth then
+      fetchurl { inherit name url sha256; }
+    else
+      (lib.overrideDerivation (fetchurl {
+        inherit name url sha256;
+        curlOpts = [
+          "--get"
+          "--data-urlencode"
+          "username@username"
+          "--data-urlencode"
+          "token@token"
+        ];
+      }) (_: { # This preHook hides the credentials from /proc
+        preHook = if username != "" && token != "" then ''
+          echo -n "${username}" >username
+          echo -n "${token}"    >token
+        '' else ''
+          # Deliberately failing since username/token was not provided, so we can't fetch.
+          # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
+          exit 1
+        '';
+        failureHook = ''
+          cat <<EOF
+          ${helpMsg}
+          EOF
+        '';
+      }));
   };
 
   configBaseCfg = ''
@@ -149,8 +146,11 @@ let
     '';
 
     passthru.updateScript = if (username != "" && token != "") then [
-      ./update.py "--username=${username}" "--token=${token}"
-    ] else null;
+      ./update.py
+      "--username=${username}"
+      "--token=${token}"
+    ] else
+      null;
 
     meta = {
       description = "A game in which you build and maintain factories";
@@ -168,7 +168,13 @@ let
       '';
       homepage = "https://www.factorio.com/";
       license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
+      maintainers = with lib.maintainers; [
+        Baughn
+        elitak
+        erictapen
+        priegger
+        lukegb
+      ];
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -200,7 +206,7 @@ let
           --run "$out/share/factorio/update-config.sh"               \
           --argv0 ""                                                 \
           --add-flags "-c \$HOME/.factorio/config.cfg"               \
-          ${if mods!=[] then "--add-flags --mod-directory=${modDir}" else ""}
+          ${if mods != [ ] then "--add-flags --mod-directory=${modDir}" else ""}
 
           # TODO Currently, every time a mod is changed/added/removed using the
           # modlist, a new derivation will take up the entire footprint of the

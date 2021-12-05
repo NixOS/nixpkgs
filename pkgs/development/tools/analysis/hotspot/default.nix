@@ -1,23 +1,6 @@
-{ lib
-, mkDerivation
-, cmake
-, elfutils
-, extra-cmake-modules
-, fetchFromGitHub
-, kconfigwidgets
-, ki18n
-, kio
-, kitemmodels
-, kitemviews
-, kwindowsystem
-, libelf
-, qtbase
-, threadweaver
-, qtx11extras
-, zstd
-, kddockwidgets
-, rustc-demangle
-}:
+{ lib, mkDerivation, cmake, elfutils, extra-cmake-modules, fetchFromGitHub
+, kconfigwidgets, ki18n, kio, kitemmodels, kitemviews, kwindowsystem, libelf
+, qtbase, threadweaver, qtx11extras, zstd, kddockwidgets, rustc-demangle }:
 
 mkDerivation rec {
   pname = "hotspot";
@@ -31,10 +14,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     elfutils
     kconfigwidgets

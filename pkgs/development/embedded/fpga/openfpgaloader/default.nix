@@ -1,12 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libftdi1
-, libusb1
-, udev
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libftdi1, libusb1, udev }:
 
 stdenv.mkDerivation rec {
   pname = "openfpgaloader";
@@ -21,11 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    libftdi1
-    libusb1
-    udev
-  ];
+  buildInputs = [ libftdi1 libusb1 udev ];
 
   meta = with lib; {
     description = "Universal utility for programming FPGAs";

@@ -1,13 +1,14 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.meshcentral;
-  configFormat = pkgs.formats.json {};
+  configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
 in with lib; {
   options.services.meshcentral = with types; {
     enable = mkEnableOption "MeshCentral computer management server";
     package = mkOption {
-      description = "MeshCentral package to use. Replacing this may be necessary to add dependencies for extra functionality.";
+      description =
+        "MeshCentral package to use. Replacing this may be necessary to add dependencies for extra functionality.";
       type = types.package;
       default = pkgs.meshcentral;
       defaultText = literalExpression "pkgs.meshcentral";
@@ -23,9 +24,7 @@ in with lib; {
           <listitem><para><link xlink:href="https://www.meshcommander.com/meshcentral2">Old homepage) with documentation link</link></para></listitem>
         </itemizedlist>
       '';
-      type = types.submodule {
-        freeformType = configFormat.type;
-      };
+      type = types.submodule { freeformType = configFormat.type; };
       example = {
         settings = {
           WANonly = true;
@@ -38,11 +37,13 @@ in with lib; {
     };
   };
   config = mkIf cfg.enable {
-    services.meshcentral.settings.settings.autoBackup.backupPath = lib.mkDefault "/var/lib/meshcentral/backups";
+    services.meshcentral.settings.settings.autoBackup.backupPath =
+      lib.mkDefault "/var/lib/meshcentral/backups";
     systemd.services.meshcentral = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile ${configFile}";
+        ExecStart =
+          "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile ${configFile}";
         DynamicUser = true;
         StateDirectory = "meshcentral";
         CacheDirectory = "meshcentral";

@@ -1,10 +1,5 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
-, ncurses5, ncurses6, gmp, glibc, libiconv
-, llvmPackages
-, coreutils
-, targetPackages
-}:
+{ lib, stdenv, fetchurl, perl, gcc, ncurses5, ncurses6, gmp, glibc, libiconv
+, llvmPackages, coreutils, targetPackages }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
@@ -16,17 +11,16 @@ let
 
   ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
 
-  libPath = lib.makeLibraryPath ([
-    ourNcurses gmp
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+  libPath = lib.makeLibraryPath ([ ourNcurses gmp ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
@@ -36,18 +30,14 @@ let
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
-  ]
-  ++ lib.optionals useLLVM [
+  ] ++ lib.optionals useLLVM [
     (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
-  ];
+    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools")
+    [ targetPackages.stdenv.cc.bintools.bintools ];
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "8.6.5";
   pname = "ghc-binary";
 
@@ -62,19 +52,22 @@ stdenv.mkDerivation rec {
       # This is the Fedora build because it links against ncurses6 where the
       # deb9 one links against ncurses5, see here
       # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+      url =
+        "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
       sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
     };
     aarch64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
+      url =
+        "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
       sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
     };
     x86_64-darwin = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      url =
+        "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
     };
-  }.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform"));
+  }.${stdenv.hostPlatform.system} or (throw
+    "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
 
@@ -113,10 +106,13 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 \
           -exec patchelf \
-          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          --replace-needed libncurses${
+            lib.optionalString stdenv.is64bit "w"
+          }.so.5 libncurses.so \
           ${ # This isn't required for x86_64-linux where we use ncurses6
-             lib.optionalString (!useNcurses6) "--replace-needed libtinfo.so libtinfo.so.5"
-           } \
+            lib.optionalString (!useNcurses6)
+            "--replace-needed libtinfo.so libtinfo.so.5"
+          } \
           --interpreter ${glibcDynLinker} {} \;
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
@@ -211,11 +207,9 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
-    maintainers = with lib.maintainers; [
-      guibou
-    ] ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [ guibou ] ++ lib.teams.haskell.members;
   };
 }

@@ -1,9 +1,7 @@
 { stdenv, lib, fetchurl, ruby }:
 
-let
-  rubyEnv = ruby.withPackages (ps: [ ps.snmp ]);
-in
-stdenv.mkDerivation rec {
+let rubyEnv = ruby.withPackages (ps: [ ps.snmp ]);
+in stdenv.mkDerivation rec {
   pname = "snmpcheck";
   version = "1.9";
   src = fetchurl {

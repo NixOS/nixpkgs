@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, installShellFiles
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, installShellFiles }:
 
 buildPythonPackage rec {
   pname = "xkcdpass";
@@ -26,7 +21,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
+    description =
+      "Generate secure multiword passwords/passphrases, inspired by XKCD";
     homepage = "https://pypi.python.org/pypi/xkcdpass/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];

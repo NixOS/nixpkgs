@@ -1,6 +1,5 @@
-{ stdenv, makeWrapper, writeText, runCommand
-, CoreServices, ImageIO, CoreGraphics
-, runtimeShell, callPackage
+{ stdenv, makeWrapper, writeText, runCommand, CoreServices, ImageIO
+, CoreGraphics, runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
 , sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12" }:
@@ -18,70 +17,65 @@ let
     inherit CoreServices ImageIO CoreGraphics stdenv;
   };
 
-  toolchains = callPackage ./toolchains.nix {
-    inherit toolchainName stdenv;
-  };
+  toolchains = callPackage ./toolchains.nix { inherit toolchainName stdenv; };
 
   sdks = callPackage ./sdks.nix {
     inherit toolchainName sdkName xcodePlatform;
     version = sdkVer;
   };
 
-  platforms = callPackage ./platforms.nix {
-    inherit sdks xcodePlatform stdenv;
-  };
+  platforms =
+    callPackage ./platforms.nix { inherit sdks xcodePlatform stdenv; };
 
   xcconfig = writeText "nix.xcconfig" ''
     SDKROOT=${sdkName}
   '';
 
   xcode-select = writeText "xcode-select" ''
-#!${runtimeShell}
-while [ $# -gt 0 ]; do
-   case "$1" in
-         -h | --help) ;; # noop
-         -s | --switch) shift;; # noop
-         -r | --reset) ;; # noop
-         -v | --version) echo xcode-select version ${xcodeSelectVersion} ;;
-         -p | -print-path | --print-path) echo @DEVELOPER_DIR@ ;;
-         --install) ;; # noop
-    esac
-    shift
-done
-  '';
+    #!${runtimeShell}
+    while [ $# -gt 0 ]; do
+       case "$1" in
+             -h | --help) ;; # noop
+             -s | --switch) shift;; # noop
+             -r | --reset) ;; # noop
+             -v | --version) echo xcode-select version ${xcodeSelectVersion} ;;
+             -p | -print-path | --print-path) echo @DEVELOPER_DIR@ ;;
+             --install) ;; # noop
+        esac
+        shift
+    done
+      '';
 
   xcrun = writeText "xcrun" ''
-#!${runtimeShell}
-while [ $# -gt 0 ]; do
-   case "$1" in
-         --sdk | -sdk) shift ;;
-         --find | -find)
-           shift
-           command -v $1 ;;
-         --log | -log) ;; # noop
-         --verbose | -verbose) ;; # noop
-         --no-cache | -no-cache) ;; # noop
-         --kill-cache | -kill-cache) ;; # noop
-         --show-sdk-path | -show-sdk-path)
-           echo ${sdks}/${sdkName}.sdk ;;
-         --show-sdk-platform-path | -show-sdk-platform-path)
-           echo ${platforms}/${xcodePlatform}.platform ;;
-         --show-sdk-version | -show-sdk-version)
-           echo ${sdkVer} ;;
-         --show-sdk-build-version | -show-sdk-build-version)
-           echo ${sdkBuildVersion} ;;
-         *) break ;;
-    esac
-    shift
-done
-if ! [[ -z "$@" ]]; then
-   exec "$@"
-fi
-  '';
+    #!${runtimeShell}
+    while [ $# -gt 0 ]; do
+       case "$1" in
+             --sdk | -sdk) shift ;;
+             --find | -find)
+               shift
+               command -v $1 ;;
+             --log | -log) ;; # noop
+             --verbose | -verbose) ;; # noop
+             --no-cache | -no-cache) ;; # noop
+             --kill-cache | -kill-cache) ;; # noop
+             --show-sdk-path | -show-sdk-path)
+               echo ${sdks}/${sdkName}.sdk ;;
+             --show-sdk-platform-path | -show-sdk-platform-path)
+               echo ${platforms}/${xcodePlatform}.platform ;;
+             --show-sdk-version | -show-sdk-version)
+               echo ${sdkVer} ;;
+             --show-sdk-build-version | -show-sdk-build-version)
+               echo ${sdkBuildVersion} ;;
+             *) break ;;
+        esac
+        shift
+    done
+    if ! [[ -z "$@" ]]; then
+       exec "$@"
+    fi
+      '';
 
-in
-
-runCommand "xcodebuild-${xcbuild.version}" {
+in runCommand "xcodebuild-${xcbuild.version}" {
   nativeBuildInputs = [ makeWrapper ];
   inherit (xcbuild) meta;
 

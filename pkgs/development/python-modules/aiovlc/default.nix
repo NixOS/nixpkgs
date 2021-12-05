@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, click, fetchFromGitHub, pytest-asyncio
+, pytest-timeout, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiovlc";
@@ -22,19 +15,11 @@ buildPythonPackage rec {
     sha256 = "jB2V/Wpxmp92wba41mWZAeO63wy3NrkupllGxJMNkFM=";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-timeout pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aiovlc"
-  ];
+  pythonImportsCheck = [ "aiovlc" ];
 
   meta = with lib; {
     description = "Python module to control VLC";

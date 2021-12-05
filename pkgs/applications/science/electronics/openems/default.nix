@@ -1,23 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, csxcad
-, fparser
-, tinyxml
-, hdf5
-, vtk
-, boost
-, zlib
-, cmake
-, octave
-, gl2ps
-, mpi
-, withQcsxcad ? true
-, withMPI ? false
-, withHyp2mat ? true
-, qcsxcad
-, hyp2mat
-}:
+{ stdenv, lib, fetchFromGitHub, csxcad, fparser, tinyxml, hdf5, vtk, boost, zlib
+, cmake, octave, gl2ps, mpi, withQcsxcad ? true, withMPI ? false
+, withHyp2mat ? true, qcsxcad, hyp2mat }:
 
 stdenv.mkDerivation {
   pname = "openems";
@@ -30,9 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1dca6b6ccy771irxzsj075zvpa3dlzv4mjb8xyg9d889dqlgyl45";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optionals withMPI [ "-DWITH_MPI=ON" ];
 
@@ -44,9 +25,8 @@ stdenv.mkDerivation {
     boost
     zlib
     csxcad
-    (octave.override { inherit hdf5; }) ]
-    ++ lib.optionals withQcsxcad [ qcsxcad ]
-    ++ lib.optionals withMPI [ mpi ]
+    (octave.override { inherit hdf5; })
+  ] ++ lib.optionals withQcsxcad [ qcsxcad ] ++ lib.optionals withMPI [ mpi ]
     ++ lib.optionals withHyp2mat [ hyp2mat ];
 
   postFixup = ''

@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3, wrapQtAppsHook }:
 
-let
-  inherit (python3.pkgs) wrapPython pyqt5;
+let inherit (python3.pkgs) wrapPython pyqt5;
 in stdenv.mkDerivation rec {
   pname = "convertall";
   version = "0.8.0";

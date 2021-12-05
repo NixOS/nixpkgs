@@ -6,9 +6,8 @@ let
   cfg = config.services.solanum;
 
   configFile = pkgs.writeText "solanum.conf" cfg.config;
-in
 
-{
+in {
 
   ###### interface
 
@@ -73,7 +72,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable (lib.mkMerge [
@@ -86,11 +84,10 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         reloadIfChanged = true;
-        restartTriggers = [
-          configFile
-        ];
+        restartTriggers = [ configFile ];
         serviceConfig = {
-          ExecStart = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
+          ExecStart =
+            "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
           ExecReload = "${util-linux}/bin/kill -HUP $MAINPID";
           DynamicUser = true;
           User = "solanum";

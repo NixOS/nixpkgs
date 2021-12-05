@@ -13,9 +13,7 @@ stdenv.mkDerivation {
 
   pythonPath = [ mpd2 ];
 
-  nativeBuildInputs = [
-    wrapPython
-  ];
+  nativeBuildInputs = [ wrapPython ];
 
   dontBuild = true;
 

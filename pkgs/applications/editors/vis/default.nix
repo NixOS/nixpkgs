@@ -1,14 +1,10 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, makeDesktopItem
-, ncurses, libtermkey, lua
-, acl ? null, libselinux ? null
-}:
+, ncurses, libtermkey, lua, acl ? null, libselinux ? null }:
 
-let
-  luaEnv = lua.withPackages(ps: [ ps.lpeg ]);
-in
-stdenv.mkDerivation rec {
+let luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
+in stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.7";
+  version = "0.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -19,14 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [
-    ncurses
-    libtermkey
-    luaEnv
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-    libselinux
-  ];
+  buildInputs = [ ncurses libtermkey luaEnv ]
+    ++ lib.optionals stdenv.isLinux [ acl libselinux ];
 
   postPatch = ''
     patchShebangs ./configure
@@ -50,12 +40,9 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "vis";
     genericName = "Text editor";
-    categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
-    ];
-    mimeType = lib.concatStringsSep ";" [
-      "text/plain" "application/octet-stream"
-    ];
+    categories = lib.concatStringsSep ";" [ "Application" "Development" "IDE" ];
+    mimeType =
+      lib.concatStringsSep ";" [ "text/plain" "application/octet-stream" ];
     startupNotify = "false";
     terminal = "true";
   };

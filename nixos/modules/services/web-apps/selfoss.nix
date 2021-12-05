@@ -7,12 +7,10 @@ let
 
   dataDir = "/var/lib/selfoss";
 
-  selfoss-config =
-  let
+  selfoss-config = let
     db_type = cfg.database.type;
     default_port = if (db_type == "mysql") then 3306 else 5342;
-  in
-  pkgs.writeText "selfoss-config.ini" ''
+  in pkgs.writeText "selfoss-config.ini" ''
     [globals]
     ${lib.optionalString (db_type != "sqlite") ''
       db_type=${db_type}
@@ -20,39 +18,41 @@ let
       db_database=${cfg.database.name}
       db_username=${cfg.database.user}
       db_password=${cfg.database.password}
-      db_port=${toString (if (cfg.database.port != null) then cfg.database.port
-                    else default_port)}
-    ''
-    }
+      db_port=${
+        toString (if (cfg.database.port != null) then
+          cfg.database.port
+        else
+          default_port)
+      }
+    ''}
     ${cfg.extraConfig}
   '';
-in
-  {
-    options = {
-      services.selfoss = {
-        enable = mkEnableOption "selfoss";
+in {
+  options = {
+    services.selfoss = {
+      enable = mkEnableOption "selfoss";
 
-        user = mkOption {
-          type = types.str;
-          default = "nginx";
-          description = ''
-            User account under which both the service and the web-application run.
-          '';
-        };
+      user = mkOption {
+        type = types.str;
+        default = "nginx";
+        description = ''
+          User account under which both the service and the web-application run.
+        '';
+      };
 
-        pool = mkOption {
-          type = types.str;
-          default = "${poolName}";
-          description = ''
-            Name of existing phpfpm pool that is used to run web-application.
-            If not specified a pool will be created automatically with
-            default values.
-          '';
-        };
+      pool = mkOption {
+        type = types.str;
+        default = "${poolName}";
+        description = ''
+          Name of existing phpfpm pool that is used to run web-application.
+          If not specified a pool will be created automatically with
+          default values.
+        '';
+      };
 
       database = {
         type = mkOption {
-          type = types.enum ["pgsql" "mysql" "sqlite"];
+          type = types.enum [ "pgsql" "mysql" "sqlite" ];
           default = "sqlite";
           description = ''
             Database to store feeds. Supported are sqlite, pgsql and mysql.

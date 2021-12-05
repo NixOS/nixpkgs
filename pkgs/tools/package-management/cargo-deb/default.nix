@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, rust
-, libiconv
-, Security
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, rust, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
@@ -24,7 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     substituteInPlace tests/command.rs \
-      --replace 'target/debug' "target/${rust.toRustTarget stdenv.buildPlatform}/release"
+      --replace 'target/debug' "target/${
+        rust.toRustTarget stdenv.buildPlatform
+      }/release"
 
     # This is an FHS specific assert depending on glibc location
     substituteInPlace src/dependencies.rs \

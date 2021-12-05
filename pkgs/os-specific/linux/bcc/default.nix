@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, cmake, llvmPackages, kernel
-, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel, flex
+, bison, elfutils, python, luajit, netperf, iperf, libelf, systemtap, bash }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
@@ -20,9 +17,17 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang kernel
-    elfutils luajit netperf iperf
-    systemtap.stapBuild flex bash
+    llvm
+    llvm.dev
+    libclang
+    kernel
+    elfutils
+    luajit
+    netperf
+    iperf
+    systemtap.stapBuild
+    flex
+    bash
   ];
 
   patches = [
@@ -32,8 +37,14 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+    flex
+    bison
+    llvmPackages.llvm.dev
+  ]
+  # libelf is incompatible with elfutils-libelf
     ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   cmakeFlags = [
@@ -55,7 +66,7 @@ python.pkgs.buildPythonApplication rec {
     mv $out/share/bcc/man $out/share/
 
     find $out/share/bcc/tools -type f -executable -print0 | \
-    while IFS= read -r -d ''$'\0' f; do
+    while IFS= read -r -d $'\0' f; do
       bin=$out/bin/$(basename $f)
       if [ ! -e $bin ]; then
         ln -s $f $bin
@@ -73,8 +84,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };
 }

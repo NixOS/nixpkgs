@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, async_generator
-, paho-mqtt
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, async_generator, paho-mqtt }:
 
 buildPythonPackage rec {
   pname = "asyncio-mqtt";
@@ -17,11 +11,8 @@ buildPythonPackage rec {
     sha256 = "sha256-uJown3bNA+pLJlorJcCjpMMFosX94gt/2tLAjIkuXLA=";
   };
 
-  propagatedBuildInputs = [
-    paho-mqtt
-  ] ++ lib.optional (pythonOlder "3.7") [
-    async_generator
-  ];
+  propagatedBuildInputs = [ paho-mqtt ]
+    ++ lib.optional (pythonOlder "3.7") [ async_generator ];
 
   doCheck = false; # no tests
 
@@ -31,7 +22,8 @@ buildPythonPackage rec {
     description = "Idomatic asyncio wrapper around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/asyncio-mqtt";
     license = licenses.bsd3;
-    changelog = "https://github.com/sbtinstruments/asyncio-mqtt/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/sbtinstruments/asyncio-mqtt/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ hexa ];
   };
 }

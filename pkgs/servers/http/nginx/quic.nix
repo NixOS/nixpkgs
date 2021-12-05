@@ -1,7 +1,4 @@
-{ callPackage
-, fetchhg
-, ...
-} @ args:
+{ callPackage, fetchhg, ... }@args:
 
 callPackage ./generic.nix args {
   src = fetchhg {

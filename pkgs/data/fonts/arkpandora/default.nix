@@ -1,7 +1,6 @@
 { fetchurl }:
 
-let
-  version = "2.04";
+let version = "2.04";
 in fetchurl {
   name = "arkpandora-${version}";
 

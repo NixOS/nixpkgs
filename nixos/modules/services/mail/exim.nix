@@ -4,9 +4,8 @@ let
   inherit (lib) literalExpression mkIf mkOption singleton types;
   inherit (pkgs) coreutils;
   cfg = config.services.exim;
-in
 
-{
+in {
 
   ###### interface
 
@@ -78,7 +77,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -100,24 +98,22 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {
-      gid = config.ids.gids.exim;
-    };
+    users.groups.${cfg.group} = { gid = config.ids.gids.exim; };
 
-    security.wrappers.exim =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${cfg.package}/bin/exim";
-      };
+    security.wrappers.exim = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${cfg.package}/bin/exim";
+    };
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
-        ExecStart   = "${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
-        ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = "${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
+        ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
       };
       preStart = ''
         if ! test -d ${cfg.spoolDir}; then

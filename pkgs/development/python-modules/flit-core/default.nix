@@ -1,19 +1,11 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, flit
-, toml
-}:
+{ lib, buildPythonPackage, callPackage, flit, toml }:
 
 buildPythonPackage rec {
   pname = "flit-core";
   version = "3.2.0";
   format = "pyproject";
 
-  outputs = [
-    "out"
-    "testsout"
-  ];
+  outputs = [ "out" "testsout" ];
 
   inherit (flit) src patches;
 
@@ -21,9 +13,7 @@ buildPythonPackage rec {
     cd flit_core
   '';
 
-  propagatedBuildInputs = [
-    toml
-  ];
+  propagatedBuildInputs = [ toml ];
 
   postInstall = ''
     mkdir $testsout
@@ -39,7 +29,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Distribution-building parts of Flit. See flit package for more information";
+    description =
+      "Distribution-building parts of Flit. See flit package for more information";
     homepage = "https://github.com/takluyver/flit";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh SuperSandro2000 ];

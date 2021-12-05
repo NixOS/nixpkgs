@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyvcf
-}:
+{ lib, buildPythonPackage, fetchPypi, pyvcf }:
 
 buildPythonPackage rec {
   pname = "ACEBinf";
@@ -21,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ACEnglish/acebinf";
-    description = "Collection of simple utilities used when building bioinformatics tools";
+    description =
+      "Collection of simple utilities used when building bioinformatics tools";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ris ];
   };

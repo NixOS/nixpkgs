@@ -1,4 +1,5 @@
-{ fetchurl, lib, stdenv, pkg-config, darwin, cairo, fontconfig, freetype, libsigcxx, meson, ninja }:
+{ fetchurl, lib, stdenv, pkg-config, darwin, cairo, fontconfig, freetype
+, libsigcxx, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
@@ -15,15 +16,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja ];
   propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-  ]);
+  buildInputs = [ fontconfig freetype ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
+    description =
+      "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output

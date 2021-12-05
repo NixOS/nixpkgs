@@ -1,14 +1,5 @@
-{ lib
-, fetchPypi
-, pythonOlder
-, buildPythonPackage
-, pip
-, pytestCheckHook
-, pytest-xdist
-, click
-, setuptools-scm
-, pep517
-}:
+{ lib, fetchPypi, pythonOlder, buildPythonPackage, pip, pytestCheckHook
+, pytest-xdist, click, setuptools-scm, pep517 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
@@ -21,20 +12,11 @@ buildPythonPackage rec {
     sha256 = "992d968df6f1a19d4d37c53b68b3d4b601b894fb3ee0926d1fa762ebc7c7e9e9";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ];
+  checkInputs = [ pytestCheckHook pytest-xdist ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    click
-    pep517
-    pip
-  ];
+  propagatedBuildInputs = [ click pep517 pip ];
 
   disabledTests = [
     # these want internet access

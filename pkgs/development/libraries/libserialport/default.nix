@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
 
   src = fetchurl {
-    url = "https://sigrok.org/download/source/libserialport/${pname}-${version}.tar.gz";
+    url =
+      "https://sigrok.org/download/source/libserialport/${pname}-${version}.tar.gz";
     sha256 = "17ajlwgvyyrap8z7f16zcs59pksvncwbmd3mzf98wj7zqgczjaja";
   };
 

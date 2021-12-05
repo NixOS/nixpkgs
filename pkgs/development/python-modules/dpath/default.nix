@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, isPy27
-, mock
-, nose
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, isPy27, mock, nose
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "dpath";
@@ -20,17 +13,13 @@ buildPythonPackage rec {
   };
 
   # use pytest as nosetests hangs
-  checkInputs = [
-    hypothesis
-    mock
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis mock nose pytestCheckHook ];
 
   pythonImportsCheck = [ "dpath" ];
 
   meta = with lib; {
-    description = "Python library for accessing and searching dictionaries via /slashed/paths ala xpath";
+    description =
+      "Python library for accessing and searching dictionaries via /slashed/paths ala xpath";
     homepage = "https://github.com/akesterson/dpath-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mmlb ];

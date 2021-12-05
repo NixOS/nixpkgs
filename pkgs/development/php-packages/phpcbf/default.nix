@@ -2,12 +2,12 @@
 let
   pname = "phpcbf";
   version = "3.6.0";
-in
-mkDerivation {
+in mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
+    url =
+      "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
     sha256 = "04wb1imm4934mpy2hxcmqh4cn7md1vwmfii39p6mby809325b5z1";
   };
 

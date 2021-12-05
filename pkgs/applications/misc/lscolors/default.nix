@@ -17,7 +17,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

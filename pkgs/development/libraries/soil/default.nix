@@ -1,24 +1,16 @@
-{ stdenv, lib
-, Carbon
-, fetchzip
-, libGL
-, libX11
-}:
+{ stdenv, lib, Carbon, fetchzip, libGL, libX11 }:
 
 stdenv.mkDerivation {
   name = "soil";
 
   src = fetchzip {
-    url = "https://web.archive.org/web/20200104042737id_/http://www.lonesock.net/files/soil.zip";
+    url =
+      "https://web.archive.org/web/20200104042737id_/http://www.lonesock.net/files/soil.zip";
     sha256 = "1c05nwbnfdgwaz8ywn7kg2xrcvrcbpdyhcfkkiiwk69zvil0pbgd";
   };
 
-  buildInputs = if stdenv.hostPlatform.isDarwin then [
-    Carbon
-  ] else [
-    libGL
-    libX11
-  ];
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then [ Carbon ] else [ libGL libX11 ];
 
   buildPhase = ''
     cd src

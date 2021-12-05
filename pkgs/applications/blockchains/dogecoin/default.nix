@@ -1,8 +1,5 @@
-{ lib, stdenv , fetchFromGitHub
-, pkg-config, autoreconfHook
-, db5, openssl, boost, zlib, miniupnpc, libevent
-, protobuf, util-linux, qt4, qrencode
-, withGui }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, db5, openssl, boost
+, zlib, miniupnpc, libevent, protobuf, util-linux, qt4, qrencode, withGui }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -17,13 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  buildInputs =
+    [ openssl db5 openssl util-linux protobuf boost zlib miniupnpc libevent ]
+    ++ optionals withGui [ qt4 qrencode ];
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui" ];
+  configureFlags =
+    [ "--with-incompatible-bdb" "--with-boost-libdir=${boost.out}/lib" ]
+    ++ optionals withGui [ "--with-gui" ];
 
   meta = {
     description = "Wow, such coin, much shiba, very rich";

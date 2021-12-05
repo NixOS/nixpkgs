@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, httpx
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, yarl
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, poetry-core, httpx
+, pytest-asyncio, pytest-httpx, pytestCheckHook, yarl }:
 
 buildPythonPackage rec {
   pname = "netdata";
@@ -24,24 +15,13 @@ buildPythonPackage rec {
     sha256 = "sha256-4+cTIqytHrCPG7lUZv1IhL7Bk5GlTEveQTtuCkFIepo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-    yarl
-  ];
+  propagatedBuildInputs = [ httpx yarl ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-httpx
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-httpx pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "netdata"
-  ];
+  pythonImportsCheck = [ "netdata" ];
 
   meta = with lib; {
     description = "Python API for interacting with Netdata";

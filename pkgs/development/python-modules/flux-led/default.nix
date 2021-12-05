@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, webcolors
-, pythonOlder
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, webcolors, pythonOlder
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "flux-led";
@@ -20,26 +15,18 @@ buildPythonPackage rec {
     sha256 = "sha256-ZWaKk9496AKlQIni+VmnyIda9kn5zQfzmaD76DznQNU=";
   };
 
-  propagatedBuildInputs = [
-    webcolors
-  ];
+  propagatedBuildInputs = [ webcolors ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner>=5.2",' ""
   '';
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "flux_led"
-  ];
+  pythonImportsCheck = [ "flux_led" ];
 
   meta = with lib; {
     description = "Python library to communicate with the flux_led smart bulbs";

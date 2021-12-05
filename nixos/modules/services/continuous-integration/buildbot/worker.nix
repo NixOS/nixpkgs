@@ -65,8 +65,9 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = "List of extra groups that the Buildbot Worker user should be a part of.";
+        default = [ ];
+        description =
+          "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
       home = mkOption {
@@ -119,10 +120,8 @@ in {
       keepalive = mkOption {
         default = 600;
         type = types.int;
-        description = "
-          This is a number that indicates how frequently keepalive messages should be sent
-          from the worker to the buildmaster, expressed in seconds.
-        ";
+        description =
+          "\n          This is a number that indicates how frequently keepalive messages should be sent\n          from the worker to the buildmaster, expressed in seconds.\n        ";
       };
 
       package = mkOption {
@@ -143,11 +142,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.buildbot-worker.workerPassFile = mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
+    services.buildbot-worker.workerPassFile =
+      mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
 
-    users.groups = optionalAttrs (cfg.group == "bbworker") {
-      bbworker = { };
-    };
+    users.groups = optionalAttrs (cfg.group == "bbworker") { bbworker = { }; };
 
     users.users = optionalAttrs (cfg.user == "bbworker") {
       bbworker = {
@@ -166,15 +164,20 @@ in {
       after = [ "network.target" "buildbot-master.service" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
-      environment.PYTHONPATH = "${python.withPackages (p: [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH =
+        "${python.withPackages (p: [ cfg.package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}/info"
         ${optionalString (cfg.hostMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
+          ln -sf "${
+            pkgs.writeText "buildbot-worker-host" cfg.hostMessage
+          }" "${cfg.buildbotDir}/info/host"
         ''}
         ${optionalString (cfg.adminMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
+          ln -sf "${
+            pkgs.writeText "buildbot-worker-admin" cfg.adminMessage
+          }" "${cfg.buildbotDir}/info/admin"
         ''}
       '';
 
@@ -185,7 +188,8 @@ in {
         WorkingDirectory = cfg.home;
 
         # NOTE: call twistd directly with stdout logging for systemd
-        ExecStart = "${python.pkgs.twisted}/bin/twistd --nodaemon --pidfile= --logfile - --python ${tacFile}";
+        ExecStart =
+          "${python.pkgs.twisted}/bin/twistd --nodaemon --pidfile= --logfile - --python ${tacFile}";
       };
 
     };

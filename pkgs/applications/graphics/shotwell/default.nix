@@ -1,41 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gtk3
-, libexif
-, libgphoto2
-, libwebp
-, libsoup
-, libxml2
-, vala
-, sqlite
-, webkitgtk
-, pkg-config
-, gnome
-, gst_all_1
-, libgudev
-, libraw
-, glib
-, glib-networking
-, json-glib
-, gcr
-, libgee
-, gexiv2
-, librest
-, gettext
-, desktop-file-utils
-, gdk-pixbuf
-, librsvg
-, wrapGAppsHook
-, gobject-introspection
-, itstool
-, libgdata
-, libchamplain
-, libsecret
-, gsettings-desktop-schemas
-, python3
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gtk3, libexif, libgphoto2, libwebp
+, libsoup, libxml2, vala, sqlite, webkitgtk, pkg-config, gnome, gst_all_1
+, libgudev, libraw, glib, glib-networking, json-glib, gcr, libgee, gexiv2
+, librest, gettext, desktop-file-utils, gdk-pixbuf, librsvg, wrapGAppsHook
+, gobject-introspection, itstool, libgdata, libchamplain, libsecret
+, gsettings-desktop-schemas, python3 }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
@@ -44,7 +12,9 @@ stdenv.mkDerivation rec {
   version = "0.30.14";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-McLkgzkI02GcssNnWgXw2lnCuqduKLkFOF/VbADBKJU=";
   };
 
@@ -106,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

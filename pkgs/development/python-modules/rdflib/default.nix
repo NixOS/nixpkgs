@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, html5lib
-, isodate
-, networkx
-, nose
-, pyparsing
-, tabulate
-, pandas
-, pytestCheckHook
-, pythonOlder
-, SPARQLWrapper
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, html5lib, isodate, networkx, nose
+, pyparsing, tabulate, pandas, pytestCheckHook, pythonOlder, SPARQLWrapper }:
 
 buildPythonPackage rec {
   pname = "rdflib";
@@ -26,20 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-YTauBWABR07ir/X8W5VuYqEcOpxmuw89nAqqX7tWhU4=";
   };
 
-  propagatedBuildInputs = [
-    isodate
-    html5lib
-    pyparsing
-    SPARQLWrapper
-  ];
+  propagatedBuildInputs = [ isodate html5lib pyparsing SPARQLWrapper ];
 
-  checkInputs = [
-    networkx
-    pandas
-    nose
-    tabulate
-    pytestCheckHook
-  ];
+  checkInputs = [ networkx pandas nose tabulate pytestCheckHook ];
 
   disabledTests = [
     # Requires network access
@@ -55,9 +31,7 @@ buildPythonPackage rec {
     "TestGraphHTTP"
   ];
 
-  pythonImportsCheck = [
-    "rdflib"
-  ];
+  pythonImportsCheck = [ "rdflib" ];
 
   meta = with lib; {
     description = "Python library for working with RDF";

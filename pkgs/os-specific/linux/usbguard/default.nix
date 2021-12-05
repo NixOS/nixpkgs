@@ -1,25 +1,7 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, installShellFiles
-, nixosTests
-, asciidoc
-, pkg-config
-, libxslt
-, libxml2
-, docbook_xml_dtd_45
-, docbook_xsl
-, dbus-glib
-, libcap_ng
-, libqb
-, libseccomp
-, polkit
-, protobuf
-, audit
-, libgcrypt
-, libsodium
-}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, installShellFiles, nixosTests
+, asciidoc, pkg-config, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
+, dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, audit, libgcrypt
+, libsodium }:
 
 assert libgcrypt != null -> libsodium == null;
 
@@ -46,26 +28,17 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
-  buildInputs = [
-    dbus-glib
-    libcap_ng
-    libqb
-    libseccomp
-    polkit
-    protobuf
-    audit
-  ]
-  ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium);
+  buildInputs = [ dbus-glib libcap_ng libqb libseccomp polkit protobuf audit ]
+    ++ (lib.optional (libgcrypt != null) libgcrypt)
+    ++ (lib.optional (libsodium != null) libsodium);
 
   configureFlags = [
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
     "--with-polkit"
-  ]
-  ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
+  ] ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
+    ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
 
   enableParallelBuilding = true;
 
@@ -77,7 +50,8 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.usbguard;
 
   meta = with lib; {
-    description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    description =
+      "The USBGuard software framework helps to protect your computer against BadUSB";
     longDescription = ''
       USBGuard is a software framework for implementing USB device authorization
       policies (what kind of USB devices are authorized) as well as method of

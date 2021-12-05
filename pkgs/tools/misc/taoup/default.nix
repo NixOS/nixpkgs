@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ruby, bash, ncurses }:
-let
-  rubyEnv = ruby.withPackages (ps: with ps; [ ansi ]);
-in
-stdenv.mkDerivation rec {
+let rubyEnv = ruby.withPackages (ps: with ps; [ ansi ]);
+in stdenv.mkDerivation rec {
   pname = "taoup";
   version = "1.1.14";
 
@@ -54,7 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
+    description =
+      "The Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
     homepage = "https://github.com/globalcitizen/taoup";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.zakame ];

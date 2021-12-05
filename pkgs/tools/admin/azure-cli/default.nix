@@ -17,8 +17,7 @@ let
     inherit stdenv lib src version;
     python = python3;
   };
-in
-py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
+in py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
@@ -265,7 +264,8 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
 
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";
-    description = "Next generation multi-platform command line experience for Azure";
+    description =
+      "Next generation multi-platform command line experience for Azure";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

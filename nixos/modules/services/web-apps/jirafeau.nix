@@ -14,13 +14,14 @@ let
       $cfg['admin_password'] = '${cfg.adminPasswordSha256}';
       $cfg['web_root'] = 'http://${withTrailingSlash cfg.hostName}';
       $cfg['var_root'] = '${withTrailingSlash cfg.dataDir}';
-      $cfg['maximal_upload_size'] = ${builtins.toString cfg.maxUploadSizeMegabytes};
+      $cfg['maximal_upload_size'] = ${
+        builtins.toString cfg.maxUploadSizeMegabytes
+      };
       $cfg['installation_done'] = true;
 
       ${cfg.extraConfig}
   '';
-in
-{
+in {
   options.services.jirafeau = {
     adminPasswordSha256 = mkOption {
       type = types.str;
@@ -48,11 +49,10 @@ in
       description = let
         documentationLink =
           "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
-      in
-        ''
-          Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
-          values.
-        '';
+      in ''
+        Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
+        values.
+      '';
     };
 
     hostName = mkOption {
@@ -71,25 +71,26 @@ in
       type = types.str;
       default = "30m";
       description = let
-        nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
-      in
-        ''
-          Timeout for reading client request bodies and headers. Refer to
-          <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
-          <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
-        '';
+        nginxCoreDocumentation =
+          "http://nginx.org/en/docs/http/ngx_http_core_module.html";
+      in ''
+        Timeout for reading client request bodies and headers. Refer to
+        <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
+        <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
+      '';
     };
 
     nginxConfig = mkOption {
       type = types.submodule
         (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           serverAliases = [ "wiki.''${config.networking.domain}" ];
         }
       '';
-      description = "Extra configuration for the nginx virtual host of Jirafeau.";
+      description =
+        "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
     package = mkOption {
@@ -116,7 +117,6 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     services = {
       nginx = {
@@ -125,15 +125,16 @@ in
           cfg.nginxConfig
           {
             extraConfig = let
-              clientMaxBodySize =
-                if cfg.maxUploadSizeMegabytes == 0 then "0" else "${cfg.maxUploadSizeMegabytes}m";
-            in
-              ''
-                index index.php;
-                client_max_body_size ${clientMaxBodySize};
-                client_body_timeout ${cfg.maxUploadTimeout};
-                client_header_timeout ${cfg.maxUploadTimeout};
-              '';
+              clientMaxBodySize = if cfg.maxUploadSizeMegabytes == 0 then
+                "0"
+              else
+                "${cfg.maxUploadSizeMegabytes}m";
+            in ''
+              index index.php;
+              client_max_body_size ${clientMaxBodySize};
+              client_body_timeout ${cfg.maxUploadTimeout};
+              client_header_timeout ${cfg.maxUploadTimeout};
+            '';
             locations = {
               "~ \\.php$".extraConfig = ''
                 include ${pkgs.nginx}/conf/fastcgi_params;

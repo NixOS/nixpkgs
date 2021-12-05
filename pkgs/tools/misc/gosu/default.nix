@@ -16,7 +16,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = {
-    description= "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
+    description =
+      "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     homepage = "https://github.com/tianon/gosu";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

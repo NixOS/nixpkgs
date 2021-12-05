@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    xorg.libX11 xorgproto cairo lv2
-  ];
+  buildInputs = [ xorg.libX11 xorgproto cairo lv2 ];
 
   # error: format not a string literal and no format arguments [-Werror=format-security]
   hardeningDisable = [ "format" ];
@@ -23,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/brummer10/GxMatchEQ.lv2";
-    description = "Matching Equalizer to apply EQ curve from one source to another source";
+    description =
+      "Matching Equalizer to apply EQ curve from one source to another source";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3;
   };

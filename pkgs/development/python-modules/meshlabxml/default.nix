@@ -1,8 +1,4 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-}:
+{ buildPythonPackage, fetchPypi, lib, }:
 
 buildPythonPackage rec {
   pname = "MeshLabXML";

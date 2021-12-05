@@ -16,7 +16,8 @@ buildGoModule rec {
 
   subPackages = "cmd/thanos";
 
-  ldflags = let t = "github.com/prometheus/common/version"; in [
+  ldflags = let t = "github.com/prometheus/common/version";
+  in [
     "-X ${t}.Version=${version}"
     "-X ${t}.Revision=unknown"
     "-X ${t}.Branch=unknown"
@@ -25,7 +26,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Highly available Prometheus setup with long term storage capabilities";
+    description =
+      "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];

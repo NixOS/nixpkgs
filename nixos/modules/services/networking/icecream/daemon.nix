@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.icecream.daemon;
+let cfg = config.services.icecream.daemon;
 in {
 
   ###### interface
@@ -12,7 +11,7 @@ in {
 
     services.icecream.daemon = {
 
-     enable = mkEnableOption "Icecream Daemon";
+      enable = mkEnableOption "Icecream Daemon";
 
       openFirewall = mkOption {
         type = types.bool;
@@ -108,7 +107,7 @@ in {
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional command line parameters.";
         example = [ "-v" ];
       };
@@ -129,17 +128,21 @@ in {
       serviceConfig = {
         ExecStart = escapeShellArgs ([
           "${getBin cfg.package}/bin/iceccd"
-          "-b" "$STATE_DIRECTORY"
-          "-u" "icecc"
+          "-b"
+          "$STATE_DIRECTORY"
+          "-u"
+          "icecc"
           (toString cfg.nice)
-        ]
-        ++ optionals (cfg.schedulerHost != null) ["-s" cfg.schedulerHost]
-        ++ optionals (cfg.netName != null) [ "-n" cfg.netName ]
-        ++ optionals (cfg.cacheLimit != null) [ "--cache-limit" (toString cfg.cacheLimit) ]
-        ++ optionals (cfg.maxProcesses != null) [ "-m" (toString cfg.maxProcesses) ]
-        ++ optionals (cfg.hostname != null) [ "-N" (cfg.hostname) ]
-        ++ optional  cfg.noRemote "--no-remote"
-        ++ cfg.extraArgs);
+        ] ++ optionals (cfg.schedulerHost != null) [ "-s" cfg.schedulerHost ]
+          ++ optionals (cfg.netName != null) [ "-n" cfg.netName ]
+          ++ optionals (cfg.cacheLimit != null) [
+            "--cache-limit"
+            (toString cfg.cacheLimit)
+          ] ++ optionals (cfg.maxProcesses != null) [
+            "-m"
+            (toString cfg.maxProcesses)
+          ] ++ optionals (cfg.hostname != null) [ "-N" (cfg.hostname) ]
+          ++ optional cfg.noRemote "--no-remote" ++ cfg.extraArgs);
         DynamicUser = true;
         User = "icecc";
         Group = "icecc";

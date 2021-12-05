@@ -1,29 +1,6 @@
-{ lib
-, stdenv
-, fetchurl
-, erlang
-, elixir
-, python
-, libxml2
-, libxslt
-, xmlto
-, docbook_xml_dtd_45
-, docbook_xsl
-, zip
-, unzip
-, rsync
-, getconf
-, socat
-, procps
-, coreutils
-, gnused
-, systemd
-, glibcLocales
-, AppKit
-, Carbon
-, Cocoa
-, nixosTests
-}:
+{ lib, stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat, procps
+, coreutils, gnused, systemd, glibcLocales, AppKit, Carbon, Cocoa, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
@@ -31,7 +8,8 @@ stdenv.mkDerivation rec {
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-l77pOFNzw83Qj+MbnwGiClA7HIGvAtI0N/9k12GV7lU=";
   };
 
@@ -55,7 +33,8 @@ stdenv.mkDerivation rec {
     procps
     gnused
     coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  ] ++ lib.optionals stdenv.isLinux
+    [ systemd ]); # for systemd unit activation check
 
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
@@ -74,9 +53,7 @@ stdenv.mkDerivation rec {
     rm $out/INSTALL
   '';
 
-  passthru.tests = {
-    vm-test = nixosTests.rabbitmq;
-  };
+  passthru.tests = { vm-test = nixosTests.rabbitmq; };
 
   meta = with lib; {
     homepage = "https://www.rabbitmq.com/";

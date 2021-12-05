@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, llvm_meta
-, src
-, cmake
-, llvm
-, perl
-, version
-}:
+{ lib, stdenv, llvm_meta, src, cmake, llvm, perl, version }:
 
 stdenv.mkDerivation rec {
   pname = "openmp";

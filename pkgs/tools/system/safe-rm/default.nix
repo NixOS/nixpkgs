@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tool intended to prevent the accidental deletion of important files";
+    description =
+      "Tool intended to prevent the accidental deletion of important files";
     homepage = "https://launchpad.net/safe-rm";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

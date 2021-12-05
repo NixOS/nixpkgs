@@ -1,16 +1,5 @@
-{ lib, stdenv
-, python3
-, libffi
-, git
-, cmake
-, zlib
-, fetchgit
-, makeWrapper
-, runCommand
-, llvmPackages_5
-, glibc
-, ncurses
-}:
+{ lib, stdenv, python3, libffi, git, cmake, zlib, fetchgit, makeWrapper
+, runCommand, llvmPackages_5, glibc, ncurses }:
 
 let
   unwrapped = stdenv.mkDerivation rec {
@@ -75,25 +64,26 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-isystem" "${lib.getDev stdenv.cc.libc}/include"
-    "-I" "${lib.getDev unwrapped}/include"
-    "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
+    "-isystem"
+    "${lib.getDev stdenv.cc.libc}/include"
+    "-I"
+    "${lib.getDev unwrapped}/include"
+    "-I"
+    "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
   # https://github.com/root-project/cling/blob/v0.7/lib/Interpreter/CIFactory.cpp#L107:L111
   # Note: it would be nice to just put the compiler in Cling's PATH and let it do this by itself, but
   # unfortunately passing -nostdinc/-nostdinc++ disables Cling's autodetection logic.
-  compilerIncludeFlags = runCommand "compiler-include-flags.txt" {} ''
+  compilerIncludeFlags = runCommand "compiler-include-flags.txt" { } ''
     export LC_ALL=C
     ${stdenv.cc}/bin/c++ -xc++ -E -v /dev/null 2>&1 | sed -n -e '/^.include/,''${' -e '/^ \/.*++/p' -e '}' > tmp
     sed -e 's/^/-isystem /' -i tmp
     tr '\n' ' ' < tmp > $out
   '';
 
-in
-
-runCommand "cling-${unwrapped.version}" {
+in runCommand "cling-${unwrapped.version}" {
   buildInputs = [ makeWrapper ];
   inherit unwrapped flags compilerIncludeFlags;
   inherit (unwrapped) meta;

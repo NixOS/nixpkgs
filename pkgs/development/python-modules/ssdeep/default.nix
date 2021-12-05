@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
-, cffi
-, six
-, pytest
-, pytest-runner
-}:
+{ lib, buildPythonPackage, fetchPypi, pkgs, cffi, six, pytest, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "ssdeep";

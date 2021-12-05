@@ -1,9 +1,9 @@
-{ lib, buildPackages, fetchFromGitHub, perl, buildLinux, structuredExtraConfig ? {}, ... } @ args:
+{ lib, buildPackages, fetchFromGitHub, perl, buildLinux
+, structuredExtraConfig ? { }, ... }@args:
 let
   mptcpVersion = "0.95.1";
   modDirVersion = "4.19.126";
-in
-buildLinux ({
+in buildLinux ({
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
   inherit modDirVersion;
 

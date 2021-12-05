@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
-, openssl
-, sqlite
-, webkitgtk
-, glib-networking
-, librsvg
-, xdg-utils
-, gst_all_1
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitLab, meson, ninja, pkg-config
+, wrapGAppsHook, gdk-pixbuf, glib, gtk3, libhandy, openssl, sqlite, webkitgtk
+, glib-networking, librsvg, xdg-utils, gst_all_1 }:
 
 stdenv.mkDerivation rec {
   pname = "newsflash";
@@ -60,11 +43,7 @@ stdenv.mkDerivation rec {
 
     # Provides glib-compile-resources to compile gresources
     glib
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   buildInputs = [
     gtk3

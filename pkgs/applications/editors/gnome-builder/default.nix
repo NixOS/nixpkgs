@@ -1,41 +1,8 @@
-{ stdenv
-, lib
-, ctags
-, cmark
-, appstream-glib
-, desktop-file-utils
-, fetchurl
-, flatpak
-, gnome
-, libgit2-glib
-, gi-docgen
-, gobject-introspection
-, glade
-, gspell
-, gtk3
-, gtksourceview4
-, json-glib
-, jsonrpc-glib
-, libdazzle
-, libpeas
-, libportal
-, libxml2
-, meson
-, ninja
-, ostree
-, pcre
-, pcre2
-, pkg-config
-, python3
-, sysprof
-, template-glib
-, vala
-, vte
-, webkitgtk
-, wrapGAppsHook
-, dbus
-, xvfb-run
-}:
+{ stdenv, lib, ctags, cmark, appstream-glib, desktop-file-utils, fetchurl
+, flatpak, gnome, libgit2-glib, gi-docgen, gobject-introspection, glade, gspell
+, gtk3, gtksourceview4, json-glib, jsonrpc-glib, libdazzle, libpeas, libportal
+, libxml2, meson, ninja, ostree, pcre, pcre2, pkg-config, python3, sysprof
+, template-glib, vala, vte, webkitgtk, wrapGAppsHook, dbus, xvfb-run }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
@@ -44,7 +11,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "VjF7Vn94Yd2gNzKVsk6U7fSRnMlV+0XtYqyllGIY4BI=";
   };
 
@@ -88,10 +57,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  checkInputs = [
-    dbus
-    xvfb-run
-  ];
+  checkInputs = [ dbus xvfb-run ];
 
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
@@ -138,9 +104,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/doc/libide "$devdoc"
   '';
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-  };
+  passthru.updateScript = gnome.updateScript { packageName = pname; };
 
   meta = with lib; {
     description = "An IDE for writing GNOME-based software";

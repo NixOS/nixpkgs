@@ -1,21 +1,7 @@
-{ lib
-, backoff
-, backports-datetime-fromisoformat
-, buildPythonPackage
-, dataclasses
-, fetchFromGitHub
-, google-api-core
-, jinja2
-, ndjson
-, pillow
-, pydantic
-, pytest-cases
-, pytestCheckHook
-, pythonOlder
-, rasterio
-, requests
-, shapely
-}:
+{ lib, backoff, backports-datetime-fromisoformat, buildPythonPackage
+, dataclasses, fetchFromGitHub, google-api-core, jinja2, ndjson, pillow
+, pydantic, pytest-cases, pytestCheckHook, pythonOlder, rasterio, requests
+, shapely }:
 
 buildPythonPackage rec {
   pname = "labelbox";
@@ -47,10 +33,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pydantic==1.8" "pydantic>=1.8"
   '';
 
-  checkInputs = [
-    pytest-cases
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cases pytestCheckHook ];
 
   disabledTestPaths = [
     # Requires network access

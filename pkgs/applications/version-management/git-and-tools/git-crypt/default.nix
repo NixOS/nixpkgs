@@ -1,6 +1,5 @@
-{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, lib, stdenv
-, libxslt, docbook_xsl
-}:
+{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, lib, stdenv, libxslt
+, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "git-crypt";

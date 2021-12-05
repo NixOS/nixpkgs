@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, arrow
-, six
-, hypothesis
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, arrow, six, hypothesis
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "inform";

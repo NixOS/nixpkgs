@@ -1,34 +1,8 @@
-{ asciidoc
-, dbus
-, docbook_xml_dtd_45
-, docbook_xsl
-, fetchFromGitHub
-, lib
-, libconfig
-, libdrm
-, libev
-, libGL
-, libX11
-, libxcb
-, libxdg_basedir
-, libXext
-, libXinerama
-, libxml2
-, libxslt
-, makeWrapper
-, meson
-, ninja
-, pcre
-, pixman
-, pkg-config
-, stdenv
-, uthash
-, xcbutilimage
-, xcbutilrenderutil
-, xorgproto
-, xwininfo
-, withDebug ? false
-}:
+{ asciidoc, dbus, docbook_xml_dtd_45, docbook_xsl, fetchFromGitHub, lib
+, libconfig, libdrm, libev, libGL, libX11, libxcb, libxdg_basedir, libXext
+, libXinerama, libxml2, libxslt, makeWrapper, meson, ninja, pcre, pixman
+, pkg-config, stdenv, uthash, xcbutilimage, xcbutilrenderutil, xorgproto
+, xwininfo, withDebug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "picom";
@@ -78,9 +52,7 @@ stdenv.mkDerivation rec {
   mesonBuildType = if withDebug then "debugoptimized" else "release";
   dontStrip = withDebug;
 
-  mesonFlags = [
-    "-Dwith_docs=true"
-  ];
+  mesonFlags = [ "-Dwith_docs=true" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -94,7 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fork of XCompMgr, a sample compositing manager for X servers";
+    description =
+      "A fork of XCompMgr, a sample compositing manager for X servers";
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE

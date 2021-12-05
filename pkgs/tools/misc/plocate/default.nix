@@ -1,13 +1,4 @@
-{ stdenv
-, lib
-, fetchgit
-, pkg-config
-, meson
-, ninja
-, systemd
-, liburing
-, zstd
-}:
+{ stdenv, lib, fetchgit, pkg-config, meson, ninja, systemd, liburing, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "plocate";

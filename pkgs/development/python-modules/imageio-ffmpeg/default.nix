@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, substituteAll
-, ffmpeg
-, python
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, substituteAll, ffmpeg, python }:
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paramiko
-, selectors2
-, lxml
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, paramiko, selectors2, lxml
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ncclient";
@@ -18,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "1sjvqaxb54nmqljiw5bg1423msa9rg015wiix9fsm6djk3wpklmk";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-    lxml
-    selectors2
-  ];
+  propagatedBuildInputs = [ paramiko lxml selectors2 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ncclient" ];
 

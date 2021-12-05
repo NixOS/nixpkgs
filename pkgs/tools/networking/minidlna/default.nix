@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ lib, stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif
+, libjpeg, sqlite, gettext }:
 
-let version = "1.3.0"; in
+let version = "1.3.0";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "minidlna";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
     sha256 = "0qrw5ny82p5ybccw4pp9jma8nwl28z927v0j2561m0289imv1na7";
   };
 
@@ -15,7 +17,8 @@ stdenv.mkDerivation {
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
+  buildInputs =
+    [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}

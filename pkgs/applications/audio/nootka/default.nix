@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, cmake
-, alsa-lib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch, qtbase
-}:
+{ lib, stdenv, fetchurl, cmake, alsa-lib, fftwSinglePrec, libjack2
+, libpulseaudio, libvorbis, soundtouch, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "nootka";
@@ -13,7 +12,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    alsa-lib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch qtbase
+    alsa-lib
+    fftwSinglePrec
+    libjack2
+    libpulseaudio
+    libvorbis
+    soundtouch
+    qtbase
   ];
 
   cmakeFlags = [
@@ -25,7 +30,8 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Application for practicing playing musical scores and ear training";
+    description =
+      "Application for practicing playing musical scores and ear training";
     homepage = "https://nootka.sourceforge.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];

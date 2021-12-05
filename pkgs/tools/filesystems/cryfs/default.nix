@@ -1,28 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, python3, gtest
-, boost, cryptopp, curl, fuse, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, python3, gtest
+, boost, cryptopp, curl, fuse, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
   version = "0.10.2";
 
   src = fetchFromGitHub {
-    owner  = "cryfs";
-    repo   = "cryfs";
-    rev    = version;
+    owner = "cryfs";
+    repo = "cryfs";
+    rev = version;
     sha256 = "1m6rcc82hbaiwcwcvf5xmxma8n0jal9zhcykv9xgwiax4ny0l8kz";
   };
 
   patches = [
     (fetchpatch {
       name = "cryfs-0.10.2-install-targets.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/cryfs/files/cryfs-0.10.2-install-targets.patch?id=192ac7421ddd4093125f4997898fb62e8a140a44";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/cryfs/files/cryfs-0.10.2-install-targets.patch?id=192ac7421ddd4093125f4997898fb62e8a140a44";
       sha256 = "1jz6gpi1i7dnfm88a6n3mccwfmsmvg0d0bmp3fmqqrkbcg7in00l";
     })
     (fetchpatch {
       name = "cryfs-0.10.2-unbundle-libs.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/cryfs/files/cryfs-0.10.2-unbundle-libs.patch?id=192ac7421ddd4093125f4997898fb62e8a140a44";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/cryfs/files/cryfs-0.10.2-unbundle-libs.patch?id=192ac7421ddd4093125f4997898fb62e8a140a44";
       sha256 = "0hzss5rawcjrh8iqzc40w5yjhxdqya4gbg6dzap70180s50mahzs";
     })
 
@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic filesystem for the cloud";
-    homepage    = "https://www.cryfs.org";
-    license     = licenses.lgpl3;
+    homepage = "https://www.cryfs.org";
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ peterhoeg c0bw3b ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

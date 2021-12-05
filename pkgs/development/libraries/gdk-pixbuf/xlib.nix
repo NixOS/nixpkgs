@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gtk-doc
-, gdk-pixbuf
-, libX11
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, docbook-xsl-nons
+, docbook_xml_dtd_43, gtk-doc, gdk-pixbuf, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf-xlib";
@@ -24,26 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "15wisf2xld3cr7lprnic8fvwpcmww4rydwc1bn2zilyi52vzl2zd";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    docbook-xsl-nons
-    docbook_xml_dtd_43
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config docbook-xsl-nons docbook_xml_dtd_43 gtk-doc ];
 
-  propagatedBuildInputs = [
-    gdk-pixbuf
-    libX11
-  ];
+  propagatedBuildInputs = [ gdk-pixbuf libX11 ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   meta = with lib; {
-    description = "Deprecated API for integrating GdkPixbuf with Xlib data types";
+    description =
+      "Deprecated API for integrating GdkPixbuf with Xlib data types";
     homepage = "https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib";
     maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;

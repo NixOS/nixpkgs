@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchPypi, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "02bl7q166j6rb8av9n1jz11xlwhrzmbkjq70mwr86qaj63pcxrak";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # async_timeout 4.0.0 removes loop, https://github.com/sander76/aio-powerview-api/pull/13
@@ -35,9 +24,7 @@ buildPythonPackage rec {
       --replace ", loop=self.loop)" ")"
   '';
 
-  pythonImportsCheck = [
-    "aiopvapi"
-  ];
+  pythonImportsCheck = [ "aiopvapi" ];
 
   meta = with lib; {
     description = "Python API for the PowerView API";

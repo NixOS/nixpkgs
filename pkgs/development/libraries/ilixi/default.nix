@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, directfb, libsigcxx, libxml2, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, directfb, libsigcxx, libxml2
+, fontconfig }:
 
 # TODO: optional deps: baresip, FusionDale, FusionSound, SaWMan, doxygen,
 # Reflex, Wnn, NLS

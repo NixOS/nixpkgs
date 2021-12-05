@@ -1,18 +1,19 @@
 { lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater }:
 
 let
-  pythonEnv = python3.withPackages (packages: with packages; [
-    tornado
-    pyserial
-    pillow
-    lmdb
-    streaming-form-data
-    distro
-    inotify-simple
-    libnacl
-    paho-mqtt
-    pycurl
-  ]);
+  pythonEnv = python3.withPackages (packages:
+    with packages; [
+      tornado
+      pyserial
+      pillow
+      lmdb
+      streaming-form-data
+      distro
+      inotify-simple
+      libnacl
+      paho-mqtt
+      pycurl
+    ]);
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
   version = "unstable-2021-11-13";

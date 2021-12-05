@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, brotlipy
-, buildPythonPackage
-, fetchFromGitHub
-, yarl
-}:
+{ lib, aiohttp, brotlipy, buildPythonPackage, fetchFromGitHub, yarl }:
 
 buildPythonPackage rec {
   pname = "garminconnect-aio";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "0s2gpy5hciv9akqqhxy0d2ywp6jp9mmdngx34q7fq3xn668kcrhr";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    brotlipy
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp brotlipy yarl ];
 
   # Project has no tests
   doCheck = false;

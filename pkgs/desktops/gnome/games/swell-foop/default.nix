@@ -1,30 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, gtk3
-, libgnome-games-support
-, gnome
-, desktop-file-utils
-, clutter
-, clutter-gtk
-, gettext
-, itstool
-, libxml2
-, wrapGAppsHook
-, python3
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, glib, gtk3
+, libgnome-games-support, gnome, desktop-file-utils, clutter, clutter-gtk
+, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "swell-foop";
   version = "41.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "YEL/MTxsh9VkgnxwNpazsgkTbD/Dn+Jkpu+k4wWTg9g=";
   };
 

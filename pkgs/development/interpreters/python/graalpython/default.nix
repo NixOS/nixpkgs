@@ -1,9 +1,4 @@
-{ pkgs
-, lib
-, graalvm8
-, passthruFun
-, packageOverrides ? (self: super: {})
-, self
+{ pkgs, lib, graalvm8, passthruFun, packageOverrides ? (self: super: { }), self
 }:
 
 let

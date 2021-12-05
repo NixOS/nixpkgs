@@ -1,23 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, fetchpatch
-, python3
-, meson
-, ninja
-, vala
-, gtk3
-, glib
-, pantheon
-, gtksourceview
-, libgee
-, nix-update-script
-, webkitgtk
-, libqalculate
-, intltool
-, gnuplot
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, fetchpatch, python3, meson, ninja
+, vala, gtk3, glib, pantheon, gtksourceview, libgee, nix-update-script
+, webkitgtk, libqalculate, intltool, gnuplot, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "nasc";
@@ -64,11 +47,7 @@ stdenv.mkDerivation rec {
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Do maths like a normal person, designed for elementary OS";

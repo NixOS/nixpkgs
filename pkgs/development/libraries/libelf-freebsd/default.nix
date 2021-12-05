@@ -26,7 +26,8 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = {
-    description = "Essential compilation tools and libraries for building and analyzing ELF based program images";
+    description =
+      "Essential compilation tools and libraries for building and analyzing ELF based program images";
 
     homepage = "https://sourceforge.net/p/elftoolchain/wiki/Home/";
 

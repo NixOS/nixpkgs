@@ -5,7 +5,7 @@ let
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
+  }).overrideAttrs (attrs: {
     installPhase = attrs.installPhase + ''
       rm -R $out/storage $out/public/uploads
       ln -s ${dataDir}/.env $out/.env
@@ -26,7 +26,8 @@ in package.override rec {
   };
 
   meta = with lib; {
-    description = "A platform to create documentation/wiki content built with PHP & Laravel";
+    description =
+      "A platform to create documentation/wiki content built with PHP & Laravel";
     longDescription = ''
       A platform for storing and organising information and documentation.
       Details for BookStack can be found on the official website at https://www.bookstackapp.com/.

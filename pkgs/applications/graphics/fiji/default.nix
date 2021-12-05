@@ -1,19 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk11
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-}:
+{ stdenv, lib, fetchurl, makeWrapper, autoPatchelfHook, jdk11, makeDesktopItem
+, copyDesktopItems, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "fiji";
   version = "20201104-1356";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.tar.gz";
+    url =
+      "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.tar.gz";
     sha256 = "1jv4wjjkpid5spr2nk5xlvq3hg687qx1n5zh8zlw48y1y09c4q7a";
   };
 
@@ -69,7 +62,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://imagej.net/software/fiji/";
-    description = "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
+    description =
+      "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
     platforms = [ "x86_64-linux" ];
     license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
     maintainers = with maintainers; [ zane ];

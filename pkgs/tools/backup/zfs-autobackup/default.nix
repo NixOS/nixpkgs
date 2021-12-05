@@ -1,10 +1,8 @@
 { lib, python3Packages }:
 
-let
-  pythonPackages = python3Packages;
+let pythonPackages = python3Packages;
 
-in
-pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication rec {
   pname = "zfs_autobackup";
   version = "3.1";
 

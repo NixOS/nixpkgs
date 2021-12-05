@@ -1,28 +1,7 @@
-{ stdenv
-, rustPlatform
-, lib
-, fetchFromGitHub
-, ncurses
-, perl
-, pkg-config
-, python3
-, fontconfig
-, openssl
-, libGL
-, libX11
-, libxcb
-, libxkbcommon
-, xcbutil
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilwm
-, wayland
-, zlib
-, CoreGraphics
-, Cocoa
-, Foundation
-, libiconv
-}:
+{ stdenv, rustPlatform, lib, fetchFromGitHub, ncurses, perl, pkg-config, python3
+, fontconfig, openssl, libGL, libX11, libxcb, libxkbcommon, xcbutil
+, xcbutilimage, xcbutilkeysyms, xcbutilwm, wayland, zlib, CoreGraphics, Cocoa
+, Foundation, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
@@ -53,10 +32,7 @@ rustPlatform.buildRustPackage rec {
     ncurses # tic for terminfo
   ] ++ lib.optional stdenv.isDarwin perl;
 
-  buildInputs = [
-    fontconfig
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [ fontconfig zlib ] ++ lib.optionals stdenv.isLinux [
     libX11
     libxcb
     libxkbcommon
@@ -66,12 +42,7 @@ rustPlatform.buildRustPackage rec {
     xcbutilimage
     xcbutilkeysyms
     xcbutilwm # contains xcb-ewmh among others
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreGraphics
-    Foundation
-    libiconv
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa CoreGraphics Foundation libiconv ];
 
   postInstall = ''
     # terminfo
@@ -100,7 +71,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description =
+      "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

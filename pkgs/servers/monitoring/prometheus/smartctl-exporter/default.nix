@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildGoModule
-}:
+{ lib, fetchFromGitHub, fetchpatch, buildGoModule }:
 
 buildGoModule rec {
   pname = "smartctl_exporter";
@@ -18,12 +14,14 @@ buildGoModule rec {
   patches = [
     # Fixes out of range panic (https://github.com/prometheus-community/smartctl_exporter/issues/19)
     (fetchpatch {
-      url = "https://github.com/prometheus-community/smartctl_exporter/commit/15575301a8e2fe5802a8c066c6fa9765d50b8cfa.patch";
+      url =
+        "https://github.com/prometheus-community/smartctl_exporter/commit/15575301a8e2fe5802a8c066c6fa9765d50b8cfa.patch";
       sha256 = "sha256-HLUrGXNz3uKpuQBUgQBSw6EGbGl23hQnimTGl64M5bQ=";
     })
     # Fix validation on empty smartctl response (https://github.com/prometheus-community/smartctl_exporter/pull/31)
     (fetchpatch {
-      url = "https://github.com/prometheus-community/smartctl_exporter/commit/744b4e5f6a46e029d31d5aa46642e85f429c2cfa.patch";
+      url =
+        "https://github.com/prometheus-community/smartctl_exporter/commit/744b4e5f6a46e029d31d5aa46642e85f429c2cfa.patch";
       sha256 = "sha256-MgLtYR1SpM6XrZQQ3AgQRmNF3OnaBCqXMJRV9BOzKPc=";
     })
     # Fixes missing metrics if outside of query interval (https://github.com/prometheus-community/smartctl_exporter/pull/18)

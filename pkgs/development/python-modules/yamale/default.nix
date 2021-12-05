@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyyaml
-, ruamel-yaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook, pyyaml
+, ruamel-yaml }:
 
 buildPythonPackage rec {
   pname = "yamale";
@@ -21,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-hFBU3o3HpL0Schgzcx3oYq0IAUVGKThIfEteYcFbLnk=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ pyyaml ruamel-yaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "yamale"
-  ];
+  pythonImportsCheck = [ "yamale" ];
 
   meta = with lib; {
     description = "A schema and validator for YAML";

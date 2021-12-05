@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     ./x11-only.patch
   ];
 
-  configureFlags = [
-    "--with-bash-path=${pkgs.bash}/bin/bash"
-  ];
+  configureFlags = [ "--with-bash-path=${pkgs.bash}/bin/bash" ];
 
   preConfigure = ''
     configureFlags="$configureFlags --sysconfdir=$out/etc"
@@ -40,13 +38,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk3 udev desktop-file-utils shared-mime-info intltool
-    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
-  ] ++ (if ifuseSupport then [ ifuse ] else []);
+    gtk3
+    udev
+    desktop-file-utils
+    shared-mime-info
+    intltool
+    wrapGAppsHook
+    ffmpegthumbnailer
+    jmtpfs
+    lsof
+    udisks2
+  ] ++ (if ifuseSupport then [ ifuse ] else [ ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "A multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux

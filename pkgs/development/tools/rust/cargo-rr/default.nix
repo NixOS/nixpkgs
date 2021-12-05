@@ -1,10 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, rr
-}:
+{ lib, rustPlatform, fetchFromGitHub, nix-update-script, makeWrapper, rr }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rr";
@@ -19,11 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0fjs76n6bbbv83s213h2dgsszgxy4hbjsclyk9m81b3bfbmmb9sa";
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,7 +22,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
+    description = ''
+      Cargo subcommand "rr": a light wrapper around rr, the time-travelling debugger'';
     homepage = "https://github.com/danielzfranklin/cargo-rr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ otavio ];

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper
+, makeDesktopItem }:
 stdenv.mkDerivation rec {
   pname = "orthorobot";
   version = "1.1.1";

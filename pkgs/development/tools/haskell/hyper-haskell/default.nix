@@ -1,5 +1,5 @@
-{ lib, stdenvNoCC, fetchFromGitHub, jshon, electron_10
-, runtimeShell, hyper-haskell-server, extra-packages ? [] }:
+{ lib, stdenvNoCC, fetchFromGitHub, jshon, electron_10, runtimeShell
+, hyper-haskell-server, extra-packages ? [ ] }:
 
 let
   binPath = lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
@@ -45,7 +45,8 @@ in stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The strongly hyped graphical interpreter for the Haskell programming language";
+    description =
+      "The strongly hyped graphical interpreter for the Haskell programming language";
     homepage = "https://github.com/HeinrichApfelmus/hyper-haskell";
     license = licenses.bsd3;
     maintainers = [ maintainers.rvl ];

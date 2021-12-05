@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, numpy
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytools, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "cgen";
@@ -16,10 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    pytools
-    numpy
-  ];
+  propagatedBuildInputs = [ pytools numpy ];
 
   checkPhase = ''
     pytest

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.51";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/l/${pname}/${pname}_${version}.orig.tar.gz";
+    url =
+      "mirror://debian/pool/main/l/${pname}/${pname}_${version}.orig.tar.gz";
     sha256 = "0yf3idz1qspyff1if41xjpqqcaqa8q8icslqlnz0p9dj36gmm5l3";
   };
 
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Powerful multi-lingual file viewer / grep";
-    homepage = "https://web.archive.org/web/20160310122517/www.ff.iij4u.or.jp/~nrt/lv/";
+    homepage =
+      "https://web.archive.org/web/20160310122517/www.ff.iij4u.or.jp/~nrt/lv/";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ kayhide ];

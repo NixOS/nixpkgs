@@ -1,23 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoconf
-, automake
-, pkg-config
-, zlib
-, libpng
-, libjpeg ? null
-, libwebp ? null
-, libtiff ? null
-, libXpm ? null
-, fontconfig
-, freetype
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, pkg-config, zlib
+, libpng, libjpeg ? null, libwebp ? null, libtiff ? null, libXpm ? null
+, fontconfig, freetype }:
 
 stdenv.mkDerivation rec {
   pname = "gd";
   version = "2.3.2";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
+    url =
+      "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
     sha256 = "1yypywkh8vphcy4qqpf51kxpb0a3r7rjqk3fc61rpn70hiq092j7";
   };
 
@@ -25,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2021-40812.partial.patch";
-      url = "https://github.com/libgd/libgd/commit/6f5136821be86e7068fcdf651ae9420b5d42e9a9.patch";
+      url =
+        "https://github.com/libgd/libgd/commit/6f5136821be86e7068fcdf651ae9420b5d42e9a9.patch";
       sha256 = "11rvhd23bl05ksj8z39hwrhqqjm66svr4hl3y230wrc64rvnd2d2";
     })
   ];

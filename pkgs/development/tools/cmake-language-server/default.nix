@@ -1,13 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, poetry
-, pygls
-, pyparsing
-, cmake
-, pytest-datadir
-, pytestCheckHook
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, poetry, pygls, pyparsing, cmake
+, pytest-datadir, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "cmake-language-server";

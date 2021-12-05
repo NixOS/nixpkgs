@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, liblockfile }:
 
 stdenv.mkDerivation rec {
-  _name   = "lockfile-progs";
+  _name = "lockfile-progs";
   version = "0.1.18";
-  name    = "${_name}-${version}";
+  name = "${_name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/${_name}/${_name}_${version}.tar.gz";

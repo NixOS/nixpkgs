@@ -1,4 +1,5 @@
-{ isPy3k, buildPythonPackage, fetchPypi, service-identity, ldap3, twisted, ldaptor, mock }:
+{ isPy3k, buildPythonPackage, fetchPypi, service-identity, ldap3, twisted
+, ldaptor, mock }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";

@@ -1,10 +1,9 @@
-{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
+{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools
+, procps, sox }:
 
-let
-  version = "1.7.5";
-in
+let version = "1.7.5";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "caudec";
   inherit version;
 
@@ -24,16 +23,19 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    for executable in $(cd $out/bin && ls); do
-  wrapProgram $out/bin/$executable \
-    --prefix PATH : "${lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]}"
-    done
+      for executable in $(cd $out/bin && ls); do
+    wrapProgram $out/bin/$executable \
+      --prefix PATH : "${
+        lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]
+      }"
+      done
   '';
 
-   meta = with lib; {
+  meta = with lib; {
     homepage = "http://caudec.net/";
-    description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
-    license     = licenses.gpl3;
-    platforms   = platforms.linux ++ platforms.darwin;
+    description =
+      "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

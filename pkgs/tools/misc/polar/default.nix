@@ -11,8 +11,7 @@ let
     gemdir = ./.;
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
 
   pname = "polar";
   # The package has no releases so let's use the latest commit
@@ -39,21 +38,21 @@ stdenv.mkDerivation rec {
   # Then, wrap the scripts so that they use the correct ruby environment and put
   # these wrapped executables under bin.
   installPhase = ''
-    install -Dm644 -t $out/etc/udev/rules.d ./pkg/99-polar.rules
-    mkdir -p $out/{bin,lib/polar,share/polar}
-    cp -r lib/* $out/lib/polar/
-    for script in ./polar_*
-    do
-      raw="$out/share/polar/$script"
-      bin="$out/bin/$script"
-      cp "$script" "$raw"
-      cat > $bin <<EOF
-#!/bin/sh -e
-exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$raw" "\$@"
-EOF
-      chmod +x $bin
-    done
-  '';
+        install -Dm644 -t $out/etc/udev/rules.d ./pkg/99-polar.rules
+        mkdir -p $out/{bin,lib/polar,share/polar}
+        cp -r lib/* $out/lib/polar/
+        for script in ./polar_*
+        do
+          raw="$out/share/polar/$script"
+          bin="$out/bin/$script"
+          cp "$script" "$raw"
+          cat > $bin <<EOF
+    #!/bin/sh -e
+    exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$raw" "\$@"
+    EOF
+          chmod +x $bin
+        done
+      '';
 
   meta = with lib; {
     description = "Command-line tools to interact with Polar watches";

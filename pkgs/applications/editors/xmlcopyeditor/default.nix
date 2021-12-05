@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
+{ lib, stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre
+, wxGTK, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "xmlcopyeditor";

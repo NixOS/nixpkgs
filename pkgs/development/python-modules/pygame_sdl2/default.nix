@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchurl, isPy27
-, cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
+{ lib, buildPythonPackage, fetchurl, isPy27, cython, SDL2, SDL2_image, SDL2_ttf
+, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
   pname = "pygame_sdl2";
@@ -8,7 +8,8 @@ buildPythonPackage rec {
   name = "${pname}-${version}-${renpy_version}";
 
   src = fetchurl {
-    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}-for-renpy-${renpy_version}.tar.gz";
+    url =
+      "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}-for-renpy-${renpy_version}.tar.gz";
     sha256 = "1amgsb6mm8ssf7vdcs5dr8rlxrgyhh29m4i573z1cw61ynd7vgcw";
   };
 
@@ -17,15 +18,9 @@ buildPythonPackage rec {
     rm -rf gen gen3
   '';
 
-  nativeBuildInputs = [
-    SDL2.dev cython
-  ];
+  nativeBuildInputs = [ SDL2.dev cython ];
 
-  buildInputs = [
-    SDL2 SDL2_image SDL2_ttf SDL2_mixer
-    libjpeg libpng
-  ];
-
+  buildInputs = [ SDL2 SDL2_image SDL2_ttf SDL2_mixer libjpeg libpng ];
 
   doCheck = isPy27; # python3 tests are non-functional
 
@@ -36,9 +31,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A reimplementation of parts of pygame API using SDL2";
-    homepage    = "https://github.com/renpy/pygame_sdl2";
+    homepage = "https://github.com/renpy/pygame_sdl2";
     # Some parts are also available under Zlib License
-    license     = licenses.lgpl2;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ raskin ];
   };
 }

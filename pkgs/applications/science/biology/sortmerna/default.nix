@@ -1,4 +1,5 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib }:
+{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub
+, fetchpatch, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sortmerna";
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
+    description =
+      "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
     license = licenses.lgpl3;
     platforms = platforms.x86_64;
     homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";

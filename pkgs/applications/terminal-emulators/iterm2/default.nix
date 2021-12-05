@@ -1,12 +1,11 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
- /*
- This derivation is impure: it relies on an Xcode toolchain being installed
- and available in the expected place. The values of sandboxProfile
- are copied pretty directly from the MacVim derivation, which
- is also impure. In order to build you at least need the `sandbox`
- option set to `relaxed` or `false`.
- */
+/* This derivation is impure: it relies on an Xcode toolchain being installed
+   and available in the expected place. The values of sandboxProfile
+   are copied pretty directly from the MacVim derivation, which
+   is also impure. In order to build you at least need the `sandbox`
+   option set to `relaxed` or `false`.
+*/
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
@@ -25,16 +24,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   preConfigure = "LD=$CC";
-  makeFlagsArray = ["Nix"];
+  makeFlagsArray = [ "Nix" ];
   installPhase = ''
     mkdir -p $out/Applications
     mv Build/Products/Deployment/iTerm2.app $out/Applications/iTerm.app
   '';
 
   sandboxProfile = ''
-     (allow file-read* file-write* process-exec mach-lookup)
-     ; block homebrew dependencies
-     (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
   meta = with lib; {
@@ -43,6 +42,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ tricktron ];
     platforms = platforms.darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,24 +1,21 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "environment";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
-  machine = { pkgs, ... }:
-    {
-      boot.kernelPackages = pkgs.linuxPackages;
-      environment.etc.plainFile.text = ''
-        Hello World
-      '';
-      environment.etc."folder/with/file".text = ''
-        Foo Bar!
-      '';
+  machine = { pkgs, ... }: {
+    boot.kernelPackages = pkgs.linuxPackages;
+    environment.etc.plainFile.text = ''
+      Hello World
+    '';
+    environment.etc."folder/with/file".text = ''
+      Foo Bar!
+    '';
 
-      environment.sessionVariables = {
-        TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
-        NIXCON = "awesome";
-      };
+    environment.sessionVariables = {
+      TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
+      NIXCON = "awesome";
     };
+  };
 
   testScript = ''
     machine.succeed('[ -L "/etc/plainFile" ]')

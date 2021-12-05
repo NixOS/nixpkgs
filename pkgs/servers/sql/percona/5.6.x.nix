@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.6.49-89.0";
 
   src = fetchurl {
-    url = "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-${version}/source/tarball/percona-server-${version}.tar.gz";
+    url =
+      "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-${version}/source/tarball/percona-server-${version}.tar.gz";
     sha256 = "09qqk02iny7jvngyk6k2j0kk2sspc6gw8sm3i6nn97njbkihi697";
   };
 
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.percona.com";
-    description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
+    description =
+      "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ grahamc ];

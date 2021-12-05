@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
 
-let
-  version = "1.0.18";
-in
-stdenv.mkDerivation {
+let version = "1.0.18";
+in stdenv.mkDerivation {
   pname = "svn-all-fast-export";
   inherit version;
 

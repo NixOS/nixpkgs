@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.002";
+let version = "1.002";
 in fetchzip rec {
   name = "anonymousPro-${version}";
 
-  url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
+  url =
+    "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
     unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype

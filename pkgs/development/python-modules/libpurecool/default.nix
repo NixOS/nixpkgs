@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, netifaces
-, paho-mqtt
-, pycryptodome
-, requests
-, six
-, zeroconf
-}:
+{ lib, buildPythonPackage, fetchPypi, netifaces, paho-mqtt, pycryptodome
+, requests, six, zeroconf }:
 
 buildPythonPackage rec {
   pname = "libpurecool";
@@ -25,14 +17,8 @@ buildPythonPackage rec {
       --replace "from .zeroconf import ServiceBrowser, Zeroconf" "from zeroconf import ServiceBrowser, Zeroconf"
   '';
 
-  propagatedBuildInputs = [
-    netifaces
-    paho-mqtt
-    pycryptodome
-    requests
-    six
-    zeroconf
-  ];
+  propagatedBuildInputs =
+    [ netifaces paho-mqtt pycryptodome requests six zeroconf ];
 
   # Tests are only present in repo, https://github.com/etheralm/libpurecool/issues/36
   doCheck = false;

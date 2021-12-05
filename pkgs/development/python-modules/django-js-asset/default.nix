@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, django, python }:
 
 buildPythonPackage rec {
   pname = "django-js-asset";
@@ -17,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "141zxng0wwxalsi905cs8pdppy3ad717y3g4fkdxw4n3pd0fjp8r";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "js_asset"
-  ];
+  pythonImportsCheck = [ "js_asset" ];
 
   checkPhase = ''
     runHook preCheck
@@ -32,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Script tag with additional attributes for django.forms.Media";
+    description =
+      "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
     maintainers = with maintainers; [ hexa ];
     license = with licenses; [ bsd3 ];

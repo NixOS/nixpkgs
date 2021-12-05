@@ -1,18 +1,6 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, hex
-, lwt
-, zarith
-, alcotest
-, alcotest-lwt
-, crowbar
-, bigstring
-, lwt_log
-, ppx_inline_test
-, qcheck-alcotest
-, tezos-test-helpers
-}:
+{ lib, fetchFromGitLab, buildDunePackage, hex, lwt, zarith, alcotest
+, alcotest-lwt, crowbar, bigstring, lwt_log, ppx_inline_test, qcheck-alcotest
+, tezos-test-helpers }:
 
 buildDunePackage rec {
   pname = "tezos-stdlib";
@@ -34,12 +22,7 @@ buildDunePackage rec {
     rm -rf vendors
   '';
 
-  propagatedBuildInputs = [
-    hex
-    lwt
-    zarith
-    ppx_inline_test
-  ];
+  propagatedBuildInputs = [ hex lwt zarith ppx_inline_test ];
 
   checkInputs = [
     bigstring
@@ -57,7 +40,8 @@ buildDunePackage rec {
   doCheck = false;
 
   meta = {
-    description = "Tezos: yet-another local-extension of the OCaml standard library";
+    description =
+      "Tezos: yet-another local-extension of the OCaml standard library";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

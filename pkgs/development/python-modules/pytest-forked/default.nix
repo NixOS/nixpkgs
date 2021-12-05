@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, py
-, pytest
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, py, pytest
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytest-forked";
@@ -18,13 +12,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    py
-  ];
+  propagatedBuildInputs = [ py ];
 
   checkInputs = [ pytestCheckHook ];
 

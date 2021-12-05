@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pexpect
-, notebook
-, nix
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pexpect, notebook, nix }:
 
 buildPythonPackage rec {
   pname = "nix-kernel";
@@ -29,10 +22,7 @@ buildPythonPackage rec {
       --replace "cmdclass={'install': install_with_kernelspec}," ""
   '';
 
-  propagatedBuildInputs = [
-    pexpect
-    notebook
-  ];
+  propagatedBuildInputs = [ pexpect notebook ];
 
   # no tests in repo
   doCheck = false;

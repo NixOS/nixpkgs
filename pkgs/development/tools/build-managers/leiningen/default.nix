@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg }:
+{ lib, stdenv, fetchurl, makeWrapper, coreutils, jdk, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
   version = "2.9.7";
 
   src = fetchurl {
-    url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
+    url =
+      "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
     sha256 = "sha256-948g0ZMfAoJw53vA8MAKWg76Tst6VnYwSjSuT0aeKB0=";
   };
 
   jarsrc = fetchurl {
-    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.jar";
+    url =
+      "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.jar";
     sha256 = "sha256-gvAUFKzs3bsOvW1XFQW7Zxpv0JMja82sJGjP5fLqqAI=";
   };
 

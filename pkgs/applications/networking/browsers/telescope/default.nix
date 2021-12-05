@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, libevent
-, libressl
-, ncurses
-, autoreconfHook
-, buildPackages
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, bison, libevent, libressl, ncurses
+, autoreconfHook, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "telescope";
@@ -21,17 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r2+jvmnW9EeQf/2X2cOxnOa+HGuGHV6YMftT2MxbSYQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    bison
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config bison ];
 
-  buildInputs = [
-    libevent
-    libressl
-    ncurses
-  ];
+  buildInputs = [ libevent libressl ncurses ];
 
   configureFlags = [
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"

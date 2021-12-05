@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Add missing headers to fix build.
     (fetchpatch {
-      url = "https://github.com/riscv/riscv-isa-sim/commit/b3855682c2d744c613d2ffd6b53e3f021ecea4f3.patch";
+      url =
+        "https://github.com/riscv/riscv-isa-sim/commit/b3855682c2d744c613d2ffd6b53e3f021ecea4f3.patch";
       sha256 = "1v1mpp4iddf5n4h3kmj65g075m7xc31bxww7gldnmgl607ma7cnl";
     })
   ];
@@ -31,17 +32,17 @@ stdenv.mkDerivation rec {
   # To test whether spike is working, we run the RISC-V hello applications using the RISC-V proxy
   # kernel on the Spike emulator and see whether we get the expected output.
   doInstallCheck = true;
-  installCheckPhase =
-    let
-      riscvPkgs = import ../../../.. { crossSystem = lib.systems.examples.riscv64-embedded; };
-    in
-    ''
-      runHook preInstallCheck
+  installCheckPhase = let
+    riscvPkgs = import ../../../.. {
+      crossSystem = lib.systems.examples.riscv64-embedded;
+    };
+  in ''
+    runHook preInstallCheck
 
-      $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk ${riscvPkgs.hello}/bin/hello | grep -Fq "Hello, world"
+    $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk ${riscvPkgs.hello}/bin/hello | grep -Fq "Hello, world"
 
-      runHook postInstallCheck
-    '';
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A RISC-V ISA Simulator";

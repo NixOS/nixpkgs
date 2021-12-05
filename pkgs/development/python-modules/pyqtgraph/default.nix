@@ -1,24 +1,8 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, scipy
-, numpy
-, pyqt5
-, pyopengl
-, qt5
-, pytestCheckHook
-, freefont_ttf
-, makeFontsConf
-, fetchpatch
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, scipy, numpy, pyqt5
+, pyopengl, qt5, pytestCheckHook, freefont_ttf, makeFontsConf, fetchpatch }:
 
-let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
-in
-buildPythonPackage rec {
+let fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+in buildPythonPackage rec {
   pname = "pyqtgraph";
   version = "0.12.2";
 
@@ -32,17 +16,13 @@ buildPythonPackage rec {
   # TODO: remove when updating to 0.12.3
   patches = [
     (fetchpatch {
-      url = "https://github.com/pyqtgraph/pyqtgraph/commit/2de5cd78da92b48e48255be2f41ae332cf8bb675.patch";
+      url =
+        "https://github.com/pyqtgraph/pyqtgraph/commit/2de5cd78da92b48e48255be2f41ae332cf8bb675.patch";
       sha256 = "1hy86psqyl6ipvbg23zvackkd6f7ajs6qll0mbs0x2zmrj92hk00";
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    pyqt5
-    scipy
-    pyopengl
-  ];
+  propagatedBuildInputs = [ numpy pyqt5 scipy pyopengl ];
 
   checkInputs = [ pytestCheckHook ];
 

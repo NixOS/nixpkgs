@@ -1,25 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
-, ps, dnsutils # dig is recommended for multiple categories
-, withRecommends ? false # Install (almost) all recommended tools (see --recommends)
+{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, ps
+, dnsutils # dig is recommended for multiple categories
+, withRecommends ?
+  false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
-, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
-}:
+, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg }:
 
 let
-  prefixPath = programs:
-    "--prefix PATH ':' '${lib.makeBinPath programs}'";
+  prefixPath = programs: "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower pciutils
+    util-linuxMinimal
+    dmidecode
+    file
+    hddtemp
+    iproute2
+    ipmitool
+    usbutils
+    kmod
+    lm_sensors
+    smartmontools
+    binutils
+    tree
+    upower
+    pciutils
   ];
-  recommendedDisplayInformationPrograms = lib.optionals
-    withRecommendedDisplayInformationPrograms
+  recommendedDisplayInformationPrograms =
+    lib.optionals withRecommendedDisplayInformationPrograms
     ([ glxinfo ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
   programs = [ ps dnsutils ] # Core programs
-    ++ recommendedSystemPrograms
-    ++ recommendedDisplayInformationPrograms;
+    ++ recommendedSystemPrograms ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
   version = "3.3.04-1";
@@ -38,7 +48,9 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp inxi $out/bin/
     wrapProgram $out/bin/inxi \
-      --set PERL5LIB "${perlPackages.makePerlPath (with perlPackages; [ CpanelJSONXS ])}" \
+      --set PERL5LIB "${
+        perlPackages.makePerlPath (with perlPackages; [ CpanelJSONXS ])
+      }" \
       ${prefixPath programs}
     mkdir -p $out/share/man/man1
     cp inxi.1 $out/share/man/man1/

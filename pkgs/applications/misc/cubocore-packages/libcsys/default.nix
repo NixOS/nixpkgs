@@ -11,18 +11,13 @@ mkDerivation rec {
     sha256 = "sha256-9LH95uJJIn4FHfnikGi5UCI6nUNW+1cSZnJ/KpZDI5Y=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    udisks2
-  ];
+  buildInputs = [ qtbase udisks2 ];
 
   meta = with lib; {
-    description = "Library for managing drive and getting system resource information in real time";
+    description =
+      "Library for managing drive and getting system resource information in real time";
     homepage = "https://gitlab.com/cubocore/libcsys";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

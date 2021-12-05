@@ -1,4 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pycurl, python-dateutil, configobj, sqlalchemy, sdnotify, flask }:
+{ lib, buildPythonApplication, fetchFromGitHub, pycurl, python-dateutil
+, configobj, sqlalchemy, sdnotify, flask }:
 
 buildPythonApplication rec {
   pname = "pyca";
@@ -11,14 +12,8 @@ buildPythonApplication rec {
     sha256 = "0cvkmdlcax9da9iw4ls73vw0pxvm8wvchab5gwdy9w9ibqdpcmwh";
   };
 
-  propagatedBuildInputs = [
-    pycurl
-    python-dateutil
-    configobj
-    sqlalchemy
-    sdnotify
-    flask
-  ];
+  propagatedBuildInputs =
+    [ pycurl python-dateutil configobj sqlalchemy sdnotify flask ];
 
   meta = with lib; {
     description = "A fully functional Opencast capture agent written in Python";

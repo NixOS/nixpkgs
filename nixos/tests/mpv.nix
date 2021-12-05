@@ -1,17 +1,13 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
+  with lib;
 
-let
-  port = toString 4321;
-in
-{
-  name = "mpv";
-  meta.maintainers = with maintainers; [ zopieux ];
+  let port = toString 4321;
+  in {
+    name = "mpv";
+    meta.maintainers = with maintainers; [ zopieux ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
+    nodes.machine = { pkgs, ... }: {
       environment.systemPackages = [
         pkgs.curl
         (pkgs.wrapMpv pkgs.mpv-unwrapped {
@@ -20,9 +16,9 @@ in
       ];
     };
 
-  testScript = ''
-    machine.execute("set -m; mpv --script-opts=webui-port=${port} --idle=yes >&2 &")
-    machine.wait_for_open_port(${port})
-    assert "<title>simple-mpv-webui" in machine.succeed("curl -s localhost:${port}")
-  '';
-})
+    testScript = ''
+      machine.execute("set -m; mpv --script-opts=webui-port=${port} --idle=yes >&2 &")
+      machine.wait_for_open_port(${port})
+      assert "<title>simple-mpv-webui" in machine.succeed("curl -s localhost:${port}")
+    '';
+  })

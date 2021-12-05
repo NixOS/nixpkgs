@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip_4, qt4, pkg-config, lndir, dbus, makeWrapper }:
+{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip_4, qt4
+, pkg-config, lndir, dbus, makeWrapper }:
 
 buildPythonPackage rec {
   pname = "PyQt-x11-gpl";
@@ -55,9 +56,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  passthru = {
-    qt = qt4;
-  };
+  passthru = { qt = qt4; };
 
   meta = with lib; {
     description = "Python bindings for Qt";

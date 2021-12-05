@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aniso8601
-, graphql-core
-, graphql-relay
-, promise
-, pytestCheckHook
-, pytest-asyncio
-, pytest-benchmark
-, pytest-mock
-, pytz
-, snapshottest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aniso8601, graphql-core
+, graphql-relay, promise, pytestCheckHook, pytest-asyncio, pytest-benchmark
+, pytest-mock, pytz, snapshottest }:
 
 buildPythonPackage rec {
   pname = "graphene";
@@ -24,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Pgln369s4qXdKqLxhX+AkgpDQm+MfSZ/OVmB1AaawHI=";
   };
 
-  propagatedBuildInputs = [
-    aniso8601
-    graphql-core
-    graphql-relay
-  ];
+  propagatedBuildInputs = [ aniso8601 graphql-core graphql-relay ];
 
   checkInputs = [
     promise

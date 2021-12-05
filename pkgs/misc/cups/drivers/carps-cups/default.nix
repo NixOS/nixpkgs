@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cups
-}:
+{ stdenv, lib, fetchFromGitHub, cups }:
 
 stdenv.mkDerivation {
   pname = "carps-cups";
@@ -36,9 +32,7 @@ stdenv.mkDerivation {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "https://www.canon.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      ewok
-    ];
+    maintainers = with maintainers; [ ewok ];
   };
 }
 

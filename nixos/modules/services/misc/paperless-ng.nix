@@ -14,7 +14,8 @@ let
   } // lib.mapAttrs (_: toString) cfg.extraConfig;
 
   manage = let
-    setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+    setupEnv = lib.concatStringsSep "\n"
+      (mapAttrsToList (name: val: ''export ${name}="${val}"'') env);
   in pkgs.writeShellScript "manage" ''
     ${setupEnv}
     exec ${cfg.package}/bin/paperless-ng "$@"
@@ -31,11 +32,7 @@ let
       "-/etc/localtime"
       "-/run/postgresql"
     ];
-    BindPaths = [
-      cfg.consumptionDir
-      cfg.dataDir
-      cfg.mediaDir
-    ];
+    BindPaths = [ cfg.consumptionDir cfg.dataDir cfg.mediaDir ];
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
@@ -66,16 +63,16 @@ let
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
     SystemCallArchitectures = "native";
-    SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+    SystemCallFilter =
+      [ "@system-service" "~@privileged @resources @setuid @keyring" ];
     # Does not work well with the temporary root
     #UMask = "0066";
   };
-in
-{
+in {
   meta.maintainers = with maintainers; [ earvstedt Flakebi ];
 
   imports = [
-    (mkRemovedOptionModule [ "services" "paperless"] ''
+    (mkRemovedOptionModule [ "services" "paperless" ] ''
       The paperless module has been removed as the upstream project died.
       Users should migrate to the paperless-ng module (services.paperless-ng).
       More information can be found in the NixOS 21.11 release notes.
@@ -160,7 +157,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = ''
         Extra paperless-ng config options.
 
@@ -193,13 +190,18 @@ in
     services.redis.enable = mkIf (!hasAttr "PAPERLESS_REDIS" env) true;
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      "d '${cfg.mediaDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      "d '${cfg.dataDir}' - ${cfg.user} ${
+        config.users.users.${cfg.user}.group
+      } - -"
+      "d '${cfg.mediaDir}' - ${cfg.user} ${
+        config.users.users.${cfg.user}.group
+      } - -"
       (if cfg.consumptionDirIsPublic then
         "d '${cfg.consumptionDir}' 777 - - - -"
       else
-        "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      )
+        "d '${cfg.consumptionDir}' - ${cfg.user} ${
+          config.users.users.${cfg.user}.group
+        } - -")
     ];
 
     systemd.services.paperless-ng-server = {
@@ -222,8 +224,7 @@ in
           ${cfg.package}/bin/paperless-ng migrate
           echo ${cfg.package} > "$versionFile"
         fi
-      ''
-      + optionalString (cfg.passwordFile != null) ''
+      '' + optionalString (cfg.passwordFile != null) ''
         export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
         export PAPERLESS_ADMIN_PASSWORD=$(cat "${cfg.dataDir}/superuser-password")
         superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
@@ -239,17 +240,18 @@ in
     # Password copying can't be implemented as a privileged preStart script
     # in 'paperless-ng-server' because 'defaultServiceConfig' limits the filesystem
     # paths accessible by the service.
-    systemd.services.paperless-ng-copy-password = mkIf (cfg.passwordFile != null) {
-      requiredBy = [ "paperless-ng-server.service" ];
-      before = [ "paperless-ng-server.service" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.coreutils}/bin/install --mode 600 --owner '${cfg.user}' --compare \
-            '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
-        '';
-        Type = "oneshot";
+    systemd.services.paperless-ng-copy-password =
+      mkIf (cfg.passwordFile != null) {
+        requiredBy = [ "paperless-ng-server.service" ];
+        before = [ "paperless-ng-server.service" ];
+        serviceConfig = {
+          ExecStart = ''
+            ${pkgs.coreutils}/bin/install --mode 600 --owner '${cfg.user}' --compare \
+              '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
+          '';
+          Type = "oneshot";
+        };
       };
-    };
 
     systemd.services.paperless-ng-consumer = {
       description = "Paperless document consumer";
@@ -278,11 +280,13 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # gunicorn needs setuid
-        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid" ];
+        SystemCallFilter = defaultServiceConfig.SystemCallFilter
+          ++ [ "@setuid" ];
       };
       environment = env // {
         PATH = mkForce cfg.package.path;
-        PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
+        PYTHONPATH =
+          "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
       };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
@@ -300,9 +304,7 @@ in
         home = cfg.dataDir;
       };
 
-      groups.${defaultUser} = {
-        gid = config.ids.gids.paperless;
-      };
+      groups.${defaultUser} = { gid = config.ids.gids.paperless; };
     };
   };
 }

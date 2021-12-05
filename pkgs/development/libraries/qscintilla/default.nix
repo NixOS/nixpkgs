@@ -1,8 +1,5 @@
-{ stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
-, fixDarwinDylibNames
-}:
+{ stdenv, lib, fetchurl, unzip, qt4 ? null, qmake4Hook ? null, withQt5 ? false
+, qtbase ? null, qtmacextras ? null, qmake ? null, fixDarwinDylibNames }:
 
 let
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
@@ -12,7 +9,8 @@ in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
+    url =
+      "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
     sha256 = "5zRgV9tH0vs4RGf6/M/LE6oHQTc8XVk7xytVsvDdIKc=";
   };
 
@@ -43,7 +41,9 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
       --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
+      --replace '$$[QT_INSTALL_DATA]'         $out/share${
+        lib.optionalString (!withQt5) "/qt"
+      }
   '';
 
   meta = with lib; {

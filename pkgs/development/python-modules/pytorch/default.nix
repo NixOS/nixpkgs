@@ -1,37 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
-  mklDnnSupport ? true, useSystemNccl ? true,
-  MPISupport ? false, mpi,
-  buildDocs ? false,
-  cudaArchList ? null,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python, cudaSupport ? false
+, cudatoolkit, cudnn, nccl, magma, mklDnnSupport ? true, useSystemNccl ? true
+, MPISupport ? false, mpi, buildDocs ? false, cudaArchList ? null,
 
-  # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
+# Native build inputs
+cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
 
-  # Build inputs
-  numactl,
+# Build inputs
+numactl,
 
-  # Propagated build inputs
-  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
+# Propagated build inputs
+dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
 
-  # Unit tests
-  hypothesis, psutil,
+# Unit tests
+hypothesis, psutil,
 
-  # virtual pkg that consistently instantiates blas across nixpkgs
-  # See https://github.com/NixOS/nixpkgs/pull/83888
-  blas,
+# virtual pkg that consistently instantiates blas across nixpkgs
+# See https://github.com/NixOS/nixpkgs/pull/83888
+blas,
 
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
+# ninja (https://ninja-build.org) must be available to run C++ extensions tests,
+ninja,
 
-  # dependencies for torch.utils.tensorboard
-  pillow, six, future, tensorflow-tensorboard, protobuf,
+# dependencies for torch.utils.tensorboard
+pillow, six, future, tensorflow-tensorboard, protobuf,
 
-  isPy3k, pythonOlder }:
+isPy3k, pythonOlder }:
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
+in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
@@ -82,26 +79,26 @@ let
       "6.0"
       "6.1"
       "7.0"
-      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-                 # which leads me to believe this is the final cuda-9-compatible architecture.
+      "7.0+PTX" # I am getting a "undefined architecture compute_75" on cuda 9
+      # which leads me to believe this is the final cuda-9-compatible architecture.
     ];
 
     cuda10 = cuda9 ++ [
       "7.5"
-      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+      "7.5+PTX" # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
     ];
 
     cuda11 = cuda10 ++ [
       "8.0"
-      "8.0+PTX"  # < CUDA toolkit 11.0
+      "8.0+PTX" # < CUDA toolkit 11.0
       "8.6"
-      "8.6+PTX"  # < CUDA toolkit 11.1
+      "8.6+PTX" # < CUDA toolkit 11.1
     ];
   };
-  final_cudaArchList =
-    if !cudaSupport || cudaArchList != null
-    then cudaArchList
-    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
+  final_cudaArchList = if !cudaSupport || cudaArchList != null then
+    cudaArchList
+  else
+    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -122,15 +119,15 @@ in buildPythonPackage rec {
   disabled = !isPy3k;
 
   outputs = [
-    "out"   # output standard python package
-    "dev"   # output libtorch headers
-    "lib"   # output libtorch libraries
+    "out" # output standard python package
+    "dev" # output libtorch headers
+    "lib" # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
-    owner  = "pytorch";
-    repo   = "pytorch";
-    rev    = "v${version}";
+    owner = "pytorch";
+    repo = "pytorch";
+    rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
   };
@@ -152,7 +149,9 @@ in buildPythonPackage rec {
   '';
 
   preConfigure = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
+    export TORCH_CUDA_ARCH_LIST="${
+      lib.strings.concatStringsSep ";" final_cudaArchList
+    }"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
@@ -200,7 +199,8 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL =
+    setBool useSystemNccl; # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -209,15 +209,11 @@ in buildPythonPackage rec {
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
   # https://github.com/pytorch/pytorch/blob/v1.2.0/setup.py#L17
-  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
+  NIX_CFLAGS_COMPILE =
+    lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
 
-  nativeBuildInputs = [
-    cmake
-    util-linux
-    which
-    ninja
-    pybind11
-  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
+  nativeBuildInputs = [ cmake util-linux which ninja pybind11 ]
+    ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
@@ -230,7 +226,11 @@ in buildPythonPackage rec {
     pyyaml
     typing-extensions
     # the following are required for tensorboard support
-    pillow six future tensorflow-tensorboard protobuf
+    pillow
+    six
+    future
+    tensorflow-tensorboard
+    protobuf
   ] ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
@@ -238,24 +238,24 @@ in buildPythonPackage rec {
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
-  pythonImportsCheck = [
-    "torch"
-  ];
+  pythonImportsCheck = [ "torch" ];
 
-  checkPhase = with lib.versions; with lib.strings; concatStringsSep " " [
-    cudaStubEnv
-    "${python.interpreter} test/run_test.py"
-    "--exclude"
-    (concatStringsSep " " [
-      "utils" # utils requires git, which is not allowed in the check phase
+  checkPhase = with lib.versions;
+    with lib.strings;
+    concatStringsSep " " [
+      cudaStubEnv
+      "${python.interpreter} test/run_test.py"
+      "--exclude"
+      (concatStringsSep " " [
+        "utils" # utils requires git, which is not allowed in the check phase
 
-      # "dataloader" # psutils correctly finds and triggers multiprocessing, but is too sandboxed to run -- resulting in numerous errors
-      # ^^^^^^^^^^^^ NOTE: while test_dataloader does return errors, these are acceptable errors and do not interfere with the build
+        # "dataloader" # psutils correctly finds and triggers multiprocessing, but is too sandboxed to run -- resulting in numerous errors
+        # ^^^^^^^^^^^^ NOTE: while test_dataloader does return errors, these are acceptable errors and do not interfere with the build
 
-      # tensorboard has acceptable failures for pytorch 1.3.x due to dependencies on tensorboard-plugins
-      (optionalString (majorMinor version == "1.3" ) "tensorboard")
-    ])
-  ];
+        # tensorboard has acceptable failures for pytorch 1.3.x due to dependencies on tensorboard-plugins
+        (optionalString (majorMinor version == "1.3") "tensorboard")
+      ])
+    ];
   postInstall = ''
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/include $dev/include
@@ -310,10 +310,14 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
-    homepage    = "https://pytorch.org/";
-    license     = licenses.bsd3;
-    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    homepage = "https://pytorch.org/";
+    license = licenses.bsd3;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [
+      teh
+      thoughtpolice
+      tscholak
+    ]; # tscholak esp. for darwin-related builds
     # error: use of undeclared identifier 'noU'; did you mean 'no'?
     broken = stdenv.isDarwin;
   };

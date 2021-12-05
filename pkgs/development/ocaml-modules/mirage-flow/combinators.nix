@@ -8,6 +8,7 @@ buildDunePackage {
   propagatedBuildInputs = [ ocaml_lwt logs cstruct mirage-clock mirage-flow ];
 
   meta = mirage-flow.meta // {
-    description = "Flow implementations and combinators for MirageOS specialized to lwt";
+    description =
+      "Flow implementations and combinators for MirageOS specialized to lwt";
   };
 }

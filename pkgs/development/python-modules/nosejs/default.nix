@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "NoseJS";
@@ -21,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pypi.org/project/NoseJS/";
-    description = "A Nose plugin for integrating JavaScript tests into a Python test suite";
+    description =
+      "A Nose plugin for integrating JavaScript tests into a Python test suite";
     license = licenses.free;
   };
 

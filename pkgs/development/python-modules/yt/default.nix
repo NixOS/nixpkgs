@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, setuptools
-, sympy
-, numpy
-, ipython
-, hdf5
-, nose
-, cython
-, python
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, matplotlib, setuptools, sympy, numpy
+, ipython, hdf5, nose, cython, python, isPy3k }:
 
 buildPythonPackage rec {
   pname = "yt";
@@ -23,22 +11,11 @@ buildPythonPackage rec {
     sha256 = "6219cbf971871320a13679a57722c0363e50db5e6d4d64ea9d197461b2a7f70f";
   };
 
-  buildInputs = [
-    cython
-  ];
+  buildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    matplotlib
-    setuptools
-    sympy
-    numpy
-    ipython
-    hdf5
-  ];
+  propagatedBuildInputs = [ matplotlib setuptools sympy numpy ipython hdf5 ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     cd $out/${python.sitePackages}

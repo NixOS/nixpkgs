@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/denilsonsa/prettyping";
-    description = "A wrapper around the standard ping tool with the objective of making the output prettier, more colorful, more compact, and easier to read";
+    description =
+      "A wrapper around the standard ping tool with the objective of making the output prettier, more colorful, more compact, and easier to read";
     license = with licenses; [ mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ qoelet ];

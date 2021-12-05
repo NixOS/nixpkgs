@@ -1,44 +1,11 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, substituteAll
-, pkg-config
-, gtk-doc
-, gobject-introspection
-, gjs
-, nixosTests
-, glib
-, systemd
-, xz
-, e2fsprogs
-, libsoup
-, glib-networking
-, wrapGAppsHook
-, gpgme
-, which
-, makeWrapper
-, autoconf
-, automake
-, libtool
-, fuse
-, util-linuxMinimal
-, libselinux
-, libsodium
-, libarchive
-, libcap
-, bzip2
-, bison
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, openssl
-, python3
+{ lib, stdenv, fetchurl, fetchpatch, substituteAll, pkg-config, gtk-doc
+, gobject-introspection, gjs, nixosTests, glib, systemd, xz, e2fsprogs, libsoup
+, glib-networking, wrapGAppsHook, gpgme, which, makeWrapper, autoconf, automake
+, libtool, fuse, util-linuxMinimal, libselinux, libsodium, libarchive, libcap
+, bzip2, bison, libxslt, docbook-xsl-nons, docbook_xml_dtd_42, openssl, python3
 }:
 
-let
-  testPython = (python3.withPackages (p: with p; [
-    pyyaml
-  ]));
+let testPython = (python3.withPackages (p: with p; [ pyyaml ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2021.4";
@@ -46,7 +13,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
+    url =
+      "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
     sha256 = "sha256-21zgGhYGrzRm7HcjZwD1OmPOIOSYSlSdDquj9mo9k2E=";
   };
 
@@ -108,14 +76,20 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
+    "--with-systemdsystemgeneratordir=${
+      placeholder "out"
+    }/lib/systemd/system-generators"
     "--enable-installed-tests"
     "--with-ed25519-libsodium"
   ];
 
   makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
+    "installed_testdir=${
+      placeholder "installedTests"
+    }/libexec/installed-tests/libostree"
+    "installed_test_metadir=${
+      placeholder "installedTests"
+    }/share/installed-tests/libostree"
   ];
 
   preConfigure = ''
@@ -134,9 +108,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = {
-      installedTests = nixosTests.installed-tests.ostree;
-    };
+    tests = { installedTests = nixosTests.installed-tests.ostree; };
   };
 
   meta = with lib; {

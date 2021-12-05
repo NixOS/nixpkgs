@@ -1,9 +1,7 @@
 { stdenv, lib, fetchFromGitHub, nixosTests }:
 
-let
-  sources = (import ./sources.nix) { inherit fetchFromGitHub; };
-in
-stdenv.mkDerivation {
+let sources = (import ./sources.nix) { inherit fetchFromGitHub; };
+in stdenv.mkDerivation {
   pname = "${sources.pname}-web";
 
   inherit (sources) version src;

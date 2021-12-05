@@ -1,24 +1,7 @@
-{ lib
-, stdenv
-, alsa-lib
-, CoreAudioKit
-, fetchFromGitHub
-, fontconfig
-, ForceFeedback
-, installShellFiles
-, libpcap
-, libpulseaudio
-, libXi
-, libXinerama
-, makeDesktopItem
-, makeWrapper
-, pkg-config
-, python3
-, qtbase
-, SDL2
-, SDL2_ttf
-, which
-}:
+{ lib, stdenv, alsa-lib, CoreAudioKit, fetchFromGitHub, fontconfig
+, ForceFeedback, installShellFiles, libpcap, libpulseaudio, libXi, libXinerama
+, makeDesktopItem, makeWrapper, pkg-config, python3, qtbase, SDL2, SDL2_ttf
+, which }:
 
 let
   desktopItem = makeDesktopItem {
@@ -30,8 +13,7 @@ let
   };
 
   dest = "$out/opt/mame";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mame";
   version = "0.238";
 
@@ -43,7 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
+  NIX_CFLAGS_COMPILE =
+    [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
 
   makeFlags = [
     "TOOLS=1"
@@ -55,19 +38,21 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs =
-    [ SDL2 SDL2_ttf qtbase ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs = [ SDL2 SDL2_ttf qtbase ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    libpulseaudio
+    libXinerama
+    libXi
+    fontconfig
+  ] ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
-  nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
+  nativeBuildInputs =
+    [ python3 pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
   # install directory, so we add absolute paths here
-  patches = [
-    ./emuopts.patch
-  ];
+  patches = [ ./emuopts.patch ];
 
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \

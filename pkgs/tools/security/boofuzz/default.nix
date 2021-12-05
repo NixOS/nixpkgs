@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
@@ -41,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_raw_l3"
   ];
 
-  pythonImportsCheck = [
-    "boofuzz"
-  ];
+  pythonImportsCheck = [ "boofuzz" ];
 
   meta = with lib; {
     description = "Network protocol fuzzing tool";

@@ -1,33 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, autogen
-, gettext
-, libtool
-, pkg-config
-, unzip
-, which
-, gmp
-, libsodium
-, python3
-, sqlite
-, zlib
-}:
-let
-  py3 = python3.withPackages (p: [ p.Mako p.mrkd ]);
-in
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, autoconf, automake, autogen, gettext, libtool
+, pkg-config, unzip, which, gmp, libsodium, python3, sqlite, zlib }:
+let py3 = python3.withPackages (p: [ p.Mako p.mrkd ]);
+in stdenv.mkDerivation rec {
   pname = "clightning";
   version = "0.10.2";
 
   src = fetchurl {
-    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
+    url =
+      "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
     sha256 = "3c9dcb686217b2efe0e988e90b95777c4591e3335e259e01a94af87e0bf01809";
   };
 
-  nativeBuildInputs = [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];
+  nativeBuildInputs =
+    [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];
 
   buildInputs = [ gmp libsodium sqlite zlib ];
 

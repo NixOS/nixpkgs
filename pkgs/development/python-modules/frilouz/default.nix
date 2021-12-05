@@ -1,9 +1,4 @@
-{ lib
-, astunparse
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-}:
+{ lib, astunparse, buildPythonPackage, fetchFromGitHub, isPy3k }:
 
 buildPythonPackage rec {
   pname = "frilouz";

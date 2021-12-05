@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments, dominate, beautifulsoup4, docutils, sphinx }:
+{ lib, buildPythonPackage, fetchPypi, pygments, dominate, beautifulsoup4
+, docutils, sphinx }:
 
 buildPythonPackage rec {
   pname = "alectryon";
@@ -10,19 +10,14 @@ buildPythonPackage rec {
     sha256 = "00cxzfifvgcf3d3s8lsj1yxcwyf3a1964p86fj7b42q8pa0b4r3i";
   };
 
-  propagatedBuildInputs = [
-    pygments
-    dominate
-    beautifulsoup4
-    docutils
-    sphinx
-  ];
+  propagatedBuildInputs = [ pygments dominate beautifulsoup4 docutils sphinx ];
 
   doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/cpitclaudel/alectryon";
-    description = "A collection of tools for writing technical documents that mix Coq code and prose";
+    description =
+      "A collection of tools for writing technical documents that mix Coq code and prose";
     license = licenses.mit;
     maintainers = with maintainers; [ Zimmi48 ];
   };

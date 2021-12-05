@@ -1,11 +1,6 @@
-{ buildPythonPackage
-, cirq-core
-, google-api-core
-, protobuf
+{ buildPythonPackage, cirq-core, google-api-core, protobuf
 # test inputs
-, pytestCheckHook
-, freezegun
-}:
+, pytestCheckHook, freezegun }:
 
 buildPythonPackage rec {
   pname = "cirq-google";
@@ -19,14 +14,7 @@ buildPythonPackage rec {
       --replace "google-api-core[grpc] >= 1.14.0, < 2.0.0dev" "google-api-core[grpc] >= 1.14.0, < 3.0.0dev"
   '';
 
-  propagatedBuildInputs = [
-    cirq-core
-    google-api-core
-    protobuf
-  ];
+  propagatedBuildInputs = [ cirq-core google-api-core protobuf ];
 
-  checkInputs = [
-    freezegun
-    pytestCheckHook
-  ];
+  checkInputs = [ freezegun pytestCheckHook ];
 }

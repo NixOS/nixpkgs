@@ -17,8 +17,8 @@ rustPlatform.buildRustPackage rec {
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv CoreServices Security ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ libiconv CoreServices Security ];
 
   postInstall = let
     wrap = exe: ''

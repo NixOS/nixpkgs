@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libuninameslist";
@@ -14,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-izxG2mx+D83s78eL19ERUaLrw9FPjlJRcFZw3+xzLDQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://github.com/fontforge/libuninameslist/";

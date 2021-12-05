@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "cjdns";
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.isLinux util-linux;
 
   CFLAGS = "-O2 -Wno-error=stringop-truncation";
-  buildPhase =
-    lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
-    + "bash do";
+  buildPhase = lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 " + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \

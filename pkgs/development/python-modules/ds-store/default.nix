@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mac_alias
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mac_alias, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ds_store";

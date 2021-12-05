@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
-, libcap, ncurses, jansson
-, withGtk ? false, gtk3 }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libcap
+, ncurses, jansson, withGtk ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "mtr${lib.optionalString withGtk "-gui"}";
@@ -18,7 +17,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/traviscross/mtr/pull/411
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/traviscross/mtr/commit/aeb493e08eabcb4e6178bda0bb84e9cd01c9f213.patch";
+      url =
+        "https://github.com/traviscross/mtr/commit/aeb493e08eabcb4e6178bda0bb84e9cd01c9f213.patch";
       sha256 = "1qk8lf4sha18g36mr84vbdvll2s8khgbzyyq0as3ifx44lv0qlf2";
     })
   ];
@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ ncurses jansson ]
-    ++ lib.optional withGtk gtk3
+  buildInputs = [ ncurses jansson ] ++ lib.optional withGtk gtk3
     ++ lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hypothesis
-, pytestCheckHook
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, hypothesis, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "c965d54f1b8d0d0b19479db3924c7c36cf672dbf2aec92d43fbdaf4492ba18c0";
   };
 
-  pythonImportsCheck = [
-     "priority"
-  ];
+  pythonImportsCheck = [ "priority" ];
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytestCheckHook ];
 
   meta = with lib; {
     description = "A pure-Python implementation of the HTTP/2 priority tree";

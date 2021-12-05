@@ -1,11 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, dawg-python
-, docopt
-, pymorphy2-dicts-ru
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, dawg-python, docopt
+, pymorphy2-dicts-ru }:
 
 buildPythonPackage rec {
   pname = "pymorphy2";
@@ -18,16 +12,13 @@ buildPythonPackage rec {
     hash = "sha256-hsRHFX3uLrI0HvvkU44SgadUdWuhqjLad6iWFMWLVgw=";
   };
 
-  propagatedBuildInputs = [
-    dawg-python
-    docopt
-    pymorphy2-dicts-ru
-  ];
+  propagatedBuildInputs = [ dawg-python docopt pymorphy2-dicts-ru ];
 
   pythonImportsCheck = [ "pymorphy2" ];
 
   meta = with lib; {
-    description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
+    description =
+      "Morphological analyzer/inflection engine for Russian and Ukrainian";
     homepage = "https://github.com/kmike/pymorphy2";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -1,9 +1,8 @@
 { stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
-  # build dependencies
-  alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
-  xorg, systemd
-}:
+# build dependencies
+alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig
+, freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango, xorg
+, systemd }:
 let
 
   deps = [
@@ -46,7 +45,8 @@ in stdenv.mkDerivation rec {
   pname = "pencil";
 
   src = fetchurl {
-    url    = "http://pencil.evolus.vn/dl/V${version}.ga/pencil_${version}.ga_amd64.deb";
+    url =
+      "http://pencil.evolus.vn/dl/V${version}.ga/pencil_${version}.ga_amd64.deb";
     sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
   };
 
@@ -77,7 +77,6 @@ in stdenv.mkDerivation rec {
     ln -s $out/opt/pencil/pencil $out/bin/pencil
   '';
 
-
   preFixup = let
     packages = deps;
     libPathNative = lib.makeLibraryPath packages;
@@ -98,9 +97,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GUI prototyping/mockup tool";
-    homepage    = "https://pencil.evolus.vn/";
-    license     = licenses.gpl2; # Commercial license is also available
+    homepage = "https://pencil.evolus.vn/";
+    license = licenses.gpl2; # Commercial license is also available
     maintainers = with maintainers; [ bjornfor prikhi mrVanDalo ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

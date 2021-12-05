@@ -12,11 +12,7 @@ in {
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = [
-        "-J-Xmx2G"
-        "-J-XX:MaxInlineLevel=20"
-        "-J-XX:+UseParallelGC"
-      ];
+      example = [ "-J-Xmx2G" "-J-XX:MaxInlineLevel=20" "-J-XX:+UseParallelGC" ];
       description = ''
         Specifies additional command line argument to pass to bloop
         java process.
@@ -43,9 +39,9 @@ in {
         PATH = mkForce "${makeBinPath [ config.programs.java.package ]}";
       };
       serviceConfig = {
-        Type        = "simple";
-        ExecStart   = "${pkgs.bloop}/bin/bloop server";
-        Restart     = "always";
+        Type = "simple";
+        ExecStart = "${pkgs.bloop}/bin/bloop server";
+        Restart = "always";
       };
     };
 

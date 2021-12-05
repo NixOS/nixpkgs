@@ -1,6 +1,6 @@
 # GNU Virtual Private Ethernet
 
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (lib) mkOption mkIf types;
@@ -15,31 +15,31 @@ let
       text = cfg.configText;
     }
   else
-    throw "You must either specify contents of the config file or the config file itself for GVPE";
+    throw
+    "You must either specify contents of the config file or the config file itself for GVPE";
 
   ifupScript = if cfg.ipAddress == null || cfg.subnet == null then
-     throw "Specify IP address and subnet (with mask) for GVPE"
-   else if cfg.nodename == null then
-     throw "You must set node name for GVPE"
-   else
-   (pkgs.writeTextFile {
-    name = "gvpe-if-up";
-    text = ''
-      #! /bin/sh
+    throw "Specify IP address and subnet (with mask) for GVPE"
+  else if cfg.nodename == null then
+    throw "You must set node name for GVPE"
+  else
+    (pkgs.writeTextFile {
+      name = "gvpe-if-up";
+      text = ''
+        #! /bin/sh
 
-      export PATH=$PATH:${pkgs.iproute2}/sbin
+        export PATH=$PATH:${pkgs.iproute2}/sbin
 
-      ip link set $IFNAME up
-      ip address add ${cfg.ipAddress} dev $IFNAME
-      ip route add ${cfg.subnet} dev $IFNAME
+        ip link set $IFNAME up
+        ip address add ${cfg.ipAddress} dev $IFNAME
+        ip route add ${cfg.subnet} dev $IFNAME
 
-      ${cfg.customIFSetup}
-    '';
-    executable = true;
-  });
-in
+        ${cfg.customIFSetup}
+      '';
+      executable = true;
+    });
 
-{
+in {
   options = {
     services.gvpe = {
       enable = lib.mkEnableOption "gvpe";
@@ -47,7 +47,7 @@ in
       nodename = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description =''
+        description = ''
           GVPE node name
         '';
       };
@@ -121,8 +121,7 @@ in
 
       script = "${pkgs.gvpe}/sbin/gvpe -c /var/gvpe -D ${cfg.nodename} "
         + " ${cfg.nodename}.pid-file=/var/gvpe/gvpe.pid"
-        + " ${cfg.nodename}.if-up=if-up"
-        + " &> /var/log/gvpe";
+        + " ${cfg.nodename}.if-up=if-up" + " &> /var/log/gvpe";
 
       serviceConfig.Restart = "always";
     };

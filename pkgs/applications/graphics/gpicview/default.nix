@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/nonas/debian-clang/master/buildlogs/gpicview/gpicview-0.2.4/debian/patches/clang_FTBFS_Wreturn-type.patch";
+      url =
+        "https://raw.githubusercontent.com/nonas/debian-clang/master/buildlogs/gpicview/gpicview-0.2.4/debian/patches/clang_FTBFS_Wreturn-type.patch";
       sha256 = "02dm966bplnv10knpdx7rlpjipk884156ggd9ij05zhza0jl8xcs";
     })
   ];

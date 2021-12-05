@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.18";
 
   src = fetchurl {
-    url = "https://github.com/SSilence/selfoss/releases/download/${version}/${pname}-${version}.zip";
+    url =
+      "https://github.com/SSilence/selfoss/releases/download/${version}/${pname}-${version}.zip";
     sha256 = "1vd699r1kjc34n8avggckx2b0daj5rmgrj997sggjw2inaq4cg8b";
   };
 

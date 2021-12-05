@@ -1,8 +1,4 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, bash, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "invoke";

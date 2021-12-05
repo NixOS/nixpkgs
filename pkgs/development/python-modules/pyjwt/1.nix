@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, cryptography, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "PyJWT";
@@ -22,13 +17,9 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

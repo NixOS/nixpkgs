@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, gnome_python, librsvg, libwnck2, libgtop, pkg-config, python2, gtk2 }:
+{ lib, stdenv, fetchurl, gnome_python, librsvg, libwnck2, libgtop, pkg-config
+, python2, gtk2 }:
 
-let
-  inherit (python2.pkgs) python pygtk;
+let inherit (python2.pkgs) python pygtk;
 in stdenv.mkDerivation rec {
   ver_maj = "2.32";
   ver_min = "0";
@@ -9,7 +9,8 @@ in stdenv.mkDerivation rec {
   pname = "gnome-python-desktop";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-python-desktop/${ver_maj}/gnome-python-desktop-${version}.tar.bz2";
+    url =
+      "mirror://gnome/sources/gnome-python-desktop/${ver_maj}/gnome-python-desktop-${version}.tar.bz2";
     sha256 = "1s8f9rns9v7qlwjv9qh9lr8crp88dpzfm45hj47zc3ivpy0dbnq9";
   };
 

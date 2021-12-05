@@ -20,7 +20,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ click redis ];
 
   meta = with lib; {
-    description = "A simple, lightweight library for creating background jobs, and processing them";
+    description =
+      "A simple, lightweight library for creating background jobs, and processing them";
     homepage = "https://github.com/nvie/rq/";
     maintainers = with maintainers; [ mrmebelman ];
     license = licenses.bsd2;

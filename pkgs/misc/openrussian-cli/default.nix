@@ -1,27 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, gnumake, pkg-config, wget, unzip, gawk
-, sqlite, which, luaPackages, installShellFiles, makeWrapper
-}:
+{ stdenv, lib, fetchFromGitHub, gnumake, pkg-config, wget, unzip, gawk, sqlite
+, which, luaPackages, installShellFiles, makeWrapper }:
 stdenv.mkDerivation rec {
-  pname   = "openrussian-cli";
+  pname = "openrussian-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner   = "rhaberkorn";
-    repo    = "openrussian-cli";
-    rev     = version;
-    sha256  = "1ria7s7dpqip2wdwn35wmkry84g8ghdqnxc9cbxzzq63vl6pgvcn";
+    owner = "rhaberkorn";
+    repo = "openrussian-cli";
+    rev = version;
+    sha256 = "1ria7s7dpqip2wdwn35wmkry84g8ghdqnxc9cbxzzq63vl6pgvcn";
   };
 
   nativeBuildInputs = [
-    gnumake pkg-config wget unzip gawk sqlite which installShellFiles makeWrapper
+    gnumake
+    pkg-config
+    wget
+    unzip
+    gawk
+    sqlite
+    which
+    installShellFiles
+    makeWrapper
   ];
 
   buildInputs = with luaPackages; [ lua luasql-sqlite3 luautf8 ];
 
-  makeFlags = [
-    "LUA=${luaPackages.lua}/bin/lua"
-    "LUAC=${luaPackages.lua}/bin/luac"
-  ];
+  makeFlags =
+    [ "LUA=${luaPackages.lua}/bin/lua" "LUAC=${luaPackages.lua}/bin/luac" ];
 
   dontConfigure = true;
 
@@ -52,10 +57,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/rhaberkorn/openrussian-cli";
-    description = "Offline Console Russian Dictionary (based on openrussian.org)";
-    license     = with licenses; [ gpl3Only mit cc-by-sa-40 ];
+    homepage = "https://github.com/rhaberkorn/openrussian-cli";
+    description =
+      "Offline Console Russian Dictionary (based on openrussian.org)";
+    license = with licenses; [ gpl3Only mit cc-by-sa-40 ];
     maintainers = with maintainers; [ zane ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

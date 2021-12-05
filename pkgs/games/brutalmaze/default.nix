@@ -13,11 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    loca
-    palace
-    pygame
-  ];
+  propagatedBuildInputs = with python3Packages; [ loca palace pygame ];
 
   doCheck = false; # there's no test
 

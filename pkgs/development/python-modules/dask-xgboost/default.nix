@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, xgboost
-, dask
-, distributed
-}:
+{ lib, buildPythonPackage, fetchPypi, xgboost, dask, distributed }:
 
 buildPythonPackage rec {
   version = "0.2.0";

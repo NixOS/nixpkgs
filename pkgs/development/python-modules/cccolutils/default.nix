@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock
+, git }:
 
 buildPythonPackage rec {
   pname = "CCColUtils";

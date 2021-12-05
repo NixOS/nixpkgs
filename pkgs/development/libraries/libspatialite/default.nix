@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, geos
-, librttopo
-, libxml2
-, minizip
-, proj
-, sqlite
-, libiconv
-}:
+{ lib, stdenv, fetchurl, pkg-config, geos, librttopo, libxml2, minizip, proj
+, sqlite, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "libspatialite";
@@ -18,22 +8,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/${pname}-${version}.tar.gz";
+    url =
+      "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/${pname}-${version}.tar.gz";
     sha256 = "sha256-7svJQxHHgBLQWevA+uhupe9u7LEzA+boKzdTwbNAnpg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    geos
-    librttopo
-    libxml2
-    minizip
-    proj
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = [ geos librttopo libxml2 minizip proj sqlite ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   configureFlags = [ "--disable-freexl" ];
 

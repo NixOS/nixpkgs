@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ecdsa
-, pysha3
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, ecdsa, pysha3 }:
 
 buildPythonPackage rec {
   pname = "bip_utils";
@@ -21,12 +15,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ecdsa pysha3 ];
 
-  pythonImportsCheck = [
-    "bip_utils"
-  ];
+  pythonImportsCheck = [ "bip_utils" ];
 
   meta = {
-    description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
+    description =
+      "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
     homepage = "https://github.com/ebellocchia/bip_utils";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ prusnak ];

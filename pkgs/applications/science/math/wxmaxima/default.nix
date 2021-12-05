@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook
-, cmake
-, gettext
-, maxima
-, wxGTK
-, gnome
-}:
+{ lib, stdenv, fetchFromGitHub, wrapGAppsHook, cmake, gettext, maxima, wxGTK
+, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
@@ -27,11 +19,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    cmake
-    gettext
-  ];
+  nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 
   preConfigure = ''
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)

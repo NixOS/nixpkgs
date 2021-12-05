@@ -1,7 +1,6 @@
-{ mkDerivation, fetchFromGitHub, fetchpatch
-, aeson, aeson-pretty, attoparsec, base, bytestring, conduit, conduit-extra
-, containers, exceptions, mtl, optparse-simple, parsec, scientific, lib
-, text, unordered-containers, vector
+{ mkDerivation, fetchFromGitHub, fetchpatch, aeson, aeson-pretty, attoparsec
+, base, bytestring, conduit, conduit-extra, containers, exceptions, mtl
+, optparse-simple, parsec, scientific, lib, text, unordered-containers, vector
 }:
 mkDerivation rec {
   pname = "jl";
@@ -15,7 +14,8 @@ mkDerivation rec {
   patches = [
     # MonadFail compatibility patch. Should be removed with the next release
     (fetchpatch {
-      url = "https://github.com/chrisdone/jl/commit/6d40308811cbc22a96b47ebe69ec308b4e9fd356.patch";
+      url =
+        "https://github.com/chrisdone/jl/commit/6d40308811cbc22a96b47ebe69ec308b4e9fd356.patch";
       sha256 = "1pg92ffkg8kim5r8rz8js6fjqyjisg1266sf7p9jyxjgsskwpa4g";
     })
   ];
@@ -23,12 +23,31 @@ mkDerivation rec {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson attoparsec base bytestring containers exceptions mtl parsec
-    scientific text unordered-containers vector
+    aeson
+    attoparsec
+    base
+    bytestring
+    containers
+    exceptions
+    mtl
+    parsec
+    scientific
+    text
+    unordered-containers
+    vector
   ];
   executableHaskellDepends = [
-    aeson aeson-pretty base bytestring conduit conduit-extra containers
-    mtl optparse-simple text vector
+    aeson
+    aeson-pretty
+    base
+    bytestring
+    conduit
+    conduit-extra
+    containers
+    mtl
+    optparse-simple
+    text
+    vector
   ];
   license = lib.licenses.bsd3;
   description = "Functional sed for JSON";

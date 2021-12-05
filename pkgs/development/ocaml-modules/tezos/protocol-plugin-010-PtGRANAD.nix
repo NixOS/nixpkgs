@@ -1,10 +1,5 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-embedded-protocol-010-PtGRANAD
-, tezos-protocol-010-PtGRANAD
-, tezos-shell
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-embedded-protocol-010-PtGRANAD
+, tezos-protocol-010-PtGRANAD, tezos-shell }:
 
 buildDunePackage {
   pname = "tezos-protocol-plugin-010-PtGRANAD";

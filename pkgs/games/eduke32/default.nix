@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
-, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
-, SDL2, SDL2_mixer
-, AGL, Cocoa, GLUT, OpenGL
-}:
+, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL, SDL2, SDL2_mixer, AGL
+, Cocoa, GLUT, OpenGL }:
 
 let
   desktopItem = makeDesktopItem {
@@ -23,27 +21,14 @@ in stdenv.mkDerivation rec {
   revExtra = "6c289cce4";
 
   src = fetchurl {
-    url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    url =
+      "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
     sha256 = "sha256-/NQMsmT9z2N3KWBrP8hlGngQKJUgSP+vrNoFqJscRCk=";
   };
 
-  buildInputs = [
-    flac
-    libvorbis
-    libvpx
-    SDL2
-    SDL2_mixer
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    gtk2
-    libGL
-    libGLU
-  ] ++ lib.optionals stdenv.isDarwin [
-    AGL
-    Cocoa
-    GLUT
-    OpenGL
-  ];
+  buildInputs = [ flac libvorbis libvpx SDL2 SDL2_mixer ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib gtk2 libGL libGLU ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Cocoa GLUT OpenGL ];
 
   nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
@@ -58,14 +43,14 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
+  NIX_CFLAGS_COMPILE =
+    "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
 
-  makeFlags = [
-    "SDLCONFIG=${SDL2}/bin/sdl2-config"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # broken, see: https://github.com/NixOS/nixpkgs/issues/19098
-    "LTO=0"
-  ];
+  makeFlags = [ "SDLCONFIG=${SDL2}/bin/sdl2-config" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # broken, see: https://github.com/NixOS/nixpkgs/issues/19098
+      "LTO=0"
+    ];
 
   enableParallelBuilding = true;
 

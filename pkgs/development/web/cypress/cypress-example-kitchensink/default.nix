@@ -1,39 +1,25 @@
-{ callPackage
-, cypress
-, nodejs-12_x
+{ callPackage, cypress, nodejs-12_x
 , # FIXME: duplicated from ./regen-nix. node2nix should expose this
-  nodePackages
-, xorg
-, pkgs
-, stdenv
-,
-}:
+nodePackages, xorg, pkgs, stdenv, }:
 
 let
-  fromNode2nix = import ./cypress-example-kitchensink.nix {
-    inherit pkgs;
-  };
+  fromNode2nix = import ./cypress-example-kitchensink.nix { inherit pkgs; };
 
   nodeDependencies = fromNode2nix.shell.nodeDependencies.overrideAttrs (o: {
     CYPRESS_INSTALL_BINARY = "0";
     PUPPETEER_SKIP_DOWNLOAD = "1";
   });
 
-  fontConfigEtc = (
-    pkgs.nixos { config.fonts.fontconfig.enable = true; }
-  ).config.environment.etc.fonts.source;
+  fontConfigEtc = (pkgs.nixos {
+    config.fonts.fontconfig.enable = true;
+  }).config.environment.etc.fonts.source;
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "cypress-example-kitchensink";
   src = callPackage ./src.nix { };
   passthru.fc = fontConfigEtc;
-  nativeBuildInputs = [
-    cypress
-    nodejs-12_x
-    xorg.xorgserver
-    nodePackages.jsonplaceholder
-  ];
+  nativeBuildInputs =
+    [ cypress nodejs-12_x xorg.xorgserver nodePackages.jsonplaceholder ];
   FONTCONFIG_PATH = fontConfigEtc;
   postPatch = ''
     # Use our own offline backend. 15011 means js0n ;)

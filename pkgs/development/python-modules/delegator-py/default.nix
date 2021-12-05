@@ -1,8 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, pexpect
-}:
+{ buildPythonPackage, lib, fetchFromGitHub, pexpect }:
 
 buildPythonPackage rec {
   version = "0.1.1";

@@ -1,21 +1,12 @@
-{ pkgs ? import <nixpkgs> { }
-, lib ? pkgs.lib
-, version
-}:
-let
-  inherit (pkgs) python3;
-in
-pkgs.stdenv.mkDerivation {
+{ pkgs ? import <nixpkgs> { }, lib ? pkgs.lib, version }:
+let inherit (pkgs) python3;
+in pkgs.stdenv.mkDerivation {
   pname = "poetry2nix";
   inherit version;
 
-  buildInputs = [
-    (python3.withPackages (ps: [ ps.toml ]))
-  ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.toml ])) ];
 
-  nativeBuildInputs = [
-    pkgs.makeWrapper
-  ];
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   src = ./bin;
 
@@ -32,9 +23,9 @@ pkgs.stdenv.mkDerivation {
     mkdir -p $out/bin
     mv poetry2nix $out/bin
 
-    wrapProgram $out/bin/poetry2nix --prefix PATH ":" ${lib.makeBinPath [
-      pkgs.nix-prefetch-git
-    ]}
+    wrapProgram $out/bin/poetry2nix --prefix PATH ":" ${
+      lib.makeBinPath [ pkgs.nix-prefetch-git ]
+    }
 
     runHook postInstall
   '';

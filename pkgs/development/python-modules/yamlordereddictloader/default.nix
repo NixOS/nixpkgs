@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, ordereddict
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, ordereddict, pyyaml }:
 
 buildPythonPackage rec {
   pname = "yamlordereddictloader";

@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, flex
-, zlib
-, usePAM ? stdenv.hostPlatform.isLinux
-, pam
-, useSSL ? true
-, openssl
-}:
+{ lib, stdenv, fetchurl, bison, flex, zlib, usePAM ? stdenv.hostPlatform.isLinux
+, pam, useSSL ? true, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "monit";
@@ -20,22 +11,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex ];
-  buildInputs = [ zlib.dev ] ++
-    lib.optionals useSSL [ openssl ] ++
-    lib.optionals usePAM [ pam ];
+  buildInputs = [ zlib.dev ] ++ lib.optionals useSSL [ openssl ]
+    ++ lib.optionals usePAM [ pam ];
 
-  configureFlags = [
-    (lib.withFeature usePAM "pam")
-  ] ++ (if useSSL then [
+  configureFlags = [ (lib.withFeature usePAM "pam") ] ++ (if useSSL then [
     "--with-ssl-incl-dir=${openssl.dev}/include"
     "--with-ssl-lib-dir=${openssl.out}/lib"
-  ] else [
-    "--without-ssl"
-  ]) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # will need to check both these are true for musl
-    "libmonit_cv_setjmp_available=yes"
-    "libmonit_cv_vsnprintf_c99_conformant=yes"
-  ];
+  ] else
+    [ "--without-ssl" ])
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # will need to check both these are true for musl
+      "libmonit_cv_setjmp_available=yes"
+      "libmonit_cv_vsnprintf_c99_conformant=yes"
+    ];
 
   meta = {
     homepage = "https://mmonit.com/monit/";

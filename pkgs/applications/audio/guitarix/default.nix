@@ -1,46 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, avahi
-, bluez
-, boost
-, curl
-, eigen
-, fftw
-, gettext
-, glib
-, glib-networking
-, glibmm
-, gnome
-, gsettings-desktop-schemas
-, gtk3
-, gtkmm3
-, hicolor-icon-theme
-, intltool
-, ladspaH
-, libjack2
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, pkg-config
-, python3
-, sassc
-, serd
-, sord
-, sratom
-, wafHook
-, wrapGAppsHook
-, zita-convolver
-, zita-resampler
+{ lib, stdenv, fetchurl, fetchpatch, avahi, bluez, boost, curl, eigen, fftw
+, gettext, glib, glib-networking, glibmm, gnome, gsettings-desktop-schemas, gtk3
+, gtkmm3, hicolor-icon-theme, intltool, ladspaH, libjack2, libsndfile, lilv
+, lrdf, lv2, pkg-config, python3, sassc, serd, sord, sratom, wafHook
+, wrapGAppsHook, zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
-let
-  inherit (lib) optional;
-in
+let inherit (lib) optional;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "guitarix";
   version = "0.42.1";
 
@@ -52,7 +20,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "guitarix-gcc11.patch";
-      url = "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
+      url =
+        "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
       stripLen = 1;
       sha256 = "1qhlbf18cn6m9jdz3741nrdfqvznjna3daqmn9l10k5nd3asy4il";
     })

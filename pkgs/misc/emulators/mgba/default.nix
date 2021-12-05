@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, libepoxy
-, ffmpeg
-, imagemagick
-, libedit
-, libelf
-, libzip
-, makeDesktopItem
-, minizip
-, pkg-config
-, qtbase
-, qtmultimedia
-, qttools
-, wrapQtAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, cmake, libepoxy, ffmpeg, imagemagick
+, libedit, libelf, libzip, makeDesktopItem, minizip, pkg-config, qtbase
+, qtmultimedia, qttools, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mgba";
@@ -29,11 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-A48PVUCekdRYel/BddPCeIcEDllOvcU7pk4i4P58dpo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
     SDL2
     libepoxy

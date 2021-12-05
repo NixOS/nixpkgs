@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, jinja2
-, pyramid
-}:
+{ lib, buildPythonPackage, fetchPypi, webtest, jinja2, pyramid }:
 
 buildPythonPackage rec {
   pname = "pyramid_jinja2";

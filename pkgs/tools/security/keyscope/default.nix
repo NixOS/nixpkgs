@@ -1,14 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, DiskArbitration
-, Foundation
-, IOKit
-, Security
-}:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv
+, DiskArbitration, Foundation, IOKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "keyscope";
@@ -40,9 +31,11 @@ rustPlatform.buildRustPackage rec {
   VERGEN_GIT_SEMVER = "v${version}";
 
   meta = with lib; {
-    description = "A key and secret workflow (validation, invalidation, etc.) tool";
+    description =
+      "A key and secret workflow (validation, invalidation, etc.) tool";
     homepage = "https://github.com/spectralops/keyscope";
-    changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };

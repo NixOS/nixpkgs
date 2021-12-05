@@ -16,7 +16,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "bspwm desktop management that supports dymanic appending, removing, and renaming";
+    description =
+      "bspwm desktop management that supports dymanic appending, removing, and renaming";
     homepage = "https://github.com/cmschuetz/btops";
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.mit;

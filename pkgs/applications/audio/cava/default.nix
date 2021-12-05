@@ -1,16 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsa-lib, fftw,
-  libpulseaudio, ncurses }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsa-lib, fftw, libpulseaudio
+, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "cava";
   version = "0.7.4";
 
-  buildInputs = [
-    alsa-lib
-    fftw
-    libpulseaudio
-    ncurses
-  ];
+  buildInputs = [ alsa-lib fftw libpulseaudio ncurses ];
 
   src = fetchFromGitHub {
     owner = "karlstav";

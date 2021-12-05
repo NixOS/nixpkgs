@@ -1,25 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, pkg-config
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
-, gtk3
-, libxml2
-, granite
-, libhandy
-, libnotify
-, vte
-, libgee
-, elementary-icon-theme
-, appstream
-, pcre2
-, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, nix-update-script, fetchpatch, pkg-config, meson
+, ninja, python3, vala, desktop-file-utils, gtk3, libxml2, granite, libhandy
+, libnotify, vte, libgee, elementary-icon-theme, appstream, pcre2, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -39,15 +20,14 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/terminal/pull/611
     (fetchpatch {
-      url = "https://github.com/elementary/terminal/commit/4f6f2d9f58642ed904240c247cc0a0846baecb6b.patch";
+      url =
+        "https://github.com/elementary/terminal/commit/4f6f2d9f58642ed904240c247cc0a0846baecb6b.patch";
       sha256 = "04pbd72migxw8i949v3bmw8kfi5nr02rjcwfrx3b6xkiic9825sv";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [
@@ -62,16 +42,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
-    libgee
-    libhandy
-    libnotify
-    pcre2
-    vte
-  ];
+  buildInputs =
+    [ elementary-icon-theme granite gtk3 libgee libhandy libnotify pcre2 vte ];
 
   # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
   mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];

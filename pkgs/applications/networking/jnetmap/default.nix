@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.5.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/jnetmap/jNetMap%20${version}/jNetMap-${version}.jar";
+    url =
+      "mirror://sourceforge/project/jnetmap/jNetMap%20${version}/jNetMap-${version}.jar";
     sha256 = "0nxsfa600jhazwbabxmr9j37mhwysp0fyrvczhv3f1smiy8rjanl";
   };
 

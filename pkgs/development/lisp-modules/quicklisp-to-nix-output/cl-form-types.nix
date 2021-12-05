@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-form-types";
   version = "20211020-git";
 
@@ -8,16 +7,31 @@ rec {
 
   description = "Library for determining types of Common Lisp forms.";
 
-  deps = [ args."agutil" args."alexandria" args."anaphora" args."arrows" args."cl-environments" args."closer-mop" args."collectors" args."fiveam" args."introspect-environment" args."iterate" args."optima" args."parse-declarations-1_dot_0" args."symbol-munger" ];
+  deps = [
+    args."agutil"
+    args."alexandria"
+    args."anaphora"
+    args."arrows"
+    args."cl-environments"
+    args."closer-mop"
+    args."collectors"
+    args."fiveam"
+    args."introspect-environment"
+    args."iterate"
+    args."optima"
+    args."parse-declarations-1_dot_0"
+    args."symbol-munger"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-form-types/2021-10-20/cl-form-types-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-form-types/2021-10-20/cl-form-types-20211020-git.tgz";
     sha256 = "1f5wni1jrd5jbra2z2smw4vdw4k3bkbas8n676y3g3yv10lhddg8";
   };
 
   packageName = "cl-form-types";
 
-  asdFilesToKeep = ["cl-form-types.asd"];
+  asdFilesToKeep = [ "cl-form-types.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-form-types DESCRIPTION
@@ -39,4 +53,5 @@ rec {
     (agutil alexandria anaphora arrows cl-environments closer-mop collectors
      fiveam introspect-environment iterate optima parse-declarations-1.0
      symbol-munger)
-    VERSION 20211020-git SIBLINGS NIL PARASITES (cl-form-types/test)) */
+    VERSION 20211020-git SIBLINGS NIL PARASITES (cl-form-types/test))
+*/

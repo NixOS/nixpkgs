@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
-, webkitgtk
-}:
+{ lib, stdenv, fetchurl, autoPatchelfHook, dpkg, alsa-lib, freetype, libglvnd
+, curl, libXcursor, libXinerama, libXrandr, libXrender, libjack2, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "tonelib-zoom";
@@ -24,18 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4q2vM0/q7o/FracnO2xxnr27opqfVQoN7fsqTD9Tr/c=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    alsa-lib
-    freetype
-    libglvnd
-    webkitgtk
-  ] ++ runtimeDependencies;
+  buildInputs = [ stdenv.cc.cc.lib alsa-lib freetype libglvnd webkitgtk ]
+    ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -54,7 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
+    description =
+      "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
     homepage = "https://tonelib.net/";
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];

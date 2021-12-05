@@ -15,7 +15,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
+    description =
+      "Tools to bootstrap CAs, certificate requests, and signed certificates";
     license = licenses.asl20;
     maintainers = with maintainers; [ volth ];
   };

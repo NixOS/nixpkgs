@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.services.irkerd;
   ports = [ 6659 ];
-in
-{
+in {
   options.services.irkerd = {
     enable = mkOption {
       description = "Whether to enable irker, an IRC notification daemon.";
@@ -47,7 +46,8 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.irker}/bin/irkerd -H ${cfg.listenAddress} -n ${cfg.nick}";
+        ExecStart =
+          "${pkgs.irker}/bin/irkerd -H ${cfg.listenAddress} -n ${cfg.nick}";
         User = "irkerd";
       };
     };
@@ -59,7 +59,7 @@ in
       isSystemUser = true;
       group = "irkerd";
     };
-    users.groups.irkerd = {};
+    users.groups.irkerd = { };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openPorts ports;
     networking.firewall.allowedUDPPorts = mkIf cfg.openPorts ports;

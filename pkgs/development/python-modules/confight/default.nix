@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, toml
-}:
+{ lib, buildPythonPackage, fetchPypi, toml }:
 
 buildPythonPackage rec {
   pname = "confight";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-fJr7f9Y/zEpCedWYd04AMuhkOFqZLJOw4sDiz8SDQ/Y=";
   };
 
-  propagatedBuildInputs = [
-    toml
-  ];
+  propagatedBuildInputs = [ toml ];
 
   pythonImportsCheck = [ "confight" ];
 

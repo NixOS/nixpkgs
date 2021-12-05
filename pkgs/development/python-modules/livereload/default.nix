@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, django
-, tornado
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose, django, tornado, six }:
 
 buildPythonPackage rec {
   pname = "livereload";

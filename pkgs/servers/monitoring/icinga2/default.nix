@@ -1,8 +1,9 @@
-{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
-, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
+{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison
+, systemd, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib
+, tzdata
 # Databases
 , withMysql ? true, withPostgresql ? false
-# Features
+  # Features
 , withChecker ? true, withCompat ? false, withLivestatus ? false
 , withNotification ? true, withPerfdata ? true, withIcingadb ? true
 , nameSuffix ? "" }:
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = let
-    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
+    mkFeatureFlag = label: value:
+      "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
   in [
     # Paths
     "-DCMAKE_INSTALL_SYSCONFDIR=etc"
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  vim = runCommand "vim-icinga2-${version}" {} ''
+  vim = runCommand "vim-icinga2-${version}" { } ''
     mkdir -p $out/share/vim-plugins
     cp -r "${src}/tools/syntax/vim" $out/share/vim-plugins/icinga2
   '';

@@ -6,13 +6,15 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
-  release."1.1.2".sha256 = "sha256-SEnMilLNxh6a3oiDNGLaBr8quQ/nO2T9Fwdf/1il2Yk=";
+  release."1.1.2".sha256 =
+    "sha256-SEnMilLNxh6a3oiDNGLaBr8quQ/nO2T9Fwdf/1il2Yk=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.14"; out = "1.1.2"; }
-  ] null;
-
+  defaultVersion = with versions;
+    switch coq.coq-version [{
+      case = range "8.10" "8.14";
+      out = "1.1.2";
+    }] null;
 
   propagatedBuildInputs = [ ssreflect ];
 

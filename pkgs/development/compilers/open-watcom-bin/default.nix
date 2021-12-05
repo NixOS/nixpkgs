@@ -1,4 +1,5 @@
-{ lib, stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses, bash, coreutils }:
+{ lib, stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses
+, bash, coreutils }:
 
 let
 
@@ -83,8 +84,7 @@ let
     send "\n"
   '';
 
-in
-stdenvNoCC.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "open-watcom-bin";
   version = "1.9";
 

@@ -14,18 +14,20 @@ let
       after = [ "syslog.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      script =
-        let
-          jqFilter = "."
-            + lib.optionalString (cfg.database.host != null) "[0].db.password = \"'\"'\"$(cat ${lib.escapeShellArg cfg.database.passwordFile})\"'\"'\""
-            + " | .[0]"
-            + lib.optionalString (cfg.extraSettingsFile != null) " * .[1]";
-          jqFiles = [ settingsFile ] ++ lib.optional (cfg.extraSettingsFile != null) cfg.extraSettingsFile;
-        in
-        ''
-          export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s "${jqFilter}" ${lib.escapeShellArgs jqFiles})"
-          exec ${cfg.package}/bin/invidious
-        '';
+      script = let
+        jqFilter = "." + lib.optionalString (cfg.database.host != null) ''
+          [0].db.password = "'"'"$(cat ${
+            lib.escapeShellArg cfg.database.passwordFile
+          })"'"'"'' + " | .[0]"
+          + lib.optionalString (cfg.extraSettingsFile != null) " * .[1]";
+        jqFiles = [ settingsFile ]
+          ++ lib.optional (cfg.extraSettingsFile != null) cfg.extraSettingsFile;
+      in ''
+        export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s "${jqFilter}" ${
+          lib.escapeShellArgs jqFiles
+        })"
+        exec ${cfg.package}/bin/invidious
+      '';
 
       serviceConfig = {
         RestartSec = "2s";
@@ -60,13 +62,13 @@ let
         # Not needed because peer authentication is enabled
         password = lib.mkIf (cfg.database.host == null) "";
       };
-    } // (lib.optionalAttrs (cfg.domain != null) {
-      inherit (cfg) domain;
-    });
+    } // (lib.optionalAttrs (cfg.domain != null) { inherit (cfg) domain; });
 
     assertions = [{
-      assertion = cfg.database.host != null -> cfg.database.passwordFile != null;
-      message = "If database host isn't null, database password needs to be set";
+      assertion = cfg.database.host != null -> cfg.database.passwordFile
+        != null;
+      message =
+        "If database host isn't null, database password needs to be set";
     }];
   };
 
@@ -99,7 +101,8 @@ let
 
     systemd.services.invidious-db-clean = {
       description = "Invidious database cleanup";
-      documentation = [ "https://docs.invidious.io/Database-Information-and-Maintenance.md" ];
+      documentation =
+        [ "https://docs.invidious.io/Database-Information-and-Maintenance.md" ];
       startAt = lib.mkDefault "weekly";
       path = [ config.services.postgresql.package ];
       script = ''
@@ -116,9 +119,7 @@ let
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
 
-      serviceConfig = {
-        User = "invidious";
-      };
+      serviceConfig = { User = "invidious"; };
     };
   };
 
@@ -140,11 +141,11 @@ let
 
     assertions = [{
       assertion = cfg.domain != null;
-      message = "To use services.invidious.nginx, you need to set services.invidious.domain";
+      message =
+        "To use services.invidious.nginx, you need to set services.invidious.domain";
     }];
   };
-in
-{
+in {
   options.services.invidious = {
     enable = lib.mkEnableOption "Invidious";
 
@@ -255,9 +256,6 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    serviceConfig
-    localDatabaseConfig
-    nginxConfig
-  ]);
+  config = lib.mkIf cfg.enable
+    (lib.mkMerge [ serviceConfig localDatabaseConfig nginxConfig ]);
 }

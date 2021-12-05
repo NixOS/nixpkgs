@@ -5,8 +5,7 @@ let
   cfg = config.services.signald;
   dataDir = "/var/lib/signald";
   defaultUser = "signald";
-in
-{
+in {
   options.services.signald = {
     enable = mkEnableOption "the signald service";
 
@@ -37,12 +36,12 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
-      ${defaultUser} = { };
-    };
+    users.groups =
+      optionalAttrs (cfg.group == defaultUser) { ${defaultUser} = { }; };
 
     systemd.services.signald = {
-      description = "A daemon for interacting with the Signal Private Messenger";
+      description =
+        "A daemon for interacting with the Signal Private Messenger";
       wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -50,7 +49,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath}";
+        ExecStart =
+          "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath}";
         Restart = "on-failure";
         StateDirectory = "signald";
         RuntimeDirectory = "signald";
@@ -95,7 +95,8 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+        SystemCallFilter =
+          [ "@system-service" "~@privileged @resources @setuid @keyring" ];
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";

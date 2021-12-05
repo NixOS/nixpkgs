@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, localimport
-, pathlib2
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, localimport, pathlib2, six }:
 
 buildPythonPackage rec {
   pname = "nodepy-runtime";
@@ -15,15 +9,9 @@ buildPythonPackage rec {
     hash = "sha256-6tSsD76EpCZxkdulv1BcUZtIXGWLG6PuII25J8STygE=";
   };
 
-  propagatedBuildInputs = [
-    localimport
-    pathlib2
-    six
-  ];
+  propagatedBuildInputs = [ localimport pathlib2 six ];
 
-  pythonImportsCheck = [
-    "nodepy"
-  ];
+  pythonImportsCheck = [ "nodepy" ];
 
   meta = with lib; {
     homepage = "https://github.com/nodepy/nodepy";

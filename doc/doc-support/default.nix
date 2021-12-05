@@ -1,4 +1,4 @@
-{ pkgs ? (import ../.. {}), nixpkgs ? { }}:
+{ pkgs ? (import ../.. { }), nixpkgs ? { } }:
 let
   locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
   functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
@@ -23,8 +23,7 @@ let
       <xsl:import href="${./parameters.xml}"/>
     </xsl:stylesheet>
   '';
-in pkgs.runCommand "doc-support" {}
-''
+in pkgs.runCommand "doc-support" { } ''
   mkdir result
   (
     cd result

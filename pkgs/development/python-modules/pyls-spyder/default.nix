@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-lsp-server
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchFromGitHub, python-lsp-server, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "11ajbsia60d4c9s6m6rbvaqp1d69fcdbq6a98lkzkkzv2b9pdhkk";
   };
 
-  propagatedBuildInputs = [
-    python-lsp-server
-  ];
+  propagatedBuildInputs = [ python-lsp-server ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyls_spyder" ];
 

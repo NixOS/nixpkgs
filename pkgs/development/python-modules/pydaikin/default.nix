@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromBitbucket
-, freezegun
-, netifaces
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, urllib3
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromBitbucket, freezegun, netifaces
+, pytest-aiohttp, pytestCheckHook, pythonOlder, urllib3 }:
 
 buildPythonPackage rec {
   pname = "pydaikin";
@@ -22,21 +13,13 @@ buildPythonPackage rec {
     sha256 = "sha256-Fk6zMWgvhKp+7BMDGw89Akb4fgK6+xi+AyvEY3pdTQQ=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    netifaces
-    urllib3
-  ];
+  propagatedBuildInputs = [ aiohttp netifaces urllib3 ];
 
   # while they have tests, they do not run them in their CI and they fail as of 2.6.0
   # AttributeError: 'DaikinBRP069' object has no attribute 'last_hour_cool_energy_consumption'
   doCheck = false;
 
-  checkInputs = [
-    freezegun
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ freezegun pytest-aiohttp pytestCheckHook ];
 
   pythonImportsCheck = [ "pydaikin" ];
 

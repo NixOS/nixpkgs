@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, httpretty
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook, httpretty
+, responses }:
 
 buildPythonPackage rec {
   pname = "fixerio";
@@ -18,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "009h1mys175xdyznn5bl980vly40544s4ph1zcgqwg2i2ic93gvb";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    httpretty
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ httpretty pytestCheckHook responses ];
 
   disabledTests = [
     # tests require network access

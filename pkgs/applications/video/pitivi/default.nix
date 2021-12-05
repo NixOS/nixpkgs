@@ -1,23 +1,6 @@
-{ lib
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook
-, python3Packages
-, gst_all_1
-, gtk3
-, gobject-introspection
-, libpeas
-, librsvg
-, gnome
-, libnotify
-, gsound
-, meson
-, ninja
-, gsettings-desktop-schemas
-}:
+{ lib, fetchurl, pkg-config, gettext, itstool, python3, wrapGAppsHook
+, python3Packages, gst_all_1, gtk3, gobject-introspection, libpeas, librsvg
+, gnome, libnotify, gsound, meson, ninja, gsettings-desktop-schemas }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pitivi";
@@ -26,7 +9,9 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
   };
 
@@ -37,15 +22,8 @@ python3Packages.buildPythonApplication rec {
     ./prevent-closure-contamination.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    itstool
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config gettext itstool python3 wrapGAppsHook ];
 
   buildInputs = [
     gobject-introspection
@@ -91,7 +69,8 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "pitivi";
-      versionPolicy = "none"; # we are using dev version, since the stable one is too old
+      versionPolicy =
+        "none"; # we are using dev version, since the stable one is too old
     };
   };
 
@@ -104,7 +83,7 @@ python3Packages.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

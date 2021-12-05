@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, mount, libuuid
-, macfuse-stubs, DiskArbitration
-, crypto ? false, libgcrypt, gnutls
-}:
+{ lib, stdenv, fetchurl, pkg-config, mount, libuuid, macfuse-stubs
+, DiskArbitration, crypto ? false, libgcrypt, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
@@ -36,11 +34,10 @@ stdenv.mkDerivation rec {
     "--enable-extras"
   ];
 
-  postInstall =
-    ''
-      # Prefer ntfs-3g over the ntfs driver in the kernel.
-      ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
-    '';
+  postInstall = ''
+    # Prefer ntfs-3g over the ntfs driver in the kernel.
+    ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tuxera/ntfs-3g";

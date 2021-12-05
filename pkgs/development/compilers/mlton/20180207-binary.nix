@@ -1,17 +1,19 @@
 { lib, stdenv, fetchurl, patchelf, gmp }:
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
-in
-stdenv.mkDerivation rec {
+let dynamic-linker = stdenv.cc.bintools.dynamicLinker;
+in stdenv.mkDerivation rec {
   pname = "mlton";
   version = "20180207";
 
-  src = if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
-    url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux.tgz";
-    sha256 = "0f4q575yfm5dpg4a2wsnqn4l2zrar96p6rlsk0dw10ggyfwvsjlf";
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
+    (fetchurl {
+      url =
+        "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux.tgz";
+      sha256 = "0f4q575yfm5dpg4a2wsnqn4l2zrar96p6rlsk0dw10ggyfwvsjlf";
     })
-  else if stdenv.hostPlatform.system == "x86_64-darwin" then (fetchurl {
-    url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.gmp-static.tgz";
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    (fetchurl {
+      url =
+        "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.gmp-static.tgz";
       sha256 = "1cw7yhw48qp12q0adwf8srpjzrgkp84kmlkqw3pz8vkxz4p9hbdv";
     })
   else

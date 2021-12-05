@@ -1,6 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl
-, Security
-}:
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-index";
@@ -16,8 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "161lz96a52s53rhhkxxhcg41bsmh8w6rv6nl8gwqmg3biszy7hah";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl curl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl curl ] ++ lib.optional stdenv.isDarwin Security;
 
   doCheck = !stdenv.isDarwin;
 

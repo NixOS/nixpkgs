@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bokeh
-, emcee
-, matplotlib
-, netcdf4
-, numba
-, numpy
-, pandas
-, pytest
-, scipy
-, setuptools
-, tensorflow-probability
+{ lib, buildPythonPackage, fetchFromGitHub, bokeh, emcee, matplotlib, netcdf4
+, numba, numpy, pandas, pytest, scipy, setuptools, tensorflow-probability
 , xarray
 #, h5py (used by disabled tests)
 #, pymc3 (broken)
@@ -84,7 +72,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "ArviZ is a Python package for exploratory analysis of Bayesian models";
+    description =
+      "ArviZ is a Python package for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
     license = licenses.asl20;
     maintainers = [ maintainers.omnipotententity ];

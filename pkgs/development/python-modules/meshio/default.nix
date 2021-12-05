@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, netcdf4
-, h5py
-, exdown
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, netcdf4, h5py, exdown
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "meshio";
@@ -18,18 +11,11 @@ buildPythonPackage rec {
     sha256 = "0kv832s2vyff30zz8yqypw5jifwdanvh5x56d2bzkvy94h4jlddy";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    netcdf4
-    h5py
-  ];
+  propagatedBuildInputs = [ numpy netcdf4 h5py ];
 
-  checkInputs = [
-    exdown
-    pytestCheckHook
-  ];
+  checkInputs = [ exdown pytestCheckHook ];
 
-  pythonImportsCheck = ["meshio"];
+  pythonImportsCheck = [ "meshio" ];
 
   meta = with lib; {
     homepage = "https://github.com/nschloe/meshio";

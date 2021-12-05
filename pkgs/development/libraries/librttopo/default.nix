@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, autoreconfHook
-, geos
-}:
+{ lib, stdenv, fetchFromGitea, autoreconfHook, geos }:
 
 stdenv.mkDerivation rec {
   pname = "librttopo";

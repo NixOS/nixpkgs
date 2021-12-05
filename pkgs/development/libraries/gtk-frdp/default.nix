@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, glib
-, gtk3
-, freerdp
-, unstableGitUpdater
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, vala
+, gobject-introspection, glib, gtk3, freerdp, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
@@ -24,19 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "2YOLpyd26qWQKvneH4ww2DS8h/ZNYDmfbYIjQDvDMko=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection ];
 
-  buildInputs = [
-    glib
-    gtk3
-    freerdp
-  ];
+  buildInputs = [ glib gtk3 freerdp ];
 
   passthru = {
     updateScript = unstableGitUpdater {

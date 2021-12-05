@@ -1,25 +1,6 @@
-{ lib, stdenv
-, fetchFromGitLab
-, nix-update-script
-, meson
-, ninja
-, gettext
-, python3
-, rustPlatform
-, pkg-config
-, gtksourceview4
-, glib
-, libhandy_0
-, gtk3
-, dbus
-, openssl
-, sqlite
-, gst_all_1
-, cairo
-, gdk-pixbuf
-, gspell
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, meson, ninja, gettext
+, python3, rustPlatform, pkg-config, gtksourceview4, glib, libhandy_0, gtk3
+, dbus, openssl, sqlite, gst_all_1, cairo, gdk-pixbuf, gspell, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "fractal";
@@ -61,9 +42,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-editing-services
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override {
-      gtkSupport = true;
-    })
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gstreamer
     gst_all_1.gst-devtools
     gtk3
@@ -78,11 +57,7 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Matrix group messaging app";

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "3.20";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bwbasic/bwbasic/version%203.20/bwbasic-3.20.zip";
+    url =
+      "mirror://sourceforge/project/bwbasic/bwbasic/version%203.20/bwbasic-3.20.zip";
     sha256 = "1w9r4cl7z1lh52c1jpjragbspi1qn0zb7jhcsldav4gdnzxfw67f";
   };
 

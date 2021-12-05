@@ -1,17 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, icu, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, icu, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fltrdr";
   version = "0.3.1";
 
   src = fetchFromGitHub {
-    repo   = "fltrdr";
-    owner  = "octobanana";
-    rev    = version;
+    repo = "fltrdr";
+    owner = "octobanana";
+    rev = version;
     sha256 = "1vpci7vqzcpdd21zgigyz38k77r9fc81dmiwsvfr8w7gad5sg6sj";
   };
 
@@ -33,8 +29,8 @@ stdenv.mkDerivation rec {
       setting.
     '';
 
-    platforms   = platforms.linux; # can only test linux
-    license     = licenses.mit;
+    platforms = platforms.linux; # can only test linux
+    license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }

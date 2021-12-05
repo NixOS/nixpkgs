@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, Theano
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, Theano, isPy3k }:
 
 buildPythonPackage rec {
   pname = "Lasagne";
@@ -22,7 +16,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Lightweight library to build and train neural networks in Theano";
+    description =
+      "Lightweight library to build and train neural networks in Theano";
     homepage = "https://github.com/Lasagne/Lasagne";
     maintainers = with maintainers; [ NikolaMandic ];
     license = licenses.mit;

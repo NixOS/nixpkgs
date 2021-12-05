@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oslotest
-, pbr
-, testscenarios
-, stestr
-}:
+{ lib, buildPythonPackage, fetchPypi, oslotest, pbr, testscenarios, stestr }:
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
@@ -25,11 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  checkInputs = [
-    oslotest
-    stestr
-    testscenarios
-  ];
+  checkInputs = [ oslotest stestr testscenarios ];
 
   checkPhase = ''
     stestr run

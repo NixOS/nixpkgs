@@ -1,15 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-auth
-, google-cloud-iam
-, google-cloud-core
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-auth
+, google-cloud-iam, google-cloud-core, google-cloud-kms, google-cloud-testutils
+, google-resumable-media, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
@@ -20,11 +11,8 @@ buildPythonPackage rec {
     sha256 = "sha256-d1TU3KpFl1UUtATs4NortCkqy8Z8pVmmnhKhnVT82wY=";
   };
 
-  propagatedBuildInputs = [
-    google-auth
-    google-cloud-core
-    google-resumable-media
-  ];
+  propagatedBuildInputs =
+    [ google-auth google-cloud-core google-resumable-media ];
 
   checkInputs = [
     google-cloud-iam

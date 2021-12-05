@@ -1,22 +1,20 @@
-{ mkDerivation, lib, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
-  libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
+{ mkDerivation, lib, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw
+, libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
   version = "9.4.4";
   pname = "qsstv";
 
   src = fetchurl {
-    url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
+    url =
+      "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
     sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
   };
 
-  nativeBuildInputs = [
-    qmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
-  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsa-lib hamlib libv4l
-                  fftwFloat ];
+  buildInputs =
+    [ qtbase openjpeg fftw libpulseaudio alsa-lib hamlib libv4l fftwFloat ];
 
   postInstall = ''
     # Install desktop icon

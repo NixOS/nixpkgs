@@ -2,10 +2,9 @@
 , xylib, readline, gnuplot, swig3 }:
 
 let
-  name    = "fityk";
+  name = "fityk";
   version = "1.3.1";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchFromGitHub {
@@ -16,8 +15,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline
-    gnuplot swig3 ];
+  buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline gnuplot swig3 ];
 
   meta = {
     description = "Curve fitting and peak fitting software";

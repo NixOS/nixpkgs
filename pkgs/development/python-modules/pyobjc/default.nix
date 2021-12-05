@@ -14,7 +14,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A bridge between the Python and Objective-C programming languages";
+    description =
+      "A bridge between the Python and Objective-C programming languages";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     homepage = "https://pythonhosted.org/pyobjc/";

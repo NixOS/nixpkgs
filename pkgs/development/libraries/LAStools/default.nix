@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
-  version = "201003"; # LAStools makes release-ish commits with a message containing their version number as YYMMDD; these align with their website changelog
+  version =
+    "201003"; # LAStools makes release-ish commits with a message containing their version number as YYMMDD; these align with their website changelog
 
   src = fetchFromGitHub {
     owner = "LAStools";
@@ -15,13 +16,9 @@ stdenv.mkDerivation rec {
     ./drop-64-suffix.patch # necessary to prevent '64' from being appended to the names of the executables
   ];
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Software for rapid LiDAR processing";

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, wrapt
-, aioitertools
-, aiohttp
-, botocore
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, wrapt, aioitertools, aiohttp
+, botocore }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";

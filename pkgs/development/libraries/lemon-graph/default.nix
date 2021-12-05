@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-}:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "lemon-graph";
@@ -19,7 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
-    description = "Efficient library for combinatorial optimization tasks on graphs and networks";
+    description =
+      "Efficient library for combinatorial optimization tasks on graphs and networks";
     license = licenses.boost;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.all;

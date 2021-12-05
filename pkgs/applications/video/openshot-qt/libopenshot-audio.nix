@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, doxygen
-, libX11
-, libXcursor
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, pkg-config
-, zlib
-, AGL
-, Cocoa
-, Foundation
-}:
+{ lib, stdenv, fetchFromGitHub, alsa-lib, cmake, doxygen, libX11, libXcursor
+, libXext, libXft, libXinerama, libXrandr, pkg-config, zlib, AGL, Cocoa
+, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
@@ -28,15 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake doxygen pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ (if stdenv.isDarwin then [
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ (if stdenv.isDarwin then [
       AGL
       Cocoa
       Foundation

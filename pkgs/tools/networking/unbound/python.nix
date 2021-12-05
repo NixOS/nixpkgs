@@ -1,9 +1,7 @@
 { lib, stdenv, unbound, openssl, expat, libevent, swig, pythonPackages }:
 
-let
-  inherit (pythonPackages) python;
-in
-stdenv.mkDerivation rec {
+let inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   pname = "pyunbound";
   inherit (unbound) version src;
 
@@ -40,11 +38,8 @@ stdenv.mkDerivation rec {
       --replace "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}"
   '';
 
-  installFlags = [
-    "configfile=\${out}/etc/unbound/unbound.conf"
-    "pyunbound-install"
-    "lib"
-  ];
+  installFlags =
+    [ "configfile=\${out}/etc/unbound/unbound.conf" "pyunbound-install" "lib" ];
 
   # All we want is the Unbound Python module
   postInstall = ''
@@ -55,13 +50,14 @@ stdenv.mkDerivation rec {
     # We don't need anything else
     rm -r $out/bin $out/share $out/include $out/etc/unbound
   ''
-  # patchelf is only available on Linux and no patching is needed on darwin
-  + lib.optionalString stdenv.isLinux ''
-    patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
-  '';
+    # patchelf is only available on Linux and no patching is needed on darwin
+    + lib.optionalString stdenv.isLinux ''
+      patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
+    '';
 
   meta = with lib; {
-    description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
+    description =
+      "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];

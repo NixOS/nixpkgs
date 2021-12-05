@@ -11,9 +11,7 @@ let
     ${cfg.config}
   '';
 
-in
-with lib;
-{
+in with lib; {
   options = {
     services.haproxy = {
 
@@ -74,7 +72,8 @@ with lib;
           # when running the config test, don't be quiet so we can see what goes wrong
           "/run/haproxy/haproxy -c -f ${haproxyCfg}"
         ];
-        ExecStart = "/run/haproxy/haproxy -Ws -f /etc/haproxy.cfg -p /run/haproxy/haproxy.pid";
+        ExecStart =
+          "/run/haproxy/haproxy -Ws -f /etc/haproxy.cfg -p /run/haproxy/haproxy.pid";
         # support reloading
         ExecReload = [
           "${pkgs.haproxy}/sbin/haproxy -c -f ${haproxyCfg}"
@@ -92,7 +91,8 @@ with lib;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        SystemCallFilter= "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
+        SystemCallFilter =
+          "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
         # needed in case we bind to port < 1024
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
@@ -105,8 +105,6 @@ with lib;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "haproxy") {
-      haproxy = {};
-    };
+    users.groups = optionalAttrs (cfg.group == "haproxy") { haproxy = { }; };
   };
 }

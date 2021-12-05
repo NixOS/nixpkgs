@@ -16,8 +16,7 @@ let
       sha256 = "1ffgh5826985phc8amvzl9iydvsnij5brh4gczfh201vfmw9d4hh";
     };
   });
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "powerlevel10k";
   version = "1.15.0";
 

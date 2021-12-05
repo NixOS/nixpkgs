@@ -1,12 +1,5 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, gtksourceview3
-, libappindicator-gtk3
-, libnotify
-}:
+{ lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection
+, gtksourceview3, libappindicator-gtk3, libnotify }:
 
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
@@ -24,12 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [
-    gobject-introspection
-    gtksourceview3
-    libappindicator-gtk3
-    libnotify
-  ];
+  buildInputs =
+    [ gobject-introspection gtksourceview3 libappindicator-gtk3 libnotify ];
 
   propagatedBuildInputs = with python3Packages; [
     dbus-python
@@ -40,7 +29,8 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGapps = true;
 
-  pythonPath = with python3Packages; requiredPythonModules [ dbus-python xlib pygobject3 ];
+  pythonPath = with python3Packages;
+    requiredPythonModules [ dbus-python xlib pygobject3 ];
 
   postInstall = ''
     rm $out/bin/autokey-qt

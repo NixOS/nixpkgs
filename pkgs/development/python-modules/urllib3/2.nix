@@ -1,21 +1,6 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, cryptography
-, python-dateutil
-, fetchpatch
-, fetchPypi
-, idna
-, mock
-, pyopenssl
-, pysocks
-, pytest-freezegun
-, pytest-timeout
-, pytestCheckHook
-, tornado
-, trustme
-}:
+{ lib, brotli, buildPythonPackage, certifi, cryptography, python-dateutil
+, fetchpatch, fetchPypi, idna, mock, pyopenssl, pysocks, pytest-freezegun
+, pytest-timeout, pytestCheckHook, tornado, trustme }:
 
 buildPythonPackage rec {
   pname = "urllib3";
@@ -29,19 +14,14 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "CVE-2021-28363.patch";
-      url = "https://github.com/urllib3/urllib3/commit/8d65ea1ecf6e2cdc27d42124e587c1b83a3118b0.patch";
+      url =
+        "https://github.com/urllib3/urllib3/commit/8d65ea1ecf6e2cdc27d42124e587c1b83a3118b0.patch";
       sha256 = "1lqhrd11p03iv14bp89rh67ynf000swmwsfvr3jpfdycdqr3ka9q";
     })
   ];
 
-  propagatedBuildInputs = [
-    brotli
-    certifi
-    cryptography
-    idna
-    pyopenssl
-    pysocks
-  ];
+  propagatedBuildInputs =
+    [ brotli certifi cryptography idna pyopenssl pysocks ];
 
   checkInputs = [
     python-dateutil

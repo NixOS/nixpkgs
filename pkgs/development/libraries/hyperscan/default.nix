@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, coreutils, gnused, util-linux, fetchpatch
-, boost
-, withStatic ? false # build only shared libs by default, build static+shared if true
+{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3, coreutils, gnused
+, util-linux, fetchpatch, boost, withStatic ?
+  false # build only shared libs by default, build static+shared if true
 }:
 
 # NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
@@ -24,23 +23,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python3
+    cmake
+    ragel
+    python3
     # Consider simply using busybox for these
     # Need at least: rev, sed, cut, nm
-    coreutils gnused util-linux
+    coreutils
+    gnused
+    util-linux
   ];
 
-  cmakeFlags = [
-    "-DFAT_RUNTIME=ON"
-    "-DBUILD_AVX512=ON"
-  ]
-  ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags = [ "-DFAT_RUNTIME=ON" "-DBUILD_AVX512=ON" ]
+    ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+    ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
   patches = [
     (fetchpatch {
       # part of https://github.com/intel/hyperscan/pull/336
-      url = "https://github.com/intel/hyperscan/commit/e2c4010b1fc1272cab816ba543940b3586e68a0c.patch";
+      url =
+        "https://github.com/intel/hyperscan/commit/e2c4010b1fc1272cab816ba543940b3586e68a0c.patch";
       sha256 = "sha256-doVNwROL6MTcgOW8jBwGTnxe0zvxjawiob/g6AvXLak=";
     })
   ];
@@ -69,7 +70,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.hyperscan.io/";
     maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" ]; # can't find nm on darwin ; might build on aarch64 but untested
+    platforms = [
+      "x86_64-linux"
+    ]; # can't find nm on darwin ; might build on aarch64 but untested
     license = licenses.bsd3;
   };
 }

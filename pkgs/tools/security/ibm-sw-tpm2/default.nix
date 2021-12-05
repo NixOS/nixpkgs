@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/kgoldman/ibmswtpm2/commit/e6684009aff9c1bad38875e3319c2e02ef791424.patch";
+      url =
+        "https://github.com/kgoldman/ibmswtpm2/commit/e6684009aff9c1bad38875e3319c2e02ef791424.patch";
       sha256 = "1flzlri807c88agmpb0w8xvh5f16mmqv86xw4ic4z272iynzd40j";
     })
   ];
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
+    description =
+      "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];

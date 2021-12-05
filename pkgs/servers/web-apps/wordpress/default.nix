@@ -14,13 +14,12 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/wordpress
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) wordpress;
-  };
+  passthru.tests = { inherit (nixosTests) wordpress; };
 
   meta = with lib; {
     homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
+    description =
+      "WordPress is open source software you can use to create a beautiful website, blog, or app";
     license = [ licenses.gpl2 ];
     maintainers = [ maintainers.basvandijk ];
     platforms = platforms.all;

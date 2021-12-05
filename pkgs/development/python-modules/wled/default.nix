@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, backoff
-, poetry-core
-, packaging
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp, backoff
+, poetry-core, packaging, yarl, aresponses, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "wled";
@@ -25,22 +14,11 @@ buildPythonPackage rec {
     sha256 = "1jhykilb81sp1srxk91222qglwdlr993ssvgfnl837nbcx6ws1hw";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    backoff
-    packaging
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp backoff packaging yarl ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml

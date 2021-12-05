@@ -2,12 +2,12 @@
 let
   pname = "phpmd";
   version = "2.8.2";
-in
-mkDerivation {
+in mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
+    url =
+      "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
     sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
   };
 

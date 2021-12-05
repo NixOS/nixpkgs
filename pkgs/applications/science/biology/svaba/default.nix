@@ -1,4 +1,4 @@
-{ lib, stdenv, zlib, bzip2, xz, fetchFromGitHub } :
+{ lib, stdenv, zlib, bzip2, xz, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
+    description =
+      "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
     license = licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";
     maintainers = with maintainers; [ scalavision ];

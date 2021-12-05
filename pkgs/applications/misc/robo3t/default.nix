@@ -1,35 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, zlib
-, glib
-, xorg
-, dbus
-, fontconfig
-, libGL
-, freetype
-, xkeyboard_config
-, makeDesktopItem
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, curl, zlib, glib, xorg, dbus, fontconfig, libGL
+, freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
-in
+  curlWithGnuTls = curl.override {
+    gnutlsSupport = true;
+    opensslSupport = false;
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "robo3t";
   version = "1.4.3";
   rev = "48f7dfd";
 
   src = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
+    url =
+      "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
     sha256 = "sha256-pH4q/O3bq45ZZn+s/12iScd0WbfkcLjK4MBdVCMXK00=";
   };
 
   icon = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/raw/${rev}/install/macosx/robomongo.iconset/icon_128x128.png";
+    url =
+      "https://github.com/Studio3T/robomongo/raw/${rev}/install/macosx/robomongo.iconset/icon_128x128.png";
     sha256 = "sha256-2PkUxBq2ow0wl09k8B6LJJUQ+y4GpnmoAeumKN1u5xg=";
   };
 

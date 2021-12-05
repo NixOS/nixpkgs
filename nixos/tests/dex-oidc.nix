@@ -14,25 +14,21 @@ import ./make-test-python.nix ({ lib, ... }: {
         };
         web.http = "127.0.0.1:8080";
         oauth2.skipApprovalScreen = true;
-        staticClients = [
-          {
-            id = "oidcclient";
-            name = "Client";
-            redirectURIs = [ "https://example.com/callback" ];
-            secretFile = "/etc/dex/oidcclient";
-          }
-        ];
-        connectors = [
-          {
-            type = "mockPassword";
-            id = "mock";
-            name = "Example";
-            config = {
-              username = "admin";
-              password = "password";
-            };
-          }
-        ];
+        staticClients = [{
+          id = "oidcclient";
+          name = "Client";
+          redirectURIs = [ "https://example.com/callback" ];
+          secretFile = "/etc/dex/oidcclient";
+        }];
+        connectors = [{
+          type = "mockPassword";
+          id = "mock";
+          name = "Example";
+          config = {
+            username = "admin";
+            password = "password";
+          };
+        }];
       };
     };
 
@@ -45,13 +41,11 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     services.postgresql = {
       enable = true;
-      ensureDatabases =[ "dex" ];
-      ensureUsers = [
-        {
-          name = "dex";
-          ensurePermissions = { "DATABASE dex" = "ALL PRIVILEGES"; };
-        }
-      ];
+      ensureDatabases = [ "dex" ];
+      ensureUsers = [{
+        name = "dex";
+        ensurePermissions = { "DATABASE dex" = "ALL PRIVILEGES"; };
+      }];
     };
   };
 

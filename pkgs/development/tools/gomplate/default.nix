@@ -19,11 +19,8 @@ buildGoModule rec {
     rm net/net_test.go
   '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/${owner}/${pname}/v3/version.Version=${rev}" ];
 
   meta = with lib; {
     description = "A flexible commandline tool for template rendering";

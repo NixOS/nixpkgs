@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkg-config, rsync,
-  asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkg-config, rsync
+, asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       sha256 = "0b0h2qxh73l502p7phf6qgl8576nf6fvqqp2x5wy3nz7sc9qb1z8";
       name = "fix-non-versioned-lua-not-search-in-cmake.patch";
-      url = "https://github.com/axkibe/lsyncd/pull/500/commits/0af99d8d5ba35118e8799684a2d4a8ea4b0c6957.patch";
+      url =
+        "https://github.com/axkibe/lsyncd/pull/500/commits/0af99d8d5ba35118e8799684a2d4a8ea4b0c6957.patch";
     })
   ];
 
@@ -27,19 +28,27 @@ stdenv.mkDerivation rec {
 
   # Special flags needed on Darwin:
   # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
-  cmakeFlags = lib.optional stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" ];
+  cmakeFlags =
+    lib.optional stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" ];
 
   dontUseCmakeBuildDir = true;
 
   buildInputs = [
     rsync
-    cmake lua pkg-config
-    asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
+    cmake
+    lua
+    pkg-config
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
   ];
 
   meta = with lib; {
     homepage = "https://github.com/axkibe/lsyncd";
-    description = "A utility that synchronizes local directories with remote targets";
+    description =
+      "A utility that synchronizes local directories with remote targets";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bobvanderlinden ];

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, mock }:
 
 buildPythonPackage rec {
   pname = "statsd";

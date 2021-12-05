@@ -19,7 +19,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/caarlos0/domain_exporter";
-    description = "Exports the expiration time of your domains as prometheus metrics";
+    description =
+      "Exports the expiration time of your domains as prometheus metrics";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata prusnak ];
   };

@@ -1,11 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, glib
-, pkg-config
-, wrapGAppsHook
-, gtk3
-}:
+{ lib, rustPlatform, fetchFromGitHub, glib, pkg-config, wrapGAppsHook, gtk3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "image-roll";
@@ -31,7 +24,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Simple and fast GTK image viewer with basic image manipulation tools";
+    description =
+      "Simple and fast GTK image viewer with basic image manipulation tools";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -1,18 +1,7 @@
-{ fetchFromGitHub
-, lib
-, gobject-introspection
-, meson
-, ninja
-, python3
-, gtk3
-, gdk-pixbuf
-, wrapGAppsHook
-, gettext
-, polkit
-, glib
-}:
+{ fetchFromGitHub, lib, gobject-introspection, meson, ninja, python3, gtk3
+, gdk-pixbuf, wrapGAppsHook, gettext, polkit, glib }:
 
-python3.pkgs.buildPythonApplication rec  {
+python3.pkgs.buildPythonApplication rec {
   pname = "warpinator";
   version = "1.2.5";
 
@@ -34,11 +23,7 @@ python3.pkgs.buildPythonApplication rec  {
     polkit # for its gettext
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    gdk-pixbuf
-  ];
+  buildInputs = [ glib gtk3 gdk-pixbuf ];
 
   propagatedBuildInputs = with python3.pkgs; [
     grpcio-tools
@@ -54,9 +39,7 @@ python3.pkgs.buildPythonApplication rec  {
     netifaces
   ];
 
-  mesonFlags = [
-    "-Dbundle-zeroconf=false"
-  ];
+  mesonFlags = [ "-Dbundle-zeroconf=false" ];
 
   postPatch = ''
     chmod +x install-scripts/*

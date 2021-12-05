@@ -1,16 +1,10 @@
-{ lib, stdenv, lua, buildEnv, makeWrapper
-, extraLibs ? []
-, extraOutputsToInstall ? []
-, postBuild ? ""
-, ignoreCollisions ? false
-, requiredLuaModules
-, makeWrapperArgs ? []
-}:
+{ lib, stdenv, lua, buildEnv, makeWrapper, extraLibs ? [ ]
+, extraOutputsToInstall ? [ ], postBuild ? "", ignoreCollisions ? false
+, requiredLuaModules, makeWrapperArgs ? [ ] }:
 
 # Create a lua executable that knows about additional packages.
 let
-  env = let
-    paths =  requiredLuaModules (extraLibs ++ [ lua ] );
+  env = let paths = requiredLuaModules (extraLibs ++ [ lua ]);
   in buildEnv {
     name = "${lua.name}-env";
 
@@ -70,7 +64,7 @@ let
           echo >&2 ""
           exit 1
         '';
-    };
+      };
     };
   };
 in env

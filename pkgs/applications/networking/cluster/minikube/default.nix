@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, which
-, libvirt
-, vmnet
-}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, pkg-config
+, which, libvirt, vmnet }:
 
 buildGoModule rec {
   pname = "minikube";
@@ -26,7 +18,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config which ];
 
-  buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
+  buildInputs = if stdenv.isDarwin then
+    [ vmnet ]
+  else if stdenv.isLinux then
+    [ libvirt ]
+  else
+    null;
 
   buildPhase = ''
     make COMMIT=${src.rev}
@@ -49,7 +46,13 @@ buildGoModule rec {
     homepage = "https://minikube.sigs.k8s.io";
     description = "A tool that makes it easy to run Kubernetes locally";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
+    maintainers = with maintainers; [
+      ebzzry
+      copumpkin
+      vdemeester
+      atkinschang
+      Chili-Man
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, serpent
-, pythonOlder
-, pytestCheckHook
-}:
+{ buildPythonPackage, fetchPypi, lib, serpent, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Pyro5";
@@ -22,7 +16,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # ignore network related tests, which fail in sandbox
-  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ];
+  disabledTests =
+    [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";

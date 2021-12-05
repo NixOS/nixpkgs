@@ -1,24 +1,9 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libconfig
+{ lib, fetchFromGitHub, libpulseaudio, libconfig
 # Needs a gnuradio built with qt gui support
-, gnuradio3_8
-, thrift
+, gnuradio3_8, thrift
 # Not gnuradioPackages'
-, codec2
-, log4cpp
-, gmp
-, gsm
-, libopus
-, libjpeg
-, libsndfile
-, libftdi
-, limesuite
-, protobuf
-, speex
-, speexdsp
-}:
+, codec2, log4cpp, gmp, gsm, libopus, libjpeg, libsndfile, libftdi, limesuite
+, protobuf, speex, speexdsp }:
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
@@ -68,11 +53,8 @@ gnuradio3_8.pkgs.mkDerivation rec {
     thrift
     gnuradio3_8.unwrapped.python.pkgs.thrift
   ];
-  nativeBuildInputs = [
-    protobuf
-    gnuradio3_8.qt.qmake
-    gnuradio3_8.qt.wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [ protobuf gnuradio3_8.qt.qmake gnuradio3_8.qt.wrapQtAppsHook ];
 
   meta = with lib; {
     description = "SDR transceiver application for analog and digital modes";

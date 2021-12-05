@@ -4,13 +4,14 @@ stdenv.mkDerivation rec {
   name = "libtiger-0.3.4";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libtiger/${name}.tar.gz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libtiger/${name}.tar.gz";
     sha256 = "0rj1bmr9kngrgbxrjbn4f4f9pww0wmf6viflinq7ava7zdav4hkk";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libkate pango cairo ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
+  buildInputs = [ libkate pango cairo ] ++ lib.optional stdenv.isDarwin
+    darwin.apple_sdk.frameworks.ApplicationServices;
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";

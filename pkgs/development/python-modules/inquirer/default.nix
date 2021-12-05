@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytest-cov, pexpect, pytest-mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed
+, pytest, pytest-cov, pexpect, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "inquirer";
@@ -15,9 +16,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ blessed python-editor readchar ];
 
   postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "blessed==1.17.6" "blessed~=1.17" \
-     --replace "readchar==2.0.1" "readchar>=2.0.0"
+    substituteInPlace requirements.txt \
+      --replace "blessed==1.17.6" "blessed~=1.17" \
+      --replace "readchar==2.0.1" "readchar>=2.0.0"
   '';
 
   checkInputs = [ pytest pytest-cov pexpect pytest-mock ];
@@ -28,7 +29,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/magmax/python-inquirer";
-    description = "A collection of common interactive command line user interfaces, based on Inquirer.js";
+    description =
+      "A collection of common interactive command line user interfaces, based on Inquirer.js";
     license = licenses.mit;
     maintainers = [ maintainers.mmahut ];
   };

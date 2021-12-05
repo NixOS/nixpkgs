@@ -2,22 +2,31 @@
 
 let
   archids = {
-    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = {
+      hostarch = "x86_64";
+      efiPlatform = "x64";
+    };
+    i686-linux = rec {
+      hostarch = "ia32";
+      efiPlatform = hostarch;
+    };
+    aarch64-linux = {
+      hostarch = "aarch64";
+      efiPlatform = "aa64";
+    };
   };
 
-  inherit
-    (archids.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
+  inherit (archids.${stdenv.hostPlatform.system} or (throw
+    "unsupported system: ${stdenv.hostPlatform.system}"))
     hostarch efiPlatform;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "refind";
   version = "0.13.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
     sha256 = "0w6990ggns4xsdmgj3aq527q15frrxfmxwa3m6igabd4ai498n6x";
   };
 
@@ -30,15 +39,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  makeFlags =
-    [ "prefix="
-      "EFIINC=${gnu-efi}/include/efi"
-      "EFILIB=${gnu-efi}/lib"
-      "GNUEFILIB=${gnu-efi}/lib"
-      "EFICRT0=${gnu-efi}/lib"
-      "HOSTARCH=${hostarch}"
-      "ARCH=${hostarch}"
-    ];
+  makeFlags = [
+    "prefix="
+    "EFIINC=${gnu-efi}/include/efi"
+    "EFILIB=${gnu-efi}/lib"
+    "GNUEFILIB=${gnu-efi}/lib"
+    "EFICRT0=${gnu-efi}/lib"
+    "HOSTARCH=${hostarch}"
+    "ARCH=${hostarch}"
+  ];
 
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
 

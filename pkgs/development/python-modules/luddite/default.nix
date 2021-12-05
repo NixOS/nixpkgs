@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest-socket
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, pytestCheckHook
+, pytest-socket, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "luddite";

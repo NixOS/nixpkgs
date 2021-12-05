@@ -6,9 +6,7 @@ let
 
   configFile = ./xfs.conf;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -26,14 +24,13 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.xfs.enable {
-    assertions = singleton
-      { assertion = config.fonts.enableFontDir;
-        message = "Please enable fonts.enableFontDir to use the X Font Server.";
-      };
+    assertions = singleton {
+      assertion = config.fonts.enableFontDir;
+      message = "Please enable fonts.enableFontDir to use the X Font Server.";
+    };
 
     systemd.services.xfs = {
       description = "X Font Server";

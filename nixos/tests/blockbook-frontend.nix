@@ -1,18 +1,15 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "blockbook-frontend";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
-  };
+  meta = with pkgs.lib; { maintainers = with maintainers; [ _1000101 ]; };
 
   machine = { ... }: {
-    services.blockbook-frontend."test" = {
-      enable = true;
-    };
+    services.blockbook-frontend."test" = { enable = true; };
     services.bitcoind.mainnet = {
       enable = true;
       rpc = {
         port = 8030;
-        users.rpc.passwordHMAC = "acc2374e5f9ba9e62a5204d3686616cf$53abdba5e67a9005be6a27ca03a93ce09e58854bc2b871523a0d239a72968033";
+        users.rpc.passwordHMAC =
+          "acc2374e5f9ba9e62a5204d3686616cf$53abdba5e67a9005be6a27ca03a93ce09e58854bc2b871523a0d239a72968033";
       };
     };
   };

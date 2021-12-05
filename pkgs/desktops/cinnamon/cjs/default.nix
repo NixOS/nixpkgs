@@ -1,32 +1,7 @@
-{ dbus-glib
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-, python3
-, cairo
-, gnome
-, xapps
-, keybinder3
-, upower
-, callPackage
-, glib
-, libffi
-, gtk3
-, readline
-, spidermonkey_78
-, meson
-, sysprof
-, dbus
-, xvfb-run
-, ninja
-, makeWrapper
-, which
-, libxml2
-, gtk4
-}:
+{ dbus-glib, fetchFromGitHub, gobject-introspection, pkg-config, lib, stdenv
+, wrapGAppsHook, python3, cairo, gnome, xapps, keybinder3, upower, callPackage
+, glib, libffi, gtk3, readline, spidermonkey_78, meson, sysprof, dbus, xvfb-run
+, ninja, makeWrapper, which, libxml2, gtk4 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
@@ -59,9 +34,7 @@ stdenv.mkDerivation rec {
     dbus # for dbus-run-session
   ];
 
-  checkInputs = [
-    xvfb-run
-  ];
+  checkInputs = [ xvfb-run ];
 
   propagatedBuildInputs = [
     glib
@@ -73,9 +46,7 @@ stdenv.mkDerivation rec {
     xapps
   ];
 
-  mesonFlags = [
-    "-Dprofiler=disabled"
-  ];
+  mesonFlags = [ "-Dprofiler=disabled" ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";
@@ -85,12 +56,7 @@ stdenv.mkDerivation rec {
       This module contains JavaScript bindings based on gobject-introspection.
     '';
 
-    license = with licenses; [
-      gpl2Plus
-      lgpl2Plus
-      mit
-      mpl11
-    ];
+    license = with licenses; [ gpl2Plus lgpl2Plus mit mpl11 ];
 
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

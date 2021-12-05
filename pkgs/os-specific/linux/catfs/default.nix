@@ -1,8 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub
-, fetchpatch
-, fuse
-, pkg-config
-}:
+{ lib, rustPlatform, fetchFromGitHub, fetchpatch, fuse, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "catfs";
@@ -20,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     # update cargo lock
     (fetchpatch {
-      url = "https://github.com/kahing/catfs/commit/f838c1cf862cec3f1d862492e5be82b6dbe16ac5.patch";
+      url =
+        "https://github.com/kahing/catfs/commit/f838c1cf862cec3f1d862492e5be82b6dbe16ac5.patch";
       sha256 = "1r1p0vbr3j9xyj9r1ahipg4acii3m4ni4m9mp3avbi1rfgzhblhw";
     })
   ];

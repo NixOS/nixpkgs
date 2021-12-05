@@ -1,18 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go, python3
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
-}:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, perl, go, python3, protobuf, zlib
+, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7 }:
 
-let
-  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
-in
+let pythonEnv = python3.withPackages (ps: [ ps.protobuf ]);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "android-tools";
   version = "31.0.3";
 
   src = fetchurl {
-    url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
+    url =
+      "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
     sha256 = "0adhws565ny90vzh5jpkbcai8sfs3b9acs0bgl6bm9z1nr2xklnp";
   };
 
@@ -20,7 +17,8 @@ stdenv.mkDerivation rec {
     # fmt 8 breaks the build but we can use fmt 7 from Nixpkgs:
     (fetchpatch {
       # Vendor google's version of fmtlib
-      url = "https://github.com/nmeum/android-tools/commit/21061c1dfb006c22304053c1f6f9e48ae4cbe25a.patch";
+      url =
+        "https://github.com/nmeum/android-tools/commit/21061c1dfb006c22304053c1f6f9e48ae4cbe25a.patch";
       sha256 = "17mcsgfc3i8xq4hck0ppnzafh15aljxy7j2q4djcmwnvrkv9kx3s";
       revert = true;
       excludes = [ "vendor/fmtlib" ];

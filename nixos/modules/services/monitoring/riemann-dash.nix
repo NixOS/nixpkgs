@@ -59,9 +59,8 @@ in {
       group = "riemanndash";
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - riemanndash riemanndash - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' - riemanndash riemanndash - -" ];
 
     systemd.services.riemann-dash = {
       wantedBy = [ "multi-user.target" ];

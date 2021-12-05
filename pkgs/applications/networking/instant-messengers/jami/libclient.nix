@@ -1,12 +1,4 @@
-{ version
-, src
-, jami-meta
-, stdenv
-, lib
-, pkg-config
-, cmake
-, qtbase
-, jami-daemon
+{ version, src, jami-meta, stdenv, lib, pkg-config, cmake, qtbase, jami-daemon
 }:
 
 stdenv.mkDerivation {
@@ -15,23 +7,16 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/lrc";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    jami-daemon
-  ];
+  buildInputs = [ jami-daemon ];
 
   patches = [
     # Fix path to include dir when using split outputs
     ./libclient-include-path.patch
   ];
 
-  propagatedBuildInputs = [
-    qtbase
-  ];
+  propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];
 
   cmakeFlags = [

@@ -1,8 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-}:
+{ lib, fetchFromGitHub, buildGoModule, makeWrapper }:
 
 buildGoModule rec {
   pname = "kubeval";

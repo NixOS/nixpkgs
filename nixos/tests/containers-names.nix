@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-names";
-  meta = {
-    maintainers = with lib.maintainers; [ patryk27 ];
-  };
+  meta = { maintainers = with lib.maintainers; [ patryk27 ]; };
 
   machine = { ... }: {
     # We're using the newest kernel, so that we can test containers with long names.
@@ -18,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         config = { };
       };
 
-     in {
+    in {
       first = container "1";
       second = container "2";
       really-long-name = container "3";

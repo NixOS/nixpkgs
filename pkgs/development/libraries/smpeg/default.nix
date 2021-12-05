@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
+{ lib, stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config
+, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -10,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
   };
 
-  patches = [
-    ./format.patch
-    ./gcc6.patch
-    ./libx11.patch
-  ];
+  patches = [ ./format.patch ./gcc6.patch ./libx11.patch ];
 
   enableParallelBuilding = true;
 

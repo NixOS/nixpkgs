@@ -16,7 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Test ssh login key acceptance without having the private key";
+    description =
+      "Test ssh login key acceptance without having the private key";
     homepage = "https://github.com/benjojo/ssh-key-confirmer";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];

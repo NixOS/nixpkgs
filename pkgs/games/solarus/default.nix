@@ -1,7 +1,5 @@
-{ lib, mkDerivation, fetchFromGitLab, cmake, luajit
-,  SDL2, SDL2_image, SDL2_ttf, physfs, glm
-, openal, libmodplug, libvorbis
-, qtbase, qttools }:
+{ lib, mkDerivation, fetchFromGitLab, cmake, luajit, SDL2, SDL2_image, SDL2_ttf
+, physfs, glm, openal, libmodplug, libvorbis, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "solarus";
@@ -17,10 +15,18 @@ mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ luajit SDL2
-    SDL2_image SDL2_ttf physfs
-    openal libmodplug libvorbis
-    qtbase glm ];
+  buildInputs = [
+    luajit
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    physfs
+    openal
+    libmodplug
+    libvorbis
+    qtbase
+    glm
+  ];
 
   preFixup = ''
     mkdir $lib/

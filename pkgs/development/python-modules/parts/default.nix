@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "parts";
@@ -16,12 +13,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "parts"
-  ];
+  pythonImportsCheck = [ "parts" ];
 
   meta = with lib; {
-    description = "Python library for common list functions related to partitioning lists";
+    description =
+      "Python library for common list functions related to partitioning lists";
     homepage = "https://github.com/lapets/parts";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

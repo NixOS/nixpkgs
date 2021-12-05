@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ postgresql ];
 
-  makeFlags = [
-    "BISON=${bison}/bin/bison"
-    "FLEX=${flex}/bin/flex"
-  ];
+  makeFlags = [ "BISON=${bison}/bin/bison" "FLEX=${flex}/bin/flex" ];
 
   installPhase = ''
     install -D -t $out/lib *.so
@@ -31,8 +28,7 @@ stdenv.mkDerivation rec {
 
     dontConfigure = true;
 
-    buildPhase = let
-      postgresqlAge = postgresql.withPackages (ps: [ ps.age ]);
+    buildPhase = let postgresqlAge = postgresql.withPackages (ps: [ ps.age ]);
     in ''
       # The regression tests need to be run in the order specified in the Makefile.
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
@@ -56,7 +52,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/incubator-age/releases/tag/v${version}";
+    changelog =
+      "https://github.com/apache/incubator-age/releases/tag/v${version}";
     maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;

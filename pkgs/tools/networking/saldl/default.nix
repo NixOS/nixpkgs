@@ -1,16 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, wafHook
-, python3
-, asciidoc
-, docbook_xml_dtd_45
-, docbook_xsl
-, libxml2
-, libxslt
-, curl
-, libevent
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, wafHook, python3, asciidoc
+, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt, curl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "saldl";

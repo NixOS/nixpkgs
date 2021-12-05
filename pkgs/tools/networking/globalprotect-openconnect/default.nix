@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, qtwebsockets, qtwebengine, wrapQtAppsHook
+, openconnect }:
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
@@ -24,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
+    description =
+      "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.jerith666 ];

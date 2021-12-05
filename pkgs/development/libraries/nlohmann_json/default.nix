@@ -1,8 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-}:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 let
   testData = fetchFromGitHub {
     owner = "nlohmann";

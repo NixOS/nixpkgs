@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, check, validatePkgConfig, shared ? false }:
+{ stdenv, lib, fetchFromGitHub, cmake, check, validatePkgConfig, shared ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Light-weight, simple and fast XML parser for C++ with XPath support";
+    description =
+      "Light-weight, simple and fast XML parser for C++ with XPath support";
     homepage = "https://pugixml.org";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];

@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, jinja2
-, msrest
-, vsts
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, jinja2, msrest, vsts }:
 
 buildPythonPackage rec {
   version = "0.0.22";
@@ -22,7 +18,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Integrate Azure Functions with Azure DevOps. Specifically made for the Azure CLI";
+    description =
+      "Integrate Azure Functions with Azure DevOps. Specifically made for the Azure CLI";
     homepage = "https://github.com/Azure/azure-functions-devops-build";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

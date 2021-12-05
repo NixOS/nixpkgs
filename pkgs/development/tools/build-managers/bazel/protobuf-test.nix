@@ -1,17 +1,5 @@
-{
-  bazel
-, bazelTest
-, fetchFromGitHub
-, fetchurl
-, gccStdenv
-, lib
-, openjdk8
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-}:
+{ bazel, bazelTest, fetchFromGitHub, fetchurl, gccStdenv, lib, openjdk8
+, runLocal, runtimeShell, writeScript, writeText, distDir }:
 
 let
   com_google_protobuf = fetchFromGitHub {
@@ -56,7 +44,7 @@ let
     protobuf_deps()
     load("@rules_proto//proto:repositories.bzl", "rules_proto_toolchains")
     rules_proto_toolchains()
-    '';
+  '';
 
   protoSupport = writeText "proto-support.bzl" ''
     """Load dependencies needed to compile the protobuf library as a 3rd-party consumer."""
@@ -142,7 +130,7 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace" { } (''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     touch $out/BUILD.bazel
@@ -150,8 +138,7 @@ let
     mkdir $out/person
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
-  ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  '' + (lib.optionalString gccStdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

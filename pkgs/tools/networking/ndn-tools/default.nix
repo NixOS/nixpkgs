@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, wafHook
-}:
+{ lib, stdenv, boost, fetchFromGitHub, libpcap, ndn-cxx, openssl, pkg-config
+, sphinx, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "ndn-tools";

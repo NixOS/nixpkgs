@@ -1,4 +1,4 @@
-{fetchurl, lib, stdenv}:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "dbacl";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://dbacl.sourceforge.net/";
     longDescription = "a digramic Bayesian classifier for text recognition.";
-    maintainers = [];
+    maintainers = [ ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };

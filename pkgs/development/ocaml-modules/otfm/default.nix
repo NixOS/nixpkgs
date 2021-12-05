@@ -4,9 +4,8 @@ let
   pname = "otfm";
   version = "0.3.0";
   webpage = "https://erratique.ch/software/${pname}";
-in
 
-assert lib.versionAtLeast ocaml.version "4.01.0";
+in assert lib.versionAtLeast ocaml.version "4.01.0";
 
 stdenv.mkDerivation {
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation {
       of them.
     '';
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

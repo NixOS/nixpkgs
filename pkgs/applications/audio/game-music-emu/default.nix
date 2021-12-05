@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "game-music-emu";
 
   src = fetchurl {
-    url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
+    url =
+      "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
     sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
 

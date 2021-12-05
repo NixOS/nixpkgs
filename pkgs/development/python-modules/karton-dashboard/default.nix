@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, karton-core
-, mistune
-, prometheus-client
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, karton-core, mistune
+, prometheus-client }:
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
@@ -18,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-C1wtpHyuTlNS6Se1rR0RGUl3xht4aphAtddKlIsOAkI=";
   };
 
-  propagatedBuildInputs = [
-    flask
-    karton-core
-    mistune
-    prometheus-client
-  ];
+  propagatedBuildInputs = [ flask karton-core mistune prometheus-client ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -35,7 +24,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Web application that allows for Karton task and queue introspection";
+    description =
+      "Web application that allows for Karton task and queue introspection";
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

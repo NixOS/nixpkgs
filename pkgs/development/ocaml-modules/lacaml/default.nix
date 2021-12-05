@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, darwin, buildDunePackage, dune-configurator
-, lapack, blas
-}:
+{ lib, stdenv, fetchurl, darwin, buildDunePackage, dune-configurator, lapack
+, blas }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -13,14 +12,14 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
+    url =
+      "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
     sha256 = "1i47wqnd9iy6ndbi9zfahpb592gahp6im26rgpwch13vgzk3kifd";
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ lapack blas ] ++
-    lib.optionals stdenv.isDarwin
-      [ darwin.apple_sdk.frameworks.Accelerate ];
+  propagatedBuildInputs = [ lapack blas ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {
     homepage = "https://mmottl.github.io/lacaml";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinxcontrib-serializinghtml
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, sphinxcontrib-serializinghtml, six }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";

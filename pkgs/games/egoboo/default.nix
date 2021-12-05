@@ -31,18 +31,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libGLU libGL SDL SDL_mixer SDL_image SDL_ttf ];
 
-  /*
-    This big commented thing may be needed for versions 2.8.0 or beyond
-    I keep it here for future updates.
+  /* This big commented thing may be needed for versions 2.8.0 or beyond
+     I keep it here for future updates.
 
-    # Some files have to go to $HOME, but we put them in the 'shared'.
-    patchPhase = ''
-      sed -i -e 's,''${HOME}/.''${PROJ_NAME},''${PREFIX}/share/games/''${PROJ_NAME},g' Makefile
-    '';
+     # Some files have to go to $HOME, but we put them in the 'shared'.
+     patchPhase = ''
+       sed -i -e 's,''${HOME}/.''${PROJ_NAME},''${PREFIX}/share/games/''${PROJ_NAME},g' Makefile
+     '';
 
-    preBuild = ''
-      makeFlags=PREFIX=$out
-    '';
+     preBuild = ''
+       makeFlags=PREFIX=$out
+     '';
   */
 
   NIX_LDFLAGS = "-lm";

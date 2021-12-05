@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, mock
-, zope_testing
-, lib
-}:
+{ buildPythonPackage, fetchPypi, mock, zope_testing, lib }:
 
 buildPythonPackage rec {
   pname = "zc.lockfile";
@@ -19,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Inter-process locks";
-    homepage =  "https://www.python.org/pypi/zc.lockfile";
+    homepage = "https://www.python.org/pypi/zc.lockfile";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

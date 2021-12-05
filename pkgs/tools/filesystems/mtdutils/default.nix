@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo
+, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
@@ -10,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w20Zp1G0WbNvEJwqpLw2f8VvmW8ZBEL0GSHze8qpPWg";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
+    ++ lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
   configureFlags = with lib; [

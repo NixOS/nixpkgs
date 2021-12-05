@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, libxkbcommon
-, systemd
-, xorg
-, electron_11
-, makeWrapper
-, makeDesktopItem
-}:
+{ stdenv, lib, fetchurl, libxkbcommon, systemd, xorg, electron_11, makeWrapper
+, makeDesktopItem }:
 let
   desktopItem = makeDesktopItem rec {
     name = "Obinskit";
@@ -18,13 +10,13 @@ let
     categories = "Utility";
   };
   electron = electron_11;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "obinskit";
   version = "1.1.8";
 
   src = fetchurl {
-    url = "http://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
+    url =
+      "http://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
     sha256 = "MgasbgexOdscQrUte/6OzCSrc74RvaBq44oHplQA/Gc=";
   };
 
@@ -51,11 +43,20 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/opt/obinskit/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib libxkbcommon (lib.getLib systemd) xorg.libXt xorg.libXtst ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          stdenv.cc.cc.lib
+          libxkbcommon
+          (lib.getLib systemd)
+          xorg.libXt
+          xorg.libXtst
+        ]
+      }"
   '';
 
   meta = with lib; {
-    description = "Graphical configurator for Anne Pro and Anne Pro II keyboards";
+    description =
+      "Graphical configurator for Anne Pro and Anne Pro II keyboards";
     homepage = "https://www.hexcore.xyz/obinskit";
     license = licenses.unfree;
     maintainers = with maintainers; [ shou ];

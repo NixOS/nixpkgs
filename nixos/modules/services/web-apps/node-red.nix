@@ -5,17 +5,17 @@ with lib;
 let
   cfg = config.services.node-red;
   defaultUser = "node-red";
-  finalPackage = if cfg.withNpmAndGcc then node-red_withNpmAndGcc else cfg.package;
-  node-red_withNpmAndGcc = pkgs.runCommand "node-red" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-  }
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${pkgs.nodePackages.node-red}/bin/node-red $out/bin/node-red \
-      --set PATH '${lib.makeBinPath [ pkgs.nodePackages.npm pkgs.gcc ]}:$PATH' \
-  '';
-in
-{
+  finalPackage =
+    if cfg.withNpmAndGcc then node-red_withNpmAndGcc else cfg.package;
+  node-red_withNpmAndGcc =
+    pkgs.runCommand "node-red" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+      mkdir -p $out/bin
+      makeWrapper ${pkgs.nodePackages.node-red}/bin/node-red $out/bin/node-red \
+        --set PATH '${
+          lib.makeBinPath [ pkgs.nodePackages.npm pkgs.gcc ]
+        }:$PATH' \
+    '';
+in {
   options.services.node-red = {
     enable = mkEnableOption "the Node-RED service";
 
@@ -46,7 +46,8 @@ in
     configFile = mkOption {
       type = types.path;
       default = "${cfg.package}/lib/node_modules/node-red/settings.js";
-      defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
+      defaultText = literalExpression
+        ''"''${package}/lib/node_modules/node-red/settings.js"'';
       description = ''
         Path to the JavaScript configuration file.
         See <link
@@ -100,7 +101,7 @@ in
 
     define = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = "List of settings.js overrides to pass via -D to Node-RED.";
       example = literalExpression ''
         {
@@ -118,31 +119,36 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
-      ${defaultUser} = { };
-    };
+    users.groups =
+      optionalAttrs (cfg.group == defaultUser) { ${defaultUser} = { }; };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     systemd.services.node-red = {
       description = "Node-RED Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
-      environment = {
-        HOME = cfg.userDir;
-      };
+      environment = { HOME = cfg.userDir; };
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${finalPackage}/bin/node-red ${pkgs.lib.optionalString cfg.safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
+          ExecStart = "${finalPackage}/bin/node-red ${
+              pkgs.lib.optionalString cfg.safe "--safe"
+            } --settings ${cfg.configFile} --port ${
+              toString cfg.port
+            } --userDir ${cfg.userDir} ${
+              concatStringsSep " "
+              (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)
+            }";
           PrivateTmp = true;
           Restart = "always";
           WorkingDirectory = cfg.userDir;
         }
-        (mkIf (cfg.userDir == "/var/lib/node-red") { StateDirectory = "node-red"; })
+        (mkIf (cfg.userDir == "/var/lib/node-red") {
+          StateDirectory = "node-red";
+        })
       ];
     };
   };

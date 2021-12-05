@@ -1,12 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pythonOlder
-, python
-, substituteAll
-, importlib-resources
-, tzdata
-, hypothesis
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python, substituteAll
+, importlib-resources, tzdata, hypothesis, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "backports-zoneinfo";
@@ -23,22 +16,17 @@ buildPythonPackage rec {
     (substituteAll {
       name = "zoneinfo-path";
       src = ./zoneinfo.patch;
-      zoneinfo = "${tzdata}/lib/${python.libPrefix}/site-packages/tzdata/zoneinfo";
+      zoneinfo =
+        "${tzdata}/lib/${python.libPrefix}/site-packages/tzdata/zoneinfo";
     })
   ];
 
-  propagatedBuildInputs = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ tzdata ]
+    ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   pythonImportsCheck = [ "backports.zoneinfo" ];
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: 'AEDT' != 'AEST'

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, html5lib
-}:
+{ lib, buildPythonPackage, fetchPypi, html5lib }:
 
 buildPythonPackage rec {
   pname = "mechanize";

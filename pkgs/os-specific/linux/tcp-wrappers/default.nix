@@ -8,12 +8,14 @@ in stdenv.mkDerivation rec {
   version = "${vanillaVersion}-${patchLevel}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${vanillaVersion}.orig.tar.gz";
+    url =
+      "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${vanillaVersion}.orig.tar.gz";
     sha256 = "0p9ilj4v96q32klavx0phw9va21fjp8vpk11nbh6v2ppxnnxfhwm";
   };
 
   debian = fetchurl {
-    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
+    url =
+      "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
     sha256 = "1dcdhi9lwzv7g19ggwxms2msq9fy14rl09rjqb10hwv0jix7z8j8";
   };
 
@@ -55,7 +57,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TCP Wrappers, a network logger, also known as TCPD or LOG_TCP";
+    description =
+      "TCP Wrappers, a network logger, also known as TCPD or LOG_TCP";
 
     longDescription = ''
       Wietse Venema's network logger, also known as TCPD or LOG_TCP.

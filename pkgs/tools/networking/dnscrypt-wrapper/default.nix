@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent
+}:
 
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";

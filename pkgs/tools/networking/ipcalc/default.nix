@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, glib
-, meson
-, ninja
-, libmaxminddb
-, pkg-config
-, ronn
-}:
+{ lib, stdenv, fetchFromGitLab, glib, meson, ninja, libmaxminddb, pkg-config
+, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "ipcalc";
@@ -20,14 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qg516jv94dlk0qj0bj5y1dd0i31ziqcjd6m00w8xp5wl97bj2ji";
   };
 
-  nativeBuildInputs = [
-    glib
-    meson
-    ninja
-    pkg-config
-    libmaxminddb
-    ronn
-  ];
+  nativeBuildInputs = [ glib meson ninja pkg-config libmaxminddb ronn ];
 
   meta = with lib; {
     description = "Simple IP network calculator";

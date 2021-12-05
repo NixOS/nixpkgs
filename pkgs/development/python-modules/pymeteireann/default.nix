@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytz
-, xmltodict
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub, pytz
+, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pymeteireann";
@@ -18,12 +12,7 @@ buildPythonPackage rec {
     sha256 = "1xcfb3f2a2q99i8anpdzq8s743jgkk2a3rpar48b2dhs7l15rbsd";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-    pytz
-    xmltodict
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];
 
   # Project has no tests
   doCheck = false;
@@ -31,7 +20,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "meteireann" ];
 
   meta = with lib; {
-    description = "Python module to communicate with the Met Éireann Public Weather Forecast API";
+    description =
+      "Python module to communicate with the Met Éireann Public Weather Forecast API";
     homepage = "https://github.com/DylanGore/PyMetEireann/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,12 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, perl
-, boost
-, rdkafka
-, jansson
-, curl
-, avro-c
+{ stdenv, lib, fetchFromGitHub, perl, boost, rdkafka, jansson, curl, avro-c
 , avro-cpp }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
+    description =
+      "A schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
     homepage = "https://github.com/confluentinc/libserdes";
     license = licenses.asl20;
     maintainers = with maintainers; [ liff ];

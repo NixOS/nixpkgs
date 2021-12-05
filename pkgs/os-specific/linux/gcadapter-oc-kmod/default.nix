@@ -1,11 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, kernel
-, kmod
-}:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
-let
-  kerneldir = "lib/modules/${kernel.modDirVersion}";
+let kerneldir = "lib/modules/${kernel.modDirVersion}";
 in stdenv.mkDerivation rec {
   pname = "gcadapter-oc-kmod";
   version = "1.4";
@@ -29,7 +24,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Kernel module for overclocking the Nintendo Wii U/Mayflash GameCube adapter";
+    description =
+      "Kernel module for overclocking the Nintendo Wii U/Mayflash GameCube adapter";
     homepage = "https://github.com/HannesMann/gcadapter-oc-kmod";
     license = licenses.gpl2;
     maintainers = with maintainers; [ r-burns ];

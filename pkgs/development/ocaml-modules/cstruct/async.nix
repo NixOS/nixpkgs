@@ -4,8 +4,5 @@ buildDunePackage rec {
   pname = "cstruct-async";
   inherit (cstruct) src version meta useDune2;
 
-  propagatedBuildInputs = [
-    async_unix
-    cstruct
-  ];
+  propagatedBuildInputs = [ async_unix cstruct ];
 }

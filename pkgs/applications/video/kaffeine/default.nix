@@ -1,17 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, kio
-, cmake
-, extra-cmake-modules
-, libvlc
-, libX11
-, kidletime
-, kdelibs4support
-, libXScrnSaver
-, wrapQtAppsHook
-, qtx11extras
-}:
+{ stdenv, lib, fetchFromGitLab, kio, cmake, extra-cmake-modules, libvlc, libX11
+, kidletime, kdelibs4support, libXScrnSaver, wrapQtAppsHook, qtx11extras }:
 
 stdenv.mkDerivation rec {
   pname = "kaffeine";
@@ -25,20 +13,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FOaS9gkzkHglbsNBNMwjzbHCNQg3Mbf+9so/Vfbaquc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
 
-  buildInputs = [
-    libvlc
-    libX11
-    kidletime
-    qtx11extras
-    kdelibs4support
-    libXScrnSaver
-  ];
+  buildInputs =
+    [ libvlc libX11 kidletime qtx11extras kdelibs4support libXScrnSaver ];
 
   meta = with lib; {
     description = "KDE media player";

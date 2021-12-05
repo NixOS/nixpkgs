@@ -1,15 +1,6 @@
-{ lib
-, writeShellScriptBin
-, buildGoPackage
-, makeWrapper
-, fetchFromGitHub
-, coreutils
-, nettools
-, dmidecode
-, util-linux
-, bashInteractive
-, overrideEtc ? true
-}:
+{ lib, writeShellScriptBin, buildGoPackage, makeWrapper, fetchFromGitHub
+, coreutils, nettools, dmidecode, util-linux, bashInteractive
+, overrideEtc ? true }:
 
 let
   # Tests use lsb_release, so we mock it (the SSM agent used to not
@@ -24,8 +15,7 @@ let
       -r) echo "''${VERSION:-unknown}";;
     esac
   '';
-in
-buildGoPackage rec {
+in buildGoPackage rec {
   pname = "amazon-ssm-agent";
   version = "3.0.755.0";
 
@@ -119,7 +109,8 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Agent to enable remote management of your Amazon EC2 instance configuration";
+    description =
+      "Agent to enable remote management of your Amazon EC2 instance configuration";
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;

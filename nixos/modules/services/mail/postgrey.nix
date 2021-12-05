@@ -1,13 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib; let
+with lib;
+let
 
   cfg = config.services.postgrey;
 
   natural = with types; addCheck int (x: x >= 0);
   natural' = with types; addCheck int (x: x > 0);
 
-  socket = with types; addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? path || x ? port);
+  socket = with types;
+    addCheck (either (submodule unixSocket) (submodule inetSocket))
+    (x: x ? path || x ? port);
 
   inetSocket = with types; {
     options = {
@@ -43,15 +46,20 @@ with lib; let
 
 in {
   imports = [
-    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
+    (mkMergedOptionModule [
+      [ "services" "postgrey" "inetAddr" ]
+      [ "services" "postgrey" "inetPort" ]
+    ] [ "services" "postgrey" "socket" ] (config:
+      let
         value = p: getAttrFromPath p config;
         inetAddr = [ "services" "postgrey" "inetAddr" ];
         inetPort = [ "services" "postgrey" "inetPort" ];
-      in
-        if value inetAddr == null
-        then { path = "/run/postgrey.sock"; }
-        else { addr = value inetAddr; port = value inetPort; }
-    ))
+      in if value inetAddr == null then {
+        path = "/run/postgrey.sock";
+      } else {
+        addr = value inetAddr;
+        port = value inetPort;
+      }))
   ];
 
   options = {
@@ -76,7 +84,8 @@ in {
       greylistText = mkOption {
         type = str;
         default = "Greylisted for %%s seconds";
-        description = "Response status text for greylisted messages; use %%s for seconds left until greylisting is over and %%r for mail domain of recipient";
+        description =
+          "Response status text for greylisted messages; use %%s for seconds left until greylisting is over and %%r for mail domain of recipient";
       };
       greylistAction = mkOption {
         type = str;
@@ -86,7 +95,8 @@ in {
       greylistHeader = mkOption {
         type = str;
         default = "X-Greylist: delayed %%t seconds by postgrey-%%v at %%h; %%d";
-        description = "Prepend header to greylisted mails; use %%t for seconds delayed due to greylisting, %%v for the version of postgrey, %%d for the date, and %%h for the host";
+        description =
+          "Prepend header to greylisted mails; use %%t for seconds delayed due to greylisting, %%v for the version of postgrey, %%d for the date, and %%h for the host";
       };
       delay = mkOption {
         type = natural;
@@ -96,28 +106,33 @@ in {
       maxAge = mkOption {
         type = natural;
         default = 35;
-        description = "Delete entries from whitelist if they haven't been seen for N days";
+        description =
+          "Delete entries from whitelist if they haven't been seen for N days";
       };
       retryWindow = mkOption {
         type = either str natural;
         default = 2;
         example = "12h";
-        description = "Allow N days for the first retry. Use string with appended 'h' to specify time in hours";
+        description =
+          "Allow N days for the first retry. Use string with appended 'h' to specify time in hours";
       };
       lookupBySubnet = mkOption {
         type = bool;
         default = true;
-        description = "Strip the last N bits from IP addresses, determined by IPv4CIDR and IPv6CIDR";
+        description =
+          "Strip the last N bits from IP addresses, determined by IPv4CIDR and IPv6CIDR";
       };
       IPv4CIDR = mkOption {
         type = natural;
         default = 24;
-        description = "Strip N bits from IPv4 addresses if lookupBySubnet is true";
+        description =
+          "Strip N bits from IPv4 addresses if lookupBySubnet is true";
       };
       IPv6CIDR = mkOption {
         type = natural;
         default = 64;
-        description = "Strip N bits from IPv6 addresses if lookupBySubnet is true";
+        description =
+          "Strip N bits from IPv6 addresses if lookupBySubnet is true";
       };
       privacy = mkOption {
         type = bool;
@@ -127,16 +142,17 @@ in {
       autoWhitelist = mkOption {
         type = nullOr natural';
         default = 5;
-        description = "Whitelist clients after successful delivery of N messages";
+        description =
+          "Whitelist clients after successful delivery of N messages";
       };
       whitelistClients = mkOption {
         type = listOf path;
-        default = [];
+        default = [ ];
         description = "Client address whitelist files (see postgrey(8))";
       };
       whitelistRecipients = mkOption {
         type = listOf path;
-        default = [];
+        default = [ ];
         description = "Recipient address whitelist files (see postgrey(8))";
       };
     };
@@ -154,18 +170,16 @@ in {
           group = "postgrey";
         };
       };
-      groups = {
-        postgrey = {
-          gid = config.ids.gids.postgrey;
-        };
-      };
+      groups = { postgrey = { gid = config.ids.gids.postgrey; }; };
     };
 
     systemd.services.postgrey = let
       bind-flag = if cfg.socket ? path then
         "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
       else
-        ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
+        "--inet=${
+          optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")
+        }${toString cfg.socket.port}";
     in {
       description = "Postfix Greylisting Service";
       wantedBy = [ "multi-user.target" ];
@@ -177,23 +191,42 @@ in {
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.postgrey}/bin/postgrey \
-          ${bind-flag} \
-          --group=postgrey --user=postgrey \
-          --dbdir=/var/postgrey \
-          --delay=${toString cfg.delay} \
-          --max-age=${toString cfg.maxAge} \
-          --retry-window=${toString cfg.retryWindow} \
-          ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} \
-          --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} \
-          ${optionalString cfg.privacy "--privacy"} \
-          --auto-whitelist-clients=${toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)} \
-          --greylist-action=${cfg.greylistAction} \
-          --greylist-text="${cfg.greylistText}" \
-          --x-greylist-header="${cfg.greylistHeader}" \
-          ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
-          ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
-        '';
+        ExecStart = ''
+          ${pkgs.postgrey}/bin/postgrey \
+                    ${bind-flag} \
+                    --group=postgrey --user=postgrey \
+                    --dbdir=/var/postgrey \
+                    --delay=${toString cfg.delay} \
+                    --max-age=${toString cfg.maxAge} \
+                    --retry-window=${toString cfg.retryWindow} \
+                    ${
+                      if cfg.lookupBySubnet then
+                        "--lookup-by-subnet"
+                      else
+                        "--lookup-by-host"
+                    } \
+                    --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${
+                      toString cfg.IPv6CIDR
+                    } \
+                    ${optionalString cfg.privacy "--privacy"} \
+                    --auto-whitelist-clients=${
+                      toString (if cfg.autoWhitelist == null then
+                        0
+                      else
+                        cfg.autoWhitelist)
+                    } \
+                    --greylist-action=${cfg.greylistAction} \
+                    --greylist-text="${cfg.greylistText}" \
+                    --x-greylist-header="${cfg.greylistHeader}" \
+                    ${
+                      concatMapStringsSep " " (x: "--whitelist-clients=" + x)
+                      cfg.whitelistClients
+                    } \
+                    ${
+                      concatMapStringsSep " " (x: "--whitelist-recipients=" + x)
+                      cfg.whitelistRecipients
+                    }
+                  '';
         Restart = "always";
         RestartSec = 5;
         TimeoutSec = 10;

@@ -12,7 +12,6 @@ let
     hash = "sha256-8UnhrGa8KKmMAAkzUXztMkxgYOX8MU1ioXuEStGi4Vc=";
   };
 
-
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
@@ -38,8 +37,7 @@ let
     outputHash = "0x2wmmhjgnb6p72d3kvnv2vg52l0c4151rs4jrazs9rvxjfc88dr";
   };
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name src version;
   nativeBuildInputs = [ gradle_6 perl makeWrapper ];
   buildInputs = [ jre ];

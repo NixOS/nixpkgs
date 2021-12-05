@@ -1,6 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "unqlite";
@@ -17,7 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://unqlite.org/";
-    description = "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
+    description =
+      "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
     longDescription = ''
       UnQLite is a in-process software library which implements a
       self-contained, serverless, zero-configuration, transactional NoSQL

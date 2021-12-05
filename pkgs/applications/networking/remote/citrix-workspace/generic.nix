@@ -1,14 +1,13 @@
-{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
-, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
-, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
-, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
-, libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which
+, more, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk
+, gtk2-x11, gtk3, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg
+, pango, gtk2, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12
+, libxml2, libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx
+, e2fsprogs, symlinkJoin, libpulseaudio, pcsclite, glib-networking
 
 , homepage, version, prefix, hash
 
-, extraCerts ? []
-}:
+, extraCerts ? [ ] }:
 
 let
   openssl' = symlinkJoin {
@@ -20,9 +19,8 @@ let
       ln -sf $out/lib/libssl.so $out/lib/libssl.so.1.0.0
     '';
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "citrix-workspace";
   inherit version;
 
@@ -32,7 +30,9 @@ stdenv.mkDerivation rec {
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the ${
+        if stdenv.is64bit then "64-bit" else "32-bit"
+      } binaries, .tar.gz from:
 
       ${homepage}
 
@@ -52,14 +52,8 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
   passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    file
-    makeWrapper
-    more
-    which
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ autoPatchelfHook file makeWrapper more which wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib
@@ -118,8 +112,10 @@ stdenv.mkDerivation rec {
 
   installPhase = let
     icaFlag = program:
-      if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
-      else "-icaroot";
+      if (builtins.match "selfservice(.*)" program) != null then
+        "--icaroot"
+      else
+        "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
         --add-flags "${icaFlag program} $ICAInstDir" \
@@ -134,13 +130,20 @@ stdenv.mkDerivation rec {
     '';
 
     copyCert = path: ''
-      cp -v ${path} $out/opt/citrix-icaclient/keystore/cacerts/${baseNameOf path}
+      cp -v ${path} $out/opt/citrix-icaclient/keystore/cacerts/${
+        baseNameOf path
+      }
     '';
 
     mkWrappers = lib.concatMapStringsSep "\n";
 
-    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
-      ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
+    toWrap = [
+      "wfica"
+      "selfservice"
+      "util/configmgr"
+      "util/conncenter"
+      "util/ctx_rehash"
+    ] ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
   in ''
     runHook preInstall
 
@@ -157,7 +160,12 @@ stdenv.mkDerivation rec {
       ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
     fi
     ${mkWrappers wrapLink toWrap}
-    ${mkWrappers wrap [ "PrimaryAuthManager" "ServiceRecord" "AuthManagerDaemon" "util/ctxwebhelper" ]}
+    ${mkWrappers wrap [
+      "PrimaryAuthManager"
+      "ServiceRecord"
+      "AuthManagerDaemon"
+      "util/ctxwebhelper"
+    ]}
 
     ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
 

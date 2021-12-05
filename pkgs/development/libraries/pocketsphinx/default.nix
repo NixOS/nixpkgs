@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, sphinxbase
-, pkg-config
-, python27 # >= 2.6
+{ lib, stdenv, fetchurl, sphinxbase, pkg-config, python27 # >= 2.6
 , swig2 # 2.0
 }:
 
@@ -29,19 +25,17 @@ stdenv.mkDerivation rec {
 
 /* Example usage:
 
+   1.
 
-1.
+   $ cat << EOF > vocabulary.txt
+   oh mighty computer /1e-40/
+   hello world /1e-30/
+   EOF
 
-$ cat << EOF > vocabulary.txt
-oh mighty computer /1e-40/
-hello world /1e-30/
-EOF
+   2.
 
-2.
-
-$ pocketsphinx_continuous -inmic yes -kws vocabulary.txt 2> /dev/null
-# after you say "hello world":
-hello world
-...
-
+   $ pocketsphinx_continuous -inmic yes -kws vocabulary.txt 2> /dev/null
+   # after you say "hello world":
+   hello world
+   ...
 */

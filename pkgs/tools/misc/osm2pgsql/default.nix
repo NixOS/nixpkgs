@@ -1,18 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, proj
-, bzip2
-, zlib
-, boost
-, postgresql
-, withLuaJIT ? false
-, lua
-, luajit
-, libosmium
-, protozero
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost
+, postgresql, withLuaJIT ? false, lua, luajit, libosmium, protozero }:
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
@@ -28,8 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ expat proj bzip2 zlib boost postgresql libosmium protozero ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+    ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" "-DEXTERNAL_PROTOZERO=ON" ]
     ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";

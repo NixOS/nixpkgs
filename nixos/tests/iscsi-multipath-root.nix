@@ -1,14 +1,10 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
   let
     initiatorName = "iqn.2020-08.org.linux-iscsi.initiatorhost:example";
     targetName = "iqn.2003-01.org.linux-iscsi.target.x8664:sn.acf8fd9c23af";
-  in
-  {
+  in {
     name = "iscsi";
-    meta = {
-      maintainers = pkgs.lib.teams.deshaw.members;
-    };
+    meta = { maintainers = pkgs.lib.teams.deshaw.members; };
 
     nodes = {
       target = { config, pkgs, lib, ... }: {
@@ -17,60 +13,46 @@ import ./make-test-python.nix (
           enable = true;
           config = {
             fabric_modules = [ ];
-            storage_objects = [
-              {
-                dev = "/dev/vdb";
-                name = "test";
-                plugin = "block";
-                write_back = true;
-                wwn = "92b17c3f-6b40-4168-b082-ceeb7b495522";
-              }
-            ];
-            targets = [
-              {
-                fabric = "iscsi";
-                tpgs = [
-                  {
-                    enable = true;
-                    attributes = {
-                      authentication = 0;
-                      generate_node_acls = 1;
-                    };
-                    luns = [
-                      {
-                        alias = "94dfe06967";
-                        alua_tg_pt_gp_name = "default_tg_pt_gp";
-                        index = 0;
-                        storage_object = "/backstores/block/test";
-                      }
-                    ];
-                    node_acls = [
-                      {
-                        mapped_luns = [
-                          {
-                            alias = "d42f5bdf8a";
-                            index = 0;
-                            tpg_lun = 0;
-                            write_protect = false;
-                          }
-                        ];
-                        node_wwn = initiatorName;
-                      }
-                    ];
-                    portals = [
-                      {
-                        ip_address = "0.0.0.0";
-                        iser = false;
-                        offload = false;
-                        port = 3260;
-                      }
-                    ];
-                    tag = 1;
-                  }
-                ];
-                wwn = targetName;
-              }
-            ];
+            storage_objects = [{
+              dev = "/dev/vdb";
+              name = "test";
+              plugin = "block";
+              write_back = true;
+              wwn = "92b17c3f-6b40-4168-b082-ceeb7b495522";
+            }];
+            targets = [{
+              fabric = "iscsi";
+              tpgs = [{
+                enable = true;
+                attributes = {
+                  authentication = 0;
+                  generate_node_acls = 1;
+                };
+                luns = [{
+                  alias = "94dfe06967";
+                  alua_tg_pt_gp_name = "default_tg_pt_gp";
+                  index = 0;
+                  storage_object = "/backstores/block/test";
+                }];
+                node_acls = [{
+                  mapped_luns = [{
+                    alias = "d42f5bdf8a";
+                    index = 0;
+                    tpg_lun = 0;
+                    write_protect = false;
+                  }];
+                  node_wwn = initiatorName;
+                }];
+                portals = [{
+                  ip_address = "0.0.0.0";
+                  iser = false;
+                  offload = false;
+                  port = 3260;
+                }];
+                tag = 1;
+              }];
+              wwn = targetName;
+            }];
           };
         };
 
@@ -90,12 +72,10 @@ import ./make-test-python.nix (
             find_multipaths yes
             user_friendly_names yes
           '';
-          pathGroups = [
-            {
-              alias = 123456;
-              wwid = "3600140592b17c3f6b404168b082ceeb7";
-            }
-          ];
+          pathGroups = [{
+            alias = 123456;
+            wwid = "3600140592b17c3f6b404168b082ceeb7";
+          }];
         };
 
         services.openiscsi = {
@@ -105,11 +85,10 @@ import ./make-test-python.nix (
           name = initiatorName;
         };
 
-        environment.systemPackages = with pkgs; [
-          xfsprogs
-        ];
+        environment.systemPackages = with pkgs; [ xfsprogs ];
 
-        environment.etc."initiator-root-disk-closure".source = nodes.initiatorRootDisk.config.system.build.toplevel;
+        environment.etc."initiator-root-disk-closure".source =
+          nodes.initiatorRootDisk.config.system.build.toplevel;
 
         nix.binaryCaches = lib.mkForce [ ];
         nix.extraOptions = ''
@@ -122,14 +101,12 @@ import ./make-test-python.nix (
         boot.initrd.network.enable = true;
         boot.loader.grub.enable = false;
 
-        boot.kernelParams = lib.mkOverride 5 (
-          [
-            "boot.shell_on_fail"
-            "console=tty1"
-            "ip=192.168.1.1:::255.255.255.0::ens9:none"
-            "ip=192.168.2.1:::255.255.255.0::ens10:none"
-          ]
-        );
+        boot.kernelParams = lib.mkOverride 5 ([
+          "boot.shell_on_fail"
+          "console=tty1"
+          "ip=192.168.1.1:::255.255.255.0::ens9:none"
+          "ip=192.168.2.1:::255.255.255.0::ens10:none"
+        ]);
 
         # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
         virtualisation.writableStore = false;
@@ -141,12 +118,10 @@ import ./make-test-python.nix (
             find_multipaths yes
             user_friendly_names yes
           '';
-          pathGroups = [
-            {
-              alias = 123456;
-              wwid = "3600140592b17c3f6b404168b082ceeb7";
-            }
-          ];
+          pathGroups = [{
+            alias = 123456;
+            wwid = "3600140592b17c3f6b404168b082ceeb7";
+          }];
         };
 
         fileSystems = lib.mkOverride 5 {
@@ -157,7 +132,8 @@ import ./make-test-python.nix (
           };
         };
 
-        boot.initrd.extraFiles."etc/multipath/wwids".source = pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
+        boot.initrd.extraFiles."etc/multipath/wwids".source =
+          pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
 
         boot.iscsi-initiator = {
           discoverPortal = "target";
@@ -261,7 +237,5 @@ import ./make-test-python.nix (
       initiatorRootDisk.wait_for_unit("iscsid")
       initiatorRootDisk.succeed("test -e /scratch/both-up")
     '';
-  }
-)
-
+  })
 

@@ -1,22 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, wrapGAppsHook
-, glib
-, gtk3
-, expat
-, itstool
-, gnome-doc-utils
-, which
-, at-spi2-core
-, dbus
-, libxslt
-, libxml2
-, speechSupport ? true
-, speechd
-}:
+{ stdenv, lib, fetchFromGitLab, autoreconfHook, pkg-config, wrapGAppsHook, glib
+, gtk3, expat, itstool, gnome-doc-utils, which, at-spi2-core, dbus, libxslt
+, libxml2, speechSupport ? true, speechd }:
 
 stdenv.mkDerivation {
   pname = "dasher";
@@ -62,7 +46,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.inference.org.uk/dasher/";
-    description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
+    description =
+      "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.Profpatsch ];
     platforms = lib.platforms.all;

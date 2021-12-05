@@ -21,7 +21,8 @@ buildDunePackage rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A library for pooling resources like connections, threads, or similar";
+    description =
+      "A library for pooling resources like connections, threads, or similar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

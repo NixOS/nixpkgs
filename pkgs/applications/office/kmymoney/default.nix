@@ -1,24 +1,24 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
 , wrapQtAppsHook
 
-, akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
-, kitemmodels, libical, libofx, qgpgme
+, akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive, kcmutils
+, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement, kitemmodels
+, libical, libofx, qgpgme
 
 , sqlcipher
 
 # Needed for running tests:
 , qtbase, xvfb-run
 
-, python2, python3Packages
-}:
+, python2, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
   version = "5.1.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
   };
 
@@ -26,14 +26,33 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    doxygen
+    extra-cmake-modules
+    graphviz
+    kdoctools
+    python2
+    python3Packages.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
-    libical libofx qgpgme
+    akonadi
+    alkimia
+    aqbanking
+    gmp
+    gwenhywfar
+    kactivities
+    karchive
+    kcmutils
+    kcontacts
+    kdewebkit
+    kdiagram
+    kholidays
+    kidentitymanagement
+    kitemmodels
+    libical
+    libofx
+    qgpgme
     sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
@@ -56,11 +75,10 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   installCheckInputs = [ xvfb-run ];
-  installCheckPhase =
-    lib.optionalString doInstallCheck ''
-      xvfb-run -s '-screen 0 1024x768x24' make test \
-        ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
-    '';
+  installCheckPhase = lib.optionalString doInstallCheck ''
+    xvfb-run -s '-screen 0 1024x768x24' make test \
+      ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
+  '';
 
   meta = {
     description = "Personal finance manager for KDE";

@@ -1,9 +1,5 @@
-{ lib, stdenv, fetchurl
-, attr, e2fsprogs
-, curl, librsync, libthreadar
-, gpgme, libgcrypt, openssl
-, bzip2, lzo, xz, zlib
-}:
+{ lib, stdenv, fetchurl, attr, e2fsprogs, curl, librsync, libthreadar, gpgme
+, libgcrypt, openssl, bzip2, lzo, xz, zlib }:
 
 with lib;
 
@@ -18,11 +14,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    curl librsync libthreadar
-    gpgme libgcrypt openssl
-    bzip2 lzo xz zlib
-  ] ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  buildInputs =
+    [ curl librsync libthreadar gpgme libgcrypt openssl bzip2 lzo xz zlib ]
+    ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [
     "--disable-birthtime"
@@ -43,7 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://dar.linux.free.fr";
-    description = "Disk ARchiver, allows backing up files into indexed archives";
+    description =
+      "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = with maintainers; [ izorkin ];
     license = licenses.gpl2;
     platforms = platforms.unix;

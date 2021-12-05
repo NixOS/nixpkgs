@@ -1,32 +1,32 @@
 { lib, stdenv, fetchurl, callPackage }:
 
 let
- # Probably a bug in some FreeDict release files, but easier to trivially
- # work around than report. Not that it can cause any other problems..
- makeDictdDBFreedict = src: name: locale:
-   makeDictdDB src name "{.,bin}" locale;
+  # Probably a bug in some FreeDict release files, but easier to trivially
+  # work around than report. Not that it can cause any other problems..
+  makeDictdDBFreedict = src: name: locale:
+    makeDictdDB src name "{.,bin}" locale;
 
- makeDictdDB = src: _name: _subdir: _locale:
-   stdenv.mkDerivation {
-     name = "dictd-db-${_name}";
-     inherit src;
-     locale = _locale;
-     dbName = _name;
-     dontBuild = true;
-     unpackPhase = ''
-       tar xf  ${src}
-     '';
-     installPhase = ''
-       mkdir -p $out/share/dictd
-       cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd
-       echo "${_locale}" >$out/share/dictd/locale
-     '';
+  makeDictdDB = src: _name: _subdir: _locale:
+    stdenv.mkDerivation {
+      name = "dictd-db-${_name}";
+      inherit src;
+      locale = _locale;
+      dbName = _name;
+      dontBuild = true;
+      unpackPhase = ''
+        tar xf  ${src}
+      '';
+      installPhase = ''
+        mkdir -p $out/share/dictd
+        cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd
+        echo "${_locale}" >$out/share/dictd/locale
+      '';
 
-     meta = {
-       description = "dictd-db dictionary for dictd";
-       platforms = lib.platforms.linux;
-     };
-   };
+      meta = {
+        description = "dictd-db dictionary for dictd";
+        platforms = lib.platforms.linux;
+      };
+    };
 in rec {
   deu2eng = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/deu-eng.tar.gz";
@@ -40,7 +40,7 @@ in rec {
     url = "mirror://sourceforge/freedict/nld-eng.tar.gz";
     sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
   }) "nld-eng" "nl_NL";
-  eng2nld =  makeDictdDBFreedict (fetchurl {
+  eng2nld = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/eng-nld.tar.gz";
     sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
   }) "eng-nld" "en_UK";
@@ -90,6 +90,6 @@ in rec {
     dbName = "mueller-names";
     locale = "en_UK";
   };
-  wordnet = callPackage ./dictd-wordnet.nix {};
-  wiktionary = callPackage ./wiktionary {};
+  wordnet = callPackage ./dictd-wordnet.nix { };
+  wiktionary = callPackage ./wiktionary { };
 }

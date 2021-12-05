@@ -1,27 +1,20 @@
-{ config, stdenv, lib, fetchurl, fetchpatch
-, perl, pkg-config
-, libcap, libtool, libxml2, openssl, libuv
-, enableGSSAPI ? true, libkrb5
-, enablePython ? false, python3
-, enableSeccomp ? false, libseccomp
-, buildPackages, nixosTests
-}:
+{ config, stdenv, lib, fetchurl, fetchpatch, perl, pkg-config, libcap, libtool
+, libxml2, openssl, libuv, enableGSSAPI ? true, libkrb5, enablePython ? false
+, python3, enableSeccomp ? false, libseccomp, buildPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
   version = "9.16.16";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
+    url =
+      "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-bJE5Aq34eOfcXiKc6pT678nUD0R3WjAhPt0Ihg92HXs=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
-  patches = [
-    ./dont-keep-configure-flags.patch
-    ./remove-mkdir-var.patch
-  ];
+  patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ];
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libtool libxml2 openssl libuv ]
@@ -53,7 +46,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
     ++ lib.optional enableSeccomp "--enable-seccomp"
     ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

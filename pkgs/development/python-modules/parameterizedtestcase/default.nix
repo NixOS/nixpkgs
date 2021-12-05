@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, python, isPy27 }:
 
 buildPythonPackage rec {
   pname = "parameterizedtestcase";
@@ -24,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parameterized tests for Python's unittest module";
-    homepage = "https://github.com/msabramo/python_unittest_parameterized_test_case";
+    homepage =
+      "https://github.com/msabramo/python_unittest_parameterized_test_case";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

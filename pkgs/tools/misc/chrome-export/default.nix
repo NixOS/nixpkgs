@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "chrome-export";
@@ -28,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
+    description =
+      "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
     homepage = "https://github.com/bdesham/chrome-export";
     license = [ licenses.isc ];
     maintainers = [ maintainers.bdesham ];

@@ -1,11 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, curl
-, libimobiledevice
-, libirecovery
-, libzip
-, libusbmuxd
-, IOKit
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl
+, libimobiledevice, libirecovery, libzip, libusbmuxd, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
@@ -18,10 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w7ywp77xc6v4hifi3j9ywrj447vv7fkwg2w26w0lq95f3bkblqr";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     curl

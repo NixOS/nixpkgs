@@ -1,20 +1,20 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   testCombinations = pkgs.lib.cartesianProductOfSets {
-    predictable = [true false];
-    withNetworkd = [true false];
+    predictable = [ true false ];
+    withNetworkd = [ true false ];
   };
 in pkgs.lib.listToAttrs (builtins.map ({ predictable, withNetworkd }: {
   name = pkgs.lib.optionalString (!predictable) "un" + "predictable"
-       + pkgs.lib.optionalString withNetworkd "Networkd";
+    + pkgs.lib.optionalString withNetworkd "Networkd";
   value = makeTest {
-    name = "${if predictable then "" else "un"}predictableInterfaceNames${if withNetworkd then "-with-networkd" else ""}";
-    meta = {};
+    name = "${if predictable then "" else "un"}predictableInterfaceNames${
+        if withNetworkd then "-with-networkd" else ""
+      }";
+    meta = { };
 
     machine = { lib, ... }: {
       networking.usePredictableInterfaceNames = lib.mkForce predictable;

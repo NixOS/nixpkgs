@@ -15,7 +15,8 @@ rec {
   extraPatches = [
     (fetchpatch {
       name = "CVE-2020-14387.patch";
-      url = "https://git.samba.org/?p=rsync.git;a=patch;h=c3f7414;hp=4c4fce51072c9189cfb11b52aa54fed79f5741bd";
+      url =
+        "https://git.samba.org/?p=rsync.git;a=patch;h=c3f7414;hp=4c4fce51072c9189cfb11b52aa54fed79f5741bd";
       sha256 = "000lyx48lns84p53nsdlr45mb9558lrvnsz3yic0y3z6h2izv82x";
     })
   ];

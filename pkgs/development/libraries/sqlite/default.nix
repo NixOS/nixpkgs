@@ -1,21 +1,19 @@
 { lib, stdenv, fetchurl, zlib, interactive ? false, readline, ncurses
-, python3Packages
-, enableDeserialize ? false
-}:
+, python3Packages, enableDeserialize ? false }:
 
 with lib;
 
-let
-  archiveVersion = import ./archive-version.nix lib;
-in
+let archiveVersion = import ./archive-version.nix lib;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "sqlite";
   version = "3.36.0";
 
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    url = "https://sqlite.org/2021/sqlite-autoconf-${
+        archiveVersion version
+      }.tar.gz";
     sha256 = "sha256-vZDD65a+6ZYga4O+cGXJzhmu84w/T7Uwc62g0LabvOM=";
   };
 
@@ -29,7 +27,8 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ]
+    ++ optional interactive "--enable-readline";
 
   NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -56,14 +55,14 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # Use pread(), pread64(), pwrite(), pwrite64() functions for better performance if they are available.
     if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread_pwrite_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread(0, NULL, 0, 0);\n  pwrite(0, NULL, 0, 0);\n  return 0;\n}'; then
+      $'#include <unistd.h>\nint main()\n{\n  pread(0, NULL, 0, 0);\n  pwrite(0, NULL, 0, 0);\n  return 0;\n}'; then
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD"
     fi
     if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
+      $'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64"
     elif cc -D_LARGEFILE64_SOURCE -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
+      $'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64 -D_LARGEFILE64_SOURCE"
     fi
 
@@ -82,12 +81,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails to link against tcl
 
-  passthru.tests = {
-    inherit (python3Packages) sqlalchemy;
-  };
+  passthru.tests = { inherit (python3Packages) sqlalchemy; };
 
   meta = {
-    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
+    description =
+      "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;

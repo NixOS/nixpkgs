@@ -6,8 +6,7 @@ let
     rev = "07493a5e78677de448b0e35bd72bf1dc6498b5ea";
     sha256 = "sha256-V1vGGC8Q257iQMhxCBEBkZntt0ckppCJMCEr2Nqxo/M=";
   };
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "teleport";
   version = "7.3.2";
 

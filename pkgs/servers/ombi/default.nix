@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook, fixDarwinDylibNames, zlib, krb5, openssl, icu, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook, fixDarwinDylibNames
+, zlib, krb5, openssl, icu, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -22,7 +23,8 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   src = fetchurl {
-    url = "https://github.com/Ombi-app/Ombi/releases/download/v${version}/${os}-${arch}.tar.gz";
+    url =
+      "https://github.com/Ombi-app/Ombi/releases/download/v${version}/${os}-${arch}.tar.gz";
     sha256 = hash;
   };
 
@@ -46,7 +48,8 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
+    description =
+      "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
     homepage = "https://ombi.io/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ woky ];

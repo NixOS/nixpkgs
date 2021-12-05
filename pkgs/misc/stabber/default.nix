@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
-, libmicrohttpd
-}:
+, libmicrohttpd }:
 
 with lib;
 

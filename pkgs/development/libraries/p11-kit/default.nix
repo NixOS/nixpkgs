@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, which
-, gettext, libffi, libiconv, libtasn1
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, which, gettext
+, libffi, libiconv, libtasn1 }:
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jvUzOhMvbq05SxQ+kjKQHDDMzNwo4U6nFHu3JjygJHw=";
   };
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   # for cross platform builds of p11-kit, libtasn1 in nativeBuildInputs
@@ -31,11 +30,13 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-trust-paths=${lib.concatStringsSep ":" [
-      "/etc/ssl/trust-source"               # p11-kit trust source
-      "/etc/ssl/certs/ca-certificates.crt"  # NixOS + Debian/Ubuntu/Arch/Gentoo...
-      "/etc/pki/tls/certs/ca-bundle.crt"    # Fedora/CentOS
-    ]}"
+    "--with-trust-paths=${
+      lib.concatStringsSep ":" [
+        "/etc/ssl/trust-source" # p11-kit trust source
+        "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
+        "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
+      ]
+    }"
   ];
 
   enableParallelBuilding = true;
@@ -49,9 +50,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  installFlags = [
-    "exampledir=${placeholder "out"}/etc/pkcs11"
-  ];
+  installFlags = [ "exampledir=${placeholder "out"}/etc/pkcs11" ];
 
   meta = with lib; {
     description = "Library for loading and sharing PKCS#11 modules";

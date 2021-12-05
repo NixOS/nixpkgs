@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
-, elementary-notifications
+{ lib, stdenv, fetchFromGitHub, nix-update-script, fetchpatch, meson, ninja
+, pkg-config, vala, libgee, granite, gtk3, switchboard, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
@@ -29,31 +17,19 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard-plug-notifications/pull/83
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/2e0320aab62b6932e8ef5f941d02e244de381957.patch";
+      url =
+        "https://github.com/elementary/switchboard-plug-notifications/commit/2e0320aab62b6932e8ef5f941d02e244de381957.patch";
       sha256 = "0rcamasq837grck0i2yx6psggzrhv7p7m3mra5l0k9zsjxgar92v";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config vala ];
 
-  buildInputs = [
-    elementary-notifications
-    granite
-    gtk3
-    libgee
-    switchboard
-  ];
+  buildInputs = [ elementary-notifications granite gtk3 libgee switchboard ];
 
   meta = with lib; {
     description = "Switchboard Notifications Plug";

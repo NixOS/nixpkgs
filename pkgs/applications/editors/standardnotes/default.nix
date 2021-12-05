@@ -1,5 +1,5 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
+{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils, fetchurl
+, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
   version = "3.8.18";
@@ -17,13 +17,12 @@ let
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
+    url =
+      "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
     inherit sha256;
   };
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extract { inherit name src; };
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
 
@@ -34,9 +33,7 @@ in appimageTools.wrapType2 rec {
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  extraPkgs = pkgs: with pkgs; [ libsecret ];
 
   extraInstallCommands = ''
     # directory in /nix/store so readonly

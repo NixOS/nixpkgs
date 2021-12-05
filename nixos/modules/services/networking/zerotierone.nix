@@ -2,14 +2,12 @@
 
 with lib;
 
-let
-  cfg = config.services.zerotierone;
-in
-{
+let cfg = config.services.zerotierone;
+in {
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
-    default = [];
+    default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
     description = ''
@@ -69,9 +67,7 @@ in
 
     # Prevent systemd from potentially changing the MAC address
     systemd.network.links."50-zerotier" = {
-      matchConfig = {
-        OriginalName = "zt*";
-      };
+      matchConfig = { OriginalName = "zt*"; };
       linkConfig = {
         AutoNegotiation = false;
         MACAddressPolicy = "none";

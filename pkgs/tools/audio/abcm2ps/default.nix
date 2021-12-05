@@ -11,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RELWtI+S2cbG7cXCehXymvWRdair28UaDZRVr5xt9Tk=";
   };
 
-  configureFlags = [
-    "--INSTALL=install"
-  ];
+  configureFlags = [ "--INSTALL=install" ];
 
-  buildFlags = [
-    "CC=${stdenv.cc}/bin/cc"
-  ];
+  buildFlags = [ "CC=${stdenv.cc}/bin/cc" ];
 
   nativeBuildInputs = [ which pkg-config docutils ];
 
@@ -26,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://moinejf.free.fr/";
     license = licenses.lgpl3Plus;
-    description = "A command line program which converts ABC to music sheet in PostScript or SVG format";
+    description =
+      "A command line program which converts ABC to music sheet in PostScript or SVG format";
     platforms = platforms.unix;
     maintainers = [ maintainers.dotlambda ];
   };

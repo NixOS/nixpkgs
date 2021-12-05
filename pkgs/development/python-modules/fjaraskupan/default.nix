@@ -1,11 +1,5 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, bleak, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "fjaraskupan";
@@ -21,14 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-nUrgV4keJpYRkKZE+udvmPdCW3O3YQTS1ye40IdA7vA=";
   };
 
-  propagatedBuildInputs = [
-    bleak
-  ];
+  propagatedBuildInputs = [ bleak ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "fjaraskupan" ];
 

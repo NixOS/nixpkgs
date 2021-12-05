@@ -1,18 +1,6 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, installShellFiles
-, astroid
-, isort
-, mccabe
-, platformdirs
-, toml
-, pytest-benchmark
-, pytest-xdist
-, pytestCheckHook
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+, installShellFiles, astroid, isort, mccabe, platformdirs, toml
+, pytest-benchmark, pytest-xdist, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pylint";
@@ -27,17 +15,9 @@ buildPythonPackage rec {
     sha256 = "08kc9139v1sd0vhna0rqikyds0xq8hxv0j9707n2i1nbv2z6xhsv";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
-    astroid
-    isort
-    mccabe
-    platformdirs
-    toml
-  ];
+  propagatedBuildInputs = [ astroid isort mccabe platformdirs toml ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
@@ -45,11 +25,7 @@ buildPythonPackage rec {
     installManPage man/*.1
   '';
 
-  checkInputs = [
-    pytest-benchmark
-    pytest-xdist
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-benchmark pytest-xdist pytestCheckHook ];
 
   dontUseSetuptoolsCheck = true;
 
@@ -58,9 +34,7 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  pytestFlagsArray = [
-    "-n auto"
-  ];
+  pytestFlagsArray = [ "-n auto" ];
 
   disabledTestPaths = [
     # tests miss multiple input files

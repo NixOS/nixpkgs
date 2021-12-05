@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click }:
+{ lib, buildPythonPackage, fetchFromGitHub, click }:
 
 buildPythonPackage rec {
   pname = "click-datetime";

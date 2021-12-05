@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, snappy
-, cffi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, snappy, cffi, nose }:
 
 buildPythonPackage rec {
   pname = "python-snappy";
@@ -30,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python library for the snappy compression library from Google";
+    description =
+      "Python library for the snappy compression library from Google";
     homepage = "https://github.com/andrix/python-snappy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

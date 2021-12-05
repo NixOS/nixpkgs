@@ -20,7 +20,12 @@ python3Packages.buildPythonApplication rec {
     $out/bin/simp_le --test
   '';
 
-  propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];
+  propagatedBuildInputs = with python3Packages; [
+    acme
+    setuptools-scm
+    josepy
+    idna
+  ];
 
   checkInputs = with python3Packages; [ mock ];
 

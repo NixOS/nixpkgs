@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.03";
 
   src = fetchurl {
-    url = "https://bioweb.supagro.inra.fr/${pname}/releases/${pname}_v${version}.jar";
+    url =
+      "https://bioweb.supagro.inra.fr/${pname}/releases/${pname}_v${version}.jar";
     sha256 = "0jnjyz4f255glg37rawzdv4m6nfs7wfwc5dny7afvx4dz2sv4ssh";
   };
 

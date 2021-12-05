@@ -14,9 +14,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-kPYvkovzQDmoB67TZHCKZ5jtW6pN3gHxBPKAU8prbgo=";
 
   meta = with lib; {
-    description = "Kubernetes object analysis with recommendations for improved reliability and security";
-    homepage    = "https://github.com/zegl/kube-score";
-    license     = licenses.mit;
+    description =
+      "Kubernetes object analysis with recommendations for improved reliability and security";
+    homepage = "https://github.com/zegl/kube-score";
+    license = licenses.mit;
     maintainers = [ maintainers.j4m3s ];
   };
 }

@@ -6,32 +6,29 @@ let
   name = "${pname}-${version}-binary";
 
   src = fetchurl {
-    url = "https://github.com/marktext/marktext/releases/download/${version}/marktext-x86_64.AppImage";
+    url =
+      "https://github.com/marktext/marktext/releases/download/${version}/marktext-x86_64.AppImage";
     sha256 = "0s93c79vy2vsi7b6xq4hvsvjjad8bdkhl1q135vp98zmbf7bvm9b";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
-in
-appimageTools.wrapType2 rec {
+  appimageContents = appimageTools.extractType2 { inherit name src; };
+in appimageTools.wrapType2 rec {
   inherit name src;
 
   profile = ''
     export LC_ALL=C.UTF-8
   ''
-  # Fixes file open dialog error
-  #     GLib-GIO-ERROR **: 20:36:48.243: No GSettings schemas are installed on the system
-  # See https://github.com/NixOS/nixpkgs/pull/83701#issuecomment-608034097
-  + ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+    # Fixes file open dialog error
+    #     GLib-GIO-ERROR **: 20:36:48.243: No GSettings schemas are installed on the system
+    # See https://github.com/NixOS/nixpkgs/pull/83701#issuecomment-608034097
+    + ''
+      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+    '';
 
   multiPkgs = null; # no 32bit needed
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.libsecret
-    p.xorg.libxkbfile
-  ];
+  extraPkgs = p:
+    (appimageTools.defaultFhsEnvArgs.multiPkgs p)
+    ++ [ p.libsecret p.xorg.libxkbfile ];
 
   extraInstallCommands = ''
     # Strip version from binary name.
@@ -45,7 +42,8 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A simple and elegant markdown editor, available for Linux, macOS and Windows";
+    description =
+      "A simple and elegant markdown editor, available for Linux, macOS and Windows";
     homepage = "https://marktext.app";
     license = licenses.mit;
     maintainers = with maintainers; [ nh2 ];

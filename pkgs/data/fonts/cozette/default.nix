@@ -1,12 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.8.3";
-in
-fetchzip rec {
+let version = "1.8.3";
+in fetchzip rec {
   name = "Cozette-${version}";
 
-  url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
+  url =
+    "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
 
   sha256 = "1nc4zk6n7cbv9vwlhpm3ady5lc4d4ic1klyywwfg27w8j0jv57hx";
 

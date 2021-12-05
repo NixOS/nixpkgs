@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
-    repo  = "fdupes";
-    rev   = "v${version}";
+    repo = "fdupes";
+    rev = "v${version}";
     sha256 = "1c5hv7vkfxsii1qafhsynzp9zkwim47xkpk27sy64qdsjnhysdak";
   };
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses pcre2 ];
 
   meta = with lib; {
-    description = "Identifies duplicate files residing within specified directories";
+    description =
+      "Identifies duplicate files residing within specified directories";
     longDescription = ''
       fdupes searches the given path for duplicate files.
       Such files are found by comparing file sizes and MD5 signatures,

@@ -1,15 +1,5 @@
-{ alsa-lib
-, fetchFromGitHub
-, makeWrapper
-, openssl
-, pkg-config
-, python3
-, rustPlatform
-, lib
-, wayland
-, xorg
-, vulkan-loader
-}:
+{ alsa-lib, fetchFromGitHub, makeWrapper, openssl, pkg-config, python3
+, rustPlatform, lib, wayland, xorg, vulkan-loader }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
@@ -22,11 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-N4i13vx/hWzFf2DT3lToAAnbMgIaUL/B2C3WI1el3ps=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config python3 ];
 
   buildInputs = [
     alsa-lib
@@ -51,7 +37,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-6B6bSIU15Ca1/lLYij9YjpFykbJhOGZieydNXis/Cw8=";
 
   meta = with lib; {
-    description = "An Adobe Flash Player emulator written in the Rust programming language.";
+    description =
+      "An Adobe Flash Player emulator written in the Rust programming language.";
     homepage = "https://ruffle.rs/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ govanify ];

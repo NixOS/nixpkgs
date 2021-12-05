@@ -1,18 +1,5 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, fetchFromGitLab
-, pkg-config
-, glib
-, docbook_xsl
-, sane-backends
-, gobject-introspection
-, vala
-, gtk-doc
-, valgrind
-, doxygen
-, cunit
+{ stdenv, lib, meson, ninja, fetchFromGitLab, pkg-config, glib, docbook_xsl
+, sane-backends, gobject-introspection, vala, gtk-doc, valgrind, doxygen, cunit
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +17,16 @@ stdenv.mkDerivation rec {
     sha256 = "1a1lszhq3j11i1jybc5kmn7hhhji44xhjqsxsldsy9l3344rkzv4";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja doxygen gtk-doc docbook_xsl gobject-introspection vala ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    doxygen
+    gtk-doc
+    docbook_xsl
+    gobject-introspection
+    vala
+  ];
 
   buildInputs = [ sane-backends glib ];
 

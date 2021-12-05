@@ -6,12 +6,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [
-    ringo
-    lwt
-  ];
+  propagatedBuildInputs = [ ringo lwt ];
 
-  meta = ringo.meta // {
-    description = "Lwt-wrappers for Ringo caches";
-  };
+  meta = ringo.meta // { description = "Lwt-wrappers for Ringo caches"; };
 }

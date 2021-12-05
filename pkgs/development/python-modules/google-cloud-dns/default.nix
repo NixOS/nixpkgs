@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, pytestCheckHook
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, google-cloud-core
+, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";

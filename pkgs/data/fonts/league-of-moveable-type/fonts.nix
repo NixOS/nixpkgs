@@ -40,7 +40,8 @@
     name = "linden-hill.zip";
   }
   {
-    url = "https://www.theleagueofmoveabletype.com/league-script-number-one/download";
+    url =
+      "https://www.theleagueofmoveabletype.com/league-script-number-one/download";
     sha256 = "056hb02a5vydrq5q0gwzanp2zkrrv1spm8sfc5wzhyfzgwd1vc76";
     name = "league-script-number-one.zip";
   }
@@ -60,7 +61,8 @@
     name = "orbitron.zip";
   }
   {
-    url = "https://www.theleagueofmoveabletype.com/goudy-bookletter-1911/download";
+    url =
+      "https://www.theleagueofmoveabletype.com/goudy-bookletter-1911/download";
     sha256 = "01qganq5n7rgqw546lf45kj8j7ymfjr00i2bwp3qw7ibifg9pn4n";
     name = "goudy-bookletter-1911.zip";
   }

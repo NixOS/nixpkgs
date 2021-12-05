@@ -3,8 +3,7 @@
 let
   pname = "stow";
   version = "2.3.1";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -17,7 +16,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "A tool for managing the installation of multiple software packages in the same run-time directory tree";
+    description =
+      "A tool for managing the installation of multiple software packages in the same run-time directory tree";
 
     longDescription = ''
       GNU Stow is a symlink farm manager which takes distinct packages

@@ -4,14 +4,11 @@ with lib;
 let
   cfg = config.services.webdav-server-rs;
   format = pkgs.formats.toml { };
-  settings = recursiveUpdate
-    {
-      server.uid = config.users.users."${cfg.user}".uid;
-      server.gid = config.users.groups."${cfg.group}".gid;
-    }
-    cfg.settings;
-in
-{
+  settings = recursiveUpdate {
+    server.uid = config.users.users."${cfg.user}".uid;
+    server.gid = config.users.groups."${cfg.group}".gid;
+  } cfg.settings;
+in {
   options = {
     services.webdav-server-rs = {
       enable = mkEnableOption "WebDAV server";
@@ -72,7 +69,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = format.generate "webdav-server.toml" settings;
-        defaultText = "Config file generated from services.webdav-server-rs.settings";
+        defaultText =
+          "Config file generated from services.webdav-server-rs.settings";
         description = ''
           Path to config file. If this option is set, it will override any
           configuration done in services.webdav-server-rs.settings.
@@ -85,12 +83,16 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = hasAttr cfg.user config.users.users && config.users.users."${cfg.user}".uid != null;
-        message = "users.users.${cfg.user} and users.users.${cfg.user}.uid must be defined.";
+        assertion = hasAttr cfg.user config.users.users
+          && config.users.users."${cfg.user}".uid != null;
+        message =
+          "users.users.${cfg.user} and users.users.${cfg.user}.uid must be defined.";
       }
       {
-        assertion = hasAttr cfg.group config.users.groups && config.users.groups."${cfg.group}".gid != null;
-        message = "users.groups.${cfg.group} and users.groups.${cfg.group}.gid must be defined.";
+        assertion = hasAttr cfg.group config.users.groups
+          && config.users.groups."${cfg.group}".gid != null;
+        message =
+          "users.groups.${cfg.group} and users.groups.${cfg.group}.gid must be defined.";
       }
     ];
 
@@ -111,12 +113,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.webdav-server-rs}/bin/webdav-server -c ${cfg.configFile}";
+        ExecStart =
+          "${pkgs.webdav-server-rs}/bin/webdav-server -c ${cfg.configFile}";
 
-        CapabilityBoundingSet = [
-          "CAP_SETUID"
-          "CAP_SETGID"
-        ];
+        CapabilityBoundingSet = [ "CAP_SETUID" "CAP_SETGID" ];
 
         NoExecPaths = [ "/" ];
         ExecPaths = [ "/nix/store" ];

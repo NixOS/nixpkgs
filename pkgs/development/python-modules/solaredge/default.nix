@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, pythonOlder, pytz
+, requests }:
 
 buildPythonPackage rec {
   pname = "solaredge";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "0q4gib0l3qnlpncg84ki027vr1apjlr47vd6845rpk7zkm8lqgfz";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-    pytz
-    requests
-  ];
+  propagatedBuildInputs = [ python-dateutil pytz requests ];
 
   # Project has no tests
   doCheck = false;

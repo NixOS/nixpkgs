@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme, jdupes }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme
+, hicolor-icon-theme, jdupes }:
 
 stdenv.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -11,18 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0x6qzch4rrc8firb1dcf926j93gpqxvd7h6dj5wwczxbvxi5bd77";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gtk3
-    jdupes
-  ];
+  nativeBuildInputs = [ meson ninja gtk3 jdupes ];
 
-  propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
-    gnome-icon-theme
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs =
+    [ gnome.adwaita-icon-theme gnome-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
@@ -39,7 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modern icon theme designed around bold colours and simple geometric shapes";
+    description =
+      "Modern icon theme designed around bold colours and simple geometric shapes";
     homepage = "https://snwh.org/paper";
     license = with licenses; [ cc-by-sa-40 lgpl3 ];
     # darwin cannot deal with file names differing only in case

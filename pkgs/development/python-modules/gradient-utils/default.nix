@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hyperopt
-, mock
-, numpy
-, poetry-core
-, prometheus-client
-, pytestCheckHook
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, hyperopt, mock, numpy, poetry-core
+, prometheus-client, pytestCheckHook, requests }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
@@ -32,17 +23,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    hyperopt
-    prometheus-client
-    numpy
-  ];
+  propagatedBuildInputs = [ hyperopt prometheus-client numpy ];
 
-  checkInputs = [
-    mock
-    requests
-    pytestCheckHook
-  ];
+  checkInputs = [ mock requests pytestCheckHook ];
 
   preCheck = ''
     export HOSTNAME=myhost-experimentId

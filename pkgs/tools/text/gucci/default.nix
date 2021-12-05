@@ -15,9 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  ldflags = [
-    "-X main.AppVersion=${version}"
-  ];
+  ldflags = [ "-X main.AppVersion=${version}" ];
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";

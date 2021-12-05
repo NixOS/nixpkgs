@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NDl6MsvIDAXkaLqXt7Wa0T7aulT31P5Z/d/Vb+ILya0=";
   };
 
-  configureFlags = [
-    "--with-moduledir=${placeholder "out"}/lib/security"
-  ];
+  configureFlags = [ "--with-moduledir=${placeholder "out"}/lib/security" ];
 
   buildInputs = [ pam gnupg ];
 

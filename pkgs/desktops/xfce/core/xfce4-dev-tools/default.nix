@@ -1,14 +1,5 @@
-{ mkXfceDerivation
-, autoreconfHook
-, libxslt
-, docbook_xsl
-, autoconf
-, automake
-, glib
-, gtk-doc
-, intltool
-, libtool
-}:
+{ mkXfceDerivation, autoreconfHook, libxslt, docbook_xsl, autoconf, automake
+, glib, gtk-doc, intltool, libtool }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -17,20 +8,9 @@ mkXfceDerivation {
 
   sha256 = "sha256-5r9dJfCgXosXoOAtNg1kaPWgFEAmyw/pWTtdG+K1h3A=";
 
-  nativeBuildInputs = [
-    autoreconfHook
-    libxslt
-    docbook_xsl
-  ];
+  nativeBuildInputs = [ autoreconfHook libxslt docbook_xsl ];
 
-  propagatedBuildInputs = [
-    autoconf
-    automake
-    glib
-    gtk-doc
-    intltool
-    libtool
-  ];
+  propagatedBuildInputs = [ autoconf automake glib gtk-doc intltool libtool ];
 
   setupHook = ./setup-hook.sh;
 

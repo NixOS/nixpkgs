@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, libuuid, json_c
-, doxygen, perl, python2, python2Packages
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, libuuid, json_c, doxygen, perl, python2
+, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "opae";
@@ -9,21 +7,19 @@ stdenv.mkDerivation rec {
 
   # the tag has a silly name for some reason. drop this in the future if
   # possible
-  tver    = "${version}-5";
+  tver = "${version}-5";
 
   src = fetchFromGitHub {
-    owner  = "opae";
-    repo   = "opae-sdk";
-    rev    = "refs/tags/${tver}";
+    owner = "opae";
+    repo = "opae-sdk";
+    rev = "refs/tags/${tver}";
     sha256 = "1dmkpnr9dqxwjhbdzx2r3fdfylvinda421yyg319am5gzlysxwi8";
   };
 
   doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=format-truncation"
-    "-Wno-error=address-of-packed-member"
-  ];
+  NIX_CFLAGS_COMPILE =
+    [ "-Wno-error=format-truncation" "-Wno-error=address-of-packed-member" ];
 
   nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
   buildInputs = [ libuuid json_c python2 ];
@@ -40,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Programmable Acceleration Engine SDK";
-    homepage    = "https://01.org/opae";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" ];
+    homepage = "https://01.org/opae";
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -3,9 +3,8 @@
 let
   llvm = llvmPackages.llvm;
   clang-unwrapped = llvmPackages.clang-unwrapped;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "libclc";
   version = "11.0.1";
 
@@ -30,7 +29,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://libclc.llvm.org/";
-    description = "Implementation of the library requirements of the OpenCL C programming language";
+    description =
+      "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;
   };

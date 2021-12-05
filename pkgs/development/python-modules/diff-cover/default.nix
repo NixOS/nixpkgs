@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, inflect
-, jinja2
-, jinja2_pluralize
-, pycodestyle
-, pyflakes
-, pygments
-, pylint
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, chardet, fetchPypi, inflect, jinja2, jinja2_pluralize
+, pycodestyle, pyflakes, pygments, pylint, pytest-mock, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
@@ -25,26 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-4iQ9/QcXh/lW8HE6wFZWc6Y57xhAEWu2TQnIUZJNAMs=";
   };
 
-  propagatedBuildInputs = [
-    chardet
-    inflect
-    jinja2
-    jinja2_pluralize
-    pygments
-  ];
+  propagatedBuildInputs = [ chardet inflect jinja2 jinja2_pluralize pygments ];
 
-  checkInputs = [
-    pycodestyle
-    pyflakes
-    pylint
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pycodestyle pyflakes pylint pytest-mock pytestCheckHook ];
 
-  disabledTests = [
-    "added_file_pylint_console"
-    "file_does_not_exist"
-  ];
+  disabledTests = [ "added_file_pylint_console" "file_does_not_exist" ];
 
   pythonImportsCheck = [ "diff_cover" ];
 

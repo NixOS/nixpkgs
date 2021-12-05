@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, jansson, lib, libconfig, libevent, libgcrypt, lua, lua53Packages
-, makeWrapper, openssl, pkg-config, python3, readline, zlib
-}:
+{ stdenv, fetchFromGitHub, jansson, lib, libconfig, libevent, libgcrypt, lua
+, lua53Packages, makeWrapper, openssl, pkg-config, python3, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "telegram-cli";
@@ -26,10 +25,7 @@ stdenv.mkDerivation rec {
     readline
     zlib
   ];
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -41,7 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Command-line interface for Telegram, that uses readline interface, it's a client implementation of TGL library";
+    description =
+      "Command-line interface for Telegram, that uses readline interface, it's a client implementation of TGL library";
     downloadPage = "https://github.com/kenorb-contrib/tg";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];

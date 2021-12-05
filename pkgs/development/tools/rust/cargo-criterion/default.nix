@@ -16,7 +16,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Cargo extension for running Criterion.rs benchmarks";
     homepage = "https://github.com/bheisler/cargo-criterion";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ humancalico ];
   };
 }

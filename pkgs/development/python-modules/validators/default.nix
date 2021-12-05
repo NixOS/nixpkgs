@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, six
-, decorator
-, pytestCheckHook
-, isort
-, flake8
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, six, decorator, pytestCheckHook
+, isort, flake8 }:
 
 buildPythonPackage rec {
   pname = "validators";
@@ -19,16 +11,9 @@ buildPythonPackage rec {
     sha256 = "37cd9a9213278538ad09b5b9f9134266e7c226ab1fede1d500e29e0a8fbb9ea6";
   };
 
-  propagatedBuildInputs = [
-    six
-    decorator
-  ];
+  propagatedBuildInputs = [ six decorator ];
 
-  checkInputs = [
-    pytestCheckHook
-    flake8
-    isort
-  ];
+  checkInputs = [ pytestCheckHook flake8 isort ];
 
   disabledTests = lib.optionals isPy27 [ "url" ];
 

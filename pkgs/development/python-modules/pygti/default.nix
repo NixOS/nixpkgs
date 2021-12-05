@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, aiohttp
-, pytz
-, voluptuous
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, setuptools-scm, aiohttp
+, pytz, voluptuous }:
 
 buildPythonPackage rec {
   pname = "pygti";
@@ -21,26 +14,16 @@ buildPythonPackage rec {
     sha256 = "0zqa2krsniaqisjr0xqw009wdyy3y48zar9lrwysjsqci7k07d9x";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    aiohttp
-    pytz
-    voluptuous
-  ];
+  propagatedBuildInputs = [ aiohttp pytz voluptuous ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pygti.auth"
-    "pygti.exceptions"
-    "pygti.gti"
-  ];
+  pythonImportsCheck = [ "pygti.auth" "pygti.exceptions" "pygti.gti" ];
 
   meta = with lib; {
     description = "Access public transport information in Hamburg, Germany";

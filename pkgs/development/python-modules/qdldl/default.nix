@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, pybind11
-, numpy
-, scipy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, cmake, pybind11, numpy, scipy
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "qdldl";
@@ -22,10 +15,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-  ];
+  propagatedBuildInputs = [ numpy scipy ];
 
   pythonImportsCheck = [ "qdldl" ];
   checkInputs = [ pytestCheckHook ];

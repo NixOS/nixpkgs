@@ -9,46 +9,40 @@ let
 
   webPkg = cfg.package;
 
-in
-
-{
+in {
 
   options = {
 
     services.pgpkeyserver-lite = {
 
-      enable = mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
+      enable = mkEnableOption
+        "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
 
       package = mkOption {
         default = pkgs.pgpkeyserver-lite;
         defaultText = literalExpression "pkgs.pgpkeyserver-lite";
         type = types.package;
-        description = "
-          Which webgui derivation to use.
-        ";
+        description = "\n          Which webgui derivation to use.\n        ";
       };
 
       hostname = mkOption {
         type = types.str;
-        description = "
-          Which hostname to set the vHost to that is proxying to sks.
-        ";
+        description =
+          "\n          Which hostname to set the vHost to that is proxying to sks.\n        ";
       };
 
       hkpAddress = mkOption {
         default = builtins.head sksCfg.hkpAddress;
         type = types.str;
-        description = "
-          Wich ip address the sks-keyserver is listening on.
-        ";
+        description =
+          "\n          Wich ip address the sks-keyserver is listening on.\n        ";
       };
 
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         type = types.int;
-        description = "
-          Which port the sks-keyserver is listening on.
-        ";
+        description =
+          "\n          Which port the sks-keyserver is listening on.\n        ";
       };
     };
   };
@@ -57,8 +51,7 @@ in
 
     services.nginx.enable = true;
 
-    services.nginx.virtualHosts = let
-      hkpPort = builtins.toString cfg.hkpPort;
+    services.nginx.virtualHosts = let hkpPort = builtins.toString cfg.hkpPort;
     in {
       ${cfg.hostname} = {
         root = webPkg;

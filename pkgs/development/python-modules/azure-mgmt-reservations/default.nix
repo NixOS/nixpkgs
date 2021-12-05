@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common
+, azure-mgmt-core, azure-mgmt-nspkg, isPy3k }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-reservations";
@@ -19,14 +11,8 @@ buildPythonPackage rec {
     sha256 = "880df54fdf3869ee6b142d4fc7a3fce518c850523c42cc895b7fb8359956554e";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common azure-mgmt-core ]
+    ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;

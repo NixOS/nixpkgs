@@ -1,19 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, grpc
-, protobuf
-, openssl
-, nlohmann_json
-, gtest
-, spdlog
-, c-ares
-, abseil-cpp
-, zlib
-, sqlite
-, re2
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, grpc, protobuf, openssl
+, nlohmann_json, gtest, spdlog, c-ares, abseil-cpp, zlib, sqlite, re2 }:
 
 stdenv.mkDerivation rec {
   pname = "bear";
@@ -48,10 +34,12 @@ stdenv.mkDerivation rec {
   ];
 
   # 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin")
+    "-D_LIBCPP_DISABLE_AVAILABILITY";
 
   meta = with lib; {
-    description = "Tool that generates a compilation database for clang tooling";
+    description =
+      "Tool that generates a compilation database for clang tooling";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands
       e.g. for YouCompleteMe.  You just enter your development nix-shell

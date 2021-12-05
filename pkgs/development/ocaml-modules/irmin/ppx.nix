@@ -5,7 +5,8 @@ buildDunePackage rec {
   version = "2.7.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
+    url =
+      "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
     sha256 = "29c68c5001a727aaa7a6842d6204ffa3e24b3544fa4f6af2234cdbfa032f7fdf";
   };
 
@@ -13,10 +14,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    ppx_repr
-    ppxlib
-  ];
+  propagatedBuildInputs = [ ppx_repr ppxlib ];
 
   meta = {
     homepage = "https://irmin.org/";

@@ -1,15 +1,5 @@
-{ lib
-, jre8
-, qmake
-, qtbase
-, qttools
-, qtwebkit
-, qtxmlpatterns
-, binutils
-, wrapQtAppsHook
-, openmodelica
-, mkOpenModelicaDerivation
-}:
+{ lib, jre8, qmake, qtbase, qttools, qtwebkit, qtxmlpatterns, binutils
+, wrapQtAppsHook, openmodelica, mkOpenModelicaDerivation }:
 with openmodelica;
 mkOpenModelicaDerivation rec {
   pname = "omedit";
@@ -22,7 +12,9 @@ mkOpenModelicaDerivation rec {
   buildInputs = [ qtwebkit qtxmlpatterns binutils ];
 
   postPatch = ''
-    sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
+    sed -i $(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${
+      lib.getDev qttools
+    }/bin/lrelease|'
   '';
 
   dontUseQmakeConfigure = true;

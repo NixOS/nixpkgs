@@ -1,10 +1,4 @@
-{ cmake
-, fetchFromGitHub
-, sqlite
-, postgresql
-, boost
-, lib, stdenv
-}:
+{ cmake, fetchFromGitHub, sqlite, postgresql, boost, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "soci";
@@ -21,11 +15,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSOCI_STATIC=OFF" "-DCMAKE_CXX_STANDARD=11" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    sqlite
-    postgresql
-    boost
-  ];
+  buildInputs = [ sqlite postgresql boost ];
 
   meta = with lib; {
     description = "Database access library for C++";

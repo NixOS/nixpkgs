@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem
-, libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
-, harfbuzz #substituting glyphs with opentype fonts
-, fribidi, m17n_lib #bidi and encoding
-, openssl, libssh2 #build-in ssh
-, fcitx, ibus, uim #IME
-, wrapGAppsHook #color picker in mlconfig
-, Cocoa #Darwin
+{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem, libX11
+, gdk-pixbuf, cairo, libXft, gtk3, vte
+, harfbuzz # substituting glyphs with opentype fonts
+, fribidi, m17n_lib # bidi and encoding
+, openssl, libssh2 # build-in ssh
+, fcitx, ibus, uim # IME
+, wrapGAppsHook # color picker in mlconfig
+, Cocoa # Darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -15,32 +15,26 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = pname;
-    rev = "rel-${lib.replaceStrings [ "." ] [ "_" ] version}"; # 3.9.1 -> rel-3_9_1
+    rev =
+      "rel-${lib.replaceStrings [ "." ] [ "_" ] version}"; # 3.9.1 -> rel-3_9_1
     sha256 = "1hh196kz2n3asv8r8r2bdk5b2w93zq7rw4880ciiq1554h0ib7fj";
   };
 
   nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
-  buildInputs = [
-    libX11
-    gdk-pixbuf.dev
-    cairo
-    libXft
-    gtk3
-    harfbuzz
-    fribidi
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # need linker magic, not adapted for Darwin yet
-    openssl
-    libssh2
+  buildInputs = [ libX11 gdk-pixbuf.dev cairo libXft gtk3 harfbuzz fribidi ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      # need linker magic, not adapted for Darwin yet
+      openssl
+      libssh2
 
-    # Not supported on Darwin
-    vte
-    m17n_lib
+      # Not supported on Darwin
+      vte
+      m17n_lib
 
-    fcitx
-    ibus
-    uim
-  ];
+      fcitx
+      ibus
+      uim
+    ];
 
   #bad configure.ac and Makefile.in everywhere
   preConfigure = ''
@@ -61,32 +55,26 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "
-    -L${stdenv.cc.cc.lib}/lib
-    -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
-    -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n
-  " + lib.optionalString (openssl != null) "
-    -lcrypto
-  " + lib.optionalString (libssh2 != null) "
-    -lssh2
-  ";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin)
+    "\n    -L${stdenv.cc.cc.lib}/lib\n    -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft\n    -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n\n  "
+    + lib.optionalString (openssl != null) "\n    -lcrypto\n  "
+    + lib.optionalString (libssh2 != null) "\n    -lssh2\n  ";
 
   configureFlags = [
-    "--with-imagelib=gdk-pixbuf" #or mlimgloader depending on your bugs of choice
+    "--with-imagelib=gdk-pixbuf" # or mlimgloader depending on your bugs of choice
     "--with-type-engines=cairo,xft,xcore"
     "--with-gtk=3.0"
-    "--enable-ind" #indic scripts
-    "--enable-fribidi" #bidi scripts
+    "--enable-ind" # indic scripts
+    "--enable-fribidi" # bidi scripts
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
-     #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
-     #and configuring ~/.mlterm/key correctly.
- ] ++ lib.optionals (!stdenv.isDarwin) [
-   "--with-x=yes"
-   "--with-gui=xlib,fb"
-    "--enable-m17nlib" #character encodings
- ] ++ lib.optionals stdenv.isDarwin [
-    "--with-gui=quartz"
- ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
+    #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
+    #and configuring ~/.mlterm/key correctly.
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "--with-x=yes"
+    "--with-gui=xlib,fb"
+    "--enable-m17nlib" # character encodings
+  ] ++ lib.optionals stdenv.isDarwin [ "--with-gui=quartz" ]
+    ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
@@ -106,9 +94,8 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
+    categories =
+      lib.concatStringsSep ";" [ "Application" "System" "TerminalEmulator" ];
     startupNotify = "false";
   };
 

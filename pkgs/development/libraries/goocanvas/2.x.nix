@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection
+, python2, gtk3, cairo, glib, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "goocanvas";
@@ -14,11 +15,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config gettext gtk-doc python2 ];
   buildInputs = [ gtk3 cairo glib gobject-introspection ];
 
-  configureFlags = [
-    "--disable-python"
-  ];
+  configureFlags = [ "--disable-python" ];
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR =
+    "$(out)/lib/girepository-1.0";
 
   passthru = {
     updateScript = gnome.updateScript {

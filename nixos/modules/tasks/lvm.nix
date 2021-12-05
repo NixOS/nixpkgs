@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.services.lvm;
+let cfg = config.services.lvm;
 in {
   options.services.lvm = {
     package = mkOption {
@@ -58,25 +57,34 @@ in {
         '';
       };
 
-      environment.etc."lvm/lvm.conf".text = concatMapStringsSep "\n"
-        (bin: "global/${bin}_executable = ${pkgs.thin-provisioning-tools}/bin/${bin}")
-        [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ];
+      environment.etc."lvm/lvm.conf".text = concatMapStringsSep "\n" (bin:
+        "global/${bin}_executable = ${pkgs.thin-provisioning-tools}/bin/${bin}") [
+          "thin_check"
+          "thin_dump"
+          "thin_repair"
+          "cache_check"
+          "cache_dump"
+          "cache_repair"
+        ];
     })
     (mkIf (cfg.dmeventd.enable || cfg.boot.thin.enable) {
       boot.initrd.preLVMCommands = ''
-          mkdir -p /etc/lvm
-          cat << EOF >> /etc/lvm/lvm.conf
-          ${optionalString cfg.boot.thin.enable (
-            concatMapStringsSep "\n"
-              (bin: "global/${bin}_executable = $(command -v ${bin})")
-              [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
-            )
-          }
-          ${optionalString cfg.dmeventd.enable ''
-            dmeventd/executable = "$(command -v false)"
-            activation/monitoring = 0
-          ''}
-          EOF
+        mkdir -p /etc/lvm
+        cat << EOF >> /etc/lvm/lvm.conf
+        ${optionalString cfg.boot.thin.enable (concatMapStringsSep "\n"
+          (bin: "global/${bin}_executable = $(command -v ${bin})") [
+            "thin_check"
+            "thin_dump"
+            "thin_repair"
+            "cache_check"
+            "cache_dump"
+            "cache_repair"
+          ])}
+        ${optionalString cfg.dmeventd.enable ''
+          dmeventd/executable = "$(command -v false)"
+          activation/monitoring = 0
+        ''}
+        EOF
       '';
     })
   ];

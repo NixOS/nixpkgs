@@ -2,28 +2,21 @@
 
 let
   version = "5.15.3";
-  overrides = {
-    qtscript.version = "5.15.4";
-  };
+  overrides = { qtscript.version = "5.15.4"; };
 
   mk = name: args:
-    let
-      override = overrides.${name} or {};
-    in
-    {
+    let override = overrides.${name} or { };
+    in {
       version = override.version or version;
-      src = override.src or
-        fetchgit {
-          inherit (args) url rev sha256;
-          fetchLFS = false;
-          fetchSubmodules = false;
-          deepClone = false;
-          leaveDotGit = false;
-        };
+      src = override.src or fetchgit {
+        inherit (args) url rev sha256;
+        fetchLFS = false;
+        fetchSubmodules = false;
+        deepClone = false;
+        leaveDotGit = false;
+      };
     };
-in
-lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
-// {
+in lib.mapAttrs mk (lib.importJSON ./srcs-generated.json) // {
   # qtwebkit does not have an official release tarball on the qt mirror and is
   # mostly maintained by the community.
   qtwebkit = rec {
@@ -36,37 +29,35 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     version = "5.212.0-alpha4";
   };
 
-  qtwebengine =
-    let
-      branchName = "5.15.7";
-      rev = "v${branchName}-lts";
-    in
-    {
-      version = "${branchName}-${lib.substring 0 7 rev}";
+  qtwebengine = let
+    branchName = "5.15.7";
+    rev = "v${branchName}-lts";
+  in {
+    version = "${branchName}-${lib.substring 0 7 rev}";
 
-      src = fetchgit {
-        url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "fssBN/CDgXAuiNj14MPeIDI15ZDRBGuF7wxSXns9exU=";
-        inherit rev branchName;
-        fetchSubmodules = true;
-        leaveDotGit = true;
-        name = "qtwebengine-${lib.substring 0 7 rev}.tar.gz";
-        postFetch = ''
-          # remove submodule .git directory
-          rm -rf "$out/src/3rdparty/.git"
+    src = fetchgit {
+      url = "https://github.com/qt/qtwebengine.git";
+      sha256 = "fssBN/CDgXAuiNj14MPeIDI15ZDRBGuF7wxSXns9exU=";
+      inherit rev branchName;
+      fetchSubmodules = true;
+      leaveDotGit = true;
+      name = "qtwebengine-${lib.substring 0 7 rev}.tar.gz";
+      postFetch = ''
+        # remove submodule .git directory
+        rm -rf "$out/src/3rdparty/.git"
 
-          # compress to not exceed the 2GB output limit
-          # try to make a deterministic tarball
-          tar -I 'gzip -n' \
-            --sort=name \
-            --mtime=1970-01-01 \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --transform='s@^@source/@' \
-            -cf temp  -C "$out" .
-          rm -r "$out"
-          mv temp "$out"
-        '';
-      };
+        # compress to not exceed the 2GB output limit
+        # try to make a deterministic tarball
+        tar -I 'gzip -n' \
+          --sort=name \
+          --mtime=1970-01-01 \
+          --owner=root --group=root \
+          --numeric-owner --mode=go=rX,u+rw,a-s \
+          --transform='s@^@source/@' \
+          -cf temp  -C "$out" .
+        rm -r "$out"
+        mv temp "$out"
+      '';
     };
+  };
 }

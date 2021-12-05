@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/coin3d/coin";
     license = licenses.bsd3;
-    description = "High-level, retained-mode toolkit for effective 3D graphics development";
+    description =
+      "High-level, retained-mode toolkit for effective 3D graphics development";
     maintainers = with maintainers; [ gebner viric ];
     platforms = platforms.linux;
   };

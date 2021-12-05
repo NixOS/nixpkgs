@@ -1,28 +1,10 @@
-{ stdenv
-, lib
-, buildEnv
-, substituteAll
-, runCommand
-, coreutils
-, dwarf-fortress
-, dwarf-therapist
-, enableDFHack ? false
-, dfhack
-, enableSoundSense ? false
-, soundSense
-, jdk
-, enableStoneSense ? false
-, enableTWBT ? false
-, twbt
-, themes ? { }
-, theme ? null
+{ stdenv, lib, buildEnv, substituteAll, runCommand, coreutils, dwarf-fortress
+, dwarf-therapist, enableDFHack ? false, dfhack, enableSoundSense ? false
+, soundSense, jdk, enableStoneSense ? false, enableTWBT ? false, twbt
+, themes ? { }, theme ? null
   # General config options:
-, enableIntro ? true
-, enableTruetype ? true
-, enableFPS ? false
-, enableTextMode ? false
-, enableSound ? true
-}:
+, enableIntro ? true, enableTruetype ? true, enableFPS ? false
+, enableTextMode ? false, enableSound ? true }:
 
 let
   dfhack_ = dfhack.override {
@@ -31,9 +13,7 @@ let
   };
 
   ptheme =
-    if builtins.isString theme
-    then builtins.getAttr theme themes
-    else theme;
+    if builtins.isString theme then builtins.getAttr theme themes else theme;
 
   unBool = b: if b then "YES" else "NO";
 
@@ -41,8 +21,7 @@ let
   themePkg = lib.optional (theme != null) ptheme;
   pkgs = lib.optional enableDFHack dfhack_
     ++ lib.optional enableSoundSense soundSense
-    ++ lib.optional enableTWBT twbt.art
-    ++ [ dwarf-fortress ];
+    ++ lib.optional enableTWBT twbt.art ++ [ dwarf-fortress ];
 
   fixup = lib.singleton (runCommand "fixup" { } (''
     mkdir -p $out/data/init
@@ -69,8 +48,7 @@ let
   '' + lib.optionalString enableTWBT ''
     substituteInPlace $out/data/init/init.txt \
       --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-  '' +
-  lib.optionalString enableTextMode ''
+  '' + lib.optionalString enableTextMode ''
     substituteInPlace $out/data/init/init.txt \
       --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TEXT]'
   '' + ''
@@ -89,18 +67,15 @@ let
 
     ignoreCollisions = true;
   };
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";
     src = ./dwarf-fortress-init.in;
     inherit env;
-    exe =
-      if stdenv.isLinux then "libs/Dwarf_Fortress"
-      else "dwarfort.exe";
+    exe = if stdenv.isLinux then "libs/Dwarf_Fortress" else "dwarfort.exe";
     stdenv_shell = "${stdenv.shell}";
     cp = "${coreutils}/bin/cp";
     rm = "${coreutils}/bin/rm";

@@ -1,10 +1,7 @@
 # Minica can provide a CA key and cert, plus a key
 # and cert for our fake CA server's Web Front End (WFE).
-{
-  pkgs ? import <nixpkgs> {},
-  minica ? pkgs.minica,
-  mkDerivation ? pkgs.stdenv.mkDerivation
-}:
+{ pkgs ? import <nixpkgs> { }, minica ? pkgs.minica
+, mkDerivation ? pkgs.stdenv.mkDerivation }:
 let
   conf = import ./snakeoil-certs.nix;
   domain = conf.domain;

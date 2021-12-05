@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, fuse
-, makeWrapper
-, openssl
-, pandoc
-, pkg-config
-, libfido2
-}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, fuse, makeWrapper, openssl
+, pandoc, pkg-config, libfido2 }:
 
 buildGoModule rec {
   pname = "gocryptfs";
@@ -23,11 +14,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-yJ7RYwhArgmGlFmSplrX1hiLkc7FkS1qQCUcRlbnNWQ=";
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    pandoc
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config pandoc ];
 
   buildInputs = [ openssl ];
 

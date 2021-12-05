@@ -1,22 +1,6 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-, six
-, tqdm
-, pyyaml
-, docopt
-, requests
-, jsonpatch
-, args
-, schema
-, responses
-, backports_csv
-, isPy3k
-, lib
-, glibcLocales
-, setuptools
-, urllib3
-}:
+{ buildPythonPackage, fetchPypi, pytest, six, tqdm, pyyaml, docopt, requests
+, jsonpatch, args, schema, responses, backports_csv, isPy3k, lib, glibcLocales
+, setuptools, urllib3 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
@@ -27,18 +11,9 @@ buildPythonPackage rec {
     sha256 = "ebd11ecd038c71e75a3aef8d87750b46480169ecaefb23074c4ae48440bf2836";
   };
 
-  propagatedBuildInputs = [
-    six
-    tqdm
-    pyyaml
-    docopt
-    requests
-    jsonpatch
-    args
-    schema
-    setuptools
-    urllib3
-  ] ++ lib.optionals (!isPy3k) [ backports_csv ];
+  propagatedBuildInputs =
+    [ six tqdm pyyaml docopt requests jsonpatch args schema setuptools urllib3 ]
+    ++ lib.optionals (!isPy3k) [ backports_csv ];
 
   checkInputs = [ pytest responses glibcLocales ];
 
@@ -54,7 +29,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
+    changelog =
+      "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
   };

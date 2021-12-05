@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
-, jre, makeWrapper, bash, gnused }:
+{ stdenv, lib, fetchurl, fetchFromGitHub, jre, makeWrapper, bash, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "confluent-platform";
@@ -7,7 +6,9 @@ stdenv.mkDerivation rec {
   scalaVersion = "2.12";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
+    url = "http://packages.confluent.io/archive/${
+        lib.versions.majorMinor version
+      }/confluent-${version}-${scalaVersion}.tar.gz";
     sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
   };
 

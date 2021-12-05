@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
-, pytest-xdist, covCore, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock, pytest-xdist
+, covCore, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "dyn";
@@ -12,17 +12,11 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    mock
-    pytest-xdist
-    covCore
-  ];
+  checkInputs = [ pytest pytest-cov mock pytest-xdist covCore ];
   # Disable checks because they are not stateless and require internet access.
   doCheck = false;
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "Dynect dns lib";

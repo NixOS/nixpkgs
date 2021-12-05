@@ -1,29 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, vala
-, libxslt
-, pkg-config
-, glib
-, gtk3
-, gnome
-, python3
-, dconf
-, libxml2
-, gettext
-, docbook-xsl-nons
-, wrapGAppsHook
-, gobject-introspection
-}:
+{ lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkg-config, glib, gtk3
+, gnome, python3, dconf, libxml2, gettext, docbook-xsl-nons, wrapGAppsHook
+, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
   version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-Vxr0x9rU8Em1PmzXKLea3fCMJ92ra8V7OW0hGGbueeM=";
   };
 
@@ -41,11 +27,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    dconf
-  ];
+  buildInputs = [ glib gtk3 dconf ];
 
   postPatch = ''
     chmod +x meson_post_install.py

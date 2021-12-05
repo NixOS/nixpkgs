@@ -28,7 +28,8 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";
     maintainers = [ maintainers.kmein ];
-    description = "A Moodle downloader that downloads course content fast from Moodle";
+    description =
+      "A Moodle downloader that downloads course content fast from Moodle";
     license = licenses.gpl3Plus;
   };
 }

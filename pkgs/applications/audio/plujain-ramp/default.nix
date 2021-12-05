@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, lv2  }:
+{ lib, stdenv, fetchFromGitHub, lv2 }:
 
 stdenv.mkDerivation rec {
   version = "v1.1.3";
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k7qpr8c15d623c4zqxwdklp98amildh03cqsnqq5ia9ba8z3016";
   };
 
-  buildInputs = [
-    lv2
-  ];
+  buildInputs = [ lv2 ];
 
   installFlags = [ "INSTALL_PATH=$(out)/lib/lv2" ];
 

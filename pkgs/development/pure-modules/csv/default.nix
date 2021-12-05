@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "Comma Separated Value Interface for the Pure Programming Language";
+    description =
+      "Comma Separated Value Interface for the Pure Programming Language";
     homepage = "http://puredocs.bitbucket.org/pure-csv.html";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;

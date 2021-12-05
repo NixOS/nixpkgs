@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-, writeText
-, writeShellScript
-, sqlite
-}:
+{ lib, fetchFromGitHub, python3, writeText, writeShellScript, sqlite }:
 let
   pypkgs = python3.pkgs;
 
@@ -31,8 +25,7 @@ let
     fi
   '';
 
-in
-pypkgs.buildPythonApplication rec {
+in pypkgs.buildPythonApplication rec {
   pname = "pykms";
   version = "unstable-2021-01-25";
 
@@ -81,7 +74,8 @@ pypkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Windows KMS (Key Management Service) server written in Python";
+    description =
+      "Windows KMS (Key Management Service) server written in Python";
     homepage = "https://github.com/SystemRage/py-kms";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];

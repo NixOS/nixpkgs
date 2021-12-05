@@ -1,15 +1,5 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, bcrypt
-, invoke
-, pynacl
-, pyasn1
-, pytestCheckHook
-, pytest-relaxed
-, mock
-}:
+{ pkgs, buildPythonPackage, fetchPypi, cryptography, bcrypt, invoke, pynacl
+, pyasn1, pytestCheckHook, pytest-relaxed, mock }:
 
 buildPythonPackage rec {
   pname = "paramiko";
@@ -24,10 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ invoke pytestCheckHook pytest-relaxed mock ];
 
-  disabledTestPaths = [
-    "tests/test_sftp.py"
-    "tests/test_config.py"
-  ];
+  disabledTestPaths = [ "tests/test_sftp.py" "tests/test_config.py" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,15 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, geos
-, gdal
-, asgiref
-, pytz
-, sqlparse
-, pythonOlder
-, withGdal ? false
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, geos, gdal, asgiref
+, pytz, sqlparse, pythonOlder, withGdal ? false }:
 
 buildPythonPackage rec {
   pname = "Django";
@@ -22,19 +12,14 @@ buildPythonPackage rec {
     sha256 = "51284300f1522ffcdb07ccbdf676a307c6678659e1284f0618e5a774127a6a08";
   };
 
-  patches = lib.optional withGdal
-    (substituteAll {
-      src = ./django_3_set_geos_gdal_lib.patch;
-      geos = geos;
-      gdal = gdal;
-      extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    });
+  patches = lib.optional withGdal (substituteAll {
+    src = ./django_3_set_geos_gdal_lib.patch;
+    geos = geos;
+    gdal = gdal;
+    extension = stdenv.hostPlatform.extensions.sharedLibrary;
+  });
 
-  propagatedBuildInputs = [
-    asgiref
-    pytz
-    sqlparse
-  ];
+  propagatedBuildInputs = [ asgiref pytz sqlparse ];
 
   # too complicated to setup
   doCheck = false;

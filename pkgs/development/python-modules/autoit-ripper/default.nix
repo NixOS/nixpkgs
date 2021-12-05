@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pefile
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pefile, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "autoit-ripper";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-fluG/2XlUh3kPtYtSotrP02c7kdmem92Hy1R93SaTzk=";
   };
 
-  propagatedBuildInputs = [
-    pefile
-  ];
+  propagatedBuildInputs = [ pefile ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -29,12 +22,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "autoit_ripper"
-  ];
+  pythonImportsCheck = [ "autoit_ripper" ];
 
   meta = with lib; {
-    description = "Python module to extract AutoIt scripts embedded in PE binaries";
+    description =
+      "Python module to extract AutoIt scripts embedded in PE binaries";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

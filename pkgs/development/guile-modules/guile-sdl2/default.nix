@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, guile
-, libtool
-, pkg-config
-}:
+{ lib, stdenv, fetchurl, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, guile, libtool
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "guile-sdl2";
@@ -19,17 +10,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-lWTLctPUDqvN/Y95oOL7LF3czlLJFQ9d9np9dx4DHYU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    libtool
-  ];
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
-    guile
-  ];
+  nativeBuildInputs = [ pkg-config libtool ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf guile ];
 
   configureFlags = [
     "--with-libsdl2-image-prefix=${SDL2_image}"
@@ -38,9 +20,7 @@ stdenv.mkDerivation rec {
     "--with-libsdl2-ttf-prefix=${SDL2_ttf}"
   ];
 
-  makeFlags = [
-    "GUILE_AUTO_COMPILE=0"
-  ];
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     homepage = "https://dthompson.us/projects/guile-sdl2.html";

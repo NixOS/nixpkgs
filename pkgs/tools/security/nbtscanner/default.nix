@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, Security
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nbtscanner";

@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
-with lib;
-{
+with lib; {
   options = {
     appstream.enable = mkOption {
       type = types.bool;

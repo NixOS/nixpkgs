@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "Lets you write FastCGI scripts with Pure, to be run by web servers like Apache";
+    description =
+      "Lets you write FastCGI scripts with Pure, to be run by web servers like Apache";
     homepage = "http://puredocs.bitbucket.org/pure-fastcgi.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

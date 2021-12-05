@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests, responses }:
 
 buildPythonPackage rec {
   pname = "python-twitch-client";
@@ -21,10 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytestCheckHook responses ];
 
   pythonImportsCheck = [ "twitch" ];
 

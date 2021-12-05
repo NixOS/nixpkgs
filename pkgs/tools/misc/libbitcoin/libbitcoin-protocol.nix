@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, boost, libbitcoin, secp256k1, zeromq }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, boost, libbitcoin
+, secp256k1, zeromq }:
 
 let
   pname = "libbitcoin-protocol";

@@ -1,25 +1,7 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, spake2
-, pynacl
-, six
-, attrs
-, twisted
-, autobahn
-, automat
-, hkdf
-, tqdm
-, click
-, humanize
-, txtorcon
-, nettools
-, glibcLocales
-, mock
-, magic-wormhole-transit-relay
-, magic-wormhole-mailbox-server
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, spake2, pynacl, six, attrs
+, twisted, autobahn, automat, hkdf, tqdm, click, humanize, txtorcon, nettools
+, glibcLocales, mock, magic-wormhole-transit-relay
+, magic-wormhole-mailbox-server }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
@@ -31,8 +13,22 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
-  checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
+  propagatedBuildInputs = [
+    spake2
+    pynacl
+    six
+    attrs
+    twisted
+    autobahn
+    automat
+    hkdf
+    tqdm
+    click
+    humanize
+    txtorcon
+  ];
+  checkInputs =
+    [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py

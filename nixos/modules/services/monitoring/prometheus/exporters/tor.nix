@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.tor;
-in
-{
+let cfg = config.services.prometheus.exporters.tor;
+in {
   port = 9130;
   extraOpts = {
     torControlAddress = mkOption {

@@ -1,9 +1,10 @@
 { lib, fetchzip }:
 
-let version = "1.100"; in
-fetchzip {
+let version = "1.100";
+in fetchzip {
   name = "ankacoder-condensed-${version}";
-  url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoderCondensed.${version}.zip";
+  url =
+    "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoderCondensed.${version}.zip";
 
   postFetch = ''
     unzip $downloadedFile

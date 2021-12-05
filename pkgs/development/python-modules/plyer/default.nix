@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, keyring, mock, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, keyring, mock
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "plyer";
@@ -14,12 +15,14 @@ buildPythonPackage rec {
   patches = [
     # fix naming of the DOCUMENTS dir
     (fetchpatch {
-      url = "https://github.com/rski/plyer/commit/99dabb2d62248fc3ea5705c2720abf71c9fc378b.patch";
+      url =
+        "https://github.com/rski/plyer/commit/99dabb2d62248fc3ea5705c2720abf71c9fc378b.patch";
       sha256 = "sha256-bbnw0TxH4FGTso5dopzquDCjrjZAy+6CJauqi/nfstA=";
     })
     # fix handling of the ~/.config/user-dirs.dir file
     (fetchpatch {
-      url = "https://github.com/rski/plyer/commit/f803697a1fe4fb5e9c729ee6ef1997b8d64f3ccd.patch";
+      url =
+        "https://github.com/rski/plyer/commit/f803697a1fe4fb5e9c729ee6ef1997b8d64f3ccd.patch";
       sha256 = "sha256-akuh//P5puz2PwcBRXZQ4KoGk+fxi4jn2H3pTIT5M78=";
     })
   ];
@@ -55,7 +58,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "plyer" ];
 
   meta = with lib; {
-    description = "Plyer is a platform-independent api to use features commonly found on various platforms";
+    description =
+      "Plyer is a platform-independent api to use features commonly found on various platforms";
     homepage = "https://github.com/kivy/plyer";
     license = licenses.mit;
     maintainers = with maintainers; [ rski ];

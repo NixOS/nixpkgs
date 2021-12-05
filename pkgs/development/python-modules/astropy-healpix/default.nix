@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, astropy
-, astropy-extension-helpers
-, setuptools-scm
-, pytestCheckHook
-, pytest-doctestplus
-, hypothesis
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, astropy, astropy-extension-helpers
+, setuptools-scm, pytestCheckHook, pytest-doctestplus, hypothesis }:
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
@@ -16,25 +7,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version;
-    pname = lib.replaceStrings ["-"] ["_"] pname;
+    pname = lib.replaceStrings [ "-" ] [ "_" ] pname;
     sha256 = "409a6621c383641456c074f0f0350a24a4a58e910eaeef14e9bbce3e00ad6690";
   };
 
-  nativeBuildInputs = [
-    astropy-extension-helpers
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ astropy-extension-helpers setuptools-scm ];
 
-  propagatedBuildInputs = [
-    numpy
-    astropy
-  ];
+  propagatedBuildInputs = [ numpy astropy ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-doctestplus
-    hypothesis
-  ];
+  checkInputs = [ pytestCheckHook pytest-doctestplus hypothesis ];
 
   # tests must be run in the build directory
   preCheck = ''

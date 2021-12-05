@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, tatsu
-, arrow
-, pytestCheckHook
-, pytest-flakes
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, tatsu, arrow
+, pytestCheckHook, pytest-flakes }:
 
 buildPythonPackage rec {
   pname = "ics";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "0rrdc9rcxc3ys6rml81b8m8qdlisk78a34bdib0wy65hlkmyyykn";
   };
 
-  propagatedBuildInputs = [
-    arrow
-    tatsu
-  ];
+  propagatedBuildInputs = [ arrow tatsu ];
 
-  checkInputs = [
-    pytest-flakes
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-flakes pytestCheckHook ];
 
   postPatch = ''
     # 0.8 will move to python-dateutil

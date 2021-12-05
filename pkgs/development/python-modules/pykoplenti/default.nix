@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pycryptodome
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, click, fetchFromGitHub, prompt-toolkit
+, pycryptodome, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pykoplenti";
@@ -20,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "12nsyz8a49vhby1jp991vaky82fm93jrgcsjzwa2rixwg1zql4sw";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    prompt-toolkit
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ aiohttp click prompt-toolkit pycryptodome ];
 
   # Project has no tests
   doCheck = false;

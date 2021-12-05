@@ -1,15 +1,5 @@
-{ lib
-, bitstring
-, buildPythonApplication
-, fetchFromGitHub
-, fetchpatch
-, flask
-, mido
-, numpy
-, pyserial
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, bitstring, buildPythonApplication, fetchFromGitHub, fetchpatch, flask
+, mido, numpy, pyserial, pytestCheckHook, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "cantoolz";
@@ -26,18 +16,13 @@ buildPythonApplication rec {
   patches = [
     (fetchpatch {
       # Replace time.clock() which was removed, https://github.com/CANToolz/CANToolz/pull/30
-      url = "https://github.com/CANToolz/CANToolz/pull/30/commits/d75574523d3b273c40fb714532c4de27f9e6dd3e.patch";
+      url =
+        "https://github.com/CANToolz/CANToolz/pull/30/commits/d75574523d3b273c40fb714532c4de27f9e6dd3e.patch";
       sha256 = "0g91hywg5q6f2qk1awgklywigclrbhh6a6mwd0kpbkk1wawiiwbc";
     })
   ];
 
-  propagatedBuildInputs = [
-    flask
-    pyserial
-    mido
-    numpy
-    bitstring
-  ];
+  propagatedBuildInputs = [ flask pyserial mido numpy bitstring ];
 
   checkInputs = [ pytestCheckHook ];
   disabledTests = [ "test_process" ];

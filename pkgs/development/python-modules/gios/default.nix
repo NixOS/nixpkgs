@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, dacite, fetchFromGitHub
+, pytest-asyncio, pytest-error-for-skips, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "gios";
@@ -23,17 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-WjuDsu0EA+KtErusw5VADyvleVegXHCTEkuQ1lU/SRU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    dacite
-  ];
+  propagatedBuildInputs = [ aiohttp dacite ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytest-error-for-skips
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aioresponses pytest-asyncio pytest-error-for-skips pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

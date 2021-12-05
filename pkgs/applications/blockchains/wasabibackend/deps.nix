@@ -1,9 +1,12 @@
 { fetchurl }:
 let
   nugetUrlBase = "https://www.nuget.org/api/v2/package";
-  fetchNuGet = { name, version, sha256 }: fetchurl { inherit sha256; url = "${nugetUrlBase}/${name}/${version}"; };
-in
-[
+  fetchNuGet = { name, version, sha256 }:
+    fetchurl {
+      inherit sha256;
+      url = "${nugetUrlBase}/${name}/${version}";
+    };
+in [
 
   (fetchNuGet {
     name = "microsoft.aspnetcore.app.runtime.linux-x64";

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, jinja2
-, markupsafe
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, jinja2, markupsafe
+, pytest-aiohttp, pytestCheckHook, pythonOlder, pyyaml }:
 
 buildPythonPackage rec {
   pname = "aiohttp-swagger";
@@ -23,17 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-M43sNpbXWXFRTd549cZhvhO35nBB6OH+ki36BzSk87Q=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    jinja2
-    markupsafe
-    pyyaml
-  ];
+  propagatedBuildInputs = [ aiohttp jinja2 markupsafe pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-aiohttp
-  ];
+  checkInputs = [ pytestCheckHook pytest-aiohttp ];
 
   postPatch = ''
     substituteInPlace requirements.txt \

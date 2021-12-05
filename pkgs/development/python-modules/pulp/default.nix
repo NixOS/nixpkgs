@@ -1,9 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pyparsing
-, amply
-}:
+{ lib, fetchPypi, buildPythonPackage, pyparsing, amply }:
 
 buildPythonPackage rec {
   pname = "PuLP";

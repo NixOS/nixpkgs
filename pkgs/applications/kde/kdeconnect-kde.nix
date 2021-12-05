@@ -1,33 +1,8 @@
-{ mkDerivation
-, extra-cmake-modules
-, fetchpatch
-, kcmutils
-, kconfigwidgets
-, kdbusaddons
-, kdoctools
-, ki18n
-, kiconthemes
-, kio
-, kirigami2
-, knotifications
-, kpeople
-, kpeoplevcard
-, kwayland
-, lib
-, libXtst
-, libfakekey
-, makeWrapper
-, pulseaudio-qt
-, qca-qt5
-, qqc2-desktop-style
-, qtgraphicaleffects
-, qtmultimedia
-, qtquickcontrols2
-, qtx11extras
-, breeze-icons
-, sshfs
-, wayland
-, wayland-scanner
+{ mkDerivation, extra-cmake-modules, fetchpatch, kcmutils, kconfigwidgets
+, kdbusaddons, kdoctools, ki18n, kiconthemes, kio, kirigami2, knotifications
+, kpeople, kpeoplevcard, kwayland, lib, libXtst, libfakekey, makeWrapper
+, pulseaudio-qt, qca-qt5, qqc2-desktop-style, qtgraphicaleffects, qtmultimedia
+, qtquickcontrols2, qtx11extras, breeze-icons, sshfs, wayland, wayland-scanner
 }:
 
 mkDerivation {
@@ -62,12 +37,11 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ sshfs ]}"
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ sshfs ]}" ];
 
   meta = with lib; {
-    description = "KDE Connect provides several features to integrate your phone and your computer";
+    description =
+      "KDE Connect provides several features to integrate your phone and your computer";
     homepage = "https://community.kde.org/KDEConnect";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ fridh ];

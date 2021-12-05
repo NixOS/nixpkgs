@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb1, avahi-compat, glib, libredirect }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb1
+, avahi-compat, glib, libredirect }:
 let
-  myPatchElf = file: with lib; ''
-    patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
-      ${file}
-  '';
+  myPatchElf = file:
+    with lib; ''
+      patchelf --set-interpreter \
+        ${stdenv.glibc}/lib/ld-linux${
+          optionalString stdenv.is64bit "-x86-64"
+        }.so.2 \
+        ${file}
+    '';
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "brscan5";
   version = "1.2.6-0";
   src = {
     "i686-linux" = fetchurl {
-      url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
+      url =
+        "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
       sha256 = "102q745pc0168syggd4gym51qf3m3iqld3a4skfnbkm6yky4w4s8";
     };
     "x86_64-linux" = fetchurl {
-      url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
+      url =
+        "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
       sha256 = "1pwbzhpg5nzpw2rw936vf2cr334v8iny16y8fbb1zimgzmv427wx";
     };
   }."${stdenv.hostPlatform.system}";

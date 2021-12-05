@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+, google-api-core, libcst, mock, proto-plus, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
@@ -24,10 +15,8 @@ buildPythonPackage rec {
 
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 
-  pythonImportsCheck = [
-    "google.cloud.iam_credentials"
-    "google.cloud.iam_credentials_v1"
-  ];
+  pythonImportsCheck =
+    [ "google.cloud.iam_credentials" "google.cloud.iam_credentials_v1" ];
 
   meta = with lib; {
     description = "IAM Service Account Credentials API client library";

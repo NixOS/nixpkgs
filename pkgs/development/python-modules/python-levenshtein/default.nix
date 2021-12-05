@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "python-levenshtein";
@@ -16,12 +13,11 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "Levenshtein"
-  ];
+  pythonImportsCheck = [ "Levenshtein" ];
 
   meta = with lib; {
-    description = "Functions for fast computation of Levenshtein distance and string similarity";
+    description =
+      "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/ztane/python-Levenshtein";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aske ];

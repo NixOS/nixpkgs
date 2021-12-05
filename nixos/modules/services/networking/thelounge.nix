@@ -5,9 +5,10 @@ with lib;
 let
   cfg = config.services.thelounge;
   dataDir = "/var/lib/thelounge";
-  configJsData = "module.exports = " + builtins.toJSON (
-    { private = cfg.private; port = cfg.port; } // cfg.extraConfig
-  );
+  configJsData = "module.exports = " + builtins.toJSON ({
+    private = cfg.private;
+    port = cfg.port;
+  } // cfg.extraConfig);
 in {
   options.services.thelounge = {
     enable = mkEnableOption "The Lounge web IRC client";
@@ -30,16 +31,17 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
-      example = literalExpression ''{
-        reverseProxy = true;
-        defaults = {
-          name = "Your Network";
-          host = "localhost";
-          port = 6697;
-        };
-      }'';
+      example = literalExpression ''
+        {
+                reverseProxy = true;
+                defaults = {
+                  name = "Your Network";
+                  host = "localhost";
+                  port = 6697;
+                };
+              }'';
       description = ''
         The Lounge's <filename>config.js</filename> contents as attribute set (will be
         converted to JSON to generate the configuration file).
@@ -58,11 +60,13 @@ in {
       group = "thelounge";
       isSystemUser = true;
     };
-    users.groups.thelounge = {};
+    users.groups.thelounge = { };
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];
-      preStart = "ln -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
+      preStart = "ln -sf ${
+          pkgs.writeText "config.js" configJsData
+        } ${dataDir}/config.js";
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;

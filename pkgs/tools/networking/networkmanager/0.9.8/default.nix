@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, dbus-glib
-, udev, libnl, libuuid, gnutls, dhcp
-, libgcrypt, perl, libgudev, avahi, ppp, kmod }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, dbus-glib, udev, libnl, libuuid
+, gnutls, dhcp, libgcrypt, perl, libgudev, avahi, ppp, kmod }:
 
 stdenv.mkDerivation rec {
   pname = "networkmanager";
   version = "0.9.8.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
+    url =
+      "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
     sha256 = "0wn9qh8r56r8l19dqr68pdl1rv3zg1dv47rfy6fqa91q7li2fk86";
   };
 
@@ -31,9 +31,11 @@ stdenv.mkDerivation rec {
     "--with-iptables=no"
     "--with-udev-dir=\${out}/lib/udev"
     "--with-resolvconf=no"
-    "--sysconfdir=/etc" "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
+    "--with-crypto=gnutls"
+    "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--disable-ppp"
@@ -45,15 +47,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkg-config ];
 
-  patches =
-    [ ./libnl-3.2.25.patch
-      ./nixos-purity.patch
-    ];
+  patches = [ ./libnl-3.2.25.patch ./nixos-purity.patch ];
 
-  preInstall =
-    ''
-      installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
-    '';
+  preInstall = ''
+    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
+  '';
 
   meta = with lib; {
     homepage = "http://projects.gnome.org/NetworkManager/";

@@ -23,7 +23,8 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "pgactivity" ];
 
   meta = with lib; {
-    description = "A top like application for PostgreSQL server activity monitoring";
+    description =
+      "A top like application for PostgreSQL server activity monitoring";
     homepage = "https://github.com/dalibo/pg_activity";
     license = licenses.postgresql;
     maintainers = with maintainers; [ mausch ];

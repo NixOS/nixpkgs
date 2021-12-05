@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, coverage
-, zope_testrunner
-}:
+{ lib, buildPythonPackage, fetchPypi, six, coverage, zope_testrunner }:
 
 buildPythonPackage rec {
   pname = "zope.i18nmessageid";

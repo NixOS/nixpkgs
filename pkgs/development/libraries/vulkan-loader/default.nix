@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libxcb
-, libXrandr, wayland, vulkan-headers, addOpenGLRunpath }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libxcb, libXrandr
+, wayland, vulkan-headers, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "LunarG Vulkan loader";
-    homepage    = "https://www.lunarg.com";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://www.lunarg.com";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

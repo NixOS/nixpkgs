@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub, poetry-core
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "enturclient";
@@ -20,14 +14,9 @@ buildPythonPackage rec {
     sha256 = "1kl44ch8p31pr70yv6na2m0w40frackdwzph9rpb05sc83va701i";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # Project has no tests
   doCheck = false;

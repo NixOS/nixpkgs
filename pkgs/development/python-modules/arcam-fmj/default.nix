@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, attrs
-, defusedxml
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, aiohttp, attrs
+, defusedxml, pytest-aiohttp, pytest-mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
@@ -23,24 +14,12 @@ buildPythonPackage rec {
     sha256 = "sha256-YkoABsOLEl1gSCRgZr0lLZGzicr3N5KRNLDjfuQhy2U=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    attrs
-    defusedxml
-  ];
+  propagatedBuildInputs = [ aiohttp attrs defusedxml ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytest-mock pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "arcam.fmj"
-    "arcam.fmj.client"
-    "arcam.fmj.state"
-    "arcam.fmj.utils"
-  ];
+  pythonImportsCheck =
+    [ "arcam.fmj" "arcam.fmj.client" "arcam.fmj.state" "arcam.fmj.utils" ];
 
   meta = with lib; {
     description = "Python library for speaking to Arcam receivers";

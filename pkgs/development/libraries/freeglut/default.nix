@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, fetchpatch, libXi, libXrandr, libXxf86vm, libGL, libGLU
+, xlibsWrapper, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "freeglut";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c.patch";
+      url =
+        "https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c.patch";
       sha256 = "0j43vrnm22mz3r3c43szgcnil19cx9vcydzky9gwzqlyacr51swd";
       stripLen = 2;
     })
@@ -24,12 +26,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
-                 "-DOPENGL_INCLUDE_DIR=${libGL}/include"
-                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
-                 "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
-                 "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
-                 "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
-               ];
+    "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+    "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
+    "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+    "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
+    "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
+  ];
 
   meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";

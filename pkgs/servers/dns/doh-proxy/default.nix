@@ -10,21 +10,12 @@ buildPythonApplication rec {
     sha256 = "1fxzxipzdvk75yrcr78mpdz8lwpisba67lk4jcwxdnkv6997dwfp";
   };
 
-  nativeBuildInputs = [ pytest-runner flake8];
+  nativeBuildInputs = [ pytest-runner flake8 ];
 
-  propagatedBuildInputs = [
-    aioh2
-    dnspython
-    aiohttp-remotes
-  ];
+  propagatedBuildInputs = [ aioh2 dnspython aiohttp-remotes ];
 
-  checkInputs = [
-    asynctest
-    unittest-data-provider
-    pytest
-    pytest-cov
-    pytest-aiohttp
-  ];
+  checkInputs =
+    [ asynctest unittest-data-provider pytest pytest-cov pytest-aiohttp ];
 
   # attempts to resolve address
   checkPhase = ''

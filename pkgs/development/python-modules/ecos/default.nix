@@ -1,13 +1,6 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-, numpy
-, scipy
-  # check inputs
-, nose
-}:
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub, pkgs, numpy, scipy
+# check inputs
+, nose }:
 
 buildPythonPackage rec {
   pname = "ecos";
@@ -27,10 +20,7 @@ buildPythonPackage rec {
     echo '__version__ = "${version}"' >> ./src/ecos/version.py
   '';
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-  ];
+  propagatedBuildInputs = [ numpy scipy ];
 
   checkInputs = [ nose ];
   checkPhase = ''

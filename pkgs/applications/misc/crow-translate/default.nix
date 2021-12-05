@@ -1,17 +1,6 @@
-{ lib
-, mkDerivation
-, nix-update-script
-, fetchFromGitHub
-, substituteAll
-, cmake
-, extra-cmake-modules
-, qttools
-, leptonica
-, tesseract4
-, qtmultimedia
-, qtx11extras
-, qttranslations
-}:
+{ lib, mkDerivation, nix-update-script, fetchFromGitHub, substituteAll, cmake
+, extra-cmake-modules, qttools, leptonica, tesseract4, qtmultimedia, qtx11extras
+, qttranslations }:
 let
   singleapplication = fetchFromGitHub {
     owner = "itay-grudev";
@@ -49,8 +38,7 @@ let
     rev = "2021-08-15";
     sha256 = "sha256-uBu0vbKfhhnPKGwrnSBjPwS9ncH1iAlmeefAcpckOm4=";
   };
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "crow-translate";
   version = "2.8.7";
 
@@ -64,7 +52,8 @@ mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./dont-fetch-external-libs.patch;
-      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags fluent;
+      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator
+        circleflags fluent;
     })
     (substituteAll {
       # See https://github.com/NixOS/nixpkgs/issues/86054
@@ -87,14 +76,11 @@ mkDerivation rec {
       --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
+    description =
+      "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
     homepage = "https://crow-translate.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

@@ -1,33 +1,16 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, cmake
-, python
-, zlib
-, ncurses
-, docutils
-, pygments
-, numpy
-, scipy
-, scikit-learn
-, spdlog
-, fmt
-, rapidjson
-}:
+{ stdenv, lib, fetchPypi, buildPythonPackage, cmake, python, zlib, ncurses
+, docutils, pygments, numpy, scipy, scikit-learn, spdlog, fmt, rapidjson }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
   version = "8.11.0";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     sha256 = "cfde0515a3fa4d224aad5461135372f3441ae1a64717ae6bff5e23509d70b0bd";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     docutils
@@ -42,13 +25,10 @@ buildPythonPackage rec {
 
   # As we disable configure via cmake, pass explicit global options to enable
   # spdlog and fmt packages
-  setupPyGlobalFlags = [ "--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\"" ];
+  setupPyGlobalFlags =
+    [ ''--cmake-options="-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON"'' ];
 
-  propagatedBuildInputs = [
-    numpy
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs = [ numpy scikit-learn scipy ];
 
   # Python build script uses CMake, but we don't want CMake to do the
   # configuration.
@@ -66,10 +46,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
-    homepage    = "https://github.com/JohnLangford/vowpal_wabbit";
-    license     = licenses.bsd3;
-    broken      = stdenv.isAarch64;
+    description =
+      "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
+    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    license = licenses.bsd3;
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ teh ];
   };
 }

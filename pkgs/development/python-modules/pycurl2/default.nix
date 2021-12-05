@@ -1,10 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k
-, simplejson
-, unittest2
-, nose
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, simplejson, unittest2, nose
+, pkgs }:
 
 buildPythonPackage {
   pname = "pycurl2";
@@ -26,7 +21,8 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pycurl2";
-    description = "A fork from original PycURL library that no maintained from 7.19.0";
+    description =
+      "A fork from original PycURL library that no maintained from 7.19.0";
     license = licenses.mit;
     platforms = platforms.linux;
   };

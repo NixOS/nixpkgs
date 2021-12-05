@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.17.1";
 
   src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
+    url =
+      "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 

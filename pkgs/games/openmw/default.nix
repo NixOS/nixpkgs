@@ -1,25 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, openscenegraph
-, mygui
-, bullet
-, ffmpeg
-, boost
-, SDL2
-, unshield
-, openal
-, libXt
-, lz4
-, recastnavigation
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
+, openscenegraph, mygui, bullet, ffmpeg, boost, SDL2, unshield, openal, libXt
+, lz4, recastnavigation }:
 
 let
-  openscenegraph_openmw = (openscenegraph.override { colladaSupport = true; })
-    .overrideDerivation (self: {
+  openscenegraph_openmw =
+    (openscenegraph.override { colladaSupport = true; }).overrideDerivation
+    (self: {
       src = fetchFromGitHub {
         owner = "OpenMW";
         repo = "osg";
@@ -36,15 +22,12 @@ let
       rev = version;
       sha256 = "sha256-uQ4X8F8nmagbcFh0KexrmnhHIXFSB3A1CCnjPVeHL3Q=";
     };
-    patches = [];
-    cmakeFlags = (old.cmakeFlags or []) ++ [
-      "-DUSE_DOUBLE_PRECISION=ON"
-      "-DBULLET2_MULTITHREADING=ON"
-    ];
+    patches = [ ];
+    cmakeFlags = (old.cmakeFlags or [ ])
+      ++ [ "-DUSE_DOUBLE_PRECISION=ON" "-DBULLET2_MULTITHREADING=ON" ];
   });
 
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "openmw";
   version = "0.47.0";
 
@@ -78,7 +61,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An unofficial open source engine reimplementation of the game Morrowind";
+    description =
+      "An unofficial open source engine reimplementation of the game Morrowind";
     homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar marius851000 ];

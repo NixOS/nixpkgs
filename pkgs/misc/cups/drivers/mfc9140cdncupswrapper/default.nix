@@ -1,22 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, coreutils
-, gnugrep
-, gnused
-, mfc9140cdnlpr
-, pkgsi686Linux
-, psutils
-}:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gnugrep, gnused
+, mfc9140cdnlpr, pkgsi686Linux, psutils }:
 
 stdenv.mkDerivation rec {
   pname = "mfc9140cdncupswrapper";
   version = "1.1.4-0";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf100407/${pname}-${version}.i386.deb";
+    url =
+      "https://download.brother.com/welcome/dlf100407/${pname}-${version}.i386.deb";
     sha256 = "18aramgqgra1shdhsa75i0090hk9i267gvabildwsk52kq2b96c6";
   };
 
@@ -24,10 +15,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x $src $out
   '';
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-  ];
+  nativeBuildInputs = [ dpkg makeWrapper ];
 
   dontBuild = true;
 
@@ -54,9 +42,11 @@ stdenv.mkDerivation rec {
     ln $dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd $out/share/cups/model
 
     sed -n '/!ENDOFWFILTER!/,/!ENDOFWFILTER!/p' "$dir/cupswrapper/cupswrappermfc9140cdn" | sed '1 br; b; :r s/.*/printer_model=mfc9140cdn; cat <<!ENDOFWFILTER!/'  | bash > $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
-    sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [ coreutils gnused gnugrep ]}:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
+    sed -i "/#! \/bin\/sh/a PATH=${
+      lib.makeBinPath [ coreutils gnused gnugrep ]
+    }:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
     chmod +x $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
-    '';
+  '';
 
   meta = with lib; {
     description = "Brother MFC-9140CDN CUPS wrapper driver";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, buildLinux, ... }@args:
 
 let
   # having the full version string here makes it easier to update
@@ -9,9 +9,8 @@ let
 
   numbers = lib.splitString "." version;
   branch = "${lib.elemAt numbers 0}.${lib.elemAt numbers 1}";
-in
 
-buildLinux (args // {
+in buildLinux (args // {
   inherit version modDirVersion;
   isZen = true;
 
@@ -22,14 +21,13 @@ buildLinux (args // {
     sha256 = "sha256-sEt6h29GY18+45jHheRd69eCw+EAzn/CVUK5XRqdZcA=";
   };
 
-  structuredExtraConfig = with lib.kernel; {
-    ZEN_INTERACTIVE = yes;
-  };
+  structuredExtraConfig = with lib.kernel; { ZEN_INTERACTIVE = yes; };
 
   extraMeta = {
     inherit branch;
     maintainers = with lib.maintainers; [ atemu andresilva ];
-    description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
+    description =
+      "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
   };
 
 } // (args.argsOverride or { }))

@@ -1,47 +1,18 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-translations
-, colord
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, lcms2
-, libcanberra-gtk3
-, libgnomekbd
-, libnotify
-, libxklavier
-, wrapGAppsHook
-, pkg-config
-, pulseaudio
-, lib
-, stdenv
-, systemd
-, upower
-, dconf
-, cups
-, polkit
-, librsvg
-, libwacom
-, xf86_input_wacom
-, xorg
-, fontconfig
-, tzdata
-, nss
-, libgudev
-, meson
-, ninja
-, dbus
-, dbus-glib
-}:
+{ fetchFromGitHub, cinnamon-desktop, cinnamon-translations, colord, glib
+, gsettings-desktop-schemas, gtk3, lcms2, libcanberra-gtk3, libgnomekbd
+, libnotify, libxklavier, wrapGAppsHook, pkg-config, pulseaudio, lib, stdenv
+, systemd, upower, dconf, cups, polkit, librsvg, libwacom, xf86_input_wacom
+, xorg, fontconfig, tzdata, nss, libgudev, meson, ninja, dbus, dbus-glib }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
   version = "5.2.0";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
-   #include "csd-power-proxy.h"
-            ^~~~~~~~~~~~~~~~~~~
-  compilation terminated. */
+      #include "csd-power-proxy.h"
+               ^~~~~~~~~~~~~~~~~~~
+     compilation terminated.
+  */
 
   # but this occurs only sometimes, so disabling parallel building
   # also see https://github.com/linuxmint/cinnamon-settings-daemon/issues/248
@@ -54,10 +25,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-6omif4UxMrXWxL+R9lQ8ogxotW+3E9Kp99toH3PJtaU=";
   };
 
-  patches = [
-    ./csd-backlight-helper-fix.patch
-    ./use-sane-install-dir.patch
-  ];
+  patches = [ ./csd-backlight-helper-fix.patch ./use-sane-install-dir.patch ];
 
   mesonFlags = [ "-Dc_args=-I${glib.dev}/include/gio-unix-2.0" ];
 
@@ -93,12 +61,7 @@ stdenv.mkDerivation rec {
     dbus-glib
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    wrapGAppsHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja wrapGAppsHook pkg-config ];
 
   outputs = [ "out" "dev" ];
 

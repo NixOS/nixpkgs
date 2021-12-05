@@ -1,10 +1,10 @@
 { lib, fetchurl }:
 
-let
-  version = "7.040";
+let version = "7.040";
 in fetchurl rec {
   name = "libertinus-${version}";
-  url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
+  url =
+    "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
   sha256 = "0z658r88p52dyrcslv0wlccw0sw7m5jz8nbqizv95nf7bfw96iyk";
 
   downloadToTemp = true;

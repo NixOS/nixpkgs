@@ -2,20 +2,15 @@
 
 with lib;
 
-let
-  cfg = config.programs.usbtop;
+let cfg = config.programs.usbtop;
 in {
   options = {
     programs.usbtop.enable = mkEnableOption "usbtop and required kernel module";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      usbtop
-    ];
+    environment.systemPackages = with pkgs; [ usbtop ];
 
-    boot.kernelModules = [
-      "usbmon"
-    ];
+    boot.kernelModules = [ "usbmon" ];
   };
 }

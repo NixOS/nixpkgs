@@ -9,9 +9,10 @@ let
   # versionAtLeast statement remains set to 21.03 for backwards compatibility.
   # See https://github.com/NixOS/nixpkgs/pull/108899 and
   # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if versionAtLeast config.system.stateVersion "21.03"
-    then "hedgedoc"
-    else "codimd";
+  name = if versionAtLeast config.system.stateVersion "21.03" then
+    "hedgedoc"
+  else
+    "codimd";
 
   prettyJSON = conf:
     pkgs.runCommandLocal "hedgedoc-config.json" {
@@ -20,8 +21,7 @@ let
       echo '${builtins.toJSON conf}' | jq \
         '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
     '';
-in
-{
+in {
   imports = [
     (mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
   ];
@@ -31,7 +31,7 @@ in
 
     groups = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Groups to which the user ${name} should be added.
       '';
@@ -88,7 +88,7 @@ in
       };
       allowOrigin = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "localhost" "hedgedoc.org" ];
         description = ''
           List of domains to whitelist.
@@ -221,7 +221,7 @@ in
       };
       db = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             dialect = "sqlite";
@@ -236,7 +236,7 @@ in
           Note: This option overrides <option>db</option>.
         '';
       };
-      sslKeyPath= mkOption {
+      sslKeyPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/hedgedoc/hedgedoc.key";
@@ -254,7 +254,7 @@ in
       };
       sslCAPath = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "/var/lib/hedgedoc/ca.crt" ];
         description = ''
           SSL ca chain. Needed when <option>useSSL</option> is enabled.
@@ -891,7 +891,8 @@ in
             };
             identifierFormat = mkOption {
               type = types.str;
-              default = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
+              default =
+                "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
               description = ''
                 Optional name identifier format.
               '';
@@ -906,7 +907,7 @@ in
             };
             externalGroups = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "Temporary-staff" "External-users" ];
               description = ''
                 Excluded group names.
@@ -914,7 +915,7 @@ in
             };
             requiredGroups = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "Hedgedoc-Users" ];
               description = ''
                 Required group names.
@@ -996,13 +997,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.configuration.db == {} -> (
-          cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
-        );
-        message = "Database configuration for HedgeDoc missing."; }
-    ];
-    users.groups.${name} = {};
+    assertions = [{
+      assertion = cfg.configuration.db == { }
+        -> (cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null);
+      message = "Database configuration for HedgeDoc missing.";
+    }];
+    users.groups.${name} = { };
     users.users.${name} = {
       description = "HedgeDoc service user";
       group = name;
@@ -1024,7 +1024,8 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         ExecStart = "${cfg.package}/bin/hedgedoc";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        EnvironmentFile =
+          mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=${cfg.workDir}/config.json"
           "NODE_ENV=production"

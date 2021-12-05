@@ -5,17 +5,13 @@ with lib;
 let
   cfg = config.services.cpuminer-cryptonight;
 
-  json = builtins.toJSON (
-    cfg // {
-       enable = null;
-       threads =
-         if cfg.threads == 0 then null else toString cfg.threads;
-    }
-  );
+  json = builtins.toJSON (cfg // {
+    enable = null;
+    threads = if cfg.threads == 0 then null else toString cfg.threads;
+  });
 
   confFile = builtins.toFile "cpuminer.json" json;
-in
-{
+in {
 
   options = {
 
@@ -43,7 +39,8 @@ in
       threads = mkOption {
         type = types.int;
         default = 0;
-        description = "Number of miner threads, defaults to available processors";
+        description =
+          "Number of miner threads, defaults to available processors";
       };
     };
 
@@ -56,7 +53,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.cpuminer-multi}/bin/minerd --syslog --config=${confFile}";
+        ExecStart =
+          "${pkgs.cpuminer-multi}/bin/minerd --syslog --config=${confFile}";
         User = "nobody";
       };
     };

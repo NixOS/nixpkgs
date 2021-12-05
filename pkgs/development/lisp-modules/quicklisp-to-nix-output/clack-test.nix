@@ -1,21 +1,74 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "clack-test";
   version = "clack-20210411-git";
 
   description = "Testing Clack Applications.";
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-annot" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."clack" args."clack-handler-hunchentoot" args."clack-socket" args."dexador" args."dissect" args."fast-http" args."fast-io" args."flexi-streams" args."http-body" args."hunchentoot" args."ironclad" args."jonathan" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."local-time" args."md5" args."named-readtables" args."proc-parse" args."quri" args."rfc2388" args."rove" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."trivial-types" args."usocket" args."xsubseq" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."bordeaux-threads"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."chipz"
+    args."chunga"
+    args."cl_plus_ssl"
+    args."cl-annot"
+    args."cl-base64"
+    args."cl-cookie"
+    args."cl-fad"
+    args."cl-ppcre"
+    args."cl-reexport"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."cl-utilities"
+    args."clack"
+    args."clack-handler-hunchentoot"
+    args."clack-socket"
+    args."dexador"
+    args."dissect"
+    args."fast-http"
+    args."fast-io"
+    args."flexi-streams"
+    args."http-body"
+    args."hunchentoot"
+    args."ironclad"
+    args."jonathan"
+    args."lack"
+    args."lack-component"
+    args."lack-middleware-backtrace"
+    args."lack-util"
+    args."local-time"
+    args."md5"
+    args."named-readtables"
+    args."proc-parse"
+    args."quri"
+    args."rfc2388"
+    args."rove"
+    args."smart-buffer"
+    args."split-sequence"
+    args."static-vectors"
+    args."trivial-backtrace"
+    args."trivial-features"
+    args."trivial-garbage"
+    args."trivial-gray-streams"
+    args."trivial-mimes"
+    args."trivial-types"
+    args."usocket"
+    args."xsubseq"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/clack/2021-04-11/clack-20210411-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/clack/2021-04-11/clack-20210411-git.tgz";
     sha256 = "0yai9cx1gha684ljr8k1s5n4mi6mpj2wmvv6b9iw7pw1vhw5m8mf";
   };
 
   packageName = "clack-test";
 
-  asdFilesToKeep = ["clack-test.asd"];
+  asdFilesToKeep = [ "clack-test.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack-test DESCRIPTION Testing Clack Applications. SHA256
@@ -77,4 +130,5 @@ rec {
      clack-middleware-oauth clack-middleware-postmodern
      clack-middleware-rucksack clack-session-store-dbi
      t-clack-middleware-auth-basic t-clack-middleware-csrf)
-    PARASITES NIL) */
+    PARASITES NIL)
+*/

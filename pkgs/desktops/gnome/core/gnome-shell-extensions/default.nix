@@ -1,22 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, glib
-, gnome
-, gnome-menus
-, substituteAll
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib, gnome
+, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "2E+qwUSLOPl12cGUkMWSivxcWixJ3X5/ga9pD5Rm/Gg=";
   };
 
@@ -27,17 +19,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext glib ];
 
-  mesonFlags = [
-    "-Dextension_set=all"
-  ];
+  mesonFlags = [ "-Dextension_set=all" ];
 
   preFixup = ''
     # The meson build doesn't compile the schemas.

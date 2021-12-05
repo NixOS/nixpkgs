@@ -1,8 +1,7 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
-with python3.pkgs; buildPythonPackage rec {
+with python3.pkgs;
+buildPythonPackage rec {
   pname = "esphome-dashboard";
   version = "20211201.0";
 
@@ -14,9 +13,7 @@ with python3.pkgs; buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "esphome_dashboard"
-  ];
+  pythonImportsCheck = [ "esphome_dashboard" ];
 
   meta = with lib; {
     description = "ESPHome dashboard";

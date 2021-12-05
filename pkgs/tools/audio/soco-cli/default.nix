@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "soco-cli";
@@ -28,9 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   # Tests wants to communicate with hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "soco_cli"
-  ];
+  pythonImportsCheck = [ "soco_cli" ];
 
   meta = with lib; {
     description = "Command-line interface to control Sonos sound systems";

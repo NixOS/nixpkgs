@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux
+, gnugrep, gnused, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
@@ -23,7 +24,9 @@ stdenv.mkDerivation rec {
     install -m 644 -D contrib/zsh/_transcrypt $out/share/zsh/site-functions/_transcrypt
 
     wrapProgram $out/bin/transcrypt \
-      --prefix PATH : "${lib.makeBinPath [ git openssl coreutils util-linux gnugrep gnused gawk ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [ git openssl coreutils util-linux gnugrep gnused gawk ]
+      }"
 
     cat > $out/bin/transcrypt-depspathprefix << EOF
     #!${stdenv.shell}

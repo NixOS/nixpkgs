@@ -1,11 +1,4 @@
-{ coreutils
-, fetchFromGitHub
-, gzip
-, jq
-, lib
-, makeWrapper
-, qrencode
-, stdenvNoCC
+{ coreutils, fetchFromGitHub, gzip, jq, lib, makeWrapper, qrencode, stdenvNoCC
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,16 +21,14 @@ stdenvNoCC.mkDerivation rec {
     cp -a quill-qr.sh $out/bin/quill-qr.sh
     patchShebangs $out/bin
 
-    wrapProgram $out/bin/quill-qr.sh --prefix PATH : "${lib.makeBinPath [
-      qrencode
-      coreutils
-      jq
-      gzip
-    ]}"
+    wrapProgram $out/bin/quill-qr.sh --prefix PATH : "${
+      lib.makeBinPath [ qrencode coreutils jq gzip ]
+    }"
   '';
 
   meta = with lib; {
-    description = "Print QR codes for use with https://p5deo-6aaaa-aaaab-aaaxq-cai.raw.ic0.app/";
+    description =
+      "Print QR codes for use with https://p5deo-6aaaa-aaaab-aaaxq-cai.raw.ic0.app/";
     homepage = "https://github.com/IvanMalison/quill-qr";
     maintainers = with maintainers; [ imalison ];
     platforms = with platforms; linux;

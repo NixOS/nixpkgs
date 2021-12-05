@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage
-, fetchFromGitHub
-, six
-, mock, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "configobj";
@@ -15,7 +11,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0x97794nk3dfn0i3si9fv7y19jnpnarb34bkdwlz7ii7ag6xihhw";
   };
-
 
   propagatedBuildInputs = [ six ];
 

@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pytestCheckHook
-, ApplicationServices
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, cffi, pytestCheckHook
+, ApplicationServices }:
 
 buildPythonPackage rec {
   pname = "pymunk";
@@ -19,18 +12,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ cffi ];
-  buildInputs = lib.optionals stdenv.isDarwin [
-    ApplicationServices
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   preBuild = ''
     ${python.interpreter} setup.py build_ext --inplace
   '';
 
   checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [
-    "pymunk/tests"
-  ];
+  pytestFlagsArray = [ "pymunk/tests" ];
   pythonImportsCheck = [ "pymunk" ];
 
   meta = with lib; {

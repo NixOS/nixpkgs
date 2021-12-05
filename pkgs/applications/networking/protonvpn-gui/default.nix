@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, gobject-introspection, imagemagick,
-wrapGAppsHook, python3Packages, gtk3, networkmanager, webkitgtk }:
+{ lib, fetchFromGitHub, gobject-introspection, imagemagick, wrapGAppsHook
+, python3Packages, gtk3, networkmanager, webkitgtk }:
 
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-linux-gui";
@@ -14,18 +14,11 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
-  nativeBuildInputs = [
-    gobject-introspection imagemagick wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gobject-introspection imagemagick wrapGAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
-    protonvpn-nm-lib
-    psutil
-  ];
+  propagatedBuildInputs = with python3Packages; [ protonvpn-nm-lib psutil ];
 
-  buildInputs = [
-    gtk3 networkmanager webkitgtk
-  ];
+  buildInputs = [ gtk3 networkmanager webkitgtk ];
 
   postFixup = ''
     # Setting icons

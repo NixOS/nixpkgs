@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyusb
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyusb }:
 
 buildPythonPackage {
   pname = "openant-unstable";

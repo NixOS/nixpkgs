@@ -12,14 +12,9 @@ buildDunePackage rec {
   };
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    uri
-  ];
+  propagatedBuildInputs = [ uri ];
 
-  checkInputs = [
-    crowbar
-    alcotest
-  ];
+  checkInputs = [ crowbar alcotest ];
 
   doCheck = true;
 

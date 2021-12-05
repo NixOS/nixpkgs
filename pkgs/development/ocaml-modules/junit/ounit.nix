@@ -5,10 +5,7 @@ buildDunePackage ({
 
   inherit (junit) src version meta useDune2;
 
-  propagatedBuildInputs = [
-    junit
-    ounit
-  ];
+  propagatedBuildInputs = [ junit ounit ];
 
   doCheck = true;
 })

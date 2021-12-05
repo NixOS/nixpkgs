@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config
-, libusb1
-, readline
-}:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config, libusb1
+, readline }:
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
@@ -16,17 +14,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
-  buildInputs = [
-    libusb1
-    readline
-  ];
+  buildInputs = [ libusb1 readline ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
@@ -40,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libirecovery";
-    description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
+    description =
+      "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
       iBoot/iBSS found on Apple's iOS devices via USB. A command-line utility is also

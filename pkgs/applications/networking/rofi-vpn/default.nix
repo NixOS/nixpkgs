@@ -1,10 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, makeWrapper
-, networkmanager
-, rofi-unwrapped
-}:
+{ stdenv, lib, fetchFromGitLab, makeWrapper, networkmanager, rofi-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-vpn";
@@ -31,7 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   meta = with lib; {
-    description = "Rofi-based interface to enable VPN connections with NetworkManager";
+    description =
+      "Rofi-based interface to enable VPN connections with NetworkManager";
     homepage = "https://gitlab.com/DamienCassou/rofi-vpn";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ DamienCassou ];

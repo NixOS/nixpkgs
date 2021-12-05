@@ -1,15 +1,5 @@
-{ cffi
-, six
-, enum34
-, hypothesis
-, pytest
-, wheel
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, lib
-, stdenv
-}:
+{ cffi, six, enum34, hypothesis, pytest, wheel, buildPythonPackage, fetchPypi
+, isPy3k, lib, stdenv }:
 
 buildPythonPackage rec {
   pname = "argon2_cffi";
@@ -25,7 +15,8 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
+  ARGON2_CFFI_USE_SSE2 =
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
 
   checkInputs = [ hypothesis pytest wheel ];
   checkPhase = ''
@@ -34,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Secure Password Hashes for Python";
-    homepage    = "https://argon2-cffi.readthedocs.io/";
-    license     = licenses.mit;
+    homepage = "https://argon2-cffi.readthedocs.io/";
+    license = licenses.mit;
   };
 }

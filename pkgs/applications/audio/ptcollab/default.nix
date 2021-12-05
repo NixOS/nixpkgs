@@ -1,15 +1,5 @@
-{ mkDerivation
-, lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, qmake
-, pkg-config
-, qtbase
-, qtmultimedia
-, libvorbis
-, rtmidi
-}:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, nix-update-script, qmake
+, pkg-config, qtbase, qtmultimedia, libvorbis, rtmidi }:
 
 mkDerivation rec {
   pname = "ptcollab";
@@ -26,14 +16,11 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtmultimedia libvorbis rtmidi ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "Experimental pxtone editor where you can collaborate with friends";
+    description =
+      "Experimental pxtone editor where you can collaborate with friends";
     homepage = "https://yuxshao.github.io/ptcollab/";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];

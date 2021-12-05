@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkg-config, xercesc, xml-security-c, xml-tooling-c }:
+{ lib, stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp
+, log4shib, pkg-config, xercesc, xml-security-c, xml-tooling-c }:
 
 stdenv.mkDerivation rec {
   pname = "shibboleth-sp";
@@ -11,7 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ boost fcgi openssl opensaml-cpp log4shib xercesc xml-security-c xml-tooling-c ];
+  buildInputs = [
+    boost
+    fcgi
+    openssl
+    opensaml-cpp
+    log4shib
+    xercesc
+    xml-security-c
+    xml-tooling-c
+  ];
 
   configureFlags = [
     "--without-apxs"
@@ -23,10 +33,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage    = "https://shibboleth.net/products/service-provider.html";
-    description = "Enables SSO and Federation web applications written with any programming language or framework";
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    homepage = "https://shibboleth.net/products/service-provider.html";
+    description =
+      "Enables SSO and Federation web applications written with any programming language or framework";
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ maintainers.jammerful ];
   };
 }

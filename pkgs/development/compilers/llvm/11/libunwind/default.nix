@@ -1,6 +1,5 @@
 { lib, stdenv, llvm_meta, version, fetch, cmake, fetchpatch
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -8,9 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetch pname "1vpqs2c358v8fbr1r8jmzkfqk12jllimjcfmgxga127ksq9b37nj";
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   outputs = [ "out" "dev" ];
 

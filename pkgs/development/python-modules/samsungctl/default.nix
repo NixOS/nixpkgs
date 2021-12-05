@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, websocket-client
-}:
+{ lib, buildPythonPackage, fetchPypi, websocket-client }:
 
 buildPythonPackage rec {
   pname = "samsungctl";
@@ -11,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
   };
 
-  propagatedBuildInputs = [
-    websocket-client
-  ];
+  propagatedBuildInputs = [ websocket-client ];
 
   # no tests
   doCheck = false;

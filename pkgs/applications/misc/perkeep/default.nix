@@ -7,7 +7,8 @@ let
   };
 
   publisherJS = fetchurl {
-    url = "https://storage.googleapis.com/perkeep-release/gopherjs/publisher.js";
+    url =
+      "https://storage.googleapis.com/perkeep-release/gopherjs/publisher.js";
     sha256 = "09hd7p0xscqnh612jbrjvh3njmlm4292zd5sbqx2lg0aw688q8p2";
   };
 
@@ -51,7 +52,8 @@ in buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
+    description =
+      "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = "https://perkeep.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan danderson kalbasit ];

@@ -11,7 +11,5 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ];
-  };
+  meta = with lib; { maintainers = with maintainers; [ ]; };
 }

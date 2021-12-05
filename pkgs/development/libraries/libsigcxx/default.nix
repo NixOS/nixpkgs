@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "2.10.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-0IKiznLHUPZrGkFavj6FLfLq4eivUwEPSsLqJhpHiDI=";
   };
 

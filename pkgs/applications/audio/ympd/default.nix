@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libmpdclient
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libmpdclient, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "ympd";
@@ -23,7 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.ympd.org";
-    description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
+    description =
+      "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ maintainers.siddharthist ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;

@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config, cairo }:
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config
+, cairo }:
 
 buildDunePackage rec {
   pname = "cairo2";
   version = "0.6.2";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
+    url =
+      "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
     sha256 = "sha256-a7P1kiVmIwT6Fhtwxs29ffgO4iexsulxUoc9cnJmEK4=";
   };
 
@@ -16,8 +18,8 @@ buildDunePackage rec {
   buildInputs = [ cairo dune-configurator ];
 
   doCheck = !(stdenv.isDarwin
-  # https://github.com/Chris00/ocaml-cairo/issues/19
-  || lib.versionAtLeast ocaml.version "4.10");
+    # https://github.com/Chris00/ocaml-cairo/issues/19
+    || lib.versionAtLeast ocaml.version "4.10");
 
   meta = with lib; {
     homepage = "https://github.com/Chris00/ocaml-cairo";

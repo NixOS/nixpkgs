@@ -16,7 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Fast and powerful Git hooks manager for any type of projects";
+    description =
+      "Fast and powerful Git hooks manager for any type of projects";
     homepage = "https://github.com/Arkweid/lefthook";
     license = licenses.mit;
     maintainers = with maintainers; [ rencire ];

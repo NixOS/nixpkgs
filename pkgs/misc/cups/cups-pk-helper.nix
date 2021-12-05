@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "cups-pk-helper";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";
     sha256 = "0a52jw6rm7lr5nbyksiia0rn7sasyb5cjqcb95z1wxm2yprgi6lm";
   };
 
@@ -15,13 +16,15 @@ stdenv.mkDerivation rec {
   patches = [
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/cups-pk-helper/cups-pk-helper/merge_requests/2.patch";
+      url =
+        "https://gitlab.freedesktop.org/cups-pk-helper/cups-pk-helper/merge_requests/2.patch";
       sha256 = "1kamhr5kn8c1y0q8xbip0fgr7maf3dyddlvab4n0iypk7rwwikl0";
     })
   ];
 
   meta = with lib; {
-    description = "PolicyKit helper to configure cups with fine-grained privileges";
+    description =
+      "PolicyKit helper to configure cups with fine-grained privileges";
     homepage = "http://www.freedesktop.org/wiki/Software/cups-pk-helper/";
     license = licenses.gpl2;
     platforms = platforms.linux;

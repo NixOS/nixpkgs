@@ -1,9 +1,4 @@
-{ lib
-, fetchurl
-, gnustep
-, gcc
-, llvmPackages_9
-}:
+{ lib, fetchurl, gnustep, gcc, llvmPackages_9 }:
 
 let
   # Earlier llvm than 9 segfaults
@@ -14,17 +9,14 @@ in gnustep'.gsmakeDerivation rec {
   version = "1.0-b10";
 
   src = fetchurl {
-    url = "http://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
+    url =
+      "http://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
     sha256 = "1b27npgsan2nx1p581b9q2krx4506yyd6s34r4sf1r9x9adshm77";
   };
 
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
 
-  buildInputs = [
-    gnustep'.base
-    gnustep'.gui
-    gnustep'.back
-  ];
+  buildInputs = [ gnustep'.base gnustep'.gui gnustep'.back ];
 
   # Fix the Exec and Icon paths in the .desktop file, and save the file in the
   # correct place.

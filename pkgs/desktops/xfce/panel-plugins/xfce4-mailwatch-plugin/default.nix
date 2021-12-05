@@ -1,31 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, xfce4-panel, libxfce4ui,
-  exo, gnutls, libgcrypt, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, xfce4-panel, libxfce4ui, exo
+, gnutls, libgcrypt, xfce }:
 
-let
-  category = "panel-plugins";
-in
+let category = "panel-plugins";
 
-stdenv.mkDerivation rec {
-  pname  = "xfce4-mailwatch-plugin";
+in stdenv.mkDerivation rec {
+  pname = "xfce4-mailwatch-plugin";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-IPkevv0ogLJ/Qh93MRWzdA9n3iv2D+rOOEG/0aCcvi4=";
   };
 
-  nativeBuildInputs = [
-    intltool
-    pkg-config
-  ];
+  nativeBuildInputs = [ intltool pkg-config ];
 
-  buildInputs = [
-    libxfce4ui
-    xfce4-panel
-    exo
-    gnutls
-    libgcrypt
-  ];
+  buildInputs = [ libxfce4ui xfce4-panel exo gnutls libgcrypt ];
 
   passthru.updateScript = xfce.updateScript {
     inherit pname version;

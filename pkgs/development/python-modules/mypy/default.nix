@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, mypy-extensions
-, python
-, pythonOlder
-, typed-ast
-, typing-extensions
-, tomli
-, types-typed-ast
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPythonPackage, mypy-extensions
+, python, pythonOlder, typed-ast, typing-extensions, tomli, types-typed-ast }:
 
 buildPythonPackage rec {
   pname = "mypy";
@@ -28,7 +17,8 @@ buildPythonPackage rec {
     # FIXME: Remove patch after upstream has decided the proper solution.
     #        https://github.com/python/mypy/pull/11143
     (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
+      url =
+        "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
       sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
     })
   ];
@@ -38,16 +28,9 @@ buildPythonPackage rec {
       --replace "tomli>=1.1.0,<1.2.0" "tomli"
   '';
 
-  buildInputs = [
-    types-typed-ast
-  ];
+  buildInputs = [ types-typed-ast ];
 
-  propagatedBuildInputs = [
-    mypy-extensions
-    tomli
-    typed-ast
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ mypy-extensions tomli typed-ast typing-extensions ];
 
   # Tests not included in pip package.
   doCheck = false;

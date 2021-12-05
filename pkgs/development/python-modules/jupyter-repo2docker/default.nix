@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, docker
-, entrypoints
-, escapism
-, fetchFromGitHub
-, iso8601
-, jinja2
-, pkgs-docker
-, python-json-logger
-, pythonOlder
-, ruamel-yaml
-, semver
-, toml
-, traitlets
-}:
+{ lib, buildPythonPackage, docker, entrypoints, escapism, fetchFromGitHub
+, iso8601, jinja2, pkgs-docker, python-json-logger, pythonOlder, ruamel-yaml
+, semver, toml, traitlets }:
 
 buildPythonPackage rec {
   version = "2021.08.0";

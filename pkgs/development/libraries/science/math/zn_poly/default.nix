@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gmp
-, python2
+{ stdenv, lib, fetchFromGitLab, fetchpatch, gmp, python2
 , tune ? false # tune to hardware, impure
 }:
 
@@ -21,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ra5vy585bqq7g3317iw6fp44iqgqvds3j0l1va6mswimypq4vxb";
   };
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   nativeBuildInputs = [
     python2 # needed by ./configure to create the makefile
@@ -40,16 +33,15 @@ stdenv.mkDerivation rec {
   # It seems buggy anyways (see homepage).
   buildFlags = [ "all" "${libbasename}${libext}" ];
 
-  configureFlags = lib.optionals (!tune) [
-    "--disable-tuning"
-  ];
+  configureFlags = lib.optionals (!tune) [ "--disable-tuning" ];
 
   patches = [
     # fix format-security by not passing variables directly to printf
     # https://gitlab.com/sagemath/zn_poly/merge_requests/1
     (fetchpatch {
       name = "format-security.patch";
-      url = "https://gitlab.com/timokau/zn_poly/commit/1950900a80ec898d342b8bcafa148c8027649766.patch";
+      url =
+        "https://gitlab.com/timokau/zn_poly/commit/1950900a80ec898d342b8bcafa148c8027649766.patch";
       sha256 = "1gks9chvsfpc6sg5h3nqqfia4cgvph7jmj9dw67k7dk7kv9y0rk1";
     })
   ];

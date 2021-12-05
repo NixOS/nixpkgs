@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
-, secp256k1 }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch
+, wrapQtAppsHook, secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";

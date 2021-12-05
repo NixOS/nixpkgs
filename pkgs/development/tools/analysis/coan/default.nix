@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "coan";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/coan2/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/coan2/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 

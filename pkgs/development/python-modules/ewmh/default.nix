@@ -16,7 +16,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/parkouss/pyewmh";
-    description = "An implementation of EWMH (Extended Window Manager Hints), based on Xlib";
+    description =
+      "An implementation of EWMH (Extended Window Manager Hints), based on Xlib";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bandresen ];
   };

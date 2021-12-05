@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZMz0NySxzX2XHiqB8f5asvwjIG6kdIcq8Gb3EbAxBaU=";
   };
 
-  nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
+  nativeBuildInputs = [
+    cmake
+    libxslt # manpage
+  ];
 
-  cmakeFlags = [];
+  cmakeFlags = [ ];
 
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107

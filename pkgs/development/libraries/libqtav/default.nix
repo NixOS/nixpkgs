@@ -1,21 +1,6 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, extra-cmake-modules
-, qtbase
-, qtmultimedia
-, qtquick1
-, qttools
-, libGL
-, libX11
-, libass
-, openal
-, ffmpeg
-, libuchardet
-, alsa-lib
-, libpulseaudio
-, libva
-}:
+{ mkDerivation, lib, fetchFromGitHub, extra-cmake-modules, qtbase, qtmultimedia
+, qtquick1, qttools, libGL, libX11, libass, openal, ffmpeg, libuchardet
+, alsa-lib, libpulseaudio, libva }:
 
 with lib;
 
@@ -62,7 +47,8 @@ mkDerivation rec {
   meta = {
     description = "A multimedia playback framework based on Qt + FFmpeg";
     #license = licenses.lgpl21; # For the libraries / headers only.
-    license = licenses.gpl3; # With the examples (under bin) and most likely some of the optional dependencies used.
+    license =
+      licenses.gpl3; # With the examples (under bin) and most likely some of the optional dependencies used.
     homepage = "http://www.qtav.org/";
     maintainers = [ maintainers.jraygauthier ];
     platforms = platforms.linux;

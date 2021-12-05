@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, blas
-, lapack
-, isPy27
-, python
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, blas, lapack, isPy27, python
 }:
 
 buildPythonPackage {
@@ -22,11 +15,7 @@ buildPythonPackage {
 
   hardeningDisable = [ "all" ];
 
-  propagatedBuildInputs = [
-    numpy
-    blas
-    lapack
-  ];
+  propagatedBuildInputs = [ numpy blas lapack ];
 
   # Include patches from working version of PySparse 1.3-dev in
   # Conda-Forge,

@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
     # issue with nasm, however yasm is now used)
     ++ optional stdenv.isDarwin "--enable-macosx_module --disable-assembly";
 
-  nativeBuildInputs = [ ]
-    ++ optional (!stdenv.isDarwin) yasm;
+  nativeBuildInputs = [ ] ++ optional (!stdenv.isDarwin) yasm;
 
   buildInputs = [ ]
     # Undocumented darwin hack
@@ -38,10 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MPEG-4 video codec for PC";
-    homepage    = "https://www.xvid.com/";
-    license     = licenses.gpl2;
+    homepage = "https://www.xvid.com/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
 

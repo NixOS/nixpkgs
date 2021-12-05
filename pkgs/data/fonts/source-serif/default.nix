@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "4.004";
+let version = "4.004";
 in fetchzip {
   name = "source-serif-${version}";
 
-  url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
+  url =
+    "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/{opentype,truetype,variable}
@@ -18,7 +18,8 @@ in fetchzip {
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-serif/";
-    description = "Typeface for setting text in many sizes, weights, and languages. Designed to complement Source Sans";
+    description =
+      "Typeface for setting text in many sizes, weights, and languages. Designed to complement Source Sans";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];

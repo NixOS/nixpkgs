@@ -1,7 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, aria2, poetry, pytest, pytest-cov, pytest-xdist, responses
-, asciimatics, loguru, requests, setuptools, websocket-client
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aria2, poetry, pytest
+, pytest-cov, pytest-xdist, responses, asciimatics, loguru, requests, setuptools
+, websocket-client }:
 
 buildPythonPackage rec {
   pname = "aria2p";
@@ -32,11 +31,13 @@ buildPythonPackage rec {
     pytest -nauto -k "not test_api and not test_cli and not test_interface"
   '';
 
-  propagatedBuildInputs = [ asciimatics loguru requests setuptools websocket-client ];
+  propagatedBuildInputs =
+    [ asciimatics loguru requests setuptools websocket-client ];
 
   meta = with lib; {
     homepage = "https://github.com/pawamoy/aria2p";
-    description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
+    description =
+      "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];
   };

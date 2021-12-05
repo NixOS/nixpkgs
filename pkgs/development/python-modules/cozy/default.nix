@@ -1,30 +1,13 @@
-{ buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, lib
-, z3
-, ply
-, igraph
-, oset
-, ordered-set
-, dictionaries
-, setuptools
-}:
+{ buildPythonPackage, isPy3k, fetchFromGitHub, lib, z3, ply, igraph, oset
+, ordered-set, dictionaries, setuptools }:
 
 buildPythonPackage {
   pname = "cozy";
   version = "2.0a1";
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
-    setuptools
-    z3
-    ply
-    igraph
-    oset
-    ordered-set
-    dictionaries
-  ];
+  propagatedBuildInputs =
+    [ setuptools z3 ply igraph oset ordered-set dictionaries ];
 
   src = fetchFromGitHub {
     owner = "CozySynthesizer";
@@ -51,7 +34,6 @@ buildPythonPackage {
   postInstall = ''
     $out/bin/cozy --help
   '';
-
 
   meta = with lib; {
     description = "The collection synthesizer";

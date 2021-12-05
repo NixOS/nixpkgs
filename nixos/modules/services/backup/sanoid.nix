@@ -80,31 +80,35 @@ let
 
   # Function to build "zfs allow" and "zfs unallow" commands for the
   # filesystems we've delegated permissions to.
-  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
-    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-    "-+/run/booted-system/sw/bin/zfs"
-    zfsAction
-    "sanoid"
-    (concatStringsSep "," permissions)
-    dataset
-  ];
+  buildAllowCommand = zfsAction: permissions: dataset:
+    lib.escapeShellArgs [
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+      "-+/run/booted-system/sw/bin/zfs"
+      zfsAction
+      "sanoid"
+      (concatStringsSep "," permissions)
+      dataset
+    ];
 
-  configFile =
-    let
-      mkValueString = v:
-        if builtins.isList v then concatStringsSep "," v
-        else generators.mkValueStringDefault { } v;
+  configFile = let
+    mkValueString = v:
+      if builtins.isList v then
+        concatStringsSep "," v
+      else
+        generators.mkValueStringDefault { } v;
 
-      mkKeyValue = k: v:
-        if v == null then ""
-        else if k == "processChildrenOnly" then ""
-        else if k == "useTemplate" then ""
-        else generators.mkKeyValueDefault { inherit mkValueString; } "=" k v;
-    in
-    generators.toINI { inherit mkKeyValue; } cfg.settings;
+    mkKeyValue = k: v:
+      if v == null then
+        ""
+      else if k == "processChildrenOnly" then
+        ""
+      else if k == "useTemplate" then
+        ""
+      else
+        generators.mkKeyValueDefault { inherit mkValueString; } "=" k v;
+  in generators.toINI { inherit mkKeyValue; } cfg.settings;
 
-in
-{
+in {
 
   # Interface
 
@@ -128,8 +132,10 @@ in
       type = types.attrsOf (types.submodule ({ config, options, ... }: {
         freeformType = datasetSettingsType;
         options = commonOptions // datasetOptions;
-        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or { });
-        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
+        config.use_template =
+          mkAliasDefinitions (mkDefault options.useTemplate or { });
+        config.process_children_only =
+          mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
       }));
       default = { };
       description = "Datasets to snapshot.";
@@ -176,8 +182,12 @@ in
     systemd.services.sanoid = {
       description = "Sanoid snapshot service";
       serviceConfig = {
-        ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
-        ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
+        ExecStartPre =
+          (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ])
+            datasets);
+        ExecStopPost =
+          (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ])
+            datasets);
         ExecStart = lib.escapeShellArgs ([
           "${pkgs.sanoid}/bin/sanoid"
           "--cron"

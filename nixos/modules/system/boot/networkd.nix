@@ -43,14 +43,23 @@ let
           "RxBufferSize"
           "TxBufferSize"
         ])
-        (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
+        (assertValueOneOf "MACAddressPolicy" [ "persistent" "random" "none" ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
         (assertByteFormat "BitsPerSecond")
-        (assertValueOneOf "Duplex" ["half" "full"])
+        (assertValueOneOf "Duplex" [ "half" "full" ])
         (assertValueOneOf "AutoNegotiation" boolValues)
-        (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
-        (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
+        (assertValueOneOf "WakeOnLan" [
+          "phy"
+          "unicast"
+          "multicast"
+          "broadcast"
+          "arp"
+          "magic"
+          "secureon"
+          "off"
+        ])
+        (assertValueOneOf "Port" [ "tp" "aui" "bnc" "mii" "fibre" ])
         (assertValueOneOf "ReceiveChecksumOffload" boolValues)
         (assertValueOneOf "TransmitChecksumOffload" boolValues)
         (assertValueOneOf "TCPSegmentationOffload" boolValues)
@@ -138,13 +147,7 @@ let
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
-        (assertOnlyFields [
-          "Id"
-          "GVRP"
-          "MVRP"
-          "LooseBinding"
-          "ReorderHeader"
-        ])
+        (assertOnlyFields [ "Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader" ])
         (assertInt "Id")
         (assertRange "Id" 0 4094)
         (assertValueOneOf "GVRP" boolValues)
@@ -154,10 +157,8 @@ let
       ];
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" [
-        (assertOnlyFields [
-          "Mode"
-        ])
-        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+        (assertOnlyFields [ "Mode" ])
+        (assertValueOneOf "Mode" [ "private" "vepa" "bridge" "passthru" ])
       ];
 
       sectionVXLAN = checkUnitConfig "VXLAN" [
@@ -204,7 +205,7 @@ let
         (assertValueOneOf "GenericProtocolExtension" boolValues)
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
-        (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "IPDoNotFragment" (boolValues + [ "inherit" ]))
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -237,14 +238,17 @@ let
         (assertRange "TTL" 0 255)
         (assertValueOneOf "DiscoverPathMTU" boolValues)
         (assertValueOneOf "CopyDSCP" boolValues)
-        (assertValueOneOf "Mode" ["ip6ip6" "ipip6" "any"])
+        (assertValueOneOf "Mode" [ "ip6ip6" "ipip6" "any" ])
         (assertValueOneOf "Independent" boolValues)
         (assertValueOneOf "AssignToLoopback" boolValues)
         (assertValueOneOf "AllowLocalRemote" boolValues)
         (assertValueOneOf "FooOverUDP" boolValues)
         (assertPort "FOUDestinationPort")
         (assertPort "FOUSourcePort")
-        (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+        (assertValueOneOf "Encapsulation" [
+          "FooOverUDP"
+          "GenericUDPEncapsulation"
+        ])
         (assertValueOneOf "ISATAP" boolValues)
         (assertValueOneOf "SerializeTunneledPackets" boolValues)
         (assertInt "ERSPANIndex")
@@ -252,20 +256,16 @@ let
       ];
 
       sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
-        (assertOnlyFields [
-          "Port"
-          "Encapsulation"
-          "Protocol"
-        ])
+        (assertOnlyFields [ "Port" "Encapsulation" "Protocol" ])
         (assertPort "Port")
-        (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+        (assertValueOneOf "Encapsulation" [
+          "FooOverUDP"
+          "GenericUDPEncapsulation"
+        ])
       ];
 
       sectionPeer = checkUnitConfig "Peer" [
-        (assertOnlyFields [
-          "Name"
-          "MACAddress"
-        ])
+        (assertOnlyFields [ "Name" "MACAddress" ])
         (assertMacAddress "MACAddress")
       ];
 
@@ -277,11 +277,7 @@ let
       # do not add it to this list. The nix store is world-readable let's
       # refrain ourselves from providing a footgun.
       sectionWireGuard = checkUnitConfig "WireGuard" [
-        (assertOnlyFields [
-          "PrivateKeyFile"
-          "ListenPort"
-          "FirewallMark"
-        ])
+        (assertOnlyFields [ "PrivateKeyFile" "ListenPort" "FirewallMark" ])
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
       ];
@@ -343,16 +339,20 @@ let
           "encap2+3"
           "encap3+4"
         ])
-        (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
-        (assertValueOneOf "AdSelect" ["stable" "bandwidth" "count"])
+        (assertValueOneOf "LACPTransmitRate" [ "slow" "fast" ])
+        (assertValueOneOf "AdSelect" [ "stable" "bandwidth" "count" ])
         (assertInt "AdActorSystemPriority")
         (assertRange "AdActorSystemPriority" 1 65535)
         (assertInt "AdUserPortKey")
         (assertRange "AdUserPortKey" 0 1023)
-        (assertValueOneOf "FailOverMACPolicy" ["none" "active" "follow"])
-        (assertValueOneOf "ARPValidate" ["none" "active" "backup" "all"])
-        (assertValueOneOf "ARPAllTargets" ["any" "all"])
-        (assertValueOneOf "PrimaryReselectPolicy" ["always" "better" "failure"])
+        (assertValueOneOf "FailOverMACPolicy" [ "none" "active" "follow" ])
+        (assertValueOneOf "ARPValidate" [ "none" "active" "backup" "all" ])
+        (assertValueOneOf "ARPAllTargets" [ "any" "all" ])
+        (assertValueOneOf "PrimaryReselectPolicy" [
+          "always"
+          "better"
+          "failure"
+        ])
         (assertInt "ResendIGMP")
         (assertRange "ResendIGMP" 0 255)
         (assertInt "PacketsPerSlave")
@@ -366,19 +366,14 @@ let
       ];
 
       sectionXfrm = checkUnitConfig "Xfrm" [
-        (assertOnlyFields [
-          "InterfaceId"
-          "Independent"
-        ])
+        (assertOnlyFields [ "InterfaceId" "Independent" ])
         (assertInt "InterfaceId")
         (assertRange "InterfaceId" 1 4294967295)
         (assertValueOneOf "Independent" boolValues)
       ];
 
       sectionVRF = checkUnitConfig "VRF" [
-        (assertOnlyFields [
-          "Table"
-        ])
+        (assertOnlyFields [ "Table" ])
         (assertInt "Table")
         (assertMinimum "Table" 0)
       ];
@@ -396,14 +391,14 @@ let
           "GatewayBandwithUp"
           "RoutingAlgorithm"
         ])
-        (assertValueOneOf "GatewayMode" ["off" "client" "server"])
+        (assertValueOneOf "GatewayMode" [ "off" "client" "server" ])
         (assertValueOneOf "Aggregation" boolValues)
         (assertValueOneOf "BridgeLoopAvoidance" boolValues)
         (assertValueOneOf "DistributedArpTable" boolValues)
         (assertValueOneOf "Fragmentation" boolValues)
         (assertInt "HopPenalty")
         (assertRange "HopPenalty" 0 255)
-        (assertValueOneOf "RoutingAlgorithm" ["batman-v" "batman-iv"])
+        (assertValueOneOf "RoutingAlgorithm" [ "batman-v" "batman-iv" ])
       ];
     };
 
@@ -500,21 +495,30 @@ let
           "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
-        (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
+        (assertValueOneOf "DHCP" [ "yes" "no" "ipv4" "ipv6" ])
         (assertValueOneOf "DHCPServer" boolValues)
-        (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "LinkLocalAddressing" [
+          "yes"
+          "no"
+          "ipv4"
+          "ipv6"
+          "fallback"
+          "ipv4-fallback"
+        ])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
-        (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
-        (assertValueOneOf "MulticastDNS" (boolValues ++ ["resolve"]))
-        (assertValueOneOf "DNSOverTLS" (boolValues ++ ["opportunistic"]))
-        (assertValueOneOf "DNSSEC" (boolValues ++ ["allow-downgrade"]))
-        (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
-        (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
+        (assertValueOneOf "LLMNR" (boolValues ++ [ "resolve" ]))
+        (assertValueOneOf "MulticastDNS" (boolValues ++ [ "resolve" ]))
+        (assertValueOneOf "DNSOverTLS" (boolValues ++ [ "opportunistic" ]))
+        (assertValueOneOf "DNSSEC" (boolValues ++ [ "allow-downgrade" ]))
+        (assertValueOneOf "LLDP" (boolValues ++ [ "routers-only" ]))
+        (assertValueOneOf "EmitLLDP" (boolValues
+          ++ [ "nearest-bridge" "non-tpmr-bridge" "customer-bridge" ]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertValueOneOf "IPForward" (boolValues ++ [ "ipv4" "ipv6" ]))
         (assertValueOneOf "IPMasquerade" boolValues)
-        (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv6PrivacyExtensions"
+          (boolValues ++ [ "prefer-public" "kernel" ]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
         (assertInt "IPv6DuplicateAddressDetection")
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
@@ -529,7 +533,8 @@ let
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
         (assertValueOneOf "IgnoreCarrierLoss" boolValues)
-        (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
+        (assertValueOneOf "KeepConfiguration"
+          (boolValues ++ [ "static" "dhcp-on-stop" "dhcp" ]))
       ];
 
       sectionAddress = checkUnitConfig "Address" [
@@ -547,9 +552,14 @@ let
           "AutoJoin"
         ])
         (assertHasField "Address")
-        (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
+        (assertValueOneOf "PreferredLifetime" [ "forever" "infinity" "0" 0 ])
         (assertValueOneOf "HomeAddress" boolValues)
-        (assertValueOneOf "DuplicateAddressDetection" ["ipv4" "ipv6" "both" "none"])
+        (assertValueOneOf "DuplicateAddressDetection" [
+          "ipv4"
+          "ipv6"
+          "both"
+          "none"
+        ])
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
         (assertValueOneOf "AddPrefixRoute" boolValues)
         (assertValueOneOf "AutoJoin" boolValues)
@@ -581,7 +591,7 @@ let
         (assertPort "SourcePort")
         (assertPort "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
-        (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
+        (assertValueOneOf "Family" [ "ipv4" "ipv6" "both" ])
         (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
       ];
@@ -610,8 +620,8 @@ let
         ])
         (assertValueOneOf "GatewayOnLink" boolValues)
         (assertInt "Metric")
-        (assertValueOneOf "IPv6Preference" ["low" "medium" "high"])
-        (assertValueOneOf "Scope" ["global" "site" "link" "host" "nowhere"])
+        (assertValueOneOf "IPv6Preference" [ "low" "medium" "high" ])
+        (assertValueOneOf "Scope" [ "global" "site" "link" "host" "nowhere" ])
         (assertValueOneOf "Type" [
           "unicast"
           "local"
@@ -629,7 +639,7 @@ let
         (assertValueOneOf "FastOpenNoCookie" boolValues)
         (assertValueOneOf "TTLPropagate" boolValues)
         (assertByteFormat "MTUBytes")
-        (assertValueOneOf "IPServiceType" ["CS6" "CS4"])
+        (assertValueOneOf "IPServiceType" [ "CS6" "CS4" ])
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -672,10 +682,10 @@ let
         (assertValueOneOf "Anonymize" boolValues)
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
-        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
-        (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
+        (assertValueOneOf "ClientIdentifier" [ "mac" "duid" "duid-only" ])
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
@@ -713,18 +723,13 @@ let
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertValueOneOf "WithoutRA" [ "solicit" "information-request" ])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
       ];
 
       sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
-        (assertOnlyFields [
-          "SubnetId"
-          "Announce"
-          "Assign"
-          "Token"
-        ])
+        (assertOnlyFields [ "SubnetId" "Announce" "Assign" "Token" ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
       ];
@@ -745,11 +750,11 @@ let
           "DHCPv6Client"
         ])
         (assertValueOneOf "UseDNS" boolValues)
-        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
         (assertValueOneOf "UseOnLinkPrefix" boolValues)
-        (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
+        (assertValueOneOf "DHCPv6Client" (boolValues ++ [ "always" ]))
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -804,7 +809,13 @@ let
         ])
         (assertValueOneOf "Managed" boolValues)
         (assertValueOneOf "OtherInformation" boolValues)
-        (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+        (assertValueOneOf "RouterPreference" [
+          "high"
+          "medium"
+          "low"
+          "normal"
+          "default"
+        ])
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
       ];
@@ -835,7 +846,7 @@ let
     };
 
     matchConfig = mkOption {
-      default = {};
+      default = { };
       example = { Name = "eth0"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -866,7 +877,7 @@ let
     };
 
     linkConfig = mkOption {
-      default = {};
+      default = { };
       example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
       type = types.addCheck (types.attrsOf unitOption) check.link.sectionLink;
       description = ''
@@ -882,8 +893,9 @@ let
   wireguardPeerOptions = {
     options = {
       wireguardPeerConfig = mkOption {
-        default = {};
-        type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuardPeer;
+        default = { };
+        type = types.addCheck (types.attrsOf unitOption)
+          check.netdev.sectionWireGuardPeer;
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[WireGuardPeer]</literal> section of the unit.  See
@@ -897,8 +909,12 @@ let
   netdevOptions = commonNetworkOptions // {
 
     netdevConfig = mkOption {
-      example = { Name = "mybridge"; Kind = "bridge"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
+      example = {
+        Name = "mybridge";
+        Kind = "bridge";
+      };
+      type =
+        types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Netdev]</literal> section of the unit.  See
@@ -908,7 +924,7 @@ let
     };
 
     vlanConfig = mkOption {
-      default = {};
+      default = { };
       example = { Id = 4; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVLAN;
       description = ''
@@ -920,9 +936,10 @@ let
     };
 
     macvlanConfig = mkOption {
-      default = {};
+      default = { };
       example = { Mode = "private"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[MACVLAN]</literal> section of the unit.  See
@@ -932,8 +949,9 @@ let
     };
 
     vxlanConfig = mkOption {
-      default = {};
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
+      default = { };
+      type =
+        types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[VXLAN]</literal> section of the unit.  See
@@ -943,9 +961,10 @@ let
     };
 
     tunnelConfig = mkOption {
-      default = {};
+      default = { };
       example = { Remote = "192.168.1.1"; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTunnel;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.netdev.sectionTunnel;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tunnel]</literal> section of the unit.  See
@@ -957,7 +976,8 @@ let
     fooOverUDPConfig = mkOption {
       default = { };
       example = { Port = 9001; };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
+      type = types.addCheck (types.attrsOf unitOption)
+        check.netdev.sectionFooOverUDP;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[FooOverUDP]</literal> section of the unit.  See
@@ -967,7 +987,7 @@ let
     };
 
     peerConfig = mkOption {
-      default = {};
+      default = { };
       example = { Name = "veth2"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionPeer;
       description = ''
@@ -979,7 +999,7 @@ let
     };
 
     tunConfig = mkOption {
-      default = {};
+      default = { };
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTun;
       description = ''
@@ -991,7 +1011,7 @@ let
     };
 
     tapConfig = mkOption {
-      default = {};
+      default = { };
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTap;
       description = ''
@@ -1003,13 +1023,14 @@ let
     };
 
     wireguardConfig = mkOption {
-      default = {};
+      default = { };
       example = {
         PrivateKeyFile = "/etc/wireguard/secret.key";
         ListenPort = 51820;
         FirewallMark = 42;
       };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[WireGuard]</literal> section of the unit. See
@@ -1022,14 +1043,16 @@ let
     };
 
     wireguardPeers = mkOption {
-      default = [];
-      example = [ { wireguardPeerConfig={
-        Endpoint = "192.168.1.1:51820";
-        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
-        PresharedKeyFile = "/etc/wireguard/psk.key";
-        AllowedIPs = [ "10.0.0.1/32" ];
-        PersistentKeepalive = 15;
-      };}];
+      default = [ ];
+      example = [{
+        wireguardPeerConfig = {
+          Endpoint = "192.168.1.1:51820";
+          PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+          PresharedKeyFile = "/etc/wireguard/psk.key";
+          AllowedIPs = [ "10.0.0.1/32" ];
+          PersistentKeepalive = 15;
+        };
+      }];
       type = with types; listOf (submodule wireguardPeerOptions);
       description = ''
         Each item in this array specifies an option in the
@@ -1043,7 +1066,7 @@ let
     };
 
     bondConfig = mkOption {
-      default = {};
+      default = { };
       example = { Mode = "802.3ad"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBond;
       description = ''
@@ -1055,7 +1078,7 @@ let
     };
 
     xfrmConfig = mkOption {
-      default = {};
+      default = { };
       example = { InterfaceId = 1; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionXfrm;
       description = ''
@@ -1067,7 +1090,7 @@ let
     };
 
     vrfConfig = mkOption {
-      default = {};
+      default = { };
       example = { Table = 2342; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVRF;
       description = ''
@@ -1082,12 +1105,13 @@ let
     };
 
     batmanAdvancedConfig = mkOption {
-      default = {};
+      default = { };
       example = {
         GatewayMode = "server";
         RoutingAlgorithm = "batman-v";
       };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
+      type = types.addCheck (types.attrsOf unitOption)
+        check.netdev.sectionBatmanAdvanced;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[BatmanAdvanced]</literal> section of the unit. See
@@ -1102,7 +1126,8 @@ let
     options = {
       addressConfig = mkOption {
         example = { Address = "192.168.0.100/24"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionAddress;
+        type = types.addCheck (types.attrsOf unitOption)
+          check.network.sectionAddress;
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Address]</literal> section of the unit.  See
@@ -1117,8 +1142,13 @@ let
     options = {
       routingPolicyRuleConfig = mkOption {
         default = { };
-        example = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoutingPolicyRule;
+        example = {
+          Table = 10;
+          IncomingInterface = "eth1";
+          Family = "both";
+        };
+        type = types.addCheck (types.attrsOf unitOption)
+          check.network.sectionRoutingPolicyRule;
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[RoutingPolicyRule]</literal> section of the unit.  See
@@ -1132,9 +1162,10 @@ let
   routeOptions = {
     options = {
       routeConfig = mkOption {
-        default = {};
+        default = { };
         example = { Gateway = "192.168.0.1"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoute;
+        type =
+          types.addCheck (types.attrsOf unitOption) check.network.sectionRoute;
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Route]</literal> section of the unit.  See
@@ -1148,9 +1179,10 @@ let
   ipv6PrefixOptions = {
     options = {
       ipv6PrefixConfig = mkOption {
-        default = {};
+        default = { };
         example = { Prefix = "fd00::/64"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6Prefix;
+        type = types.addCheck (types.attrsOf unitOption)
+          check.network.sectionIPv6Prefix;
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[IPv6Prefix]</literal> section of the unit.  See
@@ -1164,9 +1196,10 @@ let
   networkOptions = commonNetworkOptions // {
 
     linkConfig = mkOption {
-      default = {};
+      default = { };
       example = { Unmanaged = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionLink;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.network.sectionLink;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Link]</literal> section of the unit.  See
@@ -1176,9 +1209,10 @@ let
     };
 
     networkConfig = mkOption {
-      default = {};
+      default = { };
       example = { Description = "My Network"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionNetwork;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.network.sectionNetwork;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Network]</literal> section of the unit.  See
@@ -1191,13 +1225,19 @@ let
     # Produce a nice warning message so users know it is gone.
     dhcpConfig = mkOption {
       visible = false;
-      apply = _: throw "The option `systemd.network.networks.*.dhcpConfig` can no longer be used since it's been removed. Please use `systemd.network.networks.*.dhcpV4Config` instead.";
+      apply = _:
+        throw
+        "The option `systemd.network.networks.*.dhcpConfig` can no longer be used since it's been removed. Please use `systemd.network.networks.*.dhcpV4Config` instead.";
     };
 
     dhcpV4Config = mkOption {
-      default = {};
-      example = { UseDNS = true; UseRoutes = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv4;
+      default = { };
+      example = {
+        UseDNS = true;
+        UseRoutes = true;
+      };
+      type =
+        types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv4;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv4]</literal> section of the unit.  See
@@ -1207,9 +1247,10 @@ let
     };
 
     dhcpV6Config = mkOption {
-      default = {};
+      default = { };
       example = { UseDNS = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
+      type =
+        types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6]</literal> section of the unit.  See
@@ -1219,9 +1260,13 @@ let
     };
 
     dhcpV6PrefixDelegationConfig = mkOption {
-      default = {};
-      example = { SubnetId = "auto"; Announce = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
+      default = { };
+      example = {
+        SubnetId = "auto";
+        Announce = true;
+      };
+      type = types.addCheck (types.attrsOf unitOption)
+        check.network.sectionDHCPv6PrefixDelegation;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
@@ -1231,9 +1276,13 @@ let
     };
 
     ipv6AcceptRAConfig = mkOption {
-      default = {};
-      example = { UseDNS = true; DHCPv6Client = "always"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
+      default = { };
+      example = {
+        UseDNS = true;
+        DHCPv6Client = "always";
+      };
+      type = types.addCheck (types.attrsOf unitOption)
+        check.network.sectionIPv6AcceptRA;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6AcceptRA]</literal> section of the unit. See
@@ -1243,9 +1292,13 @@ let
     };
 
     dhcpServerConfig = mkOption {
-      default = {};
-      example = { PoolOffset = 50; EmitDNS = false; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServer;
+      default = { };
+      example = {
+        PoolOffset = 50;
+        EmitDNS = false;
+      };
+      type = types.addCheck (types.attrsOf unitOption)
+        check.network.sectionDHCPServer;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPServer]</literal> section of the unit.  See
@@ -1258,13 +1311,20 @@ let
     # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
     ipv6PrefixDelegationConfig = mkOption {
       visible = false;
-      apply = _: throw "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
+      apply = _:
+        throw
+        "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
     };
 
     ipv6SendRAConfig = mkOption {
-      default = {};
-      example = { EmitDNS = true; Managed = true; OtherInformation = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
+      default = { };
+      example = {
+        EmitDNS = true;
+        Managed = true;
+        OtherInformation = true;
+      };
+      type = types.addCheck (types.attrsOf unitOption)
+        check.network.sectionIPv6SendRA;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6SendRA]</literal> section of the unit.  See
@@ -1274,8 +1334,11 @@ let
     };
 
     ipv6Prefixes = mkOption {
-      default = [];
-      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      default = [ ];
+      example = [{
+        AddressAutoconfiguration = true;
+        OnLink = true;
+      }];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
@@ -1462,198 +1525,150 @@ let
 
   networkConfig = { config, ... }: {
     config = {
-      matchConfig = optionalAttrs (config.name != null) {
-        Name = config.name;
-      };
-      networkConfig = optionalAttrs (config.DHCP != null) {
-        DHCP = config.DHCP;
-      } // optionalAttrs (config.domains != null) {
-        Domains = concatStringsSep " " config.domains;
-      };
+      matchConfig = optionalAttrs (config.name != null) { Name = config.name; };
+      networkConfig =
+        optionalAttrs (config.DHCP != null) { DHCP = config.DHCP; }
+        // optionalAttrs (config.domains != null) {
+          Domains = concatStringsSep " " config.domains;
+        };
     };
   };
 
-  commonMatchText = def: optionalString (def.matchConfig != { }) ''
-    [Match]
-    ${attrsToSection def.matchConfig}
-  '';
+  commonMatchText = def:
+    optionalString (def.matchConfig != { }) ''
+      [Match]
+      ${attrsToSection def.matchConfig}
+    '';
 
-  linkToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + ''
-          [Link]
-          ${attrsToSection def.linkConfig}
-        ''
-        + def.extraConfig;
-    };
+  linkToUnit = name: def: {
+    inherit (def) enable;
+    text = commonMatchText def + ''
+      [Link]
+      ${attrsToSection def.linkConfig}
+    '' + def.extraConfig;
+  };
 
-  netdevToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + ''
-          [NetDev]
-          ${attrsToSection def.netdevConfig}
-        ''
-        + optionalString (def.vlanConfig != { }) ''
-          [VLAN]
-          ${attrsToSection def.vlanConfig}
-        ''
-        + optionalString (def.macvlanConfig != { }) ''
-          [MACVLAN]
-          ${attrsToSection def.macvlanConfig}
-        ''
-        + optionalString (def.vxlanConfig != { }) ''
-          [VXLAN]
-          ${attrsToSection def.vxlanConfig}
-        ''
-        + optionalString (def.tunnelConfig != { }) ''
-          [Tunnel]
-          ${attrsToSection def.tunnelConfig}
-        ''
-        + optionalString (def.fooOverUDPConfig != { }) ''
-          [FooOverUDP]
-          ${attrsToSection def.fooOverUDPConfig}
-        ''
-        + optionalString (def.peerConfig != { }) ''
-          [Peer]
-          ${attrsToSection def.peerConfig}
-        ''
-        + optionalString (def.tunConfig != { }) ''
-          [Tun]
-          ${attrsToSection def.tunConfig}
-        ''
-        + optionalString (def.tapConfig != { }) ''
-          [Tap]
-          ${attrsToSection def.tapConfig}
-        ''
-        + optionalString (def.wireguardConfig != { }) ''
-          [WireGuard]
-          ${attrsToSection def.wireguardConfig}
-        ''
-        + flip concatMapStrings def.wireguardPeers (x: ''
-          [WireGuardPeer]
-          ${attrsToSection x.wireguardPeerConfig}
-        '')
-        + optionalString (def.bondConfig != { }) ''
-          [Bond]
-          ${attrsToSection def.bondConfig}
-        ''
-        + optionalString (def.xfrmConfig != { }) ''
-          [Xfrm]
-          ${attrsToSection def.xfrmConfig}
-        ''
-        + optionalString (def.vrfConfig != { }) ''
-          [VRF]
-          ${attrsToSection def.vrfConfig}
-        ''
-        + optionalString (def.batmanAdvancedConfig != { }) ''
-          [BatmanAdvanced]
-          ${attrsToSection def.batmanAdvancedConfig}
-        ''
-        + def.extraConfig;
-    };
+  netdevToUnit = name: def: {
+    inherit (def) enable;
+    text = commonMatchText def + ''
+      [NetDev]
+      ${attrsToSection def.netdevConfig}
+    '' + optionalString (def.vlanConfig != { }) ''
+      [VLAN]
+      ${attrsToSection def.vlanConfig}
+    '' + optionalString (def.macvlanConfig != { }) ''
+      [MACVLAN]
+      ${attrsToSection def.macvlanConfig}
+    '' + optionalString (def.vxlanConfig != { }) ''
+      [VXLAN]
+      ${attrsToSection def.vxlanConfig}
+    '' + optionalString (def.tunnelConfig != { }) ''
+      [Tunnel]
+      ${attrsToSection def.tunnelConfig}
+    '' + optionalString (def.fooOverUDPConfig != { }) ''
+      [FooOverUDP]
+      ${attrsToSection def.fooOverUDPConfig}
+    '' + optionalString (def.peerConfig != { }) ''
+      [Peer]
+      ${attrsToSection def.peerConfig}
+    '' + optionalString (def.tunConfig != { }) ''
+      [Tun]
+      ${attrsToSection def.tunConfig}
+    '' + optionalString (def.tapConfig != { }) ''
+      [Tap]
+      ${attrsToSection def.tapConfig}
+    '' + optionalString (def.wireguardConfig != { }) ''
+      [WireGuard]
+      ${attrsToSection def.wireguardConfig}
+    '' + flip concatMapStrings def.wireguardPeers (x: ''
+      [WireGuardPeer]
+      ${attrsToSection x.wireguardPeerConfig}
+    '') + optionalString (def.bondConfig != { }) ''
+      [Bond]
+      ${attrsToSection def.bondConfig}
+    '' + optionalString (def.xfrmConfig != { }) ''
+      [Xfrm]
+      ${attrsToSection def.xfrmConfig}
+    '' + optionalString (def.vrfConfig != { }) ''
+      [VRF]
+      ${attrsToSection def.vrfConfig}
+    '' + optionalString (def.batmanAdvancedConfig != { }) ''
+      [BatmanAdvanced]
+      ${attrsToSection def.batmanAdvancedConfig}
+    '' + def.extraConfig;
+  };
 
-  networkToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + optionalString (def.linkConfig != { }) ''
-          [Link]
-          ${attrsToSection def.linkConfig}
-        ''
-        + ''
-          [Network]
-        ''
-        + attrsToSection def.networkConfig
-        + optionalString (def.address != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
-        ''
-        + optionalString (def.gateway != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
-        ''
-        + optionalString (def.dns != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
-        ''
-        + optionalString (def.ntp != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
-        ''
-        + optionalString (def.bridge != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
-        ''
-        + optionalString (def.bond != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
-        ''
-        + optionalString (def.vrf != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
-        ''
-        + optionalString (def.vlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
-        ''
-        + optionalString (def.macvlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
-        ''
-        + optionalString (def.vxlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
-        ''
-        + optionalString (def.tunnel != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
-        ''
-        + optionalString (def.xfrm != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
-        ''
-        + ''
-
-        ''
-        + flip concatMapStrings def.addresses (x: ''
-          [Address]
-          ${attrsToSection x.addressConfig}
-        '')
-        + flip concatMapStrings def.routingPolicyRules (x: ''
-          [RoutingPolicyRule]
-          ${attrsToSection x.routingPolicyRuleConfig}
-        '')
-        + flip concatMapStrings def.routes (x: ''
-          [Route]
-          ${attrsToSection x.routeConfig}
-        '')
-        + optionalString (def.dhcpV4Config != { }) ''
-          [DHCPv4]
-          ${attrsToSection def.dhcpV4Config}
-        ''
-        + optionalString (def.dhcpV6Config != { }) ''
-          [DHCPv6]
-          ${attrsToSection def.dhcpV6Config}
-        ''
-        + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
-          [DHCPv6PrefixDelegation]
-          ${attrsToSection def.dhcpV6PrefixDelegationConfig}
-        ''
-        + optionalString (def.ipv6AcceptRAConfig != { }) ''
-          [IPv6AcceptRA]
-          ${attrsToSection def.ipv6AcceptRAConfig}
-        ''
-        + optionalString (def.dhcpServerConfig != { }) ''
-          [DHCPServer]
-          ${attrsToSection def.dhcpServerConfig}
-        ''
-        + optionalString (def.ipv6SendRAConfig != { }) ''
-          [IPv6SendRA]
-          ${attrsToSection def.ipv6SendRAConfig}
-        ''
-        + flip concatMapStrings def.ipv6Prefixes (x: ''
-          [IPv6Prefix]
-          ${attrsToSection x.ipv6PrefixConfig}
-        '')
-        + def.extraConfig;
-    };
+  networkToUnit = name: def: {
+    inherit (def) enable;
+    text = commonMatchText def + optionalString (def.linkConfig != { }) ''
+      [Link]
+      ${attrsToSection def.linkConfig}
+    '' + ''
+      [Network]
+    '' + attrsToSection def.networkConfig
+      + optionalString (def.address != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
+      '' + optionalString (def.gateway != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
+      '' + optionalString (def.dns != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
+      '' + optionalString (def.ntp != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+      '' + optionalString (def.bridge != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+      '' + optionalString (def.bond != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+      '' + optionalString (def.vrf != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
+      '' + optionalString (def.vlan != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+      '' + optionalString (def.macvlan != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+      '' + optionalString (def.vxlan != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
+      '' + optionalString (def.tunnel != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+      '' + optionalString (def.xfrm != [ ]) ''
+        ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
+      '' + "\n" + flip concatMapStrings def.addresses (x: ''
+        [Address]
+        ${attrsToSection x.addressConfig}
+      '') + flip concatMapStrings def.routingPolicyRules (x: ''
+        [RoutingPolicyRule]
+        ${attrsToSection x.routingPolicyRuleConfig}
+      '') + flip concatMapStrings def.routes (x: ''
+        [Route]
+        ${attrsToSection x.routeConfig}
+      '') + optionalString (def.dhcpV4Config != { }) ''
+        [DHCPv4]
+        ${attrsToSection def.dhcpV4Config}
+      '' + optionalString (def.dhcpV6Config != { }) ''
+        [DHCPv6]
+        ${attrsToSection def.dhcpV6Config}
+      '' + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
+        [DHCPv6PrefixDelegation]
+        ${attrsToSection def.dhcpV6PrefixDelegationConfig}
+      '' + optionalString (def.ipv6AcceptRAConfig != { }) ''
+        [IPv6AcceptRA]
+        ${attrsToSection def.ipv6AcceptRAConfig}
+      '' + optionalString (def.dhcpServerConfig != { }) ''
+        [DHCPServer]
+        ${attrsToSection def.dhcpServerConfig}
+      '' + optionalString (def.ipv6SendRAConfig != { }) ''
+        [IPv6SendRA]
+        ${attrsToSection def.ipv6SendRAConfig}
+      '' + flip concatMapStrings def.ipv6Prefixes (x: ''
+        [IPv6Prefix]
+        ${attrsToSection x.ipv6PrefixConfig}
+      '') + def.extraConfig;
+  };
 
   unitFiles = listToAttrs (map (name: {
     name = "systemd/network/${name}";
     value.source = "${cfg.units.${name}.unit}/${name}";
   }) (attrNames cfg.units));
-in
 
-{
+in {
   options = {
 
     systemd.network.enable = mkOption {
@@ -1665,33 +1680,33 @@ in
     };
 
     systemd.network.links = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
+      default = { };
+      type = with types; attrsOf (submodule [{ options = linkOptions; }]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
+      default = { };
+      type = with types; attrsOf (submodule [{ options = netdevOptions; }]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
+      default = { };
+      type = with types;
+        attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
-      default = {};
+      default = { };
       internal = true;
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        { options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
-          config = {
-            unit = mkDefault (makeUnit name config);
-          };
+      type = with types;
+        attrsOf (submodule ({ name, config, ... }: {
+          options =
+            mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
+          config = { unit = mkDefault (makeUnit name config); };
         }));
     };
 
@@ -1701,7 +1716,8 @@ in
 
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
+      systemd.network.units =
+        mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
       environment.etc = unitFiles;
     }
 
@@ -1715,8 +1731,11 @@ in
         "systemd-networkd.socket"
       ];
 
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
-        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+      systemd.network.units =
+        mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v))
+        cfg.netdevs
+        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v))
+        cfg.networks;
 
       # systemd-networkd is socket-activated by kernel netlink route change
       # messages. It is important to have systemd buffer those on behalf of
@@ -1741,7 +1760,8 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+          ExecStart =
+            "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
         };
       };
 

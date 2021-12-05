@@ -1,20 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pyparsing
-, tables
-, cython
-, python
-, sympy
-, meshio
-, mpi4py
-, psutil
-, openssh
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, matplotlib, pyparsing
+, tables, cython, python, sympy, meshio, mpi4py, psutil, openssh, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "sfepy";

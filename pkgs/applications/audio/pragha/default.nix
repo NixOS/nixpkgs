@@ -1,34 +1,14 @@
-{ lib
-, intltool
-, mkDerivation
-, installShellFiles
-, pkg-config
-, fetchFromGitHub
-, dbus-glib
-, desktop-file-utils
-, hicolor-icon-theme
-, pcre
-, qtbase
-, sqlite
-, taglib
-, zlib
-, gtk3
-, libpeas
-, libcddb
-, libcdio
-, gst_all_1, withGstPlugins ? true
-, glyr, withGlyr ? true
-, liblastfmSF, withLastfm ? true
-, libcdio-paranoia, withCD ? true
-, keybinder3, withKeybinder ? false
-, libnotify, withLibnotify ? false
-, libsoup, withLibsoup ? false
-, libgudev, withGudev ? false # experimental
+{ lib, intltool, mkDerivation, installShellFiles, pkg-config, fetchFromGitHub
+, dbus-glib, desktop-file-utils, hicolor-icon-theme, pcre, qtbase, sqlite
+, taglib, zlib, gtk3, libpeas, libcddb, libcdio, gst_all_1
+, withGstPlugins ? true, glyr, withGlyr ? true, liblastfmSF, withLastfm ? true
+, libcdio-paranoia, withCD ? true, keybinder3, withKeybinder ? false, libnotify
+, withLibnotify ? false, libsoup, withLibsoup ? false, libgudev
+, withGudev ? false # experimental
 , libmtp, withMtp ? false # experimental
-, xfce, withXfce4ui ? false
-, totem-pl-parser, withTotemPlParser ? false
-# , grilo, withGrilo ? false
-# , rygel, withRygel ? true
+, xfce, withXfce4ui ? false, totem-pl-parser, withTotemPlParser ? false
+  # , grilo, withGrilo ? false
+  # , rygel, withRygel ? true
 }:
 
 assert withGlyr -> withLastfm;
@@ -53,37 +33,38 @@ mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = with gst_all_1; [
-    dbus-glib
-    gstreamer
-    gst-plugins-base
-    gtk3
-    hicolor-icon-theme
-    libpeas
-    pcre
-    qtbase
-    sqlite
-    taglib
-    zlib
-  ]
-  ++ lib.optionals withGstPlugins [ gst-plugins-good gst-plugins-bad gst-plugins-ugly ]
-  ++ lib.optionals withCD [ libcddb libcdio libcdio-paranoia ]
-  ++ lib.optional withGudev libgudev
-  ++ lib.optional withKeybinder keybinder3
-  ++ lib.optional withLibnotify libnotify
-  ++ lib.optional withLastfm liblastfmSF
-  ++ lib.optional withGlyr glyr
-  ++ lib.optional withLibsoup libsoup
-  ++ lib.optional withMtp libmtp
-  ++ lib.optional withXfce4ui xfce.libxfce4ui
-  ++ lib.optional withTotemPlParser totem-pl-parser
-  # ++ lib.optional withGrilo grilo
-  # ++ lib.optional withRygel rygel
+  buildInputs = with gst_all_1;
+    [
+      dbus-glib
+      gstreamer
+      gst-plugins-base
+      gtk3
+      hicolor-icon-theme
+      libpeas
+      pcre
+      qtbase
+      sqlite
+      taglib
+      zlib
+    ] ++ lib.optionals withGstPlugins [
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ] ++ lib.optionals withCD [ libcddb libcdio libcdio-paranoia ]
+    ++ lib.optional withGudev libgudev ++ lib.optional withKeybinder keybinder3
+    ++ lib.optional withLibnotify libnotify
+    ++ lib.optional withLastfm liblastfmSF ++ lib.optional withGlyr glyr
+    ++ lib.optional withLibsoup libsoup ++ lib.optional withMtp libmtp
+    ++ lib.optional withXfce4ui xfce.libxfce4ui
+    ++ lib.optional withTotemPlParser totem-pl-parser
+    # ++ lib.optional withGrilo grilo
+    # ++ lib.optional withRygel rygel
   ;
 
   CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
 
-  NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  NIX_CFLAGS_COMPILE =
+    "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
@@ -94,7 +75,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A lightweight GTK+ music manager - fork of Consonance Music Manager";
+    description =
+      "A lightweight GTK+ music manager - fork of Consonance Music Manager";
     homepage = "https://pragha-music-player.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mbaeten ];

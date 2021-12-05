@@ -39,17 +39,15 @@ rec {
        }
        => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
   */
-  toGNUCommandLineShell =
-    options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
+  toGNUCommandLineShell = options: attrs:
+    lib.escapeShellArgs (toGNUCommandLine options attrs);
 
   toGNUCommandLine = {
     # how to string-format the option name;
     # by default one character is a short option (`-`),
     # more than one characters a long option (`--`).
-    mkOptionName ?
-      k: if builtins.stringLength k == 1
-          then "-${k}"
-          else "--${k}",
+    mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}"
+    ,
 
     # how to format a boolean value to a command list;
     # by default it’s a flag option
@@ -66,18 +64,22 @@ rec {
     # though they can still appear as values of a list.
     # By default, everything is printed verbatim and complex types
     # are forbidden (lists, attrsets, functions). `null` values are omitted.
-    mkOption ?
-      k: v: if v == null
-            then []
-            else [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
-    }:
+    mkOption ? k: v:
+      if v == null then
+        [ ]
+      else [
+        (mkOptionName k)
+        (lib.generators.mkValueStringDefault { } v)
+      ] }:
     options:
-      let
-        render = k: v:
-          if      builtins.isBool v then mkBool k v
-          else if builtins.isList v then mkList k v
-          else mkOption k v;
+    let
+      render = k: v:
+        if builtins.isBool v then
+          mkBool k v
+        else if builtins.isList v then
+          mkList k v
+        else
+          mkOption k v;
 
-      in
-        builtins.concatLists (lib.mapAttrsToList render options);
+    in builtins.concatLists (lib.mapAttrsToList render options);
 }

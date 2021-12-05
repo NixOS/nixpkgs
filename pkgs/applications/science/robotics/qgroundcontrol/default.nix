@@ -1,20 +1,29 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
-}:
+{ lib, mkDerivation, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation
+, qtserialport, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech
+, qtx11extras, qmake, qttools, gst_all_1, wayland, pkg-config }:
 
 mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.1.4";
 
   qtInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech qtx11extras
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
+    qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    wayland
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
@@ -67,7 +76,8 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
+    description =
+      "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "http://qgroundcontrol.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

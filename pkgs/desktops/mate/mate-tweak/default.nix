@@ -1,17 +1,6 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, intltool
-, mate
-, libnotify
-, gtk3
-, gdk-pixbuf
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, genericUpdater
-, common-updater-scripts
-}:
+{ lib, fetchFromGitHub, python3Packages, intltool, mate, libnotify, gtk3
+, gdk-pixbuf, gobject-introspection, wrapGAppsHook, glib, genericUpdater
+, common-updater-scripts }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
@@ -77,13 +66,15 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = genericUpdater {
     inherit pname version;
     attrPath = "mate.${pname}";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";
     homepage = "https://github.com/ubuntu-mate/mate-tweak";
-    changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
+    changelog =
+      "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.linux;
     maintainers = teams.mate.members ++ (with maintainers; [ luc65r ]);

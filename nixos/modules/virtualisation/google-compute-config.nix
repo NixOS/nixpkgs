@@ -1,14 +1,8 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  gce = pkgs.google-compute-engine;
-in
-{
-  imports = [
-    ../profiles/headless.nix
-    ../profiles/qemu-guest.nix
-  ];
-
+let gce = pkgs.google-compute-engine;
+in {
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
   fileSystems."/" = {
     fsType = "ext4";
@@ -101,7 +95,7 @@ in
     path = with pkgs; [ coreutils ethtool openssh ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_instance_setup";
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       Type = "oneshot";
     };
     wantedBy = [ "sshd.service" "multi-user.target" ];
@@ -109,27 +103,34 @@ in
 
   systemd.services.google-network-daemon = {
     description = "Google Compute Engine Network Daemon";
-    after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
+    after = [
+      "network-online.target"
+      "network.target"
+      "google-instance-setup.service"
+    ];
     path = with pkgs; [ iproute2 ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_network_daemon";
-      StandardOutput="journal+console";
-      Type="simple";
+      StandardOutput = "journal+console";
+      Type = "simple";
     };
     wantedBy = [ "multi-user.target" ];
   };
 
   systemd.services.google-clock-skew-daemon = {
     description = "Google Compute Engine Clock Skew Daemon";
-    after = [ "network.target" "google-instance-setup.service" "google-network-daemon.service" ];
+    after = [
+      "network.target"
+      "google-instance-setup.service"
+      "google-network-daemon.service"
+    ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_clock_skew_daemon";
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       Type = "simple";
     };
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
   };
-
 
   systemd.services.google-shutdown-scripts = {
     description = "Google Compute Engine Shutdown Scripts";
@@ -142,9 +143,10 @@ in
     ];
     serviceConfig = {
       ExecStart = "${pkgs.coreutils}/bin/true";
-      ExecStop = "${gce}/bin/google_metadata_script_runner --script-type shutdown";
+      ExecStop =
+        "${gce}/bin/google_metadata_script_runner --script-type shutdown";
       RemainAfterExit = true;
-      StandardOutput="journal+console";
+      StandardOutput = "journal+console";
       TimeoutStopSec = "0";
       Type = "oneshot";
     };
@@ -161,7 +163,8 @@ in
       "google-network-daemon.service"
     ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_metadata_script_runner --script-type startup";
+      ExecStart =
+        "${gce}/bin/google_metadata_script_runner --script-type startup";
       KillMode = "process";
       StandardOutput = "journal+console";
       Type = "oneshot";
@@ -169,5 +172,6 @@ in
     wantedBy = [ "multi-user.target" ];
   };
 
-  environment.etc."sysctl.d/11-gce-network-security.conf".source = "${gce}/sysctl.d/11-gce-network-security.conf";
+  environment.etc."sysctl.d/11-gce-network-security.conf".source =
+    "${gce}/sysctl.d/11-gce-network-security.conf";
 }

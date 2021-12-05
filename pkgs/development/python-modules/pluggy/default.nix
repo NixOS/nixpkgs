@@ -1,10 +1,5 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools-scm
-, pythonOlder
-, importlib-metadata
-}:
+{ buildPythonPackage, lib, fetchPypi, setuptools-scm, pythonOlder
+, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "pluggy";
@@ -24,9 +19,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";

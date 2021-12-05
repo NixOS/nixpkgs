@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, responses
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, requests
+, pytestCheckHook, responses }:
 
 buildPythonPackage rec {
   pname = "herepy";
@@ -21,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-I5u5PKB29jQNFdsx+y5ZJOE837D7Hpcsf3pwlCvmEqU=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytestCheckHook responses ];
 
-  pythonImportsCheck = [
-    "herepy"
-  ];
+  pythonImportsCheck = [ "herepy" ];
 
   meta = with lib; {
     description = "Library that provides a Python interface to the HERE APIs";

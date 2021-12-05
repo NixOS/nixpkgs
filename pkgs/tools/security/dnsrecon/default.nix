@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
@@ -16,9 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "other";
 
-  pythonPath = with python3.pkgs; [
-    dnspython netaddr lxml
-  ];
+  pythonPath = with python3.pkgs; [ dnspython netaddr lxml ];
 
   postPatch = ''
     substituteInPlace dnsrecon.py \

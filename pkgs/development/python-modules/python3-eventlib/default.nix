@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope_interface, twisted, greenlet }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope_interface, twisted
+, greenlet }:
 
 buildPythonPackage rec {
   pname = "python3-eventlib";

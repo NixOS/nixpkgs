@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, bcrypt
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, bcrypt, python }:
 
 buildPythonPackage rec {
   pname = "flask-bcrypt";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "0036gag3nj7fzib23lbbpwhlrn1s0kkrfwk5pd90y4cjcfqh8z9x";
   };
 
-  propagatedBuildInputs = [
-    flask
-    bcrypt
-  ];
+  propagatedBuildInputs = [ flask bcrypt ];
 
   checkPhase = ''
     ${python.interpreter} test_bcrypt.py

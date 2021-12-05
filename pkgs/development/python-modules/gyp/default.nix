@@ -1,7 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitiles
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitiles }:
 
 buildPythonPackage {
   pname = "gyp";
@@ -13,14 +10,13 @@ buildPythonPackage {
     sha256 = "0r9phq5yrmj968vdvy9vivli35wn1j9a6iwshp69wl7q4p0x8q2b";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./no-darwin-cflags.patch
-    ./no-xcode.patch
-  ];
+  patches =
+    lib.optionals stdenv.isDarwin [ ./no-darwin-cflags.patch ./no-xcode.patch ];
 
   meta = with lib; {
     description = "A tool to generate native build files";
-    homepage = "https://chromium.googlesource.com/external/gyp/+/master/README.md";
+    homepage =
+      "https://chromium.googlesource.com/external/gyp/+/master/README.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
   };

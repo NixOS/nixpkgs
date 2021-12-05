@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
@@ -20,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     update-dotdee
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/xolox/python-rotate-backups/issues/33

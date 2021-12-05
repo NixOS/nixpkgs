@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sgmllib3k
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, sgmllib3k }:
 
 buildPythonPackage rec {
   pname = "feedparser";

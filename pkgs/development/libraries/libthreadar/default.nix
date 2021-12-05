@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [
-    "--disable-build-html"
-  ];
+  configureFlags = [ "--disable-build-html" ];
 
   postInstall = ''
     # Disable html help
@@ -24,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://libthreadar.sourceforge.net/";
-    description = "A C++ library that provides several classes to manipulate threads";
+    description =
+      "A C++ library that provides several classes to manipulate threads";
     longDescription = ''
       Libthreadar is a C++ library providing a small set of C++ classes to manipulate
       threads in a very simple and efficient way from your C++ code.

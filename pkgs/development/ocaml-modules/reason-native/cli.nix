@@ -3,9 +3,5 @@
 {
   pname = "cli";
 
-  buildInputs = [
-    re
-    reason
-    pastel
-  ];
+  buildInputs = [ re reason pastel ];
 }

@@ -12,12 +12,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals useGTK [ gtk2 ]
-                ++ lib.optional stdenv.isDarwin Carbon;
+    ++ lib.optional stdenv.isDarwin Carbon;
 
-  preBuild =
-    ''
-      export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
-    '';
+  preBuild = ''
+    export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
+  '';
 
   meta = with lib; {
     description = "iODBC driver manager";

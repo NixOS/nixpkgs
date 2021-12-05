@@ -1,33 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, linkFarm
-, substituteAll
-, elementary-greeter
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, gnome-settings-daemon
-, mutter
-, elementary-icon-theme
-, wingpanel-with-indicators
-, elementary-gtk-theme
-, elementary-settings-daemon
-, nixos-artwork
-, lightdm
-, gdk-pixbuf
-, clutter-gtk
-, dbus
-, accountsservice
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, linkFarm, substituteAll
+, elementary-greeter, pkg-config, meson, ninja, vala, desktop-file-utils, gtk3
+, granite, libgee, libhandy, gnome-settings-daemon, mutter
+, elementary-icon-theme, wingpanel-with-indicators, elementary-gtk-theme
+, elementary-settings-daemon, nixos-artwork, lightdm, gdk-pixbuf, clutter-gtk
+, dbus, accountsservice, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
@@ -43,24 +19,17 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      path =
+        "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
       name = "io.elementary.greeter.desktop";
     }];
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config vala wrapGAppsHook ];
 
   buildInputs = [
     accountsservice
@@ -92,7 +61,8 @@ stdenv.mkDerivation rec {
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+      default_wallpaper =
+        "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
   ];
 

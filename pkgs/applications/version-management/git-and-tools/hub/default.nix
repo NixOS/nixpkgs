@@ -1,4 +1,5 @@
-{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, unixtools, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, unixtools
+, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -38,7 +39,8 @@ buildGoPackage rec {
   passthru.tests = { inherit (nixosTests) hub; };
 
   meta = with lib; {
-    description = "Command-line wrapper for git that makes you better at GitHub";
+    description =
+      "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
     homepage = "https://hub.github.com/";
     maintainers = with maintainers; [ globin ];

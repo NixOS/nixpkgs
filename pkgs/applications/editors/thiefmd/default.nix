@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, wrapGAppsHook, cmake, desktop-file-utils, glib
-, meson, ninja, pkg-config, vala, clutter, discount, gtk3, gtksourceview4, gtkspell3
-, libarchive, libgee, libhandy, libsecret, link-grammar, webkitgtk }:
+, meson, ninja, pkg-config, vala, clutter, discount, gtk3, gtksourceview4
+, gtkspell3, libarchive, libgee, libhandy, libsecret, link-grammar, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "thiefmd";
@@ -14,14 +14,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake desktop-file-utils glib meson wrapGAppsHook
-    ninja pkg-config vala
-  ];
+  nativeBuildInputs =
+    [ cmake desktop-file-utils glib meson wrapGAppsHook ninja pkg-config vala ];
 
   buildInputs = [
-    clutter discount gtk3 gtksourceview4 gtkspell3
-    libarchive libgee libhandy libsecret link-grammar
+    clutter
+    discount
+    gtk3
+    gtksourceview4
+    gtkspell3
+    libarchive
+    libgee
+    libhandy
+    libsecret
+    link-grammar
     webkitgtk
   ];
 
@@ -39,7 +45,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Markdown & Fountain editor that helps with organization and management";
+    description =
+      "Markdown & Fountain editor that helps with organization and management";
     homepage = "https://thiefmd.com";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

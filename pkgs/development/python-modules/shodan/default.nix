@@ -1,12 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, click-plugins
-, colorama
-, requests
-, setuptools
-, XlsxWriter
-}:
+{ lib, fetchPypi, buildPythonPackage, click-plugins, colorama, requests
+, setuptools, XlsxWriter }:
 
 buildPythonPackage rec {
   pname = "shodan";
@@ -17,13 +10,8 @@ buildPythonPackage rec {
     sha256 = "sha256-fivdvBtgv2IAQtABD0t2KoC0MRHb6pwEHXLUMl4mDCM=";
   };
 
-  propagatedBuildInputs = [
-    click-plugins
-    colorama
-    requests
-    setuptools
-    XlsxWriter
-  ];
+  propagatedBuildInputs =
+    [ click-plugins colorama requests setuptools XlsxWriter ];
 
   # The tests require a shodan api key, so skip them.
   doCheck = false;

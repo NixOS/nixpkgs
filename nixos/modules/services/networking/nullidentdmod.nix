@@ -1,5 +1,6 @@
-{ config, lib, pkgs, ... }: with lib; let
-  cfg = config.services.nullidentdmod;
+{ config, lib, pkgs, ... }:
+with lib;
+let cfg = config.services.nullidentdmod;
 
 in {
   options.services.nullidentdmod = with types; {
@@ -7,7 +8,8 @@ in {
 
     userid = mkOption {
       type = nullOr str;
-      description = "User ID to return. Set to null to return a random string each time.";
+      description =
+        "User ID to return. Set to null to return a random string each time.";
       default = null;
       example = "alice";
     };
@@ -25,7 +27,9 @@ in {
       description = "NullidentdMod service";
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.nullidentdmod}/bin/nullidentdmod${optionalString (cfg.userid != null) " ${cfg.userid}"}";
+        ExecStart = "${pkgs.nullidentdmod}/bin/nullidentdmod${
+            optionalString (cfg.userid != null) " ${cfg.userid}"
+          }";
         StandardInput = "socket";
         StandardOutput = "socket";
       };

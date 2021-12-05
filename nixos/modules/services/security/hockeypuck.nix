@@ -76,7 +76,8 @@ in {
 
       openpgp.db = {
         driver = "postgres-jsonb";
-        dsn = lib.mkDefault "database=hockeypuck host=/var/run/postgresql sslmode=disable";
+        dsn = lib.mkDefault
+          "database=hockeypuck host=/var/run/postgresql sslmode=disable";
       };
     };
 
@@ -85,7 +86,7 @@ in {
       group = "hockeypuck";
       description = "Hockeypuck user";
     };
-    users.groups.hockeypuck = {};
+    users.groups.hockeypuck = { };
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";
@@ -94,7 +95,9 @@ in {
       serviceConfig = {
         WorkingDirectory = "/var/lib/hockeypuck";
         User = "hockeypuck";
-        ExecStart = "${pkgs.hockeypuck}/bin/hockeypuck -config ${settingsFormat.generate "config.toml" cfg.settings}";
+        ExecStart = "${pkgs.hockeypuck}/bin/hockeypuck -config ${
+            settingsFormat.generate "config.toml" cfg.settings
+          }";
         Restart = "always";
         RestartSec = "5s";
         LogsDirectory = "hockeypuck";

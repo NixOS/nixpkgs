@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pytest-asyncio, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "1nmmwp9m38b75lz51ypcj0qxnxm9wq4id5cggl0pn2rx6gwnbw9n";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ aresponses pytestCheckHook pytest-asyncio ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo
@@ -38,9 +25,7 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "pyuptimerobot"
-  ];
+  pythonImportsCheck = [ "pyuptimerobot" ];
 
   meta = with lib; {
     description = "Python API wrapper for Uptime Robot";

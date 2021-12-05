@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pynobo";
@@ -20,7 +17,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pynobo" ];
 
   meta = with lib; {
-    description = "Python 3 TCP/IP interface for Nobo Hub/Nobo Energy Control devices";
+    description =
+      "Python 3 TCP/IP interface for Nobo Hub/Nobo Energy Control devices";
     homepage = "https://github.com/echoromeo/pynobo";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

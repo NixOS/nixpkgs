@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0.4";
 
   src = fetchurl {
-    url = "https://github.com/firehol/iprange/releases/download/v${version}/iprange-${version}.tar.xz";
+    url =
+      "https://github.com/firehol/iprange/releases/download/v${version}/iprange-${version}.tar.xz";
     sha256 = "0rymw4ydn09dng34q4g5111706fyppzs2gd5br76frgvfj4x2f71";
   };
 

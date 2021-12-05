@@ -1,26 +1,7 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
-, mock
-, lxml
-, relatorio
-, genshi
-, python-dateutil
-, polib
-, python-sql
-, werkzeug
-, wrapt
-, passlib
-, pillow
-, bcrypt
-, pydot
-, python-Levenshtein
-, simplejson
-, html2text
-, psycopg2
-, withPostgresql ? true
-}:
+{ lib, buildPythonApplication, fetchPypi, pythonOlder, mock, lxml, relatorio
+, genshi, python-dateutil, polib, python-sql, werkzeug, wrapt, passlib, pillow
+, bcrypt, pydot, python-Levenshtein, simplejson, html2text, psycopg2
+, withPostgresql ? true }:
 
 buildPythonApplication rec {
   pname = "trytond";
@@ -37,9 +18,7 @@ buildPythonApplication rec {
   # Tells the tests which database to use
   DB_NAME = ":memory:";
 
-  buildInputs = [
-    mock
-  ];
+  buildInputs = [ mock ];
 
   propagatedBuildInputs = [
     lxml

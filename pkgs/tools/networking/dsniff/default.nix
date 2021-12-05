@@ -1,26 +1,27 @@
-{ gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
-, rpcsvc-proto, libtirpc, libnsl
-}:
+{ gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet
+, libnids, symlinkJoin, openssl, rpcsvc-proto, libtirpc, libnsl }:
 
 # We compile with GCC 9 since GCC 10 segfaults on the code
 # (see https://bugzilla.redhat.com/show_bug.cgi?id=1862809).
 
 let
-  /*
-  dsniff's build system unconditionnaly wants static libraries and does not
-  support multi output derivations. We do some overriding to give it
-  satisfaction.
+  /* dsniff's build system unconditionnaly wants static libraries and does not
+     support multi output derivations. We do some overriding to give it
+     satisfaction.
   */
   staticdb = symlinkJoin {
     inherit (db) name;
-    paths = with db.overrideAttrs(old: { dontDisableStatic = true; }); [ out dev ];
+    paths = with db.overrideAttrs (old: { dontDisableStatic = true; }); [
+      out
+      dev
+    ];
     postBuild = ''
       rm $out/lib/*.so*
     '';
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libpcap.overrideAttrs (old: { dontDisableStatic = true; })) ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap
@@ -29,15 +30,13 @@ let
   };
   net = symlinkJoin {
     inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libnet.overrideAttrs (old: { dontDisableStatic = true; })) ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
     '';
   };
-  nids = libnids.overrideAttrs(old: {
-    dontDisableStatic = true;
-  });
+  nids = libnids.overrideAttrs (old: { dontDisableStatic = true; });
   ssl = symlinkJoin {
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
@@ -76,7 +75,8 @@ in gcc9Stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "collection of tools for network auditing and penetration testing";
+    description =
+      "collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';

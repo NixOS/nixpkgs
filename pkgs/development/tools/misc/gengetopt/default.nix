@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line option parser generator";
 
-    longDescription =
-      '' GNU Gengetopt program generates a C function that uses getopt_long
-         function to parse the command line options, to validate them and
-         fills a struct
-      '';
+    longDescription = ''
+      GNU Gengetopt program generates a C function that uses getopt_long
+              function to parse the command line options, to validate them and
+              fills a struct
+           '';
 
     homepage = "https://www.gnu.org/software/gengetopt/";
 

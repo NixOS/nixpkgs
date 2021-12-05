@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "08b33bbrhbva1lyzzsj5k6ggcqzrfjfhb2n99a0b8b07kqc3f7gq";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   enableParallelBuilding = true;

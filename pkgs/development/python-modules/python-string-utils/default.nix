@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "python-string-utils";
@@ -12,13 +9,14 @@ buildPythonPackage rec {
     sha256 = "sha256-3PkGCwPwdkfApgNAjciwP4B/O1SgXG4Z6xRGAlb6wMs=";
   };
 
-  pythonImportsCheck = ["string_utils"];
+  pythonImportsCheck = [ "string_utils" ];
 
   # tests are not available in pypi tarball
   doCheck = false;
 
   meta = with lib; {
-    description = "A handy Python library to validate, manipulate and generate strings.";
+    description =
+      "A handy Python library to validate, manipulate and generate strings.";
     homepage = "https://github.com/daveoncode/python-string-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

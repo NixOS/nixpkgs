@@ -6,9 +6,7 @@ let
   configFile = pkgs.writeText "inspircd.conf" cfg.config;
 
 in {
-  meta = {
-    maintainers = [ lib.maintainers.sternenseemann ];
-  };
+  meta = { maintainers = [ lib.maintainers.sternenseemann ]; };
 
   options = {
     services.inspircd = {
@@ -46,14 +44,17 @@ in {
 
   config = lib.mkIf cfg.enable {
     systemd.services.inspircd = {
-      description = "InspIRCd - the stable, high-performance and modular Internet Relay Chat Daemon";
+      description =
+        "InspIRCd - the stable, high-performance and modular Internet Relay Chat Daemon";
       wantedBy = [ "multi-user.target" ];
       requires = [ "network.target" ];
 
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${lib.getBin cfg.package}/bin/inspircd start --config ${configFile} --nofork --nopid
+          ${
+            lib.getBin cfg.package
+          }/bin/inspircd start --config ${configFile} --nofork --nopid
         '';
         DynamicUser = true;
       };

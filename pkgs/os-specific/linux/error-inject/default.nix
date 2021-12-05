@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchgit
-, bison, flex, rasdaemon
-}:
+{ lib, stdenv, fetchgit, bison, flex, rasdaemon }:
 
 {
   edac-inject = rasdaemon.inject;
@@ -40,7 +38,8 @@
     version = "9bd5e2c7886fca72f139cd8402488a2235957d41";
 
     src = fetchgit {
-      url = "git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git";
+      url =
+        "git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git";
       rev = version;
       sha256 = "0bh6mzpk2mr4xidkammmkfk21b4dbq793qjg25ryyxd1qv0c6cg4";
     };

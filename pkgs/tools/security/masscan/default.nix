@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, libpcap
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "masscan";
@@ -24,11 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "GITVER=${version}"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags =
+    [ "PREFIX=$(out)" "GITVER=${version}" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 
@@ -52,7 +43,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast scan of the Internet";
     homepage = "https://github.com/robertdavidgraham/masscan";
-    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
+    changelog =
+      "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];

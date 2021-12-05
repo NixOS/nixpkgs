@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, libogg, libvorbis, libao, pkg-config, curl
-, speex, flac
+{ lib, stdenv, fetchurl, libogg, libvorbis, libao, pkg-config, curl, speex, flac
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +6,8 @@ stdenv.mkDerivation rec {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${version}.tar.gz";
+    url =
+      "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${version}.tar.gz";
     sha256 = "1c7h4ivgfdyygz2hyh6nfibxlkz8kdk868a576qkkjgj5gn78xyv";
   };
 

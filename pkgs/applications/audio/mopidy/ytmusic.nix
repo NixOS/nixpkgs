@@ -10,11 +10,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-BZtW+qHsTnOMj+jdAFI8ZMwGxJc9lNosgPJZGbt4JgU=";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-    python3Packages.ytmusicapi
-    python3Packages.pytube
-  ];
+  propagatedBuildInputs =
+    [ mopidy python3Packages.ytmusicapi python3Packages.pytube ];
 
   doCheck = false;
 

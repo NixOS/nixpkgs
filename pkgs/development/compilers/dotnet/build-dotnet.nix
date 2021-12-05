@@ -1,18 +1,7 @@
-{ type
-, version
-, sha512
-}:
+{ type, version, sha512 }:
 
-assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
-{ lib, stdenv
-, fetchurl
-, libunwind
-, openssl
-, icu
-, libuuid
-, zlib
-, curl
-}:
+assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
+{ lib, stdenv, fetchurl, libunwind, openssl, icu, libuuid, zlib, curl }:
 
 let
   pname = if type == "aspnetcore" then
@@ -26,11 +15,15 @@ let
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "osx-x64";
     aarch64-darwin = "osx-arm64";
-  }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  }.${stdenv.hostPlatform.system} or (throw
+    "unsupported system: ${stdenv.hostPlatform.system}");
   urls = {
-    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
-    runtime = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
-    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}.tar.gz";
+    aspnetcore =
+      "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
+    runtime =
+      "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
+    sdk =
+      "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}.tar.gz";
   };
   descriptions = {
     aspnetcore = "ASP.NET Core Runtime ${version}";

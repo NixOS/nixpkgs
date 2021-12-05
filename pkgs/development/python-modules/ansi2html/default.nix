@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools-scm }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook
+, setuptools, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "ansi2html";

@@ -1,10 +1,8 @@
-{ lib, stdenv, fetchurl
-, gpm, openssl, pkg-config, libev # Misc.
+{ lib, stdenv, fetchurl, gpm, openssl, pkg-config, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
-, enableFB ? true
-, enableDirectFB ? false, directfb
-, enableX11 ? true, libX11, libXt, libXau # GUI support
+, enableFB ? true, enableDirectFB ? false, directfb, enableX11 ? true, libX11
+, libXt, libXau # GUI support
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
-    ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
-    ++ lib.optional enableX11 "--with-x"
+    ++ lib.optional (enableX11 || enableFB || enableDirectFB)
+    "--enable-graphics" ++ lib.optional enableX11 "--with-x"
     ++ lib.optional enableFB "--with-fb"
     ++ lib.optional enableDirectFB "--with-directfb";
 

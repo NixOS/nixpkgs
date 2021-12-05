@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest
-, cryptography
-, blinker
-, pyjwt
+{ lib, buildPythonPackage, fetchPypi, mock, pytest, cryptography, blinker, pyjwt
 }:
 
 buildPythonPackage rec {
@@ -26,7 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/idan/oauthlib";
-    description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+    description =
+      "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     maintainers = with maintainers; [ prikhi ];
     license = licenses.bsd3;
   };

@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.hardware.acpilight;
-in
-{
+let cfg = config.hardware.acpilight;
+in {
   options = {
     hardware.acpilight = {
       enable = mkOption {

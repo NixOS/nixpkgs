@@ -1,18 +1,6 @@
-{ lib
-, boost
-, buildPythonPackage
-, cmake
-, cryptography
-, fetchFromGitHub
-, git
-, pc-ble-driver
-, pythonAtLeast
-, pythonOlder
-, scikit-build
-, setuptools
-, swig
-, wrapt
-}:
+{ lib, boost, buildPythonPackage, cmake, cryptography, fetchFromGitHub, git
+, pc-ble-driver, pythonAtLeast, pythonOlder, scikit-build, setuptools, swig
+, wrapt }:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
@@ -27,32 +15,18 @@ buildPythonPackage rec {
     sha256 = "0q2zag77drcjkjm0cbvy2sf6fq2a4yl5li1zv1xfwmy53ami9b5l";
   };
 
-  nativeBuildInputs = [
-    cmake
-    swig
-    git
-    setuptools
-    scikit-build
-  ];
+  nativeBuildInputs = [ cmake swig git setuptools scikit-build ];
 
-  buildInputs = [
-    boost
-    pc-ble-driver
-  ];
+  buildInputs = [ boost pc-ble-driver ];
 
-  propagatedBuildInputs = [
-    cryptography
-    wrapt
-  ];
+  propagatedBuildInputs = [ cryptography wrapt ];
 
   dontUseCmakeConfigure = true;
 
   # doCheck tries to write to the global python directory to install things
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pc_ble_driver_py"
-  ];
+  pythonImportsCheck = [ "pc_ble_driver_py" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";

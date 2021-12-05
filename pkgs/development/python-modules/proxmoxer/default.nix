@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, paramiko
-, pytestCheckHook
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, nose, paramiko
+, pytestCheckHook, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "proxmoxer";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ElHocXrazwK+b5vdjYSJAYB4ajs2n+V8koj4QKkdDMQ=";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-    requests
-  ];
+  propagatedBuildInputs = [ paramiko requests ];
 
-  checkInputs = [
-    mock
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ mock nose pytestCheckHook ];
 
   # Tests require openssh_wrapper which is outdated and not available
   pytestFlagsArray = [ "tests/paramiko_tests.py" ];

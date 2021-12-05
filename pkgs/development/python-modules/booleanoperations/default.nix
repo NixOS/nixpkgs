@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, fonttools, fs, pyclipper, defcon, fontpens
-, setuptools-scm, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, fonttools, fs, pyclipper, defcon, fontpens
+, setuptools-scm, pytest }:
 
 buildPythonPackage rec {
   pname = "booleanOperations";
@@ -15,13 +13,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    fonttools
-    fs
-    pyclipper
-    defcon
-    fontpens
-  ];
+  propagatedBuildInputs = [ fonttools fs pyclipper defcon fontpens ];
 
   checkInputs = [ pytest ];
 

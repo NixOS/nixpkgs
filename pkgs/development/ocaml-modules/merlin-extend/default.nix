@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/let-def/merlin-extend/releases/download/v${version}/merlin-extend-v${version}.tbz";
+    url =
+      "https://github.com/let-def/merlin-extend/releases/download/v${version}/merlin-extend-v${version}.tbz";
     sha256 = "0hvc4mz92x3rl2dxwrhvhzwl4gilnyvvwcqgr45vmdpyjyp3dwn2";
   };
 

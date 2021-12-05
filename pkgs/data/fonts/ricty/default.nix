@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.1.1";
 
   src = fetchurl {
-      url = "https://rictyfonts.github.io/files/ricty_generator-${version}.sh";
-      sha256 = "03fngb8f5hl7ifigdm5yljhs4z2x80cq8y8kna86d07ghknhzgw6";
+    url = "https://rictyfonts.github.io/files/ricty_generator-${version}.sh";
+    sha256 = "03fngb8f5hl7ifigdm5yljhs4z2x80cq8y8kna86d07ghknhzgw6";
   };
 
   unpackPhase = ''
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high-quality Japanese font based on Inconsolata and Migu 1M";
+    description =
+      "A high-quality Japanese font based on Inconsolata and Migu 1M";
     homepage = "https://rictyfonts.github.io";
     license = licenses.unfree;
     maintainers = [ maintainers.mikoim ];

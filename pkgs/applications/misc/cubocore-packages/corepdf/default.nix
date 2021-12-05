@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, cmake, ninja, libcprime
+, libcsys }:
 
 mkDerivation rec {
   pname = "corepdf";
@@ -11,17 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-HeOklgCwJ5h3DeelJOZqasG+eC9DGG3R0Cqg2yPKYhM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    poppler
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase poppler libcprime libcsys ];
 
   meta = with lib; {
     description = "A PDF viewer from the C Suite";

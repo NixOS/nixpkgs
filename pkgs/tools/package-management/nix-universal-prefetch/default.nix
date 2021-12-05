@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ruby
-}:
+{ lib, stdenv, fetchFromGitHub, ruby }:
 
 # No gems used, so mkDerivation is fine.
 stdenv.mkDerivation rec {

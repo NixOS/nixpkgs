@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ npth gettext ];
 
-  configureFlags = [
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-  ];
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ];
 
   doCheck = true;
 

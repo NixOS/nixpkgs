@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/magnetophon/MBdistortion/commit/10e35084b88c559f1b63760cf40fd5ef5a6745a5.patch";
+      url =
+        "https://github.com/magnetophon/MBdistortion/commit/10e35084b88c559f1b63760cf40fd5ef5a6745a5.patch";
       sha256 = "0hwjl3rzvn3id0sr0qs8f37jdmr915mdan8miaf78ra0ir3wnk76";
     })
   ];

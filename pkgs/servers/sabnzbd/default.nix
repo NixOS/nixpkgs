@@ -1,23 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, par2cmdline
-, unzip
-, unrar
-, p7zip
-, makeWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, python3, par2cmdline, unzip, unrar, p7zip
+, makeWrapper }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
-    chardet
-    cheetah3
-    cherrypy
-    cryptography
-    configobj
-    feedparser
-    sabyenc3
-  ]);
+  pythonEnv = python3.withPackages (ps:
+    with ps; [
+      chardet
+      cheetah3
+      cherrypy
+      cryptography
+      configobj
+      feedparser
+      sabyenc3
+    ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
   version = "3.4.0";
@@ -47,7 +41,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Usenet NZB downloader, par2 repairer and auto extracting server";
+    description =
+      "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

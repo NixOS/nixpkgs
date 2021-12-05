@@ -1,4 +1,5 @@
-{ lib, stdenv, python3, fetchFromGitHub, makeWrapper, schedtool, sysctl, util-linux, fetchpatch }:
+{ lib, stdenv, python3, fetchFromGitHub, makeWrapper, schedtool, sysctl
+, util-linux, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "ananicy";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
     # https://github.com/Nefelim4ag/Ananicy/pull/437
     # fix makefile destinations
     (fetchpatch {
-      url = "https://github.com/Nefelim4ag/Ananicy/commit/dbda0f50670de3f249991706ef1cc107c5197a2f.patch";
+      url =
+        "https://github.com/Nefelim4ag/Ananicy/commit/dbda0f50670de3f249991706ef1cc107c5197a2f.patch";
       sha256 = "sha256-vMcJxekg2QUbm253CLAv3tmo5kedSlw+/PI/LamNWwc=";
       # only used for debian packaging. lets exclude it so the patch applies even when that file is changed
       excludes = [ "package.sh" ];
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
     # https://github.com/Nefelim4ag/Ananicy/pull/439
     # fix syntax error
     (fetchpatch {
-      url = "https://github.com/Nefelim4ag/Ananicy/commit/0f8b809298ccfd88d0e2ab952d6e4131865246da.patch";
+      url =
+        "https://github.com/Nefelim4ag/Ananicy/commit/0f8b809298ccfd88d0e2ab952d6e4131865246da.patch";
       sha256 = "sha256-PWE4F0G97gecgc9HnG7ScA78+QVc8u8aF9u74qVChX0=";
     })
   ];
@@ -31,10 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "SYSCONFDIR=${placeholder "out"}/etc"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   dontConfigure = true;
   dontBuild = true;

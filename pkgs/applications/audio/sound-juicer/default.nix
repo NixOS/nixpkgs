@@ -1,41 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk3
-, itstool
-, libxml2
-, brasero
-, libcanberra-gtk3
-, gnome
-, gst_all_1
-, libmusicbrainz5
-, libdiscid
-, isocodes
-, gsettings-desktop-schemas
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gtk3, itstool, libxml2
+, brasero, libcanberra-gtk3, gnome, gst_all_1, libmusicbrainz5, libdiscid
+, isocodes, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "sound-juicer";
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "08d5d81rz9sj3m5paw8fwbgxmhlbr7bcjdzpmzj832qvg8smydxf";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    itstool
-    libxml2
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config itstool libxml2 wrapGAppsHook ];
 
   buildInputs = [
     glib
@@ -54,11 +32,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav
   ];
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     description = "A Gnome CD Ripper";

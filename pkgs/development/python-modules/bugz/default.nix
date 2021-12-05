@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage {
   pname = "bugz-0.9.3";

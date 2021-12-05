@@ -1,18 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, giflib
-, ilmbase
-, libjpeg
-, libpng
-, libtiff
-, opencolorio_1
-, openexr
-, robin-map
-, unzip
-, fmt
-}:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, giflib, ilmbase, libjpeg, libpng
+, libtiff, opencolorio_1, openexr, robin-map, unzip, fmt }:
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
@@ -27,10 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
-  nativeBuildInputs = [
-    cmake
-    unzip
-  ];
+  nativeBuildInputs = [ cmake unzip ];
 
   buildInputs = [
     boost

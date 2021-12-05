@@ -1,14 +1,5 @@
-{ lib
-, aioredis
-, asgiref
-, buildPythonPackage
-, channels
-, fetchPypi
-, hiredis
-, msgpack
-, pythonOlder
-, redis
-}:
+{ lib, aioredis, asgiref, buildPythonPackage, channels, fetchPypi, hiredis
+, msgpack, pythonOlder, redis }:
 
 buildPythonPackage rec {
   pname = "channels-redis";

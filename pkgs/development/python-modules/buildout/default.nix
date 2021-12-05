@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pip
-, setuptools
-, wheel
-}:
+{ buildPythonPackage, fetchFromGitHub, lib, pip, setuptools, wheel }:
 
 buildPythonPackage rec {
   pname = "zc-buildout";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "01sj09xx5kmkzynhq1xd8ahn6xqybfi8lrqjqr5lr45aaxjk2pid";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-    pip
-    wheel
-  ];
+  propagatedBuildInputs = [ setuptools pip wheel ];
 
   doCheck = false; # Missing package & BLOCKED on "zc.recipe.egg"
 

@@ -2,8 +2,7 @@
 let
   version = "1.0.2";
   sha256 = "1i7zjn5cdv9h00fgjg46b8yrz4d3dqvfr25g3f13967ycy58m48h";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "system76-acpi-module-${version}-${kernel.version}";
 
   passthru.moduleName = "system76_acpi";
@@ -19,9 +18,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildFlags = [
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  buildFlags =
+    [ "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -D system76_acpi.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76_acpi.ko

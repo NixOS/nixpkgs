@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "4.49.1";
+let version = "4.49.1";
 in fetchzip {
   name = "terminus-font-ttf-${version}";
 
-  url = "https://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
+  url =
+    "https://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
 
   postFetch = ''
     unzip -j $downloadedFile

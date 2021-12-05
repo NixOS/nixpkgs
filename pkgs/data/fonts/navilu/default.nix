@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dm444 -t $out/share/fonts/truetype/ Navilu.ttf";
 
-  meta = with lib; src.meta // {
-    description = "A Kannada handwriting font";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry ];
-  };
+  meta = with lib;
+    src.meta // {
+      description = "A Kannada handwriting font";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ ehmry ];
+    };
 }

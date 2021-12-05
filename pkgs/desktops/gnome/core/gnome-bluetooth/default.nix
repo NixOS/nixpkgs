@@ -1,26 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
-, gnome
-, meson
-, ninja
-, pkg-config
-, gtk3
-, gettext
-, glib
-, udev
-, itstool
-, libxml2
-, wrapGAppsHook
-, libnotify
-, libcanberra-gtk3
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, python3
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, gnome, meson, ninja, pkg-config, gtk3, gettext, glib
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3
+, gobject-introspection, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43, python3
+, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
@@ -30,7 +11,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1a9ynlwwkb3wpg293ym517vmrkk63y809mmcv9a21k5yr199x53c";
   };
 
@@ -59,10 +42,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    "-Dicon_update=false"
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dicon_update=false" "-Dgtk_doc=true" ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
@@ -77,8 +57,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
-    description = "Application that let you manage Bluetooth in the GNOME destkop";
+    homepage =
+      "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
+    description =
+      "Application that let you manage Bluetooth in the GNOME destkop";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

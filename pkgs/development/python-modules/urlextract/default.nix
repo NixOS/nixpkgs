@@ -1,13 +1,5 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, filelock
-, idna
-, pytestCheckHook
-, uritools
-}:
+{ lib, appdirs, buildPythonPackage, dnspython, fetchPypi, filelock, idna
+, pytestCheckHook, uritools }:
 
 buildPythonPackage rec {
   pname = "urlextract";
@@ -18,17 +10,9 @@ buildPythonPackage rec {
     sha256 = "669f07192584b841b49ba8868fbd6b00e7ddc28367d36a3d8ca8c8e429420748";
   };
 
-  propagatedBuildInputs = [
-    appdirs
-    filelock
-    idna
-    uritools
-  ];
+  propagatedBuildInputs = [ appdirs filelock idna uritools ];
 
-  checkInputs = [
-    dnspython
-    pytestCheckHook
-  ];
+  checkInputs = [ dnspython pytestCheckHook ];
 
   disabledTests = [
     # fails with dns.resolver.NoResolverConfiguration due to network sandboxing

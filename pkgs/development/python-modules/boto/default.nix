@@ -1,19 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, isPy38
-, python
-, nose
-, mock
-, requests
-, httpretty
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, isPy38, python, nose, mock
+, requests, httpretty }:
 
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  disabled = pythonAtLeast "3.9"; # no longer compatible with hmac std lib package
+  disabled =
+    pythonAtLeast "3.9"; # no longer compatible with hmac std lib package
 
   src = fetchPypi {
     inherit pname version;

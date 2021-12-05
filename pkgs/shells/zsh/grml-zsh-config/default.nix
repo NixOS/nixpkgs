@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, lib
-, zsh, coreutils, inetutils, procps, txt2tags }:
+{ stdenv, fetchFromGitHub, lib, zsh, coreutils, inetutils, procps, txt2tags }:
 
 with lib;
 

@@ -16,7 +16,8 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to regularly log uptime to detect bad shutdowns.";
+        description =
+          "Whether to regularly log uptime to detect bad shutdowns.";
       };
 
       period = mkOption {
@@ -26,7 +27,6 @@ in {
       };
     };
   };
-
 
   config = mkIf cfg.enable {
 

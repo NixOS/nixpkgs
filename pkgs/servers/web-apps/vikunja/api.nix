@@ -12,17 +12,16 @@ buildGoModule rec {
     sha256 = "sha256-ngdtK8e4mLpbuY9OP1aHk99qPX/cKwnyhb/3ImTwF6M=";
   };
 
-  nativeBuildInputs =
-      let
-        fakeGit = writeShellScriptBin "git" ''
-          if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-              echo "${version}"
-          else
-              >&2 echo "Unknown command: $@"
-              exit 1
-          fi
-        '';
-      in [ fakeGit mage ];
+  nativeBuildInputs = let
+    fakeGit = writeShellScriptBin "git" ''
+      if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
+          echo "${version}"
+      else
+          >&2 echo "Unknown command: $@"
+          exit 1
+      fi
+    '';
+  in [ fakeGit mage ];
 
   vendorSha256 = "sha256-0MP04KpWX17Fa1WhLwF4yzIsDqGAeTUXxv81B+BTNe4=";
 

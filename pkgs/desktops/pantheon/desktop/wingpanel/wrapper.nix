@@ -1,36 +1,23 @@
-{ lib
-, wrapGAppsHook
-, glib
-, stdenv
-, xorg
-, wingpanel
-, wingpanelIndicators
-, switchboard-with-plugs
-, indicators ? null
+{ lib, wrapGAppsHook, glib, stdenv, xorg, wingpanel, wingpanelIndicators
+, switchboard-with-plugs, indicators ? null
   # Only useful to disable for development testing.
-, useDefaultIndicators ? true
-}:
+, useDefaultIndicators ? true }:
 
 let
-  selectedIndicators =
-    if indicators == null then wingpanelIndicators
-    else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
-in
-stdenv.mkDerivation rec {
+  selectedIndicators = if indicators == null then
+    wingpanelIndicators
+  else
+    indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
+in stdenv.mkDerivation rec {
   name = "${wingpanel.name}-with-indicators";
 
   src = null;
 
-  paths = [
-    wingpanel
-  ] ++ selectedIndicators;
+  paths = [ wingpanel ] ++ selectedIndicators;
 
   passAsFile = [ "paths" ];
 
-  nativeBuildInputs = [
-    glib
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ glib wrapGAppsHook ];
 
   buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)
     ++ selectedIndicators;

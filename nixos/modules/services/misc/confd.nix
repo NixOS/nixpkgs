@@ -22,7 +22,7 @@ in {
     backend = mkOption {
       description = "Confd config storage backend to use.";
       default = "etcd";
-      type = types.enum ["etcd" "consul" "redis" "zookeeper"];
+      type = types.enum [ "etcd" "consul" "redis" "zookeeper" ];
     };
 
     interval = mkOption {
@@ -52,7 +52,7 @@ in {
     logLevel = mkOption {
       description = "Confd log level.";
       default = "info";
-      type = types.enum ["info" "debug"];
+      type = types.enum [ "info" "debug" ];
     };
 
     confDir = mkOption {
@@ -74,14 +74,10 @@ in {
       description = "Confd Service.";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/confd";
-      };
+      serviceConfig = { ExecStart = "${cfg.package}/bin/confd"; };
     };
 
-    environment.etc = {
-      "confd/confd.toml".text = confdConfig;
-    };
+    environment.etc = { "confd/confd.toml".text = confdConfig; };
 
     environment.systemPackages = [ cfg.package ];
 

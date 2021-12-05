@@ -1,41 +1,18 @@
-{ autoPatchelfHook
-, coreutils
-, curl
-, dotnetCorePackages
-, dotnetPackages
-, fetchFromGitHub
-, fetchurl
-, git
-, glibc
-, icu
-, libkrb5
-, lib
-, linkFarm
-, lttng-ust
-, makeWrapper
-, nodejs-12_x
-, openssl
-, stdenv
-, zlib
-}:
+{ autoPatchelfHook, coreutils, curl, dotnetCorePackages, dotnetPackages
+, fetchFromGitHub, fetchurl, git, glibc, icu, libkrb5, lib, linkFarm, lttng-ust
+, makeWrapper, nodejs-12_x, openssl, stdenv, zlib }:
 let
   deps = (import ./deps.nix { inherit fetchurl; });
-  nugetPackages = map
-    (x: {
-      name = "${x.name}.nupkg";
-      path = "${x}";
-    })
-    deps;
+  nugetPackages = map (x: {
+    name = "${x.name}.nupkg";
+    path = "${x}";
+  }) deps;
   nugetSource = linkFarm "nuget-packages" nugetPackages;
 
   dotnetSdk = dotnetCorePackages.sdk_3_1;
-  runtimeId =
-    if stdenv.isAarch64
-    then "linux-arm64"
-    else "linux-x64";
+  runtimeId = if stdenv.isAarch64 then "linux-arm64" else "linux-x64";
   fakeSha1 = "0000000000000000000000000000000000000000";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "github-runner";
   version = "2.284.0";
 
@@ -46,12 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JR0OzbT5gGhO/dxb/eSjP/d/VxW/aLmTs/oPwN8b8Rc=";
   };
 
-  nativeBuildInputs = [
-    dotnetSdk
-    dotnetPackages.Nuget
-    makeWrapper
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [ dotnetSdk dotnetPackages.Nuget makeWrapper autoPatchelfHook ];
 
   buildInputs = [
     curl # libcurl.so.4
@@ -84,7 +57,9 @@ stdenv.mkDerivation rec {
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
+                "dotnet test Test/Test.csproj --filter '${
+                  lib.concatStringsSep "&amp;" disabledTests
+                }'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -144,43 +119,42 @@ stdenv.mkDerivation rec {
     "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
   ] ++ map
     # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
-      "CompositeActionWithActionfile_CompositeContainerNested"
-      "CompositeActionWithActionfile_CompositePrestepNested"
-      "CompositeActionWithActionfile_MaxLimit"
-      "CompositeActionWithActionfile_Node"
-      "DownloadActionFromGraph"
-      "DownloadActionFromGraph_Legacy"
-      "NotPullOrBuildImagesMultipleTimes"
-      "NotPullOrBuildImagesMultipleTimes_Legacy"
-      "RepositoryActionWithActionYamlFile_DockerHubImage"
-      "RepositoryActionWithActionYamlFile_DockerHubImage_Legacy"
-      "RepositoryActionWithActionfileAndDockerfile"
-      "RepositoryActionWithActionfileAndDockerfile_Legacy"
-      "RepositoryActionWithActionfile_DockerHubImage"
-      "RepositoryActionWithActionfile_DockerHubImage_Legacy"
-      "RepositoryActionWithActionfile_Dockerfile"
-      "RepositoryActionWithActionfile_Dockerfile_Legacy"
-      "RepositoryActionWithActionfile_DockerfileRelativePath"
-      "RepositoryActionWithActionfile_DockerfileRelativePath_Legacy"
-      "RepositoryActionWithActionfile_Node"
-      "RepositoryActionWithActionfile_Node_Legacy"
-      "RepositoryActionWithDockerfile"
-      "RepositoryActionWithDockerfile_Legacy"
-      "RepositoryActionWithDockerfileInRelativePath"
-      "RepositoryActionWithDockerfileInRelativePath_Legacy"
-      "RepositoryActionWithDockerfilePrepareActions_Repository"
-      "RepositoryActionWithInvalidWrapperActionfile_Node"
-      "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
-      "RepositoryActionWithWrapperActionfile_PreSteps"
-      "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
-      "EnsureDotnetsdkBashDownloadScriptUpToDate"
-      "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
-    ];
+    (x:
+      "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
+        "CompositeActionWithActionfile_CompositeContainerNested"
+        "CompositeActionWithActionfile_CompositePrestepNested"
+        "CompositeActionWithActionfile_MaxLimit"
+        "CompositeActionWithActionfile_Node"
+        "DownloadActionFromGraph"
+        "DownloadActionFromGraph_Legacy"
+        "NotPullOrBuildImagesMultipleTimes"
+        "NotPullOrBuildImagesMultipleTimes_Legacy"
+        "RepositoryActionWithActionYamlFile_DockerHubImage"
+        "RepositoryActionWithActionYamlFile_DockerHubImage_Legacy"
+        "RepositoryActionWithActionfileAndDockerfile"
+        "RepositoryActionWithActionfileAndDockerfile_Legacy"
+        "RepositoryActionWithActionfile_DockerHubImage"
+        "RepositoryActionWithActionfile_DockerHubImage_Legacy"
+        "RepositoryActionWithActionfile_Dockerfile"
+        "RepositoryActionWithActionfile_Dockerfile_Legacy"
+        "RepositoryActionWithActionfile_DockerfileRelativePath"
+        "RepositoryActionWithActionfile_DockerfileRelativePath_Legacy"
+        "RepositoryActionWithActionfile_Node"
+        "RepositoryActionWithActionfile_Node_Legacy"
+        "RepositoryActionWithDockerfile"
+        "RepositoryActionWithDockerfile_Legacy"
+        "RepositoryActionWithDockerfileInRelativePath"
+        "RepositoryActionWithDockerfileInRelativePath_Legacy"
+        "RepositoryActionWithDockerfilePrepareActions_Repository"
+        "RepositoryActionWithInvalidWrapperActionfile_Node"
+        "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
+        "RepositoryActionWithWrapperActionfile_PreSteps"
+        "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
+      ] ++ map (x:
+        "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
+          "EnsureDotnetsdkBashDownloadScriptUpToDate"
+          "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+        ];
 
   checkInputs = [ git ];
 
@@ -253,7 +227,9 @@ stdenv.mkDerivation rec {
 
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath (buildInputs ++ [ openssl ])
+        } \
         ''${@:2}
     }
 

@@ -1,14 +1,5 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
-, stdenv
-, pkg-config
-, postgresql
-, sqlite
-, openssl
-, Security
-, libiconv
-}:
+{ rustPlatform, fetchFromGitHub, lib, stdenv, pkg-config, postgresql, sqlite
+, openssl, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "movine";
@@ -24,12 +15,12 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-4ghfenwmauR4Ft9n7dvBflwIMXPdFq1vh6FpIegHnZk=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql sqlite ] ++ (
-    if !stdenv.isDarwin then [ openssl ] else [ Security libiconv ]
-  );
+  buildInputs = [ postgresql sqlite ]
+    ++ (if !stdenv.isDarwin then [ openssl ] else [ Security libiconv ]);
 
   meta = with lib; {
-    description = "A migration manager written in Rust, that attempts to be smart yet minimal";
+    description =
+      "A migration manager written in Rust, that attempts to be smart yet minimal";
     homepage = "https://github.com/byronwasti/movine";
     license = licenses.mit;
     longDescription = ''

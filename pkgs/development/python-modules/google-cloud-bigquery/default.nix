@@ -1,20 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, freezegun
-, google-cloud-core
-, google-cloud-datacatalog
-, google-cloud-storage
-, google-cloud-testutils
-, google-resumable-media
-, ipython
-, mock
-, pandas
-, proto-plus
-, psutil
-, pyarrow
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, freezegun
+, google-cloud-core, google-cloud-datacatalog, google-cloud-storage
+, google-cloud-testutils, google-resumable-media, ipython, mock, pandas
+, proto-plus, psutil, pyarrow }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
@@ -25,12 +12,8 @@ buildPythonPackage rec {
     sha256 = "sha256-DiNT2X5SktyM5URHtxL7nolJbnFLXKz8PVNmFNHEYdw=";
   };
 
-  propagatedBuildInputs = [
-    google-resumable-media
-    google-cloud-core
-    proto-plus
-    pyarrow
-  ];
+  propagatedBuildInputs =
+    [ google-resumable-media google-cloud-core proto-plus pyarrow ];
 
   checkInputs = [
     freezegun
@@ -69,10 +52,7 @@ buildPythonPackage rec {
     "test_table_snapshots"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.bigquery"
-    "google.cloud.bigquery_v2"
-  ];
+  pythonImportsCheck = [ "google.cloud.bigquery" "google.cloud.bigquery_v2" ];
 
   meta = with lib; {
     description = "Google BigQuery API client library";

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, pyqt5
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest, pyqt5 }:
 
 buildPythonPackage rec {
   pname = "pytest-qt";
@@ -15,17 +9,11 @@ buildPythonPackage rec {
     sha256 = "dfc5240dec7eb43b76bcb5f9a87eecae6ef83592af49f3af5f1d5d093acaa93e";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  checkInputs = [
-    pyqt5
-  ];
+  checkInputs = [ pyqt5 ];
 
   # tests require X server
   doCheck = false;

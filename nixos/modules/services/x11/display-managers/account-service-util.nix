@@ -1,10 +1,4 @@
-{ accountsservice
-, glib
-, gobject-introspection
-, python3
-, wrapGAppsHook
-, lib
-}:
+{ accountsservice, glib, gobject-introspection, python3, wrapGAppsHook, lib }:
 
 python3.pkgs.buildPythonApplication {
   name = "set-session";
@@ -17,20 +11,11 @@ python3.pkgs.buildPythonApplication {
 
   strictDeps = false;
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
-  buildInputs = [
-    accountsservice
-    glib
-  ];
+  buildInputs = [ accountsservice glib ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
-    ordered-set
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 ordered-set ];
 
   installPhase = ''
     mkdir -p $out/bin

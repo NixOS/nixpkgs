@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "jdcal";
@@ -20,7 +16,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A module containing functions for converting between Julian dates and calendar dates";
+    description =
+      "A module containing functions for converting between Julian dates and calendar dates";
     homepage = "https://github.com/phn/jdcal";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lihop ];

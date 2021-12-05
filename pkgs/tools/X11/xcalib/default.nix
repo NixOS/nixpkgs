@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "A tiny monitor calibration loader for X and MS-Windows";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

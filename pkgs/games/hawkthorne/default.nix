@@ -10,18 +10,15 @@ stdenv.mkDerivation {
     sha256 = "013smhdf9sh91153fpk2bwhhnpg6pn7kfrpw77jmf0v48i3q44h2";
   };
 
-  buildInputs = [
-    love curl zip
-  ];
+  buildInputs = [ love curl zip ];
 
-  patches = [
-    ./makefile.patch
-  ];
+  patches = [ ./makefile.patch ];
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "Journey to the Center of Hawkthorne - A fan-made retro-style game based on the show Community";
+    description =
+      "Journey to the Center of Hawkthorne - A fan-made retro-style game based on the show Community";
     longDescription = ''
       Journey to the Center of Hawkthorne is an open source game written in Love2D.
       It's based on the show Community, starring Jim Rash and Joel McHale as

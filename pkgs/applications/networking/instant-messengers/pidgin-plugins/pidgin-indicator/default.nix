@@ -1,13 +1,5 @@
-{ autoreconfHook
-, fetchFromGitHub
-, glib
-, intltool
-, lib
-, libappindicator-gtk2
-, libtool
-, pidgin
-, stdenv
-}:
+{ autoreconfHook, fetchFromGitHub, glib, intltool, lib, libappindicator-gtk2
+, libtool, pidgin, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-indicator";

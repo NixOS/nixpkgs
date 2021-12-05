@@ -1,11 +1,6 @@
-{ lib, stdenv, fetchurl, makeDesktopItem
-, libX11, libXt, libXft, libXrender
-, ncurses, fontconfig, freetype
-, pkg-config, gdk-pixbuf, perl
-, perlSupport      ? true
-, gdkPixbufSupport ? true
-, unicode3Support  ? true
-}:
+{ lib, stdenv, fetchurl, makeDesktopItem, libX11, libXt, libXft, libXrender
+, ncurses, fontconfig, freetype, pkg-config, gdk-pixbuf, perl
+, perlSupport ? true, gdkPixbufSupport ? true, unicode3Support ? true }:
 
 let
   pname = "rxvt-unicode";
@@ -21,32 +16,35 @@ let
     genericName = pname;
     categories = "System;TerminalEmulator;";
   };
-in
 
-with lib;
+in with lib;
 
 stdenv.mkDerivation {
   name = "${pname}-unwrapped-${version}";
   inherit pname version;
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
+    url =
+      "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
     sha256 = "12y9p32q0v7n7rhjla0j2g9d5rj2dmwk20c9yhlssaaxlawiccb4";
   };
 
-  buildInputs =
-    [ libX11 libXt libXft ncurses  # required to build the terminfo file
-      fontconfig freetype pkg-config libXrender
-    ] ++ optional perlSupport perl
-      ++ optional gdkPixbufSupport gdk-pixbuf;
+  buildInputs = [
+    libX11
+    libXt
+    libXft
+    ncurses # required to build the terminfo file
+    fontconfig
+    freetype
+    pkg-config
+    libXrender
+  ] ++ optional perlSupport perl ++ optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [
-    ./patches/9.06-font-width.patch
-    ./patches/256-color-resources.patch
-  ] ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
-
+  patches =
+    [ ./patches/9.06-font-width.patch ./patches/256-color-resources.patch ]
+    ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"
@@ -58,18 +56,16 @@ stdenv.mkDerivation {
   LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
   CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
 
-  preConfigure =
-    ''
-      # without this the terminfo won't be compiled by tic, see man tic
-      mkdir -p $terminfo/share/terminfo
-      export TERMINFO=$terminfo/share/terminfo
-    ''
-    + lib.optionalString perlSupport ''
-      # make urxvt find its perl file lib/perl5/site_perl
-      # is added to PERL5LIB automatically
-      mkdir -p $out/$(dirname ${perl.libPrefix})
-      ln -s $out/lib/urxvt $out/${perl.libPrefix}
-    '';
+  preConfigure = ''
+    # without this the terminfo won't be compiled by tic, see man tic
+    mkdir -p $terminfo/share/terminfo
+    export TERMINFO=$terminfo/share/terminfo
+  '' + lib.optionalString perlSupport ''
+    # make urxvt find its perl file lib/perl5/site_perl
+    # is added to PERL5LIB automatically
+    mkdir -p $out/$(dirname ${perl.libPrefix})
+    ln -s $out/lib/urxvt $out/${perl.libPrefix}
+  '';
 
   postInstall = ''
     mkdir -p $out/nix-support

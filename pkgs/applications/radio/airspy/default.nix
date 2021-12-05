@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake , pkg-config, libusb1
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "airspy";
@@ -20,8 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libusb1 ];
 
-  cmakeFlags =
-    lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
+  cmakeFlags = lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/airspy/airspyone_host";

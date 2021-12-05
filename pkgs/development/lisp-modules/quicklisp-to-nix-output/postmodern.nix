@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "postmodern";
   version = "20211020-git";
 
@@ -8,16 +7,39 @@ rec {
 
   description = "PostgreSQL programming API";
 
-  deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-postgres_plus_local-time" args."cl-postgres_slash_tests" args."cl-ppcre" args."closer-mop" args."fiveam" args."global-vars" args."ironclad" args."local-time" args."md5" args."s-sql" args."s-sql_slash_tests" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."uiop" args."usocket" ];
+  deps = [
+    args."alexandria"
+    args."bordeaux-threads"
+    args."cl-base64"
+    args."cl-postgres"
+    args."cl-postgres_plus_local-time"
+    args."cl-postgres_slash_tests"
+    args."cl-ppcre"
+    args."closer-mop"
+    args."fiveam"
+    args."global-vars"
+    args."ironclad"
+    args."local-time"
+    args."md5"
+    args."s-sql"
+    args."s-sql_slash_tests"
+    args."simple-date"
+    args."simple-date_slash_postgres-glue"
+    args."split-sequence"
+    args."uax-15"
+    args."uiop"
+    args."usocket"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz";
     sha256 = "0iw0sbjra3g57ivfqgx3c97mlcdzlh2kgqp12d1r2i9pw8z0ckh6";
   };
 
   packageName = "postmodern";
 
-  asdFilesToKeep = ["postmodern.asd"];
+  asdFilesToKeep = [ "postmodern.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM postmodern DESCRIPTION PostgreSQL programming API SHA256
@@ -47,4 +69,5 @@ rec {
      local-time md5 s-sql s-sql/tests simple-date simple-date/postgres-glue
      split-sequence uax-15 uiop usocket)
     VERSION 20211020-git SIBLINGS (cl-postgres s-sql simple-date) PARASITES
-    (postmodern/tests)) */
+    (postmodern/tests))
+*/

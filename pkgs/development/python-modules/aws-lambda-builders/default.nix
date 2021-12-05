@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pathlib
-, pytest
-, mock
-, parameterized
-, isPy27
-, isPy35
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, six, pathlib, pytest, mock
+, parameterized, isPy27, isPy35 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
@@ -25,15 +16,9 @@ buildPythonPackage rec {
   # Package is not compatible with Python 3.5
   disabled = isPy35;
 
-  propagatedBuildInputs = [
-    six
-  ] ++ lib.optionals isPy27 [ pathlib ];
+  propagatedBuildInputs = [ six ] ++ lib.optionals isPy27 [ pathlib ];
 
-  checkInputs = [
-    pytest
-    mock
-    parameterized
-  ];
+  checkInputs = [ pytest mock parameterized ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH

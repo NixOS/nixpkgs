@@ -13,13 +13,23 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "ocaml-libvirt-0.6.1.5-fix.patch";
-      url = "http://git.annexia.org/?p=virt-top.git;a=patch;h=24a461715d5bce47f63cb0097606fc336230589f";
+      url =
+        "http://git.annexia.org/?p=virt-top.git;a=patch;h=24a461715d5bce47f63cb0097606fc336230589f";
       sha256 = "15w7w9iggvlw8m9w8g4h08251wzb3m3zkb58glr7ifsgi3flbn61";
     })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light ];
+  buildInputs = with ocamlPackages; [
+    ocaml
+    findlib
+    ocaml_extlib
+    ocaml_libvirt
+    gettext-stub
+    curses
+    csv
+    xml-light
+  ];
 
   buildPhase = "make opt";
 

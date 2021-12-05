@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, mock
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, mock, libcst, proto-plus
+, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
@@ -27,10 +19,7 @@ buildPythonPackage rec {
     "test_list_clusters"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.dataproc"
-    "google.cloud.dataproc_v1"
-  ];
+  pythonImportsCheck = [ "google.cloud.dataproc" "google.cloud.dataproc_v1" ];
 
   meta = with lib; {
     description = "Google Cloud Dataproc API client library";

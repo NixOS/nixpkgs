@@ -1,42 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, unzip
-, makeWrapper
-, setJavaClassPath
+{ stdenv, lib, fetchurl, autoPatchelfHook, unzip, makeWrapper, setJavaClassPath
 , zulu
 # minimum dependencies
-, alsa-lib
-, fontconfig
-, freetype
-, zlib
-, xorg
+, alsa-lib, fontconfig, freetype, zlib, xorg
 # runtime dependencies
 , cups
 # runtime dependencies for GTK+ Look and Feel
-, gtkSupport ? stdenv.isLinux
-, cairo
-, glib
-, gtk3
-}:
+, gtkSupport ? stdenv.isLinux, cairo, glib, gtk3 }:
 
 let
   version = "11.50.19";
   openjdk = "11.0.12";
 
-  sha256_linux = "b8e8a63b79bc312aa90f3558edbea59e71495ef1a9c340e38900dd28a1c579f3";
-  sha256_darwin = "9bc6874932f7f88d0a48220d3200449ddf7dc5c0e82af2df2738bc13d21b0e4e";
+  sha256_linux =
+    "b8e8a63b79bc312aa90f3558edbea59e71495ef1a9c340e38900dd28a1c579f3";
+  sha256_darwin =
+    "9bc6874932f7f88d0a48220d3200449ddf7dc5c0e82af2df2738bc13d21b0e4e";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
 
-  runtimeDependencies = [
-    cups
-  ] ++ lib.optionals gtkSupport [
-    cairo glib gtk3
-  ];
+  runtimeDependencies = [ cups ]
+    ++ lib.optionals gtkSupport [ cairo glib gtk3 ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in stdenv.mkDerivation {
@@ -45,7 +30,8 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
+    url =
+      "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
     sha256 = hash;
   };
 
@@ -62,11 +48,8 @@ in stdenv.mkDerivation {
     zlib
   ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
-    unzip
-  ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ unzip ];
 
   installPhase = ''
     mkdir -p $out
@@ -97,9 +80,7 @@ in stdenv.mkDerivation {
       patchelf --add-needed libfontconfig.so {} \;
   '';
 
-  passthru = {
-    home = zulu;
-  };
+  passthru = { home = zulu; };
 
   meta = with lib; {
     homepage = "https://www.azul.com/products/zulu/";

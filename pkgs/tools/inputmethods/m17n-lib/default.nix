@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "1.8.0";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
+    url =
+      "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
     sha256 = "0jp61y09xqj10mclpip48qlfhniw8gwy8b28cbzxy8hq8pkwmfkq";
   };
 
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
 
   # reconf needed to sucesfully cross-compile
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
     # requires m17n-db tool at build time
     m17n_db
   ];

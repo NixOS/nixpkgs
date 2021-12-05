@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
 
-  configureFlags = [
-    "--with-blas-lib=-lblas"
-    "--with-lapack-lib=-llapack"
-  ];
+  configureFlags = [ "--with-blas-lib=-lblas" "--with-lapack-lib=-llapack" ];
 
   nativeBuildInputs = [ unzip gfortran ];
 

@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono
+, dotnetPackages, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   xplat = fetchurl {
-    url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
+    url =
+      "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
     sha256 = "1wnzbdpk4s9bmawlh359ak2b8zi0sgx1qvcjnvfncr1wsck53v7q";
   };
 
-  deps = map (package: package.src)
-    (import ./deps.nix { inherit fetchurl; });
+  deps = map (package: package.src) (import ./deps.nix { inherit fetchurl; });
 
   nuget-config = writeText "NuGet.config" ''
     <?xml version="1.0" encoding="utf-8"?>
@@ -21,33 +22,24 @@ let
     </configuration>
   '';
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "msbuild";
   version = "16.10.1+xamarinxplat.2021.05.26.14.00";
 
   src = fetchurl {
-    url = "https://download.mono-project.com/sources/msbuild/msbuild-${version}.tar.xz";
+    url =
+      "https://download.mono-project.com/sources/msbuild/msbuild-${version}.tar.xz";
     sha256 = "05ghqqkdj4s3d0xkp7mkdzjig5zj3k6ajx71j0g2wv6rdbvg6899";
   };
 
-  nativeBuildInputs = [
-    dotnet-sdk
-    mono
-    unzip
-  ];
+  nativeBuildInputs = [ dotnet-sdk mono unzip ];
 
-  buildInputs = [
-    dotnetPackages.Nuget
-    glibcLocales
-    makeWrapper
-  ];
+  buildInputs = [ dotnetPackages.Nuget glibcLocales makeWrapper ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
+    "${glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
     # not patchShebangs, there is /bin/bash in the body of the script as well
@@ -109,39 +101,40 @@ stdenv.mkDerivation rec {
 
   # https://docs.microsoft.com/cs-cz/visualstudio/msbuild/walkthrough-creating-an-msbuild-project-file-from-scratch?view=vs-2019
   installCheckPhase = ''
-    cat > Helloworld.cs <<EOF
-using System;
+        cat > Helloworld.cs <<EOF
+    using System;
 
-class HelloWorld
-{
-    static void Main()
+    class HelloWorld
     {
-#if DebugConfig
-        Console.WriteLine("WE ARE IN THE DEBUG CONFIGURATION");
-#endif
+        static void Main()
+        {
+    #if DebugConfig
+            Console.WriteLine("WE ARE IN THE DEBUG CONFIGURATION");
+    #endif
 
-        Console.WriteLine("Hello, world!");
+            Console.WriteLine("Hello, world!");
+        }
     }
-}
-EOF
+    EOF
 
-    cat > Helloworld.csproj <<EOF
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Compile Include="Helloworld.cs" />
-  </ItemGroup>
-  <Target Name="Build">
-    <Csc Sources="@(Compile)"/>
-  </Target>
-</Project>
-EOF
+        cat > Helloworld.csproj <<EOF
+    <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <ItemGroup>
+        <Compile Include="Helloworld.cs" />
+      </ItemGroup>
+      <Target Name="Build">
+        <Csc Sources="@(Compile)"/>
+      </Target>
+    </Project>
+    EOF
 
-    $out/bin/msbuild Helloworld.csproj -t:Build
-    ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
-  '';
+        $out/bin/msbuild Helloworld.csproj -t:Build
+        ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
+      '';
 
   meta = with lib; {
-    description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
+    description =
+      "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     homepage = "https://github.com/mono/msbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ jdanek ];

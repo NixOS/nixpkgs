@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
-, SDL2, alsa-lib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper, SDL2, alsa-lib
+, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
   version = "1.03.00";
   pname = "milkytracker";
 
   src = fetchFromGitHub {
-    owner  = "milkytracker";
-    repo   = "MilkyTracker";
-    rev    = "v${version}";
+    owner = "milkytracker";
+    repo = "MilkyTracker";
+    rev = "v${version}";
     sha256 = "025fj34gq2kmkpwcswcyx7wdxb89vm944dh685zi4bxx0hz16vvk";
   };
 
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://milkytracker.org";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

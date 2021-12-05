@@ -1,18 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, jdk
-, jre
-, ant
-, makeWrapper
-, doCheck ? true
-, withExamples ? false
-}:
+{ lib, stdenv, fetchurl, substituteAll, jdk, jre, ant, makeWrapper
+, doCheck ? true, withExamples ? false }:
 let
   deps = import ./deps.nix { inherit fetchurl; };
   testInputs = import ./testinputs.nix { inherit fetchurl; };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mkgmap";
   version = "4813";
 
@@ -29,25 +20,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = with deps; ''
-    mkdir -p lib/compile
-    cp ${fastutil} lib/compile/${fastutil.name}
-    cp ${osmpbf} lib/compile/${osmpbf.name}
-    cp ${protobuf} lib/compile/${protobuf.name}
-  '' + lib.optionalString doCheck ''
-    mkdir -p lib/test
-    cp ${fastutil} lib/test/${fastutil.name}
-    cp ${osmpbf} lib/test/${osmpbf.name}
-    cp ${protobuf} lib/test/${protobuf.name}
-    cp ${jaxb-api} lib/test/${jaxb-api.name}
-    cp ${junit} lib/test/${junit.name}
-    cp ${hamcrest-core} lib/test/${hamcrest-core.name}
+  postPatch = with deps;
+    ''
+      mkdir -p lib/compile
+      cp ${fastutil} lib/compile/${fastutil.name}
+      cp ${osmpbf} lib/compile/${osmpbf.name}
+      cp ${protobuf} lib/compile/${protobuf.name}
+    '' + lib.optionalString doCheck ''
+      mkdir -p lib/test
+      cp ${fastutil} lib/test/${fastutil.name}
+      cp ${osmpbf} lib/test/${osmpbf.name}
+      cp ${protobuf} lib/test/${protobuf.name}
+      cp ${jaxb-api} lib/test/${jaxb-api.name}
+      cp ${junit} lib/test/${junit.name}
+      cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
-    mkdir -p test/resources/in/img
-    ${lib.concatMapStringsSep "\n" (res: ''
-      cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
-    '') testInputs}
-  '';
+      mkdir -p test/resources/in/img
+      ${lib.concatMapStringsSep "\n" (res: ''
+        cp ${res} test/resources/in/${
+          builtins.replaceStrings [ "__" ] [ "/" ] res.name
+        }
+      '') testInputs}
+    '';
 
   nativeBuildInputs = [ jdk ant makeWrapper ];
 
@@ -71,7 +65,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = [ ./update.sh "mkgmap" meta.downloadPage ];
 
   meta = with lib; {
-    description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
+    description =
+      "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "http://www.mkgmap.org.uk";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
     license = licenses.gpl2Only;

@@ -1,15 +1,5 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, click
-, dnspython
-, fetchFromGitHub
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, six
-}:
+{ lib, asyncio-dgram, buildPythonPackage, click, dnspython, fetchFromGitHub
+, mock, pytest-asyncio, pytestCheckHook, pythonOlder, six }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
@@ -23,18 +13,9 @@ buildPythonPackage rec {
     sha256 = "00xi3452lap4zx38msx89vvhrzkzb2dvwis1fcmx24qngj9g3yfr";
   };
 
-  propagatedBuildInputs = [
-    asyncio-dgram
-    click
-    dnspython
-    six
-  ];
+  propagatedBuildInputs = [ asyncio-dgram click dnspython six ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "mcstatus" ];
 

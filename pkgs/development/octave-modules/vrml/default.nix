@@ -1,14 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{ buildOctavePackage, lib, fetchurl
 # Octave dependencies
-, linear-algebra
-, miscellaneous
-, struct
-, statistics
+, linear-algebra, miscellaneous, struct, statistics
 # Runtime dependencies
-, freewrl
-}:
+, freewrl }:
 
 buildOctavePackage rec {
   pname = "vrml";
@@ -19,16 +13,9 @@ buildOctavePackage rec {
     sha256 = "1mx93k150agd27mbzvds13v9z0x36j68hwpdvlvjmcl2fga5fly4";
   };
 
-  propagatedBuildInputs = [
-    freewrl
-  ];
+  propagatedBuildInputs = [ freewrl ];
 
-  requiredOctavePackages = [
-    linear-algebra
-    miscellaneous
-    struct
-    statistics
-  ];
+  requiredOctavePackages = [ linear-algebra miscellaneous struct statistics ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/vrml/index.html";

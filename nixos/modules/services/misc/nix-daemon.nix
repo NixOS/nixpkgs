@@ -13,13 +13,14 @@ let
   isNix23 = versionAtLeast nixVersion "2.3pre";
 
   makeNixBuildUser = nr: {
-    name  = "nixbld${toString nr}";
+    name = "nixbld${toString nr}";
     value = {
       description = "Nix build user ${toString nr}";
 
       /* For consistency with the setgid(2), setuid(2), and setgroups(2)
          calls in `libstore/build.cc', don't add any supplementary group
-         here except "nixbld".  */
+         here except "nixbld".
+      */
       uid = builtins.add config.ids.uids.nixbld nr;
       isSystemUser = true;
       group = "nixbld";
@@ -29,53 +30,63 @@ let
 
   nixbldUsers = listToAttrs (map makeNixBuildUser (range 1 cfg.nrBuildUsers));
 
-  nixConf =
-    assert versionAtLeast nixVersion "2.2";
-    pkgs.runCommand "nix.conf" { preferLocalBuild = true; extraOptions = cfg.extraOptions; } (
-      ''
-        cat > $out <<END
-        # WARNING: this file is generated from the nix.* options in
-        # your NixOS configuration, typically
-        # /etc/nixos/configuration.nix.  Do not edit it!
-        build-users-group = nixbld
-        max-jobs = ${toString (cfg.maxJobs)}
-        cores = ${toString (cfg.buildCores)}
-        sandbox = ${if (builtins.isBool cfg.useSandbox) then boolToString cfg.useSandbox else cfg.useSandbox}
-        extra-sandbox-paths = ${toString cfg.sandboxPaths}
-        substituters = ${toString cfg.binaryCaches}
-        trusted-substituters = ${toString cfg.trustedBinaryCaches}
-        trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
-        auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
-        trusted-users = ${toString cfg.trustedUsers}
-        allowed-users = ${toString cfg.allowedUsers}
-        ${optionalString (!cfg.distributedBuilds) ''
-          builders =
-        ''}
-        system-features = ${toString cfg.systemFeatures}
-        ${optionalString isNix23 ''
-          sandbox-fallback = false
-        ''}
-        $extraOptions
-        END
-      '' + optionalString cfg.checkConfig (
-            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
-              echo "Ignore nix.checkConfig when cross-compiling"
-            '' else ''
-              echo "Checking that Nix can read nix.conf..."
-              ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
-            '')
-      );
+  nixConf = assert versionAtLeast nixVersion "2.2";
+    pkgs.runCommand "nix.conf" {
+      preferLocalBuild = true;
+      extraOptions = cfg.extraOptions;
+    } (''
+      cat > $out <<END
+      # WARNING: this file is generated from the nix.* options in
+      # your NixOS configuration, typically
+      # /etc/nixos/configuration.nix.  Do not edit it!
+      build-users-group = nixbld
+      max-jobs = ${toString (cfg.maxJobs)}
+      cores = ${toString (cfg.buildCores)}
+      sandbox = ${
+        if (builtins.isBool cfg.useSandbox) then
+          boolToString cfg.useSandbox
+        else
+          cfg.useSandbox
+      }
+      extra-sandbox-paths = ${toString cfg.sandboxPaths}
+      substituters = ${toString cfg.binaryCaches}
+      trusted-substituters = ${toString cfg.trustedBinaryCaches}
+      trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
+      auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
+      require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
+      trusted-users = ${toString cfg.trustedUsers}
+      allowed-users = ${toString cfg.allowedUsers}
+      ${optionalString (!cfg.distributedBuilds) ''
+        builders =
+      ''}
+      system-features = ${toString cfg.systemFeatures}
+      ${optionalString isNix23 ''
+        sandbox-fallback = false
+      ''}
+      $extraOptions
+      END
+    '' + optionalString cfg.checkConfig
+      (if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+        echo "Ignore nix.checkConfig when cross-compiling"
+      '' else ''
+        echo "Checking that Nix can read nix.conf..."
+        ln -s $out ./nix.conf
+        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${
+          optionalString isNix23
+          "--no-net --option experimental-features nix-command"
+        } >/dev/null
+      ''));
 
-in
-
-{
+in {
   imports = [
     (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
     (mkRenamedOptionModule [ "nix" "chrootDirs" ] [ "nix" "sandboxPaths" ])
-    (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [ "nix" "daemonIOSchedPriority" ])
-    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
+    (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [
+      "nix"
+      "daemonIOSchedPriority"
+    ])
+    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ]
+      "Consider nix.daemonCPUSchedPolicy instead.")
   ];
 
   ###### interface
@@ -103,7 +114,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.either types.int (types.enum ["auto"]);
+        type = types.either types.int (types.enum [ "auto" ]);
         default = "auto";
         example = 64;
         description = ''
@@ -120,10 +131,10 @@ in
         default = false;
         example = true;
         description = ''
-         If set to true, Nix automatically detects files in the store that have
-         identical contents, and replaces them with hard links to a single copy.
-         This saves disk space. If set to false (the default), you can still run
-         nix-store --optimise to get rid of duplicate files.
+          If set to true, Nix automatically detects files in the store that have
+          identical contents, and replaces them with hard links to a single copy.
+          This saves disk space. If set to false (the default), you can still run
+          nix-store --optimise to get rid of duplicate files.
         '';
       };
 
@@ -142,29 +153,20 @@ in
       };
 
       useSandbox = mkOption {
-        type = types.either types.bool (types.enum ["relaxed"]);
+        type = types.either types.bool (types.enum [ "relaxed" ]);
         default = true;
-        description = "
-          If set, Nix will perform builds in a sandboxed environment that it
-          will set up automatically for each build. This prevents impurities
-          in builds by disallowing access to dependencies outside of the Nix
-          store by using network and mount namespaces in a chroot environment.
-          This is enabled by default even though it has a possible performance
-          impact due to the initial setup time of a sandbox for each build. It
-          doesn't affect derivation hashes, so changing this option will not
-          trigger a rebuild of packages.
-        ";
+        description =
+          "\n          If set, Nix will perform builds in a sandboxed environment that it\n          will set up automatically for each build. This prevents impurities\n          in builds by disallowing access to dependencies outside of the Nix\n          store by using network and mount namespaces in a chroot environment.\n          This is enabled by default even though it has a possible performance\n          impact due to the initial setup time of a sandbox for each build. It\n          doesn't affect derivation hashes, so changing this option will not\n          trigger a rebuild of packages.\n        ";
       };
 
       sandboxPaths = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "/dev" "/proc" ];
-        description =
-          ''
-            Directories from the host filesystem to be included
-            in the sandbox.
-          '';
+        description = ''
+          Directories from the host filesystem to be included
+          in the sandbox.
+        '';
       };
 
       extraOptions = mkOption {
@@ -174,7 +176,8 @@ in
           keep-outputs = true
           keep-derivations = true
         '';
-        description = "Additional text appended to <filename>nix.conf</filename>.";
+        description =
+          "Additional text appended to <filename>nix.conf</filename>.";
       };
 
       distributedBuilds = mkOption {
@@ -187,7 +190,7 @@ in
       };
 
       daemonCPUSchedPolicy = mkOption {
-        type = types.enum ["other" "batch" "idle"];
+        type = types.enum [ "other" "batch" "idle" ];
         default = "other";
         example = "batch";
         description = ''
@@ -201,11 +204,11 @@ in
           responsiveness of a system performing expensive builds, it may also
           slow down and potentially starve crucial configuration updates
           during load.
-      '';
+        '';
       };
 
       daemonIOSchedClass = mkOption {
-        type = types.enum ["best-effort" "idle"];
+        type = types.enum [ "best-effort" "idle" ];
         default = "best-effort";
         example = "idle";
         description = ''
@@ -217,7 +220,7 @@ in
           Please note that while using the idle scheduling class can improve
           responsiveness of a system performing expensive builds, it might also
           slow down or starve crucial configuration updates during load.
-      '';
+        '';
       };
 
       daemonIOSchedPriority = mkOption {
@@ -230,7 +233,7 @@ in
           scheduling policy: With idle, priorities are not used in scheduling
           decisions. best-effort supports values in the range 0 (high) to 7
           (low).
-      '';
+        '';
       };
 
       buildMachines = mkOption {
@@ -256,7 +259,7 @@ in
             };
             systems = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
               description = ''
                 The system types the build machine can execute derivations on.
@@ -311,7 +314,7 @@ in
             };
             mandatoryFeatures = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "big-parallel" ];
               description = ''
                 A list of features mandatory for this builder. The builder will
@@ -322,7 +325,7 @@ in
             };
             supportedFeatures = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [ "kvm" "big-parallel" ];
               description = ''
                 A list of features supported by this builder. The builder will
@@ -332,7 +335,7 @@ in
             };
           };
         }));
-        default = [];
+        default = [ ];
         description = ''
           This option lists the machines to be used if distributed builds are
           enabled (see <option>nix.distributedBuilds</option>).
@@ -346,7 +349,7 @@ in
       envVars = mkOption {
         type = types.attrs;
         internal = true;
-        default = {};
+        default = { };
         description = "Environment variables used by Nix.";
       };
 
@@ -408,7 +411,8 @@ in
 
       binaryCachePublicKeys = mkOption {
         type = types.listOf types.str;
-        example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+        example =
+          [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
         description = ''
           List of public keys used to sign binary caches. If
           <option>nix.requireSignedBinaryCaches</option> is enabled,
@@ -451,12 +455,11 @@ in
 
       nixPath = mkOption {
         type = types.listOf types.str;
-        default =
-          [
-            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixos-config=/etc/nixos/configuration.nix"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ];
+        default = [
+          "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+          "nixos-config=/etc/nixos/configuration.nix"
+          "/nix/var/nix/profiles/per-user/root/channels"
+        ];
         description = ''
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
@@ -481,52 +484,61 @@ in
       };
 
       registry = mkOption {
-        type = types.attrsOf (types.submodule (
-          let
-            inputAttrs = types.attrsOf (types.oneOf [types.str types.int types.bool types.package]);
-          in
-          { config, name, ... }:
-          { options = {
-              from = mkOption {
-                type = inputAttrs;
-                example = { type = "indirect"; id = "nixpkgs"; };
-                description = "The flake reference to be rewritten.";
+        type = types.attrsOf (types.submodule (let
+          inputAttrs = types.attrsOf
+            (types.oneOf [ types.str types.int types.bool types.package ]);
+        in { config, name, ... }: {
+          options = {
+            from = mkOption {
+              type = inputAttrs;
+              example = {
+                type = "indirect";
+                id = "nixpkgs";
               };
-              to = mkOption {
-                type = inputAttrs;
-                example = { type = "github"; owner = "my-org"; repo = "my-nixpkgs"; };
-                description = "The flake reference to which <option>from></option> is to be rewritten.";
-              };
-              flake = mkOption {
-                type = types.nullOr types.attrs;
-                default = null;
-                example = literalExpression "nixpkgs";
-                description = ''
-                  The flake input to which <option>from></option> is to be rewritten.
-                '';
-              };
-              exact = mkOption {
-                type = types.bool;
-                default = true;
-                description = ''
-                  Whether the <option>from</option> reference needs to match exactly. If set,
-                  a <option>from</option> reference like <literal>nixpkgs</literal> does not
-                  match with a reference like <literal>nixpkgs/nixos-20.03</literal>.
-                '';
-              };
+              description = "The flake reference to be rewritten.";
             };
-            config = {
-              from = mkDefault { type = "indirect"; id = name; };
-              to = mkIf (config.flake != null)
-                ({ type = "path";
-                   path = config.flake.outPath;
-                 } // lib.filterAttrs
-                   (n: v: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                   config.flake);
+            to = mkOption {
+              type = inputAttrs;
+              example = {
+                type = "github";
+                owner = "my-org";
+                repo = "my-nixpkgs";
+              };
+              description =
+                "The flake reference to which <option>from></option> is to be rewritten.";
             };
-          }
-        ));
-        default = {};
+            flake = mkOption {
+              type = types.nullOr types.attrs;
+              default = null;
+              example = literalExpression "nixpkgs";
+              description = ''
+                The flake input to which <option>from></option> is to be rewritten.
+              '';
+            };
+            exact = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether the <option>from</option> reference needs to match exactly. If set,
+                a <option>from</option> reference like <literal>nixpkgs</literal> does not
+                match with a reference like <literal>nixpkgs/nixos-20.03</literal>.
+              '';
+            };
+          };
+          config = {
+            from = mkDefault {
+              type = "indirect";
+              id = name;
+            };
+            to = mkIf (config.flake != null) ({
+              type = "path";
+              path = config.flake.outPath;
+            } // lib.filterAttrs (n: v:
+              n == "lastModified" || n == "rev" || n == "revCount" || n
+              == "narHash") config.flake);
+          };
+        }));
+        default = { };
         description = ''
           A system-wide flake registry.
         '';
@@ -536,121 +548,111 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+    nix.binaryCachePublicKeys =
+      [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
-    environment.systemPackages =
-      [ nix
-        pkgs.nix-info
-      ]
-      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
+    environment.systemPackages = [ nix pkgs.nix-info ]
+      ++ optional (config.programs.bash.enableCompletion)
+      pkgs.nix-bash-completions;
 
     environment.etc."nix/nix.conf".source = nixConf;
 
     environment.etc."nix/registry.json".text = builtins.toJSON {
       version = 2;
-      flakes = mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;
+      flakes =
+        mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;
     };
 
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
-    environment.etc."nix/machines" =
-      { enable = cfg.buildMachines != [];
-        text =
-          concatMapStrings (machine:
-            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
-            + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
-            + toString (machine.speedFactor)
-            + " "
-            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
-            + " "
-            + concatStringsSep "," machine.mandatoryFeatures
-            + "\n"
-          ) cfg.buildMachines;
-      };
-    assertions =
-      let badMachine = m: m.system == null && m.systems == [];
-      in [
-        {
-          assertion = !(builtins.any badMachine cfg.buildMachines);
-          message = ''
-            At least one system type (via <varname>system</varname> or
-              <varname>systems</varname>) must be set for every build machine.
-              Invalid machine specifications:
-          '' + "      " +
-          (builtins.concatStringsSep "\n      "
-            (builtins.map (m: m.hostName)
-              (builtins.filter (badMachine) cfg.buildMachines)));
-        }
-      ];
-
+    environment.etc."nix/machines" = {
+      enable = cfg.buildMachines != [ ];
+      text = concatMapStrings (machine:
+        "${
+          if machine.sshUser != null then "${machine.sshUser}@" else ""
+        }${machine.hostName} " + (if machine.system != null then
+          machine.system
+        else
+          concatStringsSep "," machine.systems)
+        + " ${if machine.sshKey != null then machine.sshKey else "-"} ${
+           toString machine.maxJobs
+         } " + toString (machine.speedFactor) + " " + concatStringsSep ","
+        (machine.mandatoryFeatures ++ machine.supportedFeatures) + " "
+        + concatStringsSep "," machine.mandatoryFeatures + "\n")
+        cfg.buildMachines;
+    };
+    assertions = let badMachine = m: m.system == null && m.systems == [ ];
+    in [{
+      assertion = !(builtins.any badMachine cfg.buildMachines);
+      message = ''
+        At least one system type (via <varname>system</varname> or
+          <varname>systems</varname>) must be set for every build machine.
+          Invalid machine specifications:
+      '' + "      " + (builtins.concatStringsSep "\n      "
+        (builtins.map (m: m.hostName)
+          (builtins.filter (badMachine) cfg.buildMachines)));
+    }];
 
     systemd.packages = [ nix ];
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
-    systemd.services.nix-daemon =
-      { path = [ nix pkgs.util-linux config.programs.ssh.package ]
-          ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
+    systemd.services.nix-daemon = {
+      path = [ nix pkgs.util-linux config.programs.ssh.package ]
+        ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
-        environment = cfg.envVars
-          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
-          // config.networking.proxy.envVars;
+      environment = cfg.envVars // {
+        CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
+      } // config.networking.proxy.envVars;
 
-        unitConfig.RequiresMountsFor = "/nix/store";
+      unitConfig.RequiresMountsFor = "/nix/store";
 
-        serviceConfig =
-          { CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
-            IOSchedulingClass = cfg.daemonIOSchedClass;
-            IOSchedulingPriority = cfg.daemonIOSchedPriority;
-            LimitNOFILE = 4096;
-          };
-
-        restartTriggers = [ nixConf ];
+      serviceConfig = {
+        CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
+        IOSchedulingClass = cfg.daemonIOSchedClass;
+        IOSchedulingPriority = cfg.daemonIOSchedPriority;
+        LimitNOFILE = 4096;
       };
+
+      restartTriggers = [ nixConf ];
+    };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = cfg.nixPath;
-      };
+    environment.sessionVariables = cfg.envVars // { NIX_PATH = cfg.nixPath; };
 
-    environment.extraInit =
-      ''
-        if [ -e "$HOME/.nix-defexpr/channels" ]; then
-          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
-        fi
-      '';
+    environment.extraInit = ''
+      if [ -e "$HOME/.nix-defexpr/channels" ]; then
+        export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+      fi
+    '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
+    nix.nrBuildUsers =
+      mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
 
     users.users = nixbldUsers;
 
     services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
 
-    system.activationScripts.nix = stringAfter [ "etc" "users" ]
-      ''
-        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
+    system.activationScripts.nix = stringAfter [ "etc" "users" ] ''
+      install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
 
-        # Subscribe the root user to the NixOS channel by default.
-        if [ ! -e "/root/.nix-channels" ]; then
-            echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
-        fi
-      '';
+      # Subscribe the root user to the NixOS channel by default.
+      if [ ! -e "/root/.nix-channels" ]; then
+          echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
+      fi
+    '';
 
-    nix.systemFeatures = mkDefault (
-      [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-      optionals (pkgs.hostPlatform ? gcc.arch) (
-        # a builder can run code for `gcc.arch` and inferior architectures
-        [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-        map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
-      )
-    );
+    nix.systemFeatures = mkDefault
+      ([ "nixos-test" "benchmark" "big-parallel" "kvm" ]
+        ++ optionals (pkgs.hostPlatform ? gcc.arch) (
+          # a builder can run code for `gcc.arch` and inferior architectures
+          [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++ map (x: "gccarch-${x}")
+          lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}));
 
   };
 

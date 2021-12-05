@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, perlPackages
-, makeWrapper
-}:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mylvmbackup";
@@ -23,26 +18,29 @@ stdenv.mkDerivation rec {
     patchShebangs mylvmbackup
     substituteInPlace Makefile \
       --replace "prefix = /usr/local" "prefix = ${builtins.placeholder "out"}" \
-      --replace "sysconfdir = /etc" "sysconfdir = ${builtins.placeholder "out"}/etc" \
+      --replace "sysconfdir = /etc" "sysconfdir = ${
+        builtins.placeholder "out"
+      }/etc" \
       --replace "/usr/bin/install" "install"
   '';
 
   postInstall = ''
     wrapProgram "$out/bin/mylvmbackup" \
-      --prefix PERL5LIB : "${perlPackages.makePerlPath (
-    with perlPackages; [
-      ConfigIniFiles
-      DBDmysql
-      DBI
-      TimeDate
-      FileCopyRecursive
-    ]
-  )}"
+      --prefix PERL5LIB : "${
+        perlPackages.makePerlPath (with perlPackages; [
+          ConfigIniFiles
+          DBDmysql
+          DBI
+          TimeDate
+          FileCopyRecursive
+        ])
+      }"
   '';
 
   meta = {
     homepage = "https://www.lenzg.net/mylvmbackup/";
-    description = "a tool for quickly creating full physical backups of a MySQL server's data files";
+    description =
+      "a tool for quickly creating full physical backups of a MySQL server's data files";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = with lib.platforms; linux;

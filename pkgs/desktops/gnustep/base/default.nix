@@ -1,16 +1,6 @@
-{ aspell, audiofile
-, gsmakeDerivation
-, cups
-, fetchzip
-, gmp, gnutls
-, libffi, binutils-unwrapped
-, libjpeg, libtiff, libpng, giflib
-, libxml2, libxslt, libiconv
-, libobjc, libgcrypt
-, icu
-, pkg-config, portaudio
-, libiberty
-}:
+{ aspell, audiofile, gsmakeDerivation, cups, fetchzip, gmp, gnutls, libffi
+, binutils-unwrapped, libjpeg, libtiff, libpng, giflib, libxml2, libxslt
+, libiconv, libobjc, libgcrypt, icu, pkg-config, portaudio, libiberty }:
 gsmakeDerivation rec {
   pname = "gnustep-base";
   version = "1.28.0";
@@ -20,23 +10,34 @@ gsmakeDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
-    aspell audiofile
+    aspell
+    audiofile
     cups
-    gmp gnutls
-    libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib giflib
-    libxml2 libxslt libiconv
-    libobjc libgcrypt
+    gmp
+    gnutls
+    libffi
+    binutils-unwrapped
+    libjpeg
+    libtiff
+    libpng
+    giflib
+    giflib
+    libxml2
+    libxslt
+    libiconv
+    libobjc
+    libgcrypt
     icu
     portaudio
     libiberty
   ];
-  patches = [
-    ./fixup-paths.patch
-  ];
+  patches = [ ./fixup-paths.patch ];
 
   meta = {
-    description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
-    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    description =
+      "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
+    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }";
   };
 }

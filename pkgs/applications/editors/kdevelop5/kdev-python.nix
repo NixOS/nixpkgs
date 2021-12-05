@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, python }:
+{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor
+, kdevelop-unwrapped, python }:
 
 stdenv.mkDerivation rec {
   pname = "kdev-python";
@@ -9,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Iw3puQ3ZS0eNfBvaZ4cxsP49IRqIMX3R+r3OPG771RI=";
   };
 
-  cmakeFlags = [
-    "-DPYTHON_EXECUTABLE=${python}/bin/python"
-  ];
+  cmakeFlags = [ "-DPYTHON_EXECUTABLE=${python}/bin/python" ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ threadweaver ktexteditor kdevelop-unwrapped ];

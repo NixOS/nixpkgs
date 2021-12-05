@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, substituteAll
-, alsa-utils
-, libnotify
-, which
-, jeepney
-, loguru
-, pytestCheckHook
-, coreutils
-}:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
+, alsa-utils, libnotify, which, jeepney, loguru, pytestCheckHook, coreutils }:
 
 buildPythonPackage rec {
   pname = "notify-py";

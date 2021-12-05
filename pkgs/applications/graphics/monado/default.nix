@@ -1,48 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, writeText
-, cmake
-, doxygen
-, glslang
-, pkg-config
-, python3
-, SDL2
-, dbus
-, eigen
-, ffmpeg
-, gst-plugins-base
-, gstreamer
-, hidapi
-, libGL
-, libXau
-, libXdmcp
-, libXrandr
-, libbsd
-, libffi
-, libjpeg
+{ lib, stdenv, fetchFromGitLab, fetchpatch, writeText, cmake, doxygen, glslang
+, pkg-config, python3, SDL2, dbus, eigen, ffmpeg, gst-plugins-base, gstreamer
+, hidapi, libGL, libXau, libXdmcp, libXrandr, libbsd, libffi, libjpeg
 # , librealsense
-, libsurvive
-, libusb1
-, libuv
-, libuvc
-, libv4l
-, libxcb
-, opencv4
-, openhmd
-, udev
-, vulkan-headers
-, vulkan-loader
-, wayland
-, wayland-protocols
-, zlib
+, libsurvive, libusb1, libuv, libuvc, libv4l, libxcb, opencv4, openhmd, udev
+, vulkan-headers, vulkan-loader, wayland, wayland-protocols, zlib
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
 # instead of via the monado-service program. For more information see:
 # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
-, serviceSupport ? true
-}:
+, serviceSupport ? true }:
 
 stdenv.mkDerivation rec {
   pname = "monado";
@@ -60,22 +26,16 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/137245
     # Fix warning after Vulkan 1.2.174 VK_NULL_HANDLE change
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/c47775a95d8e139a2f234063793eb6726f830510.patch";
+      url =
+        "https://gitlab.freedesktop.org/monado/monado/-/commit/c47775a95d8e139a2f234063793eb6726f830510.patch";
       sha256 = "093ymvi9ifpk4vyjcwhhci9cnscxwbv5f80xdbppcqa0j92nmkmp";
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    glslang
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ cmake doxygen glslang pkg-config python3 ];
 
-  cmakeFlags = [
-    "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
-  ];
+  cmakeFlags =
+    [ "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}" ];
 
   buildInputs = [
     SDL2

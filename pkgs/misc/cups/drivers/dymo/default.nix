@@ -10,14 +10,18 @@ stdenv.mkDerivation rec {
   dl-name = "dymo-cups-drivers-1.4.0";
 
   src = fetchurl {
-    url = "http://download.dymo.com/dymo/Software/Download%20Drivers/Linux/Download/${dl-name}.tar.gz";
+    url =
+      "http://download.dymo.com/dymo/Software/Download%20Drivers/Linux/Download/${dl-name}.tar.gz";
     sha256 = "0wagsrz3q7yrkzb5ws0m5faq68rqnqfap9p98sgk5jl6x7krf1y6";
   };
 
   buildInputs = [ cups ];
   patches = [ ./fix-includes.patch ];
 
-  makeFlags = [ "cupsfilterdir=$(out)/lib/cups/filter" "cupsmodeldir=$(out)/share/cups/model" ];
+  makeFlags = [
+    "cupsfilterdir=$(out)/lib/cups/filter"
+    "cupsmodeldir=$(out)/share/cups/model"
+  ];
 
   meta = {
     description = "CUPS Linux drivers and SDK for DYMO printers";

@@ -1,10 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, effects
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, contrib, effects, lib }:
+build-idris-package {
   name = "hamt";
   version = "2016-11-15";
 

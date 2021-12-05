@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, which, perl, jdk
-, ocamlPackages, openssl
-, coreutils, zlib, ncurses, makeWrapper
-, gcc, binutils, gnumake, nodejs
-}:
+{ lib, stdenv, fetchFromGitHub, which, perl, jdk, ocamlPackages, openssl
+, coreutils, zlib, ncurses, makeWrapper, gcc, binutils, gnumake, nodejs }:
 
 stdenv.mkDerivation rec {
   pname = "opa";
@@ -19,7 +16,8 @@ stdenv.mkDerivation rec {
 
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
-  codeGeneratorPaths = lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
+  codeGeneratorPaths =
+    lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
 
   preConfigure = ''
     patchShebangs .
@@ -44,10 +42,28 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
+  buildInputs = [
+    which
+    perl
+    jdk
+    openssl
+    coreutils
+    zlib
+    ncurses
+    makeWrapper
+    gcc
+    binutils
+    gnumake
+    nodejs
   ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
+    ocaml
+    findlib
+    ssl
+    cryptokit
+    camlzip
+    ulex
+    ocamlgraph
+    camlp4
   ]);
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -64,7 +80,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A concise and elegant language for writing distributed web applications";
+    description =
+      "A concise and elegant language for writing distributed web applications";
     longDescription = ''
       Opa is a new generation of web development platform that lets you write distributed
       web applications using a single technology. Among the the many features of Opa are these:

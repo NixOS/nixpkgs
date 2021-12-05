@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, runCommand
-, fetchCrate
-, rustPlatform
-, Security
-, openssl
-, pkg-config
-, SystemConfiguration
-, libiconv
-}:
+{ lib, stdenv, fetchurl, runCommand, fetchCrate, rustPlatform, Security, openssl
+, pkg-config, SystemConfiguration, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";

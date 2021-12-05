@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-}:
+{ lib, stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "h3";
@@ -17,10 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_LINTING=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DENABLE_LINTING=OFF" ];
 
   meta = with lib; {
     homepage = "https://h3geo.org/";

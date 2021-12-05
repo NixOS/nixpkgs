@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
-, ruamel-yaml
-, python-dateutil
-}:
+{ buildPythonPackage, lib, fetchPypi, isPy27, ruamel-yaml, python-dateutil }:
 
 buildPythonPackage rec {
   version = "1.5.0";

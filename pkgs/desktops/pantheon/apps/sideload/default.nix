@@ -1,25 +1,7 @@
-{ lib
-, stdenv
-, desktop-file-utils
-, nix-update-script
-, elementary-gtk-theme
-, elementary-icon-theme
-, fetchFromGitHub
-, flatpak
-, gettext
-, glib
-, granite
-, gtk3
-, libgee
-, libhandy
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, libxml2
-, wrapGAppsHook
-}:
+{ lib, stdenv, desktop-file-utils, nix-update-script, elementary-gtk-theme
+, elementary-icon-theme, fetchFromGitHub, flatpak, gettext, glib, granite, gtk3
+, libgee, libhandy, meson, ninja, pkg-config, python3, vala, libxml2
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "sideload";
@@ -33,9 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [

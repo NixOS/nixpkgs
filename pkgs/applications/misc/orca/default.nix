@@ -1,36 +1,9 @@
-{ lib
-, pkg-config
-, fetchurl
-, buildPythonApplication
-, autoreconfHook
-, wrapGAppsHook
-, gobject-introspection
-, gettext
-, yelp-tools
-, itstool
-, python
-, pygobject3
-, gtk3
-, gnome
-, substituteAll
-, at-spi2-atk
-, at-spi2-core
-, pyatspi
-, dbus
-, dbus-python
-, pyxdg
-, xkbcomp
-, procps
-, lsof
-, coreutils
-, gsettings-desktop-schemas
-, speechd
-, brltty
-, liblouis
-, setproctitle
-, gst_all_1
-, gst-python
-}:
+{ lib, pkg-config, fetchurl, buildPythonApplication, autoreconfHook
+, wrapGAppsHook, gobject-introspection, gettext, yelp-tools, itstool, python
+, pygobject3, gtk3, gnome, substituteAll, at-spi2-atk, at-spi2-core, pyatspi
+, dbus, dbus-python, pyxdg, xkbcomp, procps, lsof, coreutils
+, gsettings-desktop-schemas, speechd, brltty, liblouis, setproctitle, gst_all_1
+, gst-python }:
 
 buildPythonApplication rec {
   pname = "orca";
@@ -39,7 +12,9 @@ buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "dpflFEXhn9d05osWCtr2aHuAgXLeBBdgLhaXZra21L0=";
   };
 
@@ -89,11 +64,7 @@ buildPythonApplication rec {
     gst_all_1.gst-plugins-good
   ];
 
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
-  };
+  passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";

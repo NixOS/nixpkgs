@@ -1,4 +1,5 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3 }:
+{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config
+, libunwind, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
@@ -14,9 +15,10 @@ rustPlatform.buildRustPackage rec {
   NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
 
   # error: linker `arm-linux-gnueabihf-gcc` not found
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export RUSTFLAGS="-Clinker=$CC"
-  '';
+  preConfigure =
+    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      export RUSTFLAGS="-Clinker=$CC"
+    '';
 
   checkInputs = [ python3 ];
 

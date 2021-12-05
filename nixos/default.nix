@@ -1,6 +1,5 @@
 { configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
-, system ? builtins.currentSystem
-}:
+, system ? builtins.currentSystem }:
 
 let
 
@@ -18,21 +17,18 @@ let
   # This is for `nixos-rebuild build-vm-with-bootloader'.
   vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
     inherit system;
-    modules =
-      [ configuration
-        ./modules/virtualisation/qemu-vm.nix
-        { virtualisation.useBootLoader = true; }
-        ({ config, ... }: {
-          virtualisation.useEFIBoot =
-            config.boot.loader.systemd-boot.enable ||
-            config.boot.loader.efi.canTouchEfiVariables;
-        })
-      ];
+    modules = [
+      configuration
+      ./modules/virtualisation/qemu-vm.nix
+      { virtualisation.useBootLoader = true; }
+      ({ config, ... }: {
+        virtualisation.useEFIBoot = config.boot.loader.systemd-boot.enable
+          || config.boot.loader.efi.canTouchEfiVariables;
+      })
+    ];
   }).config;
 
-in
-
-{
+in {
   inherit (eval) pkgs config options;
 
   system = eval.config.system.build.toplevel;

@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, eigen
-, nlopt
-, ipopt
-, boost
-, pagmo2
-, numpy
-, cloudpickle
-, ipyparallel
-, numba
-, python
-}:
+{ lib, buildPythonPackage, eigen, nlopt, ipopt, boost, pagmo2, numpy
+, cloudpickle, ipyparallel, numba, python }:
 
 let
   propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];

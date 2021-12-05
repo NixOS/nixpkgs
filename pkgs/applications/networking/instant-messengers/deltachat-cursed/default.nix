@@ -1,9 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, libnotify
+{ lib, python3, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libnotify
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,17 +12,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0zzzrzc8yxw6ffwfirbrr5ahbidbvlwdvgdg82zjsdjjbarxph8c";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ python3.pkgs.setuptools-scm wrapGAppsHook ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [
-    gobject-introspection
-    libnotify
-  ];
+  buildInputs = [ gobject-introspection libnotify ];
 
   propagatedBuildInputs = with python3.pkgs; [
     deltachat

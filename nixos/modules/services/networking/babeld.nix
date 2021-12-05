@@ -6,31 +6,29 @@ let
 
   cfg = config.services.babeld;
 
-  conditionalBoolToString = value: if (isBool value) then (boolToString value) else (toString value);
+  conditionalBoolToString = value:
+    if (isBool value) then (boolToString value) else (toString value);
 
   paramsString = params:
-    concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (getAttr name params)}")
-                   (attrNames params);
+    concatMapStringsSep " "
+    (name: "${name} ${conditionalBoolToString (getAttr name params)}")
+    (attrNames params);
 
   interfaceConfig = name:
-    let
-      interface = getAttr name cfg.interfaces;
-    in
-    "interface ${name} ${paramsString interface}\n";
+    let interface = getAttr name cfg.interfaces;
+    in ''
+      interface ${name} ${paramsString interface}
+    '';
 
-  configFile = with cfg; pkgs.writeText "babeld.conf" (
-    ''
+  configFile = with cfg;
+    pkgs.writeText "babeld.conf" (''
       skip-kernel-setup true
-    ''
-    + (optionalString (cfg.interfaceDefaults != null) ''
+    '' + (optionalString (cfg.interfaceDefaults != null) ''
       default ${paramsString cfg.interfaceDefaults}
-    '')
-    + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
-    + extraConfig);
+    '') + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
+      + extraConfig);
 
-in
-
-{
+in {
 
   meta.maintainers = with maintainers; [ hexa ];
 
@@ -49,27 +47,26 @@ in
           See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
         '';
         type = types.nullOr (types.attrsOf types.unspecified);
-        example =
-          {
-            type = "tunnel";
-            split-horizon = true;
-          };
+        example = {
+          type = "tunnel";
+          split-horizon = true;
+        };
       };
 
       interfaces = mkOption {
-        default = {};
+        default = { };
         description = ''
           A set describing babeld interfaces.
           See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example =
-          { enp0s2 =
-            { type = "wired";
-              hello-interval = 5;
-              split-horizon = "auto";
-            };
+        example = {
+          enp0s2 = {
+            type = "wired";
+            hello-interval = 5;
+            split-horizon = "auto";
           };
+        };
       };
 
       extraConfig = mkOption {
@@ -84,7 +81,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.babeld.enable {
@@ -94,14 +90,17 @@ in
       "net.ipv6.conf.all.accept_redirects" = 0;
       "net.ipv4.conf.all.forwarding" = 1;
       "net.ipv4.conf.all.rp_filter" = 0;
-    } // lib.mapAttrs' (ifname: _: lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0)) config.services.babeld.interfaces;
+    } // lib.mapAttrs' (ifname: _:
+      lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0))
+      config.services.babeld.interfaces;
 
     systemd.services.babeld = {
       description = "Babel routing daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
+        ExecStart =
+          "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
         AmbientCapabilities = [ "CAP_NET_ADMIN" ];
         CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
         DevicePolicy = "closed";
@@ -131,10 +130,7 @@ in
         PrivateUsers = false; # kernel_route(ADD): Operation not permitted
         ProcSubset = "pid";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged @resources"
-        ];
+        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
         UMask = "0177";
         RuntimeDirectory = "babeld";
         StateDirectory = "babeld";

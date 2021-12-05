@@ -1,9 +1,5 @@
-{ stdenv, lib, edk2, util-linux, nasm, acpica-tools
-, csmSupport ? false, seabios ? null
-, secureBoot ? false
-, httpSupport ? false
-, tpmSupport ? false
-}:
+{ stdenv, lib, edk2, util-linux, nasm, acpica-tools, csmSupport ? false
+, seabios ? null, secureBoot ? false, httpSupport ? false, tpmSupport ? false }:
 
 assert csmSupport -> seabios != null;
 
@@ -19,9 +15,8 @@ let
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
-in
 
-edk2.mkDerivation projectDscPath {
+in edk2.mkDerivation projectDscPath {
   name = "OVMF-${version}";
 
   outputs = [ "out" "fd" ];
@@ -30,11 +25,16 @@ edk2.mkDerivation projectDscPath {
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
-  buildFlags =
-    lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+  buildFlags = lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
-    ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
-    ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
+    ++ lib.optionals httpSupport [
+      "-D NETWORK_HTTP_ENABLE=TRUE"
+      "-D NETWORK_HTTP_BOOT_ENABLE=TRUE"
+    ] ++ lib.optionals tpmSupport [
+      "-D TPM_ENABLE"
+      "-D TPM2_ENABLE"
+      "-D TPM2_CONFIG_ENABLE"
+    ];
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
@@ -64,6 +64,6 @@ edk2.mkDerivation projectDscPath {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

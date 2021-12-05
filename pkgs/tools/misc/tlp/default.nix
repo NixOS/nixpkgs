@@ -1,28 +1,9 @@
-{ stdenv
-, lib
-, checkbashisms
-, coreutils
-, ethtool
-, fetchFromGitHub
-, gawk
-, gnugrep
-, gnused
-, hdparm
-, iw
-, kmod
-, makeWrapper
-, pciutils
-, perl
-, perlcritic
-, shellcheck
-, smartmontools
-, systemd
-, util-linux
-, x86_energy_perf_policy
-  # RDW only works with NetworkManager, and thus is optional with default off
-, enableRDW ? false
-, networkmanager
-}: stdenv.mkDerivation rec {
+{ stdenv, lib, checkbashisms, coreutils, ethtool, fetchFromGitHub, gawk, gnugrep
+, gnused, hdparm, iw, kmod, makeWrapper, pciutils, perl, perlcritic, shellcheck
+, smartmontools, systemd, util-linux, x86_energy_perf_policy
+# RDW only works with NetworkManager, and thus is optional with default off
+, enableRDW ? false, networkmanager }:
+stdenv.mkDerivation rec {
   pname = "tlp";
   version = "1.4.0";
 
@@ -69,7 +50,7 @@
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+    ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
 
   doCheck = true;
   checkInputs = [ checkbashisms perlcritic shellcheck ];
@@ -77,52 +58,50 @@
 
   # TODO: Consider using resholve here
   postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        util-linux
-      ] ++ lib.optional enableRDW networkmanager
-        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
-    );
-  in
-    ''
-      fixup_perl=(
-        $out/share/tlp/tlp-pcilist
-        $out/share/tlp/tlp-readconfs
-        $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
-      )
-      for f in "''${fixup_perl[@]}"; do
-        wrapProgram "$f" --prefix PATH : "${paths}"
-      done
+    paths = lib.makeBinPath ([
+      coreutils
+      ethtool
+      gawk
+      gnugrep
+      gnused
+      hdparm
+      iw
+      kmod
+      pciutils
+      perl
+      smartmontools
+      systemd
+      util-linux
+    ] ++ lib.optional enableRDW networkmanager ++ lib.optional
+      (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy)
+      x86_energy_perf_policy);
+  in ''
+    fixup_perl=(
+      $out/share/tlp/tlp-pcilist
+      $out/share/tlp/tlp-readconfs
+      $out/share/tlp/tlp-usblist
+      $out/share/tlp/tpacpi-bat
+    )
+    for f in "''${fixup_perl[@]}"; do
+      wrapProgram "$f" --prefix PATH : "${paths}"
+    done
 
-      fixup_bash=(
-        $out/bin/*
-        $out/etc/NetworkManager/dispatcher.d/*
-        $out/lib/udev/tlp-*
-        $out/sbin/*
-        $out/share/tlp/bat.d/*
-        $out/share/tlp/func.d/*
-        $out/share/tlp/tlp-func-base
-      )
-      for f in "''${fixup_bash[@]}"; do
-        sed -i '2iexport PATH=${paths}:$PATH' "$f"
-      done
+    fixup_bash=(
+      $out/bin/*
+      $out/etc/NetworkManager/dispatcher.d/*
+      $out/lib/udev/tlp-*
+      $out/sbin/*
+      $out/share/tlp/bat.d/*
+      $out/share/tlp/func.d/*
+      $out/share/tlp/tlp-func-base
+    )
+    for f in "''${fixup_bash[@]}"; do
+      sed -i '2iexport PATH=${paths}:$PATH' "$f"
+    done
 
-      rm -rf $out/var
-      rm -rf $out/share/metainfo
-    '';
+    rm -rf $out/var
+    rm -rf $out/share/metainfo
+  '';
 
   meta = with lib; {
     description = "Advanced Power Management for Linux";

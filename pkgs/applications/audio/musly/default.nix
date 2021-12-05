@@ -14,11 +14,13 @@ stdenv.mkDerivation {
     install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
-  '' else "";
+  '' else
+    "";
 
   meta = with lib; {
     homepage = "https://www.musly.org";
-    description = "A fast and high-quality audio music similarity library written in C/C++";
+    description =
+      "A fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
       Musly analyzes the the audio signal of music pieces to estimate their similarity.
       No meta-data about the music piece is included in the similarity estimation.

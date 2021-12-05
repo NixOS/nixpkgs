@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, defusedxml
-, deprecated
-, fetchFromGitHub
-, lxml
-, paramiko
-, psutil
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, stdenv, buildPythonPackage, defusedxml, deprecated, fetchFromGitHub, lxml
+, paramiko, psutil, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "ospd";
@@ -25,21 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-dZgs+G2vJQIKnN9xHcNeNViG7mOIdKb+Ms2AKE+FC4M=";
   };
 
-  propagatedBuildInputs = [
-    defusedxml
-    deprecated
-    lxml
-    paramiko
-    psutil
-  ];
+  propagatedBuildInputs = [ defusedxml deprecated lxml paramiko psutil ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ospd"
-  ];
+  pythonImportsCheck = [ "ospd" ];
 
   meta = with lib; {
     description = "Framework for vulnerability scanners which support OSP";

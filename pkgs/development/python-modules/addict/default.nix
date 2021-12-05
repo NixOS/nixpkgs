@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "addict";
@@ -18,7 +14,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "addict" ];
 
   meta = with lib; {
-    description = "Module that exposes a dictionary subclass that allows items to be set like attributes";
+    description =
+      "Module that exposes a dictionary subclass that allows items to be set like attributes";
     homepage = "https://github.com/mewwts/addict";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ veprbl ];

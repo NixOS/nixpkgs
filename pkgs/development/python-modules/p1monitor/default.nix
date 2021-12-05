@@ -1,11 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, yarl
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, poetry-core, pythonOlder
+, yarl }:
 
 buildPythonPackage rec {
   pname = "p1monitor";
@@ -21,14 +15,9 @@ buildPythonPackage rec {
     sha256 = "1xfr097hmjppp6cfdvfjypxmr1sb9dasq1s3np2vd5d93w0p5123";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp yarl ];
 
   # Project has no tests
   doCheck = false;

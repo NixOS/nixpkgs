@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, pbr, isPy3k }:
 
 buildPythonPackage rec {
   pname = "sandboxlib";

@@ -11,12 +11,18 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0bglj833wxpp3cq430p1d3xp085ls221js2y90w7ir2x5ay8l7am";
   };
 
-  propagatedBuildInputs = [pythonPackages.h5py pythonPackages.matplotlib pythonPackages.seaborn pythonPackages.pandas];
+  propagatedBuildInputs = [
+    pythonPackages.h5py
+    pythonPackages.matplotlib
+    pythonPackages.seaborn
+    pythonPackages.pandas
+  ];
 
   meta = {
-    description = "a toolkit for working with nanopore sequencing data from Oxford Nanopore";
+    description =
+      "a toolkit for working with nanopore sequencing data from Oxford Nanopore";
     license = lib.licenses.mit;
     homepage = "https://poretools.readthedocs.io/en/latest/";
-    maintainers = [lib.maintainers.rybern];
+    maintainers = [ lib.maintainers.rybern ];
   };
 }

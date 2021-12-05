@@ -1,15 +1,5 @@
-{ lib, stdenv
-, dbus-glib
-, fetchurl
-, glib
-, gnome
-, libnotify
-, libtool
-, libwnck
-, makeWrapper
-, pkg-config
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, dbus-glib, fetchurl, glib, gnome, libnotify, libtool, libwnck
+, makeWrapper, pkg-config, gsettings-desktop-schemas }:
 
 let baseURI = "https://launchpad.net/~leolik/+archive/leolik";
 in stdenv.mkDerivation rec {
@@ -26,8 +16,13 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
-    gsettings-desktop-schemas gnome.gnome-common
+    glib
+    libwnck
+    libnotify
+    dbus-glib
+    makeWrapper
+    gsettings-desktop-schemas
+    gnome.gnome-common
     libtool
   ];
 

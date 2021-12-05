@@ -1,10 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
-, libiconv
-}:
+{ lib, rustPlatform, fetchFromGitHub, nix-update-script, stdenv, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-limit";
@@ -21,16 +15,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
+    description =
+      ''Cargo subcommand "limit": reduces the noise of compiler messages'';
     homepage = "https://github.com/alopatindev/cargo-limit";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ otavio ];
   };
 }

@@ -12,20 +12,19 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = with python3Packages; [ sphinx setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
-    python3Packages.setuptools python3Packages.notmuch chardet dkimpy
+    python3Packages.setuptools
+    python3Packages.notmuch
+    chardet
+    dkimpy
   ];
 
-  checkInputs = with python3Packages; [
-    freezegun notmuch
-  ];
+  checkInputs = with python3Packages; [ freezegun notmuch ];
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${notmuch}/bin"''
-  ];
+  makeWrapperArgs = [ ''--prefix PATH ':' "${notmuch}/bin"'' ];
 
   outputs = [ "out" "doc" ];
 
-  postBuild =  ''
+  postBuild = ''
     ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
   '';
 
@@ -34,7 +33,6 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/share/doc/afew
     cp -R build/sphinx/html/* $out/share/doc/afew
   '';
-
 
   meta = with lib; {
     homepage = "https://github.com/afewmail/afew";

@@ -1,21 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab
-, autoconf, automake, gettext, intltool
-, libtool, pkg-config, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, pyxdg
+{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, autoconf, automake, gettext
+, intltool, libtool, pkg-config, wrapGAppsHook, wrapPython
+, gobject-introspection, gtk3, python, pygobject3, pyxdg
 
-, withQuartz ? stdenv.isDarwin, ApplicationServices
-, withRandr ? stdenv.isLinux, libxcb
-, withDrm ? stdenv.isLinux, libdrm
+, withQuartz ? stdenv.isDarwin, ApplicationServices, withRandr ? stdenv.isLinux
+, libxcb, withDrm ? stdenv.isLinux, libdrm
 
-, withGeolocation ? true
-, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeolocation ? true, withCoreLocation ? withGeolocation && stdenv.isDarwin
+, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
-, withAppIndicator ? stdenv.isLinux, libappindicator, libayatana-appindicator
-}:
+, withAppIndicator ? stdenv.isLinux, libappindicator, libayatana-appindicator }:
 
 let
-  mkRedshift =
-    { pname, version, src, meta }:
+  mkRedshift = { pname, version, src, meta }:
     stdenv.mkDerivation rec {
       inherit pname version src meta;
 
@@ -46,19 +42,15 @@ let
         "--enable-apparmor"
       ];
 
-      buildInputs = [
-        gobject-introspection
-        gtk3
-        python
-      ] ++ lib.optional  withRandr        libxcb
-        ++ lib.optional  withGeoclue      geoclue
-        ++ lib.optional  withDrm          libdrm
-        ++ lib.optional  withQuartz       ApplicationServices
+      buildInputs = [ gobject-introspection gtk3 python ]
+        ++ lib.optional withRandr libxcb ++ lib.optional withGeoclue geoclue
+        ++ lib.optional withDrm libdrm
+        ++ lib.optional withQuartz ApplicationServices
         ++ lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
-        ++ lib.optional  withAppIndicator (if (pname != "gammastep")
-             then libappindicator
-             else libayatana-appindicator)
-        ;
+        ++ lib.optional withAppIndicator (if (pname != "gammastep") then
+          libappindicator
+        else
+          libayatana-appindicator);
 
       pythonPath = [ pygobject3 pyxdg ];
 
@@ -82,8 +74,7 @@ let
 
       enableParallelBuilding = true;
     };
-in
-rec {
+in rec {
   redshift = mkRedshift rec {
     pname = "redshift";
     version = "1.12";

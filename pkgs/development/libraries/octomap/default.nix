@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A probabilistic, flexible, and compact 3D mapping library for robotic systems";
+    description =
+      "A probabilistic, flexible, and compact 3D mapping library for robotic systems";
     homepage = "https://octomap.github.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lopsided98 ];

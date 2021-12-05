@@ -15,7 +15,7 @@ let
   optionalNullString = o: s: optional (s != null) (strOpt o s);
   optionalNullBool = o: b: optional (b != null) (boolOpt o b);
   optionalNullInt = o: i: optional (i != null) (intOpt o i);
-  optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
+  optionalEmptyList = o: l: optional ([ ] != l) (lstOpt o l);
 
   mkEnableTrueOption = name: mkEnableOption name // { default = true; };
 
@@ -74,26 +74,30 @@ let
       };
     };
 
-  commonTunOpts = name: {
-    outbound = i2cpOpts name;
-    inbound = i2cpOpts name;
-    crypto.tagsToSend = mkOption {
-      type = types.int;
-      description = "Number of ElGamal/AES tags to send.";
-      default = 40;
-    };
-    destination = mkOption {
-      type = types.str;
-      description = "Remote endpoint, I2P hostname or b32.i2p address.";
-    };
-    keys = mkOption {
-      type = types.str;
-      default = name + "-keys.dat";
-      description = "Keyset used for tunnel identity.";
-    };
-  } // mkEndpointOpt name "127.0.0.1" 0;
+  commonTunOpts = name:
+    {
+      outbound = i2cpOpts name;
+      inbound = i2cpOpts name;
+      crypto.tagsToSend = mkOption {
+        type = types.int;
+        description = "Number of ElGamal/AES tags to send.";
+        default = 40;
+      };
+      destination = mkOption {
+        type = types.str;
+        description = "Remote endpoint, I2P hostname or b32.i2p address.";
+      };
+      keys = mkOption {
+        type = types.str;
+        default = name + "-keys.dat";
+        description = "Keyset used for tunnel identity.";
+      };
+    } // mkEndpointOpt name "127.0.0.1" 0;
 
-  sec = name: "\n[" + name + "]";
+  sec = name:
+    ''
+
+      ['' + name + "]";
   notice = "# DO NOT EDIT -- this file has been generated automatically.";
   i2pdConf = let
     opts = [
@@ -109,134 +113,170 @@ let
       ++ (optionalNullInt "port" cfg.port)
       ++ (optionalNullString "family" cfg.family)
       ++ (optionalNullString "datadir" cfg.dataDir)
-      ++ (optionalNullInt "share" cfg.share)
-      ++ (optionalNullBool "ssu" cfg.ssu)
+      ++ (optionalNullInt "share" cfg.share) ++ (optionalNullBool "ssu" cfg.ssu)
       ++ (optionalNullBool "ntcp" cfg.ntcp)
       ++ (optionalNullString "ntcpproxy" cfg.ntcpProxy)
       ++ (optionalNullString "ifname" cfg.ifname)
       ++ (optionalNullString "ifname4" cfg.ifname4)
-      ++ (optionalNullString "ifname6" cfg.ifname6)
-      ++ [
-      (sec "limits")
-      (intOpt "transittunnels" cfg.limits.transittunnels)
-      (intOpt "coresize" cfg.limits.coreSize)
-      (intOpt "openfiles" cfg.limits.openFiles)
-      (intOpt "ntcphard" cfg.limits.ntcpHard)
-      (intOpt "ntcpsoft" cfg.limits.ntcpSoft)
-      (intOpt "ntcpthreads" cfg.limits.ntcpThreads)
-      (sec "upnp")
-      (boolOpt "enabled" cfg.upnp.enable)
-      (sec "precomputation")
-      (boolOpt "elgamal" cfg.precomputation.elgamal)
-      (sec "reseed")
-      (boolOpt "verify" cfg.reseed.verify)
-    ] ++ (optionalNullString "file" cfg.reseed.file)
+      ++ (optionalNullString "ifname6" cfg.ifname6) ++ [
+        (sec "limits")
+        (intOpt "transittunnels" cfg.limits.transittunnels)
+        (intOpt "coresize" cfg.limits.coreSize)
+        (intOpt "openfiles" cfg.limits.openFiles)
+        (intOpt "ntcphard" cfg.limits.ntcpHard)
+        (intOpt "ntcpsoft" cfg.limits.ntcpSoft)
+        (intOpt "ntcpthreads" cfg.limits.ntcpThreads)
+        (sec "upnp")
+        (boolOpt "enabled" cfg.upnp.enable)
+        (sec "precomputation")
+        (boolOpt "elgamal" cfg.precomputation.elgamal)
+        (sec "reseed")
+        (boolOpt "verify" cfg.reseed.verify)
+      ] ++ (optionalNullString "file" cfg.reseed.file)
       ++ (optionalEmptyList "urls" cfg.reseed.urls)
       ++ (optionalNullString "floodfill" cfg.reseed.floodfill)
       ++ (optionalNullString "zipfile" cfg.reseed.zipfile)
-      ++ (optionalNullString "proxy" cfg.reseed.proxy)
-      ++ [
-      (sec "trust")
-      (boolOpt "enabled" cfg.trust.enable)
-      (boolOpt "hidden" cfg.trust.hidden)
-    ] ++ (optionalEmptyList "routers" cfg.trust.routers)
-      ++ (optionalNullString "family" cfg.trust.family)
-      ++ [
-      (sec "websockets")
-      (boolOpt "enabled" cfg.websocket.enable)
-      (strOpt "address" cfg.websocket.address)
-      (intOpt "port" cfg.websocket.port)
-      (sec "exploratory")
-      (intOpt "inbound.length" cfg.exploratory.inbound.length)
-      (intOpt "inbound.quantity" cfg.exploratory.inbound.quantity)
-      (intOpt "outbound.length" cfg.exploratory.outbound.length)
-      (intOpt "outbound.quantity" cfg.exploratory.outbound.quantity)
-      (sec "ntcp2")
-      (boolOpt "enabled" cfg.ntcp2.enable)
-      (boolOpt "published" cfg.ntcp2.published)
-      (intOpt "port" cfg.ntcp2.port)
-      (sec "addressbook")
-      (strOpt "defaulturl" cfg.addressbook.defaulturl)
-    ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
-      ++ (flip map
-      (collect (proto: proto ? port && proto ? address) cfg.proto)
-      (proto: let protoOpts = [
-        (sec proto.name)
-        (boolOpt "enabled" proto.enable)
-        (strOpt "address" proto.address)
-        (intOpt "port" proto.port)
-        ] ++ (if proto ? keys then optionalNullString "keys" proto.keys else [])
-        ++ (if proto ? auth then optionalNullBool "auth" proto.auth else [])
-        ++ (if proto ? user then optionalNullString "user" proto.user else [])
-        ++ (if proto ? pass then optionalNullString "pass" proto.pass else [])
-        ++ (if proto ? strictHeaders then optionalNullBool "strictheaders" proto.strictHeaders else [])
-        ++ (if proto ? hostname then optionalNullString "hostname" proto.hostname else [])
-        ++ (if proto ? outproxy then optionalNullString "outproxy" proto.outproxy else [])
-        ++ (if proto ? outproxyPort then optionalNullInt "outproxyport" proto.outproxyPort else [])
-        ++ (if proto ? outproxyEnable then optionalNullBool "outproxy.enabled" proto.outproxyEnable else []);
-        in (concatStringsSep "\n" protoOpts)
-      ));
-  in
-    pkgs.writeText "i2pd.conf" (concatStringsSep "\n" opts);
+      ++ (optionalNullString "proxy" cfg.reseed.proxy) ++ [
+        (sec "trust")
+        (boolOpt "enabled" cfg.trust.enable)
+        (boolOpt "hidden" cfg.trust.hidden)
+      ] ++ (optionalEmptyList "routers" cfg.trust.routers)
+      ++ (optionalNullString "family" cfg.trust.family) ++ [
+        (sec "websockets")
+        (boolOpt "enabled" cfg.websocket.enable)
+        (strOpt "address" cfg.websocket.address)
+        (intOpt "port" cfg.websocket.port)
+        (sec "exploratory")
+        (intOpt "inbound.length" cfg.exploratory.inbound.length)
+        (intOpt "inbound.quantity" cfg.exploratory.inbound.quantity)
+        (intOpt "outbound.length" cfg.exploratory.outbound.length)
+        (intOpt "outbound.quantity" cfg.exploratory.outbound.quantity)
+        (sec "ntcp2")
+        (boolOpt "enabled" cfg.ntcp2.enable)
+        (boolOpt "published" cfg.ntcp2.published)
+        (intOpt "port" cfg.ntcp2.port)
+        (sec "addressbook")
+        (strOpt "defaulturl" cfg.addressbook.defaulturl)
+      ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
+      ++ (flip map (collect (proto: proto ? port && proto ? address) cfg.proto)
+        (proto:
+          let
+            protoOpts = [
+              (sec proto.name)
+              (boolOpt "enabled" proto.enable)
+              (strOpt "address" proto.address)
+              (intOpt "port" proto.port)
+            ] ++ (if proto ? keys then
+              optionalNullString "keys" proto.keys
+            else
+              [ ]) ++ (if proto ? auth then
+                optionalNullBool "auth" proto.auth
+              else
+                [ ]) ++ (if proto ? user then
+                  optionalNullString "user" proto.user
+                else
+                  [ ]) ++ (if proto ? pass then
+                    optionalNullString "pass" proto.pass
+                  else
+                    [ ]) ++ (if proto ? strictHeaders then
+                      optionalNullBool "strictheaders" proto.strictHeaders
+                    else
+                      [ ]) ++ (if proto ? hostname then
+                        optionalNullString "hostname" proto.hostname
+                      else
+                        [ ]) ++ (if proto ? outproxy then
+                          optionalNullString "outproxy" proto.outproxy
+                        else
+                          [ ]) ++ (if proto ? outproxyPort then
+                            optionalNullInt "outproxyport" proto.outproxyPort
+                          else
+                            [ ]) ++ (if proto ? outproxyEnable then
+                              optionalNullBool "outproxy.enabled"
+                              proto.outproxyEnable
+                            else
+                              [ ]);
+          in (concatStringsSep "\n" protoOpts)));
+  in pkgs.writeText "i2pd.conf" (concatStringsSep "\n" opts);
 
-  tunnelConf = let opts = [
-    notice
-    (flip map
-      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
-      (tun: let outTunOpts = [
-        (sec tun.name)
-        "type = client"
-        (intOpt "port" tun.port)
-        (strOpt "destination" tun.destination)
-        ] ++ (if tun ? destinationPort then optionalNullInt "destinationport" tun.destinationPort else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? address then
-            optionalNullString "address" tun.address else [])
-        ++ (if tun ? inbound.length then
-            optionalNullInt "inbound.length" tun.inbound.length else [])
-        ++ (if tun ? inbound.quantity then
-            optionalNullInt "inbound.quantity" tun.inbound.quantity else [])
-        ++ (if tun ? outbound.length then
-            optionalNullInt "outbound.length" tun.outbound.length else [])
-        ++ (if tun ? outbound.quantity then
-            optionalNullInt "outbound.quantity" tun.outbound.quantity else [])
-        ++ (if tun ? crypto.tagsToSend then
-            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
-        in concatStringsSep "\n" outTunOpts))
-    (flip map
-      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
-      (tun: let inTunOpts = [
-        (sec tun.name)
-        "type = server"
-        (intOpt "port" tun.port)
-        (strOpt "host" tun.address)
-      ] ++ (if tun ? destination then
-            optionalNullString "destination" tun.destination else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? inPort then
-            optionalNullInt "inport" tun.inPort else [])
-        ++ (if tun ? accessList then
-            optionalEmptyList "accesslist" tun.accessList else []);
-        in concatStringsSep "\n" inTunOpts))];
-    in pkgs.writeText "i2pd-tunnels.conf" opts;
+  tunnelConf = let
+    opts = [
+      notice
+      (flip map (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
+        (tun:
+          let
+            outTunOpts = [
+              (sec tun.name)
+              "type = client"
+              (intOpt "port" tun.port)
+              (strOpt "destination" tun.destination)
+            ] ++ (if tun ? destinationPort then
+              optionalNullInt "destinationport" tun.destinationPort
+            else
+              [ ]) ++ (if tun ? keys then
+                optionalNullString "keys" tun.keys
+              else
+                [ ]) ++ (if tun ? address then
+                  optionalNullString "address" tun.address
+                else
+                  [ ]) ++ (if tun ? inbound.length then
+                    optionalNullInt "inbound.length" tun.inbound.length
+                  else
+                    [ ]) ++ (if tun ? inbound.quantity then
+                      optionalNullInt "inbound.quantity" tun.inbound.quantity
+                    else
+                      [ ]) ++ (if tun ? outbound.length then
+                        optionalNullInt "outbound.length" tun.outbound.length
+                      else
+                        [ ]) ++ (if tun ? outbound.quantity then
+                          optionalNullInt "outbound.quantity"
+                          tun.outbound.quantity
+                        else
+                          [ ]) ++ (if tun ? crypto.tagsToSend then
+                            optionalNullInt "crypto.tagstosend"
+                            tun.crypto.tagsToSend
+                          else
+                            [ ]);
+          in concatStringsSep "\n" outTunOpts))
+      (flip map (collect (tun: tun ? port && tun ? address) cfg.inTunnels) (tun:
+        let
+          inTunOpts = [
+            (sec tun.name)
+            "type = server"
+            (intOpt "port" tun.port)
+            (strOpt "host" tun.address)
+          ] ++ (if tun ? destination then
+            optionalNullString "destination" tun.destination
+          else
+            [ ])
+            ++ (if tun ? keys then optionalNullString "keys" tun.keys else [ ])
+            ++ (if tun ? inPort then
+              optionalNullInt "inport" tun.inPort
+            else
+              [ ]) ++ (if tun ? accessList then
+                optionalEmptyList "accesslist" tun.accessList
+              else
+                [ ]);
+        in concatStringsSep "\n" inTunOpts))
+    ];
+  in pkgs.writeText "i2pd-tunnels.conf" opts;
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     exec ${pkgs.i2pd}/bin/i2pd \
-      ${if cfg.address == null then "" else "--host="+cfg.address} \
+      ${if cfg.address == null then "" else "--host=" + cfg.address} \
       --service \
       --conf=${i2pdConf} \
       --tunconf=${tunnelConf}
   '';
 
-in
-
-{
+in {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
+    (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [
+      "services"
+      "i2pd"
+      "address"
+    ])
   ];
 
   ###### interface
@@ -254,7 +294,7 @@ in
       };
 
       logLevel = mkOption {
-        type = types.enum ["debug" "info" "warn" "error"];
+        type = types.enum [ "debug" "info" "warn" "error" ];
         default = "error";
         description = ''
           The log level. <command>i2pd</command> defaults to "info"
@@ -358,8 +398,8 @@ in
         type = with types; nullOr int;
         default = null;
         description = ''
-           Set a router bandwidth limit integer in KBps.
-           If not set, <command>i2pd</command> defaults to 32KBps.
+          Set a router bandwidth limit integer in KBps.
+          If not set, <command>i2pd</command> defaults to 32KBps.
         '';
       };
 
@@ -384,16 +424,17 @@ in
         '';
       };
 
-      precomputation.elgamal = mkEnableTrueOption "Precomputed ElGamal tables" // {
-        description = ''
-          Whenever to use precomputated tables for ElGamal.
-          <command>i2pd</command> defaults to <literal>false</literal>
-          to save 64M of memory (and looses some performance).
+      precomputation.elgamal = mkEnableTrueOption "Precomputed ElGamal tables"
+        // {
+          description = ''
+            Whenever to use precomputated tables for ElGamal.
+            <command>i2pd</command> defaults to <literal>false</literal>
+            to save 64M of memory (and looses some performance).
 
-          We default to <literal>true</literal> as that is what most
-          users want anyway.
-        '';
-      };
+            We default to <literal>true</literal> as that is what most
+            users want anyway.
+          '';
+        };
 
       reseed.verify = mkEnableOption "SU3 signature verification";
 
@@ -407,7 +448,7 @@ in
 
       reseed.urls = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Reseed URLs.
         '';
@@ -437,14 +478,15 @@ in
         '';
       };
 
-     addressbook.defaulturl = mkOption {
+      addressbook.defaulturl = mkOption {
         type = types.str;
-        default = "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt";
+        default =
+          "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt";
         description = ''
           AddressBook subscription URL for initial setup
         '';
       };
-     addressbook.subscriptions = mkOption {
+      addressbook.subscriptions = mkOption {
         type = with types; listOf str;
         default = [
           "http://inr.i2p/export/alive-hosts.txt"
@@ -468,7 +510,7 @@ in
 
       trust.routers = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Only connect to the listed routers.
         '';
@@ -576,28 +618,30 @@ in
         };
       };
 
-      proto.httpProxy = (mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4444 "httpproxy-keys.dat")
-      // {
-        outproxy = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = "Upstream outproxy bind address.";
+      proto.httpProxy =
+        (mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4444 "httpproxy-keys.dat")
+        // {
+          outproxy = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Upstream outproxy bind address.";
+          };
         };
-      };
-      proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "socksproxy-keys.dat")
-      // {
-        outproxyEnable = mkEnableOption "SOCKS outproxy";
-        outproxy = mkOption {
-          type = types.str;
-          default = "127.0.0.1";
-          description = "Upstream outproxy bind address.";
+      proto.socksProxy =
+        (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "socksproxy-keys.dat")
+        // {
+          outproxyEnable = mkEnableOption "SOCKS outproxy";
+          outproxy = mkOption {
+            type = types.str;
+            default = "127.0.0.1";
+            description = "Upstream outproxy bind address.";
+          };
+          outproxyPort = mkOption {
+            type = types.int;
+            default = 4444;
+            description = "Upstream outproxy bind port.";
+          };
         };
-        outproxyPort = mkOption {
-          type = types.int;
-          default = 4444;
-          description = "Upstream outproxy bind port.";
-        };
-      };
 
       proto.sam = mkEndpointOpt "sam" "127.0.0.1" 7656;
       proto.bob = mkEndpointOpt "bob" "127.0.0.1" 2827;
@@ -605,9 +649,9 @@ in
       proto.i2pControl = mkEndpointOpt "i2pcontrol" "127.0.0.1" 7650;
 
       outTunnels = mkOption {
-        default = {};
-        type = with types; attrsOf (submodule (
-          { name, ... }: {
+        default = { };
+        type = with types;
+          attrsOf (submodule ({ name, ... }: {
             options = {
               destinationPort = mkOption {
                 type = with types; nullOr int;
@@ -615,44 +659,39 @@ in
                 description = "Connect to particular port at destination.";
               };
             } // commonTunOpts name;
-            config = {
-              name = mkDefault name;
-            };
-          }
-        ));
+            config = { name = mkDefault name; };
+          }));
         description = ''
           Connect to someone as a client and establish a local accept endpoint
         '';
       };
 
       inTunnels = mkOption {
-        default = {};
-        type = with types; attrsOf (submodule (
-          { name, ... }: {
+        default = { };
+        type = with types;
+          attrsOf (submodule ({ name, ... }: {
             options = {
               inPort = mkOption {
                 type = types.int;
                 default = 0;
-                description = "Service port. Default to the tunnel's listen port.";
+                description =
+                  "Service port. Default to the tunnel's listen port.";
               };
               accessList = mkOption {
                 type = with types; listOf str;
-                default = [];
-                description = "I2P nodes that are allowed to connect to this service.";
+                default = [ ];
+                description =
+                  "I2P nodes that are allowed to connect to this service.";
               };
             } // commonTunOpts name;
-            config = {
-              name = mkDefault name;
-            };
-          }
-        ));
+            config = { name = mkDefault name; };
+          }));
         description = ''
           Serve something on I2P network at port and delegate requests to address inPort.
         '';
       };
     };
   };
-
 
   ###### implementation
 
@@ -672,8 +711,7 @@ in
       description = "Minimal I2P router";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig =
-      {
+      serviceConfig = {
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";

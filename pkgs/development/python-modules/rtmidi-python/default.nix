@@ -21,9 +21,7 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rtmidi_python"
-  ];
+  pythonImportsCheck = [ "rtmidi_python" ];
 
   meta = with lib; {
     description = "Python wrapper for RtMidi";

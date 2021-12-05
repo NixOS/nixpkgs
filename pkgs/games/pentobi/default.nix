@@ -1,6 +1,6 @@
-{ lib, mkDerivation, appstream, fetchFromGitHub, cmake, gettext, libxslt, librsvg, itstool
-, qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview, docbook_xsl
-}:
+{ lib, mkDerivation, appstream, fetchFromGitHub, cmake, gettext, libxslt
+, librsvg, itstool, qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview
+, docbook_xsl }:
 
 mkDerivation rec {
   version = "18.5";
@@ -14,7 +14,8 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake docbook_xsl qttools ];
-  buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
+  buildInputs =
+    [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
 
   patchPhase = ''
     substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"

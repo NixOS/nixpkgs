@@ -1,14 +1,5 @@
-{ stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, gettext
-, lib
-, libiconv
-, libtool
-, libusb1
-, pkg-config
-}:
+{ stdenv, autoconf, automake, fetchFromGitHub, gettext, lib, libiconv, libtool
+, libusb1, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libmtp";
@@ -23,13 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    gettext
-    libtool
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf automake gettext libtool pkg-config ];
 
   buildInputs = [ libiconv ];
 

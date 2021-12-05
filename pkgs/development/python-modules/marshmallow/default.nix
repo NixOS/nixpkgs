@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, pytz
-, simplejson
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pytestCheckHook, pytz
+, simplejson }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
@@ -20,15 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-tP/RKo2Hzxz2bT7ybRs9wGzq7TpsmzmOPi3BGuSLDA0=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytz
-    simplejson
-  ];
+  checkInputs = [ pytestCheckHook pytz simplejson ];
 
-  pythonImportsCheck = [
-    "marshmallow"
-  ];
+  pythonImportsCheck = [ "marshmallow" ];
 
   meta = with lib; {
     description = ''

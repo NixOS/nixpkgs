@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis
+, setproctitle, nose, pkgs }:
 
 let
 
@@ -13,9 +14,7 @@ let
     };
   });
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyres";
   version = "1.5";
 

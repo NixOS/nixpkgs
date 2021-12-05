@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, uhd, boost, soapysdr
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, uhd, boost, soapysdr }:
 
 stdenv.mkDerivation rec {
   pname = "soapyuhd";

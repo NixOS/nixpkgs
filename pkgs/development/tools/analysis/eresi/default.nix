@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/thorkill/eresi/commit/a79406344cc21d594d27fa5ec5922abe9f7475e7.patch";
+      url =
+        "https://github.com/thorkill/eresi/commit/a79406344cc21d594d27fa5ec5922abe9f7475e7.patch";
       sha256 = "1mjjc6hj7r06iarvai7prcdvjk9g0k5vwrmkwcm7b8ivd5xzxp2z";
     })
   ];
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.is64bit "install64";
+    ++ lib.optional stdenv.is64bit "install64";
 
   meta = {
     description = "The ERESI Reverse Engineering Software Interface";

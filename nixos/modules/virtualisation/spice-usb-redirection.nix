@@ -1,5 +1,4 @@
-{ config, pkgs, lib, ... }:
-{
+{ config, pkgs, lib, ... }: {
   options.virtualisation.spiceUSBRedirection.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;

@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-benchmark, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "1ip0yrqmnqncgpwvba18x020gkwr7csiw4zdy6mrdnvwf5qyam4x";
   };
 
-  checkInputs = [
-    pytest-benchmark
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-benchmark pytestCheckHook ];
 
   pythonImportsCheck = [ "graphql" ];
 

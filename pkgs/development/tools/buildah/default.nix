@@ -1,16 +1,5 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
-}:
+{ lib, buildGoModule, fetchFromGitHub, go-md2man, installShellFiles, pkg-config
+, gpgme, lvm2, btrfs-progs, libapparmor, libselinux, libseccomp }:
 
 buildGoModule rec {
   pname = "buildah";
@@ -31,14 +20,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
-  ];
+  buildInputs = [ btrfs-progs gpgme libapparmor libseccomp libselinux lvm2 ];
 
   buildPhase = ''
     runHook preBuild
@@ -59,7 +41,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tool which facilitates building OCI images";
     homepage = "https://buildah.io/";
-    changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
+    changelog =
+      "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
     platforms = platforms.linux;

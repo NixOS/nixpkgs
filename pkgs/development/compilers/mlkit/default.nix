@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook mlton ];
 
-  buildFlags = ["mlkit" "mlkit_libs"];
+  buildFlags = [ "mlkit" "mlkit_libs" ];
 
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";

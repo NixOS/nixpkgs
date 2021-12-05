@@ -13,10 +13,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  checkInputs = [
-    hypothesis
-    mypy
-  ];
+  checkInputs = [ hypothesis mypy ];
 
   meta = with lib; {
     description = "Algebraic data types for Python";

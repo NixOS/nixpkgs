@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, python }:
 
-let
-  py = python;
+let py = python;
 in buildPythonPackage rec {
   pname = "mysql-connector";
   version = "8.0.24";
@@ -38,7 +37,8 @@ in buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
-    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
+    changelog =
+      "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
     license = [ lib.licenses.gpl2Only ];
     maintainers = with lib.maintainers; [ neosimsim turion ];
   };

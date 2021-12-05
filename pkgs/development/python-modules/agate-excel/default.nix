@@ -1,6 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
-, agate, openpyxl, xlrd, olefile, pytestCheckHook
-}:
+{ lib, fetchPypi, buildPythonPackage, agate, openpyxl, xlrd, olefile
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "agate-excel";
@@ -22,8 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";
-    homepage    = "https://github.com/wireservice/agate-excel";
-    license     = licenses.mit;
+    homepage = "https://github.com/wireservice/agate-excel";
+    license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
   };
 }

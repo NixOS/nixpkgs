@@ -5,16 +5,15 @@ buildDunePackage rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
+    url =
+      "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
     sha256 = "sha256-1gXkBl+pCliABEDvLzOi2TE5i/LCIGGorLffhFwKrAI=";
   };
 
   minimumOCamlVersion = "4.03";
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    result
-  ];
+  propagatedBuildInputs = [ result ];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-dune/csexp/";

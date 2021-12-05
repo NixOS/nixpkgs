@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, gtk2
-, libjack2, libsndfile
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, gtk2, libjack2
+, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "timemachine";
@@ -13,9 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ autoconf automake gtk2 libjack2
-      libsndfile
-    ];
+  buildInputs = [ autoconf automake gtk2 libjack2 libsndfile ];
 
   preConfigure = "./autogen.sh";
 

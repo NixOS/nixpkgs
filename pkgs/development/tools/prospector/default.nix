@@ -1,13 +1,8 @@
-{ lib
-, pkgs
-, python3
-}:
+{ lib, pkgs, python3 }:
 
-let
-  setoptconf-tmp = python3.pkgs.callPackage ./setoptconf.nix { };
-in
+let setoptconf-tmp = python3.pkgs.callPackage ./setoptconf.nix { };
 
-with python3.pkgs;
+in with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "prospector";
@@ -27,9 +22,7 @@ buildPythonApplication rec {
       --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bandit
@@ -54,16 +47,13 @@ buildPythonApplication rec {
     vulture
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
+    description =
+      "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
     license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

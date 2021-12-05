@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, codec2
-, libsamplerate
-, libsndfile
-, lpcnetfreedv
-, portaudio
-, speexdsp
-, hamlib
-, wxGTK31-gtk3
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, codec2, libsamplerate, libsndfile
+, lpcnetfreedv, portaudio, speexdsp, hamlib, wxGTK31-gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "freedv";
@@ -35,10 +24,8 @@ stdenv.mkDerivation rec {
     wxGTK31-gtk3
   ];
 
-  cmakeFlags = [
-    "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
-    "-DUSE_STATIC_DEPS:BOOL=FALSE"
-  ];
+  cmakeFlags =
+    [ "-DUSE_INTERNAL_CODEC2:BOOL=FALSE" "-DUSE_STATIC_DEPS:BOOL=FALSE" ];
 
   meta = with lib; {
     homepage = "https://freedv.org/";

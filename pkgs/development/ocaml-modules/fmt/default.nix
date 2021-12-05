@@ -1,29 +1,30 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq
+, stdlib-shims }:
 
-if !lib.versionAtLeast ocaml.version "4.05"
-then throw "fmt is not available for OCaml ${ocaml.version}"
+if !lib.versionAtLeast ocaml.version "4.05" then
+  throw "fmt is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
-  version = "0.8.9";
-  pname = "ocaml${ocaml.version}-fmt";
+  stdenv.mkDerivation rec {
+    version = "0.8.9";
+    pname = "ocaml${ocaml.version}-fmt";
 
-  src = fetchurl {
-    url = "https://erratique.ch/software/fmt/releases/fmt-${version}.tbz";
-    sha256 = "0gkkkj4x678vxdda4xaw2dd44qjacavsvn5nx8gydfwah6pjbkxk";
-  };
+    src = fetchurl {
+      url = "https://erratique.ch/software/fmt/releases/fmt-${version}.tbz";
+      sha256 = "0gkkkj4x678vxdda4xaw2dd44qjacavsvn5nx8gydfwah6pjbkxk";
+    };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg cmdliner ];
-  propagatedBuildInputs = [ seq stdlib-shims ];
+    nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+    buildInputs = [ findlib topkg cmdliner ];
+    propagatedBuildInputs = [ seq stdlib-shims ];
 
-  inherit (topkg) buildPhase installPhase;
+    inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
-    homepage = "https://erratique.ch/software/fmt";
-    license = licenses.isc;
-    description = "OCaml Format pretty-printer combinators";
-    inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.vbgl ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://erratique.ch/software/fmt";
+      license = licenses.isc;
+      description = "OCaml Format pretty-printer combinators";
+      inherit (ocaml.meta) platforms;
+      maintainers = [ maintainers.vbgl ];
+    };
+  }

@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, stompclient, python-daemon, redis, pid, pytest, six, click, coverage
-, sqlalchemy }:
+{ lib, buildPythonPackage, fetchPypi, stompclient, python-daemon, redis, pid
+, pytest, six, click, coverage, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "CoilMQ";
@@ -18,7 +17,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Simple, lightweight, and easily extensible STOMP message broker";
+    description =
+      "Simple, lightweight, and easily extensible STOMP message broker";
     homepage = "https://github.com/hozn/coilmq/";
     license = licenses.asl20;
   };

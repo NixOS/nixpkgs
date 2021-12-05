@@ -1,15 +1,8 @@
-{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, flock
-, withMysql ? false
-, withPgsql ? false
-, withSqlite ? false, sqlite
-, withPam ? false, pam
-, withZlib ? true, zlib
-, withIconv ? true
-, withTools ? false
-, withRedis ? false
-}:
+{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng
+, libjpeg, libwebp, erlang, openssl, expat, libyaml, bash, gnused, gnugrep
+, coreutils, util-linux, procps, gd, flock, withMysql ? false, withPgsql ? false
+, withSqlite ? false, sqlite, withPam ? false, pam, withZlib ? true, zlib
+, withIconv ? true, withTools ? false, withRedis ? false }:
 
 let
   fakegit = writeScriptBin "git" ''
@@ -26,17 +19,16 @@ in stdenv.mkDerivation rec {
   pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
+    url =
+      "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
     sha256 = "09s8mj0dkvp9mxazsqxqqmnl5n2xyi8avx0rzgvqrbl3byanzfzr";
   };
 
   nativeBuildInputs = [ fakegit makeWrapper ];
 
   buildInputs = [ erlang openssl expat libyaml gd ]
-    ++ lib.optional withSqlite sqlite
-    ++ lib.optional withPam pam
-    ++ lib.optional withZlib zlib
-  ;
+    ++ lib.optional withSqlite sqlite ++ lib.optional withPam pam
+    ++ lib.optional withZlib zlib;
 
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
@@ -71,16 +63,16 @@ in stdenv.mkDerivation rec {
     outputHash = "1mvixgb46ss35abjwz3lw38c69bii1xyj557a92bvrxc1gc6gx31";
   };
 
-  configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
-      (lib.enableFeature withPgsql "pgsql")
-      (lib.enableFeature withSqlite "sqlite")
-      (lib.enableFeature withPam "pam")
-      (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withIconv "iconv")
-      (lib.enableFeature withTools "tools")
-      (lib.enableFeature withRedis "redis")
-    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  configureFlags = [
+    (lib.enableFeature withMysql "mysql")
+    (lib.enableFeature withPgsql "pgsql")
+    (lib.enableFeature withSqlite "sqlite")
+    (lib.enableFeature withPam "pam")
+    (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withIconv "iconv")
+    (lib.enableFeature withTools "tools")
+    (lib.enableFeature withRedis "redis")
+  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
@@ -97,7 +89,9 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [ libpng libjpeg libwebp ]
+    }"
     rm $out/bin/{mix,iex,elixir}
   '';
 

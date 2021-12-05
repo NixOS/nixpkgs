@@ -4,9 +4,8 @@ let
   majorVersion = "0";
   minorVersion = "102";
   pname = "aileron";
-in
 
-fetchzip {
+in fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}.zip";

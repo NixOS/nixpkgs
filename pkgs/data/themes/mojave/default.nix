@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, glib
-, gtk-engine-murrine
-, gtk_engines
-, inkscape
-, jdupes
-, optipng
-, sassc
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, glib, gtk-engine-murrine, gtk_engines
+, inkscape, jdupes, optipng, sassc, which }:
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
@@ -24,29 +13,19 @@ stdenv.mkDerivation rec {
       sha256 = "08j70kmjhvh06c3ahcracarrfq4vpy0zsp6zkcivbw4nf3bzp2zc";
     })
     (fetchurl {
-      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
+      url =
+        "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
       sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
     })
   ];
 
   sourceRoot = "source";
 
-  nativeBuildInputs = [
-    glib
-    inkscape
-    jdupes
-    optipng
-    sassc
-    which
-  ];
+  nativeBuildInputs = [ glib inkscape jdupes optipng sassc which ];
 
-  buildInputs = [
-    gtk_engines
-  ];
+  buildInputs = [ gtk_engines ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
@@ -83,7 +62,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Mac OSX Mojave like theme for GTK based desktop environments";
+    description =
+      "Mac OSX Mojave like theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

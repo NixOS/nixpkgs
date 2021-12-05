@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-}:
+{ lib, buildPythonPackage, fetchPypi, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "ghp-import";

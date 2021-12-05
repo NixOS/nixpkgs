@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     #  make[1]: *** No rule to make target 'libb64.a', needed by 'c-example1'.  Stop.
     (fetchpatch {
       name = "parallel-make.patch";
-      url = "https://github.com/libb64/libb64/commit/4fe47c052e9123da8f751545deb48be08c3411f6.patch";
+      url =
+        "https://github.com/libb64/libb64/commit/4fe47c052e9123da8f751545deb48be08c3411f6.patch";
       sha256 = "18b3np3gpyzimqmk6001riqv5n70wfbclky6zzsrvj5zl1dj4ljf";
     })
   ];

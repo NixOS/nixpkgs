@@ -1,7 +1,4 @@
-{ lib
-, fetchCrate
-, rustPlatform
-}:
+{ lib, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vopono";
@@ -15,7 +12,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256:1y07iazb7rwgs0viwn81qmwbcnxza9n89w2jh0r4fq98rr337081";
 
   meta = with lib; {
-    description = "Run applications through VPN connections in network namespaces";
+    description =
+      "Run applications through VPN connections in network namespaces";
     homepage = "https://github.com/jamesmcm/vopono";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

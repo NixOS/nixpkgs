@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libxslt, freetype, libpng, libxml2
-}:
+{ lib, stdenv, fetchurl, pkg-config, libxslt, freetype, libpng, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "swfmill";
@@ -18,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt freetype libpng libxml2 ];
 
   meta = {
-    description = "An xml2swf and swf2xml processor with import functionalities";
+    description =
+      "An xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

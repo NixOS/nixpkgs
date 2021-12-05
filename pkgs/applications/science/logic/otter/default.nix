@@ -1,22 +1,17 @@
-{lib, stdenv, fetchurl, tcsh, libXaw, libXt, libX11}:
+{ lib, stdenv, fetchurl, tcsh, libXaw, libXt, libX11 }:
 let
   s = # Generated upstream information
-  rec {
-    version = "3.3f";
-    name = "otter";
-    url = "https://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
-    sha256 = "16mc1npl7sk9cmqhrf3ghfmvx29inijw76f1b1lsykllaxjqqb1r";
-  };
-  buildInputs = [
-    tcsh libXaw libXt libX11
-  ];
-in
-stdenv.mkDerivation {
+    rec {
+      version = "3.3f";
+      name = "otter";
+      url = "https://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
+      sha256 = "16mc1npl7sk9cmqhrf3ghfmvx29inijw76f1b1lsykllaxjqqb1r";
+    };
+  buildInputs = [ tcsh libXaw libXt libX11 ];
+in stdenv.mkDerivation {
   name = "${s.name}-${s.version}";
   inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+  src = fetchurl { inherit (s) url sha256; };
 
   hardeningDisable = [ "format" ];
 
@@ -45,8 +40,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "A reliable first-order theorem prover";
-    license = lib.licenses.publicDomain ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     broken = true;
   };

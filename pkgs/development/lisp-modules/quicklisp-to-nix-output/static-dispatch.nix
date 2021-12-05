@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "static-dispatch";
   version = "20211020-git";
 
@@ -8,16 +7,32 @@ rec {
 
   description = "Static generic function dispatch for Common Lisp.";
 
-  deps = [ args."agutil" args."alexandria" args."anaphora" args."arrows" args."cl-environments" args."cl-form-types" args."closer-mop" args."collectors" args."fiveam" args."introspect-environment" args."iterate" args."optima" args."parse-declarations-1_dot_0" args."symbol-munger" ];
+  deps = [
+    args."agutil"
+    args."alexandria"
+    args."anaphora"
+    args."arrows"
+    args."cl-environments"
+    args."cl-form-types"
+    args."closer-mop"
+    args."collectors"
+    args."fiveam"
+    args."introspect-environment"
+    args."iterate"
+    args."optima"
+    args."parse-declarations-1_dot_0"
+    args."symbol-munger"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/static-dispatch/2021-10-20/static-dispatch-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/static-dispatch/2021-10-20/static-dispatch-20211020-git.tgz";
     sha256 = "0zm8haaf65a6mw1jwkzf2fhlh19ixq1asjc2kiz1jhdy40qdkkfj";
   };
 
   packageName = "static-dispatch";
 
-  asdFilesToKeep = ["static-dispatch.asd"];
+  asdFilesToKeep = [ "static-dispatch.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM static-dispatch DESCRIPTION
@@ -40,4 +55,5 @@ rec {
     (agutil alexandria anaphora arrows cl-environments cl-form-types closer-mop
      collectors fiveam introspect-environment iterate optima
      parse-declarations-1.0 symbol-munger)
-    VERSION 20211020-git SIBLINGS NIL PARASITES (static-dispatch/test)) */
+    VERSION 20211020-git SIBLINGS NIL PARASITES (static-dispatch/test))
+*/

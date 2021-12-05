@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitLab, nose, pillow
-, isPy3k, isPyPy
-}:
+{ lib, buildPythonPackage, fetchFromGitLab, nose, pillow, isPy3k, isPyPy }:
 buildPythonPackage rec {
   pname = "pypillowfight";
   version = "0.3.0";

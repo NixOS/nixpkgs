@@ -1,5 +1,4 @@
-{ lib, buildDunePackage, mirage-types
-}:
+{ lib, buildDunePackage, mirage-types }:
 
 buildDunePackage {
   pname = "mirage-types-lwt";

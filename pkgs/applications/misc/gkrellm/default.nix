@@ -1,19 +1,5 @@
-{ lib
-, fetchurl
-, stdenv
-, gettext
-, pkg-config
-, glib
-, gtk2
-, libX11
-, libSM
-, libICE
-, which
-, IOKit
-, copyDesktopItems
-, makeDesktopItem
-, wrapGAppsHook
-}:
+{ lib, fetchurl, stdenv, gettext, pkg-config, glib, gtk2, libX11, libSM, libICE
+, which, IOKit, copyDesktopItems, makeDesktopItem, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gkrellm";

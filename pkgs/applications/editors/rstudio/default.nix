@@ -1,36 +1,8 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, cmake
-, boost
-, zlib
-, openssl
-, R
-, qtbase
-, qtxmlpatterns
-, qtsensors
-, qtwebengine
-, qtwebchannel
-, libuuid
-, hunspellDicts
-, unzip
-, ant
-, jdk
-, gnumake
-, makeWrapper
-, pandoc
-, llvmPackages
-, libyamlcpp
-, soci
-, postgresql
-, nodejs
-, mkYarnModules
-, qmake
-}:
+{ lib, mkDerivation, fetchurl, fetchpatch, fetchFromGitHub, makeDesktopItem
+, copyDesktopItems, cmake, boost, zlib, openssl, R, qtbase, qtxmlpatterns
+, qtsensors, qtwebengine, qtwebchannel, libuuid, hunspellDicts, unzip, ant, jdk
+, gnumake, makeWrapper, pandoc, llvmPackages, libyamlcpp, soci, postgresql
+, nodejs, mkYarnModules, qmake }:
 
 let
   pname = "RStudio";
@@ -61,24 +33,16 @@ let
   panmirrorModules = mkYarnModules {
     inherit pname version;
     packageJSON = ./package.json;
-    yarnLock =  ./yarn.lock;
+    yarnLock = ./yarn.lock;
     yarnNix = ./yarndeps.nix;
   };
 
-in
-mkDerivation rec {
-  inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR RSTUDIO_VERSION_PATCH;
+in mkDerivation rec {
+  inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR
+    RSTUDIO_VERSION_PATCH;
 
-  nativeBuildInputs = [
-    cmake
-    unzip
-    ant
-    jdk
-    makeWrapper
-    pandoc
-    nodejs
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [ cmake unzip ant jdk makeWrapper pandoc nodejs copyDesktopItems ];
 
   buildInputs = [
     boost
@@ -116,7 +80,8 @@ mkDerivation rec {
     # https://src.fedoraproject.org/rpms/rstudio/tree/rawhide
     (fetchpatch {
       name = "system-node.patch";
-      url = "https://src.fedoraproject.org/rpms/rstudio/raw/5bda2e290c9e72305582f2011040938d3e356906/f/0004-use-system-node.patch";
+      url =
+        "https://src.fedoraproject.org/rpms/rstudio/raw/5bda2e290c9e72305582f2011040938d3e356906/f/0004-use-system-node.patch";
       sha256 = "sha256-P1Y07RB/ceFNa749nyBUWSE41eiiZgt43zVcmahvfZM=";
     })
   ];
@@ -138,13 +103,16 @@ mkDerivation rec {
         --replace "bin/pandoc" "${pandoc}/bin/pandoc"
   '';
 
-  hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
+  hunspellDictionaries = with lib;
+    filter isDerivation (unique (attrValues hunspellDicts));
   # These dicts contain identically-named dict files, so we only keep the
   # -large versions in case of clashes
-  largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
-  otherDicts = with lib; filter
-    (d: !(hasAttr "dictFileName" d &&
-      elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+  largeDicts = with lib;
+    filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
+  otherDicts = with lib;
+    filter (d:
+      !(hasAttr "dictFileName" d
+        && elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
     hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
 
@@ -182,9 +150,7 @@ mkDerivation rec {
     rm -r $out/lib/rstudio/bin/{pandoc/pandoc,pandoc}
   '';
 
-  qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ gnumake ]}"
-  ];
+  qtWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ gnumake ]}" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -195,7 +161,8 @@ mkDerivation rec {
       genericName = "IDE";
       comment = meta.description;
       categories = "Development;";
-      mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
+      mimeType =
+        "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
     })
   ];
 

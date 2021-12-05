@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, capstone }:
 
 buildPythonPackage rec {
   pname = "ropgadget";
@@ -15,19 +11,16 @@ buildPythonPackage rec {
     sha256 = "1i0gx0cwhxk6d8byvck17hh83szz3k6ndd118ha3q0r0msap0lz1";
   };
 
-  propagatedBuildInputs = [
-    capstone
-  ];
+  propagatedBuildInputs = [ capstone ];
 
   # Test suite is working with binaries
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ropgadget"
-  ];
+  pythonImportsCheck = [ "ropgadget" ];
 
   meta = with lib; {
-    description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
+    description =
+      "Tool to search for gadgets in binaries to facilitate ROP exploitation";
     homepage = "http://shell-storm.org/project/ROPgadget/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];

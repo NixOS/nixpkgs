@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, libvlc
-, substituteAll
-}:
+{ lib, buildPythonPackage, fetchPypi, setuptools, libvlc, substituteAll }:
 
 buildPythonPackage rec {
   pname = "python-vlc";
@@ -19,20 +13,19 @@ buildPythonPackage rec {
     # Patch path for VLC
     (substituteAll {
       src = ./vlc-paths.patch;
-      libvlcPath="${libvlc}/lib/libvlc.so.5";
+      libvlcPath = "${libvlc}/lib/libvlc.so.5";
     })
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "vlc" ];
 
   meta = with lib; {
-    description = "Python bindings for VLC, the cross-platform multimedia player and framework";
+    description =
+      "Python bindings for VLC, the cross-platform multimedia player and framework";
     homepage = "https://wiki.videolan.org/PythonBinding";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ tbenst ];

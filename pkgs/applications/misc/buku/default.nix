@@ -7,20 +7,22 @@ let
         version = "1.3.24";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+          sha256 =
+            "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
         };
       });
-      sqlalchemy-utils = super.sqlalchemy-utils.overridePythonAttrs (oldAttrs: rec {
-        version = "0.36.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
-        };
-      });
+      sqlalchemy-utils = super.sqlalchemy-utils.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "0.36.6";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
+          };
+        });
     };
   };
-in
-with python3'.pkgs; buildPythonApplication rec {
+in with python3'.pkgs;
+buildPythonApplication rec {
   version = "4.6";
   pname = "buku";
 

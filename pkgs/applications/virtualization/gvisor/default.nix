@@ -1,18 +1,5 @@
-{ lib
-, buildBazelPackage
-, fetchFromGitHub
-, callPackage
-, bash
-, cacert
-, git
-, glibcLocales
-, go
-, iproute2
-, iptables
-, makeWrapper
-, procps
-, protobuf
-, python3
+{ lib, buildBazelPackage, fetchFromGitHub, callPackage, bash, cacert, git
+, glibcLocales, go, iproute2, iptables, makeWrapper, procps, protobuf, python3
 }:
 
 let
@@ -57,17 +44,15 @@ in buildBazelPackage rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo  = "gvisor";
-    rev   = "release-${version}";
+    repo = "gvisor";
+    rev = "release-${version}";
     sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
   };
 
   nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
 
   bazelTarget = "//runsc:runsc";
-  bazelFlags = [
-    "--override_repository=rules_proto=${rulesProto}"
-  ];
+  bazelFlags = [ "--override_repository=rules_proto=${rulesProto}" ];
 
   # gvisor uses the Starlark implementation of rules_cc, not the built-in one,
   # so we shouldn't delete it from our dependencies.

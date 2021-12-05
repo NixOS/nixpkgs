@@ -1,9 +1,4 @@
-{ lib
-, aioredis
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-}:
+{ lib, aioredis, buildPythonPackage, fetchFromGitHub, msgpack }:
 
 buildPythonPackage rec {
   pname = "aiocache";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1czs8pvhzi92qy2dch2995rb62mxpbhd80dh2ir7zpa9qcm6wxvx";
   };
 
-  propagatedBuildInputs = [
-    aioredis
-    msgpack
-  ];
+  propagatedBuildInputs = [ aioredis msgpack ];
 
   # aiomcache would be required but last release was in 2017
   doCheck = false;

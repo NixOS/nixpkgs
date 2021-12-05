@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pytz
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, libcst, proto-plus
+, pytestCheckHook, pytest-asyncio, pytz, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";

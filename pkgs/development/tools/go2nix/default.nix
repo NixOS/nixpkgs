@@ -1,5 +1,5 @@
-{ lib, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
-  fetchFromGitHub }:
+{ lib, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper
+, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go2nix";

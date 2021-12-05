@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "gotify-server";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ ma27 ]; };
 
   machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];

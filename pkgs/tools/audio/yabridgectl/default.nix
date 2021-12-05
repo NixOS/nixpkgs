@@ -1,9 +1,4 @@
-{ lib
-, rustPlatform
-, yabridge
-, makeWrapper
-, wine
-}:
+{ lib, rustPlatform, yabridge, makeWrapper, wine }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yabridgectl";
@@ -30,8 +25,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A small, optional utility to help set up and update yabridge for several directories at once";
-    homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
+    description =
+      "A small, optional utility to help set up and update yabridge for several directories at once";
+    homepage =
+      "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;

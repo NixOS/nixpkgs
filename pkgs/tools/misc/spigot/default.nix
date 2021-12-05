@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchgit
-, autoreconfHook
-, gmp
-, ncurses
-, halibut
-, perl
-}:
+{ lib, stdenv, buildPackages, fetchgit, autoreconfHook, gmp, ncurses, halibut
+, perl }:
 
 stdenv.mkDerivation rec {
   pname = "spigot";

@@ -1,18 +1,5 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, immutables
-, motor
-, msgpack
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, ujson
-}:
+{ lib, attrs, buildPythonPackage, fetchFromGitHub, hypothesis, immutables, motor
+, msgpack, poetry-core, pytestCheckHook, pythonOlder, pyyaml, tomlkit, ujson }:
 
 buildPythonPackage rec {
   pname = "cattrs";
@@ -30,13 +17,9 @@ buildPythonPackage rec {
     sha256 = "sha256-CKAsvRKS8kmLcyPA753mh6d3S04ObzO7xLPpmlmxrxI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    attrs
-  ];
+  propagatedBuildInputs = [ attrs ];
 
   checkInputs = [
     hypothesis

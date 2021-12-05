@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, leptonica, libpng, libtiff, icu, pango, opencl-headers }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, leptonica, libpng
+, libtiff, icu, pango, opencl-headers }:
 
 stdenv.mkDerivation rec {
   pname = "tesseract";

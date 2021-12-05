@@ -1,43 +1,8 @@
-{ lib
-, aiohttp
-, Babel
-, blinker
-, buildPythonPackage
-, python-dateutil
-, docutils
-, doit
-, fetchPypi
-, freezegun
-, ghp-import
-, hsluv
-, html5lib
-, ipykernel
-, jinja2
-, lxml
-, Mako
-, markdown
-, micawber
-, mock
-, natsort
-, notebook
-, phpserialize
-, piexif
-, pillow
-, pygal
-, pygments
-, pyphen
-, PyRSS2Gen
-, pytestCheckHook
-, pythonOlder
-, requests
-, ruamel-yaml
-, stdenv
-, toml
-, typogrify
-, unidecode
-, watchdog
-, Yapsy
-}:
+{ lib, aiohttp, Babel, blinker, buildPythonPackage, python-dateutil, docutils
+, doit, fetchPypi, freezegun, ghp-import, hsluv, html5lib, ipykernel, jinja2
+, lxml, Mako, markdown, micawber, mock, natsort, notebook, phpserialize, piexif
+, pillow, pygal, pygments, pyphen, PyRSS2Gen, pytestCheckHook, pythonOlder
+, requests, ruamel-yaml, stdenv, toml, typogrify, unidecode, watchdog, Yapsy }:
 
 buildPythonPackage rec {
   pname = "Nikola";
@@ -83,11 +48,7 @@ buildPythonPackage rec {
     Yapsy
   ];
 
-  checkInputs = [
-    freezegun
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ freezegun mock pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ]
-    ++ lib.optional stdenv.isDarwin wrapQtAppsHook;
+  nativeBuildInputs = [ qmake ] ++ lib.optional stdenv.isDarwin wrapQtAppsHook;
 
   buildInputs = [ libcommuni qtbase ];
 
@@ -28,9 +27,10 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
-    (if stdenv.isDarwin
-      then [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications" ]
-      else [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin" ])
+    (if stdenv.isDarwin then
+      [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications" ]
+    else
+      [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin" ])
   ];
 
   postInstall = if stdenv.isDarwin then ''

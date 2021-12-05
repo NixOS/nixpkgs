@@ -1,22 +1,22 @@
-{stdenv, lib, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
-{ name, src, preBuild ? "", target, tiVersion ? null
-, release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1", iosBuildStore ? false
-, enableWirelessDistribution ? false, installURL ? null
-, xcodeBaseDir ? "/Applications/Xcode.app"
-, androidsdkArgs ? {}
-, xcodewrapperArgs ? {}
-, ...
-}@args:
+{ stdenv, lib, composeAndroidPackages, composeXcodeWrapper, titaniumsdk
+, titanium, alloy, jdk, python, nodejs, which, file }:
+{ name, src, preBuild ? "", target, tiVersion ? null, release ? false
+, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null
+, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1"
+, iosBuildStore ? false, enableWirelessDistribution ? false, installURL ? null
+, xcodeBaseDir ? "/Applications/Xcode.app", androidsdkArgs ? { }
+, xcodewrapperArgs ? { }, ... }@args:
 
-assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
-assert (release && target == "iphone") -> iosMobileProvisioningProfile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
+assert (release && target == "android") -> androidKeyStore != null
+  && androidKeyAlias != null && androidKeyStorePassword != null;
+assert (release && target == "iphone") -> iosMobileProvisioningProfile != null
+  && iosCertificateName != null && iosCertificate != null
+  && iosCertificatePassword != null;
 assert enableWirelessDistribution -> installURL != null;
 
 let
-  realAndroidsdkArgs = {
-    platformVersions = [ "28" ];
-  } // androidsdkArgs;
+  realAndroidsdkArgs = { platformVersions = [ "28" ]; } // androidsdkArgs;
 
   androidsdk = (composeAndroidPackages realAndroidsdkArgs).androidsdk;
 
@@ -31,10 +31,14 @@ let
     fi
   '';
 
-  extraArgs = removeAttrs args [ "name" "preRebuild" "androidsdkArgs" "xcodewrapperArgs" ];
-in
-stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name;
+  extraArgs = removeAttrs args [
+    "name"
+    "preRebuild"
+    "androidsdkArgs"
+    "xcodewrapperArgs"
+  ];
+in stdenv.mkDerivation ({
+  name = lib.replaceChars [ " " ] [ "" ] name;
 
   buildInputs = [ nodejs titanium alloy python which file jdk ];
 
@@ -84,8 +88,7 @@ stdenv.mkDerivation ({
       '' else ''
         titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out
       ''}
-    ''
-    else if target == "iphone" then ''
+    '' else if target == "iphone" then ''
       # Be sure that the Xcode wrapper has priority over everything else.
       # When using buildInputs this does not seem to be the case.
       export PATH=${xcodewrapper}/bin:$PATH
@@ -131,7 +134,9 @@ stdenv.mkDerivation ({
         security default-keychain -s $keychainName
 
         # Do the actual build
-        titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target ${if iosBuildStore then "dist-appstore" else "dist-adhoc"} --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
+        titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target ${
+          if iosBuildStore then "dist-appstore" else "dist-adhoc"
+        } --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
 
         # Remove our generated keychain
         ${deleteKeychain}
@@ -153,20 +158,21 @@ stdenv.mkDerivation ({
             rm $out/modules
         fi
       ''}
-    '' else throw "Target: ${target} is not supported!"}
+    '' else
+      throw "Target: ${target} is not supported!"}
   '';
 
   installPhase = ''
     ${if target == "android" then ''
-      ${if release then ""
+      ${if release then
+        ""
       else ''
         cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out
       ''}
 
       mkdir -p $out/nix-support
       echo "file binary-dist \"$(ls $out/*.apk)\"" > $out/nix-support/hydra-build-products
-    ''
-    else if target == "iphone" then
+    '' else if target == "iphone" then
       if release then ''
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
@@ -176,13 +182,17 @@ stdenv.mkDerivation ({
           bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
           version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
 
-          sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${../xcodeenv/install.html.template} > "$out/$appname.html"
+          sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${
+            ../xcodeenv/install.html.template
+          } > "$out/$appname.html"
           echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
         ''}
-      ''
-      else ""
-    else throw "Target: ${target} is not supported!"}
+      '' else
+        ""
+    else
+      throw "Target: ${target} is not supported!"}
   '';
 
-  failureHook = lib.optionalString (release && target == "iphone") deleteKeychain;
+  failureHook =
+    lib.optionalString (release && target == "iphone") deleteKeychain;
 } // extraArgs)

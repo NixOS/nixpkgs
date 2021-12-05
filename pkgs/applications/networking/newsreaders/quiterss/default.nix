@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, qmake, pkg-config, wrapQtAppsHook
-, qtbase, qttools, qtwebkit, sqlite
-}:
+{ lib, stdenv, fetchFromGitHub, qmake, pkg-config, wrapQtAppsHook, qtbase
+, qttools, qtwebkit, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "quiterss";
@@ -23,7 +22,8 @@ stdenv.mkDerivation rec {
       written on Qt/C++
     '';
     homepage = "https://quiterss.org";
-    changelog = "https://github.com/QuiteRSS/quiterss/blob/${version}/CHANGELOG";
+    changelog =
+      "https://github.com/QuiteRSS/quiterss/blob/${version}/CHANGELOG";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

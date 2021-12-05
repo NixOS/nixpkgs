@@ -2,19 +2,17 @@
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
 let rev = "dc78b39a6ff0a1a94a29fa0fd72bcbe5d95004be";
-in
-buildGoModule rec {
+in buildGoModule rec {
   pname = "sonobuoy";
   version = "0.55.0"; # Do not forget to update `rev` above
 
-  ldflags =
-    let t = "github.com/vmware-tanzu/sonobuoy";
-    in [
-      "-s"
-      "-X ${t}/pkg/buildinfo.Version=v${version}"
-      "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
-      "-X ${t}/pkg/buildDate=unknown"
-    ];
+  ldflags = let t = "github.com/vmware-tanzu/sonobuoy";
+  in [
+    "-s"
+    "-X ${t}/pkg/buildinfo.Version=v${version}"
+    "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
+    "-X ${t}/pkg/buildDate=unknown"
+  ];
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";

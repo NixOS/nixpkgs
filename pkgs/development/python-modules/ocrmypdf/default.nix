@@ -1,31 +1,8 @@
-{ lib
-, buildPythonPackage
-, cffi
-, coloredlogs
-, fetchFromGitHub
-, ghostscript
-, img2pdf
-, importlib-metadata
-, importlib-resources
-, jbig2enc
-, pdfminer
-, pikepdf
-, pillow
-, pluggy
-, pngquant
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, reportlab
-, setuptools
-, setuptools-scm
-, setuptools-scm-git-archive
-, stdenv
-, substituteAll
-, tesseract4
-, tqdm
-, unpaper
-}:
+{ lib, buildPythonPackage, cffi, coloredlogs, fetchFromGitHub, ghostscript
+, img2pdf, importlib-metadata, importlib-resources, jbig2enc, pdfminer, pikepdf
+, pillow, pluggy, pngquant, pytest-xdist, pytestCheckHook, pythonOlder
+, reportlab, setuptools, setuptools-scm, setuptools-scm-git-archive, stdenv
+, substituteAll, tesseract4, tqdm, unpaper }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
@@ -57,10 +34,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm-git-archive
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm-git-archive setuptools-scm ];
 
   propagatedBuildInputs = [
     cffi
@@ -73,27 +47,21 @@ buildPythonPackage rec {
     reportlab
     setuptools
     tqdm
-  ] ++ (lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ]) ++ (lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ]);
+  ] ++ (lib.optionals (pythonOlder "3.8") [ importlib-metadata ])
+    ++ (lib.optionals (pythonOlder "3.9") [ importlib-resources ]);
 
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-xdist pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ocrmypdf"
-  ];
+  pythonImportsCheck = [ "ocrmypdf" ];
 
   meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
-    description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
+    description =
+      "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
+    changelog =
+      "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
 }

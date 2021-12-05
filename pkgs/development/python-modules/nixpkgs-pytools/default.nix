@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, setuptools
-, rope
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, jinja2, setuptools, rope, isPy27 }:
 
 buildPythonPackage rec {
   pname = "nixpkgs-pytools";
@@ -17,17 +10,14 @@ buildPythonPackage rec {
     sha256 = "11skcbi1lf9qcv9j5ikifb4pakhbbygqpcmv3390j7gxsa85cn19";
   };
 
-  propagatedBuildInputs = [
-    jinja2
-    setuptools
-    rope
-  ];
+  propagatedBuildInputs = [ jinja2 setuptools rope ];
 
   # tests require network ..
   doCheck = false;
 
   meta = with lib; {
-    description = "Tools for removing the tedious nature of creating nixpkgs derivations";
+    description =
+      "Tools for removing the tedious nature of creating nixpkgs derivations";
     homepage = "https://github.com/nix-community/nixpkgs-pytools";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

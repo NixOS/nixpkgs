@@ -2,14 +2,15 @@
 
 let
 
-uiEnv = pkgs.callPackage ./env.nix { };
+  uiEnv = pkgs.callPackage ./env.nix { };
 
 in stdenv.mkDerivation rec {
   pname = "parity-ui";
   version = "0.3.4";
 
   src = fetchurl {
-    url = "https://github.com/parity-js/shell/releases/download/v${version}/parity-ui_${version}_amd64.deb";
+    url =
+      "https://github.com/parity-js/shell/releases/download/v${version}/parity-ui_${version}_amd64.deb";
     sha256 = "1xbd00r9ph8w2d6d2c5xg4b5l74ljzs50rpc6kahfznypmh4kr73";
     name = "${pname}-${version}.deb";
   };

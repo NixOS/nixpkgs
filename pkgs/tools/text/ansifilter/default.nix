@@ -18,10 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "conf_dir=/etc/ansifilter"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "conf_dir=/etc/ansifilter" ];
 
   meta = with lib; {
     description = "Tool to convert ANSI to other formats";

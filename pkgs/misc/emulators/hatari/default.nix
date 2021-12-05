@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/hatari/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://download.tuxfamily.org/hatari/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-RKL2LKmV442eCHSAaVbwucPMhOqJ4BaaY4SbY807ZL0=";
   };
 

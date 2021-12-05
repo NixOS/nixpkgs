@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, regex
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, regex }:
 
 buildPythonPackage rec {
   pname = "lark-parser";
@@ -30,7 +25,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
+    description =
+      "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;

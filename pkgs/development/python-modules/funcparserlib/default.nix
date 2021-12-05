@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, python, isPy3k }:
 
 buildPythonPackage rec {
   pname = "funcparserlib";
@@ -22,7 +17,8 @@ buildPythonPackage rec {
   doCheck = !(isPy3k);
 
   meta = with lib; {
-    description = "Recursive descent parsing library based on functional combinators";
+    description =
+      "Recursive descent parsing library based on functional combinators";
     homepage = "https://github.com/vlasovskikh/funcparserlib";
     license = licenses.mit;
     platforms = platforms.unix;

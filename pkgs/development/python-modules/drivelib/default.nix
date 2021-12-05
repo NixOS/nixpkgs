@@ -1,11 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, expiringdict
-, google-auth-httplib2
-, google-auth-oauthlib
-, google-api-python-client
-}:
+{ lib, buildPythonApplication, fetchPypi, expiringdict, google-auth-httplib2
+, google-auth-oauthlib, google-api-python-client }:
 
 buildPythonApplication rec {
   pname = "drivelib";

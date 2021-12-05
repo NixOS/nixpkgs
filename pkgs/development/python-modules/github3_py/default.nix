@@ -1,20 +1,6 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, betamax
-, pytest
-, betamax-matchers
-, unittest2
-, mock
-, requests
-, uritemplate
-, python-dateutil
-, jwcrypto
-, pyopenssl
-, ndg-httpsclient
-, pyasn1
-}:
+{ lib, pythonOlder, buildPythonPackage, fetchPypi, betamax, pytest
+, betamax-matchers, unittest2, mock, requests, uritemplate, python-dateutil
+, jwcrypto, pyopenssl, ndg-httpsclient, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "github3.py";
@@ -28,7 +14,15 @@ buildPythonPackage rec {
   checkInputs = [ betamax pytest betamax-matchers ]
     ++ lib.optional (pythonOlder "3") unittest2
     ++ lib.optional (pythonOlder "3.3") mock;
-  propagatedBuildInputs = [ requests uritemplate python-dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
+  propagatedBuildInputs = [
+    requests
+    uritemplate
+    python-dateutil
+    jwcrypto
+    pyopenssl
+    ndg-httpsclient
+    pyasn1
+  ];
 
   postPatch = ''
     sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py

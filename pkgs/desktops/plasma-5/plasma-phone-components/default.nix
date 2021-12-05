@@ -1,29 +1,42 @@
-{
-  mkDerivation, lib,
+{ mkDerivation, lib,
 
-  extra-cmake-modules, kdoctools,
+extra-cmake-modules, kdoctools,
 
-  coreutils, dbus, gnugrep, gnused, libdbusmenu, pam, wayland, appstream,
+coreutils, dbus, gnugrep, gnused, libdbusmenu, pam, wayland, appstream,
 
-  kdeclarative, kdelibs4support, kpeople, kconfig, krunner, kinit, kwayland, kwin,
-  plasma-framework, telepathy, libphonenumber, protobuf, libqofono, modemmanager-qt,
-  plasma-workspace,
-  maliit-framework, maliit-keyboard,
+kdeclarative, kdelibs4support, kpeople, kconfig, krunner, kinit, kwayland, kwin
+, plasma-framework, telepathy, libphonenumber, protobuf, libqofono
+, modemmanager-qt, plasma-workspace, maliit-framework, maliit-keyboard,
 
-  qtwayland, qttools
-}:
+qtwayland, qttools }:
 
-let inherit (lib) getBin getLib; in
+let inherit (lib) getBin getLib;
 
-mkDerivation {
+in mkDerivation {
   name = "plasma-phone-components";
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    appstream libdbusmenu pam wayland
-    kdeclarative kdelibs4support kpeople kconfig krunner kinit kwayland kwin
-    plasma-framework telepathy libphonenumber protobuf libqofono modemmanager-qt
-    maliit-framework maliit-keyboard
+    appstream
+    libdbusmenu
+    pam
+    wayland
+    kdeclarative
+    kdelibs4support
+    kpeople
+    kconfig
+    krunner
+    kinit
+    kwayland
+    kwin
+    plasma-framework
+    telepathy
+    libphonenumber
+    protobuf
+    libqofono
+    modemmanager-qt
+    maliit-framework
+    maliit-keyboard
   ];
 
   postPatch = ''

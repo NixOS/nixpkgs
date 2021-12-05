@@ -5,7 +5,8 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${name}-x86_64.AppImage";
+    url =
+      "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${name}-x86_64.AppImage";
     hash = "sha256-oEcSW7UIeiGY2fCPJQ5EtDBRtd73Q04HaSk+7ObLKJc=";
   };
 

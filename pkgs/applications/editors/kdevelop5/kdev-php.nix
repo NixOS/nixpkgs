@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, kdevelop-pg-qt }:
+{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor
+, kdevelop-unwrapped, kdevelop-pg-qt }:
 
 stdenv.mkDerivation rec {
   pname = "kdev-php";

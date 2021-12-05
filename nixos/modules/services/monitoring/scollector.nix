@@ -5,20 +5,15 @@ with lib;
 let
   cfg = config.services.scollector;
 
-  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; }
-    ''
+  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; } ''
     mkdir -p $out
-    ${lib.concatStringsSep
-        "\n"
-        (lib.mapAttrsToList
-          (frequency: binaries:
-            "mkdir -p $out/${frequency}\n" +
-            (lib.concatStringsSep
-              "\n"
-              (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
-                   binaries)))
-          cfg.collectors)}
-    '';
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (frequency: binaries:
+      ''
+        mkdir -p $out/${frequency}
+      '' + (lib.concatStringsSep "\n"
+        (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
+          binaries))) cfg.collectors)}
+  '';
 
   conf = pkgs.writeText "scollector.toml" ''
     Host = "${cfg.bosunHost}"
@@ -76,8 +71,9 @@ in {
 
       collectors = mkOption {
         type = with types; attrsOf (listOf path);
-        default = {};
-        example = literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
+        default = { };
+        example = literalExpression
+          ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
         description = ''
           An attribute set mapping the frequency of collection to a list of
           binaries that should be executed at that frequency. You can use "0"
@@ -87,7 +83,7 @@ in {
 
       extraOpts = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         example = [ "-d" ];
         description = ''
           Extra scollector command line options
@@ -117,7 +113,9 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";
+        ExecStart = "${cfg.package}/bin/scollector -conf=${conf} ${
+            lib.concatStringsSep " " cfg.extraOpts
+          }";
       };
     };
 

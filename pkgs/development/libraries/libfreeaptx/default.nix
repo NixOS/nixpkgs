@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Free Implementation of Audio Processing Technology codec (aptX)";
+    description =
+      "Free Implementation of Audio Processing Technology codec (aptX)";
     license = licenses.lgpl21Plus;
     homepage = "https://github.com/iamthehorker/libfreeaptx";
     platforms = platforms.linux;

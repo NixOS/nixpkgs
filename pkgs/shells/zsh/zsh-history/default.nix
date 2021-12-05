@@ -31,7 +31,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ ];
   };
 
-  passthru.tests = {
-    zsh-history-shell-integration = nixosTests.zsh-history;
-  };
+  passthru.tests = { zsh-history-shell-integration = nixosTests.zsh-history; };
 }

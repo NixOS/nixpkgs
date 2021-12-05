@@ -1,33 +1,7 @@
-{ fetchFromGitHub
-, stdenv
-, lib
-, cmake
-, libGLU
-, libGL
-, freetype
-, freeimage
-, zziplib
-, xorgproto
-, libXrandr
-, libXaw
-, freeglut
-, libXt
-, libpng
-, boost
-, ois
-, libX11
-, libXmu
-, libSM
-, pkg-config
-, libXxf86vm
-, libICE
-, unzip
-, libXrender
-, SDL2
-, withNvidiaCg ? false
-, nvidia_cg_toolkit
-, withSamples ? false
-}:
+{ fetchFromGitHub, stdenv, lib, cmake, libGLU, libGL, freetype, freeimage
+, zziplib, xorgproto, libXrandr, libXaw, freeglut, libXt, libpng, boost, ois
+, libX11, libXmu, libSM, pkg-config, libXxf86vm, libICE, unzip, libXrender, SDL2
+, withNvidiaCg ? false, nvidia_cg_toolkit, withSamples ? false }:
 
 stdenv.mkDerivation rec {
   pname = "ogre";
@@ -48,37 +22,37 @@ stdenv.mkDerivation rec {
       --replace '#include <sys/sysctl.h>' ""
   '';
 
-  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
-    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
+  cmakeFlags = [
+    "-DOGRE_BUILD_DEPENDENCIES=OFF"
+    "-DOGRE_BUILD_SAMPLES=${toString withSamples}"
+  ] ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
     ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
     ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
 
-
   nativeBuildInputs = [ cmake unzip pkg-config ];
-  buildInputs =
-    [
-      cmake
-      libGLU
-      libGL
-      freetype
-      freeimage
-      zziplib
-      xorgproto
-      libXrandr
-      libXaw
-      freeglut
-      libXt
-      libpng
-      boost
-      ois
-      libX11
-      libXmu
-      libSM
-      libXxf86vm
-      libICE
-      libXrender
-      SDL2
-    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+  buildInputs = [
+    cmake
+    libGLU
+    libGL
+    freetype
+    freeimage
+    zziplib
+    xorgproto
+    libXrandr
+    libXaw
+    freeglut
+    libXt
+    libpng
+    boost
+    ois
+    libX11
+    libXmu
+    libSM
+    libXxf86vm
+    libICE
+    libXrender
+    SDL2
+  ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
 
   meta = {
     description = "A 3D engine";

@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, libiconv
-, brotli
-, lz4
-, memory_profiler
-, numpy
-, pytest-benchmark
-, pytestCheckHook
-, python-snappy
-, zstd
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, rustPlatform, stdenv, libiconv
+, brotli, lz4, memory_profiler, numpy, pytest-benchmark, pytestCheckHook
+, python-snappy, zstd }:
 
 buildPythonPackage rec {
   pname = "cramjam";
@@ -31,10 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-4y/jeEZjVUbaXtBx5l3Hrbnj3iNYX089K4xexRP+5v0=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ];
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   checkInputs = [

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, linuxHeaders } :
-
+{ lib, stdenv, fetchurl, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
@@ -24,7 +23,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
+    description =
+      "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
     homepage = "http://linuxptp.sourceforge.net/";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.gpl2Only;

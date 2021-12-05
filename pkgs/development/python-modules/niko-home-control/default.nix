@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nclib
-, netaddr
-, netifaces
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nclib, netaddr, netifaces
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "niko-home-control";
@@ -21,18 +15,12 @@ buildPythonPackage rec {
     sha256 = "0ah02dfnnbk98grvd180fp9rak5gpi58xiql1yyzig5pcbjidvk3";
   };
 
-  propagatedBuildInputs = [
-    nclib
-    netaddr
-    netifaces
-  ];
+  propagatedBuildInputs = [ nclib netaddr netifaces ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nikohomecontrol"
-  ];
+  pythonImportsCheck = [ "nikohomecontrol" ];
 
   meta = with lib; {
     description = "Python SDK for Niko Home Control";

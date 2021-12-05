@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "iolib_dot_conf";
   version = "iolib-v0.8.4";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "iolib.conf";
 
-  asdFilesToKeep = ["iolib.conf.asd"];
+  asdFilesToKeep = [ "iolib.conf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.conf DESCRIPTION Compile-time configuration for IOLib. SHA256
@@ -27,4 +26,5 @@ rec {
      (NAME iolib.asdf FILENAME iolib_dot_asdf))
     DEPENDENCIES (alexandria iolib.asdf) VERSION iolib-v0.8.4 SIBLINGS
     (iolib iolib.asdf iolib.base iolib.common-lisp iolib.examples) PARASITES
-    NIL) */
+    NIL)
+*/

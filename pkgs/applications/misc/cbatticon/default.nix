@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, glib, gtk3, libnotify, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, glib, gtk3, libnotify
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cbatticon";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
 
-  buildInputs =  [ glib gtk3 libnotify ];
+  buildInputs = [ glib gtk3 libnotify ];
 
   patchPhase = ''
     sed -i -e 's/ -Wno-format//g' Makefile
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "Lightweight and fast battery icon that sits in the system tray";
+    description =
+      "Lightweight and fast battery icon that sits in the system tray";
     homepage = "https://github.com/valr/cbatticon";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy35, pytest, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy35, pytest
+, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "async_generator";

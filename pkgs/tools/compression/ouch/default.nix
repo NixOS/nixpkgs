@@ -1,14 +1,5 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, help2man
-, installShellFiles
-, pkg-config
-, bzip2
-, xz
-, zlib
-, zstd
-}:
+{ lib, rustPlatform, fetchFromGitHub, help2man, installShellFiles, pkg-config
+, bzip2, xz, zlib, zstd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
@@ -40,7 +31,8 @@ rustPlatform.buildRustPackage rec {
   GEN_COMPLETIONS = 1;
 
   meta = with lib; {
-    description = "A command-line utility for easily compressing and decompressing files and directories";
+    description =
+      "A command-line utility for easily compressing and decompressing files and directories";
     homepage = "https://github.com/ouch-org/ouch";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda psibi ];

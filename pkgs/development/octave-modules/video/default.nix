@@ -1,9 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, pkg-config
-, ffmpeg
-}:
+{ buildOctavePackage, lib, fetchurl, pkg-config, ffmpeg }:
 
 buildOctavePackage rec {
   pname = "video";
@@ -14,18 +9,15 @@ buildOctavePackage rec {
     sha256 = "0s6j3c4dh5nsbh84s7vnd2ajcayy1gn07b4fcyrcynch3wl28mrv";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [
-    ffmpeg
-  ];
+  propagatedBuildInputs = [ ffmpeg ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/video/index.html";
     license = with licenses; [ gpl3Plus bsd3 ];
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
+    description =
+      "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
   };
 }

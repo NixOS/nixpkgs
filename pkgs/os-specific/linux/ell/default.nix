@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, dbus
-}:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
@@ -17,14 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W+IXubPuA/BQzD/LknCeJQgTXUH6I/rUrKBMeEzcBlw=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  checkInputs = [
-    dbus
-  ];
+  checkInputs = [ dbus ];
 
   enableParallelBuilding = true;
 

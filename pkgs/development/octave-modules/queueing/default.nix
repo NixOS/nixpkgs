@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-}:
+{ buildOctavePackage, lib, fetchurl }:
 
 buildOctavePackage rec {
   pname = "queueing";
@@ -16,7 +13,8 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/queueing/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Provides functions for queueing networks and Markov chains analysis";
+    description =
+      "Provides functions for queueing networks and Markov chains analysis";
     longDescription = ''
       The queueing package provides functions for queueing networks and Markov
       chains analysis. This package can be used to compute steady-state

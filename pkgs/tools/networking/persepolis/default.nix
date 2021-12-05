@@ -1,16 +1,6 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper
-, aria
-, libnotify
-, pulseaudio
-, psutil
-, pyqt5
-, requests
-, setproctitle
-, setuptools
-, sound-theme-freedesktop
-, wrapQtAppsHook
-, youtube-dl
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper, aria, libnotify
+, pulseaudio, psutil, pyqt5, requests, setproctitle, setuptools
+, sound-theme-freedesktop, wrapQtAppsHook, youtube-dl }:
 
 buildPythonApplication rec {
   pname = "persepolis";
@@ -26,7 +16,7 @@ buildPythonApplication rec {
   # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
   doCheck = false;
 
-  preBuild=''
+  preBuild = ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
   '';
 
@@ -36,8 +26,8 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
+    mkdir -p $out/share/applications
+    cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
   '';
 
   # prevent double wrapping
@@ -46,7 +36,7 @@ buildPythonApplication rec {
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
+    "--prefix PATH : ${lib.makeBinPath [ aria libnotify ]}"
     "\${qtWrapperArgs[@]}"
   ];
 

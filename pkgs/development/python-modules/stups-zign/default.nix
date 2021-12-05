@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, stups-tokens
-, stups-cli-support
-, pytest
-, pytest-cov
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, stups-tokens
+, stups-cli-support, pytest, pytest-cov, isPy3k }:
 
 buildPythonPackage rec {
   pname = "stups-zign";
@@ -24,24 +16,17 @@ buildPythonPackage rec {
   patches = [
     # pytest 5 is currently unsupported. Fetch and apply a pr that resolves this.
     (fetchpatch {
-      url = "https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch";
+      url =
+        "https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch";
       sha256 = "1zmyvg1z1asaqqsmxvsx0srvxd6gkgavppvg3dblxwhkml01awqk";
     })
   ];
 
-  propagatedBuildInputs = [
-    stups-tokens
-    stups-cli-support
-  ];
+  propagatedBuildInputs = [ stups-tokens stups-cli-support ];
 
-  preCheck = "
-    export HOME=$TEMPDIR
-  ";
+  preCheck = "\n    export HOME=$TEMPDIR\n  ";
 
-  checkInputs = [
-    pytest
-    pytest-cov
-  ];
+  checkInputs = [ pytest pytest-cov ];
 
   meta = with lib; {
     description = "OAuth2 token management command line utility.";

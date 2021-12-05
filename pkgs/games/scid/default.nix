@@ -22,10 +22,7 @@ tcl.mkTclDerivation {
       tcl/config.tcl
   '';
 
-  configureFlags = [
-    "BINDIR=$(out)/bin"
-    "SHAREDIR=$(out)/share"
-  ];
+  configureFlags = [ "BINDIR=$(out)/bin" "SHAREDIR=$(out)/share" ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, intltool
-, libxml2
-, pciutils
-, pkg-config
-, gtk2
-, ddccontrol-db
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, intltool, libxml2, pciutils
+, pkg-config, gtk2, ddccontrol-db }:
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
@@ -21,22 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kul0sjbwbCwadvrccG3KwL/fKWACFUg74QGvgfWE4FQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    intltool
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
 
-  buildInputs = [
-    libxml2
-    pciutils
-    gtk2
-    ddccontrol-db
-  ];
+  buildInputs = [ libxml2 pciutils gtk2 ddccontrol-db ];
 
-  configureFlags = [
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-  ];
+  configureFlags =
+    [ "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system" ];
 
   prePatch = ''
     oldPath="\$""{datadir}/ddccontrol-db"

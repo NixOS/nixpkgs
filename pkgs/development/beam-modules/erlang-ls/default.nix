@@ -8,13 +8,10 @@ let
     inherit fetchHex fetchFromGitHub fetchgit;
     builder = buildRebar3;
     overrides = (self: super: {
-      proper = super.proper.overrideAttrs (_: {
-        configurePhase = "true";
-      });
+      proper = super.proper.overrideAttrs (_: { configurePhase = "true"; });
     });
   };
-in
-rebar3Relx {
+in rebar3Relx {
   pname = "erlang-ls";
   inherit version;
   src = fetchFromGitHub {

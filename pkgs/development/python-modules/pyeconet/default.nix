@@ -1,9 +1,4 @@
-{ lib
-, paho-mqtt
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-}:
+{ lib, paho-mqtt, buildPythonPackage, fetchPypi, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pyeconet";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-x0mkC2k65VrDhv7UavgDUuRWIQoAJMDtA7jNXNUJuVg=";
   };
 
-  propagatedBuildInputs = [
-    paho-mqtt
-    aiohttp
-  ];
+  propagatedBuildInputs = [ paho-mqtt aiohttp ];
 
   # Tests require credentials
   doCheck = false;

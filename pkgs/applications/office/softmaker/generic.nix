@@ -1,46 +1,32 @@
 { lib, stdenv, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
 
-  # Dynamic Libraries
+# Dynamic Libraries
 , curl, libGL, libX11, libXext, libXmu, libXrandr, libXrender
 
-  # For fixing up execution of /bin/ls, which is necessary for
-  # product unlocking.
+# For fixing up execution of /bin/ls, which is necessary for
+# product unlocking.
 , coreutils, libredirect
 
-  # Extra utilities used by the SoftMaker applications.
+# Extra utilities used by the SoftMaker applications.
 , gnugrep, util-linux, which
 
 , pname, version, edition, suiteName, src, archive
 
-, ...
-}:
+, ... }:
 
 let
-  desktopItems = import ./desktop_items.nix {
-    inherit makeDesktopItem pname suiteName;
-  };
+  desktopItems =
+    import ./desktop_items.nix { inherit makeDesktopItem pname suiteName; };
   shortEdition = builtins.substring 2 2 edition;
 in stdenv.mkDerivation {
   inherit pname src;
 
   version = "${edition}.${version}";
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    copyDesktopItems
-    makeWrapper
-  ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper ];
 
-  buildInputs = [
-    curl
-    libGL
-    libX11
-    libXext
-    libXmu
-    libXrandr
-    libXrender
-    stdenv.cc.cc.lib
-  ];
+  buildInputs =
+    [ curl libGL libX11 libXext libXmu libXrandr libXrender stdenv.cc.cc.lib ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -73,7 +59,9 @@ in stdenv.mkDerivation {
     extraWrapperArgs = ''
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls" \
-      --prefix PATH : "${lib.makeBinPath [ coreutils gnugrep util-linux which ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [ coreutils gnugrep util-linux which ]
+      }"
     '';
   in ''
     runHook preInstall
@@ -120,7 +108,8 @@ in stdenv.mkDerivation {
   desktopItems = builtins.attrValues desktopItems;
 
   meta = with lib; {
-    description = "An office suite with a word processor, spreadsheet and presentation program";
+    description =
+      "An office suite with a word processor, spreadsheet and presentation program";
     homepage = "https://www.softmaker.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ ];

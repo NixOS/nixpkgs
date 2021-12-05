@@ -20,7 +20,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "urwid" ];
 
   meta = with lib; {
-    description = "A full-featured console (xterm et al.) user interface library";
+    description =
+      "A full-featured console (xterm et al.) user interface library";
     homepage = "https://excess.org/urwid";
     repositories.git = "git://github.com/wardi/urwid.git";
     license = licenses.lgpl21;

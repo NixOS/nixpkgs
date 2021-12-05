@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome, meson, ninja }:
+{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra
+, gobject-introspection, libtool, gnome, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "gsound";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "06l80xgykj7x1kqkjvcq06pwj2rmca458zvs053qc55x3sg06bfa";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
+  nativeBuildInputs =
+    [ pkg-config meson ninja gobject-introspection libtool vala ];
   buildInputs = [ glib libcanberra ];
 
   passthru = {

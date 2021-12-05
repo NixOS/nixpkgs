@@ -33,7 +33,7 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
+{ pkgs, python, extraIntegrations ? { } }:
 
 with pkgs.lib;
 
@@ -47,44 +47,50 @@ let
   version = "7.30.1";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
-    inherit src version;
-    name = "datadog-integration-${pname}-${version}";
+  buildIntegration = { pname, ... }@args:
+    python.pkgs.buildPythonPackage (args // {
+      inherit src version;
+      name = "datadog-integration-${pname}-${version}";
 
-    postPatch = ''
-      # jailbreak install_requires
-      sed -i 's/==.*//' requirements.in
-      cp requirements.in requirements.txt
-    '';
-    sourceRoot = "source/${args.sourceRoot or pname}";
-    doCheck = false;
-  });
+      postPatch = ''
+        # jailbreak install_requires
+        sed -i 's/==.*//' requirements.in
+        cp requirements.in requirements.txt
+      '';
+      sourceRoot = "source/${args.sourceRoot or pname}";
+      doCheck = false;
+    });
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus-client simplejson uptime
+      requests
+      protobuf
+      prometheus-client
+      simplejson
+      uptime
     ];
   };
 
   # Default integrations that should be built:
   defaultIntegrations = {
-    disk     = (ps: [ ps.psutil ]);
-    mongo    = (ps: [ ps.pymongo ]);
-    network  = (ps: [ ps.psutil ]);
-    nginx    = (ps: []);
+    disk = (ps: [ ps.psutil ]);
+    mongo = (ps: [ ps.pymongo ]);
+    network = (ps: [ ps.psutil ]);
+    nginx = (ps: [ ]);
     postgres = (ps: with ps; [ pg8000 psycopg2 ]);
-    process  = (ps: []);
+    process = (ps: [ ]);
   };
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
-  builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
-    inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
-  }) integrations;
+  builtIntegrations = mapAttrs (pname: fdeps:
+    buildIntegration {
+      inherit pname;
+      propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
+    }) integrations;
 
 in builtIntegrations // {
   inherit datadog_checks_base;

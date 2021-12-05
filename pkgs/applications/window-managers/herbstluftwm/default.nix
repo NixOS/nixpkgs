@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
-, nixosTests }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext
+, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc, xdotool
+, xorgserver, xsetroot, xterm, runtimeShell, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
@@ -11,38 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "01f1bv9axjhw1l2gwhdwahljssj0h8q7a1bqwbpnwvln0ayv39qb";
   };
 
-  outputs = [
-    "out"
-    "doc"
-    "man"
-  ];
+  outputs = [ "out" "doc" "man" ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc" ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  depsBuildBuild = [
-    asciidoc
-  ];
+  depsBuildBuild = [ asciidoc ];
 
-  buildInputs = [
-    libX11
-    libXext
-    libXinerama
-    libXrandr
-    libXft
-    libXrender
-    freetype
-  ];
+  buildInputs =
+    [ libX11 libXext libXinerama libXrandr libXft libXrender freetype ];
 
-  patches = [
-    ./test-path-environment.patch
-  ];
+  patches = [ ./test-path-environment.patch ];
 
   postPatch = ''
     patchShebangs doc/gendoc.py
@@ -74,13 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   pytestFlagsArray = [ "../tests" ];
-  disabledTests = [
-    "test_title_different_letters_are_drawn"
-  ];
+  disabledTests = [ "test_title_different_letters_are_drawn" ];
 
-  passthru = {
-    tests.herbstluftwm = nixosTests.herbstluftwm;
-  };
+  passthru = { tests.herbstluftwm = nixosTests.herbstluftwm; };
 
   meta = with lib; {
     description = "A manual tiling window manager for X";

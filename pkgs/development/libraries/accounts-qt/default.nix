@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake }:
+{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib
+, pkg-config, qmake }:
 
 mkDerivation rec {
   pname = "accounts-qt";

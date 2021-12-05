@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, flatbuffers
-}:
+{ lib, buildPythonPackage, flatbuffers }:
 
 buildPythonPackage rec {
   inherit (flatbuffers) pname version src;
@@ -15,7 +12,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flatbuffers" ];
 
   meta = flatbuffers.meta // {
-    description = "Python runtime library for use with the Flatbuffers serialization format";
+    description =
+      "Python runtime library for use with the Flatbuffers serialization format";
     maintainers = with lib.maintainers; [ wulfsta ];
   };
 }

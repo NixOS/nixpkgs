@@ -15,7 +15,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Library for detecting if a HTTP User Agent header is likely to be a bot";
+    description =
+      "Library for detecting if a HTTP User Agent header is likely to be a bot";
     homepage = "https://github.com/rory/robot-detection";
     license = licenses.gpl3Plus;
   };

@@ -1,9 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, libbsd
-, libressl
-, pkg-config
-}:
+{ lib, stdenv, fetchurl, libbsd, libressl, pkg-config }:
 
 with lib;
 

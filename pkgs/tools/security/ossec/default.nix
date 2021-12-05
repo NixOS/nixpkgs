@@ -14,19 +14,19 @@ stdenv.mkDerivation rec {
   patches = [ ./no-root.patch ];
 
   buildPhase = ''
-    echo "en
+        echo "en
 
-agent
-$out
-no
-127.0.0.1
-yes
-yes
-yes
+    agent
+    $out
+    no
+    127.0.0.1
+    yes
+    yes
+    yes
 
 
-"   | ./install.sh
-  '';
+    "   | ./install.sh
+      '';
 
   meta = with lib; {
     description = "Open source host-based instrusion detection system";

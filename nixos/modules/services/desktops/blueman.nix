@@ -3,15 +3,10 @@
 
 with lib;
 
-let
-  cfg = config.services.blueman;
+let cfg = config.services.blueman;
 in {
   ###### interface
-  options = {
-    services.blueman = {
-      enable = mkEnableOption "blueman";
-    };
-  };
+  options = { services.blueman = { enable = mkEnableOption "blueman"; }; };
 
   ###### implementation
   config = mkIf cfg.enable {

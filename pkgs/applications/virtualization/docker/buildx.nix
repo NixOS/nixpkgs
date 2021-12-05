@@ -18,7 +18,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Docker CLI plugin for extended build capabilities with BuildKit";
+    description =
+      "Docker CLI plugin for extended build capabilities with BuildKit";
     license = licenses.asl20;
     maintainers = [ maintainers.ivan-babrou ];
   };

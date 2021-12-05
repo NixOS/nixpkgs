@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
 
   src = fetchurl {
-    url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "0hz69rka4f9h8i8cnswfz80fs0nm7j5436iiyd5i8lzd2avj4bps";
   };
 
@@ -27,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

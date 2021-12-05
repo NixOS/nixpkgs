@@ -1,18 +1,5 @@
-{ buildPythonApplication
-, click
-, fetchPypi
-, git
-, httpretty
-, lib
-, qrcode
-, pygments
-, pyopenssl
-, pytestCheckHook
-, requests
-, rollbar
-, stripe
-, sure
-}:
+{ buildPythonApplication, click, fetchPypi, git, httpretty, lib, qrcode
+, pygments, pyopenssl, pytestCheckHook, requests, rollbar, stripe, sure }:
 
 buildPythonApplication rec {
   pname = "gigalixir";
@@ -27,22 +14,10 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
-    click
-    requests
-    stripe
-    rollbar
-    pygments
-    qrcode
-    pyopenssl
-  ];
+  propagatedBuildInputs =
+    [ click requests stripe rollbar pygments qrcode pyopenssl ];
 
-  checkInputs = [
-    httpretty
-    sure
-    pytestCheckHook
-    git
-  ];
+  checkInputs = [ httpretty sure pytestCheckHook git ];
 
   pythonImportsCheck = [ "gigalixir" ];
 

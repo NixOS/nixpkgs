@@ -10,7 +10,9 @@ let
 in fetchzip rec {
   name = "scheherazade${lib.optionalString new "-new"}-${version}";
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${
+      lib.optionalString new "New"
+    }-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -24,13 +26,16 @@ in fetchzip rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
-    description = "A font designed in a similar style to traditional Naskh typefaces";
+    description =
+      "A font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
 
       Scheherazade${lib.optionalString new " New"}, named after the heroine of
       the classic Arabian Nights tale, is designed in a similar style to
       traditional typefaces such as Monotype Naskh, extended to cover the
-      Unicode Arabic repertoire through Unicode ${if new then "13.0" else "8.0"}.
+      Unicode Arabic repertoire through Unicode ${
+        if new then "13.0" else "8.0"
+      }.
 
       Scheherazade provides a “simplified” rendering of Arabic script, using
       basic connecting glyphs but not including a wide variety of additional

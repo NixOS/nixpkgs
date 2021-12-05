@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.5";
 
   src = fetchurl {
-    url = "https://www.bunkus.org/videotools/ogmtools/ogmtools-${version}.tar.bz2";
+    url =
+      "https://www.bunkus.org/videotools/ogmtools/ogmtools-${version}.tar.bz2";
     sha256 = "1spx81p5wf59ksl3r3gvf78d77sh7gj8a6lw773iv67bphfivmn8";
   };
 

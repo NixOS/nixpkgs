@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, libX11, imlib2
-, enableXinerama ? true, libXinerama ? null
-}:
+{ lib, stdenv, fetchFromGitHub, libX11, imlib2, enableXinerama ? true
+, libXinerama ? null }:
 
 assert enableXinerama -> libXinerama != null;
 
@@ -15,10 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "0w95828v0splk7bj5kfacp4pq6wxpyamvyjmahyvn5hc3ycq21mq";
   };
 
-  buildInputs = [ libX11 imlib2 ]
-    ++ lib.optional enableXinerama libXinerama;
+  buildInputs = [ libX11 imlib2 ] ++ lib.optional enableXinerama libXinerama;
 
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" (if enableXinerama then "xinerama=1" else "xinerama=0") ] ;
+  buildFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    (if enableXinerama then "xinerama=1" else "xinerama=0")
+  ];
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 

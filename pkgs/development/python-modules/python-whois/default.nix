@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, nose
-, pytestCheckHook
-, simplejson
+{ lib, buildPythonPackage, fetchPypi, future, nose, pytestCheckHook, simplejson
 }:
 
 buildPythonPackage rec {
@@ -18,18 +12,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-    simplejson
-  ];
+  checkInputs = [ nose pytestCheckHook simplejson ];
 
   # Exclude tests that require network access
-  disabledTests = [
-    "test_dk_parse"
-    "test_ipv4"
-    "test_ipv6"
-  ];
+  disabledTests = [ "test_dk_parse" "test_ipv4" "test_ipv6" ];
   pythonImportsCheck = [ "whois" ];
 
   meta = with lib; {

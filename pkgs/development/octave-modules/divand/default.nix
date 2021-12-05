@@ -1,7 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-}:
+{ buildOctavePackage, lib, fetchurl }:
 
 buildOctavePackage rec {
   pname = "divand";
@@ -16,6 +13,7 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/divand/index.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Performs an n-dimensional variational analysis (interpolation) of arbitrarily located observations";
+    description =
+      "Performs an n-dimensional variational analysis (interpolation) of arbitrarily located observations";
   };
 }

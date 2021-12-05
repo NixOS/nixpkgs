@@ -1,19 +1,8 @@
-{ pkgs
-, lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, ffmpeg
-, makeWrapper
+{ pkgs, lib, stdenv, fetchFromGitHub, python3Packages, ffmpeg, makeWrapper
 , nixosTests
 
 # For the update script
-, coreutils
-, curl
-, nix-prefetch-git
-, jq
-, nodePackages
-}:
+, coreutils, curl, nix-prefetch-git, jq, nodePackages }:
 let
   nodejs = pkgs.nodejs-12_x;
   nodeEnv = import ../../../development/node-packages/node-env.nix {
@@ -33,14 +22,12 @@ let
     inherit (srcJson) rev sha256;
   };
 
-  nodeDependencies = (botamusiqueNodePackages.shell.override (old: {
-    src = src + "/web";
-  })).nodeDependencies;
+  nodeDependencies = (botamusiqueNodePackages.shell.override
+    (old: { src = src + "/web"; })).nodeDependencies;
 
   # Python needed to instantiate the html templates
   buildPython = python3Packages.python.withPackages (ps: [ ps.jinja2 ]);
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "botamusique";
   version = srcJson.version;
 
@@ -67,11 +54,7 @@ stdenv.mkDerivation rec {
       --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    python3Packages.wrapPython
-  ];
+  nativeBuildInputs = [ makeWrapper nodejs python3Packages.wrapPython ];
 
   pythonPath = with python3Packages; [
     flask
@@ -119,7 +102,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = pkgs.writeShellScript "botamusique-updater" ''
-    export PATH=${lib.makeBinPath [ coreutils curl nix-prefetch-git jq nodePackages.node2nix ]}
+    export PATH=${
+      lib.makeBinPath [
+        coreutils
+        curl
+        nix-prefetch-git
+        jq
+        nodePackages.node2nix
+      ]
+    }
     set -ex
 
     OWNER=azlux
@@ -127,7 +118,7 @@ stdenv.mkDerivation rec {
     VERSION=$(curl https://api.github.com/repos/$OWNER/$REPO/releases/latest | jq -r '.tag_name')
 
     nix-prefetch-git --rev "$VERSION" --url https://github.com/$OWNER/$REPO | \
-      jq > ${toString ./src.json } \
+      jq > ${toString ./src.json} \
         --arg version "$VERSION" \
         '.version |= $version'
     path=$(jq '.path' -r < ${toString ./src.json})
@@ -150,12 +141,11 @@ stdenv.mkDerivation rec {
       --output ${toString ./node-packages.nix}
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) botamusique;
-  };
+  passthru.tests = { inherit (nixosTests) botamusique; };
 
   meta = with lib; {
-    description = "Bot to play youtube / soundcloud / radio / local music on Mumble";
+    description =
+      "Bot to play youtube / soundcloud / radio / local music on Mumble";
     homepage = "https://github.com/azlux/botamusique";
     license = licenses.mit;
     platforms = platforms.all;

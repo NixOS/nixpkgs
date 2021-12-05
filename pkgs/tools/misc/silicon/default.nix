@@ -1,20 +1,6 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, llvmPackages
-, expat
-, freetype
-, libxcb
-, python3
-, libiconv
-, AppKit
-, CoreText
-, Security
-, fira-code
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, cmake, llvmPackages
+, expat, freetype, libxcb, python3, libiconv, AppKit, CoreText, Security
+, fira-code }:
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
@@ -41,7 +27,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ evanjs ];
   };
 }

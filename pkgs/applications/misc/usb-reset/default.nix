@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusb1
-}:
+{ lib, stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "usb-reset";
@@ -25,15 +21,14 @@ stdenv.mkDerivation rec {
       --replace /usr/include/libusb-1.0 ${libusb1.dev}/include/libusb-1.0
   '';
 
-  makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "prefix="
-  ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" "prefix=" ];
 
   meta = with lib; {
-    description = "Perform a bus reset on a USB device using its vendor and product ID";
+    description =
+      "Perform a bus reset on a USB device using its vendor and product ID";
     homepage = "https://github.com/ralight/usb-reset";
-    changelog = "https://github.com/ralight/usb-reset/blob/master/ChangeLog.txt";
+    changelog =
+      "https://github.com/ralight/usb-reset/blob/master/ChangeLog.txt";
     license = licenses.mit;
     maintainers = [ maintainers.evils ];
     platforms = platforms.all;

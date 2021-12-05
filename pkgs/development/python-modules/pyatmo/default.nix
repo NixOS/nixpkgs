@@ -1,18 +1,6 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, oauthlib
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests_oauthlib
-, requests-mock
-, setuptools-scm
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, freezegun, oauthlib
+, pytest-asyncio, pytest-mock, pytestCheckHook, pythonOlder, requests
+, requests_oauthlib, requests-mock, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
@@ -30,24 +18,12 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    oauthlib
-    requests
-    requests_oauthlib
-  ];
+  propagatedBuildInputs = [ aiohttp oauthlib requests requests_oauthlib ];
 
-  checkInputs = [
-    freezegun
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs =
+    [ freezegun pytest-asyncio pytest-mock pytestCheckHook requests-mock ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -55,9 +31,7 @@ buildPythonPackage rec {
       --replace "requests~=2.24" "requests"
   '';
 
-  pythonImportsCheck = [
-    "pyatmo"
-  ];
+  pythonImportsCheck = [ "pyatmo" ];
 
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";

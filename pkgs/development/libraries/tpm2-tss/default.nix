@@ -1,8 +1,6 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
-, openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
-}:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
+, doxygen, perl, openssl, json_c, curl, libgcrypt, cmocka, uthash, ibm-sw-tpm2
+, iproute2, procps, which }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
   # tpm2-tss tests depend on procps, procps depends on systemd by default). This
@@ -10,9 +8,8 @@ let
   # might not support the withSystemd option.
   procpsWithoutSystemd = procps.override { withSystemd = false; };
   procps_pkg = if stdenv.isLinux then procpsWithoutSystemd else procps;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tpm2-tss";
   version = "3.0.3";
 
@@ -23,22 +20,23 @@ stdenv.mkDerivation rec {
     sha256 = "106yhsjwjadxsl9dqxywg287mdwsksman02hdalhav18vcnvnlpj";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook autoconf-archive pkg-config doxygen perl ];
 
   # cmocka is checked / used(?) in the configure script
   # when unit and/or integration testing is enabled
-  buildInputs = [ openssl json_c curl libgcrypt uthash ]
-    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
-    # when tests are not run
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    cmocka
-  ];
+  buildInputs = [
+    openssl
+    json_c
+    curl
+    libgcrypt
+    uthash
+  ]
+  # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+  # when tests are not run
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ cmocka ];
 
-  checkInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
-  ];
+  checkInputs = [ cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2 ];
 
   strictDeps = true;
   preAutoreconf = "./bootstrap";

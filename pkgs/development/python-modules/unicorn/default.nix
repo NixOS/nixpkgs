@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, setuptools
-, unicorn-emu
-}:
+{ lib, stdenv, buildPythonPackage, setuptools, unicorn-emu }:
 
 buildPythonPackage rec {
   pname = "unicorn";
@@ -22,9 +17,7 @@ buildPythonPackage rec {
   # needed on non-x86 linux
   setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -36,9 +29,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "unicorn"
-  ];
+  pythonImportsCheck = [ "unicorn" ];
 
   meta = with lib; {
     description = "Python bindings for Unicorn CPU emulator engine";

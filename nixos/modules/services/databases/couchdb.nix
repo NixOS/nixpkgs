@@ -4,25 +4,23 @@ with lib;
 
 let
   cfg = config.services.couchdb;
-  configFile = pkgs.writeText "couchdb.ini" (
-    ''
-      [couchdb]
-      database_dir = ${cfg.databaseDir}
-      uri_file = ${cfg.uriFile}
-      view_index_dir = ${cfg.viewIndexDir}
-    '' + (optionalString (cfg.adminPass != null) ''
-      [admins]
-      ${cfg.adminUser} = ${cfg.adminPass}
-    '' + ''
-      [chttpd]
-    '') +
-    ''
-      port = ${toString cfg.port}
-      bind_address = ${cfg.bindAddress}
+  configFile = pkgs.writeText "couchdb.ini" (''
+    [couchdb]
+    database_dir = ${cfg.databaseDir}
+    uri_file = ${cfg.uriFile}
+    view_index_dir = ${cfg.viewIndexDir}
+  '' + (optionalString (cfg.adminPass != null) ''
+    [admins]
+    ${cfg.adminUser} = ${cfg.adminPass}
+  '' + ''
+    [chttpd]
+  '') + ''
+    port = ${toString cfg.port}
+    bind_address = ${cfg.bindAddress}
 
-      [log]
-      file = ${cfg.logFile}
-    '');
+    [log]
+    file = ${cfg.logFile}
+  '');
   executable = "${cfg.package}/bin/couchdb";
 
 in {
@@ -191,7 +189,9 @@ in {
         # 2. the module configuration
         # 3. the extraConfig from the module options
         # 4. the locally writable config file, which couchdb itself writes to
-        ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        ERL_FLAGS = "-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${
+            pkgs.writeText "couchdb-extra.ini" cfg.extraConfig
+          } ${cfg.configFile}";
       };
 
       serviceConfig = {

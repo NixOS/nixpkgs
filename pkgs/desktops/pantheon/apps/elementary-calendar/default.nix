@@ -1,30 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, geoclue2
-, libchamplain
-, clutter
-, folks
-, geocode-glib
-, python3
-, libnotify
-, libical
-, libgdata
-, evolution-data-server
-, appstream-glib
-, elementary-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, desktop-file-utils, gtk3, granite, libgee, libhandy, geoclue2
+, libchamplain, clutter, folks, geocode-glib, python3, libnotify, libical
+, libgdata, evolution-data-server, appstream-glib, elementary-icon-theme
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
@@ -73,9 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

@@ -1,30 +1,29 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux
+, coreutils, bubblewrap }:
 
-let buildFHSEnv = callPackage ./env.nix { }; in
+let buildFHSEnv = callPackage ./env.nix { };
 
-args @ {
-  name
-, runScript ? "bash"
-, extraInstallCommands ? ""
-, meta ? {}
-, passthru ? {}
-, unshareUser ? true
-, unshareIpc ? true
-, unsharePid ? true
-, unshareNet ? false
-, unshareUts ? true
-, unshareCgroup ? true
-, dieWithParent ? true
-, ...
-}:
+in args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? { }
+, passthru ? { }, unshareUser ? true, unshareIpc ? true, unsharePid ? true
+, unshareNet ? false, unshareUts ? true, unshareCgroup ? true
+, dieWithParent ? true, ... }:
 
 with builtins;
 let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "runScript"
+    "extraInstallCommands"
+    "meta"
+    "passthru"
+    "dieWithParent"
+    "unshareUser"
+    "unshareCgroup"
+    "unshareUts"
+    "unshareNet"
+    "unsharePid"
+    "unshareIpc"
   ]);
 
   etcBindFlags = let
@@ -90,11 +89,12 @@ let
     EOF
     ldconfig &> /dev/null
   '';
-  init = run: writeShellScriptBin "${name}-init" ''
-    source /etc/profile
-    ${createLdConfCache}
-    exec ${run} "$@"
-  '';
+  init = run:
+    writeShellScriptBin "${name}-init" ''
+      source /etc/profile
+      ${createLdConfCache}
+      exec ${run} "$@"
+    '';
 
   bwrapCmd = { initArgs ? "" }: ''
     blacklist=(/nix /dev /proc /etc)
@@ -180,9 +180,7 @@ in runCommandLocal name {
   inherit meta;
 
   passthru = passthru // {
-    env = runCommandLocal "${name}-shell-env" {
-      shellHook = bwrapCmd {};
-    } ''
+    env = runCommandLocal "${name}-shell-env" { shellHook = bwrapCmd { }; } ''
       echo >&2 ""
       echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
       echo >&2 ""

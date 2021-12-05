@@ -5,11 +5,13 @@ stdenv.mkDerivation rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
+    url =
+      "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
     sha256 = "sha256-YRsNgCJ9C3AonHFXh7LYX9Fe2RXrVtWFwQTCQ3YDboM=";
   };
 
-  patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
+  patches =
+    [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
 
   dontBuild = true;
 
@@ -22,10 +24,11 @@ stdenv.mkDerivation rec {
     rm $out/composer.json-dist
   '';
 
-  passthru.withPlugins = f: buildEnv {
-    name = "${roundcube.name}-with-plugins";
-    paths = (f roundcubePlugins) ++ [ roundcube ];
-  };
+  passthru.withPlugins = f:
+    buildEnv {
+      name = "${roundcube.name}-with-plugins";
+      paths = (f roundcubePlugins) ++ [ roundcube ];
+    };
 
   meta = {
     description = "Open Source Webmail Software";

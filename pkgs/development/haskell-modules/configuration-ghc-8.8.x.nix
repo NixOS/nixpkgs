@@ -49,9 +49,8 @@ self: super: {
 
   # cabal-install needs more recent versions of Cabal and random, but an older
   # version of base16-bytestring.
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
-  });
+  cabal-install = super.cabal-install.overrideScope
+    (self: super: { Cabal = self.Cabal_3_6_2_0; });
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -62,7 +61,8 @@ self: super: {
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
   hashable-time = doJailbreak super.hashable-time;
-  hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
+  hledger-lib = doJailbreak
+    super.hledger-lib; # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
@@ -74,7 +74,8 @@ self: super: {
   test-framework = doJailbreak super.test-framework;
   th-expand-syns = doJailbreak super.th-expand-syns;
   # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
-  io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
+  io-streams-haproxy =
+    doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
   snap-server = doJailbreak super.snap-server;
   exact-pi = doJailbreak super.exact-pi;
   time-compat = doJailbreak super.time-compat;
@@ -84,7 +85,10 @@ self: super: {
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288
-  snap-core = overrideCabal (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; }) super.snap-core;
+  snap-core = overrideCabal (drv: {
+    prePatch =
+      "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''";
+  }) super.snap-core;
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal (drv: { prePatch = "rm Setup.hs"; }) super.csv;
@@ -97,7 +101,8 @@ self: super: {
   darcs = dontDistribute super.darcs;
 
   # The package needs the latest Cabal version.
-  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_6_2_0; });
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope
+    (self: super: { Cabal = self.Cabal_3_6_2_0; });
 
   # cabal-fmt requires Cabal3
   cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
@@ -119,7 +124,8 @@ self: super: {
 
   # ghc versions which don‘t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+  ghc-lib-parser-ex =
+    addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # Older compilers need the latest ghc-lib to build this package.
   hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;

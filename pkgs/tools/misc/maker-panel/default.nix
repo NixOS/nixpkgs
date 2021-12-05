@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, go-md2man
-, installShellFiles
-}:
+{ lib, fetchFromGitHub, rustPlatform, go-md2man, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "maker-panel";

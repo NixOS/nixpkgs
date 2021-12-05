@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jdk11
-, psutil
-, pythonOlder
+{ lib, buildPythonPackage, docopt, fetchFromGitHub, jdk11, psutil, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -20,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-OZSLk5qXX6rEclo6JC8o/7Mz0Y2sJqUsLhnrVK4gkVI=";
   };
 
-  propagatedBuildInputs = [
-    psutil
-    docopt
-  ];
+  propagatedBuildInputs = [ psutil docopt ];
 
   postPatch = ''
     substituteInPlace adbe/adb_enhanced.py \
@@ -33,9 +24,7 @@ buildPythonPackage rec {
   # Disable tests because they require a dedicated Android emulator
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adbe"
-  ];
+  pythonImportsCheck = [ "adbe" ];
 
   meta = with lib; {
     description = "Tool for Android testing and development";

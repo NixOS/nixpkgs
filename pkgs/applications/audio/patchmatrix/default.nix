@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libjack2
-, lv2
-, meson
-, ninja
-, pkg-config
-, glew
-, xorg
-}:
+{ stdenv, lib, fetchFromGitHub, libjack2, lv2, meson, ninja, pkg-config, glew
+, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "patchmatrix";
@@ -21,19 +12,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-rR3y5rGzmib//caPmhthvMelAdHRvV0lMRfvcj9kcCg=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    glew
-    libjack2
-    lv2
-    xorg.libX11
-    xorg.libXext
-  ];
+  buildInputs = [ glew libjack2 lv2 xorg.libX11 xorg.libXext ];
 
   meta = with lib; {
     description = "A JACK patchbay in flow matrix style";

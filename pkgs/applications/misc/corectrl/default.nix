@@ -1,25 +1,8 @@
-{ lib, stdenv
-, fetchFromGitLab
-, extra-cmake-modules
-, botan2
-, karchive
-, kauth
-, libdrm
-, hwdata
-, mesa-demos
-, procps
-, util-linux
-, vulkan-tools
-, qtbase
-, qtcharts
-, qtquickcontrols2
-, qtsvg
-, qttools
-, qtxmlpatterns
-, wrapQtAppsHook
-} :
+{ lib, stdenv, fetchFromGitLab, extra-cmake-modules, botan2, karchive, kauth
+, libdrm, hwdata, mesa-demos, procps, util-linux, vulkan-tools, qtbase, qtcharts
+, qtquickcontrols2, qtsvg, qttools, qtxmlpatterns, wrapQtAppsHook }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "corectrl";
   version = "1.2.2";
 
@@ -30,10 +13,7 @@ stdenv.mkDerivation rec{
     sha256 = "1zp523cgvmfjc42wx1f1jh5q3jnsnm833m2xnbbwmfrmhrzh5269";
   };
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ extra-cmake-modules wrapQtAppsHook ];
   buildInputs = [
     botan2
     karchive

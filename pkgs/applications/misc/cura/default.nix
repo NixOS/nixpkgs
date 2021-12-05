@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
- qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2
+, qtgraphicaleffects, curaengine, plugins ? [ ] }:
 
 mkDerivation rec {
   pname = "cura";
@@ -20,16 +20,23 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
-  propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
-  ] ++ plugins;
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      libsavitar
+      numpy-stl
+      pyserial
+      requests
+      uranium
+      zeroconf
+      pynest2d
+      sentry-sdk
+      trimesh
+      keyring
+    ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
-  cmakeFlags = [
-    "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
-    "-DCURA_VERSION=${version}"
-  ];
+  cmakeFlags =
+    [ "-DURANIUM_DIR=${python3.pkgs.uranium.src}" "-DCURA_VERSION=${version}" ];
 
   makeWrapperArgs = [
     # hacky workaround for https://github.com/NixOS/nixpkgs/issues/59901
@@ -56,7 +63,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "3D printer / slicing GUI built on top of the Uranium framework";
+    description =
+      "3D printer / slicing GUI built on top of the Uranium framework";
     homepage = "https://github.com/Ultimaker/Cura";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

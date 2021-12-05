@@ -97,15 +97,14 @@ let
       '';
     };
 
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "cockroachdb";
-  meta.maintainers = with pkgs.lib.maintainers;
-    [ thoughtpolice ];
+  meta.maintainers = with pkgs.lib.maintainers; [ thoughtpolice ];
 
   nodes = {
-    node1 = makeNode "country=us,region=east,dc=1"  "192.168.1.1" null;
+    node1 = makeNode "country=us,region=east,dc=1" "192.168.1.1" null;
     node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
-    node3 = makeNode "country=eu,region=west,dc=2"  "192.168.1.3" "192.168.1.1";
+    node3 = makeNode "country=eu,region=west,dc=2" "192.168.1.3" "192.168.1.1";
   };
 
   # NOTE: All the nodes must start in order and you must NOT use startAll, because

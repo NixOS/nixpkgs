@@ -1,10 +1,10 @@
 { lib, fetchzip }:
 
-let
-  version = "0.133";
+let version = "0.133";
 in fetchzip {
   name = "culmus-${version}";
-  url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
+  url =
+    "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
   postFetch = ''
     tar xf $downloadedFile --strip=1
     mkdir -p $out/share/fonts/{truetype,type1}
@@ -19,7 +19,8 @@ in fetchzip {
 
   meta = {
     description = "Culmus Hebrew fonts";
-    longDescription = "The Culmus project aims at providing the Hebrew-speaking GNU/Linux and Unix community with a basic collection of Hebrew fonts for X Windows.";
+    longDescription =
+      "The Culmus project aims at providing the Hebrew-speaking GNU/Linux and Unix community with a basic collection of Hebrew fonts for X Windows.";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2;
     homepage = "http://culmus.sourceforge.net/";

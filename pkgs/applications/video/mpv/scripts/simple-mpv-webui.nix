@@ -1,5 +1,4 @@
-{ lib, stdenvNoCC
-, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 stdenvNoCC.mkDerivation rec {
   pname = "simple-mpv-ui";
   version = "2.1.0";
@@ -19,7 +18,8 @@ stdenvNoCC.mkDerivation rec {
   passthru.scriptName = "webui.lua";
 
   meta = with lib; {
-    description = "A web based user interface with controls for the mpv mediaplayer";
+    description =
+      "A web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
     maintainers = with maintainers; [ cript0nauta zopieux ];
     longDescription = ''

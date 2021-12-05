@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, pbr, nose }:
 
 buildPythonPackage rec {
   pname = "lockfile";
@@ -23,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://launchpad.net/pylockfile";
-    description = "Platform-independent advisory file locking capability for Python applications";
+    description =
+      "Platform-independent advisory file locking capability for Python applications";
     license = licenses.asl20;
   };
 }

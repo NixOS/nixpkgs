@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";
+      url =
+        "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";
       sha256 = "0cc8ymvgjgwy7ghca2dd8m8pxpinf27s2i8krf2m3fzv2ckq09v3";
     })
   ];

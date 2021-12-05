@@ -1,6 +1,4 @@
-{ mkDerivation
-, extra-cmake-modules, qttools, qtbase
-}:
+{ mkDerivation, extra-cmake-modules, qttools, qtbase }:
 
 mkDerivation {
   name = "kplotting";

@@ -15,7 +15,8 @@ in fetchzip rec {
   sha256 = "127hnpxicqya7v1wmzxxqafq3aj1n33i4j5ncflbw6gj5g3bizwl";
 
   meta = with lib; {
-    description = "monospace font designed to be clear, pragmatic and very readable";
+    description =
+      "monospace font designed to be clear, pragmatic and very readable";
     homepage = "https://pcaro.es/p/hermit";
     license = licenses.ofl;
     maintainers = with maintainers; [ dtzWill ];

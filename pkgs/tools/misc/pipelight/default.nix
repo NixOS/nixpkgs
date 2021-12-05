@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
+{ lib, stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL
+, wine-staging }:
 
 let
   wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
-
 
 in stdenv.mkDerivation rec {
 
@@ -21,10 +21,7 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
-  patches = [
-    ./pipelight.patch
-    ./wine-6.13-new-args.patch
-  ];
+  patches = [ ./pipelight.patch ./wine-6.13-new-args.patch ];
 
   configurePhase = ''
     patchShebangs .

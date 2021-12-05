@@ -1,20 +1,10 @@
-{ lib
-, buildPythonApplication
-, isPy3k
-, fetchFromGitHub
-, manuel
-, setuptools
-, docutils
-, lxml
-, svg-path
-, pygments
-, watchdog
-}:
+{ lib, buildPythonApplication, isPy3k, fetchFromGitHub, manuel, setuptools
+, docutils, lxml, svg-path, pygments, watchdog }:
 
 buildPythonApplication rec {
   pname = "hovercraft";
   version = "2.7";
-  disabled = ! isPy3k;
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "regebro";
@@ -24,7 +14,8 @@ buildPythonApplication rec {
   };
 
   checkInputs = [ manuel ];
-  propagatedBuildInputs = [ setuptools docutils lxml svg-path pygments watchdog ];
+  propagatedBuildInputs =
+    [ setuptools docutils lxml svg-path pygments watchdog ];
 
   meta = with lib; {
     description = "Makes impress.js presentations from reStructuredText";

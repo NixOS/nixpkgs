@@ -1,6 +1,4 @@
-{ lib, fetchurl, buildDunePackage
-, astring, fmt, logs, ocaml_lwt
-}:
+{ lib, fetchurl, buildDunePackage, astring, fmt, logs, ocaml_lwt }:
 
 buildDunePackage rec {
   pname = "irmin-watcher";
@@ -9,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/irmin-watcher/releases/download/${version}/irmin-watcher-${version}.tbz";
+    url =
+      "https://github.com/mirage/irmin-watcher/releases/download/${version}/irmin-watcher-${version}.tbz";
     sha256 = "00d4ph4jbsw6adp3zqdrwi099hfcf7p1xzi0685qr7bgcmandjfv";
   };
 

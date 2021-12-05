@@ -5,14 +5,16 @@ stdenv.mkDerivation rec {
   version = "3.22";
 
   src = fetchurl {
-    url = "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-${version}.tar.gz";
+    url =
+      "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-${version}.tar.gz";
     sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
   };
 
   patches = [
     ./CVE-2014-3618.patch
     (fetchurl {
-      url = "https://sources.debian.org/data/main/p/procmail/3.22-26/debian/patches/30";
+      url =
+        "https://sources.debian.org/data/main/p/procmail/3.22-26/debian/patches/30";
       sha256 = "11zmz1bj0v9pay3ldmyyg7473b80h89gycrhndsgg9q50yhcqaaq";
       name = "CVE-2017-16844";
     })

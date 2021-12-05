@@ -31,10 +31,16 @@ mkDerivation rec {
     "-DG2O_BUILD_EXAMPLES=OFF"
   ] ++ lib.optionals stdenv.isx86_64 [
     "-DDO_SSE_AUTODETECT=OFF"
-    "-DDISABLE_SSE3=${  if stdenv.hostPlatform.sse3Support   then "OFF" else "ON"}"
-    "-DDISABLE_SSE4_1=${if stdenv.hostPlatform.sse4_1Support then "OFF" else "ON"}"
-    "-DDISABLE_SSE4_2=${if stdenv.hostPlatform.sse4_2Support then "OFF" else "ON"}"
-    "-DDISABLE_SSE4_A=${if stdenv.hostPlatform.sse4_aSupport then "OFF" else "ON"}"
+    "-DDISABLE_SSE3=${if stdenv.hostPlatform.sse3Support then "OFF" else "ON"}"
+    "-DDISABLE_SSE4_1=${
+      if stdenv.hostPlatform.sse4_1Support then "OFF" else "ON"
+    }"
+    "-DDISABLE_SSE4_2=${
+      if stdenv.hostPlatform.sse4_2Support then "OFF" else "ON"
+    }"
+    "-DDISABLE_SSE4_A=${
+      if stdenv.hostPlatform.sse4_aSupport then "OFF" else "ON"
+    }"
   ];
 
   meta = with lib; {

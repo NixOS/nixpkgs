@@ -1,26 +1,15 @@
-/*
+/* This file is for options that NixOS and nix-darwin have in common.
 
-  This file is for options that NixOS and nix-darwin have in common.
-
-  Platform-specific code is in the respective default.nix files.
-
+   Platform-specific code is in the respective default.nix files.
 */
 
 { config, lib, options, pkgs, ... }:
 let
   inherit (lib)
-    filterAttrs
-    literalDocBook
-    literalExpression
-    mkIf
-    mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    types
-    ;
+    filterAttrs literalDocBook literalExpression mkIf mkOption
+    mkRemovedOptionModule mkRenamedOptionModule types;
 
-  cfg =
-    config.services.hercules-ci-agent;
+  cfg = config.services.hercules-ci-agent;
 
   format = pkgs.formats.toml { };
 
@@ -117,7 +106,8 @@ let
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/cluster-join-token.key";
-        defaultText = literalExpression ''staticSecretsDirectory + "/cluster-join-token.key"'';
+        defaultText = literalExpression
+          ''staticSecretsDirectory + "/cluster-join-token.key"'';
       };
       binaryCachesPath = mkOption {
         description = ''
@@ -131,7 +121,8 @@ let
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/binary-caches.json";
-        defaultText = literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
+        defaultText =
+          literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
       };
       secretsJsonPath = mkOption {
         description = ''
@@ -146,44 +137,57 @@ let
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/secrets.json";
-        defaultText = literalExpression ''staticSecretsDirectory + "/secrets.json"'';
+        defaultText =
+          literalExpression ''staticSecretsDirectory + "/secrets.json"'';
       };
     };
   };
 
   # TODO (roberth, >=2022) remove
-  checkNix =
-    if !cfg.checkNix
-    then ""
-    else if lib.versionAtLeast config.nix.package.version "2.3.10"
-    then ""
-    else
-      pkgs.stdenv.mkDerivation {
-        name = "hercules-ci-check-system-nix-src";
-        inherit (config.nix.package) src patches;
-        dontConfigure = true;
-        buildPhase = ''
-          echo "Checking in-memory pathInfoCache expiry"
-          if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then
-            cat 1>&2 <<EOF
+  checkNix = if !cfg.checkNix then
+    ""
+  else if lib.versionAtLeast config.nix.package.version "2.3.10" then
+    ""
+  else
+    pkgs.stdenv.mkDerivation {
+      name = "hercules-ci-check-system-nix-src";
+      inherit (config.nix.package) src patches;
+      dontConfigure = true;
+      buildPhase = ''
+        echo "Checking in-memory pathInfoCache expiry"
+        if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then
+          cat 1>&2 <<EOF
 
-            You are deploying Hercules CI Agent on a system with an incompatible
-            nix-daemon. Please make sure nix.package is set to a Nix version of at
-            least 2.3.10 or a master version more recent than Mar 12, 2020.
-          EOF
-            exit 1
-          fi
-        '';
-        installPhase = "touch $out";
-      };
+          You are deploying Hercules CI Agent on a system with an incompatible
+          nix-daemon. Please make sure nix.package is set to a Nix version of at
+          least 2.3.10 or a master version more recent than Mar 12, 2020.
+        EOF
+          exit 1
+        fi
+      '';
+      installPhase = "touch $out";
+    };
 
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "extraOptions" ] [ "services" "hercules-ci-agent" "settings" ])
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "baseDirectory" ] [ "services" "hercules-ci-agent" "settings" "baseDirectory" ])
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "concurrentTasks" ] [ "services" "hercules-ci-agent" "settings" "concurrentTasks" ])
-    (mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ] "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
+    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "extraOptions" ] [
+      "services"
+      "hercules-ci-agent"
+      "settings"
+    ])
+    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "baseDirectory" ] [
+      "services"
+      "hercules-ci-agent"
+      "settings"
+      "baseDirectory"
+    ])
+    (mkRenamedOptionModule [
+      "services"
+      "hercules-ci-agent"
+      "concurrentTasks"
+    ] [ "services" "hercules-ci-agent" "settings" "concurrentTasks" ])
+    (mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ]
+      "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
   ];
 
   options.services.hercules-ci-agent = {
@@ -227,16 +231,16 @@ in
       type = types.submoduleWith { modules = [ settingsModule ]; };
     };
 
-    /*
-      Internal and/or computed values.
+    /* Internal and/or computed values.
 
-      These are written as options instead of let binding to allow sharing with
-      default.nix on both NixOS and nix-darwin.
+       These are written as options instead of let binding to allow sharing with
+       default.nix on both NixOS and nix-darwin.
     */
     tomlFile = mkOption {
       type = types.path;
       internal = true;
-      defaultText = literalDocBook "generated <literal>hercules-ci-agent.toml</literal>";
+      defaultText =
+        literalDocBook "generated <literal>hercules-ci-agent.toml</literal>";
       description = ''
         The fully assembled config file.
       '';
@@ -250,14 +254,14 @@ in
       narinfo-cache-negative-ttl = 0
     '';
     services.hercules-ci-agent = {
-      tomlFile =
-        format.generate "hercules-ci-agent.toml" cfg.settings;
+      tomlFile = format.generate "hercules-ci-agent.toml" cfg.settings;
 
       settings.labels = {
-        agent.source =
-          if options.services.hercules-ci-agent.package.highestPrio == (lib.modules.mkOptionDefault { }).priority
-          then "nixpkgs"
-          else lib.mkOptionDefault "override";
+        agent.source = if options.services.hercules-ci-agent.package.highestPrio
+        == (lib.modules.mkOptionDefault { }).priority then
+          "nixpkgs"
+        else
+          lib.mkOptionDefault "override";
         pkgs.version = pkgs.lib.version;
         lib.version = lib.version;
       };

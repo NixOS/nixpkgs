@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, click, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "1430k699gblxwspsbgxnha8afk6npqharhz2jyjw5gir9pi6g9cz";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-  ];
+  propagatedBuildInputs = [ aiohttp click ];
 
   # Project has no tests
   doCheck = false;

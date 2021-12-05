@@ -7,7 +7,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
 
   src = fetchzip {
-    url = "https://bitbucket.org/smondet/${pname}/get/${pname}.${version}.tar.gz";
+    url =
+      "https://bitbucket.org/smondet/${pname}/get/${pname}.${version}.tar.gz";
     sha256 = "0ccjwcriwm8fv29ij1cnbc9win054kb6pfga3ygzdbjpjb778j46";
   };
 

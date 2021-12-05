@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchurl, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation (rec {
   version = "4.11.0";
@@ -32,8 +30,4 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.pierron ];
     platforms = platforms.linux;
   };
-} // lib.optionalAttrs ( ! enableShared )
-{
-  CONFIG_PFMLIB_SHARED = "n";
-}
-)
+} // lib.optionalAttrs (!enableShared) { CONFIG_PFMLIB_SHARED = "n"; })

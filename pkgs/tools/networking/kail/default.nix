@@ -4,11 +4,7 @@ buildGoModule rec {
   pname = "kail";
   version = "0.15.0";
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   src = fetchFromGitHub {
     owner = "boz";

@@ -13,13 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-U8Uf7LG6+dOi+XxRpJrpy0kAqyr8fAlVchE9ZJ+ex/s=";
 
-  cargoBuildFlags = [
-    "-p" "rslint_cli"
-    "-p" "rslint_lsp"
-  ];
+  cargoBuildFlags = [ "-p" "rslint_cli" "-p" "rslint_lsp" ];
 
   meta = with lib; {
-    description = "A fast, customizable, and easy to use JavaScript and TypeScript linter";
+    description =
+      "A fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

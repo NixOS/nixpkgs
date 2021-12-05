@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "ibis";
@@ -23,9 +18,7 @@ buildPythonPackage rec {
     ${python.interpreter} test_ibis.py
   '';
 
-  pythonImportsCheck = [
-    "ibis"
-  ];
+  pythonImportsCheck = [ "ibis" ];
 
   meta = with lib; {
     description = "Lightweight template engine";

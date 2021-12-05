@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, six
-, decorator
-, nose
-, krb5Full
-, GSS
-, parameterized
-, shouldbe
-, cython
-, python
-, k5test
-}:
+{ stdenv, lib, buildPythonPackage, pythonOlder, fetchFromGitHub, six, decorator
+, nose, krb5Full, GSS, parameterized, shouldbe, cython, python, k5test }:
 
 buildPythonPackage rec {
   pname = "gssapi";
@@ -33,30 +19,16 @@ buildPythonPackage rec {
       --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
   '';
 
-  nativeBuildInputs = [
-    cython
-    krb5Full
-  ];
+  nativeBuildInputs = [ cython krb5Full ];
 
-  propagatedBuildInputs =  [
-    decorator
-    six
-  ];
+  propagatedBuildInputs = [ decorator six ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    GSS
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
 
-  checkInputs = [
-    k5test
-    nose
-    parameterized
-    shouldbe
-    six
-  ];
+  checkInputs = [ k5test nose parameterized shouldbe six ];
 
-  doCheck = pythonOlder "3.8"  # `shouldbe` not available
-    && !stdenv.isDarwin;  # many failures on darwin
+  doCheck = pythonOlder "3.8" # `shouldbe` not available
+    && !stdenv.isDarwin; # many failures on darwin
 
   # skip tests which fail possibly due to be an upstream issue (see
   # https://github.com/pythongssapi/python-gssapi/issues/220)

@@ -3,22 +3,23 @@ let
 
   dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
 
-  dnsScript = {pkgs, nodes}: let
-    dnsAddress = dnsServerIP nodes;
-  in pkgs.writeShellScript "dns-hook.sh" ''
-    set -euo pipefail
-    echo '[INFO]' "[$2]" 'dns-hook.sh' $*
-    if [ "$1" = "present" ]; then
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
-    else
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
-    fi
-  '';
+  dnsScript = { pkgs, nodes }:
+    let dnsAddress = dnsServerIP nodes;
+    in pkgs.writeShellScript "dns-hook.sh" ''
+      set -euo pipefail
+      echo '[INFO]' "[$2]" 'dns-hook.sh' $*
+      if [ "$1" = "present" ]; then
+        ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
+      else
+        ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
+      fi
+    '';
 
-  documentRoot = pkgs: pkgs.runCommand "docroot" {} ''
-    mkdir -p "$out"
-    echo hello world > "$out/index.html"
-  '';
+  documentRoot = pkgs:
+    pkgs.runCommand "docroot" { } ''
+      mkdir -p "$out"
+      echo hello world > "$out/index.html"
+    '';
 
   vhostBase = pkgs: {
     forceSSL = true;
@@ -46,7 +47,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
         description = "Pebble ACME challenge test server";
         wantedBy = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
+          ExecStart =
+            "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
@@ -78,25 +80,26 @@ in import ./make-test-python.nix ({ lib, ... }: {
       };
 
       # Test that account creation is collated into one service
-      specialisation.account-creation.configuration = { nodes, pkgs, lib, ... }: let
-        email = "newhostmaster@example.test";
-        caDomain = nodes.acme.config.test-support.acme.caDomain;
-        # Exit 99 to make it easier to track if this is the reason a renew failed
-        testScript = ''
-          test -e accounts/${caDomain}/${email}/account.json || exit 99
-        '';
-      in {
-        security.acme.email = lib.mkForce email;
-        systemd.services."b.example.test".preStart = testScript;
-        systemd.services."c.example.test".preStart = testScript;
+      specialisation.account-creation.configuration = { nodes, pkgs, lib, ... }:
+        let
+          email = "newhostmaster@example.test";
+          caDomain = nodes.acme.config.test-support.acme.caDomain;
+          # Exit 99 to make it easier to track if this is the reason a renew failed
+          testScript = ''
+            test -e accounts/${caDomain}/${email}/account.json || exit 99
+          '';
+        in {
+          security.acme.email = lib.mkForce email;
+          systemd.services."b.example.test".preStart = testScript;
+          systemd.services."c.example.test".preStart = testScript;
 
-        services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
-          enableACME = true;
+          services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
+            enableACME = true;
+          };
+          services.nginx.virtualHosts."c.example.test" = (vhostBase pkgs) // {
+            enableACME = true;
+          };
         };
-        services.nginx.virtualHosts."c.example.test" = (vhostBase pkgs) // {
-          enableACME = true;
-        };
-      };
 
       # Cert config changes will not cause the nginx configuration to change.
       # This tests that the reload service is correctly triggered.
@@ -120,9 +123,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       # Test OCSP Stapling
       specialisation.ocsp-stapling.configuration = { pkgs, ... }: {
-        security.acme.certs."a.example.test" = {
-          ocspMustStaple = true;
-        };
+        security.acme.certs."a.example.test" = { ocspMustStaple = true; };
         services.nginx.virtualHosts."a.example.com" = {
           extraConfig = ''
             ssl_stapling on;
@@ -146,7 +147,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
         # Used to determine if service reload was triggered
         systemd.targets.test-renew-httpd = {
           wants = [ "acme-c.example.test.service" ];
-          after = [ "acme-c.example.test.service" "httpd-config-reload.service" ];
+          after =
+            [ "acme-c.example.test.service" "httpd-config-reload.service" ];
         };
       };
 
@@ -169,24 +171,25 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       # Validate service relationships by adding a slow start service to nginx' wants.
       # Reproducer for https://github.com/NixOS/nixpkgs/issues/81842
-      specialisation.slow-startup.configuration = { pkgs, config, nodes, lib, ... }: {
-        systemd.services.my-slow-service = {
-          wantedBy = [ "multi-user.target" "nginx.service" ];
-          before = [ "nginx.service" ];
-          preStart = "sleep 5";
-          script = "${pkgs.python3}/bin/python -m http.server";
-        };
+      specialisation.slow-startup.configuration =
+        { pkgs, config, nodes, lib, ... }: {
+          systemd.services.my-slow-service = {
+            wantedBy = [ "multi-user.target" "nginx.service" ];
+            before = [ "nginx.service" ];
+            preStart = "sleep 5";
+            script = "${pkgs.python3}/bin/python -m http.server";
+          };
 
-        services.nginx.virtualHosts."slow.example.com" = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/".proxyPass = "http://localhost:8000";
+          services.nginx.virtualHosts."slow.example.com" = {
+            forceSSL = true;
+            enableACME = true;
+            locations."/".proxyPass = "http://localhost:8000";
+          };
         };
-      };
     };
 
     # The client will be used to curl the webserver to validate configuration
-    client = {nodes, lib, pkgs, ...}: {
+    client = { nodes, lib, pkgs, ... }: {
       imports = [ commonConfig ];
       networking.nameservers = lib.mkForce [ (dnsServerIP nodes) ];
 
@@ -195,17 +198,16 @@ in import ./make-test-python.nix ({ lib, ... }: {
     };
   };
 
-  testScript = {nodes, ...}:
+  testScript = { nodes, ... }:
     let
       caDomain = nodes.acme.config.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
-    in
-    # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
-    # this is because a oneshot goes from inactive => activating => inactive, and never
-    # reaches the active state. Targets do not have this issue.
+      # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
+      # this is because a oneshot goes from inactive => activating => inactive, and never
+      # reaches the active state. Targets do not have this issue.
 
-    ''
+    in ''
       import time
 
 
@@ -317,7 +319,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${
+            dnsServerIP nodes
+          }:8055/add-a'
       )
 
       acme.start()
@@ -332,7 +336,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
           webserver.wait_for_unit("acme-finished-a.example.test.target")
 
       with subtest("Certificates and accounts have safe + valid permissions"):
-          group = "${nodes.webserver.config.security.acme.certs."a.example.test".group}"
+          group = "${
+            nodes.webserver.config.security.acme.certs."a.example.test".group
+          }"
           webserver.succeed(
               f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
           )

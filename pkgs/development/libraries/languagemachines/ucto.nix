@@ -1,26 +1,30 @@
-{ lib, stdenv, fetchurl
-, automake, autoconf, libtool, pkg-config, autoconf-archive
-, libxml2, icu, bzip2, libtar
-, languageMachines
-}:
+{ lib, stdenv, fetchurl, automake, autoconf, libtool, pkg-config
+, autoconf-archive, libxml2, icu, bzip2, libtar, languageMachines }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-ucto.json;
-in
+let release = lib.importJSON ./release-info/LanguageMachines-ucto.json;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "ucto-${release.version}";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "ucto-${release.version}.tar.gz"; };
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "ucto-${release.version}.tar.gz";
+  };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf bzip2 libtool autoconf-archive
-                  icu libtar libxml2
-                  languageMachines.ticcutils
-                  languageMachines.libfolia
-                  languageMachines.uctodata
-                  # TODO textcat from libreoffice? Pulls in X11 dependencies?
-                ];
+  buildInputs = [
+    automake
+    autoconf
+    bzip2
+    libtool
+    autoconf-archive
+    icu
+    libtar
+    libxml2
+    languageMachines.ticcutils
+    languageMachines.libfolia
+    languageMachines.uctodata
+    # TODO textcat from libreoffice? Pulls in X11 dependencies?
+  ];
   preConfigure = "sh bootstrap.sh;";
 
   postInstall = ''
@@ -34,9 +38,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A rule-based tokenizer for natural language";
-    homepage    = "https://languagemachines.github.io/ucto/";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    homepage = "https://languagemachines.github.io/ucto/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

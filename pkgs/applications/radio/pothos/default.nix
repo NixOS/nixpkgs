@@ -1,22 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, wrapQtAppsHook
-, pcre
-, poco
-, qtbase
-, qtsvg
-, libsForQt5
-, nlohmann_json
-, soapysdr-with-plugins
-, portaudio
-, alsa-lib
-, muparserx
-, python3
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, doxygen, wrapQtAppsHook
+, pcre, poco, qtbase, qtsvg, libsForQt5, nlohmann_json, soapysdr-with-plugins
+, portaudio, alsa-lib, muparserx, python3 }:
 
 mkDerivation rec {
   pname = "pothos";
@@ -38,8 +22,17 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];
 
   buildInputs = [
-    pcre poco qtbase qtsvg libsForQt5.qwt nlohmann_json
-    soapysdr-with-plugins portaudio alsa-lib muparserx python3
+    pcre
+    poco
+    qtbase
+    qtsvg
+    libsForQt5.qwt
+    nlohmann_json
+    soapysdr-with-plugins
+    portaudio
+    alsa-lib
+    muparserx
+    python3
   ];
 
   postInstall = ''

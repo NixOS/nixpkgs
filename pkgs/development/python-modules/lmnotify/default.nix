@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, requests
-, requests_oauthlib
-}:
+{ lib, buildPythonPackage, fetchPypi, oauthlib, requests, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "lmnotify";

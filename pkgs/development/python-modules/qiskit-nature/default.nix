@@ -1,22 +1,9 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-  # Python Inputs
-, h5py
-, numpy
-, psutil
-, qiskit-terra
-, retworkx
-, scikit-learn
-, scipy
-, withPyscf ? false
-, pyscf
-  # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
-}:
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub
+# Python Inputs
+, h5py, numpy, psutil, qiskit-terra, retworkx, scikit-learn, scipy
+, withPyscf ? false, pyscf
+# Check Inputs
+, pytestCheckHook, ddt, pylatexenc }:
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
@@ -35,27 +22,15 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "h5py<3.3" "h5py"
   '';
 
-  propagatedBuildInputs = [
-    h5py
-    numpy
-    psutil
-    qiskit-terra
-    retworkx
-    scikit-learn
-    scipy
-  ] ++ lib.optional withPyscf pyscf;
+  propagatedBuildInputs =
+    [ h5py numpy psutil qiskit-terra retworkx scikit-learn scipy ]
+    ++ lib.optional withPyscf pyscf;
 
-  checkInputs = [
-    pytestCheckHook
-    ddt
-    pylatexenc
-  ];
+  checkInputs = [ pytestCheckHook ddt pylatexenc ];
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlagsArray = [
-    "--durations=10"
-  ] ++ lib.optionals (!withPyscf) [
+  pytestFlagsArray = [ "--durations=10" ] ++ lib.optionals (!withPyscf) [
     "--ignore=test/algorithms/excited_state_solvers/test_excited_states_eigensolver.py"
   ];
 

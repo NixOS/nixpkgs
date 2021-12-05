@@ -1,8 +1,6 @@
-{ lib
-, python3Packages
-, hyDefinedPythonPackages /* Packages like with python.withPackages */
-, ...
-}:
+{ lib, python3Packages
+, hyDefinedPythonPackages # Packages like with python.withPackages
+, ... }:
 python3Packages.buildPythonApplication rec {
   pname = "hy";
   version = "1.0a1";
@@ -14,16 +12,9 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ flake8 pytest ];
 
-  propagatedBuildInputs = with python3Packages; [
-    appdirs
-    astor
-    clint
-    colorama
-    fastentrypoints
-    funcparserlib
-    rply
-    pygments
-  ] ++ (hyDefinedPythonPackages python3Packages);
+  propagatedBuildInputs = with python3Packages;
+    [ appdirs astor clint colorama fastentrypoints funcparserlib rply pygments ]
+    ++ (hyDefinedPythonPackages python3Packages);
 
   # Hy does not include tests in the source distribution from PyPI, so only test executable.
   checkPhase = ''

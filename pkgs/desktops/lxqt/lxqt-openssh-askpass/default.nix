@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, qtx11extras
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools
+, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-openssh-askpass";
@@ -24,20 +12,10 @@ mkDerivation rec {
     sha256 = "0fp5jq3j34p81y200jbyp7wcz04r7jk07bfwrigjwcyj2xknkrgw";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
-    kwindowsystem
-    liblxqt
-    libqtxdg
-  ];
+  buildInputs =
+    [ qtbase qttools qtx11extras qtsvg kwindowsystem liblxqt libqtxdg ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

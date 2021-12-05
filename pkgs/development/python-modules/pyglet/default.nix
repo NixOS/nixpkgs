@@ -1,21 +1,6 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, unzip
-, pythonOlder
-, libGL
-, libGLU
-, xorg
-, pytestCheckHook
-, glibc
-, gtk2-x11
-, gdk-pixbuf
-, fontconfig
-, freetype
-, ffmpeg-full
-, openal
-, libpulseaudio
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, unzip, pythonOlder, libGL, libGLU
+, xorg, pytestCheckHook, glibc, gtk2-x11, gdk-pixbuf, fontconfig, freetype
+, ffmpeg-full, openal, libpulseaudio }:
 
 buildPythonPackage rec {
   version = "1.5.21";
@@ -32,8 +17,7 @@ buildPythonPackage rec {
   # Even naively searching `LD_LIBRARY_PATH` won't work since `libc.so` is a linker script and
   # ctypes.cdll.LoadLibrary cannot deal with those. Therefore, just hardcode the paths to the
   # necessary libraries.
-  postPatch = let
-    ext = stdenv.hostPlatform.extensions.sharedLibrary;
+  postPatch = let ext = stdenv.hostPlatform.extensions.sharedLibrary;
   in ''
     cat > pyglet/lib.py <<EOF
     import ctypes
@@ -84,9 +68,7 @@ buildPythonPackage rec {
   # tests do run and pass in nix-shell, however.
   doCheck = false;
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PYGLET_HEADLESS=True

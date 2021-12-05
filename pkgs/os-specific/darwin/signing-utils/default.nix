@@ -1,13 +1,8 @@
-{ stdenvNoCC
-, sigtool
-, cctools
-}:
+{ stdenvNoCC, sigtool, cctools }:
 
-let
-  stdenv = stdenvNoCC;
-in
+let stdenv = stdenvNoCC;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "signing-utils";
 
   dontUnpack = true;

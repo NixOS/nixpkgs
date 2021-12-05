@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests

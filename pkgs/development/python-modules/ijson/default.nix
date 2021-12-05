@@ -12,7 +12,8 @@ buildPythonPackage rec {
   doCheck = false; # something about yajl
 
   meta = with lib; {
-    description = "Iterative JSON parser with a standard Python iterator interface";
+    description =
+      "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvl ];

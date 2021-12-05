@@ -5,36 +5,41 @@ let
   inherit (config.users) groups;
   rootDir = "/run/freeciv";
   argsFormat = {
-    type = with lib.types; let
-      valueType = nullOr (oneOf [
-        bool int float str
-        (listOf valueType)
-      ]) // {
-        description = "freeciv-server params";
-      };
-    in valueType;
+    type = with lib.types;
+      let
+        valueType = nullOr (oneOf [ bool int float str (listOf valueType) ])
+          // {
+            description = "freeciv-server params";
+          };
+      in valueType;
     generate = name: value:
-      let mkParam = k: v:
-            if v == null then []
-            else if isBool v then if v then [("--"+k)] else []
-            else [("--"+k) v];
-          mkParams = k: v: map (mkParam k) (if isList v then v else [v]);
-      in escapeShellArgs (concatLists (concatLists (mapAttrsToList mkParams value)));
+      let
+        mkParam = k: v:
+          if v == null then
+            [ ]
+          else if isBool v then
+            if v then [ ("--" + k) ] else [ ]
+          else [
+            ("--" + k)
+            v
+          ];
+        mkParams = k: v: map (mkParam k) (if isList v then v else [ v ]);
+      in escapeShellArgs
+      (concatLists (concatLists (mapAttrsToList mkParams value)));
   };
-in
-{
+in {
   options = {
     services.freeciv = {
-      enable = mkEnableOption ''freeciv'';
+      enable = mkEnableOption "freeciv";
       settings = mkOption {
         description = ''
           Parameters of freeciv-server.
         '';
-        default = {};
+        default = { };
         type = types.submodule {
           freeformType = argsFormat.type;
           options.Announce = mkOption {
-            type = types.enum ["IPv4" "IPv6" "none"];
+            type = types.enum [ "IPv4" "IPv6" "none" ];
             default = "none";
             description = "Announce game in LAN using given protocol.";
           };
@@ -47,16 +52,19 @@ in
                 backend="sqlite"
                 database="/var/lib/freeciv/auth.sqlite"
             '';
-            description = "Enable database connection with given configuration.";
+            description =
+              "Enable database connection with given configuration.";
           };
           options.debug = mkOption {
             type = types.ints.between 0 3;
             default = 0;
             description = "Set debug log level.";
           };
-          options.exit-on-end = mkEnableOption "exit instead of restarting when a game ends.";
+          options.exit-on-end =
+            mkEnableOption "exit instead of restarting when a game ends.";
           options.Guests = mkEnableOption "guests to login if auth is enabled";
-          options.Newusers = mkEnableOption "new users to login if auth is enabled";
+          options.Newusers =
+            mkEnableOption "new users to login if auth is enabled";
           options.port = mkOption {
             type = types.port;
             default = 5556;
@@ -86,11 +94,12 @@ in
           };
         };
       };
-      openFirewall = mkEnableOption "opening the firewall for the port listening for clients";
+      openFirewall = mkEnableOption
+        "opening the firewall for the port listening for clients";
     };
   };
   config = mkIf cfg.enable {
-    users.groups.freeciv = {};
+    users.groups.freeciv = { };
     # Use with:
     #   journalctl -u freeciv.service -f -o cat &
     #   cat >/run/freeciv.stdin
@@ -118,29 +127,27 @@ in
         ExecStart = pkgs.writeShellScript "freeciv-server" (''
           set -eux
           savedir=$(date +%Y-%m-%d_%H-%M-%S)
-          '' + "${pkgs.freeciv}/bin/freeciv-server"
-          + " " + optionalString (cfg.settings.saves != null)
-            (concatStringsSep " " [ "--saves" "${escapeShellArg cfg.settings.saves}/$savedir" ])
-          + " " + argsFormat.generate "freeciv-server" (cfg.settings // { saves = null; }));
+        '' + "${pkgs.freeciv}/bin/freeciv-server" + " "
+          + optionalString (cfg.settings.saves != null) (concatStringsSep " " [
+            "--saves"
+            "${escapeShellArg cfg.settings.saves}/$savedir"
+          ]) + " " + argsFormat.generate "freeciv-server"
+          (cfg.settings // { saves = null; }));
         DynamicUser = true;
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "755";
         StateDirectory = [ "freeciv" ];
         WorkingDirectory = "/var/lib/freeciv";
         # Avoid mounting rootDir in the own rootDir of ExecStart='s mount namespace.
-        InaccessiblePaths = ["-+${rootDir}"];
+        InaccessiblePaths = [ "-+${rootDir}" ];
         # This is for BindPaths= and BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
         RootDirectory = rootDir;
         RootDirectoryStartOnly = true;
         MountAPIVFS = true;
-        BindReadOnlyPaths = [
-          builtins.storeDir
-          "/etc"
-          "/run"
-        ];
+        BindReadOnlyPaths = [ builtins.storeDir "/etc" "/run" ];
         # The following options are only for optimizing:
         # systemd-analyze security freeciv
         AmbientCapabilities = "";
@@ -173,15 +180,22 @@ in
           # Groups in @system-service which do not contain a syscall listed by:
           # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' freeciv-server
           # in tests, and seem likely not necessary for freeciv-server.
-          "~@aio" "~@chown" "~@ipc" "~@keyring" "~@memlock"
-          "~@resources" "~@setuid" "~@sync" "~@timer"
+          "~@aio"
+          "~@chown"
+          "~@ipc"
+          "~@keyring"
+          "~@memlock"
+          "~@resources"
+          "~@setuid"
+          "~@sync"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
       };
     };
-    networking.firewall = mkIf cfg.openFirewall
-      { allowedTCPPorts = [ cfg.settings.port ]; };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
   meta.maintainers = with lib.maintainers; [ julm ];
 }

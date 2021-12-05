@@ -18,9 +18,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  passthru.tests = {
-    smoke-test = nixosTests.atd;
-  };
+  passthru.tests = { smoke-test = nixosTests.atd; };
 
   meta = with lib; {
     homepage = "https://github.com/mjambon/atd";

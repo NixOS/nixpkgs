@@ -1,21 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, SDL2
-, libGL
-, openalSoft
-, curl
-, speex
-, opusfile
-, libogg
-, libvorbis
-, libopus
-, libjpeg
-, mumble
-, freetype
-}:
+{ lib, stdenv, fetchFromGitHub, which, pkg-config, SDL2, libGL, openalSoft, curl
+, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype }:
 
 stdenv.mkDerivation {
   pname = "ioquake3";
@@ -46,7 +30,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0" ];
+  makeFlags = [
+    "USE_INTERNAL_LIBS=0"
+    "USE_FREETYPE=1"
+    "USE_OPENAL_DLOPEN=0"
+    "USE_CURL_DLOPEN=0"
+  ];
 
   installTargets = [ "copyfiles" ];
 
@@ -58,7 +47,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://ioquake3.org/";
-    description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
+    description =
+      "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rvolosatovs eelco abbradar ];

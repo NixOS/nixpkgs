@@ -1,4 +1,5 @@
-{ lib, buildDunePackage, tls, async, cstruct-async, core, cstruct, mirage-crypto-rng-async, async_find }:
+{ lib, buildDunePackage, tls, async, cstruct-async, core, cstruct
+, mirage-crypto-rng-async, async_find }:
 
 buildDunePackage rec {
   pname = "tls-async";
@@ -10,13 +11,6 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  propagatedBuildInputs = [
-    async
-    async_find
-    core
-    cstruct
-    cstruct-async
-    mirage-crypto-rng-async
-    tls
-  ];
+  propagatedBuildInputs =
+    [ async async_find core cstruct cstruct-async mirage-crypto-rng-async tls ];
 }

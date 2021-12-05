@@ -1,26 +1,27 @@
-{ lib, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
-  pango, gobject-introspection, wrapGAppsHook, gettext,
+{ lib, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2, pango
+, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
- enableOSM ? true, osm-gps-map,
- enableGraphviz ? true, graphviz,
- enableGhostscript ? true, ghostscript
- }:
+enableOSM ? true, osm-gps-map, enableGraphviz ? true, graphviz
+, enableGhostscript ? true, ghostscript }:
 
-let
-  inherit (pythonPackages) python buildPythonApplication;
+let inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
   version = "5.1.4";
   pname = "gramps";
 
   nativeBuildInputs = [ wrapGAppsHook intltool gettext ];
-  buildInputs = [ gtk3 gobject-introspection pango gexiv2 ]
-    # Map support
+  buildInputs = [
+    gtk3
+    gobject-introspection
+    pango
+    gexiv2
+  ]
+  # Map support
     ++ lib.optional enableOSM osm-gps-map
     # Graphviz support
     ++ lib.optional enableGraphviz graphviz
     # Ghostscript support
-    ++ lib.optional enableGhostscript ghostscript
-  ;
+    ++ lib.optional enableGhostscript ghostscript;
 
   src = fetchFromGitHub {
     owner = "gramps-project";

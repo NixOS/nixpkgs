@@ -1,9 +1,12 @@
 { fetchurl }:
 let
   nugetUrlBase = "https://www.nuget.org/api/v2/package";
-  fetchNuGet = { name, version, sha256 }: fetchurl { inherit sha256; url = "${nugetUrlBase}/${name}/${version}"; };
-in
-[
+  fetchNuGet = { name, version, sha256 }:
+    fetchurl {
+      inherit sha256;
+      url = "${nugetUrlBase}/${name}/${version}";
+    };
+in [
 
   (fetchNuGet {
     name = "hdrhistogram";
@@ -186,32 +189,38 @@ in
     sha256 = "03mnvkhskbzxddz4hm113zsch1jyzh2cs450dk3rgfjp8crlw1va";
   })
   (fetchNuGet {
-    name = "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "16rnxzpk5dpbbl1x354yrlsbvwylrq456xzpsha1n9y3glnhyx9d";
   })
   (fetchNuGet {
-    name = "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "0rwpqngkqiapqc5c2cpkj7idhngrgss5qpnqg0yh40mbyflcxf8i";
   })
   (fetchNuGet {
-    name = "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "0hkg03sgm2wyq8nqk6dbm9jh5vcq57ry42lkqdmfklrw89lsmr59";
   })
   (fetchNuGet {
-    name = "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "1n06gxwlinhs0w7s8a94r1q3lwqzvynxwd3mp10ws9bg6gck8n4r";
   })
   (fetchNuGet {
-    name = "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "0c2p354hjx58xhhz7wv6div8xpi90sc6ibdm40qin21bvi7ymcaa";
   })
   (fetchNuGet {
-    name = "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "0404wqrc7f2yc0wxv71y3nnybvqx8v4j9d47hlscxy759a525mc3";
   })
@@ -246,77 +255,92 @@ in
     sha256 = "0zy5r25jppz48i2bkg8b9lfig24xixg6nm3xyr1379zdnqnpm8f6";
   })
   (fetchNuGet {
-    name = "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "0qyynf9nz5i7pc26cwhgi8j62ps27sqmf78ijcfgzab50z9g8ay3";
   })
   (fetchNuGet {
-    name = "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "096ch4n4s8k82xga80lfmpimpzahd2ip1mgwdqgar0ywbbl6x438";
   })
   (fetchNuGet {
-    name = "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "1klrs545awhayryma6l7g2pvnp9xy4z0r1i40r80zb45q3i9nbyf";
   })
   (fetchNuGet {
-    name = "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "1dm8fifl7rf1gy7lnwln78ch4rw54g0pl5g1c189vawavll7p6rj";
   })
   (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple";
+    name =
+      "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple";
     version = "4.3.0";
     sha256 = "10yc8jdrwgcl44b4g93f1ds76b176bajd3zqi2faf5rvh1vy9smi";
   })
   (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "0zcxjv5pckplvkg0r6mw3asggm7aqzbdjimhvsasb0cgm59x09l3";
   })
   (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "1m9z1k9kzva9n9kwinqxl97x2vgl79qhqjlv17k9s2ymcyv2bwr6";
   })
   (fetchNuGet {
-    name = "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "0vhynn79ih7hw7cwjazn87rm9z9fj0rvxgzlab36jybgcpcgphsn";
   })
   (fetchNuGet {
-    name = "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "1cpx56mcfxz7cpn57wvj18sjisvzq8b5vd9rw16ihd2i6mcp3wa1";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "160p68l2c7cqmyqjwxydcvgw7lvl1cr0znkw8fp24d1by9mqc8p3";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "15gsm1a8jdmgmf8j5v1slfz8ks124nfdhk2vxs2rw3asrxalg8hi";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "15zrc8fgd8zx28hdghcj5f5i34wf3l6bq5177075m2bc2j34jrqy";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "0q0n5q1r1wnqmr5i5idsrd9ywl33k0js4pngkwq9p368mbxp8x1w";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     sha256 = "1p4dgxax6p7rlgj4q73k73rslcnz4wdcv8q2flg1s8ygwcm58ld5";
   })
   (fetchNuGet {
-    name = "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
+    name =
+      "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.2";
     sha256 = "1x0g58pbpjrmj2x2qw17rdwwnrcl0wvim2hdwz48lixvwvp22n9c";
   })

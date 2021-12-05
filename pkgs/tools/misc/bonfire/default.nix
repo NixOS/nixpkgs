@@ -36,7 +36,8 @@ buildPythonApplication rec {
     substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
   '';
 
-  propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
+  propagatedBuildInputs =
+    [ arrow click keyring parsedatetime requests six termcolor ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/bonfire";

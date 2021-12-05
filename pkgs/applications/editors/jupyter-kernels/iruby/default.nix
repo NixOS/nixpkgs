@@ -1,6 +1,4 @@
-{ lib
-, bundlerApp
-}:
+{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "iruby";
@@ -9,9 +7,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Ruby kernel for Jupyter";
-    homepage    = "https://github.com/SciRuby/iruby";
-    license     = licenses.mit;
+    homepage = "https://github.com/SciRuby/iruby";
+    license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,18 +1,11 @@
-{ lib, stdenv
-, meson
-, ninja
-, sysprof
-}:
+{ lib, stdenv, meson, ninja, sysprof }:
 
 stdenv.mkDerivation rec {
   pname = "libsysprof-capture";
 
   inherit (sysprof) src version;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ meson ninja ];
 
   mesonFlags = [
     "-Dwith_sysprofd=none"

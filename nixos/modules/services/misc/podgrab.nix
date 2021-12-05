@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.services.podgrab;
-in
-{
+let cfg = config.services.podgrab;
+in {
   options.services.podgrab = with lib; {
     enable = mkEnableOption "Podgrab, a self-hosted podcast manager";
 
@@ -20,7 +18,8 @@ in
       type = types.port;
       default = 8080;
       example = 4242;
-      description = "The port on which Podgrab will listen for incoming HTTP traffic.";
+      description =
+        "The port on which Podgrab will listen for incoming HTTP traffic.";
     };
   };
 
@@ -36,9 +35,8 @@ in
       };
       serviceConfig = {
         DynamicUser = true;
-        EnvironmentFile = lib.optional (cfg.passwordFile != null) [
-          cfg.passwordFile
-        ];
+        EnvironmentFile =
+          lib.optional (cfg.passwordFile != null) [ cfg.passwordFile ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";
         WorkingDirectory = "${pkgs.podgrab}/share";
         StateDirectory = [ "podgrab/config" "podgrab/data" ];

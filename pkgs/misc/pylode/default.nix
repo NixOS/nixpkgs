@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pylode";
@@ -35,12 +32,11 @@ python3.pkgs.buildPythonApplication rec {
   # Path issues with the tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylode"
-  ];
+  pythonImportsCheck = [ "pylode" ];
 
   meta = with lib; {
-    description = "OWL ontology documentation tool using Python and templating, based on LODE";
+    description =
+      "OWL ontology documentation tool using Python and templating, based on LODE";
     homepage = "https://github.com/RDFLib/pyLODE";
     # Next release will move to BSD3
     license = licenses.gpl3Only;

@@ -1,43 +1,33 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkg-config, which
-, flex, bison
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python3, python3
-, swig
-, ncurses
-, pam
-, libnotify
-, buildPackages
-, coreutils
-, bash
-, gnugrep
-, gnused
-, kmod
-, writeShellScript
-, closureInfo
-, runCommand
-}:
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook, pkg-config
+, which, flex, bison, linuxHeaders ? stdenv.cc.libc.linuxHeaders, gawk
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+  && lib.meta.availableOn stdenv.hostPlatform perl, perl, withPython ?
+  stdenv.hostPlatform == stdenv.buildPlatform
+  && lib.meta.availableOn stdenv.hostPlatform python3, python3, swig, ncurses
+, pam, libnotify, buildPackages, coreutils, bash, gnugrep, gnused, kmod
+, writeShellScript, closureInfo, runCommand }:
 
 let
   apparmor-version = "3.0.3";
 
-  apparmor-meta = component: with lib; {
-    homepage = "https://apparmor.net/";
-    description = "A mandatory access control system - ${component}";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ joachifm julm phreedom thoughtpolice ];
-    platforms = platforms.linux;
-  };
+  apparmor-meta = component:
+    with lib; {
+      homepage = "https://apparmor.net/";
+      description = "A mandatory access control system - ${component}";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ joachifm julm phreedom thoughtpolice ];
+      platforms = platforms.linux;
+    };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    url = "https://launchpad.net/apparmor/${
+        lib.versions.majorMinor apparmor-version
+      }/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
     sha256 = "0nasq8pdmzkrf856yg1v8z5hcs0nn6gw2qr60ab0a7j9ixfv0g8m";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
-    PATH="${lib.makeBinPath [coreutils gnused gnugrep]}:$PATH"
+    PATH="${lib.makeBinPath [ coreutils gnused gnugrep ]}:$PATH"
     . ${apparmor-parser}/lib/apparmor/rc.apparmor.functions
     remove_profiles
   '';
@@ -54,7 +44,8 @@ let
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
+      url =
+        "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
@@ -72,24 +63,16 @@ let
 
     src = apparmor-sources;
 
-   # checking whether python bindings are enabled... yes
-   # checking for python3... no
-   # configure: error: python is required when enabling python bindings
+    # checking whether python bindings are enabled... yes
+    # checking for python3... no
+    # configure: error: python is required when enabling python bindings
     strictDeps = false;
 
-    nativeBuildInputs = [
-      autoreconfHook
-      bison
-      flex
-      pkg-config
-      swig
-      ncurses
-      which
-      perl
-    ] ++ lib.optional withPython python3;
-
-    buildInputs = lib.optional withPerl perl
+    nativeBuildInputs =
+      [ autoreconfHook bison flex pkg-config swig ncurses which perl ]
       ++ lib.optional withPython python3;
+
+    buildInputs = lib.optional withPerl perl ++ lib.optional withPython python3;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -97,8 +80,12 @@ let
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${
+        lib.getDev stdenv.cc.libc
+      }/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${
+        lib.getDev stdenv.cc.libc
+      }/include/netinet/in.h"
     '';
     inherit patches;
 
@@ -134,27 +121,26 @@ let
 
     nativeBuildInputs = [ makeWrapper which python3 ];
 
-    buildInputs = [
-      bash
-      perl
-      python3
-      libapparmor
-      libapparmor.python
-    ];
+    buildInputs = [ bash perl python3 libapparmor libapparmor.python ];
 
     prePatch = prePatchCommon +
       # Do not build vim file
       lib.optionalString stdenv.hostPlatform.isMusl ''
         sed -i ./utils/Makefile -e "/\<vim\>/d"
       '' + ''
-      for file in utils/apparmor/easyprof.py utils/apparmor/aa.py utils/logprof.conf; do
-        substituteInPlace $file --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
-      done
-    '';
+        for file in utils/apparmor/easyprof.py utils/apparmor/aa.py utils/logprof.conf; do
+          substituteInPlace $file --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+        done
+      '';
     inherit patches;
     postPatch = "cd ./utils";
     makeFlags = [ "LANGS=" ];
-    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
+    installFlags = [
+      "DESTDIR=$(out)"
+      "BINDIR=$(out)/bin"
+      "VIM_INSTALL_PATH=$(out)/share"
+      "PYPREFIX="
+    ];
 
     postInstall = ''
       sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
@@ -187,23 +173,17 @@ let
 
     src = apparmor-sources;
 
-    nativeBuildInputs = [
-      pkg-config
-      libapparmor
-      gawk
-      which
-    ];
+    nativeBuildInputs = [ pkg-config libapparmor gawk which ];
 
-    buildInputs = [
-      libapparmor
-    ];
+    buildInputs = [ libapparmor ];
 
     prePatch = prePatchCommon;
     postPatch = ''
       cd ./binutils
     '';
     makeFlags = [ "LANGS=" "USE_SYSTEM=1" ];
-    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "SBINDIR=$(out)/bin" ];
+    installFlags =
+      [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "SBINDIR=$(out)/bin" ];
 
     inherit doCheck;
 
@@ -229,14 +209,18 @@ let
         --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
       substituteInPlace parser/rc.apparmor.functions \
        --replace "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
-      sed -i parser/rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
+      sed -i parser/rc.apparmor.functions -e '2i . ${
+        ./fix-rc.apparmor.functions.sh
+      }'
     '';
     inherit patches;
     postPatch = ''
       cd ./parser
     '';
     makeFlags = [
-      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "LANGS="
+      "USE_SYSTEM=1"
+      "INCLUDEDIR=${libapparmor}/include"
       "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ];
     installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];
@@ -279,7 +263,8 @@ let
       cd ./profiles
     '';
 
-    installFlags = [ "DESTDIR=$(out)" "EXTRAS_DEST=$(out)/share/apparmor/extra-profiles" ];
+    installFlags =
+      [ "DESTDIR=$(out)" "EXTRAS_DEST=$(out)/share/apparmor/extra-profiles" ];
 
     inherit doCheck;
 
@@ -310,37 +295,33 @@ let
   # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
   apparmorRulesFromClosure =
     { # The store path of the derivation is given in $path
-      additionalRules ? []
+    additionalRules ? [ ]
       # TODO: factorize here some other common paths
       # that may emerge from use cases.
     , baseRules ? [
-        "r $path"
-        "r $path/etc/**"
-        "r $path/share/**"
-        # Note that not all libraries are prefixed with "lib",
-        # eg. glibc-2.30/lib/ld-2.30.so
-        "mr $path/lib/**.so*"
-        # eg. glibc-2.30/lib/gconv/gconv-modules
-        "r $path/lib/**"
-      ]
-    , name ? ""
-    }: rootPaths: runCommand
-      ( "apparmor-closure-rules"
-      + lib.optionalString (name != "") "-${name}" ) {} ''
-    touch $out
-    while read -r path
-    do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
-    done <${closureInfo { inherit rootPaths; }}/store-paths
-  '';
-in
-{
-  inherit
-    libapparmor
-    apparmor-utils
-    apparmor-bin-utils
-    apparmor-parser
-    apparmor-pam
-    apparmor-profiles
-    apparmor-kernel-patches
+      "r $path"
+      "r $path/etc/**"
+      "r $path/share/**"
+      # Note that not all libraries are prefixed with "lib",
+      # eg. glibc-2.30/lib/ld-2.30.so
+      "mr $path/lib/**.so*"
+      # eg. glibc-2.30/lib/gconv/gconv-modules
+      "r $path/lib/**"
+    ], name ? "" }:
+    rootPaths:
+    runCommand
+    ("apparmor-closure-rules" + lib.optionalString (name != "") "-${name}")
+    { } ''
+      touch $out
+      while read -r path
+      do printf >>$out "%s,\n" ${
+        lib.concatMapStringsSep " " (x: ''"${x}"'')
+        (baseRules ++ additionalRules)
+      }
+      done <${closureInfo { inherit rootPaths; }}/store-paths
+    '';
+in {
+  inherit libapparmor apparmor-utils apparmor-bin-utils apparmor-parser
+    apparmor-pam apparmor-profiles apparmor-kernel-patches
     apparmorRulesFromClosure;
 }

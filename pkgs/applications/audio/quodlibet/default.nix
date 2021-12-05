@@ -1,50 +1,78 @@
-{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
-  tag ? "", xvfb-run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
-  gst_all_1, withGstPlugins ? true,
-  xineBackend ? false, xine-lib,
-  withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
-  webkitgtk ? null,
-  keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
+{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3
+, gdk-pixbuf, librsvg, tag ? "", xvfb-run, dbus, glibcLocales, glib
+, glib-networking, gobject-introspection, hicolor-icon-theme, gst_all_1
+, withGstPlugins ? true, xineBackend ? false, xine-lib, withDbusPython ? false
+, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false
+, webkitgtk ? null, keybinder3 ? null, gtksourceview ? null, libmodplug ? null
+, kakasi ? null, libappindicator-gtk3 ? null }:
 
-let optionals = lib.optionals; in
-python3.pkgs.buildPythonApplication rec {
+let optionals = lib.optionals;
+in python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
   version = "4.4.0";
 
   src = fetchurl {
-    url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
+    url =
+      "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
     sha256 = "sha256-oDMY0nZ+SVlVF2PQqH+tl3OHr3EmCP5XJxQXaiS782c=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
-  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest-xdist polib xvfb-run dbus.daemon glibcLocales ]);
+  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [
+    pytest
+    pytest-xdist
+    polib
+    xvfb-run
+    dbus.daemon
+    glibcLocales
+  ]);
 
-  buildInputs = [ gnome.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
-    ++ (if xineBackend then [ xine-lib ] else with gst_all_1;
-    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
+  buildInputs = [
+    gnome.adwaita-icon-theme
+    libsoup
+    glib
+    glib-networking
+    gtk3
+    webkitgtk
+    gdk-pixbuf
+    keybinder3
+    gtksourceview
+    libmodplug
+    libappindicator-gtk3
+    kakasi
+    gobject-introspection
+  ] ++ (if xineBackend then
+    [ xine-lib ]
+  else
+    with gst_all_1;
+    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-plugins-bad
+    ]);
 
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
-      ++ optionals withDbusPython [ dbus-python ]
-      ++ optionals withPyInotify [ pyinotify ]
-      ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
-      ++ optionals withPahoMqtt [ paho-mqtt ];
+  propagatedBuildInputs = with python3.pkgs;
+    [ pygobject3 pycairo mutagen gst-python feedparser ]
+    ++ optionals withDbusPython [ dbus-python ]
+    ++ optionals withPyInotify [ pyinotify ]
+    ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
+    ++ optionals withPahoMqtt [ paho-mqtt ];
 
   LC_ALL = "en_US.UTF-8";
 
-  pytestFlags = lib.optionals (xineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
-  ] ++ [
-    # requires networking
-    "--ignore=tests/test_browsers_iradio.py"
-    # the default theme doesn't have the required icons
-    "--ignore=tests/plugin/test_trayicon.py"
-    # upstream does actually not enforce source code linting
-    "--ignore=tests/quality"
-    # build failure on Arch Linux
-    # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
-    "--ignore=tests/test_operon.py"
-  ];
+  pytestFlags = lib.optionals (xineBackend || !withGstPlugins)
+    [ "--ignore=tests/plugin/test_replaygain.py" ] ++ [
+      # requires networking
+      "--ignore=tests/test_browsers_iradio.py"
+      # the default theme doesn't have the required icons
+      "--ignore=tests/plugin/test_trayicon.py"
+      # upstream does actually not enforce source code linting
+      "--ignore=tests/quality"
+      # build failure on Arch Linux
+      # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
+      "--ignore=tests/test_operon.py"
+    ];
 
   checkPhase = ''
     runHook preCheck
@@ -60,10 +88,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  preFixup = lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
+  preFixup = lib.optionalString (kakasi != null)
+    "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with lib; {
-    description = "GTK-based audio player written in Python, using the Mutagen tagging library";
+    description =
+      "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
     longDescription = ''

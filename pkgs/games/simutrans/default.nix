@@ -1,73 +1,71 @@
 { lib, stdenv, fetchurl, pkg-config, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config, runtimeShell
-}:
+, buildEnv, config, runtimeShell }:
 
 let
   # Choose your "paksets" of objects, images, text, music, etc.
-  paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
+  paksets =
+    config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
-  result = with lib; withPaks (
-    if paksets == "*" then attrValues pakSpec # taking all
-      else map (name: pakSpec.${name}) (splitString " " paksets)
-  );
+  result = with lib;
+    withPaks (if paksets == "*" then
+      attrValues pakSpec # taking all
+    else
+      map (name: pakSpec.${name}) (splitString " " paksets));
 
   ver1 = "121";
   ver2 = "0";
   ver3 = "";
-  version  = "${ver1}.${ver2}${lib.optionalString (ver3 != "") ".${ver3}"}";
+  version = "${ver1}.${ver2}${lib.optionalString (ver3 != "") ".${ver3}"}";
   ver_dash = "${ver1}-${ver2}${lib.optionalString (ver3 != "") "-${ver3}"}";
 
   binary_src = fetchurl {
-    url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
+    url =
+      "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
     sha256 = "1f463r6kr5ig0zd3mncc74k93xbjywsq3d06j5r17831jyc9bzb9";
   };
 
-
   # As of 2021/07, many of these paksets have not been updated for years, so are on old versions.
-  pakSpec = lib.mapAttrs
-    (pakName: attrs: mkPak (attrs // {inherit pakName;}))
-  {
-    pak64 = {
-      srcPath = "${ver_dash}/simupak64-${ver_dash}";
-      sha256 = "1k335kh8dhm1hdn5iwn3sdgnrlpk0rqxmmgqgqcwsi09cmw45m5c";
-    };
-    "pak64.japan" = {
-      # No release for 121.0 yet!
-      srcPath = "120-0/simupak64.japan-120-0-1";
-      sha256 = "14swy3h4ij74bgaw7scyvmivfb5fmp21nixmhlpk3mav3wr3167i";
+  pakSpec =
+    lib.mapAttrs (pakName: attrs: mkPak (attrs // { inherit pakName; })) {
+      pak64 = {
+        srcPath = "${ver_dash}/simupak64-${ver_dash}";
+        sha256 = "1k335kh8dhm1hdn5iwn3sdgnrlpk0rqxmmgqgqcwsi09cmw45m5c";
+      };
+      "pak64.japan" = {
+        # No release for 121.0 yet!
+        srcPath = "120-0/simupak64.japan-120-0-1";
+        sha256 = "14swy3h4ij74bgaw7scyvmivfb5fmp21nixmhlpk3mav3wr3167i";
+      };
+
+      pak128 = {
+        srcPath =
+          "pak128%20for%20ST%20120.4.1%20%282.8.1%2C%20priority%20signals%20%2B%20bugfix%29/pak128";
+        sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
+      };
+      "pak128.britain" = {
+        srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.18-120-3";
+        sha256 = "1kyb0s54kysvdr0zdln9106yx75d71j4lbw3v87k3i440cj3r1d3";
+      };
+      "pak128.cs" = { # note: it needs pak128 to work
+        url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
+        sha256 = "008d8x1s0vxsq78rkczlnf57pv1n5hi1v5nbd1l5w3yls7lk11sc";
+      };
+      "pak128.german" = {
+        url = "mirror://sourceforge/simutrans/PAK128.german/"
+          + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
+        sha256 = "1cv1rzl1a3i5dvk476zq094wawk9hhdh2f0y4xrdny5gn17mb2xi";
+      };
+
+      /* This release contains accented filenames that prevent unzipping.
+         "pak192.comic" = {
+           srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
+           sha256 = throw "";
+         };
+      */
     };
 
-    pak128 = {
-      srcPath = "pak128%20for%20ST%20120.4.1%20%282.8.1%2C%20priority%20signals%20%2B%20bugfix%29/pak128";
-      sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
-    };
-    "pak128.britain" = {
-      srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.18-120-3";
-      sha256 = "1kyb0s54kysvdr0zdln9106yx75d71j4lbw3v87k3i440cj3r1d3";
-    };
-    "pak128.cs" = { # note: it needs pak128 to work
-      url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
-      sha256 = "008d8x1s0vxsq78rkczlnf57pv1n5hi1v5nbd1l5w3yls7lk11sc";
-    };
-    "pak128.german" = {
-      url = "mirror://sourceforge/simutrans/PAK128.german/"
-        + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
-      sha256 = "1cv1rzl1a3i5dvk476zq094wawk9hhdh2f0y4xrdny5gn17mb2xi";
-    };
-
-    /* This release contains accented filenames that prevent unzipping.
-    "pak192.comic" = {
-      srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
-      sha256 = throw "";
-    };
-    */
-  };
-
-
-  mkPak = {
-    sha256, pakName, srcPath ? null
-    , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip"
-  }:
+  mkPak = { sha256, pakName, srcPath ? null
+    , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip" }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
       dontUnpack = true;
@@ -89,23 +87,25 @@ let
     };
 
   /* The binaries need all data in one directory; the default is directory
-      of the executable, and another option is the current directory :-/ */
-  withPaks = paks: buildEnv {
-    inherit (binaries) name;
-    paths = [binaries] ++ paks;
-    postBuild = ''
-      rm "$out/bin" && mkdir "$out/bin"
-      cat > "$out/bin/simutrans" <<EOF
-      #!${runtimeShell}
-      cd "$out"/share/simutrans
-      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
-      EOF
-      chmod +x "$out/bin/simutrans"
-    '';
+      of the executable, and another option is the current directory :-/
+  */
+  withPaks = paks:
+    buildEnv {
+      inherit (binaries) name;
+      paths = [ binaries ] ++ paks;
+      postBuild = ''
+        rm "$out/bin" && mkdir "$out/bin"
+        cat > "$out/bin/simutrans" <<EOF
+        #!${runtimeShell}
+        cd "$out"/share/simutrans
+        exec "${binaries}/bin/simutrans" -use_workdir "\$@"
+        EOF
+        chmod +x "$out/bin/simutrans"
+      '';
 
-    passthru.meta = binaries.meta // { hydraPlatforms = []; };
-    passthru.binaries = binaries;
-  };
+      passthru.meta = binaries.meta // { hydraPlatforms = [ ]; };
+      passthru.binaries = binaries;
+    };
 
   binaries = stdenv.mkDerivation {
     pname = "simutrans";
@@ -120,9 +120,12 @@ let
 
     configurePhase = let
       # Configuration as per the readme.txt and config.template
-      platform =
-        if stdenv.isLinux then "linux" else
-        if stdenv.isDarwin then "mac" else throw "add your platform";
+      platform = if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "mac"
+      else
+        throw "add your platform";
       config = ''
         BACKEND = mixer_sdl
         COLOUR_DEPTH = 16
@@ -153,7 +156,8 @@ let
     '';
 
     meta = with lib; {
-      description = "A simulation game in which the player strives to run a successful transport system";
+      description =
+        "A simulation game in which the player strives to run a successful transport system";
       longDescription = ''
         Simutrans is a cross-platform simulation game in which the
         player strives to run a successful transport system by

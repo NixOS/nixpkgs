@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-}:
+{ lib, stdenv, fetchFromGitHub, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "cpufetch";
@@ -15,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vae/59eEDuZUDsTHE93mi+L8WBr3H4zp+mzXg7WWusA=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall

@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub, python3Packages }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "pylint-exit";
   version = "1.2.0";
 

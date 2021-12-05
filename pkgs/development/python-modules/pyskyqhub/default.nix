@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyskyqhub";
@@ -19,16 +14,12 @@ buildPythonPackage rec {
     sha256 = "EVkTvynMPmCr7DPuDqfpMvVPCvpPpJHfqsNjD3tn8zg=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require phyiscal hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyskyqhub"
-  ];
+  pythonImportsCheck = [ "pyskyqhub" ];
 
   meta = with lib; {
     description = "Python module for accessing SkyQ Hub";

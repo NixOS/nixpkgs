@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, packr, makeWrapper, installShellFiles, helm, kustomize }:
+{ lib, buildGoModule, fetchFromGitHub, packr, makeWrapper, installShellFiles
+, helm, kustomize }:
 
 buildGoModule rec {
   pname = "argocd";
@@ -22,16 +23,16 @@ buildGoModule rec {
     packr
   '';
 
-  ldflags =
-    let package_url = "github.com/argoproj/argo-cd/v2/common"; in
-    [
-      "-s" "-w"
-      "-X ${package_url}.version=${version}"
-      "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${commit}"
-      "-X ${package_url}.gitTag=${tag}"
-      "-X ${package_url}.gitTreeState=clean"
-    ];
+  ldflags = let package_url = "github.com/argoproj/argo-cd/v2/common";
+  in [
+    "-s"
+    "-w"
+    "-X ${package_url}.version=${version}"
+    "-X ${package_url}.buildDate=unknown"
+    "-X ${package_url}.gitCommit=${commit}"
+    "-X ${package_url}.gitTag=${tag}"
+    "-X ${package_url}.gitTreeState=clean"
+  ];
 
   # Test is disabled because ksonnet is missing from nixpkgs.
   # Log: https://gist.github.com/superherointj/79cbdc869dfd44d28a10dc6746ecb3f9

@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, pixie, rlwrap
-}:
+{ lib, stdenv, fetchFromGitHub, pixie, rlwrap }:
 
 stdenv.mkDerivation rec {
   pname = "dust";
@@ -37,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
+    description =
+      "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
     homepage = src.meta.homepage;
     maintainers = with maintainers; [ ];
     license = licenses.lgpl3;

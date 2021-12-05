@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, intltool
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, glib
-, json-glib
-, libsoup
-, libnotify
-, gdk-pixbuf
-, modemmanager
-, avahi
-, glib-networking
-, python3
-, wrapGAppsHook
-, gobject-introspection
-, vala
-, withDemoAgent ? false
-}:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, intltool, meson, ninja, pkg-config
+, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_412, glib, json-glib, libsoup
+, libnotify, gdk-pixbuf, modemmanager, avahi, glib-networking, python3
+, wrapGAppsHook, gobject-introspection, vala, withDemoAgent ? false }:
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
@@ -43,18 +22,21 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/geoclue/geoclue/-/commit/2de651b6590087a2df2defe8f3d85b3cf6b91494
     # NOTE: this should be removed when the next version is released
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2de651b6590087a2df2defe8f3d85b3cf6b91494.patch";
+      url =
+        "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2de651b6590087a2df2defe8f3d85b3cf6b91494.patch";
       sha256 = "hv7t2Hmpv2oDXiPWA7JpYD9q+cuuk+En/lJJickvFII=";
     })
 
     # Make the Mozilla API key configurable
     # https://gitlab.freedesktop.org/geoclue/geoclue/merge_requests/54 (only partially backported)
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/95c9ad4dc176860c85a07d0db4cb4179929bdb54.patch";
+      url =
+        "https://gitlab.freedesktop.org/geoclue/geoclue/commit/95c9ad4dc176860c85a07d0db4cb4179929bdb54.patch";
       sha256 = "/lq/dLBJl2vf16tt7emYoTtXY6iUw+4s2XcABUHp3Kc=";
     })
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/1a00809a0d89b0849a57647c878d192354247a33.patch";
+      url =
+        "https://gitlab.freedesktop.org/geoclue/geoclue/commit/1a00809a0d89b0849a57647c878d192354247a33.patch";
       sha256 = "6FuiukgFWg2cEKt8LlKP4E0rfSH/ZQgk6Ip1mGJpNFQ=";
     })
 
@@ -76,21 +58,11 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  buildInputs = [
-    glib
-    json-glib
-    libsoup
-    avahi
-  ] ++ lib.optionals withDemoAgent [
-    libnotify gdk-pixbuf
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    modemmanager
-  ];
+  buildInputs = [ glib json-glib libsoup avahi ]
+    ++ lib.optionals withDemoAgent [ libnotify gdk-pixbuf ]
+    ++ lib.optionals (!stdenv.isDarwin) [ modemmanager ];
 
-  propagatedBuildInputs = [
-    glib
-    glib-networking
-  ];
+  propagatedBuildInputs = [ glib glib-networking ];
 
   mesonFlags = [
     "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"

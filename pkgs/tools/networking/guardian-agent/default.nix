@@ -1,9 +1,4 @@
-{ buildGoPackage
-, fetchFromGitHub
-, lib
-, autossh
-, makeWrapper
-}:
+{ buildGoPackage, fetchFromGitHub, lib, autossh, makeWrapper }:
 
 buildGoPackage rec {
   pname = "guardian-agent";

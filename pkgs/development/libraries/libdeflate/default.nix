@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/ebiggers/libdeflate/commit/ee4d18872bfe09a32cfd031c716b9069a04a50a0.diff";
+      url =
+        "https://github.com/ebiggers/libdeflate/commit/ee4d18872bfe09a32cfd031c716b9069a04a50a0.diff";
       sha256 = "0d2lllg60zbbbch0w0qrcqijrgski8xlsy5llg3i684d66ci538a";
     })
   ];
@@ -22,9 +23,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  makeFlags = lib.optional stdenv.hostPlatform.isStatic [ "DISABLE_SHARED=1"];
+  makeFlags = lib.optional stdenv.hostPlatform.isStatic [ "DISABLE_SHARED=1" ];
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   configurePhase = ''
     make programs/config.h

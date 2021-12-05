@@ -1,4 +1,6 @@
-{ lib, stdenv, autoconf, automake, autoreconfHook, fetchurl, glib, gobject-introspection, gtk-doc, libtool, libxml2, libxslt, openssl, pkg-config, python27Packages, xmlsec, zlib }:
+{ lib, stdenv, autoconf, automake, autoreconfHook, fetchurl, glib
+, gobject-introspection, gtk-doc, libtool, libxml2, libxslt, openssl, pkg-config
+, python27Packages, xmlsec, zlib }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +14,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ autoconf automake glib gobject-introspection gtk-doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
+  buildInputs = [
+    autoconf
+    automake
+    glib
+    gobject-introspection
+    gtk-doc
+    libtool
+    libxml2
+    libxslt
+    openssl
+    python27Packages.six
+    xmlsec
+    zlib
+  ];
 
   configurePhase = ''
     ./configure --with-pkg-config=$PKG_CONFIG_PATH \

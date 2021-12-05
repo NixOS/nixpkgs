@@ -1,23 +1,27 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, awscli, unzip }:
 let
   ver = "1.2.54.0";
-  source =
-    if stdenv.isDarwin then {
-      url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
-      sha256 = "kgxoQrtu2tsV5t/3oA+Z2juY24hPOznPGjlQMsqOIZg=";
-    } else {
-      url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
-      sha256 = "uug1cT4yRxNQcf+zWz0mi72G4EGa3eZHVuG36INSqrM=";
-    };
-  archivePath = if stdenv.isDarwin then "sessionmanager-bundle" else "usr/local/sessionmanagerplugin";
-in
-stdenv.mkDerivation rec {
+  source = if stdenv.isDarwin then {
+    url =
+      "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
+    sha256 = "kgxoQrtu2tsV5t/3oA+Z2juY24hPOznPGjlQMsqOIZg=";
+  } else {
+    url =
+      "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
+    sha256 = "uug1cT4yRxNQcf+zWz0mi72G4EGa3eZHVuG36INSqrM=";
+  };
+  archivePath = if stdenv.isDarwin then
+    "sessionmanager-bundle"
+  else
+    "usr/local/sessionmanagerplugin";
+in stdenv.mkDerivation rec {
   pname = "ssm-session-manager-plugin";
   version = ver;
 
   src = fetchurl source;
 
-  nativeBuildInputs = [ autoPatchelfHook ] ++ (if stdenv.isDarwin then [ unzip ] else [ dpkg ]);
+  nativeBuildInputs = [ autoPatchelfHook ]
+    ++ (if stdenv.isDarwin then [ unzip ] else [ dpkg ]);
 
   buildInputs = [ awscli ];
 

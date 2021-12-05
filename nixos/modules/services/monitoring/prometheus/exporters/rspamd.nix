@@ -10,7 +10,10 @@ let
 
   generateConfig = extraLabels: {
     metrics = (map (path: {
-      name = "rspamd_${replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
+      name = "rspamd_${
+          replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ]
+          path
+        }";
       path = "{ .${path} }";
       labels = extraLabels;
     }) [
@@ -53,15 +56,12 @@ let
       };
     }];
   };
-in
-{
+in {
   port = 7980;
   extraOpts = {
     extraLabels = mkOption {
       type = types.attrsOf types.str;
-      default = {
-        host = config.networking.hostName;
-      };
+      default = { host = config.networking.hostName; };
       defaultText = literalExpression "{ host = config.networking.hostName; }";
       example = literalExpression ''
         {
@@ -92,6 +92,9 @@ in
       For more information, take a look at the official documentation
       (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
-     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

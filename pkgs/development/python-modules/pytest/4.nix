@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools-scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
-}:
+, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy }:
 buildPythonPackage rec {
   version = "4.6.11";
   pname = "pytest";
@@ -18,8 +17,17 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ lib.optionals (!isPy3k) [ funcsigs ]
+  propagatedBuildInputs = [
+    attrs
+    py
+    setuptools
+    six
+    pluggy
+    more-itertools
+    atomicwrites
+    wcwidth
+    packaging
+  ] ++ lib.optionals (!isPy3k) [ funcsigs ]
     ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460

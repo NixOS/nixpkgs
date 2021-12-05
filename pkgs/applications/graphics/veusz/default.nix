@@ -1,9 +1,4 @@
-{ python3Packages
-, qtbase
-, ghostscript
-, wrapQtAppsHook
-, lib
-}:
+{ python3Packages, qtbase, ghostscript, wrapQtAppsHook, lib }:
 
 python3Packages.buildPythonApplication rec {
   pname = "veusz";

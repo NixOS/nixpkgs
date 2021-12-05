@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gfortran
-, cmake
-, shared ? true
-}:
+{ lib, stdenv, fetchFromGitHub, gfortran, cmake, shared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "liblapack";
@@ -20,7 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran cmake ];
 
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
-  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "stackprotector" ];
+  hardeningDisable =
+    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "stackprotector" ];
 
   cmakeFlags = [
     "-DCMAKE_Fortran_FLAGS=-fPIC"
@@ -43,7 +38,8 @@ stdenv.mkDerivation rec {
   #
   # Upstream issue to track:
   # * https://github.com/Reference-LAPACK/lapack/issues/440
-  ctestArgs = lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
+  ctestArgs =
+    lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
 
   checkPhase = ''
     runHook preCheck

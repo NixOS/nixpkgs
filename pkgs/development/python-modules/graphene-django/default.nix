@@ -1,21 +1,8 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub
 
-, graphene
-, graphql-core
-, django
-, djangorestframework
-, promise
-, text-unidecode
+, graphene, graphql-core, django, djangorestframework, promise, text-unidecode
 
-, django-filter
-, mock
-, pytest-django
-, pytest-random-order
-, pytestCheckHook
-}:
+, django-filter, mock, pytest-django, pytest-random-order, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "graphene-django";
@@ -35,26 +22,15 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
-    djangorestframework
-    graphene
-    graphql-core
-    django
-    promise
-    text-unidecode
-  ];
+  propagatedBuildInputs =
+    [ djangorestframework graphene graphql-core django promise text-unidecode ];
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=examples.django_test_settings
   '';
 
-  checkInputs = [
-    django-filter
-    mock
-    pytest-django
-    pytest-random-order
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ django-filter mock pytest-django pytest-random-order pytestCheckHook ];
 
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";

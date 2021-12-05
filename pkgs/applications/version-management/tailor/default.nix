@@ -12,8 +12,6 @@ python2Packages.buildPythonApplication rec {
     sha256 = "061acapxxn5ab3ipb5nd3nm8pk2xj67bi83jrfd6lqq3273fmdjh";
   };
 
-  meta = {
-    description = "Version control tools integration tool";
-  };
+  meta = { description = "Version control tools integration tool"; };
 }
 

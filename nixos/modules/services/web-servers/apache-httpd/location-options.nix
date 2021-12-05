@@ -1,8 +1,6 @@
 { config, lib, name, ... }:
-let
-  inherit (lib) mkOption types;
-in
-{
+let inherit (lib) mkOption types;
+in {
   options = {
 
     proxyPass = mkOption {

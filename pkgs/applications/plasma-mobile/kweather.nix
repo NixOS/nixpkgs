@@ -1,27 +1,14 @@
-{ lib
-, mkDerivation
+{ lib, mkDerivation
 
-, cmake
-, extra-cmake-modules
+, cmake, extra-cmake-modules
 
-, kconfig
-, ki18n
-, kirigami2
-, knotifications
-, kquickcharts
-, kweathercore
-, plasma-framework
-, qtcharts
-, qtquickcontrols2
-}:
+, kconfig, ki18n, kirigami2, knotifications, kquickcharts, kweathercore
+, plasma-framework, qtcharts, qtquickcontrols2 }:
 
 mkDerivation rec {
   pname = "kweather";
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     kconfig

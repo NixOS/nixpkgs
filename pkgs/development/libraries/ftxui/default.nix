@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen, graphviz }:
 
 stdenv.mkDerivation rec {
   pname = "ftxui";
@@ -17,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cbljksgy1ckw34h0mq70s8sma0p16sznn4z9r4hwv76y530m0ww";
   };
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs = [ cmake doxygen graphviz ];
 
   meta = with lib; {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";

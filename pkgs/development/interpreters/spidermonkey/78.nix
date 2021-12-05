@@ -1,30 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, autoconf213
-, pkg-config
-, perl
-, python3
-, zip
-, buildPackages
-, which
-, readline
-, zlib
-, icu67
-, cargo
-, rustc
-, rust-cbindgen
-, yasm
-, llvmPackages_12
-, nspr
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python3, zip
+, buildPackages, which, readline, zlib, icu67, cargo, rustc, rust-cbindgen, yasm
+, llvmPackages_12, nspr }:
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "78.15.0";
 
   src = fetchurl {
-    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+    url =
+      "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
     sha256 = "0l91cxdc5v9fps79ckb1kid4gw6v5qng1jd9zvaacwaiv628shx4";
   };
 
@@ -32,7 +16,8 @@ stdenv.mkDerivation rec {
     # Fix build failure on armv7l using Debian patch
     # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
     (fetchpatch {
-      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
+      url =
+        "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
       sha256 = "02b7zwm6vxmk61aj79a6m32s1k5sr0hwm3q1j4v6np9jfyd10g1j";
     })
   ];
@@ -54,12 +39,7 @@ stdenv.mkDerivation rec {
     zip
   ];
 
-  buildInputs = [
-    icu67
-    nspr
-    readline
-    zlib
-  ];
+  buildInputs = [ icu67 nspr readline zlib ];
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"

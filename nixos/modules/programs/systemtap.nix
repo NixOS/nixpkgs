@@ -17,13 +17,10 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "DEBUG")
-    ];
+    system.requiredKernelConfig = with config.lib.kernelConfig;
+      [ (isYes "DEBUG") ];
     boot.kernel.features.debug = true;
-    environment.systemPackages = [
-      config.boot.kernelPackages.systemtap
-    ];
+    environment.systemPackages = [ config.boot.kernelPackages.systemtap ];
   };
 
 }

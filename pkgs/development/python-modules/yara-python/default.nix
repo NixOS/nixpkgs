@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, yara
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, yara }:
 
 buildPythonPackage rec {
   pname = "yara-python";
@@ -16,17 +11,11 @@ buildPythonPackage rec {
     sha256 = "sha256-lOP+OVnMgpP8S+Q3jGRNEAFXAohXgX5Nvl+l4EK5ebs=";
   };
 
-  buildInputs = [
-    yara
-  ];
+  buildInputs = [ yara ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  setupPyBuildFlags = [
-    "--dynamic-linking"
-  ];
+  setupPyBuildFlags = [ "--dynamic-linking" ];
 
   pytestFlagsArray = [ "tests.py" ];
 

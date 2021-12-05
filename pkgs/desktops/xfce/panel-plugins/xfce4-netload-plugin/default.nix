@@ -10,7 +10,5 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 
-  meta = {
-    description = "Internet load speed plugin for Xfce4 panel";
-  };
+  meta = { description = "Internet load speed plugin for Xfce4 panel"; };
 }

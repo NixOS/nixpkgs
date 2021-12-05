@@ -1,7 +1,8 @@
 { lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
 
 let
-  pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
+  pythonEnv = pythonPackages.python.withPackages
+    (p: [ p.requests p.setuptools p.zxcvbn ]);
 
 in stdenv.mkDerivation rec {
   pname = "pass-audit";
@@ -14,9 +15,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1vapymgpab91kh798mirgs1nb7j9qln0gm2d3321cmsghhb7xs45";
   };
 
-  patches = [
-    ./0002-Fix-audit.bash-setup.patch
-  ];
+  patches = [ ./0002-Fix-audit.bash-setup.patch ];
 
   postPatch = ''
     substituteInPlace audit.bash \

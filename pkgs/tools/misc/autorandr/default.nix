@@ -1,8 +1,4 @@
-{ lib, stdenv
-, python3Packages
-, fetchFromGitHub
-, systemd
-, xrandr
+{ lib, stdenv, python3Packages, fetchFromGitHub, systemd, xrandr
 , installShellFiles }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/phillipberndt/autorandr/";
-    description = "Automatically select a display configuration based on connected devices";
+    description =
+      "Automatically select a display configuration based on connected devices";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ coroa globin ];
     platforms = platforms.unix;

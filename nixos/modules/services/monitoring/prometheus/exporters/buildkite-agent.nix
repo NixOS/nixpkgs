@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.buildkite-agent;
-in
-{
+let cfg = config.services.prometheus.exporters.buildkite-agent;
+in {
   port = 9876;
   extraOpts = {
     tokenPath = mkOption {
@@ -44,17 +42,17 @@ in
   };
   serviceOpts = {
     script =
-      let
-        queues = concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
-      in
-      ''
+      let queues = concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
+      in ''
         export BUILDKITE_AGENT_TOKEN="$(cat ${toString cfg.tokenPath})"
         exec ${pkgs.buildkite-agent-metrics}/bin/buildkite-agent-metrics \
           -backend prometheus \
           -interval ${cfg.interval} \
           -endpoint ${cfg.endpoint} \
           ${optionalString (cfg.queues != null) queues} \
-          -prometheus-addr "${cfg.listenAddress}:${toString cfg.port}" ${concatStringsSep " " cfg.extraFlags}
+          -prometheus-addr "${cfg.listenAddress}:${toString cfg.port}" ${
+            concatStringsSep " " cfg.extraFlags
+          }
       '';
     serviceConfig = {
       DynamicUser = false;

@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
-, libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
-, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
+{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE
+, libXi, libXv, libXrender, libXrandr, libXfixes, libXcursor, libXinerama
+, libXext, libX11, zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
 
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "i386"
-    else throw "Unsupported system ${stdenv.hostPlatform.system}";
-  sha256 =
-    if arch == "amd64"
-    then "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
-    else "0gndbxrj3kgc2dhjqwjifr3cl85hgpm695z0wi01wvwzhrjqs0l2";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "amd64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "i386"
+  else
+    throw "Unsupported system ${stdenv.hostPlatform.system}";
+  sha256 = if arch == "amd64" then
+    "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
+  else
+    "0gndbxrj3kgc2dhjqwjifr3cl85hgpm695z0wi01wvwzhrjqs0l2";
   version = "7.1.8.3036";
   fullPath = lib.makeLibraryPath [
     glibc
@@ -20,7 +22,8 @@ let
     libICE
     libXi
     libXv
-    libGLU libGL
+    libGLU
+    libGL
     libXrender
     libXrandr
     libXfixes
@@ -37,12 +40,12 @@ let
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "googleearth";
   inherit version;
   src = fetchurl {
-    url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-stable/google-earth-stable_${version}-r0_${arch}.deb";
+    url =
+      "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-stable/google-earth-stable_${version}-r0_${arch}.deb";
     inherit sha256;
   };
 
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x ${src} ./
   '';
 
-  installPhase =''
+  installPhase = ''
     mkdir $out
     mv usr/* $out/
     rmdir usr

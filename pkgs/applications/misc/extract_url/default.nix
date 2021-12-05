@@ -1,11 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, perlPackages
-, cursesSupport ? true
-, uriFindSupport ? true
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perlPackages, cursesSupport ? true
+, uriFindSupport ? true }:
 
 let
-  perlDeps =
-    [ perlPackages.MIMETools perlPackages.HTMLParser ]
+  perlDeps = [ perlPackages.MIMETools perlPackages.HTMLParser ]
     ++ lib.optional cursesSupport perlPackages.CursesUI
     ++ lib.optional uriFindSupport perlPackages.URIFind;
 

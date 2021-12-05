@@ -1,21 +1,8 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt5
-, gnuradio3_8Minimal
-, thrift
-, log4cpp
-, mpir
-, fftwFloat
-, alsa-lib
-, libjack2
+{ lib, fetchFromGitHub, cmake, pkg-config, qt5, gnuradio3_8Minimal, thrift
+, log4cpp, mpir, fftwFloat, alsa-lib, libjack2
 # drivers (optional):
-, rtl-sdr
-, hackrf
-, pulseaudioSupport ? true, libpulseaudio
-, portaudioSupport ? false, portaudio
-}:
+, rtl-sdr, hackrf, pulseaudioSupport ? true, libpulseaudio
+, portaudioSupport ? false, portaudio }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 assert portaudioSupport -> portaudio != null;
@@ -33,11 +20,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     sha256 = "sha256-DMmQXcGPudAVOwuc+LVrcIzfwMMQVBZPbM6Bt1w56D8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config qt5.wrapQtAppsHook ];
   buildInputs = [
     log4cpp
     mpir
@@ -56,17 +39,14 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals portaudioSupport [ portaudio ];
 
-  cmakeFlags =
-    let
-      audioBackend =
-        if pulseaudioSupport
-        then "Pulseaudio"
-        else if portaudioSupport
-        then "Portaudio"
-        else "Gr-audio";
-    in [
-      "-DLINUX_AUDIO_BACKEND=${audioBackend}"
-    ];
+  cmakeFlags = let
+    audioBackend = if pulseaudioSupport then
+      "Pulseaudio"
+    else if portaudioSupport then
+      "Portaudio"
+    else
+      "Gr-audio";
+  in [ "-DLINUX_AUDIO_BACKEND=${audioBackend}" ];
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"
@@ -85,7 +65,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / macOS too
+    platforms = platforms.linux; # should work on Darwin / macOS too
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

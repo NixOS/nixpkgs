@@ -1,18 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, click
-, pytestCheckHook
-, shellingham
-, pytest-xdist
-, pytest-sugar
-, coverage
-, mypy
-, black
-, isort
-, pythonOlder
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, click, pytestCheckHook
+, shellingham, pytest-xdist, pytest-sugar, coverage, mypy, black, isort
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "typer";
@@ -25,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "1pgm0zsylbmz1r96q4n3rfi0h3pn4jss2yfs83z0yxa90nmsxhv3";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   checkInputs = [
     pytestCheckHook

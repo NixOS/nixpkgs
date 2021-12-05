@@ -1,9 +1,4 @@
-{ lib
-, aioserial
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-}:
+{ lib, aioserial, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "phone-modem";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "0kqa1ky5hjs9zdp3dnd8s9mz5p6z0al3hxxlgqdq9vnnpnv0lafy";
   };
 
-  propagatedBuildInputs = [
-    aioserial
-  ];
+  propagatedBuildInputs = [ aioserial ];
 
   # Project has no tests
   doCheck = false;

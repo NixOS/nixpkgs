@@ -13,9 +13,7 @@ import ./make-test-python.nix {
         to = "alice@localhost";
         interval = "1";
         config.from = "test@example.org";
-        feeds = {
-          nixos = { url = "http://127.0.0.1/news-rss.xml"; };
-        };
+        feeds = { nixos = { url = "http://127.0.0.1/news-rss.xml"; }; };
       };
       services.opensmtpd = {
         enable = true;

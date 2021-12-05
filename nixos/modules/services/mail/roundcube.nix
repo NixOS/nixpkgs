@@ -7,9 +7,9 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php80.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
-in
-{
+  phpWithPspell =
+    pkgs.php80.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+in {
   options.services.roundcube = {
     enable = mkOption {
       type = types.bool;
@@ -65,12 +65,14 @@ in
       };
       password = mkOption {
         type = types.str;
-        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use <literal>passwordFile</literal> instead.";
+        description =
+          "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use <literal>passwordFile</literal> instead.";
         default = "";
       };
       passwordFile = mkOption {
         type = types.str;
-        description = "Password file for the postgresql connection. Must be readable by user <literal>nginx</literal>. Ignored if <literal>database.host</literal> is set to <literal>localhost</literal>, as peer authentication will be used.";
+        description =
+          "Password file for the postgresql connection. Must be readable by user <literal>nginx</literal>. Ignored if <literal>database.host</literal> is set to <literal>localhost</literal>, as peer authentication will be used.";
       };
       dbname = mkOption {
         type = types.str;
@@ -81,7 +83,7 @@ in
 
     plugins = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';
@@ -89,7 +91,7 @@ in
 
     dicts = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression "with pkgs.aspellDicts; [ en fr de ]";
       description = ''
         List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
@@ -105,7 +107,8 @@ in
         Note: Since roundcube only uses 70% of max upload values configured in php
         30% is added automatically to <xref linkend="opt-services.roundcube.maxAttachmentSize"/>.
       '';
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
+      apply = configuredMaxAttachmentSize:
+        "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
     extraConfig = mkOption {
@@ -117,25 +120,41 @@ in
 
   config = mkIf cfg.enable {
     # backward compatibility: if password is set but not passwordFile, make one.
-    services.roundcube.database.passwordFile = mkIf (!localDB && cfg.database.password != "") (mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}"));
-    warnings = lib.optional (!localDB && cfg.database.password != "") "services.roundcube.database.password is deprecated and insecure; use services.roundcube.database.passwordFile instead";
+    services.roundcube.database.passwordFile =
+      mkIf (!localDB && cfg.database.password != "") (mkDefault
+        ("${pkgs.writeText "roundcube-password" cfg.database.password}"));
+    warnings = lib.optional (!localDB && cfg.database.password != "")
+      "services.roundcube.database.password is deprecated and insecure; use services.roundcube.database.passwordFile instead";
 
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
+      ${lib.optionalString (!localDB)
+      "$password = file_get_contents('${cfg.database.passwordFile}');"}
 
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
+      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${
+        lib.optionalString (!localDB) ":' . $password . '"
+      }@${
+        if localDB then "unix(/run/postgresql)" else cfg.database.host
+      }/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
       $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
-      $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+      $config['plugins'] = [${
+        concatMapStringsSep "," (p: "'${p}'") cfg.plugins
+      }];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
-      $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
+      $config['enable_spellcheck'] = ${
+        if cfg.dicts == [ ] then "false" else "true"
+      };
       # by default, spellchecking uses a third-party cloud services
       $config['spellcheck_engine'] = 'pspell';
-      $config['spellcheck_languages'] = array(${lib.concatMapStringsSep ", " (dict: let p = builtins.parseDrvName dict.shortName; in "'${p.name}' => '${dict.fullName}'") cfg.dicts});
+      $config['spellcheck_languages'] = array(${
+        lib.concatMapStringsSep ", " (dict:
+          let p = builtins.parseDrvName dict.shortName;
+          in "'${p.name}' => '${dict.fullName}'") cfg.dicts
+      });
 
       ${cfg.extraConfig}
     '';
@@ -165,12 +184,12 @@ in
     services.postgresql = mkIf localDB {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
-      ensureUsers = [ {
+      ensureUsers = [{
         name = cfg.database.username;
         ensurePermissions = {
           "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
         };
-      } ];
+      }];
     };
 
     users.users.${user} = mkIf localDB {
@@ -178,7 +197,7 @@ in
       isSystemUser = true;
       createHome = false;
     };
-    users.groups.${user} = mkIf localDB {};
+    users.groups.${user} = mkIf localDB { };
 
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
@@ -201,14 +220,14 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+      phpEnv.ASPELL_CONF =
+        "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
     # Restart on config changes.
-    systemd.services.phpfpm-roundcube.restartTriggers = [
-      config.environment.etc."roundcube/config.inc.php".source
-    ];
+    systemd.services.phpfpm-roundcube.restartTriggers =
+      [ config.environment.etc."roundcube/config.inc.php".source ];
 
     systemd.services.roundcube-setup = mkMerge [
       (mkIf (cfg.database.host == "localhost") {
@@ -219,9 +238,14 @@ in
       {
         wantedBy = [ "multi-user.target" ];
         script = let
-          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
-        in
-        ''
+          psql = "${
+              lib.optionalString (!localDB)
+              "PGPASSFILE=${cfg.database.passwordFile}"
+            } ${pkgs.postgresql}/bin/psql ${
+              lib.optionalString (!localDB)
+              "-h ${cfg.database.host} -U ${cfg.database.username} "
+            } ${cfg.database.dbname}";
+        in ''
           version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
           if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
             ${psql} -f ${cfg.package}/SQL/postgres.initial.sql

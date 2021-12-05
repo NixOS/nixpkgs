@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.5.2";
 
   src = fetchurl {
-    url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
+    url =
+      "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
     sha256 = "sha256-F6ZS37SR2Wvok5YOm3kZFJNu4WwTt3ejyvVi/kjLh98=";
   };
 
@@ -36,12 +37,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
-    badPlatforms = [
-      "alpha-linux"
-      "riscv32-linux"
-      "sparc-linux"
-      "sparc64-linux"
-    ];
+    badPlatforms =
+      [ "alpha-linux" "riscv32-linux" "sparc-linux" "sparc64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

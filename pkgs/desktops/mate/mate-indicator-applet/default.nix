@@ -1,26 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libindicator-gtk3, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libindicator-gtk3, mate
+, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-indicator-applet";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "144fh9f3lag2cqnmb6zxlh8k83ya8kha6rmd7r8gg3z5w3nzpyz4";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gettext
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    libindicator-gtk3
-    mate.mate-panel
-    hicolor-icon-theme
-  ];
+  buildInputs = [ gtk3 libindicator-gtk3 mate.mate-panel hicolor-icon-theme ];
 
   enableParallelBuilding = true;
 

@@ -1,14 +1,5 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, redis
-, alembic
-, pystache
-, pytest
-, factory_boy
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, srht, redis, alembic, pystache
+, pytest, factory_boy, python }:
 
 buildPythonPackage rec {
   pname = "todosrht";
@@ -23,12 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    redis
-    alembic
-    pystache
-  ];
+  propagatedBuildInputs = [ srht redis alembic pystache ];
 
   preBuild = ''
     export PKGVER=${version}
@@ -36,10 +22,7 @@ buildPythonPackage rec {
   '';
 
   # pytest tests fail
-  checkInputs = [
-    pytest
-    factory_boy
-  ];
+  checkInputs = [ pytest factory_boy ];
 
   dontUseSetuptoolsCheck = true;
 

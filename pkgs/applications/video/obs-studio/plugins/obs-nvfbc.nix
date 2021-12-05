@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config
-, obs-studio, libGL, libX11
-}:
+{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config, obs-studio, libGL
+, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-nvfbc";

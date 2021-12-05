@@ -1,12 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, alsa-lib, ffmpeg_4, libjack2, udev, libva, xorg
-, sbc, SDL2, makeFontsConf
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz
+, valgrind, glib, dbus, gst_all_1, alsa-lib, ffmpeg_4, libjack2, udev, libva
+, xorg, sbc, SDL2, makeFontsConf }:
 
-let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ ];
-  };
+let fontsConf = makeFontsConf { fontDirectories = [ ]; };
 in stdenv.mkDerivation rec {
   pname = "pipewire";
   version = "0.2.7";
@@ -20,22 +16,29 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
-  nativeBuildInputs = [
-    meson ninja pkg-config doxygen graphviz valgrind
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config doxygen graphviz valgrind ];
   buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer
-    alsa-lib ffmpeg_4 libjack2 udev libva xorg.libX11 sbc SDL2
+    glib
+    dbus
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    alsa-lib
+    ffmpeg_4
+    libjack2
+    udev
+    libva
+    xorg.libX11
+    sbc
+    SDL2
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    "-Dgstreamer=enabled"
-  ];
+  mesonFlags = [ "-Ddocs=true" "-Dgstreamer=enabled" ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR =
+    "${placeholder "out"}/lib/systemd/user";
 
-  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+  FONTCONFIG_FILE =
+    fontsConf; # Fontconfig error: Cannot load default config file
 
   doCheck = true;
 

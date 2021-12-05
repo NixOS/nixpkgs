@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, gettext
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
@@ -20,16 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qpf8w7x9sp3sd4zpsrlj5ywpwqkq4ywbagm4sf25cwwn82dl59b";
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ gettext meson ninja ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

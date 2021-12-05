@@ -6,21 +6,43 @@ mkCoqDerivation rec {
   owner = "coq-community";
   releaseRev = v: "v${v}";
 
-  release."8.13.0".sha256 = "sha256-8bDr/Ovl6s8BFaRcHeS5H33/K/pYdeKfSN+krVuKulQ=";
-  release."8.11.1".sha256 = "sha256-jTPgcXSNn1G2mMDC7ocFcmqs8svB7Yo1emXP15iuxiU=";
-  release."8.9.0".sha256 = "sha256-UBsvzlDEZsZsVkbUI0GbFEhpxnnLCiaqlqDyWVC5I6s=";
-  release."8.8.0".sha256 = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
-  release."8.7.0".sha256 = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
-  release."8.6.0".sha256 = "sha256-GltkGQ3tJqUPAbdDkqqvKLLhMOap50XvGaCkjshiNdY=";
+  release."8.13.0".sha256 =
+    "sha256-8bDr/Ovl6s8BFaRcHeS5H33/K/pYdeKfSN+krVuKulQ=";
+  release."8.11.1".sha256 =
+    "sha256-jTPgcXSNn1G2mMDC7ocFcmqs8svB7Yo1emXP15iuxiU=";
+  release."8.9.0".sha256 =
+    "sha256-UBsvzlDEZsZsVkbUI0GbFEhpxnnLCiaqlqDyWVC5I6s=";
+  release."8.8.0".sha256 =
+    "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
+  release."8.7.0".sha256 =
+    "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
+  release."8.6.0".sha256 =
+    "sha256-GltkGQ3tJqUPAbdDkqqvKLLhMOap50XvGaCkjshiNdY=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.13"; out = "8.13.0"; }
-    { case = "8.9"; out = "8.9.0"; }
-    { case = "8.8"; out = "8.8.0"; }
-    { case = "8.7"; out = "8.7.0"; }
-    { case = "8.6"; out = "8.6.0"; }
-  ] null;
+  defaultVersion = with versions;
+    switch coq.coq-version [
+      {
+        case = range "8.10" "8.13";
+        out = "8.13.0";
+      }
+      {
+        case = "8.9";
+        out = "8.9.0";
+      }
+      {
+        case = "8.8";
+        out = "8.8.0";
+      }
+      {
+        case = "8.7";
+        out = "8.7.0";
+      }
+      {
+        case = "8.6";
+        out = "8.6.0";
+      }
+    ] null;
 
   mlPlugin = true;
   extraBuildInputs = (with coq.ocamlPackages; [ num ocamlbuild ]);

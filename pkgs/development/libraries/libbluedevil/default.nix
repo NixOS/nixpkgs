@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "0p4f0brhcz9gfxfd6114fa5x6swfdmgzv350xwncdr0s1qnamk8c";
   };
 

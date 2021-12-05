@@ -37,8 +37,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ossf/scorecard/v${lib.versions.major version}/pkg.gitVersion=v${version}"
-    "-X github.com/ossf/scorecard/v${lib.versions.major version}/pkg.gitTreeState=clean"
+    "-X github.com/ossf/scorecard/v${
+      lib.versions.major version
+    }/pkg.gitVersion=v${version}"
+    "-X github.com/ossf/scorecard/v${
+      lib.versions.major version
+    }/pkg.gitTreeState=clean"
   ];
 
   preCheck = ''

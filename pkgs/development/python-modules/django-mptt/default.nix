@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-js-asset
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, django, django-js-asset, python }:
 
 buildPythonPackage rec {
   pname = "django-mptt";
@@ -18,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "12y3chxhqxk2yxin055f0f45nabj0s8hil12hw0lwzlbax6k9ss6";
   };
 
-  propagatedBuildInputs = [
-    django
-    django-js-asset
-  ];
+  propagatedBuildInputs = [ django django-js-asset ];
 
-  pythonImportsCheck = [
-    "mptt"
-  ];
+  pythonImportsCheck = [ "mptt" ];
 
   checkPhase = ''
     runHook preCheck
@@ -34,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Utilities for implementing a modified pre-order traversal tree in Django";
+    description =
+      "Utilities for implementing a modified pre-order traversal tree in Django";
     homepage = "https://github.com/django-mptt/django-mptt";
     maintainers = with maintainers; [ hexa ];
     license = with licenses; [ mit ];

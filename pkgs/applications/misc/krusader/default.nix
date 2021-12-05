@@ -1,8 +1,5 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem
-}:
+{ mkDerivation, fetchurl, lib, extra-cmake-modules, kdoctools, wrapGAppsHook
+, karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem }:
 
 mkDerivation rec {
   pname = "krusader";
@@ -15,7 +12,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
-  propagatedBuildInputs = [ karchive kconfig kcrash kguiaddons kinit kparts kwindowsystem ];
+  propagatedBuildInputs =
+    [ karchive kconfig kcrash kguiaddons kinit kparts kwindowsystem ];
 
   meta = with lib; {
     description = "Norton/Total Commander clone for KDE";

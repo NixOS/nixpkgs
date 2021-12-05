@@ -1,17 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper
-, SDL2, libGL, curl
-, oggSupport ? true, libogg, libvorbis
-, openalSupport ? true, openal
-, zipSupport ? true, zlib
-, Cocoa, OpenAL
-}:
+{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper, SDL2, libGL, curl
+, oggSupport ? true, libogg, libvorbis, openalSupport ? true, openal
+, zipSupport ? true, zlib, Cocoa, OpenAL }:
 
 let
   mkFlag = b: if b then "ON" else "OFF";
 
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub cmake; };
 
-  wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
+  wrapper =
+    import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
@@ -20,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
-      rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
+      rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
       sha256 = "0xnpmh0pl1095dykhc76rp242x587yh9zh6wayqzaam6cn3xlz3w";
     };
 
@@ -34,8 +31,7 @@ let
     buildInputs = [ SDL2 libGL curl ]
       ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
       ++ lib.optionals oggSupport [ libogg libvorbis ]
-      ++ lib.optional openalSupport openal
-      ++ lib.optional zipSupport zlib;
+      ++ lib.optional openalSupport openal ++ lib.optional zipSupport zlib;
 
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"

@@ -1,26 +1,33 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
-, callPackage
-}: let
-  mkPlugin = name: stdenv.mkDerivation {
-    name = "vdr-${vdr.version}-${name}";
-    inherit (vdr) src;
-    buildInputs = [ vdr ];
-    preConfigure = "cd PLUGINS/src/${name}";
-    installFlags = [ "DESTDIR=$(out)" ];
-  };
+{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub, libvdpau
+, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg, libiconv
+, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses, callPackage
+}:
+let
+  mkPlugin = name:
+    stdenv.mkDerivation {
+      name = "vdr-${vdr.version}-${name}";
+      inherit (vdr) src;
+      buildInputs = [ vdr ];
+      preConfigure = "cd PLUGINS/src/${name}";
+      installFlags = [ "DESTDIR=$(out)" ];
+    };
 in {
 
-  xineliboutput = callPackage ./xineliboutput {};
+  xineliboutput = callPackage ./xineliboutput { };
 
-  skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
-    buildInputs = oldAttr.buildInputs ++ [ ncurses ];
-  });
+  skincurses = (mkPlugin "skincurses").overrideAttrs
+    (oldAttr: { buildInputs = oldAttr.buildInputs ++ [ ncurses ]; });
 
   inherit (lib.genAttrs [
-    "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
-  ] mkPlugin);
+    "epgtableid0"
+    "hello"
+    "osddemo"
+    "pictures"
+    "servicedemo"
+    "status"
+    "svdrpdemo"
+  ] mkPlugin)
+  ;
 
   femon = stdenv.mkDerivation rec {
     pname = "vdr-femon";
@@ -29,7 +36,8 @@ in {
     buildInputs = [ vdr ];
 
     src = fetchurl {
-      url = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/files/${pname}-${version}.tgz";
+      url =
+        "http://www.saunalahti.fi/~rahrenbe/vdr/femon/files/${pname}-${version}.tgz";
       sha256 = "1hra1xslj8s68zbyr8zdqp8yap0aj1p6rxyc6cwy1j122kwcnapp";
     };
 
@@ -52,7 +60,10 @@ in {
     version = "20190525";
 
     buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg
+      vdr
+      libxcb
+      xcbutilwm
+      ffmpeg
       alsa-lib
       libvdpau # vdpau
       libva # va-api
@@ -82,7 +93,6 @@ in {
     };
 
   };
-
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
@@ -122,7 +132,8 @@ in {
 
     meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-markad";
-      description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
+      description =
+        "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];
@@ -152,19 +163,11 @@ in {
       groff
     ];
 
-    buildInputs = [
-      vdr
-      pcre
-    ];
+    buildInputs = [ vdr pcre ];
 
-    buildFlags = [
-      "SENDMAIL="
-      "REGEXLIB=pcre"
-    ];
+    buildFlags = [ "SENDMAIL=" "REGEXLIB=pcre" ];
 
-    installFlags = [
-      "DESTDIR=$(out)"
-    ];
+    installFlags = [ "DESTDIR=$(out)" ];
 
     outputs = [ "out" "man" ];
 

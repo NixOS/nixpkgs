@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
-, zlib, libzen, libmediainfo, curl, libmms, glib
-}:
+{ lib, stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook, zlib, libzen
+, libmediainfo, curl, libmms, glib }:
 
 let
   # FileBot requires libcurl-gnutls.so to build
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
+  curlWithGnuTls = curl.override {
+    gnutlsSupport = true;
+    opensslSupport = false;
+  };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "filebot";
   version = "4.9.4";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20210326102451/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    url =
+      "https://web.archive.org/web/20210326102451/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
     sha256 = "sha256-fz0B9P/UBrlKGPZkheMd/4cFnWHt+brS3zRTv4nVt9o=";
   };
 

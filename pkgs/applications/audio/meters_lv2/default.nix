@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config
-, lv2, libGLU, libGL, gtk2, cairo, pango, fftwFloat, libjack2 }:
+{ lib, stdenv, fetchurl, pkg-config, lv2, libGLU, libGL, gtk2, cairo, pango
+, fftwFloat, libjack2 }:
 
 let
   version = "0.9.10";
@@ -21,8 +21,7 @@ let
     sha256 = "1v79xys1k2923wpivdjd44vand6c4agwvnrqi4c8kdv9r07b559v";
   };
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,11 +35,12 @@ stdenv.mkDerivation {
   preConfigure = "makeFlagsArray=( PREFIX=$out )";
   meter_VERSION = version;
 
-  meta = with lib;
-    { description = "Collection of audio level meters with GUI in LV2 plugin format";
-      homepage = "http://x42.github.io/meters.lv2/";
-      maintainers = with maintainers; [ ehmry ];
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-    };
+  meta = with lib; {
+    description =
+      "Collection of audio level meters with GUI in LV2 plugin format";
+    homepage = "http://x42.github.io/meters.lv2/";
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

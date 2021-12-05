@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
+, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";

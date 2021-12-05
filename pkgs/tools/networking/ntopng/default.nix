@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkg-config, groff, curl, json_c, luajit, zeromq, rrdtool
-}:
+{ lib, stdenv, fetchurl, libpcap, # gnutls, libgcrypt,
+libxml2, glib, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
+, pkg-config, groff, curl, json_c, luajit, zeromq, rrdtool }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
 # directory, but we use luajit, zeromq, and rrdtool from nixpkgs
@@ -24,10 +23,24 @@ stdenv.mkDerivation rec {
     ./0003-New-libpcap-defines-SOCKET.patch
   ];
 
-  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkg-config groff curl json_c luajit zeromq
-    rrdtool ];
-
+  buildInputs = [
+    libpcap # gnutls libgcrypt
+    libxml2
+    glib
+    geoip
+    geolite-legacy
+    sqlite
+    which
+    autoreconfHook
+    git
+    pkg-config
+    groff
+    curl
+    json_c
+    luajit
+    zeromq
+    rrdtool
+  ];
 
   autoreconfPhase = ''
     substituteInPlace autogen.sh --replace "/bin/rm" "rm"
@@ -55,11 +68,12 @@ stdenv.mkDerivation rec {
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"
-    + lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
+  NIX_CFLAGS_COMPILE = "-fpermissive" + lib.optionalString stdenv.cc.isClang
+    " -Wno-error=reserved-user-defined-literal";
 
   meta = with lib; {
-    description = "High-speed web-based traffic analysis and flow collection tool";
+    description =
+      "High-speed web-based traffic analysis and flow collection tool";
     homepage = "http://www.ntop.org/products/ntop/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

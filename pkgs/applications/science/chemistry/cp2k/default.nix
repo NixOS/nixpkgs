@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
-, fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which, elpa, pkg-config
-} :
+{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack, fftw, libint
+, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper, libxsmm, spglib
+, which, elpa, pkg-config }:
 
 let
   cp2kVersion = "psmp";
@@ -38,10 +37,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ mpi ];
   propagatedUserEnvPkgs = [ mpi ];
 
-  makeFlags = [
-    "ARCH=${arch}"
-    "VERSION=${cp2kVersion}"
-  ];
+  makeFlags = [ "ARCH=${arch}" "VERSION=${cp2kVersion}" ];
 
   doCheck = true;
 

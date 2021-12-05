@@ -18,8 +18,7 @@ let
     LDFLAGS=-s
     EXTRA_OBJS=strverscmp.o
   ''; # use linux flags by default
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "tree";
   version = "1.8.0";
 

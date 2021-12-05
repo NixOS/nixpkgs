@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, Security
-, libiconv
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, Security
+, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
@@ -21,16 +14,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1qvrzaila3wbjmc7ri5asa3di2nzln78ys9innzd84fr36c90kkc";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    libiconv
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = [ openssl libiconv ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   buildFeatures = [ "fix" ];
 
@@ -38,7 +25,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Audit Cargo.lock files for crates with security vulnerabilities";
+    description =
+      "Audit Cargo.lock files for crates with security vulnerabilities";
     homepage = "https://rustsec.org";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ basvandijk ];

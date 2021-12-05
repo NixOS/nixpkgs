@@ -1,7 +1,5 @@
-{ lib, stdenv, buildPackages
-, fetchurl, linuxHeaders, libiconvReal
-, extraConfig ? ""
-}:
+{ lib, stdenv, buildPackages, fetchurl, linuxHeaders, libiconvReal
+, extraConfig ? "" }:
 
 let
   configParser = ''
@@ -39,24 +37,25 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + lib.optionalString (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
-    CONFIG_ARM_EABI y
-    ARCH_WANTS_BIG_ENDIAN n
-    ARCH_BIG_ENDIAN n
-    ARCH_WANTS_LITTLE_ENDIAN y
-    ARCH_LITTLE_ENDIAN y
-    UCLIBC_HAS_FPU n
-  '';
+  '' + lib.optionalString
+    (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
+      CONFIG_ARM_EABI y
+      ARCH_WANTS_BIG_ENDIAN n
+      ARCH_BIG_ENDIAN n
+      ARCH_WANTS_LITTLE_ENDIAN y
+      ARCH_LITTLE_ENDIAN y
+      UCLIBC_HAS_FPU n
+    '';
 
   version = "1.0.38";
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "uclibc-ng-${version}";
   inherit version;
 
   src = fetchurl {
-    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
+    url =
+      "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
     # from "${url}.sha256";
     sha256 = "sha256-7wexvOOfDpIsM3XcdhHxESz7GsOW+ZkiA0dfiN5rHrU=";
   };
@@ -80,12 +79,9 @@ stdenv.mkDerivation {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
-    "VERBOSE=1"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "CROSS=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags = [ "ARCH=${stdenv.hostPlatform.parsed.cpu.name}" "VERBOSE=1" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "CROSS=${stdenv.cc.targetPrefix}" ];
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
@@ -109,6 +105,7 @@ stdenv.mkDerivation {
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;
-    platforms = intersectLists platforms.linux platforms.x86; # fails to build on ARM
+    platforms =
+      intersectLists platforms.linux platforms.x86; # fails to build on ARM
   };
 }

@@ -1,17 +1,19 @@
 { lib, fetchzip }:
 
-let
-  version = "1.1";
+let version = "1.1";
 in fetchzip rec {
   name = "comic-relief-${version}";
 
-  url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
+  url =
+    "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
 
   postFetch = ''
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/doc/${name}
     mkdir -p $out/share/fonts/truetype
-    cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
+    cp -v ${
+      ./comic-sans-ms-alias.conf
+    }     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
     unzip -j $downloadedFile \*.ttf      -d $out/share/fonts/truetype
     unzip -j $downloadedFile FONTLOG.txt -d $out/share/doc/${name}
   '';
@@ -30,7 +32,7 @@ in fetchzip rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `corefonts` package, then you probably will not

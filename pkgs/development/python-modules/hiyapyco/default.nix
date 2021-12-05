@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, jinja2
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jinja2 }:
 
 buildPythonPackage rec {
   pname = "hiyapyco";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1ams9dp05yhgbg6255wrjgchl2mqg0s34d8b8prvql9lsh59s1fj";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-    jinja2
-  ];
+  propagatedBuildInputs = [ pyyaml jinja2 ];
 
   postPatch = ''
     # Should no longer be needed with the next release
@@ -36,7 +28,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hiyapyco" ];
 
   meta = with lib; {
-    description = "Python library allowing hierarchical overlay of config files in YAML syntax";
+    description =
+      "Python library allowing hierarchical overlay of config files in YAML syntax";
     homepage = "https://github.com/zerwes/hiyapyco";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veehaitch ];

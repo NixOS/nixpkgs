@@ -1,30 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, glib
-, dbus
-, gettext
-, cinnamon-desktop
-, cinnamon-common
-, intltool
-, libxslt
-, gtk3
-, libgnomekbd
-, gnome
-, libtool
-, wrapGAppsHook
-, gobject-introspection
-, python3
-, pam
-, accountsservice
-, cairo
-, xapps
-, xorg
-, iso-flags-png-320x420
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, glib, dbus, gettext
+, cinnamon-desktop, cinnamon-common, intltool, libxslt, gtk3, libgnomekbd, gnome
+, libtool, wrapGAppsHook, gobject-introspection, python3, pam, accountsservice
+, cairo, xapps, xorg, iso-flags-png-320x420 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
@@ -60,7 +37,8 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXrandr
 
-    (python3.withPackages (pp: with pp; [ pygobject3 setproctitle xapp pycairo ]))
+    (python3.withPackages
+      (pp: with pp; [ pygobject3 setproctitle xapp pycairo ]))
     xapps
     pam
     accountsservice

@@ -13,7 +13,12 @@ let
         };
 
         checkInputs = [ self.pytest ];
-        propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
+        propagatedBuildInputs = with self; [
+          itsdangerous
+          click
+          werkzeug
+          jinja2
+        ];
 
         doCheck = false;
       });
@@ -26,30 +31,28 @@ let
 
         src = fetchPypi {
           inherit pname version;
-          sha256 = "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
+          sha256 =
+            "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
         };
         doCheck = false;
       });
     })
   ];
 
-  mkOverride = attrname: version: sha256:
-    self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      });
-    };
+  mkOverride = attrname: version: sha256: self: super: {
+    ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      inherit version;
+      src = oldAttrs.src.override { inherit version sha256; };
+    });
+  };
 
   py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (defaultOverrides);
+    packageOverrides =
+      lib.foldr lib.composeExtensions (self: super: { }) (defaultOverrides);
   };
 
-in
-with py.pkgs;
+in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";

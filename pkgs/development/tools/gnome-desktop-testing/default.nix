@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, glib
-, autoreconfHook
-, pkg-config
-, systemd
-, fetchFromGitLab
-, nix-update-script
-}:
+{ stdenv, lib, glib, autoreconfHook, pkg-config, systemd, fetchFromGitLab
+, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop-testing";
@@ -20,22 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    glib
-    systemd
-  ];
+  buildInputs = [ glib systemd ];
 
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome-desktop-testing";
-    };
+    updateScript = nix-update-script { attrPath = "gnome-desktop-testing"; };
   };
 
   meta = with lib; {

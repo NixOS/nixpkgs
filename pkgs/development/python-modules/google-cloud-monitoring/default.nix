@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, libcst
-, proto-plus
-, pandas
-, pytestCheckHook
-, pytest-asyncio
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, google-cloud-testutils
+, libcst, proto-plus, pandas, pytestCheckHook, pytest-asyncio, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
@@ -22,17 +12,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus ];
 
-  checkInputs = [ google-cloud-testutils mock pandas pytestCheckHook pytest-asyncio ];
+  checkInputs =
+    [ google-cloud-testutils mock pandas pytestCheckHook pytest-asyncio ];
 
   disabledTests = [
     # requires credentials
     "test_list_monitored_resource_descriptors"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.monitoring"
-    "google.cloud.monitoring_v3"
-  ];
+  pythonImportsCheck =
+    [ "google.cloud.monitoring" "google.cloud.monitoring_v3" ];
 
   meta = with lib; {
     description = "Stackdriver Monitoring API client library";

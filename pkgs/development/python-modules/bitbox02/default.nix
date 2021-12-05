@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, base58, ecdsa, hidapi, noiseprotocol, protobuf, semver, typing-extensions }:
+{ lib, buildPythonPackage, fetchPypi, base58, ecdsa, hidapi, noiseprotocol
+, protobuf, semver, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "bitbox02";
@@ -9,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "fe0e8aeb9b32fd7d76bb3e9838895973a74dfd532a8fb8ac174a1a60214aee26";
   };
 
-  propagatedBuildInputs = [ base58 ecdsa hidapi noiseprotocol protobuf semver typing-extensions ];
+  propagatedBuildInputs =
+    [ base58 ecdsa hidapi noiseprotocol protobuf semver typing-extensions ];
 
   # does not contain tests
   doCheck = false;

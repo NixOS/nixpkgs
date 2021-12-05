@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, gettext, dysnomia, libintl, libiconv }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, gettext
+, dysnomia, libintl, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "disnix";
   version = "0.10.1";
 
   src = fetchurl {
-    url = "https://github.com/svanderburg/disnix/releases/download/disnix-${version}/disnix-${version}.tar.gz";
+    url =
+      "https://github.com/svanderburg/disnix/releases/download/disnix-${version}/disnix-${version}.tar.gz";
     sha256 = "13rjw1va7l8w7ir73xqxq4zb3ig2iwhiwxhp5dbfv0z3gnqizghq";
   };
 

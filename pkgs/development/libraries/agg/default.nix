@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config
-, freetype, SDL, libX11 }:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config, freetype, SDL
+, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "agg";
@@ -8,18 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.antigrain.com/${pname}-${version}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  nativeBuildInputs = [
-    pkg-config
-    autoconf
-    automake
-    libtool
-  ];
-  buildInputs = [
-    freetype
-    SDL
-  ] ++ lib.optionals stdenv.isLinux [
-    libX11
-  ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
+  buildInputs = [ freetype SDL ] ++ lib.optionals stdenv.isLinux [ libX11 ];
 
   postPatch = ''
     substituteInPlace include/agg_renderer_outline_aa.h \

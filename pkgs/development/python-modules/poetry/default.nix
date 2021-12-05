@@ -1,26 +1,8 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder, fetchpatch
-, cachecontrol
-, cachy
-, cleo
-, clikit
-, html5lib
-, httpretty
-, importlib-metadata
-, intreehooks
-, keyring
-, lockfile
-, pexpect
-, pkginfo
-, poetry-core
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
-, requests
-, requests-toolbelt
-, shellingham
-, tomlkit
-, virtualenv
-}:
+, cachecontrol, cachy, cleo, clikit, html5lib, httpretty, importlib-metadata
+, intreehooks, keyring, lockfile, pexpect, pkginfo, poetry-core, pytestCheckHook
+, pytest-cov, pytest-mock, requests, requests-toolbelt, shellingham, tomlkit
+, virtualenv }:
 
 buildPythonPackage rec {
   pname = "poetry";
@@ -94,7 +76,8 @@ buildPythonPackage rec {
     # pytest-mock.  This is addressed upstream in
     # https://github.com/python-poetry/poetry/pull/3457
     (fetchpatch {
-      url = "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
+      url =
+        "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
       sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
     })
   ];

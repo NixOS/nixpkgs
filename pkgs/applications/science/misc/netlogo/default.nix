@@ -11,14 +11,13 @@ let
     categories = "Science;";
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "netlogo";
   version = "6.1.1";
 
   src = fetchurl {
-    url = "https://ccl.northwestern.edu/netlogo/${version}/NetLogo-${version}-64.tgz";
+    url =
+      "https://ccl.northwestern.edu/netlogo/${version}/NetLogo-${version}-64.tgz";
     sha256 = "1j08df68pgggxqkmpzd369w4h97q0pivmmljdb48hjghx7hacblp";
   };
 

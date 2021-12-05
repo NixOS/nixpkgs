@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pamqp
-, pytest
-, asynctest
-, pyrabbit2
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pamqp, pytest, asynctest, pyrabbit2
+, isPy27 }:
 
 buildPythonPackage rec {
   pname = "aioamqp";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
 
   patches = [ ./compat-pamqp-3.patch ];
 
-  propagatedBuildInputs = [
-    pamqp
-  ];
+  propagatedBuildInputs = [ pamqp ];
 
-  checkInputs = [
-    pytest
-    asynctest
-    pyrabbit2
-  ];
+  checkInputs = [ pytest asynctest pyrabbit2 ];
 
   # tests assume rabbitmq server running
   doCheck = false;

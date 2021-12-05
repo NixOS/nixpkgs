@@ -1,7 +1,8 @@
-{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook, pcre-cpp, gnome }:
+{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3
+, pkg-config, wrapGAppsHook, pcre-cpp, gnome }:
 
 stdenv.mkDerivation rec {
-  version="1.1.3";
+  version = "1.1.3";
   pname = "gsmartcontrol";
 
   src = fetchurl {
@@ -9,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a8j7dkml9zvgpk83xcdajfz7g6mmpmm5k86dl5sjc24zb7n4kxn";
   };
 
-  patches = [
-    ./fix-paths.patch
-  ];
+  patches = [ ./fix-paths.patch ];
 
   nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook ];
   buildInputs = [ gtkmm3 pcre-cpp gnome.adwaita-icon-theme ];
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gsmartcontrol.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [qknight];
+    maintainers = with lib.maintainers; [ qknight ];
     platforms = with lib.platforms; linux;
   };
 }

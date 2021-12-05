@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv
+, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
@@ -27,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Alternative to xdg-open to manage default applications with ease";
+    description =
+      "Alternative to xdg-open to manage default applications with ease";
     homepage = "https://github.com/chmln/handlr";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli ];

@@ -24,34 +24,36 @@ let
     };
   };
 
-  toDrv = title: data: stdenv.mkDerivation rec {
-    inherit (data) id version description sha256;
-    inherit title;
+  toDrv = title: data:
+    stdenv.mkDerivation rec {
+      inherit (data) id version description sha256;
+      inherit title;
 
-    pname = "yquake2-${title}";
+      pname = "yquake2-${title}";
 
-    src = fetchFromGitHub {
-      inherit sha256;
-      owner = "yquake2";
-      repo = data.id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
+      src = fetchFromGitHub {
+        inherit sha256;
+        owner = "yquake2";
+        repo = data.id;
+        rev = "${lib.toUpper id}_${
+            builtins.replaceStrings [ "." ] [ "_" ] version
+          }";
+      };
+
+      nativeBuildInputs = [ cmake ];
+
+      installPhase = ''
+        mkdir -p $out/lib/yquake2/${id}
+        cp Release/* $out/lib/yquake2/${id}
+      '';
+
+      meta = with lib; {
+        inherit (data) description;
+        homepage = "https://www.yamagi.org/quake2/";
+        license = licenses.unfree;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ tadfisher ];
+      };
     };
 
-    nativeBuildInputs = [ cmake ];
-
-    installPhase = ''
-      mkdir -p $out/lib/yquake2/${id}
-      cp Release/* $out/lib/yquake2/${id}
-    '';
-
-    meta = with lib; {
-      inherit (data) description;
-      homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.unfree;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
-    };
-  };
-
-in
-  lib.mapAttrs toDrv games
+in lib.mapAttrs toDrv games

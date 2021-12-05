@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, PyICU
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, PyICU, python }:
 
 buildPythonPackage {
   pname = "slob";
@@ -28,7 +22,8 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/itkach/slob/";
-    description = "Reference implementation of the slob (sorted list of blobs) format";
+    description =
+      "Reference implementation of the slob (sorted list of blobs) format";
     license = licenses.gpl3Only;
   };
 }

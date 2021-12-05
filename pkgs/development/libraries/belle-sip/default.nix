@@ -1,13 +1,5 @@
-{ antlr3_4
-, bctoolbox
-, cmake
-, fetchFromGitLab
-, lib
-, libantlr3c
-, mbedtls
-, stdenv
-, zlib
-}:
+{ antlr3_4, bctoolbox, cmake, fetchFromGitLab, lib, libantlr3c, mbedtls, stdenv
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
@@ -39,7 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
-    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
+    description =
+      "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];

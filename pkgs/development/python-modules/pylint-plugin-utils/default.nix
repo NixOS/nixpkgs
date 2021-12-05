@@ -1,12 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
+{ buildPythonPackage, fetchFromGitHub, isPy3k, lib
 
 # pythonPackages
-, pylint
-, toml
-}:
+, pylint, toml }:
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
@@ -20,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "1zapmbczxs1phrwbd0yvpfxhljd2pyv4pi9rwggaq38lcnc325s7";
   };
 
-  propagatedBuildInputs = [
-    pylint toml
-  ];
+  propagatedBuildInputs = [ pylint toml ];
 
   checkPhase = ''
     python tests.py
@@ -32,8 +25,6 @@ buildPythonPackage rec {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
     license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

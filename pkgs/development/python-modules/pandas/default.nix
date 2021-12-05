@@ -1,29 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, python
-, cython
-, numpy
-, python-dateutil
-, pytz
-, scipy
-, sqlalchemy
-, tables
-, xlrd
-, xlwt
+{ lib, stdenv, buildPythonPackage, fetchPypi, python, cython, numpy
+, python-dateutil, pytz, scipy, sqlalchemy, tables, xlrd, xlwt
 # Test inputs
-, glibcLocales
-, hypothesis
-, jinja2
-, pytestCheckHook
-, pytest-xdist
-, pytest-asyncio
-, XlsxWriter
+, glibcLocales, hypothesis, jinja2, pytestCheckHook, pytest-xdist
+, pytest-asyncio, XlsxWriter
 # Darwin inputs
-, runtimeShell
-, libcxx
-}:
+, runtimeShell, libcxx }:
 
 buildPythonPackage rec {
   pname = "pandas";
@@ -38,11 +19,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin libcxx;
 
-  propagatedBuildInputs = [
-    numpy
-    python-dateutil
-    pytz
-  ];
+  propagatedBuildInputs = [ numpy python-dateutil pytz ];
 
   checkInputs = [
     glibcLocales
@@ -68,13 +45,10 @@ buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
+  doCheck = !stdenv.isAarch32
+    && !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  pytestFlagsArray = [
-    "--skip-slow"
-    "--skip-network"
-    "--numprocesses" "0"
-  ];
+  pytestFlagsArray = [ "--skip-slow" "--skip-network" "--numprocesses" "0" ];
 
   disabledTests = [
     # Locale-related
@@ -91,10 +65,7 @@ buildPythonPackage rec {
     "test_from_coo"
     # AssertionError: No common DType exists for the given inputs
     "test_comparison_invalid"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_locale"
-    "test_clipboard"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_locale" "test_clipboard" ];
 
   # Tests have relative paths, and need to reference compiled C extensions
   # so change directory where `import .test` is able to be resolved
@@ -103,15 +74,15 @@ buildPythonPackage rec {
     export LC_ALL="en_US.UTF-8"
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
-  # TODO: Get locale and clipboard support working on darwin.
-  #       Until then we disable the tests.
-  + lib.optionalString stdenv.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!${runtimeShell}" > pbcopy
-    echo "#!${runtimeShell}" > pbpaste
-    chmod a+x pbcopy pbpaste
-    export PATH=$(pwd):$PATH
-  '';
+    # TODO: Get locale and clipboard support working on darwin.
+    #       Until then we disable the tests.
+    + lib.optionalString stdenv.isDarwin ''
+      # Fake the impure dependencies pbpaste and pbcopy
+      echo "#!${runtimeShell}" > pbcopy
+      echo "#!${runtimeShell}" > pbpaste
+      chmod a+x pbcopy pbpaste
+      export PATH=$(pwd):$PATH
+    '';
 
   pythonImportsCheck = [ "pandas" ];
 

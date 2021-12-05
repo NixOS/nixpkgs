@@ -1,7 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3
-, wrapGAppsHook, nest-asyncio, pycairo, py-desmume, pygtkspellcheck, setuptools
-, skytemple-files, skytemple-icons
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, gobject-introspection, gtk3
+, gtksourceview3, wrapGAppsHook, nest-asyncio, pycairo, py-desmume
+, pygtkspellcheck, setuptools, skytemple-files, skytemple-icons }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
@@ -31,7 +30,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
-    description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
+    description =
+      "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix ];
   };

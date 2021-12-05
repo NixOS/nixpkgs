@@ -1,27 +1,30 @@
-{ stdenvNoCC, lib, fetchzip, pkgs
-}:
+{ stdenvNoCC, lib, fetchzip, pkgs }:
 let
 
   prebuilt_crt = fetchzip {
-    url =  "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
+    url =
+      "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
     sha256 = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
     stripRoot = false;
   };
 
   prebuilt_libs = fetchzip {
-    url = "https://android.googlesource.com/platform/prebuilts/ndk/+archive/f2c77d8ba8a7f5c2d91771e31164f29be0b8ff98/platform/platforms/android-30/arch-arm64/usr/lib.tar.gz";
+    url =
+      "https://android.googlesource.com/platform/prebuilts/ndk/+archive/f2c77d8ba8a7f5c2d91771e31164f29be0b8ff98/platform/platforms/android-30/arch-arm64/usr/lib.tar.gz";
     sha256 = "sha256-TZBV7+D1QvKOCEi+VNGT5SStkgj0xRbyWoLH65zSrjw=";
     stripRoot = false;
   };
 
   prebuilt_ndk_crt = fetchzip {
-    url = "https://android.googlesource.com/toolchain/prebuilts/ndk/r23/+archive/6c5fa4c0d3999b9ee932f6acbd430eb2f31f3151/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30.tar.gz";
+    url =
+      "https://android.googlesource.com/toolchain/prebuilts/ndk/r23/+archive/6c5fa4c0d3999b9ee932f6acbd430eb2f31f3151/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30.tar.gz";
     sha256 = "sha256-KHw+cCwAwlm+5Nwp1o8WONqdi4BBDhFaVVr+7GxQ5uE=";
     stripRoot = false;
   };
 
   ndk_support_headers = fetchzip {
-    url ="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
+    url =
+      "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
     sha256 = "sha256-NBv7Pk1CEaz8ns9moleEERr3x/rFmVmG33LgFSeO6fY=";
     stripRoot = false;
   };
@@ -29,19 +32,20 @@ let
   kernelHeaders = pkgs.makeLinuxHeaders {
     version = "android-common-11-5.4";
     src = fetchzip {
-      url = "https://android.googlesource.com/kernel/common/+archive/48ffcbf0b9e7f0280bfb8c32c68da0aaf0fdfef6.tar.gz";
+      url =
+        "https://android.googlesource.com/kernel/common/+archive/48ffcbf0b9e7f0280bfb8c32c68da0aaf0fdfef6.tar.gz";
       sha256 = "1y7cmlmcr5vdqydd9n785s139yc4aylc3zhqa59xsylmkaf5habk";
       stripRoot = false;
     };
   };
 
-in
-stdenvNoCC.mkDerivation rec {
+in stdenvNoCC.mkDerivation rec {
   pname = "bionic-prebuilt";
   version = "ndk-release-r23";
 
   src = fetchzip {
-    url = "https://android.googlesource.com/platform/bionic/+archive/00e8ce1142d8823b0d2fc8a98b40119b0f1f02cd.tar.gz";
+    url =
+      "https://android.googlesource.com/platform/bionic/+archive/00e8ce1142d8823b0d2fc8a98b40119b0f1f02cd.tar.gz";
     sha256 = "10z5mp4w0acvjvgxv7wlqa7m70hcyarmjdlfxbd9rwzf4mrsr8d1";
     stripRoot = false;
   };
@@ -51,9 +55,7 @@ stdenvNoCC.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  patches = [
-    ./ndk-version.patch
-  ];
+  patches = [ ./ndk-version.patch ];
 
   postPatch = ''
     substituteInPlace libc/include/sys/cdefs.h --replace \
@@ -62,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
-  installPhase= ''
+  installPhase = ''
     # copy the bionic headers
     mkdir -p $out/include/support $out/include/android
     cp -vr libc/include/* $out/include
@@ -105,9 +107,9 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "The Android libc implementation";
-    homepage    = "https://android.googlesource.com/platform/bionic/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://android.googlesource.com/platform/bionic/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ s1341 ];
   };
 }

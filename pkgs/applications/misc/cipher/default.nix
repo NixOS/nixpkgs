@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libgee
-, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, vala
+, pkg-config, pantheon, python3, gettext, glib, gtk3, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cipher";
@@ -24,22 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "00azc5ck17zkdypfza6x1viknwhimd9fqgk2ybff3mx6aphmla7a";
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    vala
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gettext meson ninja vala pkg-config python3 wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    gtk3
-    pantheon.granite
-    libgee
-  ];
+  buildInputs = [ glib gtk3 pantheon.granite libgee ];
 
   postPatch = ''
     substituteInPlace data/com.github.arshubham.cipher.desktop.in \
@@ -48,14 +24,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "A simple application for encoding and decoding text, designed for elementary OS";
+    description =
+      "A simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;

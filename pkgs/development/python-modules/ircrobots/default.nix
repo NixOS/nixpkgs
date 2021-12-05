@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, anyio
-, asyncio-throttle
-, dataclasses
-, ircstates
-, async_stagger
-, async-timeout
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, anyio, asyncio-throttle
+, dataclasses, ircstates, async_stagger, async-timeout, python }:
 
 buildPythonPackage rec {
   pname = "ircrobots";
@@ -28,15 +18,9 @@ buildPythonPackage rec {
     sed -iE 's/anyio.*/anyio/' requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    anyio
-    asyncio-throttle
-    ircstates
-    async_stagger
-    async-timeout
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs =
+    [ anyio asyncio-throttle ircstates async_stagger async-timeout ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

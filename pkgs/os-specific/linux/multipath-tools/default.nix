@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c, kmod }:
+{ lib, stdenv, fetchurl, pkg-config, perl, lvm2, libaio, gzip, readline, systemd
+, liburcu, json_c, kmod }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
@@ -6,7 +7,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
-    url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
+    url =
+      "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
     sha256 = "1mgjylklh1cx8px8ffgl12kyc0ln3445vbabd2sy8chq31rpiiq8";
   };
 
@@ -17,7 +19,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libmultipath/Makefile \
-      --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+      --replace /usr/include/libdevmapper.h ${
+        lib.getDev lvm2
+      }/include/libdevmapper.h
 
     # systemd-udev-settle.service is deprecated.
     substituteInPlace multipathd/multipathd.service \

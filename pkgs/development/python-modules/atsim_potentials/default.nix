@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configparser
-, pyparsing
-, pytest
-, future
-, openpyxl
-, wrapt
-}:
+{ lib, buildPythonPackage, fetchPypi, configparser, pyparsing, pytest, future
+, openpyxl, wrapt }:
 
 buildPythonPackage rec {
   version = "0.4.0";
@@ -19,13 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    configparser
-    future
-    openpyxl
-    pyparsing
-    wrapt
-  ];
+  propagatedBuildInputs = [ configparser future openpyxl pyparsing wrapt ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -41,7 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
-    description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
+    description =
+      "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
     broken = true; # missing cexprtk package

@@ -1,28 +1,34 @@
-{ lib, stdenv, fetchurl, desktop-file-utils
-, gtk3, libX11
-, makeWrapper, pkg-config, perl, autoreconfHook, wrapGAppsHook
-}:
+{ lib, stdenv, fetchurl, desktop-file-utils, gtk3, libX11, makeWrapper
+, pkg-config, perl, autoreconfHook, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
   version = "20200610.9aa7b7c";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
+    url =
+      "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
     sha256 = "0rrd1c77ar91zqy4rr4xp1z7x3ywnshlac99cga4hnrgwb7vwl3f";
   };
 
   sgt-puzzles-menu = fetchurl {
-    url = "https://raw.githubusercontent.com/Oleh-Kravchenko/portage/master/games-puzzle/sgt-puzzles/files/sgt-puzzles.menu";
+    url =
+      "https://raw.githubusercontent.com/Oleh-Kravchenko/portage/master/games-puzzle/sgt-puzzles/files/sgt-puzzles.menu";
     sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
   };
 
-  nativeBuildInputs = [ autoreconfHook desktop-file-utils makeWrapper
-    pkg-config perl wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    desktop-file-utils
+    makeWrapper
+    pkg-config
+    perl
+    wrapGAppsHook
+  ];
 
   buildInputs = [ gtk3 libX11 ];
 
-  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin"];
+  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin" ];
 
   preInstall = ''
     mkdir -p "$out"/{bin,share/doc/sgtpuzzles}

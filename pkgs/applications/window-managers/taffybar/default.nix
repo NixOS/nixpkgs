@@ -1,9 +1,6 @@
-{ lib, stdenv, ghcWithPackages, taffybar, makeWrapper, packages ? (x: []) }:
+{ lib, stdenv, ghcWithPackages, taffybar, makeWrapper, packages ? (x: [ ]) }:
 
-let
-  taffybarEnv = ghcWithPackages (self: [
-    self.taffybar
-  ] ++ packages self);
+let taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
 in stdenv.mkDerivation {
   name = "taffybar-with-packages-${taffybarEnv.version}";
 

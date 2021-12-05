@@ -22,7 +22,8 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to help users who are familiar with docker-compose move to Kubernetes";
+    description =
+      "A tool to help users who are familiar with docker-compose move to Kubernetes";
     homepage = "https://kompose.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ thpham vdemeester ];

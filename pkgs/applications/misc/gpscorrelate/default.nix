@@ -21,11 +21,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    exiv2
-    gtk3
-    libxml2
-  ];
+  buildInputs = [ exiv2 gtk3 libxml2 ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"

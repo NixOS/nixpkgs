@@ -11,10 +11,7 @@ buildPythonPackage rec {
   };
 
   # has tests, but only on GitHub, however the pyproject build fails for me
-  pythonImportsCheck = [
-    "crashtest.frame"
-    "crashtest.inspector"
-  ];
+  pythonImportsCheck = [ "crashtest.frame" "crashtest.inspector" ];
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/crashtest";

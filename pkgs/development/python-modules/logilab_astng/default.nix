@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, logilab_common
-}:
+{ lib, buildPythonPackage, fetchurl, logilab_common }:
 
 buildPythonPackage rec {
   pname = "logilab-astng";

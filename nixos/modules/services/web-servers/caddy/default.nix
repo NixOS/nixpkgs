@@ -32,9 +32,9 @@ let
   tlsJSON = pkgs.writeText "tls.json" (builtins.toJSON tlsConfig);
 
   # merge the TLS config options we expose with the ones originating in the Caddyfile
-  configJSON =
-    if cfg.ca != null then
-      let tlsConfigMerge = ''
+  configJSON = if cfg.ca != null then
+    let
+      tlsConfigMerge = ''
         {"apps":
           {"tls":
             {"automation":
@@ -47,16 +47,15 @@ let
             }
           }
         }'';
-      in
-      pkgs.runCommand "caddy-config.json" { } ''
-        ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
-      ''
-    else
-      adaptedConfig;
-in
-{
+    in pkgs.runCommand "caddy-config.json" { } ''
+      ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
+    ''
+  else
+    adaptedConfig;
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
+    (mkRemovedOptionModule [ "services" "caddy" "agree" ]
+      "this option is no longer necessary for Caddy 2")
   ];
 
   options.services.caddy = {
@@ -79,9 +78,8 @@ in
     };
 
     virtualHosts = mkOption {
-      type = types.attrsOf (types.submodule (import ./vhost-options.nix {
-        inherit config lib;
-      }));
+      type = types.attrsOf
+        (types.submodule (import ./vhost-options.nix { inherit config lib; }));
       default = { };
       example = literalExpression ''
         {
@@ -97,7 +95,6 @@ in
       '';
       description = "Declarative vhost config";
     };
-
 
     user = mkOption {
       default = "caddy";
@@ -180,8 +177,14 @@ in
       serviceConfig = {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${configJSON}" ];
+        ExecStart = [
+          ""
+          "${cfg.package}/bin/caddy run ${
+            optionalString cfg.resume "--resume"
+          } --config ${configJSON}"
+        ];
+        ExecReload =
+          [ "" "${cfg.package}/bin/caddy reload --config ${configJSON}" ];
 
         User = cfg.user;
         Group = cfg.group;

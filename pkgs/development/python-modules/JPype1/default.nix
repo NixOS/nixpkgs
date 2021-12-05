@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pythonOlder
-, typing-extensions
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pythonOlder, typing-extensions
+, pytest }:
 
 buildPythonPackage rec {
   pname = "JPype1";
@@ -17,13 +11,10 @@ buildPythonPackage rec {
     sha256 = "4fc27dba89750cb0c9d692466341ce60c0fe86a16051091cb5347a37cf884151";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   # required openjdk (easy) but then there were some class path issues
   # when running the tests

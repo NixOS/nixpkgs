@@ -1,20 +1,5 @@
-{ buildPythonPackage
-, lib
-, stdenv
-, cmake
-, cppe
-, eigen
-, python
-, pybind11
-, numpy
-, h5py
-, numba
-, scipy
-, pandas
-, polarizationsolver
-, pytest
-, llvmPackages
-}:
+{ buildPythonPackage, lib, stdenv, cmake, cppe, eigen, python, pybind11, numpy
+, h5py, numba, scipy, pandas, polarizationsolver, pytest, llvmPackages }:
 
 buildPythonPackage rec {
   inherit (cppe) pname version src meta;
@@ -26,10 +11,7 @@ buildPythonPackage rec {
       --replace "external/eigen3" "${eigen}/include/eigen3"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    eigen
-  ];
+  nativeBuildInputs = [ cmake eigen ];
 
   dontUseCmakeConfigure = true;
 
@@ -40,15 +22,7 @@ buildPythonPackage rec {
 
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  checkInputs = [
-    pytest
-    h5py
-    numba
-    numpy
-    pandas
-    polarizationsolver
-    scipy
-  ];
+  checkInputs = [ pytest h5py numba numpy pandas polarizationsolver scipy ];
 
   pythonImportsCheck = [ "cppe" ];
 }

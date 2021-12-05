@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, mock
-, psutil
-, six
-, future
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, mock, psutil, six, future
 }:
 
 let

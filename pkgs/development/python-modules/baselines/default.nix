@@ -1,19 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, gym
-, scipy
-, tqdm
-, joblib
-, dill
-, progressbar2
-, cloudpickle
-, click
-, pyzmq
-, tensorflow
-, mpi4py
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, gym, scipy, tqdm, joblib
+, dill, progressbar2, cloudpickle, click, pyzmq, tensorflow, mpi4py }:
 
 buildPythonPackage {
   pname = "baselines";
@@ -51,12 +37,11 @@ buildPythonPackage {
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   meta = with lib; {
-    description = "High-quality implementations of reinforcement learning algorithms";
+    description =
+      "High-quality implementations of reinforcement learning algorithms";
     homepage = "https://github.com/openai/baselines";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];

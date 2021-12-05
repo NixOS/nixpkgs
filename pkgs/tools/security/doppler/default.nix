@@ -13,7 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-VPxHxNtDeP5CFDMTeMsZYED9ZGWMquJdeupeCVldY/E=";
 
-  ldflags = [ "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}" ];
+  ldflags =
+    [ "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}" ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/doppler
@@ -21,7 +22,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://doppler.com";
-    description = "The official CLI for interacting with your Doppler Enclave secrets and configuation";
+    description =
+      "The official CLI for interacting with your Doppler Enclave secrets and configuation";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
   };

@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   pname = "xtl";
   version = "0.7.2";
@@ -24,7 +19,8 @@ stdenv.mkDerivation rec {
   checkTarget = "xtest";
 
   meta = with lib; {
-    description = "Basic tools (containers, algorithms) used by other quantstack packages";
+    description =
+      "Basic tools (containers, algorithms) used by other quantstack packages";
     homepage = "https://github.com/xtensor-stack/xtl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cpcloud ];

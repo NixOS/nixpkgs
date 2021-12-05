@@ -1,8 +1,7 @@
-{ lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
-, gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
-, gnome, buildPythonApplication, python-dateutil, pyinotify, pygobject3
-, bcrypt, gobject-introspection, gsettings-desktop-schemas
-, pango, gdk-pixbuf, atk }:
+{ lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall, gtk3
+, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook, gnome
+, buildPythonApplication, python-dateutil, pyinotify, pygobject3, bcrypt
+, gobject-introspection, gsettings-desktop-schemas, pango, gdk-pixbuf, atk }:
 
 buildPythonApplication rec {
   version = "0.9.4.4";
@@ -19,19 +18,23 @@ buildPythonApplication rec {
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
     gobject-introspection
-    pango gdk-pixbuf atk libnotify
+    pango
+    gdk-pixbuf
+    atk
+    libnotify
   ];
 
   buildInputs = [
-    gtk3 librsvg libappindicator-gtk3
-    libnotify gnome.adwaita-icon-theme
+    gtk3
+    librsvg
+    libappindicator-gtk3
+    libnotify
+    gnome.adwaita-icon-theme
     # Schemas with proxy configuration
     gsettings-desktop-schemas
   ];
 
-  propagatedBuildInputs = [
-    python-dateutil pyinotify pygobject3 bcrypt
-  ];
+  propagatedBuildInputs = [ python-dateutil pyinotify pygobject3 bcrypt ];
 
   patches = [
     (substituteAll {

@@ -1,11 +1,5 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, python
-, dbus-python
-, enlightenment
-}:
+{ lib, fetchurl, buildPythonPackage, pkg-config, python, dbus-python
+, enlightenment }:
 
 # Should be bumped along with EFL!
 
@@ -14,7 +8,8 @@ buildPythonPackage rec {
   version = "1.25.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
+    url =
+      "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
     sha256 = "0bk161xwlz4dlv56r68xwkm8snzfifaxd1j7w2wcyyk4fgvnvq4r";
   };
 
@@ -40,7 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for EFL and Elementary";
-    homepage = "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
+    homepage =
+      "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];

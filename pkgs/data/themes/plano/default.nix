@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gtk_engines
-, gtk-engine-murrine
-, librsvg
-, sassc
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gdk-pixbuf, gtk_engines
+, gtk-engine-murrine, librsvg, sassc }:
 
 stdenv.mkDerivation rec {
   pname = "plano-theme";
@@ -20,21 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0g2mwvzc04z3dsdfhwqgw9s7987406pv22s9rbazfvprk4ddc5b6";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    sassc
-  ];
+  nativeBuildInputs = [ meson ninja sassc ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gtk_engines
-    librsvg
-  ];
+  buildInputs = [ gdk-pixbuf gtk_engines librsvg ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = with lib; {
     description = "Flat theme for GNOME and Xfce";

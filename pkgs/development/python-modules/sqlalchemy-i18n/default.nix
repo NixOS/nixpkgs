@@ -1,9 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, sqlalchemy
-, sqlalchemy-utils
-}:
+{ lib, fetchPypi, buildPythonPackage, sqlalchemy, sqlalchemy-utils }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy-i18n";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "de33376483a581ca14218d8f57a114466c5f72b674a95839b6c4564a6e67796f";
   };
 
-  propagatedBuildInputs = [
-    sqlalchemy
-    sqlalchemy-utils
-  ];
+  propagatedBuildInputs = [ sqlalchemy sqlalchemy-utils ];
 
   # tests require running a postgresql server
   doCheck = false;

@@ -1,11 +1,4 @@
-{ stdenv
-, pkgs
-, lib
-, buildBowerComponents
-, fetchbower
-, fetchurl
-, nodejs
-}:
+{ stdenv, pkgs, lib, buildBowerComponents, fetchbower, fetchurl, nodejs }:
 
 let
   nodePackages = import ./node-packages.nix {
@@ -25,8 +18,10 @@ let
       # * add the second jquery ~2.1.0 entry
       # * add the second bootstrap ~3.1.1 entry
       paths = old_.paths ++ [
-        (fetchbower "jquery" "2.1.0" "~2.1.0" "02kwvz93vzpv10qnp7s0dz3al0jh77awwrizb6wadsvgifxssnlr")
-        (fetchbower "bootstrap" "3.1.1" "~3.1.1" "06bhjwa8p7mzbpr3jkgydd804z1nwrkdql66h7jkfml99psv9811")
+        (fetchbower "jquery" "2.1.0" "~2.1.0"
+          "02kwvz93vzpv10qnp7s0dz3al0jh77awwrizb6wadsvgifxssnlr")
+        (fetchbower "bootstrap" "3.1.1" "~3.1.1"
+          "06bhjwa8p7mzbpr3jkgydd804z1nwrkdql66h7jkfml99psv9811")
       ];
     });
   });
@@ -34,26 +29,16 @@ let
   # find an element in an attribute set
   findValue = pred: default: set:
     let
-      list =
-        lib.concatMap
-          (name:
-            let v = set.${name}; in
-            if pred name v then [ v ] else [ ]
-          )
-          (lib.attrNames set)
-      ;
-    in
-    if list == [ ] then default
-    else lib.head list
-  ;
+      list = lib.concatMap
+        (name: let v = set.${name}; in if pred name v then [ v ] else [ ])
+        (lib.attrNames set);
+    in if list == [ ] then default else lib.head list;
 
   # The cryptpad package attribute key changes for each release. Get it out
   # programatically instead.
-  cryptpad = findValue
-    (k: v: v.packageName == "cryptpad")
-    (throw "cryptpad not found")
-    nodePackages
-  ;
+  cryptpad =
+    findValue (k: v: v.packageName == "cryptpad") (throw "cryptpad not found")
+    nodePackages;
 
   combined = cryptpad.override {
     postInstall = ''
@@ -86,5 +71,4 @@ let
     };
 
   };
-in
-combined
+in combined

@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, requests
-, matrix-client
-, distro
-, click
-, cryptography
-, pyopenssl
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, requests, matrix-client
+, distro, click, cryptography, pyopenssl, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "zulip";
@@ -37,9 +27,7 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export COLUMNS=80

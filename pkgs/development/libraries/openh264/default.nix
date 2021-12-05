@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ nasm ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ];
+  makeFlags =
+    [ "PREFIX=${placeholder "out"}" "ARCH=${stdenv.hostPlatform.linuxArch}" ];
 
   meta = with lib; {
     description = "A codec library which supports H.264 encoding and decoding";

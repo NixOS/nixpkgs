@@ -1,12 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, sfml
-, glm
-, python3
-, glew
-, pkg-config
+{ stdenv, lib, fetchFromGitHub, cmake, sfml, glm, python3, glew, pkg-config
 , SDL2 }:
 
 stdenv.mkDerivation rec {
@@ -21,22 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0drf8wwx0gcmi22jq2yyjy7ppxynfq172wqakchscm313j248fjr";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    SDL2
-    glew
-    glm
-    python3
-    sfml
-  ];
+  buildInputs = [ SDL2 glew glm python3 sfml ];
 
-  patches = [
-    ./install_path_fix.patch
-  ];
+  patches = [ ./install_path_fix.patch ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 

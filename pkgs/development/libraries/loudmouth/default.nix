@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
   };
 
-  patches = [
-  ];
+  patches = [ ];
 
   configureFlags = [ "--with-ssl=openssl" ];
 

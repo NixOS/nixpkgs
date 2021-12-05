@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, python3, bash }:
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, python3, bash
+}:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -15,11 +16,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  configureFlags = [
-    "--enable-frontends=conf,mconf,nconf"
-  ];
+  configureFlags = [ "--enable-frontends=conf,mconf,nconf" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
   meta = with lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";

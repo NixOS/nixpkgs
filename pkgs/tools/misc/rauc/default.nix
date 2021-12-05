@@ -1,15 +1,5 @@
-{ autoreconfHook
-, curl
-, dbus
-, fetchFromGitHub
-, glib
-, json-glib
-, lib
-, nix-update-script
-, openssl
-, pkg-config
-, stdenv
-}:
+{ autoreconfHook, curl, dbus, fetchFromGitHub, glib, json-glib, lib
+, nix-update-script, openssl, pkg-config, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "rauc";
@@ -22,11 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AIizbD2jaZ5SY0K/hwpHdGE20KEhWC53LWUiVYs9Oiw=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   enableParallelBuilding = true;
 
@@ -38,7 +24,9 @@ stdenv.mkDerivation rec {
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-dbusinterfacesdir=${placeholder "out"}/share/dbus-1/interfaces"
     "--with-dbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-dbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussystemservicedir=${
+      placeholder "out"
+    }/share/dbus-1/system-services"
   ];
 
   meta = with lib; {

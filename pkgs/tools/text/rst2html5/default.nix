@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
     pygments
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://rst2html5.readthedocs.io/en/latest/";
     description = "Converts ReSTructuredText to (X)HTML5";
     license = licenses.mit;

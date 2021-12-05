@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage, lxml, docopt, six, pytestCheckHook, mock }:
+{ lib, fetchPypi, buildPythonPackage, lxml, docopt, six, pytestCheckHook, mock
+}:
 
 buildPythonPackage rec {
   pname = "rnginline";
@@ -14,13 +15,12 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook mock ];
 
   # Those tests does not succeed, a test dependency is likely missing but nothing is specified upstream
-  disabledTestPaths = [
-    "rnginline/test/test_cmdline.py"
-    "rnginline/test/test_rnginline.py"
-  ];
+  disabledTestPaths =
+    [ "rnginline/test/test_cmdline.py" "rnginline/test/test_rnginline.py" ];
 
   meta = {
-    description = "A Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";
+    description =
+      "A Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";
     homepage = "https://github.com/h4l/rnginline";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.lesuisse ];

@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "octofetch";

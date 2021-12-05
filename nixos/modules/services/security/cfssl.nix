@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.cfssl;
+let cfg = config.services.cfssl;
 in {
   options.services.cfssl = {
     enable = mkEnableOption "the CFSSL CA api-server";
@@ -29,13 +28,15 @@ in {
     ca = mkOption {
       defaultText = literalExpression ''"''${cfg.dataDir}/ca.pem"'';
       type = types.str;
-      description = "CA used to sign the new certificate -- accepts '[file:]fname' or 'env:varname'.";
+      description =
+        "CA used to sign the new certificate -- accepts '[file:]fname' or 'env:varname'.";
     };
 
     caKey = mkOption {
       defaultText = literalExpression ''"file:''${cfg.dataDir}/ca-key.pem"'';
       type = types.str;
-      description = "CA private key -- accepts '[file:]fname' or 'env:varname'.";
+      description =
+        "CA private key -- accepts '[file:]fname' or 'env:varname'.";
     };
 
     caBundle = mkOption {
@@ -76,7 +77,8 @@ in {
     configFile = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = "Path to configuration file. Do not put this in nix-store as it might contain secrets.";
+      description =
+        "Path to configuration file. Do not put this in nix-store as it might contain secrets.";
     };
 
     responder = mkOption {
@@ -88,13 +90,15 @@ in {
     responderKey = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = "Private key for OCSP responder certificate. Do not put this in nix-store.";
+      description =
+        "Private key for OCSP responder certificate. Do not put this in nix-store.";
     };
 
     tlsKey = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = "Other endpoint's CA private key. Do not put this in nix-store.";
+      description =
+        "Other endpoint's CA private key. Do not put this in nix-store.";
     };
 
     tlsCert = mkOption {
@@ -124,19 +128,22 @@ in {
     mutualTlsClientCert = mkOption {
       default = null;
       type = types.nullOr types.path;
-      description = "Mutual TLS - client certificate to call remote instance requiring client certs.";
+      description =
+        "Mutual TLS - client certificate to call remote instance requiring client certs.";
     };
 
     mutualTlsClientKey = mkOption {
       default = null;
       type = types.nullOr types.path;
-      description = "Mutual TLS - client key to call remote instance requiring client certs. Do not put this in nix-store.";
+      description =
+        "Mutual TLS - client key to call remote instance requiring client certs. Do not put this in nix-store.";
     };
 
     dbConfig = mkOption {
       default = null;
       type = types.nullOr types.path;
-      description = "Certificate db configuration file. Path must be writeable.";
+      description =
+        "Certificate db configuration file. Path must be writeable.";
     };
 
     logLevel = mkOption {
@@ -147,9 +154,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.cfssl = {
-      gid = config.ids.gids.cfssl;
-    };
+    users.extraGroups.cfssl = { gid = config.ids.gids.cfssl; };
 
     users.extraUsers.cfssl = {
       description = "cfssl user";
@@ -171,10 +176,9 @@ in {
         Restart = "always";
         User = "cfssl";
 
-        ExecStart = with cfg; let
-          opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
-        in
-          lib.concatStringsSep " \\\n" [
+        ExecStart = with cfg;
+          let opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
+          in lib.concatStringsSep " \\\n" [
             "${pkgs.cfssl}/bin/cfssl serve"
             (opt "address" address)
             (opt "port" (toString port))

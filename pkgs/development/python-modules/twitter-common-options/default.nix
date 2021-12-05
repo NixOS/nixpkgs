@@ -1,10 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname   = "twitter.common.options";
+  pname = "twitter.common.options";
   version = "0.3.11";
 
   src = fetchPypi {
@@ -14,8 +11,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Twitter's optparse wrapper";
-    homepage    = "https://twitter.github.io/commons/";
-    license     = licenses.asl20;
+    homepage = "https://twitter.github.io/commons/";
+    license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
   };
 

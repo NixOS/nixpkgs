@@ -1,15 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, hdf5-cpp, python3, texlive
-, armadillo, mpi, globalarrays, openssh
-, makeWrapper
-} :
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl, openblas, hdf5-cpp
+, python3, texlive, armadillo, mpi, globalarrays, openssh, makeWrapper }:
 
 let
   version = "21.10";
   # The tag keeps moving, fix a hash instead
   gitLabRev = "117305462bac932106e8e3a0347238b768bcb058";
 
-  python = python3.withPackages (ps : with ps; [ six pyparsing ]);
+  python = python3.withPackages (ps: with ps; [ six pyparsing ]);
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
@@ -27,23 +24,10 @@ in stdenv.mkDerivation {
     ./openblasPath.patch
   ];
 
-  nativeBuildInputs = [
-    perl
-    gfortran
-    cmake
-    texlive.combined.scheme-minimal
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [ perl gfortran cmake texlive.combined.scheme-minimal makeWrapper ];
 
-  buildInputs = [
-    openblas
-    hdf5-cpp
-    python
-    armadillo
-    mpi
-    globalarrays
-    openssh
-  ];
+  buildInputs = [ openblas hdf5-cpp python armadillo mpi globalarrays openssh ];
 
   cmakeFlags = [
     "-DOPENMP=ON"

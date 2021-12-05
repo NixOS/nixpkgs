@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "s-sql";
   version = "postmodern-20211020-git";
 
@@ -8,16 +7,33 @@ rec {
 
   description = "Lispy DSL for SQL";
 
-  deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-postgres_slash_tests" args."cl-ppcre" args."closer-mop" args."fiveam" args."global-vars" args."ironclad" args."md5" args."postmodern" args."split-sequence" args."uax-15" args."usocket" ];
+  deps = [
+    args."alexandria"
+    args."bordeaux-threads"
+    args."cl-base64"
+    args."cl-postgres"
+    args."cl-postgres_slash_tests"
+    args."cl-ppcre"
+    args."closer-mop"
+    args."fiveam"
+    args."global-vars"
+    args."ironclad"
+    args."md5"
+    args."postmodern"
+    args."split-sequence"
+    args."uax-15"
+    args."usocket"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz";
     sha256 = "0iw0sbjra3g57ivfqgx3c97mlcdzlh2kgqp12d1r2i9pw8z0ckh6";
   };
 
   packageName = "s-sql";
 
-  asdFilesToKeep = ["s-sql.asd"];
+  asdFilesToKeep = [ "s-sql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM s-sql DESCRIPTION Lispy DSL for SQL SHA256
@@ -40,4 +56,5 @@ rec {
      cl-ppcre closer-mop fiveam global-vars ironclad md5 postmodern
      split-sequence uax-15 usocket)
     VERSION postmodern-20211020-git SIBLINGS
-    (cl-postgres postmodern simple-date) PARASITES (s-sql/tests)) */
+    (cl-postgres postmodern simple-date) PARASITES (s-sql/tests))
+*/

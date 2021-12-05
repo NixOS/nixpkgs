@@ -1,8 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, azure-common
-, azure-core
-, msrest
-}:
+{ lib, buildPythonPackage, fetchPypi, azure-common, azure-core, msrest }:
 
 buildPythonPackage rec {
   pname = "azure-synapse-spark";
@@ -14,11 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-core
-    msrest
-  ];
+  propagatedBuildInputs = [ azure-common azure-core msrest ];
 
   pythonImportsCheck = [ "azure.synapse.spark" ];
 

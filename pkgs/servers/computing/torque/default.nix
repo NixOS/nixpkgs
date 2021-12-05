@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, openssl, flex, bison, pkg-config, groff, libxml2, util-linux
-, coreutils, file, libtool, which, boost, autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitHub, openssl, flex, bison, pkg-config, groff, libxml2
+, util-linux, coreutils, file, libtool, which, boost, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "torque";
@@ -17,10 +16,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config flex bison libxml2 ];
-  buildInputs = [
-    openssl groff libxml2 util-linux libtool
-    which boost
-  ];
+  buildInputs = [ openssl groff libxml2 util-linux libtool which boost ];
 
   enableParallelBuilding = true;
 
@@ -66,7 +62,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.adaptivecomputing.com/products/open-source/torque";
-    description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
+    description =
+      "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = platforms.linux;
     license = "TORQUEv1.1";
   };

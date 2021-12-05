@@ -14,7 +14,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Unified diff python parsing/metadata extraction library";
     homepage = "https://github.com/matiasb/python-unidiff";
-    changelog = "https://github.com/matiasb/python-unidiff/raw/v${version}/HISTORY";
+    changelog =
+      "https://github.com/matiasb/python-unidiff/raw/v${version}/HISTORY";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

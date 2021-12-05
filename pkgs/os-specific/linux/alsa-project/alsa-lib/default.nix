@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-topology-conf
-, alsa-ucm-conf
-}:
+{ lib, stdenv, fetchurl, alsa-topology-conf, alsa-ucm-conf }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-lib";
@@ -14,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YoQh2VDOyvI03j+JnVIMCmkjMTyWStdR/6wIHfMxQ44=";
   };
 
-  patches = [
-    ./alsa-plugin-conf-multilib.patch
-  ];
+  patches = [ ./alsa-plugin-conf-multilib.patch ];
 
   enableParallelBuilding = true;
 

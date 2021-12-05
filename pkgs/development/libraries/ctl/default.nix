@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, ilmbase, libtiff, openexr }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, ilmbase, libtiff
+, openexr }:
 
 stdenv.mkDerivation rec {
   pname = "ctl";
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "ctl-1.5.2-ilm_230.patch";
-      url = "https://src.fedoraproject.org/rpms/CTL/raw/9d7c15a91bccdc0a9485d463bf2789be72e6b17d/f/ctl-1.5.2-ilm_230.patch";
+      url =
+        "https://src.fedoraproject.org/rpms/CTL/raw/9d7c15a91bccdc0a9485d463bf2789be72e6b17d/f/ctl-1.5.2-ilm_230.patch";
       sha256 = "0mdx7llwrm0q8ai53zhyxi40i9h5s339dbkqpqv30yzi2xpnfj3d";
     })
   ];

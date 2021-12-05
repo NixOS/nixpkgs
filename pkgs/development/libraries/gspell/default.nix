@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, libxml2
-, autoreconfHook
-, gtk-doc
-, glib
-, gtk3
-, enchant2
-, icu
-, vala
-, gobject-introspection
-, gnome
-, gtk-mac-integration
+{ lib, stdenv, fetchurl, pkg-config, libxml2, autoreconfHook, gtk-doc, glib
+, gtk3, enchant2, icu, vala, gobject-introspection, gnome, gtk-mac-integration
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +10,9 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1pdb4gbjrs8mk6r0ipw5vxyvzav1wvkjq46kiq53r3nyznfpdfyw";
   };
 
@@ -31,22 +21,11 @@ stdenv.mkDerivation rec {
     ./0001-Darwin-build-fix.patch
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    vala
-    gobject-introspection
-    libxml2
-    autoreconfHook
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [ pkg-config vala gobject-introspection libxml2 autoreconfHook gtk-doc ];
 
-  buildInputs = [
-    glib
-    gtk3
-    icu
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration
-  ];
+  buildInputs = [ glib gtk3 icu ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gtk-mac-integration ];
 
   propagatedBuildInputs = [
     # required for pkg-config

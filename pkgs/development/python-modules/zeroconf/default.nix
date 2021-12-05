@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, pytest-asyncio
-, pythonOlder
-, pytestCheckHook
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, ifaddr, pytest-asyncio
+, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
@@ -22,14 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-KdcRG1YKtvhcqq/FNiOVQeXlyYepvPjRL5EZJA8Axyk=";
   };
 
-  propagatedBuildInputs = [
-    ifaddr
-  ];
+  propagatedBuildInputs = [ ifaddr ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # tests that require network interaction
@@ -39,16 +27,11 @@ buildPythonPackage rec {
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_lots_of_names"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_lots_of_names" ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "zeroconf"
-    "zeroconf.asyncio"
-  ];
+  pythonImportsCheck = [ "zeroconf" "zeroconf.asyncio" ];
 
   meta = with lib; {
     description = "Python implementation of multicast DNS service discovery";

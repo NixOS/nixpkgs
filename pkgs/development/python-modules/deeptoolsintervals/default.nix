@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, zlib
-, xz
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, zlib, xz }:
 
 buildPythonPackage rec {
   pname = "deeptoolsintervals";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, python, numpy }:
 
 buildPythonPackage rec {
   pname = "numexpr";
@@ -19,13 +14,9 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  nativeBuildInputs = [
-    numpy
-  ];
+  nativeBuildInputs = [ numpy ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     runtest="$(pwd)/numexpr/tests/test_numexpr.py"

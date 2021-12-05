@@ -1,16 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
+{ lib, stdenv, fetchFromGitLab, cmake
 
-, arpa2cm
-, doxygen
-, e2fsprogs
-, lmdb
-, openssl
-, pkg-config
-, ragel
-}:
+, arpa2cm, doxygen, e2fsprogs, lmdb, openssl, pkg-config, ragel }:
 
 stdenv.mkDerivation rec {
   pname = "arpa2common";
@@ -23,19 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LWsWoHRdLWRSF9JaEwrw+CXm5Azgh7zNeq0a8Z/hijQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    arpa2cm
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake arpa2cm doxygen pkg-config ];
 
-  propagatedBuildInputs = [
-    e2fsprogs
-    lmdb
-    openssl
-    ragel
-  ];
+  propagatedBuildInputs = [ e2fsprogs lmdb openssl ragel ];
 
   # the project uses single argument `printf` throughout the program
   hardeningDisable = [ "format" ];

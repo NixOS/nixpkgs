@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "simpleeval";
@@ -16,17 +12,11 @@ buildPythonPackage rec {
     sha256 = "111w76mahbf3lm2p72dkqp5fhwg7nvnwm4l078dgsgkixssjazi7";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test_simpleeval.py"
-  ];
+  pytestFlagsArray = [ "test_simpleeval.py" ];
 
-  pythonImportsCheck = [
-    "simpleeval"
-  ];
+  pythonImportsCheck = [ "simpleeval" ];
 
   meta = with lib; {
     description = "Simple, safe single expression evaluator library";

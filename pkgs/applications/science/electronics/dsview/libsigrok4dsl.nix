@@ -1,7 +1,5 @@
-{ lib, stdenv, pkg-config, autoreconfHook,
-glib, libzip, libserialport, check, libusb1, libftdi,
-systemd, alsa-lib, dsview
-}:
+{ lib, stdenv, pkg-config, autoreconfHook, glib, libzip, libserialport, check
+, libusb1, libftdi, systemd, alsa-lib, dsview }:
 
 stdenv.mkDerivation {
   inherit (dsview) version src;
@@ -14,9 +12,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = [
-    glib libzip libserialport libusb1 libftdi systemd check alsa-lib
-  ];
+  buildInputs =
+    [ glib libzip libserialport libusb1 libftdi systemd check alsa-lib ];
 
   meta = with lib; {
     description = "A fork of the sigrok library for usage with DSView";

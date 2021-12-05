@@ -1,10 +1,9 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
-{
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "kbd-setfont-decompress";
 
   meta.maintainers = with lib.maintainers; [ oxalica ];
 
-  machine = { ... }: {};
+  machine = { ... }: { };
 
   testScript = ''
     machine.succeed("gzip -cd ${pkgs.terminus_font}/share/consolefonts/ter-v16b.psf.gz >font.psf")

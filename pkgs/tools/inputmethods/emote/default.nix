@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook, gobject-introspection, gtk3, keybinder3, xdotool, pango, gdk-pixbuf, atk, librsvg }:
+{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook, gobject-introspection
+, gtk3, keybinder3, xdotool, pango, gdk-pixbuf, atk, librsvg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "emote";
@@ -20,14 +21,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snap/gui/emote.desktop --replace "Icon=\''${SNAP}/usr/share/icons/emote.svg" "Icon=emote.svg"
   '';
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-    gobject-introspection
-    keybinder3
-    pango
-    gdk-pixbuf
-    atk
-  ];
+  nativeBuildInputs =
+    [ wrapGAppsHook gobject-introspection keybinder3 pango gdk-pixbuf atk ];
 
   propagatedBuildInputs = [
     python3Packages.manimpango

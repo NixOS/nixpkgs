@@ -1,17 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, httplib2
-, keyring
-, lazr-restfulclient
-, lazr-uri
-, setuptools
-, six
-, testresources
-, wadllib
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, httplib2, keyring
+, lazr-restfulclient, lazr-uri, setuptools, six, testresources, wadllib
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "launchpadlib";
@@ -42,7 +31,8 @@ buildPythonPackage rec {
   doCheck = isPy3k;
 
   meta = with lib; {
-    description = "Script Launchpad through its web services interfaces. Officially supported";
+    description =
+      "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.marsam ];

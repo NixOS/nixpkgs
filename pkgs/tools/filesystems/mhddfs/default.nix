@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse attr uthash ];
 
-  patches = [
-    ./fix-format-security-error.patch
-  ];
+  patches = [ ./fix-format-security-error.patch ];
 
   postPatch = ''
     substituteInPlace src/main.c --replace "attr/xattr.h" "sys/xattr.h"

@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, async-timeout }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, async-timeout }:
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
@@ -17,11 +16,7 @@ buildPythonPackage rec {
   # only manual tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "haffmpeg.camera"
-    "haffmpeg.sensor"
-    "haffmpeg.tools"
-  ];
+  pythonImportsCheck = [ "haffmpeg.camera" "haffmpeg.sensor" "haffmpeg.tools" ];
 
   meta = with lib; {
     homepage = "https://github.com/pvizeli/ha-ffmpeg";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest-mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
@@ -16,17 +11,13 @@ buildPythonPackage rec {
     sha256 = "sha256-Y02h9sXBIqJi9DOwg+49F6mgOfjxs3eFl++0dGHNNhs=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
-  pythonImportsCheck = [
-    "RestrictedPython"
-  ];
+  pythonImportsCheck = [ "RestrictedPython" ];
 
   meta = with lib; {
-    description = "Restricted execution environment for Python to run untrusted code";
+    description =
+      "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
     license = licenses.zpl21;
     maintainers = with maintainers; [ juaningan ];

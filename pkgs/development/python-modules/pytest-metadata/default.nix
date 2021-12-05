@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm }:
+{ lib, buildPythonPackage, fetchPypi, pytest, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-metadata";

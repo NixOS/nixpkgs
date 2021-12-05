@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, glib
-, libcap
-, libseccomp
-, libslirp
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, libcap
+, libseccomp, libslirp, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";

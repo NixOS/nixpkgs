@@ -1,19 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, libqtxdg
-, perl
-, xorg
-, autoPatchelfHook
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, qtbase, qttools
+, qtx11extras, qtsvg, kwindowsystem, libqtxdg, perl, xorg, autoPatchelfHook
+, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "screengrab";

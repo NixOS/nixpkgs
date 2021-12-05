@@ -19,9 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext perlPackages.perl perlPackages.LocaleGettext ];
   buildInputs = [ perlPackages.LocaleGettext ];
 
-  doCheck = false;                                # target `check' is missing
+  doCheck = false; # target `check' is missing
 
-  patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
+  patches = if stdenv.hostPlatform.isCygwin then
+    [ ./1.40.4-cygwin-nls.patch ]
+  else
+    null;
 
   # We don't use makeWrapper here because it uses substitutions our
   # bootstrap shell can't handle.
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}${perlPackages.LocaleGettext}/${perlPackages.perl.libPrefix}
     ${lib.optionalString stdenv.hostPlatform.isCygwin
-        ''export PATH=\''${PATH:+:}${gettext}/bin''}
+    "export PATH=\\\${PATH:+:}${gettext}/bin"}
     exec -a \$0 $out/bin/.help2man-wrapped "\$@"
     EOF
     chmod +x $out/bin/help2man
@@ -40,10 +43,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Generate man pages from `--help' output";
 
-    longDescription =
-      '' help2man produces simple manual pages from the ‘--help’ and
-         ‘--version’ output of other commands.
-      '';
+    longDescription = ''
+      help2man produces simple manual pages from the ‘--help’ and
+              ‘--version’ output of other commands.
+           '';
 
     homepage = "https://www.gnu.org/software/help2man/";
 

@@ -1,7 +1,5 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 # These tests will:
 #  * Set up a vaultwarden server
@@ -20,71 +18,71 @@ let
   dbPassword = "please_dont_hack";
 
   userEmail = "meow@example.com";
-  userPassword = "also_super_secret_ZJWpBKZi668QGt"; # Must be complex to avoid interstitial warning on the signup page
+  userPassword =
+    "also_super_secret_ZJWpBKZi668QGt"; # Must be complex to avoid interstitial warning on the signup page
 
   storedPassword = "seeeecret";
 
-  makeVaultwardenTest = backend: makeTest {
-    name = "vaultwarden-${backend}";
-    meta = {
-      maintainers = with pkgs.lib.maintainers; [ jjjollyjim ];
-    };
+  makeVaultwardenTest = backend:
+    makeTest {
+      name = "vaultwarden-${backend}";
+      meta = { maintainers = with pkgs.lib.maintainers; [ jjjollyjim ]; };
 
-    nodes = {
-      server = { pkgs, ... }:
-        let backendConfig = {
-          mysql = {
-            services.mysql = {
-              enable = true;
-              initialScript = pkgs.writeText "mysql-init.sql" ''
-                CREATE DATABASE bitwarden;
-                CREATE USER 'bitwardenuser'@'localhost' IDENTIFIED BY '${dbPassword}';
-                GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
-                FLUSH PRIVILEGES;
-              '';
-              package = pkgs.mariadb;
+      nodes = {
+        server = { pkgs, ... }:
+          let
+            backendConfig = {
+              mysql = {
+                services.mysql = {
+                  enable = true;
+                  initialScript = pkgs.writeText "mysql-init.sql" ''
+                    CREATE DATABASE bitwarden;
+                    CREATE USER 'bitwardenuser'@'localhost' IDENTIFIED BY '${dbPassword}';
+                    GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
+                    FLUSH PRIVILEGES;
+                  '';
+                  package = pkgs.mariadb;
+                };
+
+                services.vaultwarden.config.databaseUrl =
+                  "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+
+                systemd.services.vaultwarden.after = [ "mysql.service" ];
+              };
+
+              postgresql = {
+                services.postgresql = {
+                  enable = true;
+                  initialScript = pkgs.writeText "postgresql-init.sql" ''
+                    CREATE DATABASE bitwarden;
+                    CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
+                    GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
+                  '';
+                };
+
+                services.vaultwarden.config.databaseUrl =
+                  "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+
+                systemd.services.vaultwarden.after = [ "postgresql.service" ];
+              };
+
+              sqlite = { };
             };
+          in mkMerge [
+            backendConfig.${backend}
+            {
+              services.vaultwarden = {
+                enable = true;
+                dbBackend = backend;
+                config.rocketPort = 80;
+              };
 
-            services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+              networking.firewall.allowedTCPPorts = [ 80 ];
 
-            systemd.services.vaultwarden.after = [ "mysql.service" ];
-          };
-
-          postgresql = {
-            services.postgresql = {
-              enable = true;
-              initialScript = pkgs.writeText "postgresql-init.sql" ''
-                CREATE DATABASE bitwarden;
-                CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
-                GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
-              '';
-            };
-
-            services.vaultwarden.config.databaseUrl = "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
-
-            systemd.services.vaultwarden.after = [ "postgresql.service" ];
-          };
-
-          sqlite = { };
-        };
-        in
-        mkMerge [
-          backendConfig.${backend}
-          {
-            services.vaultwarden = {
-              enable = true;
-              dbBackend = backend;
-              config.rocketPort = 80;
-            };
-
-            networking.firewall.allowedTCPPorts = [ 80 ];
-
-            environment.systemPackages =
-              let
-                testRunner = pkgs.writers.writePython3Bin "test-runner"
-                  {
-                    libraries = [ pkgs.python3Packages.selenium ];
-                  } ''
+              environment.systemPackages = let
+                testRunner = pkgs.writers.writePython3Bin "test-runner" {
+                  libraries = [ pkgs.python3Packages.selenium ];
+                } ''
                   from selenium.webdriver import Firefox
                   from selenium.webdriver.firefox.options import Options
                   from selenium.webdriver.support.ui import WebDriverWait
@@ -137,52 +135,48 @@ let
 
                   driver.find_element_by_xpath("//button[contains(., 'Save')]").click()
                 '';
-              in
-              [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
+              in [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
 
-          }
-        ];
+            }
+          ];
 
-      client = { pkgs, ... }:
-        {
+        client = { pkgs, ... }: {
           environment.systemPackages = [ pkgs.bitwarden-cli ];
         };
+      };
+
+      testScript = ''
+        start_all()
+        server.wait_for_unit("vaultwarden.service")
+        server.wait_for_open_port(80)
+
+        with subtest("configure the cli"):
+            client.succeed("bw --nointeraction config server http://server")
+
+        with subtest("can't login to nonexistant account"):
+            client.fail(
+                "bw --nointeraction --raw login ${userEmail} ${userPassword}"
+            )
+
+        with subtest("use the web interface to sign up, log in, and save a password"):
+            server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
+
+        with subtest("log in with the cli"):
+            key = client.succeed(
+                "bw --nointeraction --raw login ${userEmail} ${userPassword}"
+            ).strip()
+
+        with subtest("sync with the cli"):
+            client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
+
+        with subtest("get the password with the cli"):
+            password = client.succeed(
+                f"bw --nointeraction --raw --session {key} list items | ${pkgs.jq}/bin/jq -r .[].login.password"
+            )
+            assert password.strip() == "${storedPassword}"
+      '';
     };
-
-    testScript = ''
-      start_all()
-      server.wait_for_unit("vaultwarden.service")
-      server.wait_for_open_port(80)
-
-      with subtest("configure the cli"):
-          client.succeed("bw --nointeraction config server http://server")
-
-      with subtest("can't login to nonexistant account"):
-          client.fail(
-              "bw --nointeraction --raw login ${userEmail} ${userPassword}"
-          )
-
-      with subtest("use the web interface to sign up, log in, and save a password"):
-          server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
-
-      with subtest("log in with the cli"):
-          key = client.succeed(
-              "bw --nointeraction --raw login ${userEmail} ${userPassword}"
-          ).strip()
-
-      with subtest("sync with the cli"):
-          client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
-
-      with subtest("get the password with the cli"):
-          password = client.succeed(
-              f"bw --nointeraction --raw --session {key} list items | ${pkgs.jq}/bin/jq -r .[].login.password"
-          )
-          assert password.strip() == "${storedPassword}"
-    '';
-  };
-in
-builtins.listToAttrs (
-  map
-    (backend: { name = backend; value = makeVaultwardenTest backend; })
-    backends
-)
+in builtins.listToAttrs (map (backend: {
+  name = backend;
+  value = makeVaultwardenTest backend;
+}) backends)

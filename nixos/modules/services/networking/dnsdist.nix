@@ -45,8 +45,14 @@ in {
         DynamicUser = true;
 
         # upstream overrides for better nixos compatibility
-        ExecStartPre = [ "" "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}" ];
-        ExecStart = [ "" "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}" ];
+        ExecStartPre = [
+          ""
+          "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}"
+        ];
+        ExecStart = [
+          ""
+          "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}"
+        ];
       };
     };
   };

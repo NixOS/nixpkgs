@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "../configure";
 
-  configureFlags = lib.optional (payload != null)
-    "--with-payload=${payload}";
+  configureFlags = lib.optional (payload != null) "--with-payload=${payload}";
 
   hardeningDisable = [ "all" ];
 

@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pkg-config, darwin }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite
+, pkg-config, darwin }:
 
 buildGoModule rec {
   pname = "yubikey-agent";
@@ -11,8 +12,7 @@ buildGoModule rec {
     sha256 = "14s61jgcmpqh70jz0krrai8xg0xqhwmillxkij50vbsagpxjssk6";
   };
 
-  buildInputs =
-    lib.optional stdenv.isLinux (lib.getDev pcsclite)
+  buildInputs = lib.optional stdenv.isLinux (lib.getDev pcsclite)
     ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
   nativeBuildInputs = [ makeWrapper pkg-config ];

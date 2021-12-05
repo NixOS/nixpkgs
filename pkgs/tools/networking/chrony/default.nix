@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" "--enable-ntp-signd" ]
+  configureFlags =
+    [ "--chronyvardir=$(out)/var/lib/chrony" "--enable-ntp-signd" ]
     ++ lib.optional stdenv.isLinux "--enable-scfilter";
 
   meta = with lib; {

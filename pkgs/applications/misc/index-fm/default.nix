@@ -1,19 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, applet-window-buttons
-, karchive
-, kcoreaddons
-, ki18n
-, kio
-, kirigami2
-, mauikit
-, mauikit-filebrowsing
-, qtmultimedia
-, qtquickcontrols2
-}:
+{ lib, mkDerivation, fetchFromGitLab, cmake, extra-cmake-modules
+, applet-window-buttons, karchive, kcoreaddons, ki18n, kio, kirigami2, mauikit
+, mauikit-filebrowsing, qtmultimedia, qtquickcontrols2 }:
 
 mkDerivation rec {
   pname = "index";
@@ -27,10 +14,7 @@ mkDerivation rec {
     sha256 = "sha256-Os/5igKGYBeY/FxO6I+7mpFohuk3yHGLd7vE2GewFpU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   buildInputs = [
     applet-window-buttons

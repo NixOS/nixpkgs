@@ -1,13 +1,5 @@
-{ fetchFromGitHub
-, rustPlatform
-, lib
-, stdenv
-, fetchpatch
-, CoreFoundation
-, libiconv
-, libresolv
-, Security
-}:
+{ fetchFromGitHub, rustPlatform, lib, stdenv, fetchpatch, CoreFoundation
+, libiconv, libresolv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
@@ -22,7 +14,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-vNa1OF1x/MCTo9B4DTDZNWyHTsOl7Za3EgjnpsL/gWg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    libiconv
+    libresolv
+    Security
+  ];
 
   meta = with lib; {
     description = "Git repository summary on your terminal";

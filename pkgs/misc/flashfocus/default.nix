@@ -9,9 +9,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0cn44hryvz2wl7xklaslxsb3l2i3f8jkgmml0n9v2ks22j5l4r4h";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pytest-runner
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pytest-runner ];
 
   propagatedBuildInputs = with python3.pkgs; [
     i3ipc

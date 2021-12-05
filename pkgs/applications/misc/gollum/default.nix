@@ -1,5 +1,5 @@
-{ lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git, docutils, perl }:
+{ lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript, git, docutils
+, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gollum";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${lib.makeBinPath [ git docutils perl]}
+      --prefix PATH ":" ${lib.makeBinPath [ git docutils perl ]}
     makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
       --prefix PATH ":" ${lib.makeBinPath [ git ]}
   '';
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = bundlerUpdateScript "gollum";
 
   meta = with lib; {
-    description = "A simple, Git-powered wiki with a sweet API and local frontend";
+    description =
+      "A simple, Git-powered wiki with a sweet API and local frontend";
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/v${version}/HISTORY.md";
     license = licenses.mit;

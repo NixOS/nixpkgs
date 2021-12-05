@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit
-, pytestCheckHook
-, numpy
-, scipy
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, flit, pytestCheckHook
+, numpy, scipy }:
 
 buildPythonPackage rec {
   pname = "threadpoolctl";

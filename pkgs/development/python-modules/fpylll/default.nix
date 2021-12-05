@@ -1,17 +1,5 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pkgconfig
-, gmp
-, pari
-, mpfr
-, fplll
-, cython
-, cysignals
-, numpy
-, pytest
-}:
+{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, pkgconfig, gmp, pari
+, mpfr, fplll, cython, cysignals, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "fpylll";
@@ -27,37 +15,26 @@ buildPythonPackage rec {
   patches = [
     # two patches to fix the testsuite on aarch64 (https://github.com/fplll/fpylll/issues/162)
     (fetchpatch {
-      url = "https://github.com/fplll/fpylll/commit/d5809a8fdb86b2693b1fa94e655bbbe4ad80e286.patch";
+      url =
+        "https://github.com/fplll/fpylll/commit/d5809a8fdb86b2693b1fa94e655bbbe4ad80e286.patch";
       name = "less-precision-in-tests.patch";
       sha256 = "0vkvi25nwwvk5r4a4xmkbf060di4hjq32bys75l2hsaysxmk93nz";
     })
     (fetchpatch {
-      url = "https://github.com/fplll/fpylll/commit/b5b146a010d50da219a313adc4b6f7deddcc146b.patch";
+      url =
+        "https://github.com/fplll/fpylll/commit/b5b146a010d50da219a313adc4b6f7deddcc146b.patch";
       name = "dont-hardcode-precision.patch";
       sha256 = "1rsbwh90i1j5p2rp6jd5n25v1jzw1n8728fzz1lhb91zmk0hlxc9";
     })
   ];
 
-  buildInputs = [
-    gmp
-    pari
-    mpfr
-    fplll
-  ];
+  buildInputs = [ gmp pari mpfr fplll ];
 
-  propagatedBuildInputs = [
-    cython
-    cysignals
-    numpy
-  ];
+  propagatedBuildInputs = [ cython cysignals numpy ];
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # Since upstream introduced --doctest-modules in

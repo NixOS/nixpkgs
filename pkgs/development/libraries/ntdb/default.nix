@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, python2
-, python3
-, pkg-config
-, readline
-, gettext
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, wafHook
-}:
+{ lib, stdenv, fetchurl, python2, python3, pkg-config, readline, gettext
+, libxslt, docbook-xsl-nons, docbook_xml_dtd_42, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "ntdb";
@@ -37,10 +27,8 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
-    "--bundled-libraries=NONE"
-    "--builtin-libraries=replace,ccan"
-  ];
+  wafConfigureFlags =
+    [ "--bundled-libraries=NONE" "--builtin-libraries=replace,ccan" ];
 
   meta = with lib; {
     description = "The not-so trivial database";

@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, glibc, zlib
 , enableStatic ? stdenv.hostPlatform.isStatic
-, sftpPath ? "/run/current-system/sw/libexec/sftp-server"
-}:
+, sftpPath ? "/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
   pname = "dropbear";
   version = "2020.81";
 
   src = fetchurl {
-    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
+    url =
+      "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
     sha256 = "0fy5ma4cfc2pk25mcccc67b2mf1rnb2c06ilb7ddnxbpnc85s8s8";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
-  CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
+  CFLAGS = ''-DSFTPSERVER_PATH=\"${sftpPath}\"'';
 
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib ]
+    ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
   meta = with lib; {
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";

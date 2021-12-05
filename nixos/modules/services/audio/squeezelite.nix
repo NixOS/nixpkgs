@@ -12,7 +12,7 @@ in {
 
   options = {
 
-    services.squeezelite= {
+    services.squeezelite = {
 
       enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
@@ -28,18 +28,18 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    systemd.services.squeezelite= {
+    systemd.services.squeezelite = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "Software Squeezebox emulator";
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.squeezelite}/bin/squeezelite -N ${dataDir}/player-name ${cfg.extraArguments}";
+        ExecStart =
+          "${pkgs.squeezelite}/bin/squeezelite -N ${dataDir}/player-name ${cfg.extraArguments}";
         StateDirectory = builtins.baseNameOf dataDir;
         SupplementaryGroups = "audio";
       };

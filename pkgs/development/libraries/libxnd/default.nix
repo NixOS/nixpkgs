@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libndtypes
-}:
+{ lib, stdenv, fetchFromGitHub, libndtypes }:
 
 stdenv.mkDerivation {
   pname = "libxnd";
@@ -20,12 +16,12 @@ stdenv.mkDerivation {
   # Override linker with cc (symlink to either gcc or clang)
   # Library expects to use cc for linking
   configureFlags = [
-      # Override linker with cc (symlink to either gcc or clang)
-      # Library expects to use cc for linking
-      "LD=${stdenv.cc.targetPrefix}cc"
-      # needed for tests
-      "--with-includes=${libndtypes}/include"
-      "--with-libs=${libndtypes}/lib"
+    # Override linker with cc (symlink to either gcc or clang)
+    # Library expects to use cc for linking
+    "LD=${stdenv.cc.targetPrefix}cc"
+    # needed for tests
+    "--with-includes=${libndtypes}/include"
+    "--with-libs=${libndtypes}/lib"
   ];
 
   # other packages which depend on libxnd seem to expect overflow.h, but
@@ -39,7 +35,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "C library for managing typed memory blocks and Python container module";
+    description =
+      "C library for managing typed memory blocks and Python container module";
     homepage = "https://xnd.io/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ costrouc ];

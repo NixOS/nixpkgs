@@ -1,16 +1,16 @@
-import ./make-test-python.nix ({ lib, ...} : {
+import ./make-test-python.nix ({ lib, ... }: {
   name = "herbstluftwm";
 
-  meta = {
-    maintainers = with lib.maintainers; [ thibautmarty ];
-  };
+  meta = { maintainers = with lib.maintainers; [ thibautmarty ]; };
 
   machine = { pkgs, lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = lib.mkForce "none+herbstluftwm";
+    services.xserver.displayManager.defaultSession =
+      lib.mkForce "none+herbstluftwm";
     services.xserver.windowManager.herbstluftwm.enable = true;
-    environment.systemPackages = [ pkgs.dzen2 ]; # needed for upstream provided panel
+    environment.systemPackages =
+      [ pkgs.dzen2 ]; # needed for upstream provided panel
   };
 
   testScript = ''

@@ -1,10 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, pkg-config, which, perl, libXrandr
-, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
-, wayland, wayland-protocols
-, libXinerama, libnotify, pango, xorgproto, librsvg
-, testVersion, dunst
-}:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, pkg-config, which, perl, libXrandr
+, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver, wayland
+, wayland-protocols, libXinerama, libnotify, pango, xorgproto, librsvg
+, testVersion, dunst }:
 
 stdenv.mkDerivation rec {
   pname = "dunst";
@@ -20,9 +17,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
 
   buildInputs = [
-    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
-    libXinerama libnotify pango xorgproto librsvg libXrandr
-    wayland wayland-protocols
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    libX11
+    libXScrnSaver
+    libXinerama
+    libnotify
+    pango
+    xorgproto
+    librsvg
+    libXrandr
+    wayland
+    wayland-protocols
   ];
 
   outputs = [ "out" "man" ];

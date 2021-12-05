@@ -1,12 +1,4 @@
-{ lib
-, fetchhg
-, buildPythonPackage
-, srht
-, hglib
-, scmsrht
-, unidiff
-, python
-}:
+{ lib, fetchhg, buildPythonPackage, srht, hglib, scmsrht, unidiff, python }:
 
 buildPythonPackage rec {
   pname = "hgsrht";
@@ -20,12 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    hglib
-    scmsrht
-    unidiff
-  ];
+  propagatedBuildInputs = [ srht hglib scmsrht unidiff ];
 
   preBuild = ''
     export PKGVER=${version}

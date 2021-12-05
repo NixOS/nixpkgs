@@ -11,7 +11,9 @@ let
     mv config.js $out
   '';
 
-  finalConfigFile = if (cfg.configFile != null) then cfg.configFile else ''
+  finalConfigFile = if (cfg.configFile != null) then
+    cfg.configFile
+  else ''
     var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
 
     module.exports = _.merge(
@@ -60,7 +62,7 @@ in {
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = {
         displayNetwork = false;
@@ -89,20 +91,25 @@ in {
       home = shoutHome;
       createHome = true;
     };
-    users.groups.shout = {};
+    users.groups.shout = { };
 
     systemd.services.shout = {
       description = "Shout web IRC client";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      preStart = "ln -sf ${pkgs.writeText "config.js" finalConfigFile} ${shoutHome}/config.js";
+      preStart = "ln -sf ${
+          pkgs.writeText "config.js" finalConfigFile
+        } ${shoutHome}/config.js";
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
-        "--port" (toString cfg.port)
-        "--host" (toString cfg.listenAddress)
-        "--home" shoutHome
+        "--port"
+        (toString cfg.port)
+        "--host"
+        (toString cfg.listenAddress)
+        "--home"
+        shoutHome
       ];
       serviceConfig = {
         User = "shout";

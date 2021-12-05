@@ -26,10 +26,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GNOME Shell extension showing a video preview on the corner of the screen";
+    description =
+      "GNOME Shell extension showing a video preview on the corner of the screen";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
     homepage = "https://github.com/medenagan/window-corner-preview";
-    broken = lib.versionAtLeast gnome.gnome-shell.version "3.32"; # Doesn't support 3.34
+    broken = lib.versionAtLeast gnome.gnome-shell.version
+      "3.32"; # Doesn't support 3.34
   };
 }

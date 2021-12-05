@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Classic (1.4) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    description =
+      "Classic (1.4) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free

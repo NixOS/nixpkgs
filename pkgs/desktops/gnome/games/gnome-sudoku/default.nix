@@ -1,16 +1,31 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gobject-introspection, gettext, gtk3, gnome, wrapGAppsHook
-, libgee, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
+{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gobject-introspection
+, gettext, gtk3, gnome, wrapGAppsHook, libgee, json-glib, qqwing, itstool
+, libxml2, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
   version = "40.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-sudoku/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "NhIFMePHE5WB6jgA+/48KzFpTEQBRezIl6w05WLXVKM=";
   };
 
-  nativeBuildInputs = [ meson ninja vala pkg-config gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    gobject-introspection
+    gettext
+    itstool
+    libxml2
+    python3
+    desktop-file-utils
+    wrapGAppsHook
+  ];
   buildInputs = [ gtk3 libgee json-glib qqwing ];
 
   postPatch = ''

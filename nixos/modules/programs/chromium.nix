@@ -11,9 +11,8 @@ let
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
   };
-in
 
-{
+in {
   ###### interface
 
   options = {
@@ -32,7 +31,7 @@ in
           <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist">ExtensionInstallForcelist</link>
           for additional details.
         '';
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
@@ -74,7 +73,7 @@ in
           <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/">https://cloud.google.com/docs/chrome-enterprise/policies/</link>
           Make sure the selected policy is supported on Linux and your browser version.
         '';
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "BrowserSignin" = 0;
@@ -95,10 +94,14 @@ in
 
   config = lib.mkIf cfg.enable {
     # for chromium
-    environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    environment.etc."chromium/policies/managed/default.json".text =
+      builtins.toJSON defaultProfile;
+    environment.etc."chromium/policies/managed/extra.json".text =
+      builtins.toJSON cfg.extraOpts;
     # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    environment.etc."opt/chrome/policies/managed/default.json".text =
+      builtins.toJSON defaultProfile;
+    environment.etc."opt/chrome/policies/managed/extra.json".text =
+      builtins.toJSON cfg.extraOpts;
   };
 }

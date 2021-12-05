@@ -1,6 +1,6 @@
 { obs-studio, symlinkJoin, makeWrapper }:
 
-{ plugins ? [] }:
+{ plugins ? [ ] }:
 
 symlinkJoin {
   name = "wrapped-${obs-studio.name}";
@@ -15,7 +15,5 @@ symlinkJoin {
   '';
 
   inherit (obs-studio) meta;
-  passthru = obs-studio.passthru // {
-    passthru.unwrapped = obs-studio;
-  };
+  passthru = obs-studio.passthru // { passthru.unwrapped = obs-studio; };
 }

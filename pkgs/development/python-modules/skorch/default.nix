@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pytest
-, pytest-cov
-, flaky
-, numpy
-, pandas
-, pytorch
-, scikit-learn
-, scipy
-, tabulate
-, tqdm
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest, pytest-cov, flaky
+, numpy, pandas, pytorch, scikit-learn, scipy, tabulate, tqdm }:
 
 buildPythonPackage rec {
   pname = "skorch";

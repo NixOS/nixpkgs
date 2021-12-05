@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, capnproto
-, cython
-, fetchFromGitHub
-, isPy27
-, isPyPy
-, pkgconfig
-}:
+{ lib, buildPythonPackage, capnproto, cython, fetchFromGitHub, isPy27, isPyPy
+, pkgconfig }:
 
 buildPythonPackage rec {
   pname = "pycapnp";

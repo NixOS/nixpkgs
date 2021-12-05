@@ -1,22 +1,25 @@
-{ lib, stdenv, autoconf, automake, curl, fetchurl, fetchpatch, jdk8, makeWrapper, nettools
-, python, git
-}:
+{ lib, stdenv, autoconf, automake, curl, fetchurl, fetchpatch, jdk8, makeWrapper
+, nettools, python, git }:
 
-let jdk = jdk8; jre = jdk8.jre; in
+let
+  jdk = jdk8;
+  jre = jdk8.jre;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "opentsdb";
   version = "2.4.0";
 
   src = fetchurl {
-    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
   patches = [
     (fetchpatch {
       name = "CVE-2020-35476.patch";
-      url = "https://github.com/OpenTSDB/opentsdb/commit/b89fded4ee326dc064b9d7e471e9f29f7d1dede9.patch";
+      url =
+        "https://github.com/OpenTSDB/opentsdb/commit/b89fded4ee326dc064b9d7e471e9f29f7d1dede9.patch";
       sha256 = "1vb9m0a4fsjqcjagiypvkngzgsw4dil8jrlhn5xbz7rwx8x96wvb";
     })
   ];

@@ -1,25 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoconf
-, automake
-, libtool
-, which
-, pkg-config
-, python3
-, vala
-, avahi
-, gdk-pixbuf
-, gst_all_1
-, glib
-, gtk3
-, libgee
-, check
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gobject-introspection
-, libsoup
+{ stdenv, lib, fetchFromGitLab, autoconf, automake, libtool, which, pkg-config
+, python3, vala, avahi, gdk-pixbuf, gst_all_1, glib, gtk3, libgee, check
+, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43, gobject-introspection, libsoup
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +14,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "${lib.toUpper pname}_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "${lib.toUpper pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "04y1wjwnbw4pzg05h383d83p6an6ylwy4b4g32jmjxpfi388x33g";
   };
 
@@ -51,27 +32,14 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [
-    avahi
-    gdk-pixbuf
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-  ];
+  buildInputs =
+    [ avahi gdk-pixbuf gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
 
-  propagatedBuildInputs = [
-    glib
-    libsoup
-  ];
+  propagatedBuildInputs = [ glib libsoup ];
 
-  checkInputs = [
-    libgee
-    check
-    gtk3
-  ];
+  checkInputs = [ libgee check gtk3 ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
-  ];
+  configureFlags = [ "--enable-gtk-doc" ];
 
   # Cannot disable tests here or `check` from checkInputs would not be included.
   # Cannot disable building the tests or docs will not build:

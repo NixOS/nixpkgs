@@ -1,12 +1,9 @@
 { lib, config, ... }: {
 
-  options.value = lib.mkOption {
-    type = lib.types.anything;
-  };
+  options.value = lib.mkOption { type = lib.types.anything; };
 
-  options.applied = lib.mkOption {
-    default = lib.mapAttrs (name: fun: fun null) config.value;
-  };
+  options.applied =
+    lib.mkOption { default = lib.mapAttrs (name: fun: fun null) config.value; };
 
   config = lib.mkMerge [
     {

@@ -1,22 +1,6 @@
-{ lib, stdenv
-, buildPythonApplication
-, fetchPypi
-, isPy3k
-, cli-helpers
-, click
-, configobj
-, humanize
-, prompt-toolkit
-, psycopg2
-, pygments
-, sqlparse
-, pgspecial
-, setproctitle
-, keyring
-, pendulum
-, pytestCheckHook
-, mock
-}:
+{ lib, stdenv, buildPythonApplication, fetchPypi, isPy3k, cli-helpers, click
+, configobj, humanize, prompt-toolkit, psycopg2, pygments, sqlparse, pgspecial
+, setproctitle, keyring, pendulum, pytestCheckHook, mock }:
 
 buildPythonApplication rec {
   pname = "pgcli";

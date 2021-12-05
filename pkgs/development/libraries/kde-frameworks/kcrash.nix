@@ -1,8 +1,5 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kcoreaddons, kwindowsystem, qtbase, qtx11extras,
-}:
+{ mkDerivation, extra-cmake-modules, kcoreaddons, kwindowsystem, qtbase
+, qtx11extras, }:
 
 mkDerivation {
   name = "kcrash";

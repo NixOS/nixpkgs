@@ -16,9 +16,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with lib; {
-    description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";
+    description =
+      "Infinitely transfer between every device over pure HTTP with pipes or browsers";
     homepage = "https://github.com/nwtgck/piping-server-rust";
-    changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "piping-server";

@@ -1,6 +1,4 @@
-{  buildPythonPackage
-, stestr
-}:
+{ buildPythonPackage, stestr }:
 
 buildPythonPackage rec {
   pname = "stestr-tests";
@@ -17,9 +15,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    stestr
-  ];
+  checkInputs = [ stestr ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH

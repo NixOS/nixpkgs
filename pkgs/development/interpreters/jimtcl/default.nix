@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, sqlite, readline, asciidoc, SDL, SDL_gfx }:
 
-let
-  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
+let makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
   pname = "jimtcl";
@@ -14,13 +13,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1k88hz0v3bi19xdvlp0i9nsx38imzwpjh632w7326zwbv2wldf0h";
   };
 
-  nativeBuildInputs = [
-    asciidoc
-  ];
+  nativeBuildInputs = [ asciidoc ];
 
-  buildInputs = [
-    sqlite readline SDL SDL_gfx
-  ];
+  buildInputs = [ sqlite readline SDL SDL_gfx ];
 
   configureFlags = [
     "--shared"
@@ -50,7 +45,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open source small-footprint implementation of the Tcl programming language";
+    description =
+      "An open source small-footprint implementation of the Tcl programming language";
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;

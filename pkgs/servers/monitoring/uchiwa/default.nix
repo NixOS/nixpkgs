@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage
+, makeWrapper }:
 
 let
   inherit (import ./src.nix) version sha256;
@@ -7,7 +8,7 @@ let
 
   src = fetchFromGitHub {
     inherit owner repo sha256;
-    rev    = version;
+    rev = version;
   };
 
   backend = buildGoPackage {
@@ -45,9 +46,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A Dashboard for the sensu monitoring framework";
-    homepage    = "http://sensuapp.org/";
-    license     = licenses.mit;
+    homepage = "http://sensuapp.org/";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

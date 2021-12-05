@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ];
 
-  makeFlags = [ "DESTDIR=$(out)"];
+  makeFlags = [ "DESTDIR=$(out)" ];
 
-  installFlags = [ "PREFIX=\"\"" ];
+  installFlags = [ ''PREFIX=""'' ];
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/linuxconsole/";

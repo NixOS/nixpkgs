@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pythonOlder
-, pytestCheckHook
-, ruamel-yaml
-, toml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, git, pythonOlder, pytestCheckHook
+, ruamel-yaml, toml }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-Rg2I79r0Pp3AUgT6mD+kEdm+5CEGgdmFn6G3xcU6fnk=";
   };
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-    toml
-  ];
+  propagatedBuildInputs = [ ruamel-yaml toml ];
 
-  checkInputs = [
-    git
-    pytestCheckHook
-  ];
+  checkInputs = [ git pytestCheckHook ];
 
   # the tests require a functional git installation which requires a valid HOME
   # directory.

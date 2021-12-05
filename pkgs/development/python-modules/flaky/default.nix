@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, nose
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, nose, pytest }:
 
 buildPythonPackage rec {
   pname = "flaky";
@@ -28,7 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/box/flaky";
-    description = "Plugin for nose or py.test that automatically reruns flaky tests";
+    description =
+      "Plugin for nose or py.test that automatically reruns flaky tests";
     license = licenses.asl20;
   };
 

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2
+}:
 
 stdenv.mkDerivation {
   pname = "hobbes";
@@ -17,17 +18,9 @@ stdenv.mkDerivation {
     rm test/Python.C
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    llvm_12
-    ncurses
-    readline
-    zlib
-    libxml2
-  ];
+  buildInputs = [ llvm_12 ncurses readline zlib libxml2 ];
 
   doCheck = true;
   checkTarget = "test";

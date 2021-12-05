@@ -1,23 +1,37 @@
-{ stdenv, lib
-, pkg-config, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite, zstd
-}:
+{ stdenv, lib, pkg-config, autoreconfHook, fetchurl, cpio, zlib, bzip2, file
+, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua
+, llvmPackages, sqlite, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
   version = "4.17.0";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
+    url = "http://ftp.rpm.org/releases/rpm-${
+        lib.versions.majorMinor version
+      }.x/rpm-${version}.tar.bz2";
     sha256 = "2e0d220b24749b17810ed181ac1ed005a56bbb6bc8ac429c21f314068dc65e6a";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
-                ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = [
+    cpio
+    zlib
+    zstd
+    bzip2
+    file
+    libarchive
+    libgcrypt
+    nspr
+    nss
+    db
+    xz
+    python
+    lua
+    sqlite
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]

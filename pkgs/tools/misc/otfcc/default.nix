@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ premake5 ];
 
-  patches = [
-    ./fix-aarch64.patch
-    ./move-makefiles.patch
-  ];
+  patches = [ ./fix-aarch64.patch ./move-makefiles.patch ];
 
   buildFlags = lib.optional stdenv.isAarch64 [ "config=release_arm" ];
 

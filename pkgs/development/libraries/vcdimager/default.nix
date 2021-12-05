@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, pkg-config, libcdio, libxml2, popt
-, libiconv, darwin }:
+{ stdenv, lib, fetchurl, pkg-config, libcdio, libxml2, popt, libiconv, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "vcdimager";
@@ -12,14 +11,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 popt libiconv ]
-             ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit DiskArbitration ]);
+  buildInputs = [ libxml2 popt libiconv ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [ IOKit DiskArbitration ]);
 
   propagatedBuildInputs = [ libcdio ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/vcdimager/";
-    description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
+    description =
+      "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

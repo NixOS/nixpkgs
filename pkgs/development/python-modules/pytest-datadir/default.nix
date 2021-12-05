@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, setuptools-scm, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools-scm, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-datadir";
@@ -25,7 +23,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/gabrielcnr/pytest-datadir";
-    description = "pytest plugin for manipulating test data directories and files";
+    description =
+      "pytest plugin for manipulating test data directories and files";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
   };

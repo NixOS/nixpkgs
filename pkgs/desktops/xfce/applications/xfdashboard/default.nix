@@ -1,18 +1,5 @@
-{ mkXfceDerivation
-, clutter
-, libXcomposite
-, libXinerama
-, libXdamage
-, libX11
-, libwnck
-, libxfce4ui
-, libxfce4util
-, garcon
-, xfconf
-, gtk3
-, glib
-, dbus-glib
-}:
+{ mkXfceDerivation, clutter, libXcomposite, libXinerama, libXdamage, libX11
+, libwnck, libxfce4ui, libxfce4util, garcon, xfconf, gtk3, glib, dbus-glib }:
 
 mkXfceDerivation {
   category = "apps";
@@ -39,7 +26,5 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
-    description = "Gnome shell like dashboard";
-  };
+  meta = { description = "Gnome shell like dashboard"; };
 }

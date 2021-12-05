@@ -1,19 +1,16 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools, fetchpatch,
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, fetchpatch,
 
-  libepoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
-  pipewire, udev, wayland, xcb-util-cursor, xwayland,
+libepoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa
+, pipewire, udev, wayland, xcb-util-cursor, xwayland,
 
-  qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
-  qtvirtualkeyboard, qtx11extras,
+qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors
+, qtvirtualkeyboard, qtx11extras,
 
-  breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
-  kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
-  kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
-  krunner, kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons,
-  kwindowsystem, kxmlgui, plasma-framework, libqaccessibilityclient,
-}:
+breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets
+, kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n
+, kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage
+, krunner, kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons
+, kwindowsystem, kxmlgui, plasma-framework, libqaccessibilityclient, }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
 
@@ -21,17 +18,58 @@ mkDerivation {
   name = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    libepoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
-    udev wayland xcb-util-cursor xwayland
+    libepoxy
+    lcms2
+    libICE
+    libSM
+    libcap
+    libdrm
+    libinput
+    libxkbcommon
+    mesa
+    pipewire
+    udev
+    wayland
+    xcb-util-cursor
+    xwayland
 
-    qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
-    qtvirtualkeyboard qtx11extras
+    qtdeclarative
+    qtmultimedia
+    qtquickcontrols2
+    qtscript
+    qtsensors
+    qtvirtualkeyboard
+    qtx11extras
 
-    breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
-    kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
-    kidletime kinit kio knewstuff knotifications kpackage krunner kscreenlocker
-    kservice kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui
-    plasma-framework libqaccessibilityclient
+    breeze-qt5
+    kactivities
+    kcmutils
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kdeclarative
+    kdecoration
+    kglobalaccel
+    ki18n
+    kiconthemes
+    kidletime
+    kinit
+    kio
+    knewstuff
+    knotifications
+    kpackage
+    krunner
+    kscreenlocker
+    kservice
+    kwayland
+    kwayland-server
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    plasma-framework
+    libqaccessibilityclient
 
   ];
   outputs = [ "out" "dev" ];
@@ -46,13 +84,12 @@ mkDerivation {
     # everything related to timezone, like clock widgets, will be broken.
     # https://invent.kde.org/plasma/kwin/-/merge_requests/1590
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/9a008b223ad696db3bf5692750f2b74e578e08b8.diff";
+      url =
+        "https://invent.kde.org/plasma/kwin/-/commit/9a008b223ad696db3bf5692750f2b74e578e08b8.diff";
       sha256 = "sha256-f35G+g2MVABLDbAkCed3ZmtDWrzYn1rdD08mEx35j4k=";
     })
   ];
-  CXXFLAGS = [
-    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
-  ];
+  CXXFLAGS = [ ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"'' ];
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.

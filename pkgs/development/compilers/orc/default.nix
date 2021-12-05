@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchurl, meson, ninja
-, gtk-doc ? null, file, docbook_xsl
-, buildDevDoc ? gtk-doc != null
-}: let
-  inherit (lib) optional optionals;
+{ lib, stdenv, fetchurl, meson, ninja, gtk-doc ? null, file, docbook_xsl
+, buildDevDoc ? gtk-doc != null }:
+let inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
   version = "0.4.32";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
     sha256 = "1w0qmyj3v9sb2g7ff39pp38b9850y9hyy0bag26ifrby5f7ksvm6";
   };
 
@@ -17,18 +16,13 @@ in stdenv.mkDerivation rec {
     sed -i '/exec_opcodes_sys/d' testsuite/meson.build
   '';
 
-  outputs = [ "out" "dev" ]
-     ++ optional buildDevDoc "devdoc"
-  ;
+  outputs = [ "out" "dev" ] ++ optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
-  mesonFlags =
-    optional (!buildDevDoc) [ "-Dgtk_doc=disabled" ]
-  ;
+  mesonFlags = optional (!buildDevDoc) [ "-Dgtk_doc=disabled" ];
 
   nativeBuildInputs = [ meson ninja ]
-    ++ optionals buildDevDoc [ gtk-doc file docbook_xsl ]
-  ;
+    ++ optionals buildDevDoc [ gtk-doc file docbook_xsl ];
 
   doCheck = true;
 

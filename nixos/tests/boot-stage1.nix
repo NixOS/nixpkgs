@@ -3,19 +3,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
-      compileKernelModule = name: source: pkgs.runCommandCC name rec {
-        inherit source;
-        kdev = config.boot.kernelPackages.kernel.dev;
-        kver = config.boot.kernelPackages.kernel.modDirVersion;
-        ksrc = "${kdev}/lib/modules/${kver}/build";
-        hardeningDisable = [ "pic" ];
-        nativeBuildInputs = kdev.moduleBuildDependencies;
-      } ''
-        echo "obj-m += $name.o" > Makefile
-        echo "$source" > "$name.c"
-        make -C "$ksrc" M=$(pwd) modules
-        install -vD "$name.ko" "$out/lib/modules/$kver/$name.ko"
-      '';
+      compileKernelModule = name: source:
+        pkgs.runCommandCC name rec {
+          inherit source;
+          kdev = config.boot.kernelPackages.kernel.dev;
+          kver = config.boot.kernelPackages.kernel.modDirVersion;
+          ksrc = "${kdev}/lib/modules/${kver}/build";
+          hardeningDisable = [ "pic" ];
+          nativeBuildInputs = kdev.moduleBuildDependencies;
+        } ''
+          echo "obj-m += $name.o" > Makefile
+          echo "$source" > "$name.c"
+          make -C "$ksrc" M=$(pwd) modules
+          install -vD "$name.ko" "$out/lib/modules/$kver/$name.ko"
+        '';
 
       # This spawns a kthread which just waits until it gets a signal and
       # terminates if that is the case. We want to make sure that nothing during
@@ -68,49 +69,53 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     boot.initrd.kernelModules = [ "kcanary" ];
 
     boot.initrd.extraUtilsCommands = let
-      compile = name: source: pkgs.runCommandCC name { inherit source; } ''
-        mkdir -p "$out/bin"
-        echo "$source" | gcc -Wall -o "$out/bin/$name" -xc -
-      '';
+      compile = name: source:
+        pkgs.runCommandCC name { inherit source; } ''
+          mkdir -p "$out/bin"
+          echo "$source" | gcc -Wall -o "$out/bin/$name" -xc -
+        '';
 
-      daemonize = name: source: compile name ''
-        #include <stdio.h>
-        #include <unistd.h>
-
-        void runSource(void) {
-        ${source}
-        }
-
-        int main(void) {
-          if (fork() > 0) return 0;
-          setsid();
-          runSource();
-          return 1;
-        }
-      '';
-
-      mkCmdlineCanary = { name, cmdline ? "", source ? "" }: (daemonize name ''
-        char *argv[] = {"${cmdline}", NULL};
-        execvp("${name}-child", argv);
-      '') // {
-        child = compile "${name}-child" ''
+      daemonize = name: source:
+        compile name ''
           #include <stdio.h>
           #include <unistd.h>
 
+          void runSource(void) {
+          ${source}
+          }
+
           int main(void) {
-            ${source}
-            while (1) sleep(1);
+            if (fork() > 0) return 0;
+            setsid();
+            runSource();
             return 1;
           }
         '';
-      };
 
-      copyCanaries = with lib; concatMapStrings (canary: ''
-        ${optionalString (canary ? child) ''
-          copy_bin_and_libs "${canary.child}/bin/${canary.child.name}"
-        ''}
-        copy_bin_and_libs "${canary}/bin/${canary.name}"
-      '');
+      mkCmdlineCanary = { name, cmdline ? "", source ? "" }:
+        (daemonize name ''
+          char *argv[] = {"${cmdline}", NULL};
+          execvp("${name}-child", argv);
+        '') // {
+          child = compile "${name}-child" ''
+            #include <stdio.h>
+            #include <unistd.h>
+
+            int main(void) {
+              ${source}
+              while (1) sleep(1);
+              return 1;
+            }
+          '';
+        };
+
+      copyCanaries = with lib;
+        concatMapStrings (canary: ''
+          ${optionalString (canary ? child) ''
+            copy_bin_and_libs "${canary.child}/bin/${canary.child.name}"
+          ''}
+          copy_bin_and_libs "${canary}/bin/${canary.name}"
+        '');
 
     in copyCanaries [
       # Simple canary process which just sleeps forever and should be killed by

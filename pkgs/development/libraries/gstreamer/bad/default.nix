@@ -1,95 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, gettext
-, pkg-config
-, python3
-, gst-plugins-base
-, orc
-, gobject-introspection
-, enableZbar ? false
-, faacSupport ? false
-, faac
-, faad2
-, libass
-, libkate
-, libmms
-, lrdf
-, ladspaH
-, libnice
-, webrtc-audio-processing
-, lilv
-, lv2
-, serd
-, sord
-, sratom
-, libbs2b
-, libmodplug
-, mpeg2dec
-, libmicrodns
-, openjpeg
-, libopus
-, librsvg
-, bluez
-, chromaprint
-, curl
-, directfb
-, fdk_aac
-, flite
-, gsm
-, libaom
-, libdc1394
-, libde265
-, libdrm
-, libdvdnav
-, libdvdread
-, libgudev
-, libofa
-, libsndfile
-, libusb1
-, neon
-, openal
-, opencv4
-, openexr
-, openh264
-, libopenmpt
-, pango
-, rtmpdump
-, sbc
-, soundtouch
-, spandsp
-, srtp
-, zbar
-, wayland-protocols
-, wildmidi
-, fluidsynth
-, libva
-, libvdpau
-, wayland
-, libwebp
-, xvidcore
-, gnutls
-, mjpegtools
-, libGLU
-, libGL
-, libintl
-, libgme
-, openssl
-, x265
-, libxml2
-, srt
-, vo-aacenc
-, VideoToolbox
-, AudioToolbox
-, AVFoundation
-, CoreMedia
-, CoreVideo
-, Foundation
-, MediaToolbox
-}:
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, gettext, pkg-config, python3
+, gst-plugins-base, orc, gobject-introspection, enableZbar ? false
+, faacSupport ? false, faac, faad2, libass, libkate, libmms, lrdf, ladspaH
+, libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom, libbs2b
+, libmodplug, mpeg2dec, libmicrodns, openjpeg, libopus, librsvg, bluez
+, chromaprint, curl, directfb, fdk_aac, flite, gsm, libaom, libdc1394, libde265
+, libdrm, libdvdnav, libdvdread, libgudev, libofa, libsndfile, libusb1, neon
+, openal, opencv4, openexr, openh264, libopenmpt, pango, rtmpdump, sbc
+, soundtouch, spandsp, srtp, zbar, wayland-protocols, wildmidi, fluidsynth
+, libva, libvdpau, wayland, libwebp, xvidcore, gnutls, mjpegtools, libGLU, libGL
+, libintl, libgme, openssl, x265, libxml2, srt, vo-aacenc, VideoToolbox
+, AudioToolbox, AVFoundation, CoreMedia, CoreVideo, Foundation, MediaToolbox }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
@@ -98,7 +18,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
   };
 
@@ -107,11 +28,10 @@ stdenv.mkDerivation rec {
     ./fix_pkgconfig_includedir.patch
     # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
+      url =
+        "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
       sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
-      includes = [
-        "ext/opencv/gstcvdilateerode.cpp"
-      ];
+      includes = [ "ext/opencv/gstcvdilateerode.cpp" ];
     })
   ];
 
@@ -180,54 +100,51 @@ stdenv.mkDerivation rec {
     libintl
     srt
     vo-aacenc
-  ] ++ lib.optionals enableZbar [
-    zbar
-  ] ++ lib.optionals faacSupport [
-    faac
-  ] ++ lib.optionals stdenv.isLinux [
-    bluez
-    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # wildmidi requires apple's OpenAL
-    # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    wildmidi
-    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
-    mjpegtools
+  ] ++ lib.optionals enableZbar [ zbar ] ++ lib.optionals faacSupport [ faac ]
+    ++ lib.optionals stdenv.isLinux [
+      bluez
+      libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
+      wayland
+      wayland-protocols
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      # wildmidi requires apple's OpenAL
+      # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
+      wildmidi
+      # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
+      mjpegtools
 
-    chromaprint
-    directfb
-    flite
-    libdrm
-    libgudev
-    libnice
-    libofa
-    sbc
-    spandsp
+      chromaprint
+      directfb
+      flite
+      libdrm
+      libgudev
+      libnice
+      libofa
+      sbc
+      spandsp
 
-    # ladspa plug-in
-    ladspaH
-    lrdf # TODO: make build on Darwin
+      # ladspa plug-in
+      ladspaH
+      lrdf # TODO: make build on Darwin
 
-    # lv2 plug-in
-    lilv
-    lv2
-    serd
-    sord
-    sratom
-  ] ++ lib.optionals stdenv.isDarwin [
-    # For unknown reasons the order is important, e.g. if
-    # VideoToolbox is last, we get:
-    #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
-    VideoToolbox
-    AudioToolbox
-    AVFoundation
-    CoreMedia
-    CoreVideo
-    Foundation
-    MediaToolbox
-  ];
+      # lv2 plug-in
+      lilv
+      lv2
+      serd
+      sord
+      sratom
+    ] ++ lib.optionals stdenv.isDarwin [
+      # For unknown reasons the order is important, e.g. if
+      # VideoToolbox is last, we get:
+      #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
+      VideoToolbox
+      AudioToolbox
+      AVFoundation
+      CoreMedia
+      CoreVideo
+      Foundation
+      MediaToolbox
+    ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
@@ -264,11 +181,9 @@ stdenv.mkDerivation rec {
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
-  ]
-  ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ]
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
@@ -285,17 +200,14 @@ stdenv.mkDerivation rec {
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
-  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
-    "-Dwayland=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
-    # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
-    # but its meson build system does not declare the dependency.
-    "-Dapplemedia=disabled"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [ "-Dgl=disabled" ]
+    ++ lib.optionals (!gst-plugins-base.waylandEnabled) [ "-Dwayland=disabled" ]
+    ++ lib.optionals (!gst-plugins-base.glEnabled) [
+      # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
+      # but its meson build system does not declare the dependency.
+      "-Dapplemedia=disabled"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "-Dintrospection=disabled" ];
 
   # Argument list too long
   strictDeps = true;

@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, elementpath
-, lxml
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, elementpath, lxml, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   version = "1.8.2";
@@ -20,21 +14,13 @@ buildPythonPackage rec {
     sha256 = "sha256-d7f19T17aAwdtNDjCrsXXY39u0aRgQo4vFPnxFNs2PQ=";
   };
 
-  propagatedBuildInputs = [
-    elementpath
-  ];
+  propagatedBuildInputs = [ elementpath ];
 
-  checkInputs = [
-    lxml
-    pytestCheckHook
-  ];
+  checkInputs = [ lxml pytestCheckHook ];
 
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
-  disabledTests = [
-    "export_remote"
-    "element_tree_import_script"
-  ];
+  disabledTests = [ "export_remote" "element_tree_import_script" ];
 
   disabledTestPaths = [
     "tests/test_schemas.py"

@@ -1,27 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck, libfakekey, libXtst, mate, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck, libfakekey, libXtst
+, mate, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "12gdy69nfysl8vmd8lv8b0lknkaagplrrz88nh6n0rmjkxnipgz3";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gettext
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    libwnck
-    libfakekey
-    libXtst
-    mate.mate-panel
-  ];
+  buildInputs = [ gtk3 libwnck libfakekey libXtst mate.mate-panel ];
 
   enableParallelBuilding = true;
 

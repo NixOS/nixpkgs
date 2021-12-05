@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/graphics/pngtoico/pngtoico-${version}.tar.gz";
+    url =
+      "mirror://kernel/software/graphics/pngtoico/pngtoico-${version}.tar.gz";
     sha256 = "1xb4aa57sjvgqfp01br3dm72hf7q0gb2ad144s1ifrs09215fgph";
   };
 
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.kernel.org/pub/software/graphics/pngtoico/";
-    description = "Small utility to convert a set of PNG images to Microsoft ICO format";
+    description =
+      "Small utility to convert a set of PNG images to Microsoft ICO format";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
   };

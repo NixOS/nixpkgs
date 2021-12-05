@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, lvm2
-, libuuid
-, gettext
-, readline
-, util-linux
-, check
-, enableStatic ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
+, util-linux, check, enableStatic ? stdenv.hostPlatform.isStatic }:
 
 stdenv.mkDerivation rec {
   pname = "parted";
@@ -24,20 +14,20 @@ stdenv.mkDerivation rec {
     # Fix build with glibc >= 2.28
     # https://github.com/NixOS/nixpkgs/issues/86403
     (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-block/parted/files/parted-3.2-sysmacros.patch?id=8e2414f551c14166f259f9a25a594aec7a5b9ea0";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-block/parted/files/parted-3.2-sysmacros.patch?id=8e2414f551c14166f259f9a25a594aec7a5b9ea0";
       sha256 = "0fdgifjbri7n28hv74zksac05gw72p2czzvyar0jp62b9dnql3mp";
     })
   ];
 
-  buildInputs = [ libuuid ]
-    ++ lib.optional (readline != null) readline
+  buildInputs = [ libuuid ] ++ lib.optional (readline != null) readline
     ++ lib.optional (gettext != null) gettext
     ++ lib.optional (lvm2 != null) lvm2;
 
-  configureFlags =
-    (if (readline != null)
-    then [ "--with-readline" ]
-    else [ "--without-readline" ])
+  configureFlags = (if (readline != null) then
+    [ "--with-readline" ]
+  else
+    [ "--without-readline" ])
     ++ lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ lib.optional enableStatic "--enable-static";
 

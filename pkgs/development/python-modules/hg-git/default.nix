@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dulwich
-, mercurial
-}:
+{ lib, buildPythonPackage, fetchPypi, dulwich, mercurial }:
 
 buildPythonPackage rec {
   pname = "hg-git";

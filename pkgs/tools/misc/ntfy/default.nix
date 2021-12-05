@@ -11,13 +11,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 
-  checkInputs = with python3Packages; [
-    mock
-  ];
+  checkInputs = with python3Packages; [ mock ];
 
   propagatedBuildInputs = with python3Packages; [
-    requests ruamel-yaml appdirs
-    sleekxmpp dnspython
+    requests
+    ruamel-yaml
+    appdirs
+    sleekxmpp
+    dnspython
     emoji
     psutil
     matrix-client
@@ -31,7 +32,8 @@ python3Packages.buildPythonApplication rec {
     # From https://github.com/dschep/ntfy/pull/229 - "Swap Slacker for Slack SDK"
     (fetchpatch {
       name = "ntfy-Swap-Slacker-for-Slack-SDK.patch";
-      url = "https://github.com/dschep/ntfy/commit/2346e7cfdca84c8f1afc7462a92145c1789deb3e.patch";
+      url =
+        "https://github.com/dschep/ntfy/commit/2346e7cfdca84c8f1afc7462a92145c1789deb3e.patch";
       sha256 = "13k7jbsdx0jx7l5s8whirric76hml5bznkfcxab5xdp88q52kpk7";
     })
   ];
@@ -41,7 +43,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A utility for sending notifications, on demand and when commands finish";
+    description =
+      "A utility for sending notifications, on demand and when commands finish";
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jfrankenau kamilchm ];

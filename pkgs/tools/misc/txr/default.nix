@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "231";
 
   src = fetchurl {
-    url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
+    url =
+      "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
     sha256 = "0mcglb84zfmrai2bcdg9j0ck8jp8h7ii2rf4m38yjggy0dvii2lc";
   };
 

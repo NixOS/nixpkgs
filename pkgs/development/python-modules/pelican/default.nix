@@ -1,30 +1,7 @@
-{ lib
-, beautifulsoup4
-, blinker
-, buildPythonPackage
-, docutils
-, feedgenerator
-, fetchFromGitHub
-, git
-, glibcLocales
-, jinja2
-, lxml
-, markdown
-, markupsafe
-, mock
-, pytestCheckHook
-, pandoc
-, pillow
-, pygments
-, python-dateutil
-, pythonOlder
-, pytz
-, rich
-, pytest-xdist
-, six
-, typogrify
-, unidecode
-}:
+{ lib, beautifulsoup4, blinker, buildPythonPackage, docutils, feedgenerator
+, fetchFromGitHub, git, glibcLocales, jinja2, lxml, markdown, markupsafe, mock
+, pytestCheckHook, pandoc, pillow, pygments, python-dateutil, pythonOlder, pytz
+, rich, pytest-xdist, six, typogrify, unidecode }:
 
 buildPythonPackage rec {
   pname = "pelican";
@@ -43,14 +20,7 @@ buildPythonPackage rec {
     '';
   };
 
-  buildInputs = [
-    glibcLocales
-    pandoc
-    git
-    mock
-    markdown
-    typogrify
-  ];
+  buildInputs = [ glibcLocales pandoc git mock markdown typogrify ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -69,11 +39,7 @@ buildPythonPackage rec {
     unidecode
   ];
 
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-    pandoc
-  ];
+  checkInputs = [ pytest-xdist pytestCheckHook pandoc ];
 
   postPatch = ''
     substituteInPlace pelican/tests/test_pelican.py \
@@ -106,7 +72,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pelican" ];
 
   meta = with lib; {
-    description = "Static site generator that requires no database or server-side logic";
+    description =
+      "Static site generator that requires no database or server-side logic";
     homepage = "http://getpelican.com/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline prikhi ];

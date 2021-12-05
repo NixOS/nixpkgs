@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2021-35940.patch";
-      url = "https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch";
+      url =
+        "https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch";
       sha256 = "1qd511dyqa1b7bj89iihrlbaavbzl6yyblqginghmcnhw8adymbs";
       # convince fetchpatch to restore missing `a/`, `b/` to paths
       extraPrefix = "";
@@ -20,11 +21,13 @@ stdenv.mkDerivation rec {
 
     # Fix cross.
     (fetchpatch {
-      url = "https://github.com/apache/apr/commit/374210c50ee9f4dbf265f0172dcf2d45b97d0550.patch";
+      url =
+        "https://github.com/apache/apr/commit/374210c50ee9f4dbf265f0172dcf2d45b97d0550.patch";
       sha256 = "04k62c5dh043jhkgs5qma6yqkq4q7nh0zswr81il4l7q1zil581y";
     })
     (fetchpatch {
-      url = "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
+      url =
+        "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
       sha256 = "0hhm5v5wx985c28dq6d9ngnyqihpsphq4mw7rwylk39k2p90ppcm";
     })
   ] ++ lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
@@ -37,10 +40,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  preConfigure =
-    ''
-      configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
-    '';
+  preConfigure = ''
+    configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
+  '';
 
   configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_file__dev_zero=yes"

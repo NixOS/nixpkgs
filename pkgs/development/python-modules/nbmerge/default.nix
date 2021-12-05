@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nbformat
-, nose
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nbformat, nose }:
 
 buildPythonPackage rec {
   pname = "nbmerge";

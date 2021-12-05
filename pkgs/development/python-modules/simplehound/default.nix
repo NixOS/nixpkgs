@@ -1,11 +1,5 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests-mock
-}:
+{ lib, requests, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pythonOlder, requests-mock }:
 
 buildPythonPackage rec {
   pname = "simplehound";
@@ -21,10 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    requests-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ requests-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "simplehound" ];
 

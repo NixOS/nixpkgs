@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
+{ lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python }:
 
 stdenv.mkDerivation rec {
   pname = "tennix";

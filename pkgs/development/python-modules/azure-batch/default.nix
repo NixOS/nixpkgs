@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, azure-common
-, msrestazure
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, azure-common, msrestazure }:
 
 buildPythonPackage rec {
   pname = "azure-batch";
@@ -16,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "ce5fdb0ec962eddfe85cd82205e9177cb0bbdb445265746e38b3bbbf1f16dc73";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common ];
 
   # has no tests
   doCheck = false;

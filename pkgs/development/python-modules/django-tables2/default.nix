@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, django
-, tablib
-, python
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, django, tablib, python
 }:
 
 buildPythonPackage rec {
@@ -20,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "04vvgf18diwp0mgp14b71a0dxhgrcslv1ljybi300gvzvzjnp3qv";
   };
 
-  propagatedBuildInputs = [
-    django
-    tablib
-  ];
+  propagatedBuildInputs = [ django tablib ];
 
   pythonImportsCheck = [
     # Requested setting DJANGO_TABLES2_TEMPLATE, but settings are not configured.

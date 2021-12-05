@@ -1,36 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, alsa-lib
-, coreutils
-, db
-, dpkg
-, glib
-, gtk3
-, wrapGAppsHook
-, libkrb5
-, libsecret
-, nss
-, openssl
-, udev
-, xorg
-}:
+{ stdenv, lib, fetchurl, autoPatchelfHook, alsa-lib, coreutils, db, dpkg, glib
+, gtk3, wrapGAppsHook, libkrb5, libsecret, nss, openssl, udev, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
   version = "1.9.2";
 
   src = fetchurl {
-    url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
+    url =
+      "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
     sha256 = "sha256-o7w2XHd5FnPYt9j8IIGy6OgKtdeNb/qZ+EiXGEn0NUQ=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib
@@ -46,11 +27,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  runtimeDependencies = [
-    coreutils
-    openssl
-    (lib.getLib udev)
-  ];
+  runtimeDependencies = [ coreutils openssl (lib.getLib udev) ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -75,13 +52,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = /* sh */ ''
-    substituteInPlace $out/share/applications/Mailspring.desktop \
-      --replace Exec=mailspring Exec=$out/bin/mailspring
-  '';
+  postFixup = # sh
+    ''
+      substituteInPlace $out/share/applications/Mailspring.desktop \
+        --replace Exec=mailspring Exec=$out/bin/mailspring
+    '';
 
   meta = with lib; {
-    description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
+    description =
+      "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     longDescription = ''
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.
       Mailspring's sync engine runs locally, but its source is not open.

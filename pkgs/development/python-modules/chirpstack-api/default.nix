@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpcio
-}:
+{ lib, buildPythonPackage, fetchPypi, google-api-core, grpcio }:
 
 buildPythonPackage rec {
   pname = "chirpstack-api";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "08djidy3fyhghyzvndcjas3hb1s9d7719gvmgbl8bzxjm4h2c433";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    grpcio
-  ];
+  propagatedBuildInputs = [ google-api-core grpcio ];
 
   # Project has no tests
   doCheck = false;

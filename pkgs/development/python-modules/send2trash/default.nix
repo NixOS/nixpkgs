@@ -1,8 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
 
 buildPythonPackage rec {
   pname = "Send2Trash";

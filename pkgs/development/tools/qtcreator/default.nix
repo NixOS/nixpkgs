@@ -1,7 +1,6 @@
-{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
-, withDocumentation ? false, withClangPlugins ? true
-}:
+{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch, qtbase, qtquickcontrols
+, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
+, withDocumentation ? false, withClangPlugins ? true }:
 
 with lib;
 
@@ -16,22 +15,25 @@ let
     };
     unpackPhase = "";
   });
-in
 
-mkDerivation rec {
+in mkDerivation rec {
   pname = "qtcreator";
   version = "5.0.2";
-  baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
+  baseVersion =
+    builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    url =
+      "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
     sha256 = "1bf07150226da46237f26f5eaa9f090ce81ed79b9bc75e0dfa6328043e360103";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
-    optionals withClangPlugins [ llvmPackages_8.libclang
-                                 clang_qt_vendor
-                                 llvmPackages_8.llvm ];
+  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ]
+    ++ optionals withClangPlugins [
+      llvmPackages_8.libclang
+      clang_qt_vendor
+      llvmPackages_8.llvm
+    ];
 
   nativeBuildInputs = [ qmake ];
 
@@ -40,23 +42,27 @@ mkDerivation rec {
   # like libc++-version, which is default name for libc++ folder in nixos.
   # ./0002-Dont-remove-clang-header-paths.patch is for forcing qtcreator to not
   # remove system clang include paths.
-  patches = [ ./0001-Fix-clang-libcpp-regexp.patch
-              ./0002-Dont-remove-clang-header-paths.patch ];
+  patches = [
+    ./0001-Fix-clang-libcpp-regexp.patch
+    ./0002-Dont-remove-clang-header-paths.patch
+  ];
 
   doCheck = true;
 
   buildFlags = optional withDocumentation "docs";
 
-  installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
+  installFlags = [ "INSTALL_ROOT=$(out)" ]
+    ++ optional withDocumentation "install_docs";
 
-  qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
+  qtWrapperArgs =
+    [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
 
   preConfigure = ''
     substituteInPlace src/plugins/plugins.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
     substituteInPlace src/libs/libs.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    '' + optionalString withClangPlugins ''
+  '' + optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
@@ -67,7 +73,12 @@ mkDerivation rec {
       --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang.lib}/lib' \
       --replace 'LIBCLANG_LIBS += $${CLANG_LIB}' 'LIBCLANG_LIBS += -lclang' \
       --replace 'LIBTOOLING_LIBS = -L$${LLVM_LIBDIR}' 'LIBTOOLING_LIBS = -L${clang_qt_vendor}/lib' \
-      --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
+      --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${
+        lib.concatStringsSep "\n" [
+          "LLVM_CXXFLAGS ~= s,-gsplit-dwarf,"
+          "    LLVM_CXXFLAGS += -fno-rtti"
+        ]
+      }'
   '';
 
   preBuild = optionalString withDocumentation ''

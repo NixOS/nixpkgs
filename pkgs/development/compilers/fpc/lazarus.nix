@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchurl, makeWrapper, writeText
-, fpc, gtk2, glib, pango, atk, gdk-pixbuf
-, libXi, xorgproto, libX11, libXext
-, gdb, gnumake, binutils
-, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null
-}:
+{ stdenv, lib, fetchurl, makeWrapper, writeText, fpc, gtk2, glib, pango, atk
+, gdk-pixbuf, libXi, xorgproto, libX11, libXext, gdb, gnumake, binutils
+, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null }:
 
 # TODO:
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
@@ -16,20 +13,21 @@ let
   majorMinorPatch = v:
     builtins.concatStringsSep "." (lib.take 3 (lib.splitVersion v));
 
-  overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v:
-    "const ${k} = '${v}';") {
+  overrides = writeText "revision.inc" (lib.concatStringsSep "\n"
+    (lib.mapAttrsToList (k: v: "const ${k} = '${v}';") {
       # this is technically the SVN revision but as we don't have that replace
       # it with the version instead of showing "Unknown"
       RevisionStr = version;
     }));
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lazarus-${LCL_PLATFORM}";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
+    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${
+        majorMinorPatch version
+      }/lazarus-${version}.tar.gz";
     sha256 = "sha256-umzvf4I6LSgWYimYLvySYDnUIxPEDiL+DGd2wT0AFbI=";
   };
 
@@ -39,15 +37,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # we need gtk2 unconditionally as that is the default target when building applications with lazarus
-    fpc gtk2 glib libXi xorgproto
-    libX11 libXext pango atk
-    stdenv.cc gdk-pixbuf
-  ]
-  ++ lib.optionals withQt [ libqt5pas qtbase ];
+    fpc
+    gtk2
+    glib
+    libXi
+    xorgproto
+    libX11
+    libXext
+    pango
+    atk
+    stdenv.cc
+    gdk-pixbuf
+  ] ++ lib.optionals withQt [ libqt5pas qtbase ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional withQt wrapQtAppsHook;
 
   makeFlags = [
     "FPC=fpc"
@@ -74,11 +77,7 @@ stdenv.mkDerivation rec {
     "-lglib-2.0"
     "-lgtk-x11-2.0"
     "-lpango-1.0"
-  ]
-  ++ lib.optionals withQt [
-    "-L${lib.getLib libqt5pas}/lib"
-    "-lQt5Pas"
-  ]);
+  ] ++ lib.optionals withQt [ "-L${lib.getLib libqt5pas}/lib" "-lQt5Pas" ]);
 
   preBuild = ''
     mkdir -p $out/share "$out/lazarus"
@@ -87,20 +86,20 @@ stdenv.mkDerivation rec {
       --replace '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 
-  postInstall = let
-    ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
-  in ''
-    wrapProgram $out/bin/startlazarus \
-      --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
-      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
-      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
-      --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
-  '';
+  postInstall =
+    let ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
+    in ''
+      wrapProgram $out/bin/startlazarus \
+        --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
+        --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
+        --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+        --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
+    '';
 
   meta = with lib; {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
-    license = licenses.gpl2Plus ;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

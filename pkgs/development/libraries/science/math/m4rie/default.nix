@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromBitbucket
-, autoreconfHook
-, m4ri
-}:
+{ lib, stdenv, fetchFromBitbucket, autoreconfHook, m4ri }:
 
 stdenv.mkDerivation rec {
   version = "20200115";
@@ -17,17 +13,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [
-    m4ri
-  ];
+  buildInputs = [ m4ri ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://malb.bitbucket.io/m4rie/";
-    description = "Library for matrix multiplication, reduction and inversion over GF(2^k) for 2 <= k <= 10";
+    description =
+      "Library for matrix multiplication, reduction and inversion over GF(2^k) for 2 <= k <= 10";
     longDescription = ''
       M4RIE is a library for fast arithmetic with dense matrices over small finite fields of even characteristic.
       It uses the M4RI library, implementing the same operations over the finite field F2.

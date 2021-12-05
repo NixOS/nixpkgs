@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file
+, perl }:
 
 stdenv.mkDerivation rec {
   pname = "a2ps";
@@ -11,16 +12,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/09_CVE-2001-1593.diff";
+      url =
+        "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/09_CVE-2001-1593.diff";
       sha256 = "1hrfmvb21zlklmg2fqikgywhqgc4qnvbhx517w87faafrhzhlnh0";
     })
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/CVE-2014-0466.diff";
+      url =
+        "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/CVE-2014-0466.diff";
       sha256 = "0grqqsc3m45niac56m19m5gx7gc0m8zvia5iman1l4rlq31shf8s";
     })
     (fetchpatch {
       name = "CVE-2015-8107.patch";
-      url = "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/fix-format-security.diff";
+      url =
+        "https://sources.debian.net/data/main/a/a2ps/1:4.14-1.3/debian/patches/fix-format-security.diff";
       sha256 = "0pq7zl41gf2kc6ahwyjnzn93vbxb4jc2c5g8j20isp4vw6dqrnwv";
     })
   ];

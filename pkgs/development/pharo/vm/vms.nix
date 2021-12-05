@@ -1,35 +1,14 @@
-{ cmake
-, lib
-, stdenv
-, fetchurl
-, bash
-, unzip
-, glibc
-, openssl
-, gcc
-, libgit2
-, libGLU, libGL
-, freetype
-, xorg
-, alsa-lib
-, cairo
-, libuuid
-, autoreconfHook
-, gcc48
-, fetchFromGitHub
-, makeWrapper
-, runtimeShell
-, libnsl
-} @args:
+{ cmake, lib, stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libgit2
+, libGLU, libGL, freetype, xorg, alsa-lib, cairo, libuuid, autoreconfHook, gcc48
+, fetchFromGitHub, makeWrapper, runtimeShell, libnsl }@args:
 
 let
   pharo-vm-build = import ./build-vm.nix args;
   pharo-vm-build-legacy = import ./build-vm-legacy.nix args;
-in
 
-let suffix = if stdenv.is64bit then "64" else "32"; in
+in let suffix = if stdenv.is64bit then "64" else "32";
 
-{
+in {
   # Build the latest VM
   spur = pharo-vm-build rec {
     name = "pharo-spur${suffix}";
@@ -48,7 +27,7 @@ let suffix = if stdenv.is64bit then "64" else "32"; in
     # is too impure to run from nix.
     revision = "6a63f68a3dd4deb7c17dd2c7ac6e4dd4b0b6d937";
     source-date = "Tue May 30 19:41:27 2017 -0700";
-    source-url  = "https://github.com/pharo-project/pharo-vm";
+    source-url = "https://github.com/pharo-project/pharo-vm";
   };
 
   # Build an old ("legacy") CogV3 VM for running pre-spur images.

@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchFromGitLab
-, perlPackages
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitLab, perlPackages, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gcstar";
@@ -58,7 +54,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/Kerenoc/GCstar";
-    description = "Manage your collections of movies, games, books, music and more";
+    description =
+      "Manage your collections of movies, games, books, music and more";
     longDescription = ''
       GCstar is an application for managing your collections.
       It supports many types of collections, including movies, books, games, comics, stamps, coins, and many more.

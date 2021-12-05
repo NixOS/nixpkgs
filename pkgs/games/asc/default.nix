@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkg-config, zlib, zip, bzip2
-, libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
+, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkg-config, zlib, zip
+, bzip2, libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
   pname = "asc";
@@ -13,13 +13,35 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing"; # I'm too lazy to catch all gcc47-related problems
+  NIX_CFLAGS_COMPILE =
+    "-fpermissive -Wno-error=narrowing"; # I'm too lazy to catch all gcc47-related problems
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl pkg-config zlib zip bzip2 libpng
-    libtiff fluidsynth libmikmod flac libvorbis libogg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_sound
+    libsigcxx
+    physfs
+    boost
+    expat
+    freetype
+    libjpeg
+    wxGTK
+    lua
+    perl
+    pkg-config
+    zlib
+    zip
+    bzip2
+    libpng
+    libtiff
+    fluidsynth
+    libmikmod
+    flac
+    libvorbis
+    libogg
   ];
 
   meta = with lib; {

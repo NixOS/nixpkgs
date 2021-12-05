@@ -9,17 +9,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
   };
 
-  checkInputs = with python3.pkgs; [
-    pytest
-    mock
-  ];
+  checkInputs = with python3.pkgs; [ pytest mock ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    six
-    pyyaml
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ distro jinja2 six pyyaml ];
 
   checkPhase = "make test-unit PYTHON=${python3.executable}";
 

@@ -1,4 +1,5 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2
+, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
@@ -19,7 +20,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ./make-linux.mk \
       --replace 'armv5' 'armv6'
   '';
-
 
   nativeBuildInputs = [ ronn ];
   buildInputs = [ openssl lzo zlib iproute2 ];
@@ -47,10 +47,17 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   meta = with lib; {
-    description = "Create flat virtual Ethernet networks of almost unlimited size";
+    description =
+      "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
+    maintainers = with maintainers; [
+      sjmackenzie
+      zimbatm
+      ehmry
+      obadz
+      danielfullmer
+    ];
     platforms = platforms.all;
   };
 }

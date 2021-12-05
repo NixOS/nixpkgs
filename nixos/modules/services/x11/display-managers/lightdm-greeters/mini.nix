@@ -8,8 +8,7 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.mini;
 
-  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf"
-    ''
+  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf" ''
     [greeter]
     user = ${cfg.user}
     show-password-label = true
@@ -44,10 +43,9 @@ let
     password-border-width = 2px
 
     ${cfg.extraConfig}
-    '';
+  '';
 
-in
-{
+in {
   options = {
 
     services.xserver.displayManager.lightdm.greeters.mini = {
@@ -94,7 +92,8 @@ in
       name = "lightdm-mini-greeter";
     };
 
-    environment.etc."lightdm/lightdm-mini-greeter.conf".source = miniGreeterConf;
+    environment.etc."lightdm/lightdm-mini-greeter.conf".source =
+      miniGreeterConf;
 
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/share/man/man1"
   '';
 
-  NIX_CFLAGS_COMPILE=" -Wno-error ";
+  NIX_CFLAGS_COMPILE = " -Wno-error ";
 
   meta = with lib; {
     description = "Attachment extractor for MIME messages";
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateInfo = {
-      downloadPage = "http://www.pldaniels.com/ripmime/";
-    };
+    updateInfo = { downloadPage = "http://www.pldaniels.com/ripmime/"; };
   };
 }

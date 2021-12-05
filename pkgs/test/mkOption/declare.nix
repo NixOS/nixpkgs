@@ -23,9 +23,7 @@ rec {
     # Can depends on more than one configuration.
     require = [ configC configD ];
 
-    optionB = pkgs.lib.mkOption {
-      default = false;
-    };
+    optionB = pkgs.lib.mkOption { default = false; };
 
     # Is not obliged to define other options.
   };
@@ -33,9 +31,7 @@ rec {
   configC = pkgs: this: {
     require = [ configA ];
 
-    optionC = pkgs.lib.mkOption {
-      default = false;
-    };
+    optionC = pkgs.lib.mkOption { default = false; };
 
     # Use the default value if it is not overwritten.
     optionA = this.optionC;

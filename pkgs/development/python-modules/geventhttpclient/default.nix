@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, backports_ssl_match_hostname
-, brotli
-, certifi
-, gevent
-, six
-, dpkt
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, backports_ssl_match_hostname
+, brotli, certifi, gevent, six, dpkt, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
@@ -20,19 +10,10 @@ buildPythonPackage rec {
     sha256 = "f3c5884d62be75162426728e3d86788740b13e363b197ef592f1443dba240709";
   };
 
-  propagatedBuildInputs = [
-    brotli
-    certifi
-    gevent
-    six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports_ssl_match_hostname
-  ];
+  propagatedBuildInputs = [ brotli certifi gevent six ]
+    ++ lib.optionals (pythonOlder "3.7") [ backports_ssl_match_hostname ];
 
-  checkInputs = [
-    dpkt
-    pytestCheckHook
-  ];
+  checkInputs = [ dpkt pytestCheckHook ];
 
   disabledTests = [
     # socket.gaierror: [Errno -2] Name or service not known

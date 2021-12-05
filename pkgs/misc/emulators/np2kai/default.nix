@@ -1,38 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, enable16Bit ? true
-, enable32Bit ? true
+{ stdenv, lib, fetchFromGitHub, enable16Bit ? true, enable32Bit ? true
 
-, enableSDL ? true
-, withSDLVersion ? "2"
-, SDL
-, SDL_ttf
-, SDL_mixer
-, SDL2
-, SDL2_ttf
-, SDL2_mixer
+, enableSDL ? true, withSDLVersion ? "2", SDL, SDL_ttf, SDL_mixer, SDL2
+, SDL2_ttf, SDL2_mixer
 
-, enableX11 ? stdenv.hostPlatform.isLinux
-, automake
-, autoconf
-, autoconf-archive
-, libtool
-, pkg-config
-, unzip
-, gtk2
-, libusb1
-, libXxf86vm
-, nasm
-, libICE
-, libSM
+, enableX11 ? stdenv.hostPlatform.isLinux, automake, autoconf, autoconf-archive
+, libtool, pkg-config, unzip, gtk2, libusb1, libXxf86vm, nasm, libICE, libSM
 
-  # HAXM build succeeds but the binary segfaults, seemingly due to the missing HAXM kernel module
-  # Enable once there is a HAXM kernel module option in NixOS? Or somehow bind it to the system kernel having HAXM?
-  # Or leave it disabled by default?
-  # https://github.com/intel/haxm/blob/master/docs/manual-linux.md
-, enableHAXM ? false
-}:
+# HAXM build succeeds but the binary segfaults, seemingly due to the missing HAXM kernel module
+# Enable once there is a HAXM kernel module option in NixOS? Or somehow bind it to the system kernel having HAXM?
+# Or leave it disabled by default?
+# https://github.com/intel/haxm/blob/master/docs/manual-linux.md
+, enableHAXM ? false }:
 
 assert lib.assertMsg (enable16Bit || enable32Bit)
   "Must enable 16-Bit and/or 32-Bit system variant.";
@@ -46,74 +24,54 @@ let
   inherit (lib.strings) concatStringsSep concatMapStringsSep;
   isSDL2 = (withSDLVersion == "2");
   sdlInfix = optionalString isSDL2 "2";
-  sdlDeps1 = [
-    SDL
-    SDL_ttf
-    SDL_mixer
-  ];
-  sdlDeps2 = [
-    SDL2
-    SDL2_ttf
-    SDL2_mixer
-  ];
+  sdlDeps1 = [ SDL SDL_ttf SDL_mixer ];
+  sdlDeps2 = [ SDL2 SDL2_ttf SDL2_mixer ];
   sdlDepsBuildonly = if isSDL2 then sdlDeps1 else sdlDeps2;
   sdlDepsTarget = if isSDL2 then sdlDeps2 else sdlDeps1;
-  sdlMakefileSuffix =
-    if stdenv.hostPlatform.isWindows then "win"
-    else if stdenv.hostPlatform.isDarwin then "mac"
-    else "unix";
+  sdlMakefileSuffix = if stdenv.hostPlatform.isWindows then
+    "win"
+  else if stdenv.hostPlatform.isDarwin then
+    "mac"
+  else
+    "unix";
   sdlMakefiles = concatMapStringsSep " " (x: x + "." + sdlMakefileSuffix)
-    (optionals enable16Bit [
-      "Makefile"
-    ] ++ optionals enable32Bit [
-      "Makefile21"
-    ]);
+    (optionals enable16Bit [ "Makefile" ]
+      ++ optionals enable32Bit [ "Makefile21" ]);
   sdlBuildFlags = concatStringsSep " "
-    (optionals enableSDL [
-      "SDL_VERSION=${withSDLVersion}"
-    ]);
+    (optionals enableSDL [ "SDL_VERSION=${withSDLVersion}" ]);
   sdlBins = concatStringsSep " "
-    (optionals enable16Bit [
-      "np2kai"
-    ] ++ optionals enable32Bit [
-      "np21kai"
-    ]);
+    (optionals enable16Bit [ "np2kai" ] ++ optionals enable32Bit [ "np21kai" ]);
   x11ConfigureFlags = concatStringsSep " "
-    ((
-      if ((enableHAXM && (enable16Bit || enable32Bit)) || (enable16Bit && enable32Bit)) then [
-        "--enable-build-all"
-      ] else if enableHAXM then [
-        "--enable-haxm"
-      ] else if enable32Bit then [
-        "--enable-ia32"
-      ] else [ ]
-    ) ++ optionals (!isSDL2) [
-      "--enable-sdl"
-      "--enable-sdlmixer"
-      "--enable-sdlttf"
+    ((if ((enableHAXM && (enable16Bit || enable32Bit))
+      || (enable16Bit && enable32Bit)) then
+      [ "--enable-build-all" ]
+    else if enableHAXM then
+      [ "--enable-haxm" ]
+    else if enable32Bit then
+      [ "--enable-ia32" ]
+    else
+      [ ]) ++ optionals (!isSDL2) [
+        "--enable-sdl"
+        "--enable-sdlmixer"
+        "--enable-sdlttf"
 
-      "--enable-sdl2=no"
-      "--enable-sdl2mixer=no"
-      "--enable-sdl2ttf=no"
-    ]);
+        "--enable-sdl2=no"
+        "--enable-sdl2mixer=no"
+        "--enable-sdl2ttf=no"
+      ]);
   x11BuildFlags = concatStringsSep " " [
     "SDL2_CONFIG=sdl2-config"
     "SDL_CONFIG=sdl-config"
-    "SDL_CFLAGS=\"$(sdl${sdlInfix}-config --cflags)\""
-    "SDL_LIBS=\"$(sdl${sdlInfix}-config --libs) -lSDL${sdlInfix}_mixer -lSDL${sdlInfix}_ttf\""
+    ''SDL_CFLAGS="$(sdl${sdlInfix}-config --cflags)"''
+    ''
+      SDL_LIBS="$(sdl${sdlInfix}-config --libs) -lSDL${sdlInfix}_mixer -lSDL${sdlInfix}_ttf"''
   ];
-  x11Bins = concatStringsSep " "
-    (optionals enable16Bit [
-      "xnp2kai"
-    ] ++ optionals enable32Bit [
-      "xnp21kai"
-    ] ++ optionals enableHAXM [
-      "xnp21kai_haxm"
-    ]);
-in
-stdenv.mkDerivation rec {
+  x11Bins = concatStringsSep " " (optionals enable16Bit [ "xnp2kai" ]
+    ++ optionals enable32Bit [ "xnp21kai" ]
+    ++ optionals enableHAXM [ "xnp21kai_haxm" ]);
+in stdenv.mkDerivation rec {
   pname = "np2kai";
-  version = "0.86rev22"; #update src.rev to commit rev accordingly
+  version = "0.86rev22"; # update src.rev to commit rev accordingly
 
   src = fetchFromGitHub rec {
     owner = "AZO234";
@@ -134,8 +92,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
 
-  nativeBuildInputs = sdlDepsBuildonly
-    ++ optionals enableX11 [
+  nativeBuildInputs = sdlDepsBuildonly ++ optionals enableX11 [
     automake
     autoconf
     autoconf-archive
@@ -146,13 +103,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = sdlDepsTarget
-    ++ optionals enableX11 [
-    gtk2
-    libICE
-    libSM
-    libusb1
-    libXxf86vm
-  ];
+    ++ optionals enableX11 [ gtk2 libICE libSM libusb1 libXxf86vm ];
 
   enableParallelBuilding = true;
 

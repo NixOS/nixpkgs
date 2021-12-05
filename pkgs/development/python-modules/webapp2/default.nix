@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webob
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, webob, six }:
 
 buildPythonPackage rec {
   pname = "webapp2";

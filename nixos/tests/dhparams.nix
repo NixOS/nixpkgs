@@ -57,86 +57,88 @@ in import ./make-test-python.nix {
   nodes.generation5 = {
     imports = [ common ];
     security.dhparams.defaultBitSize = 30;
-    security.dhparams.params.foo3 = {};
-    security.dhparams.params.bar3 = {};
+    security.dhparams.params.foo3 = { };
+    security.dhparams.params.bar3 = { };
   };
 
-  testScript = { nodes, ... }: let
-    getParamPath = gen: name: let
-      node = "generation${toString gen}";
-    in nodes.${node}.config.security.dhparams.params.${name}.path;
+  testScript = { nodes, ... }:
+    let
+      getParamPath = gen: name:
+        let node = "generation${toString gen}";
+        in nodes.${node}.config.security.dhparams.params.${name}.path;
 
-    switchToGeneration = gen: let
-      node = "generation${toString gen}";
-      inherit (nodes.${node}.config.system.build) toplevel;
-      switchCmd = "${toplevel}/bin/switch-to-configuration test";
+      switchToGeneration = gen:
+        let
+          node = "generation${toString gen}";
+          inherit (nodes.${node}.config.system.build) toplevel;
+          switchCmd = "${toplevel}/bin/switch-to-configuration test";
+        in ''
+          with machine.nested("switch to generation ${toString gen}"):
+              machine.succeed(
+                  "${switchCmd}"
+              )
+              machine = ${node}
+        '';
+
     in ''
-      with machine.nested("switch to generation ${toString gen}"):
-          machine.succeed(
-              "${switchCmd}"
+      import re
+
+
+      def assert_param_bits(path, bits):
+          with machine.nested(f"check bit size of {path}"):
+              output = machine.succeed(f"openssl dhparam -in {path} -text")
+              pattern = re.compile(r"^\s*DH Parameters:\s+\((\d+)\s+bit\)\s*$", re.M)
+              match = pattern.match(output)
+              if match is None:
+                  raise Exception("bla")
+              if match[1] != str(bits):
+                  raise Exception(f"bit size should be {bits} but it is {match[1]} instead.")
+
+
+      machine = generation1
+
+      machine.wait_for_unit("multi-user.target")
+
+      with subtest("verify startup order"):
+          machine.succeed("systemctl is-active foo.service")
+
+      with subtest("check bit sizes of dhparam files"):
+          assert_param_bits("${getParamPath 1 "foo"}", 16)
+          assert_param_bits("${getParamPath 1 "bar"}", 17)
+
+      ${switchToGeneration 2}
+
+      with subtest("check whether bit size has changed"):
+          assert_param_bits("${getParamPath 2 "foo"}", 18)
+
+      with subtest("ensure that dhparams file for 'bar' was deleted"):
+          machine.fail("test -e ${getParamPath 1 "bar"}")
+
+      ${switchToGeneration 3}
+
+      with subtest("ensure that 'security.dhparams.path' has been deleted"):
+          machine.fail("test -e ${nodes.generation3.config.security.dhparams.path}")
+
+      ${switchToGeneration 4}
+
+      with subtest("check bit sizes dhparam files"):
+          assert_param_bits(
+              "${getParamPath 4 "foo2"}", 18
           )
-          machine = ${node}
+          assert_param_bits(
+              "${getParamPath 4 "bar2"}", 19
+          )
+
+      with subtest("check whether dhparam files are in the Nix store"):
+          machine.succeed(
+              "expr match ${getParamPath 4 "foo2"} ${builtins.storeDir}",
+              "expr match ${getParamPath 4 "bar2"} ${builtins.storeDir}",
+          )
+
+      ${switchToGeneration 5}
+
+      with subtest("check whether defaultBitSize works as intended"):
+          assert_param_bits("${getParamPath 5 "foo3"}", 30)
+          assert_param_bits("${getParamPath 5 "bar3"}", 30)
     '';
-
-  in ''
-    import re
-
-
-    def assert_param_bits(path, bits):
-        with machine.nested(f"check bit size of {path}"):
-            output = machine.succeed(f"openssl dhparam -in {path} -text")
-            pattern = re.compile(r"^\s*DH Parameters:\s+\((\d+)\s+bit\)\s*$", re.M)
-            match = pattern.match(output)
-            if match is None:
-                raise Exception("bla")
-            if match[1] != str(bits):
-                raise Exception(f"bit size should be {bits} but it is {match[1]} instead.")
-
-
-    machine = generation1
-
-    machine.wait_for_unit("multi-user.target")
-
-    with subtest("verify startup order"):
-        machine.succeed("systemctl is-active foo.service")
-
-    with subtest("check bit sizes of dhparam files"):
-        assert_param_bits("${getParamPath 1 "foo"}", 16)
-        assert_param_bits("${getParamPath 1 "bar"}", 17)
-
-    ${switchToGeneration 2}
-
-    with subtest("check whether bit size has changed"):
-        assert_param_bits("${getParamPath 2 "foo"}", 18)
-
-    with subtest("ensure that dhparams file for 'bar' was deleted"):
-        machine.fail("test -e ${getParamPath 1 "bar"}")
-
-    ${switchToGeneration 3}
-
-    with subtest("ensure that 'security.dhparams.path' has been deleted"):
-        machine.fail("test -e ${nodes.generation3.config.security.dhparams.path}")
-
-    ${switchToGeneration 4}
-
-    with subtest("check bit sizes dhparam files"):
-        assert_param_bits(
-            "${getParamPath 4 "foo2"}", 18
-        )
-        assert_param_bits(
-            "${getParamPath 4 "bar2"}", 19
-        )
-
-    with subtest("check whether dhparam files are in the Nix store"):
-        machine.succeed(
-            "expr match ${getParamPath 4 "foo2"} ${builtins.storeDir}",
-            "expr match ${getParamPath 4 "bar2"} ${builtins.storeDir}",
-        )
-
-    ${switchToGeneration 5}
-
-    with subtest("check whether defaultBitSize works as intended"):
-        assert_param_bits("${getParamPath 5 "foo3"}", 30)
-        assert_param_bits("${getParamPath 5 "bar3"}", 30)
-  '';
 }

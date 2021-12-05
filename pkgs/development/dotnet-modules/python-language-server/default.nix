@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, autoPatchelfHook
-, openssl
-, icu
-}:
+{ lib, stdenv, fetchFromGitHub, buildDotnetModule, dotnetCorePackages
+, autoPatchelfHook, openssl, icu }:
 
 buildDotnetModule rec {
   pname = "python-language-server";
@@ -19,7 +12,8 @@ buildDotnetModule rec {
     sha256 = "1m8pf9k20wy4fzv27v3bswvc8s01ag6ka2qm9nn6bgq0s0lq78mh";
   };
 
-  projectFile = "src/LanguageServer/Impl/Microsoft.Python.LanguageServer.csproj";
+  projectFile =
+    "src/LanguageServer/Impl/Microsoft.Python.LanguageServer.csproj";
   nugetDeps = ./deps.nix;
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;

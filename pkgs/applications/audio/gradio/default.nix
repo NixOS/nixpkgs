@@ -1,22 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, python3
-, gsettings-desktop-schemas
-, desktop-file-utils
-, glib
-, gtk3
-, intltool
-, libsoup
-, json-glib
-, wrapGAppsHook
-, meson
-, ninja
-, vala
-, sqlite
-, gst_all_1
-, gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
-}:
-let
-  version = "7.3";
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3, gsettings-desktop-schemas
+, desktop-file-utils, glib, gtk3, intltool, libsoup, json-glib, wrapGAppsHook
+, meson, ninja, vala, sqlite, gst_all_1
+, gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ] }:
+let version = "7.3";
 
 in stdenv.mkDerivation {
   pname = "gradio";
@@ -63,7 +49,8 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/haecker-felix/gradio";
-    description = "A GTK3 app for finding and listening to internet radio stations";
+    description =
+      "A GTK3 app for finding and listening to internet radio stations";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.samdroid-apps ];

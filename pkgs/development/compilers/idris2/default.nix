@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, clang
-, chez
-, gmp
-, zsh
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, clang, chez, gmp, zsh }:
 
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
 
@@ -35,8 +27,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build tests
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional stdenv.isDarwin "OS=";
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional stdenv.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [ "bootstrap" "SCHEME=scheme" ];
@@ -83,7 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A purely functional programming language with first class types";
+    description =
+      "A purely functional programming language with first class types";
     homepage = "https://github.com/idris-lang/Idris2";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fabianhjr wchresta ];

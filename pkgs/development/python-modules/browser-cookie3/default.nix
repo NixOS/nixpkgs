@@ -1,13 +1,5 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, lz4
-, keyring
-, pbkdf2
-, pycryptodome
-, pyaes
-}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, lz4, keyring, pbkdf2, pycryptodome
+, pyaes }:
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
@@ -20,20 +12,12 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [
-    lz4
-    keyring
-    pbkdf2
-    pyaes
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ lz4 keyring pbkdf2 pyaes pycryptodome ];
 
   # No tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "browser_cookie3"
-  ];
+  pythonImportsCheck = [ "browser_cookie3" ];
 
   meta = with lib; {
     description = "Loads cookies from your browser into a cookiejar object";

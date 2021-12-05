@@ -1,21 +1,32 @@
-{ lib, stdenv, fetchurl, meson, ninja, glib, json-glib, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome }:
+{ lib, stdenv, fetchurl, meson, ninja, glib, json-glib, pkg-config
+, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome
+}:
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
   version = "3.40.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
   buildInputs = [ glib json-glib ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "wuPRYlfHJmzTkBiE4iN1V1v2Go4fZ1lsiODYeucNDvQ=";
   };
 
-  mesonFlags = [
-    "-Denable_gtk_doc=true"
-  ];
+  mesonFlags = [ "-Denable_gtk_doc=true" ];
 
   # Tests fail non-deterministically
   # https://gitlab.gnome.org/GNOME/jsonrpc-glib/issues/2
@@ -29,7 +40,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to communicate using the JSON-RPC 2.0 specification";
+    description =
+      "A library to communicate using the JSON-RPC 2.0 specification";
     homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

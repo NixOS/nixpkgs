@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, six
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, six, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "whisper";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "11f7sarj62zgpw3ak4a2q55lj7ap4039l9ybc3a6yvs1ppvrcn7x";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   disabledTests = [
     # whisper-resize.py: not found

@@ -1,5 +1,4 @@
-{ stdenv, glibc, flex, bison, cmake
-, version, src, meta }:
+{ stdenv, glibc, flex, bison, cmake, version, src, meta }:
 stdenv.mkDerivation {
   pname = "scyther-cli";
   inherit version;

@@ -1,19 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, bison
-, pkg-config
-, gettext
-, desktop-file-utils
-, glib
-, gtk2
-, libxml2
-, libbfd
-, zlib
-, binutils
-, gnutls
-, enableGui ? true
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, pkg-config, gettext
+, desktop-file-utils, glib, gtk2, libxml2, libbfd, zlib, binutils, gnutls
+, enableGui ? true }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-gnutella";
@@ -26,31 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Hk5KPXSJ2s0J/stW3Qgvu6p6RG5VCvuWx1UlMR+3JO4=";
   };
 
-  nativeBuildInputs = [
-    bison
-    desktop-file-utils
-    gettext
-    pkg-config
-  ];
-  buildInputs = [
-    glib
-    gnutls
-    libbfd
-    libxml2
-    zlib
-  ]
-  ++
-    lib.optionals (enableGui) [ gtk2 ]
-  ;
+  nativeBuildInputs = [ bison desktop-file-utils gettext pkg-config ];
+  buildInputs = [ glib gnutls libbfd libxml2 zlib ]
+    ++ lib.optionals (enableGui) [ gtk2 ];
 
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
     # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
     "--disable-malloc"
-  ]
-    ++ lib.optionals (!enableGui) [ "--topless" ]
-  ;
+  ] ++ lib.optionals (!enableGui) [ "--topless" ];
 
   enableParallelBuilding = true;
 
@@ -60,8 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A GTK Gnutella client, optimized for speed and scalability";
-    homepage = "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
-    changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";
+    homepage =
+      "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
+    changelog =
+      "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";
     maintainers = [ maintainers.doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pythonOlder
-, pyserial
-}:
+{ lib, buildPythonPackage, colorlog, fetchPypi, pythonOlder, pyserial }:
 
 buildPythonPackage rec {
   pname = "pypca";
@@ -16,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "0y0p2rm22x21mykipiv42fjc79b0969qsbhk3cqkrdnqwh5psbdl";
   };
 
-  propagatedBuildInputs = [
-    colorlog
-    pyserial
-  ];
+  propagatedBuildInputs = [ colorlog pyserial ];
 
   # Project has no tests
   doCheck = false;

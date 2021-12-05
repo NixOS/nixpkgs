@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam, nixosTests
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, bison, libasr, libevent
+, zlib, libressl, db, pam, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
@@ -45,10 +44,7 @@ stdenv.mkDerivation rec {
   # See https://github.com/OpenSMTPD/OpenSMTPD/pull/884
   makeFlags = [ "CFLAGS=-ffunction-sections" "LDFLAGS=-Wl,--gc-sections" ];
 
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-    "localstatedir=\${TMPDIR}"
-  ];
+  installFlags = [ "sysconfdir=\${out}/etc" "localstatedir=\${TMPDIR}" ];
 
   meta = with lib; {
     homepage = "https://www.opensmtpd.org/";

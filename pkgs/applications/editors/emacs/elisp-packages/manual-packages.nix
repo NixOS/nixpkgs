@@ -1,7 +1,9 @@
-{ lib, pkgs }: self: with self; with lib.licenses; {
+{ lib, pkgs }:
+self:
+with self;
+with lib.licenses; {
 
-  elisp-ffi = let
-    rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
+  elisp-ffi = let rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
   in melpaBuild {
     pname = "elisp-ffi";
     version = "20170518.0";
@@ -59,44 +61,43 @@
     fileSpecs = [ "elisp/*.el" ];
 
     meta = {
-      description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
+      description =
+        "An extension of haskell-mode that provides completion of symbols and documentation browsing";
       license = bsd3;
     };
   };
 
-  haskell-unicode-input-method = let
-    rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+  haskell-unicode-input-method =
+    let rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+    in melpaBuild {
+      pname = "haskell-unicode-input-method";
+      version = "20110905.2307";
+
+      commit = rev;
+
+      src = pkgs.fetchFromGitHub {
+        owner = "roelvandijk";
+        repo = "emacs-haskell-unicode-input-method";
+        inherit rev;
+        sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
+      };
+
+      recipe = pkgs.writeText "recipe" ''
+        (haskell-unicode-input-method
+         :repo "roelvandijk/emacs-haskell-unicode-input-method"
+         :fetcher github)
+      '';
+
+      packageRequires = [ ];
+
+      meta = {
+        homepage = "https://melpa.org/#haskell-unicode-input-method/";
+        license = lib.licenses.free;
+      };
+    };
+
+  matrix-client = let rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
   in melpaBuild {
-    pname = "haskell-unicode-input-method";
-    version = "20110905.2307";
-
-    commit = rev;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "roelvandijk";
-      repo = "emacs-haskell-unicode-input-method";
-      inherit rev;
-      sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
-    };
-
-    recipe = pkgs.writeText "recipe" ''
-      (haskell-unicode-input-method
-       :repo "roelvandijk/emacs-haskell-unicode-input-method"
-       :fetcher github)
-    '';
-
-    packageRequires = [];
-
-    meta = {
-      homepage = "https://melpa.org/#haskell-unicode-input-method/";
-      license = lib.licenses.free;
-    };
-  };
-
-  matrix-client = let
-    rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
-  in melpaBuild
-  {
     pname = "matrix-client";
     version = "0.3.0";
 
@@ -112,7 +113,8 @@
     patches = [
       # Fix: avatar loading when imagemagick support is not available
       (pkgs.fetchpatch {
-        url = "https://github.com/alphapapa/matrix-client.el/commit/5f49e615c7cf2872f48882d3ee5c4a2bff117d07.patch";
+        url =
+          "https://github.com/alphapapa/matrix-client.el/commit/5f49e615c7cf2872f48882d3ee5c4a2bff117d07.patch";
         sha256 = "07bvid7s1nv1377p5n61q46yww3m1w6bw4vnd4iyayw3fby1lxbm";
       })
     ];
@@ -150,7 +152,7 @@
 
   agda2-mode = callPackage ./agda2-mode { };
 
-  agda-input = callPackage ./agda-input{ };
+  agda-input = callPackage ./agda-input { };
 
   bqn-mode = callPackage ./bqn-mode { };
 

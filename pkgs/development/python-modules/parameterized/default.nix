@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, isPy3k
-, mock
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, isPy3k, mock, nose }:
 
 buildPythonPackage rec {
   pname = "parameterized";
@@ -17,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
   };
 
-  checkInputs = [
-    nose
-    mock
-    glibcLocales
-  ];
+  checkInputs = [ nose mock glibcLocales ];
 
   checkPhase = ''
     runHook preCheck

@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.4.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${version}.tar.bz2";
+    url =
+      "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${version}.tar.bz2";
     sha256 = "0cbs1w89q8wfjrrhvxf6xk0y02nkjl5hd0yb692c8ma01i6b2nf6";
   };
 
@@ -15,10 +16,7 @@ stdenv.mkDerivation rec {
     sed -e "/ldconfig/d" -i ./Makefile
   '';
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "SUFFIX=''"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "SUFFIX=''" ];
 
   preInstall = ''
     # The Makefile does not create the include and lib directories
@@ -32,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Zita thread library";
-    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
+    homepage =
+      "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

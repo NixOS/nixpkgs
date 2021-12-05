@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, gettext
-, autoreconfHook
-, gmp
-, mpfr
+{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, autoreconfHook, gmp, mpfr
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "00iyz218ywspizjiimrjdcqvdqmrsb2367zyy3vkmypnf9i9l680";
   };
 
-  nativeBuildInputs = [
-    gettext
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ gettext autoreconfHook ];
 
-  buildInputs = [
-    gmp
-    mpfr
-  ];
+  buildInputs = [ gmp mpfr ];
 
   meta = with lib; {
     description = "Lattice algorithms using floating-point arithmetic";

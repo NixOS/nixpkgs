@@ -30,9 +30,7 @@ let
     ${cfg.extraConfig}
   '';
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -100,7 +98,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.aerospike.enable {
@@ -120,7 +117,8 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/asd --fgdaemon --config-file ${aerospikeConf}";
+        ExecStart =
+          "${cfg.package}/bin/asd --fgdaemon --config-file ${aerospikeConf}";
         User = "aerospike";
         Group = "aerospike";
         LimitNOFILE = 100000;

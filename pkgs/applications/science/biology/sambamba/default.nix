@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # make ldc 1.27.1 compatible
     (fetchpatch {
-      url = "https://github.com/biod/sambamba/pull/480/commits/b5c80feb62683d24ec0529f685a1d7a36962a1d4.patch";
+      url =
+        "https://github.com/biod/sambamba/pull/480/commits/b5c80feb62683d24ec0529f685a1d7a36962a1d4.patch";
       sha256 = "0yr9baxqbhyb4scwcwczk77z8gazhkl60jllhz9dnrb7p5qsvs7r";
     })
   ];

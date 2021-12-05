@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pep8
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pep8 }:
 
 buildPythonPackage rec {
   pname = "tissue";

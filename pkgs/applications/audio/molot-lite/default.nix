@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Stereo and mono audio signal dynamic range compressor in LV2 format";
+    description =
+      "Stereo and mono audio signal dynamic range compressor in LV2 format";
     homepage = "https://github.com/magnetophon/molot-lite";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];

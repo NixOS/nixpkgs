@@ -14,11 +14,10 @@ let
     before = paths-nixos.conf
 
     ${concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
-      optionalString (def != "")
-        ''
-          [${name}]
-          ${def}
-        '')))}
+      optionalString (def != "") ''
+        [${name}]
+        ${def}
+      '')))}
   '';
 
   pathsConf = pkgs.writeText "paths-nixos.conf" ''
@@ -33,9 +32,7 @@ let
     [DEFAULT]
   '';
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -58,7 +55,8 @@ in
         defaultText = literalExpression "pkgs.fail2ban";
         type = types.package;
         example = literalExpression "pkgs.fail2ban_0_11";
-        description = "The fail2ban package to use for running the fail2ban service.";
+        description =
+          "The fail2ban package to use for running the fail2ban service.";
       };
 
       packageFirewall = mkOption {
@@ -70,7 +68,7 @@ in
       };
 
       extraPackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = lib.literalExpression "[ pkgs.ipset ]";
         description = ''
@@ -146,9 +144,11 @@ in
       };
 
       bantime-increment.formula = mkOption {
-        default = "ban.Time * (1<<(ban.Count if ban.Count<20 else 20)) * banFactor";
+        default =
+          "ban.Time * (1<<(ban.Count if ban.Count<20 else 20)) * banFactor";
         type = types.str;
-        example = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
+        example =
+          "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
         description = ''
           "bantime-increment.formula" used by default to calculate next value of ban time, default value bellow,
           the same ban time growing will be reached by multipliers 1, 2, 4, 8, 16, 32...
@@ -199,7 +199,7 @@ in
         description = ''
           The contents of Fail2ban's main configuration file.  It's
           generally not necessary to change it.
-       '';
+        '';
       };
 
       jails = mkOption {
@@ -248,21 +248,25 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
-      "fail2ban can not be used without a firewall"
-    ];
+    warnings = mkIf (config.networking.firewall.enable == false
+      && config.networking.nftables.enable == false)
+      [ "fail2ban can not be used without a firewall" ];
 
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = {
       "fail2ban/fail2ban.local".source = fail2banConf;
       "fail2ban/jail.local".source = jailConf;
-      "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
+      "fail2ban/fail2ban.conf".source =
+        "${cfg.package}/etc/fail2ban/fail2ban.conf";
       "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
-      "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
+      "fail2ban/paths-common.conf".source =
+        "${cfg.package}/etc/fail2ban/paths-common.conf";
       "fail2ban/paths-nixos.conf".source = pathsConf;
-      "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
-      "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+      "fail2ban/action.d".source =
+        "${cfg.package}/etc/fail2ban/action.d/*.conf";
+      "fail2ban/filter.d".source =
+        "${cfg.package}/etc/fail2ban/filter.d/*.conf";
     };
 
     systemd.services.fail2ban = {
@@ -274,7 +278,8 @@ in
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ]
+        ++ cfg.extraPackages;
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
@@ -286,7 +291,12 @@ in
         Restart = "on-failure";
         PIDFile = "/run/fail2ban/fail2ban.pid";
         # Capabilities
-        CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        CapabilityBoundingSet = [
+          "CAP_AUDIT_READ"
+          "CAP_DAC_READ_SEARCH"
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
         # Security
         NoNewPrivileges = true;
         # Directory
@@ -318,10 +328,14 @@ in
         bantime.factor       = ${cfg.bantime-increment.factor}
         bantime.formula      = ${cfg.bantime-increment.formula}
         bantime.multipliers  = ${cfg.bantime-increment.multipliers}
-        bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
+        bantime.overalljails = ${
+          boolToString cfg.bantime-increment.overalljails
+        }
       ''}
       # Miscellaneous options
-      ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
+      ignoreip    = 127.0.0.1/8 ${
+        optionalString config.networking.enableIPv6 "::1"
+      } ${concatStringsSep " " cfg.ignoreIP}
       maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
@@ -334,7 +348,9 @@ in
     services.openssh.logLevel = lib.mkDefault "VERBOSE";
     services.fail2ban.jails.sshd = mkDefault ''
       enabled = true
-      port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}
+      port    = ${
+        concatMapStringsSep "," (p: toString p) config.services.openssh.ports
+      }
     '';
   };
 }

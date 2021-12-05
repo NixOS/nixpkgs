@@ -1,74 +1,67 @@
-/*
-  This test runs podman as a backend for the Docker CLI.
- */
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+# This test runs podman as a backend for the Docker CLI.
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
-  let gen-ca = pkgs.writeScript "gen-ca" ''
-    # Create CA
-    PATH="${pkgs.openssl}/bin:$PATH"
-    openssl genrsa -out ca-key.pem 4096
-    openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem
+  let
+    gen-ca = pkgs.writeScript "gen-ca" ''
+      # Create CA
+      PATH="${pkgs.openssl}/bin:$PATH"
+      openssl genrsa -out ca-key.pem 4096
+      openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem
 
-    # Create service
-    openssl genrsa -out podman-key.pem 4096
-    openssl req -subj '/CN=podman' -sha256 -new -key podman-key.pem -out service.csr
-    echo subjectAltName = DNS:podman,IP:127.0.0.1 >> extfile.cnf
-    echo extendedKeyUsage = serverAuth >> extfile.cnf
-    openssl x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out podman-cert.pem -extfile extfile.cnf
+      # Create service
+      openssl genrsa -out podman-key.pem 4096
+      openssl req -subj '/CN=podman' -sha256 -new -key podman-key.pem -out service.csr
+      echo subjectAltName = DNS:podman,IP:127.0.0.1 >> extfile.cnf
+      echo extendedKeyUsage = serverAuth >> extfile.cnf
+      openssl x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out podman-cert.pem -extfile extfile.cnf
 
-    # Create client
-    openssl genrsa -out client-key.pem 4096
-    openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr
-    echo extendedKeyUsage = clientAuth > extfile-client.cnf
-    openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf
+      # Create client
+      openssl genrsa -out client-key.pem 4096
+      openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr
+      echo extendedKeyUsage = clientAuth > extfile-client.cnf
+      openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf
 
-    # Create CA 2
-    PATH="${pkgs.openssl}/bin:$PATH"
-    openssl genrsa -out ca-2-key.pem 4096
-    openssl req -new -x509 -days 365 -key ca-2-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca-2.pem
+      # Create CA 2
+      PATH="${pkgs.openssl}/bin:$PATH"
+      openssl genrsa -out ca-2-key.pem 4096
+      openssl req -new -x509 -days 365 -key ca-2-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca-2.pem
 
-    # Create client signed by CA 2
-    openssl genrsa -out client-2-key.pem 4096
-    openssl req -subj '/CN=client' -new -key client-2-key.pem -out client-2.csr
-    echo extendedKeyUsage = clientAuth > extfile-client.cnf
-    openssl x509 -req -days 365 -sha256 -in client-2.csr -CA ca-2.pem -CAkey ca-2-key.pem -CAcreateserial -out client-2-cert.pem -extfile extfile-client.cnf
+      # Create client signed by CA 2
+      openssl genrsa -out client-2-key.pem 4096
+      openssl req -subj '/CN=client' -new -key client-2-key.pem -out client-2.csr
+      echo extendedKeyUsage = clientAuth > extfile-client.cnf
+      openssl x509 -req -days 365 -sha256 -in client-2.csr -CA ca-2.pem -CAkey ca-2-key.pem -CAcreateserial -out client-2-cert.pem -extfile extfile-client.cnf
 
     '';
-  in
-  {
+  in {
     name = "podman-tls-ghostunnel";
     meta = {
       maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];
     };
 
     nodes = {
-      podman =
-        { pkgs, ... }:
-        {
-          virtualisation.podman.enable = true;
-          virtualisation.podman.dockerSocket.enable = true;
-          virtualisation.podman.networkSocket = {
-            enable = true;
-            openFirewall = true;
-            server = "ghostunnel";
-            tls.cert = "/root/podman-cert.pem";
-            tls.key = "/root/podman-key.pem";
-            tls.cacert = "/root/ca.pem";
-          };
-
-          environment.systemPackages = [
-            pkgs.docker-client
-          ];
-
-          users.users.alice = {
-            isNormalUser = true;
-            home = "/home/alice";
-            description = "Alice Foobar";
-            extraGroups = ["podman"];
-          };
-
+      podman = { pkgs, ... }: {
+        virtualisation.podman.enable = true;
+        virtualisation.podman.dockerSocket.enable = true;
+        virtualisation.podman.networkSocket = {
+          enable = true;
+          openFirewall = true;
+          server = "ghostunnel";
+          tls.cert = "/root/podman-cert.pem";
+          tls.key = "/root/podman-key.pem";
+          tls.cacert = "/root/ca.pem";
         };
+
+        environment.systemPackages = [ pkgs.docker-client ];
+
+        users.users.alice = {
+          isNormalUser = true;
+          home = "/home/alice";
+          description = "Alice Foobar";
+          extraGroups = [ "podman" ];
+        };
+
+      };
 
       client = { ... }: {
         environment.systemPackages = [
@@ -146,5 +139,4 @@ import ./make-test-python.nix (
           client.fail("docker version")
 
     '';
-  }
-)
+  })

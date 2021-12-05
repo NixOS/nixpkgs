@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pillow
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, pillow }:
 
 buildPythonPackage rec {
   pname = "ev3dev2";

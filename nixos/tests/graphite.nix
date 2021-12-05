@@ -1,27 +1,26 @@
-import ./make-test-python.nix ({ pkgs, ... } :
-{
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "graphite";
   nodes = {
-    one =
-      { ... }: {
-        time.timeZone = "UTC";
-        services.graphite = {
-          web = {
-            enable = true;
-            extraConfig = ''
-              SECRET_KEY = "abcd";
-            '';
-          };
-          api = {
-            enable = true;
-            port = 8082;
-            finders = [ ];
-          };
-          carbon.enableCache = true;
-          seyren.enable = false;  # Implicitely requires openssl-1.0.2u which is marked insecure
-          beacon.enable = true;
+    one = { ... }: {
+      time.timeZone = "UTC";
+      services.graphite = {
+        web = {
+          enable = true;
+          extraConfig = ''
+            SECRET_KEY = "abcd";
+          '';
         };
+        api = {
+          enable = true;
+          port = 8082;
+          finders = [ ];
+        };
+        carbon.enableCache = true;
+        seyren.enable =
+          false; # Implicitely requires openssl-1.0.2u which is marked insecure
+        beacon.enable = true;
       };
+    };
   };
 
   testScript = ''

@@ -1,17 +1,6 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, responses
-, rich
-}:
+{ lib, backoff, buildPythonPackage, fetchFromGitHub, importlib-metadata
+, parameterized, poetry-core, pytestCheckHook, pythonOlder, requests
+, requests-mock, responses, rich }:
 
 buildPythonPackage rec {
   pname = "censys";
@@ -27,24 +16,12 @@ buildPythonPackage rec {
     sha256 = "sha256-qh3Z8Gza8J3OEM94GguJ+oEdVle01Gx1m/7+LCOErKY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    backoff
-    requests
-    rich
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ backoff requests rich ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    parameterized
-    pytestCheckHook
-    requests-mock
-    responses
-  ];
+  checkInputs = [ parameterized pytestCheckHook requests-mock responses ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

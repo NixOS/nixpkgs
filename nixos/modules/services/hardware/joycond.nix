@@ -3,9 +3,8 @@
 let
   cfg = config.services.joycond;
   kernelPackages = config.boot.kernelPackages;
-in
 
-with lib;
+in with lib;
 
 {
   options.services.joycond = {
@@ -22,10 +21,7 @@ with lib;
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      kernelPackages.hid-nintendo
-      cfg.package
-    ];
+    environment.systemPackages = [ kernelPackages.hid-nintendo cfg.package ];
 
     boot.extraModulePackages = [ kernelPackages.hid-nintendo ];
     boot.kernelModules = [ "hid_nintendo" ];

@@ -11,10 +11,19 @@ python3Packages.buildPythonApplication rec {
     sha256 = "042fvkvranfnv2xxxz9d92cgia14p1hwmpjgm0rr94pjd36n1sfs";
   };
 
-  checkInputs = [ which ] ++ (with python3Packages; [ cython pytest pytest-trio ]);
+  checkInputs = [ which ]
+    ++ (with python3Packages; [ cython pytest pytest-trio ]);
   propagatedBuildInputs = with python3Packages; [
-    sqlite apsw pycrypto requests defusedxml dugong
-    google-auth google-auth-oauthlib trio pyfuse3
+    sqlite
+    apsw
+    pycrypto
+    requests
+    defusedxml
+    dugong
+    google-auth
+    google-auth-oauthlib
+    trio
+    pyfuse3
   ];
 
   preBuild = ''

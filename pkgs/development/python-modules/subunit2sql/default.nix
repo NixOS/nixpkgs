@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oslo-concurrency
-, oslo-db
-, pbr
-, python-dateutil
-, stestr
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, oslo-concurrency, oslo-db, pbr
+, python-dateutil, stestr }:
 
 buildPythonPackage rec {
   pname = "subunit2sql";
@@ -18,17 +10,9 @@ buildPythonPackage rec {
     sha256 = "sha256-c+Dg6moKiv30M0mmwGQSOEbc94gfH//ZnF7lnBgv8EU=";
   };
 
-  propagatedBuildInputs = [
-    oslo-db
-    pbr
-    python-dateutil
-  ];
+  propagatedBuildInputs = [ oslo-db pbr python-dateutil ];
 
-  checkInputs = [
-    mock
-    oslo-concurrency
-    stestr
-  ];
+  checkInputs = [ mock oslo-concurrency stestr ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
@@ -47,7 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "subunit2sql" ];
 
   meta = with lib; {
-    description = "Command to Read a subunit file or stream and put the data in a SQL DB";
+    description =
+      "Command to Read a subunit file or stream and put the data in a SQL DB";
     homepage = "https://opendev.org/opendev/subunit2sql";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

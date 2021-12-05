@@ -17,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/jluttine/sphinx-bayesnet";
-    description = "Bayesian networks and factor graphs in Sphinx using TikZ syntax";
+    description =
+      "Bayesian networks and factor graphs in Sphinx using TikZ syntax";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jluttine ];
   };

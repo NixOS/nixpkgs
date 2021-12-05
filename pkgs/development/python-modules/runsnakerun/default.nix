@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, squaremap
-, wxPython
-}:
+{ lib, buildPythonPackage, fetchPypi, squaremap, wxPython }:
 
 buildPythonPackage rec {
   pname = "runsnakerun";

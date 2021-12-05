@@ -1,7 +1,5 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ system ? builtins.currentSystem, config ? { }
+, pkgs ? import ../.. { inherit system config; } }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -14,8 +12,7 @@ let
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
   };
-in
-{
+in {
   basic = makeTest {
     name = "systemd-boot";
     meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
@@ -46,7 +43,7 @@ in
 
     machine = { pkgs, lib, ... }: {
       imports = [ common ];
-      specialisation.something.configuration = {};
+      specialisation.something.configuration = { };
     };
 
     testScript = ''

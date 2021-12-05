@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, poetry-core }:
 
 buildPythonPackage rec {
   pname = "generic";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ex93I+ofo5lP6qoolZwzjxSspeqJimY3vpB32RLJ00k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   pythonImportsCheck = [ "generic" ];
 

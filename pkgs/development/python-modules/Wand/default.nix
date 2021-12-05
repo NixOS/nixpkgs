@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, imagemagickBig
-}:
+{ lib, buildPythonPackage, fetchPypi, imagemagickBig }:
 
 buildPythonPackage rec {
   pname = "Wand";

@@ -1,16 +1,15 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "service-runner";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ roberth ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ roberth ]; };
 
   nodes = {
     machine = { pkgs, lib, ... }: {
       services.nginx.enable = true;
-      services.nginx.virtualHosts.machine.root = pkgs.runCommand "webroot" {} ''
-        mkdir $out
-        echo 'yay' >$out/index.html
-      '';
+      services.nginx.virtualHosts.machine.root =
+        pkgs.runCommand "webroot" { } ''
+          mkdir $out
+          echo 'yay' >$out/index.html
+        '';
       systemd.services.nginx.enable = false;
     };
 

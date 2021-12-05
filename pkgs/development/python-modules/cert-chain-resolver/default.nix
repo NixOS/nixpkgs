@@ -1,10 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pytest-mock
-, cryptography
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytest-mock
+, cryptography }:
 
 buildPythonPackage rec {
   pname = "cert-chain-resolver";
@@ -29,7 +24,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
-    description = "Resolve / obtain the certificate intermediates of a x509 certificate";
+    description =
+      "Resolve / obtain the certificate intermediates of a x509 certificate";
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch ];
   };

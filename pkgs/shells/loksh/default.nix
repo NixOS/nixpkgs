@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, meson
-, ninja
-, pkg-config
-, ncurses
-, fetchFromGitHub
-}:
+{ lib, stdenv, meson, ninja, pkg-config, ncurses, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "loksh";
@@ -19,15 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x33plxqhh5202hgqidgccz5hpg8d2q71ylgnm437g60mfi9z0px";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   postInstall = ''
     mv $out/bin/ksh $out/bin/loksh
@@ -35,9 +22,7 @@ stdenv.mkDerivation rec {
     mv $out/share/man/man1/sh.1 $out/share/man/man1/loksh-sh.1
   '';
 
-  passthru = {
-    shellPath = "/bin/loksh";
-  };
+  passthru = { shellPath = "/bin/loksh"; };
 
   meta = with lib; {
     description = "Linux port of OpenBSD's ksh";

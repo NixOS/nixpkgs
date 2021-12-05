@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
-, help2man
-, glib-networking
-, gst_all_1
-, gtk3
-, luafilesystem
-, luajit
-, sqlite
-, webkitgtk
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook, help2man
+, glib-networking, gst_all_1, gtk3, luafilesystem, luajit, sqlite, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "luakit";
@@ -24,11 +12,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5YeJkbWk1wHxWXqWOvhEDeScWPU/aRVhuOWRHLSHVZM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    help2man
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config help2man wrapGAppsHook ];
   buildInputs = [
     gtk3
     glib-networking # TLS support
@@ -36,7 +20,7 @@ stdenv.mkDerivation rec {
     luajit
     sqlite
     webkitgtk
-  ] ++ ( with gst_all_1; [
+  ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
     gst-plugins-good
@@ -44,7 +28,6 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gst-libav
   ]);
-
 
   # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
   # TODO: why is not this the default? The test runner adds
@@ -75,7 +58,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://luakit.github.io/";
-    description = "Fast, small, webkit-based browser framework extensible in Lua";
+    description =
+      "Fast, small, webkit-based browser framework extensible in Lua";
     longDescription = ''
       Luakit is a highly configurable browser framework based on the WebKit web
       content engine and the GTK+ toolkit. It is very fast, extensible with Lua,
@@ -83,8 +67,8 @@ stdenv.mkDerivation rec {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    license     = licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

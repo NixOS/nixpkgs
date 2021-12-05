@@ -26,9 +26,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  passthru = {
-    tests.samba-wsdd = nixosTests.samba-wsdd;
-  };
+  passthru = { tests.samba-wsdd = nixosTests.samba-wsdd; };
 
   meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";

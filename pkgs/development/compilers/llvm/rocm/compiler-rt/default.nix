@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
-    "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+    "-DCMAKE_SIZEOF_VOID_P=${
+      toString (stdenv.hostPlatform.parsed.cpu.bits / 8)
+    }"
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -33,12 +35,12 @@ stdenv.mkDerivation rec {
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     (fetchpatch {
       name = "libsanitizer-no-cyclades-rocm.patch";
-      url = "https://gist.github.com/lovesegfault/b255dcf2fa4e202411a6a04b61e6cc04/raw";
+      url =
+        "https://gist.github.com/lovesegfault/b255dcf2fa4e202411a6a04b61e6cc04/raw";
       sha256 = "sha256-PMMSLr2zHuNDn1OWqumqHwB74ktJSHxhJWkqEKB7Z64=";
       stripLen = 1;
-     })
-    ];
-
+    })
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

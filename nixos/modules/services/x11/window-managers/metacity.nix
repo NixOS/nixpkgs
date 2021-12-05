@@ -6,22 +6,21 @@ let
 
   cfg = config.services.xserver.windowManager.metacity;
   inherit (pkgs) gnome;
-in
 
-{
+in {
   options = {
     services.xserver.windowManager.metacity.enable = mkEnableOption "metacity";
   };
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "metacity";
-        start = ''
-          ${gnome.metacity}/bin/metacity &
-          waitPID=$!
-        '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "metacity";
+      start = ''
+        ${gnome.metacity}/bin/metacity &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ gnome.metacity ];
 

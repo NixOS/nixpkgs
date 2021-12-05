@@ -1,22 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-, py-multiaddr
-, requests
-, pytestCheckHook
-, pytest-cov
-, pytest-dependency
-, pytest-localserver
-, pytest-mock
-, pytest-order
-, pytest-cid
-, mock
-, ipfs
-, httpx
-, httpcore
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python, py-multiaddr
+, requests, pytestCheckHook, pytest-cov, pytest-dependency, pytest-localserver
+, pytest-mock, pytest-order, pytest-cid, mock, ipfs, httpx, httpcore }:
 
 buildPythonPackage rec {
   pname = "ipfshttpclient";
@@ -31,10 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
-  propagatedBuildInputs = [
-    py-multiaddr
-    requests
-  ];
+  propagatedBuildInputs = [ py-multiaddr requests ];
 
   checkInputs = [
     pytestCheckHook

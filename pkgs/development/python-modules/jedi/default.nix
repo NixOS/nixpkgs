@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, colorama
-, django
-, docopt
-, pytestCheckHook
-, parso
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, colorama
+, django, docopt, pytestCheckHook, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -25,12 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ parso ];
 
-  checkInputs = [
-    colorama
-    django
-    docopt
-    pytestCheckHook
-  ];
+  checkInputs = [ colorama django docopt pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -49,7 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
-    description = "An autocompletion tool for Python that can be used for text editors";
+    description =
+      "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];
   };

@@ -1,6 +1,5 @@
-{ lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, uuidm, re, stdlib-shims, uutf
-}:
+{ lib, buildDunePackage, fetchurl, astring, cmdliner, fmt, uuidm, re
+, stdlib-shims, uutf }:
 
 buildDunePackage rec {
   pname = "alcotest";
@@ -9,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-mirage-${version}.tbz";
+    url =
+      "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-mirage-${version}.tbz";
     sha256 = "sha256:1h9yp44snb6sgm5g1x3wg4gwjscic7i56jf0j8jr07355pxwrami";
   };
 

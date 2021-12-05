@@ -1,16 +1,5 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, imageio
-, imagecorruptions
-, numpy
-, opencv3
-, pytestCheckHook
-, scikitimage
-, scipy
-, shapely
-, six
-, lib
-}:
+{ buildPythonPackage, fetchFromGitHub, imageio, imagecorruptions, numpy, opencv3
+, pytestCheckHook, scikitimage, scipy, shapely, six, lib }:
 
 buildPythonPackage rec {
   pname = "imgaug";
@@ -32,21 +21,10 @@ buildPythonPackage rec {
       --replace "--xdoctest --xdoctest-global-exec=\"import imgaug as ia\nfrom imgaug import augmenters as iaa\"" ""
   '';
 
-  propagatedBuildInputs = [
-    imageio
-    imagecorruptions
-    numpy
-    opencv3
-    scikitimage
-    scipy
-    shapely
-    six
-  ];
+  propagatedBuildInputs =
+    [ imageio imagecorruptions numpy opencv3 scikitimage scipy shapely six ];
 
-  checkInputs = [
-    opencv3
-    pytestCheckHook
-  ];
+  checkInputs = [ opencv3 pytestCheckHook ];
 
   disabledTests = [
     # Tests are outdated

@@ -4,7 +4,9 @@ import ../make-test-python.nix {
   nodes = {
     client = { nodes, pkgs, ... }: {
       environment.systemPackages = [
-        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
+        (pkgs.callPackage ./xmpp-sendmessage.nix {
+          connectTo = nodes.server.config.networking.primaryIPAddress;
+        })
       ];
       networking.extraHosts = ''
         ${nodes.server.config.networking.primaryIPAddress} example.com
@@ -46,14 +48,8 @@ import ../make-test-python.nix {
           domain = "example.com";
           enabled = true;
         };
-        muc = [
-          {
-            domain = "conference.example.com";
-          }
-        ];
-        uploadHttp = {
-          domain = "uploads.example.com";
-        };
+        muc = [{ domain = "conference.example.com"; }];
+        uploadHttp = { domain = "uploads.example.com"; };
       };
     };
     mysql = { config, pkgs, ... }: {

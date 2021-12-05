@@ -1,43 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, python2
-, makeWrapper
-, gawk
-, bash
-, getopt
-, procps
-, which
-, jre
-, coreutils
-, nixosTests
-  # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
-, generation
-, version
-, sha256
-, extraMeta ? { }
-, ...
-}:
+{ lib, stdenv, fetchurl, python2, makeWrapper, gawk, bash, getopt, procps, which
+, jre, coreutils, nixosTests
+# generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
+, generation, version, sha256, extraMeta ? { }, ... }:
 
 let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-  binPath = lib.makeBinPath [
-    bash
-    getopt
-    gawk
-    which
-    jre
-    procps
-  ];
-in
+  binPath = lib.makeBinPath [ bash getopt gawk which jre procps ];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cassandra";
   inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
+    url =
+      "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper coreutils ];
@@ -105,22 +82,16 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests =
-      let
-        test = nixosTests."cassandra_${generation}";
-      in
-      {
-        nixos =
-          assert test.testPackage.version == version;
-          test;
-      };
+    tests = let test = nixosTests."cassandra_${generation}";
+    in { nixos = assert test.testPackage.version == version; test; };
   };
 
-  meta = with lib; {
-    homepage = "http://cassandra.apache.org/";
-    description = "A massively scalable open source NoSQL database";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = [ maintainers.roberth ];
-  } // extraMeta;
+  meta = with lib;
+    {
+      homepage = "http://cassandra.apache.org/";
+      description = "A massively scalable open source NoSQL database";
+      platforms = platforms.unix;
+      license = licenses.asl20;
+      maintainers = [ maintainers.roberth ];
+    } // extraMeta;
 }

@@ -41,7 +41,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
-    description = "Some standard networking plugins, maintained by the CNI team";
+    description =
+      "Some standard networking plugins, maintained by the CNI team";
     homepage = "https://www.cni.dev/plugins/";
     license = licenses.asl20;
     platforms = platforms.linux;

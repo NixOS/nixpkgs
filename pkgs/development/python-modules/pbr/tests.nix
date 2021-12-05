@@ -1,14 +1,5 @@
-{ buildPythonPackage
-, git
-, gnupg
-, pbr
-, mock
-, sphinx
-, stestr
-, testresources
-, testscenarios
-, virtualenv
-}:
+{ buildPythonPackage, git, gnupg, pbr, mock, sphinx, stestr, testresources
+, testscenarios, virtualenv }:
 
 buildPythonPackage rec {
   pname = "pbr";
@@ -25,17 +16,8 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    pbr
-    git
-    gnupg
-    mock
-    sphinx
-    stestr
-    testresources
-    testscenarios
-    virtualenv
-  ];
+  checkInputs =
+    [ pbr git gnupg mock sphinx stestr testresources testscenarios virtualenv ];
 
   checkPhase = ''
     stestr run -e <(echo "

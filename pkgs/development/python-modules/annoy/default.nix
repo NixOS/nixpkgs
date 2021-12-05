@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, h5py
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, h5py, nose }:
 
 buildPythonPackage rec {
   version = "1.17.0";
@@ -16,12 +11,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ h5py ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   meta = with lib; {
-    description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
+    description =
+      "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
     homepage = "https://github.com/spotify/annoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];

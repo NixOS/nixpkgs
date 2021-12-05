@@ -1,27 +1,18 @@
-{ lib
-, element-desktop # for seshat and keytar
-, schildichat-web
-, stdenv
-, fetchgit
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, fetchYarnDeps
-, yarn, nodejs, fixup_yarn_lock
-, electron
-, Security
-, AppKit
-, CoreServices
+{ lib, element-desktop # for seshat and keytar
+, schildichat-web, stdenv, fetchgit, makeWrapper, makeDesktopItem
+, copyDesktopItems, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock, electron
+, Security, AppKit, CoreServices
 
-, useWayland ? false
-}:
+, useWayland ? false }:
 
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "schildichat-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
-in
-stdenv.mkDerivation rec {
+  electron_exec = if stdenv.isDarwin then
+    "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
+  else
+    "${electron}/bin/electron";
+in stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
   inherit (pinData) version;
 
@@ -37,7 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper copyDesktopItems ];
+  nativeBuildInputs =
+    [ yarn fixup_yarn_lock nodejs makeWrapper copyDesktopItems ];
   inherit (element-desktop) seshat keytar;
 
   configurePhase = ''
@@ -88,7 +80,10 @@ stdenv.mkDerivation rec {
 
     # executable wrapper
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --add-flags "$out/share/element/electron${
+        lib.optionalString useWayland
+        " --enable-features=UseOzonePlatform --ozone-platform=wayland"
+      }"
 
     runHook postInstall
   '';
@@ -101,17 +96,17 @@ stdenv.mkDerivation rec {
   # https://github.com/schildichat/element-desktop/blob/sc/package.json
   desktopItems = [
     (makeDesktopItem {
-     name = "schildichat-desktop";
-     exec = "${executableName} %u";
-     icon = "schildichat";
-     desktopName = "SchildiChat";
-     genericName = "Matrix Client";
-     comment = meta.description;
-     categories = "Network;InstantMessaging;Chat;";
-     extraEntries = ''
-       StartupWMClass=schildichat
-       MimeType=x-scheme-handler/element;
-     '';
+      name = "schildichat-desktop";
+      exec = "${executableName} %u";
+      icon = "schildichat";
+      desktopName = "SchildiChat";
+      genericName = "Matrix Client";
+      comment = meta.description;
+      categories = "Network;InstantMessaging;Chat;";
+      extraEntries = ''
+        StartupWMClass=schildichat
+        MimeType=x-scheme-handler/element;
+      '';
     })
   ];
 

@@ -1,11 +1,9 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
-let
-  cfg = config.services.hail;
+let cfg = config.services.hail;
 in {
-
 
   ###### interface
 
@@ -40,7 +38,6 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -49,11 +46,10 @@ in {
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ nix ];
-      environment = {
-        HOME = "/var/lib/empty";
-      };
+      environment = { HOME = "/var/lib/empty"; };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/hail --profile ${cfg.profile} --job-uri ${cfg.hydraJobUri}"
+        ExecStart =
+          "${cfg.package}/bin/hail --profile ${cfg.profile} --job-uri ${cfg.hydraJobUri}"
           + lib.optionalString (cfg.netrc != null) " --netrc-file ${cfg.netrc}";
       };
     };

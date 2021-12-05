@@ -1,30 +1,13 @@
-{ stdenv
-, lib
-, fakeroot
-, fetchurl
-, libfaketime
-, substituteAll
+{ stdenv, lib, fakeroot, fetchurl, libfaketime, substituteAll
 ## runtime dependencies
-, coreutils
-, file
-, findutils
-, gawk
-, ghostscript
-, gnugrep
-, gnused
-, libtiff
-, psmisc
-, sharutils
-, util-linux
-, zlib
+, coreutils, file, findutils, gawk, ghostscript, gnugrep, gnused, libtiff
+, psmisc, sharutils, util-linux, zlib
 ## optional packages (using `null` disables some functionality)
-, jbigkit ? null
-, lcms2 ? null  # for colored faxes
-, openldap ? null
-, pam ? null
-## system-dependent settings that have to be hardcoded
-, maxgid ? 65534  # null -> try to auto-detect (bad on linux)
-, maxuid ? 65534  # null -> hardcoded value 60002
+, jbigkit ? null, lcms2 ? null # for colored faxes
+, openldap ? null, pam ? null
+  ## system-dependent settings that have to be hardcoded
+, maxgid ? 65534 # null -> try to auto-detect (bad on linux)
+, maxuid ? 65534 # null -> hardcoded value 60002
 }:
 
 let
@@ -36,9 +19,10 @@ let
   configSite = substituteAll {
     name = "${pname}-config.site";
     src = ./config.site;
-    config_maxgid = lib.optionalString (maxgid!=null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
+    config_maxgid = lib.optionalString (maxgid != null)
+      "CONFIG_MAXGID=${builtins.toString maxgid}";
     ghostscript_version = ghostscript.version;
-    out_ = "@out@";  # "out" will be resolved in post-install.sh
+    out_ = "@out@"; # "out" will be resolved in post-install.sh
     inherit coreutils ghostscript libtiff;
   };
 
@@ -46,11 +30,16 @@ let
     name = "${pname}-post-patch.sh";
     src = ./post-patch.sh;
     inherit configSite;
-    maxuid = lib.optionalString (maxuid!=null) (builtins.toString maxuid);
-    faxcover_binpath = lib.makeBinPath
-      [stdenv.shellPackage coreutils];
-    faxsetup_binpath = lib.makeBinPath
-      [stdenv.shellPackage coreutils findutils gnused gnugrep gawk];
+    maxuid = lib.optionalString (maxuid != null) (builtins.toString maxuid);
+    faxcover_binpath = lib.makeBinPath [ stdenv.shellPackage coreutils ];
+    faxsetup_binpath = lib.makeBinPath [
+      stdenv.shellPackage
+      coreutils
+      findutils
+      gnused
+      gnugrep
+      gawk
+    ];
   };
 
   postInstall = substituteAll {
@@ -59,9 +48,7 @@ let
     inherit fakeroot libfaketime;
   };
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
@@ -75,24 +62,25 @@ stdenv.mkDerivation {
   # for a couple of standard binaries in the `PATH` and
   # hardcode their absolute paths in the new package.
   buildInputs = [
-    file  # for `file` command
+    file # for `file` command
     ghostscript
     libtiff
-    psmisc  # for `fuser` command
-    sharutils  # for `uuencode` command
-    util-linux  # for `agetty` command
+    psmisc # for `fuser` command
+    sharutils # for `uuencode` command
+    util-linux # for `agetty` command
     zlib
-    jbigkit  # optional
-    lcms2  # optional
-    openldap  # optional
-    pam  # optional
+    jbigkit # optional
+    lcms2 # optional
+    openldap # optional
+    pam # optional
   ];
   postPatch = ". ${postPatch}";
   dontAddPrefix = true;
   postInstall = ". ${postInstall}";
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
-    description = "enterprise-class system for sending and receiving facsimiles";
+    description =
+      "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";
     license = lib.licenses.bsd3;

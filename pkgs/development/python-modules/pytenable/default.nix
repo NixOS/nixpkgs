@@ -1,21 +1,6 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, typing-extensions
-}:
+{ lib, appdirs, buildPythonPackage, defusedxml, fetchFromGitHub, marshmallow
+, pytest-datafiles, pytest-vcr, pytestCheckHook, python-box, python-dateutil
+, requests, requests-pkcs12, responses, restfly, semver, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "pytenable";
@@ -28,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-qljoJ+nYFVS5VHr/M4mITtO9Czuyb4HLzVjhprhyJIs=";
   };
 
-  propagatedBuildInputs = [
-    semver
-  ];
+  propagatedBuildInputs = [ semver ];
 
   buildInputs = [
     appdirs
@@ -44,12 +27,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
-    responses
-    pytest-datafiles
-    pytest-vcr
-    pytestCheckHook
-  ];
+  checkInputs = [ responses pytest-datafiles pytest-vcr pytestCheckHook ];
 
   disabledTests = [
     # Disable tests that requires a Docker container

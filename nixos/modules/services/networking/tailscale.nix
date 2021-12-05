@@ -18,7 +18,8 @@ in {
     interfaceName = mkOption {
       type = types.str;
       default = "tailscale0";
-      description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
+      description = ''
+        The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
     package = mkOption {

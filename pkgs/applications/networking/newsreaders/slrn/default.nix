@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl
-, slang, ncurses, openssl }:
+{ lib, stdenv, fetchurl, slang, ncurses, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "slrn";
@@ -17,10 +16,7 @@ stdenv.mkDerivation rec {
       -e "s|/bin/rm|rm|"
   '';
 
-  configureFlags = [
-    "--with-slang=${slang.dev}"
-    "--with-ssl=${openssl.dev}"
-  ];
+  configureFlags = [ "--with-slang=${slang.dev}" "--with-ssl=${openssl.dev}" ];
 
   buildInputs = [ slang ncurses openssl ];
 

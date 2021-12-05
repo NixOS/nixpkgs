@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestCheckHook
-, pexpect
-, pytest-cov
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestCheckHook, pexpect
+, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
@@ -25,9 +19,7 @@ buildPythonPackage rec {
     # Remove until https://github.com/pytest-dev/pytest/pull/7207 or similar
     "test_suppresses_timeout_when_debugger_is_entered"
   ];
-  pytestFlagsArray = [
-    "-ra"
-  ];
+  pytestFlagsArray = [ "-ra" ];
 
   meta = with lib; {
     description = "py.test plugin to abort hanging tests";

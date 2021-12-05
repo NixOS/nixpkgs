@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "NOLDCONFIG=y" ];
 
   meta = with lib; {
-    description = "User space software for Intel(R) Resource Director Technology";
+    description =
+      "User space software for Intel(R) Resource Director Technology";
     homepage = "https://github.com/intel/intel-cmt-cat";
     license = licenses.bsd3;
     maintainers = with maintainers; [ arkivm ];

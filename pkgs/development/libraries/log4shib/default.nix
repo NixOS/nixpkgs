@@ -13,7 +13,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
-    description = "A forked version of log4cpp that has been created for the Shibboleth project";
+    description =
+      "A forked version of log4cpp that has been created for the Shibboleth project";
     maintainers = [ maintainers.jammerful ];
     license = licenses.lgpl21;
     homepage = "http://log4cpp.sf.net";

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, internetarchive
-, fetchPypi
-, yt-dlp
-, docopt
-, isPy27
-}:
+{ lib, buildPythonPackage, internetarchive, fetchPypi, yt-dlp, docopt, isPy27 }:
 
 buildPythonPackage rec {
   pname = "tubeup";

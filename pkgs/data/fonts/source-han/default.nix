@@ -1,27 +1,17 @@
-{ stdenvNoCC
-, lib
-, fetchzip
-}:
+{ stdenvNoCC, lib, fetchzip }:
 
 let
-  makePackage =
-    { family
-    , description
-    , rev
-    , sha256
-    , postFetch ? ''
-        install -m444 -Dt $out/share/fonts/opentype/source-han-${family} $downloadedFile
-      ''
-    , zip ? ""
-    }:
-    let Family =
-      lib.toUpper (lib.substring 0 1 family) +
-      lib.substring 1 (lib.stringLength family) family;
-    in
-    fetchzip {
+  makePackage = { family, description, rev, sha256, postFetch ? ''
+    install -m444 -Dt $out/share/fonts/opentype/source-han-${family} $downloadedFile
+  '', zip ? "" }:
+    let
+      Family = lib.toUpper (lib.substring 0 1 family)
+        + lib.substring 1 (lib.stringLength family) family;
+    in fetchzip {
       name = "source-han-${family}-${lib.removeSuffix "R" rev}";
 
-      url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";
+      url =
+        "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";
       inherit sha256 postFetch;
 
       meta = {
@@ -31,8 +21,7 @@ let
         maintainers = with lib.maintainers; [ taku0 emily ];
       };
     };
-in
-{
+in {
   sans = makePackage {
     family = "sans";
     description = "sans-serif";

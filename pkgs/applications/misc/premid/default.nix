@@ -1,25 +1,22 @@
-{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook, fetchurl, copyDesktopItems
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-}:
+{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook, fetchurl
+, copyDesktopItems, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus
+, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify
+, libpulseaudio, libuuid, libX11, libXScrnSaver, libXcomposite, libXcursor
+, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb
+, libxshmfence, mesa, nspr, nss, pango, systemd, libappindicator-gtk3
+, libdbusmenu }:
 
 stdenv.mkDerivation rec {
   pname = "premid";
   version = "2.3.2";
 
   src = fetchurl {
-    url = "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
+    url =
+      "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
     sha256 = "sha256-TuID63cVZkQ2kBl2iZeuVvjRUJYBt62ppPvgffBlOXY=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook copyDesktopItems ];
 
   buildInputs = [
     alsa-lib
@@ -41,13 +38,46 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   libPath = lib.makeLibraryPath [
-    libcxx systemd libpulseaudio libdrm mesa
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
-    libappindicator-gtk3 libdbusmenu
-   ];
+    libcxx
+    systemd
+    libpulseaudio
+    libdrm
+    mesa
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libnotify
+    libX11
+    libXcomposite
+    libuuid
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    systemd
+    libXScrnSaver
+    libappindicator-gtk3
+    libdbusmenu
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,opt/PreMiD,share/pixmaps}
@@ -82,7 +112,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple, configurable utility to show your web activity as playing status on Discord";
+    description =
+      "A simple, configurable utility to show your web activity as playing status on Discord";
     homepage = "https://premid.app";
     downloadPage = "https://premid.app/downloads";
     license = licenses.mpl20;

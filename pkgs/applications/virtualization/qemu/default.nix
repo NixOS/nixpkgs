@@ -1,68 +1,79 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
-, perl, pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, autoPatchelfHook, runtimeShell
-, attr, libcap, libcap_ng
-, CoreServices, Cocoa, Hypervisor, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib, perl
+, pixman, vde2, alsa-lib, texinfo, flex, bison, lzo, snappy, libaio, libtasn1
+, gnutls, nettle, curl, ninja, meson, sigtool, makeWrapper, autoPatchelfHook
+, runtimeShell, attr, libcap, libcap_ng, CoreServices, Cocoa, Hypervisor, rez
+, setfile, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
+, seccompSupport ? stdenv.isLinux, libseccomp, alsaSupport ?
+  lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3
+, gettext, vte, wrapGAppsHook, vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
 , spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
-, usbredirSupport ? spiceSupport, usbredir
-, xenSupport ? false, xen
-, cephSupport ? false, ceph
-, glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
-, virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
-, smbdSupport ? false, samba
-, tpmSupport ? true
-, uringSupport ? stdenv.isLinux, liburing
-, hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
-                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
-                    else null)
-, nixosTestRunner ? false
-}:
+, ncursesSupport ? !nixosTestRunner, ncurses, usbredirSupport ? spiceSupport
+, usbredir, xenSupport ? false, xen, cephSupport ? false, ceph
+, glusterfsSupport ? false, glusterfs, libuuid, openGLSupport ? sdlSupport, mesa
+, libepoxy, libdrm, virglSupport ? openGLSupport, virglrenderer
+, libiscsiSupport ? true, libiscsi, smbdSupport ? false, samba
+, tpmSupport ? true, uringSupport ? stdenv.isLinux, liburing
+, hostCpuOnly ? false, hostCpuTargets ? (if hostCpuOnly then
+  (lib.optional stdenv.isx86_64 "i386-softmmu"
+    ++ [ "${stdenv.hostPlatform.qemuArch}-softmmu" ])
+else
+  null), nixosTestRunner ? false }:
 
 let
   audio = lib.optionalString alsaSupport "alsa,"
     + lib.optionalString pulseSupport "pa,"
     + lib.optionalString sdlSupport "sdl,";
 
-in
-
-stdenv.mkDerivation rec {
-  pname = "qemu"
-    + lib.optionalString xenSupport "-xen"
+in stdenv.mkDerivation rec {
+  pname = "qemu" + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
   version = "6.1.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
     sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
   };
 
-  nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+  nativeBuildInputs = [
+    makeWrapper
+    python
+    python.pkgs.sphinx
+    python.pkgs.sphinx_rtd_theme
+    pkg-config
+    flex
+    bison
+    meson
+    ninja
+  ] ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
-  buildInputs = [ zlib glib perl pixman
-    vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
-  ]
-    ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
-    ++ lib.optionals seccompSupport [ libseccomp ]
+  buildInputs = [
+    zlib
+    glib
+    perl
+    pixman
+    vde2
+    texinfo
+    lzo
+    snappy
+    libtasn1
+    gnutls
+    nettle
+    curl
+  ] ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Cocoa
+      Hypervisor
+      rez
+      setfile
+    ] ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
@@ -73,8 +84,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
     ++ lib.optionals stdenv.isLinux [ libaio libcap_ng libcap attr ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals cephSupport [ ceph ]
+    ++ lib.optionals xenSupport [ xen ] ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
     ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
     ++ lib.optionals virglSupport [ virglrenderer ]
@@ -82,7 +92,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ];
 
-  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontUseMesonConfigure =
+    true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
 
@@ -91,53 +102,60 @@ stdenv.mkDerivation rec {
     ./9p-ignore-noatime.patch
     # Cocoa clipboard support only works on macOS 10.14+
     (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
+      url =
+        "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
     (fetchpatch {
       name = "CVE-2021-3713.patch"; # remove with next release
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
+      url =
+        "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
       sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
     })
     # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
     # on some systems. Remove with next release.
     (fetchpatch {
       name = "fix-crash-in-v9fs_walk.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
+      url =
+        "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
       sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
     })
     # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
     (fetchpatch {
       name = "fix-aio-discard-return-value.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
+      url =
+        "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
       sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
     })
     # Fixes managedsave (snapshot creation) with QXL video device. Remove with next release.
     (fetchpatch {
       name = "qxl-fix-pre-save-logic.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
+      url =
+        "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
       sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ./sigrtminmax.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
-      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # The Hypervisor.framework support patch converted something that can be applied:
-    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
-    # The base revision is whatever commit there is before the series starts:
-    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
-    # The target revision is what patchew has as the series tag from patchwork:
-    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
-    (fetchpatch {
-      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
-      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
-    })
-  ];
+      ./sigrtminmax.patch
+      (fetchpatch {
+        url =
+          "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
+        sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
+      })
+    ] ++ lib.optionals stdenv.isDarwin [
+      # The Hypervisor.framework support patch converted something that can be applied:
+      # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
+      # The base revision is whatever commit there is before the series starts:
+      # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
+      # The target revision is what patchew has as the series tag from patchwork:
+      # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
+      (fetchpatch {
+        url =
+          "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
+        sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
+      })
+    ];
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -187,7 +205,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
-    ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
+    ++ lib.optional (hostCpuTargets != null)
+    "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ lib.optional stdenv.isDarwin "--enable-cocoa"
     ++ lib.optional stdenv.isDarwin "--enable-hvf"
     ++ lib.optional stdenv.isLinux "--enable-linux-aio"
@@ -237,9 +256,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  passthru = {
-    qemu-system-i386 = "bin/qemu-system-i386";
-  };
+  passthru = { qemu-system-i386 = "bin/qemu-system-i386"; };
 
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];

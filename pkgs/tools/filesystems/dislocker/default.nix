@@ -1,12 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, mbedtls
-, fuse
-}:
-
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, mbedtls, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "dislocker";
@@ -27,7 +19,8 @@ stdenv.mkDerivation rec {
     #
     # https://github.com/Aorimn/dislocker/pull/246
     (fetchpatch {
-      url = "https://github.com/Aorimn/dislocker/commit/7744f87c75fcfeeb414d0957771042b10fb64e62.diff";
+      url =
+        "https://github.com/Aorimn/dislocker/commit/7744f87c75fcfeeb414d0957771042b10fb64e62.diff";
       sha256 = "0bpyccbbfjsidsrd2q9qylb95nvi8g3glb3jss7xmhywj86bhzr5";
     })
   ];
@@ -37,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read BitLocker encrypted partitions in Linux";
-    homepage    = "https://github.com/aorimn/dislocker";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/aorimn/dislocker";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ elitak ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

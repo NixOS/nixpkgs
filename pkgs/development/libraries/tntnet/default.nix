@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.tntnet.org/tntnet.html";
-    description = "Web server which allows users to develop web applications using C++";
-    platforms = platforms.linux ;
+    description =
+      "Web server which allows users to develop web applications using C++";
+    platforms = platforms.linux;
     license = licenses.lgpl21;
     maintainers = [ maintainers.juliendehos ];
   };

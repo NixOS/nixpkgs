@@ -28,7 +28,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Terraform Language Server (official)";
     homepage = "https://github.com/hashicorp/terraform-ls";
-    changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ mbaillie jk ];
   };

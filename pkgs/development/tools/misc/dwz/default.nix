@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.14";
 
   src = fetchurl {
-    url = "https://www.sourceware.org/ftp/${pname}/releases/${pname}-${version}.tar.gz";
+    url =
+      "https://www.sourceware.org/ftp/${pname}/releases/${pname}-${version}.tar.gz";
     sha256 = "07qdvzfk4mvbqj5z3aff7vc195dxqn1mi27w2dzs1w2zhymnw01k";
   };
 

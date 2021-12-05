@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, markdown-it-py
-, pytest-regressions
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, markdown-it-py
+, pytest-regressions, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
@@ -21,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-3zFSTjqwjUV6+fU6falYbIzj/Hp7E/9EXKZIi00tkg4=";
   };
 
-  propagatedBuildInputs = [
-    markdown-it-py
-  ];
+  propagatedBuildInputs = [ markdown-it-py ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-regressions
-  ];
+  checkInputs = [ pytestCheckHook pytest-regressions ];
 
-  pythonImportsCheck = [
-    "mdit_py_plugins"
-  ];
+  pythonImportsCheck = [ "mdit_py_plugins" ];
 
   meta = with lib; {
     description = "Collection of core plugins for markdown-it-py";

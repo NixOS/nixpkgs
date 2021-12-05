@@ -1,32 +1,7 @@
-{ alsa-lib
-, aubio
-, cmake
-, dssi
-, fetchurl
-, flac
-, libjack2
-, ladspaH
-, ladspaPlugins
-, liblo
-, libmad
-, libsamplerate
-, libsndfile
-, libtool
-, libvorbis
-, lilv
-, lv2
-, mkDerivation
-, opusfile
-, pkg-config
-, qttools
-, qtbase
-, rubberband
-, serd
-, sord
-, sratom
-, lib
-, suil
-}:
+{ alsa-lib, aubio, cmake, dssi, fetchurl, flac, libjack2, ladspaH, ladspaPlugins
+, liblo, libmad, libsamplerate, libsndfile, libtool, libvorbis, lilv, lv2
+, mkDerivation, opusfile, pkg-config, qttools, qtbase, rubberband, serd, sord
+, sratom, lib, suil }:
 
 mkDerivation rec {
   pname = "qtractor";
@@ -37,12 +12,7 @@ mkDerivation rec {
     sha256 = "sha256-GgDc7WM4nVGlq+8EcwxJ7MnSPYwAej51IMrN0glCTbQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    libtool
-    pkg-config
-    qttools
-  ];
+  nativeBuildInputs = [ cmake libtool pkg-config qttools ];
 
   buildInputs = [
     alsa-lib

@@ -1,14 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, jre
-, makeWrapper
-, unzip
-}:
+{ stdenv, lib, fetchurl, jre, makeWrapper, unzip }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dex2jar";
-  version  = "2.0";
+  version = "2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.zip";
@@ -30,7 +24,7 @@ stdenv.mkDerivation rec {
     mv * $f
     for i in $f/*.sh; do
       n=$(basename ''${i%.sh})
-      makeWrapper $i $out/bin/$n --prefix PATH : ${lib.makeBinPath [ jre ] }
+      makeWrapper $i $out/bin/$n --prefix PATH : ${lib.makeBinPath [ jre ]}
     done
   '';
 

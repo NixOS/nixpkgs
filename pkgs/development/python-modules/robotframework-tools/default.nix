@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, robotframework
-, moretools
-, pathpy
-, six
-, zetup
-, modeled
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, robotframework, moretools, pathpy, six
+, zetup, modeled, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "0.1rc4";
@@ -21,13 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ zetup ];
 
-  propagatedBuildInputs = [
-    robotframework
-    moretools
-    pathpy
-    six
-    modeled
-  ];
+  propagatedBuildInputs = [ robotframework moretools pathpy six modeled ];
 
   postPatch = ''
     # Remove upstream's selfmade approach to collect the dependencies

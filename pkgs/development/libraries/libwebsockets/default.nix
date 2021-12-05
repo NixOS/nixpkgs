@@ -1,63 +1,59 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, zlib
-, libuv
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, zlib, libuv
 # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
-, withExternalPoll ? false
-}:
+, withExternalPoll ? false }:
 
 let
-  generic = { version, sha256 }: stdenv.mkDerivation rec {
-    pname = "libwebsockets";
-    inherit version;
+  generic = { version, sha256 }:
+    stdenv.mkDerivation rec {
+      pname = "libwebsockets";
+      inherit version;
 
-    src = fetchFromGitHub {
-      owner = "warmcat";
-      repo = "libwebsockets";
-      rev = "v${version}";
-      inherit sha256;
-    };
+      src = fetchFromGitHub {
+        owner = "warmcat";
+        repo = "libwebsockets";
+        rev = "v${version}";
+        inherit sha256;
+      };
 
-    buildInputs = [ openssl zlib libuv ];
+      buildInputs = [ openssl zlib libuv ];
 
-    nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [ cmake ];
 
-    cmakeFlags = [
-      "-DLWS_WITH_PLUGINS=ON"
-      "-DLWS_WITH_IPV6=ON"
-      "-DLWS_WITH_SOCKS5=ON"
-      # Required since v4.2.0
-      "-DLWS_BUILD_HASH=no_hash"
-    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-      ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
+      cmakeFlags = [
+        "-DLWS_WITH_PLUGINS=ON"
+        "-DLWS_WITH_IPV6=ON"
+        "-DLWS_WITH_SOCKS5=ON"
+        # Required since v4.2.0
+        "-DLWS_BUILD_HASH=no_hash"
+      ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+        "-DLWS_WITHOUT_TESTAPPS=ON"
+        ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
 
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
+      NIX_CFLAGS_COMPILE =
+        lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
-    postInstall = ''
-      rm -r ${placeholder "out"}/share/libwebsockets-test-server
-    '';
-
-    # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
-    disallowedReferences = [ stdenv.cc.cc ];
-
-    meta = with lib; {
-      description = "Light, portable C library for websockets";
-      longDescription = ''
-        Libwebsockets is a lightweight pure C library built to
-        use minimal CPU and memory resources, and provide fast
-        throughput in both directions.
+      postInstall = ''
+        rm -r ${placeholder "out"}/share/libwebsockets-test-server
       '';
-      homepage = "https://libwebsockets.org/";
-      # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
-      # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
-      license = with licenses; [ mit publicDomain bsd3 asl20 ];
-      maintainers = with maintainers; [ mindavi ];
-      platforms = platforms.all;
+
+      # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
+      disallowedReferences = [ stdenv.cc.cc ];
+
+      meta = with lib; {
+        description = "Light, portable C library for websockets";
+        longDescription = ''
+          Libwebsockets is a lightweight pure C library built to
+          use minimal CPU and memory resources, and provide fast
+          throughput in both directions.
+        '';
+        homepage = "https://libwebsockets.org/";
+        # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
+        # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
+        license = with licenses; [ mit publicDomain bsd3 asl20 ];
+        maintainers = with maintainers; [ mindavi ];
+        platforms = platforms.all;
+      };
     };
-  };
 
 in {
   libwebsockets_3_1 = generic {

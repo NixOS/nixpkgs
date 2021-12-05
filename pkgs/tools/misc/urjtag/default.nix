@@ -1,50 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, autoreconfHook
-, gettext
-, libftdi1
-, libtool
-, libusb-compat-0_1
-, makeWrapper
-, pkg-config
-, readline
-, which
-, bsdlSupport ? true
-, jedecSupport ? true
-, staplSupport ? true
-, svfSupport ? true
-}:
+{ lib, stdenv, fetchurl, autoconf, automake, autoreconfHook, gettext, libftdi1
+, libtool, libusb-compat-0_1, makeWrapper, pkg-config, readline, which
+, bsdlSupport ? true, jedecSupport ? true, staplSupport ? true
+, svfSupport ? true }:
 
 stdenv.mkDerivation rec {
   pname = "urjtag";
   version = "2021.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.xz";
+    url =
+      "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.xz";
     hash = "sha256-sKLqokVROvCW3E13AQmDIzXGlMbBKqXpL++uhoVBbxw=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    which
-    gettext
-  ];
-  buildInputs = [
-    libftdi1
-    libtool
-    libusb-compat-0_1
-    readline
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config which gettext ];
+  buildInputs = [ libftdi1 libtool libusb-compat-0_1 readline ];
 
   configureFlags = [
-    (lib.enableFeature bsdlSupport  "bsdl")
+    (lib.enableFeature bsdlSupport "bsdl")
     (lib.enableFeature jedecSupport "jedec-exp")
     (lib.enableFeature staplSupport "stapl")
-    (lib.enableFeature svfSupport   "svf")
+    (lib.enableFeature svfSupport "svf")
   ];
 
   meta = with lib; {

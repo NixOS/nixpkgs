@@ -1,11 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "cbor2";
@@ -18,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-4oPnC1WgSf82TMXmSP3lh+TZsOh+SyZkxp5jkTXms7g=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -37,9 +27,7 @@ buildPythonPackage rec {
     "test_huge_truncated_string"
   ];
 
-  pythonImportsCheck = [
-    "cbor2"
-  ];
+  pythonImportsCheck = [ "cbor2" ];
 
   meta = with lib; {
     description = "Python CBOR (de)serializer with extensive tag support";

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "backports_abc";
@@ -20,6 +16,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/cython/backports_abc";
     license = lib.licenses.psfl;
-    description = "A backport of recent additions to the 'collections.abc' module";
+    description =
+      "A backport of recent additions to the 'collections.abc' module";
   };
 }

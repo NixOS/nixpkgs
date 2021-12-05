@@ -1,12 +1,11 @@
 { lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
-}:
+, libX11, libgdiplus, ffmpeg, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
+, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7105"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version =
+    "1.0.7105"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
@@ -24,12 +23,8 @@ buildDotnetModule rec {
   # System.Exception: SDL2 initlaization failed with error "No available video device"
   executables = [ "Ryujinx" ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    wrapGAppsHook
-    gobject-introspection
-    gdk-pixbuf
-  ];
+  nativeBuildInputs =
+    [ copyDesktopItems wrapGAppsHook gobject-introspection gdk-pixbuf ];
 
   runtimeDeps = [
     gtk3
@@ -61,15 +56,17 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Ryujinx";
-    name = "ryujinx";
-    exec = "Ryujinx";
-    icon = "ryujinx";
-    comment = meta.description;
-    type = "Application";
-    categories = "Game;";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Ryujinx";
+      name = "ryujinx";
+      exec = "Ryujinx";
+      icon = "ryujinx";
+      comment = meta.description;
+      type = "Application";
+      categories = "Game;";
+    })
+  ];
 
   meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";

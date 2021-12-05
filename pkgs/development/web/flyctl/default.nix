@@ -21,7 +21,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/superfly/flyctl/flyctl.Version=${version}" "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}" "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000" "-X github.com/superfly/flyctl/flyctl.Environment=production" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/superfly/flyctl/flyctl.Version=${version}"
+    "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}"
+    "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000"
+    "-X github.com/superfly/flyctl/flyctl.Environment=production"
+  ];
 
   meta = with lib; {
     description = "Command line tools for fly.io services";

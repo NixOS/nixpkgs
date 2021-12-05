@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyjwt
-, ratelimit
-, pytz
-, requests
-, requests-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder, pyjwt
+, ratelimit, pytz, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "pyflume";
@@ -22,17 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-Ka90n9Esv6tm310DjYeosBUhudeVoEJzt45L40+0GwQ=";
   };
 
-  propagatedBuildInputs = [
-    pyjwt
-    ratelimit
-    pytz
-    requests
-  ];
+  propagatedBuildInputs = [ pyjwt ratelimit pytz requests ];
 
-  checkInputs = [
-    requests-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ requests-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "pyflume" ];
 

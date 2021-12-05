@@ -26,12 +26,15 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    ./genMakefiles ${{
-      x86_64-darwin = "macosx";
-      i686-linux = "linux";
-      x86_64-linux = "linux-64bit";
-      aarch64-linux = "linux-64bit";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}")}
+    ./genMakefiles ${
+      {
+        x86_64-darwin = "macosx";
+        i686-linux = "linux";
+        x86_64-linux = "linux-64bit";
+        aarch64-linux = "linux-64bit";
+      }.${stdenv.hostPlatform.system} or (throw
+        "Unsupported platform ${stdenv.hostPlatform.system}")
+    }
 
     runHook postConfigure
   '';
@@ -53,7 +56,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
+    description =
+      "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     homepage = "http://www.live555.com/liveMedia/";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
     license = licenses.lgpl21Plus;

@@ -1,10 +1,12 @@
 { lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
-, abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
-, enableBloat ? false
-}:
+, abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit
+, colord, colordiff, coreutils, cpio, db, diffutils, dtc, e2fsprogs, enjarify
+, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX
+, giflib, gnumeric, gnupg, gnutar, gzip, hdf5, imagemagick, jdk, libarchive
+, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk
+, pgpdump, poppler_utils, procyon, qemu, R, radare2, sng, sqlite, squashfsTools
+, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
+, enableBloat ? false }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
@@ -42,19 +44,79 @@ python3Packages.buildPythonApplication rec {
   #
   # Still missing these tools: docx2txt lipo otool r2pipe
   pythonPath = [
-      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
-      e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd
-    ]
-    ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
-    ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
+    binutils-unwrapped
+    bzip2
+    colordiff
+    coreutils
+    cpio
+    db
+    diffutils
+    e2fsprogs
+    file
+    findutils
+    fontforge-fonttools
+    gettext
+    gnutar
+    gzip
+    libarchive
+    libcaca
+    lz4
+    openssl
+    pgpdump
+    sng
+    sqlite
+    squashfsTools
+    unzip
+    xxd
+    xz
+    zip
+    zstd
+  ] ++ (with python3Packages; [
+    argcomplete
+    debian
+    defusedxml
+    jsondiff
+    jsbeautifier
+    libarchive-c
+    python_magic
+    progressbar33
+    pypdf2
+    rpm
+    tlsh
+  ]) ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
-      abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+      abootimg
+      apksigner
+      apktool
+      cbfstool
+      colord
+      enjarify
+      ffmpeg
+      fpc
+      ghc
+      ghostscriptX
+      giflib
+      gnupg
+      gnumeric
+      hdf5
+      imagemagick
+      llvm
+      jdk
+      mono
+      ocaml
+      odt2txt
+      oggvideotools
+      openssh
+      pdftk
+      poppler_utils
+      procyon
+      qemu
+      R
+      tcpdump
+      ubootTools
+      wabt
+      radare2
+      xmlbeans
     ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
@@ -92,7 +154,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "Perform in-depth comparison of files, archives, and directories";
+    description =
+      "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories
       different. It will recursively unpack archives of many kinds and transform

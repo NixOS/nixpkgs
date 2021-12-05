@@ -1,27 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, fontconfig
-, libX11
-, perl
-, flex
-, bison
-, pkg-config
-, tcl
-, tk
-, xorg
-, yices
-, zlib
-, ghc
-, gmp-static
-, verilog
-, asciidoctor
-, tex }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, fontconfig, libX11, perl
+, flex, bison, pkg-config, tcl, tk, xorg, yices, zlib, ghc, gmp-static, verilog
+, asciidoctor, tex }:
 
 let
-  ghcWithPackages = ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
+  ghcWithPackages =
+    ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
 
 in stdenv.mkDerivation rec {
   pname = "bluespec";
@@ -94,10 +77,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
-    gmp-static
-    verilog
-  ];
+  checkInputs = [ gmp-static verilog ];
 
   checkTarget = "check-smoke";
 

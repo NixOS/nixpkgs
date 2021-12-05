@@ -8,10 +8,7 @@ let
     inherit (config.hardware.pcmcia) firmware config;
   };
 
-in
-
-
-{
+in {
   ###### interface
 
   options = {
@@ -27,7 +24,7 @@ in
 
       firmware = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           List of firmware used to handle specific PCMCIA card.
         '';

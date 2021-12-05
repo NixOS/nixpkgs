@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, flask, pyjwt, werkzeug, pytest }:
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, flask, pyjwt, werkzeug
+, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-JWT-Extended";

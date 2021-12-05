@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pytest-asyncio, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pylaunches";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "0mczxkwczyh9kva4xzpmnawy0hjha1fdrwj6igip9w5z1q48zs49";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ aresponses pytestCheckHook pytest-asyncio ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo
@@ -39,12 +26,11 @@ buildPythonPackage rec {
       --replace ', "pytest-runner"' ""
   '';
 
-  pythonImportsCheck = [
-    "pylaunches"
-  ];
+  pythonImportsCheck = [ "pylaunches" ];
 
   meta = with lib; {
-    description = "Python module to get information about upcoming space launches";
+    description =
+      "Python module to get information about upcoming space launches";
     homepage = "https://github.com/ludeeus/pylaunches";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config, lua5, curl, quvi_scripts, libproxy, libgcrypt, glib }:
+{ lib, stdenv, fetchurl, pkg-config, lua5, curl, quvi_scripts, libproxy
+, libgcrypt, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libquvi";
-  version="0.9.4";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/quvi/libquvi-${version}.tar.xz";

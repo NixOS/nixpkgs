@@ -7,41 +7,50 @@ let
 
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
-  mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
-    al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
-    al_portOnly = builtins.match "([0-9]+)" addr;
-    al = findFirst (a: a != null)
-      (throw "services.kresd.*: incorrect address specification '${addr}'")
-      [ al_v4 al_v6 al_portOnly ];
-    port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
-    in # freebind is set for compatibility with earlier kresd services;
-       # it could be configurable, for example.
-      ''
-        net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
-      '';
+  mkListen = kind: addr:
+    let
+      al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
+      al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
+      al_portOnly = builtins.match "([0-9]+)" addr;
+      al = findFirst (a: a != null)
+        (throw "services.kresd.*: incorrect address specification '${addr}'") [
+          al_v4
+          al_v6
+          al_portOnly
+        ];
+      port = last al;
+      addrSpec =
+        if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
+      # freebind is set for compatibility with earlier kresd services;
+      # it could be configurable, for example.
+    in ''
+      net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
+    '';
 
-  configFile = pkgs.writeText "kresd.conf" (
-    ""
+  configFile = pkgs.writeText "kresd.conf" (""
     + concatMapStrings (mkListen "dns") cfg.listenPlain
     + concatMapStrings (mkListen "tls") cfg.listenTLS
-    + concatMapStrings (mkListen "doh2") cfg.listenDoH
-    + cfg.extraConfig
-  );
+    + concatMapStrings (mkListen "doh2") cfg.listenDoH + cfg.extraConfig);
 in {
-  meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
+  meta.maintainers = [
+    maintainers.vcunat # upstream developer
+  ];
 
   imports = [
-    (mkChangedOptionModule [ "services" "kresd" "interfaces" ] [ "services" "kresd" "listenPlain" ]
-      (config:
-        let value = getAttrFromPath [ "services" "kresd" "interfaces" ] config;
-        in map
-          (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53") # Syntax depends on being IPv6 or IPv4.
-          value
-      )
-    )
-    (mkRemovedOptionModule [ "services" "kresd" "cacheDir" ] "Please use (bind-)mounting instead.")
+    (mkChangedOptionModule [ "services" "kresd" "interfaces" ] [
+      "services"
+      "kresd"
+      "listenPlain"
+    ] (config:
+      let value = getAttrFromPath [ "services" "kresd" "interfaces" ] config;
+      in map (iface:
+        if elem ":" (stringToCharacters iface) then
+          "[${iface}]:53"
+        else
+          "${iface}:53") # Syntax depends on being IPv6 or IPv4.
+      value))
+    (mkRemovedOptionModule [ "services" "kresd" "cacheDir" ]
+      "Please use (bind-)mounting instead.")
   ];
 
   ###### interface
@@ -58,12 +67,11 @@ in {
     };
     package = mkOption {
       type = types.package;
-      description = "
-        knot-resolver package to use.
-      ";
+      description = "\n        knot-resolver package to use.\n      ";
       default = pkgs.knot-resolver;
       defaultText = literalExpression "pkgs.knot-resolver";
-      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
+      example = literalExpression
+        "pkgs.knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;
@@ -83,7 +91,7 @@ in {
     };
     listenTLS = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = [ ];
       example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
       description = ''
         Addresses and ports on which kresd should provide DNS over TLS (see RFC 7858).
@@ -92,7 +100,7 @@ in {
     };
     listenDoH = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = [ ];
       example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
       description = ''
         Addresses and ports on which kresd should provide DNS over HTTPS/2 (see RFC 8484).
@@ -113,18 +121,20 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.etc."knot-resolver/kresd.conf".source = configFile; # not required
+    environment.etc."knot-resolver/kresd.conf".source =
+      configFile; # not required
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
-    users.users.knot-resolver =
-      { isSystemUser = true;
-        group = "knot-resolver";
-        description = "Knot-resolver daemon user";
-      };
+    users.users.knot-resolver = {
+      isSystemUser = true;
+      group = "knot-resolver";
+      description = "Knot-resolver daemon user";
+    };
     users.groups.knot-resolver.gid = null;
 
-    systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
+    systemd.packages =
+      [ cfg.package ]; # the units are patched inside the package a bit
 
     systemd.targets.kresd = { # configure units started by default
       wantedBy = [ "multi-user.target" ];

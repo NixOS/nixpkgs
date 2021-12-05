@@ -30,6 +30,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://codezen.org/canto-ng/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers;[ devhell ];
+    maintainers = with maintainers; [ devhell ];
   };
 }

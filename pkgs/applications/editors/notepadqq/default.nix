@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, which, qtbase, qtsvg, qttools, qtwebkit }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, which, qtbase, qtsvg, qttools
+, qtwebkit }:
 
 mkDerivation rec {
   pname = "notepadqq";
@@ -11,13 +12,9 @@ mkDerivation rec {
     sha256 = "0lbv4s7ng31dkznzbkmp2cvkqglmfj6lv4mbg3r410fif2nrva7k";
   };
 
-  nativeBuildInputs = [
-    pkg-config which qttools
-  ];
+  nativeBuildInputs = [ pkg-config which qttools ];
 
-  buildInputs = [
-    qtbase qtsvg qtwebkit
-  ];
+  buildInputs = [ qtbase qtsvg qtwebkit ];
 
   preConfigure = ''
     export LRELEASE="lrelease"

@@ -1,11 +1,5 @@
-{ buildPythonPackage
-, exempi
-, fetchFromGitHub
-, mock
-, pythonOlder
-, pytz
-, lib, stdenv
-}:
+{ buildPythonPackage, exempi, fetchFromGitHub, mock, pythonOlder, pytz, lib
+, stdenv }:
 
 buildPythonPackage {
   pname = "python-xmp-toolkit";

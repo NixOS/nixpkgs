@@ -1,10 +1,4 @@
-{ lib
-, fetchzip
-, rustPlatform
-, stdenv
-, Security
-, libiconv
-}:
+{ lib, fetchzip, rustPlatform, stdenv, Security, libiconv }:
 
 rustPlatform.buildRustPackage {
   version = "0.29.1";
@@ -14,7 +8,8 @@ rustPlatform.buildRustPackage {
   # Source revisions are noted alongside the binary releases:
   # https://github.com/mozilla/geckodriver/releases
   src = (fetchzip {
-    url = "https://hg.mozilla.org/mozilla-central/archive/970ef713fe58cbc8a29bfb2fb452a57e010bdb08.zip/testing";
+    url =
+      "https://hg.mozilla.org/mozilla-central/archive/970ef713fe58cbc8a29bfb2fb452a57e010bdb08.zip/testing";
     sha256 = "0cpx0kx8asqkmz2nyanbmcvhnrsksgd6jp3wlcd0maid3qbyw7s2";
   }).overrideAttrs (_: {
     # normally guessed by the url's file extension, force it to unpack properly
@@ -27,7 +22,8 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
+    description =
+      "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
     homepage = "https://github.com/mozilla/geckodriver";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jraygauthier ];

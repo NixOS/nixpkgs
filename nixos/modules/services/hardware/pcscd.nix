@@ -10,8 +10,7 @@ let
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
   };
 
-in
-{
+in {
 
   ###### interface
 
@@ -67,7 +66,8 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart =
+        [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
     };
   };
 }

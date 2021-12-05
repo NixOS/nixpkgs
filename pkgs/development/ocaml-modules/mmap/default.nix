@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mmap/releases/download/v${version}/mmap-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mmap/releases/download/v${version}/mmap-v${version}.tbz";
     sha256 = "0l6waidal2n8mkdn74avbslvc10sf49f5d889n838z03pra5chsc";
   };
 

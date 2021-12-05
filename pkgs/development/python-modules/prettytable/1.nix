@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, setuptools-scm
-, wcwidth
-}:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales, setuptools-scm, wcwidth }:
 
 buildPythonPackage rec {
   pname = "prettytable";
@@ -29,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "prettytable" ];
 
   meta = with lib; {
-    description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
+    description =
+      "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
     homepage = "http://code.google.com/p/prettytable/";
     license = licenses.bsd3;
   };

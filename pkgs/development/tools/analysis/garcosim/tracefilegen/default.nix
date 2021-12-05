@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Automatically generate all types of basic memory management operations and write into trace files";
+    description =
+      "Automatically generate all types of basic memory management operations and write into trace files";
     homepage = "https://github.com/GarCoSim";
     maintainers = [ maintainers.cmcdragonkai ];
     license = licenses.gpl2;

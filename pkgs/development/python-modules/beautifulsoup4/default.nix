@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, html5lib
-, lxml
-, pytestCheckHook
-, pythonOlder
-, soupsieve
-}:
+{ lib, buildPythonPackage, fetchPypi, html5lib, lxml, pytestCheckHook
+, pythonOlder, soupsieve }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
@@ -19,15 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-wjrSPFIdgYlVpBUaZ9gVgDGdS/VI09SfQiOuBB/5iJE=";
   };
 
-  propagatedBuildInputs = [
-    html5lib
-    lxml
-    soupsieve
-  ];
+  propagatedBuildInputs = [ html5lib lxml soupsieve ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bs4" ];
 

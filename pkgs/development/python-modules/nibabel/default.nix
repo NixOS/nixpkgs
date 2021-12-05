@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, packaging
-, pytest
-, nose
-, numpy
-, h5py
-, pydicom
-, scipy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, packaging, pytest, nose, numpy
+, h5py, pydicom, scipy }:
 
 buildPythonPackage rec {
   pname = "nibabel";

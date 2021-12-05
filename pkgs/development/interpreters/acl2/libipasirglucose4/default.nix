@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   libname = pname + stdenv.targetPlatform.extensions.sharedLibrary;
 
   src = fetchurl {
-    url = "https://baldur.iti.kit.edu/sat-competition-2017/solvers/incremental/glucose-ipasir.zip";
+    url =
+      "https://baldur.iti.kit.edu/sat-competition-2017/solvers/incremental/glucose-ipasir.zip";
     sha256 = "0xchgady9vwdh8frmc8swz6va53igp2wj1y9sshd0g7549n87wdj";
   };
   nativeBuildInputs = [ unzip ];
@@ -33,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Shared library providing IPASIR interface to the Glucose SAT solver";
+    description =
+      "Shared library providing IPASIR interface to the Glucose SAT solver";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ kini ];

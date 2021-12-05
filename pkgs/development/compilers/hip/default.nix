@@ -1,28 +1,7 @@
-{ stdenv
-, binutils-unwrapped
-, clang
-, clang-unwrapped
-, cmake
-, compiler-rt
-, fetchFromGitHub
-, fetchpatch
-, file
-, lib
-, lld
-, llvm
-, makeWrapper
-, perl
-, python
-, rocclr
-, rocm-comgr
-, rocm-device-libs
-, rocm-opencl-runtime
-, rocm-runtime
-, rocm-thunk
-, rocminfo
-, writeScript
-, writeText
-}:
+{ stdenv, binutils-unwrapped, clang, clang-unwrapped, cmake, compiler-rt
+, fetchFromGitHub, fetchpatch, file, lib, lld, llvm, makeWrapper, perl, python
+, rocclr, rocm-comgr, rocm-device-libs, rocm-opencl-runtime, rocm-runtime
+, rocm-thunk, rocminfo, writeScript, writeText }:
 
 stdenv.mkDerivation rec {
   name = "hip";
@@ -78,12 +57,14 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "no-git-during-build";
-      url = "https://github.com/acowley/HIP/commit/310b7e972cfb23216250c0240ba6134741679aee.patch";
+      url =
+        "https://github.com/acowley/HIP/commit/310b7e972cfb23216250c0240ba6134741679aee.patch";
       sha256 = "08ky7v1yvajabn9m5x3afzrnz38gnrgc7vgqlbyr7s801c383ha1";
     })
     (fetchpatch {
       name = "use-PATH-when-compiling-pch";
-      url = "https://github.com/acowley/HIP/commit/bfb4dd1eafa9714a2c05a98229cc35ffa3429b37.patch";
+      url =
+        "https://github.com/acowley/HIP/commit/bfb4dd1eafa9714a2c05a98229cc35ffa3429b37.patch";
       sha256 = "1wp0m32df7pf4rhx3k5n750fd7kz10zr60z0wllb0mw6h00w6xpz";
     })
   ];
@@ -117,7 +98,9 @@ stdenv.mkDerivation rec {
         -e 's,^\($HIP_RUNTIME=\).*$,\1"ROCclr";,' \
         -e 's,^\([[:space:]]*$HSA_PATH=\).*$,\1"${rocm-runtime}";,'g \
         -e 's,\([[:space:]]*$HOST_OSNAME=\).*,\1"nixos";,' \
-        -e 's,\([[:space:]]*$HOST_OSVER=\).*,\1"${lib.versions.majorMinor lib.version}";,' \
+        -e 's,\([[:space:]]*$HOST_OSVER=\).*,\1"${
+          lib.versions.majorMinor lib.version
+        }";,' \
         -e 's,^\([[:space:]]*\)$HIP_CLANG_INCLUDE_PATH = abs_path("$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/include");,\1$HIP_CLANG_INCLUDE_PATH = "${clang-unwrapped}/lib/clang/$HIP_CLANG_VERSION/include";,' \
         -e 's,^\([[:space:]]*$HIPCXXFLAGS .= " -isystem $HIP_CLANG_INCLUDE_PATH\)";,\1 -isystem ${rocm-runtime}/include";,' \
         -e 's,\($HIPCXXFLAGS .= " -isystem \\"$HIP_INCLUDE_PATH\\"\)" ;,\1 --rocm-path=${rocclr}";,' \

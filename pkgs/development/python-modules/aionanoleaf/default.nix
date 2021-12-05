@@ -1,9 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aionanoleaf";
@@ -19,16 +14,12 @@ buildPythonPackage rec {
     sha256 = "sha256-Ys6zFfS0R3L504fkMVZvt1IjCzLoT1OEW/OOCaXp7dw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aionanoleaf"
-  ];
+  pythonImportsCheck = [ "aionanoleaf" ];
 
   meta = with lib; {
     description = "Python wrapper for the Nanoleaf API";

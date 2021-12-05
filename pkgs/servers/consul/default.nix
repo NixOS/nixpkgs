@@ -24,7 +24,7 @@ buildGoModule rec {
 
   # This corresponds to paths with package main - normally unneeded but consul
   # has a split module structure in one repo
-  subPackages = ["." "connect/certgen"];
+  subPackages = [ "." "connect/certgen" ];
 
   vendorSha256 = "sha256-cQP1po9LGunFVocl4+HPs67oae2KpgyfRRB+xGVySUY=";
 

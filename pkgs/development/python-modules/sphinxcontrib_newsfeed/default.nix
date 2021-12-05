@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-}:
+{ lib, buildPythonPackage, fetchPypi, sphinx }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-newsfeed";
@@ -16,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sphinx ];
 
   meta = with lib; {
-    description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
+    description =
+      "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
     homepage = "https://bitbucket.org/prometheus/sphinxcontrib-newsfeed";
     license = licenses.bsd2;
   };

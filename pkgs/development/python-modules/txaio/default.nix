@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, six
-, twisted
-, zope_interface
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, pytest-asyncio, pytestCheckHook
+, pythonOlder, six, twisted, zope_interface }:
 
 buildPythonPackage rec {
   pname = "txaio";
@@ -20,17 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-fW+JdFaAIz8cTbndt0jfXojSp6N5Yr4XTA/QTI26Hcg=";
   };
 
-  propagatedBuildInputs = [
-    six
-    twisted
-    zope_interface
-  ];
+  propagatedBuildInputs = [ six twisted zope_interface ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # No real value
@@ -47,7 +30,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "txaio" ];
 
   meta = with lib; {
-    description = "Utilities to support code that runs unmodified on Twisted and asyncio";
+    description =
+      "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage = "https://github.com/crossbario/txaio";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

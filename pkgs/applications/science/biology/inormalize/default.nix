@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perlPackages,
-  libminc, EBTKS }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc, EBTKS
+}:
 
 stdenv.mkDerivation rec {
   pname = "inormalize";
-  name  = "${pname}-2014-10-21";
+  name = "${pname}-2014-10-21";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "79cea9cdfe7b99abfd40afda89ab2253b596ad2f";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "79cea9cdfe7b99abfd40afda89ab2253b596ad2f";
     sha256 = "1ahqv5q0ljvji99a5q8azjkdf6bgp6nr8lwivkqwqs3jm0k5clq7";
   };
 
@@ -19,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc EBTKS ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
+  cmakeFlags =
+    [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
 
   postFixup = ''
     for p in $out/bin/*; do
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Program to normalize intensity of MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

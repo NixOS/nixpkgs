@@ -13,17 +13,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-shared" ];
 
-  doCheck = false;                                # no test suite
+  doCheck = false; # no test suite
 
   meta = {
     description = "User-space NFSv3 file system server";
 
-    longDescription =
-      '' UNFS3 is a user-space implementation of the NFSv3 server
-         specification.  It provides a daemon for the MOUNT and NFS
-         protocols, which are used by NFS clients for accessing files on the
-         server.
-      '';
+    longDescription = ''
+      UNFS3 is a user-space implementation of the NFSv3 server
+              specification.  It provides a daemon for the MOUNT and NFS
+              protocols, which are used by NFS clients for accessing files on the
+              server.
+           '';
 
     homepage = "http://unfs3.sourceforge.net/";
 

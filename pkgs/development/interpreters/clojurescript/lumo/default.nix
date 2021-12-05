@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, clojure
-, gnutar
-, nodejs
-, jre
-, unzip
-, nodePackages
-, xcbuild
-, python
-, openssl
-, pkgs
-, fetchgit
-, darwin
-}:
+{ stdenv, lib, fetchurl, clojure, gnutar, nodejs, jre, unzip, nodePackages
+, xcbuild, python, openssl, pkgs, fetchgit, darwin }:
 let
   version = "1.10.1";
   nodeVersion = "11.13.0";
@@ -24,43 +10,44 @@ let
   lumo-internal-classpath = "LUMO__INTERNAL__CLASSPATH";
 
   # as found in cljs/snapshot/lumo/repl.cljs
-  requireDeps = '' \
-      cljs.analyzer \
-      cljs.compiler \
-      cljs.env \
-      cljs.js \
-      cljs.reader \
-      cljs.repl \
-      cljs.source-map \
-      cljs.source-map.base64 \
-      cljs.source-map.base64-vlq \
-      cljs.spec.alpha \
-      cljs.spec.gen.alpha \
-      cljs.tagged-literals \
-      cljs.tools.reader \
-      cljs.tools.reader.reader-types \
-      cljs.tools.reader.impl.commons \
-      cljs.tools.reader.impl.utils \
-      clojure.core.rrb-vector \
-      clojure.core.rrb-vector.interop \
-      clojure.core.rrb-vector.nodes \
-      clojure.core.rrb-vector.protocols \
-      clojure.core.rrb-vector.rrbt \
-      clojure.core.rrb-vector.transients \
-      clojure.core.rrb-vector.trees \
-      clojure.string \
-      clojure.set \
-      clojure.walk \
-      cognitect.transit \
-      fipp.visit \
-      fipp.engine \
-      fipp.deque \
-      lazy-map.core \
-      lumo.pprint.data \
-      lumo.repl \
-      lumo.repl-resources \
-      lumo.js-deps \
-      lumo.common '';
+  requireDeps = ''
+    \
+         cljs.analyzer \
+         cljs.compiler \
+         cljs.env \
+         cljs.js \
+         cljs.reader \
+         cljs.repl \
+         cljs.source-map \
+         cljs.source-map.base64 \
+         cljs.source-map.base64-vlq \
+         cljs.spec.alpha \
+         cljs.spec.gen.alpha \
+         cljs.tagged-literals \
+         cljs.tools.reader \
+         cljs.tools.reader.reader-types \
+         cljs.tools.reader.impl.commons \
+         cljs.tools.reader.impl.utils \
+         clojure.core.rrb-vector \
+         clojure.core.rrb-vector.interop \
+         clojure.core.rrb-vector.nodes \
+         clojure.core.rrb-vector.protocols \
+         clojure.core.rrb-vector.rrbt \
+         clojure.core.rrb-vector.transients \
+         clojure.core.rrb-vector.trees \
+         clojure.string \
+         clojure.set \
+         clojure.walk \
+         cognitect.transit \
+         fipp.visit \
+         fipp.engine \
+         fipp.deque \
+         lazy-map.core \
+         lumo.pprint.data \
+         lumo.repl \
+         lumo.repl-resources \
+         lumo.js-deps \
+         lumo.common '';
 
   compileClojurescript = (simple: ''
     (require '[cljs.build.api :as cljs])
@@ -84,15 +71,11 @@ let
        :target             :nodejs
        :hashbang           false
        ;; :libs               [ \"src/cljs/bundled\" \"src/js\" ]
-       :output-dir         ${if simple
-  then ''\"cljstmp\"''
-  else ''\"target\"''}
-       :output-to          ${if simple
-  then ''\"cljstmp/main.js\"''
-  else ''\"target/deleteme.js\"'' }})
-  ''
-  );
-
+       :output-dir         ${if simple then ''\"cljstmp\"'' else ''\"target\"''}
+       :output-to          ${
+         if simple then ''\"cljstmp/main.js\"'' else ''\"target/deleteme.js\"''
+       }})
+  '');
 
   cacheToJsons = ''
     (import [java.io ByteArrayOutputStream FileInputStream])
@@ -130,16 +113,14 @@ let
         (subs string  0 (.indexOf string \"cljs.nodejs={};\"))))
   '';
 
-
   cljdeps = import ./deps.nix { inherit pkgs; };
   classp = cljdeps.makeClasspaths {
     extraClasspaths = [ "src/js" "src/cljs/bundled" "src/cljs/snapshot" ];
   };
 
-
-  getJarPath = jarName: (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
-in
-stdenv.mkDerivation {
+  getJarPath = jarName:
+    (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
+in stdenv.mkDerivation {
   inherit version;
   pname = "lumo";
 
@@ -158,12 +139,8 @@ stdenv.mkDerivation {
     openssl
     gnutar
     nodePackages."lumo-build-deps-../interpreters/clojurescript/lumo"
-  ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-    xcbuild
-  ]
-  );
+  ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [ ApplicationServices xcbuild ]);
 
   patches = [ ./no_mangle.patch ./mkdir_promise.patch ];
 
@@ -175,7 +152,9 @@ stdenv.mkDerivation {
   buildPhase = ''
        # Copy over lumo-build-deps environment
     rm yarn.lock
-    cp -rf ${nodePackages."lumo-build-deps-../interpreters/clojurescript/lumo"}/lib/node_modules/lumo-build-deps/* ./
+    cp -rf ${
+      nodePackages."lumo-build-deps-../interpreters/clojurescript/lumo"
+    }/lib/node_modules/lumo-build-deps/* ./
 
     # configure clojure-cli
     mkdir ./.cpcache
@@ -198,9 +177,13 @@ stdenv.mkDerivation {
 
     # Step 2: sift files
     unzip -o ${getJarPath "org.clojure/clojurescript"} -d ./target
-    unzip -j ${getJarPath "org.clojure/clojure"} "clojure/template.clj" -d ./target/clojure
+    unzip -j ${
+      getJarPath "org.clojure/clojure"
+    } "clojure/template.clj" -d ./target/clojure
     unzip -o ${getJarPath "org.clojure/google-closure-library"} -d ./target
-    unzip -o ${getJarPath "org.clojure/google-closure-library-third-party"} -d ./target
+    unzip -o ${
+      getJarPath "org.clojure/google-closure-library-third-party"
+    } -d ./target
     unzip -o ${getJarPath "org.clojure/tools.reader"} -d ./target
     unzip -o ${getJarPath "org.clojure/test.check"} -d ./target
     cp -rf ./src/cljs/bundled/lumo/* ./target/lumo/

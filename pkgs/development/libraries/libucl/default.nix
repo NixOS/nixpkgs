@@ -1,20 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, curl
-, lua
-, openssl
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, curl, lua, openssl
 , features ? {
-    urls = false;
-    # Upstream enables regex by default
-    regex = true;
-    # Signature support is broken with openssl 1.1.1: https://github.com/vstakhov/libucl/issues/203
-    signatures = false;
-    lua = false;
-    utils = false;
-  }
-}:
+  urls = false;
+  # Upstream enables regex by default
+  regex = true;
+  # Signature support is broken with openssl 1.1.1: https://github.com/vstakhov/libucl/issues/203
+  signatures = false;
+  lua = false;
+  utils = false;
+} }:
 
 let
   featureDeps = {
@@ -22,8 +15,7 @@ let
     signatures = [ openssl ];
     lua = [ lua ];
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "libucl";
   version = "0.8.1";
 
@@ -37,11 +29,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = with lib;
-    concatLists (
-      mapAttrsToList (feat: enabled:
-        optionals enabled (featureDeps."${feat}" or [])
-      ) features
-    );
+    concatLists (mapAttrsToList
+      (feat: enabled: optionals enabled (featureDeps."${feat}" or [ ]))
+      features);
 
   enableParallelBuilding = true;
 

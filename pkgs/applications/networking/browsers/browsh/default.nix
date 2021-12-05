@@ -7,7 +7,8 @@ let
   # literally an asset that is indifferent regardless of the platform, this
   # might be just enough.
   webext = fetchurl {
-    url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}-an.fx.xpi";
+    url =
+      "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}-an.fx.xpi";
     sha256 = "1shf1s9s525wns5vrsc4ns21zjxm1si43lx6v0q8ma6vd5x5445l";
   };
 
@@ -52,7 +53,8 @@ in buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "A fully-modern text-based browser, rendering to TTY and browsers";
+    description =
+      "A fully-modern text-based browser, rendering to TTY and browsers";
     homepage = "https://www.brow.sh/";
     maintainers = [ maintainers.kalbasit ];
     license = lib.licenses.lgpl21;

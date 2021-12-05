@@ -18,9 +18,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libseccomp ];
 
   meta = with lib; {
-    description = "Rust implementation of the Open Containers Initiative oci-runtime";
+    description =
+      "Rust implementation of the Open Containers Initiative oci-runtime";
     homepage = "https://github.com/oracle/railcar";
-    license = with licenses; [ asl20 /* or */ upl ];
+    license = with licenses; [
+      asl20 # or
+      upl
+    ];
     maintainers = [ maintainers.spacekookie ];
   };
 }

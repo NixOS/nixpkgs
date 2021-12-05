@@ -1,15 +1,5 @@
-{ lib,
-  stdenv,
-  fetchFromGitLab,
-  gfortran,
-  libelf,
-  libiberty,
-  zlib,
-  libbfd,
-  libopcodes,
-  buildPackages,
-  autoreconfHook
-}:
+{ lib, stdenv, fetchFromGitLab, gfortran, libelf, libiberty, zlib, libbfd
+, libopcodes, buildPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "EZTrace";
@@ -26,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libelf libiberty zlib libbfd libopcodes ];
 
   meta = with lib; {
-    description = "Tool that aims at generating automatically execution trace from HPC programs";
+    description =
+      "Tool that aims at generating automatically execution trace from HPC programs";
     license = licenses.cecill-b;
     maintainers = with maintainers; [ ];
   };

@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.cryptpad;
-in
-{
+let cfg = config.services.cryptpad;
+in {
   options.services.cryptpad = {
     enable = mkEnableOption "the Cryptpad service";
 
@@ -13,15 +11,15 @@ in
       default = pkgs.cryptpad;
       defaultText = literalExpression "pkgs.cryptpad";
       type = types.package;
-      description = "
-        Cryptpad package to use.
-      ";
+      description = "\n        Cryptpad package to use.\n      ";
     };
 
     configFile = mkOption {
       type = types.path;
-      default = "${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
-      defaultText = literalExpression ''"''${package}/lib/node_modules/cryptpad/config/config.example.js"'';
+      default =
+        "${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
+      defaultText = literalExpression
+        ''"''${package}/lib/node_modules/cryptpad/config/config.example.js"'';
       description = ''
         Path to the JavaScript configuration file.
 
@@ -39,10 +37,8 @@ in
       after = [ "networking.target" ];
       serviceConfig = {
         DynamicUser = true;
-        Environment = [
-          "CRYPTPAD_CONFIG=${cfg.configFile}"
-          "HOME=%S/cryptpad"
-        ];
+        Environment =
+          [ "CRYPTPAD_CONFIG=${cfg.configFile}" "HOME=%S/cryptpad" ];
         ExecStart = "${cfg.package}/bin/cryptpad";
         PrivateTmp = true;
         Restart = "always";

@@ -1,36 +1,19 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
+{ stdenv, lib, mkDerivation, fetchFromGitHub, extra-cmake-modules
 
 # common deps
 , karchive
 
 # client deps
-, qtbase
-, qtkeychain
-, qtmultimedia
-, qtsvg
-, qttools
-, libsecret
+, qtbase, qtkeychain, qtmultimedia, qtsvg, qttools, libsecret
 
 # optional client deps
-, giflib
-, kdnssd
-, libvpx
-, miniupnpc
-, qtx11extras # kis
+, giflib, kdnssd, libvpx, miniupnpc, qtx11extras # kis
 
 # optional server deps
-, libmicrohttpd
-, libsodium
-, withSystemd ? stdenv.isLinux
-, systemd ? null
+, libmicrohttpd, libsodium, withSystemd ? stdenv.isLinux, systemd ? null
 
-# options
-, buildClient ? true
-, buildServer ? true
+  # options
+, buildClient ? true, buildServer ? true
 , buildServerGui ? true # if false builds a headless server
 , buildExtraTools ? false
 , enableKisTablet ? false # enable improved graphics tablet support
@@ -59,12 +42,9 @@ let
     libsodium # ext-auth support
   ] ++ optional withSystemd systemd;
 
-  kisDeps = [
-    qtx11extras
-  ];
+  kisDeps = [ qtx11extras ];
 
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
+  boolToFlag = bool: if bool then "ON" else "OFF";
 
 in mkDerivation rec {
   pname = "drawpile";
@@ -79,12 +59,8 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [
-    karchive
-  ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  buildInputs = [ karchive ] ++ optionals buildClient clientDeps
+    ++ optionals buildServer serverDeps ++ optionals enableKisTablet kisDeps;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -97,7 +73,8 @@ in mkDerivation rec {
   ];
 
   meta = {
-    description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+    description =
+      "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
     license = licenses.gpl3;

@@ -1,30 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
-, editorconfig-core-c
-, gtksourceview4
-, gtkspell3
-, libsoup
-, vte
-, webkitgtk
-, ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, vala, python3, desktop-file-utils, gtk3, granite, libgee, libhandy
+, elementary-icon-theme, appstream, libpeas, editorconfig-core-c, gtksourceview4
+, gtkspell3, libsoup, vte, webkitgtk, ctags, libgit2-glib, wrapGAppsHook, polkit
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [

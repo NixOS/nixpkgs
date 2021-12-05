@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, nose
-, toolz
-, python
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, nose, toolz, python, isPy27 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
@@ -27,7 +19,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
-    description = "Cython implementation of Toolz: High performance functional utilities";
+    description =
+      "Cython implementation of Toolz: High performance functional utilities";
     license = "licenses.bsd3";
     maintainers = with lib.maintainers; [ fridh ];
   };

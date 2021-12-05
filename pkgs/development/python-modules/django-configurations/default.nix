@@ -1,16 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django-discover-runner
-, mock
-, dj-database-url
-, dj-email-url
-, dj-search-url
-, django-cache-url
-, six
-, django
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, django-discover-runner, mock
+, dj-database-url, dj-email-url, dj-search-url, django-cache-url, six, django
+, setuptools-scm }:
 
 buildPythonPackage rec {
   version = "2.2";
@@ -23,7 +13,14 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
-  checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url ];
+  checkInputs = [
+    django-discover-runner
+    mock
+    dj-database-url
+    dj-email-url
+    dj-search-url
+    django-cache-url
+  ];
 
   checkPhase = ''
     export PYTHONPATH=.:$PYTHONPATH

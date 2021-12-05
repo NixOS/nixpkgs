@@ -12,11 +12,10 @@ let
   createFd = optionalString (cfg.certFile != null) "${fd}<${cfg.certFile}";
 
   # Command line arguments for the shellinabox daemon
-  args = [ "--background" ]
-   ++ optional (! cfg.enableSSL) "--disable-ssl"
-   ++ optional (cfg.certFile != null) "--cert-fd=${fd}"
-   ++ optional (cfg.certDirectory != null) "--cert=${cfg.certDirectory}"
-   ++ cfg.extraOptions;
+  args = [ "--background" ] ++ optional (!cfg.enableSSL) "--disable-ssl"
+    ++ optional (cfg.certFile != null) "--cert-fd=${fd}"
+    ++ optional (cfg.certDirectory != null) "--cert=${cfg.certDirectory}"
+    ++ cfg.extraOptions;
 
   # Command to start shellinaboxd
   cmd = "${pkgs.shellinabox}/bin/shellinaboxd ${concatStringsSep " " args}";
@@ -24,9 +23,7 @@ let
   # Command to start shellinaboxd if certFile is specified
   wrappedCmd = "${pkgs.bash}/bin/bash -c 'exec ${createFd} && ${cmd}'";
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -96,13 +93,18 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions =
-      [ { assertion = cfg.enableSSL == true
-            -> cfg.certDirectory != null || cfg.certFile != null;
-          message = "SSL is enabled for shellinabox, but no certDirectory or certFile has been specefied."; }
-        { assertion = ! (cfg.certDirectory != null && cfg.certFile != null);
-          message = "Cannot set both certDirectory and certFile for shellinabox."; }
-      ];
+    assertions = [
+      {
+        assertion = cfg.enableSSL == true -> cfg.certDirectory != null
+          || cfg.certFile != null;
+        message =
+          "SSL is enabled for shellinabox, but no certDirectory or certFile has been specefied.";
+      }
+      {
+        assertion = !(cfg.certDirectory != null && cfg.certFile != null);
+        message = "Cannot set both certDirectory and certFile for shellinabox.";
+      }
+    ];
 
     systemd.services.shellinaboxd = {
       description = "Shellinabox Web Server Daemon";
@@ -114,7 +116,8 @@ in
       serviceConfig = {
         Type = "forking";
         User = "${cfg.user}";
-        ExecStart = "${if cfg.certFile == null then "${cmd}" else "${wrappedCmd}"}";
+        ExecStart =
+          "${if cfg.certFile == null then "${cmd}" else "${wrappedCmd}"}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, expat
-, file
-, flex
-, texinfo
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, expat, file, flex
+, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "udunits";
@@ -20,20 +12,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-+HW21+r65OroCxMK2/B5fe7zHs4hD4xyoJK2bhdJGyQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    texinfo
-    bison
-    flex
-    file
-  ];
-  buildInputs = [
-    expat
-  ];
+  nativeBuildInputs = [ autoreconfHook texinfo bison flex file ];
+  buildInputs = [ expat ];
 
   meta = with lib; {
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
-    description = "A C-based package for the programatic handling of units of physical quantities";
+    description =
+      "A C-based package for the programatic handling of units of physical quantities";
     longDescription = ''
       The UDUNITS package supports units of physical quantities. Its C library
       provides for arithmetic manipulation of units and for conversion of

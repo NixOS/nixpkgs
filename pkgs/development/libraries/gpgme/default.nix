@@ -1,17 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, libgpg-error, gnupg, pkg-config, glib, pth, libassuan
-, file, which, ncurses
-, texinfo
-, buildPackages
-, qtbase ? null
-, pythonSupport ? false, swig2 ? null, python ? null
-}:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libgpg-error, gnupg
+, pkg-config, glib, pth, libassuan, file, which, ncurses, texinfo, buildPackages
+, qtbase ? null, pythonSupport ? false, swig2 ? null, python ? null }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-in
+let inherit (stdenv.hostPlatform) system;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gpgme";
   version = "1.16.0";
 
@@ -28,23 +21,24 @@ stdenv.mkDerivation rec {
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
     (fetchpatch {
       name = "0001-Fix-python-tests-on-non-Linux.patch";
-      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
+      url =
+        "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
       sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
     })
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
-  # Fix _AC_UNDECLARED_WARNING for autoconf≥2.70. See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
-  ++ lib.optional stdenv.cc.isClang ./fix-clang-autoconf-undeclared-warning.patch;
+    # Fix _AC_UNDECLARED_WARNING for autoconf≥2.70. See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
+    ++ lib.optional stdenv.cc.isClang
+    ./fix-clang-autoconf-undeclared-warning.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
-  propagatedBuildInputs =
-    [ libgpg-error glib libassuan pth ]
+  propagatedBuildInputs = [ libgpg-error glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
   nativeBuildInputs = [ pkg-config gnupg texinfo autoreconfHook ]
-  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+    ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -55,10 +49,10 @@ stdenv.mkDerivation rec {
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python"
-  # Tests will try to communicate with gpg-agent instance via a UNIX socket
-  # which has a path length limit. Nix on darwin is using a build directory
-  # that already has quite a long path and the resulting socket path doesn't
-  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+    # Tests will try to communicate with gpg-agent instance via a UNIX socket
+    # which has a path length limit. Nix on darwin is using a build directory
+    # that already has quite a long path and the resulting socket path doesn't
+    # fit in the limit. https://github.com/NixOS/nix/pull/1085
     ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
   NIX_CFLAGS_COMPILE = toString (
@@ -74,7 +68,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnupg.org/software/gpgme/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
+    changelog =
+      "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG

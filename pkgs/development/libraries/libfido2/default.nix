@@ -1,13 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, hidapi
-, libcbor
-, openssl
-, udev
-, zlib
+{ lib, stdenv, fetchurl, cmake, pkg-config, hidapi, libcbor, openssl, udev, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +7,8 @@ stdenv.mkDerivation rec {
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
+    url =
+      "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
     sha256 = "07gxyy5yzgfh5hg7q9fr77z5mkj0xjvd5ya7p5f5kar4iwc92hjm";
   };
 
@@ -29,11 +21,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DUSE_HIDAPI=1"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DNFC_LINUX=1"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DUSE_HIDAPI=1" ]
+    ++ lib.optionals stdenv.isLinux [ "-DNFC_LINUX=1" ];
 
   meta = with lib; {
     description = ''

@@ -1,32 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libhandy
-, modemmanager
-, gtk3
-, gom
-, gsound
-, feedbackd
-, callaudiod
-, evolution-data-server
-, glib
-, folks
-, desktop-file-utils
-, appstream-glib
-, libpeas
-, libgdata
-, dbus
-, vala
-, wrapGAppsHook
-, xvfb-run
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gobject-introspection
-}:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, libhandy, modemmanager
+, gtk3, gom, gsound, feedbackd, callaudiod, evolution-data-server, glib, folks
+, desktop-file-utils, appstream-glib, libpeas, libgdata, dbus, vala
+, wrapGAppsHook, xvfb-run, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43
+, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "calls";
@@ -69,16 +45,11 @@ stdenv.mkDerivation rec {
     libgdata # required by some dependency transitively
   ];
 
-  checkInputs = [
-    dbus
-    xvfb-run
-  ];
+  checkInputs = [ dbus xvfb-run ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   doCheck = true;
 
@@ -94,7 +65,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A phone dialer and call handler";
-    longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
+    longDescription =
+      "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann ];

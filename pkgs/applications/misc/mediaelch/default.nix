@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, qttools
-}:
+{ lib, mkDerivation, fetchFromGitHub, qmake, curl, ffmpeg, libmediainfo, libzen
+, qtbase, qtdeclarative, qtmultimedia, qtsvg, qttools }:
 
 mkDerivation rec {
   pname = "mediaelch";
@@ -27,7 +15,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
+  buildInputs =
+    [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
 
   prePatch = ''
     substituteInPlace MediaElch.pro --replace "/usr" "$out"

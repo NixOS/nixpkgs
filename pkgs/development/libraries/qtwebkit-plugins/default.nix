@@ -18,12 +18,15 @@ stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   postPatch = ''
-    sed -i "s,-lhunspell,-lhunspell-${lib.versions.majorMinor hunspell.version}," src/spellcheck/spellcheck.pri
+    sed -i "s,-lhunspell,-lhunspell-${
+      lib.versions.majorMinor hunspell.version
+    }," src/spellcheck/spellcheck.pri
     sed -i "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix," src/src.pro
   '';
 
   meta = with lib; {
-    description = "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
+    description =
+      "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
     homepage = "https://github.com/QupZilla/qtwebkit-plugins";
     license = licenses.gpl3;
     platforms = platforms.linux;

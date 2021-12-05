@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.unifi-poller;
 
-  configFile = pkgs.writeText "unifi-poller.json" (generators.toJSON {} {
+  configFile = pkgs.writeText "unifi-poller.json" (generators.toJSON { } {
     inherit (cfg) poller influxdb loki prometheus unifi;
   });
 
@@ -31,7 +31,7 @@ in {
       };
       plugins = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Load additional plugins.
         '';
@@ -86,8 +86,10 @@ in {
       };
       pass = mkOption {
         type = types.path;
-        default = pkgs.writeText "unifi-poller-influxdb-default.password" "unifipoller";
-        defaultText = literalExpression "unifi-poller-influxdb-default.password";
+        default =
+          pkgs.writeText "unifi-poller-influxdb-default.password" "unifipoller";
+        defaultText =
+          literalExpression "unifi-poller-influxdb-default.password";
         description = ''
           Path of a file containing the password for influxdb.
           This file needs to be readable by the unifi-poller user.
@@ -184,7 +186,8 @@ in {
         };
         pass = mkOption {
           type = types.path;
-          default = pkgs.writeText "unifi-poller-unifi-default.password" "unifi";
+          default =
+            pkgs.writeText "unifi-poller-unifi-default.password" "unifi";
           defaultText = literalExpression "unifi-poller-unifi-default.password";
           description = ''
             Path of a file containing the password for the unifi service user.
@@ -282,7 +285,7 @@ in {
 
       controllers = mkOption {
         type = with types; listOf (submodule { options = controllerOptions; });
-        default = [];
+        default = [ ];
         description = ''
           List of Unifi controllers to poll. Use defaults if empty.
         '';
@@ -303,7 +306,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
+        ExecStart =
+          "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
         Restart = "always";
         PrivateTmp = true;
         ProtectHome = true;

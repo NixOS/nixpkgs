@@ -9,13 +9,6 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    libkdegames
-    kdoctools
-    ki18n
-    kio
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ libkdegames kdoctools ki18n kio ];
 }

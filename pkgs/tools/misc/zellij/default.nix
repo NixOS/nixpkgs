@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, installShellFiles
-, pkg-config
-, libiconv
-, openssl
-, zellij
-, testVersion
-}:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, installShellFiles, pkg-config
+, libiconv, openssl, zellij, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
@@ -23,16 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1pjmlwx966pgri58xx2zqr84wili0bzpl9gzhjdkvcx0j1f66anb";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   preCheck = ''
     HOME=$TMPDIR
@@ -50,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/Changelog.md";
+    changelog =
+      "https://github.com/zellij-org/zellij/blob/v${version}/Changelog.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ therealansh _0x4A6F ];
   };

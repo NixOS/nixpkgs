@@ -1,5 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, pcsclite, qtsvg, qttools, qtwebsockets
-, qtquickcontrols2, qtgraphicaleffects }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, pcsclite, qtsvg
+, qttools, qtwebsockets, qtquickcontrols2, qtgraphicaleffects }:
 
 mkDerivation rec {
   pname = "AusweisApp2";
@@ -14,7 +14,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ qtsvg qttools qtwebsockets qtquickcontrols2 qtgraphicaleffects pcsclite ];
+  buildInputs =
+    [ qtsvg qttools qtwebsockets qtquickcontrols2 qtgraphicaleffects pcsclite ];
 
   meta = with lib; {
     description = "Authentication software for the German ID card";

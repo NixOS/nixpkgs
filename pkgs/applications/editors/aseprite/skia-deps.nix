@@ -1,5 +1,4 @@
-{ fetchgit }:
-{
+{ fetchgit }: {
   angle2 = fetchgit {
     url = "https://chromium.googlesource.com/angle/angle.git";
     rev = "956ab4d9fab36be9929e63829475d4d69b2c681c";
@@ -16,7 +15,8 @@
     sha256 = "05ipmag6k55jmidbyvg5mkqm69zfw03gfkqhi9jnjlmlbg31y412";
   };
   sfntly = fetchgit {
-    url = "https://chromium.googlesource.com/external/github.com/googlei18n/sfntly.git";
+    url =
+      "https://chromium.googlesource.com/external/github.com/googlei18n/sfntly.git";
     rev = "b18b09b6114b9b7fe6fc2f96d8b15e8a72f66916";
     sha256 = "0zf1h0dibmm38ldypccg4faacvskmd42vsk6zbxlfcfwjlqm6pp4";
   };

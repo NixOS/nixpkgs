@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ octave libxml2 ];
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Tools for adjustment of geodetic networks";
     homepage = "https://www.gnu.org/software/gama/";
     license = licenses.gpl3Plus;

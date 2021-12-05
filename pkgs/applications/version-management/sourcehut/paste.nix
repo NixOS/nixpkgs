@@ -1,10 +1,4 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, pyyaml
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, srht, pyyaml, python }:
 
 buildPythonPackage rec {
   pname = "pastesrht";
@@ -19,10 +13,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
-  propagatedBuildInputs = [
-    srht
-    pyyaml
-  ];
+  propagatedBuildInputs = [ srht pyyaml ];
 
   preBuild = ''
     export PKGVER=${version}

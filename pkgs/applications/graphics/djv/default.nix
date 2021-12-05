@@ -1,22 +1,6 @@
-{ stdenv
-, cmake
-, fetchFromGitHub
-, lib
-, alsa-lib
-, libGL
-, libX11
-, libXinerama
-, libXi
-, zlib
-, rtaudio
-, rapidjson
-, ilmbase
-, glm
-, glfw3
-, libpng
-, opencolorio_1
-, freetype
-}:
+{ stdenv, cmake, fetchFromGitHub, lib, alsa-lib, libGL, libX11, libXinerama
+, libXi, zlib, rtaudio, rapidjson, ilmbase, glm, glfw3, libpng, opencolorio_1
+, freetype }:
 
 let
 
@@ -58,9 +42,7 @@ let
     sourceRoot = "source/etc/SuperBuild";
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [
-      libGL
-    ];
+    buildInputs = [ libGL ];
 
     postPatch = ''
       chmod -R +w .
@@ -101,8 +83,7 @@ let
     doCheck = true;
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "djv";
   version = djvVersion;
 
@@ -143,7 +124,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A professional review software for VFX, animation, and film production";
+    description =
+      "A professional review software for VFX, animation, and film production";
     homepage = "https://darbyjohnston.github.io/DJV/";
     platforms = platforms.linux;
     maintainers = [ maintainers.blitz ];

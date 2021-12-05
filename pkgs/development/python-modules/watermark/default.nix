@@ -1,11 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, importlib-metadata
-, ipython
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, importlib-metadata, ipython
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "watermark";
@@ -19,18 +13,16 @@ buildPythonPackage rec {
     sha256 = "0w2mzi344x1mrv8d9jca67bhig34jissr9sqrk68gpg5n10alblb";
   };
 
-  propagatedBuildInputs = [
-    ipython
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [ ipython ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs =  [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "watermark" ];
 
   meta = with lib; {
-    description = "IPython extension for printing date and time stamps, version numbers, and hardware information.";
+    description =
+      "IPython extension for printing date and time stamps, version numbers, and hardware information.";
     homepage = "https://github.com/rasbt/watermark";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nphilou ];

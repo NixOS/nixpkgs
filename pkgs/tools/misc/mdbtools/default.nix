@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, glib, readline
-, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
-, txt2man, which
-}:
+{ stdenv, lib, fetchFromGitHub, glib, readline, bison, flex, pkg-config
+, autoreconfHook, libxslt, makeWrapper, txt2man, which }:
 
 stdenv.mkDerivation rec {
   pname = "mdbtools";
@@ -16,9 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-scrollkeeper" ];
 
-  nativeBuildInputs = [
-    pkg-config bison flex autoreconfHook txt2man which
-  ];
+  nativeBuildInputs = [ pkg-config bison flex autoreconfHook txt2man which ];
 
   buildInputs = [ glib readline ];
 

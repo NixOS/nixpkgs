@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
+{ lib, stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k
+, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -13,9 +14,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "devdoc" ];
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./pygobject-2.0-fix-darwin.patch
-  ];
+  patches = lib.optionals stdenv.isDarwin [ ./pygobject-2.0-fix-darwin.patch ];
 
   configureFlags = [ "--disable-introspection" ];
 

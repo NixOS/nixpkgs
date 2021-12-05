@@ -1,7 +1,6 @@
 { config, lib, name, ... }:
 
-with lib;
-{
+with lib; {
   options = {
     dataPath = mkOption {
       type = types.path;

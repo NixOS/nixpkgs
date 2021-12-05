@@ -6,12 +6,12 @@ let
 
   stateDirectory = "/var/lib/duplicity";
 
-  localTarget =
-    if hasPrefix "file://" cfg.targetUrl
-    then removePrefix "file://" cfg.targetUrl else null;
+  localTarget = if hasPrefix "file://" cfg.targetUrl then
+    removePrefix "file://" cfg.targetUrl
+  else
+    null;
 
-in
-{
+in {
   options.services.duplicity = {
     enable = mkEnableOption "backups with duplicity";
 
@@ -146,25 +146,36 @@ in
 
         environment.HOME = stateDirectory;
 
-        script =
-          let
-            target = escapeShellArg cfg.targetUrl;
-            extra = escapeShellArgs ([ "--archive-dir" stateDirectory ] ++ cfg.extraFlags);
-            dup = "${pkgs.duplicity}/bin/duplicity";
-          in
-          ''
-            set -x
-            ${dup} cleanup ${target} --force ${extra}
-            ${lib.optionalString (cfg.cleanup.maxAge != null) "${dup} remove-older-than ${lib.escapeShellArg cfg.cleanup.maxAge} ${target} --force ${extra}"}
-            ${lib.optionalString (cfg.cleanup.maxFull != null) "${dup} remove-all-but-n-full ${toString cfg.cleanup.maxFull} ${target} --force ${extra}"}
-            ${lib.optionalString (cfg.cleanup.maxIncr != null) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
-            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${lib.escapeShellArgs (
-              [ cfg.root cfg.targetUrl ]
+        script = let
+          target = escapeShellArg cfg.targetUrl;
+          extra = escapeShellArgs
+            ([ "--archive-dir" stateDirectory ] ++ cfg.extraFlags);
+          dup = "${pkgs.duplicity}/bin/duplicity";
+        in ''
+          set -x
+          ${dup} cleanup ${target} --force ${extra}
+          ${lib.optionalString (cfg.cleanup.maxAge != null)
+          "${dup} remove-older-than ${
+            lib.escapeShellArg cfg.cleanup.maxAge
+          } ${target} --force ${extra}"}
+          ${lib.optionalString (cfg.cleanup.maxFull != null)
+          "${dup} remove-all-but-n-full ${
+            toString cfg.cleanup.maxFull
+          } ${target} --force ${extra}"}
+          ${lib.optionalString (cfg.cleanup.maxIncr != null)
+          "${dup} remove-all-inc-of-but-n-full ${
+            toString cfg.cleanup.maxIncr
+          } ${target} --force ${extra}"}
+          exec ${dup} ${
+            if cfg.fullIfOlderThan == "always" then "full" else "incr"
+          } ${
+            lib.escapeShellArgs ([ cfg.root cfg.targetUrl ]
               ++ concatMap (p: [ "--include" p ]) cfg.include
-              ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
-              ++ (lib.optionals (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ])
-              )} ${extra}
-          '';
+              ++ concatMap (p: [ "--exclude" p ]) cfg.exclude ++ (lib.optionals
+                (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan
+                  != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ]))
+          } ${extra}
+        '';
         serviceConfig = {
           PrivateTmp = true;
           ProtectSystem = "strict";
@@ -175,17 +186,17 @@ in
         } // optionalAttrs (cfg.secretFile != null) {
           EnvironmentFile = cfg.secretFile;
         };
-      } // optionalAttrs (cfg.frequency != null) {
-        startAt = cfg.frequency;
-      };
+      } // optionalAttrs (cfg.frequency != null) { startAt = cfg.frequency; };
 
-      tmpfiles.rules = optional (localTarget != null) "d ${localTarget} 0700 root root -";
+      tmpfiles.rules =
+        optional (localTarget != null) "d ${localTarget} 0700 root root -";
     };
 
     assertions = singleton {
       # Duplicity will fail if the last file selection option is an include. It
       # is not always possible to detect but this simple case can be caught.
-      assertion = cfg.include != [ ] -> cfg.exclude != [ ] || cfg.extraFlags != [ ];
+      assertion = cfg.include != [ ] -> cfg.exclude != [ ] || cfg.extraFlags
+        != [ ];
       message = ''
         Duplicity will fail if you only specify included paths ("Because the
         default is to include all files, the expression is redundant. Exiting

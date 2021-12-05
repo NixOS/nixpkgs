@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3Packages
-, vulkan-headers
-, vulkan-loader
-, shaderc
-, glslang
-, lcms2
-, libepoxy
-, libGL
-, xorg
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, python3Packages
+, vulkan-headers, vulkan-loader, shaderc, glslang, lcms2, libepoxy, libGL, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "08kqsd29h8wm0vz7698wh2mdgpwv6anqc5n7d1spnnamwyfwc64h";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3Packages.Mako
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config python3Packages.Mako ];
 
   buildInputs = [
     vulkan-headers
@@ -51,7 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Reusable library for GPU-accelerated video/image rendering primitives";
+    description =
+      "Reusable library for GPU-accelerated video/image rendering primitives";
     longDescription = ''
       Reusable library for GPU-accelerated image/view processing primitives and
       shaders, as well a batteries-included, extensible, high-quality rendering
@@ -59,7 +43,8 @@ stdenv.mkDerivation rec {
       MoltenVK).
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
-    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
+    changelog =
+      "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ primeos tadeokondrak ];
     platforms = platforms.all;

@@ -5,9 +5,9 @@ with lib;
 let
   cfg = config.services.awstats;
   package = pkgs.awstats;
-  configOpts = {name, config, ...}: {
+  configOpts = { name, config, ... }: {
     options = {
-      type = mkOption{
+      type = mkOption {
         type = types.enum [ "mail" "web" ];
         default = "web";
         example = "mail";
@@ -50,7 +50,7 @@ let
 
       hostAliases = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "www.example.org" ];
         description = ''
           List of aliases the site has.
@@ -59,13 +59,14 @@ let
 
       extraConfig = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "ValidHTTPCodes" = "404";
           }
         '';
-        description = "Extra configuration to be appended to awstats.\${name}.conf.";
+        description =
+          "Extra configuration to be appended to awstats.\${name}.conf.";
       };
 
       webService = {
@@ -86,12 +87,17 @@ let
     };
   };
   webServices = filterAttrs (name: value: value.webService.enable) cfg.configs;
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "awstats" "service" "enable" ] "Please enable per domain with `services.awstats.configs.<name>.webService.enable`")
-    (mkRemovedOptionModule [ "services" "awstats" "service" "urlPrefix" ] "Please set per domain with `services.awstats.configs.<name>.webService.urlPrefix`")
-    (mkRenamedOptionModule [ "services" "awstats" "vardir" ] [ "services" "awstats" "dataDir" ])
+    (mkRemovedOptionModule [ "services" "awstats" "service" "enable" ]
+      "Please enable per domain with `services.awstats.configs.<name>.webService.enable`")
+    (mkRemovedOptionModule [ "services" "awstats" "service" "urlPrefix" ]
+      "Please set per domain with `services.awstats.configs.<name>.webService.urlPrefix`")
+    (mkRenamedOptionModule [ "services" "awstats" "vardir" ] [
+      "services"
+      "awstats"
+      "dataDir"
+    ])
   ];
 
   options.services.awstats = {
@@ -105,7 +111,7 @@ in
 
     configs = mkOption {
       type = types.attrsOf (types.submodule configOpts);
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "mysite" = {
@@ -130,82 +136,76 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     environment.systemPackages = [ package.bin ];
 
     environment.etc = mapAttrs' (name: opts:
-    nameValuePair "awstats/awstats.${name}.conf" {
-      source = pkgs.runCommand "awstats.${name}.conf"
-      { preferLocalBuild = true; }
-      (''
-        sed \
-      ''
-      # set up mail stats
-      + optionalString (opts.type == "mail")
-      ''
-        -e 's|^\(LogType\)=.*$|\1=M|' \
-        -e 's|^\(LevelForBrowsersDetection\)=.*$|\1=0|' \
-        -e 's|^\(LevelForOSDetection\)=.*$|\1=0|' \
-        -e 's|^\(LevelForRefererAnalyze\)=.*$|\1=0|' \
-        -e 's|^\(LevelForRobotsDetection\)=.*$|\1=0|' \
-        -e 's|^\(LevelForSearchEnginesDetection\)=.*$|\1=0|' \
-        -e 's|^\(LevelForFileTypesDetection\)=.*$|\1=0|' \
-        -e 's|^\(LevelForWormsDetection\)=.*$|\1=0|' \
-        -e 's|^\(ShowMenu\)=.*$|\1=1|' \
-        -e 's|^\(ShowSummary\)=.*$|\1=HB|' \
-        -e 's|^\(ShowMonthStats\)=.*$|\1=HB|' \
-        -e 's|^\(ShowDaysOfMonthStats\)=.*$|\1=HB|' \
-        -e 's|^\(ShowDaysOfWeekStats\)=.*$|\1=HB|' \
-        -e 's|^\(ShowHoursStats\)=.*$|\1=HB|' \
-        -e 's|^\(ShowDomainsStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowHostsStats\)=.*$|\1=HB|' \
-        -e 's|^\(ShowAuthenticatedUsers\)=.*$|\1=0|' \
-        -e 's|^\(ShowRobotsStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowEMailSenders\)=.*$|\1=HBML|' \
-        -e 's|^\(ShowEMailReceivers\)=.*$|\1=HBML|' \
-        -e 's|^\(ShowSessionsStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowPagesStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowFileTypesStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowFileSizesStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowBrowsersStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowOSStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowOriginStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowKeyphrasesStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowKeywordsStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowMiscStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowHTTPErrorsStats\)=.*$|\1=0|' \
-        -e 's|^\(ShowSMTPErrorsStats\)=.*$|\1=1|' \
-      ''
-      +
-      # common options
-      ''
-        -e 's|^\(DirData\)=.*$|\1="${cfg.dataDir}/${name}"|' \
-        -e 's|^\(DirIcons\)=.*$|\1="icons"|' \
-        -e 's|^\(CreateDirDataIfNotExists\)=.*$|\1=1|' \
-        -e 's|^\(SiteDomain\)=.*$|\1="${name}"|' \
-        -e 's|^\(LogFile\)=.*$|\1="${opts.logFile}"|' \
-        -e 's|^\(LogFormat\)=.*$|\1="${opts.logFormat}"|' \
-      ''
-      +
-      # extra config
-      concatStringsSep "\n" (mapAttrsToList (n: v: ''
-        -e 's|^\(${n}\)=.*$|\1="${v}"|' \
-      '') opts.extraConfig)
-      +
-      ''
-        < '${package.out}/wwwroot/cgi-bin/awstats.model.conf' > "$out"
-      '');
-    }) cfg.configs;
+      nameValuePair "awstats/awstats.${name}.conf" {
+        source =
+          pkgs.runCommand "awstats.${name}.conf" { preferLocalBuild = true; }
+          (''
+            sed \
+          ''
+            # set up mail stats
+            + optionalString (opts.type == "mail") ''
+              -e 's|^\(LogType\)=.*$|\1=M|' \
+              -e 's|^\(LevelForBrowsersDetection\)=.*$|\1=0|' \
+              -e 's|^\(LevelForOSDetection\)=.*$|\1=0|' \
+              -e 's|^\(LevelForRefererAnalyze\)=.*$|\1=0|' \
+              -e 's|^\(LevelForRobotsDetection\)=.*$|\1=0|' \
+              -e 's|^\(LevelForSearchEnginesDetection\)=.*$|\1=0|' \
+              -e 's|^\(LevelForFileTypesDetection\)=.*$|\1=0|' \
+              -e 's|^\(LevelForWormsDetection\)=.*$|\1=0|' \
+              -e 's|^\(ShowMenu\)=.*$|\1=1|' \
+              -e 's|^\(ShowSummary\)=.*$|\1=HB|' \
+              -e 's|^\(ShowMonthStats\)=.*$|\1=HB|' \
+              -e 's|^\(ShowDaysOfMonthStats\)=.*$|\1=HB|' \
+              -e 's|^\(ShowDaysOfWeekStats\)=.*$|\1=HB|' \
+              -e 's|^\(ShowHoursStats\)=.*$|\1=HB|' \
+              -e 's|^\(ShowDomainsStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowHostsStats\)=.*$|\1=HB|' \
+              -e 's|^\(ShowAuthenticatedUsers\)=.*$|\1=0|' \
+              -e 's|^\(ShowRobotsStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowEMailSenders\)=.*$|\1=HBML|' \
+              -e 's|^\(ShowEMailReceivers\)=.*$|\1=HBML|' \
+              -e 's|^\(ShowSessionsStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowPagesStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowFileTypesStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowFileSizesStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowBrowsersStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowOSStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowOriginStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowKeyphrasesStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowKeywordsStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowMiscStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowHTTPErrorsStats\)=.*$|\1=0|' \
+              -e 's|^\(ShowSMTPErrorsStats\)=.*$|\1=1|' \
+            '' +
+            # common options
+            ''
+              -e 's|^\(DirData\)=.*$|\1="${cfg.dataDir}/${name}"|' \
+              -e 's|^\(DirIcons\)=.*$|\1="icons"|' \
+              -e 's|^\(CreateDirDataIfNotExists\)=.*$|\1=1|' \
+              -e 's|^\(SiteDomain\)=.*$|\1="${name}"|' \
+              -e 's|^\(LogFile\)=.*$|\1="${opts.logFile}"|' \
+              -e 's|^\(LogFormat\)=.*$|\1="${opts.logFormat}"|' \
+            '' +
+            # extra config
+            concatStringsSep "\n" (mapAttrsToList (n: v: ''
+              -e 's|^\(${n}\)=.*$|\1="${v}"|' \
+            '') opts.extraConfig) + ''
+              < '${package.out}/wwwroot/cgi-bin/awstats.model.conf' > "$out"
+            '');
+      }) cfg.configs;
 
     # create data directory with the correct permissions
-    systemd.tmpfiles.rules =
-      [ "d '${cfg.dataDir}' 755 root root - -" ] ++
-      mapAttrsToList (name: opts: "d '${cfg.dataDir}/${name}' 755 root root - -") cfg.configs ++
-      [ "Z '${cfg.dataDir}' 755 root root - -" ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 755 root root - -" ]
+      ++ mapAttrsToList
+      (name: opts: "d '${cfg.dataDir}/${name}' 755 root root - -") cfg.configs
+      ++ [ "Z '${cfg.dataDir}' 755 root root - -" ];
 
     # nginx options
-    services.nginx.virtualHosts = mapAttrs'(name: opts: {
+    services.nginx.virtualHosts = mapAttrs' (name: opts: {
       name = opts.webService.hostname;
       value = {
         locations = {
@@ -229,8 +229,7 @@ in
     systemd.services = mkIf (cfg.updateAt != null) (mapAttrs' (name: opts:
       nameValuePair "awstats-${name}-update" {
         description = "update awstats for ${name}";
-        script = optionalString (opts.type == "mail")
-        ''
+        script = optionalString (opts.type == "mail") ''
           if [[ -f "${cfg.dataDir}/${name}-cursor" ]]; then
             CURSOR="$(cat "${cfg.dataDir}/${name}-cursor" | tr -d '\n')"
             if [[ -n "$CURSOR" ]]; then
@@ -250,7 +249,7 @@ in
             -awstatsprog=${package.bin}/bin/awstats
         '';
         startAt = cfg.updateAt;
-    }) cfg.configs);
+      }) cfg.configs);
   };
 
 }

@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, watchdog
-, dataclasses
-, pytest-timeout
-, pytest-xprocess
-, pytestCheckHook
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, watchdog, dataclasses
+, pytest-timeout, pytest-xprocess, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
@@ -24,19 +15,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
     # watchdog requires macos-sdk 10.13+
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
-  checkInputs = [
-    pytest-timeout
-    pytest-xprocess
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-timeout pytest-xprocess pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
 
   pytestFlagsArray = [
     # don't run tests that are marked with filterwarnings, they fail with

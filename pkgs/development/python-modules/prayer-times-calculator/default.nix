@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "prayer-times-calculator";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-wm1r0MK6dx0cJvyQ7ulxvGWyIrNiPV2RXJD/IuKP3+E=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;

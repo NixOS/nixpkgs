@@ -105,7 +105,7 @@ in {
     };
 
     systemd.services = let
-      hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
+      hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'";
       hkpPort = builtins.toString cfg.hkpPort;
     in {
       sks-db = {
@@ -114,7 +114,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           ${lib.optionalString (cfg.webroot != null)
-            "ln -sfT \"${cfg.webroot}\" web"}
+          ''ln -sfT "${cfg.webroot}" web''}
           mkdir -p dump
           ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
@@ -138,7 +138,8 @@ in {
           User = "sks";
           Group = "sks";
           Restart = "always";
-          ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
+          ExecStart =
+            "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
         };
       };
     };

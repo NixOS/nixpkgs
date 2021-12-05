@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, dotmap
-, fetchPypi
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pythonOlder
-, tabulate
-, timeago
-}:
+{ lib, buildPythonPackage, dotmap, fetchPypi, pexpect, protobuf, pygatt
+, pypubsub, pyqrcode, pyserial, pythonOlder, tabulate, timeago }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
@@ -41,9 +29,7 @@ buildPythonPackage rec {
   # https://github.com/meshtastic/Meshtastic-python/issues/86
   doCheck = false;
 
-  pythonImportsCheck = [
-    "meshtastic"
-  ];
+  pythonImportsCheck = [ "meshtastic" ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";

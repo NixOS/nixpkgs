@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pillow
-, setuptools
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, numpy, pillow, setuptools }:
 
 let
   pname = "pydicom";
@@ -29,8 +21,7 @@ let
     sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
   };
 
-in
-buildPythonPackage {
+in buildPythonPackage {
   inherit pname version src;
   disabled = pythonOlder "3.6";
 
@@ -48,15 +39,14 @@ buildPythonPackage {
   '';
 
   # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
-  disabledTests = [
-    "test_fetch_data_files"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # https://github.com/pydicom/pydicom/issues/1386
-    "test_array"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky, hard to reproduce failure outside hydra
-    "test_time_check"
-  ];
+  disabledTests = [ "test_fetch_data_files" ] ++ lib.optionals stdenv.isAarch64
+    [
+      # https://github.com/pydicom/pydicom/issues/1386
+      "test_array"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # flaky, hard to reproduce failure outside hydra
+      "test_time_check"
+    ];
 
   meta = with lib; {
     homepage = "https://pydicom.github.io";

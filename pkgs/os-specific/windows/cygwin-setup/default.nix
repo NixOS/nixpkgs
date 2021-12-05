@@ -1,6 +1,5 @@
 { lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
-, zlib, bzip2, xz, libgcrypt
-}:
+, zlib, bzip2, xz, libgcrypt }:
 
 with lib;
 
@@ -20,9 +19,10 @@ stdenv.mkDerivation rec {
   buildInputs = let
     mkStatic = flip overrideDerivation (o: {
       dontDisableStatic = true;
-      configureFlags = toList (o.configureFlags or []) ++ [ "--enable-static" ];
-      buildInputs = map mkStatic (o.buildInputs or []);
-      propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
+      configureFlags = toList (o.configureFlags or [ ])
+        ++ [ "--enable-static" ];
+      buildInputs = map mkStatic (o.buildInputs or [ ]);
+      propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or [ ]);
     });
   in map mkStatic [ zlib bzip2 xz libgcrypt ];
 

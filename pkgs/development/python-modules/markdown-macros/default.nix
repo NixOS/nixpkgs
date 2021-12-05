@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, markdown
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, markdown }:
 
 buildPythonPackage rec {
   pname = "markdown-macros";
@@ -31,7 +26,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An extension for python-markdown that makes writing trac-like macros easy";
+    description =
+      "An extension for python-markdown that makes writing trac-like macros easy";
     homepage = "https://github.com/wnielson/markdown-macros";
     license = licenses.mit;
     maintainers = [ maintainers.abigailbuccaneer ];

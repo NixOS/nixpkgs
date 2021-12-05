@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, quantities
-, numpy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, quantities, numpy }:
 
 buildPythonPackage rec {
   pname = "semantic";

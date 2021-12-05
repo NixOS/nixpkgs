@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssh
-, gfortran, mpi, blas, lapack
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, openssh, gfortran, mpi, blas, lapack }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -47,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
-    description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
+    description =
+      "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ costrouc markuskowa ];

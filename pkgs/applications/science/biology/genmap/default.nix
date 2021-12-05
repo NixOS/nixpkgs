@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, which }:
 
 stdenv.mkDerivation rec {
   pname = "genmap";

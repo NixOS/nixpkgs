@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytest-runner, pytestCheckHook, pytest-mypy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, colorama, regex
+, pytest-runner, pytestCheckHook, pytest-mypy }:
 
 buildPythonPackage rec {
   pname = "tatsu";
@@ -23,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tatsu" ];
 
   meta = with lib; {
-    description = "Generates Python parsers from grammars in a variation of EBNF";
+    description =
+      "Generates Python parsers from grammars in a variation of EBNF";
     longDescription = ''
       TatSu (the successor to Grako) is a tool that takes grammars in a
       variation of EBNF as input, and outputs memoizing (Packrat) PEG parsers in

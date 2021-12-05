@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, htslib, zlib, curl, openssl, samblaster, sambamba
-, samtools, hexdump, python2Packages, which }:
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, curl, openssl, samblaster
+, sambamba, samtools, hexdump, python2Packages, which }:
 
 let
   python =

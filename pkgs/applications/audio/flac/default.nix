@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2020-0499.patch";
-      url = "https://github.com/xiph/flac/commit/2e7931c27eb15e387da440a37f12437e35b22dd4.patch";
+      url =
+        "https://github.com/xiph/flac/commit/2e7931c27eb15e387da440a37f12437e35b22dd4.patch";
       sha256 = "160qzq9ms5addz7sx06pnyjjkqrffr54r4wd8735vy4x008z71ah";
     })
   ];
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://xiph.org/flac/";
-    description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
+    description =
+      "Library and tools for encoding and decoding the FLAC lossless audio file format";
     platforms = platforms.all;
     license = licenses.bsd3;
   };

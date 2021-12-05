@@ -10,14 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "139dgb9vfr2q7bxvjskykdz526xxwrn0bh463ir8m2p7rx5a3pw5";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xsl
-    intltool
-    libxslt
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook docbook_xsl intltool libxslt pkg-config wrapGAppsHook ];
 
   buildInputs = [ ffmpeg-full glib gtk3 sox ];
 

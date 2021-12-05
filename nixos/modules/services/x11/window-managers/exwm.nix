@@ -13,9 +13,8 @@ let
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
   exwm-emacs = pkgs.emacsWithPackages packages;
-in
 
-{
+in {
   options = {
     services.xserver.windowManager.exwm = {
       enable = mkEnableOption "exwm";
@@ -39,7 +38,7 @@ in
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = epkgs: [];
+        default = epkgs: [ ];
         defaultText = literalExpression "epkgs: []";
         example = literalExpression ''
           epkgs: [

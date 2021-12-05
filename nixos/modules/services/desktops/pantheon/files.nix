@@ -7,7 +7,8 @@ with lib;
 {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "pantheon" "files" "enable" ] "Use `environment.systemPackages [ pkgs.pantheon.elementary-files ];`")
+    (mkRemovedOptionModule [ "services" "pantheon" "files" "enable" ]
+      "Use `environment.systemPackages [ pkgs.pantheon.elementary-files ];`")
   ];
 
 }

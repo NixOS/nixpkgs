@@ -1,51 +1,12 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchurl
-, fetchpatch
-, pkg-config
-, gettext
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gtk-doc
-, meson
-, ninja
-, python3
-, makeWrapper
-, shared-mime-info
-, isocodes
-, expat
-, glib
-, cairo
-, pango
-, gdk-pixbuf
-, atk
-, at-spi2-atk
-, gobject-introspection
-, fribidi
-, xorg
-, libepoxy
-, libxkbcommon
-, libxml2
-, gmp
-, gnome
-, gsettings-desktop-schemas
-, sassc
-, trackerSupport ? stdenv.isLinux
-, tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
-, libGL
-, wayland
-, wayland-protocols
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
-, cups
-, AppKit
-, Cocoa
-, broadwaySupport ? true
-}:
+{ lib, stdenv, substituteAll, fetchurl, fetchpatch, pkg-config, gettext
+, docbook-xsl-nons, docbook_xml_dtd_43, gtk-doc, meson, ninja, python3
+, makeWrapper, shared-mime-info, isocodes, expat, glib, cairo, pango, gdk-pixbuf
+, atk, at-spi2-atk, gobject-introspection, fribidi, xorg, libepoxy, libxkbcommon
+, libxml2, gmp, gnome, gsettings-desktop-schemas, sassc
+, trackerSupport ? stdenv.isLinux, tracker, x11Support ? stdenv.isLinux
+, waylandSupport ? stdenv.isLinux, libGL, wayland, wayland-protocols
+, xineramaSupport ? stdenv.isLinux, cupsSupport ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux, cups, AppKit, Cocoa, broadwaySupport ? true }:
 
 let
 
@@ -55,22 +16,19 @@ let
     gtk_binary_version = "3.0.0";
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gtk+3";
   version = "3.24.30";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
 
-  setupHooks = [
-    ./hooks/drop-icon-theme-cache.sh
-    gtkCleanImmodulesCache
-  ];
+  setupHooks = [ ./hooks/drop-icon-theme-cache.sh gtkCleanImmodulesCache ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/${
+        lib.versions.majorMinor version
+      }/gtk+-${version}.tar.xz";
     sha256 = "sha256-unW//zIK0fTPvukrqBPsM2MizDxmDUBqrQFLBwh6O6k=";
   };
 
@@ -102,46 +60,35 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  buildInputs = [
-    libxkbcommon
-    libepoxy
-    isocodes
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ] ++ lib.optionals trackerSupport [
-    tracker
-  ];
+  buildInputs = [ libxkbcommon libepoxy isocodes ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ]
+    ++ lib.optionals trackerSupport [ tracker ];
   #TODO: colord?
 
-  propagatedBuildInputs = with xorg; [
-    at-spi2-atk
-    atk
-    cairo
-    expat
-    fribidi
-    gdk-pixbuf
-    glib
-    gsettings-desktop-schemas
-    libICE
-    libSM
-    libXcomposite
-    libXcursor
-    libXi
-    libXrandr
-    libXrender
-    pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    # explicitly propagated, always needed
-    Cocoa
-  ] ++ lib.optionals waylandSupport [
-    libGL
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals xineramaSupport [
-    libXinerama
-  ] ++ lib.optionals cupsSupport [
-    cups
-  ];
+  propagatedBuildInputs = with xorg;
+    [
+      at-spi2-atk
+      atk
+      cairo
+      expat
+      fribidi
+      gdk-pixbuf
+      glib
+      gsettings-desktop-schemas
+      libICE
+      libSM
+      libXcomposite
+      libXcursor
+      libXi
+      libXrandr
+      libXrender
+      pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      # explicitly propagated, always needed
+      Cocoa
+    ] ++ lib.optionals waylandSupport [ libGL wayland wayland-protocols ]
+    ++ lib.optionals xineramaSupport [ libXinerama ]
+    ++ lib.optionals cupsSupport [ cups ];
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withGtkDoc}"
@@ -195,7 +142,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
     for program in ''${demos[@]}; do
@@ -213,7 +160,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description =
+      "A multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform

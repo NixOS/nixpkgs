@@ -1,23 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, perl, itstool, isocodes, enchant, libxml2, python3
-, adwaita-icon-theme, gtksourceview4, libpeas, mate-desktop, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, perl, itstool, isocodes, enchant
+, libxml2, python3, adwaita-icon-theme, gtksourceview4, libpeas, mate-desktop
+, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "pluma";
   version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "0lway12q2xygiwjgrx7chgka838jbnmlzz98g7agag1rwzd481ii";
   };
 
-  nativeBuildInputs = [
-    gettext
-    isocodes
-    itstool
-    perl
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gettext isocodes itstool perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
     adwaita-icon-theme

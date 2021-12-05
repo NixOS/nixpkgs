@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateInfo = {
-      downloadPage = "http://guichaz.free.fr/untie";
-    };
+    updateInfo = { downloadPage = "http://guichaz.free.fr/untie"; };
   };
 }

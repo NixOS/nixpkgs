@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, sqlite, wxGTK30-gtk3, libusb1, soapysdr
-, mesa_glu, libX11, gnuplot, fltk
-} :
+{ lib, stdenv, fetchFromGitHub, cmake, sqlite, wxGTK30-gtk3, libusb1, soapysdr
+, mesa_glu, libX11, gnuplot, fltk }:
 
 stdenv.mkDerivation rec {
   pname = "limesuite";
@@ -16,9 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DOpenGL_GL_PREFERENCE=GLVND"
-  ];
+  cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=GLVND" ];
 
   buildInputs = [
     libusb1

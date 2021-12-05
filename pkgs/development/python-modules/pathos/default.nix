@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dill
-, pox
-, ppft
-, multiprocess
-}:
+{ lib, buildPythonPackage, fetchPypi, dill, pox, ppft, multiprocess }:
 
 buildPythonPackage rec {
   pname = "pathos";
@@ -22,7 +15,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Parallel graph management and execution in heterogeneous computing";
+    description =
+      "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://github.com/uqfoundation/pathos/";
     license = licenses.bsd3;
   };

@@ -7,10 +7,12 @@ let
   # Workaround the issue by providing click 7 explicitly.
   python = python3.override {
     packageOverrides = self: super: {
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      click =
+        self.callPackage ../../../development/python-modules/click/7.nix { };
     };
   };
-in with python.pkgs; buildPythonApplication rec {
+in with python.pkgs;
+buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.2";
   disabled = !isPy3k;
@@ -22,17 +24,9 @@ in with python.pkgs; buildPythonApplication rec {
     sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
   };
 
-  propagatedBuildInputs = [
-    click
-    dateparser
-    pandas
-    py-lru-cache
-    six
-  ];
+  propagatedBuildInputs = [ click dateparser pandas py-lru-cache six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Convert CSV files into a SQLite database";

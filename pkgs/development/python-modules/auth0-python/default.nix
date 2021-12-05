@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyjwt
-, pytestCheckHook
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, mock, pyjwt, pytestCheckHook, requests }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
@@ -16,15 +9,9 @@ buildPythonPackage rec {
     sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
   };
 
-  propagatedBuildInputs = [
-    requests
-    pyjwt
-  ];
+  propagatedBuildInputs = [ requests pyjwt ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   disabledTests = [
     # tries to ping websites (e.g. google.com)

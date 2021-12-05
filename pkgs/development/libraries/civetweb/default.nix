@@ -1,6 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "civetweb";
@@ -20,20 +18,13 @@ stdenv.mkDerivation rec {
     "INCLUDEDIR=${placeholder "dev"}/include"
   ];
 
-  patches = [
-    ./0001-allow-setting-paths-in-makefile.patch
-  ];
+  patches = [ ./0001-allow-setting-paths-in-makefile.patch ];
 
   strictDeps = true;
 
   outputs = [ "out" "dev" ];
 
-  installTargets = [
-    "install-headers"
-    "install-lib"
-    "install-slib"
-    "install"
-  ];
+  installTargets = [ "install-headers" "install-lib" "install-slib" "install" ];
 
   preInstall = ''
     mkdir -p $dev/include

@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libuuid
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libuuid }:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";

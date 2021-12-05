@@ -1,6 +1,6 @@
 { lib, callPackage, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
-}:
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo
+, ppx_derivers }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
@@ -13,28 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0m6ldrci1a4j0qv1cbwh770zni3al8qxsphl353rv19f6rblplhs";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    menhir
-  ];
+  nativeBuildInputs = [ makeWrapper menhir ];
 
-  buildInputs = [
-    cppo
-    dune_2
-    findlib
-    fix
-    menhir
-    menhirSdk
-    ocaml
-    ppxlib
-    utop
-  ];
+  buildInputs = [ cppo dune_2 findlib fix menhir menhirSdk ocaml ppxlib utop ];
 
-  propagatedBuildInputs = [
-    menhirLib
-    merlin-extend
-    ppx_derivers
-  ];
+  propagatedBuildInputs = [ menhirLib merlin-extend ppx_derivers ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
@@ -46,9 +29,7 @@ stdenv.mkDerivation rec {
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
   '';
 
-  passthru.tests = {
-    hello = callPackage ./tests/hello { };
-  };
+  passthru.tests = { hello = callPackage ./tests/hello { }; };
 
   meta = with lib; {
     homepage = "https://reasonml.github.io/";

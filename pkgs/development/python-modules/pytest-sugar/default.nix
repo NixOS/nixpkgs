@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, termcolor
-, pytest
-, packaging
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, termcolor, pytest, packaging
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
@@ -18,14 +12,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    termcolor
-    packaging
-  ];
+  propagatedBuildInputs = [ termcolor packaging ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A plugin that changes the default look and feel of py.test";

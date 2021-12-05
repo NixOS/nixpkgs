@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.artistic2;
 
     platforms = lib.platforms.linux;
-    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
+    broken = !stdenv.is64bit; # the linux 32 bit build fails.
   };
 }

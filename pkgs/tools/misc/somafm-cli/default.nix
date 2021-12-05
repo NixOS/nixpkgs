@@ -1,10 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, jq
-, mpv
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, jq, mpv }:
 
 stdenv.mkDerivation rec {
   pname = "somafm-cli";
@@ -21,7 +15,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m0755 -D src/somafm $out/bin/somafm
-    wrapProgram $out/bin/somafm --prefix PATH ":" "${lib.makeBinPath [ curl jq mpv ]}";
+    wrapProgram $out/bin/somafm --prefix PATH ":" "${
+      lib.makeBinPath [ curl jq mpv ]
+    }";
   '';
 
   meta = with lib; {

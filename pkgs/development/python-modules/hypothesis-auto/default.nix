@@ -1,9 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, hypothesis
-, poetry
-, pydantic
-, pytest
-}:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, poetry, pydantic, pytest }:
 
 buildPythonPackage rec {
   pname = "hypothesis-auto";
@@ -15,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "1c9jksza0gg2gva3liy0s8riv6imjavhnqw05m8l5660knq2yb2y";
   };
 
-  nativeBuildInputs = [
-    poetry
-  ];
+  nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [
-    pydantic
-    hypothesis
-    pytest
-  ];
+  propagatedBuildInputs = [ pydantic hypothesis pytest ];
 
   pythonImportsCheck = [ "hypothesis_auto" ];
 

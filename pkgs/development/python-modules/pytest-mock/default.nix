@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest-asyncio, pytestCheckHook
+, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
@@ -17,15 +12,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_mock" ];
 
   meta = with lib; {
-    description = "Thin-wrapper around the mock package for easier use with pytest";
+    description =
+      "Thin-wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];

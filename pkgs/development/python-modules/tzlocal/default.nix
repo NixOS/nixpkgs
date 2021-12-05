@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytz }:
+{ lib, buildPythonPackage, fetchPypi, pytz }:
 
 buildPythonPackage rec {
   pname = "tzlocal";

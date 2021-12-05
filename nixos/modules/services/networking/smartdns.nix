@@ -29,8 +29,7 @@ in {
     };
 
     settings = mkOption {
-      type =
-      let atom = oneOf [ str int bool ];
+      type = let atom = oneOf [ str int bool ];
       in attrsOf (coercedTo atom toList (listOf atom));
       example = literalExpression ''
         {

@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
-  cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which
+, openssl, libxml2, cmake, z3, substituteAll, cc ? stdenv.cc
+, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
@@ -11,14 +12,14 @@ stdenv.mkDerivation (rec {
     rev = version;
     sha256 = "1s8glmzz0g5lj1fjwwy4m3n660smiq5wl9r1lg686wqh42hcgnsy";
 
-# Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
-# LLVM.  (The submodule is a specific tag in the LLVM source tree).
-#
-# The pony developers are currently working to get off 9.x as quickly
-# as possible so hopefully in a few revisions this package build will
-# become a lot simpler.
-#
-# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
+    # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
+    # LLVM.  (The submodule is a specific tag in the LLVM source tree).
+    #
+    # The pony developers are currently working to get off 9.x as quickly
+    # as possible so hopefully in a few revisions this package build will
+    # become a lot simpler.
+    #
+    # https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
 
     fetchSubmodules = true;
   };
@@ -40,7 +41,8 @@ stdenv.mkDerivation (rec {
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchurl {
-        url = "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
+        url =
+          "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
         sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
       };
     })
@@ -68,38 +70,38 @@ stdenv.mkDerivation (rec {
         --replace "/opt/local/lib" ""
   '';
 
-
   preBuild = ''
     make libs build_flags=-j$NIX_BUILD_CORES
     make configure build_flags=-j$NIX_BUILD_CORES
   '';
 
-  makeFlags = [
-    "PONYC_VERSION=${version}"
-    "prefix=${placeholder "out"}"
-  ]
+  makeFlags = [ "PONYC_VERSION=${version}" "prefix=${placeholder "out"}" ]
     ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
     ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
+  NIX_CFLAGS_COMPILE =
+    [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
   installPhase = "make config=release prefix=$out "
     + lib.optionalString stdenv.isDarwin "bits=64 "
-    + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no "
-    + '' install
-    wrapProgram $out/bin/ponyc \
-      --prefix PATH ":" "${stdenv.cc}/bin" \
-      --set-default CC "$CC" \
-      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
-  '';
+    + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no " + ''
+      install
+         wrapProgram $out/bin/ponyc \
+           --prefix PATH ":" "${stdenv.cc}/bin" \
+           --set-default CC "$CC" \
+           --prefix PONYPATH : "${
+             lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]
+           }"
+       '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
   meta = with lib; {
-    description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
+    description =
+      "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ kamilchm patternspandemic redvers ];

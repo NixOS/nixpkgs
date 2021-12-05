@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "opencv4-support.patch";
-      url = "https://github.com/dyne/frei0r/commit/c0c8eed79fc8abe6c9881a53d7391efb526a3064.patch";
+      url =
+        "https://github.com/dyne/frei0r/commit/c0c8eed79fc8abe6c9881a53d7391efb526a3064.patch";
       sha256 = "sha256-qxUAui4EEBEj8M/SoyMUkj//KegMTTT6FTBDC/Chxz4=";
     })
   ];

@@ -1,10 +1,4 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, libsodium
-, cmake
-, substituteAll
-, pythonPackages
+{ lib, fetchFromGitHub, stdenv, libsodium, cmake, substituteAll, pythonPackages
 }:
 
 stdenv.mkDerivation {
@@ -57,7 +51,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/madMAx43v3r/chia-plotter";
-    description = "New implementation of a chia plotter which is designed as a processing pipeline";
+    description =
+      "New implementation of a chia plotter which is designed as a processing pipeline";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ilyakooo0 ];

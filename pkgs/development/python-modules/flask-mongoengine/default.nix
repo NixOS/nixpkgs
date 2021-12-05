@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask_wtf
-, mongoengine
-, six
-, nose
-, rednose
-, coverage
-, email_validator
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, flask, flask_wtf, mongoengine, six
+, nose, rednose, coverage, email_validator }:
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
@@ -22,26 +12,17 @@ buildPythonPackage rec {
     sha256 = "10g9b13ls2msnhv8j44gslrfxa2ppqz2y1xjn2a4gg4m9mdjv8b2";
   };
 
-  propagatedBuildInputs = [
-    email_validator
-    flask
-    flask_wtf
-    mongoengine
-    six
-  ];
+  propagatedBuildInputs = [ email_validator flask flask_wtf mongoengine six ];
 
   # they set test requirements to setup_requirements...
-  buildInputs = [
-    nose
-    rednose
-    coverage
-  ];
+  buildInputs = [ nose rednose coverage ];
 
   # tests require working mongodb connection
   doCheck = false;
 
   meta = with lib; {
-    description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
+    description =
+      "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

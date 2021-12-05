@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
@@ -29,7 +26,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "dnstwist" ];
 
   meta = with lib; {
-    description = "Domain name permutation engine for detecting homograph phishing attacks";
+    description =
+      "Domain name permutation engine for detecting homograph phishing attacks";
     homepage = "https://github.com/elceef/dnstwist";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

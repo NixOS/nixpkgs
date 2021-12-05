@@ -1,10 +1,9 @@
 { lib, targetPlatform }:
 
-let
-  p =  targetPlatform.gcc or {}
-    // targetPlatform.parsed.abi;
+let p = targetPlatform.gcc or { } // targetPlatform.parsed.abi;
 in lib.concatLists [
-  (lib.optional (!targetPlatform.isx86_64 && p ? arch) "--with-arch=${p.arch}") # --with-arch= is unknown flag on x86_64
+  (lib.optional (!targetPlatform.isx86_64 && p ? arch)
+    "--with-arch=${p.arch}") # --with-arch= is unknown flag on x86_64
   (lib.optional (p ? cpu) "--with-cpu=${p.cpu}")
   (lib.optional (p ? abi) "--with-abi=${p.abi}")
   (lib.optional (p ? fpu) "--with-fpu=${p.fpu}")

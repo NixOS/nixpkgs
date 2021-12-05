@@ -7,9 +7,22 @@ stdenv.mkDerivation rec {
     url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
     sha256 = "1p9hpa2zs33p7hzrds80kwrm5255s0869v3s3qmsyx2sx63c7czj";
   };
-  propagatedBuildInputs = [ rrdtool ] ++
-    (with perlPackages; [ perl FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
-      NetOpenSSH NetSNMP LWP IOTty fping NetDNS perlldap ]);
+  propagatedBuildInputs = [ rrdtool ] ++ (with perlPackages; [
+    perl
+    FCGI
+    CGI
+    CGIFast
+    ConfigGrammar
+    DigestHMAC
+    NetTelnet
+    NetOpenSSH
+    NetSNMP
+    LWP
+    IOTty
+    fping
+    NetDNS
+    perlldap
+  ]);
 
   postInstall = ''
     mv $out/htdocs/smokeping.fcgi.dist $out/htdocs/smokeping.fcgi

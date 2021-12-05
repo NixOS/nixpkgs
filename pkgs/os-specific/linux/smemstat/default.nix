@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "smemstat";
   version = "0.02.10";
   src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.xz";
+    url =
+      "https://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.xz";
     sha256 = "sha256-Vrs1jOg5yHdEffVo769aaxSawo4iZtGrFJ65Nu+RhcU=";
   };
   patches = [
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/ColinIanKing/smemstat/pull/1
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/ColinIanKing/smemstat/commit/95119558d1679295c9f9f7f618ddbe212674a4bf.patch";
+      url =
+        "https://github.com/ColinIanKing/smemstat/commit/95119558d1679295c9f9f7f618ddbe212674a4bf.patch";
       sha256 = "sha256-Cl3Y0HIy1nXqBux6+AXoPuKJatSv3Z0X/4bD+MNjkAQ=";
     })
   ];

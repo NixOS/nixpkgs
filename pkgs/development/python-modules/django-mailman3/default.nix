@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
-, django-allauth, mailmanclient, django, mock
-}:
+, django-allauth, mailmanclient, django, mock }:
 
 buildPythonPackage rec {
   pname = "django-mailman3";
@@ -11,9 +10,8 @@ buildPythonPackage rec {
     sha256 = "6ea8c24c13e7afe744f18e18e4d19d0e74223e0d9bd5d782deea85dcb865feb7";
   };
 
-  propagatedBuildInputs = [
-    django-gravatar2 django_compressor django-allauth mailmanclient
-  ];
+  propagatedBuildInputs =
+    [ django-gravatar2 django_compressor django-allauth mailmanclient ];
   checkInputs = [ django mock ];
 
   checkPhase = ''

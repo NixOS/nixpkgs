@@ -1,10 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, testfixtures
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pythonOlder
+, testfixtures }:
 
 buildPythonApplication rec {
   pname = "bump2version";
@@ -19,10 +14,7 @@ buildPythonApplication rec {
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    testfixtures
-  ];
+  checkInputs = [ pytestCheckHook testfixtures ];
 
   disabledTests = [
     # X's in pytest are git tests which won't run in sandbox

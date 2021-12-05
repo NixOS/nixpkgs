@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pbr
-, requests
-, pycryptodome
-, pyjwt
-, pytestCheckHook
-, requests-mock
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pbr, requests
+, pycryptodome, pyjwt, pytestCheckHook, requests-mock }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
@@ -24,22 +15,13 @@ buildPythonPackage rec {
     hash = "sha256-/AkQ7hEjzgL4/ruXqTdchh+N8PY5q3ILNKKo43EOGg4=";
   };
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   PBR_VERSION = version;
 
-  propagatedBuildInputs = [
-    requests
-    pycryptodome
-    pyjwt
-  ];
+  propagatedBuildInputs = [ requests pycryptodome pyjwt ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ pytestCheckHook requests-mock ];
 
   meta = with lib; {
     description = "Library to read data from the BMW Connected Drive portal";

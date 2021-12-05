@@ -7,10 +7,7 @@ let
   cfg = config.services.fprintd;
   fprintdPkg = if cfg.tod.enable then pkgs.fprintd-tod else pkgs.fprintd;
 
-in
-
-
-{
+in {
 
   ###### interface
 
@@ -18,12 +15,14 @@ in
 
     services.fprintd = {
 
-      enable = mkEnableOption "fprintd daemon and PAM module for fingerprint readers handling";
+      enable = mkEnableOption
+        "fprintd daemon and PAM module for fingerprint readers handling";
 
       package = mkOption {
         type = types.package;
         default = fprintdPkg;
-        defaultText = literalExpression "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
+        defaultText = literalExpression
+          "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
         description = ''
           fprintd package to use.
         '';
@@ -43,7 +42,6 @@ in
       };
     };
   };
-
 
   ###### implementation
 

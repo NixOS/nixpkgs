@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, tinyxml
-, libusb1
-, libzip
-, glib
-, gobject-introspection
-, gst_all_1
-, libwebcam
-, libunwind
-, elfutils
-, orc
-, python3Packages
-, libuuid
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, pcre, tinyxml, libusb1
+, libzip, glib, gobject-introspection, gst_all_1, libwebcam, libunwind, elfutils
+, orc, python3Packages, libuuid, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
@@ -30,12 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hpy9yhc4mn6w8gvzwif703smmcys0j2jqbz2xfghqxcyb0ykplj";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3Packages.wrapPython
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ cmake pkg-config python3Packages.wrapPython wrapGAppsHook ];
 
   buildInputs = [
     pcre
@@ -72,7 +51,9 @@ stdenv.mkDerivation rec {
     "-DTCAM_INSTALL_GIR=${placeholder "out"}/share/gir-1.0"
     "-DTCAM_INSTALL_TYPELIB=${placeholder "out"}/lib/girepository-1.0"
     "-DTCAM_INSTALL_SYSTEMD=${placeholder "out"}/etc/systemd/system"
-    "-DTCAM_INSTALL_PYTHON3_MODULES=${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+    "-DTCAM_INSTALL_PYTHON3_MODULES=${
+      placeholder "out"
+    }/lib/${python3Packages.python.libPrefix}/site-packages"
     "-DGSTREAMER_1.0_INCLUDEDIR=${placeholder "out"}/include/gstreamer-1.0"
     # There are gobject introspection commands launched as part of the build. Those have a runtime
     # dependency on `libtcam` (which itself is built as part of this build). In order to allow
@@ -90,7 +71,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Linux sources and UVC firmwares for The Imaging Source cameras";
+    description =
+      "The Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
     license = with licenses; [ asl20 ];
     platforms = platforms.linux;

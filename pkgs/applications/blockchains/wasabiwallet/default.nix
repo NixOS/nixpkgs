@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, makeDesktopItem
-, curl
-, dotnetCorePackages
-, fontconfig
-, krb5
-, openssl
-, xorg
-, zlib
-}:
+{ lib, stdenv, fetchurl, makeDesktopItem, curl, dotnetCorePackages, fontconfig
+, krb5, openssl, xorg, zlib }:
 
 let
   dotnet-runtime = dotnetCorePackages.runtime_5_0;
@@ -22,13 +13,13 @@ let
     xorg.libX11
     zlib
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "wasabiwallet";
   version = "1.1.12.9";
 
   src = fetchurl {
-    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
+    url =
+      "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
     sha256 = "sha256-DtoLQbRXyR4xGm+M0xg9uj8wcbh1dOBJUG430OS8AS4=";
   };
 

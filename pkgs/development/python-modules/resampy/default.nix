@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-cov
-, numpy
-, scipy
-, cython
-, numba
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, pytest-cov, numpy, scipy
+, cython, numba, six }:
 
 buildPythonPackage rec {
   pname = "resampy";

@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./outputs.patch ];
 
-  nativeBuildInputs = [
-    yasm perl cmake pkg-config python3
-  ];
+  nativeBuildInputs = [ yasm perl cmake pkg-config python3 ];
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -29,19 +27,17 @@ stdenv.mkDerivation rec {
   # Configuration options:
   # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
-    "-DCONFIG_RUNTIME_CPU_DETECT=0"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-DAS_EXECUTABLE=${stdenv.cc.targetPrefix}as"
-  ] ++ lib.optionals stdenv.isAarch32 [
-    # armv7l-hf-multiplatform does not support NEON
-    # see lib/systems/platform.nix
-    "-DENABLE_NEON=0"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DENABLE_TESTS=OFF" ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
+      "-DCONFIG_RUNTIME_CPU_DETECT=0"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "-DAS_EXECUTABLE=${stdenv.cc.targetPrefix}as" ]
+    ++ lib.optionals stdenv.isAarch32 [
+      # armv7l-hf-multiplatform does not support NEON
+      # see lib/systems/platform.nix
+      "-DENABLE_NEON=0"
+    ];
 
   postFixup = ''
     moveToOutput lib/libaom.a "$static"
@@ -56,10 +52,11 @@ stdenv.mkDerivation rec {
       for Open Media. It contains an AV1 library as well as applications like
       an encoder (aomenc) and a decoder (aomdec).
     '';
-    homepage    = "https://aomedia.org/av1-features/get-started/";
-    changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    homepage = "https://aomedia.org/av1-features/get-started/";
+    changelog =
+      "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
     maintainers = with maintainers; [ primeos kiloreux ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     license = licenses.bsd2;
   };
 }

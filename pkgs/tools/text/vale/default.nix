@@ -25,7 +25,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://docs.errata.ai/vale/about";
-    description = "A syntax-aware linter for prose built with speed and extensibility in mind";
+    description =
+      "A syntax-aware linter for prose built with speed and extensibility in mind";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, libspotify
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, cffi, libspotify }:
 
 buildPythonPackage rec {
   pname = "pyspotify";
@@ -38,7 +32,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://pyspotify.mopidy.com";
-    description = "A Python interface to Spotify’s online music streaming service";
+    description =
+      "A Python interface to Spotify’s online music streaming service";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovek323 ];
   };

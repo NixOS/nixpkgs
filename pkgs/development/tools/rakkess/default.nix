@@ -12,12 +12,18 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-1/8it/djhDjbWqe36VefnRu9XuwAa/qKpZT6d2LGpJ0=";
 
-  ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/corneliusweig/rakkess";
-    changelog = "https://github.com/corneliusweig/rakkess/releases/tag/v${version}";
-    description = "Review Access - kubectl plugin to show an access matrix for k8s server resources";
+    changelog =
+      "https://github.com/corneliusweig/rakkess/releases/tag/v${version}";
+    description =
+      "Review Access - kubectl plugin to show an access matrix for k8s server resources";
     longDescription = ''
       Have you ever wondered what access rights you have on a provided
       kubernetes cluster? For single resources you can use

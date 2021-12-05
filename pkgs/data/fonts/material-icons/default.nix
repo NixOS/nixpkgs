@@ -1,13 +1,12 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "3.0.1";
+let version = "3.0.1";
 in fetchFromGitHub {
   name = "material-icons-${version}";
 
-  owner  = "google";
-  repo   = "material-design-icons";
-  rev    = version;
+  owner = "google";
+  repo = "material-design-icons";
+  rev = version;
 
   postFetch = ''
     tar xf $downloadedFile --strip=1

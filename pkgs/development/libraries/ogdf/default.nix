@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
+    description =
+      "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
     homepage = "http://www.ogdf.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
@@ -39,5 +40,5 @@ stdenv.mkDerivation rec {
       OGDF is developed and supported by Osnabrück University, TU Dortmund,
       University of Cologne, University of Konstanz, and TU Ilmenau.
     '';
-   };
+  };
 }

@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchzip
-, installShellFiles
-}:
+{ lib, stdenv, fetchzip, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "msr";
@@ -14,13 +10,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-e01qYWbOALkXp5NpexuVodMxA3EBySejJ6ZBpZjyT+E=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  patches = [
-    ./000-include-sysmacros.patch
-  ];
+  patches = [ ./000-include-sysmacros.patch ];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.etallen.com/msr.html";
-    description = "Linux tool to display or modify x86 model-specific registers (MSRs)";
+    description =
+      "Linux tool to display or modify x86 model-specific registers (MSRs)";
     license = licenses.bsd0;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];

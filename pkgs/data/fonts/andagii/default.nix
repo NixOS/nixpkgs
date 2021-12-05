@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "1.0.2";
+let version = "1.0.2";
 in fetchzip {
   name = "andagii-${version}";
 

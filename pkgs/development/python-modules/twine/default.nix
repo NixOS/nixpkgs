@@ -1,16 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, importlib-metadata
-, keyring
-, pkginfo
-, pyblake2
-, readme_renderer
-, requests
-, requests-toolbelt
-, setuptools-scm
-, tqdm
-, colorama
-, rfc3986
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, importlib-metadata, keyring
+, pkginfo, pyblake2, readme_renderer, requests, requests-toolbelt
+, setuptools-scm, tqdm, colorama, rfc3986 }:
 
 buildPythonPackage rec {
   pname = "twine";

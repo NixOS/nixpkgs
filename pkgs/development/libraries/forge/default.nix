@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, arrayfire, expat, fontconfig, freeimage, freetype, boost
-, mesa, libGLU, libGL, glfw3, SDL2, cudatoolkit
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, arrayfire, expat, fontconfig
+, freeimage, freetype, boost, mesa, libGLU, libGL, glfw3, SDL2, cudatoolkit }:
 
 stdenv.mkDerivation rec {
   pname = "forge";
@@ -15,10 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     expat
@@ -28,7 +23,8 @@ stdenv.mkDerivation rec {
     boost.dev
     freeimage
     mesa
-    libGLU libGL
+    libGLU
+    libGL
     glfw3
     SDL2
     cudatoolkit
@@ -36,7 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend";
+    description =
+      "An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend";
     longDescription = ''
       An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend.
       The goal of Forge is to provide high performance OpenGL visualizations for C/C++ applications that use CUDA/OpenCL.

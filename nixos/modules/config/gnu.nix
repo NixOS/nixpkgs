@@ -16,16 +16,16 @@
   config = lib.mkIf config.gnu {
 
     environment.systemPackages = with pkgs;
-      # TODO: Adjust `requiredPackages' from `system-path.nix'.
-      # TODO: Add Inetutils once it has the new `ifconfig'.
-      [ parted
+    # TODO: Adjust `requiredPackages' from `system-path.nix'.
+    # TODO: Add Inetutils once it has the new `ifconfig'.
+      [
+        parted
         #fdisk  # XXX: GNU fdisk currently fails to build and it's redundant
-                # with the `parted' command.
-        nano zile
+        # with the `parted' command.
+        nano
+        zile
         texinfo # for the stand-alone Info reader
-      ]
-      ++ lib.optional (!stdenv.isAarch32) grub2;
-
+      ] ++ lib.optional (!stdenv.isAarch32) grub2;
 
     # GNU GRUB, where available.
     boot.loader.grub.enable = !pkgs.stdenv.isAarch32;

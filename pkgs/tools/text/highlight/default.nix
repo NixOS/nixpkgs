@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc
+}:
 
 let
   self = stdenv.mkDerivation rec {
@@ -57,6 +58,4 @@ let
     };
   };
 
-in
-  if stdenv.isDarwin then self
-  else perl.pkgs.toPerlModule self
+in if stdenv.isDarwin then self else perl.pkgs.toPerlModule self

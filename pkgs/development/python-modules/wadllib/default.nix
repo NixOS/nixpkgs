@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, setuptools
-, lazr-uri
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, setuptools, lazr-uri }:
 
 buildPythonPackage rec {
   pname = "wadllib";

@@ -1,18 +1,6 @@
-{ lib
-, aenum
-, aiodns
-, aiohttp
-, buildPythonPackage
-, cchardet
-, fetchFromGitHub
-, pyopenssl
-, pythonOlder
-, pytz
-, related
-, requests
-, uonet-request-signer-hebe
-, yarl
-}:
+{ lib, aenum, aiodns, aiohttp, buildPythonPackage, cchardet, fetchFromGitHub
+, pyopenssl, pythonOlder, pytz, related, requests, uonet-request-signer-hebe
+, yarl }:
 
 buildPythonPackage rec {
   pname = "vulcan-api";
@@ -44,9 +32,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vulcan"
-  ];
+  pythonImportsCheck = [ "vulcan" ];
 
   meta = with lib; {
     description = "Python library for UONET+ e-register API";

@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "2.0";
+let version = "2.0";
 in fetchzip rec {
   name = "theano-${version}";
 
-  url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+  url =
+    "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/opentype

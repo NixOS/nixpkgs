@@ -1,12 +1,5 @@
-{ buildPythonPackage
-, callPackage
-, pytest-cov
-, fetchPypi
-, lib
-, pytest
-, pythonOlder
-, pytest-runner
-}:
+{ buildPythonPackage, callPackage, pytest-cov, fetchPypi, lib, pytest
+, pythonOlder, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "pycategories";

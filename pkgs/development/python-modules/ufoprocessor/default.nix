@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, defcon, fonttools, lxml, fs
-, mutatormath, fontmath, fontparts
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, defcon, fonttools, lxml, fs, mutatormath
+, fontmath, fontparts, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "ufoProcessor";
@@ -16,15 +13,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    defcon
-    lxml
-    fonttools
-    fs
-    fontmath
-    fontparts
-    mutatormath
-  ];
+  propagatedBuildInputs =
+    [ defcon lxml fonttools fs fontmath fontparts mutatormath ];
 
   checkPhase = ''
     runHook preCheck

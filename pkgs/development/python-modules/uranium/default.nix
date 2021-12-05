@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, cmake
-, pyqt5, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy
+, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
   version = "4.10.0";

@@ -1,15 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-}:
+{ lib, buildPythonPackage, fetchPypi, msrestazure, azure-common, azure-mgmt-core
+, azure-mgmt-nspkg }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-billing";
-  version = "6.0.0"; #pypi's 0.2.0 doesn't build ootb
+  version = "6.0.0"; # pypi's 0.2.0 doesn't build ootb
 
   src = fetchPypi {
     inherit pname version;
@@ -17,12 +11,8 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
-    msrestazure
-    azure-common
-    azure-mgmt-core
-    azure-mgmt-nspkg
-  ];
+  propagatedBuildInputs =
+    [ msrestazure azure-common azure-mgmt-core azure-mgmt-nspkg ];
 
   preBuild = ''
     rm -rf azure_bdist_wheel.py

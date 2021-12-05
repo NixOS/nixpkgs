@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch
     (fetchpatch {
       name = "CVE-2019-16707.patch";
-      url = "https://github.com/hunspell/hunspell/commit/ac938e2ecb48ab4dd21298126c7921689d60571b.patch";
+      url =
+        "https://github.com/hunspell/hunspell/commit/ac938e2ecb48ab4dd21298126c7921689d60571b.patch";
       sha256 = "0bwfksz87iy7ikx3fb54zd5ww169qfm9kl076hsch3cs8p30s8az";
     })
   ];

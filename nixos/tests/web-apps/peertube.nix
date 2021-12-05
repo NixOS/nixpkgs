@@ -1,15 +1,15 @@
-import ../make-test-python.nix ({pkgs, ...}:
-{
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "peertube";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes = {
     database = {
       networking = {
-       interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.10"; prefixLength = 24; }
-          ];
+        interfaces.eth1 = {
+          ipv4.addresses = [{
+            address = "192.168.2.10";
+            prefixLength = 24;
+          }];
         };
         firewall.allowedTCPPorts = [ 5432 6379 ];
       };
@@ -51,9 +51,10 @@ import ../make-test-python.nix ({pkgs, ...}:
 
       networking = {
         interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.11"; prefixLength = 24; }
-          ];
+          ipv4.addresses = [{
+            address = "192.168.2.11";
+            prefixLength = 24;
+          }];
         };
         extraHosts = ''
           192.168.2.11 peertube.local
@@ -79,12 +80,8 @@ import ../make-test-python.nix ({pkgs, ...}:
         };
 
         settings = {
-          listen = {
-            hostname = "0.0.0.0";
-          };
-          instance = {
-            name = "PeerTube Test Server";
-          };
+          listen = { hostname = "0.0.0.0"; };
+          instance = { name = "PeerTube Test Server"; };
         };
       };
     };
@@ -92,10 +89,11 @@ import ../make-test-python.nix ({pkgs, ...}:
     client = {
       environment.systemPackages = [ pkgs.jq ];
       networking = {
-       interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.12"; prefixLength = 24; }
-          ];
+        interfaces.eth1 = {
+          ipv4.addresses = [{
+            address = "192.168.2.12";
+            prefixLength = 24;
+          }];
         };
         extraHosts = ''
           192.168.2.11 peertube.local

@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   # fix a compilation failure related to darwin integers, remove at next release
   patches = [
     (fetchpatch {
-      url = "https://github.com/tomolt/libschrift/commit/1b1292f2cf4b582d66b2f6c87105997391f9fa08.patch";
+      url =
+        "https://github.com/tomolt/libschrift/commit/1b1292f2cf4b582d66b2f6c87105997391f9fa08.patch";
       sha256 = "076l3n28famgi74nr5bz47yn192bm76p8c8558fm5zj5c21pcfsv";
     })
   ];

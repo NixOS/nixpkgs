@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, gnat
-, gprbuild
-, fetchFromGitHub
-, xmlada
-, which
-}:
+{ stdenv, lib, gnat, gprbuild, fetchFromGitHub, xmlada, which }:
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-core";
@@ -18,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fn28dp6bgpp1sshr09m1x85g2gx11xqkiy410hiicfyg5hamh1l";
   };
 
-  nativeBuildInputs = [
-    gprbuild
-    which
-    gnat
-  ];
+  nativeBuildInputs = [ gprbuild which gnat ];
 
   # propagate since gprbuild needs to find
   # referenced GPR project definitions

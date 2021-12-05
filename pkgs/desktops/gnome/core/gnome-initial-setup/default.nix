@@ -1,44 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, gettext
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gnome
-, accountsservice
-, fontconfig
-, gdm
-, geoclue2
-, geocode-glib
-, glib
-, gnome-desktop
-, gnome-online-accounts
-, gtk3
-, libgweather
-, json-glib
-, krb5
-, libpwquality
-, librest
-, libsecret
-, networkmanager
-, pango
-, polkit
-, webkitgtk
-, systemd
-, libnma
-, tzdata
-, libgnomekbd
-, gsettings-desktop-schemas
-}:
+{ lib, stdenv, fetchurl, substituteAll, gettext, meson, ninja, pkg-config
+, wrapGAppsHook, gnome, accountsservice, fontconfig, gdm, geoclue2, geocode-glib
+, glib, gnome-desktop, gnome-online-accounts, gtk3, libgweather, json-glib, krb5
+, libpwquality, librest, libsecret, networkmanager, pango, polkit, webkitgtk
+, systemd, libnma, tzdata, libgnomekbd, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "R/ZHW2bIQ+fVPZC6Dns5SHYt8VFjSkNvaMK5u6BQVgo=";
   };
 
@@ -49,14 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-    systemd
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext meson ninja pkg-config systemd wrapGAppsHook ];
 
   buildInputs = [
     accountsservice

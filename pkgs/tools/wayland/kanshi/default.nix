@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";

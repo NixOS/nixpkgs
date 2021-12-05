@@ -1,27 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, hypothesis
-, setuptools-scm
-, six
-, attrs
-, py
-, setuptools
-, pytest-cov
-, pytest-timeout
-, pytest-tornado
-, mock
-, tabulate
-, nbformat
-, jsonschema
-, pytestCheckHook
-, colorama
-, pygments
-, tornado
-, requests
-, GitPython
-, jupyter-server-mathjax
-, notebook
-, jinja2
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, hypothesis, setuptools-scm, six
+, attrs, py, setuptools, pytest-cov, pytest-timeout, pytest-tornado, mock
+, tabulate, nbformat, jsonschema, pytestCheckHook, colorama, pygments, tornado
+, requests, GitPython, jupyter-server-mathjax, notebook, jinja2 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
@@ -69,7 +49,7 @@ buildPythonPackage rec {
     GitPython
     notebook
     jinja2
-    ];
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";

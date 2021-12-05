@@ -1,10 +1,5 @@
-{ lib, stdenv
-, cmake
-, extra-cmake-modules
-, plasma-framework
-, kwindowsystem
-, fetchFromGitHub
-}:
+{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem
+, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "playbar2";
@@ -17,15 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0iv2m4flgaz2r0k7f6l0ca8p6cw8j8j2gin1gci2pg3l5g5khbch";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    plasma-framework
-    kwindowsystem
-  ];
+  buildInputs = [ plasma-framework kwindowsystem ];
 
   dontWrapQtApps = true;
 

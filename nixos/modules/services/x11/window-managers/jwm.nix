@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.jwm;
-in
-{
+let cfg = config.services.xserver.windowManager.jwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.jwm.enable = mkEnableOption "jwm";

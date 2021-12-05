@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/halturin/multitail/pull/4
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/halturin/multitail/commit/d7d10f3bce261074c116eba9f924b61f43777662.patch";
+      url =
+        "https://github.com/halturin/multitail/commit/d7d10f3bce261074c116eba9f924b61f43777662.patch";
       sha256 = "0kyp9l6v92mz6d3h34j11gs5kh3sf2nv76mygqfxb800vd8r0cgg";
     })
   ];

@@ -1,12 +1,10 @@
-{ stdenv, lib, buildPackages
-, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, aclSupport ? stdenv.isLinux, acl ? null
-, attrSupport ? stdenv.isLinux, attr ? null
-, selinuxSupport? false, libselinux ? null, libsepol ? null
-# No openssl in default version, so openssl-induced rebuilds aren't too big.
-# It makes *sum functions significantly faster.
-, minimal ? true, withOpenssl ? !minimal, openssl ? null
-, withPrefix ? false
+{ stdenv, lib, buildPackages, autoreconfHook, bison, texinfo, fetchurl, perl, xz
+, libiconv, gmp ? null, aclSupport ? stdenv.isLinux, acl ? null
+, attrSupport ? stdenv.isLinux, attr ? null, selinuxSupport ? false
+, libselinux ? null, libsepol ? null
+  # No openssl in default version, so openssl-induced rebuilds aren't too big.
+  # It makes *sum functions significantly faster.
+, minimal ? true, withOpenssl ? !minimal, openssl ? null, withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
 
@@ -66,43 +64,47 @@ stdenv.mkDerivation (rec {
 
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
-  '' + (optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
-    ''
+  '' + (optionalString (stdenv.hostPlatform.libc == "musl")
+    (lib.concatStringsSep "\n" [''
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-    ''
-  ])) + (optionalString stdenv.isAarch64 ''
-    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
+    ''])) + (optionalString stdenv.isAarch64 ''
+      sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
 
-    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
-  '');
+      # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+      sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
+    '');
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
-    ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
+  nativeBuildInputs = [
+    perl
+    xz.bin
+    autoreconfHook
+  ] # autoreconfHook is due to patch, normally only needed for cygwin
+    ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ]; # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
-    ++ optional (singleBinary != false)
-      ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+    ++ optional (singleBinary != false) ("--enable-single-binary"
+      + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
-    ++ optional withPrefix "--program-prefix=g"
-    ++ optional stdenv.isDarwin "--disable-nls" # the shipped configure script doesn't enable nls, but using autoreconfHook does so which breaks the build
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
-      # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
-      # don't know why it is not properly detected cross building with glibc.
-      "fu_cv_sys_stat_statfs2_bsize=yes"
-    ];
+    ++ optional withPrefix "--program-prefix=g" ++ optional stdenv.isDarwin
+    "--disable-nls" # the shipped configure script doesn't enable nls, but using autoreconfHook does so which breaks the build
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform
+      && stdenv.hostPlatform.libc == "glibc") [
+        # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
+        # don't know why it is not properly detected cross building with glibc.
+        "fu_cv_sys_stat_statfs2_bsize=yes"
+      ];
 
-
-  buildInputs = [ gmp ]
-    ++ optional aclSupport acl
-    ++ optional attrSupport attr
-    ++ optional withOpenssl openssl
-    ++ optionals selinuxSupport [ libselinux libsepol ]
-       # TODO(@Ericson2314): Investigate whether Darwin could benefit too
-    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
+  buildInputs = [ gmp ] ++ optional aclSupport acl ++ optional attrSupport attr
+    ++ optional withOpenssl openssl ++ optionals selinuxSupport [
+      libselinux
+      libsepol
+    ]
+    # TODO(@Ericson2314): Investigate whether Darwin could benefit too
+    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform
+      && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
@@ -114,7 +116,8 @@ stdenv.mkDerivation (rec {
     && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
+  PERL =
+    if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
   enableParallelBuilding = true;
 
@@ -127,18 +130,20 @@ stdenv.mkDerivation (rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform && !minimal) ''
-    rm $out/share/man/man1/*
-    cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
-  ''
-  # du: 8.7 M locale + 0.4 M man pages
-  + optionalString minimal ''
-    rm -r "$out/share"
-  '';
+  postInstall =
+    optionalString (stdenv.hostPlatform != stdenv.buildPlatform && !minimal) ''
+      rm $out/share/man/man1/*
+      cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
+    ''
+    # du: 8.7 M locale + 0.4 M man pages
+    + optionalString minimal ''
+      rm -r "$out/share"
+    '';
 
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
-    description = "The basic file, shell and text manipulation utilities of the GNU operating system";
+    description =
+      "The basic file, shell and text manipulation utilities of the GNU operating system";
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text
       manipulation utilities of the GNU operating system.  These are

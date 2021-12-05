@@ -8,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/fiat/releases/download/v${version}/${pname}-v${version}.tbz";
+    url =
+      "https://github.com/mirage/fiat/releases/download/v${version}/${pname}-v${version}.tbz";
     sha256 = "0086h9qkvnqfm8acrxqbki54z619nj73x7f0d01v5vg2naznx7w9";
   };
 
@@ -20,8 +21,15 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ bigarray-compat cstruct eqaf hex ];
-  checkInputs = [ alcotest asn1-combinators benchmark
-                  ppx_deriving_yojson rresult stdlib-shims yojson ];
+  checkInputs = [
+    alcotest
+    asn1-combinators
+    benchmark
+    ppx_deriving_yojson
+    rresult
+    stdlib-shims
+    yojson
+  ];
   doCheck = true;
 
   meta = with lib; {

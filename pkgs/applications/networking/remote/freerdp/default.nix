@@ -1,10 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, ffmpeg, glib, openssl
-, pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
-, libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
-, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt, cairo
-, libusb1, libpulseaudio, cups, pcsclite, systemd, libjpeg_turbo
-, buildServer ? true, nocaps ? false
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, ffmpeg, glib
+, openssl, pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi
+, libXinerama, libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile
+, wayland, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
+, libxslt, cairo, libusb1, libpulseaudio, cups, pcsclite, systemd, libjpeg_turbo
+, buildServer ? true, nocaps ? false }:
 
 let
   cmFlag = flag: if flag then "ON" else "OFF";

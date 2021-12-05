@@ -1,4 +1,4 @@
-{fetchurl, python, buildPythonPackage, makeWrapper}:
+{ fetchurl, python, buildPythonPackage, makeWrapper }:
 
 buildPythonPackage rec {
   pname = "PyXML";

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel, yasm
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel, yasm }:
 
 stdenv.mkDerivation {
 
@@ -14,10 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libsixel
-    yasm
-  ];
+  buildInputs = [ libsixel yasm ];
 
   configurePhase = ''
     ./configure --enable-libsixel --prefix=$out
@@ -28,7 +24,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A complete, cross-platform solution to record, convert and stream audio and video, extended to support console graphics";
+    description =
+      "A complete, cross-platform solution to record, convert and stream audio and video, extended to support console graphics";
     homepage = "http://www.ffmpeg.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;

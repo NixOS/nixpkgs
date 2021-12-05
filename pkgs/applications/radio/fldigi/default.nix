@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, hamlib
-, fltk14
-, libjpeg
-, libpng
-, portaudio
-, libsndfile
-, libsamplerate
-, libpulseaudio
-, libXinerama
-, gettext
-, pkg-config
-, alsa-lib
-, udev
+{ lib, stdenv, fetchurl, hamlib, fltk14, libjpeg, libpng, portaudio, libsndfile
+, libsamplerate, libpulseaudio, libXinerama, gettext, pkg-config, alsa-lib, udev
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config
-, SDL, libGLU, libGL, openal, lua
-, libdevil, freetype, physfs
-, libmodplug, mpg123, libvorbis, libogg
-, libmng
-}:
+{ lib, stdenv, fetchurl, pkg-config, SDL, libGLU, libGL, openal, lua, libdevil
+, freetype, physfs, libmodplug, mpg123, libvorbis, libogg, libmng }:
 
 stdenv.mkDerivation rec {
   name = "love-0.7.2";
@@ -17,8 +13,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL libGLU libGL openal lua
-    libdevil freetype physfs libmodplug mpg123 libvorbis libogg libmng
+    SDL
+    libGLU
+    libGL
+    openal
+    lua
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
+    libmng
   ];
 
   preConfigure = ''

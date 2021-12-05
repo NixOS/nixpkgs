@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, aiohttp
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pyatag";
@@ -18,17 +13,12 @@ buildPythonPackage rec {
     sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyatag"
-    "pyatag.discovery"
-  ];
+  pythonImportsCheck = [ "pyatag" "pyatag.discovery" ];
 
   meta = with lib; {
     description = "Python module to talk to Atag One";

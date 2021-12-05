@@ -21,10 +21,7 @@ stdenv.mkDerivation rec {
     patchShebangs src/collectives/device/gen_rules.sh
   '';
 
-  makeFlags = [
-    "CUDA_HOME=${cudatoolkit}"
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "CUDA_HOME=${cudatoolkit}" "PREFIX=$(out)" ];
 
   postFixup = ''
     moveToOutput lib/libnccl_static.a $dev
@@ -39,7 +36,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
+    description =
+      "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

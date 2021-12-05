@@ -1,8 +1,4 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  networkmanager, qtbase,
-}:
+{ mkDerivation, extra-cmake-modules, networkmanager, qtbase, }:
 
 mkDerivation {
   name = "networkmanager-qt";

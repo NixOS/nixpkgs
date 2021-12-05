@@ -1,28 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3
-, inetutils
-, nixosTests
+{ stdenv, lib, fetchFromGitHub, python3, inetutils, nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+, extraPackages ? ps:
+  [ ]
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
-, packageOverrides ? self: super: {}
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
+, packageOverrides ? self: super:
+  { }
 
-# Skip pip install of required packages on startup
+  # Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
   defaultOverrides = [
     # Remove with Home Assistant 2021.12
-    (mkOverride "PyChromecast" "9.4.0" "sha256-Y8PLrjxZHml7BmklEJ/VXGqkRyneAy+QVA5rusPeBHQ=")
+    (mkOverride "PyChromecast" "9.4.0"
+      "sha256-Y8PLrjxZHml7BmklEJ/VXGqkRyneAy+QVA5rusPeBHQ=")
 
     # aiounify 29 breaks integration tests
     (self: super: {
@@ -38,7 +36,8 @@ let
     })
 
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
+    (mkOverride "python-slugify" "4.0.1"
+      "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -49,7 +48,8 @@ let
           rev = version;
           sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
         };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs
+          ++ [ python3.pkgs.dicttoxml ];
       });
     })
 
@@ -70,27 +70,29 @@ let
 
     # Pinned due to API changes in influxdb-client>1.21.0
     (self: super: {
-      influxdb-client = super.influxdb-client.overridePythonAttrs (oldAttrs: rec {
-        version = "1.21.0";
-        src = fetchFromGitHub {
-          owner = "influxdata";
-          repo = "influxdb-client-python";
-          rev = "v${version}";
-          sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
-        };
-      });
+      influxdb-client = super.influxdb-client.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "1.21.0";
+          src = fetchFromGitHub {
+            owner = "influxdata";
+            repo = "influxdb-client-python";
+            rev = "v${version}";
+            sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+          };
+        });
     })
 
     (self: super: {
-      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "nettigo-air-monitor";
-          rev = version;
-          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
-        };
-      });
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "1.1.1";
+          src = fetchFromGitHub {
+            owner = "bieniu";
+            repo = "nettigo-air-monitor";
+            rev = version;
+            sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
+          };
+        });
     })
 
     # Pinned due to API changes in pyruckus>0.12
@@ -120,7 +122,8 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+    (mkOverride "poolsense" "0.0.8"
+      "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
 
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
@@ -128,28 +131,28 @@ let
     })
   ];
 
-  mkOverride = attrname: version: sha256:
-    self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      });
-    };
+  mkOverride = attrname: version: sha256: self: super: {
+    ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      inherit version;
+      src = oldAttrs.src.override { inherit version sha256; };
+    });
+  };
 
   py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { })
+      ([ packageOverrides ] ++ defaultOverrides);
   };
 
   componentPackages = import ./component-packages.nix;
 
   availableComponents = builtins.attrNames componentPackages.components;
 
-  getPackages = component: builtins.getAttr component componentPackages.components;
+  getPackages = component:
+    builtins.getAttr component componentPackages.components;
 
-  componentBuildInputs = lib.concatMap (component: getPackages component py.pkgs) extraComponents;
+  componentBuildInputs =
+    lib.concatMap (component: getPackages component py.pkgs) extraComponents;
 
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages py.pkgs;
@@ -157,7 +160,8 @@ let
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "2021.11.5";
 
-in with py.pkgs; buildPythonApplication rec {
+in with py.pkgs;
+buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
@@ -176,9 +180,7 @@ in with py.pkgs; buildPythonApplication rec {
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
-  patches = [
-    ./0001-tests-ignore-OSErrors-in-hass-fixture.patch
-  ];
+  patches = [ ./0001-tests-ignore-OSErrors-in-hass-fixture.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -217,9 +219,8 @@ in with py.pkgs; buildPythonApplication rec {
     yarl
     # Not in setup.py, but used in homeassistant/util/package.py
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ] ++ componentBuildInputs ++ extraBuildInputs;
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
+    ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
@@ -769,9 +770,9 @@ in with py.pkgs; buildPythonApplication rec {
     "zone"
     "zwave"
     "zwave_js"
-  ] ++ lib.optionals (builtins.any (s: s == stdenv.hostPlatform.system) debugpy.meta.platforms) [
-    "debugpy"
-  ];
+  ] ++ lib.optionals
+    (builtins.any (s: s == stdenv.hostPlatform.system) debugpy.meta.platforms)
+    [ "debugpy" ];
 
   pytestFlagsArray = [
     # parallelize test run
@@ -879,7 +880,9 @@ in with py.pkgs; buildPythonApplication rec {
     export PATH=${inetutils}/bin:$PATH
 
     # error out when component test directory is missing, otherwise hidden by xdist execution :(
-    for component in ${lib.concatStringsSep " " (map lib.escapeShellArg componentTests)}; do
+    for component in ${
+      lib.concatStringsSep " " (map lib.escapeShellArg componentTests)
+    }; do
       test -d "tests/components/$component" || {
         >2& echo "ERROR: Tests for component '$component' were enabled, but they do not exist!"
         exit 1
@@ -890,14 +893,13 @@ in with py.pkgs; buildPythonApplication rec {
   passthru = {
     inherit availableComponents extraComponents;
     python = py;
-    tests = {
-      inherit (nixosTests) home-assistant;
-    };
+    tests = { inherit (nixosTests) home-assistant; };
   };
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
-    description = "Open source home automation that puts local control and privacy first";
+    description =
+      "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
     platforms = platforms.linux;

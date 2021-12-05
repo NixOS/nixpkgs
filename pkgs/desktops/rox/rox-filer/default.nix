@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, wrapGAppsHook
-, libxml2
-, gtk
-, libSM
-, shared-mime-info
-}:
+{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, libxml2, gtk, libSM
+, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   pname = "rox-filer";
@@ -18,16 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
   NIX_LDFLAGS = "-ldl -lm";
 
-  patches = [
-    ./rox-filer-2.11-in-source-build.patch
-  ];
+  patches = [ ./rox-filer-2.11-in-source-build.patch ];
 
   # go to the source directory after unpacking the sources
   setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";

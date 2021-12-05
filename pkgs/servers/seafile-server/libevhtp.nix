@@ -15,13 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent ];
 
-  cmakeFlags = [
-    "-DEVHTP_DISABLE_SSL=ON"
-    "-DEVHTP_BUILD_SHARED=ON"
-  ];
+  cmakeFlags = [ "-DEVHTP_DISABLE_SSL=ON" "-DEVHTP_BUILD_SHARED=ON" ];
 
   meta = with lib; {
-    description = "Create extremely-fast and secure embedded HTTP servers with ease";
+    description =
+      "Create extremely-fast and secure embedded HTTP servers with ease";
     homepage = "https://github.com/criticalstack/libevhtp";
     license = licenses.bsd3;
     maintainers = with maintainers; [ greizgh schmittlauch ];

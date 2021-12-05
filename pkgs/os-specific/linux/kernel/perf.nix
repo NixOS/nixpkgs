@@ -1,11 +1,8 @@
-{ lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
-, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils-unwrapped
-, libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
-, zlib
-, withGtk ? false, gtk2
-, withZstd ? true, zstd
-, withLibcap ? true, libcap
-}:
+{ lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc
+, xmlto, makeWrapper, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison
+, pkg-config, libunwind, binutils-unwrapped, libiberty, audit, libbfd
+, libopcodes, openssl, systemtap, numactl, zlib, withGtk ? false, gtk2
+, withZstd ? true, zstd, withLibcap ? true, libcap }:
 
 with lib;
 
@@ -31,21 +28,43 @@ stdenv.mkDerivation {
     fi
   '';
 
-  makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
+  makeFlags = [ "prefix=$(out)" "WERROR=0" ] ++ kernel.makeFlags;
 
   hardeningDisable = [ "format" ];
 
   # perf refers both to newt and slang
   nativeBuildInputs = [
-    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty audit makeWrapper pkg-config python3
+    asciidoc
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxslt
+    flex
+    bison
+    libiberty
+    audit
+    makeWrapper
+    pkg-config
+    python3
   ];
   buildInputs = [
-    elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
-    libopcodes python3 perl
+    elfutils
+    newt
+    slang
+    libunwind
+    libbfd
+    zlib
+    openssl
+    systemtap.stapBuild
+    numactl
+    libopcodes
+    python3
+    perl
   ] ++ lib.optional withGtk gtk2
-    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
-    ++ lib.optional withZstd zstd
+    ++ (if (versionAtLeast kernel.version "4.19") then
+      [ python3 ]
+    else
+      [ python2 ]) ++ lib.optional withZstd zstd
     ++ lib.optional withLibcap libcap;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -76,7 +95,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
     broken = kernel.kernelOlder "5";
   };

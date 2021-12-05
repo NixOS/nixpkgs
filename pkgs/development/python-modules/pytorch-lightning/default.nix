@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, future
-, pytestCheckHook
-, pytorch
-, pyyaml
-, tensorflow-tensorboard
-, tqdm }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, future, pytestCheckHook
+, pytorch, pyyaml, tensorflow-tensorboard, tqdm }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
@@ -22,13 +14,7 @@ buildPythonPackage rec {
     sha256 = "12zhq4pnfcwbgcx7cs99c751gp3w0ysaf5ykv2lv8f4i360w3r5a";
   };
 
-  propagatedBuildInputs = [
-    future
-    pytorch
-    pyyaml
-    tensorflow-tensorboard
-    tqdm
-  ];
+  propagatedBuildInputs = [ future pytorch pyyaml tensorflow-tensorboard tqdm ];
 
   checkInputs = [ pytestCheckHook ];
   # Some packages are not in NixPkgs; other tests try to build distributed
@@ -38,7 +24,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytorch_lightning" ];
 
   meta = with lib; {
-    description = "Lightweight PyTorch wrapper for machine learning researchers";
+    description =
+      "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://pytorch-lightning.readthedocs.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];

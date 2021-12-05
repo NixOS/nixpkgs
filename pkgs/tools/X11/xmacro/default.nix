@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1p9jljxyn4j6piljiyi2xv6f8jhjbzhabprp8p0qmqxaxgdipi61";
   };
 
-  preInstall = "echo -e 'install:\n	mkdir \${out}/bin;\n	cp xmacrorec2 xmacroplay \${out}/bin;' >>Makefile; ";
+  preInstall = ''
+    echo -e 'install:
+    	mkdir ''${out}/bin;
+    	cp xmacrorec2 xmacroplay ''${out}/bin;' >>Makefile; '';
 
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 

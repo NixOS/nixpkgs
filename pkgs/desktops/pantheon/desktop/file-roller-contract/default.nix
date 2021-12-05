@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, file-roller
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, file-roller }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller-contract";

@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pkg-config
-, libxkbcommon
-, libinput
-, pixman
-, udev
-, wlroots
-, wayland
-, pywayland
-, xkbcommon
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, python, cffi, pkg-config, libxkbcommon
+, libinput, pixman, udev, wlroots, wayland, pywayland, xkbcommon
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pywlroots";

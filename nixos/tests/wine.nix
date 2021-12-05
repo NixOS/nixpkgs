@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; config = { }; }
-}:
+{ system ? builtins.currentSystem, pkgs ? import ../.. {
+  inherit system;
+  config = { };
+} }:
 
 let
   inherit (pkgs.lib) concatMapStrings listToAttrs;

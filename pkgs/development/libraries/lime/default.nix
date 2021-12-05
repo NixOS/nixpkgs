@@ -1,12 +1,4 @@
-{ bctoolbox
-, belle-sip
-, cmake
-, fetchFromGitLab
-, lib
-, soci
-, sqlite
-, boost
-, stdenv
+{ bctoolbox, belle-sip, cmake, fetchFromGitLab, lib, soci, sqlite, boost, stdenv
 }:
 
 stdenv.mkDerivation rec {

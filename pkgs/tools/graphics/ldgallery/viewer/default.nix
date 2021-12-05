@@ -27,10 +27,8 @@ let
     buildInputs = optionals stdenv.isDarwin [ CoreServices ];
   };
 
-in
-
-# making sure that the source and the node package are in sync
-assert versions.majorMinor nodePkg.version == removePrefix "v" sourcePkg.rev;
+  # making sure that the source and the node package are in sync
+in assert versions.majorMinor nodePkg.version == removePrefix "v" sourcePkg.rev;
 
 stdenv.mkDerivation {
   pname = nodePkg.packageName;

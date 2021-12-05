@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pyyaml, hypothesis
-}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pyyaml, hypothesis }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
@@ -11,19 +9,11 @@ buildPythonPackage rec {
     sha256 = "8a297c7a197683ba02e5e2b882ffd6c6180d01bdefb534b69cd3962df020bfe6";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
-    hypothesis
-    pytest
-  ];
+  checkInputs = [ hypothesis pytest ];
 
-  pythonImportsCheck = [
-    "yaml"
-    "yamlloader"
-  ];
+  pythonImportsCheck = [ "yaml" "yamlloader" ];
 
   meta = with lib; {
     description = "A case-insensitive list for Python";

@@ -1,11 +1,12 @@
-{ callPackage, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2
-, cudatoolkit_11_3, cudatoolkit_11_4
-}:
+{ callPackage, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2
+, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2, cudatoolkit_11_3
+, cudatoolkit_11_4 }:
 
 let
-  generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
-    inherit (args) cudatoolkit;
-  };
+  generic = args:
+    callPackage (import ./generic.nix (removeAttrs args [ "cudatoolkit" ])) {
+      inherit (args) cudatoolkit;
+    };
 
 in rec {
   cudnn_cudatoolkit_10_0 = generic rec {
@@ -40,21 +41,17 @@ in rec {
     hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
   };
 
-  cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {
-    cudatoolkit = cudatoolkit_11_1;
-  };
+  cudnn_cudatoolkit_11_1 =
+    cudnn_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_1; };
 
-  cudnn_cudatoolkit_11_2 = cudnn_cudatoolkit_11_0.override {
-    cudatoolkit = cudatoolkit_11_2;
-  };
+  cudnn_cudatoolkit_11_2 =
+    cudnn_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_2; };
 
-  cudnn_cudatoolkit_11_3 = cudnn_cudatoolkit_11_0.override {
-    cudatoolkit = cudatoolkit_11_3;
-  };
+  cudnn_cudatoolkit_11_3 =
+    cudnn_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_3; };
 
-  cudnn_cudatoolkit_11_4 = cudnn_cudatoolkit_11_0.override {
-    cudatoolkit = cudatoolkit_11_4;
-  };
+  cudnn_cudatoolkit_11_4 =
+    cudnn_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_4; };
 
   cudnn_cudatoolkit_11 = cudnn_cudatoolkit_11_4;
 }

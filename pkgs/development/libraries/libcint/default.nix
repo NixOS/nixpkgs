@@ -1,11 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, blas
-  # Check Inputs
-, python3
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, blas
+# Check Inputs
+, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libcint";

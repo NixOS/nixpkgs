@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   src = fetchurl {
-    url = "https://suso.suso.org/programs/num-utils/downloads/num-utils-${version}.tar.gz";
+    url =
+      "https://suso.suso.org/programs/num-utils/downloads/num-utils-${version}.tar.gz";
     sha256 = "0kn6yskjww2agcqvas5l2xp55mp4njdxqkdicchlji3qzih2fn83";
   };
 
@@ -14,10 +15,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace Makefile --replace "-o 0 -g 0" "" --replace "\$(RPMDIR)" ""
   '';
-  makeFlags = [
-    "TOPDIR=${placeholder "out"}"
-    "PERL=${perl}/bin/perl"
-  ];
+  makeFlags = [ "TOPDIR=${placeholder "out"}" "PERL=${perl}/bin/perl" ];
 
   meta = with lib; {
     description = "Programs for dealing with numbers from the command line";

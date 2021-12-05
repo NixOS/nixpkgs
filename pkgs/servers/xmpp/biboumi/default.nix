@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn
-, libiconv, botan2, systemd, pkg-config, udns, python3Packages } :
+, libiconv, botan2, systemd, pkg-config, udns, python3Packages }:
 
 let
   louiz_catch = fetchgit {
@@ -7,8 +7,7 @@ let
     rev = "0a34cc201ef28bf25c88b0062f331369596cb7b7"; # v2.2.1
     sha256 = "0ad0sjhmzx61a763d2ali4vkj8aa1sbknnldks7xlf4gy83jfrbl";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "biboumi";
   version = "9.0";
 

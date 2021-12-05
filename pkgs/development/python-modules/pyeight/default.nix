@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-}:
+{ lib, aiohttp, async-timeout, buildPythonPackage, fetchFromGitHub, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pyeight";
@@ -18,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "1ybhs09wyzzaryghd6ijxhajp3677x63c4qzqsgln1mmxhj8wm5k";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  propagatedBuildInputs = [ aiohttp async-timeout ];
 
   # Project has no tests
   doCheck = false;

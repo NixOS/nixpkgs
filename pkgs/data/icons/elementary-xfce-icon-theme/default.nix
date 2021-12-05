@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, optipng, librsvg, gtk3
+, pantheon, gnome, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
@@ -11,13 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-E8f6UU/4Y9Nfk7LjDcdyV+TdeVj/zl3oFCyEu3Gz27w=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    gdk-pixbuf
-    librsvg
-    optipng
-    gtk3
-  ];
+  nativeBuildInputs = [ pkg-config gdk-pixbuf librsvg optipng gtk3 ];
 
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme

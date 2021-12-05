@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ms-cv";
@@ -23,9 +18,7 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Correlation vector implementation in python";

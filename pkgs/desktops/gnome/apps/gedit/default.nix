@@ -1,32 +1,16 @@
-{ lib, stdenv
-, meson
-, fetchurl
-, python3
-, pkg-config
-, gtk3
-, glib
-, adwaita-icon-theme
-, libpeas
-, gtksourceview4
-, gsettings-desktop-schemas
-, wrapGAppsHook
-, ninja
-, libsoup
-, tepl
-, gnome
-, gspell
-, perl
-, itstool
-, desktop-file-utils
-, vala
-}:
+{ lib, stdenv, meson, fetchurl, python3, pkg-config, gtk3, glib
+, adwaita-icon-theme, libpeas, gtksourceview4, gsettings-desktop-schemas
+, wrapGAppsHook, ninja, libsoup, tepl, gnome, gspell, perl, itstool
+, desktop-file-utils, vala }:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
   version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gedit/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "149ngl9qw6h59546lir1pa7hvw23ppsnqlj9mfqphmmn5jl99qsm";
   };
 

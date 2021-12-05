@@ -3,11 +3,9 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
-null
-}:
+, guiSupport ? true, enableMinimal ? false, adns ? null, bzip2 ? null
+, gnutls ? null, libusb1 ? null, openldap ? null, pcsclite ? null
+, pinentry ? null, readline ? null, sqlite ? null, zlib ? null }:
 
 with lib;
 
@@ -26,8 +24,20 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
+    libgcrypt
+    libassuan
+    libksba
+    libiconv
+    npth
+    gettext
+    readline
+    libusb1
+    gnutls
+    adns
+    openldap
+    zlib
+    bzip2
+    sqlite
   ];
 
   patches = [
@@ -42,8 +52,10 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
-    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
+    sed -i 's,"libpcsclite\.so[^"]*","${
+      lib.getLib pcsclite
+    }/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
@@ -53,10 +65,10 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
+  ] ++ optional guiSupport
+    "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
-  postInstall = if enableMinimal
-  then ''
+  postInstall = if enableMinimal then ''
     rm -r $out/{libexec,sbin,share}
     for f in `find $out/bin -type f -not -name gpg`
     do
@@ -78,7 +90,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    description =
+      "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free

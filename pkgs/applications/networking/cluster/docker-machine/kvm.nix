@@ -9,9 +9,9 @@ buildGoPackage rec {
   goDeps = ./kvm-deps.nix;
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "dhiltgen";
-    repo   = "docker-machine-kvm";
+    rev = "v${version}";
+    owner = "dhiltgen";
+    repo = "docker-machine-kvm";
     sha256 = "0ch4zwb6h7hnr5l3skj1daypvpyms2i666lbnmakpw1fw3zvjmgy";
   };
 

@@ -1,32 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, glib
-, nss
-, nspr
-, atk
-, at-spi2-atk
-, libdrm
-, expat
-, libxcb
-, libxkbcommon
-, libX11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, mesa
-, gtk3
-, pango
-, cairo
-, alsa-lib
-, dbus
-, at-spi2-core
-, cups
-, libxshmfence
-}:
+{ lib, stdenv, fetchurl, cmake, glib, nss, nspr, atk, at-spi2-atk, libdrm, expat
+, libxcb, libxkbcommon, libX11, libXcomposite, libXdamage, libXext, libXfixes
+, libXrandr, mesa, gtk3, pango, cairo, alsa-lib, dbus, at-spi2-core, cups
+, libxshmfence }:
 
 let
   rpath = lib.makeLibraryPath [
@@ -74,15 +49,15 @@ let
   };
 
   platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "cef-binary";
   version = "90.6.7";
   gitRevision = "19ba721";
   chromiumVersion = "90.0.4430.212";
 
   src = fetchurl {
-    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
+    url =
+      "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
     inherit (platformInfo) sha256;
   };
 
@@ -103,7 +78,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Simple framework for embedding Chromium-based browsers in other applications";
+    description =
+      "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;

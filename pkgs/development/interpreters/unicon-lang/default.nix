@@ -35,7 +35,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A very high level, goal-directed, object-oriented, general purpose applications language";
+    description =
+      "A very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.gpl2;

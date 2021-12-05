@@ -1,7 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake, pkg-config, udev
-, qtmultimedia, qtscript, alsa-lib, ola, libftdi1, libusb-compat-0_1
-, libsndfile, libmad
-}:
+, qtmultimedia, qtscript, alsa-lib, ola, libftdi1, libusb-compat-0_1, libsndfile
+, libmad }:
 
 mkDerivation rec {
   pname = "qlcplus";
@@ -17,14 +16,23 @@ mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "qt5.15-deprecation-fixes.patch";
-      url = "https://github.com/mcallegari/qlcplus/commit/e4ce4b0226715876e8e9e3b23785d43689b2bb64.patch";
+      url =
+        "https://github.com/mcallegari/qlcplus/commit/e4ce4b0226715876e8e9e3b23785d43689b2bb64.patch";
       sha256 = "1zhrg6ava1nyc97xcx75r02zzkxmar0973w4jwkm5ch3iqa8bqnh";
     })
   ];
 
   nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
-    udev qtmultimedia qtscript alsa-lib ola libftdi1 libusb-compat-0_1 libsndfile libmad
+    udev
+    qtmultimedia
+    qtscript
+    alsa-lib
+    ola
+    libftdi1
+    libusb-compat-0_1
+    libsndfile
+    libmad
   ];
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
@@ -44,7 +52,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
+    description =
+      "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;

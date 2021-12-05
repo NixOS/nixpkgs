@@ -1,5 +1,4 @@
-{ lib, fetchurl, python2Packages, picocom
-, avrdude, arduino-core }:
+{ lib, fetchurl, python2Packages, picocom, avrdude, arduino-core }:
 
 python2Packages.buildPythonApplication rec {
   pname = "ino";

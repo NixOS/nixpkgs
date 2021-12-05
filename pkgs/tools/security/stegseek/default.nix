@@ -1,12 +1,5 @@
-{ lib, stdenv
-, cmake
-, fetchFromGitHub
-, libjpeg
-, libmcrypt
-, libmhash
-, libtool
-, zlib
-}:
+{ lib, stdenv, cmake, fetchFromGitHub, libjpeg, libmcrypt, libmhash, libtool
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "stegseek";
@@ -21,13 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libjpeg
-    libmcrypt
-    libmhash
-    libtool
-    zlib
-  ];
+  buildInputs = [ libjpeg libmcrypt libmhash libtool zlib ];
 
   doCheck = true;
 

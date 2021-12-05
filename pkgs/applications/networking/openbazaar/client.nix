@@ -1,22 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, gcc-unwrapped
-, dpkg
-, bash
-, nodePackages
-, makeWrapper
-, electron_6
-}:
+{ lib, stdenv, fetchurl, gcc-unwrapped, dpkg, bash, nodePackages, makeWrapper
+, electron_6 }:
 
-let
-  electron = electron_6;
-in
-stdenv.mkDerivation rec {
+let electron = electron_6;
+in stdenv.mkDerivation rec {
   pname = "openbazaar-client";
   version = "2.4.10";
 
   src = fetchurl {
-    url = "https://github.com/OpenBazaar/openbazaar-desktop/releases/download/v${version}/openbazaar2client_${version}_amd64.deb";
+    url =
+      "https://github.com/OpenBazaar/openbazaar-desktop/releases/download/v${version}/openbazaar2client_${version}_amd64.deb";
     sha256 = "sha256-X0iTTLOJsZeyVZwNU3y39cFMHnxlnYXmqQERE26CLTY=";
   };
 

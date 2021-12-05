@@ -3,8 +3,9 @@
 let
   rubiesEnv = runCommand "chruby-env" { preferLocalBuild = true; } ''
     mkdir $out
-    ${lib.concatStrings
-        (lib.mapAttrsToList (name: path: "ln -s ${path} $out/${name}\n") rubies)}
+    ${lib.concatStrings (lib.mapAttrsToList (name: path: ''
+      ln -s ${path} $out/${name}
+    '') rubies)}
   '';
 
 in stdenv.mkDerivation rec {
@@ -19,9 +20,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1894g6fymr8kra9vwhbmnrcr58l022mcd7g9ans4zd3izla2j3gx";
   };
 
-  patches = lib.optionalString (rubies != null) [
-    ./env.patch
-  ];
+  patches = lib.optionalString (rubies != null) [ ./env.patch ];
 
   postPatch = lib.optionalString (rubies != null) ''
     substituteInPlace share/chruby/chruby.sh --replace "@rubiesEnv@" ${rubiesEnv}

@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, python3
-, ninja
-, hicolor-icon-theme
-, gtk3
-, xorg
-, librsvg
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, python3, ninja
+, hicolor-icon-theme, gtk3, xorg, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
@@ -24,18 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WR4HV0nJKj0WeSFHXLK64O0LhX8myAJE4w0aztyhPn4=";
   };
 
-  nativeBuildInputs = [
-    gtk3
-    librsvg
-    meson
-    ninja
-    python3
-    xorg.xcursorgen
-  ];
+  nativeBuildInputs = [ gtk3 librsvg meson ninja python3 xorg.xcursorgen ];
 
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
@@ -52,9 +33,7 @@ stdenv.mkDerivation rec {
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

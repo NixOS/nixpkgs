@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchurl, isPy3k }:
 
 buildPythonPackage {
   pname = "muttils";

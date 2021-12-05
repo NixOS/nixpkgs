@@ -1,9 +1,4 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, python, six }:
 
 buildPythonPackage rec {
   pname = "ppft";

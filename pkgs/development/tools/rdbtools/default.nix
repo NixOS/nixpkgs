@@ -17,7 +17,8 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
+    description =
+      "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
     homepage = "https://github.com/sripathikrishnan/redis-rdb-tools";
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];

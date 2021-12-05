@@ -5,40 +5,42 @@ with lib;
 let
   cfg = config.services.avahi;
 
-  yesNo = yes : if yes then "yes" else "no";
+  yesNo = yes: if yes then "yes" else "no";
 
-  avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
-    [server]
-    ${# Users can set `networking.hostName' to the empty string, when getting
+  avahiDaemonConf = with cfg;
+    pkgs.writeText "avahi-daemon.conf" ''
+      [server]
+      ${ # Users can set `networking.hostName' to the empty string, when getting
       # a host name from DHCP.  In that case, let Avahi take whatever the
       # current host name is; setting `host-name' to the empty string in
       # `avahi-daemon.conf' would be invalid.
       optionalString (hostName != "") "host-name=${hostName}"}
-    browse-domains=${concatStringsSep ", " browseDomains}
-    use-ipv4=${yesNo ipv4}
-    use-ipv6=${yesNo ipv6}
-    ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
-    ${optionalString (domainName!=null) "domain-name=${domainName}"}
-    allow-point-to-point=${yesNo allowPointToPoint}
-    ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
+      browse-domains=${concatStringsSep ", " browseDomains}
+      use-ipv4=${yesNo ipv4}
+      use-ipv6=${yesNo ipv6}
+      ${optionalString (interfaces != null)
+      "allow-interfaces=${concatStringsSep "," interfaces}"}
+      ${optionalString (domainName != null) "domain-name=${domainName}"}
+      allow-point-to-point=${yesNo allowPointToPoint}
+      ${optionalString (cacheEntriesMax != null)
+      "cache-entries-max=${toString cacheEntriesMax}"}
 
-    [wide-area]
-    enable-wide-area=${yesNo wideArea}
+      [wide-area]
+      enable-wide-area=${yesNo wideArea}
 
-    [publish]
-    disable-publishing=${yesNo (!publish.enable)}
-    disable-user-service-publishing=${yesNo (!publish.userServices)}
-    publish-addresses=${yesNo (publish.userServices || publish.addresses)}
-    publish-hinfo=${yesNo publish.hinfo}
-    publish-workstation=${yesNo publish.workstation}
-    publish-domain=${yesNo publish.domain}
+      [publish]
+      disable-publishing=${yesNo (!publish.enable)}
+      disable-user-service-publishing=${yesNo (!publish.userServices)}
+      publish-addresses=${yesNo (publish.userServices || publish.addresses)}
+      publish-hinfo=${yesNo publish.hinfo}
+      publish-workstation=${yesNo publish.workstation}
+      publish-domain=${yesNo publish.domain}
 
-    [reflector]
-    enable-reflector=${yesNo reflector}
-    ${extraConfig}
-  '';
-in
-{
+      [reflector]
+      enable-reflector=${yesNo reflector}
+      ${extraConfig}
+    '';
+in {
   options.services.avahi = {
     enable = mkOption {
       type = types.bool;
@@ -112,7 +114,7 @@ in
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= ''
+      description = ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.
@@ -128,12 +130,13 @@ in
     reflector = mkOption {
       type = types.bool;
       default = false;
-      description = "Reflect incoming mDNS requests to all allowed network interfaces.";
+      description =
+        "Reflect incoming mDNS requests to all allowed network interfaces.";
     };
 
     extraServiceFiles = mkOption {
       type = with types; attrsOf (either str path);
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
@@ -167,13 +170,15 @@ in
       userServices = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to publish user services. Will set <literal>addresses=true</literal>.";
+        description =
+          "Whether to publish user services. Will set <literal>addresses=true</literal>.";
       };
 
       addresses = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to register mDNS address records for all local IP addresses.";
+        description =
+          "Whether to register mDNS address records for all local IP addresses.";
       };
 
       hinfo = mkOption {
@@ -196,7 +201,8 @@ in
       domain = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to announce the locally used domain name for browsing by other hosts.";
+        description =
+          "Whether to announce the locally used domain name for browsing by other hosts.";
       };
     };
 
@@ -236,7 +242,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.avahi = {};
+    users.groups.avahi = { };
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
     system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
@@ -246,10 +252,10 @@ in
 
     environment.systemPackages = [ pkgs.avahi ];
 
-    environment.etc = (mapAttrs' (n: v: nameValuePair
-      "avahi/services/${n}.service"
-      { ${if types.path.check v then "source" else "text"} = v; }
-    ) cfg.extraServiceFiles);
+    environment.etc = (mapAttrs' (n: v:
+      nameValuePair "avahi/services/${n}.service" {
+        ${if types.path.check v then "source" else "text"} = v;
+      }) cfg.extraServiceFiles);
 
     systemd.sockets.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack Activation Socket";
@@ -274,7 +280,8 @@ in
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart =
+          "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
       };
     };
 

@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, python3Packages
-, ffmpeg
-, flac
-, gobject-introspection
-, gtk3
-, libnotify
-, libsamplerate
-, libvorbis
-, mpg123
-, libopenmpt
-, opusfile
-, pango
-, pulseaudio
-, withDiscordRPC ? false
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, ffmpeg, flac
+, gobject-introspection, gtk3, libnotify, libsamplerate, libvorbis, mpg123
+, libopenmpt, opusfile, pango, pulseaudio, withDiscordRPC ? false }:
 
 stdenv.mkDerivation rec {
   pname = "tauon";
@@ -32,11 +16,15 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace tauon.py \
       --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = os.path.dirname(__file__)' 'install_directory = "${placeholder "out"}/share/tauon"'
+      --replace 'install_directory = os.path.dirname(__file__)' 'install_directory = "${
+        placeholder "out"
+      }/share/tauon"'
 
     substituteInPlace t_modules/t_main.py \
       --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = sys.path[0]' 'install_directory = "${placeholder "out"}/share/tauon"' \
+      --replace 'install_directory = sys.path[0]' 'install_directory = "${
+        placeholder "out"
+      }/share/tauon"' \
       --replace 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so' \
       --replace 'lib/libphazor.so' '../../lib/libphazor.so'
 
@@ -50,10 +38,7 @@ stdenv.mkDerivation rec {
     ./compile-phazor.sh
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    python3Packages.wrapPython
-  ];
+  nativeBuildInputs = [ pkg-config python3Packages.wrapPython ];
 
   buildInputs = [
     flac
@@ -69,24 +54,25 @@ stdenv.mkDerivation rec {
     pulseaudio
   ];
 
-  pythonPath = with python3Packages; [
-    dbus-python
-    isounidecode
-    musicbrainzngs
-    mutagen
-    pillow
-    pulsectl
-    pycairo
-    pylast
-    pygobject3
-    pylyrics
-    pysdl2
-    requests
-    send2trash
-  ] ++ lib.optional withDiscordRPC pypresence;
+  pythonPath = with python3Packages;
+    [
+      dbus-python
+      isounidecode
+      musicbrainzngs
+      mutagen
+      pillow
+      pulsectl
+      pycairo
+      pylast
+      pygobject3
+      pylyrics
+      pysdl2
+      requests
+      send2trash
+    ] ++ lib.optional withDiscordRPC pypresence;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
     "--prefix PYTHONPATH : $out/share/tauon"
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
   ];

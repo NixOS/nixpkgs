@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, numpy
-, pytest-asyncio
-, pytestCheckHook
-, python-rapidjson
-, pythonOlder
-, pyzmq
-, ruamel-yaml
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, msgpack, numpy, pytest-asyncio
+, pytestCheckHook, python-rapidjson, pythonOlder, pyzmq, ruamel-yaml }:
 
 buildPythonPackage rec {
   pname = "rpcq";
@@ -24,18 +14,9 @@ buildPythonPackage rec {
     sha256 = "1vvf6y7459f8aamhkcxx36ajiai143s2vwg751x0dl0lx7hp3yn5";
   };
 
-  propagatedBuildInputs = [
-    msgpack
-    python-rapidjson
-    pyzmq
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ msgpack python-rapidjson pyzmq ruamel-yaml ];
 
-  checkInputs = [
-    numpy
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ numpy pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -45,7 +26,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rpcq" ];
 
   meta = with lib; {
-    description = "The RPC framework and message specification for rigetti Quantum Cloud services";
+    description =
+      "The RPC framework and message specification for rigetti Quantum Cloud services";
     homepage = "https://github.com/rigetti/rpcq";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

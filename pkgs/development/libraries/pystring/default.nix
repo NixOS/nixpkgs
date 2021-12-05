@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "pystring-cmake-configuration.patch";
-      url = "https://github.com/imageworks/pystring/commit/4f653fc35421129eae8a2c424901ca7170059370.patch";
+      url =
+        "https://github.com/imageworks/pystring/commit/4f653fc35421129eae8a2c424901ca7170059370.patch";
       sha256 = "1hynzz76ff4vvmi6kwixsmjswkpyj6s4vv05d7nw0zscj4cdp8k3";
     })
   ];
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/imageworks/pystring/";
-    description = "A collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
+    description =
+      "A collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
     license = licenses.bsd3;
     maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;

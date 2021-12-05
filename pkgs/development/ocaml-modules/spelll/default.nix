@@ -1,6 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, seq
-}:
+{ lib, fetchFromGitHub, buildDunePackage, seq }:
 
 buildDunePackage rec {
   pname = "spelll";

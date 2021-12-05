@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, glib, pkg-config, libfm-extra }:
 
 let name = "menu-cache-1.1.0";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${name}.tar.xz";

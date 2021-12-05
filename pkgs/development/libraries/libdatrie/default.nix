@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, autoreconfHook, autoconf-archive
+{ lib, stdenv, fetchFromGitHub, makeWrapper, autoreconfHook, autoconf-archive
 , installShellFiles, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -16,18 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "03dc363259iyiidrgadzc7i03mmfdj8h78j82vk6z53w6fxq5zxc";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
-    installShellFiles
-  ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive installShellFiles ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  preAutoreconf = let
-    reports = "https://github.com/tlwg/libdatrie/issues";
-  in
-  ''
+  preAutoreconf = let reports = "https://github.com/tlwg/libdatrie/issues";
+  in ''
     sed -i -e "/AC_INIT/,+3d" configure.ac
     sed -i "5iAC_INIT(${pname},${version},[${reports}])" configure.ac
   '';
@@ -38,7 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
-    description = "This is an implementation of double-array structure for representing trie";
+    description =
+      "This is an implementation of double-array structure for representing trie";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ SuperSandro2000 ];

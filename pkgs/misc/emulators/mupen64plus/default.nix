@@ -1,11 +1,13 @@
-{lib, stdenv, fetchurl, boost, dash, freetype, libpng, pkg-config, SDL, which, zlib, nasm }:
+{ lib, stdenv, fetchurl, boost, dash, freetype, libpng, pkg-config, SDL, which
+, zlib, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";
   version = "2.5.9";
 
   src = fetchurl {
-    url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
+    url =
+      "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
     sha256 = "1a21n4gqdvag6krwcjm5bnyw5phrlxw6m0mk73jy53iq03f3s96m";
   };
 

@@ -1,29 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, xmlto
-, docbook_xml_dtd_44
-, docbook_xsl
-, installShellFiles
-}:
+{ lib, stdenv, fetchurl, ncurses, xmlto, docbook_xml_dtd_44, docbook_xsl
+, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "vms-empire";
   version = "1.16";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [
-    ncurses
-    xmlto
-    docbook_xml_dtd_44
-    docbook_xsl
-  ];
+  buildInputs = [ ncurses xmlto docbook_xml_dtd_44 docbook_xsl ];
 
   postBuild = ''
     xmlto man vms-empire.xml
@@ -35,7 +23,9 @@ stdenv.mkDerivation rec {
     install -D vms-empire -t ${placeholder "out"}/bin/
     install -D vms-empire.html -t ${placeholder "out"}/share/doc/${pname}/
     install -D vms-empire.desktop -t ${placeholder "out"}/share/applications/
-    install -D vms-empire.png -t ${placeholder "out"}/share/icons/hicolor/48x48/apps/
+    install -D vms-empire.png -t ${
+      placeholder "out"
+    }/share/icons/hicolor/48x48/apps/
     install -D vms-empire.xml -t ${placeholder "out"}/share/appdata/
     installManPage empire.6
     runHook postInstall
@@ -45,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://catb.org/~esr/vms-empire/";
-    description = "The ancestor of all expand/explore/exploit/exterminate games";
+    description =
+      "The ancestor of all expand/explore/exploit/exterminate games";
     longDescription = ''
       Empire is a simulation of a full-scale war between two emperors, the
       computer and you. Naturally, there is only room for one, so the object of

@@ -5,23 +5,18 @@ stdenv.mkDerivation rec {
   pname = "schemaspy";
 
   src = fetchurl {
-    url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${pname}-${version}.jar";
+    url =
+      "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${pname}-${version}.jar";
     sha256 = "0lgz6b17hx9857fb2l03ggz8y3n8a37vrcsylif0gmkwj1v4qgl7";
   };
 
   dontUnpack = true;
 
-  buildInputs = [
-    jre
-  ];
+  buildInputs = [ jre ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  wrappedPath = lib.makeBinPath [
-    graphviz
-  ];
+  wrappedPath = lib.makeBinPath [ graphviz ];
 
   installPhase = ''
     install -D ${src} "$out/share/java/${pname}-${version}.jar"

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, glibcLocales
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "ipython_genutils";

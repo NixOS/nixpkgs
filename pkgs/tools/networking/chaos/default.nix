@@ -1,7 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "chaos";
@@ -16,9 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "1mc60jkf7xmf3zsb2fihsgg3jkb2mfvsw84aby2kqcf14hdsk2gl";
 
-  subPackages = [
-    "cmd/chaos/"
-  ];
+  subPackages = [ "cmd/chaos/" ];
 
   meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";

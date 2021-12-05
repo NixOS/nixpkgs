@@ -1,11 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, idrisscript
-, hrtime
-, webgl
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, idrisscript, hrtime, webgl, lib }:
+build-idris-package {
   name = "console";
   version = "2017-04-20";
 

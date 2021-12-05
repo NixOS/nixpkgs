@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, cython
-, numpy
-, msgpack
-, pytestCheckHook
-, python
-, gcc8
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, setuptools-scm, cython, numpy
+, msgpack, pytestCheckHook, python, gcc8 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
@@ -21,24 +11,13 @@ buildPythonPackage rec {
     sha256 = "35adbcc746b95e3ac92e949a161811f5aa2602b9eb1ef241b5ea6f09bb220997";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    cython
-    gcc8
-  ];
+  nativeBuildInputs = [ setuptools-scm cython gcc8 ];
 
-  propagatedBuildInputs = [
-    numpy
-    msgpack
-  ];
+  propagatedBuildInputs = [ numpy msgpack ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/numcodecs"
-  ];
+  pytestFlagsArray = [ "$out/${python.sitePackages}/numcodecs" ];
 
   disabledTests = [
     "test_backwards_compatibility"
@@ -48,10 +27,11 @@ buildPythonPackage rec {
     "test_bytes"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
-    description = "Buffer compression and transformation codecs for use in data storage and communication applications";
+    description =
+      "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ maintainers.costrouc ];
   };
 }

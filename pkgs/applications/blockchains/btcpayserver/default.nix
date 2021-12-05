@@ -18,7 +18,8 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
 
-  dotnetFlags = lib.optionals altcoinSupport [ "/p:Configuration=Altcoins-Release" ];
+  dotnetFlags =
+    lib.optionals altcoinSupport [ "/p:Configuration=Altcoins-Release" ];
 
   # btcpayserver requires the publish directory as its working dir
   # https://github.com/btcpayserver/btcpayserver/issues/1894

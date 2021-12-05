@@ -1,20 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, gnuradio
-, thrift
-, cmake
-, pkg-config
-, doxygen
-, swig
-, python
-, log4cpp
-, mpir
-, boost
-, gmp
-, icu
-, limesuite
-}:
+{ lib, mkDerivation, fetchFromGitHub, gnuradio, thrift, cmake, pkg-config
+, doxygen, swig, python, log4cpp, mpir, boost, gmp, icu, limesuite }:
 
 let
   version = {
@@ -37,23 +22,12 @@ in mkDerivation {
   inherit version src;
   disabledForGRafter = "3.9";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    swig
-    python
-  ];
-  buildInputs = [
-    log4cpp
-    mpir
-    boost
-    gmp
-    icu
-    limesuite
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
-    thrift
-    python.pkgs.thrift
-  ];
+  nativeBuildInputs = [ cmake pkg-config swig python ];
+  buildInputs = [ log4cpp mpir boost gmp icu limesuite ]
+    ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+      thrift
+      python.pkgs.thrift
+    ];
 
   meta = with lib; {
     description = "Gnuradio source and sink blocks for LimeSDR";

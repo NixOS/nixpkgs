@@ -1,5 +1,5 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests
-, systemd, withSystemdSupport ? true }:
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests, systemd
+, withSystemdSupport ? true }:
 
 with lib;
 

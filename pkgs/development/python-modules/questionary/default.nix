@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry
-, prompt-toolkit
-, pytest-cov
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry, prompt-toolkit, pytest-cov
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "questionary";
@@ -19,18 +13,11 @@ buildPythonPackage rec {
     sha256 = "14k24fq2nmk90iv0k7pnmmdhmk8z261397wg52sfcsccyhpdw3i7";
   };
 
-  nativeBuildInputs = [
-    poetry
-  ];
+  nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  propagatedBuildInputs = [ prompt-toolkit ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "questionary" ];
 

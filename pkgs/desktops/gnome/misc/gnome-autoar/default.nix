@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, glib
-, gobject-introspection
-, libarchive
-, vala
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, gnome, gtk3, glib
+, gobject-introspection, libarchive, vala }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-autoar";
@@ -19,30 +8,19 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-autoar/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "ZGvVDrrZLZHBvokJehU2QVYVdELKwUcd7X7LJ9mpFQ4=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config vala ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    libarchive
-    glib
-  ];
+  propagatedBuildInputs = [ libarchive glib ];
 
-  mesonFlags = [
-    "-Dvapi=true"
-  ];
+  mesonFlags = [ "-Dvapi=true" ];
 
   passthru = {
     updateScript = gnome.updateScript {

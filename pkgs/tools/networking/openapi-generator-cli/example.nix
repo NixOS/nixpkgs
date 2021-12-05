@@ -3,7 +3,8 @@
 runCommand "openapi-generator-cli-test" {
   nativeBuildInputs = [ openapi-generator-cli ];
   petstore = fetchurl {
-    url = "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/14c0908becbccd78252be49bd92be8c53cd2b9e3/examples/v3.0/petstore.yaml";
+    url =
+      "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/14c0908becbccd78252be49bd92be8c53cd2b9e3/examples/v3.0/petstore.yaml";
     sha256 = "sha256:1mgdbzv42alv0b1a18dqbabqyvyhrg3brynr5hqsrm3qljfzaq5b";
   };
   config = builtins.toJSON {

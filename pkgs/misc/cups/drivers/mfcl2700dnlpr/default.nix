@@ -1,11 +1,13 @@
-{ lib, stdenv, coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused, makeWrapper, perl, which }:
+{ lib, stdenv, coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused
+, makeWrapper, perl, which }:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2700dnlpr";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf102085/${pname}-${version}.i386.deb";
+    url =
+      "https://download.brother.com/welcome/dlf102085/${pname}-${version}.i386.deb";
     sha256 = "170qdzxlqikzvv2wphvfb37m19mn13az4aj88md87ka3rl5knk4m";
   };
 
@@ -24,9 +26,9 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2700DN \
-      --prefix PATH : ${lib.makeBinPath [
-        coreutils ghostscript gnugrep gnused which
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [ coreutils ghostscript gnugrep gnused which ]
+      }
 
     interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter

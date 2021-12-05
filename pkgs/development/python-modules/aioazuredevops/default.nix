@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, aiohttp
-, click
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, aiohttp, click }:
 
 buildPythonPackage rec {
   pname = "aioazuredevops";
@@ -17,19 +11,13 @@ buildPythonPackage rec {
     sha256 = "4c98a995d0516f502ba191fa3ac973ee72b93425e7eab3cdf770516c6e93c780";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-  ];
+  propagatedBuildInputs = [ aiohttp click ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioazuredevops.builds"
-    "aioazuredevops.client"
-    "aioazuredevops.core"
-  ];
+  pythonImportsCheck =
+    [ "aioazuredevops.builds" "aioazuredevops.client" "aioazuredevops.core" ];
 
   meta = with lib; {
     description = "Get data from the Azure DevOps API";

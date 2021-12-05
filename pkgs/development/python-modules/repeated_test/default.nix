@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittest2
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "repeated_test";
@@ -18,7 +13,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
+    description =
+      "A quick unittest-compatible framework for repeating a test function over many fixtures";
     homepage = "https://github.com/epsy/repeated_test";
     license = licenses.mit;
   };

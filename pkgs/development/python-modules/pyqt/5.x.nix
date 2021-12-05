@@ -1,19 +1,6 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, pkg-config
-, dbus
-, lndir
-, dbus-python
-, sip
-, pyqt-builder
-, libsForQt5
-, withConnectivity ? false
-, withMultimedia ? false
-, withWebKit ? false
-, withWebSockets ? false
-}:
+{ lib, buildPythonPackage, isPy27, fetchPypi, pkg-config, dbus, lndir
+, dbus-python, sip, pyqt-builder, libsForQt5, withConnectivity ? false
+, withMultimedia ? false, withWebKit ? false, withWebSockets ? false }:
 
 let
   pyqt5_sip = buildPythonPackage rec {
@@ -45,38 +32,20 @@ in buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with libsForQt5; [
-    pkg-config
-    qmake
-    lndir
-    sip
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtwebchannel
-  ]
+  nativeBuildInputs = with libsForQt5;
+    [ pkg-config qmake lndir sip qtbase qtsvg qtdeclarative qtwebchannel ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
-  ;
+    ++ lib.optional withWebSockets qtwebsockets;
 
-  buildInputs = with libsForQt5; [
-    dbus
-    qtbase
-    qtsvg
-    qtdeclarative
-    pyqt-builder
-  ]
+  buildInputs = with libsForQt5;
+    [ dbus qtbase qtsvg qtdeclarative pyqt-builder ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
-  ;
+    ++ lib.optional withWebSockets qtwebsockets;
 
-  propagatedBuildInputs = [
-    dbus-python
-    pyqt5_sip
-  ];
+  propagatedBuildInputs = [ dbus-python pyqt5_sip ];
 
   patches = [
     # Fix some wrong assumptions by ./project.py
@@ -96,24 +65,18 @@ in buildPythonPackage rec {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5"
-    "PyQt5.QtCore"
-    "PyQt5.QtQml"
-    "PyQt5.QtWidgets"
-    "PyQt5.QtGui"
-  ]
+  pythonImportsCheck =
+    [ "PyQt5" "PyQt5.QtCore" "PyQt5.QtQml" "PyQt5.QtWidgets" "PyQt5.QtGui" ]
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
-  ;
+    ++ lib.optional withConnectivity "PyQt5.QtConnectivity";
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };
 }

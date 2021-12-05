@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, Security
-, openssl
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, Security, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hiksink";
@@ -20,15 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "15r6rwhyy0s5i0v9nzx3hfl5cvlb0hxnllcwfnw0bbn9km25l9r3";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Tool to convert Hikvision camera events to MQTT";

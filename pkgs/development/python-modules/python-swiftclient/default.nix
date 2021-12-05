@@ -1,12 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, mock
-, openstacksdk
-, pbr
-, python-keystoneclient
-, stestr
-}:
+{ lib, buildPythonApplication, fetchPypi, mock, openstacksdk, pbr
+, python-keystoneclient, stestr }:
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
@@ -19,11 +12,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pbr python-keystoneclient ];
 
-  checkInputs = [
-    mock
-    openstacksdk
-    stestr
-  ];
+  checkInputs = [ mock openstacksdk stestr ];
 
   postInstall = ''
     install -Dm644 tools/swift.bash_completion $out/share/bash_completion.d/swift

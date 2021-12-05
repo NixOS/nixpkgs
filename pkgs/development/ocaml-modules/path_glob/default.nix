@@ -5,7 +5,8 @@ buildDunePackage rec {
   version = "0.2";
   useDune2 = true;
   src = fetchurl {
-    url = "https://gasche.gitlab.io/path_glob/releases/path_glob-${version}.tbz";
+    url =
+      "https://gasche.gitlab.io/path_glob/releases/path_glob-${version}.tbz";
     sha256 = "01ra20bzjiihbgma74axsp70gqmid6x7jmiizg48mdkni0aa42ay";
   };
 

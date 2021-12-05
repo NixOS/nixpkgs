@@ -1,13 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
-, fixDarwinDylibNames
-, file
-, fetchpatch
-, legacySupport ? false
-, static ? stdenv.hostPlatform.isStatic
-# these need to be ran on the host, thus disable when cross-compiling
+{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep, fixDarwinDylibNames, file
+, fetchpatch, legacySupport ? false, static ? stdenv.hostPlatform.isStatic
+  # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
-, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
-}:
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform }:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
@@ -21,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
@@ -31,7 +26,8 @@ stdenv.mkDerivation rec {
 
     # Fixes linking for static builds
     (fetchpatch {
-      url = "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
+      url =
+        "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
       sha256 = "sha256-PuYAqnJWAE+L9bsroOnnBGJhERW8LHrGSLtIEkKU9vg=";
     })
   ];
@@ -42,7 +38,9 @@ stdenv.mkDerivation rec {
     substituteInPlace build/cmake/tests/CMakeLists.txt \
       --replace 'libzstd_static' 'libzstd_shared'
     sed -i \
-      "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      "1aexport ${
+        lib.optionalString stdenv.isDarwin "DY"
+      }LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
   '';
 
@@ -86,8 +84,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
   '';
 
-  outputs = [ "bin" "dev" ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "man"
+  outputs = [ "bin" "dev" ] ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
 
   meta = with lib; {

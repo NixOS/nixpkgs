@@ -1,21 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, polkit
-, polkit-qt
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, pcre
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, lxqt-build-tools
+, qtbase, qttools, qtx11extras, qtsvg, polkit, polkit-qt, kwindowsystem, liblxqt
+, libqtxdg, pcre, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-policykit";
@@ -28,11 +13,7 @@ mkDerivation rec {
     sha256 = "0hmxzkkggnpci305xax9663cbjqdh6n0j0dawwcpwj4ks8mp7xh7";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     qtbase

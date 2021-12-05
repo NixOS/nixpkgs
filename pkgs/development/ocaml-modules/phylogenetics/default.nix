@@ -1,18 +1,5 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_deriving
-, bppsuite
-, alcotest
-, angstrom-unix
-, biocaml
-, core
-, gsl
-, lacaml
-, menhir
-, menhirLib
-, printbox
-}:
+{ lib, buildDunePackage, fetchurl, ppx_deriving, bppsuite, alcotest
+, angstrom-unix, biocaml, core, gsl, lacaml, menhir, menhirLib, printbox }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
@@ -21,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/biocaml/phylogenetics/releases/download/v${version}/${pname}-${version}.tbz";
     sha256 = "sha256:0knfh2s0jfnsc0vsq5yw5xla7m7i98xd0qv512dyh3jhkh7m00l9";
   };
 
@@ -29,16 +17,8 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest bppsuite ];
   buildInputs = [ menhir ];
-  propagatedBuildInputs = [
-    angstrom-unix
-    biocaml
-    core
-    gsl
-    lacaml
-    menhirLib
-    ppx_deriving
-    printbox
-  ];
+  propagatedBuildInputs =
+    [ angstrom-unix biocaml core gsl lacaml menhirLib ppx_deriving printbox ];
 
   doCheck = true;
 

@@ -64,8 +64,8 @@ in {
 
   imports = [
     (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -84,8 +84,9 @@ in {
       };
 
       backupAll = mkOption {
-        default = cfg.databases == [];
-        defaultText = literalExpression "services.postgresqlBackup.databases == []";
+        default = cfg.databases == [ ];
+        defaultText =
+          literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
           Backup all databases using pg_dumpall.
@@ -97,7 +98,7 @@ in {
       };
 
       databases = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of database names to dump.
@@ -124,7 +125,7 @@ in {
       };
 
       compression = mkOption {
-        type = types.enum ["none" "gzip" "zstd"];
+        type = types.enum [ "none" "gzip" "zstd" ];
         default = "gzip";
         description = ''
           The type of compression to use on the generated database dump.
@@ -137,14 +138,13 @@ in {
   config = mkMerge [
     {
       assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        assertion = cfg.backupAll -> cfg.databases == [ ];
+        message =
+          "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
       }];
     }
     (mkIf cfg.enable {
-      systemd.tmpfiles.rules = [
-        "d '${cfg.location}' 0700 postgres - - -"
-      ];
+      systemd.tmpfiles.rules = [ "d '${cfg.location}' 0700 postgres - - -" ];
     })
     (mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
@@ -152,8 +152,7 @@ in {
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
       systemd.services = listToAttrs (map (db:
-        let
-          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+        let cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
         in {
           name = "postgresqlBackup-${db}";
           value = postgresqlBackupService db cmd;

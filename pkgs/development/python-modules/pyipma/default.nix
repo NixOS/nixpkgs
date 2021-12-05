@@ -1,10 +1,4 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, geopy
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, fetchPypi, geopy, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyipma";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "0hq5dasqpsn64x2sf6a28hdmysygmcdq4in6s08w97jfvwc6xmym";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    geopy
-  ];
+  propagatedBuildInputs = [ aiohttp geopy ];
 
   # Project has no tests included in the PyPI releases
   doCheck = false;
@@ -28,7 +19,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyipma" ];
 
   meta = with lib; {
-    description = "Python library to retrieve information from Instituto Português do Mar e Atmosfera";
+    description =
+      "Python library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

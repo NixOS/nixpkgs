@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, cffi
-, lmdb
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, cffi, lmdb }:
 
 buildPythonPackage rec {
   pname = "lmdb";
@@ -19,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ cffi pytestCheckHook ];
 
-  LMDB_FORCE_SYSTEM=1;
+  LMDB_FORCE_SYSTEM = 1;
 
   meta = with lib; {
     description = "Universal Python binding for the LMDB 'Lightning' Database";

@@ -1,34 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, python3
-, libgee
-, clutter-gtk
-, json-glib
-, libgda
-, libgpod
-, libhandy
-, libnotify
-, libpeas
-, libsoup
-, zeitgeist
-, gst_all_1
-, taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
-, elementary-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, ninja, vala, desktop-file-utils, gtk3, granite, python3, libgee, clutter-gtk
+, json-glib, libgda, libgpod, libhandy, libnotify, libpeas, libsoup, zeitgeist
+, gst_all_1, taglib, libdbusmenu, libsignon-glib, libaccounts-glib
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
@@ -47,26 +21,18 @@ stdenv.mkDerivation rec {
     # Upstream code not respecting our localedir
     # https://github.com/elementary/music/pull/648
     (fetchpatch {
-      url = "https://github.com/elementary/music/commit/aea97103d59afd213467403a48788e476e47c4c3.patch";
+      url =
+        "https://github.com/elementary/music/commit/aea97103d59afd213467403a48788e476e47c4c3.patch";
       sha256 = "1ayj8l6lb19hhl9bhsdfbq7jgchfmpjx0qkljnld90czcksn95yx";
     })
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ desktop-file-utils meson ninja pkg-config python3 vala wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
     clutter-gtk
@@ -93,9 +59,7 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  mesonFlags = [
-    "-Dplugins=audioplayer,cdrom,ipod"
-  ];
+  mesonFlags = [ "-Dplugins=audioplayer,cdrom,ipod" ];
 
   postPatch = ''
     chmod +x meson/post_install.py

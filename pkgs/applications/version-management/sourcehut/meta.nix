@@ -1,22 +1,6 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, buildGoModule
-, pgpy
-, srht
-, redis
-, bcrypt
-, qrcode
-, stripe
-, zxcvbn
-, alembic
-, pystache
-, dnspython
-, sshpubkeys
-, weasyprint
-, prometheus-client
-, python
-}:
+{ lib, fetchFromSourcehut, buildPythonPackage, buildGoModule, pgpy, srht, redis
+, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache, dnspython, sshpubkeys
+, weasyprint, prometheus-client, python }:
 let
   version = "0.53.14";
 
@@ -27,14 +11,14 @@ let
     sha256 = "sha256-/+r/XLDkcSTW647xPMh5bcJmR2xZNNH74AJ5jemna2k=";
   };
 
-  buildApi = src: buildGoModule {
-    inherit src version;
-    pname = "metasrht-api";
-    vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
-  };
+  buildApi = src:
+    buildGoModule {
+      inherit src version;
+      pname = "metasrht-api";
+      vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
+    };
 
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
 

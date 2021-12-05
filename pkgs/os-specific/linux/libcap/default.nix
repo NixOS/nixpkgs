@@ -1,7 +1,5 @@
 { stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
-, usePam ? !isStatic, pam ? null
-, isStatic ? stdenv.hostPlatform.isStatic
-}:
+, usePam ? !isStatic, pam ? null, isStatic ? stdenv.hostPlatform.isStatic }:
 
 assert usePam -> pam != null;
 
@@ -10,12 +8,12 @@ stdenv.mkDerivation rec {
   version = "2.49";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
     sha256 = "sha256-6YvE2TZFCC7Hh3MLD9GnErOIgkZcUFd33hfDOIMe4YE=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ lib.optional usePam "pam";
+  outputs = [ "out" "dev" "lib" "man" "doc" ] ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];

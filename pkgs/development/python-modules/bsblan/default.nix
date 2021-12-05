@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, aresponses
-, coverage
-, mypy
-, pytest-asyncio
-, pytest-cov
-, pytest-mock
-, aiohttp
-, attrs
-, cattrs
-, yarl
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, aresponses
+, coverage, mypy, pytest-asyncio, pytest-cov, pytest-mock, aiohttp, attrs
+, cattrs, yarl }:
 
 buildPythonPackage rec {
   pname = "bsblan";
@@ -25,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "0vyg9vsrs34jahlav83qp2djv81p3ks31qz4qh46zdij2nx7l1fv";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    attrs
-    cattrs
-    yarl
-  ];
+  propagatedBuildInputs = [ aiohttp attrs cattrs yarl ];
 
   checkInputs = [
     aresponses

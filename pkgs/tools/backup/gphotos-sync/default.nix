@@ -22,10 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ ffmpeg ];
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-    mock
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook mock ];
 
   checkPhase = ''
     export HOME=$(mktemp -d)
@@ -40,9 +37,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Google Photos and Albums backup with Google Photos Library API";
-    homepage    = "https://github.com/gilesknap/gphotos-sync";
-    license     = licenses.mit;
+    description =
+      "Google Photos and Albums backup with Google Photos Library API";
+    homepage = "https://github.com/gilesknap/gphotos-sync";
+    license = licenses.mit;
     maintainers = with maintainers; [ dnr ];
   };
 }

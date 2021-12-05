@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "nexia";
@@ -19,14 +13,9 @@ buildPythonPackage rec {
     sha256 = "0ql08nfvh6rjhjdh78gzih7az95m0fc9wxc22yqmlc9grifnp9i5";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    requests-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ requests-mock pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner",' ""

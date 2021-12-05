@@ -4,16 +4,14 @@ let
 
   thrift' = thrift.overridePythonAttrs (old: rec {
     version = "0.9.3";
-    src= fetchPypi {
+    src = fetchPypi {
       inherit (old) pname;
       inherit version;
       sha256 = "0zl7cgckqy9j5vq8wyfzw82q1blkdpsblnmhv8c6ffcxs4xkvg6z";
     };
   });
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pycassa";
   version = "1.11.2";
 

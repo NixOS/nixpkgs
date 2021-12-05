@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
-, cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config, cairo
+, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
 let
   version = "3.10.12";
@@ -23,7 +23,18 @@ in stdenv.mkDerivation {
     "--with-ngspice=${getBin ngspice}/bin/ngspice"
   ];
 
-  buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];
+  buildInputs = with xorg; [
+    cairo
+    ghostscript
+    libSM
+    libXt
+    libICE
+    libX11
+    libXpm
+    tcl
+    tk
+    zlib
+  ];
 
   meta = with lib; {
     description = "Generic drawing program tailored to circuit diagrams";

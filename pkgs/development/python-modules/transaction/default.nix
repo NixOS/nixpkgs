@@ -1,10 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, zope_interface
-, mock
-}:
-
+{ lib, fetchPypi, buildPythonPackage, zope_interface, mock }:
 
 buildPythonPackage rec {
   pname = "transaction";

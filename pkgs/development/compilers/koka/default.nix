@@ -1,7 +1,7 @@
 { stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
-, alex, array, base, bytestring, cond, containers, directory, extra
-, filepath, hpack, hspec, hspec-core, isocline, json, lib, mtl
-, parsec, process, regex-compat, text, time }:
+, alex, array, base, bytestring, cond, containers, directory, extra, filepath
+, hpack, hspec, hspec-core, isocline, json, lib, mtl, parsec, process
+, regex-compat, text, time }:
 
 let
   version = "2.3.2";
@@ -19,22 +19,28 @@ let
     nativeBuildInputs = [ cmake ];
   };
   inherit (pkgsHostTarget.targetPackages.stdenv) cc;
-  runtimeDeps = [
-    cc
-    cc.bintools.bintools
-    pkgsHostTarget.gnumake
-    pkgsHostTarget.cmake
-  ];
-in
-mkDerivation rec {
+  runtimeDeps =
+    [ cc cc.bintools.bintools pkgsHostTarget.gnumake pkgsHostTarget.cmake ];
+in mkDerivation rec {
   pname = "koka";
   inherit version src;
   isLibrary = false;
   isExecutable = true;
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    array base bytestring cond containers directory isocline mtl
-    parsec process text time kklib
+    array
+    base
+    bytestring
+    cond
+    containers
+    directory
+    isocline
+    mtl
+    parsec
+    process
+    text
+    time
+    kklib
   ];
   executableToolDepends = [ alex makeWrapper ];
   postInstall = ''

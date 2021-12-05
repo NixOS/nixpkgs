@@ -1,7 +1,6 @@
 { lib, runCommand, powerline }:
 
-let
-  inherit (powerline) version;
+let inherit (powerline) version;
 in runCommand "powerline-symbols-${version}" {
   meta = {
     inherit (powerline.meta) license;

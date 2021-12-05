@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg, makeWrapper, coreutils, ... }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg
+, makeWrapper, coreutils, ... }:
 
 buildGoModule rec {
   pname = "owncast";
@@ -26,7 +27,9 @@ buildGoModule rec {
 
     setupScript = ''
       [ ! -d "$PWD/webroot" ] && (
-        ${coreutils}/bin/cp --no-preserve=mode -r "${placeholder "out"}/webroot" "$PWD"
+        ${coreutils}/bin/cp --no-preserve=mode -r "${
+          placeholder "out"
+        }/webroot" "$PWD"
       )
 
       [ ! -d "$PWD/static" ] && (

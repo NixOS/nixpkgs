@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-ephemeral";
-  meta = {
-    maintainers = with lib.maintainers; [ patryk27 ];
-  };
+  meta = { maintainers = with lib.maintainers; [ patryk27 ]; };
 
   machine = { pkgs, ... }: {
     virtualisation.writableStore = true;
@@ -16,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         services.nginx = {
           enable = true;
           virtualHosts.localhost = {
-            root = pkgs.runCommand "localhost" {} ''
+            root = pkgs.runCommand "localhost" { } ''
               mkdir "$out"
               echo hello world > "$out/index.html"
             '';

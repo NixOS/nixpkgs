@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil, humanize, click, pytestCheckHook, tox }:
+{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil
+, humanize, click, pytestCheckHook, tox }:
 
 buildPythonApplication rec {
   pname = "twtxt";

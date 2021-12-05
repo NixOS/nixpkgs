@@ -1,12 +1,5 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-}:
+{ lib, aiohttp, aresponses, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pytest-asyncio, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pytraccar";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "08f7rwvbc1h17lvgv9823ssd3p0vw7yzsg40lbkacgqqiv1hxfzs";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs = [ aresponses pytestCheckHook pytest-asyncio ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo
@@ -38,9 +25,7 @@ buildPythonPackage rec {
       --replace 'version="master",' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "pytraccar"
-  ];
+  pythonImportsCheck = [ "pytraccar" ];
 
   meta = with lib; {
     description = "Python library to handle device information from Traccar";

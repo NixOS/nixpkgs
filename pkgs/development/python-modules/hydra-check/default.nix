@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, requests
-, beautifulsoup4
-, mypy
-, types-requests
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, docopt, requests
+, beautifulsoup4, mypy, types-requests }:
 
 buildPythonPackage rec {
   pname = "hydra-check";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "EegoQ8qTrFGFYbCDsbAOE4Afg9haLjYdC0Cux/yvSk8=";
   };
 
-  propagatedBuildInputs = [
-    docopt
-    requests
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ docopt requests beautifulsoup4 ];
 
-  checkInputs = [
-    mypy
-    types-requests
-  ];
+  checkInputs = [ mypy types-requests ];
 
   checkPhase = ''
     echo -e "\x1b[32m## run mypy\x1b[0m"

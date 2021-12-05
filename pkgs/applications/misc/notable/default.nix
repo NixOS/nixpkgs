@@ -8,16 +8,14 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/notable/notable/releases/download/v${version}/Notable-${version}.AppImage";
+    url =
+      "https://github.com/notable/notable/releases/download/v${version}/Notable-${version}.AppImage";
     inherit sha256;
   };
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  appimageContents = appimageTools.extract { inherit name src; };
 
-in
-appimageTools.wrapType2 rec {
+in appimageTools.wrapType2 rec {
 
   inherit name src;
 
@@ -27,7 +25,9 @@ appimageTools.wrapType2 rec {
   '';
 
   multiPkgs = null; # no 32bit needed
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.at-spi2-atk p.at-spi2-core ];
+  extraPkgs = p:
+    (appimageTools.defaultFhsEnvArgs.multiPkgs p)
+    ++ [ p.at-spi2-atk p.at-spi2-core ];
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop

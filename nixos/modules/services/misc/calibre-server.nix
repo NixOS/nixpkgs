@@ -6,16 +6,17 @@ let
 
   cfg = config.services.calibre-server;
 
-in
-
-{
+in {
   imports = [
-    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [ "services" "calibre-server" "libraries" ]
-      (config:
-        let libraryDir = getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
-        in [ libraryDir ]
-      )
-    )
+    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [
+      "services"
+      "calibre-server"
+      "libraries"
+    ] (config:
+      let
+        libraryDir =
+          getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
+      in [ libraryDir ]))
   ];
 
   ###### interface
@@ -47,22 +48,23 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     systemd.services.calibre-server = {
-        description = "Calibre Server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Restart = "always";
-          ExecStart = "${pkgs.calibre}/bin/calibre-server ${lib.concatStringsSep " " cfg.libraries}";
-        };
-
+      description = "Calibre Server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Restart = "always";
+        ExecStart = "${pkgs.calibre}/bin/calibre-server ${
+            lib.concatStringsSep " " cfg.libraries
+          }";
       };
+
+    };
 
     environment.systemPackages = [ pkgs.calibre ];
 
@@ -76,9 +78,7 @@ in
     };
 
     users.groups = optionalAttrs (cfg.group == "calibre-server") {
-      calibre-server = {
-        gid = config.ids.gids.calibre-server;
-      };
+      calibre-server = { gid = config.ids.gids.calibre-server; };
     };
 
   };

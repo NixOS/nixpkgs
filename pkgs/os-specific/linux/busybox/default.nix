@@ -1,11 +1,8 @@
 { stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableMinimal ? false
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
-, extraConfig ? ""
-}:
+, enableStatic ? stdenv.hostPlatform.isStatic, enableMinimal ? false
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl, extraConfig ? "" }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 
@@ -43,11 +40,11 @@ let
     rev = "debian/1%${debianVersion}";
     sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
   };
-  debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
+  debianDispatcherScript =
+    "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "busybox";
   version = "1.34.1";
 
@@ -62,9 +59,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" "pie" ]
     ++ lib.optionals enableStatic [ "fortify" ];
 
-  patches = [
-    ./busybox-in-store.patch
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  patches = [ ./busybox-in-store.patch ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
 
@@ -116,9 +113,10 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
-  '';
+  postConfigure =
+    lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
+      makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    '';
 
   postInstall = ''
     sed -e '
@@ -133,14 +131,19 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs =
+    lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
+      stdenv.cc.libc
+      stdenv.cc.libc.static
+    ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # tries to access the net
 
   meta = with lib; {
-    description = "Tiny versions of common UNIX utilities in a single small executable";
+    description =
+      "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];

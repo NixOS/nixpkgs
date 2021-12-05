@@ -1,16 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchzip
-, addOpenGLRunpath
-, cmake
-, glibc_multi
-, glibc
-, git
-, pkg-config
-, cudatoolkit
-, withCuda ? false
-}:
+{ stdenv, lib, fetchFromGitHub, fetchzip, addOpenGLRunpath, cmake, glibc_multi
+, glibc, git, pkg-config, cudatoolkit, withCuda ? false }:
 
 let
   hwloc = stdenv.mkDerivation rec {
@@ -18,7 +7,9 @@ let
     version = "2.2.0";
 
     src = fetchzip {
-      url = "https://download.open-mpi.org/release/hwloc/v${lib.versions.majorMinor version}/hwloc-${version}.tar.gz";
+      url = "https://download.open-mpi.org/release/hwloc/v${
+          lib.versions.majorMinor version
+        }/hwloc-${version}.tar.gz";
       sha256 = "1ibw14h9ppg8z3mmkwys8vp699n85kymdz20smjd2iq9b67y80b6";
     };
 
@@ -47,8 +38,7 @@ let
     outputs = [ "out" "lib" "dev" "doc" "man" ];
   };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "firestarter";
   version = "2.0";
 
@@ -60,30 +50,19 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    git
-    pkg-config
-  ] ++ lib.optionals withCuda [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ cmake git pkg-config ]
+    ++ lib.optionals withCuda [ addOpenGLRunpath ];
 
-  buildInputs = [ hwloc ] ++ (if withCuda then
-    [ glibc_multi cudatoolkit ]
-  else
-    [ glibc.static ]);
+  buildInputs = [ hwloc ]
+    ++ (if withCuda then [ glibc_multi cudatoolkit ] else [ glibc.static ]);
 
-  NIX_LDFLAGS = lib.optionals withCuda [
-    "-L${cudatoolkit}/lib/stubs"
-  ];
+  NIX_LDFLAGS = lib.optionals withCuda [ "-L${cudatoolkit}/lib/stubs" ];
 
   cmakeFlags = [
     "-DFIRESTARTER_BUILD_HWLOC=OFF"
     "-DCMAKE_C_COMPILER_WORKS=1"
     "-DCMAKE_CXX_COMPILER_WORKS=1"
-  ] ++ lib.optionals withCuda [
-    "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
-  ];
+  ] ++ lib.optionals withCuda [ "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA" ];
 
   installPhase = ''
     runHook preInstall

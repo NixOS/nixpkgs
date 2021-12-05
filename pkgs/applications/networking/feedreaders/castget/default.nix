@@ -1,13 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, glib
-, ronn
-, curl
-, id3lib
-, libxml2
-, glibcLocales
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, ronn, curl
+, id3lib, libxml2, glibcLocales }:
 
 stdenv.mkDerivation rec {
   pname = "castget";
@@ -17,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "mlj";
     repo = pname;
     # Upstream uses `_` instead of `.` for the version
-    rev = "rel_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1129x64rw587q3sdpa3lrgs0gni5f0siwbvmfz8ya4zkbhgi2ik7";
   };
 

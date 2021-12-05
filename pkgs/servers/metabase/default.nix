@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The easy, open source way for everyone in your company to ask questions and learn from data";
-    homepage    = "https://metabase.com";
-    license     = licenses.agpl3;
-    platforms   = platforms.all;
+    description =
+      "The easy, open source way for everyone in your company to ask questions and learn from data";
+    homepage = "https://metabase.com";
+    license = licenses.agpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
   };
 }

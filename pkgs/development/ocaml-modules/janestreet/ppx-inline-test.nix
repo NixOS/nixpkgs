@@ -1,5 +1,4 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_driver, ppx_tools}:
+{ lib, buildOcamlJane, ppx_core, ppx_driver, ppx_tools }:
 
 buildOcamlJane {
   pname = "ppx_inline_test";

@@ -1,17 +1,16 @@
 { buildDunePackage, atd, biniou, yojson }:
 
-let runtime =
-  buildDunePackage {
+let
+  runtime = buildDunePackage {
     pname = "atdgen-runtime";
     inherit (atd) version useDune2 src;
 
     propagatedBuildInputs = [ biniou yojson ];
 
     meta = { inherit (atd.meta) license; };
-  }
-; in
+  };
 
-buildDunePackage {
+in buildDunePackage {
   pname = "atdgen";
   inherit (atd) version useDune2 src;
 
@@ -20,7 +19,8 @@ buildDunePackage {
   propagatedBuildInputs = [ runtime ];
 
   meta = {
-    description = "Generates efficient JSON serializers, deserializers and validators";
+    description =
+      "Generates efficient JSON serializers, deserializers and validators";
     inherit (atd.meta) license;
   };
 }

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, jsonpickle
-, mock
-, pytest
-, pytestCheckHook
-, requests
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, jsonpickle, mock, pytest
+, pytestCheckHook, requests, responses }:
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
@@ -21,20 +12,12 @@ buildPythonPackage rec {
     sha256 = "1c50ka4y712rr551gq3kdfw7fgfxr4w837sww6yy683yz7m1d1h8";
   };
 
-  propagatedBuildInputs = [
-    jsonpickle
-    requests
-  ];
+  propagatedBuildInputs = [ jsonpickle requests ];
 
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [
-    pytest
-    pytestCheckHook
-    responses
-  ] ++ lib.optionals (!isPy3k) [
-    mock
-  ];
+  checkInputs = [ pytest pytestCheckHook responses ]
+    ++ lib.optionals (!isPy3k) [ mock ];
 
   preCheck = ''
     cd digitalocean

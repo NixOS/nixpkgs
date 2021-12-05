@@ -1,7 +1,6 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, withPulseaudio ? stdenv.isLinux, libpulseaudio
-}:
+{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv, pkg-config
+, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
+, withPulseaudio ? stdenv.isLinux, libpulseaudio }:
 
 mkDerivation rec {
   version = "0.4.4";
@@ -14,20 +13,10 @@ mkDerivation rec {
     sha256 = "1fgvh2hsrm8vqbqq9g45skhyyrhhka4d8ngmyldkldak1fgmrvb7";
   };
 
-  buildInputs = [
-    udev
-    qtbase
-    zlib
-    libXdmcp
-    qttools
-    qtx11extras
-    libdbusmenu
-  ] ++ lib.optional withPulseaudio libpulseaudio;
+  buildInputs = [ udev qtbase zlib libXdmcp qttools qtx11extras libdbusmenu ]
+    ++ lib.optional withPulseaudio libpulseaudio;
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   cmakeFlags = [
     "-DINSTALL_DIR_ANIMATIONS=libexec"
@@ -46,7 +35,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Driver and configuration tool for Corsair keyboards and mice";
+    description =
+      "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;
     platforms = platforms.linux;

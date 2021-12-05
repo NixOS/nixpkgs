@@ -29,7 +29,5 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "1miqv0ral5vazx721wildjlzvji5r7pbgm39c0cpj5ywafaikxr8";
 
-  meta = {
-    description = "Various fonts from the DOSEmu project";
-  };
+  meta = { description = "Various fonts from the DOSEmu project"; };
 }

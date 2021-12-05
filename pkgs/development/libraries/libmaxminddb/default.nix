@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = meta.homepage + "/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = meta.homepage
+      + "/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-diCsGHxZHOIbzXvzUjdqPFapM+aEVYofa+9L1PP5gmc=";
   };
 

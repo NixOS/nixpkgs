@@ -1,15 +1,6 @@
-{ lib
-, fetchFromGitLab
-, buildPythonPackage
-, pillow
-, setuptools-scm
-, setuptools-scm-git-archive
-, tesseract
-, cuneiform
-, isPy3k
-, substituteAll
-, pytestCheckHook
-}:
+{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools-scm
+, setuptools-scm-git-archive, tesseract, cuneiform, isPy3k, substituteAll
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyocr";

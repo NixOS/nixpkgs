@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, git
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, git, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "git-revise";
@@ -25,7 +19,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
-    changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ emily ];
   };

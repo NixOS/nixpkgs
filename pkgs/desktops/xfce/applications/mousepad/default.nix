@@ -15,7 +15,5 @@ mkXfceDerivation {
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];
 
-  meta = {
-    description = "Simple text editor for Xfce";
-  };
+  meta = { description = "Simple text editor for Xfce"; };
 }

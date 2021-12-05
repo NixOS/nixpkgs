@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
   NIX_CFLAGS_COMPILE = "-O";
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "simple markup - markdown like syntax";

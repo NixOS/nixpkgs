@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, cython, numpy
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, cython, numpy
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "2.5.0";

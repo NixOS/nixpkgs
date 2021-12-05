@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost openssl ];
 
-  cmakeFlags = [
-    "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON" ];
 
   # The test driver binary lacks an RPath to the library's libs
   preCheck = ''
@@ -28,9 +26,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Collection of open-source libraries for high level network programming";
-    homepage    = "https://cpp-netlib.org";
-    license     = licenses.boost;
-    platforms   = platforms.all;
+    description =
+      "Collection of open-source libraries for high level network programming";
+    homepage = "https://cpp-netlib.org";
+    license = licenses.boost;
+    platforms = platforms.all;
   };
 }

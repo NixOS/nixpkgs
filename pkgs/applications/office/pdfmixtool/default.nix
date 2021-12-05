@@ -1,13 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qpdf
-, podofo
-}:
+{ lib, mkDerivation, fetchFromGitLab, cmake, pkg-config, qtbase, qttools, qpdf
+, podofo }:
 
 mkDerivation rec {
   pname = "pdfmixtool";
@@ -20,17 +12,9 @@ mkDerivation rec {
     sha256 = "066ap1w05gj8n0kvilyhlr1fzwrmlczx3lax7mbw0rfid9qh3467";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    qtbase
-    qttools
-    qpdf
-    podofo
-  ];
+  buildInputs = [ qtbase qttools qpdf podofo ];
 
   meta = with lib; {
     description = "An application to split, merge, rotate and mix PDF files";

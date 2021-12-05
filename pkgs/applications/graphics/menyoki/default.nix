@@ -1,14 +1,5 @@
-{ fetchFromGitHub
-, installShellFiles
-, lib
-, pkg-config
-, rustPlatform
-, stdenv
-, libX11
-, libXrandr
-, AppKit
-, withSki ? true
-}:
+{ fetchFromGitHub, installShellFiles, lib, pkg-config, rustPlatform, stdenv
+, libX11, libXrandr, AppKit, withSki ? true }:
 
 rustPlatform.buildRustPackage rec {
   pname = "menyoki";
@@ -39,7 +30,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Screen{shot,cast} and perform ImageOps on the command line";
     homepage = "https://menyoki.cli.rs/";
-    changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
   };

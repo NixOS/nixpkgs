@@ -1,6 +1,4 @@
-{ lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
-}:
+{ lib, localSystem, crossSystem, config, overlays, crossOverlays ? [ ] }:
 
 assert crossSystem == localSystem;
 
@@ -16,8 +14,7 @@ in bootStages ++ [
   # Additional stage, built using custom stdenv
   (vanillaPackages: {
     inherit config overlays;
-    stdenv =
-      assert vanillaPackages.hostPlatform == localSystem;
+    stdenv = assert vanillaPackages.hostPlatform == localSystem;
       assert vanillaPackages.targetPlatform == localSystem;
       config.replaceStdenv { pkgs = vanillaPackages; };
   })

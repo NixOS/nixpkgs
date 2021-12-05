@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  pname   = "stun";
+  pname = "stun";
   version = "0.97";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/${pname}/stund-${version}.tgz";
+    url = "mirror://sourceforge/${pname}/stund-${version}.tgz";
     sha256 = "1mxirnnqfqdwb9x8hfjjsscp6lx3468ph6ddx32l94ir46fbzqc3";
   };
 
   srcManpages = fetchurl {
-    url    = "mirror://ubuntu/pool/universe/s/stun/stun_0.97~dfsg-2.debian.tar.xz";
-    name   = "stun-debian.tar.xz";
+    url = "mirror://ubuntu/pool/universe/s/stun/stun_0.97~dfsg-2.debian.tar.xz";
+    name = "stun-debian.tar.xz";
     sha256 = "1pr6zrdhia0aafsvywl1hrhlgl00vahp63bw1z2mzvdxri7q88f0";
   };
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stun server and test client";
-    homepage    = "https://sourceforge.net/projects/stun/";
-    license     = licenses.vsl10;
+    homepage = "https://sourceforge.net/projects/stun/";
+    license = licenses.vsl10;
     maintainers = with maintainers; [ marcweber obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

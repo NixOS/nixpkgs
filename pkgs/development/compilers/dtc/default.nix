@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python ? null, swig, libyaml
-}:
+{ stdenv, lib, fetchgit, flex, bison, pkg-config, which, pythonSupport ? false
+, python ? null, swig, libyaml }:
 
 stdenv.mkDerivation rec {
   pname = "dtc";
@@ -13,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libyaml ];
-  nativeBuildInputs = [ flex bison pkg-config which ] ++ lib.optionals pythonSupport [ python swig ];
+  nativeBuildInputs = [ flex bison pkg-config which ]
+    ++ lib.optionals pythonSupport [ python swig ];
 
   postPatch = ''
     patchShebangs pylibfdt/

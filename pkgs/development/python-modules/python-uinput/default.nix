@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, udev }:
+{ lib, buildPythonPackage, fetchPypi, udev }:
 
 buildPythonPackage rec {
   pname = "python-uinput";

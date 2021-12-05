@@ -10,7 +10,9 @@ symlinkJoin {
     for i in $out/bin/* $out/libexec/**; do
     if [ ! -d $i ]; then
       echo wrapping $i
-      wrapProgram $i --set EDS_EXTRA_PREFIXES "${lib.concatStringsSep ":" plugins}"
+      wrapProgram $i --set EDS_EXTRA_PREFIXES "${
+        lib.concatStringsSep ":" plugins
+      }"
     fi
     done
 

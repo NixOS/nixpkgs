@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pyparsing
-, numpy
-, cython
-, astropy
-, astropy-helpers
-, pytestCheckHook
-, pytest-astropy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pyparsing, numpy, cython
+, astropy, astropy-helpers, pytestCheckHook, pytest-astropy }:
 
 buildPythonPackage rec {
   pname = "pyregion";
@@ -24,11 +14,7 @@ buildPythonPackage rec {
     sha256 = "1izar7z606czcyws9s8bjbpb1xhqshpv5009rlpc92hciw7jv4kg";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-    numpy
-    astropy
-  ];
+  propagatedBuildInputs = [ pyparsing numpy astropy ];
 
   # Upstream patch needed for the test to pass
   patches = [

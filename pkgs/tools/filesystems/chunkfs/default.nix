@@ -9,12 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "4c168fc2b265a6ba34afc565707ea738f34375325763c0596f2cfa1c9b8d40f1";
   };
 
-  buildInputs = [perl fuse];
+  buildInputs = [ perl fuse ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
-  ];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -22,7 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa";
+    description =
+      "FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa";
     homepage = "http://chunkfs.florz.de/";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;

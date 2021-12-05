@@ -1,9 +1,10 @@
-{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
+{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs
+}:
 
 assert lib.versionAtLeast nodejs.version "12.0.0";
 
 let
-  nodeSources = runCommand "node-sources" {} ''
+  nodeSources = runCommand "node-sources" { } ''
     tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
     mv node-* $out
   '';
@@ -30,7 +31,7 @@ in mkYarnPackage rec {
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
-     '';
+      '';
     };
   };
 
@@ -67,9 +68,7 @@ in mkYarnPackage rec {
     true
   '';
 
-  passthru = {
-    nodeAppDir = "libexec/${pname}/deps/${pname}";
-  };
+  passthru = { nodeAppDir = "libexec/${pname}/deps/${pname}"; };
 
   meta = {
     description = "A bridge between Matrix and Discord";

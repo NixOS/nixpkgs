@@ -1,9 +1,4 @@
-{ lib
-, buildPythonApplication
-, colorama
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonApplication, colorama, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "uddup";
@@ -16,13 +11,9 @@ buildPythonApplication rec {
     sha256 = "1f5dm3772hiik9irnyvbs7wygcafbwi7czw3b47cwhb90b8fi5hg";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "uddup" ];
 

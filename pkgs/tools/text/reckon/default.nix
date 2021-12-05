@@ -24,10 +24,12 @@ stdenv.mkDerivation rec {
   passthru.updateScript = bundlerUpdateScript "reckon";
 
   meta = with lib; {
-    description = "Flexibly import bank account CSV files into Ledger for command line accounting";
+    description =
+      "Flexibly import bank account CSV files into Ledger for command line accounting";
     license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.unix;
-    changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
   };
 }

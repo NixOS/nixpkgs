@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, python2
-}:
+{ lib, stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "conway_polynomials";
@@ -10,13 +7,15 @@ stdenv.mkDerivation rec {
   pythonEnv = python2.withPackages (ps: with ps; [ six ]);
 
   src = fetchurl {
-    url = "mirror://sageupstream/conway_polynomials/conway_polynomials-${version}.tar.bz2";
+    url =
+      "mirror://sageupstream/conway_polynomials/conway_polynomials-${version}.tar.bz2";
     sha256 = "05zb1ly9x2bbscqv0jgc45g48xx77mfs7qdbqhn4ihmihn57iwnq";
   };
 
   # Script that creates the "database" (nested python array) and pickles it
   spkg-install = fetchurl {
-    url = "https://git.sagemath.org/sage.git/plain/build/pkgs/conway_polynomials/spkg-install.py?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+    url =
+      "https://git.sagemath.org/sage.git/plain/build/pkgs/conway_polynomials/spkg-install.py?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
     sha256 = "0m12nfb37j3bn4bp06ddgnyp2d6z0hg5f83pbbjszxw7vxs33a82";
   };
 

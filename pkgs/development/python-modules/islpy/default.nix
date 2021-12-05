@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isl
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, isl, pybind11, pytestCheckHook
+, pythonOlder, six }:
 
 buildPythonPackage rec {
   pname = "islpy";

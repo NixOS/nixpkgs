@@ -6,16 +6,9 @@ buildDunePackage rec {
   inherit (bls12-381-gen) version src useDune2 doCheck;
 
   minimalOCamlVersion = "4.08";
-  propagatedBuildInputs = [
-    ff-sig
-    zarith
-    ctypes
-    bls12-381-gen
-  ];
+  propagatedBuildInputs = [ ff-sig zarith ctypes bls12-381-gen ];
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://gitlab.com/dannywillems/ocaml-bls12-381";

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, flake8
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, six, flake8, nose }:
 
 buildPythonPackage rec {
   pname = "polyline";
@@ -24,8 +18,10 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hicsail/polyline";
     license = licenses.mit;
-    description = "Python implementation of Google's Encoded Polyline Algorithm Format.";
-    longDescription = "polyline is a Python implementation of Google's Encoded Polyline Algorithm Format (http://goo.gl/PvXf8Y). It is essentially a port of https://github.com/mapbox/polyline built with Python 2 and 3 support in mind.";
+    description =
+      "Python implementation of Google's Encoded Polyline Algorithm Format.";
+    longDescription =
+      "polyline is a Python implementation of Google's Encoded Polyline Algorithm Format (http://goo.gl/PvXf8Y). It is essentially a port of https://github.com/mapbox/polyline built with Python 2 and 3 support in mind.";
     maintainers = with maintainers; [ ersin ];
   };
 }

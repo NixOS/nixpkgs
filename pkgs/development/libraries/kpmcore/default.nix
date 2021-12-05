@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt, qtbase
-, util-linux
-}:
+{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules, qca-qt5, kauth, kio
+, polkit-qt, qtbase, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "kpmcore";
@@ -9,19 +7,22 @@ stdenv.mkDerivation rec {
   version = "4.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    url =
+      "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
     hash = "sha256-MvW0CqvFZtzcJlya6DIpzorPbKJai6fxt7nKsKpJn54=";
   };
 
   patches = [
     # Fix build with `kcoreaddons` >= 5.77.0
     (fetchpatch {
-      url = "https://github.com/KDE/kpmcore/commit/07e5a3ac2858e6d38cc698e0f740e7a693e9f302.patch";
+      url =
+        "https://github.com/KDE/kpmcore/commit/07e5a3ac2858e6d38cc698e0f740e7a693e9f302.patch";
       sha256 = "sha256-LYzea888euo2HXM+acWaylSw28iwzOdZBvPBt/gjP1s=";
     })
     # Fix crash when `fstab` omits mount options.
     (fetchpatch {
-      url = "https://github.com/KDE/kpmcore/commit/eea84fb60525803a789e55bb168afb968464c130.patch";
+      url =
+        "https://github.com/KDE/kpmcore/commit/eea84fb60525803a789e55bb168afb968464c130.patch";
       sha256 = "sha256-NJ3PvyRC6SKNSOlhJPrDDjepuw7IlAoufPgvml3fap0=";
     })
   ];

@@ -1,18 +1,15 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, procps
-, qtbase, qtwebengine, qtwebkit
-, cmake
-, syncthing
-, preferQWebView ? false
-, preferNative   ? true }:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, procps, qtbase
+, qtwebengine, qtwebkit, cmake, syncthing, preferQWebView ? false
+, preferNative ? true }:
 
 mkDerivation rec {
   version = "0.5.8";
   pname = "qsyncthingtray";
 
   src = fetchFromGitHub {
-    owner  = "sieren";
-    repo   = "QSyncthingTray";
-    rev    = version;
+    owner = "sieren";
+    repo = "QSyncthingTray";
+    rev = version;
     sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 
@@ -20,15 +17,18 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ ]
-    ++ lib.optional preferQWebView "-DQST_BUILD_WEBKIT=1"
-    ++ lib.optional preferNative   "-DQST_BUILD_NATIVEBROWSER=1";
+  cmakeFlags = [ ] ++ lib.optional preferQWebView "-DQST_BUILD_WEBKIT=1"
+    ++ lib.optional preferNative "-DQST_BUILD_NATIVEBROWSER=1";
 
-  patches = [ (fetchpatch {
-    name = "support_native_browser.patch";
-    url = "https://patch-diff.githubusercontent.com/raw/sieren/QSyncthingTray/pull/225.patch";
-    sha256 = "0w665xdlsbjxs977pdpzaclxpswf7xys1q3rxriz181lhk2y66yy";
-  }) ] ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
+  patches = [
+    (fetchpatch {
+      name = "support_native_browser.patch";
+      url =
+        "https://patch-diff.githubusercontent.com/raw/sieren/QSyncthingTray/pull/225.patch";
+      sha256 = "0w665xdlsbjxs977pdpzaclxpswf7xys1q3rxriz181lhk2y66yy";
+    })
+  ] ++ lib.optional (!preferQWebView && !preferNative)
+    ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
 
   postPatch = ''
     ${lib.optionalString stdenv.isLinux ''
@@ -43,7 +43,8 @@ mkDerivation rec {
     ''}
   '';
 
-  installPhase = let qst = "qsyncthingtray"; in ''
+  installPhase = let qst = "qsyncthingtray";
+  in ''
     runHook preInstall
 
     mkdir -p $out/bin
@@ -57,9 +58,9 @@ mkDerivation rec {
     homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''
-        A cross-platform status bar for Syncthing.
-        Currently supports macOS, Windows and Linux.
-        Written in C++ with Qt.
+      A cross-platform status bar for Syncthing.
+      Currently supports macOS, Windows and Linux.
+      Written in C++ with Qt.
     '';
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
@@ -67,6 +68,8 @@ mkDerivation rec {
     # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
     # but qt > 5.6 works when only using the native browser
     # https://github.com/sieren/QSyncthingTray/issues/223
-    broken = (builtins.compareVersions qtbase.version "5.7.0" >= 0 && !preferNative) || stdenv.isDarwin;
+    broken =
+      (builtins.compareVersions qtbase.version "5.7.0" >= 0 && !preferNative)
+      || stdenv.isDarwin;
   };
 }

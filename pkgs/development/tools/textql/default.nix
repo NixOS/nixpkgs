@@ -7,9 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/dinedal/textql";
 
   src = fetchFromGitHub {
-    owner  = "dinedal";
-    repo   = "textql";
-    rev    = version;
+    owner = "dinedal";
+    repo = "textql";
+    rev = version;
     sha256 = "1b61w4pc5gl7m12mphricihzq7ifnzwn0yyw3ypv0d0fj26h5hc3";
   };
 

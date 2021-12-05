@@ -1,37 +1,23 @@
-{ fetchzip
-, libX11
-, libGLU, libGL
-, makeWrapper
-, lib, stdenv
-}:
+{ fetchzip, libX11, libGLU, libGL, makeWrapper, lib, stdenv }:
 
 let
 
-  libPath = lib.makeLibraryPath [
-    libGLU libGL
-    stdenv.cc.cc
-    libX11
-  ];
+  libPath = lib.makeLibraryPath [ libGLU libGL stdenv.cc.cc libX11 ];
 
   inidir = "\\\${XDG_CONFIG_HOME:-\\$HOME/.config}/kisslicer";
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "kisslicer";
   version = "1.6.3";
 
   src = fetchzip {
-    url = "https://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_${version}_release.zip";
+    url =
+      "https://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_${version}_release.zip";
     sha256 = "1xmywj5jrcsqv1d5x3mphhvafs4mfm9l12npkhk7l03qxbwg9j82";
     stripRoot = false;
   };
 
-  buildInputs = [
-    makeWrapper
-    libGLU libGL
-    libX11
-  ];
+  buildInputs = [ makeWrapper libGLU libGL libX11 ];
 
   installPhase = ''
     mkdir -p $out/bin

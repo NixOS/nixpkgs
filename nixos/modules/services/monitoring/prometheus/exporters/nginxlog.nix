@@ -2,14 +2,13 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.nginxlog;
+let cfg = config.services.prometheus.exporters.nginxlog;
 in {
   port = 9117;
   extraOpts = {
     settings = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = ''
         All settings of nginxlog expressed as an Nix attrset.
 
@@ -38,14 +37,15 @@ in {
         metrics_endpoint = cfg.metricsEndpoint;
       };
     };
-    completeConfig = pkgs.writeText "nginxlog-exporter.yaml" (builtins.toJSON (lib.recursiveUpdate listenConfig cfg.settings));
+    completeConfig = pkgs.writeText "nginxlog-exporter.yaml"
+      (builtins.toJSON (lib.recursiveUpdate listenConfig cfg.settings));
   in {
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-nginxlog-exporter}/bin/prometheus-nginxlog-exporter -config-file ${completeConfig}
       '';
-      Restart="always";
-      ProtectSystem="full";
+      Restart = "always";
+      ProtectSystem = "full";
     };
   };
 }

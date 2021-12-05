@@ -1,24 +1,16 @@
-{ stdenv
-, lib
-, unzip
-, util-linux
-, libusb1
-, evdi
-, systemd
-, makeWrapper
-, requireFile
-, substituteAll
-}:
+{ stdenv, lib, unzip, util-linux, libusb1, evdi, systemd, makeWrapper
+, requireFile, substituteAll }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-    else throw "Unsupported architecture";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then
+    "x64"
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    "x86"
+  else
+    throw "Unsupported architecture";
   bins = "${arch}-ubuntu-1604";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "displaylink";
   version = "5.4.1-55.174";
 
@@ -35,7 +27,9 @@ stdenv.mkDerivation rec {
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu ${lib.versions.majorMinor version}.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu ${
+        lib.versions.majorMinor version
+      }.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
     '';
   };
@@ -63,7 +57,6 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
-
 
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";

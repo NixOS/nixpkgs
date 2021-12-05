@@ -23,7 +23,10 @@ rustPlatform.buildRustPackage rec {
       characters and non-ASCII).
     '';
     homepage = "https://github.com/sharkdp/hexyl";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ dywedir SuperSandro2000 ];
   };
 }

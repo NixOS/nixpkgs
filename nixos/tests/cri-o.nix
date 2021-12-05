@@ -3,11 +3,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "cri-o";
   maintainers = with pkgs.lib.maintainers; teams.podman.members;
 
-  nodes = {
-    crio = {
-      virtualisation.cri-o.enable = true;
-    };
-  };
+  nodes = { crio = { virtualisation.cri-o.enable = true; }; };
 
   testScript = ''
     start_all()

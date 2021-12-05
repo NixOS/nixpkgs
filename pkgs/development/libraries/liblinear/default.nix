@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fixDarwinDylibNames }:
 
-let
-  soVersion = "4";
+let soVersion = "4";
 in stdenv.mkDerivation rec {
   pname = "liblinear";
   version = "2.43";
@@ -9,7 +8,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "liblinear";
-    rev = "v${builtins.replaceStrings ["."] [""] version}";
+    rev = "v${builtins.replaceStrings [ "." ] [ "" ] version}";
     sha256 = "sha256-qcSMuWHJgsapWs1xgxv3fKSXcx18q8cwyIn3E4RCGKA=";
   };
 

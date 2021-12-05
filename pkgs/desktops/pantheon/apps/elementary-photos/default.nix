@@ -1,36 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, desktop-file-utils
-, gtk3
-, libaccounts-glib
-, libexif
-, libgee
-, libhandy
-, geocode-glib
-, gexiv2
-, libgphoto2
-, granite
-, gst_all_1
-, libgudev
-, json-glib
-, libraw
-, librest
-, libsoup
-, sqlite
-, python3
-, scour
-, webkitgtk
-, libwebp
-, appstream
-, wrapGAppsHook
-, elementary-icon-theme
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config
+, vala, desktop-file-utils, gtk3, libaccounts-glib, libexif, libgee, libhandy
+, geocode-glib, gexiv2, libgphoto2, granite, gst_all_1, libgudev, json-glib
+, libraw, librest, libsoup, sqlite, python3, scour, webkitgtk, libwebp
+, appstream, wrapGAppsHook, elementary-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
@@ -83,9 +55,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  mesonFlags = [
-    "-Dplugins=false"
-  ];
+  mesonFlags = [ "-Dplugins=false" ];
 
   postPatch = ''
     chmod +x meson/post_install.py
@@ -93,9 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {

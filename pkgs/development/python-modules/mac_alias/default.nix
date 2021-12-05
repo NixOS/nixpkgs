@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   version = "2.2.0";
@@ -17,7 +16,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/al45tair/mac_alias";
-    description = "Generate or read binary Alias and Bookmark records from Python code";
+    description =
+      "Generate or read binary Alias and Bookmark records from Python code";
     longDescription = ''
       mac_alias lets you generate or read binary Alias and Bookmark records from Python code.
 

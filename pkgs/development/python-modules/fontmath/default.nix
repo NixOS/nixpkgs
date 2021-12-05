@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, fonttools, setuptools-scm
-, pytest, pytest-runner
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, fonttools, setuptools-scm, pytest
+, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "fontMath";
@@ -20,7 +18,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
-    description = "A collection of objects that implement fast font, glyph, etc. math";
+    description =
+      "A collection of objects that implement fast font, glyph, etc. math";
     homepage = "https://github.com/robotools/fontMath/";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];

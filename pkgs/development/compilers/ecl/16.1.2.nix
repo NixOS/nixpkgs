@@ -1,38 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
-, gmp, mpfr, libffi, makeWrapper
-, noUnicode ? false
-, gcc
-, threadSupport ? false
-, useBoehmgc ? true, boehmgc
-}:
+{ lib, stdenv, fetchurl, fetchpatch, libtool, autoconf, automake, gmp, mpfr
+, libffi, makeWrapper, noUnicode ? false, gcc, threadSupport ? false
+, useBoehmgc ? true, boehmgc }:
 
 let
   s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="16.1.2";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
-  };
-  buildInputs = [
-    libtool autoconf automake makeWrapper
-  ];
-  propagatedBuildInputs = [
-    libffi gmp mpfr gcc
-  ] ++ lib.optionals useBoehmgc [
+    rec {
+      baseName = "ecl";
+      version = "16.1.2";
+      name = "${baseName}-${version}";
+      url =
+        "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
+      sha256 = "16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    };
+  buildInputs = [ libtool autoconf automake makeWrapper ];
+  propagatedBuildInputs = [ libffi gmp mpfr gcc ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+  src = fetchurl { inherit (s) url sha256; };
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
@@ -40,14 +29,14 @@ stdenv.mkDerivation {
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
     # -incdir, -libdir doesn't seem to be supported for libffi
     "--with-libffi-prefix=${lib.getDev libffi}"
-    ] ++ lib.optional (! noUnicode) "--enable-unicode"
-    ;
+  ] ++ lib.optional (!noUnicode) "--enable-unicode";
 
   patches = [
     (fetchpatch {
       # Avoid infinite loop, see https://gitlab.com/embeddable-common-lisp/ecl/issues/43 (fixed upstream)
       name = "avoid-infinite-loop.patch";
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/commit/caba1989f40ef917e7486f41b9cd5c7e3c5c2d79.patch";
+      url =
+        "https://gitlab.com/embeddable-common-lisp/ecl/commit/caba1989f40ef917e7486f41b9cd5c7e3c5c2d79.patch";
       sha256 = "07vw91psbc9gdn8grql46ra8lq3bgkzg5v480chnbryna4sv6lbb";
     })
     (fetchpatch {
@@ -55,7 +44,8 @@ stdenv.mkDerivation {
       # Rebased version of
       # https://gitlab.com/embeddable-common-lisp/ecl/commit/ac5f011f57a85a38627af154bc3ee7580e7fecd4.patch
       name = "getcwd.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/16.1.2-getcwd.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url =
+        "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/16.1.2-getcwd.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1fbi8gn7rv8nqff5mpaijsrch3k3z7qc5cn4h1vl8qrr8xwqlqhb";
     })
     ./ecl-1.16.2-libffi-3.3-abi.patch
@@ -68,28 +58,35 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/ecl" \
       --prefix PATH ':' "${
         lib.makeBinPath [
-          gcc                   # for the C compiler
+          gcc # for the C compiler
           gcc.bintools.bintools # for ar
         ]
       }" \
   ''
-  # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
-  # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.
-  # Since it is missing even the prefix flag for boehmgc we also need to inject
-  # the correct -I flag via NIX_CFLAGS_COMPILE. Since we have access to it, we
-  # create the variables with suffixSalt (which seems to be necessary for
-  # NIX_CFLAGS_COMPILE even).
-  + lib.optionalString useBoehmgc ''
-      --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
-      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
-  '' + ''
-      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
-  '';
+    # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
+    # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.
+    # Since it is missing even the prefix flag for boehmgc we also need to inject
+    # the correct -I flag via NIX_CFLAGS_COMPILE. Since we have access to it, we
+    # create the variables with suffixSalt (which seems to be necessary for
+    # NIX_CFLAGS_COMPILE even).
+    + lib.optionalString useBoehmgc ''
+      --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${
+        lib.getDev boehmgc
+      }/include" \
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${
+        lib.getLib boehmgc
+      }/lib" \
+    '' + ''
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${
+        lib.getLib libffi
+      }/lib"
+    '';
 
   meta = with lib; {
     inherit (s) version;
-    description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = licenses.mit ;
+    description =
+      "Lisp implementation aiming to be small, fast and easy to embed";
+    license = licenses.mit;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
   };

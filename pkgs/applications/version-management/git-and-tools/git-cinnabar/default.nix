@@ -1,12 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
-, curl, libiconv, mercurial, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, autoconf, makeWrapper, curl, libiconv, mercurial
+, zlib }:
 
-let
-  python3 = mercurial.python;
-in
+let python3 = mercurial.python;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "git-cinnabar";
   version = "0.5.7";
 

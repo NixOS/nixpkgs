@@ -6,23 +6,23 @@ let
   cfg = config.programs.sway;
 
   wrapperOptions = types.submodule {
-    options =
-      let
-        mkWrapperFeature  = default: description: mkOption {
+    options = let
+      mkWrapperFeature = default: description:
+        mkOption {
           type = types.bool;
           inherit default;
           example = !default;
           description = "Whether to make use of the ${description}";
         };
-      in {
-        base = mkWrapperFeature true ''
-          base wrapper to execute extra session commands and prepend a
-          dbus-run-session to the sway command.
-        '';
-        gtk = mkWrapperFeature false ''
-          wrapGAppsHook wrapper to execute sway with required environment
-          variables for GTK applications.
-        '';
+    in {
+      base = mkWrapperFeature true ''
+        base wrapper to execute extra session commands and prepend a
+        dbus-run-session to the sway command.
+      '';
+      gtk = mkWrapperFeature false ''
+        wrapGAppsHook wrapper to execute sway with required environment
+        variables for GTK applications.
+      '';
     };
   };
 
@@ -74,7 +74,7 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "--verbose"
         "--debug"
@@ -89,9 +89,7 @@ in {
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs; [
-        swaylock swayidle alacritty dmenu
-      ];
+      default = with pkgs; [ swaylock swayidle alacritty dmenu ];
       defaultText = literalExpression ''
         with pkgs; [ swaylock swayidle alacritty dmenu ];
       '';
@@ -112,15 +110,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
-        message = ''
-          The extraSessionCommands for Sway will not be run if
-          wrapperFeatures.base is disabled.
-        '';
-      }
-    ];
+    assertions = [{
+      assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
+      message = ''
+        The extraSessionCommands for Sway will not be run if
+        wrapperFeatures.base is disabled.
+      '';
+    }];
     environment = {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
       # Needed for the default wallpaper:
@@ -134,7 +130,7 @@ in {
         '';
       };
     };
-    security.pam.services.swaylock = {};
+    security.pam.services.swaylock = { };
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;

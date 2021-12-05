@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook
-, clutter-gtk
-, elementary-icon-theme
-, evolution-data-server
-, granite
-, geoclue2
-, geocode-glib
-, gtk3
-, libchamplain
-, libgdata
-, libgee
-, libhandy
-, libical
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, appstream, desktop-file-utils
+, meson, ninja, pkg-config, python3, vala, wrapGAppsHook, clutter-gtk
+, elementary-icon-theme, evolution-data-server, granite, geoclue2, geocode-glib
+, gtk3, libchamplain, libgdata, libgee, libhandy, libical }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
@@ -38,9 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [

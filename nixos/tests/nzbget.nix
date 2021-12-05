@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nzbget";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ aanderse flokli ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ aanderse flokli ]; };
 
   nodes = {
     server = { ... }: {

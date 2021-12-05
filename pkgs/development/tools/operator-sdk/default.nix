@@ -27,7 +27,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding";
+    description =
+      "SDK for building Kubernetes applications. Provides high level APIs, useful abstractions, and project scaffolding";
     homepage = "https://github.com/operator-framework/operator-sdk";
     license = licenses.asl20;
     maintainers = with maintainers; [ arnarg ];

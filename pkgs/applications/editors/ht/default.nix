@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w2xnw3z9ws9qrdpb80q55h6ynhh3aziixcfn45x91bzrbifix9i";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   hardeningDisable = [ "format" ];
 

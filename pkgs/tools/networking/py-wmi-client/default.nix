@@ -11,7 +11,12 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1kd12gi1knqv477f1shzqr0h349s5336vzp3fpfp3xl0b502ld8d";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ impacket natsort pyasn1 pycrypto ];
+  propagatedBuildInputs = with pythonPackages; [
+    impacket
+    natsort
+    pyasn1
+    pycrypto
+  ];
 
   # no tests
   doCheck = false;

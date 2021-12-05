@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, writeScript
-, cmake
-, clang
-, clang-unwrapped
-, lld
-, llvm
-}:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, clang-unwrapped, lld
+, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";

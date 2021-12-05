@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libxml2 ];
 
-  configureFlags = [
-    "--enable-libxml2-backend"
-  ];
+  configureFlags = [ "--enable-libxml2-backend" ];
 
   # Build and install the "xmlrpc" tool (like the Debian package)
   postInstall = ''

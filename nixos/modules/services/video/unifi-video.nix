@@ -56,7 +56,6 @@ let
     '';
   };
 
-
   mongoWtConf = pkgs.writeTextFile {
     name = "mongowt.conf";
     executable = false;
@@ -89,98 +88,97 @@ let
 
   stateDir = "/var/lib/unifi-video";
 
-in
-  {
+in {
 
-    options.services.unifi-video = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether or not to enable the unifi-video service.
-        '';
-      };
-
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.jre8;
-        defaultText = literalExpression "pkgs.jre8";
-        description = ''
-          The JRE package to use. Check the release notes to ensure it is supported.
-        '';
-      };
-
-      unifiVideoPackage = mkOption {
-        type = types.package;
-        default = pkgs.unifi-video;
-        defaultText = literalExpression "pkgs.unifi-video";
-        description = ''
-          The unifi-video package to use.
-        '';
-      };
-
-      mongodbPackage = mkOption {
-        type = types.package;
-        default = pkgs.mongodb-4_0;
-        defaultText = literalExpression "pkgs.mongodb";
-        description = ''
-          The mongodb package to use.
-        '';
-      };
-
-      logDir = mkOption {
-        type = types.str;
-        default = "${stateDir}/logs";
-        description = ''
-          Where to store the logs.
-        '';
-      };
-
-      dataDir = mkOption {
-        type = types.str;
-        default = "${stateDir}/data";
-        description = ''
-          Where to store the database and other data.
-        '';
-      };
-
-      openPorts = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether or not to open the required ports on the firewall.
-        '';
-      };
-
-      maximumJavaHeapSize = mkOption {
-        type = types.nullOr types.int;
-        default = 1024;
-        example = 4096;
-        description = ''
-          Set the maximimum heap size for the JVM in MB.
-        '';
-      };
-
-      pidFile = mkOption {
-        type = types.path;
-        default = "${cfg.dataDir}/unifi-video.pid";
-        description = "Location of unifi-video pid file.";
-      };
-
-};
-
-config = mkIf cfg.enable {
-  users = {
-    users.unifi-video = {
-      description = "UniFi Video controller daemon user";
-      home = stateDir;
-      group = "unifi-video";
-      isSystemUser = true;
+  options.services.unifi-video = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not to enable the unifi-video service.
+      '';
     };
-    groups.unifi-video = {};
+
+    jrePackage = mkOption {
+      type = types.package;
+      default = pkgs.jre8;
+      defaultText = literalExpression "pkgs.jre8";
+      description = ''
+        The JRE package to use. Check the release notes to ensure it is supported.
+      '';
+    };
+
+    unifiVideoPackage = mkOption {
+      type = types.package;
+      default = pkgs.unifi-video;
+      defaultText = literalExpression "pkgs.unifi-video";
+      description = ''
+        The unifi-video package to use.
+      '';
+    };
+
+    mongodbPackage = mkOption {
+      type = types.package;
+      default = pkgs.mongodb-4_0;
+      defaultText = literalExpression "pkgs.mongodb";
+      description = ''
+        The mongodb package to use.
+      '';
+    };
+
+    logDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/logs";
+      description = ''
+        Where to store the logs.
+      '';
+    };
+
+    dataDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/data";
+      description = ''
+        Where to store the database and other data.
+      '';
+    };
+
+    openPorts = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether or not to open the required ports on the firewall.
+      '';
+    };
+
+    maximumJavaHeapSize = mkOption {
+      type = types.nullOr types.int;
+      default = 1024;
+      example = 4096;
+      description = ''
+        Set the maximimum heap size for the JVM in MB.
+      '';
+    };
+
+    pidFile = mkOption {
+      type = types.path;
+      default = "${cfg.dataDir}/unifi-video.pid";
+      description = "Location of unifi-video pid file.";
+    };
+
   };
 
-  networking.firewall = mkIf cfg.openPorts {
+  config = mkIf cfg.enable {
+    users = {
+      users.unifi-video = {
+        description = "UniFi Video controller daemon user";
+        home = stateDir;
+        group = "unifi-video";
+        isSystemUser = true;
+      };
+      groups.unifi-video = { };
+    };
+
+    networking.firewall = mkIf cfg.openPorts {
       # https://help.ui.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
       allowedTCPPorts = [
         7080 # HTTP portal
@@ -241,11 +239,20 @@ config = mkIf cfg.enable {
     systemd.services.unifi-video = {
       description = "UniFi Video NVR daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ;
+      after = [ "network.target" ];
       unitConfig.RequiresMountsFor = stateDir;
       # Make sure package upgrades trigger a service restart
       restartTriggers = [ cfg.unifiVideoPackage cfg.mongodbPackage ];
-      path = with pkgs; [ gawk coreutils busybox which jre8 lsb-release libcap util-linux ];
+      path = with pkgs; [
+        gawk
+        coreutils
+        busybox
+        which
+        jre8
+        lsb-release
+        libcap
+        util-linux
+      ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} ${mainClass} start";
@@ -259,7 +266,5 @@ config = mkIf cfg.enable {
 
   };
 
-  meta = {
-    maintainers = with lib.maintainers; [ rsynnest ];
-  };
+  meta = { maintainers = with lib.maintainers; [ rsynnest ]; };
 }

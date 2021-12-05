@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ gtk2 libsndfile python3 ];
 
-  wafConfigureFlags = lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
+  wafConfigureFlags =
+    lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
 
   meta = with lib; {
     homepage = "https://lv2plug.in";

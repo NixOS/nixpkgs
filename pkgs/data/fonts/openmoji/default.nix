@@ -1,18 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, scfbuild
-, nodejs
-, nodePackages
-, python3Packages
+{ lib, stdenv, fetchFromGitHub, scfbuild, nodejs, nodePackages, python3Packages
 , variant ? "color" # "color" or "black"
 }:
 
 let
-  filename = builtins.replaceStrings
-    [ "color"              "black"              ]
-    [ "OpenMoji-Color.ttf" "OpenMoji-Black.ttf" ]
-    variant;
+  filename = builtins.replaceStrings [ "color" "black" ] [
+    "OpenMoji-Color.ttf"
+    "OpenMoji-Black.ttf"
+  ] variant;
 
 in stdenv.mkDerivation rec {
   pname = "openmoji";
@@ -25,12 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-7G6a+LFq79njyPhnDhhSJ98Smw5fWlfcsFj6nWBPsSk=";
   };
 
-  nativeBuildInputs = [
-    scfbuild
-    nodejs
-    nodePackages.glob
-    nodePackages.lodash
-  ];
+  nativeBuildInputs = [ scfbuild nodejs nodePackages.glob nodePackages.lodash ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,6 +42,7 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";
-    description = "Open-source emojis for designers, developers and everyone else";
+    description =
+      "Open-source emojis for designers, developers and everyone else";
   };
 }

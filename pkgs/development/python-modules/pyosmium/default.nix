@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, python
-, libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, nose, shapely, pythonOlder, isPyPy, lz4, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, cmake, python, libosmium, protozero
+, boost, expat, bzip2, zlib, pybind11, nose, shapely, pythonOlder, isPyPy, lz4
+, requests }:
 
 buildPythonPackage rec {
   pname = "pyosmium";
@@ -28,7 +28,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for libosmium";
     homepage = "https://osmcode.org/pyosmium";
-    changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
   };

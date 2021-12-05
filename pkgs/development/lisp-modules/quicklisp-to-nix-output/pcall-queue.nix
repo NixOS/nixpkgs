@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "pcall-queue";
   version = "pcall-0.3";
 
@@ -15,7 +14,7 @@ rec {
 
   packageName = "pcall-queue";
 
-  asdFilesToKeep = ["pcall-queue.asd"];
+  asdFilesToKeep = [ "pcall-queue.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM pcall-queue DESCRIPTION System lacks description SHA256
@@ -25,4 +24,5 @@ rec {
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads))
     DEPENDENCIES (alexandria bordeaux-threads) VERSION pcall-0.3 SIBLINGS
-    (pcall) PARASITES NIL) */
+    (pcall) PARASITES NIL)
+*/

@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.piumarta.com/software/memstream/";
-    description = "memstream.c is an implementation of the POSIX function open_memstream() for BSD and BSD-like operating systems";
+    description =
+      "memstream.c is an implementation of the POSIX function open_memstream() for BSD and BSD-like operating systems";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;

@@ -1,6 +1,7 @@
 # Taken from a past commit of nixpkgs
 
-{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytest-cov
+, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -30,7 +31,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
-    description = "An autocompletion tool for Python that can be used for text editors";
+    description =
+      "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
   };
 }

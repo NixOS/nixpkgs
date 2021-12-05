@@ -1,19 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, click
-, colorama
-, cryptography
-, exrex
-, fetchFromGitHub
-, pyopenssl
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, questionary
-, requests
-, requests-mock
-}:
+{ lib, stdenv, buildPythonPackage, click, colorama, cryptography, exrex
+, fetchFromGitHub, pyopenssl, pyperclip, pytest-mock, pytestCheckHook
+, questionary, requests, requests-mock }:
 
 buildPythonPackage rec {
   pname = "myjwt";
@@ -37,11 +24,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-    requests-mock
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook requests-mock ];
 
   postPatch = ''
     # Remove all version pinning (E.g., tornado==5.1.1 -> tornado)
@@ -51,7 +34,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "myjwt" ];
 
   meta = with lib; {
-    description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
+    description =
+      "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

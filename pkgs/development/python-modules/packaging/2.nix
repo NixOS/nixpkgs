@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytestCheckHook
-, pretend
+{ lib, buildPythonPackage, fetchPypi, pyparsing, six, pytestCheckHook, pretend
 }:
 
 # We keep 20.4 because it uses setuptools instead of flit-core
@@ -22,10 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing six ];
 
-  checkInputs = [
-    pytestCheckHook
-    pretend
-  ];
+  checkInputs = [ pytestCheckHook pretend ];
 
   # Prevent circular dependency
   doCheck = false;

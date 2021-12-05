@@ -5,18 +5,17 @@ with lib;
 let
   cfg = config.services.prometheus.pushgateway;
 
-  cmdlineArgs =
-       opt "web.listen-address" cfg.web.listen-address
+  cmdlineArgs = opt "web.listen-address" cfg.web.listen-address
     ++ opt "web.telemetry-path" cfg.web.telemetry-path
     ++ opt "web.external-url" cfg.web.external-url
     ++ opt "web.route-prefix" cfg.web.route-prefix
-    ++ optional cfg.persistMetrics ''--persistence.file="/var/lib/${cfg.stateDir}/metrics"''
+    ++ optional cfg.persistMetrics
+    ''--persistence.file="/var/lib/${cfg.stateDir}/metrics"''
     ++ opt "persistence.interval" cfg.persistence.interval
-    ++ opt "log.level" cfg.log.level
-    ++ opt "log.format" cfg.log.format
+    ++ opt "log.level" cfg.log.level ++ opt "log.format" cfg.log.format
     ++ cfg.extraFlags;
 
-  opt = k : v : optional (v != null) ''--${k}="${v}"'';
+  opt = k: v: optional (v != null) ''--${k}="${v}"'';
 
 in {
   options = {
@@ -83,7 +82,8 @@ in {
       };
 
       log.level = mkOption {
-        type = types.nullOr (types.enum ["debug" "info" "warn" "error" "fatal"]);
+        type =
+          types.nullOr (types.enum [ "debug" "info" "warn" "error" "fatal" ]);
         default = null;
         description = ''
           Only log messages with the given severity or above.
@@ -105,7 +105,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra commandline options when launching the Pushgateway.
         '';
@@ -141,24 +141,21 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !hasPrefix "/" cfg.stateDir;
-        message =
-          "The option services.prometheus.pushgateway.stateDir" +
-          " shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib.";
-      }
-    ];
+    assertions = [{
+      assertion = !hasPrefix "/" cfg.stateDir;
+      message = "The option services.prometheus.pushgateway.stateDir"
+        + " shouldn't be an absolute directory."
+        + " It should be a directory relative to /var/lib.";
+    }];
     systemd.services.pushgateway = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        Restart  = "always";
+        Restart = "always";
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/pushgateway" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
+        ExecStart = "${cfg.package}/bin/pushgateway"
+          + optionalString (length cmdlineArgs != 0)
+          (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
         StateDirectory = if cfg.persistMetrics then cfg.stateDir else null;
       };
     };

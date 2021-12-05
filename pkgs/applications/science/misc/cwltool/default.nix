@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, git
-, nodejs
-, python3
-}:
+{ lib, fetchFromGitHub, git, nodejs, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
@@ -25,9 +20,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "setup_requires=PYTEST_RUNNER," ""
   '';
 
-  nativeBuildInputs = [
-    git
-  ];
+  nativeBuildInputs = [ git ];
 
   propagatedBuildInputs = with python3.pkgs; [
     argcomplete
@@ -53,20 +46,12 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_content_types"
-    "test_env_filtering"
-    "test_http_path_mapping"
-  ];
+  disabledTests =
+    [ "test_content_types" "test_env_filtering" "test_http_path_mapping" ];
 
-  disabledTestPaths = [
-    "tests/test_udocker.py"
-    "tests/test_provenance.py"
-  ];
+  disabledTestPaths = [ "tests/test_udocker.py" "tests/test_provenance.py" ];
 
-  pythonImportsCheck = [
-    "cwltool"
-  ];
+  pythonImportsCheck = [ "cwltool" ];
 
   meta = with lib; {
     description = "Common Workflow Language reference implementation";

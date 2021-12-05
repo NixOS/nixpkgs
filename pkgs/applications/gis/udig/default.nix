@@ -5,11 +5,13 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "http://udig.refractions.net/files/downloads/udig-${version}.linux.gtk.x86_64.zip";
+      url =
+        "http://udig.refractions.net/files/downloads/udig-${version}.linux.gtk.x86_64.zip";
       sha256 = "03hj1mdd6sq0gbpa838wkccibp3l2hvnwxxf5dyc0jk3mmd94fwa";
     };
     x86_64-darwin = fetchurl {
-      url = "http://udig.refractions.net/files/downloads/udig-${version}.macosx.cocoa.x86_64.zip";
+      url =
+        "http://udig.refractions.net/files/downloads/udig-${version}.macosx.cocoa.x86_64.zip";
       sha256 = "16rcyp1zy3lr1hwjhzh6vwcgck52w66dm1qsc52gppy1f4i3f692";
     };
   };
@@ -60,7 +62,4 @@ let
         --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gdal ])}
     '';
   };
-in
-if stdenv.isDarwin
-then darwin
-else linux
+in if stdenv.isDarwin then darwin else linux

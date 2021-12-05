@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, pyserial, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aioserial";
@@ -16,9 +11,7 @@ buildPythonPackage rec {
     sha256 = "080j3ws3j2arj2f16mzqn1qliy0bzmb0gzk5jvm5ldkhsf1s061h";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   # Project has no tests
   doCheck = false;

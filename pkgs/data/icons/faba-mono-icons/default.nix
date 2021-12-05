@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, faba-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme
+, faba-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "faba-mono-icons";
@@ -11,17 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0nisfl92y6hrbakp9qxi0ygayl6avkzrhwirg6854bwqjy2dvjv9";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gtk3
-  ];
+  nativeBuildInputs = [ autoreconfHook gtk3 ];
 
-  propagatedBuildInputs = [
-    moka-icon-theme
-    faba-icon-theme
-    gnome-icon-theme
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs =
+    [ moka-icon-theme faba-icon-theme gnome-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

@@ -29,7 +29,8 @@ in stdenvNoCC.mkDerivation {
   '';
   meta = {
     platforms = lib.platforms.darwin;
-    description = "Install and debug iOS apps from the command line. Designed to work on un-jailbroken devices";
+    description =
+      "Install and debug iOS apps from the command line. Designed to work on un-jailbroken devices";
     license = lib.licenses.gpl3;
   };
 }

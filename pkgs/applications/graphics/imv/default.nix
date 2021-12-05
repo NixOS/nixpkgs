@@ -1,30 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, asciidoc
-, cmocka
-, docbook_xsl
-, libxslt
-, meson
-, ninja
-, pkg-config
-, icu
-, pango
-, inih
-, withWindowSystem ? "all"
-, xorg
-, libxkbcommon
-, libGLU
-, wayland
-, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
-, freeimage
-, libtiff
-, libjpeg_turbo
-, libpng
-, librsvg
-, netsurf
-, libheif
-}:
+{ stdenv, lib, fetchFromGitHub, asciidoc, cmocka, docbook_xsl, libxslt, meson
+, ninja, pkg-config, icu, pango, inih, withWindowSystem ? "all", xorg
+, libxkbcommon, libGLU, wayland, withBackends ? [
+  "freeimage"
+  "libtiff"
+  "libjpeg"
+  "libpng"
+  "librsvg"
+  "libnsgif"
+  "libheif"
+], freeimage, libtiff, libjpeg_turbo, libpng, librsvg, netsurf, libheif }:
 
 let
   windowSystems = {
@@ -39,15 +23,14 @@ let
     inherit (netsurf) libnsgif;
   };
 
-  backendFlags = builtins.map
-    (b: if builtins.elem b withBackends
-        then "-D${b}=enabled"
-        else "-D${b}=disabled")
-    (builtins.attrNames backends);
-in
+  backendFlags = builtins.map (b:
+    if builtins.elem b withBackends then
+      "-D${b}=enabled"
+    else
+      "-D${b}=disabled") (builtins.attrNames backends);
 
-# check that given window system is valid
-assert lib.assertOneOf "withWindowSystem" withWindowSystem
+  # check that given window system is valid
+in assert lib.assertOneOf "withWindowSystem" withWindowSystem
   (builtins.attrNames windowSystems);
 # check that every given backend is valid
 assert builtins.all
@@ -65,28 +48,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HP9W9US9e3YAXwCqiHV8NVqrO20SfQKcW3a6+r1XrIs=";
   };
 
-  mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
-    "-Dtest=enabled"
-    "-Dman=enabled"
-  ] ++ backendFlags;
+  mesonFlags =
+    [ "-Dwindows=${withWindowSystem}" "-Dtest=enabled" "-Dman=enabled" ]
+    ++ backendFlags;
 
-  nativeBuildInputs = [
-    asciidoc
-    cmocka
-    docbook_xsl
-    libxslt
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [ asciidoc cmocka docbook_xsl libxslt meson ninja pkg-config ];
 
-  buildInputs = [
-    icu
-    libxkbcommon
-    pango
-    inih
-  ] ++ windowSystems."${withWindowSystem}"
+  buildInputs = [ icu libxkbcommon pango inih ]
+    ++ windowSystems."${withWindowSystem}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''

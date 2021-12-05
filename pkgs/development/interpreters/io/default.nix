@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, sqlite, gmp, libffi, cairo,
-  ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline, libsndfile,
-  libxml2, freeglut, libsamplerate, pcre, libevent, libedit, yajl,
-  python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, sqlite, gmp, libffi
+, cairo, ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline
+, libsndfile, libxml2, freeglut, libsamplerate, pcre, libevent, libedit, yajl
+, python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached }:
 
 stdenv.mkDerivation {
   pname = "io";
@@ -17,21 +16,44 @@ stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       name = "check-for-sysctl-h.patch";
-      url = "https://github.com/IoLanguage/io/pull/446/commits/9f3e4d87b6d4c1bf583134d55d1cf92d3464c49f.patch";
-      sha256 = "9f06073ac17f26c2ef6298143bdd1babe7783c228f9667622aa6c91bb7ec7fa0";
+      url =
+        "https://github.com/IoLanguage/io/pull/446/commits/9f3e4d87b6d4c1bf583134d55d1cf92d3464c49f.patch";
+      sha256 =
+        "9f06073ac17f26c2ef6298143bdd1babe7783c228f9667622aa6c91bb7ec7fa0";
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    zlib sqlite gmp libffi cairo ncurses freetype
-    libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut libsamplerate pcre libevent libedit yajl
-    pkg-config glfw openssl libpthreadstubs libXdmcp
-    libmemcached python3
+    zlib
+    sqlite
+    gmp
+    libffi
+    cairo
+    ncurses
+    freetype
+    libGLU
+    libGL
+    libpng
+    libtiff
+    libjpeg
+    readline
+    libsndfile
+    libxml2
+    freeglut
+    libsamplerate
+    pcre
+    libevent
+    libedit
+    yajl
+    pkg-config
+    glfw
+    openssl
+    libpthreadstubs
+    libXdmcp
+    libmemcached
+    python3
   ];
 
   preConfigure = ''
@@ -62,11 +84,7 @@ stdenv.mkDerivation {
     homepage = "https://iolanguage.org/";
     license = licenses.bsd3;
 
-    maintainers = with maintainers; [
-      raskin
-      maggesi
-      vrthra
-    ];
+    maintainers = with maintainers; [ raskin maggesi vrthra ];
     platforms = [ "x86_64-linux" ];
   };
 }

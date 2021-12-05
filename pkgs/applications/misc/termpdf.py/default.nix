@@ -1,17 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fetchPypi
-, bibtool
-, pybtex
-, pymupdf
-, pynvim
-, pyperclip
-, roman
-, pdfrw
-, pagelabels
-, setuptools
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, fetchPypi, bibtool, pybtex
+, pymupdf, pynvim, pyperclip, roman, pdfrw, pagelabels, setuptools }:
 
 buildPythonApplication {
   pname = "termpdf.py";

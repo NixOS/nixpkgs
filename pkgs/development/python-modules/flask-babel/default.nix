@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchPypi
-, flask
-, Babel
-, jinja2
-, pytz
-, speaklater
-}:
+{ lib, buildPythonPackage, python, fetchPypi, flask, Babel, jinja2, pytz
+, speaklater }:
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
@@ -18,13 +10,7 @@ buildPythonPackage rec {
     sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
   };
 
-  propagatedBuildInputs = [
-    flask
-    Babel
-    jinja2
-    pytz
-    speaklater
-  ];
+  propagatedBuildInputs = [ flask Babel jinja2 pytz speaklater ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests

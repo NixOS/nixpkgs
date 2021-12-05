@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.plex;
-in
-{
+let cfg = config.services.plex;
+in {
   options = {
     services.plex = {
       enable = mkEnableOption "Plex Media Server";
@@ -54,7 +52,7 @@ in
 
       extraPlugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of paths to extra plugin bundles to install in Plex's plugin
           directory. Every time the systemd unit for Plex starts up, all of the
@@ -67,7 +65,7 @@ in
 
       extraScanners = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of paths to extra scanners to install in Plex's scanners
           directory.
@@ -123,9 +121,8 @@ in
               echo "Creating initial Plex data directory in: $PLEX_DATADIR"
               install -d -m 0755 -o "${cfg.user}" -g "${cfg.group}" "$PLEX_DATADIR"
             fi
-         '';
-        in
-          "!${preStartScript}";
+          '';
+        in "!${preStartScript}";
 
         ExecStart = "${cfg.package}/bin/plexmediaserver";
         KillSignal = "SIGQUIT";
@@ -134,9 +131,11 @@ in
 
       environment = {
         # Configuration for our FHS userenv script
-        PLEX_DATADIR=cfg.dataDir;
-        PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
-        PLEX_SCANNERS=concatMapStringsSep ":" builtins.toString cfg.extraScanners;
+        PLEX_DATADIR = cfg.dataDir;
+        PLEX_PLUGINS =
+          concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+        PLEX_SCANNERS =
+          concatMapStringsSep ":" builtins.toString cfg.extraScanners;
 
         # The following variables should be set by the FHS userenv script:
         #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
@@ -144,13 +143,13 @@ in
 
         # Allow access to GPU acceleration; the Plex LD_LIBRARY_PATH is added
         # by the FHS userenv script.
-        LD_LIBRARY_PATH="/run/opengl-driver/lib";
+        LD_LIBRARY_PATH = "/run/opengl-driver/lib";
 
-        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
-        PLEX_MEDIA_SERVER_TMPDIR="/tmp";
-        PLEX_MEDIA_SERVER_USE_SYSLOG="true";
-        LC_ALL="en_US.UTF-8";
-        LANG="en_US.UTF-8";
+        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS = "6";
+        PLEX_MEDIA_SERVER_TMPDIR = "/tmp";
+        PLEX_MEDIA_SERVER_USE_SYSLOG = "true";
+        LC_ALL = "en_US.UTF-8";
+        LANG = "en_US.UTF-8";
       };
     };
 
@@ -166,10 +165,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "plex") {
-      plex = {
-        gid = config.ids.gids.plex;
-      };
-    };
+    users.groups =
+      mkIf (cfg.group == "plex") { plex = { gid = config.ids.gids.plex; }; };
   };
 }

@@ -1,11 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-}:
+{ lib, buildPythonPackage, fetchPypi, future }:
 
 buildPythonPackage rec {
-  pname   = "lzstring";
+  pname = "lzstring";
   version = "1.0.4";
 
   src = fetchPypi {
@@ -17,8 +13,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "lz-string for python";
-    homepage    = "https://github.com/gkovacs/lz-string-python";
-    license     = lib.licenses.mit;
+    homepage = "https://github.com/gkovacs/lz-string-python";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ obadz ];
   };
 }

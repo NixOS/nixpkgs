@@ -17,9 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/task" ];
 
-  ldflags = [
-    "-s" "-w" "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
     ln -s $out/bin/task $out/bin/go-task

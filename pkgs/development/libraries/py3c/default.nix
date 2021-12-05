@@ -18,16 +18,11 @@ stdenv.mkDerivation rec {
       --replace "'-Werror', " ""
   '';
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   doCheck = true;
 
-  checkInputs = [
-    python2
-    python3
-  ];
+  checkInputs = [ python2 python3 ];
 
   meta = with lib; {
     homepage = "https://github.com/encukou/py3c";

@@ -1,5 +1,4 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, uvloop, postgresql }:
+{ lib, isPy3k, fetchPypi, buildPythonPackage, uvloop, postgresql }:
 
 buildPythonPackage rec {
   pname = "asyncpg";
@@ -11,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-3S+gY8M0SCNIfZ3cy0CALwJiLd+L+KbMU4he56LBwMY=";
   };
 
-  checkInputs = [
-    uvloop
-    postgresql
-  ];
+  checkInputs = [ uvloop postgresql ];
 
   pythonImportsCheck = [ "asyncpg" ];
 

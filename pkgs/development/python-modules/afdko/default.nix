@@ -1,10 +1,7 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
-, fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
-, brotli, fontmath, mutatormath, booleanoperations
-, ufoprocessor, ufonormalizer, psautohint, tqdm
-, setuptools-scm
-, pytestCheckHook
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, fonttools
+, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens, brotli, fontmath
+, mutatormath, booleanoperations, ufoprocessor, ufonormalizer, psautohint, tqdm
+, setuptools-scm, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "afdko";
@@ -22,12 +19,14 @@ buildPythonPackage rec {
     # https://github.com/adobe-type-tools/afdko/pull/1232
     # https://github.com/NixOS/nixpkgs/pull/98158#issuecomment-704321117
     (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/2c36ad10f9d964759f643e8ed7b0972a27aa26bd.patch";
+      url =
+        "https://github.com/adobe-type-tools/afdko/commit/2c36ad10f9d964759f643e8ed7b0972a27aa26bd.patch";
       sha256 = "0p6a485mmzrbfldfbhgfghsypfiad3cabcw7qlw2rh993ivpnibf";
     })
     # fix tests for fonttools 4.21.1
     (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/0919e7454a0a05a1b141c23bf8134c67e6b688fc.patch";
+      url =
+        "https://github.com/adobe-type-tools/afdko/commit/0919e7454a0a05a1b141c23bf8134c67e6b688fc.patch";
       sha256 = "0glly85swyl1kcc0mi8i0w4bm148bb001jz1winz5drfrw3a63jp";
     })
   ];
@@ -37,11 +36,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     booleanoperations
     fonttools
-    lxml           # fonttools[lxml], defcon[lxml] extra
-    fs             # fonttools[ufo] extra
-    unicodedata2   # fonttools[unicode] extra
-    brotlipy       # fonttools[woff] extra
-    zopfli         # fonttools[woff] extra
+    lxml # fonttools[lxml], defcon[lxml] extra
+    fs # fonttools[ufo] extra
+    unicodedata2 # fonttools[unicode] extra
+    brotlipy # fonttools[woff] extra
+    zopfli # fonttools[woff] extra
     fontpens
     brotli
     defcon

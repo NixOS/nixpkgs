@@ -1,13 +1,17 @@
 { lib, stdenv, fetchurl, kernel }:
 
-let
-  srcs = import (./srcs.nix) { inherit fetchurl; };
-in
-stdenv.mkDerivation rec {
+let srcs = import (./srcs.nix) { inherit fetchurl; };
+in stdenv.mkDerivation rec {
   pname = "mxu11x0";
 
-  src = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.src else srcs.mxu11x0_4.src;
-  mxu_version = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
+  src = if lib.versionAtLeast kernel.version "5.0" then
+    srcs.mxu11x0_5.src
+  else
+    srcs.mxu11x0_4.src;
+  mxu_version = if lib.versionAtLeast kernel.version "5.0" then
+    srcs.mxu11x0_5.version
+  else
+    srcs.mxu11x0_4.version;
 
   version = mxu_version + "-${kernel.version}";
 
@@ -31,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";
-    homepage = "https://www.moxa.com/en/products/industrial-edge-connectivity/usb-to-serial-converters-usb-hubs/usb-to-serial-converters/uport-1000-series";
+    homepage =
+      "https://www.moxa.com/en/products/industrial-edge-connectivity/usb-to-serial-converters-usb-hubs/usb-to-serial-converters/uport-1000-series";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;

@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "20180721";
+let version = "20180721";
 in fetchFromGitHub {
   name = "ia-writer-duospace-${version}";
 

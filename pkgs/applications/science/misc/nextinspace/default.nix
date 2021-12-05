@@ -9,11 +9,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1h3dksxyy5gq071fa7i2p73s50918y1bkk38hgfwr4226c3wipvg";
   };
 
-  pythonPath = with python3Packages; [
-    requests
-    tzlocal
-    colorama
-  ];
+  pythonPath = with python3Packages; [ requests tzlocal colorama ];
 
   meta = with lib; {
     description = "Print upcoming space-related events in your terminal";

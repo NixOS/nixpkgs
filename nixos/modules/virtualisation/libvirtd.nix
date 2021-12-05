@@ -123,30 +123,49 @@ let
       };
     };
   };
-in
-{
+in {
 
   imports = [
     (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
       "Set the option `virtualisation.libvirtd.qemu.package' instead.")
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "package" ])
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuRunAsRoot" ]
-      [ "virtualisation" "libvirtd" "qemu" "runAsRoot" ])
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuVerbatimConfig" ]
-      [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ])
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmf" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "package" ])
-    (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuSwtpm" ]
-      [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
+    (mkRenamedOptionModule [ "virtualisation" "libvirtd" "qemuPackage" ] [
+      "virtualisation"
+      "libvirtd"
+      "qemu"
+      "package"
+    ])
+    (mkRenamedOptionModule [ "virtualisation" "libvirtd" "qemuRunAsRoot" ] [
+      "virtualisation"
+      "libvirtd"
+      "qemu"
+      "runAsRoot"
+    ])
+    (mkRenamedOptionModule [
+      "virtualisation"
+      "libvirtd"
+      "qemuVerbatimConfig"
+    ] [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ])
+    (mkRenamedOptionModule [ "virtualisation" "libvirtd" "qemuOvmf" ] [
+      "virtualisation"
+      "libvirtd"
+      "qemu"
+      "ovmf"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "virtualisation" "libvirtd" "qemuOvmfPackage" ] [
+      "virtualisation"
+      "libvirtd"
+      "qemu"
+      "ovmf"
+      "package"
+    ])
+    (mkRenamedOptionModule [ "virtualisation" "libvirtd" "qemuSwtpm" ] [
+      "virtualisation"
+      "libvirtd"
+      "qemu"
+      "swtpm"
+      "enable"
+    ])
   ];
 
   ###### interface
@@ -231,7 +250,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -239,21 +257,26 @@ in
     assertions = [
       {
         assertion = config.security.polkit.enable;
-        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+        message =
+          "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
       }
       {
         assertion = builtins.elem "fd" cfg.qemu.ovmf.package.outputs;
-        message = "The option 'virtualisation.libvirtd.qemuOvmfPackage' needs a package that has an 'fd' output.";
+        message =
+          "The option 'virtualisation.libvirtd.qemuOvmfPackage' needs a package that has an 'fd' output.";
       }
     ];
 
     environment = {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
-      etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n"
-        (e:
-          "allow ${e}")
-        cfg.allowedBridges;
-      systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
+      etc."qemu/bridge.conf".text =
+        lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
+      systemPackages = with pkgs; [
+        libressl.nc
+        iptables
+        cfg.package
+        cfg.qemu.package
+      ];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
@@ -323,16 +346,15 @@ in
       after = [ "libvirtd-config.service" ]
         ++ optional vswitch.enable "ovs-vswitchd.service";
 
-      environment.LIBVIRTD_ARGS = escapeShellArgs (
-        [
-          "--config"
-          configFile
-          "--timeout"
-          "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
-        ] ++ cfg.extraOptions
-      );
+      environment.LIBVIRTD_ARGS = escapeShellArgs ([
+        "--config"
+        configFile
+        "--timeout"
+        "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
+      ] ++ cfg.extraOptions);
 
-      path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
+      path =
+        [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
         ++ optional vswitch.enable vswitch.package
         ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 

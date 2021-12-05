@@ -18,7 +18,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (kernel.meta) homepage license;
 
-    description = "Free-fall protection for spinning HP/Dell laptop hard drives";
+    description =
+      "Free-fall protection for spinning HP/Dell laptop hard drives";
     longDescription = ''
       Provides a shock protection facility in modern laptops with spinning hard
       drives, by stopping all input/output operations on the internal hard drive

@@ -1,14 +1,10 @@
-import ../make-test-python.nix (
-  { pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, ... }:
   let
     pantalaimonInstanceName = "testing";
 
     # Set up SSL certs for Synapse to be happy.
-    runWithOpenSSL = file: cmd: pkgs.runCommand file
-      {
-        buildInputs = [ pkgs.openssl ];
-      }
-      cmd;
+    runWithOpenSSL = file: cmd:
+      pkgs.runCommand file { buildInputs = [ pkgs.openssl ]; } cmd;
 
     ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
     ca_pem = runWithOpenSSL "ca.pem" ''
@@ -29,12 +25,9 @@ import ../make-test-python.nix (
         -CAcreateserial -out $out \
         -days 365
     '';
-  in
-  {
+  in {
     name = "pantalaimon";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
-    };
+    meta = with pkgs.lib; { maintainers = teams.matrix.members; };
 
     machine = { pkgs, ... }: {
       services.pantalaimon-headless.instances.${pantalaimonInstanceName} = {
@@ -61,5 +54,4 @@ import ../make-test-python.nix (
           "curl --fail -L http://localhost:8888/"
       )
     '';
-  }
-)
+  })

@@ -1,7 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "tridactyl-native";
@@ -17,9 +14,7 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "source/native";
 
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-  ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
 
   buildPhase = ''
     sed -i -e "s|REPLACE_ME_WITH_SED|$out/share/tridactyl/native_main.py|" "tridactyl.json"

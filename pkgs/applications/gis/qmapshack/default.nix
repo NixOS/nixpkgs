@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, substituteAll
-, qtscript, qttranslations, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, substituteAll, qtscript
+, qttranslations, qtwebengine, gdal, proj, routino, quazip }:
 
 mkDerivation rec {
   pname = "qmapshack";
@@ -24,13 +24,9 @@ mkDerivation rec {
 
   buildInputs = [ qtscript qtwebengine gdal proj routino quazip ];
 
-  cmakeFlags = [
-    "-DROUTINO_XML_PATH=${routino}/share/routino"
-  ];
+  cmakeFlags = [ "-DROUTINO_XML_PATH=${routino}/share/routino" ];
 
-  qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ gdal routino ]}"
-  ];
+  qtWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ gdal routino ]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/Maproom/qmapshack";

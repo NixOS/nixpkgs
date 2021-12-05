@@ -1,9 +1,4 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "iso3166";
@@ -19,13 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "iso3166"
-  ];
+  pythonImportsCheck = [ "iso3166" ];
 
   meta = with lib; {
     description = "Self-contained ISO 3166-1 country definitions";

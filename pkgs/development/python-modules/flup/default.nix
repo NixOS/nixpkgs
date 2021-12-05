@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-}:
+{ lib, buildPythonPackage, isPy3k, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "flup";

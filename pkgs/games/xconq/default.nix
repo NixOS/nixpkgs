@@ -7,12 +7,24 @@ stdenv.mkDerivation rec {
   version = "7.5.0-0pre.0.20050612";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${baseName}/${baseName}/${name}/${name}.tar.gz";
+    url =
+      "mirror://sourceforge/project/${baseName}/${baseName}/${name}/${name}.tar.gz";
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
-  buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
-    fontconfig makeWrapper ];
+  buildInputs = [
+    cpio
+    xorgproto
+    libX11
+    libXmu
+    libXaw
+    libXt
+    tcl
+    tk
+    libXext
+    fontconfig
+    makeWrapper
+  ];
 
   configureFlags = [
     "--enable-alternate-scoresdir=scores"

@@ -1,6 +1,5 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pandas, shapely, fiona, pyproj
-, pytestCheckHook, Rtree }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, pandas, shapely
+, fiona, pyproj, pytestCheckHook, Rtree }:
 
 buildPythonPackage rec {
   pname = "geopandas";
@@ -14,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "14azl3gppqn90k8h4hpjilsivj92k6p1jh7mdr6p4grbww1b7sdq";
   };
 
-  propagatedBuildInputs = [
-    pandas
-    shapely
-    fiona
-    pyproj
-  ];
+  propagatedBuildInputs = [ pandas shapely fiona pyproj ];
 
   doCheck = !stdenv.isDarwin;
   preCheck = ''

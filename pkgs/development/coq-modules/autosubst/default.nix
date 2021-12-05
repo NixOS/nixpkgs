@@ -4,13 +4,15 @@ with lib;
 mkCoqDerivation {
   pname = "autosubst";
 
-  release."1.7".rev    = "v1.7";
+  release."1.7".rev = "v1.7";
   release."1.7".sha256 = "sha256-qoyteQ5W2Noxf12uACOVeHhPLvgmTzrvEo6Ts+FKTGI=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.10"; out = "1.7"; }
-  ] null;
+  defaultVersion = with versions;
+    switch coq.coq-version [{
+      case = isGe "8.10";
+      out = "1.7";
+    }] null;
 
   propagatedBuildInputs = [ mathcomp-ssreflect ];
 

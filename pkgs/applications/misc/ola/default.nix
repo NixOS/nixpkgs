@@ -1,18 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, pkg-config
-, libuuid
-, cppunit
-, protobuf
-, zlib
-, avahi
-, libmicrohttpd
-, perl
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkg-config, libuuid
+, cppunit, protobuf, zlib, avahi, libmicrohttpd, perl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ola";
@@ -27,17 +14,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config perl ];
   buildInputs = [ libuuid cppunit protobuf zlib avahi libmicrohttpd python3 ];
-  propagatedBuildInputs = [
-    python3.pkgs.protobuf
-    python3.pkgs.numpy
-  ];
+  propagatedBuildInputs = [ python3.pkgs.protobuf python3.pkgs.numpy ];
 
   configureFlags = [ "--enable-python-libs" ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A framework for controlling entertainment lighting equipment";
+    description =
+      "A framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
     maintainers = with maintainers; [ globin ];
     license = with licenses; [ lgpl21 gpl2Plus ];

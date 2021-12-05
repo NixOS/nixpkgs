@@ -7,7 +7,10 @@ let
 
   runtime' = filter (f: f.enable) (attrValues cfg.runtime);
 
-  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
+  runtime = pkgs.linkFarm "neovim-runtime" (map (x: {
+    name = x.target;
+    path = x.source;
+  }) runtime');
 
 in {
   options.programs.neovim = {
@@ -58,7 +61,7 @@ in {
 
     configure = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           customRC = '''
@@ -93,7 +96,7 @@ in {
     };
 
     runtime = mkOption {
-      default = {};
+      default = { };
       example = literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
@@ -101,9 +104,9 @@ in {
         Set of files that have to be linked in <filename>runtime</filename>.
       '';
 
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        { options = {
+      type = with types;
+        attrsOf (submodule ({ name, config, ... }: {
+          options = {
 
             enable = mkOption {
               type = types.bool;
@@ -137,8 +140,8 @@ in {
 
           config = {
             target = mkDefault name;
-            source = mkIf (config.text != null) (
-              let name' = "neovim-runtime" + baseNameOf name;
+            source = mkIf (config.text != null)
+              (let name' = "neovim-runtime" + baseNameOf name;
               in mkDefault (pkgs.writeText name' config.text));
           };
 
@@ -148,10 +151,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      cfg.finalPackage
-    ];
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
+    environment.systemPackages = [ cfg.finalPackage ];
+    environment.variables.EDITOR =
+      mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
       inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;

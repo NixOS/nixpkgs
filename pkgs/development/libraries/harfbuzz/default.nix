@@ -1,37 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, freetype
-, fontconfig
-, libintl
-, meson
-, ninja
-, gobject-introspection
-, icu
-, graphite2
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, freetype, fontconfig, libintl
+, meson, ninja, gobject-introspection, icu, graphite2
 , harfbuzz # The icu variant uses and propagates the non-icu one.
-, ApplicationServices
-, CoreText
-, withCoreText ? false
-, withIcu ? false # recommended by upstream as default, but most don't needed and it's big
+, ApplicationServices, CoreText, withCoreText ? false, withIcu ?
+  false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
-, python3
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-}:
+, python3, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43 }:
 
 let
   version = "3.0.0";
   inherit (lib) optional optionals optionalString;
-  mesonFeatureFlag = opt: b:
-    "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
   isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 

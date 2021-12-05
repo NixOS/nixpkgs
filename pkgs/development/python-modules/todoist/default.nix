@@ -1,6 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, pythonOlder, typing
-}:
+{ lib, fetchPypi, buildPythonPackage, requests, pythonOlder, typing }:
 
 buildPythonPackage rec {
   pname = "todoist-python";
@@ -11,7 +9,8 @@ buildPythonPackage rec {
     sha256 = "sha256-AFRKA5VRD6jyiguZYP7WOQOWqHq1GjUzbuez0f1070U=";
   };
 
-  propagatedBuildInputs = [ requests ] ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ requests ]
+    ++ lib.optional (pythonOlder "3.5") typing;
 
   meta = with lib; {
     description = "The official Todoist Python API library";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, capstone
-, stdenv
-, setuptools
-}:
+{ lib, buildPythonPackage, capstone, stdenv, setuptools }:
 
 buildPythonPackage rec {
   pname = "capstone";

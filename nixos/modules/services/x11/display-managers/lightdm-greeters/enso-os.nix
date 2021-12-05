@@ -118,11 +118,7 @@ in {
   config = mkIf (ldmcfg.enable && cfg.enable) {
     environment.etc."lightdm/greeter.conf".source = ensoGreeterConf;
 
-    environment.systemPackages = [
-      cursors
-      icons
-      theme
-    ];
+    environment.systemPackages = [ cursors icons theme ];
 
     services.xserver.displayManager.lightdm = {
       greeter = mkDefault {
@@ -130,11 +126,7 @@ in {
         name = "pantheon-greeter";
       };
 
-      greeters = {
-        gtk = {
-          enable = mkDefault false;
-        };
-      };
+      greeters = { gtk = { enable = mkDefault false; }; };
     };
   };
 }

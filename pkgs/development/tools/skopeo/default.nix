@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, gpgme
-, lvm2
-, btrfs-progs
-, pkg-config
-, go-md2man
-, installShellFiles
-, makeWrapper
-, fuse-overlayfs
-}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, gpgme, lvm2, btrfs-progs
+, pkg-config, go-md2man, installShellFiles, makeWrapper, fuse-overlayfs }:
 
 buildGoModule rec {
   pname = "skopeo";
@@ -31,8 +20,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
-  buildInputs = [ gpgme ]
-  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
     runHook preBuild
@@ -54,7 +42,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A command line utility for various operations on container images and image repositories";
+    description =
+      "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
     maintainers = with maintainers; [ lewo ] ++ teams.podman.members;
     license = licenses.asl20;

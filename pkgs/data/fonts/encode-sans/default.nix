@@ -3,7 +3,8 @@
 fetchzip rec {
   name = "encode-sans-1.002";
 
-  url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
+  url =
+    "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}

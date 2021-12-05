@@ -1,15 +1,11 @@
 let
-  clients = [
-    "ircclient1"
-    "ircclient2"
-  ];
+  clients = [ "ircclient1" "ircclient2" ];
   server = "inspircd";
   ircPort = 6667;
   channel = "nixos-cat";
   iiDir = "/tmp/irc";
-in
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+in import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "inspircd";
   nodes = {
     "${server}" = {
@@ -23,30 +19,29 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         '';
       };
     };
-  } // lib.listToAttrs (builtins.map (client: lib.nameValuePair client {
-    imports = [
-      ./common/user-account.nix
-    ];
+  } // lib.listToAttrs (builtins.map (client:
+    lib.nameValuePair client {
+      imports = [ ./common/user-account.nix ];
 
-    systemd.services.ii = {
-      requires = [ "network.target" ];
-      wantedBy = [ "default.target" ];
+      systemd.services.ii = {
+        requires = [ "network.target" ];
+        wantedBy = [ "default.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        ExecPreStartPre = "mkdir -p ${iiDir}";
-        ExecStart = ''
-          ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
-        '';
-        User = "alice";
+        serviceConfig = {
+          Type = "simple";
+          ExecPreStartPre = "mkdir -p ${iiDir}";
+          ExecStart = ''
+            ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
+          '';
+          User = "alice";
+        };
       };
-    };
-  }) clients);
+    }) clients);
 
-  testScript =
-    let
-      msg = client: "Hello, my name is ${client}";
-      clientScript = client: [
+  testScript = let
+    msg = client: "Hello, my name is ${client}";
+    clientScript = client:
+      [
         ''
           ${client}.wait_for_unit("network.target")
           ${client}.systemctl("start ii")
@@ -76,18 +71,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         )
       '') clients;
 
-      # foldl', but requires a non-empty list instead of a start value
-      reduce = f: list:
-        builtins.foldl' f (builtins.head list) (builtins.tail list);
-    in ''
-      start_all()
-      ${server}.wait_for_open_port(${toString ircPort})
+    # foldl', but requires a non-empty list instead of a start value
+    reduce = f: list:
+      builtins.foldl' f (builtins.head list) (builtins.tail list);
+  in ''
+    start_all()
+    ${server}.wait_for_open_port(${toString ircPort})
 
-      # run clientScript for all clients so that every list
-      # entry is executed by every client before advancing
-      # to the next one.
-    '' + lib.concatStrings
-      (reduce
-        (lib.zipListsWith (cs: c: cs + c))
-        (builtins.map clientScript clients));
+    # run clientScript for all clients so that every list
+    # entry is executed by every client before advancing
+    # to the next one.
+  '' + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c))
+    (builtins.map clientScript clients));
 })

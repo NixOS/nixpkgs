@@ -1,25 +1,14 @@
-{ stdenv
-, fetchurl
-, fontconfig
-, freetype
-, lib
-, libICE
-, libSM
-, udev
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXrandr
-, libXrender
-}:
+{ stdenv, fetchurl, fontconfig, freetype, lib, libICE, libSM, udev, libX11
+, libXcursor, libXext, libXfixes, libXrandr, libXrender }:
 
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
   version = "3.22a";
 
   src = fetchurl {
-    url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${(lib.replaceChars ["."] [""] version)}_x86_64.tgz";
+    url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+        (lib.replaceChars [ "." ] [ "" ] version)
+      }_x86_64.tgz";
     sha256 = "0v1r8qvp1w2f3yip9fys004pa0smlmq69p7w77lfvghs1rmg1649";
   };
 
@@ -35,8 +24,7 @@ stdenv.mkDerivation rec {
     libXfixes
     libXrandr
     libXrender
-  ]
-  + ":${stdenv.cc.cc.lib}/lib64";
+  ] + ":${stdenv.cc.cc.lib}/lib64";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -76,7 +64,8 @@ stdenv.mkDerivation rec {
       GCC, Clang, ARM, IAR. Output of other compilers may be supported but is
       not guaranteed to be.
     '';
-    homepage = "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
+    homepage =
+      "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
     license = licenses.unfree;
     maintainers = [ maintainers.bmilanov ];
     platforms = [ "x86_64-linux" ];

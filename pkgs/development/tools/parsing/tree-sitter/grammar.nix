@@ -1,19 +1,14 @@
-{ stdenv
-, tree-sitter
-, lib
-}:
+{ stdenv, tree-sitter, lib }:
 
 # Build a parser grammar and put the resulting shared object in `$out/parser`
 
 {
-  # language name
-  language
-  # version of tree-sitter
+# language name
+language
+# version of tree-sitter
 , version
-  # source for the language grammar
-, source
-, location ? null
-}:
+# source for the language grammar
+, source, location ? null }:
 
 stdenv.mkDerivation rec {
 

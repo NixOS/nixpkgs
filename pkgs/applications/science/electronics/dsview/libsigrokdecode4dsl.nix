@@ -1,6 +1,4 @@
-{ lib, stdenv, pkg-config, autoreconfHook,
-glib, check, python3, dsview
-}:
+{ lib, stdenv, pkg-config, autoreconfHook, glib, check, python3, dsview }:
 
 stdenv.mkDerivation {
   inherit (dsview) version src;
@@ -13,9 +11,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = [
-    python3 glib check
-  ];
+  buildInputs = [ python3 glib check ];
 
   meta = with lib; {
     description = "A fork of the sigrokdecode library for usage with DSView";

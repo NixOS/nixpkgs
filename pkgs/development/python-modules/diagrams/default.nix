@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, black
-, jinja2
-, poetry-core
-, round
-, graphviz
-, inkscape
-, imagemagick
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, black, jinja2
+, poetry-core, round, graphviz, inkscape, imagemagick, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "diagrams";
@@ -53,8 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
   };
 }

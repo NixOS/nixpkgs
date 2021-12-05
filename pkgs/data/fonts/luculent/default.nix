@@ -1,9 +1,9 @@
 { lib, fetchzip }:
 
-let version = "2.0.0"; in
-fetchzip {
+let version = "2.0.0";
+in fetchzip {
   name = "luculent-${version}";
-  url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
+  url = "http://www.eastfarthing.com/luculent/luculent.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1

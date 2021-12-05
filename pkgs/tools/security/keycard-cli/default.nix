@@ -17,9 +17,7 @@ buildGoPackage rec {
     sha256 = "sha256-ejFvduZs3eWc6efr9o4pXb6qw2QWWQTtkTxF80vOGNU=";
   };
 
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "A command line tool and shell to manage keycards";

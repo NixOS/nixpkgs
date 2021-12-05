@@ -1,54 +1,33 @@
-/* String manipulation functions. */
+# String manipulation functions.
 { lib }:
 let
 
-inherit (builtins) length;
+  inherit (builtins) length;
 
-in
-
-rec {
+in rec {
 
   inherit (builtins)
-    compareVersions
-    elem
-    elemAt
-    filter
-    fromJSON
-    head
-    isInt
-    isList
-    isString
-    match
-    parseDrvName
-    readFile
-    replaceStrings
-    split
-    storeDir
-    stringLength
-    substring
-    tail
-    toJSON
-    typeOf
-    unsafeDiscardStringContext
-    ;
+    compareVersions elem elemAt filter fromJSON head isInt isList isString match
+    parseDrvName readFile replaceStrings split storeDir stringLength substring
+    tail toJSON typeOf unsafeDiscardStringContext;
 
   /* Concatenate a list of strings.
 
-    Type: concatStrings :: [string] -> string
+     Type: concatStrings :: [string] -> string
 
-     Example:
-       concatStrings ["foo" "bar"]
-       => "foobar"
+      Example:
+        concatStrings ["foo" "bar"]
+        => "foobar"
   */
   concatStrings = builtins.concatStringsSep "";
 
   /* Map a function over a list and concatenate the resulting strings.
 
-    Type: concatMapStrings :: (a -> string) -> [a] -> string
+     Type: concatMapStrings :: (a -> string) -> [a] -> string
 
-     Example:
-       concatMapStrings (x: "a" + x) ["foo" "bar"]
-       => "afooabar"
+      Example:
+        concatMapStrings (x: "a" + x) ["foo" "bar"]
+        => "afooabar"
   */
   concatMapStrings = f: list: concatStrings (map f list);
 
@@ -76,9 +55,10 @@ rec {
     separator:
     # Input list
     list:
-    if list == [] || length list == 1
-    then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    if list == [ ] || length list == 1 then
+      list
+    else
+      tail (lib.concatMap (x: [ separator x ]) list);
 
   /* Concatenate a list of strings with a separator between each element
 
@@ -107,7 +87,8 @@ rec {
     # Function to map over the list
     f:
     # List of input strings
-    list: concatStringsSep sep (map f list);
+    list:
+    concatStringsSep sep (map f list);
 
   /* Same as `concatMapStringsSep`, but the mapping function
      additionally receives the position of its argument.
@@ -124,7 +105,8 @@ rec {
     # Function that receives elements and their positions
     f:
     # List of input strings
-    list: concatStringsSep sep (lib.imap1 f list);
+    list:
+    concatStringsSep sep (lib.imap1 f list);
 
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
@@ -142,7 +124,8 @@ rec {
     subDir:
     # List of base paths
     paths:
-    concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
+    concatStringsSep ":"
+    (map (path: path + "/" + subDir) (filter (x: x != null) paths));
 
   /* Construct a Unix-style search path by appending the given
      `subDir` to the specified `output` of each of the packages. If no
@@ -161,7 +144,8 @@ rec {
     # Directory name to append
     subDir:
     # List of packages
-    pkgs: makeSearchPath subDir (map (lib.getOutput output) pkgs);
+    pkgs:
+    makeSearchPath subDir (map (lib.getOutput output) pkgs);
 
   /* Construct a library search path (such as RPATH) containing the
      libraries for a set of packages
@@ -199,7 +183,8 @@ rec {
     # Condition
     cond:
     # String to return if condition is true
-    string: if cond then string else "";
+    string:
+    if cond then string else "";
 
   /* Determine whether a string has given prefix.
 
@@ -215,7 +200,8 @@ rec {
     # Prefix to check for
     pref:
     # Input string
-    str: substring 0 (stringLength pref) str == pref;
+    str:
+    substring 0 (stringLength pref) str == pref;
 
   /* Determine whether a string has given suffix.
 
@@ -235,28 +221,27 @@ rec {
     let
       lenContent = stringLength content;
       lenSuffix = stringLength suffix;
-    in lenContent >= lenSuffix &&
-       substring (lenContent - lenSuffix) lenContent content == suffix;
+    in lenContent >= lenSuffix
+    && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /* Determine whether a string contains the given infix
 
-    Type: hasInfix :: string -> string -> bool
+     Type: hasInfix :: string -> string -> bool
 
-    Example:
-      hasInfix "bc" "abcd"
-      => true
-      hasInfix "ab" "abcd"
-      => true
-      hasInfix "cd" "abcd"
-      => true
-      hasInfix "foo" "abcd"
-      => false
+     Example:
+       hasInfix "bc" "abcd"
+       => true
+       hasInfix "ab" "abcd"
+       => true
+       hasInfix "cd" "abcd"
+       => true
+       hasInfix "foo" "abcd"
+       => false
   */
   hasInfix = infix: content:
-    let
-      drop = x: substring 1 (stringLength x) x;
-    in hasPrefix infix content
-      || content != "" && hasInfix infix (drop content);
+    let drop = x: substring 1 (stringLength x) x;
+    in hasPrefix infix content || content != ""
+    && hasInfix infix (drop content);
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -292,9 +277,8 @@ rec {
     # Function to map over each individual character
     f:
     # Input string
-    s: concatStrings (
-      map f (stringToCharacters s)
-    );
+    s:
+    concatStrings (map f (stringToCharacters s));
 
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
@@ -315,7 +299,8 @@ rec {
        escapeShellArg "esc'ape\nme"
        => "'esc'\\''ape\nme'"
   */
-  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
+  escapeShellArg = arg:
+    "'${replaceStrings [ "'" ] [ "'\\''" ] (toString arg)}'";
 
   /* Quote all arguments to be safely passed to the Bourne shell.
 
@@ -335,7 +320,7 @@ rec {
        escapeNixString "hello\${}\n"
        => "\"hello\\\${}\\n\""
   */
-  escapeNixString = s: escape ["$"] (toJSON s);
+  escapeNixString = s: escape [ "$" ] (toJSON s);
 
   /* Turn a string into an exact regular expression
 
@@ -359,8 +344,7 @@ rec {
   */
   escapeNixIdentifier = s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
-    then s else escapeNixString s;
+    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null then s else escapeNixString s;
 
   /* Escapes a string such that it is safe to include verbatim in an XML
      document.
@@ -371,23 +355,22 @@ rec {
        escapeXML ''"test" 'test' < & >''
        => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
   */
-  escapeXML = builtins.replaceStrings
-    ["\"" "'" "<" ">" "&"]
-    ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
+  escapeXML = builtins.replaceStrings [ ''"'' "'" "<" ">" "&" ] [
+    "&quot;"
+    "&apos;"
+    "&lt;"
+    "&gt;"
+    "&amp;"
+  ];
 
   # Obsolete - use replaceStrings instead.
-  replaceChars = builtins.replaceStrings or (
-    del: new: s:
+  replaceChars = builtins.replaceStrings or (del: new: s:
     let
       substList = lib.zipLists del new;
       subst = c:
-        let found = lib.findFirst (sub: sub.fst == c) null substList; in
-        if found == null then
-          c
-        else
-          found.snd;
-    in
-      stringAsChars subst s);
+        let found = lib.findFirst (sub: sub.fst == c) null substList;
+        in if found == null then c else found.snd;
+    in stringAsChars subst s);
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -441,9 +424,9 @@ rec {
     let
       sep = builtins.unsafeDiscardStringContext _sep;
       s = builtins.unsafeDiscardStringContext _s;
-      splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
-    in
-      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
+      splits =
+        builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
+    in map (v: addContextFrom _sep (addContextFrom _s v)) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
@@ -463,11 +446,10 @@ rec {
     let
       preLen = stringLength prefix;
       sLen = stringLength str;
-    in
-      if hasPrefix prefix str then
-        substring preLen (sLen - preLen) str
-      else
-        str;
+    in if hasPrefix prefix str then
+      substring preLen (sLen - preLen) str
+    else
+      str;
 
   /* Return a string without the specified suffix, if the suffix matches.
 
@@ -487,11 +469,10 @@ rec {
     let
       sufLen = stringLength suffix;
       sLen = stringLength str;
-    in
-      if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
-        substring 0 (sLen - sufLen) str
-      else
-        str;
+    in if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
+      substring 0 (sLen - sufLen) str
+    else
+      str;
 
   /* Return true if string v1 denotes a version older than v2.
 
@@ -526,11 +507,8 @@ rec {
        => "youtube-dl"
   */
   getName = x:
-   let
-     parse = drv: (parseDrvName drv).name;
-   in if isString x
-      then parse x
-      else x.pname or (parse x.name);
+    let parse = drv: (parseDrvName drv).name;
+    in if isString x then parse x else x.pname or (parse x.name);
 
   /* This function takes an argument that's either a derivation or a
      derivation's "name" attribute and extracts the version part from that
@@ -543,11 +521,8 @@ rec {
        => "2016.01.01"
   */
   getVersion = x:
-   let
-     parse = drv: (parseDrvName drv).version;
-   in if isString x
-      then parse x
-      else x.version or (parse x.name);
+    let parse = drv: (parseDrvName drv).version;
+    in if isString x then parse x else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
@@ -587,7 +562,8 @@ rec {
        enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
-  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+  enableFeatureAs = enable: feat: value:
+    enableFeature enable feat + optionalString enable "=${value}";
 
   /* Create an --{with,without}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
@@ -611,7 +587,8 @@ rec {
        withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
-  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+  withFeatureAs = with_: feat: value:
+    withFeature with_ feat + optionalString with_ "=${value}";
 
   /* Create a fixed width string with additional prefix to match
      required width.
@@ -629,12 +606,14 @@ rec {
     let
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
-    in
-      assert lib.assertMsg (strw <= width)
-        "fixedWidthString: requested string length (${
-          toString width}) must not be shorter than actual length (${
-            toString strw})";
-      if strw == width then str else filler + fixedWidthString reqWidth filler str;
+    in assert lib.assertMsg (strw <= width)
+      "fixedWidthString: requested string length (${
+        toString width
+      }) must not be shorter than actual length (${toString strw})";
+    if strw == width then
+      str
+    else
+      filler + fixedWidthString reqWidth filler str;
 
   /* Format a number adding leading zeroes up to fixed width.
 
@@ -654,18 +633,18 @@ rec {
        => trace: warning: Imprecise conversion from float to string 0.000000
           "0.000000"
   */
-  floatToString = float: let
-    result = toString float;
-    precise = float == fromJSON result;
-  in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
-    result;
+  floatToString = float:
+    let
+      result = toString float;
+      precise = float == fromJSON result;
+    in lib.warnIf (!precise)
+    "Imprecise conversion from float to string ${result}" result;
 
-  /* Check whether a value can be coerced to a string */
+  # Check whether a value can be coerced to a string
   isCoercibleToString = x:
-    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (isList x && lib.all isCoercibleToString x) ||
-    x ? outPath ||
-    x ? __toString;
+    elem (typeOf x) [ "path" "string" "null" "int" "float" "bool" ]
+    || (isList x && lib.all isCoercibleToString x) || x ? outPath || x
+    ? __toString;
 
   /* Check whether a value is a store path.
 
@@ -681,9 +660,7 @@ rec {
   */
   isStorePath = x:
     if !(isList x) && isCoercibleToString x then
-      let str = toString x; in
-      substring 0 1 str == "/"
-      && dirOf str == storeDir
+      let str = toString x; in substring 0 1 str == "/" && dirOf str == storeDir
     else
       false;
 
@@ -701,10 +678,11 @@ rec {
   */
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
-    let may_be_int = fromJSON str; in
-    if isInt may_be_int
-    then may_be_int
-    else throw "Could not convert ${str} to int.";
+    let may_be_int = fromJSON str;
+    in if isInt may_be_int then
+      may_be_int
+    else
+      throw "Could not convert ${str} to int.";
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.
@@ -721,15 +699,16 @@ rec {
             "/prefix/nix-profiles-library-paths.patch"
             "/prefix/compose-search-path.patch" ]
   */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+  readPathsFromFile =
+    lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
     (rootPath: file:
       let
         lines = lib.splitString "\n" (readFile file);
-        removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
+        removeComments =
+          lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
         relativePaths = removeComments lines;
         absolutePaths = map (path: rootPath + "/${path}") relativePaths;
-      in
-        absolutePaths);
+      in absolutePaths);
 
   /* Read the contents of a file removing the trailing \n
 
@@ -743,7 +722,6 @@ rec {
   */
   fileContents = file: removeSuffix "\n" (readFile file);
 
-
   /* Creates a valid derivation name from a potentially invalid one.
 
      Type: sanitizeDerivationName :: String -> String
@@ -756,22 +734,23 @@ rec {
        sanitizeDerivationName pkgs.hello
        => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
   */
-  sanitizeDerivationName = string: lib.pipe string [
-    # Get rid of string context. This is safe under the assumption that the
-    # resulting string is only used as a derivation name
-    unsafeDiscardStringContext
-    # Strip all leading "."
-    (x: elemAt (match "\\.*(.*)" x) 0)
-    # Split out all invalid characters
-    # https://github.com/NixOS/nix/blob/2.3.2/src/libstore/store-api.cc#L85-L112
-    # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
-    (split "[^[:alnum:]+._?=-]+")
-    # Replace invalid character ranges with a "-"
-    (concatMapStrings (s: if lib.isList s then "-" else s))
-    # Limit to 211 characters (minus 4 chars for ".drv")
-    (x: substring (lib.max (stringLength x - 207) 0) (-1) x)
-    # If the result is empty, replace it with "unknown"
-    (x: if stringLength x == 0 then "unknown" else x)
-  ];
+  sanitizeDerivationName = string:
+    lib.pipe string [
+      # Get rid of string context. This is safe under the assumption that the
+      # resulting string is only used as a derivation name
+      unsafeDiscardStringContext
+      # Strip all leading "."
+      (x: elemAt (match "\\.*(.*)" x) 0)
+      # Split out all invalid characters
+      # https://github.com/NixOS/nix/blob/2.3.2/src/libstore/store-api.cc#L85-L112
+      # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
+      (split "[^[:alnum:]+._?=-]+")
+      # Replace invalid character ranges with a "-"
+      (concatMapStrings (s: if lib.isList s then "-" else s))
+      # Limit to 211 characters (minus 4 chars for ".drv")
+      (x: substring (lib.max (stringLength x - 207) 0) (-1) x)
+      # If the result is empty, replace it with "unknown"
+      (x: if stringLength x == 0 then "unknown" else x)
+    ];
 
 }

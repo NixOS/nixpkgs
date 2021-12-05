@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "playsound";
@@ -20,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/TaylorSMarks/playsound";
-    description = "Pure Python, cross platform, single function module with no dependencies for playing sounds";
+    description =
+      "Pure Python, cross platform, single function module with no dependencies for playing sounds";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ luc65r ];

@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gtk3
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "usbview";
@@ -17,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1cw5jjpidjn34rxdjslpdlj99k4dqaq1kz6mplv5hgjdddijvn5p";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   meta = with lib; {
     description = "USB viewer for Linux";

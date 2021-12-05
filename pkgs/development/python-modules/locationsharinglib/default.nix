@@ -1,16 +1,5 @@
-{ lib
-, betamax
-, buildPythonPackage
-, cachetools
-, coloredlogs
-, emoji
-, fetchPypi
-, nose
-, python
-, pythonOlder
-, pytz
-, requests
-}:
+{ lib, betamax, buildPythonPackage, cachetools, coloredlogs, emoji, fetchPypi
+, nose, python, pythonOlder, pytz, requests }:
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
@@ -22,18 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
   };
 
-  propagatedBuildInputs = [
-    coloredlogs
-    requests
-    cachetools
-    pytz
-  ];
+  propagatedBuildInputs = [ coloredlogs requests cachetools pytz ];
 
-  checkInputs = [
-    betamax
-    emoji
-    nose
-  ];
+  checkInputs = [ betamax emoji nose ];
 
   postPatch = ''
     # Tests requirements want to pull in multiple modules which we don't need
@@ -53,7 +33,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "locationsharinglib" ];
 
   meta = with lib; {
-    description = "Python package to retrieve coordinates from a Google account";
+    description =
+      "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

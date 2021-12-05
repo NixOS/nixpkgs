@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dataclasses
-, kafka-python
-, cython
-, zlib
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, dataclasses
+, kafka-python, cython, zlib }:
 
 buildPythonPackage rec {
   pname = "aiokafka";
@@ -20,19 +13,12 @@ buildPythonPackage rec {
     sha256 = "sha256-D+91k4zVg28qPbWIrvyXi6WtDs1jeJt9jFGsrSBA3cs=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
-    kafka-python
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = [ kafka-python ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   # checks require running kafka server
   doCheck = false;

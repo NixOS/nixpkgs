@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, python-dateutil
-, fetchFromGitHub
-, fetchpatch
-, mock
-, msgpack
-, nose
-, pandas
-, pytestCheckHook
-, pytz
-, requests
-, requests-mock
-, six
-}:
+{ lib, buildPythonPackage, python-dateutil, fetchFromGitHub, fetchpatch, mock
+, msgpack, nose, pandas, pytestCheckHook, pytz, requests, requests-mock, six }:
 
 buildPythonPackage rec {
   pname = "influxdb";
@@ -25,26 +12,15 @@ buildPythonPackage rec {
     sha256 = "1jfkf53jcf8lcq98qc0bw5d1d0yp3558mh8l2dqc9jlsm0smigjs";
   };
 
-  propagatedBuildInputs = [
-    requests
-    python-dateutil
-    pytz
-    six
-    msgpack
-  ];
+  propagatedBuildInputs = [ requests python-dateutil pytz six msgpack ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests-mock
-    mock
-    nose
-    pandas
-  ];
+  checkInputs = [ pytestCheckHook requests-mock mock nose pandas ];
 
   patches = [
     (fetchpatch {
       # Relaxes msgpack pinning
-      url = "https://github.com/influxdata/influxdb-python/commit/cc41e290f690c4eb67f75c98fa9f027bdb6eb16b.patch";
+      url =
+        "https://github.com/influxdata/influxdb-python/commit/cc41e290f690c4eb67f75c98fa9f027bdb6eb16b.patch";
       sha256 = "1fb9qrq1kp24pixjwvzhdy67z3h0wnj92aj0jw0a25fd0rdxdvg4";
     })
   ];

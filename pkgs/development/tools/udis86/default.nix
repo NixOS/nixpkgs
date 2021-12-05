@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook python ];
 
-  configureFlags = [
-    "--enable-shared"
-  ];
+  configureFlags = [ "--enable-shared" ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
 

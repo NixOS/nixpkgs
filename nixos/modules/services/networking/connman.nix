@@ -7,7 +7,9 @@ let
   cfg = config.services.connman;
   configFile = pkgs.writeText "connman.conf" ''
     [General]
-    NetworkInterfaceBlacklist=${concatStringsSep "," cfg.networkInterfaceBlacklist}
+    NetworkInterfaceBlacklist=${
+      concatStringsSep "," cfg.networkInterfaceBlacklist
+    }
 
     ${cfg.extraConfig}
   '';
@@ -92,15 +94,19 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = !config.networking.useDHCP;
-      message = "You can not use services.connman with networking.useDHCP";
-    }{
-      # TODO: connman seemingly can be used along network manager and
-      # connmanFull supports this - so this should be worked out somehow
-      assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.connman with networking.networkmanager";
-    }];
+    assertions = [
+      {
+        assertion = !config.networking.useDHCP;
+        message = "You can not use services.connman with networking.useDHCP";
+      }
+      {
+        # TODO: connman seemingly can be used along network manager and
+        # connmanFull supports this - so this should be worked out somehow
+        assertion = !config.networking.networkmanager.enable;
+        message =
+          "You can not use services.connman with networking.networkmanager";
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -117,8 +123,7 @@ in {
           "${cfg.package}/sbin/connmand"
           "--config=${configFile}"
           "--nodaemon"
-        ] ++ optional enableIwd "--wifi=iwd_agent"
-          ++ cfg.extraFlags);
+        ] ++ optional enableIwd "--wifi=iwd_agent" ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };
@@ -152,9 +157,7 @@ in {
       wireless = {
         enable = mkIf (!enableIwd) true;
         dbusControlled = true;
-        iwd = mkIf enableIwd {
-          enable = true;
-        };
+        iwd = mkIf enableIwd { enable = true; };
       };
       networkmanager.enable = false;
     };

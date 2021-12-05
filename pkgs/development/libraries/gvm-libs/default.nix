@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, glib
-, glib-networking
-, gnutls
-, gpgme
-, hiredis
-, libgcrypt
-, libnet
-, libpcap
-, libssh
-, libuuid
-, libxml2
-, pkg-config
-, zlib
-, freeradius
-}:
+{ lib, stdenv, cmake, fetchFromGitHub, glib, glib-networking, gnutls, gpgme
+, hiredis, libgcrypt, libnet, libpcap, libssh, libuuid, libxml2, pkg-config
+, zlib, freeradius }:
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
@@ -29,10 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "14v7z8ynd20s4pkhp2nc19n6gbmbh8yrn39yi2fbfm7gj28b52sx";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     glib
@@ -51,7 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Libraries module for the Greenbone Vulnerability Management Solution";
+    description =
+      "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];

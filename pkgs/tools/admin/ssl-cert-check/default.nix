@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, findutils
-, gawk
-, gnugrep
-, gnused
-, makeWrapper
-, mktemp
-, openssl
-, which
-}:
+{ lib, stdenv, coreutils, fetchFromGitHub, findutils, gawk, gnugrep, gnused
+, makeWrapper, mktemp, openssl, which }:
 
 stdenv.mkDerivation rec {
   pname = "ssl-cert-check";
@@ -23,20 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "07k2n4l68hykraxvy030djc208z8rqff3kc7wy4ib9g6qj7s4mif";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    coreutils
-    findutils
-    gawk
-    gnugrep
-    gnused
-    mktemp
-    openssl
-    which
-  ];
+  buildInputs =
+    [ coreutils findutils gawk gnugrep gnused mktemp openssl which ];
 
   prePatch = ''
     substituteInPlace $pname --replace PATH= NOT_PATH=
@@ -50,7 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Bourne shell script that can be used to report on expiring SSL certificates";
+    description =
+      "Bourne shell script that can be used to report on expiring SSL certificates";
     homepage = "https://github.com/Matty9191/ssl-cert-check";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ryantm ];

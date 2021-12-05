@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, python
-, fetchFromGitHub
-, buildPythonPackage
-, future
-, numpy
-, scipy
-, matplotlib
-, nose
-}:
+{ lib, stdenv, python, fetchFromGitHub, buildPythonPackage, future, numpy, scipy
+, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "pydmd";

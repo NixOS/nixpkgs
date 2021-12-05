@@ -1,25 +1,17 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchurl
-, qmake
-, qttools
-, zlib
-}:
+{ lib, mkDerivation, fetchFromGitHub, fetchurl, qmake, qttools, zlib }:
 
-/*
-To use aditional parts libraries
-set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
+/* To use aditional parts libraries
+   set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
 let
   parts = fetchurl {
-    url = "https://web.archive.org/web/20190715142541/https://www.ldraw.org/library/updates/complete.zip";
+    url =
+      "https://web.archive.org/web/20190715142541/https://www.ldraw.org/library/updates/complete.zip";
     sha256 = "sha256-PW3XCbFwRaNkx4EgCnl2rXH7QgmpNgjTi17kZ5bladA=";
   };
 
-in
-mkDerivation rec {
+in mkDerivation rec {
   pname = "leocad";
   version = "21.03";
 
@@ -34,14 +26,10 @@ mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  qmakeFlags = [
-    "INSTALL_PREFIX=${placeholder "out"}"
-    "DISABLE_UPDATE_CHECK=1"
-  ];
+  qmakeFlags =
+    [ "INSTALL_PREFIX=${placeholder "out"}" "DISABLE_UPDATE_CHECK=1" ];
 
-  qtWrapperArgs = [
-    "--set-default LEOCAD_LIB ${parts}"
-  ];
+  qtWrapperArgs = [ "--set-default LEOCAD_LIB ${parts}" ];
 
   meta = with lib; {
     description = "CAD program for creating virtual LEGO models";

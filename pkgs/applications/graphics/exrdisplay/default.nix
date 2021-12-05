@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openexr fltk libGLU libGL ctl ];
 
   meta = {
-    description = "Application for viewing OpenEXR images on a display at various exposure settings";
+    description =
+      "Application for viewing OpenEXR images on a display at various exposure settings";
     homepage = "http://openexr.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;

@@ -1,21 +1,6 @@
-{ lib
-, Babel
-, buildPythonPackage
-, cssselect
-, fetchFromGitHub
-, glibcLocales
-, isodate
-, leather
-, lxml
-, nose
-, parsedatetime
-, PyICU
-, python-slugify
-, pytimeparse
-, pythonOlder
-, pytz
-, six
-}:
+{ lib, Babel, buildPythonPackage, cssselect, fetchFromGitHub, glibcLocales
+, isodate, leather, lxml, nose, parsedatetime, PyICU, python-slugify
+, pytimeparse, pythonOlder, pytz, six }:
 
 buildPythonPackage rec {
   pname = "agate";
@@ -31,24 +16,10 @@ buildPythonPackage rec {
     sha256 = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
   };
 
-  propagatedBuildInputs = [
-    Babel
-    isodate
-    leather
-    parsedatetime
-    python-slugify
-    pytimeparse
-    six
-  ];
+  propagatedBuildInputs =
+    [ Babel isodate leather parsedatetime python-slugify pytimeparse six ];
 
-  checkInputs = [
-    cssselect
-    glibcLocales
-    lxml
-    nose
-    PyICU
-    pytz
-  ];
+  checkInputs = [ cssselect glibcLocales lxml nose PyICU pytz ];
 
   postPatch = ''
     # No Python 2 support, thus constraint is not needed
@@ -60,12 +31,11 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" nosetests tests
   '';
 
-  pythonImportsCheck = [
-    "agate"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
-    description = "Python data analysis library that is optimized for humans instead of machines";
+    description =
+      "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ vrthra ];

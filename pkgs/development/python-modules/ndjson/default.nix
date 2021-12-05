@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, watchdog, flake8
-, pytest, pytest-runner, coverage, sphinx, twine }:
+{ lib, buildPythonPackage, fetchPypi, watchdog, flake8, pytest, pytest-runner
+, coverage, sphinx, twine }:
 
 buildPythonPackage rec {
   pname = "ndjson";

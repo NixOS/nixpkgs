@@ -1,4 +1,3 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -7,9 +6,7 @@ let
 
   cfg = config.services.incron;
 
-in
-
-{
+in {
   options = {
 
     services.incron = {
@@ -55,7 +52,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
@@ -71,8 +68,8 @@ in
 
     environment.systemPackages = [ pkgs.incron ];
 
-    security.wrappers.incrontab =
-    { setuid = true;
+    security.wrappers.incrontab = {
+      setuid = true;
       owner = "root";
       group = "root";
       source = "${pkgs.incron}/bin/incrontab";
@@ -83,19 +80,18 @@ in
       mode = "0444";
       text = cfg.systab;
     };
-    environment.etc."incron.allow" = mkIf (cfg.allow != null) {
-      text = concatStringsSep "\n" cfg.allow;
-    };
-    environment.etc."incron.deny" = mkIf (cfg.deny != null) {
-      text = concatStringsSep "\n" cfg.deny;
-    };
+    environment.etc."incron.allow" =
+      mkIf (cfg.allow != null) { text = concatStringsSep "\n" cfg.allow; };
+    environment.etc."incron.deny" =
+      mkIf (cfg.deny != null) { text = concatStringsSep "\n" cfg.deny; };
 
     systemd.services.incron = {
       description = "File System Events Scheduler";
       wantedBy = [ "multi-user.target" ];
       path = cfg.extraPackages;
       serviceConfig.PIDFile = "/run/incrond.pid";
-      serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 710 -p /var/spool/incron";
+      serviceConfig.ExecStartPre =
+        "${pkgs.coreutils}/bin/mkdir -m 710 -p /var/spool/incron";
       serviceConfig.ExecStart = "${pkgs.incron}/bin/incrond --foreground";
     };
   };

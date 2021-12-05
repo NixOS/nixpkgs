@@ -1,7 +1,7 @@
-{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg, fox_1_6, gdal,
-  git, gl2ps, gpp , gtest, jdk, libGL, libGLU, libX11, libjpeg,
-  libpng, libtiff, openscenegraph , proj, python3, python37Packages,
-  stdenv, swig, xercesc, xorg, zlib }:
+{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg, fox_1_6, gdal, git, gl2ps
+, gpp, gtest, jdk, libGL, libGLU, libX11, libjpeg, libpng, libtiff
+, openscenegraph, proj, python3, python37Packages, stdenv, swig, xercesc, xorg
+, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sumo";
@@ -10,16 +10,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
-    rev = "v${lib.replaceStrings ["."] ["_"] version}";
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0zpd331vy1kfi4hfiszv3m8wl4m0wdfr3zzza200kkaakw5hjxhs";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    git
-    swig
-  ];
+  nativeBuildInputs = [ cmake git swig ];
 
   buildInputs = [
     bzip2

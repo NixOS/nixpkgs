@@ -1,10 +1,8 @@
 { stdenv, lib, fetchurl, ncurses, buildPackages }:
 
-let
-  isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
-in
+let isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "s9fes";
   version = "20181205";
 
@@ -18,7 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace 'ar q' '${stdenv.cc.targetPrefix}ar q' \
       --replace 'strip' '${stdenv.cc.targetPrefix}strip'
-    ${lib.optionalString isCrossCompiling "substituteInPlace Makefile --replace ./s9 '${buildPackages.s9fes}/bin/s9'"}
+    ${lib.optionalString isCrossCompiling
+    "substituteInPlace Makefile --replace ./s9 '${buildPackages.s9fes}/bin/s9'"}
   '';
 
   buildInputs = [ ncurses ];

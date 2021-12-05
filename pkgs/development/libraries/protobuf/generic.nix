@@ -1,7 +1,4 @@
-{ lib, stdenv, version, src
-, autoreconfHook, zlib, gtest
-, ...
-}:
+{ lib, stdenv, version, src, autoreconfHook, zlib, gtest, ... }:
 
 stdenv.mkDerivation {
   pname = "protobuf";
@@ -38,20 +35,17 @@ stdenv.mkDerivation {
   # See: https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   #      https://github.com/google/protobuf/issues/1489
   dontDisableStatic = true;
-  configureFlags = [
-    "CFLAGS=-fPIC"
-    "CXXFLAGS=-fPIC"
-  ];
+  configureFlags = [ "CFLAGS=-fPIC" "CXXFLAGS=-fPIC" ];
 
   doCheck = true;
 
   meta = {
     description = "Protocol Buffers - Google's data interchange format";
-    longDescription =
-      '' Protocol Buffers are a way of encoding structured data in an
-         efficient yet extensible format.  Google uses Protocol Buffers for
-         almost all of its internal RPC protocols and file formats.
-      '';
+    longDescription = ''
+      Protocol Buffers are a way of encoding structured data in an
+              efficient yet extensible format.  Google uses Protocol Buffers for
+              almost all of its internal RPC protocols and file formats.
+           '';
     license = "mBSD";
     homepage = "https://developers.google.com/protocol-buffers/";
     platforms = lib.platforms.unix;

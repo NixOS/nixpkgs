@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, dovecot, openssl }:
-let
-  dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
+let dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
   version = "0.5.17";
 
   src = fetchurl {
-    url = "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${version}.tar.gz";
+    url =
+      "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${version}.tar.gz";
     sha256 = "0j6ng173hh5iiqxdkxfb5v9djpn39gxdrv5ki7i22cf5cqwq47h3";
   };
 

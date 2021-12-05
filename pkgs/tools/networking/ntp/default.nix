@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "4.2.8p15";
 
   src = fetchurl {
-    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${
+        lib.versions.majorMinor version
+      }/ntp-${version}.tar.gz";
     sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
 

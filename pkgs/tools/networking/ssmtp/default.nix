@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
   # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=858781
   patches = [ ./ssmtp_support_AuthPassFile_parameter.patch ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    (lib.enableFeature tlsSupport "ssl")
-  ];
+  configureFlags = [ "--sysconfdir=/etc" (lib.enableFeature tlsSupport "ssl") ];
 
   postConfigure = ''
     # Don't run the script that interactively generates a config file.

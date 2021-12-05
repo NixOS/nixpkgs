@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   GEN_COMPLETIONS = 1;
 
   meta = with lib; {
-    description = "Minimal mpd terminal client that aims to be simple yet highly configurable";
+    description =
+      "Minimal mpd terminal client that aims to be simple yet highly configurable";
     homepage = "https://github.com/figsoda/mmtc";
     changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

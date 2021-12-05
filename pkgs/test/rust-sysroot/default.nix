@@ -1,31 +1,32 @@
 { lib, rust, rustPlatform, fetchFromGitHub }:
 
 let
-  mkBlogOsTest = target: rustPlatform.buildRustPackage rec {
-    name = "blog_os-sysroot-test";
+  mkBlogOsTest = target:
+    rustPlatform.buildRustPackage rec {
+      name = "blog_os-sysroot-test";
 
-    src = fetchFromGitHub {
+      src = fetchFromGitHub {
         owner = "phil-opp";
         repo = "blog_os";
         rev = "4e38e7ddf8dd021c3cd7e4609dfa01afb827797b";
         sha256 = "0k9ipm9ddm1bad7bs7368wzzp6xwrhyfzfpckdax54l4ffqwljcg";
-    };
+      };
 
-    cargoSha256 = "1x8iwgy1irgfkv2yjkxm6479nwbrk82b0c80jm7y4kw0s32r01lg";
+      cargoSha256 = "1x8iwgy1irgfkv2yjkxm6479nwbrk82b0c80jm7y4kw0s32r01lg";
 
-    inherit target;
+      inherit target;
 
-    RUSTFLAGS = "-C link-arg=-nostartfiles";
+      RUSTFLAGS = "-C link-arg=-nostartfiles";
 
-    # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
-    doCheck = false;
+      # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
+      doCheck = false;
 
-    meta = with lib; {
+      meta = with lib; {
         description = "Test for using custom sysroots with buildRustPackage";
         maintainers = with maintainers; [ aaronjanse ];
         platforms = lib.platforms.x86_64;
+      };
     };
-  };
 
   # The book uses rust-lld for linking, but rust-lld is not currently packaged for NixOS.
   # The justification in the book for using rust-lld suggests that gcc can still be used for testing:
@@ -48,7 +49,8 @@ let
   };
 
 in {
-  blogOS-targetByFile = mkBlogOsTest (builtins.toFile "x86_64-blog_os.json" (builtins.toJSON targetContents));
+  blogOS-targetByFile = mkBlogOsTest
+    (builtins.toFile "x86_64-blog_os.json" (builtins.toJSON targetContents));
   blogOS-targetByNix = let
     plat = lib.systems.elaborate { config = "x86_64-none"; } // {
       rustc = {
@@ -56,5 +58,5 @@ in {
         platform = targetContents;
       };
     };
-    in mkBlogOsTest (rust.toRustTargetSpec plat);
+  in mkBlogOsTest (rust.toRustTargetSpec plat);
 }

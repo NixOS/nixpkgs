@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aenum
-, aiohttp
-, importlib-metadata
-, isodate
-, nest-asyncio
-, six
-, pytestCheckHook
-, mock
-, pyhamcrest
-, radish-bdd
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, aenum, aiohttp, importlib-metadata
+, isodate, nest-asyncio, six, pytestCheckHook, mock, pyhamcrest, radish-bdd }:
 
 buildPythonPackage rec {
   pname = "gremlinpython";
@@ -38,23 +26,10 @@ buildPythonPackage rec {
   '';
 
   # setup-requires requirements
-  nativeBuildInputs = [
-    importlib-metadata
-  ];
-  propagatedBuildInputs = [
-    aenum
-    aiohttp
-    isodate
-    nest-asyncio
-    six
-  ];
+  nativeBuildInputs = [ importlib-metadata ];
+  propagatedBuildInputs = [ aenum aiohttp isodate nest-asyncio six ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-    pyhamcrest
-    radish-bdd
-  ];
+  checkInputs = [ pytestCheckHook mock pyhamcrest radish-bdd ];
 
   # disable custom pytest report generation
   preCheck = ''
@@ -75,7 +50,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
+    description =
+      "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ turion ris ];

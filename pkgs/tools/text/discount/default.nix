@@ -21,12 +21,8 @@ stdenv.mkDerivation rec {
   ];
   configureScript = "./configure.sh";
 
-  configureFlags = [
-    "--enable-all-features"
-    "--pkg-config"
-    "--shared"
-    "--with-fenced-code"
-  ];
+  configureFlags =
+    [ "--enable-all-features" "--pkg-config" "--shared" "--with-fenced-code" ];
 
   enableParallelBuilding = true;
   doCheck = true;

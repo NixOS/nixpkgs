@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
-, six, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
+{ lib, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver, six
+, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
 
 buildPythonPackage rec {
   pname = "python-fedora";
@@ -9,8 +9,18 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "56b9d841a39b4030e388e90c7b77dacd479f1ce5e2ff9b18c3954d97d5709a19";
   };
-  propagatedBuildInputs = [ kitchen requests bunch paver lockfile
-    six munch urllib3 beautifulsoup4 openidc-client ];
+  propagatedBuildInputs = [
+    kitchen
+    requests
+    bunch
+    paver
+    lockfile
+    six
+    munch
+    urllib3
+    beautifulsoup4
+    openidc-client
+  ];
   doCheck = false;
 
   meta = with lib; {

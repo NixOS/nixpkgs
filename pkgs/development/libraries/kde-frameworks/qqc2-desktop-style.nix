@@ -1,11 +1,5 @@
-{ mkDerivation
-, extra-cmake-modules
-, qtquickcontrols2
-, qtx11extras
-, kconfig
-, kiconthemes
-, kirigami2
-}:
+{ mkDerivation, extra-cmake-modules, qtquickcontrols2, qtx11extras, kconfig
+, kiconthemes, kirigami2 }:
 
 mkDerivation {
   name = "qqc2-desktop-style";

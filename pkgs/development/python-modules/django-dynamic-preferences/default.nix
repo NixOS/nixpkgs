@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, django, persisting-theory, six
-}:
+{ lib, buildPythonPackage, fetchPypi, django, persisting-theory, six }:
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
@@ -18,7 +16,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/EliotBerriot/django-dynamic-preferences";
-    description = "Dynamic global and instance settings for your django project";
+    description =
+      "Dynamic global and instance settings for your django project";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

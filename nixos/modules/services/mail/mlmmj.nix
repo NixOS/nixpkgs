@@ -11,9 +11,12 @@ let
   spoolDir = "/var/spool/mlmmj";
   listDir = domain: list: "${spoolDir}/${domain}/${list}";
   listCtl = domain: list: "${listDir domain list}/control";
-  transport = domain: list: "${domain}--${list}@local.list.mlmmj mlmmj:${domain}/${list}";
-  virtual = domain: list: "${list}@${domain} ${domain}--${list}@local.list.mlmmj";
-  alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
+  transport = domain: list:
+    "${domain}--${list}@local.list.mlmmj mlmmj:${domain}/${list}";
+  virtual = domain: list:
+    "${list}@${domain} ${domain}--${list}@local.list.mlmmj";
+  alias = domain: list:
+    ''${list}: "|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/"'';
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
   customHeaders = domain: list: [
@@ -24,10 +27,11 @@ let
     "List-Subscribe: <mailto:${list}+subscribe@${domain}>"
     "List-Unsubscribe: <mailto:${list}+unsubscribe@${domain}>"
   ];
-  footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
+  footer = domain: list:
+    "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l:
-    let ctlDir = listCtl d l; in
-    ''
+    let ctlDir = listCtl d l;
+    in ''
       for DIR in incoming queue queue/discarded archive text subconf unsubconf \
                  bounce control moderation subscribers.d digesters.d requeue \
                  nomailsubs.d
@@ -37,15 +41,16 @@ let
       ${pkgs.coreutils}/bin/mkdir -p ${ctlDir}
       echo ${listAddress d l} > '${ctlDir}/listaddress'
       [ ! -e ${ctlDir}/customheaders ] && \
-          echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > '${ctlDir}/customheaders'
+          echo "${
+            lib.concatStringsSep "\n" (customHeaders d l)
+          }" > '${ctlDir}/customheaders'
       [ ! -e ${ctlDir}/footer ] && \
           echo ${footer d l} > '${ctlDir}/footer'
       [ ! -e ${ctlDir}/prefix ] && \
           echo ${subjectPrefix l} > '${ctlDir}/prefix'
     '';
-in
 
-{
+in {
 
   ###### interface
 
@@ -79,7 +84,7 @@ in
 
       mailLists = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "The collection of hosted maillists";
       };
 
@@ -110,13 +115,11 @@ in
       useDefaultShell = true;
     };
 
-    users.groups.${cfg.group} = {
-      gid = config.ids.gids.mlmmj;
-    };
+    users.groups.${cfg.group} = { gid = config.ids.gids.mlmmj; };
 
     services.postfix = {
       enable = true;
-      recipientDelimiter= "+";
+      recipientDelimiter = "+";
       masterConfig.mlmmj = {
         type = "unix";
         private = true;
@@ -145,19 +148,20 @@ in
     environment.systemPackages = [ pkgs.mlmmj ];
 
     system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
-      '';
+      ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
+      ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
+      ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+      ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+      ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+    '';
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.mlmmj}/bin/mlmmj-maintd -F -d ${spoolDir}/${cfg.listDomain}";
+        ExecStart =
+          "${pkgs.mlmmj}/bin/mlmmj-maintd -F -d ${spoolDir}/${cfg.listDomain}";
       };
     };
 

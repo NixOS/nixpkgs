@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
-, openssl, db, cyrus_sasl, zlib
-, Security
-}:
+{ lib, stdenv, fetchurl, pkg-config, perl, openssl, db, cyrus_sasl, zlib
+, Security }:
 
 stdenv.mkDerivation rec {
   pname = "isync";
@@ -19,7 +17,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://isync.sourceforge.net/";
     # https://sourceforge.net/projects/isync/
-    changelog = "https://sourceforge.net/p/isync/isync/ci/v${version}/tree/NEWS";
+    changelog =
+      "https://sourceforge.net/p/isync/isync/ci/v${version}/tree/NEWS";
     description = "Free IMAP and MailDir mailbox synchronizer";
     longDescription = ''
       mbsync (formerly isync) is a command line application which synchronizes

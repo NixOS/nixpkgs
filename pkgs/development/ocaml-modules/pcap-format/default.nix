@@ -1,6 +1,4 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_tools
-, cstruct, ounit, mmap
+{ lib, buildDunePackage, fetchurl, ppx_cstruct, ppx_tools, cstruct, ounit, mmap
 }:
 
 buildDunePackage rec {
@@ -13,24 +11,17 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-pcap/releases/download/${version}/${pname}-${version}.tbz";
+    url =
+      "https://github.com/mirage/ocaml-pcap/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "14c5rpgglyz41jic0fg0xa22d2w1syb86kva22y9fi7aqj9vm31f";
   };
 
-  nativeBuildInputs = [
-    ppx_tools
-    ppx_cstruct
-  ];
+  nativeBuildInputs = [ ppx_tools ppx_cstruct ];
 
-  propagatedBuildInputs = [
-    cstruct
-  ];
+  propagatedBuildInputs = [ cstruct ];
 
   doCheck = true;
-  checkInputs = [
-    ounit
-    mmap
-  ];
+  checkInputs = [ ounit mmap ];
 
   meta = with lib; {
     description = "Decode and encode PCAP (packet capture) files";

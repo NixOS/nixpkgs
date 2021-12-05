@@ -1,10 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, perl
-, perlPackages
-, sharnessExtensions ? {} }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, perl, perlPackages
+, sharnessExtensions ? { } }:
 
 stdenv.mkDerivation rec {
   pname = "sharness";
@@ -26,7 +21,7 @@ stdenv.mkDerivation rec {
 
   extensions = lib.mapAttrsToList (k: v: "${k}.sh ${v}") sharnessExtensions;
 
-  postInstall = lib.optionalString (sharnessExtensions != {}) ''
+  postInstall = lib.optionalString (sharnessExtensions != { }) ''
     extDir=$out/share/sharness/sharness.d
     mkdir -p "$extDir"
     linkExtensions() {
@@ -42,7 +37,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Portable shell library to write, run and analyze automated tests adhering to Test Anything Protocol (TAP)";
+    description =
+      "Portable shell library to write, run and analyze automated tests adhering to Test Anything Protocol (TAP)";
     homepage = "https://github.com/chriscool/sharness";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.spacefrogg ];

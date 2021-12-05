@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scipy
-, numpy
-, numba
-, scikit-learn
-, pytest
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, scipy, numpy, numba, scikit-learn
+, pytest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pygbm";
@@ -21,16 +13,9 @@ buildPythonPackage rec {
     sha256 = "1qg2md86d0z5aa6jn8kj3rxsippsqsccx1dbraspdsdkycncvww3";
   };
 
-  propagatedBuildInputs = [
-    scipy
-    numpy
-    numba
-    scikit-learn
-  ];
+  propagatedBuildInputs = [ scipy numpy numba scikit-learn ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # numerical rounding error in test

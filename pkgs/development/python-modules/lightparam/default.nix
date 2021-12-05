@@ -1,9 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, ipython
-, ipywidgets
-, numpy
-, pyqt5
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, ipython, ipywidgets, numpy
+, pyqt5 }:
 
 buildPythonPackage rec {
   pname = "lightparam";
@@ -17,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "13hlkvjcyz2lhvlfqyavja64jccbidshhs39sl4fibrn9iq34s3i";
   };
 
-  propagatedBuildInputs = [
-    ipython
-    ipywidgets
-    numpy
-    pyqt5
-  ];
+  propagatedBuildInputs = [ ipython ipywidgets numpy pyqt5 ];
 
   pythonImportsCheck = [ "lightparam" ];
 

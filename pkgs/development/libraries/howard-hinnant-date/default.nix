@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     # https://github.com/HowardHinnant/date/pull/538
     (fetchpatch {
       name = "output-date-pc-for-pkg-config.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/date/538-output-date-pc-for-pkg-config.patch?id=11f6b4d4206b0648182e7b41cd57dcc9ccea0728";
+      url =
+        "https://git.alpinelinux.org/aports/plain/community/date/538-output-date-pc-for-pkg-config.patch?id=11f6b4d4206b0648182e7b41cd57dcc9ccea0728";
       sha256 = "1ma0586jsd89jgwbmd2qlvlc8pshs1pc4zk5drgxi3qvp8ai1154";
     })
     # Without this patch, this library will drop a `tzdata` directory into
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.mit;
-    description = "A date and time library based on the C++11/14/17 <chrono> header";
+    description =
+      "A date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
     platforms = platforms.linux;
     maintainers = with maintainers; [ r-burns ];

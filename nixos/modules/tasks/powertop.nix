@@ -2,12 +2,12 @@
 
 with lib;
 
-let
-  cfg = config.powerManagement.powertop;
+let cfg = config.powerManagement.powertop;
 in {
   ###### interface
 
-  options.powerManagement.powertop.enable = mkEnableOption "powertop auto tuning on startup";
+  options.powerManagement.powertop.enable =
+    mkEnableOption "powertop auto tuning on startup";
 
   ###### implementation
 

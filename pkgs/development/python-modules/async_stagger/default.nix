@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook
+, pytest-asyncio, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "async_stagger";
@@ -17,16 +11,13 @@ buildPythonPackage rec {
     sha256 = "1mj3daaqxjdavbxcjrdwx5ky9maa2blbv53aa6d7w9zxkrz3b7xa";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-asyncio pytest-mock ];
 
   pythonImportsCheck = [ "async_stagger" ];
 
   meta = with lib; {
-    description = "Happy Eyeballs connection algorithm and underlying scheduling logic in asyncio";
+    description =
+      "Happy Eyeballs connection algorithm and underlying scheduling logic in asyncio";
     homepage = "https://github.com/twisteroidambassador/async_stagger";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

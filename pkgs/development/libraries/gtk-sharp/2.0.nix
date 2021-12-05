@@ -1,27 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, mono
-, glib
-, pango
-, gtk2
-, GConf ? null
-, libglade ? null
-, libgtkhtml ? null
-, gtkhtml ? null
-, libgnomecanvas ? null
-, libgnomeui ? null
-, libgnomeprint ? null
-, libgnomeprintui ? null
-, libxml2
-, monoDLLFixer
-, autoconf
-, automake
-, libtool
-, which
-, fetchpatch
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, mono, glib, pango, gtk2
+, GConf ? null, libglade ? null, libgtkhtml ? null, gtkhtml ? null
+, libgnomecanvas ? null, libgnomeui ? null, libgnomeprint ? null
+, libgnomeprintui ? null, libxml2, monoDLLFixer, autoconf, automake, libtool
+, which, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-sharp";
@@ -37,7 +18,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://projects.archlinux.de/svntogit/packages.git/plain/trunk/gtk-sharp2-2.12.12-gtkrange.patch?h=packages/gtk-sharp-2";
+      url =
+        "https://projects.archlinux.de/svntogit/packages.git/plain/trunk/gtk-sharp2-2.12.12-gtkrange.patch?h=packages/gtk-sharp-2";
       sha256 = "bjx+OfgWnN8SO82p8G7pbGuxJ9EeQxMLeHnrtEm8RV8=";
     })
   ];
@@ -54,8 +36,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
 
   buildInputs = [
-    mono glib pango gtk2 GConf libglade libgnomecanvas
-    libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+    mono
+    glib
+    pango
+    gtk2
+    GConf
+    libglade
+    libgnomecanvas
+    libgtkhtml
+    libgnomeui
+    libgnomeprint
+    libgnomeprintui
+    gtkhtml
+    libxml2
   ];
 
   preConfigure = ''
@@ -66,9 +59,7 @@ stdenv.mkDerivation rec {
 
   inherit monoDLLFixer;
 
-  passthru = {
-    gtk = gtk2;
-  };
+  passthru = { gtk = gtk2; };
 
   meta = with lib; {
     description = "Graphical User Interface Toolkit for mono and .Net";

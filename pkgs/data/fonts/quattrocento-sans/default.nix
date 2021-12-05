@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "2.0";
+let version = "2.0";
 in fetchzip rec {
   name = "quattrocento-sans-${version}";
 
-  url = "http://web.archive.org/web/20170709124317/http://www.impallari.com/media/releases/quattrocento-sans-v${version}.zip";
+  url =
+    "http://web.archive.org/web/20170709124317/http://www.impallari.com/media/releases/quattrocento-sans-v${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{fonts,doc}
@@ -20,6 +20,6 @@ in fetchzip rec {
     description = "A classic, elegant and sober sans-serif typeface";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

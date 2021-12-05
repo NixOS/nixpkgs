@@ -22,10 +22,7 @@ buildPythonPackage rec {
   # We cannot run them
   doCheck = false;
 
-  pythonImportsCheck = [
-    "snap7"
-    "snap7.util"
-  ];
+  pythonImportsCheck = [ "snap7" "snap7.util" ];
 
   meta = with lib; {
     description = "Python wrapper for the snap7 PLC communication library ";

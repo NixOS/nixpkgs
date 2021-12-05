@@ -1,16 +1,5 @@
-{ lib
-, apsw
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, flask
-, python
-, sqlite
-, withMysql ? false
-, mysql-connector
-, withPostgres ? false
-, psycopg2
-}:
+{ lib, apsw, buildPythonPackage, cython, fetchFromGitHub, flask, python, sqlite
+, withMysql ? false, mysql-connector, withPostgres ? false, psycopg2 }:
 
 buildPythonPackage rec {
   pname = "peewee";
@@ -24,19 +13,12 @@ buildPythonPackage rec {
     sha256 = "sha256-BJSM+7+VdW6SxN4/AXsX8NhQPdIFoYrVRVwR9OsJ3QE=";
   };
 
-  buildInputs = [
-    sqlite
-    cython
-  ];
+  buildInputs = [ sqlite cython ];
 
-  propagatedBuildInputs = [
-    apsw
-  ] ++ lib.optional withPostgres psycopg2
-  ++ lib.optional withMysql mysql-connector;
+  propagatedBuildInputs = [ apsw ] ++ lib.optional withPostgres psycopg2
+    ++ lib.optional withMysql mysql-connector;
 
-  checkInputs = [
-    flask
-  ];
+  checkInputs = [ flask ];
 
   doCheck = withPostgres;
 
@@ -45,9 +27,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  pythonImportsCheck = [
-    "peewee"
-  ];
+  pythonImportsCheck = [ "peewee" ];
 
   meta = with lib; {
     description = "Python ORM with support for various database implementation";

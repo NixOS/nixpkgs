@@ -1,7 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, docutils, installShellFiles
-, google-api-python-client, simplejson, oauth2client, setuptools, xdg
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, docutils, installShellFiles
+, google-api-python-client, simplejson, oauth2client, setuptools, xdg }:
 
 buildPythonPackage rec {
   pname = "goobook";
@@ -14,9 +12,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ docutils installShellFiles ];
-  propagatedBuildInputs = [
-    google-api-python-client simplejson oauth2client setuptools xdg
-  ];
+  propagatedBuildInputs =
+    [ google-api-python-client simplejson oauth2client setuptools xdg ];
 
   postInstall = ''
     rst2man goobook.1.rst goobook.1
@@ -34,10 +31,11 @@ buildPythonPackage rec {
       from the command-line and from MUAs such as Mutt.
       It can be used from Mutt the same way as abook.
     '';
-    homepage    = "https://pypi.python.org/pypi/goobook";
-    changelog   = "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
-    license     = licenses.gpl3;
+    homepage = "https://pypi.python.org/pypi/goobook";
+    changelog =
+      "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ primeos ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

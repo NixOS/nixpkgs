@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   meta = with lib; {
-    description = "Lightweight program that gathers information from your operating system and displays it in graphical form";
+    description =
+      "Lightweight program that gathers information from your operating system and displays it in graphical form";
     longDescription = ''
       xosview is a lightweight program that gathers information from your
       operating system and displays it in graphical form. It attempts to show

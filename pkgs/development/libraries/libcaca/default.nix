@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, imlib2
-, libX11
-, libXext
-, ncurses
-, pkg-config
-, x11Support ? !stdenv.isDarwin
-, zlib
-}:
+{ lib, stdenv, fetchurl, imlib2, libX11, libXext, ncurses, pkg-config
+, x11Support ? !stdenv.isDarwin, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libcaca";
@@ -24,25 +15,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  configureFlags = [
-    (if x11Support then "--enable-x11" else "--disable-x11")
-  ];
+  configureFlags = [ (if x11Support then "--enable-x11" else "--disable-x11") ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-  buildInputs = [
-    ncurses
-    zlib
-    (imlib2.override { inherit x11Support; })
-  ] ++ lib.optionals x11Support [
-    libX11
-    libXext
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ncurses zlib (imlib2.override { inherit x11Support; }) ]
+    ++ lib.optionals x11Support [ libX11 libXext ];
 
   postInstall = ''
     mkdir -p $dev/bin

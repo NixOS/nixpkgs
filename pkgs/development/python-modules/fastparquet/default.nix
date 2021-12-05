@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, numba
-, numpy
-, pandas
-, cramjam
-, fsspec
-, thrift
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, numba, numpy, pandas
+, cramjam, fsspec, thrift, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "fastparquet";

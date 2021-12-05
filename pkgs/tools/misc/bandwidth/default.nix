@@ -3,8 +3,7 @@
 let
   inherit (stdenv.hostPlatform.parsed.cpu) bits;
   arch = "bandwidth${toString bits}";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "bandwidth";
   version = "1.10.4";
 
@@ -43,7 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://zsmith.co/bandwidth.html";
-    description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
+    description =
+      "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.gpl2Plus;
     platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
     maintainers = with maintainers; [ r-burns ];

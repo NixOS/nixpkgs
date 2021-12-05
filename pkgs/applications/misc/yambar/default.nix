@@ -1,35 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, alsa-lib
-, fcft
-, json_c
-, libmpdclient
-, libxcb
-, libyaml
-, meson
-, ninja
-, pixman
-, pkg-config
-, scdoc
-, tllist
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xcbutil
-, xcbutilcursor
-, xcbutilerrors
-, xcbutilwm
-, waylandSupport ? true
-, x11Support ? true
-}:
+{ lib, stdenv, fetchFromGitea, alsa-lib, fcft, json_c, libmpdclient, libxcb
+, libyaml, meson, ninja, pixman, pkg-config, scdoc, tllist, udev, wayland
+, wayland-protocols, wayland-scanner, xcbutil, xcbutilcursor, xcbutilerrors
+, xcbutilwm, waylandSupport ? true, x11Support ? true }:
 
 let
   # Courtesy of sternenseemann and FRidh
   mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "yambar";
   version = "1.7.0";
 
@@ -41,32 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    scdoc
-    wayland-scanner
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja scdoc wayland-scanner ];
 
-  buildInputs = [
-    alsa-lib
-    fcft
-    json_c
-    libmpdclient
-    libyaml
-    pixman
-    tllist
-    udev
-  ] ++ lib.optionals (waylandSupport) [
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals (x11Support) [
-    xcbutil
-    xcbutilcursor
-    xcbutilerrors
-    xcbutilwm
-  ];
+  buildInputs = [ alsa-lib fcft json_c libmpdclient libyaml pixman tllist udev ]
+    ++ lib.optionals (waylandSupport) [ wayland wayland-protocols ]
+    ++ lib.optionals (x11Support) [
+      xcbutil
+      xcbutilcursor
+      xcbutilerrors
+      xcbutilwm
+    ];
 
   mesonBuildType = "release";
 

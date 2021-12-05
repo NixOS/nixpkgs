@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, ply
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, ply, python }:
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "0ypfbas33k1706p6w1bf9gnrv38z8fa4qci1iaks80dp58g8sv4r";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-    ply
-  ];
+  propagatedBuildInputs = [ setuptools ply ];
 
   checkPhase = ''
     runHook preCheck

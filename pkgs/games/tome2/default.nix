@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake
+}:
 
 let
   pname = "tome2";
-  description = "A dungeon crawler similar to Angband, based on the works of Tolkien";
+  description =
+    "A dungeon crawler similar to Angband, based on the works of Tolkien";
 
   desktopItem = makeDesktopItem {
     desktopName = pname;
@@ -32,9 +34,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DSYSTEM_INSTALL=ON"
-  ];
+  cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
 
   postInstall = ''
     mkdir -p $out/share/applications

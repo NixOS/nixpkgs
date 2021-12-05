@@ -1,8 +1,5 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, itsdangerous, hypothesis
-, pytestCheckHook, requests
-, pytest-timeout
- }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, itsdangerous, hypothesis
+, pytestCheckHook, requests, pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "Werkzeug";
@@ -47,9 +44,7 @@ buildPythonPackage rec {
     "test_merge_slashes_build"
     "TestMultiPart"
     "TestHTTPUtility"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
 
   meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";

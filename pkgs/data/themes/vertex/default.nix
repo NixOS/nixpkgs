@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-engine-murrine
+}:
 
 stdenv.mkDerivation rec {
   pname = "theme-vertex";

@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.services.uptimed;
   stateDir = "/var/lib/uptimed";
-in
-{
+in {
   options = {
     services.uptimed = {
       enable = mkOption {
@@ -26,28 +25,28 @@ in
 
     users.users.uptimed = {
       description = "Uptimed daemon user";
-      home        = stateDir;
-      uid         = config.ids.uids.uptimed;
-      group       = "uptimed";
+      home = stateDir;
+      uid = config.ids.uids.uptimed;
+      group = "uptimed";
     };
-    users.groups.uptimed = {};
+    users.groups.uptimed = { };
 
     systemd.services.uptimed = {
       unitConfig.Documentation = "man:uptimed(8) man:uprecords(1)";
       description = "uptimed service";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        Restart                 = "on-failure";
-        User                    = "uptimed";
-        Nice                    = 19;
-        IOSchedulingClass       = "idle";
-        PrivateTmp              = "yes";
-        PrivateNetwork          = "yes";
-        NoNewPrivileges         = "yes";
-        StateDirectory          = [ "uptimed" ];
+        Restart = "on-failure";
+        User = "uptimed";
+        Nice = 19;
+        IOSchedulingClass = "idle";
+        PrivateTmp = "yes";
+        PrivateNetwork = "yes";
+        NoNewPrivileges = "yes";
+        StateDirectory = [ "uptimed" ];
         InaccessibleDirectories = "/home";
-        ExecStart               = "${pkgs.uptimed}/sbin/uptimed -f -p ${stateDir}/pid";
+        ExecStart = "${pkgs.uptimed}/sbin/uptimed -f -p ${stateDir}/pid";
       };
 
       preStart = ''

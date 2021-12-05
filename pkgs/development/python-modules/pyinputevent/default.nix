@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage {
   pname = "pyinputevent";
@@ -16,7 +13,8 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
-    description = "Python interface to the Input Subsystem's input_event and uinput";
+    description =
+      "Python interface to the Input Subsystem's input_event and uinput";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

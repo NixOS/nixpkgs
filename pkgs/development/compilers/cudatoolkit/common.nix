@@ -1,32 +1,7 @@
-args@
-{ version
-, sha256
-, url ? ""
-, name ? ""
-, developerProgram ? false
-, runPatches ? []
-, addOpenGLRunpath
-, alsa-lib
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gcc
-, gdk-pixbuf
-, glib
-, glibc
-, gtk2
-, lib
-, makeWrapper
-, ncurses5
-, perl
-, python27
-, requireFile
-, stdenv
-, unixODBC
-, xorg
-, zlib
-}:
+args@{ version, sha256, url ? "", name ? "", developerProgram ? false
+, runPatches ? [ ], addOpenGLRunpath, alsa-lib, expat, fetchurl, fontconfig
+, freetype, gcc, gdk-pixbuf, glib, glibc, gtk2, lib, makeWrapper, ncurses5, perl
+, python27, requireFile, stdenv, unixODBC, xorg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cudatoolkit";
@@ -35,33 +10,46 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  src =
-    if developerProgram then
-      requireFile {
-        message = ''
-          This nix expression requires that ${args.name} is already part of the store.
-          Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
-          at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
-          nix-prefetch-url file://\$PWD/${args.name}
-        '';
-        inherit (args) name sha256;
-      }
-    else
-      fetchurl {
-        inherit (args) url sha256;
-      };
+  src = if developerProgram then
+    requireFile {
+      message = ''
+        This nix expression requires that ${args.name} is already part of the store.
+        Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
+        at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
+        nix-prefetch-url file://\$PWD/${args.name}
+      '';
+      inherit (args) name sha256;
+    }
+  else
+    fetchurl { inherit (args) url sha256; };
 
   outputs = [ "out" "lib" "doc" ];
 
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsa-lib
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    gtk2
+    glib
+    fontconfig
+    freetype
+    unixODBC
+    alsa-lib
   ];
 
-  rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
+  rpath =
+    "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
   unpackPhase = ''
     sh $src --keep --noexec
@@ -85,17 +73,18 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir $out
     ${lib.optionalString (lib.versionOlder version "10.1") ''
-    cd $(basename $src)
-    export PERL5LIB=.
-    perl ./install-linux.pl --prefix="$out"
-    cd ..
-    for patch in $runPatches; do
-      cd $(basename $patch)
-      perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+      cd $(basename $src)
+      export PERL5LIB=.
+      perl ./install-linux.pl --prefix="$out"
       cd ..
-    done
+      for patch in $runPatches; do
+        cd $(basename $patch)
+        perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+        cd ..
+      done
     ''}
-    ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
+    ${lib.optionalString
+    (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
       cd pkg/builds/cuda-toolkit
       mv * $out/
     ''}
@@ -124,13 +113,14 @@ stdenv.mkDerivation rec {
     rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
-    # let's remove the 32-bit libraries, they confuse the lib64->lib mover
-    rm -rf $out/lib
+      # let's remove the 32-bit libraries, they confuse the lib64->lib mover
+      rm -rf $out/lib
     ''}
 
     # Remove some cruft.
-    ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
-      "rm $out/bin/uninstall*"}
+    ${lib.optionalString
+    ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
+    "rm $out/bin/uninstall*"}
 
     # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
     if [ -d "$out"/cuda-samples ]; then
@@ -158,7 +148,8 @@ stdenv.mkDerivation rec {
 
     # Remove OpenCL libraries as they are provided by ocl-icd and driver.
     rm -f $out/lib64/libOpenCL*
-    ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
+    ${lib.optionalString
+    (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
       mv $out/lib64 $out/lib
       mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
@@ -178,19 +169,21 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for b in nvvp ${lib.optionalString (lib.versionOlder version "11") "nsight"}; do
+    for b in nvvp ${
+      lib.optionalString (lib.versionOlder version "11") "nsight"
+    }; do
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done
   '';
 
   preFixup = ''
-    while IFS= read -r -d ''$'\0' i; do
+    while IFS= read -r -d $'\0' i; do
       if ! isELF "$i"; then continue; fi
       echo "patching $i..."
       if [[ ! $i =~ \.so ]]; then
         patchelf \
-          --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
       fi
       if [[ $i =~ libcudart ]]; then
         patchelf --remove-rpath $i

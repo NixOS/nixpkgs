@@ -1,11 +1,4 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, csrmesh
-, fetchPypi
-, pycryptodome
-, requests
-}:
+{ lib, bluepy, buildPythonPackage, csrmesh, fetchPypi, pycryptodome, requests }:
 
 buildPythonPackage rec {
   pname = "avion";
@@ -16,12 +9,7 @@ buildPythonPackage rec {
     sha256 = "0zgv45086b97ngyqxdp41wxb7hpn9g7alygc21j9y3dib700vzdz";
   };
 
-  propagatedBuildInputs = [
-    bluepy
-    csrmesh
-    pycryptodome
-    requests
-  ];
+  propagatedBuildInputs = [ bluepy csrmesh pycryptodome requests ];
 
   # Project has no test
   doCheck = false;

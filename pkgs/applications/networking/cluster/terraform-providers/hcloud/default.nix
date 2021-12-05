@@ -24,7 +24,8 @@ buildGoModule rec {
   postInstall = "mv $out/bin/terraform-provider-hcloud{,_v${version}}";
 
   meta = with lib; {
-    homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
+    homepage =
+      "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ris ];

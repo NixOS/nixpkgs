@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, python
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, python }:
 
 buildPythonPackage rec {
   pname = "maxcube-api";
@@ -22,10 +17,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "license=license" "license='MIT'"
   '';
 
-  pythonImportsCheck = [
-    "maxcube"
-    "maxcube.cube"
-  ];
+  pythonImportsCheck = [ "maxcube" "maxcube.cube" ];
 
   checkPhase = ''
     runHook preCheck

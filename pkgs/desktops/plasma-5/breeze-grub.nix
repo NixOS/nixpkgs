@@ -1,6 +1,4 @@
-{
-  mkDerivation
-}:
+{ mkDerivation }:
 
 mkDerivation {
   name = "breeze-grub";

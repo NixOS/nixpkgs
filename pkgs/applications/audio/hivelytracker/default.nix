@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, SDL
-, SDL_image
-, SDL_ttf
-, gtk2
-, glib
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, SDL, SDL_image, SDL_ttf
+, gtk2, glib }:
 
 stdenv.mkDerivation rec {
   pname = "hivelytracker";
@@ -21,24 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1nqianlf1msir6wqwapi7ys1vbmf6aik58wa54b6cn5v6kwxh75a";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [
-    SDL
-    SDL_image
-    SDL_ttf
-    gtk2
-    glib
-  ];
+  buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib ];
 
-  makeFlags = [
-    "-C sdl"
-    "-f Makefile.linux"
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "-C sdl" "-f Makefile.linux" "PREFIX=$(out)" ];
 
   # TODO: try to exclude gtk and glib from darwin builds
   NIX_CFLAGS_COMPILE = [

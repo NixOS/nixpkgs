@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libaio
-}:
+{ lib, stdenv, fetchFromGitHub, libaio }:
 
 stdenv.mkDerivation rec {
   pname = "stressapptest";

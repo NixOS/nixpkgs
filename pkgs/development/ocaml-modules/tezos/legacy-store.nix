@@ -1,14 +1,6 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-context
-, tezos-lmdb
-, tezos-validation
-, tezos-shell-services
-, tezos-protocol-compiler
-, lwt-watcher
-, alcotest-lwt
-}:
+{ lib, buildDunePackage, tezos-stdlib, tezos-context, tezos-lmdb
+, tezos-validation, tezos-shell-services, tezos-protocol-compiler, lwt-watcher
+, alcotest-lwt }:
 
 buildDunePackage {
   pname = "tezos-legacy-store";
@@ -23,18 +15,15 @@ buildDunePackage {
     lwt-watcher
   ];
 
-  buildInputs = [
-    tezos-protocol-compiler
-  ];
+  buildInputs = [ tezos-protocol-compiler ];
 
-  checkInputs = [
-    alcotest-lwt
-  ];
+  checkInputs = [ alcotest-lwt ];
 
   # A lot of extra deps with wide dependency cones needed
   doCheck = false;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: custom economic-protocols environment implementation for `tezos-client` and testing";
+    description =
+      "Tezos: custom economic-protocols environment implementation for `tezos-client` and testing";
   };
 }

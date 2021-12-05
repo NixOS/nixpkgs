@@ -1,10 +1,8 @@
-args @ {lib, stdenv, clwrapper, baseName, packageName ? baseName
-  , parasites ? []
-  , buildSystems ? ([packageName] ++ parasites)
-  , version ? "latest"
-  , src, description, deps, buildInputs ? [], meta ? {}, overrides?(x: {})
-  , propagatedBuildInputs ? []
-  , asdFilesToKeep ? [(builtins.concatStringsSep "" [packageName ".asd"])]}:
+args@{ lib, stdenv, clwrapper, baseName, packageName ? baseName, parasites ? [ ]
+, buildSystems ? ([ packageName ] ++ parasites), version ? "latest", src
+, description, deps, buildInputs ? [ ], meta ? { }, overrides ? (x: { })
+, propagatedBuildInputs ? [ ]
+, asdFilesToKeep ? [ (builtins.concatStringsSep "" [ packageName ".asd" ]) ] }:
 let
   deployConfigScript = ''
     outhash="$out"
@@ -68,53 +66,53 @@ let
       fi
     done
   '';
-basePackage = {
-  name = "lisp-${baseName}-${version}";
-  inherit src;
+  basePackage = {
+    name = "lisp-${baseName}-${version}";
+    inherit src;
 
-  dontBuild = true;
+    dontBuild = true;
 
-  inherit deployConfigScript deployLaunchScript;
-  inherit asdFilesToKeep moveAsdFiles;
-  installPhase = ''
-    eval "$preInstall"
+    inherit deployConfigScript deployLaunchScript;
+    inherit asdFilesToKeep moveAsdFiles;
+    installPhase = ''
+      eval "$preInstall"
 
-    mkdir -p "$out"/share/doc/${args.baseName};
-    mkdir -p "$out"/lib/common-lisp/${args.baseName};
-    cp -r . "$out"/lib/common-lisp/${args.baseName};
-    cp -rf doc/* LICENCE LICENSE COPYING README README.html README.md readme.html "$out"/share/doc/${args.baseName} || true
+      mkdir -p "$out"/share/doc/${args.baseName};
+      mkdir -p "$out"/lib/common-lisp/${args.baseName};
+      cp -r . "$out"/lib/common-lisp/${args.baseName};
+      cp -rf doc/* LICENCE LICENSE COPYING README README.html README.md readme.html "$out"/share/doc/${args.baseName} || true
 
-    ${deployConfigScript}
-    ${deployLaunchScript}
-    ${moveAsdFiles}
+      ${deployConfigScript}
+      ${deployLaunchScript}
+      ${moveAsdFiles}
 
-    env -i \
-    NIX_LISP="$NIX_LISP" \
-    NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
-          ${lib.concatMapStrings (system: ''
-            (asdf:compile-system :${system})
-            (asdf:load-system :${system})
-            (asdf:operate (quote asdf::compile-bundle-op) :${system})
-            (ignore-errors (asdf:operate (quote asdf::deploy-asd-op) :${system}))
-'') buildSystems}
-          )"' \
-       "$out/bin/${args.baseName}-lisp-launcher.sh"
+      env -i \
+      NIX_LISP="$NIX_LISP" \
+      NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
+            ${
+              lib.concatMapStrings (system: ''
+                (asdf:compile-system :${system})
+                (asdf:load-system :${system})
+                (asdf:operate (quote asdf::compile-bundle-op) :${system})
+                (ignore-errors (asdf:operate (quote asdf::deploy-asd-op) :${system}))
+              '') buildSystems
+            }
+            )"' \
+         "$out/bin/${args.baseName}-lisp-launcher.sh"
 
-    eval "$postInstall"
-  '';
-  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp clwrapper.asdf]
-    ++ (args.propagatedBuildInputs or []);
-  buildInputs = buildInputs;
-  dontStrip=true;
+      eval "$postInstall"
+    '';
+    propagatedBuildInputs = (args.deps or [ ])
+      ++ [ clwrapper clwrapper.lisp clwrapper.asdf ]
+      ++ (args.propagatedBuildInputs or [ ]);
+    buildInputs = buildInputs;
+    dontStrip = true;
 
-  ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
+    ASDF_OUTPUT_TRANSLATIONS = "${builtins.storeDir}/:${builtins.storeDir}";
 
-  noAuditTmpDir = true;
+    noAuditTmpDir = true;
 
-  meta = {
-    inherit description version;
-  } // meta;
-};
-package = basePackage // (overrides basePackage);
-in
-stdenv.mkDerivation package
+    meta = { inherit description version; } // meta;
+  };
+  package = basePackage // (overrides basePackage);
+in stdenv.mkDerivation package

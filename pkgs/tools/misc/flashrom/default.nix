@@ -1,15 +1,5 @@
-{ fetchurl
-, fetchpatch
-, stdenv
-, installShellFiles
-, lib
-, libftdi1
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, jlinkSupport ? false
-}:
+{ fetchurl, fetchpatch, stdenv, installShellFiles, lib, libftdi1, libjaylink
+, libusb1, pciutils, pkg-config, jlinkSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "flashrom";
@@ -28,12 +18,14 @@ stdenv.mkDerivation rec {
     # remove when updating from 1.2
     (fetchpatch {
       name = "fix-aarch64-build.patch";
-      url = "https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d.patch";
+      url =
+        "https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d.patch";
       sha256 = "sha256-fXYDXgT/ik+qtxxFEyJ7/axtycbwLkEg0UD+hzsYEwg=";
     })
     # fix build with gcc 10
     (fetchpatch {
-      url = "https://github.com/flashrom/flashrom/commit/3a0c1966e4c66f91e6e8551e906b6db38002acb4.patch";
+      url =
+        "https://github.com/flashrom/flashrom/commit/3a0c1966e4c66f91e6e8551e906b6db38002acb4.patch";
       sha256 = "sha256-UfXLefMS20VUc7hk4IXECFbDWEbBnHMGSzOYemTfvjI=";
     })
   ];
@@ -52,7 +44,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.flashrom.org";
-    description = "Utility for reading, writing, erasing and verifying flash ROM chips";
+    description =
+      "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
     platforms = platforms.all;

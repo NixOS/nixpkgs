@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.msmtp;
+let cfg = config.programs.msmtp;
 
 in {
   meta.maintainers = with maintainers; [ pacien ];
@@ -22,7 +21,7 @@ in {
 
       defaults = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           aliases = "/etc/aliases";
           port = 587;
@@ -36,7 +35,7 @@ in {
 
       accounts = mkOption {
         type = with types; attrsOf attrs;
-        default = {};
+        default = { };
         example = {
           "default" = {
             host = "smtp.example";
@@ -84,12 +83,15 @@ in {
 
     environment.etc."msmtprc".text = let
       mkValueString = v:
-        if v == true then "on"
-        else if v == false then "off"
-        else generators.mkValueStringDefault {} v;
+        if v == true then
+          "on"
+        else if v == false then
+          "off"
+        else
+          generators.mkValueStringDefault { } v;
       mkKeyValueString = k: v: "${k} ${mkValueString v}";
-      mkInnerSectionString =
-        attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
+      mkInnerSectionString = attrs:
+        concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
       mkAccountString = name: attrs: ''
         account ${name}
         ${mkInnerSectionString attrs}

@@ -12,7 +12,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1g4yfz5xq9lqwh0ggyn8kn8bnzrqfmh7kx455md5ranrqqh0x5db";
 
   meta = with lib; {
-    description = "An efficient way to filter duplicate lines from input, à la uniq";
+    description =
+      "An efficient way to filter duplicate lines from input, à la uniq";
     homepage = "https://github.com/whitfin/runiq";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

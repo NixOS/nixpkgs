@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmp
-, installShellFiles
-}:
+{ lib, stdenv, fetchFromGitHub, gmp, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "ssss";
@@ -16,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "18r1hwch6nq6gjijavr4pvrxz2plrlrvdx8ssqhdj2vmqvlqwbvd";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   preBuild = ''
     sed -e s@/usr/@$out/@g -i Makefile

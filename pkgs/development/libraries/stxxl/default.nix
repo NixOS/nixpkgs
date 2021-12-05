@@ -1,15 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, parallelSupport ? (!stdenv.isDarwin)
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, parallelSupport ? (!stdenv.isDarwin) }:
 
-let
-  mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
-in
+let mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "stxxl";
   version = "1.4.1";
 
@@ -29,12 +22,11 @@ stdenv.mkDerivation rec {
     (mkFlag parallelSupport "USE_OPENMP")
   ];
 
-  passthru = {
-    inherit parallelSupport;
-  };
+  passthru = { inherit parallelSupport; };
 
   meta = with lib; {
-    description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
+    description =
+      "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
     maintainers = with maintainers; [ ];

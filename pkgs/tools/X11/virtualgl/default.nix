@@ -1,7 +1,4 @@
-{ stdenv, lib
-, virtualglLib
-, virtualglLib_i686 ? null
-}:
+{ stdenv, lib, virtualglLib, virtualglLib_i686 ? null }:
 
 stdenv.mkDerivation {
   pname = "virtualgl";

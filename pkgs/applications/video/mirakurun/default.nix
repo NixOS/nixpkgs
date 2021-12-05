@@ -3,21 +3,8 @@
 #
 # https://github.com/Chinachu/node-aribts/blob/af84dbbbd81ea80b946e538083b64b5b2dc7e8f2/package.json#L26
 
-{ lib
-, stdenvNoCC
-, bash
-, common-updater-scripts
-, fetchFromGitHub
-, genericUpdater
-, jq
-, makeWrapper
-, mkYarnPackage
-, which
-, writers
-, v4l-utils
-, yarn
-, yarn2nix
-}:
+{ lib, stdenvNoCC, bash, common-updater-scripts, fetchFromGitHub, genericUpdater
+, jq, makeWrapper, mkYarnPackage, which, writers, v4l-utils, yarn, yarn2nix }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mirakurun";
@@ -53,38 +40,28 @@ stdenvNoCC.mkDerivation rec {
     distPhase = "true";
   };
 
-  installPhase =
-    let
-      runtimeDeps = [ bash which v4l-utils ];
-    in
-    ''
-      mkdir -p $out/bin
+  installPhase = let runtimeDeps = [ bash which v4l-utils ];
+  in ''
+    mkdir -p $out/bin
 
-      makeWrapper ${mirakurun}/bin/mirakurun-epgdump $out/bin/mirakurun-epgdump \
-        --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
-        --prefix PATH : ${lib.makeBinPath runtimeDeps}
+    makeWrapper ${mirakurun}/bin/mirakurun-epgdump $out/bin/mirakurun-epgdump \
+      --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
-      # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-      # server.  However, we invoke the server directly and let systemd
-      # manage it to avoid complication. This is okay since no features
-      # unique to PM2 is currently being used.
-      makeWrapper ${yarn}/bin/yarn $out/bin/mirakurun-start \
-        --add-flags "start" \
-        --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
-        --prefix PATH : ${lib.makeBinPath runtimeDeps}
-    '';
+    # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
+    # server.  However, we invoke the server directly and let systemd
+    # manage it to avoid complication. This is okay since no features
+    # unique to PM2 is currently being used.
+    makeWrapper ${yarn}/bin/yarn $out/bin/mirakurun-start \
+      --add-flags "start" \
+      --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
+  '';
 
   passthru.updateScript = import ./update.nix {
     inherit lib;
     inherit (src.meta) homepage;
-    inherit
-      pname
-      version
-      common-updater-scripts
-      genericUpdater
-      writers
-      jq
-      yarn
+    inherit pname version common-updater-scripts genericUpdater writers jq yarn
       yarn2nix;
   };
 

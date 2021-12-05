@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-cov
-, hyppo
-, matplotlib
-, networkx
-, numpy
-, scikit-learn
-, scipy
-, seaborn
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, pytestCheckHook, pytest-cov
+, hyppo, matplotlib, networkx, numpy, scikit-learn, scipy, seaborn }:
 
 buildPythonPackage rec {
   pname = "graspologic";
@@ -26,24 +14,18 @@ buildPythonPackage rec {
     sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
   };
 
-  propagatedBuildInputs = [
-    hyppo
-    matplotlib
-    networkx
-    numpy
-    scikit-learn
-    scipy
-    seaborn
-  ];
+  propagatedBuildInputs =
+    [ hyppo matplotlib networkx numpy scikit-learn scipy seaborn ];
 
   checkInputs = [ pytestCheckHook pytest-cov ];
-  pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
+  pytestFlagsArray =
+    [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 
   meta = with lib; {
     homepage = "https://graspologic.readthedocs.io";
     description = "A package for graph statistical algorithms";
-    license = licenses.asl20;  # changing to `licenses.mit` in next release
+    license = licenses.asl20; # changing to `licenses.mit` in next release
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

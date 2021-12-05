@@ -1,12 +1,9 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{ config, ... }:
-{
+{ config, ... }: {
   config = {
 
-    environment.pathsToLink = [
-      "/share/terminfo"
-    ];
+    environment.pathsToLink = [ "/share/terminfo" ];
 
     environment.etc.terminfo = {
       source = "${config.system.path}/share/terminfo";

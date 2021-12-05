@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "tap.py";
@@ -22,7 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/python-tap/tappy";
-    description = "A set of tools for working with the Test Anything Protocol (TAP) in Python";
+    description =
+      "A set of tools for working with the Test Anything Protocol (TAP) in Python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sfrijters ];
   };

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, scipy
-, pytest
-, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, scikit-learn, scipy, pytest, isPy27
 }:
 
 buildPythonPackage rec {
@@ -19,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "01mg9npiqh1qmq5ldnbpjmr8qkiw827msiv3crpkhbj4bdzasbfm";
   };
 
-  propagatedBuildInputs = [
-    scikit-learn
-    scipy
-  ];
+  propagatedBuildInputs = [ scikit-learn scipy ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
@@ -31,7 +22,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Python implementation of global optimization with gaussian processes";
+    description =
+      "A Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/fmfn/BayesianOptimization";
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];

@@ -2,23 +2,21 @@
 
 let
   # Use astring 0.8.3 for OCaml < 4.05
-  param =
-    if lib.versionAtLeast ocaml.version "4.05"
-    then {
-      version = "0.8.5";
-      sha256 = "1ykhg9gd3iy7zsgyiy2p9b1wkpqg9irw5pvcqs3sphq71iir4ml6";
-    } else {
-      version = "0.8.3";
-      sha256 = "0ixjwc3plrljvj24za3l9gy0w30lsbggp8yh02lwrzw61ls4cri0";
-    };
-in
+  param = if lib.versionAtLeast ocaml.version "4.05" then {
+    version = "0.8.5";
+    sha256 = "1ykhg9gd3iy7zsgyiy2p9b1wkpqg9irw5pvcqs3sphq71iir4ml6";
+  } else {
+    version = "0.8.3";
+    sha256 = "0ixjwc3plrljvj24za3l9gy0w30lsbggp8yh02lwrzw61ls4cri0";
+  };
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-astring-${param.version}";
   inherit (param) version;
 
   src = fetchurl {
-    url = "https://erratique.ch/software/astring/releases/astring-${param.version}.tbz";
+    url =
+      "https://erratique.ch/software/astring/releases/astring-${param.version}.tbz";
     inherit (param) sha256;
   };
 

@@ -1,11 +1,5 @@
-{ buildPythonPackage
-, python-manilaclient
-, stestr
-, ddt
-, tempest
-, mock
-, python-openstackclient
-}:
+{ buildPythonPackage, python-manilaclient, stestr, ddt, tempest, mock
+, python-openstackclient }:
 
 buildPythonPackage rec {
   pname = "python-manilaclient-tests";
@@ -16,14 +10,8 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
-    python-manilaclient
-    stestr
-    ddt
-    tempest
-    mock
-    python-openstackclient
-  ];
+  checkInputs =
+    [ python-manilaclient stestr ddt tempest mock python-openstackclient ];
 
   checkPhase = ''
     stestr run

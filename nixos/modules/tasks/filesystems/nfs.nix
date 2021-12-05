@@ -10,7 +10,7 @@ let
 
   rpcMountpoint = "${nfsStateDir}/rpc_pipefs";
 
-  format = pkgs.formats.ini {};
+  format = pkgs.formats.ini { };
 
   idmapdConfFile = format.generate "idmapd.conf" cfg.idmapd.settings;
   nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
@@ -20,16 +20,14 @@ let
 
   cfg = config.services.nfs;
 
-in
-
-{
+in {
   ###### interface
 
   options = {
     services.nfs = {
       idmapd.settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           libnfsidmap configuration. Refer to
           <link xlink:href="https://linux.die.net/man/5/idmapd.conf"/>
@@ -58,78 +56,73 @@ in
 
   ###### implementation
 
-  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
+  config = mkIf
+    (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
 
-    services.rpcbind.enable = true;
+      services.rpcbind.enable = true;
 
-    services.nfs.idmapd.settings = {
-      General = mkMerge [
-        { Pipefs-Directory = rpcMountpoint; }
-        (mkIf (config.networking.domain != null) { Domain = config.networking.domain; })
-      ];
-      Mapping = {
-        Nobody-User = "nobody";
-        Nobody-Group = "nogroup";
-      };
-      Translation = {
-        Method = "nsswitch";
-      };
-    };
-
-    system.fsPackages = [ pkgs.nfs-utils ];
-
-    boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
-
-    systemd.packages = [ pkgs.nfs-utils ];
-
-    environment.systemPackages = [ pkgs.keyutils ];
-
-    environment.etc = {
-      "idmapd.conf".source = idmapdConfFile;
-      "nfs.conf".source = nfsConfFile;
-      "request-key.conf".source = requestKeyConfFile;
-    };
-
-    systemd.services.nfs-blkmap =
-      { restartTriggers = [ nfsConfFile ];
+      services.nfs.idmapd.settings = {
+        General = mkMerge [
+          { Pipefs-Directory = rpcMountpoint; }
+          (mkIf (config.networking.domain != null) {
+            Domain = config.networking.domain;
+          })
+        ];
+        Mapping = {
+          Nobody-User = "nobody";
+          Nobody-Group = "nogroup";
+        };
+        Translation = { Method = "nsswitch"; };
       };
 
-    systemd.targets.nfs-client =
-      { wantedBy = [ "multi-user.target" "remote-fs.target" ];
+      system.fsPackages = [ pkgs.nfs-utils ];
+
+      boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
+
+      systemd.packages = [ pkgs.nfs-utils ];
+
+      environment.systemPackages = [ pkgs.keyutils ];
+
+      environment.etc = {
+        "idmapd.conf".source = idmapdConfFile;
+        "nfs.conf".source = nfsConfFile;
+        "request-key.conf".source = requestKeyConfFile;
       };
 
-    systemd.services.nfs-idmapd =
-      { restartTriggers = [ idmapdConfFile ];
+      systemd.services.nfs-blkmap = { restartTriggers = [ nfsConfFile ]; };
+
+      systemd.targets.nfs-client = {
+        wantedBy = [ "multi-user.target" "remote-fs.target" ];
       };
 
-    systemd.services.nfs-mountd =
-      { restartTriggers = [ nfsConfFile ];
+      systemd.services.nfs-idmapd = { restartTriggers = [ idmapdConfFile ]; };
+
+      systemd.services.nfs-mountd = {
+        restartTriggers = [ nfsConfFile ];
         enable = mkDefault false;
       };
 
-    systemd.services.nfs-server =
-      { restartTriggers = [ nfsConfFile ];
+      systemd.services.nfs-server = {
+        restartTriggers = [ nfsConfFile ];
         enable = mkDefault false;
       };
 
-    systemd.services.auth-rpcgss-module =
-      {
+      systemd.services.auth-rpcgss-module = {
         unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
       };
 
-    systemd.services.rpc-gssd =
-      { restartTriggers = [ nfsConfFile ];
+      systemd.services.rpc-gssd = {
+        restartTriggers = [ nfsConfFile ];
         unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
       };
 
-    systemd.services.rpc-statd =
-      { restartTriggers = [ nfsConfFile ];
+      systemd.services.rpc-statd = {
+        restartTriggers = [ nfsConfFile ];
 
-        preStart =
-          ''
-            mkdir -p /var/lib/nfs/{sm,sm.bak}
-          '';
+        preStart = ''
+          mkdir -p /var/lib/nfs/{sm,sm.bak}
+        '';
       };
 
-  };
+    };
 }

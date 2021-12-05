@@ -1,13 +1,11 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "gnome";
-  meta = with lib; {
-    maintainers = teams.gnome.members;
-  };
+  meta = with lib; { maintainers = teams.gnome.members; };
 
-  machine =
-    { ... }:
+  machine = { ... }:
 
-    { imports = [ ./common/user-account.nix ];
+    {
+      imports = [ ./common/user-account.nix ];
 
       services.xserver.enable = true;
 
@@ -47,28 +45,30 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     };
 
-  testScript = { nodes, ... }: let
-    # Keep line widths somewhat managable
-    user = nodes.machine.config.users.users.alice;
-    uid = toString user.uid;
-    bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
-    gdbus = "${bus} gdbus";
-    su = command: "su - ${user.name} -c '${command}'";
+  testScript = { nodes, ... }:
+    let
+      # Keep line widths somewhat managable
+      user = nodes.machine.config.users.users.alice;
+      uid = toString user.uid;
+      bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
+      gdbus = "${bus} gdbus";
+      su = command: "su - ${user.name} -c '${command}'";
 
-    # Call javascript in gnome shell, returns a tuple (success, output), where
-    # `success` is true if the dbus call was successful and output is what the
-    # javascript evaluates to.
-    eval = "call --session -d org.gnome.Shell -o /org/gnome/Shell -m org.gnome.Shell.Eval";
+      # Call javascript in gnome shell, returns a tuple (success, output), where
+      # `success` is true if the dbus call was successful and output is what the
+      # javascript evaluates to.
+      eval =
+        "call --session -d org.gnome.Shell -o /org/gnome/Shell -m org.gnome.Shell.Eval";
 
-    # False when startup is done
-    startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
+      # False when startup is done
+      startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
 
-    # Start gnome-terminal
-    gnomeTerminalCommand = su "${bus} gnome-terminal";
+      # Start gnome-terminal
+      gnomeTerminalCommand = su "${bus} gnome-terminal";
 
-    # Hopefully gnome-terminal's wm class
-    wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
-  in ''
+      # Hopefully gnome-terminal's wm class
+      wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
+    in ''
       with subtest("Login to GNOME with GDM"):
           # wait for gdm to start
           machine.wait_for_unit("display-manager.service")

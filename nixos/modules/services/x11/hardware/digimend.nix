@@ -8,20 +8,18 @@ let
 
   pkg = config.boot.kernelPackages.digimend;
 
-in
-
-{
+in {
 
   options = {
 
     services.xserver.digimend = {
 
-      enable = mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
+      enable =
+        mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
 
     };
 
   };
-
 
   config = mkIf cfg.enable {
 

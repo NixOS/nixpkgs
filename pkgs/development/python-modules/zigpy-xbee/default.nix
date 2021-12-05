@@ -1,14 +1,5 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy
-}:
+{ lib, asynctest, buildPythonPackage, fetchFromGitHub, pyserial
+, pyserial-asyncio, pytest-asyncio, pytestCheckHook, pythonOlder, zigpy }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
@@ -25,17 +16,9 @@ buildPythonPackage rec {
     sha256 = "sha256-veAkaBHPYgVd3iwvnH/A2upYX4T/qXXNRcaysbRQvNI=";
   };
 
-  buildInputs = [
-    pyserial
-    pyserial-asyncio
-    zigpy
-  ];
+  buildInputs = [ pyserial pyserial-asyncio zigpy ];
 
-  checkInputs = [
-    asynctest
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # assertion failure

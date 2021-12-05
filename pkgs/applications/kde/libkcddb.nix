@@ -1,6 +1,5 @@
-{ mkDerivation, lib, extra-cmake-modules, qtbase, kdoctools
-, kcodecs, ki18n, kio, kwidgetsaddons
-, libmusicbrainz5 }:
+{ mkDerivation, lib, extra-cmake-modules, qtbase, kdoctools, kcodecs, ki18n, kio
+, kwidgetsaddons, libmusicbrainz5 }:
 
 mkDerivation {
   pname = "libkcddb";
@@ -10,8 +9,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [
-    kcodecs ki18n kio kwidgetsaddons
-    libmusicbrainz5
-  ];
+  propagatedBuildInputs = [ kcodecs ki18n kio kwidgetsaddons libmusicbrainz5 ];
 }

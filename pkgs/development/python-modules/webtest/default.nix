@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, nose
-, webob
-, six
-, beautifulsoup4
-, waitress
-, mock
-, pyquery
-, wsgiproxy2
-, pastedeploy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, nose, webob, six, beautifulsoup4
+, waitress, mock, pyquery, wsgiproxy2, pastedeploy }:
 
 buildPythonPackage rec {
   version = "2.0.35";
@@ -28,20 +16,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "nose<1.3.0" "nose"
   '';
 
-  propagatedBuildInputs = [
-    webob
-    six
-    beautifulsoup4
-    waitress
-  ];
+  propagatedBuildInputs = [ webob six beautifulsoup4 waitress ];
 
-  checkInputs = [
-    nose
-    mock
-    pastedeploy
-    wsgiproxy2
-    pyquery
-  ];
+  checkInputs = [ nose mock pastedeploy wsgiproxy2 pyquery ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64 }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool
+, xapian, icu64 }:
 stdenv.mkDerivation rec {
   pname = "fts-xapian";
   version = "1.4.14";

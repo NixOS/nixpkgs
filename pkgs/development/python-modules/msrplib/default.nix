@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchdarcs
-, eventlib
-, application
-, gnutls
-}:
+{ lib, buildPythonPackage, fetchdarcs, eventlib, application, gnutls }:
 
 buildPythonPackage rec {
   pname = "python-msrplib";
@@ -20,7 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/AGProjects/python-msrplib";
-    description = "Client library for MSRP protocol and its relay extension (RFC 4975 and RFC4976)";
+    description =
+      "Client library for MSRP protocol and its relay extension (RFC 4975 and RFC4976)";
     license = licenses.lgpl3;
   };
 

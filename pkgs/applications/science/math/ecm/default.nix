@@ -4,13 +4,13 @@ let
   pname = "ecm";
   version = "7.0.4";
   name = "${pname}-${version}";
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/file/36224/ecm-${version}.tar.gz";
+    url =
+      "http://gforge.inria.fr/frs/download.php/file/36224/ecm-${version}.tar.gz";
     sha256 = "0hxs24c2m3mh0nq1zz63z3sb7dhy1rilg2s1igwwcb26x3pb7xqc";
   };
 

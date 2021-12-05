@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, cmake, xxd
-, openssl, libwebsockets, json_c, libuv, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, xxd, openssl, libwebsockets
+, json_c, libuv, zlib }:
 
 with builtins;
 
@@ -22,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Share your terminal over the web";
-    homepage    = "https://github.com/tsl0922/ttyd";
-    license     = lib.licenses.mit;
+    homepage = "https://github.com/tsl0922/ttyd";
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thoughtpolice ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

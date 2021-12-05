@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "elementpath";
@@ -21,12 +17,11 @@ buildPythonPackage rec {
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elementpath"
-  ];
+  pythonImportsCheck = [ "elementpath" ];
 
   meta = with lib; {
-    description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
+    description =
+      "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
     homepage = "https://github.com/sissaschool/elementpath";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

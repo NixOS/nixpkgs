@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   setOutputFlags = false;
 
@@ -20,12 +22,13 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ libresolv ];
+  buildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ libresolv ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
 
   meta = with lib; {
-    description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
+    description =
+      "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
     homepage = "http://www.mavetju.org/unix/general.php";
     license = licenses.bsd2;
     maintainers = with maintainers; [ andir ];

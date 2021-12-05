@@ -1,12 +1,5 @@
-{ lib
-, substituteAll
-, mkDerivation
-, fetchFromGitLab
-, mobile-broadband-provider-info
-, qmake
-, qtbase
-, qtdeclarative
-}:
+{ lib, substituteAll, mkDerivation, fetchFromGitLab
+, mobile-broadband-provider-info, qmake, qtbase, qtdeclarative }:
 
 mkDerivation rec {
   pname = "libqofono";
@@ -39,17 +32,13 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
   '';
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtbase
-    qtdeclarative
-  ];
+  buildInputs = [ qtbase qtdeclarative ];
 
   meta = with lib; {
-    description = "Library for accessing the ofono daemon, and declarative plugin for it";
+    description =
+      "Library for accessing the ofono daemon, and declarative plugin for it";
     homepage = "https://git.sailfishos.org/mer-core/libqofono/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ samueldr ];

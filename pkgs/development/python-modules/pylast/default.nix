@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, certifi
-, fetchPypi
-, flaky
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
-}:
+{ lib, buildPythonPackage, certifi, fetchPypi, flaky, pytestCheckHook
+, pythonOlder, setuptools-scm, six }:
 
 buildPythonPackage rec {
   pname = "pylast";
@@ -21,15 +13,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    certifi
-    six
-  ];
+  propagatedBuildInputs = [ certifi six ];
 
-  checkInputs = [
-    pytestCheckHook
-    flaky
-  ];
+  checkInputs = [ pytestCheckHook flaky ];
 
   pythonImportsCheck = [ "pylast" ];
 

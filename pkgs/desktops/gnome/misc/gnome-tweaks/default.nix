@@ -1,22 +1,6 @@
-{ lib
-, meson
-, ninja
-, fetchurl
-, gdk-pixbuf
-, gettext
-, glib
-, gnome
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk3
-, itstool
-, libhandy
-, libnotify
-, libsoup
-, libxml2
-, pkg-config
-, python3Packages
-, wrapGAppsHook }:
+{ lib, meson, ninja, fetchurl, gdk-pixbuf, gettext, glib, gnome
+, gobject-introspection, gsettings-desktop-schemas, gtk3, itstool, libhandy
+, libnotify, libsoup, libxml2, pkg-config, python3Packages, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
@@ -25,7 +9,9 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "+V8/4DGwsBwC95oWWfiJFS03cq4+RN+EA9FGC6Xuw2o=";
   };
 
@@ -56,9 +42,7 @@ python3Packages.buildPythonApplication rec {
     libsoup
   ];
 
-  pythonPath = with python3Packages; [
-    pygobject3
-  ];
+  pythonPath = with python3Packages; [ pygobject3 ];
 
   postPatch = ''
     patchShebangs meson-postinstall.py

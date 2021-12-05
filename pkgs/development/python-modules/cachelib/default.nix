@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-xprocess
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-xprocess, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "cachelib";
@@ -18,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ssyHNlrSrG8YHRS131jJtmgl6eMTNdet1Hf0nTxL8sM=";
   };
 
-  checkInputs = [
-    pytest-xprocess
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-xprocess pytestCheckHook ];
 
   pythonImportsCheck = [ "cachelib" ];
 

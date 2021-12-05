@@ -1,4 +1,5 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles
+, SystemConfiguration, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
 
-  checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
+  checkFlags =
+    [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
 
   postInstall = ''
     for shell in bash fish zsh; do

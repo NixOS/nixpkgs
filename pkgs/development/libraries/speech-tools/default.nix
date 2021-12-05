@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.5";
 
   src = fetchurl {
-    url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
+    url =
+      "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
     sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
@@ -42,8 +43,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateInfo = {
-      downloadPage = "http://www.festvox.org/packed/festival/";
-    };
+    updateInfo = { downloadPage = "http://www.festvox.org/packed/festival/"; };
   };
 }

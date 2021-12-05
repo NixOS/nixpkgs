@@ -1,15 +1,5 @@
-{ stdenv
-, lib
-, fetchurl
-, boost
-, meson
-, ninja
-, pkg-config
-, cairo
-, fontconfig
-, libsigcxx30
-, ApplicationServices
-}:
+{ stdenv, lib, fetchurl, boost, meson, ninja, pkg-config, cairo, fontconfig
+, libsigcxx30, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
@@ -22,28 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b2Bg2OmN1Lis/uIpX92904z0h8B8JqrY0ag7ub/0osY=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
     boost # for tests
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [
-    cairo
-    libsigcxx30
-  ];
+  propagatedBuildInputs = [ cairo libsigcxx30 ];
 
-  mesonFlags = [
-    "-Dbuild-tests=true"
-    "-Dboost-shared=true"
-  ];
+  mesonFlags = [ "-Dbuild-tests=true" "-Dboost-shared=true" ];
 
   # Meson is no longer able to pick up Boost automatically.
   # https://github.com/NixOS/nixpkgs/issues/86131
@@ -54,7 +32,8 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
+    description =
+      "A 2D graphics library with support for multiple output devices";
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output
       devices.  Currently supported output targets include the X

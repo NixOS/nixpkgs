@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.8.5";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
+    url =
+      "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
     sha256 = "1vxzm7kczwnb6qdmc0hb00z8ykx11zk3sb68gc7rch4vrfi4dakw";
   };
 

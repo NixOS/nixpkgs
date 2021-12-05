@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "6";
+let version = "6";
 in fetchzip {
   name = "fira-code-${version}";
 
-  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+  url =
+    "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
 
   # only extract the variable font because everything else is a duplicate
   postFetch = ''

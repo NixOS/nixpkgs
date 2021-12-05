@@ -1,8 +1,4 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, networkx
-, numpy }:
+{ lib, fetchPypi, buildPythonPackage, networkx, numpy }:
 
 buildPythonPackage rec {
   pname = "python-louvain";

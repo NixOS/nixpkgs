@@ -1,23 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, cairo
-, glib
-, libinput
-, libxml2
-, pango
-, wayland
-, wayland-protocols
-, wlroots
-, libxcb
-, libxkbcommon
-, xwayland
-, libdrm
-, scdoc
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, cairo, glib, libinput
+, libxml2, pango, wayland, wayland-protocols, wlroots, libxcb, libxkbcommon
+, xwayland, libdrm, scdoc }:
 
 stdenv.mkDerivation rec {
   pname = "labwc";
@@ -30,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-v8LGiQG/n1IXeVMPWyiP9MgZzZLW78JftvxnRVTswaM=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    scdoc
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [
     cairo
     glib

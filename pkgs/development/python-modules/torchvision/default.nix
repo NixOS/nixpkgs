@@ -1,19 +1,7 @@
-{ lib
-, symlinkJoin
-, buildPythonPackage
-, fetchFromGitHub
-, ninja
-, which
-, libjpeg_turbo
-, libpng
-, numpy
-, scipy
-, pillow
-, pytorch
-, pytest
-, cudatoolkit
-, cudnn
-, cudaSupport ? pytorch.cudaSupport or false # by default uses the value from pytorch
+{ lib, symlinkJoin, buildPythonPackage, fetchFromGitHub, ninja, which
+, libjpeg_turbo, libpng, numpy, scipy, pillow, pytorch, pytest, cudatoolkit
+, cudnn, cudaSupport ?
+  pytorch.cudaSupport or false # by default uses the value from pytorch
 }:
 
 let
@@ -21,7 +9,8 @@ let
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
-  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
+  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";"
+    pytorch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
   version = "0.11.1";
@@ -39,8 +28,7 @@ in buildPythonPackage rec {
   TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
   TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
 
-  buildInputs = [ libjpeg_turbo libpng ]
-    ++ lib.optionals cudaSupport [ cudnn ];
+  buildInputs = [ libjpeg_turbo libpng ] ++ lib.optionals cudaSupport [ cudnn ];
 
   propagatedBuildInputs = [ numpy pillow pytorch scipy ];
 

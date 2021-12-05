@@ -1,12 +1,4 @@
-{ lib
-, behave
-, buildPythonPackage
-, fetchPypi
-, lxml
-, pytest
-, pyparsing
-, mock
-}:
+{ lib, behave, buildPythonPackage, fetchPypi, lxml, pytest, pyparsing, mock }:
 
 buildPythonPackage rec {
   pname = "python-docx";

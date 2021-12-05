@@ -1,11 +1,5 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pyserial
-, pythonOlder
-}:
+{ lib, async-timeout, buildPythonPackage, colorlog, fetchPypi, pyserial
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pyenvisalink";
@@ -17,11 +11,7 @@ buildPythonPackage rec {
     sha256 = "1h30gmmynihmjkd107skk2gpi210b6gfdahwqmydyj5isxrvzmq2";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    colorlog
-    pyserial
-  ];
+  propagatedBuildInputs = [ async-timeout colorlog pyserial ];
 
   # Tests require an Envisalink device
   doCheck = false;

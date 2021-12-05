@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.35";
 
   src = fetchurl {
-    url = "https://pauillac.inria.fr/~maranget/hevea/distri/hevea-${version}.tar.gz";
+    url =
+      "https://pauillac.inria.fr/~maranget/hevea/distri/hevea-${version}.tar.gz";
     sha256 = "sha256-8Ym62l0+WzWFXf39tbJwyZT8eiNmsBJQ12E1mtZsnss=";
   };
 

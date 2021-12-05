@@ -1,9 +1,9 @@
-{ lib, fetchFromGitHub, python3, mypy, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
+{ lib, fetchFromGitHub, python3, mypy, glib, cairo, pango, pkg-config, libxcb
+, xcbutilcursor }:
 
 let
-  enabled-xcffib = cairocffi-xcffib: cairocffi-xcffib.override {
-    withXcffib = true;
-  };
+  enabled-xcffib = cairocffi-xcffib:
+    cairocffi-xcffib.override { withXcffib = true; };
 
   # make it easier to reference python
   python = python3;
@@ -31,11 +31,8 @@ let
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-    nativeBuildInputs = [
-      pkg-config
-    ] ++ (with pythonPackages; [
-      setuptools-scm
-    ]);
+    nativeBuildInputs = [ pkg-config ]
+      ++ (with pythonPackages; [ setuptools-scm ]);
 
     propagatedBuildInputs = with pythonPackages; [
       xcffib
@@ -53,24 +50,23 @@ let
     ];
 
     # for `qtile check`, needs `stubtest` and `mypy` commands
-    makeWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
-    ];
+    makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ mypy ]}" ];
 
-    doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
+    doCheck =
+      false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
 
     meta = with lib; {
       homepage = "http://www.qtile.org/";
       license = licenses.mit;
-      description = "A small, flexible, scriptable tiling window manager written in Python";
+      description =
+        "A small, flexible, scriptable tiling window manager written in Python";
       platforms = platforms.linux;
       maintainers = with maintainers; [ kamilchm ];
     };
   };
-in
-  (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
-    # otherwise will be exported as "env", this restores `nix search` behavior
-    name = "${unwrapped.pname}-${unwrapped.version}";
-    # export underlying qtile package
-    passthru = { inherit unwrapped; };
-  })
+in (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
+})

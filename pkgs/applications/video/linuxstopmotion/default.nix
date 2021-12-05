@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchgit, pkg-config, qmake, qtbase, qttools, qtmultimedia, libvorbis, libtar, libxml2 }:
+{ mkDerivation, lib, fetchgit, pkg-config, qmake, qtbase, qttools, qtmultimedia
+, libvorbis, libtar, libxml2 }:
 
 mkDerivation rec {
   version = "0.8.5";
@@ -14,7 +15,9 @@ mkDerivation rec {
   buildInputs = [ qtbase qttools qtmultimedia libvorbis libtar libxml2 ];
 
   postPatch = ''
-    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${lib.getDev qttools}/bin'
+    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${
+      lib.getDev qttools
+    }/bin'
   '';
 
   meta = with lib; {

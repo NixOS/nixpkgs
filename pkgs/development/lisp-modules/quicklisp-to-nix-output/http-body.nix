@@ -1,21 +1,46 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "http-body";
   version = "20190813-git";
 
   description = "HTTP POST data parser for Common Lisp";
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-annot" args."cl-ppcre" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."jonathan" args."named-readtables" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."trivial-types" args."xsubseq" ];
+  deps = [
+    args."alexandria"
+    args."babel"
+    args."cffi"
+    args."cffi-grovel"
+    args."cffi-toolchain"
+    args."cl-annot"
+    args."cl-ppcre"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."cl-utilities"
+    args."fast-http"
+    args."fast-io"
+    args."flexi-streams"
+    args."jonathan"
+    args."named-readtables"
+    args."proc-parse"
+    args."quri"
+    args."smart-buffer"
+    args."split-sequence"
+    args."static-vectors"
+    args."trivial-features"
+    args."trivial-gray-streams"
+    args."trivial-types"
+    args."xsubseq"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/http-body/2019-08-13/http-body-20190813-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/http-body/2019-08-13/http-body-20190813-git.tgz";
     sha256 = "1mc4xinqnvjr7cdyaywdb5lv9k34pal7lhp6f9a660r1rbxybvy8";
   };
 
   packageName = "http-body";
 
-  asdFilesToKeep = ["http-body.asd"];
+  asdFilesToKeep = [ "http-body.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM http-body DESCRIPTION HTTP POST data parser for Common Lisp SHA256
@@ -47,4 +72,5 @@ rec {
      jonathan named-readtables proc-parse quri smart-buffer split-sequence
      static-vectors trivial-features trivial-gray-streams trivial-types
      xsubseq)
-    VERSION 20190813-git SIBLINGS (http-body-test) PARASITES NIL) */
+    VERSION 20190813-git SIBLINGS (http-body-test) PARASITES NIL)
+*/

@@ -2,8 +2,9 @@
 
 with lib;
 
-let cfg = config.services.hardware.pommed;
-    defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
+let
+  cfg = config.services.hardware.pommed;
+  defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
 in {
 
   options = {

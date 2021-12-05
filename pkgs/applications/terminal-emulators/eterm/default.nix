@@ -1,14 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, imlib2
-, libX11
-, libXaw
-, libXext
-, libast
-, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, imlib2, libX11, libXaw, libXext
+, libast, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "eterm";
@@ -21,17 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pfXYrd6BamBTcnarvXj+C6D1WyGtj87GrW+Dl6AeiDE=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-  buildInputs = [
-    imlib2
-    libX11
-    libXaw
-    libXext
-    libast
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ imlib2 libX11 libXaw libXext libast ];
 
   meta = with lib; {
     homepage = "http://www.eterm.org";

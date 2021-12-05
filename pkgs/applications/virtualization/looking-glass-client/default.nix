@@ -1,9 +1,6 @@
-
 { stdenv, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, cmake, pkg-config
-, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig
-, libXi, libXScrnSaver, libXinerama
-, wayland, wayland-protocols
-}:
+, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libXi
+, libXScrnSaver, libXinerama, wayland, wayland-protocols }:
 
 let
   desktopItem = makeDesktopItem {
@@ -14,8 +11,7 @@ let
     icon = "lg-logo";
     terminal = true;
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "looking-glass-client";
   version = "B4";
 
@@ -30,10 +26,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL SDL2_ttf freefont_ttf spice-protocol
-    libbfd nettle fontconfig
-    libXi libXScrnSaver libXinerama
-    wayland wayland-protocols
+    SDL
+    SDL2_ttf
+    freefont_ttf
+    spice-protocol
+    libbfd
+    nettle
+    fontconfig
+    libXi
+    libXScrnSaver
+    libXinerama
+    wayland
+    wayland-protocols
   ];
 
   NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.

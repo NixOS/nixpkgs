@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.localtime;
+let cfg = config.services.localtime;
 in {
   options = {
     services.localtime = {
@@ -39,7 +38,7 @@ in {
       isSystemUser = true;
       group = "localtimed";
     };
-    users.groups.localtimed = {};
+    users.groups.localtimed = { };
 
     systemd.services.localtime = {
       wantedBy = [ "multi-user.target" ];

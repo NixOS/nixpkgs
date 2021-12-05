@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cairocffi
-, cssselect2
-, defusedxml
-, pillow
-, tinycss2
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cairocffi, cssselect2, defusedxml
+, pillow, tinycss2, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "CairoSVG";
@@ -36,9 +27,7 @@ buildPythonPackage rec {
       --replace "--isort" ""
   '';
 
-  pytestFlagsArray = [
-    "cairosvg/test_api.py"
-  ];
+  pytestFlagsArray = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 

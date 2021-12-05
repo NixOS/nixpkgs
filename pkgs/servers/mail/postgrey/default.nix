@@ -1,15 +1,19 @@
 { fetchurl, perlPackages, lib, runCommand, postfix }:
 
 let
-    mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);
-    postgrey-flags = mk-perl-flags (with perlPackages; [
-      NetServer BerkeleyDB DigestSHA1 NetAddrIP IOMultiplex
-    ]);
-    policy-test-flags = mk-perl-flags (with perlPackages; [
-      ParseSyslog
-    ]);
-    version = "1.37";
-    name = "postgrey-${version}";
+  mk-perl-flags = inputs:
+    lib.concatStringsSep " "
+    (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);
+  postgrey-flags = mk-perl-flags (with perlPackages; [
+    NetServer
+    BerkeleyDB
+    DigestSHA1
+    NetAddrIP
+    IOMultiplex
+  ]);
+  policy-test-flags = mk-perl-flags (with perlPackages; [ ParseSyslog ]);
+  version = "1.37";
+  name = "postgrey-${version}";
 in runCommand name {
   src = fetchurl {
     url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
@@ -22,13 +26,13 @@ in runCommand name {
     license = licenses.gpl2;
   };
 } ''
-    mkdir -p $out/bin
-    cd $out
-    tar -xzf $src --strip-components=1
-    mv postgrey policy-test bin
-    sed -i -e "s,#!/usr/bin/perl -T,#!${perlPackages.perl}/bin/perl -T ${postgrey-flags}," \
-           -e "s#/etc/postfix#$out#" \
-        bin/postgrey
-    sed -i -e "s,#!/usr/bin/perl,#!${perlPackages.perl}/bin/perl ${policy-test-flags}," \
-        bin/policy-test
+  mkdir -p $out/bin
+  cd $out
+  tar -xzf $src --strip-components=1
+  mv postgrey policy-test bin
+  sed -i -e "s,#!/usr/bin/perl -T,#!${perlPackages.perl}/bin/perl -T ${postgrey-flags}," \
+         -e "s#/etc/postfix#$out#" \
+      bin/postgrey
+  sed -i -e "s,#!/usr/bin/perl,#!${perlPackages.perl}/bin/perl ${policy-test-flags}," \
+      bin/policy-test
 ''

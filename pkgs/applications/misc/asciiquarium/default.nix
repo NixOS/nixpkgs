@@ -5,7 +5,8 @@ in stdenv.mkDerivation {
   pname = "asciiquarium";
   inherit version;
   src = fetchurl {
-    url = "https://robobunny.com/projects/asciiquarium/asciiquarium_${version}.tar.gz";
+    url =
+      "https://robobunny.com/projects/asciiquarium/asciiquarium_${version}.tar.gz";
     sha256 = "0qfkr5b7sxzi973nh0h84blz2crvmf28jkkgaj3mxrr56mhwc20v";
   };
 
@@ -17,11 +18,14 @@ in stdenv.mkDerivation {
     cp asciiquarium $out/bin
     chmod +x $out/bin/asciiquarium
     wrapProgram $out/bin/asciiquarium \
-      --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ] }
+      --set PERL5LIB ${
+        perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ]
+      }
   '';
 
   meta = with lib; {
-    description = "Enjoy the mysteries of the sea from the safety of your own terminal!";
+    description =
+      "Enjoy the mysteries of the sea from the safety of your own terminal!";
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
     license = licenses.gpl2;
     platforms = platforms.unix;

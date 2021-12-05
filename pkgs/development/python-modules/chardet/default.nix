@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pythonOlder
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, hypothesis, pythonOlder, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-DW9ToV20Eg8rCMlPEefZPSyRHuEYtrMKBOw+6DEBefo=";
   };
 
-  checkInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
+  checkInputs = [ hypothesis pytestCheckHook ];
 
   pythonImportsCheck = [ "chardet" ];
 

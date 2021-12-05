@@ -5,14 +5,12 @@ with lib;
 let
   cfg = config.services.hdapsd;
   hdapsd = [ pkgs.hdapsd ];
-in
-{
+in {
   options = {
-    services.hdapsd.enable = mkEnableOption
-      ''
-        Hard Drive Active Protection System Daemon,
-        devices are detected and managed automatically by udev and systemd
-      '';
+    services.hdapsd.enable = mkEnableOption ''
+      Hard Drive Active Protection System Daemon,
+      devices are detected and managed automatically by udev and systemd
+    '';
   };
 
   config = mkIf cfg.enable {

@@ -1,12 +1,5 @@
-{ lib
-, fetchFromGitHub
-, genericUpdater
-, substituteAll
-, common-updater-scripts
-, ffmpeg
-, python3Packages
-, sox
-}:
+{ lib, fetchFromGitHub, genericUpdater, substituteAll, common-updater-scripts
+, ffmpeg, python3Packages, sox }:
 
 python3Packages.buildPythonApplication rec {
   pname = "r128gain";
@@ -26,7 +19,12 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
+  propagatedBuildInputs = with python3Packages; [
+    crcmod
+    ffmpeg-python
+    mutagen
+    tqdm
+  ];
   checkInputs = with python3Packages; [ requests sox ];
 
   # Testing downloads media files for testing, which requires the
@@ -36,7 +34,8 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     updateScript = genericUpdater {
       inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+      versionLister =
+        "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     };
   };
 

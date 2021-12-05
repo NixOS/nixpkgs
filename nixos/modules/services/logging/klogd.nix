@@ -9,7 +9,8 @@ with lib;
 
     services.klogd.enable = mkOption {
       type = types.bool;
-      default = versionOlder (getVersion config.boot.kernelPackages.kernel) "3.5";
+      default =
+        versionOlder (getVersion config.boot.kernelPackages.kernel) "3.5";
       description = ''
         Whether to enable klogd, the kernel log message processing
         daemon.  Since systemd handles logging of kernel messages on
@@ -20,7 +21,6 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.klogd.enable {
@@ -29,9 +29,8 @@ with lib;
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.sysklogd ];
       unitConfig.ConditionVirtualization = "!systemd-nspawn";
-      script =
-        "klogd -c 1 -2 -n " +
-        "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
+      script = "klogd -c 1 -2 -n "
+        + "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
     };
   };
 }

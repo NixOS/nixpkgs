@@ -1,4 +1,5 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith, overrideCC }:
+{ stdenv, lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith
+, overrideCC }:
 
 let
   version = "4.3.1";

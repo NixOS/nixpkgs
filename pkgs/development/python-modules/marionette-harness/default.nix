@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, mozprofile
-, mozversion
-, moztest
-, manifestparser
-, marionette_driver
-, browsermob-proxy
-, wptserve
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mozprofile, mozversion, moztest
+, manifestparser, marionette_driver, browsermob-proxy, wptserve }:
 
 buildPythonPackage rec {
   pname = "marionette-harness";
@@ -21,8 +11,15 @@ buildPythonPackage rec {
     sha256 = "041cd779ae383fb5c56f2bb44824f4e80ba895febd9a3f21570ac274221c82e0";
   };
 
-  propagatedBuildInputs = [ mozprofile mozversion browsermob-proxy moztest
-    wptserve manifestparser marionette_driver ];
+  propagatedBuildInputs = [
+    mozprofile
+    mozversion
+    browsermob-proxy
+    moztest
+    wptserve
+    manifestparser
+    marionette_driver
+  ];
 
   meta = {
     description = "Mozilla Marionette protocol test automation harness";

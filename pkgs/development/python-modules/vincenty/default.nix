@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "vincenty";
@@ -20,7 +17,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vincenty" ];
 
   meta = with lib; {
-    description = "Calculate the geographical distance between 2 points with extreme accuracy";
+    description =
+      "Calculate the geographical distance between 2 points with extreme accuracy";
     homepage = "https://github.com/maurycyp/vincenty";
     license = licenses.unlicense;
     maintainers = with maintainers; [ dotlambda ];

@@ -1,14 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub
-, callPackage
-, pkg-config
-, makeWrapper
-, qmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qtimageformats
-, aria2
-}:
+{ lib, mkDerivation, fetchFromGitHub, callPackage, pkg-config, makeWrapper
+, qmake, qtbase, qtwebengine, qtsvg, qtimageformats, aria2 }:
 
 mkDerivation rec {
   pname = "kiwix";
@@ -21,22 +12,12 @@ mkDerivation rec {
     sha256 = "12v43bcg4g8fcp02y2srsfdvcb7dpl4pxb9z7a235006s0kfv8yn";
   };
 
-  nativeBuildInputs = [
-    qmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
-  buildInputs = [
-    qtbase
-    qtwebengine
-    qtsvg
-    qtimageformats
-    (callPackage ./lib.nix {})
-  ];
+  buildInputs =
+    [ qtbase qtwebengine qtsvg qtimageformats (callPackage ./lib.nix { }) ];
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ aria2 ]}"
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ aria2 ]}" ];
 
   meta = with lib; {
     description = "An offline reader for Web content";

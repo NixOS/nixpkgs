@@ -1,29 +1,7 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, colorcet
-, cryptography
-, flask
-, flask-compress
-, flask-cors
-, flask-sockets
-, gevent
-, imageio
-, numpy
-, pillow
-, pyopenssl
-, scipy
-, six
-, unidecode
-, urllib3
-, wget
-, deepdiff
-, pytestCheckHook
-, pytest-cov
-, pythonOlder
-, websocket-client
-}:
+{ lib, buildPythonPackage, pythonAtLeast, fetchFromGitHub, colorcet
+, cryptography, flask, flask-compress, flask-cors, flask-sockets, gevent
+, imageio, numpy, pillow, pyopenssl, scipy, six, unidecode, urllib3, wget
+, deepdiff, pytestCheckHook, pytest-cov, pythonOlder, websocket-client }:
 
 buildPythonPackage rec {
   pname = "runway-python";
@@ -56,16 +34,9 @@ buildPythonPackage rec {
     wget
   ];
 
-  pythonImportsCheck = [
-    "runway"
-  ];
+  pythonImportsCheck = [ "runway" ];
 
-  checkInputs = [
-    deepdiff
-    pytestCheckHook
-    pytest-cov
-    websocket-client
-  ];
+  checkInputs = [ deepdiff pytestCheckHook pytest-cov websocket-client ];
 
   disabledTests = [
     # these tests require network
@@ -75,11 +46,11 @@ buildPythonPackage rec {
     # Fails with a decoding error at the moment
     "test_inference_async"
   ] ++ lib.optionals (pythonAtLeast "3.9") [
-     # AttributeError: module 'base64' has no attribute 'decodestring
-     # https://github.com/runwayml/model-sdk/issues/99
-     "test_image_serialize_and_deserialize"
-     "test_segmentation_serialize_and_deserialize_colormap"
-     "test_segmentation_serialize_and_deserialize_labelmap"
+    # AttributeError: module 'base64' has no attribute 'decodestring
+    # https://github.com/runwayml/model-sdk/issues/99
+    "test_image_serialize_and_deserialize"
+    "test_segmentation_serialize_and_deserialize_colormap"
+    "test_segmentation_serialize_and_deserialize_labelmap"
   ];
 
   meta = {

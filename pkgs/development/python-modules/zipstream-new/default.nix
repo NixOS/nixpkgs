@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage rec {
   pname = "zipstream-new";
@@ -16,13 +12,9 @@ buildPythonPackage rec {
     sha256 = "14vhgg8mcjqi8cpzrw8qzbij2fr2a63l2a8fhil21k2r8vzv92cv";
   };
 
-  pythonImportsCheck = [
-    "zipstream"
-  ];
+  pythonImportsCheck = [ "zipstream" ];
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck
@@ -31,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Like Python's ZipFile module, except it works as a generator that provides the file in many small chunks";
+    description =
+      "Like Python's ZipFile module, except it works as a generator that provides the file in many small chunks";
     homepage = "https://github.com/arjan-s/python-zipstream";
     license = licenses.gpl3;
     maintainers = with maintainers; [ hexa ];

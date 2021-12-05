@@ -1,14 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, setuptools-scm
-, xorg
-, python
-, mock
-, nose
-, util-linux
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, six, setuptools-scm, xorg
+, python, mock, nose, util-linux }:
 
 buildPythonPackage rec {
   pname = "xlib";
@@ -25,7 +16,13 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  checkInputs = [ mock nose util-linux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
+  checkInputs = [
+    mock
+    nose
+    util-linux # mcookie
+    xorg.xauth
+    xorg.xorgserver # xvfb
+  ];
   nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ xorg.libX11 ];
   propagatedBuildInputs = [ six ];

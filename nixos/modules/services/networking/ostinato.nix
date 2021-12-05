@@ -17,8 +17,7 @@ let
     Exclude=${concatStringsSep "," cfg.portList.exclude}
   '';
 
-in
-{
+in {
 
   ###### interface
 
@@ -64,7 +63,7 @@ in
       portList = {
         include = mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
           example = [ "eth*" "lo*" ];
           description = ''
             For a port to pass the filter and appear on the port list managed
@@ -73,7 +72,7 @@ in
         };
         exclude = mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
           example = [ "usbmon*" "eth0" ];
           description = ''
             A list of ports does not appear on the port list managed by drone.

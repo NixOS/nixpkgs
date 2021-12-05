@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "Program for quantifying abundances of transcripts from RNA-Seq data";
+    description =
+      "Program for quantifying abundances of transcripts from RNA-Seq data";
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;

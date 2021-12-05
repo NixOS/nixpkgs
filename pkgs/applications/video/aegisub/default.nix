@@ -1,43 +1,18 @@
-{ lib
-, config
-, stdenv
-, fetchurl
-, fetchpatch
-, boost
-, ffmpeg
-, ffms
-, fftw
-, fontconfig
-, freetype
-, icu
-, intltool
-, libGL
-, libGLU
-, libX11
-, libass
-, libiconv
-, pkg-config
-, wxGTK
-, zlib
+{ lib, config, stdenv, fetchurl, fetchpatch, boost, ffmpeg, ffms, fftw
+, fontconfig, freetype, icu, intltool, libGL, libGLU, libX11, libass, libiconv
+, pkg-config, wxGTK, zlib
 
-, spellcheckSupport ? true
-, hunspell ? null
+, spellcheckSupport ? true, hunspell ? null
 
-, automationSupport ? true
-, lua ? null
+, automationSupport ? true, lua ? null
 
-, openalSupport ? false
-, openal ? null
+, openalSupport ? false, openal ? null
 
-, alsaSupport ? stdenv.isLinux
-, alsa-lib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib ? null
 
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
-, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 
-, portaudioSupport ? false
-, portaudio ? null
-}:
+, portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
@@ -46,10 +21,8 @@ assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
-let
-  inherit (lib) optional;
-in
-stdenv.mkDerivation rec {
+let inherit (lib) optional;
+in stdenv.mkDerivation rec {
   pname = "aegisub";
   version = "3.2.2";
 
@@ -61,25 +34,29 @@ stdenv.mkDerivation rec {
   patches = [
     # Compatibility with ICU 59
     (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/dd67db47cb2203e7a14058e52549721f6ff16a49.patch";
+      url =
+        "https://github.com/Aegisub/Aegisub/commit/dd67db47cb2203e7a14058e52549721f6ff16a49.patch";
       sha256 = "sha256-R2rN7EiyA5cuBYIAMpa0eKZJ3QZahfnRp8R4HyejGB8=";
     })
 
     # Compatbility with Boost 1.69
     (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
+      url =
+        "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
       sha256 = "sha256-7nlfojrb84A0DT82PqzxDaJfjIlg5BvWIBIgoqasHNk=";
     })
 
     # Compatbility with make 4.3
     (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/6bd3f4c26b8fc1f76a8b797fcee11e7611d59a39.patch";
+      url =
+        "https://github.com/Aegisub/Aegisub/commit/6bd3f4c26b8fc1f76a8b797fcee11e7611d59a39.patch";
       sha256 = "sha256-rG8RJokd4V4aSYOQw2utWnrWPVrkqSV3TAvnGXNhLOk=";
     })
 
     # Compatibility with ffms2
     (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/1aa9215e7fc360de05da9b7ec2cd68f1940af8b2.patch";
+      url =
+        "https://github.com/Aegisub/Aegisub/commit/1aa9215e7fc360de05da9b7ec2cd68f1940af8b2.patch";
       sha256 = "sha256-JsuI4hQTcT0TEqHHoSsGbuiTg4hMCH3Cxp061oLk8Go=";
     })
 
@@ -87,15 +64,13 @@ stdenv.mkDerivation rec {
 
     # Compatibility with X11
     (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/7a6da26be6a830f4e1255091952cc0a1326a4520.patch";
+      url =
+        "https://github.com/Aegisub/Aegisub/commit/7a6da26be6a830f4e1255091952cc0a1326a4520.patch";
       sha256 = "sha256-/aTcIjFlZY4N9+IyHL4nwR0hUR4HTJM7ibbdKmNxq0w=";
     })
   ];
 
-  nativeBuildInputs = [
-    intltool
-    pkg-config
-  ];
+  nativeBuildInputs = [ intltool pkg-config ];
   buildInputs = [
     boost
     ffmpeg
@@ -111,21 +86,14 @@ stdenv.mkDerivation rec {
     libiconv
     wxGTK
     zlib
-  ]
-  ++ optional alsaSupport alsa-lib
-  ++ optional automationSupport lua
-  ++ optional openalSupport openal
-  ++ optional portaudioSupport portaudio
-  ++ optional pulseaudioSupport libpulseaudio
-  ++ optional spellcheckSupport hunspell
-  ;
+  ] ++ optional alsaSupport alsa-lib ++ optional automationSupport lua
+    ++ optional openalSupport openal ++ optional portaudioSupport portaudio
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional spellcheckSupport hunspell;
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [
-    "bindnow"
-    "relro"
-  ];
+  hardeningDisable = [ "bindnow" "relro" ];
 
   postPatch = ''
     sed -i 's/-Wno-c++11-narrowing/-Wno-narrowing/' configure.ac src/Makefile

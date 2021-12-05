@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jdk
-, makeWrapper
-, buildNativeImage ? true
-}:
+{ lib, stdenv, fetchFromGitHub, jdk, makeWrapper, buildNativeImage ? true }:
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
@@ -17,10 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-riHHclTLkrVbtzmcz9ungAIc7kaoFHS77+SNatsfNhc=";
   };
 
-  nativeBuildInputs = [
-    jdk
-    makeWrapper
-  ];
+  nativeBuildInputs = [ jdk makeWrapper ];
 
   dontConfigure = true;
 
@@ -61,7 +52,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/BQN";
-    description = "A BQN implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    description = "A BQN implementation in Java"
+      + lib.optionalString buildNativeImage ", compiled as a native image";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres sternenseemann ];
     inherit (jdk.meta) platforms;

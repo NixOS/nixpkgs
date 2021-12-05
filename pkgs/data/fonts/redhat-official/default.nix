@@ -1,8 +1,6 @@
 { lib, fetchFromGitHub }:
-let
-  version = "2.3.2";
-in
-fetchFromGitHub {
+let version = "2.3.2";
+in fetchFromGitHub {
   name = "redhat-official-${version}";
 
   owner = "RedHatOfficial";
@@ -19,7 +17,8 @@ fetchFromGitHub {
 
   meta = with lib; {
     homepage = "https://github.com/RedHatOfficial/RedHatFont";
-    description = "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
+    description =
+      "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];

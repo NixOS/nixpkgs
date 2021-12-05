@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
-, libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, cairo, curl, fcgi, freetype
+, fribidi, gdal, geos, giflib, harfbuzz, libjpeg, libpng, librsvg, libxml2
+, postgresql, proj, protobufc, zlib, withPython ? true, swig, python }:
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
@@ -15,10 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NMo/7CtWYIP1oPKki09oDWLCbj2vPk3xCU4rkHq8YKY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optional withPython swig;
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optional withPython swig;
 
   buildInputs = [
     cairo
@@ -50,7 +45,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
   meta = with lib; {
-    description = "Platform for publishing spatial data and interactive mapping applications to the web";
+    description =
+      "Platform for publishing spatial data and interactive mapping applications to the web";
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
     license = licenses.mit;

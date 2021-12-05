@@ -1,22 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, bison
-, doxygen
-, xkeyboard_config
-, libxcb
-, libxml2
-, python3
-, libX11
-  # To enable the "interactive-wayland" subcommand of xkbcli. This is the
-  # wayland equivalent of `xev` on X11.
-, withWaylandTools ? stdenv.isLinux
-, wayland
-, wayland-protocols
-, wayland-scanner
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, bison, doxygen
+, xkeyboard_config, libxcb, libxml2, python3, libX11
+# To enable the "interactive-wayland" subcommand of xkbcli. This is the
+# wayland equivalent of `xev` on X11.
+, withWaylandTools ? stdenv.isLinux, wayland, wayland-protocols, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +44,8 @@ stdenv.mkDerivation rec {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
+    changelog =
+      "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ttuegel ];
     platforms = with platforms; unix;

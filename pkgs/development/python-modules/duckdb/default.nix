@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, duckdb
-, numpy
-, pandas
-, pybind11
-, setuptools-scm
-, pytest-runner
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, duckdb, numpy, pandas, pybind11, setuptools-scm
+, pytest-runner, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "duckdb";
@@ -25,20 +17,11 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
   '';
 
-  nativeBuildInputs = [
-    pybind11
-    setuptools-scm
-    pytest-runner
-  ];
+  nativeBuildInputs = [ pybind11 setuptools-scm pytest-runner ];
 
-  propagatedBuildInputs = [
-    numpy
-    pandas
-  ];
+  propagatedBuildInputs = [ numpy pandas ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "duckdb" ];
 

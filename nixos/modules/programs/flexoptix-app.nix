@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.programs.flexoptix-app;
+let cfg = config.programs.flexoptix-app;
 in {
   options = {
     programs.flexoptix-app = {

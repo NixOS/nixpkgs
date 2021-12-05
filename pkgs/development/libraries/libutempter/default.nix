@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
   version = "1.1.6";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/main/libu/libutempter/libutempter_${version}.orig.tar.bz2";
+    url =
+      "mirror://ubuntu/pool/main/libu/libutempter/libutempter_${version}.orig.tar.bz2";
     sha256 = "15y3xbgznjxnfmix4xg3bwmqdvghdw7slbhazb0ybmyf65gmd65q";
   };
 
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files";
+    description =
+      "Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files";
     longDescription = ''
       The bundled utempter binary must be able to run as a user belonging to group utmp.
       On NixOS systems, this can be achieved by creating a setguid wrapper.

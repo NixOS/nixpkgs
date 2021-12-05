@@ -1,4 +1,5 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
+{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages
+}:
 
 crossLibcStdenv.mkDerivation {
   name = "newlib";

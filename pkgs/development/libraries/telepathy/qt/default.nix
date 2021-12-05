@@ -1,25 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, qtbase
-, pkg-config
-, python3Packages
-, dbus-glib
-, dbus
-, telepathy-farstream
-, telepathy-glib
-}:
+{ lib, stdenv, fetchurl, cmake, qtbase, pkg-config, python3Packages, dbus-glib
+, dbus, telepathy-farstream, telepathy-glib }:
 
-let
-  inherit (python3Packages) python dbus-python;
-in
-stdenv.mkDerivation rec {
+let inherit (python3Packages) python dbus-python;
+in stdenv.mkDerivation rec {
   pname = "telepathy-qt";
   version = "0.9.8";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/telepathy-qt/telepathy-qt-${version}.tar.gz";
+    url =
+      "https://telepathy.freedesktop.org/releases/telepathy-qt/telepathy-qt-${version}.tar.gz";
     sha256 = "bf8e2a09060addb80475a4938105b9b41d9e6837999b7a00e5351783857e18ad";
   };
 

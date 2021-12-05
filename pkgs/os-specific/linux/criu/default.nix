@@ -1,19 +1,29 @@
-{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
-, which, python3, makeWrapper, docbook_xml_dtd_45, perl }:
+{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables, xmlto
+, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, which, python3
+, makeWrapper, docbook_xml_dtd_45, perl }:
 
 stdenv.mkDerivation rec {
   pname = "criu";
   version = "3.15";
 
   src = fetchurl {
-    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
+    url = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
     sha256 = "09d0j24x0cyc7wkgi7cnxqgfjk7kbdlm79zxpj8d356sa3rw2z24";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython perl ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
+  nativeBuildInputs = [
+    pkg-config
+    docbook_xsl
+    which
+    makeWrapper
+    docbook_xml_dtd_45
+    python3
+    python3.pkgs.wrapPython
+    perl
+  ];
+  buildInputs =
+    [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
   propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 
   postPatch = ''
@@ -24,7 +34,11 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ASCIIDOC=${asciidoc}/bin/asciidoc" "XMLTO=${xmlto}/bin/xmlto" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ASCIIDOC=${asciidoc}/bin/asciidoc"
+    "XMLTO=${xmlto}/bin/xmlto"
+  ];
 
   outputs = [ "out" "dev" "man" ];
 
@@ -45,9 +59,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace checkpoint/restore for Linux";
-    homepage    = "https://criu.org";
-    license     = licenses.gpl2;
-    platforms   = [ "x86_64-linux" "aarch64-linux" ];
+    homepage = "https://criu.org";
+    license = licenses.gpl2;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };
 }

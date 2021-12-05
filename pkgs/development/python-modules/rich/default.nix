@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, CommonMark
-, colorama
-, dataclasses
-, poetry-core
-, pygments
-, typing-extensions
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, CommonMark, colorama
+, dataclasses, poetry-core, pygments, typing-extensions, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rich";
@@ -26,23 +16,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    CommonMark
-    colorama
-    pygments
-    typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs = [ CommonMark colorama pygments typing-extensions ]
+    ++ lib.optional (pythonOlder "3.7") [ dataclasses ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rich" ];
 
   meta = with lib; {
-    description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
+    description =
+      "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/willmcgugan/rich";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];

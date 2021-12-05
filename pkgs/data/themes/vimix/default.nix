@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gnome-shell
-, gtk-engine-murrine
-, gtk_engines
-}:
+{ lib, stdenv, fetchFromGitHub, gnome-shell, gtk-engine-murrine, gtk_engines }:
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
@@ -18,16 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnome-shell  # needed to determine the gnome-shell version
+    gnome-shell # needed to determine the gnome-shell version
   ];
 
-  buildInputs = [
-    gtk_engines
-  ];
+  buildInputs = [ gtk_engines ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall
@@ -39,7 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Flat Material Design theme for GTK based desktop environments";
+    description =
+      "Flat Material Design theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

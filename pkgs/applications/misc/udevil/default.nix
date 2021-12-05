@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, intltool, glib, pkg-config, udev, util-linux, acl }:
+{ lib, stdenv, fetchFromGitHub, intltool, glib, pkg-config, udev, util-linux
+, acl }:
 
 stdenv.mkDerivation rec {
   pname = "udevil";
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
   patches = [ ./device-info-sys-stat.patch ];
 
   meta = with lib; {
-    description = "A command line Linux program which mounts and unmounts removable devices without a password, shows device info, and monitors device changes";
+    description =
+      "A command line Linux program which mounts and unmounts removable devices without a password, shows device info, and monitors device changes";
     homepage = "https://ignorantguru.github.io/udevil/";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

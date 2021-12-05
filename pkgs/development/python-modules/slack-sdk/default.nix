@@ -1,22 +1,6 @@
-{ lib
-, aiodns
-, aiohttp
-, boto3
-, buildPythonPackage
-, codecov
-, databases
-, fetchFromGitHub
-, flake8
-, flask-sockets
-, moto
-, pythonOlder
-, psutil
-, pytest-asyncio
-, pytestCheckHook
-, sqlalchemy
-, websocket-client
-, websockets
-}:
+{ lib, aiodns, aiohttp, boto3, buildPythonPackage, codecov, databases
+, fetchFromGitHub, flake8, flask-sockets, moto, pythonOlder, psutil
+, pytest-asyncio, pytestCheckHook, sqlalchemy, websocket-client, websockets }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
@@ -32,14 +16,8 @@ buildPythonPackage rec {
     sha256 = "sha256-1IR0pQOxLjxqmjbq6zmp2rU1rBDabADva1R4YBNw+PA=";
   };
 
-  propagatedBuildInputs = [
-    aiodns
-    aiohttp
-    boto3
-    sqlalchemy
-    websocket-client
-    websockets
-  ];
+  propagatedBuildInputs =
+    [ aiodns aiohttp boto3 sqlalchemy websocket-client websockets ];
 
   checkInputs = [
     codecov
@@ -68,9 +46,7 @@ buildPythonPackage rec {
     "test_interactions"
   ];
 
-  pythonImportsCheck = [
-    "slack_sdk"
-  ];
+  pythonImportsCheck = [ "slack_sdk" ];
 
   meta = with lib; {
     description = "Slack Developer Kit for Python";

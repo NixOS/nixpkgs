@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, flask
-, google-api-core
-, google-cloud-appengine-logging
-, google-cloud-audit-log
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-}:
+{ lib, buildPythonPackage, fetchPypi, django, flask, google-api-core
+, google-cloud-appengine-logging, google-cloud-audit-log, google-cloud-core
+, google-cloud-testutils, mock, proto-plus, pytestCheckHook, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
@@ -36,14 +24,8 @@ buildPythonPackage rec {
     proto-plus
   ];
 
-  checkInputs = [
-    django
-    flask
-    google-cloud-testutils
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  checkInputs =
+    [ django flask google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   disabledTests = [
     # requires credentials
@@ -57,10 +39,7 @@ buildPythonPackage rec {
     rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
 
-  pythonImortsCheck = [
-    "google.cloud.logging"
-    "google.cloud.logging_v2"
-  ];
+  pythonImortsCheck = [ "google.cloud.logging" "google.cloud.logging_v2" ];
 
   meta = with lib; {
     description = "Stackdriver Logging API client library";

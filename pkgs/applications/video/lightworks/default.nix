@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
-, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsa-lib, udev, libjack2
-}:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv, gtk3, gdk-pixbuf
+, cairo, libjpeg_original, glib, pango, libGLU, libGL, nvidia_cg_toolkit, zlib
+, openssl, libuuid, alsa-lib, udev, libjack2 }:
 let
   fullPath = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -27,13 +26,16 @@ let
     rev = "128456";
     pname = "lightworks";
 
-    src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://cdn.lwks.com/releases/${version}/lightworks_${lib.versions.majorMinor version}_r${rev}.deb";
-          sha256 = "sha256-GkTg43IUF1NgEm/wT9CZw68Dw/R2BYBU/F4bsCxQowQ=";
-        }
-      else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
+    src = if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "https://cdn.lwks.com/releases/${version}/lightworks_${
+            lib.versions.majorMinor version
+          }_r${rev}.deb";
+        sha256 = "sha256-GkTg43IUF1NgEm/wT9CZw68Dw/R2BYBU/F4bsCxQowQ=";
+      }
+    else
+      throw
+      "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ dpkg ];
@@ -72,13 +74,11 @@ let
     dontPatchELF = true;
   };
 
-# Lightworks expects some files in /usr/share/lightworks
+  # Lightworks expects some files in /usr/share/lightworks
 in buildFHSUserEnv {
   name = lightworks.name;
 
-  targetPkgs = pkgs: [
-      lightworks
-  ];
+  targetPkgs = pkgs: [ lightworks ];
 
   runScript = "lightworks";
 

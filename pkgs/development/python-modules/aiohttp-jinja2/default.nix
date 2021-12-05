@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp, pytest-cov }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp
+, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";

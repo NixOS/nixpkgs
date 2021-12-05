@@ -1,16 +1,9 @@
-{ lib
-, writeShellScript
-, coreutils
-, git
-, nix
-, common-updater-scripts
-}:
+{ lib, writeShellScript, coreutils, git, nix, common-updater-scripts }:
 
 # This is an updater for unstable packages that should always use the latest
 # commit.
 { url ? null # The git url, if empty it will be set to src.url
-, branch ? null
-}:
+, branch ? null }:
 
 let
   updateScript = writeShellScript "unstable-update-script.sh" ''

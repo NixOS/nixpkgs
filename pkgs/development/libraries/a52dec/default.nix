@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "a52dec";
@@ -9,13 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
-  configureFlags = [
-    "--enable-shared"
-  ];
+  configureFlags = [ "--enable-shared" ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686
   # which can also be fixed with

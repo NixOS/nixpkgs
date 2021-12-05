@@ -1,21 +1,17 @@
-{ lib, stdenv, config, fetchurl, pkg-config
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, pkg-config, libGLSupported ?
+  lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
-, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
-, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
-, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
-, wayland, wayland-protocols, libxkbcommon
+, x11Support ? !stdenv.targetPlatform.isWindows
+  && !stdenv.hostPlatform.isAndroid, libX11, xorgproto, libICE, libXi
+, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, wayland
+, wayland-protocols, libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
-, udevSupport ? false, udev
-, ibusSupport ? false, ibus
-, fcitxSupport ? false, fcitx
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
-, libpulseaudio
-, AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, libiconv
-, withStatic ? false
+, udevSupport ? false, udev, ibusSupport ? false, ibus, fcitxSupport ? false
+, fcitx, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+  && !stdenv.hostPlatform.isAndroid, libpulseaudio, AudioUnit, Cocoa, CoreAudio
+, CoreServices, ForceFeedback, OpenGL, audiofile, libiconv, withStatic ? false
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -59,25 +55,34 @@ stdenv.mkDerivation rec {
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
     ++ optionals x11Support [ libX11 xorgproto ];
 
-  dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsa-lib audiofile ]
-    ++ optional  dbusSupport dbus
-    ++ optional  pulseaudioSupport libpulseaudio
-    ++ optional  udevSupport udev
+  dlopenBuildInputs = [ ] ++ optionals alsaSupport [ alsa-lib audiofile ]
+    ++ optional dbusSupport dbus ++ optional pulseaudioSupport libpulseaudio
+    ++ optional udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
+    ++ optionals x11Support [
+      libICE
+      libXi
+      libXScrnSaver
+      libXcursor
+      libXinerama
+      libXext
+      libXrandr
+      libXxf86vm
+    ];
 
-  buildInputs = [ libiconv ]
-    ++ dlopenBuildInputs
-    ++ optional  ibusSupport ibus
-    ++ optional  fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+  buildInputs = [ libiconv ] ++ dlopenBuildInputs ++ optional ibusSupport ibus
+    ++ optional fcitxSupport fcitx ++ optionals stdenv.isDarwin [
+      AudioUnit
+      Cocoa
+      CoreAudio
+      CoreServices
+      ForceFeedback
+      OpenGL
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--disable-oss"
-  ] ++ optional (!x11Support) "--without-x"
+  configureFlags = [ "--disable-oss" ] ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";

@@ -1,8 +1,5 @@
-{ stdenv, lib, fetchFromGitHub
-, pkg-config, cmake, libyaml
-, jansson, libvorbis, taglib
-, zlib
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, libyaml, jansson, libvorbis
+, taglib, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "tagutil";
@@ -17,18 +14,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    libvorbis
-    libyaml
-    jansson
-    taglib
-    zlib
-  ];
+  buildInputs = [ libvorbis libyaml jansson taglib zlib ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

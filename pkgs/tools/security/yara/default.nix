@@ -1,17 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pcre
-, pkg-config
-, protobufc
-, withCrypto ? true, openssl
-, enableCuckoo ? true, jansson
-, enableDex ? true
-, enableDotNet ? true
-, enableMacho ? true
-, enableMagic ? true, file
-, enableStatic ? false
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pcre, pkg-config, protobufc
+, withCrypto ? true, openssl, enableCuckoo ? true, jansson, enableDex ? true
+, enableDotNet ? true, enableMacho ? true, enableMagic ? true, file
+, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
   version = "4.1.3";
@@ -26,11 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ pcre protobufc ]
-    ++ lib.optionals withCrypto [ openssl ]
+  buildInputs = [ pcre protobufc ] ++ lib.optionals withCrypto [ openssl ]
     ++ lib.optionals enableMagic [ file ]
-    ++ lib.optionals enableCuckoo [ jansson ]
-  ;
+    ++ lib.optionals enableCuckoo [ jansson ];
 
   preConfigure = "./bootstrap.sh";
 

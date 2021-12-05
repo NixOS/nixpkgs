@@ -1,24 +1,19 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, makeWrapper
-, gdb
-}:
+{ lib, stdenv, python3, fetchFromGitHub, makeWrapper, gdb }:
 
 let
-  pythonPath = with python3.pkgs; makePythonPath [
-    future
-    isort
-    psutil
-    pycparser
-    pyelftools
-    python-ptrace
-    ropgadget
-    six
-    unicorn
-    pygments
-  ];
+  pythonPath = with python3.pkgs;
+    makePythonPath [
+      future
+      isort
+      psutil
+      pycparser
+      pyelftools
+      python-ptrace
+      ropgadget
+      six
+      unicorn
+      pygments
+    ];
 
 in stdenv.mkDerivation rec {
   pname = "pwndbg";
@@ -44,7 +39,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Exploit Development and Reverse Engineering with GDB Made Easy";
+    description =
+      "Exploit Development and Reverse Engineering with GDB Made Easy";
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;
     platforms = platforms.all;

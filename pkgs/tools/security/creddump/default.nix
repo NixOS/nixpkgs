@@ -25,7 +25,8 @@ python2Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Python tool to extract various credentials and secrets from Windows registry hives";
+    description =
+      "Python tool to extract various credentials and secrets from Windows registry hives";
     homepage = "https://gitlab.com/kalilinux/packages/creddump";
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -21,7 +21,8 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "ibus_theme_tools" ];
 
   meta = with lib; {
-    description = "Generate the IBus GTK or GNOME Shell theme from existing themes";
+    description =
+      "Generate the IBus GTK or GNOME Shell theme from existing themes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hollowman6 ];
     homepage = "https://github.com/openSUSE/IBus-Theme-Tools";

@@ -23,7 +23,8 @@ let
     };
 
     scudo = {
-      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+      libPath =
+        "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
       description = ''
         A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
         which aims at providing additional mitigations against heap based
@@ -45,26 +46,21 @@ let
 
   # An output that contains only the shared library, to avoid
   # needlessly bloating the system closure
-  mallocLib = pkgs.runCommand "malloc-provider-${cfg.provider}"
-    rec {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      origLibPath = providerConf.libPath;
-      libName = baseNameOf origLibPath;
-    }
-    ''
-      mkdir -p $out/lib
-      cp -L $origLibPath $out/lib/$libName
-    '';
+  mallocLib = pkgs.runCommand "malloc-provider-${cfg.provider}" rec {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    origLibPath = providerConf.libPath;
+    libName = baseNameOf origLibPath;
+  } ''
+    mkdir -p $out/lib
+    cp -L $origLibPath $out/lib/$libName
+  '';
 
   # The full path to the selected provider shlib.
   providerLibPath = "${mallocLib}/lib/${mallocLib.libName}";
-in
 
-{
-  meta = {
-    maintainers = [ maintainers.joachifm ];
-  };
+in {
+  meta = { maintainers = [ maintainers.joachifm ]; };
 
   options = {
     environment.memoryAllocator.provider = mkOption {
@@ -76,9 +72,9 @@ in
         Briefly, the system-wide memory allocator providers are:
         <itemizedlist>
         <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
-        ${toString (mapAttrsToList
-            (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
-            providers)}
+        ${toString (mapAttrsToList (name: value:
+          "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
+          providers)}
         </itemizedlist>
 
         <warning>
@@ -100,10 +96,12 @@ in
       "abstractions/base" = ''
         r /etc/ld-nix.so.preload,
         r ${config.environment.etc."ld-nix.so.preload".source},
-        include "${pkgs.apparmorRulesFromClosure {
+        include "${
+          pkgs.apparmorRulesFromClosure {
             name = "mallocLib";
-            baseRules = ["mr $path/lib/**.so*"];
-          } [ mallocLib ] }"
+            baseRules = [ "mr $path/lib/**.so*" ];
+          } [ mallocLib ]
+        }"
       '';
     };
   };

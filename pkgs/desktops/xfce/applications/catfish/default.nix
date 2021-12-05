@@ -1,14 +1,14 @@
-{ lib, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg-utils, dconf, gtk3, python3Packages, xfconf,
-  wrapGAppsHook
-}:
+{ lib, fetchurl, file, which, intltool, gobject-introspection, findutils
+, xdg-utils, dconf, gtk3, python3Packages, xfconf, wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
   version = "4.16.3";
 
   src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "https://archive.xfce.org/src/apps/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.bz2";
     sha256 = "sha256-6amaYtEJgTkVCN1D88v6LVCmm9a30e7vfTC6TGc9z9o=";
   };
 

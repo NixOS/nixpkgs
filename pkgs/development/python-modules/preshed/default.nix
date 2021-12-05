@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, murmurhash
-, pytest
-, cython
-, cymem
-, python
+{ lib, buildPythonPackage, fetchPypi, murmurhash, pytest, cython, cymem, python
 }:
 buildPythonPackage rec {
   pname = "preshed";
@@ -16,15 +9,9 @@ buildPythonPackage rec {
     sha256 = "fb3b7588a3a0f2f2f1bf3fe403361b2b031212b73a37025aea1df7215af3772a";
   };
 
-  propagatedBuildInputs = [
-    cython
-    cymem
-    murmurhash
-  ];
+  propagatedBuildInputs = [ cython cymem murmurhash ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     ${python.interpreter} setup.py test

@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, cfgv
-, fetchPypi
-, identify
-, importlib-metadata
-, importlib-resources
-, nodeenv
-, python
-, pythonOlder
-, pyyaml
-, toml
-, virtualenv
-}:
+{ lib, buildPythonPackage, cfgv, fetchPypi, identify, importlib-metadata
+, importlib-resources, nodeenv, python, pythonOlder, pyyaml, toml, virtualenv }:
 
 buildPythonPackage rec {
   pname = "pre-commit";
@@ -26,22 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-/piXysgwqnFk29AqTnuQyuSWMEUc6IRkvKc9tIa6n2U=";
   };
 
-  patches = [
-    ./languages-use-the-hardcoded-path-to-python-binaries.patch
-  ];
+  patches = [ ./languages-use-the-hardcoded-path-to-python-binaries.patch ];
 
-  propagatedBuildInputs = [
-    cfgv
-    identify
-    nodeenv
-    pyyaml
-    toml
-    virtualenv
-  ] ++ lib.optional (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ cfgv identify nodeenv pyyaml toml virtualenv ]
+    ++ lib.optional (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];
 
   # slow and impure
   doCheck = false;
@@ -55,12 +32,11 @@ buildPythonPackage rec {
       --subst-var-by nodeenv ${nodeenv}
   '';
 
-  pythonImportsCheck = [
-    "pre_commit"
-  ];
+  pythonImportsCheck = [ "pre_commit" ];
 
   meta = with lib; {
-    description = "A framework for managing and maintaining multi-language pre-commit hooks";
+    description =
+      "A framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];

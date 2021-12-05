@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, fetchFromGitHub
-, idna
-, lxml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
+{ lib, buildPythonPackage, certifi, charset-normalizer, fetchFromGitHub, idna
+, lxml, pytest-mock, pytestCheckHook, pythonOlder, requests, responses, urllib3
 }:
 
 buildPythonPackage rec {
@@ -27,24 +16,12 @@ buildPythonPackage rec {
     sha256 = "0hrbp5ci1l06j709k5y3z3ad9dryvrkvmc2wyb4a01gw7qzry7ys";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    charset-normalizer
-    idna
-    lxml
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs =
+    [ certifi charset-normalizer idna lxml requests urllib3 ];
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook responses ];
 
-  pythonImportsCheck = [
-    "qualysclient"
-  ];
+  pythonImportsCheck = [ "qualysclient" ];
 
   meta = with lib; {
     description = "Python SDK for interacting with the Qualys API";

@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-}:
+{ lib, aiohttp, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pythonOlder, poetry-core, pytest-aiohttp, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "hyperion-py";
@@ -22,19 +14,11 @@ buildPythonPackage rec {
     sha256 = "00x12ppmvlxs3qbdxq06wnzakvwm2m39qhmpp27qfpl137b0qqyj";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-aiohttp pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

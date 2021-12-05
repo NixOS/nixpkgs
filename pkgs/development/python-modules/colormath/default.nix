@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, networkx
-, nose
-, numpy
-, lib
-}:
+{ buildPythonPackage, fetchFromGitHub, networkx, nose, numpy, lib }:
 
 buildPythonPackage rec {
   pname = "colormath";

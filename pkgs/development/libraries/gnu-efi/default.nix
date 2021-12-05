@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix build on armv6l
     (fetchpatch {
-      url = "https://sourceforge.net/p/gnu-efi/patches/_discuss/thread/25bb273a18/9c4d/attachment/0001-Fix-ARCH-on-armv6-and-other-32-bit-ARM-platforms.patch";
+      url =
+        "https://sourceforge.net/p/gnu-efi/patches/_discuss/thread/25bb273a18/9c4d/attachment/0001-Fix-ARCH-on-armv6-and-other-32-bit-ARM-platforms.patch";
       sha256 = "0pj03h20g2bbz6fr753bj1scry6919h57l1h86z3b6q7hqfj0b4r";
     })
   ];

@@ -1,8 +1,7 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, setuptools-scm
-, cheroot, contextlib2, portend, routes, six, zc_lockfile
-, backports_unittest-mock, objgraph, pathpy, pytest, pytest-cov, backports_functools_lru_cache, requests-toolbelt
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm, cheroot
+, contextlib2, portend, routes, six, zc_lockfile, backports_unittest-mock
+, objgraph, pathpy, pytest, pytest-cov, backports_functools_lru_cache
+, requests-toolbelt }:
 
 buildPythonPackage rec {
   pname = "cherrypy";
@@ -14,18 +13,26 @@ buildPythonPackage rec {
     sha256 = "ef1619ad161f526745d4f0e4e517753d9d985814f1280e330661333d2ba05cdf";
   };
 
-  propagatedBuildInputs = [
-    cheroot contextlib2 portend routes six zc_lockfile
-  ];
+  propagatedBuildInputs =
+    [ cheroot contextlib2 portend routes six zc_lockfile ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
-    backports_unittest-mock objgraph pathpy pytest pytest-cov backports_functools_lru_cache requests-toolbelt
+    backports_unittest-mock
+    objgraph
+    pathpy
+    pytest
+    pytest-cov
+    backports_functools_lru_cache
+    requests-toolbelt
   ];
 
   checkPhase = ''
-    pytest ${lib.optionalString stdenv.isDarwin "--ignore=cherrypy/test/test_wsgi_unix_socket.py"}
+    pytest ${
+      lib.optionalString stdenv.isDarwin
+      "--ignore=cherrypy/test/test_wsgi_unix_socket.py"
+    }
   '';
 
   meta = with lib; {

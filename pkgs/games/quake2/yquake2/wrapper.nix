@@ -1,9 +1,6 @@
 { stdenv, lib, buildEnv, makeWrapper, yquake2 }:
 
-{ games
-, name
-, description
-}:
+{ games, name, description }:
 
 let
   env = buildEnv {
@@ -25,7 +22,5 @@ in stdenv.mkDerivation {
       --add-flags "+set game ${game.id}"
   '') games;
 
-  meta = {
-    inherit description;
-  };
+  meta = { inherit description; };
 }

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "python_http_client";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-cZqyu67xP0UIKYbhYYTNL5kLiPjjMjayde75sqkHZhg=";
   };
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   # Failure was fixed by https://github.com/sendgrid/python-http-client/commit/6d62911ab0d0645b499e14bb17c302b48f3c10e4
   disabledTests = [ "test__daterange" ];

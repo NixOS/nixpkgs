@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkg-config, lua, zlib, unzip }:
+{ lib, stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkg-config, lua
+, zlib, unzip }:
 
 let
   version = "3.3.2";
@@ -6,7 +7,8 @@ let
   # I took several games at random from https://instead.syscall.ru/games/
   games = [
     (fetchurl {
-      url = "http://instead-games.googlecode.com/files/instead-apple-day-1.2.zip";
+      url =
+        "http://instead-games.googlecode.com/files/instead-apple-day-1.2.zip";
       sha256 = "0d4m554hiqmgl4xl0jp0b3bqjl35879768hqznh9y57y04sygd2a";
     })
     (fetchurl {
@@ -18,21 +20,23 @@ let
       sha256 = "15qdbg82zp3a8vz4qxminr0xbzbdpnsciliy2wm3raz4hnadawg1";
     })
     (fetchurl {
-      url = "http://instead-games.googlecode.com/files/instead-toilet3in1-1.2.zip";
+      url =
+        "http://instead-games.googlecode.com/files/instead-toilet3in1-1.2.zip";
       sha256 = "0wz4bljbg67m84qwpaqpzs934a5pcbhpgh39fvbbbfvnnlm4lirl";
     })
     (fetchurl {
-      url = "http://instead-games.googlecode.com/files/instead-kayleth-0.4.1.zip";
+      url =
+        "http://instead-games.googlecode.com/files/instead-kayleth-0.4.1.zip";
       sha256 = "0xmn9inys0kbcdd02qaqp8gazqs67xq3fq7hvcy2qb9jbq85j8b2";
     })
   ];
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "instead-" + version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
     sha256 = "u5j2kDKRvMQPsG8iA6uOBScuyE/e1BJIK2+qVL6jqQs=";
   };
 

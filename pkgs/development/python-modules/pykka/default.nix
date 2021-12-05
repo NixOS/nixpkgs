@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pytest-mock
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, poetry-core
+, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "pykka";
@@ -20,19 +14,15 @@ buildPythonPackage rec {
     sha256 = "1cy4pr05xlsny9g573q7njsv7jaaysi1qzafm6f82y57jqnmziks";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
   meta = with lib; {
     homepage = "https://www.pykka.org/";
     description = "A Python implementation of the actor model";
-    changelog = "https://github.com/jodal/pykka/blob/v${version}/docs/changes.rst";
+    changelog =
+      "https://github.com/jodal/pykka/blob/v${version}/docs/changes.rst";
     maintainers = with maintainers; [ marsam ];
     license = licenses.asl20;
   };

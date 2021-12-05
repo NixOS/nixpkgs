@@ -1,13 +1,7 @@
-{ stdenv, lib, fetchFromGitHub
-, which
-, python3
-, help2man
-}:
+{ stdenv, lib, fetchFromGitHub, which, python3, help2man }:
 
-let
-  pyEnv = python3.withPackages(ps: [ ps.setuptools ]);
-in
-stdenv.mkDerivation rec {
+let pyEnv = python3.withPackages (ps: [ ps.setuptools ]);
+in stdenv.mkDerivation rec {
   pname = "mininet";
   version = "2.3.0";
 
@@ -38,12 +32,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-
   meta = with lib; {
     description = "Emulator for rapid prototyping of Software Defined Networks";
-    license = {
-      fullName = "Mininet 2.3.0 License";
-    };
+    license = { fullName = "Mininet 2.3.0 License"; };
     platforms = platforms.linux;
     homepage = "https://github.com/mininet/mininet";
     maintainers = with maintainers; [ teto ];

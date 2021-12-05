@@ -1,19 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, glib
-, libdaemon
-, libmpdclient
-, curl
-, sqlite
-, bundlerEnv
-, libnotify
-, pandoc
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib
+, libdaemon, libmpdclient, curl, sqlite, bundlerEnv, libnotify, pandoc }:
 
 let
   gemEnv = bundlerEnv {
@@ -54,9 +40,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A cron like daemon for mpd";
-    homepage    = "http://alip.github.io/mpdcron/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://alip.github.io/mpdcron/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 manveru ];
   };
 }

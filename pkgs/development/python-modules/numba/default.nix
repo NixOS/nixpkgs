@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, python
-, buildPythonPackage
-, numpy
-, llvmlite
-, setuptools
-, libcxx
-}:
+{ lib, stdenv, pythonAtLeast, pythonOlder, fetchPypi, python, buildPythonPackage
+, numpy, llvmlite, setuptools, libcxx }:
 
 buildPythonPackage rec {
   version = "0.54.1";
@@ -29,7 +19,8 @@ buildPythonPackage rec {
       --replace "(1, 20)" "(1, 21)"
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ numpy llvmlite setuptools ];
 
@@ -43,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numba" ];
 
-  meta =  with lib; {
+  meta = with lib; {
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     description = "Compiling Python code using LLVM";

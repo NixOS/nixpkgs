@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.5.11";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${version}.orig.tar.bz2";
+    url =
+      "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${version}.orig.tar.bz2";
     sha256 = "sha256-KqAMKVUykCgVdNyjacZjpVXqVdeob76v0iOuSd4TNIY=";
   };
 
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
+    description =
+      "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

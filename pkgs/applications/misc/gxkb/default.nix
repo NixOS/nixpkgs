@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk3, libwnck, libxklavier
-, appindicatorSupport ? true, libayatana-appindicator-gtk3
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk3, libwnck
+, libxklavier, appindicatorSupport ? true, libayatana-appindicator-gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "gxkb";
@@ -14,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ gtk3 libwnck libxklavier ] ++ lib.optional appindicatorSupport libayatana-appindicator-gtk3;
+  buildInputs = [ gtk3 libwnck libxklavier ]
+    ++ lib.optional appindicatorSupport libayatana-appindicator-gtk3;
 
   configureFlags = lib.optional appindicatorSupport "--enable-appindicator=yes";
   outputs = [ "out" "man" ];

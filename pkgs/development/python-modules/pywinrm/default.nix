@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy38
-, kerberos
-, mock
-, pytest
-, requests
-, requests_ntlm
-, six
-, xmltodict
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy38, kerberos, mock, pytest, requests
+, requests_ntlm, six, xmltodict }:
 
 buildPythonPackage rec {
   pname = "pywinrm";
@@ -28,10 +18,7 @@ buildPythonPackage rec {
     description = "Python library for Windows Remote Management";
     homepage = "https://github.com/diyan/pywinrm";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      elasticdog
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ elasticdog kamadorueda ];
     platforms = platforms.all;
   };
 }

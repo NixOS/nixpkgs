@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, pyglet
-, pysdl2
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pygame, pyglet, pysdl2
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pytmx";
@@ -22,11 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-d6VPmRdqUO6YhkOYYeXOEcrli/35IFkxK73AcZYHixw=";
   };
 
-  propagatedBuildInputs = [
-    pygame
-    pyglet
-    pysdl2
-  ];
+  propagatedBuildInputs = [ pygame pyglet pysdl2 ];
 
   pythonImportsCheck = [
     "pytmx.pytmx"
@@ -35,9 +24,7 @@ buildPythonPackage rec {
     "pytmx.util_pysdl2"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError on the property name

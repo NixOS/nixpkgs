@@ -1,9 +1,4 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, openssh
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, openssh }:
 buildGoModule rec {
   pname = "zrepl";
   version = "0.4.0";
@@ -19,9 +14,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

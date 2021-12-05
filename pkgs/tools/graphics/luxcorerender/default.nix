@@ -1,6 +1,6 @@
-{ lib, config, stdenv, fetchFromGitHub, symlinkJoin, wrapGAppsHook, cmake, boost172
-, pkg-config, flex, bison, libpng, libtiff, zlib, python3, embree, openexr
-, openimagedenoise, openimageio, tbb, c-blosc, gtk3, pcre, doxygen
+{ lib, config, stdenv, fetchFromGitHub, symlinkJoin, wrapGAppsHook, cmake
+, boost172, pkg-config, flex, bison, libpng, libtiff, zlib, python3, embree
+, openexr, openimagedenoise, openimageio, tbb, c-blosc, gtk3, pcre, doxygen
 # OpenCL Support
 , withOpenCL ? true, ocl-icd
 # Cuda Support

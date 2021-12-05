@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, python-dateutil
-, aiohttp
+{ lib, buildPythonPackage, fetchFromGitHub, requests, python-dateutil, aiohttp
 }:
 
 buildPythonPackage rec {
@@ -23,11 +18,7 @@ buildPythonPackage rec {
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-    python-dateutil
-    requests
-  ];
+  propagatedBuildInputs = [ aiohttp python-dateutil requests ];
 
   # no tests implemented
   doCheck = false;

@@ -6,22 +6,26 @@ let
   inherit (lib) mkEnableOption mkIf mkOption optionalAttrs optionalString types;
 
   confOptions = {
-      BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
+    BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
   } // optionalAttrs (cfg.network == "mainnet") {
-      Network = "Main";
-      MainNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      MainNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "Main";
+    MainNetBitcoinP2pEndPoint =
+      "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    MainNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   } // optionalAttrs (cfg.network == "testnet") {
-      Network = "TestNet";
-      TestNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      TestNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "TestNet";
+    TestNetBitcoinP2pEndPoint =
+      "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    TestNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   } // optionalAttrs (cfg.network == "regtest") {
-      Network = "RegTest";
-      RegTestBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      RegTestBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "RegTest";
+    RegTestBitcoinP2pEndPoint =
+      "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    RegTestBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   };
 
-  configFile = pkgs.writeText "wasabibackend.conf" (builtins.toJSON confOptions);
+  configFile =
+    pkgs.writeText "wasabibackend.conf" (builtins.toJSON confOptions);
 
 in {
 
@@ -39,7 +43,8 @@ in {
       customConfigFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
+        description =
+          "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
       };
 
       network = mkOption {
@@ -84,7 +89,8 @@ in {
         password = mkOption {
           type = types.str;
           default = "password";
-          description = "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.";
+          description =
+            "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.";
         };
 
         passwordFile = mkOption {
@@ -110,9 +116,8 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 '${cfg.user}' '${cfg.group}' - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' 0770 '${cfg.user}' '${cfg.group}' - -" ];
 
     systemd.services.wasabibackend = {
       description = "wasabibackend server";
@@ -152,7 +157,7 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
   };
 }

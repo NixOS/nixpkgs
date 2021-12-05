@@ -1,5 +1,4 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_driver}:
+{ lib, buildOcamlJane, ppx_core, ppx_driver }:
 
 buildOcamlJane {
   pname = "ppx_here";
@@ -7,7 +6,8 @@ buildOcamlJane {
   propagatedBuildInputs = [ ppx_core ppx_driver ];
 
   meta = with lib; {
-    description = "A ppx rewriter that defines an extension node whose value is its source position";
+    description =
+      "A ppx rewriter that defines an extension node whose value is its source position";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;
   };

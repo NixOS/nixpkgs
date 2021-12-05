@@ -7,7 +7,7 @@ let
   # TODO: move to lib/ in separate PR
   overrideMeta = drv: overrideFn:
     let
-      drv' = if drv ? meta then drv else drv // { meta = {}; };
+      drv' = if drv ? meta then drv else drv // { meta = { }; };
       pos = (builtins.unsafeGetAttrPos "pname" drv');
       meta' = drv'.meta // {
         # copied from the mkDerivation code
@@ -39,8 +39,7 @@ let
     '';
   };
 
-in
-  overrideMeta shellcheck (old: {
-    maintainers = with lib.maintainers; [ Profpatsch ];
-    outputsToInstall = [ "bin" "man" "doc" ];
-  })
+in overrideMeta shellcheck (old: {
+  maintainers = with lib.maintainers; [ Profpatsch ];
+  outputsToInstall = [ "bin" "man" "doc" ];
+})

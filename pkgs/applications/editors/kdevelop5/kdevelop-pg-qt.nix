@@ -4,8 +4,7 @@ let
   pname = "kdevelop-pg-qt";
   version = "2.2.1";
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

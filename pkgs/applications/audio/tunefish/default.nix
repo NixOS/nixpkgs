@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python3
-, alsa-lib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3, alsa-lib, curl, freetype
+, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk }:
 
 stdenv.mkDerivation {
   pname = "tunefish";
@@ -15,16 +14,14 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
+  buildInputs =
+    [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
 
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py
   '';
 
-  makeFlags = [
-    "-C" "src/tunefish4/Builds/LinuxMakefile"
-    "CONFIG=Release"
-  ];
+  makeFlags = [ "-C" "src/tunefish4/Builds/LinuxMakefile" "CONFIG=Release" ];
 
   installPhase = ''
     mkdir -p $out/lib/lv2

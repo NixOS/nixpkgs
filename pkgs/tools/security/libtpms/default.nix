@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config, autoreconfHook
-, openssl, perl
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libtpms";
@@ -27,13 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-openssl"
-    "--with-tpm2"
-  ];
+  configureFlags = [ "--with-openssl" "--with-tpm2" ];
 
   meta = with lib; {
-    description = "The libtpms library provides software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
+    description =
+      "The libtpms library provides software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
     homepage = "https://github.com/stefanberger/libtpms";
     license = licenses.bsd3;
     maintainers = [ maintainers.baloo ];

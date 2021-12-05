@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.cpupower-gui;
+let cfg = config.services.cpupower-gui;
 in {
   options = {
     services.cpupower-gui = {
@@ -48,7 +47,8 @@ in {
         serviceConfig = {
           Type = "dbus";
           BusName = "org.rnd2.cpupower_gui.helper";
-          ExecStart = "${pkgs.cpupower-gui}/lib/cpupower-gui/cpupower-gui-helper";
+          ExecStart =
+            "${pkgs.cpupower-gui}/lib/cpupower-gui/cpupower-gui-helper";
         };
       };
     };

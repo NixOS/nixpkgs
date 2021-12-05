@@ -28,15 +28,14 @@ tcl.mkTclDerivation rec {
   #   "FONTDIR=$(out)/fonts"
   # ];
 
-  preConfigure = ''configureFlags="
-    BINDIR=$out/bin
-    SHAREDIR=$out/share
-    FONTDIR=$out/fonts"
-  '';
+  preConfigure = ''
+    configureFlags="
+        BINDIR=$out/bin
+        SHAREDIR=$out/share
+        FONTDIR=$out/fonts"
+      '';
 
-  patches = [
-    ./0001-put-fonts-in-out.patch
-  ];
+  patches = [ ./0001-put-fonts-in-out.patch ];
 
   hardeningDisable = [ "format" ];
 

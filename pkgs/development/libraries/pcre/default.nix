@@ -1,7 +1,4 @@
-{ lib, stdenv, fetchurl
-, pcre, windows ? null
-, variant ? null
-}:
+{ lib, stdenv, fetchurl, pcre, windows ? null, variant ? null }:
 
 with lib;
 
@@ -9,25 +6,28 @@ assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
   version = "8.44";
-  pname = if (variant == null) then "pcre"
-    else  if (variant == "cpp") then "pcre-cpp"
-    else  variant;
+  pname = if (variant == null) then
+    "pcre"
+  else if (variant == "cpp") then
+    "pcre-cpp"
+  else
+    variant;
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
+    url =
+      "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
     sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
-    "--enable-unicode-properties"
-    "--disable-cpp"
-  ]
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV
+    && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64))
+    "--enable-jit" ++ [ "--enable-unicode-properties" "--disable-cpp" ]
     ++ optional (variant != null) "--enable-${variant}";
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
@@ -37,14 +37,14 @@ in stdenv.mkDerivation {
     patchShebangs RunGrepTest
   '';
 
-  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
-    # XXX: test failure on Cygwin
-    # we are running out of stack on both freeBSDs on Hydra
+  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD)
+    && stdenv.hostPlatform == stdenv.buildPlatform;
+  # XXX: test failure on Cygwin
+  # we are running out of stack on both freeBSDs on Hydra
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
-  ''
-    + optionalString (variant != null) ''
+  '' + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 

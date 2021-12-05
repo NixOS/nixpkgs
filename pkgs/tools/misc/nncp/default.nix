@@ -1,12 +1,5 @@
-{ lib, stdenv
-, go
-, fetchurl
-, redo-apenwarr
-, curl
-, perl
-, genericUpdater
-, writeShellScript
-}:
+{ lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
+, writeShellScript }:
 
 stdenv.mkDerivation rec {
   pname = "nncp";

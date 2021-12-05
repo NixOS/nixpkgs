@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, notebook
-, ipywidgets
-}:
+{ lib, buildPythonPackage, fetchPypi, notebook, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";

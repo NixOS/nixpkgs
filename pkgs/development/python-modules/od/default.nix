@@ -9,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "1az30snc3w6s4k1pi7mspcv8y0kp3ihf3ly44z517nszmz9lrjfi";
   };
 
-  checkInputs = [
-    repeated_test
-    unittest2
-  ];
+  checkInputs = [ repeated_test unittest2 ];
 
   meta = with lib; {
     description = "Shorthand syntax for building OrderedDicts";

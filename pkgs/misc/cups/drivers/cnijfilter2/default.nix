@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
-, withDebug ? false }:
+{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1
+, libtool, withDebug ? false }:
 
 stdenv.mkDerivation {
   pname = "cnijfilter2";
@@ -7,13 +7,12 @@ stdenv.mkDerivation {
   version = "6.10";
 
   src = fetchzip {
-    url = "https://gdlp01.c-wss.com/gds/1/0100010921/01/cnijfilter2-source-6.10-1.tar.gz";
+    url =
+      "https://gdlp01.c-wss.com/gds/1/0100010921/01/cnijfilter2-source-6.10-1.tar.gz";
     sha256 = "0w121issdjxdv5i9ksa5m23if6pz1r9ql8p894f1pqn16w0kw1ix";
   };
 
-  buildInputs = [
-    cups automake autoconf glib libxml2 libusb1 libtool
-  ];
+  buildInputs = [ cups automake autoconf glib libxml2 libusb1 libtool ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
   # directory the cnnnet.ini cache file should reside.
@@ -114,7 +113,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for many Pixma series printers.";
+    description =
+      "Canon InkJet printer drivers for many Pixma series printers.";
     longDescription = ''
       Canon InjKet printer drivers for series E200, E300, E3100, E3300, E4200, E450, E470, E480,
       G3000, G3010, G4000, G4010, G5000, G5080, G6000, G6050, G6080, G7000, G7050, G7080, GM2000,

@@ -1,24 +1,23 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools, python2Packages, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools
+, python2Packages, makeWrapper }:
 
 let
-  vasm =
-    stdenv.mkDerivation {
-      pname = "vasm";
-      version = "1.8c";
-      src = fetchFromGitHub {
-        owner = "mbitsnbites";
-        repo = "vasm";
-        rev = "244f8bbbdf64ae603f9f6c09a3067943837459ec";
-        sha256 = "0x4y5q7ygxfjfy2wxijkps9khsjjfb169sbda410vaw0m88wqj5p";
-      };
-      makeFlags = [ "CPU=m68k" "SYNTAX=mot" ];
-      installPhase = ''
-        mkdir -p $out/bin
-        cp vasmm68k_mot $out/bin
-      '';
+  vasm = stdenv.mkDerivation {
+    pname = "vasm";
+    version = "1.8c";
+    src = fetchFromGitHub {
+      owner = "mbitsnbites";
+      repo = "vasm";
+      rev = "244f8bbbdf64ae603f9f6c09a3067943837459ec";
+      sha256 = "0x4y5q7ygxfjfy2wxijkps9khsjjfb169sbda410vaw0m88wqj5p";
     };
-in
-stdenv.mkDerivation {
+    makeFlags = [ "CPU=m68k" "SYNTAX=mot" ];
+    installPhase = ''
+      mkdir -p $out/bin
+      cp vasmm68k_mot $out/bin
+    '';
+  };
+in stdenv.mkDerivation {
   pname = "blastem";
   version = "0.5.1";
   src = fetchurl {
@@ -26,7 +25,15 @@ stdenv.mkDerivation {
     sha256 = "07wzbmzp0y8mh59jxg81q17gqagz3psxigxh8dmzsipgg68y6a8r";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pkg-config SDL2 glew xcftools python2Packages.python python2Packages.pillow vasm ];
+  buildInputs = [
+    pkg-config
+    SDL2
+    glew
+    xcftools
+    python2Packages.python
+    python2Packages.pillow
+    vasm
+  ];
   preBuild = ''
     patchShebangs img2tiles.py
   '';

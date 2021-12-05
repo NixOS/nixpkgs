@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config, cmrt, libdrm, libva, libX11, libGL, wayland }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config, cmrt
+, libdrm, libva, libX11, libGL, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "intel-hybrid-driver";
@@ -25,11 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--enable-drm"
-    "--enable-x11"
-    "--enable-wayland"
-  ];
+  configureFlags = [ "--enable-drm" "--enable-x11" "--enable-wayland" ];
 
   postPatch = ''
     patchShebangs ./src/shaders/gpp.py
@@ -41,7 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://01.org/linuxmedia";
-    description = "Intel driver for the VAAPI library with partial HW acceleration";
+    description =
+      "Intel driver for the VAAPI library with partial HW acceleration";
     license = licenses.mit;
     maintainers = with maintainers; [ tadfisher ];
     platforms = platforms.linux;

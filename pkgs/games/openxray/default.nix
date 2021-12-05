@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
-, openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
-, pcre, makeWrapper, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, glew, freeimage, liblockfile, openal
+, libtheora, SDL2, lzo, libjpeg, libogg, tbb, pcre, makeWrapper, fetchpatch }:
 
 let
   version = "822-december-preview";
@@ -28,7 +27,8 @@ let
     doCheck = true;
 
     meta = with lib; {
-      description = "Crypto++, a free C++ class library of cryptographic schemes";
+      description =
+        "Crypto++, a free C++ class library of cryptographic schemes";
       homepage = "https://cryptopp.com/";
       license = with licenses; [ boost publicDomain ];
       platforms = platforms.all;
@@ -42,7 +42,8 @@ in stdenv.mkDerivation rec {
   # Fixes format hardening
   patches = [
     (fetchpatch {
-      url = "https://github.com/OpenXRay/GameSpy/pull/6/commits/155af876281f5d94f0142886693314d97deb2d4c.patch";
+      url =
+        "https://github.com/OpenXRay/GameSpy/pull/6/commits/155af876281f5d94f0142886693314d97deb2d4c.patch";
       sha256 = "1l0vcgvzzx8n56shpblpfdhvpr6c12fcqf35r0mflaiql8q7wn88";
       stripLen = 1;
       extraPrefix = "Externals/GameSpy/";
@@ -52,8 +53,18 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
 
   buildInputs = [
-    glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
-    libjpeg libogg tbb pcre
+    glew
+    freeimage
+    liblockfile
+    openal
+    cryptopp
+    libtheora
+    SDL2
+    lzo
+    libjpeg
+    libogg
+    tbb
+    pcre
   ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -71,7 +82,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
+    description =
+      "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
     homepage = src.meta.homepage;
     license = licenses.unfree // {
       url = "https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt";

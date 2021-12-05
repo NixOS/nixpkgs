@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, libGL, libGLU, freeglut, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libGL, libGLU, freeglut, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "twilight";

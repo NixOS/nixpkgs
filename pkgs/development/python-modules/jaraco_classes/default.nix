@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, setuptools-scm
-, more-itertools
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, setuptools-scm
+, more-itertools, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "jaraco.classes";

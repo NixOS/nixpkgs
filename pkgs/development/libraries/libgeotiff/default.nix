@@ -15,10 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/libgeotiff";
 
-  configureFlags = [
-    "--with-jpeg=${libjpeg.dev}"
-    "--with-zlib=${zlib.dev}"
-  ];
+  configureFlags = [ "--with-jpeg=${libjpeg.dev}" "--with-zlib=${zlib.dev}" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -27,10 +24,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
+    description =
+      "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = "https://github.com/OSGeo/libgeotiff";
     license = lib.licenses.mit;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

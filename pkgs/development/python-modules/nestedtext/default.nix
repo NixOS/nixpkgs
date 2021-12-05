@@ -1,10 +1,5 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, inform
-, pytestCheckHook
-, docopt
-, natsort
-, voluptuous
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, inform, pytestCheckHook, docopt
+, natsort, voluptuous }:
 
 buildPythonPackage rec {
   pname = "nestedtext";

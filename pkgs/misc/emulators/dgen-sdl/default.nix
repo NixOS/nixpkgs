@@ -1,8 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, libarchive
-, SDL
-}:
+{ lib, stdenv, fetchurl, libarchive, SDL }:
 
 let
   pname = "dgen-sdl";
@@ -11,7 +7,8 @@ in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://sourceforge.net/projects/dgen/files/dgen/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-meLAYBfCKHPHf4gYbrzAmGckTrbgQsdjuwlLArje9h4=";
   };
 

@@ -1,13 +1,4 @@
-{ lib, stdenv
-, fetchurl
-, unzip
-, jdk
-, ant
-, jre
-, makeWrapper
-, testVersion
-, key
-}:
+{ lib, stdenv, fetchurl, unzip, jdk, ant, jre, makeWrapper, testVersion, key }:
 
 # get this from the download URL when changing version
 let gitRevision = "7d3deab0763c88edee4f7a08e604661e0dbdd450";
@@ -17,18 +8,14 @@ in stdenv.mkDerivation rec {
   version = "2.6.3";
 
   src = fetchurl {
-    url = "https://formal.iti.kit.edu/key/releases/${version}/key-src-${version}_${gitRevision}.zip";
+    url =
+      "https://formal.iti.kit.edu/key/releases/${version}/key-src-${version}_${gitRevision}.zip";
     sha256 = "1dr5jmrqs0iy76wdsfiv5hx929i24yzm1xypzqqvx7afc7apyawy";
   };
 
   sourceRoot = "key";
 
-  nativeBuildInputs = [
-    unzip
-    jdk
-    ant
-    makeWrapper
-  ];
+  nativeBuildInputs = [ unzip jdk ant makeWrapper ];
 
   buildPhase = ''
     ant -buildfile scripts/build.xml \
@@ -51,17 +38,17 @@ in stdenv.mkDerivation rec {
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
   '';
 
-  passthru.tests.version =
-    testVersion {
-      package = key;
-      command = "KeY --help";
-      # Wrong '2.5' version in the code. On next version change to ${version}
-      version = "2.5";
-    };
+  passthru.tests.version = testVersion {
+    package = key;
+    command = "KeY --help";
+    # Wrong '2.5' version in the code. On next version change to ${version}
+    version = "2.5";
+  };
 
   meta = with lib; {
     description = "Java formal verification tool";
-    homepage = "https://www.key-project.org"; # also https://formal.iti.kit.edu/key/
+    homepage =
+      "https://www.key-project.org"; # also https://formal.iti.kit.edu/key/
     longDescription = ''
       The KeY System is a formal software development tool that aims to
       integrate design, implementation, formal specification, and formal

@@ -1,23 +1,21 @@
-{ stdenv
-, name
-, src
-, doTest ? true
-, doTestCompile ? true
-, doJavadoc ? false
-, doCheckstyle ? false
-, doRelease ? false
-, includeTestClasses ? true
-, extraMvnFlags ? ""
-, ...
-} @ args :
+{ stdenv, name, src, doTest ? true, doTestCompile ? true, doJavadoc ? false
+, doCheckstyle ? false, doRelease ? false, includeTestClasses ? true
+, extraMvnFlags ? "", ... }@args:
 
 let
-  mvnFlags = "-Dmaven.repo.local=$M2_REPO ${if doTest then "" else "-Dmaven.test.skip.exec=true"} ${extraMvnFlags}";
-in
+  mvnFlags = "-Dmaven.repo.local=$M2_REPO ${
+      if doTest then "" else "-Dmaven.test.skip.exec=true"
+    } ${extraMvnFlags}";
 
-stdenv.mkDerivation ( {
+in stdenv.mkDerivation ({
   inherit name src;
-  phases = "setupPhase unpackPhase patchPhase mvnCompile ${if doTestCompile then "mvnTestCompile mvnTestJar" else ""} ${if doTest then "mvnTest" else ""} ${if doJavadoc then "mvnJavadoc" else ""} ${if doCheckstyle then "mvnCheckstyle" else ""} mvnJar mvnAssembly mvnRelease finalPhase";
+  phases = "setupPhase unpackPhase patchPhase mvnCompile ${
+      if doTestCompile then "mvnTestCompile mvnTestJar" else ""
+    } ${if doTest then "mvnTest" else ""} ${
+      if doJavadoc then "mvnJavadoc" else ""
+    } ${
+      if doCheckstyle then "mvnCheckstyle" else ""
+    } mvnJar mvnAssembly mvnRelease finalPhase";
 
   setupPhase = ''
     runHook preSetupPhase
@@ -83,9 +81,10 @@ stdenv.mkDerivation ( {
 
     echo "$releaseName" > $out/nix-support/hydra-release-name
 
-    ${if doRelease then  ''
-    echo "file zip $out/release/$releaseName.zip" >> $out/nix-support/hydra-build-products
-    '' else ""}
+    ${if doRelease then ''
+      echo "file zip $out/release/$releaseName.zip" >> $out/nix-support/hydra-build-products
+    '' else
+      ""}
   '';
 
   finalPhase = ''
@@ -94,5 +93,4 @@ stdenv.mkDerivation ( {
       echo "report site $out/site" >> $out/nix-support/hydra-build-products
     fi
   '';
-} // args
-)
+} // args)

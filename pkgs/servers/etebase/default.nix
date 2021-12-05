@@ -2,12 +2,9 @@
 
 let
   py = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_3;
-    };
+    packageOverrides = self: super: { django = super.django_3; };
   };
-in
-  with py.pkgs;
+in with py.pkgs;
 
 buildPythonPackage rec {
   pname = "etebase-server";

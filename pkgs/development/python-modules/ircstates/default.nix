@@ -1,16 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, irctokens
-, pendulum
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, irctokens, pendulum
+, python }:
 
 buildPythonPackage rec {
   pname = "ircstates";
   version = "0.11.8";
-  disabled = pythonOlder "3.6";  # f-strings
+  disabled = pythonOlder "3.6"; # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
@@ -19,10 +13,7 @@ buildPythonPackage rec {
     sha256 = "0scxqcgby4vzh2q937r0wy2mb46aghjf47q3z6fp6di1b6hlj7zh";
   };
 
-  propagatedBuildInputs = [
-    irctokens
-    pendulum
-  ];
+  propagatedBuildInputs = [ irctokens pendulum ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

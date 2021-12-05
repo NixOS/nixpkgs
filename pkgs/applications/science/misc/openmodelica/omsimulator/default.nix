@@ -1,11 +1,5 @@
-{ lib
-, pkg-config
-, boost
-, readline
-, libxml2
-, openmodelica
-, mkOpenModelicaDerivation
-}:
+{ lib, pkg-config, boost, readline, libxml2, openmodelica
+, mkOpenModelicaDerivation }:
 
 mkOpenModelicaDerivation rec {
   pname = "omsimulator";

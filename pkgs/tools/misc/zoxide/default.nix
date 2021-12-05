@@ -1,12 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, withFzf ? true
-, fzf
-, installShellFiles
-, libiconv
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, withFzf ? true, fzf
+, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
@@ -41,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
-    changelog = "https://github.com/ajeetdsouza/zoxide/raw/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/ajeetdsouza/zoxide/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ysndr cole-h SuperSandro2000 ];
   };

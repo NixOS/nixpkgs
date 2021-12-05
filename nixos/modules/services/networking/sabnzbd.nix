@@ -7,9 +7,7 @@ let
   cfg = config.services.sabnzbd;
   inherit (pkgs) sabnzbd;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -44,34 +42,32 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     users.users.sabnzbd = {
-          uid = config.ids.uids.sabnzbd;
-          group = "sabnzbd";
-          description = "sabnzbd user";
-          home = "/var/lib/sabnzbd/";
-          createHome = true;
+      uid = config.ids.uids.sabnzbd;
+      group = "sabnzbd";
+      description = "sabnzbd user";
+      home = "/var/lib/sabnzbd/";
+      createHome = true;
     };
 
-    users.groups.sabnzbd = {
-      gid = config.ids.gids.sabnzbd;
-    };
+    users.groups.sabnzbd = { gid = config.ids.gids.sabnzbd; };
 
     systemd.services.sabnzbd = {
-        description = "sabnzbd server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "forking";
-          GuessMainPID = "no";
-          User = "${cfg.user}";
-          Group = "${cfg.group}";
-          ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
-        };
+      description = "sabnzbd server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "forking";
+        GuessMainPID = "no";
+        User = "${cfg.user}";
+        Group = "${cfg.group}";
+        ExecStart =
+          "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
+      };
     };
   };
 }

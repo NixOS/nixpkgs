@@ -4,12 +4,12 @@ let
   majorVersion = "0";
   minorVersion = "200";
   pname = "eunomia";
-in
 
-fetchzip {
+in fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
+  url =
+    "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
   sha256 = "0lpmczs1d4p9dy4s0dnvv7bl5cd0f6yzyasfrkxij5s86glps38b";
 
   postFetch = ''

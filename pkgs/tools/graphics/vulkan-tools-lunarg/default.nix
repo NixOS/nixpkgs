@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, jq
-, expat
-, libX11
-, libXdmcp
-, libXrandr
-, libffi
-, libxcb
-, wayland
-, xcbutilkeysyms
-, xcbutilwm
-, vulkan-headers
-, vulkan-loader
-, symlinkJoin
-, vulkan-validation-layers
-, writeText
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, jq, expat, libX11, libXdmcp
+, libXrandr, libffi, libxcb, wayland, xcbutilkeysyms, xcbutilwm, vulkan-headers
+, vulkan-loader, symlinkJoin, vulkan-validation-layers, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";

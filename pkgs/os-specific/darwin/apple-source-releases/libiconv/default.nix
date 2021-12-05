@@ -1,7 +1,5 @@
-{ stdenv, appleDerivation, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
+{ stdenv, appleDerivation, lib, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic }:
 
 appleDerivation {
   postUnpack = "sourceRoot=$sourceRoot/libiconv";
@@ -31,7 +29,5 @@ appleDerivation {
     ../../../../development/libraries/libiconv/setup-hook.sh
   ];
 
-  meta = {
-    platforms = lib.platforms.darwin;
-  };
+  meta = { platforms = lib.platforms.darwin; };
 }

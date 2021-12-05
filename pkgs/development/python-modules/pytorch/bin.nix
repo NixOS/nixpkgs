@@ -1,17 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchurl
-, isPy37
-, isPy38
-, isPy39
-, python
-, addOpenGLRunpath
-, future
-, numpy
-, patchelf
-, pyyaml
-, requests
-, typing-extensions
+{ lib, stdenv, buildPythonPackage, fetchurl, isPy37, isPy38, isPy39, python
+, addOpenGLRunpath, future, numpy, patchelf, pyyaml, requests, typing-extensions
 }:
 
 let
@@ -31,26 +19,16 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-    patchelf
-  ];
+  nativeBuildInputs = [ addOpenGLRunpath patchelf ];
 
-  propagatedBuildInputs = [
-    future
-    numpy
-    pyyaml
-    requests
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ future numpy pyyaml requests typing-extensions ];
 
   postInstall = ''
     # ONNX conversion
     rm -rf $out/bin
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+  postFixup = let rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, scdoc, ninja, libxkbcommon, wayland }:
+{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, scdoc, ninja, libxkbcommon
+, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "wlrctl";
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
 
   meta = with lib; {
-    description = "Command line utility for miscellaneous wlroots Wayland extensions";
+    description =
+      "Command line utility for miscellaneous wlroots Wayland extensions";
     homepage = "https://git.sr.ht/~brocellous/wlrctl";
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh artturin ];

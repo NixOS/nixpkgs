@@ -2,16 +2,30 @@
 
 with lib;
 
-let
-  cfg = config.system.nixos;
-in
+let cfg = config.system.nixos;
 
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
-    (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
-    (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
-    (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
+    (mkRenamedOptionModule [ "system" "nixosVersion" ] [
+      "system"
+      "nixos"
+      "version"
+    ])
+    (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [
+      "system"
+      "nixos"
+      "versionSuffix"
+    ])
+    (mkRenamedOptionModule [ "system" "nixosRevision" ] [
+      "system"
+      "nixos"
+      "revision"
+    ])
+    (mkRenamedOptionModule [ "system" "nixosLabel" ] [
+      "system"
+      "nixos"
+      "label"
+    ])
   ];
 
   options.system = {
@@ -19,7 +33,8 @@ in
     nixos.version = mkOption {
       internal = true;
       type = types.str;
-      description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
+      description =
+        "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
     };
 
     nixos.release = mkOption {
@@ -33,21 +48,24 @@ in
       internal = true;
       type = types.str;
       default = trivial.versionSuffix;
-      description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
+      description =
+        "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
     nixos.revision = mkOption {
       internal = true;
       type = types.nullOr types.str;
       default = trivial.revisionWithDefault null;
-      description = "The Git revision from which this NixOS configuration was built.";
+      description =
+        "The Git revision from which this NixOS configuration was built.";
     };
 
     nixos.codeName = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.codeName;
-      description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
+      description =
+        "The NixOS release code name (e.g. <literal>Emu</literal>).";
     };
 
     stateVersion = mkOption {
@@ -77,13 +95,15 @@ in
       internal = true;
       type = types.str;
       default = "https://nixos.org/channels/nixos-unstable";
-      description = "Default NixOS channel to which the root user is subscribed.";
+      description =
+        "Default NixOS channel to which the root user is subscribed.";
     };
 
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "The Git revision of the top-level flake from which this configuration was built.";
+      description =
+        "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };
@@ -99,21 +119,20 @@ in
     # Generate /etc/os-release.  See
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
-    environment.etc.os-release.text =
-      ''
-        NAME=NixOS
-        ID=nixos
-        VERSION="${cfg.release} (${cfg.codeName})"
-        VERSION_CODENAME=${toLower cfg.codeName}
-        VERSION_ID="${cfg.release}"
-        BUILD_ID="${cfg.version}"
-        PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
-        LOGO="nix-snowflake"
-        HOME_URL="https://nixos.org/"
-        DOCUMENTATION_URL="https://nixos.org/learn.html"
-        SUPPORT_URL="https://nixos.org/community.html"
-        BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
-      '';
+    environment.etc.os-release.text = ''
+      NAME=NixOS
+      ID=nixos
+      VERSION="${cfg.release} (${cfg.codeName})"
+      VERSION_CODENAME=${toLower cfg.codeName}
+      VERSION_ID="${cfg.release}"
+      BUILD_ID="${cfg.version}"
+      PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
+      LOGO="nix-snowflake"
+      HOME_URL="https://nixos.org/"
+      DOCUMENTATION_URL="https://nixos.org/learn.html"
+      SUPPORT_URL="https://nixos.org/community.html"
+      BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
+    '';
 
   };
 

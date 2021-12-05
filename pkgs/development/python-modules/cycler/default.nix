@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, nose
-, six
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, coverage, nose, six, python }:
 
 buildPythonPackage rec {
   pname = "cycler";

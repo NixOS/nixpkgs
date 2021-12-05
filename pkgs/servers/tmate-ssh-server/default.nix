@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, libtool, pkg-config
-, zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, libtool, pkg-config, zlib
+, openssl, libevent, ncurses, ruby, msgpack, libssh }:
 
 stdenv.mkDerivation rec {
   pname = "tmate-ssh-server";
   version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner  = "tmate-io";
-    repo   = "tmate-ssh-server";
-    rev    = version;
+    owner = "tmate-io";
+    repo = "tmate-ssh-server";
+    rev = version;
     sha256 = "1y77mv1k4c79glj84lzlp0s1lafr1jzf60mywr5vhy6sq47q8hwd";
   };
 
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
 
   meta = with lib; {
-    homepage    = "https://tmate.io/";
+    homepage = "https://tmate.io/";
     description = "tmate SSH Server";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }

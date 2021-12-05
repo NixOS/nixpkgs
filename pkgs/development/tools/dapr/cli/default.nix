@@ -22,7 +22,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://dapr.io";
-    description = "A CLI for managing Dapr, the distributed application runtime";
+    description =
+      "A CLI for managing Dapr, the distributed application runtime";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];
   };

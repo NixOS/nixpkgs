@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses
+, zip }:
 
 stdenv.mkDerivation rec {
   version = "11.1";
   pname = "textadept11";
 
   nativeBuildInputs = [ pkg-config unzip zip ];
-  buildInputs = [
-    gtk2 ncurses glib
-  ];
+  buildInputs = [ gtk2 ncurses glib ];
 
   src = fetchFromGitHub {
     name = "textadept11";
@@ -17,14 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "0g4bh5dp391vi32aa796vszpbxyl2dm5231v9dwc8l9v0b2786qn";
   };
 
-  preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
-      "ln -s ${fetchurl params} $PWD/src/${name}"
-    ) (import ./deps.nix)) + ''
+  preConfigure = lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (name: params: "ln -s ${fetchurl params} $PWD/src/${name}")
+    (import ./deps.nix)) + ''
 
-    cd src
-    make deps
-  '';
+      cd src
+      make deps
+    '';
 
   postBuild = ''
     make curses
@@ -39,14 +37,12 @@ stdenv.mkDerivation rec {
     make curses install PREFIX=$out MAKECMDGOALS=curses
   '';
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "WGET=true"
-    "PIXMAPS_DIR=$(out)/share/pixmaps"
-  ];
+  makeFlags =
+    [ "PREFIX=$(out)" "WGET=true" "PIXMAPS_DIR=$(out)/share/pixmaps" ];
 
   meta = with lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting. Version 11_beta";
+    description =
+      "An extensible text editor based on Scintilla with Lua scripting. Version 11_beta";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];

@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, sudo
-, lxqtUpdateScript
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools
+, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -25,21 +13,10 @@ mkDerivation rec {
     sha256 = "1y2vq3n5sv6cxqpnz79kl3dybfbw65z93cahdz8m6gplzpp24gn4";
   };
 
-  nativeBuildInputs = [
-    cmake
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
-    kwindowsystem
-    liblxqt
-    libqtxdg
-    sudo
-  ];
+  buildInputs =
+    [ qtbase qttools qtx11extras qtsvg kwindowsystem liblxqt libqtxdg sudo ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

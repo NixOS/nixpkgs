@@ -6,8 +6,8 @@ gerbil-support.gerbilPackage {
   git-version = "2376b3f";
   gerbil-package = "vyzo";
   gerbil = gerbil-unstable;
-  gerbilInputs = [];
-  buildInputs = []; # Note: at *runtime*, depends on go-libp2p-daemon
+  gerbilInputs = [ ];
+  buildInputs = [ ]; # Note: at *runtime*, depends on go-libp2p-daemon
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
   softwareName = "Gerbil-libp2p";
@@ -19,9 +19,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil libp2p: use libp2p from Gerbil";
-    homepage    = "https://github.com/vyzo/gerbil-libp2p";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
+    homepage = "https://github.com/vyzo/gerbil-libp2p";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
 }

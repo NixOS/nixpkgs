@@ -1,18 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-api-core
-, google-cloud-access-context-manager
-, google-cloud-org-policy
-, google-cloud-os-config
-, google-cloud-testutils
-, libcst
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, grpc-google-iam-v1, google-api-core
+, google-cloud-access-context-manager, google-cloud-org-policy
+, google-cloud-os-config, google-cloud-testutils, libcst, proto-plus
+, pytest-asyncio, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";

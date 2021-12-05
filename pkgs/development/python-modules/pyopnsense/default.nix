@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, fixtures, mock, pbr, pytest-cov
+, pytestCheckHook, pythonOlder, requests, six }:
 
 buildPythonPackage rec {
   pname = "pyopnsense";
@@ -21,18 +11,9 @@ buildPythonPackage rec {
     sha256 = "06rssdb3zhccnm63z96mw5yd38d9i99fgigfcdxn9divalbbhp5a";
   };
 
-  propagatedBuildInputs = [
-    pbr
-    six
-    requests
-  ];
+  propagatedBuildInputs = [ pbr six requests ];
 
-  checkInputs = [
-    fixtures
-    mock
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ fixtures mock pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "pyopnsense" ];
 

@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
-, enableCuda ? false
-, cudatoolkit
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl, rdma-core
+, libbfd, libiberty, perl, zlib, symlinkJoin, enableCuda ? false, cudatoolkit }:
 
 let
   # Needed for configure to find all libraries
@@ -24,14 +21,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
 
-  buildInputs = [
-    libbfd
-    libiberty
-    numactl
-    perl
-    rdma-core
-    zlib
-  ] ++ lib.optional enableCuda cudatoolkit;
+  buildInputs = [ libbfd libiberty numactl perl rdma-core zlib ]
+    ++ lib.optional enableCuda cudatoolkit;
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"

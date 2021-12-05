@@ -4,9 +4,14 @@ let
 
   cfg = config.services.kmscon;
 
-  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
+  autologinArg =
+    lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
-  configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
+  configDir = pkgs.writeTextFile {
+    name = "kmscon-config";
+    destination = "/kmscon.conf";
+    text = cfg.extraConfig;
+  };
 in {
   options = {
     services.kmscon = {
@@ -23,7 +28,8 @@ in {
       };
 
       hwRender = mkOption {
-        description = "Whether to use 3D hardware acceleration to render the console.";
+        description =
+          "Whether to use 3D hardware acceleration to render the console.";
         type = types.bool;
         default = false;
       };

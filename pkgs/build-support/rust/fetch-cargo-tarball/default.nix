@@ -1,35 +1,34 @@
 { lib, stdenv, cacert, git, cargo, python3 }:
-let cargo-vendor-normalise = stdenv.mkDerivation {
-  name = "cargo-vendor-normalise";
-  src = ./cargo-vendor-normalise.py;
-  nativeBuildInputs = [ python3.pkgs.wrapPython ];
-  dontUnpack = true;
-  installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
-  pythonPath = [ python3.pkgs.toml ];
-  postFixup = "wrapPythonPrograms";
-  doInstallCheck = true;
-  installCheckPhase = ''
-    # check that ../fetchcargo-default-config.toml is a fix point
-    reference=${../fetchcargo-default-config.toml}
-    < $reference $out/bin/cargo-vendor-normalise > test;
-    cmp test $reference
-  '';
-  preferLocalBuild = true;
-};
-in
-{ name ? "cargo-deps"
-, src ? null
-, srcs ? []
-, patches ? []
-, sourceRoot ? ""
-, cargoUpdateHook ? ""
-, ...
-} @ args:
+let
+  cargo-vendor-normalise = stdenv.mkDerivation {
+    name = "cargo-vendor-normalise";
+    src = ./cargo-vendor-normalise.py;
+    nativeBuildInputs = [ python3.pkgs.wrapPython ];
+    dontUnpack = true;
+    installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
+    pythonPath = [ python3.pkgs.toml ];
+    postFixup = "wrapPythonPrograms";
+    doInstallCheck = true;
+    installCheckPhase = ''
+      # check that ../fetchcargo-default-config.toml is a fix point
+      reference=${../fetchcargo-default-config.toml}
+      < $reference $out/bin/cargo-vendor-normalise > test;
+      cmp test $reference
+    '';
+    preferLocalBuild = true;
+  };
+in { name ? "cargo-deps", src ? null, srcs ? [ ], patches ? [ ], sourceRoot ? ""
+, cargoUpdateHook ? "", ... }@args:
 
-let hash_ =
-  if args ? hash then { outputHashAlgo = null; outputHash = args.hash; }
-  else if args ? sha256 then { outputHashAlgo = "sha256"; outputHash = args.sha256; }
-  else throw "fetchCargoTarball requires a hash for ${name}";
+let
+  hash_ = if args ? hash then {
+    outputHashAlgo = null;
+    outputHash = args.hash;
+  } else if args ? sha256 then {
+    outputHashAlgo = "sha256";
+    outputHash = args.sha256;
+  } else
+    throw "fetchCargoTarball requires a hash for ${name}";
 in stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
@@ -81,6 +80,4 @@ in stdenv.mkDerivation ({
   inherit (hash_) outputHashAlgo outputHash;
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-} // (builtins.removeAttrs args [
-  "name" "sha256" "cargoUpdateHook"
-]))
+} // (builtins.removeAttrs args [ "name" "sha256" "cargoUpdateHook" ]))

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse, libiconv }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu
+, lzfse, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";
@@ -15,10 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  CXXFLAGS = [
-    "-DCOMPILE_WITH_LZFSE=1"
-    "-llzfse"
-  ];
+  CXXFLAGS = [ "-DCOMPILE_WITH_LZFSE=1" "-llzfse" ];
 
   meta = with lib; {
     homepage = "https://www.darlinghq.org/";

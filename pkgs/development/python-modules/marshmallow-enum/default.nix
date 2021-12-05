@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, isPy27
-, enum34
-, pytest-flake8
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, marshmallow, pytestCheckHook, isPy27
+, enum34, pytest-flake8 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-enum";
@@ -19,14 +12,9 @@ buildPythonPackage rec {
     sha256 = "1ihrcmyfjabivg6hc44i59hnw5ijlg1byv3zs1rqxfynp8xr7398";
   };
 
-  propagatedBuildInputs = [
-    marshmallow
-  ] ++ lib.optionals isPy27 [ enum34 ];
+  propagatedBuildInputs = [ marshmallow ] ++ lib.optionals isPy27 [ enum34 ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-flake8
-  ];
+  checkInputs = [ pytestCheckHook pytest-flake8 ];
 
   disabledTests = [
     "test_custom_error_in_deserialize_by_name"

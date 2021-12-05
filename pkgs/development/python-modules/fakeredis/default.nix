@@ -1,18 +1,6 @@
-{ lib
-, aioredis
-, async_generator
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, lupa
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, six
-, sortedcontainers
-}:
+{ lib, aioredis, async_generator, buildPythonPackage, fetchPypi, hypothesis
+, lupa, pytest-asyncio, pytest-mock, pytestCheckHook, pythonOlder, redis, six
+, sortedcontainers }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
@@ -26,30 +14,17 @@ buildPythonPackage rec {
     sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
   };
 
-  propagatedBuildInputs = [
-    aioredis
-    lupa
-    redis
-    six
-    sortedcontainers
-  ];
+  propagatedBuildInputs = [ aioredis lupa redis six sortedcontainers ];
 
-  checkInputs = [
-    async_generator
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ async_generator hypothesis pytest-asyncio pytest-mock pytestCheckHook ];
 
   disabledTestPaths = [
     # AttributeError: 'AsyncGenerator' object has no attribute XXXX
     "test/test_aioredis2.py"
   ];
 
-  pythonImportsCheck = [
-    "fakeredis"
-  ];
+  pythonImportsCheck = [ "fakeredis" ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

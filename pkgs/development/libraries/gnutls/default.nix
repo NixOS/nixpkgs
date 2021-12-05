@@ -1,9 +1,9 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, util-linux
-, guileBindings ? config.gnutls.guile or false, guile
-, tpmSupport ? false, trousers, which, nettools, libunistring
-, withSecurity ? false, Security  # darwin Security.framework
+, perl, gmp, autoconf, automake, libidn, p11-kit, libiconv, unbound
+, dns-root-data, gettext, util-linux
+, guileBindings ? config.gnutls.guile or false, guile, tpmSupport ? false
+, trousers, which, nettools, libunistring, withSecurity ? false
+, Security # darwin Security.framework
 }:
 
 assert guileBindings -> guile != null;
@@ -11,28 +11,31 @@ let
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin
-      && stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && stdenv.buildPlatform
+    == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "gnutls";
   version = "3.7.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
+    url = "mirror://gnupg/gnutls/v${
+        lib.versions.majorMinor version
+      }/gnutls-${version}.tar.xz";
     sha256 = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   # Not normally useful docs.
   outputInfo = "devdoc";
-  outputDoc  = "devdoc";
+  outputDoc = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ]
-    # Disable native add_system_trust.
+  patches = [
+    ./nix-ssl-cert-file.patch
+  ]
+  # Disable native add_system_trust.
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
@@ -45,13 +48,13 @@ stdenv.mkDerivation rec {
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
-  '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
-    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
-  '';
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # See https://gitlab.com/gnutls/gnutls/-/issues/945
+       sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
+     '';
 
   preConfigure = "patchShebangs .";
-  configureFlags =
-    lib.optionals stdenv.isLinux [
+  configureFlags = lib.optionals stdenv.isLinux [
     "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
     "--with-default-trust-store-pkcs11=pkcs11:"
   ] ++ [
@@ -67,8 +70,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp libunistring unbound gettext libiconv ]
-    ++ lib.optional (isDarwin && withSecurity) Security
+  buildInputs = [
+    lzo
+    lzip
+    libtasn1
+    libidn
+    p11-kit
+    zlib
+    gmp
+    libunistring
+    unbound
+    gettext
+    libiconv
+  ] ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
@@ -85,7 +99,9 @@ stdenv.mkDerivation rec {
 
   # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!isDarwin) ''
-    sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
+    sed ${
+      lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"
+    } \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \
         -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
         -e 's,-lgmp,-L${gmp.out}/lib -lgmp,' \
@@ -100,17 +116,17 @@ stdenv.mkDerivation rec {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
-       GnuTLS is a project that aims to develop a library which
-       provides a secure layer, over a reliable transport
-       layer. Currently the GnuTLS library implements the proposed standards by
-       the IETF's TLS working group.
+      GnuTLS is a project that aims to develop a library which
+      provides a secure layer, over a reliable transport
+      layer. Currently the GnuTLS library implements the proposed standards by
+      the IETF's TLS working group.
 
-       Quoting from the TLS protocol specification:
+      Quoting from the TLS protocol specification:
 
-       "The TLS protocol provides communications privacy over the
-       Internet. The protocol allows client/server applications to
-       communicate in a way that is designed to prevent eavesdropping,
-       tampering, or message forgery."
+      "The TLS protocol provides communications privacy over the
+      Internet. The protocol allows client/server applications to
+      communicate in a way that is designed to prevent eavesdropping,
+      tampering, or message forgery."
     '';
 
     homepage = "https://gnutls.org/";

@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, pcsclite
-, PCSC
-, xcbuild
-}:
+{ stdenv, lib, fetchFromGitLab, fetchpatch, autoreconfHook, pkg-config, pcsclite
+, PCSC, xcbuild }:
 
 stdenv.mkDerivation rec {
   pname = "aribb25";
@@ -23,14 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "1kb9crfqib0npiyjk4zb63zqlzbhqm35nz8nafsvdjd71qbd2amp";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
+    ++ lib.optional stdenv.isDarwin xcbuild;
   buildInputs = if stdenv.isDarwin then [ PCSC ] else [ pcsclite ];
 
   patches = let
-    url = commit: "https://code.videolan.org/videolan/${pname}/-/commit/${commit}.diff";
+    url = commit:
+      "https://code.videolan.org/videolan/${pname}/-/commit/${commit}.diff";
   in [
     (fetchpatch {
       name = "make-cli-pipes-work-1.patch";
@@ -44,8 +35,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildFlags =
-    lib.optional stdenv.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
+  buildFlags = lib.optional stdenv.isDarwin
+    "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   meta = with lib; {
     homepage = "https://code.videolan.org/videolan/aribb25";

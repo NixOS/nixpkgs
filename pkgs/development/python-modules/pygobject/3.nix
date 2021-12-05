@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, glib
-, gobject-introspection
-, pycairo
-, cairo
-, ncurses
-, meson
-, ninja
-, isPy3k
-, gnome
-}:
+{ lib, stdenv, fetchurl, buildPythonPackage, pkg-config, glib
+, gobject-introspection, pycairo, cairo, ncurses, meson, ninja, isPy3k, gnome }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -25,28 +12,18 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "mxJhbjLPx5L53IQdnEcqQaNbhbpn06brQn4wem/kNns=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ pkg-config meson ninja gobject-introspection ];
 
-  buildInputs = [
-    glib
-    gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
-    ncurses
-  ];
+  buildInputs = [ glib gobject-introspection ]
+    ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
-  propagatedBuildInputs = [
-    pycairo
-    cairo
-  ];
+  propagatedBuildInputs = [ pycairo cairo ];
 
   passthru = {
     updateScript = gnome.updateScript {

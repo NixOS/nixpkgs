@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, requests, requests-cache, beautifulsoup4 }:
+{ lib, buildPythonPackage, fetchPypi, requests, requests-cache, beautifulsoup4
+}:
 
 buildPythonPackage rec {
   pname = "PySychonaut";
@@ -20,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysychonaut" ];
 
   meta = with lib; {
-    description = "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
+    description =
+      "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
     homepage = "https://github.com/OpenJarbas/PySychonaut";
     maintainers = [ maintainers.ivar ];
     license = licenses.asl20;

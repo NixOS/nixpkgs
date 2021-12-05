@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, noise
-, numpy
-, pyplatec
-, protobuf
-, purepng
-, h5py
-, gdal
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, isPy27, fetchFromGitHub, noise, numpy, pyplatec
+, protobuf, purepng, h5py, gdal, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "worldengine";
@@ -49,13 +38,12 @@ buildPythonPackage rec {
   doCheck = !isPy27; # google namespace clash
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "TestSerialization"
-  ];
+  disabledTests = [ "TestSerialization" ];
 
   meta = with lib; {
     homepage = "http://world-engine.org";
-    description = "World generator using simulation of plates, rain shadow, erosion, etc";
+    description =
+      "World generator using simulation of plates, rain shadow, erosion, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ rardiol ];
   };

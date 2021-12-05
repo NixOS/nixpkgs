@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchurl, pkg-config, cmake, python3, mkDerivation
-, libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
-, libvdpau, SDL2, mpv, libGL }:
+, libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras, libvdpau
+, SDL2, mpv, libGL }:
 let
   # During compilation, a CMake bundle is downloaded from `artifacts.plex.tv`,
   # which then downloads a handful of web client-related files. To enable
@@ -22,8 +22,18 @@ in mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake python3 ];
-  buildInputs = [ libX11 libXrandr qtbase qtwebchannel qtwebengine qtx11extras
-                  libvdpau SDL2 mpv libGL ];
+  buildInputs = [
+    libX11
+    libXrandr
+    qtbase
+    qtwebchannel
+    qtwebengine
+    qtx11extras
+    libvdpau
+    SDL2
+    mpv
+    libGL
+  ];
 
   preConfigure = with depSrcs; ''
     mkdir -p build/dependencies

@@ -1,9 +1,4 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, cups
-}:
+{ lib, python3Packages, fetchFromGitHub, wrapQtAppsHook, cups }:
 
 with python3Packages;
 
@@ -25,17 +20,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
-    enamlx
-    twisted
-    lxml
-    qreactor
-    jsonpickle
-    pyserial
-    pycups
-    qtconsole
-    pyqt5
-  ];
+  propagatedBuildInputs =
+    [ enamlx twisted lxml qreactor jsonpickle pyserial pycups qtconsole pyqt5 ];
 
   # QtApplication.instance() does not work during tests?
   doCheck = false;

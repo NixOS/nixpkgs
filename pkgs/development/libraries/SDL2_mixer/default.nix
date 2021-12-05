@@ -1,37 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, AudioToolbox
-, AudioUnit
-, CoreServices
-, SDL2
-, flac
-, fluidsynth
-, libmodplug
-, libogg
-, libvorbis
-, mpg123
-, opusfile
-, smpeg2
-, timidity
-}:
+{ lib, stdenv, fetchurl, pkg-config, AudioToolbox, AudioUnit, CoreServices, SDL2
+, flac, fluidsynth, libmodplug, libogg, libvorbis, mpg123, opusfile, smpeg2
+, timidity }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_mixer";
   version = "2.0.4";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
+    url =
+      "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
     sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    AudioToolbox
-    AudioUnit
-    CoreServices
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit CoreServices ];
 
   propagatedBuildInputs = [
     SDL2

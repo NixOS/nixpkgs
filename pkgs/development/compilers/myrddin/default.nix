@@ -1,12 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, binutils
-, binutils-unwrapped
-, makeWrapper
-}:
+{ stdenv, lib, fetchFromGitHub, pkg-config, bison, binutils, binutils-unwrapped
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "myrddin";
@@ -19,11 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "7ImjiG/rIKGPHq3Vh/mftY7pqw/vfOxD3LJeT87HmCk=";
   };
 
-  nativeBuildInputs = [
-    bison
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs = [ bison pkg-config makeWrapper ];
 
   postPatch = ''
     substituteInPlace mk/c.mk \

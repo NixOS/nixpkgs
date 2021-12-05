@@ -1,16 +1,7 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, makeWrapper
-, pythonOlder
-, crytic-compile
-, prettytable
-, setuptools
-, solc
-  # solc is currently broken on Darwin, default to false
-, withSolc ? !stdenv.isDarwin
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+, crytic-compile, prettytable, setuptools, solc
+# solc is currently broken on Darwin, default to false
+, withSolc ? !stdenv.isDarwin }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
@@ -22,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-5JgF53ip72bne8AlGf126FIIvXi+u7rovJmMSCcZjEQ=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [
-    crytic-compile
-    prettytable
-    setuptools
-  ];
+  propagatedBuildInputs = [ crytic-compile prettytable setuptools ];
 
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \

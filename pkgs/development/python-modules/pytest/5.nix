@@ -1,20 +1,6 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, atomicwrites
-, attrs
-, hypothesis
-, more-itertools
-, packaging
-, pathlib2
-, pluggy
-, py
-, pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy, atomicwrites
+, attrs, hypothesis, more-itertools, packaging, pathlib2, pluggy, py, pygments
+, setuptools, setuptools-scm, six, toml, wcwidth, writeText }:
 
 buildPythonPackage rec {
   version = "5.4.3";
@@ -82,9 +68,7 @@ buildPythonPackage rec {
     preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     homepage = "https://docs.pytest.org";

@@ -6,11 +6,12 @@ let
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
 
-  meta = with lib; geogebra.meta // {
-    license = licenses.geogebra;
-    maintainers = with maintainers; [ voidless sikmir ];
-    platforms = with platforms; linux ++ darwin;
-  };
+  meta = with lib;
+    geogebra.meta // {
+      license = licenses.geogebra;
+      maintainers = with maintainers; [ voidless sikmir ];
+      platforms = with platforms; linux ++ darwin;
+    };
 
   linuxPkg = stdenv.mkDerivation {
     inherit pname version meta;
@@ -26,10 +27,7 @@ let
     dontConfigure = true;
     dontBuild = true;
 
-    nativeBuildInputs = [
-      unzip
-      makeWrapper
-    ];
+    nativeBuildInputs = [ unzip makeWrapper ];
 
     unpackPhase = ''
       unzip $src
@@ -38,7 +36,9 @@ let
     installPhase = ''
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
-      makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
+      makeWrapper ${
+        lib.getBin electron
+      }/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
       install -Dm644 "${desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
@@ -67,7 +67,4 @@ let
       unzip $src -d $out/Applications
     '';
   };
-in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+in if stdenv.isDarwin then darwinPkg else linuxPkg

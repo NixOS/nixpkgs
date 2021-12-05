@@ -4,17 +4,15 @@ stdenv.mkDerivation rec {
   pname = "scaleft";
   version = "1.45.4";
 
-  src =
-    fetchurl {
-      url = "http://pkg.scaleft.com/rpm/scaleft-client-tools-${version}-1.x86_64.rpm";
-      sha256 = "1yskybjba9ljy1wazddgrm7a4cc72i1xbk7sxnjpcq4hdy3b50l0";
-    };
+  src = fetchurl {
+    url =
+      "http://pkg.scaleft.com/rpm/scaleft-client-tools-${version}-1.x86_64.rpm";
+    sha256 = "1yskybjba9ljy1wazddgrm7a4cc72i1xbk7sxnjpcq4hdy3b50l0";
+  };
 
   nativeBuildInputs = [ patchelf rpmextract ];
 
-  libPath =
-    lib.makeLibraryPath
-       [ stdenv.cc stdenv.cc.cc.lib ];
+  libPath = lib.makeLibraryPath [ stdenv.cc stdenv.cc.cc.lib ];
 
   buildCommand = ''
     mkdir -p $out/bin/
@@ -32,7 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "ScaleFT provides Zero Trust software which you can use to secure your internal servers and services";
+    description =
+      "ScaleFT provides Zero Trust software which you can use to secure your internal servers and services";
     homepage = "https://www.scaleft.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ jloyet ];

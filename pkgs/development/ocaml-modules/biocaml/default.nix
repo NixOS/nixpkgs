@@ -1,6 +1,5 @@
-{ lib, buildDunePackage, fetchFromGitHub, fetchpatch
-, ounit, async, base64, camlzip, cfstream
-, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
+{ lib, buildDunePackage, fetchFromGitHub, fetchpatch, ounit, async, base64
+, camlzip, cfstream, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
 
 buildDunePackage rec {
   pname = "biocaml";
@@ -12,14 +11,15 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1il84vvypgkhdyc2j5fmgh14a58069s6ijbd5dvyl2i7jdxaazji";
   };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ async base64 camlzip cfstream core rresult uri xmlm ];
+  propagatedBuildInputs =
+    [ async base64 camlzip cfstream core rresult uri xmlm ];
 
   meta = with lib; {
     description = "Bioinformatics library for Ocaml";

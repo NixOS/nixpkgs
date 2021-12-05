@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, luajit, ninja, pkg-config
-, python3, SDL2, lua, fftwFloat, zlib, bzip2, curl, darwin }:
+{ lib, stdenv, fetchFromGitHub, meson, luajit, ninja, pkg-config, python3, SDL2
+, lua, fftwFloat, zlib, bzip2, curl, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     mv ../resources $out/share
   '';
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  propagatedBuildInputs =
+    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   meta = with lib; {
     description = "A free 2D physics sandbox game";

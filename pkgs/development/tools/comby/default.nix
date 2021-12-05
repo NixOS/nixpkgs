@@ -1,17 +1,8 @@
-{ ocamlPackages
-, fetchFromGitHub
-, lib
-, zlib
-, pkg-config
-, cacert
-, gmp
-, libev
-, autoconf
-, sqlite
-, stdenv
-}:
+{ ocamlPackages, fetchFromGitHub, lib, zlib, pkg-config, cacert, gmp, libev
+, autoconf, sqlite, stdenv }:
 let
-  mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
+  mkCombyPackage =
+    { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
       version = "1.7.0";
@@ -51,9 +42,11 @@ let
     };
 
   combyKernel = mkCombyPackage { pname = "comby-kernel"; };
-  combySemantic = mkCombyPackage { pname = "comby-semantic"; extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ]; };
-in
-mkCombyPackage {
+  combySemantic = mkCombyPackage {
+    pname = "comby-semantic";
+    extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ];
+  };
+in mkCombyPackage {
   pname = "comby";
 
   # tests have to be removed before building otherwise installPhase will fail

@@ -1,14 +1,5 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, openssl
-, pkg-config
-, installShellFiles
-, Security
-, gitMinimal
-, util-linuxMinimal
-}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, openssl, pkg-config
+, installShellFiles, Security, gitMinimal, util-linuxMinimal }:
 
 rustPlatform.buildRustPackage rec {
   pname = "imag";
@@ -22,8 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
   checkInputs = [ gitMinimal util-linuxMinimal ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -46,8 +36,7 @@ rustPlatform.buildRustPackage rec {
       script -qfec "cargo test --workspace"
     '' else ''
       script -q "cargo test --workspace"
-    ''
-  );
+    '');
 
   postInstall = ''
     installShellCompletion target/imag.{bash,fish} --zsh target/_imag

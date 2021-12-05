@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-cov
-, pytest-xdist
-, pytest-django
-, mock
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pytest-cov
+, pytest-xdist, pytest-django, mock }:
 
 buildPythonPackage rec {
   pname = "diskcache";
@@ -20,13 +12,7 @@ buildPythonPackage rec {
     sha256 = "sha256-dWtEyyWpg0rxEwyhBdPyApzgS9o60HVGbtY76ELHvX8=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-xdist
-    pytest-django
-    mock
-  ];
+  checkInputs = [ pytestCheckHook pytest-cov pytest-xdist pytest-django mock ];
 
   # Darwin sandbox causes most tests to fail.
   doCheck = !stdenv.isDarwin;
@@ -37,9 +23,7 @@ buildPythonPackage rec {
     "test_incr_update_keyerror"
   ];
 
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
-  ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";

@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, perl, flex, bison, python3
-}:
+{ lib, stdenv, fetchurl, perl, flex, bison, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
@@ -28,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
-    license     = with licenses; [ lgpl3Only artistic2 ];
-    platforms   = platforms.unix;
+    homepage = "https://www.veripool.org/wiki/verilator";
+    license = with licenses; [ lgpl3Only artistic2 ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

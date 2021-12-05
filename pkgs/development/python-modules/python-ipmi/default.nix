@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, mock, nose, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "python-ipmi";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "0rcix3q845zsmfj5857kq1r5b8m7m3sad34i23k65m0p58clwdqm";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
-  checkInputs = [
-    mock
-    nose
-    pytestCheckHook
-  ];
+  checkInputs = [ mock nose pytestCheckHook ];
 
   pythonImportsCheck = [ "pyipmi" ];
 

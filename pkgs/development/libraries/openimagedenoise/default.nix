@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
-    url = "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
+    url =
+      "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
     sha256 = "sha256-TQ7cL0/6pnSTuW21DESA5I3S/C1BHStrWK9yaPoim6E=";
   };
 
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.leshainc ];
     platforms = platforms.unix;
-    changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
   };
 }

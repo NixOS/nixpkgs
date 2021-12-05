@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, mock, proto-plus, protobuf, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, mock
+, proto-plus, protobuf, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";

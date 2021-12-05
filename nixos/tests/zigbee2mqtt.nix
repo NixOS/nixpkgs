@@ -1,14 +1,12 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 
   {
-    machine = { pkgs, ... }:
-      {
-        services.zigbee2mqtt = {
-          enable = true;
-        };
+    machine = { pkgs, ... }: {
+      services.zigbee2mqtt = { enable = true; };
 
-        systemd.services.zigbee2mqtt.serviceConfig.DevicePolicy = lib.mkForce "auto";
-      };
+      systemd.services.zigbee2mqtt.serviceConfig.DevicePolicy =
+        lib.mkForce "auto";
+    };
 
     testScript = ''
       machine.wait_for_unit("zigbee2mqtt.service")
@@ -19,5 +17,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       machine.log(machine.succeed("systemd-analyze security zigbee2mqtt.service"))
     '';
-  }
-)
+  })

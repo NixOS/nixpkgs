@@ -1,14 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, awkward
-, numpy
-, lz4
-, xxhash
-, zstandard
-, pytestCheckHook
-, scikit-hep-testdata
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, awkward, numpy, lz4, xxhash
+, zstandard, pytestCheckHook, scikit-hep-testdata }:
 
 buildPythonPackage rec {
   pname = "uproot";
@@ -22,18 +13,9 @@ buildPythonPackage rec {
     sha256 = "sha256-zsmAdqoWvFhRRRw4fdbRhhKkDV5oP/eYsfpA0AVqAnI=";
   };
 
-  propagatedBuildInputs = [
-    awkward
-    numpy
-    lz4
-    xxhash
-    zstandard
-  ];
+  propagatedBuildInputs = [ awkward numpy lz4 xxhash zstandard ];
 
-  checkInputs = [
-    pytestCheckHook
-    scikit-hep-testdata
-  ];
+  checkInputs = [ pytestCheckHook scikit-hep-testdata ];
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';

@@ -1,22 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook
-, glib
-, gtk3
-, json-glib
-, libappindicator
-, libsoup
-, webkitgtk
-}:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, appstream, desktop-file-utils
+, meson, ninja, pkg-config, python3, vala, wrapGAppsHook, glib, gtk3, json-glib
+, libappindicator, libsoup, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "meteo";
@@ -40,25 +24,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    json-glib
-    libappindicator
-    libsoup
-    webkitgtk
-  ];
+  buildInputs = [ glib gtk3 json-glib libappindicator libsoup webkitgtk ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
     description = "Know the forecast of the next hours & days";

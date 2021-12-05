@@ -1,25 +1,7 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, mkDerivation
-, SDL2
-, frei0r
-, ladspaPlugins
-, gettext
-, mlt
-, jack1
-, pkg-config
-, qtbase
-, qtmultimedia
-, qtx11extras
-, qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, qmake
-, qttools
-, genericUpdater
-, common-updater-scripts
-}:
+{ lib, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, ladspaPlugins
+, gettext, mlt, jack1, pkg-config, qtbase, qtmultimedia, qtx11extras
+, qtwebsockets, qtquickcontrols2, qtgraphicaleffects, qmake, qttools
+, genericUpdater, common-updater-scripts }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
@@ -78,7 +60,8 @@ mkDerivation rec {
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    versionLister =
+      "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 

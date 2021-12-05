@@ -1,4 +1,5 @@
-{ lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip, rsync }:
+{ lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip
+, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "ply";

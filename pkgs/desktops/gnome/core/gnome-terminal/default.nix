@@ -1,36 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, libxml2
-, gnome
-, dconf
-, nautilus
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, vte
-, gettext
-, which
-, libuuid
-, vala
-, desktop-file-utils
-, itstool
-, wrapGAppsHook
-, pcre2
-, libxslt
-, docbook-xsl-nons
-}:
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, python3, libxml2, gnome
+, dconf, nautilus, glib, gtk3, gsettings-desktop-schemas, vte, gettext, which
+, libuuid, vala, desktop-file-utils, itstool, wrapGAppsHook, pcre2, libxslt
+, docbook-xsl-nons }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
   version = "3.42.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-terminal/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "wxmxQFUBuMdpPmFvSOztQWldLnhhSMpfnie8fZj0rrE=";
   };
 

@@ -1,21 +1,7 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, filelock
-, flit-core
-, importlib-metadata
-, isPy3k
-, packaging
-, pep517
-, pytest-mock
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, toml
-, typing ? null
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, filelock, flit-core
+, importlib-metadata, isPy3k, packaging, pep517, pytest-mock
+, pytest-rerunfailures, pytest-xdist, pytestCheckHook, pythonOlder, toml
+, typing ? null }:
 
 buildPythonPackage rec {
   pname = "build";
@@ -29,27 +15,14 @@ buildPythonPackage rec {
     sha256 = "15hc9mbxsngfc9n805x8rk7yqbxnw12mpk6hfwcsldnfii1vg2ph";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    toml
-    pep517
-    packaging
-  ] ++ lib.optionals (!isPy3k) [
-    typing
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ toml pep517 packaging ]
+    ++ lib.optionals (!isPy3k) [ typing ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
-    filelock
-    pytest-mock
-    pytest-rerunfailures
-    pytest-xdist
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ filelock pytest-mock pytest-rerunfailures pytest-xdist pytestCheckHook ];
 
   disabledTests = [
     "test_isolation"

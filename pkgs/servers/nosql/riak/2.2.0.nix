@@ -7,7 +7,8 @@ let
 
   srcs = {
     riak = fetchurl {
-      url = "https://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
+      url =
+        "https://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
       sha256 = "0kl28bpyzajcllybili46jfr1schl45w5ysii187jr0ssgls2c9p";
     };
     solr = fetchurl {
@@ -15,24 +16,23 @@ let
       sha256 = "0fy5slnldn628gmr2kilyx606ph0iykf7pz6j0xjcc3wqvrixa2a";
     };
     yokozunaJar = fetchurl {
-      url = "http://s3.amazonaws.com/files.basho.com/yokozuna/${yokozunaJarName}";
+      url =
+        "http://s3.amazonaws.com/files.basho.com/yokozuna/${yokozunaJarName}";
       sha256 = "17n6m100fz8affdcxsn4niw2lrpnswgfnd6aszgzipffwbg7v8v5";
     };
     yzMonitorJar = fetchurl {
-      url = "http://s3.amazonaws.com/files.basho.com/yokozuna/${yzMonitorJarName}";
+      url =
+        "http://s3.amazonaws.com/files.basho.com/yokozuna/${yzMonitorJarName}";
       sha256 = "0kb97d1a43vw759j1h5qwbhx455pidn2pi7sfxijqic37h81ri1m";
     };
   };
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "riak";
   version = "2.2.0";
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    which erlang pam
-  ];
+  buildInputs = [ which erlang pam ];
 
   src = srcs.riak;
 
@@ -93,8 +93,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
-    platforms   = [ "x86_64-linux" ];
-    license     = licenses.asl20;
-    knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
+    platforms = [ "x86_64-linux" ];
+    license = licenses.asl20;
+    knownVulnerabilities =
+      [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };
 }

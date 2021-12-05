@@ -15,15 +15,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    debtcollector
-    pbr
-  ];
+  propagatedBuildInputs = [ debtcollector pbr ];
 
-  checkInputs = [
-    oslotest
-    stestr
-  ];
+  checkInputs = [ oslotest stestr ];
 
   checkPhase = ''
     stestr run

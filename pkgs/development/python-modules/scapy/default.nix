@@ -1,12 +1,8 @@
-{ buildPythonPackage, fetchFromGitHub, lib, isPyPy
-, pycrypto, ecdsa # TODO
-, tox, mock, coverage, can, brotli
-, withOptionalDeps ? true, tcpdump, ipython
-, withCryptography ? true, cryptography
-, withVoipSupport ? true, sox
-, withPlottingSupport ? true, matplotlib
-, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
-, withManufDb ? false, wireshark
+{ buildPythonPackage, fetchFromGitHub, lib, isPyPy, pycrypto, ecdsa # TODO
+, tox, mock, coverage, can, brotli, withOptionalDeps ? true, tcpdump, ipython
+, withCryptography ? true, cryptography, withVoipSupport ? true, sox
+, withPlottingSupport ? true, matplotlib, withGraphicsSupport ? false, pyx
+, texlive, graphviz, imagemagick, withManufDb ? false, wireshark
 # 2D/3D graphics and graphs TODO: VPython
 # TODO: nmap, numpy
 }:
@@ -35,7 +31,12 @@ buildPythonPackage rec {
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
+    ++ lib.optionals withGraphicsSupport [
+      pyx
+      texlive.combined.scheme-minimal
+      graphviz
+      imagemagick
+    ];
 
   # Running the tests seems too complicated:
   doCheck = false;
@@ -47,7 +48,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scapy" ];
 
   meta = with lib; {
-    description = "A Python-based network packet manipulation program and library";
+    description =
+      "A Python-based network packet manipulation program and library";
     longDescription = ''
       Scapy is a powerful Python-based interactive packet manipulation program
       and library.

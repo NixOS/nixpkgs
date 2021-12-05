@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools, qtx11extras, poppler }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
+, qtx11extras, poppler }:
 
 mkDerivation rec {
   pname = "qcomicbook";
@@ -11,13 +12,9 @@ mkDerivation rec {
     sha256 = "1b769lp6gfwds4jb2g7ymhdm9c06zg57zpyz3zpdb40w07zfsjzv";
   };
 
-  nativeBuildInputs = [
-    cmake pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    qtbase qttools qtx11extras poppler
-  ];
+  buildInputs = [ qtbase qttools qtx11extras poppler ];
 
   postInstall = ''
     substituteInPlace $out/share/applications/*.desktop \

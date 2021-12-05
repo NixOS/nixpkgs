@@ -1,38 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, itstool
-, python3
-, libxml2
-, desktop-file-utils
-, wrapGAppsHook
-, gst_all_1
-, pulseaudio
-, gtk3
-, glib
-, glibmm
-, gtkmm3
-, lilv
-, lv2
-, serd
-, sord
-, sratom
-, libbs2b
-, libsamplerate
-, libsndfile
-, libebur128
-, rnnoise
-, boost
-, dbus
-, fftwFloat
-, calf
-, zita-convolver
-, zam-plugins
-, rubberband
-, lsp-plugins
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, itstool, python3
+, libxml2, desktop-file-utils, wrapGAppsHook, gst_all_1, pulseaudio, gtk3, glib
+, glibmm, gtkmm3, lilv, lv2, serd, sord, sratom, libbs2b, libsamplerate
+, libsndfile, libebur128, rnnoise, boost, dbus, fftwFloat, calf, zita-convolver
+, zam-plugins, rubberband, lsp-plugins }:
 
 let
   lv2Plugins = [
@@ -75,7 +45,11 @@ in stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base # gst-fft
     gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
-    lilv lv2 serd sord sratom
+    lilv
+    lv2
+    serd
+    sord
+    sratom
     libbs2b
     libebur128
     libsamplerate
@@ -105,7 +79,8 @@ in stdenv.mkDerivation rec {
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   meta = with lib; {
-    description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
+    description =
+      "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];

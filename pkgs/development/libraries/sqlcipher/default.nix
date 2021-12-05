@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages
+, readline, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
 
   BUILD_CC = "$(CC_FOR_BUILD)";
 
-  TCLLIBDIR = "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
+  TCLLIBDIR =
+    "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
 
   postInstall = ''
     installManPage sqlcipher.1
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.zetetic.net/sqlcipher/";
-    description = "SQLite extension that provides 256 bit AES encryption of database files";
+    description =
+      "SQLite extension that provides 256 bit AES encryption of database files";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

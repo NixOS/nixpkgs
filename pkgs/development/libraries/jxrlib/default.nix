@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
       --replace '.so' '.dylib'
   '';
 
-  nativeBuildInputs = [ python3 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ python3 ]
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   strictDeps = true;
 

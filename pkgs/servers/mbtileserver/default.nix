@@ -14,9 +14,11 @@ buildGoModule rec {
   vendorSha256 = "sha256-mUUxUZn8out6WNvKJKHoz+R44RDB0oWJb+57w72+E5w=";
 
   meta = with lib; {
-    description = "A simple Go-based server for map tiles stored in mbtiles format";
+    description =
+      "A simple Go-based server for map tiles stored in mbtiles format";
     homepage = "https://github.com/consbio/mbtileserver";
-    changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;

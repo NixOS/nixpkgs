@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, mock
-, pep440
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, git, mock, pep440, pytestCheckHook
+, pythonOlder, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
@@ -23,13 +15,7 @@ buildPythonPackage rec {
     sha256 = "21hABRiY8CTKkpFjePgBAtjs4/G5eFS3aPNMCBC41CY=";
   };
 
-  checkInputs = [
-    git
-    mock
-    pep440
-    pytestCheckHook
-    setuptools-scm
-  ];
+  checkInputs = [ git mock pep440 pytestCheckHook setuptools-scm ];
 
   disabledTests = [
     # Tests want to scan site-packages
@@ -38,9 +24,7 @@ buildPythonPackage rec {
     "test_git_versioning"
   ];
 
-  pythonImportsCheck = [
-    "setupmeta"
-  ];
+  pythonImportsCheck = [ "setupmeta" ];
 
   meta = with lib; {
     description = "Python module to simplify setup.py files";

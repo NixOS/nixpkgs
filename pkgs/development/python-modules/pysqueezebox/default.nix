@@ -10,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "93e6a3824b560d4ea2b2e5f0a67fdf3b309b6194fbf9927e44fc0d12c7fdc6c0";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # No tests in the Pypi distribution
   doCheck = false;

@@ -5,7 +5,7 @@ buildEnv {
 
   paths = [
     (callPackage ./engine.nix { inherit Cocoa; })
-    (callPackage ./game.nix {})
+    (callPackage ./game.nix { })
   ];
 
   nativeBuildInputs = [ makeWrapper ];

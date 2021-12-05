@@ -1,18 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, makeself
-, yasm
-, fuse
-, wxGTK
-, lvm2
-, substituteAll
-, e2fsprogs
-, exfat
-, ntfs3g
-, btrfs-progs
-}:
+{ lib, stdenv, fetchurl, pkg-config, makeself, yasm, fuse, wxGTK, lvm2
+, substituteAll, e2fsprogs, exfat, ntfs3g, btrfs-progs }:
 
 with lib;
 
@@ -21,7 +8,9 @@ stdenv.mkDerivation rec {
   version = "1.24-Update7";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
+    url = "https://launchpad.net/${pname}/trunk/${
+        toLower version
+      }/+download/VeraCrypt_${version}_Source.tar.bz2";
     sha256 = "0i7h44zn2mjzgh416l7kfs0dk6qc7b1bxsaxqqqcvgrpl453n7bc";
   };
 
@@ -57,7 +46,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
-    license = with licenses; [ asl20 /* and */ unfree /* TrueCrypt License version 3.0 */ ];
+    license = with licenses; [
+      asl20 # and
+      unfree # TrueCrypt License version 3.0
+    ];
     maintainers = with maintainers; [ dsferruzza ];
     platforms = platforms.linux;
   };

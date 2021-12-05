@@ -1,17 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, nose
-, pytest
-, mock
-, ipython
-, ipykernel
-, jupyterlab-widgets
-, traitlets
-, notebook
-, widgetsnbextension
-}:
+{ lib, buildPythonPackage, fetchPypi, python, nose, pytest, mock, ipython
+, ipykernel, jupyterlab-widgets, traitlets, notebook, widgetsnbextension }:
 
 buildPythonPackage rec {
   pname = "ipywidgets";

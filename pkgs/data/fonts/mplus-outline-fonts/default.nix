@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "063a";
+let version = "063a";
 in fetchzip {
   name = "mplus-${version}";
 

@@ -1,8 +1,8 @@
 let
-  grpcPort   = 19090;
-  queryPort  =  9090;
-  minioPort  =  9000;
-  pushgwPort =  9091;
+  grpcPort = 19090;
+  queryPort = 9090;
+  minioPort = 9000;
+  pushgwPort = 9091;
 
   s3 = {
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
@@ -14,19 +14,17 @@ let
     config = {
       bucket = "thanos-bucket";
       endpoint = "s3:${toString minioPort}";
-      region =  "us-east-1";
+      region = "us-east-1";
       access_key = s3.accessKey;
       secret_key = s3.secretKey;
       insecure = true;
       signature_version2 = false;
-      put_user_metadata = {};
+      put_user_metadata = { };
       http_config = {
         idle_conn_timeout = "0s";
         insecure_skip_verify = false;
       };
-      trace = {
-        enable = false;
-      };
+      trace = { enable = false; };
     };
   };
 
@@ -45,36 +43,27 @@ in import ./make-test-python.nix {
         scrapeConfigs = [
           {
             job_name = "prometheus";
-            static_configs = [
-              {
-                targets = [ "127.0.0.1:${toString queryPort}" ];
-                labels = { instance = "localhost"; };
-              }
-            ];
+            static_configs = [{
+              targets = [ "127.0.0.1:${toString queryPort}" ];
+              labels = { instance = "localhost"; };
+            }];
           }
           {
             job_name = "pushgateway";
             scrape_interval = "1s";
-            static_configs = [
-              {
-                targets = [ "127.0.0.1:${toString pushgwPort}" ];
-              }
-            ];
+            static_configs =
+              [{ targets = [ "127.0.0.1:${toString pushgwPort}" ]; }];
           }
         ];
-        rules = [
-          ''
-            groups:
-              - name: test
-                rules:
-                  - record: testrule
-                    expr: count(up{job="prometheus"})
-          ''
-        ];
+        rules = [''
+          groups:
+            - name: test
+              rules:
+                - record: testrule
+                  expr: count(up{job="prometheus"})
+        ''];
         globalConfig = {
-          external_labels = {
-            some_label = "required by thanos";
-          };
+          external_labels = { some_label = "required by thanos"; };
         };
         extraFlags = [
           # Required by thanos
@@ -131,16 +120,10 @@ in import ./make-test-python.nix {
             # This configuration just adds a new prometheus job
             # to scrape the node_exporter metrics of the s3 machine.
             services.prometheus = {
-              scrapeConfigs = [
-                {
-                  job_name = "s3-node_exporter";
-                  static_configs = [
-                    {
-                      targets = [ "s3:9100" ];
-                    }
-                  ];
-                }
-              ];
+              scrapeConfigs = [{
+                job_name = "s3-node_exporter";
+                static_configs = [{ targets = [ "s3:9100" ]; }];
+              }];
             };
           };
         };
@@ -152,9 +135,7 @@ in import ./make-test-python.nix {
       services.thanos.query = {
         enable = true;
         http-address = "0.0.0.0:${toString queryPort}";
-        store.addresses = [
-          "prometheus:${toString grpcPort}"
-        ];
+        store.addresses = [ "prometheus:${toString grpcPort}" ];
       };
     };
 
@@ -178,17 +159,13 @@ in import ./make-test-python.nix {
       services.thanos.query = {
         enable = true;
         http-address = "0.0.0.0:${toString queryPort}";
-        store.addresses = [
-          "localhost:${toString grpcPort}"
-        ];
+        store.addresses = [ "localhost:${toString grpcPort}" ];
       };
     };
 
-    s3 = { pkgs, ... } : {
+    s3 = { pkgs, ... }: {
       # Minio requires at least 1GiB of free disk space to run.
-      virtualisation = {
-        diskSize = 2 * 1024;
-      };
+      virtualisation = { diskSize = 2 * 1024; };
       networking.firewall.allowedTCPPorts = [ minioPort ];
 
       services.minio = {
@@ -205,7 +182,7 @@ in import ./make-test-python.nix {
     };
   };
 
-  testScript = { nodes, ... } : ''
+  testScript = { nodes, ... }: ''
     import json
 
     # Before starting the other machines we first make sure that our S3 service is online
@@ -228,7 +205,9 @@ in import ./make-test-python.nix {
     prometheus.wait_for_unit("prometheus.service")
 
     prometheus.wait_for_open_port(${toString queryPort})
-    prometheus.succeed("curl -sf http://127.0.0.1:${toString queryPort}/metrics")
+    prometheus.succeed("curl -sf http://127.0.0.1:${
+      toString queryPort
+    }/metrics")
 
     # Let's test if pushing a metric to the pushgateway succeeds:
     prometheus.wait_for_unit("pushgateway.service")
@@ -245,7 +224,9 @@ in import ./make-test-python.nix {
     # Function to check if the metric "some_metric" has been received and returns the correct value.
     def wait_for_metric(machine):
         return machine.wait_until_succeeds(
-            "curl -sf 'http://127.0.0.1:${toString queryPort}/api/v1/query?query=some_metric' | "
+            "curl -sf 'http://127.0.0.1:${
+              toString queryPort
+            }/api/v1/query?query=some_metric' | "
             + "jq '.data.result[0].value[1]' | grep '\"3.14\"'"
         )
 
@@ -329,7 +310,9 @@ in import ./make-test-python.nix {
         # Check if the reloaded config includes the new s3-node_exporter job:
         prometheus.succeed(
           """
-            curl -sf http://127.0.0.1:${toString queryPort}/api/v1/status/config \
+            curl -sf http://127.0.0.1:${
+              toString queryPort
+            }/api/v1/status/config \
               | jq -r .data.yaml \
               | yq '.scrape_configs | any(.job_name == "s3-node_exporter")' \
               | grep true

@@ -1,7 +1,4 @@
-{ lib
-, python3Packages
-, salt
-}:
+{ lib, python3Packages, salt }:
 
 python3Packages.buildPythonApplication rec {
   pname = "salt-pepper";
@@ -13,7 +10,13 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = with python3Packages; [ setuptools setuptools-scm salt ];
   checkInputs = with python3Packages; [
-    pytest mock pyzmq pytest-rerunfailures pytest-cov cherrypy tornado
+    pytest
+    mock
+    pyzmq
+    pytest-rerunfailures
+    pytest-cov
+    cherrypy
+    tornado
   ];
 
   meta = with lib; {

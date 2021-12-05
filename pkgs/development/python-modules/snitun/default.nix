@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, async-timeout
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-}:
+{ lib, stdenv, async-timeout, attrs, buildPythonPackage, cryptography
+, fetchFromGitHub, pytest-aiohttp, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "snitun";
@@ -20,16 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-IjdgxX6ed9IWMFaMXIXQWZWoODrZBzXtMAcMOIhPFVQ=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    attrs
-    cryptography
-  ];
+  propagatedBuildInputs = [ async-timeout attrs cryptography ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-aiohttp pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61

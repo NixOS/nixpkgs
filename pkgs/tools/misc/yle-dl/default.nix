@@ -12,7 +12,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs configargparse ffmpeg future lxml requests
+    attrs
+    configargparse
+    ffmpeg
+    future
+    lxml
+    requests
   ];
   pythonPath = [ rtmpdump php wget ];
 
@@ -20,7 +25,8 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
+    description =
+      "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;

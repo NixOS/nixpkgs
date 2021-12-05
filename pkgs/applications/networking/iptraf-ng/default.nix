@@ -13,11 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "prefix=/usr"
-    "sbindir=/bin"
-  ];
+  makeFlags = [ "DESTDIR=$(out)" "prefix=/usr" "sbindir=/bin" ];
 
   hardeningDisable = [ "format" ];
 

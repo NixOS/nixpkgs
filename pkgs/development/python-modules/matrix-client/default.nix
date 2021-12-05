@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, requests
-, responses
-, urllib3
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, requests, responses
+, urllib3 }:
 
 buildPythonPackage rec {
   pname = "matrix_client";
@@ -16,15 +10,9 @@ buildPythonPackage rec {
     sha256 = "0mii7ib3bah5ppqs7i8sjv5l0zbl57011908m4l0jbyby90ayy06";
   };
 
-  propagatedBuildInputs = [
-    requests
-    urllib3
-  ];
+  propagatedBuildInputs = [ requests urllib3 ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytestCheckHook responses ];
 
   postPatch = ''
     substituteInPlace setup.py --replace \

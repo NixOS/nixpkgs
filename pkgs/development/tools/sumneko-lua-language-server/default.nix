@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
-let
-  target = if stdenv.isDarwin then "macOS" else "Linux";
-in
-stdenv.mkDerivation rec {
+let target = if stdenv.isDarwin then "macOS" else "Linux";
+in stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
   version = "2.5.1";
 
@@ -14,10 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    ninja
-    makeWrapper
-  ];
+  nativeBuildInputs = [ ninja makeWrapper ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
@@ -26,8 +21,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd 3rd/luamake
-  ''
-  + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Needed for the test
     export HOME=/var/empty
     # This package uses the program clang for C and C++ files. The language
@@ -43,9 +37,7 @@ stdenv.mkDerivation rec {
       -e '/cxx_/s,$cc,clang++,'
   '';
 
-  ninjaFlags = [
-    "-fcompile/ninja/${lib.toLower target}.ninja"
-  ];
+  ninjaFlags = [ "-fcompile/ninja/${lib.toLower target}.ninja" ];
 
   postBuild = ''
     cd ../..

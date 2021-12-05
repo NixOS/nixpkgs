@@ -18,7 +18,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Common interface for data container classes";
     homepage = "https://github.com/scrapy/itemadapter";
-    changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
+    changelog =
+      "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

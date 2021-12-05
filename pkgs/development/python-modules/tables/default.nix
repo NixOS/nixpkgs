@@ -1,19 +1,7 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, bzip2
-, c-blosc
-, cython
-, hdf5
-, lzo
-, numpy
-, numexpr
-, setuptools
-  # Test inputs
-, pytestCheckHook
-}:
+{ lib, fetchPypi, fetchpatch, buildPythonPackage, pythonOlder, bzip2, c-blosc
+, cython, hdf5, lzo, numpy, numexpr, setuptools
+# Test inputs
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "tables";
@@ -27,23 +15,19 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  buildInputs = [
-    bzip2
-    c-blosc
-    hdf5
-    lzo
-  ];
+  buildInputs = [ bzip2 c-blosc hdf5 lzo ];
   propagatedBuildInputs = [
     numpy
     numexpr
-    setuptools  # uses pkg_resources at runtime
+    setuptools # uses pkg_resources at runtime
   ];
 
   patches = [
     (fetchpatch {
       # Needed for numpy >= 1.20.0
       name = "tables-pr-862-use-lowercase-numpy-dtypes.patch";
-      url = "https://github.com/PyTables/PyTables/commit/93a3272b8fe754095637628b4d312400e24ae654.patch";
+      url =
+        "https://github.com/PyTables/PyTables/commit/93a3272b8fe754095637628b4d312400e24ae654.patch";
       sha256 = "00czgxnm1dxp9763va9xw1nc7dd7kxh9hjcg9klim52519hkbhi4";
     })
   ];
@@ -73,10 +57,7 @@ buildPythonPackage rec {
     cd ..
   '';
   # Runs the test suite as one single test via unittest. The whole "heavy" test suite supposedly takes ~5 hours to run.
-  pytestFlagsArray = [
-    "--pyargs"
-    "tables.tests.test_suite"
-  ];
+  pytestFlagsArray = [ "--pyargs" "tables.tests.test_suite" ];
 
   pythonImportsCheck = [ "tables" ];
 

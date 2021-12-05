@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "shellescape";
@@ -19,7 +15,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shellescape" ];
 
   meta = with lib; {
-    description = "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote)";
+    description =
+      "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote)";
     homepage = "https://github.com/chrissimpkins/shellescape";
     license = with licenses; [ mit psfl ];
     maintainers = with maintainers; [ veprbl ];

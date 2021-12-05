@@ -1,21 +1,6 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, glib
-, lxqt-build-tools
-, qtbase
-, qtx11extras
-, qttools
-, qtsvg
-, kwindowsystem
-, libkscreen
-, liblxqt
-, libqtxdg
-, xorg
-, lxqtUpdateScript
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, glib, lxqt-build-tools
+, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt
+, libqtxdg, xorg, lxqtUpdateScript }:
 
 mkDerivation rec {
   pname = "lxqt-config";
@@ -28,11 +13,7 @@ mkDerivation rec {
     sha256 = "0yllqjmj4xbqi5681ffjxmlwlf9k9bpy3hgs7li6lnn90yy46qmr";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    lxqt-build-tools
-  ];
+  nativeBuildInputs = [ cmake pkg-config lxqt-build-tools ];
 
   buildInputs = [
     glib.bin

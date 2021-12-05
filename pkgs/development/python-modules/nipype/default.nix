@@ -1,53 +1,22 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
 # python dependencies
-, click
-, python-dateutil
-, etelemetry
-, filelock
-, funcsigs
-, future
-, mock
-, networkx
-, nibabel
-, numpy
-, packaging
-, prov
-, psutil
-, pybids
-, pydot
-, pytest
-, pytest-xdist
-, pytest-forked
-, rdflib
-, scipy
-, simplejson
-, traits
-, xvfbwrapper
-, pytest-cov
-, codecov
-, sphinx
+, click, python-dateutil, etelemetry, filelock, funcsigs, future, mock, networkx
+, nibabel, numpy, packaging, prov, psutil, pybids, pydot, pytest, pytest-xdist
+, pytest-forked, rdflib, scipy, simplejson, traits, xvfbwrapper, pytest-cov
+, codecov, sphinx
 # other dependencies
-, which
-, bash
-, glibcLocales
-, callPackage
+, which, bash, glibcLocales, callPackage
 # causes Python packaging conflict with any package requiring rdflib,
 # so use the unpatched rdflib by default (disables Nipype provenance tracking);
 # see https://github.com/nipy/nipype/issues/2888:
-, useNeurdflib ? false
-}:
+, useNeurdflib ? false }:
 
 let
 
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
+  # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
+  neurdflib = callPackage ./neurdflib.nix { };
 
-in
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "nipype";
   version = "1.6.1";
   disabled = isPy27;
@@ -62,9 +31,7 @@ buildPythonPackage rec {
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
-  nativeBuildInputs = [
-    sphinx
-  ];
+  nativeBuildInputs = [ sphinx ];
 
   propagatedBuildInputs = [
     click

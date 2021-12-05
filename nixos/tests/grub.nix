@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ lib, ... }: {
   name = "grub";
 
-  meta = with lib.maintainers; {
-    maintainers = [ rnhmjoj ];
-  };
+  meta = with lib.maintainers; { maintainers = [ rnhmjoj ]; };
 
   machine = { ... }: {
     virtualisation.useBootLoader = true;

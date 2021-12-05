@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.influxdb;
-in
-{
+let cfg = config.services.prometheus.exporters.influxdb;
+in {
   port = 9122;
   extraOpts = {
     sampleExpiry = mkOption {
@@ -27,7 +25,9 @@ in
       ExecStart = ''
         ${pkgs.prometheus-influxdb-exporter}/bin/influxdb_exporter \
         --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --influxdb.sample-expiry ${cfg.sampleExpiry} ${concatStringsSep " " cfg.extraFlags}
+        --influxdb.sample-expiry ${cfg.sampleExpiry} ${
+          concatStringsSep " " cfg.extraFlags
+        }
       '';
     };
   };

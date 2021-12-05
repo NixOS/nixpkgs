@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
-  buildInputs = [ gtk3 libxml2 libical libnotify libarchive
-    gspell webkitgtk libgringotts ];
+  buildInputs =
+    [ gtk3 libxml2 libical libnotify libarchive gspell webkitgtk libgringotts ];
 
   meta = with lib; {
     description = "A handy personal organizer";

@@ -1,18 +1,6 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, pkg-config
-, which
-, libapparmor
-, apparmor-parser
-, libseccomp
-, libselinux
-, makeWrapper
-, procps
-, nixosTests
-}:
+{ lib, fetchFromGitHub, buildGoModule, go-md2man, installShellFiles, pkg-config
+, which, libapparmor, apparmor-parser, libseccomp, libselinux, makeWrapper
+, procps, nixosTests }:
 
 buildGoModule rec {
   pname = "runc";
@@ -28,7 +16,8 @@ buildGoModule rec {
   vendorSha256 = null;
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
+  nativeBuildInputs =
+    [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
   buildInputs = [ libselinux libseccomp libapparmor ];
 
@@ -55,7 +44,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";
-    description = "A CLI tool for spawning and running containers according to the OCI specification";
+    description =
+      "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;

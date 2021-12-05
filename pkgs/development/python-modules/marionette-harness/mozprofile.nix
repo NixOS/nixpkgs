@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mozlog
-, mozfile
-, mozhttpd
-, wptserve
-}:
+{ lib, buildPythonPackage, fetchPypi, mozlog, mozfile, mozhttpd, wptserve }:
 
 buildPythonPackage rec {
   pname = "mozprofile";

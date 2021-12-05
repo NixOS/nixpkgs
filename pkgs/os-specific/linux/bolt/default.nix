@@ -1,23 +1,6 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, pkg-config
-, fetchFromGitLab
-, fetchpatch
-, python3
-, umockdev
-, gobject-introspection
-, dbus
-, asciidoc
-, libxml2
-, libxslt
-, docbook_xml_dtd_45
-, docbook_xsl
-, glib
-, systemd
-, polkit
-}:
+{ stdenv, lib, meson, ninja, pkg-config, fetchFromGitLab, fetchpatch, python3
+, umockdev, gobject-introspection, dbus, asciidoc, libxml2, libxslt
+, docbook_xml_dtd_45, docbook_xsl, glib, systemd, polkit }:
 
 stdenv.mkDerivation rec {
   pname = "bolt";
@@ -39,13 +22,15 @@ stdenv.mkDerivation rec {
     # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
     (fetchpatch {
       name = "disable-atime-tests.diff";
-      url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
+      url =
+        "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
       sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
     })
 
     # Fix tests with newer umockdev
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/bolt/bolt/-/commit/130e09d1c7ff02c09e4ad1c9c36e9940b68e58d8.patch";
+      url =
+        "https://gitlab.freedesktop.org/bolt/bolt/-/commit/130e09d1c7ff02c09e4ad1c9c36e9940b68e58d8.patch";
       sha256 = "HycuM7z4VvtBuZZLU68tBxGT1YjaqJRS4sKyoTGHZEk=";
     })
   ];
@@ -61,11 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ] ++ lib.optional (!doCheck) python3;
 
-  buildInputs = [
-    glib
-    polkit
-    systemd
-  ];
+  buildInputs = [ glib polkit systemd ];
 
   doCheck = true;
 
@@ -77,19 +58,17 @@ stdenv.mkDerivation rec {
     dbus
     gobject-introspection
     umockdev
-    (python3.withPackages
-      (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
+    (python3.withPackages (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 
   postPatch = ''
     patchShebangs scripts tests
   '';
 
-  mesonFlags = [
-    "-Dlocalstatedir=/var"
-  ];
+  mesonFlags = [ "-Dlocalstatedir=/var" ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR =
+    "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   meta = with lib; {

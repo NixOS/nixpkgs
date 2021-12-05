@@ -1,22 +1,9 @@
-{ lib
-, buildPythonApplication
-, isPy3k
-, daemonize
-, dbus-python
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, makeWrapper
-, pygobject3
-, pyudev
-, setproctitle
-, wrapGAppsHook
-}:
+{ lib, buildPythonApplication, isPy3k, daemonize, dbus-python, fetchFromGitHub
+, gobject-introspection, gtk3, makeWrapper, pygobject3, pyudev, setproctitle
+, wrapGAppsHook }:
 
-let
-  common = import ./common.nix { inherit lib fetchFromGitHub; };
-in
-buildPythonApplication (common // rec {
+let common = import ./common.nix { inherit lib fetchFromGitHub; };
+in buildPythonApplication (common // rec {
   pname = "openrazer_daemon";
 
   disabled = !isPy3k;
@@ -46,6 +33,7 @@ buildPythonApplication (common // rec {
   '';
 
   meta = common.meta // {
-    description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+    description =
+      "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
   };
 })

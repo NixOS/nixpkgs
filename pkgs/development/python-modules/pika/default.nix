@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, nose
-, mock
-, twisted
-, tornado
+{ lib, buildPythonPackage, fetchFromGitHub, gevent, nose, mock, twisted, tornado
 }:
 
 buildPythonPackage rec {

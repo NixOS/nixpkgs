@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Fast and flexible C++ library for working with OpenStreetMap data";
+    description =
+      "Fast and flexible C++ library for working with OpenStreetMap data";
     homepage = "https://osmcode.org/libosmium/";
     license = licenses.boost;
     maintainers = with maintainers; [ das-g ];

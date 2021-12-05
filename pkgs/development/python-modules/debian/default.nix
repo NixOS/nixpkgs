@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, six
-}:
+{ lib, buildPythonPackage, fetchPypi, chardet, six }:
 
 buildPythonPackage rec {
   pname = "python-debian";

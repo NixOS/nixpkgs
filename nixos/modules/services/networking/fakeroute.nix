@@ -6,9 +6,7 @@ let
   cfg = config.services.fakeroute;
   routeConf = pkgs.writeText "route.conf" (concatStringsSep "\n" cfg.route);
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -26,23 +24,18 @@ in
 
       route = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [
-          "216.102.187.130"
-          "4.0.1.122"
-          "198.116.142.34"
-          "63.199.8.242"
-        ];
+        default = [ ];
+        example =
+          [ "216.102.187.130" "4.0.1.122" "198.116.142.34" "63.199.8.242" ];
         description = ''
-         Fake route that will appear after the real
-         one to any host running a traceroute.
+          Fake route that will appear after the real
+          one to any host running a traceroute.
         '';
       };
 
     };
 
   };
-
 
   ###### implementation
 

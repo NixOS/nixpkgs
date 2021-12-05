@@ -1,18 +1,5 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, csxcad
-, qcsxcad
-, hdf5
-, vtkWithQt5
-, qtbase
-, wrapQtAppsHook
-, fparser
-, tinyxml
-, cgal
-, boost
-}:
+{ lib, mkDerivation, fetchFromGitHub, cmake, csxcad, qcsxcad, hdf5, vtkWithQt5
+, qtbase, wrapQtAppsHook, fparser, tinyxml, cgal, boost }:
 
 mkDerivation {
   pname = "appcsxcad";
@@ -25,21 +12,10 @@ mkDerivation {
     sha256 = "0shnfa0if3w588a68gr82qi6k7ldg1j2921fnzji90mmay21birp";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    csxcad
-    qcsxcad
-    hdf5
-    vtkWithQt5
-    qtbase
-    fparser
-    tinyxml
-    cgal
-    boost
-  ];
+  buildInputs =
+    [ csxcad qcsxcad hdf5 vtkWithQt5 qtbase fparser tinyxml cgal boost ];
 
   postFixup = ''
     rm $out/bin/AppCSXCAD.sh

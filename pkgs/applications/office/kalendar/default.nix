@@ -1,39 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, makeWrapper
+{ lib, mkDerivation, fetchFromGitLab, cmake, extra-cmake-modules, makeWrapper
 
-, qtbase
-, qtquickcontrols2
-, qtsvg
-, qtlocation
-, qtdeclarative
+, qtbase, qtquickcontrols2, qtsvg, qtlocation, qtdeclarative
 
-, kirigami2
-, kdbusaddons
-, ki18n
-, kcalendarcore
-, kconfigwidgets
-, kwindowsystem
-, kcoreaddons
-, kcontacts
-, kitemmodels
-, kxmlgui
-, knotifications
-, kiconthemes
-, kservice
-, kmime
-, kpackage
-, eventviews
-, calendarsupport
+, kirigami2, kdbusaddons, ki18n, kcalendarcore, kconfigwidgets, kwindowsystem
+, kcoreaddons, kcontacts, kitemmodels, kxmlgui, knotifications, kiconthemes
+, kservice, kmime, kpackage, eventviews, calendarsupport
 
-, akonadi
-, akonadi-contacts
-, akonadi-calendar-tools
-, kdepim-runtime
-}:
+, akonadi, akonadi-contacts, akonadi-calendar-tools, kdepim-runtime }:
 
 mkDerivation rec {
   pname = "kalendar";
@@ -47,11 +20,7 @@ mkDerivation rec {
     sha256 = "sha256-foG8j/MRbDZyzM9KmxEARfWUQXMz8ylQgersE1/gtnQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    makeWrapper
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
 
   buildInputs = [
     qtbase
@@ -85,7 +54,8 @@ mkDerivation rec {
   propagatedUserEnvPkgs = [ akonadi kdepim-runtime ];
 
   meta = with lib; {
-    description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
+    description =
+      "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
     homepage = "https://invent.kde.org/pim/kalendar/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chuangzhu ];

@@ -1,20 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cryptography
-, bcrypt
-, gssapi
-, fido2
-, libnacl
-, libsodium
-, nettle
-, python-pkcs11
-, pyopenssl
-, openssl
-, openssh
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, cryptography, bcrypt, gssapi
+, fido2, libnacl, libsodium, nettle, python-pkcs11, pyopenssl, openssl, openssh
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
@@ -40,11 +26,7 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  checkInputs = [
-    openssh
-    openssl
-    pytestCheckHook
-  ];
+  checkInputs = [ openssh openssl pytestCheckHook ];
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -68,9 +50,7 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";

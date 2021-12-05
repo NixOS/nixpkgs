@@ -44,7 +44,7 @@ in {
     (mkIf cfg.enable {
       systemd.services.sssd = {
         description = "System Security Services Daemon";
-        wantedBy    = [ "multi-user.target" ];
+        wantedBy = [ "multi-user.target" ];
         before = [ "systemd-user-sessions.service" "nss-user-lookup.target" ];
         after = [ "network-online.target" "nscd.service" ];
         requires = [ "network-online.target" "nscd.service" ];
@@ -80,18 +80,20 @@ in {
     })
 
     (mkIf cfg.sshAuthorizedKeysIntegration {
-    # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
-    # So indirect by a symlink.
-    environment.etc."ssh/authorized_keys_command" = {
-      mode = "0755";
-      text = ''
-        #!/bin/sh
-        exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
-      '';
-    };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
-    services.openssh.authorizedKeysCommandUser = "nobody";
-  })];
+      # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
+      # So indirect by a symlink.
+      environment.etc."ssh/authorized_keys_command" = {
+        mode = "0755";
+        text = ''
+          #!/bin/sh
+          exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
+        '';
+      };
+      services.openssh.authorizedKeysCommand =
+        "/etc/ssh/authorized_keys_command";
+      services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+  ];
 
   meta.maintainers = with maintainers; [ bbigras ];
 }

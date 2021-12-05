@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Osinfo database of information about operating systems for virtualization provisioning tools";
+    description =
+      "Osinfo database of information about operating systems for virtualization provisioning tools";
     homepage = "https://gitlab.com/libosinfo/osinfo-db/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.openvpn;
+let cfg = config.services.prometheus.exporters.openvpn;
 in {
   port = 9176;
   extraOpts = {

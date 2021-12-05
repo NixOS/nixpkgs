@@ -1,7 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
+{ lib, python3, fetchFromGitHub }:
 python3.pkgs.buildPythonApplication rec {
   pname = "cyclonedx-python";
   version = "0.4.3";
@@ -34,12 +31,11 @@ python3.pkgs.buildPythonApplication rec {
   # the tests want access to the cyclonedx binary
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
+  pythonImportsCheck = [ "cyclonedx" ];
 
   meta = with lib; {
-    description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
+    description =
+      "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;

@@ -1,11 +1,5 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitHub
-, autoreconfHook
-, onigurumaSupport ? true
-, oniguruma
-}:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
+, onigurumaSupport ? true, oniguruma }:
 
 stdenv.mkDerivation rec {
   pname = "jq";
@@ -21,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-tests-when-building-without-regex-supports.patch";
-      url = "https://github.com/stedolan/jq/pull/2292/commits/f6a69a6e52b68a92b816a28eb20719a3d0cb51ae.patch";
+      url =
+        "https://github.com/stedolan/jq/pull/2292/commits/f6a69a6e52b68a92b816a28eb20719a3d0cb51ae.patch";
       sha256 = "pTM5FZ6hFs5Rdx+W2dICSS2lcoLY1Q//Lan3Hu8Gr58=";
     })
   ];
@@ -52,8 +47,8 @@ stdenv.mkDerivation rec {
     "--datadir=\${doc}/share"
     "--mandir=\${man}/share/man"
   ] ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
-  # jq is linked to libjq:
-  ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+    # jq is linked to libjq:
+    ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   doInstallCheck = true;
   installCheckTarget = "check";

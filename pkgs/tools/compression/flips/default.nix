@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, libdivsufsort, pkg-config, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, gtk3, libdivsufsort, pkg-config, wrapGAppsHook
+}:
 
 stdenv.mkDerivation {
   pname = "flips";

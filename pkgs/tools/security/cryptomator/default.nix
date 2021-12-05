@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, autoPatchelfHook
-, fuse, packer
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, autoPatchelfHook, fuse, packer, maven, jdk, jre
+, makeWrapper, glib, wrapGAppsHook }:
 
 let
   pname = "cryptomator";
@@ -70,7 +67,9 @@ in stdenv.mkDerivation rec {
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
       --add-flags "org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
+      --prefix PATH : "$out/usr/share/cryptomator/libs/:${
+        lib.makeBinPath [ jre glib ]
+      }" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse ]}" \
       --set JAVA_HOME "${jre.home}"
 

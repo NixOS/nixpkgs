@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.lidarr;
-in
-{
+let cfg = config.services.lidarr;
+in {
   options = {
     services.lidarr = {
       enable = mkEnableOption "Lidarr";
@@ -50,9 +48,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.lidarr = {
       description = "Lidarr";
@@ -63,14 +60,13 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/Lidarr -nobrowser -data='${cfg.dataDir}'";
+        ExecStart =
+          "${cfg.package}/bin/Lidarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8686 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 8686 ]; };
 
     users.users = mkIf (cfg.user == "lidarr") {
       lidarr = {
@@ -81,9 +77,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "lidarr") {
-      lidarr = {
-        gid = config.ids.gids.lidarr;
-      };
+      lidarr = { gid = config.ids.gids.lidarr; };
     };
   };
 }

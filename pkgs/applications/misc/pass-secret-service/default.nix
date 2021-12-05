@@ -14,7 +14,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0rm4pbx1fiwds1v7f99khhh7x3inv9yniclwd95mrbgljk3cc6a4";
   };
 
-
   # Need to specify session.conf file for tests because it won't be found under
   # /etc/ in check phase.
   postPatch = ''
@@ -32,17 +31,8 @@ python3.pkgs.buildPythonApplication rec {
     secretstorage
   ];
 
-  checkInputs =
-    let
-      ps = python3.pkgs;
-    in
-    [
-      dbus
-      gnupg
-      ps.pytest
-      ps.pytest-asyncio
-      ps.pypass
-    ];
+  checkInputs = let ps = python3.pkgs;
+  in [ dbus gnupg ps.pytest ps.pytest-asyncio ps.pypass ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
-, sysfsutils, dmidecode, kmod }:
+{ lib, stdenv, fetchFromGitHub, perl, makeWrapper, sysfsutils, dmidecode, kmod
+}:
 
 stdenv.mkDerivation {
   pname = "edac-utils";
@@ -15,14 +15,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ perl makeWrapper ];
   buildInputs = [ sysfsutils ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ];
+  configureFlags = [ "--sysconfdir=/etc" "--localstatedir=/var" ];
 
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-  ];
+  installFlags = [ "sysconfdir=\${out}/etc" ];
 
   postInstall = ''
     wrapProgram "$out/sbin/edac-ctl" \

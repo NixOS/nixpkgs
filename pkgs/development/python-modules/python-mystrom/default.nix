@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, click
-, requests
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, click, requests, setuptools }:
 
 buildPythonPackage rec {
   pname = "python-mystrom";
@@ -16,21 +9,12 @@ buildPythonPackage rec {
     sha256 = "050dkx29wrmdd8z7pmyk36k2ihpapqi4qmyb70bm6xl5l4jh4k7j";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    requests
-    setuptools
-  ];
+  propagatedBuildInputs = [ aiohttp click requests setuptools ];
 
   # no tests are present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pymystrom.bulb"
-    "pymystrom.pir"
-    "pymystrom.switch"
-  ];
+  pythonImportsCheck = [ "pymystrom.bulb" "pymystrom.pir" "pymystrom.switch" ];
 
   meta = with lib; {
     description = "Python API client for interacting with myStrom devices";

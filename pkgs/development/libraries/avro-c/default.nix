@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jansson zlib ];
 
   meta = with lib; {
-    description = "A C library which implements parts of the Avro Specification";
+    description =
+      "A C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];

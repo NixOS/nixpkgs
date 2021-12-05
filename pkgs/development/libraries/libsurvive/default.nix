@@ -1,13 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, freeglut
-, liblapack
-, libusb1
-, openblas
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, freeglut, liblapack, libusb1
+, openblas, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libsurvive";
@@ -22,13 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [
-    freeglut
-    liblapack
-    libusb1
-    openblas
-    zlib
-  ];
+  buildInputs = [ freeglut liblapack libusb1 openblas zlib ];
 
   meta = with lib; {
     description = "Open Source Lighthouse Tracking System";

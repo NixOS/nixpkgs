@@ -1,48 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, nasm
-, ninja
-, pkg-config
-, python3
-, gst-plugins-base
-, orc
-, bzip2
-, gettext
-, libv4l
-, libdv
-, libavc1394
-, libiec61883
-, libvpx
-, speex
-, flac
-, taglib
-, libshout
-, cairo
-, gdk-pixbuf
-, aalib
-, libcaca
-, libsoup
-, libpulseaudio
-, libintl
-, Cocoa
-, lame
-, mpg123
-, twolame
-, gtkSupport ? false, gtk3
-, qt5Support ? false, qt5
-, raspiCameraSupport ? false, libraspberrypi
-, enableJack ? true, libjack2
-, libXdamage
-, libXext
-, libXfixes
-, ncurses
-, wayland
-, wayland-protocols
-, xorg
-, libgudev
-, wavpack
-}:
+{ lib, stdenv, fetchurl, meson, nasm, ninja, pkg-config, python3
+, gst-plugins-base, orc, bzip2, gettext, libv4l, libdv, libavc1394, libiec61883
+, libvpx, speex, flac, taglib, libshout, cairo, gdk-pixbuf, aalib, libcaca
+, libsoup, libpulseaudio, libintl, Cocoa, lame, mpg123, twolame
+, gtkSupport ? false, gtk3, qt5Support ? false, qt5, raspiCameraSupport ? false
+, libraspberrypi, enableJack ? true, libjack2, libXdamage, libXext, libXfixes
+, ncurses, wayland, wayland-protocols, xorg, libgudev, wavpack }:
 
 assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
@@ -53,20 +15,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    url =
+      "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1c1rpq709cy8maaykyn1n0kckj9c6fl3mhvixkk6xmdwkcx0xrdn";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-    meson
-    ninja
-    gettext
-    nasm
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland-protocols
-  ];
+  nativeBuildInputs = [ pkg-config python3 meson ninja gettext nasm ]
+    ++ lib.optionals stdenv.isLinux [ wayland-protocols ];
 
   buildInputs = [
     gst-plugins-base
@@ -94,50 +49,37 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
-  ] ++ lib.optionals raspiCameraSupport [
-    libraspberrypi
-  ] ++ lib.optionals gtkSupport [
-    # for gtksink
-    gtk3
-  ] ++ lib.optionals qt5Support (with qt5; [
-    qtbase
-    qtdeclarative
-    qtwayland
-    qtx11extras
-  ]) ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ] ++ lib.optionals stdenv.isLinux [
-    libv4l
-    libpulseaudio
-    libavc1394
-    libiec61883
-    libgudev
-    wayland
-  ] ++ lib.optionals enableJack [
-    libjack2
-  ];
+  ] ++ lib.optionals raspiCameraSupport [ libraspberrypi ]
+    ++ lib.optionals gtkSupport [
+      # for gtksink
+      gtk3
+    ] ++ lib.optionals qt5Support
+    (with qt5; [ qtbase qtdeclarative qtwayland qtx11extras ])
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ] ++ lib.optionals stdenv.isLinux [
+      libv4l
+      libpulseaudio
+      libavc1394
+      libiec61883
+      libgudev
+      wayland
+    ] ++ lib.optionals enableJack [ libjack2 ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
-  ] ++ lib.optionals (!qt5Support) [
-    "-Dqt5=disabled"
-  ] ++ lib.optionals (!gtkSupport) [
-    "-Dgtk3=disabled"
-  ] ++ lib.optionals (!enableJack) [
-    "-Djack=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Ddv1394=disabled" # Linux only
-    "-Doss4=disabled" # Linux only
-    "-Doss=disabled" # Linux only
-    "-Dpulse=disabled" # TODO check if we can keep this enabled
-    "-Dv4l2-gudev=disabled" # Linux-only
-    "-Dv4l2=disabled" # Linux-only
-    "-Dximagesrc=disabled" # Linux-only
-  ] ++ lib.optionals (!raspiCameraSupport) [
-    "-Drpicamsrc=disabled"
-  ];
+  ] ++ lib.optionals (!qt5Support) [ "-Dqt5=disabled" ]
+    ++ lib.optionals (!gtkSupport) [ "-Dgtk3=disabled" ]
+    ++ lib.optionals (!enableJack) [ "-Djack=disabled" ]
+    ++ lib.optionals (!stdenv.isLinux) [
+      "-Ddv1394=disabled" # Linux only
+      "-Doss4=disabled" # Linux only
+      "-Doss=disabled" # Linux only
+      "-Dpulse=disabled" # TODO check if we can keep this enabled
+      "-Dv4l2-gudev=disabled" # Linux-only
+      "-Dv4l2=disabled" # Linux-only
+      "-Dximagesrc=disabled" # Linux-only
+    ] ++ lib.optionals (!raspiCameraSupport) [ "-Drpicamsrc=disabled" ];
 
   postPatch = ''
     patchShebangs \

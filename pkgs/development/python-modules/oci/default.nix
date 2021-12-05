@@ -1,13 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, certifi
-, configparser
-, cryptography
-, pyopenssl
-, python-dateutil
-, pytz
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, certifi, configparser, cryptography
+, pyopenssl, python-dateutil, pytz }:
 
 buildPythonPackage rec {
   pname = "oci";
@@ -27,9 +19,8 @@ buildPythonPackage rec {
       --replace "pyOpenSSL>=17.5.0,<=19.1.0" "pyOpenSSL"
   '';
 
-  propagatedBuildInputs = [
-    certifi configparser cryptography pyopenssl python-dateutil pytz
-  ];
+  propagatedBuildInputs =
+    [ certifi configparser cryptography pyopenssl python-dateutil pytz ];
 
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
   doCheck = false;
@@ -38,7 +29,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Oracle Cloud Infrastructure Python SDK";
-    homepage = "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/index.html";
+    homepage =
+      "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/index.html";
     maintainers = with maintainers; [ ilian ];
     license = with licenses; [ asl20 upl ];
   };

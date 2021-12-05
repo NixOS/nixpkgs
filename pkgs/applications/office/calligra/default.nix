@@ -1,14 +1,13 @@
-{ mkDerivation, lib, fetchpatch, fetchurl, extra-cmake-modules, kdoctools
-, boost, qtwebkit, qtx11extras, shared-mime-info
-, breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets
-, kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n
-, kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross
-, knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons
-, kwindowsystem, kxmlgui, sonnet, threadweaver
-, kcontacts, akonadi, akonadi-calendar, akonadi-contacts
-, eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
-, librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon
-, poppler, pstoedit, qca-qt5, vc, fontconfig
+{ mkDerivation, lib, fetchpatch, fetchurl, extra-cmake-modules, kdoctools, boost
+, qtwebkit, qtx11extras, shared-mime-info, breeze-icons, kactivities, karchive
+, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons
+, kdiagram, kguiaddons, khtml, ki18n, kiconthemes, kitemviews, kjobwidgets
+, kcmutils, kdelibs4support, kio, kross, knotifications, knotifyconfig, kparts
+, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui, sonnet
+, threadweaver, kcontacts, akonadi, akonadi-calendar, akonadi-contacts, eigen
+, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
+, librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg
+, phonon, poppler, pstoedit, qca-qt5, vc, fontconfig
 # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
 
@@ -26,7 +25,8 @@ mkDerivation rec {
     # Can be dropped on next release.
     (fetchpatch {
       name = "fix-fontconfig-linking.patch";
-      url = "https://github.com/KDE/calligra/commit/62f510702ef9c34ac50f8d8601a4290ab558464c.patch";
+      url =
+        "https://github.com/KDE/calligra/commit/62f510702ef9c34ac50f8d8601a4290ab558464c.patch";
       sha256 = "11dzrp9q05dmvnwp4vk4ihcibqcf4xyr0ijscpi716cyy730flma";
       excludes = [ "CMakeLists.txt" ];
     })
@@ -35,14 +35,66 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   buildInputs = [
-    boost qtwebkit qtx11extras shared-mime-info
-    kactivities karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
-    kdbusaddons kdiagram kguiaddons khtml ki18n kiconthemes kitemviews
-    kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts
-    ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
-    kcontacts akonadi akonadi-calendar akonadi-contacts
-    eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
-    libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
+    boost
+    qtwebkit
+    qtx11extras
+    shared-mime-info
+    kactivities
+    karchive
+    kcodecs
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kdbusaddons
+    kdiagram
+    kguiaddons
+    khtml
+    ki18n
+    kiconthemes
+    kitemviews
+    kjobwidgets
+    kcmutils
+    kdelibs4support
+    kio
+    kross
+    knotifications
+    knotifyconfig
+    kparts
+    ktextwidgets
+    kwallet
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    sonnet
+    threadweaver
+    kcontacts
+    akonadi
+    akonadi-calendar
+    akonadi-contacts
+    eigen
+    git
+    gsl
+    ilmbase
+    kproperty
+    kreport
+    lcms2
+    marble
+    pcre
+    libgit2
+    libodfgen
+    librevenge
+    libvisio
+    libwpd
+    libwpg
+    libwps
+    okular
+    openexr
+    openjpeg
+    phonon
+    poppler
+    qca-qt5
+    vc
     fontconfig
   ];
 

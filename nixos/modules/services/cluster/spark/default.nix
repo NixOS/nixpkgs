@@ -1,9 +1,6 @@
-{config, pkgs, lib, ...}:
-let
-  cfg = config.services.spark;
-in
-with lib;
-{
+{ config, pkgs, lib, ... }:
+let cfg = config.services.spark;
+in with lib; {
   options = {
     services.spark = {
       master = {
@@ -14,7 +11,7 @@ with lib;
           default = "127.0.0.1";
           example = "0.0.0.0";
         };
-        restartIfChanged  = mkOption {
+        restartIfChanged = mkOption {
           type = types.bool;
           description = ''
             Automatically restart master service on config change.
@@ -26,8 +23,9 @@ with lib;
         };
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
-          description = "Extra environment variables to pass to spark master. See spark-standalone documentation.";
-          default = {};
+          description =
+            "Extra environment variables to pass to spark master. See spark-standalone documentation.";
+          default = { };
           example = {
             SPARK_MASTER_WEBUI_PORT = 8181;
             SPARK_MASTER_OPTS = "-Dspark.deploy.defaultCores=5";
@@ -46,7 +44,7 @@ with lib;
           description = "Address of the spark master.";
           default = "127.0.0.1:7077";
         };
-        restartIfChanged  = mkOption {
+        restartIfChanged = mkOption {
           type = types.bool;
           description = ''
             Automatically restart worker service on config change.
@@ -59,7 +57,7 @@ with lib;
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
           description = "Extra environment variables to pass to spark worker.";
-          default = {};
+          default = { };
           example = {
             SPARK_WORKER_CORES = 5;
             SPARK_WORKER_MEMORY = "2g";
@@ -68,9 +66,11 @@ with lib;
       };
       confDir = mkOption {
         type = types.path;
-        description = "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
+        description =
+          "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
         default = "${cfg.package}/lib/${cfg.package.untarDir}/conf";
-        defaultText = literalExpression ''"''${package}/lib/''${package.untarDir}/conf"'';
+        defaultText =
+          literalExpression ''"''${package}/lib/''${package.untarDir}/conf"'';
       };
       logDir = mkOption {
         type = types.path;
@@ -82,15 +82,16 @@ with lib;
         description = "Spark package.";
         default = pkgs.spark;
         defaultText = literalExpression "pkgs.spark";
-        example = literalExpression ''pkgs.spark.overrideAttrs (super: rec {
-          pname = "spark";
-          version = "2.4.4";
+        example = literalExpression ''
+          pkgs.spark.overrideAttrs (super: rec {
+                    pname = "spark";
+                    version = "2.4.4";
 
-          src = pkgs.fetchzip {
-            url    = "mirror://apache/spark/"''${pname}-''${version}/''${pname}-''${version}-bin-without-hadoop.tgz";
-            sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
-          };
-        })'';
+                    src = pkgs.fetchzip {
+                      url    = "mirror://apache/spark/"''${pname}-''${version}/''${pname}-''${version}-bin-without-hadoop.tgz";
+                      sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
+                    };
+                  })'';
       };
     };
   };
@@ -114,10 +115,12 @@ with lib;
             User = "spark";
             Group = "spark";
             WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
-            ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-master.sh";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-master.sh";
+            ExecStart =
+              "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-master.sh";
+            ExecStop =
+              "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-master.sh";
             TimeoutSec = 300;
-            StartLimitBurst=10;
+            StartLimitBurst = 10;
             Restart = "always";
           };
         };
@@ -137,10 +140,12 @@ with lib;
             Type = "forking";
             User = "spark";
             WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
-            ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-worker.sh spark://${cfg.worker.master}";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-worker.sh";
+            ExecStart =
+              "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-worker.sh spark://${cfg.worker.master}";
+            ExecStop =
+              "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-worker.sh";
             TimeoutSec = 300;
-            StartLimitBurst=10;
+            StartLimitBurst = 10;
             Restart = "always";
           };
         };

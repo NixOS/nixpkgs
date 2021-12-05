@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cudatoolkit
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, cudatoolkit }:
 
 buildPythonPackage rec {
   pname = "pynvml";
@@ -17,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cudatoolkit ];
 
-  doCheck = false;  # no tests in PyPi dist
+  doCheck = false; # no tests in PyPi dist
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
 
   meta = with lib; {

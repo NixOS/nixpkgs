@@ -1,26 +1,6 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, bokeh
-, toolz
-, datashape
-, numba
-, numpy
-, pandas
-, pillow
-, xarray
-, colorcet
-, param
-, pyct
-, scipy
-, pytestCheckHook
-, nbsmoke
-, fastparquet
-, nbconvert
-, pytest-xdist
-, netcdf4
-}:
+{ lib, buildPythonPackage, fetchPypi, dask, bokeh, toolz, datashape, numba
+, numpy, pandas, pillow, xarray, colorcet, param, pyct, scipy, pytestCheckHook
+, nbsmoke, fastparquet, nbconvert, pytest-xdist, netcdf4 }:
 
 buildPythonPackage rec {
   pname = "datashader";
@@ -56,18 +36,16 @@ buildPythonPackage rec {
     netcdf4
   ];
 
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
-    "datashader"
-  ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" "datashader" ];
 
   disabledTestPaths = [
     # 31/50 tests fail with TypeErrors
     "datashader/tests/test_datatypes.py"
   ];
 
-  meta = with lib;{
-    description = "Data visualization toolchain based on aggregating into a grid";
+  meta = with lib; {
+    description =
+      "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

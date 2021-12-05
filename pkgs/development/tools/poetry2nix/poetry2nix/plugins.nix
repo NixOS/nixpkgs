@@ -2,18 +2,10 @@
 let
   inherit (pkgs) stdenv;
 
-  mkPluginDrv =
-    { self
-    , plugins
-    , drv
-    , postInstall ? ""
-    , nativeBuildInputs ? [ ]
-    , buildInputs ? [ ]
-    }:
-    let
-      env = self.python.withPackages (ps: plugins);
-    in
-    stdenv.mkDerivation {
+  mkPluginDrv = { self, plugins, drv, postInstall ? "", nativeBuildInputs ? [ ]
+    , buildInputs ? [ ] }:
+    let env = self.python.withPackages (ps: plugins);
+    in stdenv.mkDerivation {
       pname = drv.pname + "-with-plugins";
 
       inherit (drv) src version meta;
@@ -36,7 +28,9 @@ let
 
         mkdir -p $out/bin
 
-        for bindir in ${lib.concatStringsSep " " (map (d: "${lib.getBin d}/bin") plugins)}; do
+        for bindir in ${
+          lib.concatStringsSep " " (map (d: "${lib.getBin d}/bin") plugins)
+        }; do
           for bin in $bindir/*; do
             ln -s ${env}/bin/$(basename $bin) $out/bin/
           done
@@ -48,23 +42,21 @@ let
       inherit postInstall;
     };
 
-in
-{
+in {
 
   # Provide the `withPlugins` function
-  toPluginAble = self: { drv
-                       , finalDrv
-                       , postInstall ? ""
-                       , nativeBuildInputs ? [ ]
-                       , buildInputs ? [ ]
-                       }: drv.overridePythonAttrs (old: {
-    passthru = old.passthru // {
-      withPlugins = pluginFn: mkPluginDrv {
-        plugins = [ finalDrv ] ++ pluginFn self;
-        inherit self postInstall nativeBuildInputs buildInputs;
-        drv = finalDrv;
+  toPluginAble = self:
+    { drv, finalDrv, postInstall ? "", nativeBuildInputs ? [ ]
+    , buildInputs ? [ ] }:
+    drv.overridePythonAttrs (old: {
+      passthru = old.passthru // {
+        withPlugins = pluginFn:
+          mkPluginDrv {
+            plugins = [ finalDrv ] ++ pluginFn self;
+            inherit self postInstall nativeBuildInputs buildInputs;
+            drv = finalDrv;
+          };
       };
-    };
-  });
+    });
 
 }

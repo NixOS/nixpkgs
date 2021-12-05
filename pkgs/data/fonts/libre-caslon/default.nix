@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   outputHash = "05aajwny99yqzn1nnq1blx6h7rl54x056y12hyawfbigkzxhscns";
 
   meta = with lib; {
-    description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
+    description =
+      "Caslon fonts based on hand-lettered American Caslons of 1960s";
     homepage = "http://www.impallari.com/librecaslon";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];

@@ -1,18 +1,13 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
   let
-    lualibs = [
-      pkgs.lua.pkgs.markdown
-    ];
+    lualibs = [ pkgs.lua.pkgs.markdown ];
 
     getPath = lib: type: "${lib}/share/lua/${pkgs.lua.luaversion}/?.${type}";
     getLuaPath = lib: getPath lib "lua";
     luaPath = lib.concatStringsSep ";" (map getLuaPath lualibs);
-  in
-  {
+  in {
     name = "openresty-lua";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ bbigras ];
-    };
+    meta = with pkgs.lib.maintainers; { maintainers = [ bbigras ]; };
 
     nodes = {
       webserver = { pkgs, lib, ... }: {
@@ -40,16 +35,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
     };
 
-    testScript = { nodes, ... }:
-      ''
-        url = "http://localhost"
+    testScript = { nodes, ... }: ''
+      url = "http://localhost"
 
-        webserver.wait_for_unit("nginx")
-        webserver.wait_for_open_port(80)
+      webserver.wait_for_unit("nginx")
+      webserver.wait_for_open_port(80)
 
-        http_code = webserver.succeed(
-          f"curl -w '%{{http_code}}' --head --fail {url}"
-        )
-        assert http_code.split("\n")[-1] == "200"
-      '';
+      http_code = webserver.succeed(
+        f"curl -w '%{{http_code}}' --head --fail {url}"
+      )
+      assert http_code.split("\n")[-1] == "200"
+    '';
   })

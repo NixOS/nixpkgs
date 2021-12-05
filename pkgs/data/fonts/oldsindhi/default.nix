@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
-let
-  version = "1.0";
+let version = "1.0";
 in fetchzip rec {
   name = "oldsindhi-${version}";
 
-  url = "https://github.com/MihailJP/oldsindhi/releases/download/v${version}/OldSindhi-${version}.tar.xz";
+  url =
+    "https://github.com/MihailJP/oldsindhi/releases/download/v${version}/OldSindhi-${version}.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1
@@ -19,7 +19,7 @@ in fetchzip rec {
     homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
     maintainers = with maintainers; [ mathnerd314 ];
-    license = with licenses; [mit ofl];
+    license = with licenses; [ mit ofl ];
     platforms = platforms.all;
   };
 }

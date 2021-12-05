@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsa-lib, gcc-unwrapped, libXext }:
+{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsa-lib, gcc-unwrapped
+, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "atari++";

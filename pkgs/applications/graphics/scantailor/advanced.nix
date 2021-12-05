@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, mkDerivation
-, cmake, libjpeg, libpng, libtiff, boost
+{ lib, fetchFromGitHub, mkDerivation, cmake, libjpeg, libpng, libtiff, boost
 , qtbase, qttools }:
 
 mkDerivation rec {

@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, simplejson
-, psutil
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, simplejson, psutil }:
 
 buildPythonPackage rec {
   pname = "le";

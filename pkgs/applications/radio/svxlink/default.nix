@@ -1,5 +1,5 @@
-{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsa-lib, speex
-, libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
+{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsa-lib
+, speex, libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
 , wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
 
 let

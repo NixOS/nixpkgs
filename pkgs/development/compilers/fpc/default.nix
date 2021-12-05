@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, gawk }:
 
-let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
+let startFPC = import ./binary.nix { inherit stdenv fetchurl; };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "3.2.0";
   pname = "fpc";
 
@@ -36,9 +36,7 @@ stdenv.mkDerivation rec {
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/lib/fpc/etc/
   '';
 
-  passthru = {
-    bootstrap = startFPC;
-  };
+  passthru = { bootstrap = startFPC; };
 
   meta = with lib; {
     description = "Free Pascal Compiler from a source distribution";

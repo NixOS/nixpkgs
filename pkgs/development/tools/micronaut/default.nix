@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.3.7";
 
   src = fetchzip {
-    url = "https://github.com/micronaut-projects/micronaut-core/releases/download/v${version}/${pname}-${version}.zip";
+    url =
+      "https://github.com/micronaut-projects/micronaut-core/releases/download/v${version}/${pname}-${version}.zip";
     sha256 = "1f9fhp10fdm18g33kxl70l6l3x1k8p81h2c3zahjmhlg0sam78zw";
   };
 
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modern, JVM-based, full-stack framework for building microservice applications";
+    description =
+      "Modern, JVM-based, full-stack framework for building microservice applications";
     longDescription = ''
       Micronaut is a modern, JVM-based, full stack microservices framework
       designed for building modular, easily testable microservice applications.

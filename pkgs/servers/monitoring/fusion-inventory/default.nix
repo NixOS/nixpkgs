@@ -1,6 +1,5 @@
 { lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute2, nettools
-, fetchFromGitHub, makeWrapper
-}:
+, fetchFromGitHub, makeWrapper }:
 
 perlPackages.buildPerlPackage rec {
   pname = "FusionInventory-Agent";
@@ -23,7 +22,7 @@ perlPackages.buildPerlPackage rec {
       --replace /sbin/ip ${iproute2}/sbin/ip
   '';
 
-  buildTools = [];
+  buildTools = [ ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = (with perlPackages; [
     CGI
@@ -67,7 +66,9 @@ perlPackages.buildPerlPackage rec {
     for cur in $out/bin/*; do
       if [ -x "$cur" ]; then
         sed -e "s|./lib|$out/lib|" -i "$cur"
-        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute2]}
+        wrapProgram "$cur" --prefix PATH : ${
+          lib.makeBinPath [ nix dmidecode pciutils usbutils nettools iproute2 ]
+        }
       fi
     done
   '';
@@ -76,7 +77,8 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     homepage = "http://www.fusioninventory.org";
-    description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
+    description =
+      "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
   };

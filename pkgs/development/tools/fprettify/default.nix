@@ -15,12 +15,11 @@ python3Packages.buildPythonApplication rec {
     patchShebangs fprettify.py
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    configargparse
-  ];
+  propagatedBuildInputs = with python3Packages; [ configargparse ];
 
   meta = with lib; {
-    description = "An auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python.";
+    description =
+      "An auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python.";
     homepage = "https://pypi.org/project/fprettify/";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fabiangd ];

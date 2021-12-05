@@ -4,11 +4,12 @@ stdenv.mkDerivation rec {
   pname = "teeter-torture";
   version = "2005-10-18";
   src = fetchurl {
-    url = "ftp://ftp.tuxpaint.org/unix/x/teetertorture/source/teetertorture-${version}.tar.gz";
+    url =
+      "ftp://ftp.tuxpaint.org/unix/x/teetertorture/source/teetertorture-${version}.tar.gz";
     sha256 = "175gdbkx3m82icyzvwpyzs4v2fd69c695k5n8ca0lnjv81wnw2hr";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer];
+  buildInputs = [ SDL SDL_image SDL_mixer ];
 
   configurePhase = ''
     sed -i s,data/,$out/share/teetertorture/, src/teetertorture.c
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.newbreedsoftware.com/teetertorture/";
-    description = "Simple shooting game with your cannon is sitting atop a teeter totter";
+    description =
+      "Simple shooting game with your cannon is sitting atop a teeter totter";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

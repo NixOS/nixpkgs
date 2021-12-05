@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_interface
-, webob
-}:
+{ lib, buildPythonPackage, fetchPypi, zope_interface, webob }:
 
 buildPythonPackage rec {
   pname = "repoze.who";

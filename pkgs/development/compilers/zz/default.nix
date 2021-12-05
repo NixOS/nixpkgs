@@ -1,13 +1,8 @@
 { lib, rustPlatform, fetchFromGitHub, makeWrapper, z3, pkgsHostTarget }:
 
-let
-  runtimeDeps = [
-    z3
-    pkgsHostTarget.targetPackages.stdenv.cc
-  ];
-in
+let runtimeDeps = [ z3 pkgsHostTarget.targetPackages.stdenv.cc ];
 
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "zz";
   version = "unstable-2021-05-04";
 

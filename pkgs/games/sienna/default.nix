@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "sienna";
   version = "1.0c";
   src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
+    url =
+      "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
     sha256 = "1x15276fhqspgrrv8fzkp032i2qa8piywc0yy061x59mxhdndzj6";
   };
 
@@ -28,8 +29,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 

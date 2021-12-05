@@ -1,11 +1,10 @@
-{ lib, stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xorgproto, libXi, gmp, readline, strace
-, libXext, libXt, libXaw, libXmu } :
+{ lib, stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which, texinfo, libX11
+, xorgproto, libXi, gmp, readline, strace, libXext, libXt, libXaw, libXmu }:
 
-assert stdenv ? cc ;
-assert stdenv.cc.isGNU ;
-assert stdenv.cc ? libc ;
-assert stdenv.cc.libc != null ;
+assert stdenv ? cc;
+assert stdenv.cc.isGNU;
+assert stdenv.cc ? libc;
+assert stdenv.cc.libc != null;
 
 stdenv.mkDerivation {
   pname = "gcl";
@@ -20,26 +19,37 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -e 's/<= obj-date/<= (if (= 0 obj-date) 1 obj-date)/' -i lsp/make.lisp
   ''
-  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=902475
-  + ''
-    substituteInPlace h/elf64_i386_reloc.h \
-      --replace 'case R_X86_64_PC32:' 'case R_X86_64_PC32: case R_X86_64_PLT32:'
-  '';
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=902475
+    + ''
+      substituteInPlace h/elf64_i386_reloc.h \
+        --replace 'case R_X86_64_PC32:' 'case R_X86_64_PC32: case R_X86_64_PLT32:'
+    '';
 
   sourceRoot = "gcl/gcl";
 
-  patches = [];
+  patches = [ ];
 
   buildInputs = [
-    mpfr m4 binutils emacs gmp
-    libX11 xorgproto libXi
-    libXext libXt libXaw libXmu
-    zlib which texinfo readline strace
+    mpfr
+    m4
+    binutils
+    emacs
+    gmp
+    libX11
+    xorgproto
+    libXi
+    libXext
+    libXt
+    libXaw
+    libXmu
+    zlib
+    which
+    texinfo
+    readline
+    strace
   ];
 
-  configureFlags = [
-    "--enable-ansi"
-  ];
+  configureFlags = [ "--enable-ansi" ];
 
   hardeningDisable = [ "pic" "bindnow" ];
 

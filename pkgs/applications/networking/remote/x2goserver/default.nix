@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, perlPackages, makeWrapper, perl, which, nx-libs
-, util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg
-, nettools, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
-}:
+, util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg, nettools
+, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash }:
 
 let
   pname = "x2goserver";
   version = "4.1.0.3";
 
   src = fetchurl {
-    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
     sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
@@ -25,18 +25,49 @@ let
     '';
   };
 
-  perlEnv = perl.withPackages (p: with p; [
-    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch FileWhich
-  ]);
+  perlEnv = perl.withPackages (p:
+    with p; [
+      x2go-perl
+      DBI
+      DBDSQLite
+      FileBaseDir
+      TryTiny
+      CaptureTiny
+      ConfigSimple
+      Switch
+      FileWhich
+    ]);
 
   binaryDeps = [
-    perlEnv which nx-libs util-linux coreutils glibc.bin gawk gnused gnugrep
-    findutils nettools iproute2 bc procps psmisc lsof pwgen openssh sshfs
-    xorg.xauth xorg.xinit xorg.xrandr xorg.xmodmap xorg.xwininfo xorg.fontutil
-    xorg.xkbcomp xorg.setxkbmap
+    perlEnv
+    which
+    nx-libs
+    util-linux
+    coreutils
+    glibc.bin
+    gawk
+    gnused
+    gnugrep
+    findutils
+    nettools
+    iproute2
+    bc
+    procps
+    psmisc
+    lsof
+    pwgen
+    openssh
+    sshfs
+    xorg.xauth
+    xorg.xinit
+    xorg.xrandr
+    xorg.xmodmap
+    xorg.xwininfo
+    xorg.fontutil
+    xorg.xkbcomp
+    xorg.setxkbmap
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildInputs = [ perlEnv bash ];

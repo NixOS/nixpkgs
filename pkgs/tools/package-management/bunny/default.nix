@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
-    description = "A simple shell script wrapper around multiple package managers";
+    description =
+      "A simple shell script wrapper around multiple package managers";
     homepage = "https://gitlab.com/tim241/bunny";
     license = licenses.gpl3;
     platforms = platforms.all;

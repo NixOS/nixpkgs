@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nmigen
-, setuptools
-, setuptools-scm
+{ lib, buildPythonPackage, fetchFromGitHub, nmigen, setuptools, setuptools-scm
 }:
 
 buildPythonPackage rec {

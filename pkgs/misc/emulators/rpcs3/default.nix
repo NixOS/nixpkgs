@@ -1,17 +1,14 @@
 { gcc11Stdenv, lib, fetchFromGitHub, wrapQtAppsHook, cmake, pkg-config, git
-, qtbase, qtquickcontrols, qtmultimedia, openal, glew, vulkan-headers, vulkan-loader, libpng
-, ffmpeg, libevdev, libusb1, zlib, curl, wolfssl, python3, pugixml, faudio, flatbuffers
-, sdl2Support ? true, SDL2
-, pulseaudioSupport ? true, libpulseaudio
-, waylandSupport ? true, wayland
-, alsaSupport ? true, alsa-lib
-}:
+, qtbase, qtquickcontrols, qtmultimedia, openal, glew, vulkan-headers
+, vulkan-loader, libpng, ffmpeg, libevdev, libusb1, zlib, curl, wolfssl, python3
+, pugixml, faudio, flatbuffers, sdl2Support ? true, SDL2
+, pulseaudioSupport ? true, libpulseaudio, waylandSupport ? true, wayland
+, alsaSupport ? true, alsa-lib }:
 
 let
   majorVersion = "0.0.19";
   gitVersion = "12975-37383f421";
-in
-gcc11Stdenv.mkDerivation {
+in gcc11Stdenv.mkDerivation {
   pname = "rpcs3";
   version = "${majorVersion}-${gitVersion}";
 
@@ -50,12 +47,27 @@ gcc11Stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtquickcontrols qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml faudio flatbuffers
+    qtbase
+    qtquickcontrols
+    qtmultimedia
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg
+    libevdev
+    zlib
+    libusb1
+    curl
+    wolfssl
+    python3
+    pugixml
+    faudio
+    flatbuffers
   ] ++ lib.optional sdl2Support SDL2
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional waylandSupport wayland;
+    ++ lib.optional alsaSupport alsa-lib ++ lib.optional waylandSupport wayland;
 
   meta = with lib; {
     description = "PS3 emulator/debugger";

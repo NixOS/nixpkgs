@@ -6,9 +6,12 @@ let
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
-      else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
-    mkKeyValue = generators.mkKeyValueDefault {} ":";
+      if builtins.length l == 1 then
+        generators.mkValueStringDefault { } (head l)
+      else
+        lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault { } s}")
+        l;
+    mkKeyValue = generators.mkKeyValueDefault { } ":";
   };
 in {
   options = {
@@ -81,7 +84,7 @@ in {
 
   config = mkIf cfg.enable {
     warnings = optional (cfg.settings ? update_manager)
-      ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.'';
+      "Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.";
 
     users.users = optionalAttrs (cfg.user == "moonraker") {
       moonraker = {

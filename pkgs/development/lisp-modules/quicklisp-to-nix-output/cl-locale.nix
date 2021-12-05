@@ -1,21 +1,34 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "cl-locale";
   version = "20151031-git";
 
   description = "Simple i18n library for Common Lisp";
 
-  deps = [ args."alexandria" args."anaphora" args."arnesi" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."collectors" args."iterate" args."named-readtables" args."symbol-munger" args."trivial-types" ];
+  deps = [
+    args."alexandria"
+    args."anaphora"
+    args."arnesi"
+    args."cl-annot"
+    args."cl-syntax"
+    args."cl-syntax-annot"
+    args."closer-mop"
+    args."collectors"
+    args."iterate"
+    args."named-readtables"
+    args."symbol-munger"
+    args."trivial-types"
+  ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-locale/2015-10-31/cl-locale-20151031-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/cl-locale/2015-10-31/cl-locale-20151031-git.tgz";
     sha256 = "14j4xazrx2v5cj4q4irfwra0ksvl2l0s7073fimpwc0xqjfsnjpg";
   };
 
   packageName = "cl-locale";
 
-  asdFilesToKeep = ["cl-locale.asd"];
+  asdFilesToKeep = [ "cl-locale.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-locale DESCRIPTION Simple i18n library for Common Lisp SHA256
@@ -35,4 +48,5 @@ rec {
     (alexandria anaphora arnesi cl-annot cl-syntax cl-syntax-annot closer-mop
      collectors iterate named-readtables symbol-munger trivial-types)
     VERSION 20151031-git SIBLINGS (cl-locale-syntax cl-locale-test) PARASITES
-    NIL) */
+    NIL)
+*/

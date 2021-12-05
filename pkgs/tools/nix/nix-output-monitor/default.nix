@@ -1,8 +1,7 @@
-{ mkDerivation, ansi-terminal, async, attoparsec, base, containers
-, cassava, directory, HUnit, mtl, nix-derivation, process, relude, lib
-, stm, terminal-size, text, time, unix, wcwidth, fetchFromGitHub
-, lock-file, data-default, expect, runtimeShell
-}:
+{ mkDerivation, ansi-terminal, async, attoparsec, base, containers, cassava
+, directory, HUnit, mtl, nix-derivation, process, relude, lib, stm
+, terminal-size, text, time, unix, wcwidth, fetchFromGitHub, lock-file
+, data-default, expect, runtimeShell }:
 mkDerivation rec {
   pname = "nix-output-monitor";
   version = "1.0.4.0";
@@ -15,17 +14,56 @@ mkDerivation rec {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    ansi-terminal async attoparsec base cassava containers directory mtl
-    nix-derivation relude stm terminal-size text time unix wcwidth lock-file
+    ansi-terminal
+    async
+    attoparsec
+    base
+    cassava
+    containers
+    directory
+    mtl
+    nix-derivation
+    relude
+    stm
+    terminal-size
+    text
+    time
+    unix
+    wcwidth
+    lock-file
     data-default
   ];
   executableHaskellDepends = [
-    ansi-terminal async attoparsec base containers directory mtl
-    nix-derivation relude stm text time unix
+    ansi-terminal
+    async
+    attoparsec
+    base
+    containers
+    directory
+    mtl
+    nix-derivation
+    relude
+    stm
+    text
+    time
+    unix
   ];
   testHaskellDepends = [
-    ansi-terminal async attoparsec base containers directory HUnit mtl
-    nix-derivation process relude stm text time unix
+    ansi-terminal
+    async
+    attoparsec
+    base
+    containers
+    directory
+    HUnit
+    mtl
+    nix-derivation
+    process
+    relude
+    stm
+    text
+    time
+    unix
   ];
   postInstall = ''
     cat > $out/bin/nom-build << EOF

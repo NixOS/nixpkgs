@@ -1,16 +1,15 @@
 { lib, stdenv, requireFile, unzip, makeWrapper, oraclejdk8, autoPatchelfHook
-, pcsclite
-}:
+, pcsclite }:
 
 stdenv.mkDerivation rec {
   pname = "javacard-devkit";
   version = "2.2.2";
-  uscoreVersion = builtins.replaceStrings ["."] ["_"] version;
+  uscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
 
   src = requireFile {
     name = "java_card_kit-${uscoreVersion}-linux.zip";
     url = "http://www.oracle.com/technetwork/java/javasebusiness/downloads/"
-        + "java-archive-downloads-javame-419430.html#java_card_kit-2.2.2-oth-JPR";
+      + "java-archive-downloads-javame-419430.html#java_card_kit-2.2.2-oth-JPR";
     sha256 = "1rzkw8izqq73ifvyp937wnjjc40a40drc4zsm0l1s6jyv3d7agb2";
   };
 
@@ -47,7 +46,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Official development kit by Oracle for programming for the Java Card platform";
+    description =
+      "Official development kit by Oracle for programming for the Java Card platform";
     longDescription = ''
       This Java Card SDK is the official SDK made available by Oracle for programming for the Java Card platform.
 
@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
           converter -applet [AppletAID] [MyApplet] [myPackage] [PackageAID] [Version]
       For more details, please refer to the documentation by Oracle
     '';
-    homepage = "https://www.oracle.com/technetwork/java/embedded/javacard/overview/index.html";
+    homepage =
+      "https://www.oracle.com/technetwork/java/embedded/javacard/overview/index.html";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.ekleog ];
     platforms = [ "i686-linux" "x86_64-linux" ];

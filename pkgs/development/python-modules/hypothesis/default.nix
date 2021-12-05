@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, attrs
-, pexpect
-, doCheck ? true
-, pytestCheckHook
-, pytest-xdist
-, sortedcontainers
-, tzdata
-}:
+{ lib, buildPythonPackage, pythonAtLeast, fetchFromGitHub, attrs, pexpect
+, doCheck ? true, pytestCheckHook, pytest-xdist, sortedcontainers, tzdata }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
 
@@ -30,10 +20,7 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [
-    attrs
-    sortedcontainers
-  ];
+  propagatedBuildInputs = [ attrs sortedcontainers ];
 
   checkInputs = [ pytestCheckHook pytest-xdist pexpect ]
     ++ lib.optional (pythonAtLeast "3.9") tzdata;

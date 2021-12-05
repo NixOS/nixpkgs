@@ -1,5 +1,4 @@
-{lib, stdenv
-, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
+{ lib, stdenv, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
 , lighttpd, iproute2 }:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
@@ -26,7 +25,9 @@ stdenv.mkDerivation rec {
 
     chmod a+x "$out/bin/nix-binary-cache.cgi"
 
-    substitute "${./nix-binary-cache-start.in}" "$out"/bin/nix-binary-cache-start \
+    substitute "${
+      ./nix-binary-cache-start.in
+    }" "$out"/bin/nix-binary-cache-start \
       --replace @out@ "$out/bin" \
       --replace @shell@ "${stdenv.shell}" \
       --replace @coreutils@ "${coreutils}/bin" \
@@ -52,9 +53,9 @@ stdenv.mkDerivation rec {
       nix-binary-cache-start that can be run without any setup to launch
       a binary cache and get the example arguments for its usage.
     '';
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

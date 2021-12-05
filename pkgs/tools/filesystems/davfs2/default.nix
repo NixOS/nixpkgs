@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, neon
-, procps
-, substituteAll
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
-}:
+{ lib, stdenv, fetchurl, fetchpatch, neon, procps, substituteAll, zlib
+, wrapperDir ? "/run/wrappers/bin" }:
 
 stdenv.mkDerivation rec {
   pname = "davfs2";
@@ -33,10 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  makeFlags = [
-    "sbindir=$(out)/sbin"
-    "ssbindir=$(out)/sbin"
-  ];
+  makeFlags = [ "sbindir=$(out)/sbin" "ssbindir=$(out)/sbin" ];
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/davfs2";

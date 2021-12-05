@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.services.prometheus.exporters.minio;
-in
-{
+let cfg = config.services.prometheus.exporters.minio;
+in {
   port = 9290;
   extraOpts = {
     minioAddress = mkOption {

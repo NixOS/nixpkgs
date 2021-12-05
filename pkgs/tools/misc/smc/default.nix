@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   version = "6.6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/smc/smc/${lib.replaceStrings ["."] ["_"] version}/smc_${lib.replaceStrings ["."] ["_"] version}.tgz";
+    url = "mirror://sourceforge/project/smc/smc/${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }/smc_${lib.replaceStrings [ "." ] [ "_" ] version}.tgz";
     sha256 = "1gv0hrgdl4wp562virpf9sib6pdhapwv4zvwbl0d5f5xyx04il11";
   };
 

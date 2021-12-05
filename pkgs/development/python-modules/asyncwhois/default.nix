@@ -1,13 +1,5 @@
-{ lib
-, aiodns
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, tldextract
-, whodap
-}:
+{ lib, aiodns, asynctest, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, pythonOlder, tldextract, whodap }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
@@ -22,16 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-mKKN2IuveOE+3mZGS5LFa15lJPA9y7KgLd0FoRuEMH0=";
   };
 
-  propagatedBuildInputs = [
-    aiodns
-    tldextract
-    whodap
-  ];
+  propagatedBuildInputs = [ aiodns tldextract whodap ];
 
-  checkInputs = [
-    asynctest
-    pytestCheckHook
-  ];
+  checkInputs = [ asynctest pytestCheckHook ];
 
   # Disable tests that require network access
   disabledTests = [

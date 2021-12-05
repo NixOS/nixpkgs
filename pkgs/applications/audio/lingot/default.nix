@@ -1,15 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, gtk3
-, wrapGAppsHook
-, alsa-lib
-, libjack2
-, libpulseaudio
-, fftw
-, jackSupport ? true
-}:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, wrapGAppsHook, alsa-lib
+, libjack2, libpulseaudio, fftw, jackSupport ? true }:
 
 stdenv.mkDerivation rec {
   pname = "lingot";
@@ -20,18 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "03x0qqb9iarjapvii3ja522vkxrqv1hwix6b1r53is48p5xwgf3i";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    alsa-lib
-    libpulseaudio
-    fftw
-  ] ++ lib.optional jackSupport libjack2;
+  buildInputs = [ gtk3 alsa-lib libpulseaudio fftw ]
+    ++ lib.optional jackSupport libjack2;
 
   configureFlags = lib.optional (!jackSupport) "--disable-jack";
 

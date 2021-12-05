@@ -1,19 +1,5 @@
-{ lib, stdenv, llvm_meta
-, fetch
-, cmake
-, zlib
-, ncurses
-, swig
-, which
-, libedit
-, libxml2
-, libllvm
-, libclang
-, python3
-, version
-, darwin
-, makeWrapper
-}:
+{ lib, stdenv, llvm_meta, fetch, cmake, zlib, ncurses, swig, which, libedit
+, libxml2, libllvm, libclang, python3, version, darwin, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lldb";
@@ -21,9 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetch "lldb" "1mriw4adrwm6kzabrjr7yqmdiylxd6glf6samd80dp8idnm9p9z8";
 
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
+  patches = [ ./gnu-install-dirs.patch ];
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -37,17 +21,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [
-    cmake python3 which swig makeWrapper
-  ];
+  nativeBuildInputs = [ cmake python3 which swig makeWrapper ];
 
-  buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs = [ ncurses zlib libedit libxml2 libllvm ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+      darwin.apple_sdk.libs.xpc
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.bootstrap_cmds
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

@@ -6,15 +6,15 @@ with lib;
 
 {
 
-  meta = {
-    maintainers = teams.gnome.members;
-  };
+  meta = { maintainers = teams.gnome.members; };
 
   # Added 2019-08-09
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome" "gnome-documents" "enable" ]
-      [ "programs" "gnome-documents" "enable" ])
+    (mkRenamedOptionModule [ "services" "gnome" "gnome-documents" "enable" ] [
+      "programs"
+      "gnome-documents"
+      "enable"
+    ])
   ];
 
   ###### interface
@@ -35,7 +35,6 @@ with lib;
     };
 
   };
-
 
   ###### implementation
 

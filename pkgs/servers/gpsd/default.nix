@@ -1,34 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
+{ stdenv, lib, fetchurl
 
 # nativeBuildInputs
-, scons
-, pkg-config
+, scons, pkg-config
 
 # buildInputs
-, dbus
-, libusb1
-, ncurses
-, pps-tools
-, python3Packages
+, dbus, libusb1, ncurses, pps-tools, python3Packages
 
 # optional deps for GUI packages
-, guiSupport ? true
-, dbus-glib
-, libX11
-, libXt
-, libXpm
-, libXaw
-, libXext
-, gobject-introspection
-, pango
-, gdk-pixbuf
-, atk
-, wrapGAppsHook
+, guiSupport ? true, dbus-glib, libX11, libXt, libXpm, libXaw, libXext
+, gobject-introspection, pango, gdk-pixbuf, atk, wrapGAppsHook
 
-, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
-}:
+, gpsdUser ? "gpsd", gpsdGroup ? "dialout" }:
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
@@ -40,42 +22,29 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: render & install HTML documentation using asciidoctor
-  nativeBuildInputs = [
-    pkg-config
-    python3Packages.wrapPython
-    scons
-  ] ++ lib.optionals guiSupport [
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ pkg-config python3Packages.wrapPython scons ]
+    ++ lib.optionals guiSupport [ gobject-introspection wrapGAppsHook ];
 
-  buildInputs = [
-    dbus
-    libusb1
-    ncurses
-    pps-tools
-    python3Packages.python
-  ] ++ lib.optionals guiSupport [
-    atk
-    dbus-glib
-    gdk-pixbuf
-    gobject-introspection
-    libX11
-    libXaw
-    libXext
-    libXpm
-    libXt
-    pango
-  ];
+  buildInputs = [ dbus libusb1 ncurses pps-tools python3Packages.python ]
+    ++ lib.optionals guiSupport [
+      atk
+      dbus-glib
+      gdk-pixbuf
+      gobject-introspection
+      libX11
+      libXaw
+      libXext
+      libXpm
+      libXt
+      pango
+    ];
 
   pythonPath = lib.optionals guiSupport [
     python3Packages.pygobject3
     python3Packages.pycairo
   ];
 
-  patches = [
-    ./sconstruct-env-fixes.patch
-  ];
+  patches = [ ./sconstruct-env-fixes.patch ];
 
   preBuild = ''
     patchShebangs .

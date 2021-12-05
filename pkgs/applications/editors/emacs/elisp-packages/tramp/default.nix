@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, emacs
-, texinfo
-}:
+{ lib, stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "tramp";
@@ -14,14 +9,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-+jjWBcj2dP9Xyj4dzpAX86KnajVa9eFDcjD9xTw6vks=";
   };
 
-  buildInputs = [
-    emacs
-    texinfo
-  ];
+  buildInputs = [ emacs texinfo ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/tramp";
-    description = "Transparently access remote files from Emacs (latest version)";
+    description =
+      "Transparently access remote files from Emacs (latest version)";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (emacs.meta) platforms;

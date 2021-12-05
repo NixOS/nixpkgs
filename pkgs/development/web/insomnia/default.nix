@@ -1,8 +1,8 @@
-{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, mesa, nspr, nss, gtk3, gtk2
-, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
+{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus
+, expat, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, mesa, nspr, nss
+, gtk3, gtk2, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection
+, wrapGAppsHook, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage
+, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
 , libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
 
 let

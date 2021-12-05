@@ -1,6 +1,5 @@
-{ buildPythonPackage, lib, fetchFromGitHub, dissononce, python-axolotl-curve25519
-, transitions, protobuf, nose
-}:
+{ buildPythonPackage, lib, fetchFromGitHub, dissononce
+, python-axolotl-curve25519, transitions, protobuf, nose }:
 
 buildPythonPackage rec {
   pname = "consonance";
@@ -19,7 +18,8 @@ buildPythonPackage rec {
     nosetests tests/test_handshakes_offline.py
   '';
 
-  propagatedBuildInputs = [ dissononce python-axolotl-curve25519 transitions protobuf ];
+  propagatedBuildInputs =
+    [ dissononce python-axolotl-curve25519 transitions protobuf ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/consonance/";

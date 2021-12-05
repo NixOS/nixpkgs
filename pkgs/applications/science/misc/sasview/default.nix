@@ -13,16 +13,11 @@ let
     reportlab = python.pkgs.reportlab;
   };
 
-in
-
-python.pkgs.buildPythonApplication rec {
+in python.pkgs.buildPythonApplication rec {
   pname = "sasview";
   version = "4.2.0";
 
-  checkInputs = with python.pkgs; [
-    pytest
-    unittest-xml-reporting
-  ];
+  checkInputs = with python.pkgs; [ pytest unittest-xml-reporting ];
 
   checkPhase = ''
     # fix the following error:

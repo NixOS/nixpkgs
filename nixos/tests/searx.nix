@@ -1,80 +1,78 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
-{
-  name = "searx";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ rnhmjoj ];
-  };
+  {
+    name = "searx";
+    meta = with pkgs.lib.maintainers; { maintainers = [ rnhmjoj ]; };
 
-  # basic setup: searx running the built-in webserver
-  nodes.base = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
+    # basic setup: searx running the built-in webserver
+    nodes.base = { ... }: {
+      imports = [ ../modules/profiles/minimal.nix ];
 
-    services.searx = {
-      enable = true;
-      environmentFile = pkgs.writeText "secrets" ''
-        WOLFRAM_API_KEY  = sometoken
-        SEARX_SECRET_KEY = somesecret
-      '';
+      services.searx = {
+        enable = true;
+        environmentFile = pkgs.writeText "secrets" ''
+          WOLFRAM_API_KEY  = sometoken
+          SEARX_SECRET_KEY = somesecret
+        '';
 
-      settings.server =
-        { port = "8080";
+        settings.server = {
+          port = "8080";
           bind_address = "0.0.0.0";
           secret_key = "@SEARX_SECRET_KEY@";
         };
-      settings.engines = [
-        { name = "wolframalpha";
-          api_key = "@WOLFRAM_API_KEY@";
-          engine = "wolframalpha_api";
-        }
-        { name = "startpage";
-          shortcut = "start";
-        }
-      ];
-    };
-
-  };
-
-  # fancy setup: run in uWSGI and use nginx as proxy
-  nodes.fancy = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-
-    services.searx = {
-      enable = true;
-      # searx refuses to run if unchanged
-      settings.server.secret_key = "somesecret";
-
-      runInUwsgi = true;
-      uwsgiConfig = {
-        # serve using the uwsgi protocol
-        socket = "/run/searx/uwsgi.sock";
-        chmod-socket = "660";
-
-        # use /searx as url "mountpoint"
-        mount = "/searx=searx.webapp:application";
-        module = "";
-        manage-script-name = true;
+        settings.engines = [
+          {
+            name = "wolframalpha";
+            api_key = "@WOLFRAM_API_KEY@";
+            engine = "wolframalpha_api";
+          }
+          {
+            name = "startpage";
+            shortcut = "start";
+          }
+        ];
       };
+
     };
 
-    # use nginx as reverse proxy
-    services.nginx.enable = true;
-    services.nginx.virtualHosts.localhost = {
-      locations."/searx".extraConfig =
-        ''
+    # fancy setup: run in uWSGI and use nginx as proxy
+    nodes.fancy = { ... }: {
+      imports = [ ../modules/profiles/minimal.nix ];
+
+      services.searx = {
+        enable = true;
+        # searx refuses to run if unchanged
+        settings.server.secret_key = "somesecret";
+
+        runInUwsgi = true;
+        uwsgiConfig = {
+          # serve using the uwsgi protocol
+          socket = "/run/searx/uwsgi.sock";
+          chmod-socket = "660";
+
+          # use /searx as url "mountpoint"
+          mount = "/searx=searx.webapp:application";
+          module = "";
+          manage-script-name = true;
+        };
+      };
+
+      # use nginx as reverse proxy
+      services.nginx.enable = true;
+      services.nginx.virtualHosts.localhost = {
+        locations."/searx".extraConfig = ''
           include ${pkgs.nginx}/conf/uwsgi_params;
           uwsgi_pass unix:/run/searx/uwsgi.sock;
         '';
-      locations."/searx/static/".alias = "${pkgs.searx}/share/static/";
+        locations."/searx/static/".alias = "${pkgs.searx}/share/static/";
+      };
+
+      # allow nginx access to the searx socket
+      users.users.nginx.extraGroups = [ "searx" ];
+
     };
 
-    # allow nginx access to the searx socket
-    users.users.nginx.extraGroups = [ "searx" ];
-
-  };
-
-  testScript =
-    ''
+    testScript = ''
       base.start()
 
       with subtest("Settings have been merged"):
@@ -111,4 +109,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
               "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/oscar/js/bootstrap.min.js >&2"
           )
     '';
-})
+  })

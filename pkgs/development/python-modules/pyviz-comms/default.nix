@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, param
-, panel
-}:
+{ buildPythonPackage, fetchPypi, lib, param, panel }:
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
@@ -21,9 +16,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyviz_comms" ];
 
-  passthru.tests = {
-    inherit panel;
-  };
+  passthru.tests = { inherit panel; };
 
   meta = with lib; {
     description = "Launch jobs, organize the output, and dissect the results";

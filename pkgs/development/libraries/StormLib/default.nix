@@ -11,10 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rcdl6ryrr8fss5z5qlpl4prrw8xpbcdgajg2hpp0i7fpk21ymcc";
   };
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWITH_LIBTOMCRYPT=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DWITH_LIBTOMCRYPT=ON" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ bzip2 libtomcrypt zlib ];
@@ -22,7 +19,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ladislav-zezula/StormLib";
     license = licenses.mit;
-    description = "An open-source project that can work with Blizzard MPQ archives";
+    description =
+      "An open-source project that can work with Blizzard MPQ archives";
     platforms = platforms.all;
     maintainers = with maintainers; [ aanderse karolchmist ];
   };

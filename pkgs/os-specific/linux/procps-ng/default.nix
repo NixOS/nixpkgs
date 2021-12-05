@@ -1,21 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, ncurses
-, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, pkg-config
 
-  # `ps` with systemd support is able to properly report different
-  # attributes like unit name, so we want to have it on linux.
-, withSystemd ? stdenv.isLinux
-, systemd
+# `ps` with systemd support is able to properly report different
+# attributes like unit name, so we want to have it on linux.
+, withSystemd ? stdenv.isLinux, systemd
 
-  # procps is mostly Linux-only. Most commands require a running Linux
-  # system (or very similar like that found in Cygwin). The one
-  # exception is ‘watch’ which is portable enough to run on pretty much
-  # any UNIX-compatible system.
-, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
-}:
+# procps is mostly Linux-only. Most commands require a running Linux
+# system (or very similar like that found in Cygwin). The one
+# exception is ‘watch’ which is portable enough to run on pretty much
+# any UNIX-compatible system.
+, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin) }:
 
 stdenv.mkDerivation rec {
   pname = "procps";
@@ -29,14 +22,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://gitlab.com/procps-ng/procps/-/commit/bb96fc42956c9ed926a1b958ab715f8b4a663dec.diff";
+      url =
+        "https://gitlab.com/procps-ng/procps/-/commit/bb96fc42956c9ed926a1b958ab715f8b4a663dec.diff";
       sha256 = "0fzsb6ns3fvrszyzsz28qvbmcn135ilr4nwh2z1a0vlpl2fw961z";
       name = "sysconf-argmax-sanity.patch";
     })
   ];
 
-  buildInputs = [ ncurses ]
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [ ncurses ] ++ lib.optional withSystemd systemd;
   nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "usrbin_execdir=$(out)/bin" ]
@@ -48,9 +41,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-modern-top" ]
     ++ lib.optional withSystemd "--with-systemd"
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
 
   installPhase = lib.optionalString watchOnly ''
     install -m 0755 -D watch $out/bin/watch
@@ -59,8 +52,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/procps-ng/procps";
-    description = "Utilities that give information about processes using the /proc filesystem";
-    priority = 11; # less than coreutils, which also provides "kill" and "uptime"
+    description =
+      "Utilities that give information about processes using the /proc filesystem";
+    priority =
+      11; # less than coreutils, which also provides "kill" and "uptime"
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.typetetris ];

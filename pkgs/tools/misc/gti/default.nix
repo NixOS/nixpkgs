@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://r-wos.org/hacks/gti";
     license = licenses.mit;
-    description = "Humorous typo-based git runner; drives a car over the terminal";
+    description =
+      "Humorous typo-based git runner; drives a car over the terminal";
     maintainers = with maintainers; [ fadenb ];
     platforms = platforms.unix;
   };

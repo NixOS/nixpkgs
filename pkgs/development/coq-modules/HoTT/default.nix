@@ -1,12 +1,14 @@
 { lib, mkCoqDerivation, autoconf, automake, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib;
+mkCoqDerivation {
   pname = "HoTT";
   owner = "HoTT";
   inherit version;
   defaultVersion = if coq.coq-version == "8.6" then "20170921" else null;
-  release."20170921".rev    = "e3557740a699167e6adb1a65855509d55a392fa1";
-  release."20170921".sha256 = "0zwfp8g62b50vmmbb2kmskj3v6w7qx1pbf43yw0hr7asdz2zbx5v";
+  release."20170921".rev = "e3557740a699167e6adb1a65855509d55a392fa1";
+  release."20170921".sha256 =
+    "0zwfp8g62b50vmmbb2kmskj3v6w7qx1pbf43yw0hr7asdz2zbx5v";
 
   extraBuildInputs = [ autoconf automake ];
 
@@ -17,9 +19,7 @@ with lib; mkCoqDerivation {
     mkdir -p "$out/bin"
   '';
 
-  configureFlags = [
-    "--bindir=$(out)/bin"
-  ];
+  configureFlags = [ "--bindir=$(out)/bin" ];
 
   patchPhase = ''
     patchShebangs etc

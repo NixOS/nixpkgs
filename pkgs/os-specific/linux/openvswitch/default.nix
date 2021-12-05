@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
-, procps, libcap_ng, openssl, python3 , perl
-, kernel ? null }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which, procps
+, libcap_ng, openssl, python3, perl, kernel ? null }:
 
 with lib;
 
@@ -19,14 +18,11 @@ in stdenv.mkDerivation rec {
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ util-linux openssl libcap_ng pythonEnv
-                  perl procps which ];
+  buildInputs = [ util-linux openssl libcap_ng pythonEnv perl procps which ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sharedstatedir=/var"
-    "--sbindir=$(out)/bin"
-  ] ++ (optionals (_kernel != null) ["--with-linux"]);
+  configureFlags =
+    [ "--localstatedir=/var" "--sharedstatedir=/var" "--sbindir=$(out)/bin" ]
+    ++ (optionals (_kernel != null) [ "--with-linux" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -42,13 +38,13 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  doCheck = false; # bash-completion test fails with "compgen: command not found"
+  doCheck =
+    false; # bash-completion test fails with "compgen: command not found"
 
   meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
-    longDescription =
-      ''
+    longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
       licensed under the open source Apache 2.0 license. It is
       designed to enable massive network automation through
@@ -57,7 +53,7 @@ in stdenv.mkDerivation rec {
       RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
-      '';
+    '';
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];

@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, gtest
-, xtensor
-, pybind11
-, numpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, cmake, gtest, xtensor, pybind11
+, numpy }:
 
 buildPythonPackage rec {
   pname = "xtensor-python";
@@ -27,13 +20,12 @@ buildPythonPackage rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   meta = with lib; {
     homepage = "https://github.com/xtensor-stack/xtensor-python";
-    description = "Python bindings for the xtensor C++ multi-dimensional array library";
+    description =
+      "Python bindings for the xtensor C++ multi-dimensional array library";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lsix ];
   };

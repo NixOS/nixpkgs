@@ -1,8 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
-, tpm2-tss
-, cryptography, ibm-sw-tpm2
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pkg-config, swig, tpm2-tss
+, cryptography, ibm-sw-tpm2 }:
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";

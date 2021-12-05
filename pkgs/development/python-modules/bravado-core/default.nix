@@ -1,7 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python-dateutil, jsonref, jsonschema,
-  pyyaml, simplejson, six, pytz, msgpack, swagger-spec-validator, rfc3987,
-  strict-rfc3339, webcolors, mypy-extensions, jsonpointer, idna, pytest, mock,
-  pytest-benchmark, isPy27, enum34 }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-dateutil, jsonref, jsonschema
+, pyyaml, simplejson, six, pytz, msgpack, swagger-spec-validator, rfc3987
+, strict-rfc3339, webcolors, mypy-extensions, jsonpointer, idna, pytest, mock
+, pytest-benchmark, isPy27, enum34 }:
 
 buildPythonPackage rec {
   pname = "bravado-core";
@@ -14,12 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-okQA4YJq0lyVJuDzD8mMRlOS/K3gf1qRUpw/5M0LlZE=";
   };
 
-  checkInputs = [
-    mypy-extensions
-    pytest
-    mock
-    pytest-benchmark
-  ];
+  checkInputs = [ mypy-extensions pytest mock pytest-benchmark ];
 
   checkPhase = "pytest --benchmark-skip";
 

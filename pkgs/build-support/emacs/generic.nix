@@ -4,16 +4,13 @@
 
 with lib;
 
-{ pname
-, version ? null
+{ pname, version ? null
 
-, buildInputs ? []
-, packageRequires ? []
+, buildInputs ? [ ], packageRequires ? [ ]
 
-, meta ? {}
+, meta ? { }
 
-, ...
-}@args:
+, ... }@args:
 
 let
 
@@ -24,9 +21,7 @@ let
     homepage = args.src.meta.homepage;
   };
 
-in
-
-stdenv.mkDerivation ({
+in stdenv.mkDerivation ({
   name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
 
   unpackCmd = ''
@@ -45,7 +40,7 @@ stdenv.mkDerivation ({
     esac
   '';
 
-  buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
+  buildInputs = [ emacs texinfo ] ++ packageRequires ++ buildInputs;
   propagatedBuildInputs = packageRequires;
   propagatedUserEnvPkgs = packageRequires;
 
@@ -68,28 +63,26 @@ stdenv.mkDerivation ({
   meta = defaultMeta // meta;
 }
 
-// lib.optionalAttrs (emacs.nativeComp or false) {
+  // lib.optionalAttrs (emacs.nativeComp or false) {
 
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+    LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 
-  nativeBuildInputs = [ gcc ];
+    nativeBuildInputs = [ gcc ];
 
-  addEmacsNativeLoadPath = true;
+    addEmacsNativeLoadPath = true;
 
-  postInstall = ''
-    # Besides adding the output directory to the native load path, make sure
-    # the current package's elisp files are in the load path, otherwise
-    # (require 'file-b) from file-a.el in the same package will fail.
-    mkdir -p $out/share/emacs/native-lisp
-    source ${./emacs-funcs.sh}
-    addEmacsVars "$out"
+    postInstall = ''
+      # Besides adding the output directory to the native load path, make sure
+      # the current package's elisp files are in the load path, otherwise
+      # (require 'file-b) from file-a.el in the same package will fail.
+      mkdir -p $out/share/emacs/native-lisp
+      source ${./emacs-funcs.sh}
+      addEmacsVars "$out"
 
-    find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch -f batch-native-compile {} || true"
-  '';
-}
+      find $out/share/emacs -type f -name '*.el' -print0 \
+        | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
+            "emacs --batch -f batch-native-compile {} || true"
+    '';
+  }
 
-// removeAttrs args [ "buildInputs" "packageRequires"
-                      "meta"
-                    ])
+  // removeAttrs args [ "buildInputs" "packageRequires" "meta" ])

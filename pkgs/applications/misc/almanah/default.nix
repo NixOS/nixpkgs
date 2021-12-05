@@ -1,26 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, atk
-, cairo
-, desktop-file-utils
-, evolution-data-server
-, evolution
-, gcr
-, gettext
-, glib
-, gnome
-, gpgme
-, gtk3
-, gtksourceview3
-, gtkspell3
-, libcryptui
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, sqlite
-, wrapGAppsHook
+{ lib, stdenv, fetchurl, atk, cairo, desktop-file-utils, evolution-data-server
+, evolution, gcr, gettext, glib, gnome, gpgme, gtk3, gtksourceview3, gtkspell3
+, libcryptui, libxml2, meson, ninja, pkg-config, python3, sqlite, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +8,9 @@ stdenv.mkDerivation rec {
   version = "0.12.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
 

@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
@@ -14,13 +11,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1p6kdjjw2jhwr875445w43k46n6zwpz0l0phkl8d3y1v4gi5l6dx";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    yara-python
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ yara-python ];
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
   preBuild = ''
     # Prepare the YARA rules

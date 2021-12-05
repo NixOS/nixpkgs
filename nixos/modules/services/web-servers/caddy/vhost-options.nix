@@ -5,8 +5,7 @@
 
 { lib, ... }:
 
-with lib;
-{
+with lib; {
   options = {
     serverAliases = mkOption {
       type = types.listOf types.str;

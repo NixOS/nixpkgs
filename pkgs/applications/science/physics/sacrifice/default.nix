@@ -12,22 +12,15 @@ stdenv.mkDerivation {
   buildInputs = [ boost hepmc2 lhapdf pythia ];
   nativeBuildInputs = [ makeWrapper ];
 
-  patches = [
-    ./compat.patch
-    ./pythia83xx.patch
-  ];
+  patches = [ ./compat.patch ./pythia83xx.patch ];
 
   preConfigure = ''
     substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
-  ''
-  + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
   '';
 
-  configureFlags = [
-    "--with-HepMC=${hepmc2}"
-    "--with-pythia=${pythia}"
-  ];
+  configureFlags = [ "--with-HepMC=${hepmc2}" "--with-pythia=${pythia}" ];
 
   postInstall = if stdenv.isDarwin then ''
     install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
@@ -40,9 +33,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A standalone contribution to AGILe for steering Pythia 8";
-    license     = lib.licenses.gpl2;
-    homepage    = "https://agile.hepforge.org/trac/wiki/Sacrifice";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    homepage = "https://agile.hepforge.org/trac/wiki/Sacrifice";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

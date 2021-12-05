@@ -1,4 +1,5 @@
-{ mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck, xfconf, libnotify, garcon, thunar }:
+{ mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck, xfconf
+, libnotify, garcon, thunar }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -7,19 +8,8 @@ mkXfceDerivation {
 
   sha256 = "sha256-w/JNjyAlxZqfVpm8EBt+ieHhUziOtfd//XHzIjJjy/4=";
 
-  buildInputs = [
-    exo
-    gtk3
-    libxfce4ui
-    libxfce4util
-    libwnck
-    xfconf
-    libnotify
-    garcon
-    thunar
-  ];
+  buildInputs =
+    [ exo gtk3 libxfce4ui libxfce4util libwnck xfconf libnotify garcon thunar ];
 
-  meta = {
-    description = "Xfce's desktop manager";
-  };
+  meta = { description = "Xfce's desktop manager"; };
 }

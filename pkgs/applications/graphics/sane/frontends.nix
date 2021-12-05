@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkg-config, libusb-compat-0_1 ? null }:
+{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkg-config
+, libusb-compat-0_1 ? null }:
 
 stdenv.mkDerivation rec {
   pname = "sane-frontends";
   version = "1.0.14";
 
   src = fetchurl {
-    url = "https://alioth-archive.debian.org/releases/sane/${pname}/${version}/${pname}-${version}.tar.gz";
+    url =
+      "https://alioth-archive.debian.org/releases/sane/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "1ad4zr7rcxpda8yzvfkq1rfjgx9nl6lan5a628wvpdbh3fn9v0z7";
   };
 
@@ -21,8 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scanner Access Now Easy";
-    homepage    = "http://www.sane-project.org/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
+    homepage = "http://www.sane-project.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -3,12 +3,12 @@
 with lib;
 
 let
-  cfg  = config.services.supybot;
+  cfg = config.services.supybot;
   isStateDirHome = hasPrefix "/home/" cfg.stateDir;
   isStateDirVar = cfg.stateDir == "/var/lib/supybot";
-  pyEnv = pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
-in
-{
+  pyEnv =
+    pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
+in {
   options = {
 
     services.supybot = {
@@ -21,9 +21,10 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = if versionAtLeast config.system.stateVersion "20.09"
-          then "/var/lib/supybot"
-          else "/home/supybot";
+        default = if versionAtLeast config.system.stateVersion "20.09" then
+          "/var/lib/supybot"
+        else
+          "/home/supybot";
         defaultText = literalExpression "/var/lib/supybot";
         description = "The root directory, logs and plugins are stored here";
       };
@@ -41,7 +42,7 @@ in
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = ''
           Attribute set of additional plugins that will be symlinked to the
           <filename>plugin</filename> subdirectory.
@@ -65,7 +66,7 @@ in
 
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = p: [];
+        default = p: [ ];
         defaultText = literalExpression "p: []";
         description = ''
           Extra Python packages available to supybot plugins. The
@@ -91,9 +92,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.supybot = {
-      gid = config.ids.gids.supybot;
-    };
+    users.groups.supybot = { gid = config.ids.gids.supybot; };
 
     systemd.services.supybot = {
       description = "Supybot, an IRC bot";
@@ -105,7 +104,7 @@ in
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
-      startLimitIntervalSec = 5 * 60;  # 5 min
+      startLimitIntervalSec = 5 * 60; # 5 min
       startLimitBurst = 1;
       serviceConfig = {
         ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
@@ -133,14 +132,10 @@ in
         ProtectHostname = true;
         CapabilityBoundingSet = "";
         ProtectSystem = "full";
-      }
-      // optionalAttrs isStateDirVar {
+      } // optionalAttrs isStateDirVar {
         StateDirectory = "supybot";
         ProtectSystem = "strict";
-      }
-      // optionalAttrs (!isStateDirHome) {
-        ProtectHome = true;
-      };
+      } // optionalAttrs (!isStateDirHome) { ProtectHome = true; };
     };
 
     systemd.tmpfiles.rules = [
@@ -154,10 +149,8 @@ in
       "d '${cfg.stateDir}/tmp'          0750 supybot supybot - -"
       "d '${cfg.stateDir}/web'          0750 supybot supybot - -"
       "L '${cfg.stateDir}/supybot.cfg'  -    -       -       - ${cfg.configFile}"
-    ]
-    ++ (flip mapAttrsToList cfg.plugins (name: dest:
-      "L+ '${cfg.stateDir}/plugins/${name}' - - - - ${dest}"
-    ));
+    ] ++ (flip mapAttrsToList cfg.plugins
+      (name: dest: "L+ '${cfg.stateDir}/plugins/${name}' - - - - ${dest}"));
 
   };
 }

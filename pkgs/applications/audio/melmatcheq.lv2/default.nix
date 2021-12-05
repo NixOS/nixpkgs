@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    xorg.libX11 xorgproto cairo lv2
-  ];
+  buildInputs = [ xorg.libX11 xorgproto cairo lv2 ];
 
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 

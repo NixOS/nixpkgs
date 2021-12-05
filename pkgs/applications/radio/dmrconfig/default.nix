@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, libusb1, systemd }:
+{ lib, stdenv, fetchFromGitHub, libusb1, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "dmrconfig";
@@ -12,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qwix75z749628w583fwp7m7kxbj0k3g159sxb7vgqxbadqqz1ab";
   };
 
-  buildInputs = [
-    libusb1 systemd
-  ];
+  buildInputs = [ libusb1 systemd ];
 
   preConfigure = ''
     substituteInPlace Makefile \

@@ -6,7 +6,8 @@ makeInstalledTest {
   testConfig = {
     services.flatpak.enable = true;
     xdg.portal.enable = true;
-    environment.systemPackages = with pkgs; [ flatpak-builder ] ++ flatpak-builder.installedTestsDependencies;
+    environment.systemPackages = with pkgs;
+      [ flatpak-builder ] ++ flatpak-builder.installedTestsDependencies;
     virtualisation.diskSize = 2048;
   };
 

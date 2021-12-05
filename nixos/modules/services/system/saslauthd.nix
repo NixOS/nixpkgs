@@ -6,9 +6,7 @@ let
 
   cfg = config.services.saslauthd;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -34,13 +32,13 @@ in
       config = mkOption {
         type = types.lines;
         default = "";
-        description = "Configuration to use for Cyrus SASL authentication daemon.";
+        description =
+          "Configuration to use for Cyrus SASL authentication daemon.";
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -52,7 +50,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O ${pkgs.writeText "saslauthd.conf" cfg.config}";
+        ExecStart =
+          "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O ${
+            pkgs.writeText "saslauthd.conf" cfg.config
+          }";
         Type = "forking";
         PIDFile = "/run/saslauthd/saslauthd.pid";
         Restart = "always";

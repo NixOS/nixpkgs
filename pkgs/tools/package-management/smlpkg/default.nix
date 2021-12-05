@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   # Set as an environment variable in all the phase scripts.
   MLCOMP = "mlton";
 
-  buildFlags = ["all"];
-  installFlags = ["prefix=$(out)"];
+  buildFlags = [ "all" ];
+  installFlags = [ "prefix=$(out)" ];
 
   doCheck = true;
 
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Generic package manager for Standard ML libraries and programs";
+    description =
+      "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
     license = licenses.mit;
     maintainers = with maintainers; [ athas ];

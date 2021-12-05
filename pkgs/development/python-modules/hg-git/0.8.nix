@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dulwich
-, isPy3k
-, fetchpatch
-}:
+{ lib, buildPythonPackage, fetchPypi, dulwich, isPy3k, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "hg-git";
@@ -22,7 +16,8 @@ buildPythonPackage rec {
   # https://foss.heptapod.net/mercurial/hg-git/-/issues/264
   patches = [
     (fetchpatch {
-      url = "https://foss.heptapod.net/mercurial/hg-git/-/commit/186b37af1ff61e8141e9eea5c75a03b3c82f1ab9.diff";
+      url =
+        "https://foss.heptapod.net/mercurial/hg-git/-/commit/186b37af1ff61e8141e9eea5c75a03b3c82f1ab9.diff";
       sha256 = "sha256-KS6fUJOVzCYX/r5sdRXuFDKtlgxz80bGDFb71ISnRgc=";
     })
   ];

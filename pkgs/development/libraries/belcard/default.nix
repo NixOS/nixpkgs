@@ -1,9 +1,4 @@
-{ bctoolbox
-, belr
-, cmake
-, fetchFromGitLab
-, lib, stdenv
-}:
+{ bctoolbox, belr, cmake, fetchFromGitLab, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "belcard";

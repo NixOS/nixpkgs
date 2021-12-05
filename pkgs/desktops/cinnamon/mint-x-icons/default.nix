@@ -1,13 +1,5 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, gnome
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
-, humanity-icon-theme
-, ubuntu-themes
-}:
+{ fetchFromGitHub, lib, stdenv, gnome, gnome-icon-theme, hicolor-icon-theme
+, gtk3, humanity-icon-theme, ubuntu-themes }:
 
 stdenv.mkDerivation rec {
   pname = "mint-x-icons";
@@ -29,9 +21,7 @@ stdenv.mkDerivation rec {
     ubuntu-themes # provides ubuntu-mono-dark
   ];
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
   dontDropIconThemeCache = true;
 
@@ -50,7 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-x-icons";
-    description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
+    description =
+      "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
     license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

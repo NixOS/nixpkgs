@@ -1,29 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, desktop-file-utils
-, gettext
-, libxml2
-, gtk3
-, granite
-, libgee
-, bamf
-, libcanberra-gtk3
-, gnome-desktop
-, mutter
-, clutter
-, elementary-icon-theme
-, gnome-settings-daemon
-, wrapGAppsHook
-, gexiv2
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, python3, ninja, vala, desktop-file-utils, gettext, libxml2, gtk3, granite
+, libgee, bamf, libcanberra-gtk3, gnome-desktop, mutter, clutter
+, elementary-icon-theme, gnome-settings-daemon, wrapGAppsHook, gexiv2 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
@@ -41,7 +19,8 @@ stdenv.mkDerivation rec {
     # Session crashes when switching windows with Alt+Tab
     # https://github.com/elementary/gala/issues/1312
     (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/cc83db8fe398feae9f3e4caa8352b65f0c8c96d4.patch";
+      url =
+        "https://github.com/elementary/gala/commit/cc83db8fe398feae9f3e4caa8352b65f0c8c96d4.patch";
       sha256 = "sha256-CPO3EHIzqHAV6ZLHngivCdsD8je8CK/NHznfxSEkhzc=";
     })
   ];
@@ -84,13 +63,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   meta = with lib; {
-    description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
+    description =
+      "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

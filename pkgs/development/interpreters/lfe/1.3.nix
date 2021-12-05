@@ -1,16 +1,14 @@
 { fetchpatch, mkDerivation }:
 
 let
-  _fetchpatch =
-    { rev, sha256 }:
+  _fetchpatch = { rev, sha256 }:
     fetchpatch {
       url = "https://github.com/rvirding/lfe/commit/${rev}.patch";
       inherit sha256;
     };
   fetchPatches = map _fetchpatch;
-in
 
-mkDerivation {
+in mkDerivation {
   version = "1.3";
   sha256 = "0pgwi0h0d34353m39jin8dxw4yykgfcg90k6pc4qkjyrg40hh4l6";
   maximumOTPVersion = "21";

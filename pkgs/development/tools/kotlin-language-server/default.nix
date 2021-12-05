@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
   version = "1.1.2";
   src = fetchurl {
-    url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
+    url =
+      "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
     sha256 = "d8850ee2be8c49e5e642c4a41f52304098ae0bcce009e4d91531a9aeecd64916";
   };
 

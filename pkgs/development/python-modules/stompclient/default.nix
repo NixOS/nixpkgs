@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, mock
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mock, nose }:
 
 buildPythonPackage rec {
   pname = "stompclient";

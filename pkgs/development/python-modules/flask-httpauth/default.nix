@@ -19,7 +19,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_httpauth" ];
 
   meta = with lib; {
-    description = "Extension that provides HTTP authentication for Flask routes";
+    description =
+      "Extension that provides HTTP authentication for Flask routes";
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];

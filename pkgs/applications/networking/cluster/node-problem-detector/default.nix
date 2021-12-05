@@ -19,8 +19,8 @@ buildGoModule rec {
   # The binary is dynamically linked against systemd libraries, making it a
   # Linux-only feature. See 'ENABLE_JOURNALD' upstream:
   # https://github.com/kubernetes/node-problem-detector/blob/master/Makefile
-  subPackages = [ "cmd/nodeproblemdetector" ] ++
-    lib.optionals stdenv.isLinux [ "cmd/logcounter" ];
+  subPackages = [ "cmd/nodeproblemdetector" ]
+    ++ lib.optionals stdenv.isLinux [ "cmd/logcounter" ];
 
   preBuild = ''
     export CGO_ENABLED=${if stdenv.isLinux then "1" else "0"}
@@ -30,14 +30,13 @@ buildGoModule rec {
 
   tags = lib.optionals stdenv.isLinux [ "journald" ];
 
-  ldflags = [
-    "-X k8s.io/${pname}/pkg/version.version=v${version}"
-  ];
+  ldflags = [ "-X k8s.io/${pname}/pkg/version.version=v${version}" ];
 
   meta = with lib; {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
-    changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
+    changelog =
+      "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lbpdt ];
   };

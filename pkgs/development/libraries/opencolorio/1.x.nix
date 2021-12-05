@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
-    description = "A color management framework for visual effects and animation";
+    description =
+      "A color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;

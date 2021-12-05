@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, python3-openid
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, flask, python3-openid, isPy3k }:
 
 buildPythonPackage rec {
   pname = "flask-openid";
@@ -17,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "5a8ffe1c8c0ad1cc1f5030e1223ea27f8861ee0215a2a58a528cc61379e5ccab";
   };
 
-  propagatedBuildInputs = [
-    flask
-    python3-openid
-  ];
+  propagatedBuildInputs = [ flask python3-openid ];
 
   # no tests for repo...
   doCheck = false;

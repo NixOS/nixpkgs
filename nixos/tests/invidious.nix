@@ -1,14 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "invidious";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ sbruder ];
-  };
+  meta = with pkgs.lib.maintainers; { maintainers = [ sbruder ]; };
 
   machine = { config, lib, pkgs, ... }: {
-    services.invidious = {
-      enable = true;
-    };
+    services.invidious = { enable = true; };
 
     specialisation = {
       nginx.configuration = {
@@ -27,7 +23,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           database = {
             createLocally = false;
             host = "127.0.0.1";
-            passwordFile = toString (pkgs.writeText "database-password" "correct horse battery staple");
+            passwordFile = toString (pkgs.writeText "database-password"
+              "correct horse battery staple");
           };
         };
         # Normally not needed because when connecting to postgres over TCP/IP
@@ -37,10 +34,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           requires = [ "postgresql.service" ];
         };
         services.postgresql =
-          let
-            inherit (config.services.invidious.settings.db) dbname user;
-          in
-          {
+          let inherit (config.services.invidious.settings.db) dbname user;
+          in {
             enable = true;
             initialScript = pkgs.writeText "init-postgres-with-password" ''
               CREATE USER kemal WITH PASSWORD 'correct horse battery staple';
@@ -61,7 +56,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed(f"${nodes.machine.config.system.build.toplevel}/specialisation/{name}/bin/switch-to-configuration test >&2")
 
 
-    url = "http://localhost:${toString nodes.machine.config.services.invidious.port}"
+    url = "http://localhost:${
+      toString nodes.machine.config.services.invidious.port
+    }"
     port = ${toString nodes.machine.config.services.invidious.port}
 
     machine.wait_for_open_port(port)

@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27,
-  cssselect, cssutils, lxml, mock, nose, requests, cachetools
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, cssselect, cssutils, lxml, mock
+, nose, requests, cachetools }:
 
 buildPythonPackage rec {
   pname = "premailer";

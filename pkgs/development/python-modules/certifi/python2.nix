@@ -1,11 +1,6 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python3
-}:
+{ lib, fetchPypi, buildPythonPackage, python3 }:
 
-let
-  inherit (python3.pkgs) certifi;
+let inherit (python3.pkgs) certifi;
 
 in buildPythonPackage rec {
   pname = "certifi";

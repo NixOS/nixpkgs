@@ -1,14 +1,12 @@
-{ stdenv
-, fetchurl
-, lib
-}:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   pname = "common-licenses";
   version = "11.1";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/b/base-files/base-files_${version}.tar.xz";
+    url =
+      "http://deb.debian.org/debian/pool/main/b/base-files/base-files_${version}.tar.xz";
     sha256 = "1i3hgd9vs14k819k441iibcgmi2zavnpqbnppyn2cz70kd830nbm";
   };
 

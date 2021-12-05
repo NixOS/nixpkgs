@@ -1,16 +1,5 @@
-{ lib, stdenv
-, libpng
-, libuuid
-, zlib
-, bzip2
-, xz
-, openssl
-, curl
-, libmysqlclient
-, bash
-, fetchFromGitHub
-, which
-}:
+{ lib, stdenv, libpng, libuuid, zlib, bzip2, xz, openssl, curl, libmysqlclient
+, bash, fetchFromGitHub, which }:
 stdenv.mkDerivation rec {
   pname = "kent";
   version = "404";
@@ -67,7 +56,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
+    description =
+      "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     license = licenses.unfree;
     maintainers = with maintainers; [ scalavision ];
     platforms = platforms.linux;

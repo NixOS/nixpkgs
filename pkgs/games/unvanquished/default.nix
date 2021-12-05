@@ -1,8 +1,7 @@
 { lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
-, copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
-, nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
-, libvorbis, libjpeg, libwebp, libpng
-, cacert, aria2 # to download assets
+, copyDesktopItems, gcc, cmake, gmp, libGL, zlib, ncurses, geoip, lua5, nettle
+, curl, SDL2, freetype, glew, openal, libopus, opusfile, libogg, libvorbis
+, libjpeg, libwebp, libpng, cacert, aria2 # to download assets
 }:
 
 let
@@ -84,10 +83,11 @@ let
     outputHash = "sha256:084jdisb48xyk9agjifn0nlnsdnjgg32si8zd1khsywd0kffplzx";
     outputHashMode = "recursive";
     nativeBuildInputs = [ aria2 cacert ];
-    buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
+    buildCommand =
+      "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
   };
 
-# this really is the daemon game engine, the game itself is in the assets
+  # this really is the daemon game engine, the game itself is in the assets
 in stdenv.mkDerivation rec {
   pname = "unvanquished";
   inherit version src binary-deps-version;
@@ -166,9 +166,9 @@ in stdenv.mkDerivation rec {
     install -Dm0644 -t $out/lib/ irt_core-x86_64.nexe
 
     mkdir $out/bin/
-    ${wrapBinary "daemon"     "unvanquished"}
+    ${wrapBinary "daemon" "unvanquished"}
     ${wrapBinary "daemon-tty" "unvanquished-tty"}
-    ${wrapBinary "daemonded"  "unvanquished-server"}
+    ${wrapBinary "daemonded" "unvanquished-server"}
 
     for d in ${src}/dist/icons/*; do
       install -Dm0644 -t $out/share/icons/hicolor/$(basename $d)/apps/ $d/unvanquished.png
@@ -185,8 +185,15 @@ in stdenv.mkDerivation rec {
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
-      mit gpl3Plus lib.licenses.zlib bsd3 # engine
-      cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
+      mit
+      gpl3Plus
+      lib.licenses.zlib
+      bsd3 # engine
+      cc-by-sa-25
+      cc-by-sa-30
+      cc-by-30
+      cc-by-sa-40
+      cc0 # assets
     ];
   };
 }

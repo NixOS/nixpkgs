@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A version control system which prioritizes ease of use and simplicity over flexibility";
+    description =
+      "A version control system which prioritizes ease of use and simplicity over flexibility";
     longDescription = ''
       Game of Trees (Got) is a version control system which prioritizes
       ease of use and simplicity over flexibility.

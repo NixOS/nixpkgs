@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.2.3";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-${version}.tar.gz";
+    url =
+      "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-${version}.tar.gz";
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 

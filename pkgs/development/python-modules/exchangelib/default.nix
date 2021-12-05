@@ -1,29 +1,8 @@
-{ lib
-, backports-datetime-fromisoformat
-, backports-zoneinfo
-, buildPythonPackage
-, cached-property
-, defusedxml
-, dnspython
-, fetchFromGitHub
-, flake8
-, isodate
-, lxml
-, oauthlib
-, psutil
-, pygments
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests_ntlm
-, requests_oauthlib
-, requests-kerberos
-, requests-mock
-, tzdata
-, tzlocal
-}:
+{ lib, backports-datetime-fromisoformat, backports-zoneinfo, buildPythonPackage
+, cached-property, defusedxml, dnspython, fetchFromGitHub, flake8, isodate, lxml
+, oauthlib, psutil, pygments, python-dateutil, pythonOlder, pytz, pyyaml
+, requests, requests_ntlm, requests_oauthlib, requests-kerberos, requests-mock
+, tzdata, tzlocal }:
 
 buildPythonPackage rec {
   pname = "exchangelib";
@@ -53,24 +32,12 @@ buildPythonPackage rec {
     requests-kerberos
     tzdata
     tzlocal
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
+    ++ lib.optionals (pythonOlder "3.7") [ backports-datetime-fromisoformat ];
 
-  checkInputs = [
-    flake8
-    psutil
-    python-dateutil
-    pytz
-    pyyaml
-    requests-mock
-  ];
+  checkInputs = [ flake8 psutil python-dateutil pytz pyyaml requests-mock ];
 
-  pythonImportsCheck = [
-    "exchangelib"
-  ];
+  pythonImportsCheck = [ "exchangelib" ];
 
   meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";

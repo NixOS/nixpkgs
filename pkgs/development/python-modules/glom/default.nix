@@ -1,12 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boltons
-, attrs
-, face
-, pytest
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchPypi, boltons, attrs, face, pytest, pyyaml }:
 
 buildPythonPackage rec {
   pname = "glom";

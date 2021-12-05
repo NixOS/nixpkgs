@@ -1,17 +1,16 @@
-{lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
+{ lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="slimerjs";
-    version="1.0.0";
-    name="${baseName}-${version}";
-    owner = "laurentj";
-    repo = baseName;
-    sha256="1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
-    rev = version;
-  };
-in
-stdenv.mkDerivation {
+    rec {
+      baseName = "slimerjs";
+      version = "1.0.0";
+      name = "${baseName}-${version}";
+      owner = "laurentj";
+      repo = baseName;
+      sha256 = "1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
+      rev = version;
+    };
+in stdenv.mkDerivation {
   inherit (s) name version;
   buildInputs = [ zip ];
   nativeBuildInputs = [ unzip ];
@@ -21,9 +20,7 @@ stdenv.mkDerivation {
   #src = fetchgit {
   #  inherit (s) url sha256 rev;
   #};
-  src = fetchFromGitHub {
-    inherit (s) owner repo rev sha256;
-  };
+  src = fetchFromGitHub { inherit (s) owner repo rev sha256; };
   preConfigure = ''
     test -d src && cd src
     test -f omni.ja || zip omni.ja -r */
@@ -41,8 +38,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Gecko-based programmatically-driven browser";
-    license = lib.licenses.mpl20 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,6 @@
-{ callPackage, AudioToolbox, AVFoundation, Cocoa, CoreFoundation, CoreMedia, CoreServices, CoreVideo, DiskArbitration, Foundation, IOKit, MediaToolbox, OpenGL, VideoToolbox }:
+{ callPackage, AudioToolbox, AVFoundation, Cocoa, CoreFoundation, CoreMedia
+, CoreServices, CoreVideo, DiskArbitration, Foundation, IOKit, MediaToolbox
+, OpenGL, VideoToolbox }:
 
 {
   gstreamer = callPackage ./core { inherit CoreServices; };
@@ -9,9 +11,13 @@
 
   gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
+  gst-plugins-bad = callPackage ./bad {
+    inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation
+      MediaToolbox VideoToolbox;
+  };
 
-  gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
+  gst-plugins-ugly =
+    callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
   gst-rtsp-server = callPackage ./rtsp-server { };
 

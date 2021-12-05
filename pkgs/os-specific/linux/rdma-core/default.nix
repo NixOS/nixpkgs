@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
-, pandoc, ethtool, iproute2, libnl, udev, python3, perl
-} :
-
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils, pandoc, ethtool
+, iproute2, libnl, udev, python3, perl }:
 
 stdenv.mkDerivation rec {
   pname = "rdma-core";
@@ -17,10 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config pandoc docutils ];
   buildInputs = [ libnl ethtool iproute2 udev python3 perl ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_RUNDIR=/run"
-    "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
-  ];
+  cmakeFlags =
+    [ "-DCMAKE_INSTALL_RUNDIR=/run" "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib" ];
 
   postPatch = ''
     substituteInPlace srp_daemon/srp_daemon.sh.in \

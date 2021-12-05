@@ -1,6 +1,5 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "chanl";
   version = "20210411-git";
 
@@ -11,13 +10,14 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."fiveam" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/chanl/2021-04-11/chanl-20210411-git.tgz";
+    url =
+      "http://beta.quicklisp.org/archive/chanl/2021-04-11/chanl-20210411-git.tgz";
     sha256 = "1c1yiw616q5hv6vzyg1y4kg68v94p37s5jrq387rwadfnnf46rgi";
   };
 
   packageName = "chanl";
 
-  asdFilesToKeep = ["chanl.asd"];
+  asdFilesToKeep = [ "chanl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM chanl DESCRIPTION
@@ -29,4 +29,5 @@ rec {
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME fiveam FILENAME fiveam))
     DEPENDENCIES (alexandria bordeaux-threads fiveam) VERSION 20210411-git
-    SIBLINGS NIL PARASITES (chanl/examples chanl/tests)) */
+    SIBLINGS NIL PARASITES (chanl/examples chanl/tests))
+*/

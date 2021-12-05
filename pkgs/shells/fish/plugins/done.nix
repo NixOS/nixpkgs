@@ -17,7 +17,8 @@ buildFishPlugin rec {
   '';
 
   meta = {
-    description = "Automatically receive notifications when long processes finish";
+    description =
+      "Automatically receive notifications when long processes finish";
     homepage = "https://github.com/franciscolourenco/done";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ malo ];

@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Listens for MIDI events on the Alsa sequencer and outputs as JSON to stdout";
+    description =
+      "Listens for MIDI events on the Alsa sequencer and outputs as JSON to stdout";
     homepage = "https://github.com/google/midi-dump-tools";
     license = licenses.asl20;
     maintainers = [ maintainers.queezle ];

@@ -1,8 +1,4 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, gg
-}:
+{ lib, fetchurl, buildDunePackage, gg }:
 
 buildDunePackage rec {
   pname = "color";
@@ -12,13 +8,12 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {
-    url = "https://github.com/anuragsoni/color/releases/download/${version}/color-${version}.tbz";
+    url =
+      "https://github.com/anuragsoni/color/releases/download/${version}/color-${version}.tbz";
     sha256 = "0wg3a36i1a7fnz5pf57qzbdghwr6dzp7nnxyrz9m9765lxsn65ph";
   };
 
-  propagatedBuildInputs = [
-    gg
-  ];
+  propagatedBuildInputs = [ gg ];
 
   meta = with lib; {
     description = "Converts between different color formats";

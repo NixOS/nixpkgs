@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, future, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,13 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-fx/kWOnh5Gk1DjeX0xiCJYnd5teD18RvKyOnawcfWWA=";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \

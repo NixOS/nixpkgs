@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, sassc
-, gtk3
-, inkscape
-, optipng
-, gtk-engine-murrine
-, gdk-pixbuf
-, librsvg
-, python3
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gtk3, inkscape, optipng
+, gtk-engine-murrine, gdk-pixbuf, librsvg, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
@@ -24,24 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "16h03x2m4j4hfwp7pdmw1navcy5q7di38jvigfgf263wajyxbznr";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    sassc
-    gtk3
-    inkscape
-    optipng
-    python3
-  ];
+  nativeBuildInputs = [ meson ninja sassc gtk3 inkscape optipng python3 ];
 
-  buildInputs = [
-    gdk-pixbuf
-    librsvg
-  ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = ''
     patchShebangs .

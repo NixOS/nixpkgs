@@ -1,16 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, semver
-  # Check Inputs
-, nose
-}:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, semver
+# Check Inputs
+, nose }:
 
 buildPythonPackage rec {
   pname = "pkutils";
   version = "1.1.1";
-  disabled = !isPy3k; # some tests using semver fail due to unicode errors on Py2.7
+  disabled =
+    !isPy3k; # some tests using semver fail due to unicode errors on Py2.7
 
   src = fetchFromGitHub {
     owner = "reubano";

@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asynctest
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, asynctest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aionotify";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  checkInputs = [
-    asynctest
-  ];
+  checkInputs = [ asynctest ];
 
   meta = with lib; {
     homepage = "https://github.com/rbarrois/aionotify";

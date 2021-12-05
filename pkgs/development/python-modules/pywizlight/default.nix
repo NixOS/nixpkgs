@@ -1,12 +1,5 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, asyncio-dgram, buildPythonPackage, click, fetchFromGitHub, pytest-asyncio
+, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pywizlight";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-XO9KmsC3DXgVcGWr5ss3m2wB8rVboWyQUWBidynhkP8=";
   };
 
-  propagatedBuildInputs = [
-    asyncio-dgram
-    click
-  ];
+  propagatedBuildInputs = [ asyncio-dgram click ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
 
   disabledTests = [
     # Tests requires network features (e. g., discovery testing)
@@ -39,9 +26,7 @@ buildPythonPackage rec {
     "test_timeout_PilotBuilder"
   ];
 
-  pythonImportsCheck = [
-    "pywizlight"
-  ];
+  pythonImportsCheck = [ "pywizlight" ];
 
   meta = with lib; {
     description = "Python connector for WiZ light bulbs";

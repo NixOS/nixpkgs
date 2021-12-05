@@ -9,15 +9,16 @@ buildPythonPackage rec {
     sha256 = "012d716c8b9ed1e513fcc4b18e5af16a8791f51e6d1716baccf988ad355c5a1f";
   };
 
-  patches = [ (fetchpatch {
-    name = "disable-broken-test"; # upstream patch
-    url = "https://github.com/mpi4py/mpi4py/commit/e13cc3ee59ec6ec2c6ee20e384e1e649d5027e8a.patch";
-    sha256 = "0iwknrhxnfmsqjj8ahpn50c8pcdyv9p3wmcqi1jhr4i5y7lnmvvx";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "disable-broken-test"; # upstream patch
+      url =
+        "https://github.com/mpi4py/mpi4py/commit/e13cc3ee59ec6ec2c6ee20e384e1e649d5027e8a.patch";
+      sha256 = "0iwknrhxnfmsqjj8ahpn50c8pcdyv9p3wmcqi1jhr4i5y7lnmvvx";
+    })
+  ];
 
-  passthru = {
-    inherit mpi;
-  };
+  passthru = { inherit mpi; };
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     export OMPI_MCA_rmaps_base_oversubscribe=yes
   '';
 
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
+  setupPyBuildFlags = [ "--mpicc=${mpi}/bin/mpicc" ];
 
   nativeBuildInputs = [ mpi openssh ];
 

@@ -1,13 +1,5 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, libnotify
-, python3
-, wrapGAppsHook
-}:
+{ lib, autoreconfHook, fetchFromGitHub, glib, gobject-introspection, intltool
+, libnotify, python3, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
@@ -26,17 +18,10 @@ python3.pkgs.buildPythonApplication rec {
     intltoolize -f
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gobject-introspection
-    intltool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook gobject-introspection intltool wrapGAppsHook ];
 
-  buildInputs = [
-    glib
-    libnotify
-  ];
+  buildInputs = [ glib libnotify ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
@@ -49,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

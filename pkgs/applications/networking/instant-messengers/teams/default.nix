@@ -1,27 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, dpkg
-, atomEnv
-, libuuid
-, libappindicator-gtk3
-, pulseaudio
-, at-spi2-atk
-, coreutils
-, gawk
-, xdg-utils
-, systemd
-, nodePackages
-, enableRectOverlay ? false }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, wrapGAppsHook, dpkg, atomEnv, libuuid
+, libappindicator-gtk3, pulseaudio, at-spi2-atk, coreutils, gawk, xdg-utils
+, systemd, nodePackages, enableRectOverlay ? false }:
 
 stdenv.mkDerivation rec {
   pname = "teams";
   version = "1.4.00.26453";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
+    url =
+      "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
     sha256 = "0ndqk893l17m42hf5fiiv6mka0v7v8r54kblvb67jsxajdvva5gf";
   };
 
@@ -29,23 +16,16 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "dpkg -x $curSrc .";
 
-  buildInputs = atomEnv.packages ++ [
-    libuuid
-    at-spi2-atk
-  ];
+  buildInputs = atomEnv.packages ++ [ libuuid at-spi2-atk ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    pulseaudio
-    libappindicator-gtk3
-  ];
+  runtimeDependencies =
+    [ (lib.getLib systemd) pulseaudio libappindicator-gtk3 ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
     gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
     gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
   '';
-
 
   buildPhase = ''
     runHook preBuild
@@ -76,9 +56,9 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/teams/teams $out/bin/
 
     ${lib.optionalString (!enableRectOverlay) ''
-    # Work-around screen sharing bug
-    # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
-    rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+      # Work-around screen sharing bug
+      # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
+      rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
     ''}
 
     runHook postInstall

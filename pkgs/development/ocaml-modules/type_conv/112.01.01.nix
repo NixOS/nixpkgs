@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildOcaml}:
+{ lib, fetchurl, buildOcaml }:
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";

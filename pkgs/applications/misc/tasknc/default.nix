@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5
+, taskwarrior }:
 
 stdenv.mkDerivation rec {
   version = "2020-12-17";
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/lharding/tasknc/commit/f74ea0641e9bf287acf22fac9f6eeea571b01800.patch";
+      url =
+        "https://github.com/lharding/tasknc/commit/f74ea0641e9bf287acf22fac9f6eeea571b01800.patch";
       sha256 = "18a90zj85sw2zfnfcv055nvi0lx3h8lcgsyabdfk94ksn78pygrv";
     })
   ];
@@ -41,7 +43,6 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior}/bin
   '';
-
 
   meta = with lib; {
     homepage = "https://github.com/lharding/tasknc";

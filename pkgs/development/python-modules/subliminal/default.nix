@@ -1,26 +1,6 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, guessit
-, babelfish
-, enzyme
-, beautifulsoup4
-, requests
-, click
-, dogpile-cache
-, stevedore
-, chardet
-, pysrt
-, six
-, appdirs
-, rarfile
-, pytz
-, sympy
-, vcrpy
-, pytest
-, pytest-flakes
-, pytest-cov
-, pytest-runner
+{ lib, fetchPypi, buildPythonPackage, guessit, babelfish, enzyme, beautifulsoup4
+, requests, click, dogpile-cache, stevedore, chardet, pysrt, six, appdirs
+, rarfile, pytz, sympy, vcrpy, pytest, pytest-flakes, pytest-cov, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -33,15 +13,23 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile-cache stevedore chardet pysrt six
-    appdirs rarfile pytz
+    guessit
+    babelfish
+    enzyme
+    beautifulsoup4
+    requests
+    click
+    dogpile-cache
+    stevedore
+    chardet
+    pysrt
+    six
+    appdirs
+    rarfile
+    pytz
   ];
 
-  checkInputs = [
-    sympy vcrpy pytest pytest-flakes
-    pytest-cov pytest-runner
-  ];
+  checkInputs = [ sympy vcrpy pytest pytest-flakes pytest-cov pytest-runner ];
 
   # https://github.com/Diaoul/subliminal/pull/963
   doCheck = false;

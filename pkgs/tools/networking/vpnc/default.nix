@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
+{ lib, stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk
+, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "vpnc";
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ nettools ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [libgcrypt perl openssl ];
+  buildInputs = [ libgcrypt perl openssl ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -58,7 +59,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.unix-ag.uni-kl.de/~massar/vpnc/";
-    description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
+    description =
+      "Virtual private network (VPN) client for Cisco's VPN concentrators";
     license = lib.licenses.gpl2Plus;
 
     platforms = lib.platforms.linux;

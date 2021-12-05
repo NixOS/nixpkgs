@@ -1,18 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pytest-runner
-, pytest
-, pytest-asyncio
-, twisted
-, treq
-, tornado
-, aiohttp
-, uritemplate
-, pyjwt
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools, pytest-runner
+, pytest, pytest-asyncio, twisted, treq, tornado, aiohttp, uritemplate, pyjwt }:
 
 buildPythonPackage rec {
   pname = "gidgethub";
@@ -27,10 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools pytest-runner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
-  propagatedBuildInputs = [
-    uritemplate
-    pyjwt
-  ];
+  propagatedBuildInputs = [ uritemplate pyjwt ];
 
   postPatch = ''
     substituteInPlace setup.py \

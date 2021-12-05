@@ -12,10 +12,7 @@ buildPythonPackage rec {
     sha256 = "15ginv4gzxrx77n7517xnvf2jcpqc6ran12s951hc85zlr8nqrpx";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    jeepney
-  ];
+  propagatedBuildInputs = [ cryptography jeepney ];
 
   # Needs a D-Bus Sesison
   doCheck = false;

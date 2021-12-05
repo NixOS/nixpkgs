@@ -1,17 +1,5 @@
-{ stdenv
-, fetchFromGitHub
-, pkg-config
-, which
-, gtk2
-, gtk3
-, qt4
-, qt5
-, libXtst
-, lib
-, libchewing
-, unixtools
-, anthy
-}:
+{ stdenv, fetchFromGitHub, pkg-config, which, gtk2, gtk3, qt4, qt5, libXtst, lib
+, libchewing, unixtools, anthy }:
 
 stdenv.mkDerivation rec {
   pname = "hime";
@@ -34,7 +22,6 @@ stdenv.mkDerivation rec {
     hime_rpath=$(patchelf --print-rpath $out/bin/hime)
     patchelf --set-rpath $out/lib/hime:$hime_rpath $out/bin/hime
   '';
-
 
   meta = with lib; {
     homepage = "http://hime-ime.github.io/";

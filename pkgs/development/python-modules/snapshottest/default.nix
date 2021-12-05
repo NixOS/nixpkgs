@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastdiff
-, six
-, termcolor
-, pytestCheckHook
-, pytest-cov
-, django
-}:
+{ lib, buildPythonPackage, fetchPypi, fastdiff, six, termcolor, pytestCheckHook
+, pytest-cov, django }:
 
 buildPythonPackage rec {
   pname = "snapshottest";

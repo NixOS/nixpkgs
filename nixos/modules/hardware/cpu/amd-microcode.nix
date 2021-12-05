@@ -18,7 +18,6 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.hardware.cpu.amd.updateMicrocode {

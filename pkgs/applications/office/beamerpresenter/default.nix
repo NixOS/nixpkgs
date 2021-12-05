@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles,
-  qmake, qtbase, qtmultimedia, wrapQtAppsHook,
-  poppler, mupdf, freetype, jbig2dec, openjpeg, gumbo,
-  renderer ? "mupdf" }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, qmake, qtbase, qtmultimedia
+, wrapQtAppsHook, poppler, mupdf, freetype, jbig2dec, openjpeg, gumbo
+, renderer ? "mupdf" }:
 
 let
   renderers = {
@@ -9,9 +8,7 @@ let
     poppler.buildInputs = [ poppler ];
   };
 
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "beamerpresenter";
   version = "0.2.1";
 
@@ -38,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modular multi screen pdf presentation software respecting your window manager";
+    description =
+      "Modular multi screen pdf presentation software respecting your window manager";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
     license = licenses.agpl3Plus;
     platforms = platforms.all;

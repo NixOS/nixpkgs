@@ -1,23 +1,7 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, karchive
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kdeclarative
-, ki18n
-, kiconthemes
-, kio
-, plasma-framework
-, kservice
-, ktexteditor
-, kwidgetsaddons
-, kdoctools
-, qtbase
-}:
+{ mkDerivation, lib, extra-cmake-modules, karchive, kcompletion, kconfig
+, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative, ki18n, kiconthemes
+, kio, plasma-framework, kservice, ktexteditor, kwidgetsaddons, kdoctools
+, qtbase }:
 
 mkDerivation {
   name = "plasma-sdk";

@@ -9,7 +9,8 @@ bundlerEnv rec {
   gemdir = ./.;
 
   meta = with lib; {
-    description = "MPD web client to listen to radio, written in React and Sinatra";
+    description =
+      "MPD web client to listen to radio, written in React and Sinatra";
     homepage = "https://github.com/rccavalcanti/pifi-radio";
     license = with licenses; gpl3Only;
     maintainers = with maintainers; [ kmein ];

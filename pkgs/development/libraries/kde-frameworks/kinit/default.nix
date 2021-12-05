@@ -1,18 +1,13 @@
-{
-  mkDerivation, lib, writeScript,
-  extra-cmake-modules, kdoctools,
-  kconfig, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework
-}:
+{ mkDerivation, lib, writeScript, extra-cmake-modules, kdoctools, kconfig
+, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework }:
 
-let inherit (lib) getLib; in
+let inherit (lib) getLib;
 
-mkDerivation {
+in mkDerivation {
   name = "kinit";
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [
-    kconfig kcrash ki18n kio kservice kwindowsystem
-  ];
+  buildInputs = [ kconfig kcrash ki18n kio kservice kwindowsystem ];
   patches = [
     ./0001-kinit-libpath.patch
     ./0002-start_kdeinit-path.patch
@@ -22,7 +17,10 @@ mkDerivation {
   CXXFLAGS = [
     ''-DNIXPKGS_KF5_KIOCORE=\"${getLib kio}/lib/libKF5KIOCore.so.5\"''
     ''-DNIXPKGS_KF5_PARTS=\"${getLib kparts}/lib/libKF5Parts.so.5\"''
-    ''-DNIXPKGS_KF5_PLASMA=\"${getLib plasma-framework}/lib/libKF5Plasma.so.5\"''
+    ''
+      -DNIXPKGS_KF5_PLASMA=\"${
+        getLib plasma-framework
+      }/lib/libKF5Plasma.so.5\"''
   ];
   setupHook = writeScript "setup-hook.sh" ''
     kinitFixupOutputHook() {

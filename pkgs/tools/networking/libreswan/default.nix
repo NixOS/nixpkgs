@@ -1,46 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, nixosTests
-, pkg-config
-, systemd
-, gmp
-, unbound
-, bison
-, flex
-, pam
-, libevent
-, libcap_ng
-, curl
-, nspr
-, bash
-, iproute2
-, iptables
-, procps
-, coreutils
-, gnused
-, gawk
-, nss
-, which
-, python3
-, libselinux
-, ldns
-, xmlto
-, docbook_xml_dtd_412
-, docbook_xsl
-, findXMLCatalogs
-}:
+{ lib, stdenv, fetchurl, nixosTests, pkg-config, systemd, gmp, unbound, bison
+, flex, pam, libevent, libcap_ng, curl, nspr, bash, iproute2, iptables, procps
+, coreutils, gnused, gawk, nss, which, python3, libselinux, ldns, xmlto
+, docbook_xml_dtd_412, docbook_xsl, findXMLCatalogs }:
 
 let
   # Tools needed by ipsec scripts
   binPath = lib.makeBinPath [
-    iproute2 iptables procps
-    coreutils gnused gawk
-    nss.tools which
+    iproute2
+    iptables
+    procps
+    coreutils
+    gnused
+    gawk
+    nss.tools
+    which
   ];
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "libreswan";
   version = "4.5";
 
@@ -62,11 +38,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd coreutils
-    gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    systemd
+    coreutils
+    gnused
+    gawk
+    gmp
+    unbound
+    pam
+    libevent
+    libcap_ng
+    curl
+    nspr
+    nss
+    ldns
     # needed to patch shebangs
-    python3 bash
+    python3
+    bash
   ] ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
@@ -110,10 +97,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Hack to make install work
-  installFlags = [
-    "FINALVARDIR=\${out}/var"
-    "FINALSYSCONFDIR=\${out}/etc"
-  ];
+  installFlags = [ "FINALVARDIR=\${out}/var" "FINALSYSCONFDIR=\${out}/etc" ];
 
   postInstall = ''
     # Install examples directory (needed for letsencrypt)
@@ -130,9 +114,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libreswan.org";
-    description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
+    description =
+      "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
-    license = with licenses; [ gpl2Plus mpl20 ] ;
+    license = with licenses; [ gpl2Plus mpl20 ];
     maintainers = with maintainers; [ afranchuk rnhmjoj ];
   };
 }

@@ -14,22 +14,27 @@ stdenv.mkDerivation rec {
 
   # Patches coming from debian package
   # https://packages.debian.org/source/sid/libs/libmatheval
-  patches = [ (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/002-skip-docs.patch";
-                sha256 = "1nnkk9aw4jj6nql46zhwq6vx74zrmr1xq5ix0xyvpawhabhgjg62";
-              } )
-              (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/003-guile2.0.patch";
-                sha256 = "1xgfw4finfvr20kjbpr4yl2djxmyr4lmvfa11pxirfvhrdi602qj";
-               } )
-              (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/disable_coth_test.patch";
-                sha256 = "0bai8jrd5azfz5afmjixlvifk34liq58qb7p9kb45k6kc1fqqxzm";
-               } )
-            ];
+  patches = [
+    (fetchpatch {
+      url =
+        "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/002-skip-docs.patch";
+      sha256 = "1nnkk9aw4jj6nql46zhwq6vx74zrmr1xq5ix0xyvpawhabhgjg62";
+    })
+    (fetchpatch {
+      url =
+        "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/003-guile2.0.patch";
+      sha256 = "1xgfw4finfvr20kjbpr4yl2djxmyr4lmvfa11pxirfvhrdi602qj";
+    })
+    (fetchpatch {
+      url =
+        "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/disable_coth_test.patch";
+      sha256 = "0bai8jrd5azfz5afmjixlvifk34liq58qb7p9kb45k6kc1fqqxzm";
+    })
+  ];
 
   meta = {
-    description = "A library to parse and evaluate symbolic expressions input as text";
+    description =
+      "A library to parse and evaluate symbolic expressions input as text";
     longDescription = ''
       GNU libmatheval is a library (callable from C and Fortran) to parse and evaluate symbolic
       expressions input as text. It supports expressions in any number of variables of arbitrary

@@ -16,10 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite ];
   doCheck = true;
 
-  cmakeFlags = [
-    "-DSQLITECPP_INTERNAL_SQLITE=OFF"
-    "-DSQLITECPP_BUILD_TESTS=ON"
-  ];
+  cmakeFlags =
+    [ "-DSQLITECPP_INTERNAL_SQLITE=OFF" "-DSQLITECPP_BUILD_TESTS=ON" ];
 
   meta = with lib; {
     homepage = "https://srombauts.github.io/SQLiteCpp/";

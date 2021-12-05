@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, gnome-shell
-, gnome-themes-extra
-, libxml2
-, sassc
-, util-linux
-}:
+{ lib, stdenv, fetchFromGitHub, glib, gnome-shell, gnome-themes-extra, libxml2
+, sassc, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
@@ -20,13 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fpq6xw2xq0fkmpg1la9q26nfbqhf0212s95v25256miz55p67ha";
   };
 
-  nativeBuildInputs = [
-    glib
-    gnome-shell
-    libxml2
-    sassc
-    util-linux
-  ];
+  nativeBuildInputs = [ glib gnome-shell libxml2 sassc util-linux ];
 
   buildInputs = [
     gnome-themes-extra # adwaita engine for Gtk2

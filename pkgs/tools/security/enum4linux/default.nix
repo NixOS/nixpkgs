@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, samba
-, perl
-, openldap
-}:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, samba, perl, openldap }:
 
 stdenv.mkDerivation rec {
   pname = "enum4linux";
@@ -20,15 +13,9 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    openldap
-    perl
-    samba
-  ];
+  buildInputs = [ openldap perl samba ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -39,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool for enumerating information from Windows and Samba systems";
+    description =
+      "A tool for enumerating information from Windows and Samba systems";
     homepage = "https://labs.portcullis.co.uk/tools/enum4linux/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fishi0x01 ];

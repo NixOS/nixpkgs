@@ -1,27 +1,20 @@
-{ bison
-, cacert
-, fetchFromGitHub
-, flex
-, php
-, lib, stdenv
-, installShellFiles
-}:
+{ bison, cacert, fetchFromGitHub, flex, php, lib, stdenv, installShellFiles }:
 
 # Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
 # invoked and complains about it being an unknown toolset. We could use `makeWrapper`, but
 # then we’d need to still craft a script that does the `php libexec/arcanist/bin/...` dance
 # anyway... So just do everything at once.
-let makeArcWrapper = toolset: ''
-  cat << WRAPPER > $out/bin/${toolset}
-  #!$shell -e
-  export PATH='${php}/bin/'\''${PATH:+':'}\$PATH
-  exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
-  WRAPPER
-  chmod +x $out/bin/${toolset}
-'';
+let
+  makeArcWrapper = toolset: ''
+    cat << WRAPPER > $out/bin/${toolset}
+    #!$shell -e
+    export PATH='${php}/bin/'\''${PATH:+':'}\$PATH
+    exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
+    WRAPPER
+    chmod +x $out/bin/${toolset}
+  '';
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "arcanist";
   version = "20200711";
 

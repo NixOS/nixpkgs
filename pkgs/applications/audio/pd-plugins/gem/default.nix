@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, puredata
-, libGL
-, libGLU
-, glew
-, freeglut
-, libv4l
-, libX11
-, file
- }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, puredata
+, libGL, libGLU, glew, freeglut, libv4l, libX11, file }:
 
 stdenv.mkDerivation rec {
   pname = "gem-unstable";
@@ -24,21 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0k5sq128wxi2qhaidspkw310pdgysxs47agv09pkjgvch2n4d5dq";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    file
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
 
-  buildInputs = [
-    puredata
-    libGL
-    libGLU
-    glew
-    freeglut
-    libv4l
-    libX11
-  ];
+  buildInputs = [ puredata libGL libGLU glew freeglut libv4l libX11 ];
 
   meta = {
     description = "Graphics Environment for Multimedia";

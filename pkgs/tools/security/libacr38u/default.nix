@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1, IOKit }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite, libusb-compat-0_1, IOKit }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
   pname = "libacr38u";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/a/acr38/acr38_1.7.11.orig.tar.bz2";
+    url =
+      "http://http.debian.net/debian/pool/main/a/acr38/acr38_1.7.11.orig.tar.bz2";
     sha256 = "0lxbq17y51cablx6bcd89klwnyigvkz0rsf9nps1a97ggnllyzkx";
   };
 

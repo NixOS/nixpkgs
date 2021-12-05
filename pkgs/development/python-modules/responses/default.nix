@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, cookies
-, fetchPypi
-, mock
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-, urllib3
-}:
+{ lib, buildPythonPackage, cookies, fetchPypi, mock, pytest-localserver
+, pytestCheckHook, pythonOlder, requests, six, urllib3 }:
 
 buildPythonPackage rec {
   pname = "responses";
@@ -20,20 +10,11 @@ buildPythonPackage rec {
     sha256 = "sha256-hmdXmH0ZYqqQjZyLMYVzn679cqNZ6VRZ3gwuTlNpybI=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    urllib3
-    six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    cookies
-  ] ++ lib.optionals (pythonOlder "3.3") [
-    mock
-  ];
+  propagatedBuildInputs = [ requests urllib3 six ]
+    ++ lib.optionals (pythonOlder "3.4") [ cookies ]
+    ++ lib.optionals (pythonOlder "3.3") [ mock ];
 
-  checkInputs = [
-    pytest-localserver
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-localserver pytestCheckHook ];
 
   pythonImportsCheck = [ "responses" ];
 

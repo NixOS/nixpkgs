@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, fetchpatch
-, setuptools-scm
-, substituteAll
-, cmake
-, boost
-, gmp
-, pybind11
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, fetchpatch
+, setuptools-scm, substituteAll, cmake, boost, gmp, pybind11, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "blspy";
@@ -44,7 +33,8 @@ buildPythonPackage rec {
 
     # avoid dynamic linking error at import time
     (fetchpatch {
-      url = "https://github.com/Chia-Network/bls-signatures/pull/287/commits/797241e9dae1c164c862cbdb38c865d4b124a601.patch";
+      url =
+        "https://github.com/Chia-Network/bls-signatures/pull/287/commits/797241e9dae1c164c862cbdb38c865d4b124a601.patch";
       sha256 = "sha256-tlc4aA75gUxt5OaSNZqIlO//PXjmddVgVLYuVEFNmkE=";
     })
   ];
@@ -53,9 +43,7 @@ buildPythonPackage rec {
 
   buildInputs = [ boost gmp.static pybind11 ];
 
-  pythonImportsCheck = [
-    "blspy"
-  ];
+  pythonImportsCheck = [ "blspy" ];
 
   # Note: upstream testsuite is just a single test.py script outside of any framework
   doCheck = false;

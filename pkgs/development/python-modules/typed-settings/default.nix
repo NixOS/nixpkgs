@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptoolsBuildHook
-, attrs
-, cattrs
-, toml
-, pytestCheckHook
-, click
-}:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, setuptoolsBuildHook, attrs
+, cattrs, toml, pytestCheckHook, click }:
 
 buildPythonPackage rec {
   pname = "typed-settings";
@@ -21,24 +12,15 @@ buildPythonPackage rec {
     sha256 = "sha256-gcyOeUyRAwU5s+XoQO/yM0tx7QHjDsBeyoe5HRZHtIs=";
   };
 
-  nativeBuildInputs = [
-    setuptoolsBuildHook
-  ];
+  nativeBuildInputs = [ setuptoolsBuildHook ];
 
-  propagatedBuildInputs = [
-    attrs
-    cattrs
-    toml
-  ];
+  propagatedBuildInputs = [ attrs cattrs toml ];
 
   preCheck = ''
     pushd tests
   '';
 
-  checkInputs = [
-    click
-    pytestCheckHook
-  ];
+  checkInputs = [ click pytestCheckHook ];
 
   disabledTests = [
     # mismatches in click help output

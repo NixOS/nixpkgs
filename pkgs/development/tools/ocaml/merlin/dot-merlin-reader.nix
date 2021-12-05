@@ -9,7 +9,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/dot-merlin-reader-v${version}.tbz";
+    url =
+      "https://github.com/ocaml/merlin/releases/download/v${version}/dot-merlin-reader-v${version}.tbz";
     sha256 = "14a36d6fb8646a5df4530420a7861722f1a4ee04753717947305e3676031e7cd";
   };
 

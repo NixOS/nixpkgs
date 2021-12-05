@@ -1,22 +1,11 @@
-{ lib
-, callPackage
+{ lib, callPackage
 
 , fetchFromGitLab
 
-, appstream
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
+, appstream, gobject-introspection, meson, ninja, pkg-config, wrapGAppsHook
 
-, glib
-, gtk3
-, libhandy
-, listparser ? callPackage ./listparser.nix { }
-, webkitgtk
-, python3
-}:
+, glib, gtk3, libhandy, listparser ? callPackage ./listparser.nix { }, webkitgtk
+, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
@@ -42,12 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    libhandy
-    webkitgtk
-  ];
+  buildInputs = [ glib gtk3 libhandy webkitgtk ];
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
@@ -73,17 +57,13 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru = {
-    inherit listparser;
-  };
+  passthru = { inherit listparser; };
 
   meta = with lib; {
     description = "An RSS/Atom feed reader for GNOME";
     homepage = "https://gitlab.gnome.org/World/gfeeds";
     license = licenses.gpl3Plus;
-    maintainers = [
-      maintainers.pbogdan
-    ];
+    maintainers = [ maintainers.pbogdan ];
     platforms = platforms.linux;
   };
 }

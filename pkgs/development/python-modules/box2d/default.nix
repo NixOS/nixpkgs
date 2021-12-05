@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, swig2
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchPypi, swig2, isPy3k }:
 
 buildPythonPackage rec {
   pname = "Box2D";

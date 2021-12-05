@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lvc/vtable-dumper";
-    description = "A tool to list content of virtual tables in a C++ shared library";
+    description =
+      "A tool to list content of virtual tables in a C++ shared library";
     license = licenses.lgpl21;
     maintainers = [ maintainers.bhipple ];
     platforms = platforms.all;

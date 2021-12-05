@@ -1,4 +1,5 @@
-{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host
+, libusb1, procps }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
@@ -20,23 +21,14 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs =
-    with python3Packages; [
-      click
-      cryptography
-      pyscard
-      pyusb
-      pyopenssl
-      six
-      fido2
-    ] ++ [
-      libu2f-host
-      libusb1
-      yubikey-personalization
-    ];
+  propagatedBuildInputs = with python3Packages;
+    [ click cryptography pyscard pyusb pyopenssl six fido2 ]
+    ++ [ libu2f-host libusb1 yubikey-personalization ];
 
   makeWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
     (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
   ];
 
@@ -56,7 +48,8 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    description = "Command line tool for configuring any YubiKey over all USB transports";
+    description =
+      "Command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;

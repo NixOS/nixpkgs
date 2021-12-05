@@ -1,13 +1,15 @@
-{ lib, symlinkJoin, glimpse, makeWrapper, glimpsePlugins, gnome, plugins ? null }:
+{ lib, symlinkJoin, glimpse, makeWrapper, glimpsePlugins, gnome, plugins ? null
+}:
 
 let
-  allPlugins = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues glimpsePlugins);
+  allPlugins =
+    lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false)
+    (lib.attrValues glimpsePlugins);
   selectedPlugins = if plugins == null then allPlugins else plugins;
   extraArgs = map (x: x.wrapArgs or "") selectedPlugins;
   versionBranch = lib.versions.majorMinor glimpse.version;
 
-in
-symlinkJoin {
+in symlinkJoin {
   name = "glimpse-with-plugins-${glimpse.version}";
 
   paths = [ glimpse ] ++ selectedPlugins;

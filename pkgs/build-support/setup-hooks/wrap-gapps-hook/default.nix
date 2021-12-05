@@ -1,16 +1,6 @@
-{ stdenv
-, lib
-, makeSetupHook
-, makeWrapper
-, gobject-introspection
-, isGraphical ? true
-, gtk3
-, librsvg
-, dconf
-, callPackage
-, wrapGAppsHook
-, writeTextFile
-}:
+{ stdenv, lib, makeSetupHook, makeWrapper, gobject-introspection
+, isGraphical ? true, gtk3, librsvg, dconf, callPackage, wrapGAppsHook
+, writeTextFile }:
 
 makeSetupHook {
   deps = lib.optionals (!stdenv.isDarwin) [
@@ -55,14 +45,13 @@ makeSetupHook {
       };
 
       # The wrapper for executable files should add path to dconf GIO module.
-      basic-contains-dconf = let
-        tested = basic;
-      in testLib.runTest "basic-contains-dconf" (
-        testLib.skip stdenv.isDarwin ''
-          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
-          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
-        ''
-      );
+      basic-contains-dconf = let tested = basic;
+      in testLib.runTest "basic-contains-dconf" (testLib.skip stdenv.isDarwin ''
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo"
+        "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar"
+        "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
+      '');
 
       # Simple derivation containing a gobject-introspection typelib.
       typelib-Mahjong = stdenv.mkDerivation {
@@ -79,14 +68,9 @@ makeSetupHook {
 
         src = sample-project;
 
-        nativeBuildInputs = [
-          gobject-introspection
-          wrapGAppsHook
-        ];
+        nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
-        buildInputs = [
-          typelib-Mahjong
-        ];
+        buildInputs = [ typelib-Mahjong ];
 
         installFlags = [ "bin-foo" "libexec-bar" ];
       };
@@ -95,11 +79,12 @@ makeSetupHook {
       # which should populate GI_TYPELIB_PATH variable with paths
       # to typelibs among the derivation’s dependencies.
       # The resulting GI_TYPELIB_PATH should be picked up by the wrapper.
-      typelib-user-has-gi-typelib-path = let
-        tested = typelib-user;
+      typelib-user-has-gi-typelib-path = let tested = typelib-user;
       in testLib.runTest "typelib-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo"
+        "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar"
+        "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
       '';
 
       # Simple derivation containing a gobject-introspection typelib in lib output.
@@ -110,9 +95,7 @@ makeSetupHook {
 
         src = sample-project;
 
-        makeFlags = [
-          "LIBDIR=${placeholder "lib"}/lib"
-        ];
+        makeFlags = [ "LIBDIR=${placeholder "lib"}/lib" ];
 
         installFlags = [ "typelib-Bechamel" ];
       };
@@ -123,14 +106,9 @@ makeSetupHook {
 
         src = sample-project;
 
-        nativeBuildInputs = [
-          gobject-introspection
-          wrapGAppsHook
-        ];
+        nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
-        buildInputs = [
-          typelib-Bechamel
-        ];
+        buildInputs = [ typelib-Bechamel ];
 
         installFlags = [ "bin-foo" "libexec-bar" ];
       };
@@ -140,12 +118,14 @@ makeSetupHook {
       # to typelibs among the derivation’s dependencies,
       # even when they are not in default output.
       # The resulting GI_TYPELIB_PATH should be picked up by the wrapper.
-      typelib-multiout-user-has-gi-typelib-path = let
-        tested = typelib-multiout-user;
-      in testLib.runTest "typelib-multiout-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
-      '';
+      typelib-multiout-user-has-gi-typelib-path =
+        let tested = typelib-multiout-user;
+        in testLib.runTest "typelib-multiout-user-has-gi-typelib-path" ''
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo"
+          "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar"
+          "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
+        '';
 
       # Simple derivation that contains a typelib as well as a program using it.
       typelib-self-user = stdenv.mkDerivation {
@@ -153,10 +133,7 @@ makeSetupHook {
 
         src = sample-project;
 
-        nativeBuildInputs = [
-          gobject-introspection
-          wrapGAppsHook
-        ];
+        nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
         installFlags = [ "typelib-Cow" "bin-foo" "libexec-bar" ];
       };
@@ -166,11 +143,12 @@ makeSetupHook {
       # to GI_TYPELIB_PATH variable.
       # The resulting GI_TYPELIB_PATH should be picked up by the wrapper.
       # https://github.com/NixOS/nixpkgs/issues/85515
-      typelib-self-user-has-gi-typelib-path = let
-        tested = typelib-self-user;
+      typelib-self-user-has-gi-typelib-path = let tested = typelib-self-user;
       in testLib.runTest "typelib-self-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo"
+        "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar"
+        "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
       '';
     };
   };

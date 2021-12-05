@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Bash script to tail Kubernetes logs from multiple pods at the same time";
+    description =
+      "Bash script to tail Kubernetes logs from multiple pods at the same time";
     longDescription = ''
       Bash script that enables you to aggregate (tail/follow) logs from
       multiple pods into one stream. This is the same as running "kubectl logs

@@ -1,12 +1,5 @@
-{ pname
-, version
-, homepage
-, lib
-, common-updater-scripts
-, genericUpdater
-, writers
-, jq
-}:
+{ pname, version, homepage, lib, common-updater-scripts, genericUpdater, writers
+, jq }:
 
 let
   updater = genericUpdater {

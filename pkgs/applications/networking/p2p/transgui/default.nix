@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus,
-libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus
+, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
@@ -14,15 +14,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    fpc lazarus stdenv.cc
-    libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
+    fpc
+    lazarus
+    stdenv.cc
+    libX11
+    glib
+    gtk2
+    gdk-pixbuf
+    pango
+    atk
+    cairo
+    openssl
   ];
 
-  NIX_LDFLAGS = "
-    -L${stdenv.cc.cc.lib}/lib
-    -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0
-    -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo -lc -lcrypto
-  ";
+  NIX_LDFLAGS =
+    "\n    -L${stdenv.cc.cc.lib}/lib\n    -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0\n    -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo -lc -lcrypto\n  ";
 
   prePatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
@@ -33,11 +39,7 @@ stdenv.mkDerivation rec {
     lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
   '';
 
-  makeFlags = [
-    "FPC=fpc"
-    "PP=fpc"
-    "INSTALL_PREFIX=$(out)"
-  ];
+  makeFlags = [ "FPC=fpc" "PP=fpc" "INSTALL_PREFIX=$(out)" ];
 
   LCL_PLATFORM = "gtk2";
 
@@ -50,11 +52,16 @@ stdenv.mkDerivation rec {
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
     categories = lib.concatStringsSep ";" [
-      "Application" "Network" "FileTransfer" "P2P" "GTK"
+      "Application"
+      "Network"
+      "FileTransfer"
+      "P2P"
+      "GTK"
     ];
     startupNotify = "true";
     mimeType = lib.concatStringsSep ";" [
-      "application/x-bittorrent" "x-scheme-handler/magnet"
+      "application/x-bittorrent"
+      "x-scheme-handler/magnet"
     ];
   };
 
@@ -68,7 +75,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A cross platform front-end for the Transmission Bit-Torrent client";
+    description =
+      "A cross platform front-end for the Transmission Bit-Torrent client";
     homepage = "https://sourceforge.net/p/transgui";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ramkromberg ];

@@ -1,6 +1,4 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "markdown-anki-decks";
@@ -13,9 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "R6T8KOHMb1Neg/RG5JQl9+7LxOkAoZL0L5wvVaqm9O0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     genanki

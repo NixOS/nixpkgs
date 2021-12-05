@@ -1,9 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python2
-, unstableGitUpdater
-}:
+{ stdenv, lib, fetchFromGitHub, python2, unstableGitUpdater }:
 stdenv.mkDerivation rec {
   pname = "klipper";
   version = "unstable-2021-11-10";
@@ -21,9 +16,10 @@ stdenv.mkDerivation rec {
   # Python 2 for the foreseeable future.
   # c.f. https://github.com/KevinOConnor/klipper/pull/3278
   # NB: This is needed for the postBuild step
-  nativeBuildInputs = [ (python2.withPackages ( p: with p; [ cffi ] )) ];
+  nativeBuildInputs = [ (python2.withPackages (p: with p; [ cffi ])) ];
 
-  buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 ])) ];
+  buildInputs =
+    [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 ])) ];
 
   # we need to run this to prebuild the chelper.
   postBuild = "python2 ./chelper/__init__.py";

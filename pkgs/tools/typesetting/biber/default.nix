@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
+{ lib, stdenv, fetchurl, fetchpatch, perlPackages, shortenPerlShebang, texlive
+}:
 
 let
-  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+  biberSource =
+    lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
 
   # perl 5.32.0 ships with U:C 1.27
   UnicodeCollate_1_29 = perlPackages.buildPerlPackage rec {
@@ -16,22 +18,55 @@ let
       license = perlPackages.perl.meta.license;
     };
   };
-in
 
-perlPackages.buildPerlModule {
+in perlPackages.buildPerlModule {
   pname = "biber";
   inherit (biberSource) version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
 
   buildInputs = with perlPackages; [
-    autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
-    DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
-    DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-    ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
-    ListMoreUtils MozillaCA ParseRecDescent IOString ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate_1_29 UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
+    autovivification
+    BusinessISBN
+    BusinessISMN
+    BusinessISSN
+    ConfigAutoConf
+    DataCompare
+    DataDump
+    DateSimple
+    EncodeEUCJPASCII
+    EncodeHanExtra
+    EncodeJIS2K
+    DateTime
+    DateTimeFormatBuilder
+    DateTimeCalendarJulian
+    ExtUtilsLibBuilder
+    FileSlurper
+    FileWhich
+    IPCRun3
+    LogLog4perl
+    LWPProtocolHttps
+    ListAllUtils
+    ListMoreUtils
+    MozillaCA
+    ParseRecDescent
+    IOString
+    ReadonlyXS
+    RegexpCommon
+    TextBibTeX
+    UnicodeCollate_1_29
+    UnicodeLineBreak
+    URI
+    XMLLibXMLSimple
+    XMLLibXSLT
+    XMLWriter
+    ClassAccessor
+    TextCSV
+    TextCSV_XS
+    TextRoman
+    DataUniqid
+    LinguaTranslit
+    SortKey
     TestDifferences
     PerlIOutf8_strict
   ];

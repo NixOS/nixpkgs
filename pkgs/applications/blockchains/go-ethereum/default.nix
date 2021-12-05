@@ -2,10 +2,7 @@
 
 let
   # A list of binaries to put into separate outputs
-  bins = [
-    "geth"
-    "clef"
-  ];
+  bins = [ "geth" "clef" ];
 
 in buildGoModule rec {
   pname = "go-ethereum";
@@ -26,9 +23,9 @@ in buildGoModule rec {
   outputs = [ "out" ] ++ bins;
 
   # Move binaries to separate outputs and symlink them back to $out
-  postInstall = lib.concatStringsSep "\n" (
-    builtins.map (bin: "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/") bins
-  );
+  postInstall = lib.concatStringsSep "\n" (builtins.map (bin:
+    "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/")
+    bins);
 
   subPackages = [
     "cmd/abidump"
@@ -48,8 +45,7 @@ in buildGoModule rec {
   ];
 
   # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";

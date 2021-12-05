@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.207";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
+    url =
+      "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
     sha256 = "0k9dv4s44k1khrhr6acsb2sqr5iq3d03ync82nzan5j7mckzs76v";
   };
 
@@ -19,12 +20,8 @@ stdenv.mkDerivation rec {
     dpkg-deb -x $src .
     runHook postUnpack
   '';
-  installPhase = "
-    runHook preInstall
-    substituteInPlace usr/bin/bdf2psf --replace /usr/bin/perl ${perl}/bin/perl
-    mv usr $out
-    runHook postInstall
-  ";
+  installPhase =
+    "\n    runHook preInstall\n    substituteInPlace usr/bin/bdf2psf --replace /usr/bin/perl ${perl}/bin/perl\n    mv usr $out\n    runHook postInstall\n  ";
 
   meta = with lib; {
     description = "BDF to PSF converter";

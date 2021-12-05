@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost166, opencl-clhpp, ocl-icd }:
+{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost166, opencl-clhpp
+, ocl-icd }:
 
 stdenv.mkDerivation rec {
   pname = "clfft";

@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
-, pytest
-}:
+{ buildPythonPackage, fetchFromGitHub, isPy3k, lib, pytest }:
 
 buildPythonPackage rec {
   pname = "viewstate";
@@ -17,9 +12,7 @@ buildPythonPackage rec {
     sha256 = "15s0n1lhkz0zwi33waqkkjipal3f7s45rxsj1bw89xpr4dj87qx5";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     pytest
@@ -29,8 +22,6 @@ buildPythonPackage rec {
     description = ".NET viewstate decoder";
     homepage = "https://github.com/yuvadm/viewstate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

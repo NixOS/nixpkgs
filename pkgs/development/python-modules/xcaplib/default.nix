@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchdarcs
-, isPy3k
-, eventlib
-, application
-}:
+{ lib, buildPythonPackage, fetchdarcs, isPy3k, eventlib, application }:
 
 buildPythonPackage rec {
   pname = "python-xcaplib";

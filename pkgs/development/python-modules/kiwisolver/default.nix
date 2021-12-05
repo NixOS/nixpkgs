@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, stdenv
-, libcxx
-, cppy
-}:
+{ lib, buildPythonPackage, fetchPypi, stdenv, libcxx, cppy }:
 
 buildPythonPackage rec {
   pname = "kiwisolver";
@@ -15,11 +9,10 @@ buildPythonPackage rec {
     sha256 = "fc4453705b81d03568d5b808ad8f09c77c47534f6ac2e72e733f9ca4714aa75c";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  nativeBuildInputs = [
-    cppy
-  ];
+  nativeBuildInputs = [ cppy ];
 
   # Does not include tests
   doCheck = false;

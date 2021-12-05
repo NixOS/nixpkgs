@@ -12,9 +12,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [
-    uri
-  ];
+  propagatedBuildInputs = [ uri ];
 
   # resto has infinite recursion in their tests
   doCheck = false;

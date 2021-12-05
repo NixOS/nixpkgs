@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libftdi1
-, libusb1
-}:
+{ lib, buildPythonPackage, fetchPypi, libftdi1, libusb1 }:
 
 buildPythonPackage rec {
   pname = "pylibftdi";
@@ -14,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "bb0ec74df292ef884aa37bf1e98fb9df4d338718e1559eebda363317a792123e";
   };
 
-  propagatedBuildInputs = [
-    libftdi1
-    libusb1
-  ];
+  propagatedBuildInputs = [ libftdi1 libusb1 ];
 
   postPatch = ''
     substituteInPlace pylibftdi/driver.py \
@@ -29,7 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://bitbucket.org/codedstructure/pylibftdi/src/default/";
-    description = "Minimal pythonic wrapper to Intra2net's libftdi driver for FTDI's USB devices";
+    description =
+      "Minimal pythonic wrapper to Intra2net's libftdi driver for FTDI's USB devices";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];
   };

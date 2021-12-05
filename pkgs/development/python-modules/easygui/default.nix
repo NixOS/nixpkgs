@@ -13,9 +13,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace README.md README.txt
   '';
 
-  propagatedBuildInputs = [
-    tkinter
-  ];
+  propagatedBuildInputs = [ tkinter ];
 
   doCheck = false; # No tests available
 

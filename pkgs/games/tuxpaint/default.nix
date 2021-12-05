@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
-  cairo, librsvg, gettext, libpaper, fribidi, pkg-config, gperf, imagemagick }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng, cairo
+, librsvg, gettext, libpaper, fribidi, pkg-config, gperf, imagemagick }:
 
 stdenv.mkDerivation rec {
   version = "0.9.24";
@@ -10,13 +10,27 @@ stdenv.mkDerivation rec {
     sha256 = "06m1lg2pikfkmassfvvrbwqffwgixcmjh1li6akaldgkalpmfql7";
   };
 
-  nativeBuildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libpng cairo
-    librsvg gettext libpaper fribidi pkg-config gperf imagemagick ];
+  nativeBuildInputs = [
+    SDL
+    SDL_image
+    SDL_ttf
+    SDL_mixer
+    libpng
+    cairo
+    librsvg
+    gettext
+    libpaper
+    fribidi
+    pkg-config
+    gperf
+    imagemagick
+  ];
   hardeningDisable = [ "format" ];
-  makeFlags = [ "GPERF=${gperf}/bin/gperf"
-                "PREFIX=$$out"
-                "COMPLETIONDIR=$$out/share/bash-completion/completions"
-              ];
+  makeFlags = [
+    "GPERF=${gperf}/bin/gperf"
+    "PREFIX=$$out"
+    "COMPLETIONDIR=$$out/share/bash-completion/completions"
+  ];
 
   patches = [ ./tuxpaint-completion.diff ];
   postPatch = ''
@@ -25,7 +39,8 @@ stdenv.mkDerivation rec {
 
   # stamps
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2014-08-23/tuxpaint-stamps-2014.08.23.tar.gz";
+    url =
+      "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2014-08-23/tuxpaint-stamps-2014.08.23.tar.gz";
     sha256 = "0rhlwrjz44wp269v3rid4p8pi0i615pzifm1ym6va64gn1bms06q";
   };
 

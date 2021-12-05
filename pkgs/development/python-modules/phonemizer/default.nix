@@ -1,14 +1,5 @@
-{ lib
-, substituteAll
-, buildPythonApplication
-, fetchPypi
-, joblib
-, segments
-, attrs
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
-}:
+{ lib, substituteAll, buildPythonApplication, fetchPypi, joblib, segments, attrs
+, espeak-ng, pytestCheckHook, pytest-cov }:
 
 buildPythonApplication rec {
   pname = "phonemizer";
@@ -33,26 +24,17 @@ buildPythonApplication rec {
     ./remove-intertwined-festival-test.patch
   ];
 
-  propagatedBuildInputs = [
-    joblib
-    segments
-    attrs
-  ];
+  propagatedBuildInputs = [ joblib segments attrs ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-  ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
 
   # We tried to package festvial, but were unable to get the backend running,
   # so let's disable related tests.
-  pytestFlagsArray = [
-    "--ignore=test/test_festival.py"
-  ];
+  pytestFlagsArray = [ "--ignore=test/test_festival.py" ];
 
   disabledTests = [
     "test_festival"

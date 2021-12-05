@@ -8,9 +8,7 @@ let
 
   cfg = config.services.lshd;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -36,7 +34,7 @@ in
       };
 
       interfaces = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of network interfaces where listening for connections.
@@ -123,12 +121,11 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.lshd.subsystems = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
+    services.lshd.subsystems = [[ "sftp" "${pkgs.lsh}/sbin/sftp-server" ]];
 
     systemd.services.lshd = {
       description = "GNU lshd SSH2 daemon";
@@ -137,9 +134,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        LD_LIBRARY_PATH = config.system.nssModules.path;
-      };
+      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
 
       preStart = ''
         test -d /etc/lsh || mkdir -m 0755 -p /etc/lsh
@@ -165,25 +160,39 @@ in
         ${lsh}/sbin/lshd --daemonic \
           --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
           -p ${toString portNumber} \
-          ${if interfaces == [] then ""
-            else (concatStrings (map (i: "--interface=\"${i}\"")
-                                     interfaces))} \
+          ${
+            if interfaces == [ ] then
+              ""
+            else
+              (concatStrings (map (i: ''--interface="${i}"'') interfaces))
+          } \
           -h "${hostKey}" \
           ${if !syslog then "--no-syslog" else ""} \
-          ${if passwordAuthentication then "--password" else "--no-password" } \
-          ${if publicKeyAuthentication then "--publickey" else "--no-publickey" } \
-          ${if rootLogin then "--root-login" else "--no-root-login" } \
-          ${if loginShell != null then "--login-shell=\"${loginShell}\"" else "" } \
-          ${if srpKeyExchange then "--srp-keyexchange" else "--no-srp-keyexchange" } \
-          ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
-          ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \
-          --subsystems=${concatStringsSep ","
-                                          (map (pair: (head pair) + "=" +
-                                                      (head (tail pair)))
-                                               subsystems)}
+          ${if passwordAuthentication then "--password" else "--no-password"} \
+          ${
+            if publicKeyAuthentication then "--publickey" else "--no-publickey"
+          } \
+          ${if rootLogin then "--root-login" else "--no-root-login"} \
+          ${
+            if loginShell != null then ''--login-shell="${loginShell}"'' else ""
+          } \
+          ${
+            if srpKeyExchange then
+              "--srp-keyexchange"
+            else
+              "--no-srp-keyexchange"
+          } \
+          ${
+            if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"
+          } \
+          ${if x11Forwarding then "--x11-forward" else "--no-x11-forward"} \
+          --subsystems=${
+            concatStringsSep ","
+            (map (pair: (head pair) + "=" + (head (tail pair))) subsystems)
+          }
       '';
     };
 
-    security.pam.services.lshd = {};
+    security.pam.services.lshd = { };
   };
 }

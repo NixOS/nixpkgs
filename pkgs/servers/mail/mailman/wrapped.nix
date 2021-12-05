@@ -1,12 +1,9 @@
 { runCommand, lib, makeWrapper, python3
-, archivers ? [ python3.pkgs.mailman-hyperkitty ]
-}:
+, archivers ? [ python3.pkgs.mailman-hyperkitty ] }:
 
-let
-  inherit (python3.pkgs) makePythonPath mailman;
-in
+let inherit (python3.pkgs) makePythonPath mailman;
 
-runCommand "${mailman.name}-wrapped" {
+in runCommand "${mailman.name}-wrapped" {
   inherit (mailman) meta;
   nativeBuildInputs = [ makeWrapper ];
   passthru = mailman.passthru // { unwrapped = mailman; };

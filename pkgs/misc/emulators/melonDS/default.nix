@@ -1,15 +1,5 @@
-{ lib
-, fetchFromGitHub
-, mkDerivation
-, cmake
-, libepoxy
-, libarchive
-, libpcap
-, libslirp
-, pkg-config
-, qtbase
-, SDL2
-}:
+{ lib, fetchFromGitHub, mkDerivation, cmake, libepoxy, libarchive, libpcap
+, libslirp, pkg-config, qtbase, SDL2 }:
 
 mkDerivation rec {
   pname = "melonDS";
@@ -23,15 +13,10 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    libepoxy
-    libarchive
-    libslirp
-    qtbase
-    SDL2
-  ];
+  buildInputs = [ libepoxy libarchive libslirp qtbase SDL2 ];
 
-  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}" ];
+  qtWrapperArgs =
+    [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}" ];
 
   meta = with lib; {
     homepage = "http://melonds.kuribo64.net/";

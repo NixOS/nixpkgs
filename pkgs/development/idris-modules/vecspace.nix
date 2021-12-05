@@ -1,9 +1,5 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, contrib, lib }:
+build-idris-package {
   name = "vecspace";
   version = "2018-01-12";
 

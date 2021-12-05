@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   shortver = "121";
 
   src = fetchzip {
-    url = "mirror://sourceforge/eureka-editor/Eureka/${version}/eureka-${shortver}-source.tar.gz";
+    url =
+      "mirror://sourceforge/eureka-editor/Eureka/${version}/eureka-${shortver}-source.tar.gz";
     sha256 = "0fpj13aq4wh3f7473cdc5jkf1c71jiiqmjc0ihqa0nm3hic1d4yv";
   };
 
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://eureka-editor.sourceforge.net";
-    description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
+    description =
+      "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
     license = licenses.gpl2;
     platforms = platforms.all;
     broken = stdenv.isDarwin;

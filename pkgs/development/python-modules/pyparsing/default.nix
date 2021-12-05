@@ -1,10 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{ buildPythonPackage, fetchFromGitHub, lib
 
 # pythonPackages
-, coverage
-}:
+, coverage }:
 
 buildPythonPackage rec {
   pname = "pyparsing";
@@ -26,10 +23,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pyparsing/pyparsing";
-    description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
+    description =
+      "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

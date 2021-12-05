@@ -5,13 +5,13 @@ let
   pname = "Vial";
 
   src = fetchurl {
-    url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
+    url =
+      "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
     sha256 = "sha256-aN0wvgahWPNSXP/JmV1JWaEnARIOTyRdz1ko6eC7Y5s=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in
-appimageTools.wrapType2 {
+in appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands = ''
@@ -24,7 +24,8 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "An Open-source cross-platform (Windows, Linux and Mac) GUI and a QMK fork for configuring your keyboard in real time";
+    description =
+      "An Open-source cross-platform (Windows, Linux and Mac) GUI and a QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes ];

@@ -10,7 +10,5 @@ mkXfceDerivation {
   nativeBuildInputs = [ exo ];
   buildInputs = [ gtk3 libwnck libXmu ];
 
-  meta = {
-    description = "Easy to use task manager for Xfce";
-  };
+  meta = { description = "Easy to use task manager for Xfce"; };
 }

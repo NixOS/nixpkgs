@@ -1,7 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, python3
-, popt
-}:
+{ lib, stdenv, fetchFromGitHub, python3, popt }:
 
 stdenv.mkDerivation rec {
   pname = "isomd5sum";
@@ -16,7 +13,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs = [ popt ] ;
+  buildInputs = [ popt ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "#/usr/" "#"

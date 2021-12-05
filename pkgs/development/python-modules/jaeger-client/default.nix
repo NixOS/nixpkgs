@@ -1,10 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, opentracing
-, threadloop
-, thrift
-, tornado
+{ buildPythonPackage, fetchPypi, lib, opentracing, threadloop, thrift, tornado
 }:
 
 buildPythonPackage rec {
@@ -16,12 +10,7 @@ buildPythonPackage rec {
     sha256 = "3157836edab8e2c209bd2d6ae61113db36f7ee399e66b1dcbb715d87ab49bfe0";
   };
 
-  propagatedBuildInputs = [
-    threadloop
-    thrift
-    tornado
-    opentracing
-  ];
+  propagatedBuildInputs = [ threadloop thrift tornado opentracing ];
 
   # FIXME: Missing dependencies: tchannel, opentracing_instrumentation
   # opentracing_instrumentation: Requires "tornado" lower than 6. Current is 6.1.

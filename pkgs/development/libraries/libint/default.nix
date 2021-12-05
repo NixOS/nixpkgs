@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
-, python3, perl, gmpxx, mpfr, boost, eigen, gfortran, cmake
-, enableFMA ? stdenv.hostPlatform.fmaSupport
-, enableFortran ? true
-}:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, python3, perl
+, gmpxx, mpfr, boost, eigen, gfortran, cmake
+, enableFMA ? stdenv.hostPlatform.fmaSupport, enableFortran ? true }:
 
 let
   pname = "libint";
   version = "2.7.1";
 
   meta = with lib; {
-    description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
+    description =
+      "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
     homepage = "https://github.com/evaleev/libint";
     license = with licenses; [ lgpl3Only gpl3Only ];
     maintainers = with maintainers; [ markuskowa sheepforce ];
@@ -40,15 +39,8 @@ let
       done
     '';
 
-    nativeBuildInputs = [
-      autoconf
-      automake
-      libtool
-      mpfr
-      python3
-      perl
-      gmpxx
-    ] ++ lib.optional enableFortran gfortran;
+    nativeBuildInputs = [ autoconf automake libtool mpfr python3 perl gmpxx ]
+      ++ lib.optional enableFortran gfortran;
 
     buildInputs = [ boost eigen ];
 
@@ -87,10 +79,8 @@ let
 
     src = "${codeGen}/${pname}-${version}.tgz";
 
-    nativeBuildInputs = [
-      python3
-      cmake
-    ] ++ lib.optional enableFortran gfortran;
+    nativeBuildInputs = [ python3 cmake ]
+      ++ lib.optional enableFortran gfortran;
 
     buildInputs = [ boost eigen ];
 
@@ -98,10 +88,10 @@ let
     # AVX support is advertised, but does not work in 2.6 (possibly in 2.7).
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
     cmakeFlags = [
-      (if enableFortran
-        then "-DENABLE_FORTRAN=ON"
-        else "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble"
-      )
+      (if enableFortran then
+        "-DENABLE_FORTRAN=ON"
+      else
+        "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble")
     ];
 
     # Can only build in the source-tree. A lot of preprocessing magic fails otherwise.

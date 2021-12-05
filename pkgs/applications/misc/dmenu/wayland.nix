@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
-, glib, wayland, libxkbcommon, makeWrapper, wayland-scanner
-, fetchpatch
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config
+, wayland-protocols, glib, wayland, libxkbcommon, makeWrapper, wayland-scanner
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "dmenu-wayland-unstable";
@@ -24,7 +23,8 @@ stdenv.mkDerivation rec {
   patches = [
     # can be removed when https://github.com/nyyManni/dmenu-wayland/pull/23 is included
     (fetchpatch {
-      url = "https://github.com/nyyManni/dmenu-wayland/commit/3434410de5dcb007539495395f7dc5421923dd3a.patch";
+      url =
+        "https://github.com/nyyManni/dmenu-wayland/commit/3434410de5dcb007539495395f7dc5421923dd3a.patch";
       sha256 = "sha256-im16kU8RWrCY0btYOYjDp8XtfGEivemIPlhwPX0C77o=";
     })
   ];

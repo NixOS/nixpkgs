@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Liberation Sans Narrow Font Family is a replacement for Arial Narrow";
+    description =
+      "Liberation Sans Narrow Font Family is a replacement for Arial Narrow";
     longDescription = ''
       Liberation Sans Narrow is a font originally created by Ascender
       Inc and licensed to Oracle Corporation under a GPLv2 license. It is

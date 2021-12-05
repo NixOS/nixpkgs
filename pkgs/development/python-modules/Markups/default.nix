@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-markdown-math
-, markdown
-, docutils
-, pygments
-, pyyaml
-}:
+{ lib, buildPythonPackage, fetchPypi, python-markdown-math, markdown, docutils
+, pygments, pyyaml }:
 
 buildPythonPackage rec {
   pname = "Markups";

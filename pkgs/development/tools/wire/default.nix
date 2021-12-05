@@ -17,7 +17,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/wire";
-    description = "A code generation tool that automates connecting components using dependency injection";
+    description =
+      "A code generation tool that automates connecting components using dependency injection";
     license = licenses.asl20;
     maintainers = with maintainers; [ svrana ];
   };

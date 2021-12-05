@@ -1,9 +1,4 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, instrument-control
-, arduino
-}:
+{ buildOctavePackage, lib, fetchurl, instrument-control, arduino }:
 
 buildOctavePackage rec {
   pname = "arduino";
@@ -14,20 +9,17 @@ buildOctavePackage rec {
     sha256 = "0r0bcq2zkwba6ab6yi6czbhrj4adm9m9ggxmzzcd9h40ckqg6wjv";
   };
 
-  requiredOctavePackages = [
-    instrument-control
-  ];
+  requiredOctavePackages = [ instrument-control ];
 
   # Might be able to use pkgs.arduino-core
-  propagatedBuildInputs = [
-    arduino
-  ];
+  propagatedBuildInputs = [ arduino ];
 
   meta = with lib; {
     name = "Octave Arduino Toolkit";
     homepage = "https://octave.sourceforge.io/arduino/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
+    description =
+      "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
   };
 }

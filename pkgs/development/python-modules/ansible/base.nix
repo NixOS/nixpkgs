@@ -1,32 +1,14 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, cryptography
-, jinja2
-, junit-xml
-, lxml
-, ncclient
-, packaging
-, paramiko
-, pexpect
-, psutil
-, pycrypto
-, pyyaml
-, requests
-, scp
-, windowsSupport ? false, pywinrm
-, xmltodict
-}:
+{ lib, callPackage, buildPythonPackage, fetchPypi, installShellFiles
+, cryptography, jinja2, junit-xml, lxml, ncclient, packaging, paramiko, pexpect
+, psutil, pycrypto, pyyaml, requests, scp, windowsSupport ? false, pywinrm
+, xmltodict }:
 
 let
   ansible-collections = callPackage ./collections.nix {
     version = "3.4.0"; # must be < 4.0
     sha256 = "096rbgz730njk0pg8qnc27mmz110wqrw354ca9gasb7rqg0f4d6a";
   };
-in
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "ansible-base";
   version = "2.10.15";
 
@@ -43,9 +25,7 @@ buildPythonPackage rec {
       --replace "[python," "["
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     # depend on ansible-collections instead of the other way around
@@ -75,9 +55,7 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  passthru = {
-    collections = ansible-collections;
-  };
+  passthru = { collections = ansible-collections; };
 
   meta = with lib; {
     description = "Radically simple IT automation";

@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, bcrypt
-, pyopenssl
-, python-gnupg
-, requests
-, openssl
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, bcrypt, pyopenssl
+, python-gnupg, requests, openssl }:
 
 buildPythonPackage rec {
   pname = "proton-client";
@@ -21,12 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-98tEL3DUYtx27JcI6pPFS2iDJXS8K3yyvCU9UVrg1EM=";
   };
 
-  propagatedBuildInputs = [
-    bcrypt
-    pyopenssl
-    python-gnupg
-    requests
-  ];
+  propagatedBuildInputs = [ bcrypt pyopenssl python-gnupg requests ];
 
   buildInputs = [ openssl ];
 

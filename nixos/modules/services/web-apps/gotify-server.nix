@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  cfg = config.services.gotify;
+let cfg = config.services.gotify;
 in {
   options = {
     services.gotify = {
@@ -33,9 +32,7 @@ in {
       after = [ "network.target" ];
       description = "Simple server for sending and receiving messages";
 
-      environment = {
-        GOTIFY_SERVER_PORT = toString cfg.port;
-      };
+      environment = { GOTIFY_SERVER_PORT = toString cfg.port; };
 
       serviceConfig = {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";

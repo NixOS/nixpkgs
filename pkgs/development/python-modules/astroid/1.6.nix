@@ -1,7 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
-, lazy-object-proxy, six, wrapt, enum34, singledispatch, backports_functools_lru_cache
-, pytest
-}:
+{ lib, fetchPypi, buildPythonPackage, lazy-object-proxy, six, wrapt, enum34
+, singledispatch, backports_functools_lru_cache, pytest }:
 
 buildPythonPackage rec {
   pname = "astroid";

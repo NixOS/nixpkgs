@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, token-bucket
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, token-bucket }:
 
 buildPythonPackage rec {
   pname = "limiter";
@@ -18,9 +13,7 @@ buildPythonPackage rec {
     sha256 = "0cdqw08qw3cid1yjknlh4hqfl46xh4madkjrl7sxk2c1pbwils8r";
   };
 
-  propagatedBuildInputs = [
-    token-bucket
-  ];
+  propagatedBuildInputs = [ token-bucket ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -30,12 +23,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "limiter"
-  ];
+  pythonImportsCheck = [ "limiter" ];
 
   meta = with lib; {
-    description = "Python rate-limiting, thread-safe and asynchronous decorators and context managers";
+    description =
+      "Python rate-limiting, thread-safe and asynchronous decorators and context managers";
     homepage = "https://github.com/alexdelorenzo/limiter";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ fab ];

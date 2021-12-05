@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, events
-, pymongo
-, simplejson
-, cerberus
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchPypi, flask, events, pymongo, simplejson
+, cerberus, setuptools }:
 
 buildPythonPackage rec {
   pname = "Eve";
@@ -18,14 +10,8 @@ buildPythonPackage rec {
     sha256 = "5647ee7dd6e063b967276e49f564cd4f96decdd0a218482bdf86c404a2be1fbf";
   };
 
-  propagatedBuildInputs = [
-    cerberus
-    events
-    flask
-    pymongo
-    simplejson
-    setuptools
-  ];
+  propagatedBuildInputs =
+    [ cerberus events flask pymongo simplejson setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -39,7 +25,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://python-eve.org/";
-    description = "Open source Python REST API framework designed for human beings";
+    description =
+      "Open source Python REST API framework designed for human beings";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

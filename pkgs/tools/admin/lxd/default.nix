@@ -1,13 +1,8 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
-, squashfsTools, iproute2, iptables, libcap
-, dqlite, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
-, criu
-, bash
-, installShellFiles
-, nixosTests
-}:
+, squashfsTools, iproute2, iptables, libcap, dqlite, raft-canonical
+, sqlite-replication, udev, writeShellScriptBin, apparmor-profiles
+, apparmor-parser, criu, bash, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "lxd";
@@ -36,13 +31,25 @@ buildGoPackage rec {
     # test binaries, code generation
     rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      [ iptables ]
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
-      ++ [ (writeShellScriptBin "apparmor_parser" ''
-             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-           '') ]
-      )
+    wrapProgram $out/bin/lxd --prefix PATH : ${
+      lib.makeBinPath ([ iptables ] ++ [
+        acl
+        rsync
+        gnutar
+        xz
+        btrfs-progs
+        gzip
+        dnsmasq
+        squashfsTools
+        iproute2
+        bash
+        criu
+        attr
+      ] ++ [
+        (writeShellScriptBin "apparmor_parser" ''
+          exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+        '')
+      ])
     }
 
     installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
@@ -51,11 +58,19 @@ buildGoPackage rec {
   passthru.tests.lxd = nixosTests.lxd;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
-                  sqlite-replication udev.dev ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    dqlite.dev
+    raft-canonical.dev
+    sqlite-replication
+    udev.dev
+  ];
 
   meta = with lib; {
-    description = "Daemon based on liblxc offering a REST API to manage containers";
+    description =
+      "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz wucke13 marsam ];

@@ -1,7 +1,6 @@
 { lib, stdenv, windows, fetchurl }:
 
-let
-  version = "9.0.0";
+let version = "9.0.0";
 in stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
@@ -13,10 +12,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [
-    "--enable-idl"
-    "--enable-secure-api"
-  ];
+  configureFlags = [ "--enable-idl" "--enable-secure-api" ];
 
   enableParallelBuilding = true;
 
@@ -24,7 +20,5 @@ in stdenv.mkDerivation {
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
 
-  meta = {
-    platforms = lib.platforms.windows;
-  };
+  meta = { platforms = lib.platforms.windows; };
 }

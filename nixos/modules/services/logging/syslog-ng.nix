@@ -17,7 +17,10 @@ let
 
   syslogngOptions = [
     "--foreground"
-    "--module-path=${concatStringsSep ":" (["${cfg.package}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
+    "--module-path=${
+      concatStringsSep ":"
+      ([ "${cfg.package}/lib/syslog-ng" ] ++ cfg.extraModulePaths)
+    }"
     "--cfgfile=${syslogngConfig}"
     "--control=${ctrlSocket}"
     "--persist-file=${persistFile}"
@@ -50,7 +53,7 @@ in {
       };
       extraModulePaths = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [ "''${pkgs.syslogng_incubator}/lib/syslog-ng" ]
         '';
@@ -92,7 +95,9 @@ in {
         PIDFile = pidFile;
         StandardOutput = "null";
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
+        ExecStart = "${cfg.package}/sbin/syslog-ng ${
+            concatStringsSep " " syslogngOptions
+          }";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

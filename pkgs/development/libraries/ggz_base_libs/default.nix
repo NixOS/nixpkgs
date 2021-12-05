@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
   name = "${baseName}-snapshot-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/${name}.tar.gz";
+    url =
+      "http://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/${name}.tar.gz";
     sha256 = "1cw1vg0fbj36zyggnzidx9cbjwfc1yr4zqmsipxnvns7xa2awbdk";
   };
 
@@ -18,16 +19,11 @@ stdenv.mkDerivation rec {
       --replace "/usr/local/ssl/lib" "${openssl.out}/lib"
   '';
 
-  configureFlags = [
-    "--with-tls"
-  ];
+  configureFlags = [ "--with-tls" ];
 
   meta = with lib; {
     description = "GGZ Gaming zone libraries";
-    maintainers = with maintainers;
-    [
-      raskin
-    ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "http://www.ggzgamingzone.org/releases/";

@@ -1,14 +1,13 @@
 { lib, stdenv, fetchurl, makeWrapper, perlPackages }:
 
-let
-  perlDeps = with perlPackages; [ TimeDate ];
-in
-stdenv.mkDerivation rec {
+let perlDeps = with perlPackages; [ TimeDate ];
+in stdenv.mkDerivation rec {
   version = "3.20";
   pname = "mb2md";
 
   src = fetchurl {
-    url = "http://batleth.sapienti-sat.org/projects/mb2md/mb2md-${version}.pl.gz";
+    url =
+      "http://batleth.sapienti-sat.org/projects/mb2md/mb2md-${version}.pl.gz";
     sha256 = "0bvkky3c90738h3skd2f1b2yy5xzhl25cbh9w2dy97rs86ssjidg";
   };
 

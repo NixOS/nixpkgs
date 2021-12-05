@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
-}:
+{ lib, stdenv, fetchFromSourcehut, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "clickclack";
@@ -15,16 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hldtHSRdw6yP9lUFna5yvJ3mOTbQbbQNnGM7fMQmmtM=";
   };
 
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "A vibration/audio feedback tool to be used with virtual keyboards";
+    description =
+      "A vibration/audio feedback tool to be used with virtual keyboards";
     homepage = "https://git.sr.ht/~proycon/clickclack";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
-
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
-assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
+assert lib.versionAtLeast kernel.version "4.2"
+  || lib.versionOlder kernel.version "4.0";
 
 stdenv.mkDerivation rec {
   # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
@@ -27,9 +27,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "CROSS_COMPILE=${stdenv.cc.targetPrefix}" ];
 
   installPhase = ''
     install -m644 -b -D exfat.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/exfat/exfat.ko

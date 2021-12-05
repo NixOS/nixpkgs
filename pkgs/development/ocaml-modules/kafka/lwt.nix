@@ -1,8 +1,4 @@
-{ buildDunePackage
-, kafka
-, lwt
-, cmdliner
-}:
+{ buildDunePackage, kafka, lwt, cmdliner }:
 
 buildDunePackage rec {
   pname = "kafka_lwt";

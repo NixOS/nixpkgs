@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, tokenize-rt
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
+, tokenize-rt }:
 
 buildPythonPackage rec {
   pname = "pyupgrade";
@@ -20,20 +15,15 @@ buildPythonPackage rec {
     sha256 = "sha256-fN0+4/EeoMD2c16OgepjDWuUhowMxzM7nB3mkL3iDjc=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    tokenize-rt
-  ];
+  propagatedBuildInputs = [ tokenize-rt ];
 
-  pythonImportsCheck = [
-    "pyupgrade"
-  ];
+  pythonImportsCheck = [ "pyupgrade" ];
 
   meta = with lib; {
-    description = "Tool to automatically upgrade syntax for newer versions of the language";
+    description =
+      "Tool to automatically upgrade syntax for newer versions of the language";
     homepage = "https://github.com/asottile/pyupgrade";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

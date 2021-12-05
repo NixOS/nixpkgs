@@ -1,23 +1,14 @@
-{ coreutils
-, fetchurl
-, gawk
-, gnused
-, jdk8
-, lib
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, writeScript
-, writeTextFile
-, recommendedUdevRules ? true
-}:
+{ coreutils, fetchurl, gawk, gnused, jdk8, lib, makeDesktopItem, makeWrapper
+, stdenv, writeScript, writeTextFile, recommendedUdevRules ? true }:
 
 stdenv.mkDerivation rec {
   pname = "roomeqwizard";
   version = "5.20.4";
 
   src = fetchurl {
-    url = "https://www.roomeqwizard.com/installers/REW_linux_${lib.replaceChars [ "." ] [ "_" ] version}.sh";
+    url = "https://www.roomeqwizard.com/installers/REW_linux_${
+        lib.replaceChars [ "." ] [ "_" ] version
+      }.sh";
     sha256 = "0m2b5hwazy4vyjk51cmayys250rircs3c0v7bv5mn28h7hyq29s8";
   };
 
@@ -80,7 +71,8 @@ stdenv.mkDerivation rec {
     cp -r "$desktopItem/share/applications" $out/share/
     cp $out/share/roomeqwizard/.install4j/s_*.png "$out/share/icons/hicolor/256x256/apps/${pname}.png"
 
-    ${lib.optionalString recommendedUdevRules ''echo "$udevRules" > $out/lib/udev/rules.d/90-roomeqwizard.rules''}
+    ${lib.optionalString recommendedUdevRules
+    ''echo "$udevRules" > $out/lib/udev/rules.d/90-roomeqwizard.rules''}
 
     runHook postInstall
   '';

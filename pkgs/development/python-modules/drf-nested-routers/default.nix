@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, django
-, djangorestframework
-, pytest
-, pytest-cov
-, pytest-django
-, ipdb
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, django
+, djangorestframework, pytest, pytest-cov, pytest-django, ipdb, python }:
 
 buildPythonPackage rec {
   pname = "drf-nested-routers";
@@ -31,7 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/alanjds/drf-nested-routers";
-    description = "Provides routers and fields to create nested resources in the Django Rest Framework";
+    description =
+      "Provides routers and fields to create nested resources in the Django Rest Framework";
     license = licenses.asl20;
     maintainers = with maintainers; [ felschr ];
   };

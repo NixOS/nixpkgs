@@ -1,14 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-http
-, aws-c-io
-, aws-c-sdkutils
-, cmake
-, s2n-tls
-}:
+{ lib, stdenv, fetchFromGitHub, aws-c-cal, aws-c-common, aws-c-compression
+, aws-c-http, aws-c-io, aws-c-sdkutils, cmake, s2n-tls }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
@@ -21,30 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cZyWe3kX5JiB6th1VkkBFKa2MEilRtU+tHvu7c9e+Yw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    aws-c-cal
-    aws-c-common
-    aws-c-compression
-    aws-c-http
-    aws-c-io
-    s2n-tls
-  ];
+  buildInputs =
+    [ aws-c-cal aws-c-common aws-c-compression aws-c-http aws-c-io s2n-tls ];
 
-  propagatedBuildInputs = [
-    aws-c-sdkutils
-  ];
+  propagatedBuildInputs = [ aws-c-sdkutils ];
 
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with lib; {
-    description = "C99 library implementation of AWS client-side authentication";
+    description =
+      "C99 library implementation of AWS client-side authentication";
     homepage = "https://github.com/awslabs/aws-c-auth";
     license = licenses.asl20;
     platforms = platforms.unix;

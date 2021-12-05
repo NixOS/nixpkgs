@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, desktop-file-utils, glib, gtk3, meson, ninja, pkg-config, python3, vala
-, wrapGAppsHook
-, glib-networking, gobject-introspection, json-glib, libgee, libhandy, libsoup
-}:
+{ lib, stdenv, fetchFromGitHub, desktop-file-utils, glib, gtk3, meson, ninja
+, pkg-config, python3, vala, wrapGAppsHook, glib-networking
+, gobject-introspection, json-glib, libgee, libhandy, libsoup }:
 
 stdenv.mkDerivation rec {
   pname = "markets";
@@ -16,11 +14,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    desktop-file-utils glib gtk3 meson ninja pkg-config python3 vala
+    desktop-file-utils
+    glib
+    gtk3
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
     wrapGAppsHook
   ];
   buildInputs = [
-    glib glib-networking gobject-introspection gtk3 json-glib libgee libhandy
+    glib
+    glib-networking
+    gobject-introspection
+    gtk3
+    json-glib
+    libgee
+    libhandy
     libsoup
   ];
 

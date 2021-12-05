@@ -1,30 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub
 # propagatedBuildInputs
-, Babel
-, alabaster
-, docutils
-, imagesize
-, jinja2
-, packaging
-, pygments
-, requests
-, setuptools
-, snowballstemmer
-, sphinxcontrib-applehelp
-, sphinxcontrib-devhelp
-, sphinxcontrib-htmlhelp
-, sphinxcontrib-jsmath
-, sphinxcontrib-qthelp
-, sphinxcontrib-serializinghtml
-, sphinxcontrib-websupport
+, Babel, alabaster, docutils, imagesize, jinja2, packaging, pygments, requests
+, setuptools, snowballstemmer, sphinxcontrib-applehelp, sphinxcontrib-devhelp
+, sphinxcontrib-htmlhelp, sphinxcontrib-jsmath, sphinxcontrib-qthelp
+, sphinxcontrib-serializinghtml, sphinxcontrib-websupport
 # check phase
-, html5lib
-, pytestCheckHook
-, typed-ast
-}:
+, html5lib, pytestCheckHook, typed-ast }:
 
 buildPythonPackage rec {
   pname = "sphinx";
@@ -59,12 +40,8 @@ buildPythonPackage rec {
     sphinxcontrib-websupport
   ];
 
-  checkInputs = [
-    html5lib
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typed-ast
-  ];
+  checkInputs = [ html5lib pytestCheckHook ]
+    ++ lib.optionals (pythonOlder "3.8") [ typed-ast ];
 
   disabledTests = [
     # requires network access

@@ -1,15 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, envoy
-, zip
-, nixosTests
-}:
+{ buildGoModule, fetchFromGitHub, lib, envoy, zip, nixosTests }:
 
-let
-  inherit (lib) concatStringsSep mapAttrsToList;
-in
-buildGoModule rec {
+let inherit (lib) concatStringsSep mapAttrsToList;
+in buildGoModule rec {
   pname = "pomerium";
   version = "0.14.7";
   src = fetchFromGitHub {
@@ -20,10 +12,7 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
-  subPackages = [
-    "cmd/pomerium"
-    "cmd/pomerium-cli"
-  ];
+  subPackages = [ "cmd/pomerium" "cmd/pomerium-cli" ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
@@ -33,14 +22,12 @@ buildGoModule rec {
       ProjectName = "pomerium";
       ProjectURL = "github.com/pomerium/pomerium";
     };
-    varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
-  in [
-    "${varFlags}"
-  ];
+    varFlags = concatStringsSep " " (mapAttrsToList (name: value:
+      "-X github.com/pomerium/pomerium/internal/version.${name}=${value}")
+      setVars);
+  in [ "${varFlags}" ];
 
-  nativeBuildInputs = [
-    zip
-  ];
+  nativeBuildInputs = [ zip ];
 
   # Pomerium expects to have envoy append to it in a zip.
   # We use a store-only (-0) zip, so that the Nix scanner can find any store references we had in the envoy binary.
@@ -66,15 +53,13 @@ buildGoModule rec {
     install -Dm0755 $GOPATH/bin/pomerium-cli $out/bin/pomerium-cli
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pomerium;
-  };
+  passthru.tests = { inherit (nixosTests) pomerium; };
 
   meta = with lib; {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Envoy derivation is x86_64-linux only.
+    platforms = [ "x86_64-linux" ]; # Envoy derivation is x86_64-linux only.
   };
 }

@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, matplotlib
-, scipy
-, isPy27
-}:
+{ lib, buildPythonPackage, fetchPypi, numpy, matplotlib, scipy, isPy27 }:
 
 buildPythonPackage rec {
   pname = "neuronpy";
@@ -23,7 +16,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
+    description =
+      "Interfaces and utilities for the NEURON simulator and analysis of neural data";
     maintainers = [ maintainers.nico202 ];
     license = licenses.mit;
   };

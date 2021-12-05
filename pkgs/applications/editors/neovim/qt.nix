@@ -1,9 +1,7 @@
 { stdenv, makeWrapper, neovim, neovim-qt-unwrapped }:
 
-let
-  unwrapped = neovim-qt-unwrapped;
-in
-stdenv.mkDerivation {
+let unwrapped = neovim-qt-unwrapped;
+in stdenv.mkDerivation {
   pname = "neovim-qt";
   version = unwrapped.version;
   buildCommand = if stdenv.isDarwin then ''
@@ -25,13 +23,9 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  passthru = {
-    inherit unwrapped;
-  };
+  passthru = { inherit unwrapped; };
 
   inherit (unwrapped) meta;
 }

@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchPypi, pkgs }:
 
 buildPythonPackage rec {
   pname = "musicbrainzngs";
@@ -15,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.glibcLocales ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   preCheck = ''
     # Remove tests that rely on networking (breaks sandboxed builds)

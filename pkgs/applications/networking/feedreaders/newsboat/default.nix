@@ -1,5 +1,6 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext
+, pkg-config, libxml2, json_c, ncurses, asciidoctor, libiconv, Security
+, Foundation, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
@@ -21,11 +22,8 @@ rustPlatform.buildRustPackage rec {
       --replace "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    asciidoctor
-    gettext
-  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
+  nativeBuildInputs = [ pkg-config asciidoctor gettext ]
+    ++ lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
     ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
@@ -35,7 +33,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
@@ -60,10 +59,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://newsboat.org/";
-    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
+    homepage = "https://newsboat.org/";
+    description =
+      "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

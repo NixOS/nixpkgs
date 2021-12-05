@@ -1,19 +1,5 @@
-{ fetchurl
-, lib
-, stdenv
-, darwin
-, openglSupport ? true
-, libX11
-, wxGTK
-, wxmac
-, pkg-config
-, buildPythonPackage
-, pyopengl
-, isPy3k
-, isPyPy
-, python
-, cairo
-, pango
+{ fetchurl, lib, stdenv, darwin, openglSupport ? true, libX11, wxGTK, wxmac
+, pkg-config, buildPythonPackage, pyopengl, isPy3k, isPyPy, python, cairo, pango
 }:
 
 assert wxGTK.unicode;
@@ -39,8 +25,7 @@ buildPythonPackage rec {
     ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
     ++ (lib.optionals stdenv.isDarwin [ wxmac ]);
 
-  buildInputs = [ ]
-    ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
+  buildInputs = [ ] ++ (lib.optionals (!stdenv.isDarwin) [ (wxGTK.gtk) ])
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
       AudioToolbox
@@ -55,8 +40,7 @@ buildPythonPackage rec {
       ImageIO
       OpenGL
       Security
-    ]))
-    ++ (lib.optional openglSupport pyopengl);
+    ])) ++ (lib.optional openglSupport pyopengl);
 
   preConfigure = ''
     cd wxPython
@@ -83,7 +67,11 @@ buildPythonPackage rec {
   buildPhase = "";
 
   installPhase = ''
-    ${python.interpreter} setup.py install WXPORT=${if stdenv.isDarwin then "osx_cocoa" else "gtk2"} NO_HEADERS=0 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
+    ${python.interpreter} setup.py install WXPORT=${
+      if stdenv.isDarwin then "osx_cocoa" else "gtk2"
+    } NO_HEADERS=0 BUILD_GLCANVAS=${
+      if openglSupport then "1" else "0"
+    } UNICODE=1 --prefix=$out
     wrapPythonPrograms
   '';
 

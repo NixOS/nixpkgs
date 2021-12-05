@@ -1,15 +1,5 @@
-{ lib
-, beautifultable
-, buildPythonPackage
-, click
-, click-default-group
-, fetchFromGitHub
-, humanize
-, keyring
-, python
-, python-dateutil
-, requests
-}:
+{ lib, beautifultable, buildPythonPackage, click, click-default-group
+, fetchFromGitHub, humanize, keyring, python, python-dateutil, requests }:
 
 buildPythonPackage rec {
   pname = "mwdblib";

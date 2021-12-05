@@ -1,24 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, alsa-lib
-, gtk2
-, libXrandr
-, libXScrnSaver
-, udev
-, zlib
-}:
+{ lib, stdenv, fetchurl, autoPatchelfHook, alsa-lib, gtk2, libXrandr
+, libXScrnSaver, udev, zlib }:
 
-let
-  name = "clonehero";
-in
-stdenv.mkDerivation rec {
+let name = "clonehero";
+in stdenv.mkDerivation rec {
   pname = "${name}-unwrapped";
   version = "0.23.2.2";
 
   src = fetchurl {
-    url = "http://dl.clonehero.net/${name}-v${lib.removePrefix "0" version}/${name}-linux.tar.gz";
+    url = "http://dl.clonehero.net/${name}-v${
+        lib.removePrefix "0" version
+      }/${name}-linux.tar.gz";
     sha256 = "0k9jcnd55yhr42gj8cmysd18yldp4k3cpk4z884p2ww03fyfq7mi";
   };
 

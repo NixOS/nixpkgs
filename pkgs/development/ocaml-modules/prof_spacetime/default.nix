@@ -1,15 +1,5 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, cmdliner
-, spacetime_lib
-, yojson
-, cohttp
-, ocaml_lwt
-, cohttp-lwt-unix
-, lambdaTerm
-, stdlib-shims
-}:
+{ buildDunePackage, lib, fetchFromGitHub, cmdliner, spacetime_lib, yojson
+, cohttp, ocaml_lwt, cohttp-lwt-unix, lambdaTerm, stdlib-shims }:
 
 buildDunePackage rec {
   pname = "prof_spacetime";

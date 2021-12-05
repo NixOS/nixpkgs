@@ -14,7 +14,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ bsddb3 pydns lockfile ];
 
   meta = {
-    description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
+    description =
+      "Statistical anti-spam filter, initially based on the work of Paul Graham";
     homepage = "http://spambayes.sourceforge.net/";
   };
 }

@@ -5,10 +5,9 @@ with lib;
 let
   cfg = config.services.pinnwand;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   configFile = format.generate "pinnwand.toml" cfg.settings;
-in
-{
+in {
   options.services.pinnwand = {
     enable = mkEnableOption "Pinnwand";
 
@@ -24,7 +23,7 @@ in
         Your <filename>pinnwand.toml</filename> as a Nix attribute set. Look up
         possible options in the <link xlink:href="https://github.com/supakeen/pinnwand/blob/master/pinnwand.toml-example">pinnwand.toml-example</link>.
       '';
-      default = {};
+      default = { };
     };
   };
 
@@ -48,7 +47,7 @@ in
         StateDirectory = "pinnwand";
         StateDirectoryMode = "0700";
 
-        AmbientCapabilities = [];
+        AmbientCapabilities = [ ];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
@@ -64,11 +63,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
-        ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
@@ -76,7 +71,8 @@ in
         UMask = "0077";
       };
 
-      command = "${pkgs.pinnwand}/bin/pinnwand --configuration-path ${configFile}";
+      command =
+        "${pkgs.pinnwand}/bin/pinnwand --configuration-path ${configFile}";
     in {
       pinnwand = {
         description = "Pinnwannd HTTP Server";
@@ -86,7 +82,7 @@ in
         unitConfig.Documentation = "https://pinnwand.readthedocs.io/en/latest/";
 
         serviceConfig = {
-          ExecStart = "${command} http --port ${toString(cfg.port)}";
+          ExecStart = "${command} http --port ${toString (cfg.port)}";
         } // hardeningOptions;
       };
 
@@ -95,7 +91,8 @@ in
         startAt = "daily";
 
         serviceConfig = {
-          ExecStart = "${command} -vvvv reap";  # verbosity increased to show number of deleted pastes
+          ExecStart =
+            "${command} -vvvv reap"; # verbosity increased to show number of deleted pastes
         } // hardeningOptions;
       };
     };

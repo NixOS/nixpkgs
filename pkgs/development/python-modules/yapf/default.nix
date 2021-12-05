@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-}:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "yapf";
@@ -13,9 +9,7 @@ buildPythonPackage rec {
     hash = "sha256-QI+5orJUwwL0nbg8WfmqC0sP0OwlvjpcURgTJ5Iv9j0=";
   };
 
-  checkInputs = [
-    nose
-  ];
+  checkInputs = [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/google/yapf";

@@ -1,46 +1,22 @@
-{ lib, stdenv, runCommand, fetchurl
-, ensureNewerSourcesHook
-, cmake, pkg-config
-, which, git
-, boost
-, libxml2, zlib, lz4
-, openldap, lttng-ust
-, babeltrace, gperf
-, gtest
-, cunit, snappy
-, makeWrapper
-, leveldb, oathToolkit
-, libnl, libcap_ng
-, rdkafka
-, nixosTests
-, cryptsetup
-, sqlite
-, lua
-, icu
-, bzip2
-, doxygen
-, graphviz
-, fmt
-, python3
+{ lib, stdenv, runCommand, fetchurl, ensureNewerSourcesHook, cmake, pkg-config
+, which, git, boost, libxml2, zlib, lz4, openldap, lttng-ust, babeltrace, gperf
+, gtest, cunit, snappy, makeWrapper, leveldb, oathToolkit, libnl, libcap_ng
+, rdkafka, nixosTests, cryptsetup, sqlite, lua, icu, bzip2, doxygen, graphviz
+, fmt, python3
 
 # Optional Dependencies
-, yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null
-, libedit ? null, libatomic_ops ? null
-, libs3 ? null
+, yasm ? null, fcgi ? null, expat ? null, curl ? null, fuse ? null
+, libedit ? null, libatomic_ops ? null, libs3 ? null
 
-# Mallocs
+  # Mallocs
 , jemalloc ? null, gperftools ? null
 
-# Crypto Dependencies
-, cryptopp ? null
-, nss ? null, nspr ? null
+  # Crypto Dependencies
+, cryptopp ? null, nss ? null, nspr ? null
 
-# Linux Only Dependencies
+  # Linux Only Dependencies
 , linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
-, ...
-}:
+, libaio ? null, libxfs ? null, zfs ? null, liburing ? null, ... }:
 
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
@@ -68,15 +44,19 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
-
+  hasRadosgw = optFcgi != null && optExpat != null && optCurl != null
+    && optLibedit != null;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
   malloc = if optJemalloc != null then optJemalloc else optGperftools;
 
   # We prefer nss over cryptopp
-  cryptoStr = if optNss != null && optNspr != null then "nss" else
-    if optCryptopp != null then "cryptopp" else "none";
+  cryptoStr = if optNss != null && optNspr != null then
+    "nss"
+  else if optCryptopp != null then
+    "cryptopp"
+  else
+    "none";
 
   cryptoLibsMap = {
     nss = [ optNss optNspr ];
@@ -84,15 +64,16 @@ let
     none = [ ];
   };
 
-  getMeta = description: with lib; {
-     homepage = "https://ceph.com/";
-     inherit description;
-     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-     maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" "aarch64-linux" ];
-   };
+  getMeta = description:
+    with lib; {
+      homepage = "https://ceph.com/";
+      inherit description;
+      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+      maintainers = with maintainers; [ adev ak johanot krav ];
+      platforms = [ "x86_64-linux" "aarch64-linux" ];
+    };
 
-  ceph-common = python.pkgs.buildPythonPackage rec{
+  ceph-common = python.pkgs.buildPythonPackage rec {
     pname = "ceph-common";
     inherit src version;
 
@@ -156,13 +137,15 @@ in rec {
     pname = "ceph";
     inherit src version;
 
-    patches = [
-      ./0000-fix-SPDK-build-env.patch
-    ];
+    patches = [ ./0000-fix-SPDK-build-env.patch ];
 
     nativeBuildInputs = [
       cmake
-      pkg-config which git python.pkgs.wrapPython makeWrapper
+      pkg-config
+      which
+      git
+      python.pkgs.wrapPython
+      makeWrapper
       python.pkgs.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
       python
@@ -173,21 +156,59 @@ in rec {
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
-      malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
-      cryptsetup sqlite lua icu bzip2
+      boost
+      ceph-python-env
+      libxml2
+      optYasm
+      optLibatomic_ops
+      optLibs3
+      malloc
+      zlib
+      openldap
+      lttng-ust
+      babeltrace
+      gperf
+      gtest
+      cunit
+      snappy
+      lz4
+      oathToolkit
+      leveldb
+      libnl
+      libcap_ng
+      rdkafka
+      cryptsetup
+      sqlite
+      lua
+      icu
+      bzip2
     ] ++ lib.optionals stdenv.isLinux [
-      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
+      linuxHeaders
+      util-linux
+      libuuid
+      udev
+      keyutils
+      liburing
+      optLibaio
+      optLibxfs
+      optZfs
       # ceph 14
-      rdma-core rabbitmq-c
+      rdma-core
+      rabbitmq-c
     ] ++ lib.optionals hasRadosgw [
-      optFcgi optExpat optCurl optFuse optLibedit
+      optFcgi
+      optExpat
+      optCurl
+      optFuse
+      optLibedit
     ];
 
-    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+    pythonPath = [
+      ceph-python-env
+      "${placeholder "out"}/${ceph-python-env.sitePackages}"
+    ];
 
-    preConfigure =''
+    preConfigure = ''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
       substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
@@ -201,7 +222,7 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
+      "-DWITH_SYSTEM_ROCKSDB=OFF" # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
       "-DWITH_SYSTEM_BOOST=ON"
@@ -213,12 +234,14 @@ in rec {
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
-      ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
+      "-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}"
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     postFixup = ''
       wrapPythonPrograms
-      wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$(toPythonPath ${placeholder "out"}):$(toPythonPath ${ceph-python-env})"
+      wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$(toPythonPath ${
+        placeholder "out"
+      }):$(toPythonPath ${ceph-python-env})"
 
       # Test that ceph-volume exists since the build system has a tendency to
       # silently drop it with misconfigurations.
@@ -235,23 +258,26 @@ in rec {
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
-    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
+    passthru.tests = {
+      inherit (nixosTests)
+        ceph-single-node ceph-multi-node ceph-single-node-bluestore;
+    };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
-    } ''
-      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
-      cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
-      cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
-      cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/sbin/mount.ceph $out/bin
-      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
-      ln -s bin $out/sbin
-      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
-      # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
-      substituteInPlace $out/bin/ceph          --replace ${ceph} $out
-      substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
-   '';
+    meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
+  } ''
+    mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
+    cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
+    cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
+    cp -r ${ceph}/bin/rbd-replay* $out/bin
+    cp -r ${ceph}/sbin/mount.ceph $out/bin
+    cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+    ln -s bin $out/sbin
+    cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
+    cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
+    # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
+    substituteInPlace $out/bin/ceph          --replace ${ceph} $out
+    substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
+  '';
 }

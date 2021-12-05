@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-}:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
@@ -14,14 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   # For pod2man during the build process.
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   # As runtime dependency for cpuinfo2cpuid.
-  buildInputs = [
-    perl
-  ];
+  buildInputs = [ perl ];
 
   # The Makefile hardcodes $(BUILDROOT)/usr as installation
   # destination. Just nuke all mentions of /usr to get the right

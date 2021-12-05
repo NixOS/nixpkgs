@@ -1,25 +1,11 @@
-{ lib
-, pythonOlder
-, pythonAtLeast
-, buildPythonPackage
-, fetchFromGitHub
+{ lib, pythonOlder, pythonAtLeast, buildPythonPackage, fetchFromGitHub
 , fetchpatch
-  # Python Inputs
-, fastdtw
-, numpy
-, psutil
-, qiskit-terra
-, scikit-learn
-, sparse
-  # Optional inputs
-, withTorch ? true
-, pytorch
-  # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
-}:
+# Python Inputs
+, fastdtw, numpy, psutil, qiskit-terra, scikit-learn, sparse
+# Optional inputs
+, withTorch ? true, pytorch
+# Check Inputs
+, pytestCheckHook, ddt, pytest-timeout, qiskit-aer }:
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
@@ -34,22 +20,13 @@ buildPythonPackage rec {
     sha256 = "sha256-2dfrkNZYSaXwiOCaRrPckq4BllANgc6BogyBcP0vosY=";
   };
 
-  propagatedBuildInputs = [
-    fastdtw
-    numpy
-    psutil
-    qiskit-terra
-    scikit-learn
-    sparse
-  ] ++ lib.optional withTorch pytorch;
+  propagatedBuildInputs =
+    [ fastdtw numpy psutil qiskit-terra scikit-learn sparse ]
+    ++ lib.optional withTorch pytorch;
 
-  doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
-  checkInputs = [
-    pytestCheckHook
-    pytest-timeout
-    ddt
-    qiskit-aer
-  ];
+  doCheck =
+    false; # TODO: enable. Tests fail on unstable due to some multithreading issue?
+  checkInputs = [ pytestCheckHook pytest-timeout ddt qiskit-aer ];
 
   pythonImportsCheck = [ "qiskit_machine_learning" ];
 
@@ -57,7 +34,7 @@ buildPythonPackage rec {
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py"  # TODO: fix, get multithreading errors with python3.9, segfaults
+    "--ignore=test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s

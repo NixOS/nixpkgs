@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, makeWrapper, bison, gcc
-, withISpin ? true, tk, swarm, graphviz }:
+{ stdenv, lib, fetchurl, makeWrapper, bison, gcc, withISpin ? true, tk, swarm
+, graphviz }:
 
 let
   binPath = lib.makeBinPath [ gcc ];
@@ -8,14 +8,15 @@ let
 in stdenv.mkDerivation rec {
   pname = "spin";
   version = "6.4.9";
-  url-version = lib.replaceChars ["."] [""] version;
+  url-version = lib.replaceChars [ "." ] [ "" ] version;
 
   src = fetchurl {
     # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
     # Dropbox mirror from developers:
     # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
     # (note that this URL doesn't work aross versions and hash should come from official site)
-    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AABtxFePMJmPxsxSvU5cpxh8a/spin${url-version}.tar.gz?raw=1";
+    url =
+      "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AABtxFePMJmPxsxSvU5cpxh8a/spin${url-version}.tar.gz?raw=1";
     sha256 = "07b7wk3qyfnp4pgwicqd33l7i1krzyihx0cf9zkv81ywaklf5vll";
   };
 

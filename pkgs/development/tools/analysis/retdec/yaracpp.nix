@@ -1,7 +1,4 @@
-{ stdenv
-, fetchFromGitHub
-, coreutils
-}:
+{ stdenv, fetchFromGitHub, coreutils }:
 
 let
   yara = fetchFromGitHub {
@@ -15,7 +12,8 @@ in stdenv.mkDerivation rec {
   # does not build anything
   pname = "yaracpp-src";
   version = "2018-10-09";
-  rev = "b92bde0e59e3b75bc445227e04b71105771dee8b"; # as specified in retdec/deps/yaracpp/CMakeLists.txt
+  rev =
+    "b92bde0e59e3b75bc445227e04b71105771dee8b"; # as specified in retdec/deps/yaracpp/CMakeLists.txt
 
   src = fetchFromGitHub {
     inherit rev;
@@ -25,20 +23,20 @@ in stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-      # check if our version of yara is the same version that upstream expects
-      echo "Checking version of yara"
-      expected_rev="$( sed -n -e 's|.*URL https://github.com/.*/archive/\(.*\)\.zip.*|\1|p' "deps/CMakeLists.txt" )"
-      if [ "$expected_rev" != '${yara.rev}' ]; then
-        echo "The yara dependency has the wrong version: ${yara.rev} while $expected_rev is expected."
-        exit 1
-      fi
+    # check if our version of yara is the same version that upstream expects
+    echo "Checking version of yara"
+    expected_rev="$( sed -n -e 's|.*URL https://github.com/.*/archive/\(.*\)\.zip.*|\1|p' "deps/CMakeLists.txt" )"
+    if [ "$expected_rev" != '${yara.rev}' ]; then
+      echo "The yara dependency has the wrong version: ${yara.rev} while $expected_rev is expected."
+      exit 1
+    fi
 
-      # patch the CMakeLists.txt file to use our local copy of the dependency instead of fetching it at build time
-      sed -i -e "s|URL .*|URL ${yara}|" "deps/CMakeLists.txt"
+    # patch the CMakeLists.txt file to use our local copy of the dependency instead of fetching it at build time
+    sed -i -e "s|URL .*|URL ${yara}|" "deps/CMakeLists.txt"
 
-      # abuse the CONFIGURE_COMMAND to make the source writeable after copying it to the build locatoin (necessary for the build)
-      sed -i -e 's|CONFIGURE_COMMAND ""|CONFIGURE_COMMAND COMMAND ${coreutils}/bin/chmod -R u+w .|' "deps/CMakeLists.txt"
-    '';
+    # abuse the CONFIGURE_COMMAND to make the source writeable after copying it to the build locatoin (necessary for the build)
+    sed -i -e 's|CONFIGURE_COMMAND ""|CONFIGURE_COMMAND COMMAND ${coreutils}/bin/chmod -R u+w .|' "deps/CMakeLists.txt"
+  '';
 
   buildPhase = "# do nothing";
   configurePhase = "# do nothing";

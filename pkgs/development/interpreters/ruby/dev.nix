@@ -4,20 +4,11 @@
 */
 { buildEnv, ruby, bundler, bundix }:
 let
-  bundler_ = bundler.override {
-    ruby = ruby;
-  };
-  bundix_ = bundix.override {
-    bundler = bundler_;
-  };
-in
-buildEnv {
+  bundler_ = bundler.override { ruby = ruby; };
+  bundix_ = bundix.override { bundler = bundler_; };
+in buildEnv {
   name = "${ruby.rubyEngine}-dev-${ruby.version}";
-  paths = [
-    bundix_
-    bundler_
-    ruby
-  ];
+  paths = [ bundix_ bundler_ ruby ];
   pathsToLink = [ "/bin" ];
   ignoreCollisions = true;
 }

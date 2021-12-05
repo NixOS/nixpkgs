@@ -1,8 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
-, gviz-api
-, protobuf
-, werkzeug
-}:
+{ lib, fetchPypi, buildPythonPackage, gviz-api, protobuf, werkzeug }:
 
 buildPythonPackage rec {
   pname = "tensorboard_plugin_profile";
@@ -17,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "16jch9py98h7wrffdiz6j0i3kdykxdp5m0kfxr1fxy2phqanpjqk";
   };
 
-  propagatedBuildInputs = [
-    gviz-api
-    protobuf
-    werkzeug
-  ];
+  propagatedBuildInputs = [ gviz-api protobuf werkzeug ];
 
   meta = with lib; {
     description = "Profile Tensorboard Plugin.";

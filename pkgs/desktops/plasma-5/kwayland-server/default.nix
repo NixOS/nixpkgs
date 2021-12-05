@@ -1,18 +1,13 @@
-{
-  mkDerivation, lib, cmake,
-  extra-cmake-modules, kdoctools,
-  kwayland, plasma-wayland-protocols,
-  wayland, wayland-protocols, qtbase
-}:
+{ mkDerivation, lib, cmake, extra-cmake-modules, kdoctools, kwayland
+, plasma-wayland-protocols, wayland, wayland-protocols, qtbase }:
 
 mkDerivation {
   name = "kwayland-server";
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules #kdoctools
+    extra-cmake-modules # kdoctools
   ];
-  buildInputs = [
-    kwayland plasma-wayland-protocols wayland wayland-protocols
-  ];
-  patches = [ ./0001-Use-KDE_INSTALL_TARGETS_DEFAULT_ARGS-when-installing.patch ];
+  buildInputs = [ kwayland plasma-wayland-protocols wayland wayland-protocols ];
+  patches =
+    [ ./0001-Use-KDE_INSTALL_TARGETS_DEFAULT_ARGS-when-installing.patch ];
 }

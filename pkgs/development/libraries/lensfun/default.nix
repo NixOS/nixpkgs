@@ -13,8 +13,7 @@ let
     sha256 = "00x35xhpn55j7f8qzakb6wl1ccbljg1gqjb93jl9w3mha2bzsr41";
   };
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -39,7 +38,8 @@ stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ flokli ];
     license = lib.licenses.lgpl3;
-    description = "An opensource database of photographic lenses and their characteristics";
+    description =
+      "An opensource database of photographic lenses and their characteristics";
     homepage = "https://lensfun.github.io";
   };
 }

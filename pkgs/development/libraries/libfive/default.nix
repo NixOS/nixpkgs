@@ -1,17 +1,5 @@
-{ lib
-, mkDerivation
-, wrapQtAppsHook
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, eigen
-, zlib
-, libpng
-, boost
-, guile
-, stdenv
-}:
+{ lib, mkDerivation, wrapQtAppsHook, fetchFromGitHub, cmake, ninja, pkg-config
+, eigen, zlib, libpng, boost, guile, stdenv }:
 
 mkDerivation {
   pname = "libfive-unstable";
@@ -42,7 +30,8 @@ mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
+    description =
+      "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
     homepage = "https://libfive.com/";
     maintainers = with maintainers; [ hodapp kovirobi ];
     license = with licenses; [ mpl20 gpl2Plus ];

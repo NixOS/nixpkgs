@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, perl, pkg-config
-, openssl, curl, libusb1, protobufc
-, enableUnsafe ? false }:
+{ lib, stdenv, fetchFromGitHub, cmake, perl, pkg-config, openssl, curl, libusb1
+, protobufc, enableUnsafe ? false }:
 
 stdenv.mkDerivation {
   pname = "ttwatch";

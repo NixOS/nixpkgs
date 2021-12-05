@@ -1,64 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook
-, pkg-config
-, gettext
-, itstool
-, libvirt-glib
-, glib
-, gobject-introspection
-, libxml2
-, gtk3
-, gtksourceview4
-, gtk-vnc
-, freerdp
-, libvirt
-, spice-gtk
-, python3
-, appstream-glib
-, spice-protocol
-, libhandy
-, libsoup
-, libosinfo
-, systemd
-, tracker
-, tracker-miners
-, vala
-, libcap
-, yajl
-, gmp
-, gdbm
-, cyrus_sasl
-, gnome
-, librsvg
-, desktop-file-utils
-, mtools
-, cdrkit
-, libcdio
-, libusb1
-, libarchive
-, acl
-, libgudev
-, libsecret
-, libcap_ng
-, numactl
-, libapparmor
-, json-glib
-, webkitgtk
-, vte
-, glib-networking
-, qemu-utils
-, qemu
-}:
+{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config, gettext
+, itstool, libvirt-glib, glib, gobject-introspection, libxml2, gtk3
+, gtksourceview4, gtk-vnc, freerdp, libvirt, spice-gtk, python3, appstream-glib
+, spice-protocol, libhandy, libsoup, libosinfo, systemd, tracker, tracker-miners
+, vala, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome, librsvg, desktop-file-utils
+, mtools, cdrkit, libcdio, libusb1, libarchive, acl, libgudev, libsecret
+, libcap_ng, numactl, libapparmor, json-glib, webkitgtk, vte, glib-networking
+, qemu-utils, qemu }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1wzhm8n485cqhbai4qshgrwl05ix881g8gjshilrj6vg8p1li79h";
   };
 
@@ -79,9 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = [
-    spice-gtk
-  ];
+  propagatedUserEnvPkgs = [ spice-gtk ];
 
   buildInputs = [
     acl
@@ -122,7 +76,9 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${
+      lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]
+    }")
   '';
 
   postPatch = ''
@@ -138,7 +94,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Simple GNOME 3 application to access remote or virtual systems";
+    description =
+      "Simple GNOME 3 application to access remote or virtual systems";
     homepage = "https://wiki.gnome.org/Apps/Boxes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

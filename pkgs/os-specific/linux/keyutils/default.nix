@@ -10,14 +10,16 @@ stdenv.mkDerivation rec {
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/${pname}-${version}.tar.gz";
+    url =
+      "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/${pname}-${version}.tar.gz";
     sha256 = "sha256-ph1XBhNq5MBb1I+GGGvP29iN2L1RB+Phlckkz8Gzm7Q=";
   };
 
   patches = [
     (fetchurl {
       # improve reproducibility
-      url = "https://salsa.debian.org/debian/keyutils/raw/4cecffcb8e2a2aa4ef41777ed40e4e4bcfb2e5bf/debian/patches/Make-build-reproducible.patch";
+      url =
+        "https://salsa.debian.org/debian/keyutils/raw/4cecffcb8e2a2aa4ef41777ed40e4e4bcfb2e5bf/debian/patches/Make-build-reproducible.patch";
       sha256 = "0wnvbjfrbk7rghd032z684l7vk7mhy3bd41zvhkrhgp3cd5id0bm";
     })
     ./conf-symlink.patch
@@ -43,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
-    description = "Tools used to control the Linux kernel key management system";
+    description =
+      "Tools used to control the Linux kernel key management system";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

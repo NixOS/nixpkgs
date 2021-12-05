@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc
-, protobuf
-}:
+{ lib, buildPythonPackage, fetchPypi, grpc, protobuf }:
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";

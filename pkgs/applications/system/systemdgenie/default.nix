@@ -1,13 +1,6 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, kxmlgui
-, fetchFromGitLab
-, kdelibs4support
-, wrapQtAppsHook
-}:
-stdenv.mkDerivation rec{
+{ stdenv, lib, cmake, extra-cmake-modules, kxmlgui, fetchFromGitLab
+, kdelibs4support, wrapQtAppsHook }:
+stdenv.mkDerivation rec {
   pname = "systemdgenie";
   version = "0.99.0";
   src = fetchFromGitLab {

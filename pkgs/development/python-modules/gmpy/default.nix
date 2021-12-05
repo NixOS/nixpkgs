@@ -1,11 +1,10 @@
-{ buildPythonPackage, fetchurl, isPyPy, gmp } :
+{ buildPythonPackage, fetchurl, isPyPy, gmp }:
 
 let
   pname = "gmpy";
   version = "1.17";
-in
 
-buildPythonPackage {
+in buildPythonPackage {
   inherit pname version;
 
   disabled = isPyPy;

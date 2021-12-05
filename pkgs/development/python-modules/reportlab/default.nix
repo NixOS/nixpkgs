@@ -1,14 +1,7 @@
-{ buildPythonPackage
-, fetchPypi
-, freetype
-, pillow
-, glibcLocales
-, python
-, isPyPy
+{ buildPythonPackage, fetchPypi, freetype, pillow, glibcLocales, python, isPyPy
 }:
 
-let
-  ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
+let ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
   version = "3.6.1";
@@ -42,7 +35,8 @@ in buildPythonPackage rec {
   disabled = isPyPy;
 
   meta = {
-    description = "An Open Source Python library for generating PDFs and graphics";
+    description =
+      "An Open Source Python library for generating PDFs and graphics";
     homepage = "http://www.reportlab.com/";
   };
 }

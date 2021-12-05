@@ -1,6 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools-scm
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six, pytest
+, backports_unittest-mock, keyring, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
@@ -20,7 +19,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [ pytest keyring ]
+    ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
   # heavily relies on importing tests from keyring package
   doCheck = false;
@@ -28,9 +28,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  pythonImportsCheck = [
-    "keyrings.alt"
-  ];
+  pythonImportsCheck = [ "keyrings.alt" ];
 
   meta = with lib; {
     license = licenses.mit;

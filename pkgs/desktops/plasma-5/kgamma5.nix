@@ -1,8 +1,5 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kconfig, kconfigwidgets, ki18n, qtbase, qtx11extras, libXxf86vm
-}:
+{ mkDerivation, lib, extra-cmake-modules, kdoctools, kconfig, kconfigwidgets
+, ki18n, qtbase, qtx11extras, libXxf86vm }:
 
 mkDerivation {
   name = "kgamma5";

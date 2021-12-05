@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libmpdclient
-, ncurses
-, pcre
-, pkg-config
-, taglib
-, curl
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libmpdclient
+, ncurses, pcre, pkg-config, taglib, curl }:
 
 stdenv.mkDerivation rec {
   version = "0.09.2";
@@ -27,7 +17,8 @@ stdenv.mkDerivation rec {
     #  https://github.com/boysetsfrog/vimpc/pull/100
     (fetchpatch {
       name = "ncurses-6.3.patch";
-      url = "https://github.com/boysetsfrog/vimpc/commit/055ecdce0720fdfc9ec2528c520b6c33da36271b.patch";
+      url =
+        "https://github.com/boysetsfrog/vimpc/commit/055ecdce0720fdfc9ec2528c520b6c33da36271b.patch";
       sha256 = "01p858jjxm0bf8hnk1z8h45j8c1y9i995mafa6ff3vg9vlak61pv";
     })
   ];

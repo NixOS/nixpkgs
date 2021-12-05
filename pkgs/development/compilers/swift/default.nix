@@ -1,39 +1,8 @@
-{ lib, stdenv
-, cmake
-, coreutils
-, glibc
-, gccForLibs
-, which
-, perl
-, libedit
-, ninja
-, pkg-config
-, sqlite
-, swig
-, bash
-, libxml2
-, clang_10
-, python3
-, ncurses
-, libuuid
-, libbsd
-, icu
-, libgcc
-, autoconf
-, libtool
-, automake
-, libblocksruntime
-, curl
-, rsync
-, git
-, libgit2
-, fetchFromGitHub
-, fetchpatch
-, findutils
-, makeWrapper
-, gnumake
-, file
-}:
+{ lib, stdenv, cmake, coreutils, glibc, gccForLibs, which, perl, libedit, ninja
+, pkg-config, sqlite, swig, bash, libxml2, clang_10, python3, ncurses, libuuid
+, libbsd, icu, libgcc, autoconf, libtool, automake, libblocksruntime, curl
+, rsync, git, libgit2, fetchFromGitHub, fetchpatch, findutils, makeWrapper
+, gnumake, file }:
 
 let
   version = "5.4.2";
@@ -150,16 +119,17 @@ let
     swig
   ];
 
-  python = (python3.withPackages (ps: [ps.six]));
+  python = (python3.withPackages (ps: [ ps.six ]));
 
   cmakeFlags = [
     "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc.dev}/include"
-    "-DC_INCLUDE_DIRS=${lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
+    "-DC_INCLUDE_DIRS=${
+      lib.makeSearchPathOutput "dev" "include" devInputs
+    }:${libxml2.dev}/include/libxml2"
     "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   ];
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "swift-${version}";
 
   nativeBuildInputs = [
@@ -180,16 +150,10 @@ stdenv.mkDerivation {
     rsync
     which
   ];
-  buildInputs = devInputs ++ [
-    clang_10
-  ];
+  buildInputs = devInputs ++ [ clang_10 ];
 
   # TODO: Revisit what needs to be propagated and how.
-  propagatedBuildInputs = [
-    libgcc
-    libgit2
-    python
-  ];
+  propagatedBuildInputs = [ libgcc libgit2 python ];
   propagatedUserEnvPkgs = [ git pkg-config ];
 
   hardeningDisable = [ "format" ]; # for LLDB
@@ -234,10 +198,18 @@ stdenv.mkDerivation {
       -e 's|/usr/bin/file|${file}/bin/file|g'
 
     # Build configuration patches.
-    patch -p1 -d swift -i ${./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch}
-    patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
-    patch -p1 -d swift -i ${./patches/0003-build-presets-linux-don-t-build-extra-libs.patch}
-    patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
+    patch -p1 -d swift -i ${
+      ./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch
+    }
+    patch -p1 -d swift -i ${
+      ./patches/0002-build-presets-linux-allow-custom-install-prefix.patch
+    }
+    patch -p1 -d swift -i ${
+      ./patches/0003-build-presets-linux-don-t-build-extra-libs.patch
+    }
+    patch -p1 -d swift -i ${
+      ./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch
+    }
     substituteInPlace swift/cmake/modules/SwiftConfigureSDK.cmake \
       --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
     sed -i swift/utils/build-presets.ini \
@@ -250,9 +222,13 @@ stdenv.mkDerivation {
       -e 's/^swift-install-components=autolink.*$/\0;editor-integration/'
 
     # LLVM toolchain patches.
-    patch -p1 -d llvm-project/clang -i ${./patches/0005-clang-toolchain-dir.patch}
+    patch -p1 -d llvm-project/clang -i ${
+      ./patches/0005-clang-toolchain-dir.patch
+    }
     patch -p1 -d llvm-project/clang -i ${./patches/0006-clang-purity.patch}
-    patch -p1 -d llvm-project/compiler-rt -i ${../llvm/common/compiler-rt/libsanitizer-no-cyclades-11.patch}
+    patch -p1 -d llvm-project/compiler-rt -i ${
+      ../llvm/common/compiler-rt/libsanitizer-no-cyclades-11.patch
+    }
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
       --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
       --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \

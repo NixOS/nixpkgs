@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.virtualisation.digitalOceanImage;
-in
-{
+let cfg = config.virtualisation.digitalOceanImage;
+in {
 
   imports = [ ./digital-ocean-config.nix ];
 
@@ -56,9 +54,10 @@ in
       in ''
         ${compress} $diskImage
       '';
-      configFile = if cfg.configFile == null
-        then config.virtualisation.digitalOcean.defaultConfigFile
-        else cfg.configFile;
+      configFile = if cfg.configFile == null then
+        config.virtualisation.digitalOcean.defaultConfigFile
+      else
+        cfg.configFile;
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };

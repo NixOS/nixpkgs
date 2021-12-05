@@ -6,11 +6,8 @@ with lib;
 {
   ###### interface
   options = {
-    services.neard = {
-      enable = mkEnableOption "neard, NFC daemon";
-    };
+    services.neard = { enable = mkEnableOption "neard, NFC daemon"; };
   };
-
 
   ###### implementation
   config = mkIf config.services.neard.enable {

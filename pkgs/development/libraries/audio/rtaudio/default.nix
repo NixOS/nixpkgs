@@ -1,18 +1,8 @@
-{ stdenv
-, lib
-, config
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
+{ stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
-, libpulseaudio
-, jackSupport ? true
-, jack
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin
-, CoreAudio
-}:
+, libpulseaudio, jackSupport ? true, jack
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio }:
 
 stdenv.mkDerivation rec {
   pname = "rtaudio";
@@ -29,8 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional jackSupport jack
-    ++ lib.optional coreaudioSupport CoreAudio;
+    ++ lib.optional jackSupport jack ++ lib.optional coreaudioSupport CoreAudio;
 
   cmakeFlags = [
     "-DRTAUDIO_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
@@ -40,7 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
+    description =
+      "A set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtaudio/";
     license = licenses.mit;
     maintainers = with maintainers; [ magnetophon ];

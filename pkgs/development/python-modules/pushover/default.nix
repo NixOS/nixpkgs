@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "python-pushover";
@@ -16,7 +15,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Bindings and command line utility for the Pushover notification service";
+    description =
+      "Bindings and command line utility for the Pushover notification service";
     homepage = "https://github.com/Thibauth/python-pushover";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

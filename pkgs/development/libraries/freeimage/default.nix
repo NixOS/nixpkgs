@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchsvn, darwin, libtiff
-, libpng, zlib, libwebp, libraw, openexr, openjpeg
-, libjpeg, jxrlib, pkg-config
-, fixDarwinDylibNames }:
+{ lib, stdenv, fetchsvn, darwin, libtiff, libpng, zlib, libwebp, libraw, openexr
+, openjpeg, libjpeg, jxrlib, pkg-config, fixDarwinDylibNames }:
 
 stdenv.mkDerivation {
   pname = "freeimage";
@@ -29,13 +27,21 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.osx --replace "x86_64" "arm64"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
-    fixDarwinDylibNames
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+  buildInputs = [
+    libtiff
+    libtiff.dev_private
+    libpng
+    zlib
+    libwebp
+    libraw
+    openexr
+    openjpeg
+    libjpeg
+    libjpeg.dev_private
+    jxrlib
   ];
-  buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 
   postBuild = lib.optionalString (!stdenv.isDarwin) ''
     make -f Makefile.fip
@@ -47,10 +53,10 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $INCDIR $INSTALLDIR
   ''
-  # Workaround for Makefiles.osx not using ?=
-  + lib.optionalString stdenv.isDarwin ''
-    makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
-  '';
+    # Workaround for Makefiles.osx not using ?=
+    + lib.optionalString stdenv.isDarwin ''
+      makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
+    '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     make -f Makefile.fip install
@@ -61,10 +67,11 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Open Source library for accessing popular graphics image file formats";
+    description =
+      "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
-    maintainers = with lib.maintainers; [viric l-as];
+    maintainers = with lib.maintainers; [ viric l-as ];
     platforms = with lib.platforms; unix;
   };
 }

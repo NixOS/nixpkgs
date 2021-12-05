@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, userpath
-, argcomplete
-, packaging
-, importlib-metadata
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, userpath, argcomplete
+, packaging, importlib-metadata, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pipx";
@@ -23,13 +15,8 @@ buildPythonPackage rec {
     sha256 = "sha256-gBeaHEig47XWKoPx3jzvgk/jJPJXtr5R5qUL0LgvbDg=";
   };
 
-  propagatedBuildInputs = [
-    userpath
-    argcomplete
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ userpath argcomplete packaging ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ pytestCheckHook ];
 

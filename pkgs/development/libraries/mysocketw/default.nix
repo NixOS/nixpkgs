@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "mysocketw";
   version = "031026";
   src = fetchurl {
-    url = "https://www.digitalfanatics.org/cal/socketw/files/SocketW${version}.tar.gz";
+    url =
+      "https://www.digitalfanatics.org/cal/socketw/files/SocketW${version}.tar.gz";
     sha256 = "0crinikhdl7xihzmc3k3k41pgxy16d5ci8m9sza1lbibns7pdwj4";
   };
 
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = {
-    description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
+    description =
+      "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
   };

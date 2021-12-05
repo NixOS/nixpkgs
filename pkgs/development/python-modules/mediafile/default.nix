@@ -1,9 +1,4 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, mutagen
-, six
-}:
+{ buildPythonPackage, fetchPypi, lib, mutagen, six }:
 
 buildPythonPackage rec {
   pname = "mediafile";
@@ -17,7 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ mutagen six ];
 
   meta = with lib; {
-    description = "MediaFile is a simple interface to the metadata tags for many audio file formats.";
+    description =
+      "MediaFile is a simple interface to the metadata tags for many audio file formats.";
     homepage = "https://github.com/beetbox/mediafile";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

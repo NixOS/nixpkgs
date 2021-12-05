@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-}:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests }:
 
 buildPythonPackage rec {
   pname = "pyephember";
@@ -17,16 +12,12 @@ buildPythonPackage rec {
     sha256 = "3eMdkP7u3TTg1AUK4OR7AGZkD0FxUUPp/etvZ2Rw74E=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyephember"
-  ];
+  pythonImportsCheck = [ "pyephember" ];
 
   meta = with lib; {
     description = "Python client to the EPH Control Systems Ember API";

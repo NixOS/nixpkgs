@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cairomm, cmake, libjack2, libpthreadstubs
+, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "artyFX";
@@ -13,7 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ cairomm libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk ];
+  buildInputs = [
+    cairomm
+    libjack2
+    libpthreadstubs
+    libXdmcp
+    libxshmfence
+    libsndfile
+    lv2
+    ntk
+  ];
 
   meta = with lib; {
     homepage = "http://openavproductions.com/artyfx/";

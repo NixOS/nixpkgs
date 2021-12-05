@@ -5,17 +5,19 @@ stdenv.mkDerivation rec {
 
   regular = fetchurl {
     # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Regular.otf";
+    url =
+      "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Regular.otf";
     sha256 = "1mxp2lvki6b1h7r9xcj1ld0g4z5y3dmsal85xam4yr764zpjzaiw";
   };
 
   italic = fetchurl {
     # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Italic.otf";
+    url =
+      "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Italic.otf";
     sha256 = "1chzcy3kyi7wpr4iq4aj1v24fq1wwph1v5z96dimlqcrnvm66h2l";
   };
 
-  nativeBuildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   sourceRoot = ".";
 

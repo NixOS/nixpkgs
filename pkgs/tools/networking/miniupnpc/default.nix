@@ -7,7 +7,8 @@ let
       inherit version;
       src = fetchurl {
         name = "${pname}-${version}.tar.gz";
-        url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
+        url =
+          "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -25,7 +26,8 @@ let
 
       meta = with lib; {
         homepage = "http://miniupnp.free.fr/";
-        description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
+        description =
+          "A client that implements the UPnP Internet Gateway Device (IGD) specification";
         platforms = with platforms; linux ++ freebsd ++ darwin;
         license = licenses.bsd3;
       };

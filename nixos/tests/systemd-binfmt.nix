@@ -3,10 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd-binfmt";
   machine = {
-    boot.binfmt.emulatedSystems = [
-      "armv7l-linux"
-      "aarch64-linux"
-    ];
+    boot.binfmt.emulatedSystems = [ "armv7l-linux" "aarch64-linux" ];
   };
 
   testScript = let

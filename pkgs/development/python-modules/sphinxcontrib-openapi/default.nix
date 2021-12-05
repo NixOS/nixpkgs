@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, m2r
-, pyyaml
-, jsonschema
-, sphinxcontrib_httpdomain
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy27, setuptools-scm, m2r, pyyaml
+, jsonschema, sphinxcontrib_httpdomain }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";

@@ -1,11 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, glib
-, libarchive
-, libticonv
+{ stdenv, lib, fetchurl, pkg-config, autoreconfHook, glib, libarchive, libticonv
 }:
 
 stdenv.mkDerivation rec {
@@ -16,16 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "10n9mhlabmaw3ha5ckllxfy6fygs2pmlmj5v6w5v62bvx54kpils";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [
-    glib
-    libarchive
-    libticonv
-  ];
+  buildInputs = [ glib libarchive libticonv ];
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

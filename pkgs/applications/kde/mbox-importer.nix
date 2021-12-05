@@ -1,7 +1,5 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-search, kconfig, kservice, kio, mailcommon, mailimporter, messagelib
+{ mkDerivation, lib, kdepimTeam, extra-cmake-modules, kdoctools, akonadi
+, akonadi-search, kconfig, kservice, kio, mailcommon, mailimporter, messagelib
 }:
 
 mkDerivation {
@@ -12,6 +10,13 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi akonadi-search kconfig kservice kio mailcommon mailimporter messagelib
+    akonadi
+    akonadi-search
+    kconfig
+    kservice
+    kio
+    mailcommon
+    mailimporter
+    messagelib
   ];
 }

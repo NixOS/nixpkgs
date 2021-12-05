@@ -1,28 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, fetchpatch
-, ninja
-, gettext
-, python3
-, pkg-config
-, libxml2
-, json-glib
-, sqlite
-, itstool
-, yelp-tools
-, vala
-, gsettings-desktop-schemas
-, gtk3
-, gnome
-, desktop-file-utils
-, wrapGAppsHook
-, gobject-introspection
-, libsoup
-, glib-networking
-, webkitgtk
-}:
+{ lib, stdenv, fetchFromGitHub, meson, fetchpatch, ninja, gettext, python3
+, pkg-config, libxml2, json-glib, sqlite, itstool, yelp-tools, vala
+, gsettings-desktop-schemas, gtk3, gnome, desktop-file-utils, wrapGAppsHook
+, gobject-introspection, libsoup, glib-networking, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
@@ -39,7 +18,8 @@ stdenv.mkDerivation rec {
     # Fix compilation with latest Vala.
     # https://github.com/FontManager/font-manager/issues/240
     (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/f9c4621389dae5999ca9d2f3c8402c2512a9ea60.patch";
+      url =
+        "https://github.com/FontManager/font-manager/commit/f9c4621389dae5999ca9d2f3c8402c2512a9ea60.patch";
       sha256 = "ZEJZSUYFLKmiHpVusO3ZUXMLUzJbbbCSqMjCtwlzPRY=";
     })
   ];

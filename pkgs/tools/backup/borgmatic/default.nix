@@ -13,9 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
-  disabledTests = [
-    "test_borgmatic_version_matches_news_version"
-  ];
+  disabledTests = [ "test_borgmatic_version_matches_news_version" ];
 
   propagatedBuildInputs = with python3Packages; [
     borgbackup
@@ -37,7 +35,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Simple, configuration-driven backup software for servers and workstations";
+    description =
+      "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

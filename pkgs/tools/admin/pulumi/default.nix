@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-  data = import ./data.nix {};
+let data = import ./data.nix { };
 in stdenv.mkDerivation {
   pname = "pulumi";
   version = data.version;
@@ -25,7 +24,8 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://pulumi.io/";
-    description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
+    description =
+      "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [

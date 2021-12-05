@@ -1,15 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, geojson
-, lxml
-, matplotlib
-, numpy
-, pandas
-, ujson
-, xarray
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, beautifulsoup4, geojson, lxml
+, matplotlib, numpy, pandas, ujson, xarray }:
 
 buildPythonPackage rec {
   pname = "osmpythontools";
@@ -26,16 +16,8 @@ buildPythonPackage rec {
   # Remove them, as we don't run the tests.
   patches = [ ./remove-test-only-dependencies.patch ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    geojson
-    lxml
-    matplotlib
-    numpy
-    pandas
-    ujson
-    xarray
-  ];
+  propagatedBuildInputs =
+    [ beautifulsoup4 geojson lxml matplotlib numpy pandas ujson xarray ];
 
   # tests touch network
   doCheck = false;

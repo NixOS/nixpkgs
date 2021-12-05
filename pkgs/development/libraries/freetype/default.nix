@@ -1,14 +1,10 @@
-{ lib, stdenv, fetchurl
-, buildPackages, pkgsHostHost
-, pkg-config, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+{ lib, stdenv, fetchurl, buildPackages, pkgsHostHost, pkg-config, which
+, makeWrapper, zlib, bzip2, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
-  # LCD filtering is also known as ClearType and covered by several Microsoft patents.
-  # This option allows it to be disabled. See http://www.freetype.org/patents.html.
-  useEncumberedCode ? true
-}:
-
+# LCD filtering is also known as ClearType and covered by several Microsoft patents.
+# This option allows it to be disabled. See http://www.freetype.org/patents.html.
+useEncumberedCode ? true }:
 
 stdenv.mkDerivation rec {
   pname = "freetype";
@@ -19,16 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i+45vTloxIBLcGFKCjrVlyma0OgkvIqtXOiq9IBnvec=";
   };
 
-  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+  propagatedBuildInputs =
+    [ zlib bzip2 libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkg-config which makeWrapper ]
-    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  nativeBuildInputs = [
+    pkg-config
+    which
+    makeWrapper
+  ]
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ lib.optional (!stdenv.isLinux) gnumake;
 
-  patches = [
-    ./enable-table-validation.patch
-  ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
+  patches = [ ./enable-table-validation.patch ]
+    ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
       fonts.
     '';
     homepage = "https://www.freetype.org/";
-    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    license =
+      licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };

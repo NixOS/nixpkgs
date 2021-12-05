@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
-, systemd, pango, cairo, gdk-pixbuf
-, wayland, wayland-protocols
-, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, systemd, pango
+, cairo, gdk-pixbuf, wayland, wayland-protocols, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mako";
@@ -14,13 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RcPwZ5NeO9vxwPWfgj5x3wVdCYGKumnYT3ngHEAWfW0=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
+  nativeBuildInputs =
+    [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
-  mesonFlags = [
-    "-Dzsh-completions=true"
-    "-Dsd-bus-provider=libsystemd"
-  ];
+  mesonFlags = [ "-Dzsh-completions=true" "-Dsd-bus-provider=libsystemd" ];
 
   meta = with lib; {
     description = "A lightweight Wayland notification daemon";

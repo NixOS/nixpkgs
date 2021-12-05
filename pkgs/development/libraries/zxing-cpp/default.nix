@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "zxing-cpp";
@@ -16,14 +11,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-N2FTzsjxm3EE5Wqz7xt+FS4zQ60Ow4WbdX6Eo08ktek=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  cmakeFlags = [
-    "-DBUILD_EXAMPLES=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" ];
 
   meta = with lib; {
     homepage = "https://github.com/nu-book/zxing-cpp";

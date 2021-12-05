@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, requests
-, cryptography
-, suds-jurko
-, pytest
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, requests, cryptography
+, suds-jurko, pytest }:
 
 buildPythonPackage rec {
   pname = "transip-api";
@@ -28,7 +21,6 @@ buildPythonPackage rec {
            --deselect tests/service_tests/test_vps.py::TestVPSService::testConstructor \
            --deselect tests/service_tests/test_webhosting.py::TestWebhostingService::testConstructor
   '';
-
 
   propagatedBuildInputs = [ requests cryptography suds-jurko ];
 

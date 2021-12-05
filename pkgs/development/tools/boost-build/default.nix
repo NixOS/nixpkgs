@@ -1,25 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
+{ lib, stdenv, fetchFromGitHub, bison
 # boost derivation to use for the src and version.
 # This is used by the boost derivation to build
 # a b2 matching their version (by overriding this
 # argument). Infinite recursion is not an issue
 # since we only look at src and version of boost.
-, useBoost ? {}
-}:
+, useBoost ? { } }:
 
-let
-  defaultVersion = "4.4.1";
-in
+let defaultVersion = "4.4.1";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "boost-build";
   version =
-    if useBoost ? version
-    then "boost-${useBoost.version}"
-    else defaultVersion;
+    if useBoost ? version then "boost-${useBoost.version}" else defaultVersion;
 
   src = useBoost.src or (fetchFromGitHub {
     owner = "boostorg";
@@ -38,9 +30,7 @@ stdenv.mkDerivation {
     ./darwin-default-toolset.patch
   ];
 
-  nativeBuildInputs = [
-    bison
-  ];
+  nativeBuildInputs = [ bison ];
 
   buildPhase = ''
     runHook preBuild

@@ -14,14 +14,15 @@ let
     i686-linux = "makefile";
     x86_64-darwin = "makemac";
   }."${stdenv.hostPlatform.system}" or throwSystem;
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mprime";
   version = "29.8b7";
 
   src = fetchurl {
-    url = "https://www.mersenne.org/ftp_root/gimps/p95v${lib.replaceStrings ["."] [""] version}.source.zip";
+    url = "https://www.mersenne.org/ftp_root/gimps/p95v${
+        lib.replaceStrings [ "." ] [ "" ] version
+      }.source.zip";
     sha256 = "0x5dk2dcppfnq17n79297lmn6p56rd66cbwrh1ds4l8r4hmwsjaj";
   };
 
@@ -63,6 +64,6 @@ stdenv.mkDerivation rec {
     # a suitable prime. http://www.mersenne.org/legal/#EULA
     license = licenses.unfree;
     # Untested on linux-32 and osx. Works in theory.
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

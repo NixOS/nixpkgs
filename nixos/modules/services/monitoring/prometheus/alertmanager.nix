@@ -4,18 +4,21 @@ with lib;
 
 let
   cfg = config.services.prometheus.alertmanager;
-  mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
+  mkConfigFile =
+    pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
-    ln -s ${file} $out
-    amtool check-config $out
-  '';
+  checkedConfig = file:
+    pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+      ln -s ${file} $out
+      amtool check-config $out
+    '';
 
   alertmanagerYml = let
     yml = if cfg.configText != null then
-        pkgs.writeText "alertmanager.yml" cfg.configText
-        else mkConfigFile;
-    in checkedConfig yml;
+      pkgs.writeText "alertmanager.yml" cfg.configText
+    else
+      mkConfigFile;
+  in checkedConfig yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--config.file /tmp/alert-manager-substituted.yaml"
@@ -23,15 +26,15 @@ let
     "--log.level ${cfg.logLevel}"
     "--storage.path /var/lib/alertmanager"
     (toString (map (peer: "--cluster.peer ${peer}:9094") cfg.clusterPeers))
-    ] ++ (optional (cfg.webExternalUrl != null)
-      "--web.external-url ${cfg.webExternalUrl}"
-    ) ++ (optional (cfg.logFormat != null)
-      "--log.format ${cfg.logFormat}"
-  );
+  ] ++ (optional (cfg.webExternalUrl != null)
+    "--web.external-url ${cfg.webExternalUrl}")
+    ++ (optional (cfg.logFormat != null) "--log.format ${cfg.logFormat}");
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
-    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
+    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ]
+      "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
+    (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ]
+      "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
       Due to incompatibility, the alertmanagerURL option has been removed,
       please use 'services.prometheus2.alertmanagers' instead.
@@ -79,7 +82,7 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.enum ["debug" "info" "warn" "error" "fatal"];
+        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
         default = "warn";
         description = ''
           Only log messages with the given severity or above.
@@ -124,7 +127,7 @@ in {
 
       clusterPeers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Initial peers for HA cluster.
         '';
@@ -132,7 +135,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra commandline options when launching the Alertmanager.
         '';
@@ -157,7 +160,7 @@ in {
       assertions = singleton {
         assertion = cfg.configuration != null || cfg.configText != null;
         message = "Can not enable alertmanager without a configuration. "
-         + "Set either the `configuration` or `configText` attribute.";
+          + "Set either the `configuration` or `configText` attribute.";
       };
     })
     (mkIf cfg.enable {
@@ -165,20 +168,23 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         preStart = ''
-           ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
-                                                    -i "${alertmanagerYml}"
+          ${
+            lib.getBin pkgs.envsubst
+          }/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
+                                                   -i "${alertmanagerYml}"
         '';
         serviceConfig = {
-          Restart  = "always";
+          Restart = "always";
           StateDirectory = "alertmanager";
           DynamicUser = true; # implies PrivateTmp
-          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+          EnvironmentFile =
+            lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = "/tmp";
-          ExecStart = "${cfg.package}/bin/alertmanager" +
-            optionalString (length cmdlineArgs != 0) (" \\\n  " +
-              concatStringsSep " \\\n  " cmdlineArgs);
+          ExecStart = "${cfg.package}/bin/alertmanager"
+            + optionalString (length cmdlineArgs != 0)
+            (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };

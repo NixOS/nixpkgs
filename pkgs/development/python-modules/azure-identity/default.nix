@@ -1,18 +1,8 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{ buildPythonPackage, fetchPypi, lib
 
 # pythonPackages
-, azure-common
-, azure-core
-, azure-nspkg
-, cryptography
-, mock
-, msal
-, msal-extensions
-, msrest
-, msrestazure
-}:
+, azure-common, azure-core, azure-nspkg, cryptography, mock, msal
+, msal-extensions, msrest, msrestazure }:
 
 buildPythonPackage rec {
   pname = "azure-identity";
@@ -46,8 +36,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Identity Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

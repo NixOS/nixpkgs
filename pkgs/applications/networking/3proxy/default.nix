@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=${placeholder "out"}"
   ];
 
-  passthru.tests = {
-    smoke-test = nixosTests._3proxy;
-  };
+  passthru.tests = { smoke-test = nixosTests._3proxy; };
 
   meta = with lib; {
     description = "Tiny free proxy server";

@@ -1,7 +1,6 @@
 { lib, fetchurl }:
 
-let
-  version = "0.0.4.7";
+let version = "0.0.4.7";
 in fetchurl {
   name = "cnstrokeorder-${version}";
 

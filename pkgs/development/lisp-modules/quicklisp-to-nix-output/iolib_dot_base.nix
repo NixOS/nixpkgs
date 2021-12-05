@@ -1,12 +1,17 @@
-/* Generated file. */
-args @ { fetchurl, ... }:
-rec {
+# Generated file.
+args@{ fetchurl, ... }: rec {
   baseName = "iolib_dot_base";
   version = "iolib-v0.8.4";
 
   description = "Base IOlib package, used instead of CL.";
 
-  deps = [ args."alexandria" args."iolib_dot_asdf" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."split-sequence" ];
+  deps = [
+    args."alexandria"
+    args."iolib_dot_asdf"
+    args."iolib_dot_common-lisp"
+    args."iolib_dot_conf"
+    args."split-sequence"
+  ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/iolib/2021-06-30/iolib-v0.8.4.tgz";
@@ -15,7 +20,7 @@ rec {
 
   packageName = "iolib.base";
 
-  asdFilesToKeep = ["iolib.base.asd"];
+  asdFilesToKeep = [ "iolib.base.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.base DESCRIPTION Base IOlib package, used instead of CL.
@@ -32,4 +37,5 @@ rec {
     (alexandria iolib.asdf iolib.common-lisp iolib.conf split-sequence) VERSION
     iolib-v0.8.4 SIBLINGS
     (iolib iolib.asdf iolib.common-lisp iolib.conf iolib.examples) PARASITES
-    NIL) */
+    NIL)
+*/

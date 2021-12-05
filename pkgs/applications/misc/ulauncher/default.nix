@@ -1,22 +1,6 @@
-{ lib
-, fetchurl
-, nix-update-script
-, python3Packages
-, gdk-pixbuf
-, glib
-, gnome
-, gobject-introspection
-, gtk3
-, wrapGAppsHook
-, webkitgtk
-, libnotify
-, keybinder3
-, libappindicator
-, intltool
-, wmctrl
-, xvfb-run
-, librsvg
-}:
+{ lib, fetchurl, nix-update-script, python3Packages, gdk-pixbuf, glib, gnome
+, gobject-introspection, gtk3, wrapGAppsHook, webkitgtk, libnotify, keybinder3
+, libappindicator, intltool, wmctrl, xvfb-run, librsvg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
@@ -25,7 +9,8 @@ python3Packages.buildPythonApplication rec {
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
-    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
+    url =
+      "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
     sha256 = "sha256-Fd3IOCEeXGV8zGd/8SzrWRsSsZRVePnsDaX8WrBrCOQ=";
   };
 
@@ -64,12 +49,7 @@ python3Packages.buildPythonApplication rec {
     websocket-client
   ];
 
-  checkInputs = with python3Packages; [
-    mock
-    pytest
-    pytest-mock
-    xvfb-run
-  ];
+  checkInputs = with python3Packages; [ mock pytest pytest-mock xvfb-run ];
 
   patches = [
     ./fix-path.patch
@@ -113,15 +93,11 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
-
+  passthru = { updateScript = nix-update-script { attrPath = pname; }; };
 
   meta = with lib; {
-    description = "A fast application launcher for Linux, written in Python, using GTK";
+    description =
+      "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;

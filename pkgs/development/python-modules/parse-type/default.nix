@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parse
-, pytestCheckHook
-, six
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, parse, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "parse-type";
@@ -17,14 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-CJroqJIi5DpmR8i1lr8OJ+234615PhpVUsqK91XOT3E=";
   };
 
-  propagatedBuildInputs = [
-    parse
-    six
-  ];
+  propagatedBuildInputs = [ parse six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

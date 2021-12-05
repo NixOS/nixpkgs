@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, python
-}:
+{ lib, buildPythonPackage, fetchPypi, paramiko, python }:
 
 buildPythonPackage rec {
   pname = "scp";
@@ -14,9 +9,7 @@ buildPythonPackage rec {
     sha256 = "b776bd6ce8c8385aa9a025b64a9815b5d798f12d4ef0d712d569503f62aece8b";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-  ];
+  propagatedBuildInputs = [ paramiko ];
 
   checkPhase = ''
     SCPPY_PORT=10022 ${python.interpreter} test.py

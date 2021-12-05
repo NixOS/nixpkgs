@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
-, docbook_xsl, pkg-config, luajit
-, coreutils, gnused, groff, docutils
-, gzip, bzip2, lzip, xz, zstd
-, python, wrapPython, pygments, markdown
-}:
+{ lib, stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt, docbook_xsl
+, pkg-config, luajit, coreutils, gnused, groff, docutils, gzip, bzip2, lzip, xz
+, zstd, python, wrapPython, pygments, markdown }:
 
 stdenv.mkDerivation rec {
   pname = "cgit";
@@ -18,14 +15,12 @@ stdenv.mkDerivation rec {
   # IMPORTANT: Remember to check which git version cgit needs on every version
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
+    url = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
     sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
   };
 
   nativeBuildInputs = [ pkg-config asciidoc ] ++ [ python wrapPython ];
-  buildInputs = [
-    openssl zlib libxml2 libxslt docbook_xsl luajit
-  ];
+  buildInputs = [ openssl zlib libxml2 libxslt docbook_xsl luajit ];
   pythonPath = [ pygments markdown ];
 
   postPatch = ''
@@ -70,7 +65,9 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
 
     for script in $out/lib/cgit/filters/*.sh $out/lib/cgit/filters/html-converters/txt2html; do
-      wrapProgram $script --prefix PATH : '${lib.makeBinPath [ coreutils gnused ]}'
+      wrapProgram $script --prefix PATH : '${
+        lib.makeBinPath [ coreutils gnused ]
+      }'
     done
   '';
 

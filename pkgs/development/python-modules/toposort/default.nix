@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "toposort";
@@ -13,9 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-3cIYLEKRKkQFEb1/9dPmocq8Osy8Z0oyWMjEHL+7ISU=";
   };
 
-  pythonImportsCheck = [
-    "toposort"
-  ];
+  pythonImportsCheck = [ "toposort" ];
 
   meta = with lib; {
     description = "A topological sort algorithm";

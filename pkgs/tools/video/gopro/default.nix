@@ -1,9 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, ffmpeg
-, imagemagick
-, makeWrapper
-, mplayer
-}:
+{ lib, stdenv, fetchFromGitHub, ffmpeg, imagemagick, makeWrapper, mplayer }:
 
 stdenv.mkDerivation rec {
   pname = "gopro";
@@ -29,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Command line interface for processing media filmed on GoPro HERO 3, 4, 5, 6, and 7 cameras";
+    description =
+      "Command line interface for processing media filmed on GoPro HERO 3, 4, 5, 6, and 7 cameras";
     homepage = "https://github.com/KonradIT/gopro-linux";
     platforms = platforms.unix;
     license = licenses.gpl3;

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
-  # Darwin
-  libiconv, CoreFoundation, Security }:
+# Darwin
+libiconv, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sit";
@@ -26,7 +26,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Serverless Information Tracker";
     homepage = "https://sit.fyi/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ dywedir yrashk ];
     # Upstream has not had a release in several years, and dependencies no
     # longer compile with the latest Rust compiler.

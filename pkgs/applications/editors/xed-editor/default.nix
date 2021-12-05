@@ -1,20 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libxml2
-, libpeas
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, xapps
-, pkg-config
-, meson
-, ninja
-, wrapGAppsHook
-, intltool
-, itstool }:
+{ stdenv, lib, fetchFromGitHub, cmake, libxml2, libpeas, glib, gtk3
+, gtksourceview4, gspell, xapps, pkg-config, meson, ninja, wrapGAppsHook
+, intltool, itstool }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
@@ -27,25 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VIudVgENibOz8RK0oK80U74wy592q3vKEnl3zuS7oSI=";
   };
 
-  nativeBuildInputs = [
-    meson
-    cmake
-    pkg-config
-    intltool
-    itstool
-    ninja
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ meson cmake pkg-config intltool itstool ninja wrapGAppsHook ];
 
-  buildInputs = [
-    libxml2
-    glib
-    gtk3
-    gtksourceview4
-    libpeas
-    gspell
-    xapps
-  ];
+  buildInputs = [ libxml2 glib gtk3 gtksourceview4 libpeas gspell xapps ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas

@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchurl, cmake
-, libGL, libGLU, libXv, libXtst, libXi, libjpeg_turbo, fltk
-, xorg
-, opencl-headers, opencl-clhpp, ocl-icd
-}:
+{ lib, stdenv, fetchurl, cmake, libGL, libGLU, libXv, libXtst, libXi
+, libjpeg_turbo, fltk, xorg, opencl-headers, opencl-clhpp, ocl-icd }:
 
 stdenv.mkDerivation rec {
   pname = "virtualgl-lib";
@@ -13,15 +10,27 @@ stdenv.mkDerivation rec {
     sha256 = "1giin3jmcs6y616bb44bpz30frsmj9f8pz2vg7jvb9vcfc9456rr";
   };
 
-  cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];
+  cmakeFlags = [
+    "-DVGL_SYSTEMFLTK=1"
+    "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libjpeg_turbo libGL libGLU fltk
-    libXv libXtst libXi xorg.xcbutilkeysyms
-    opencl-headers opencl-clhpp ocl-icd
+  buildInputs = [
+    libjpeg_turbo
+    libGL
+    libGLU
+    fltk
+    libXv
+    libXtst
+    libXi
+    xorg.xcbutilkeysyms
+    opencl-headers
+    opencl-clhpp
+    ocl-icd
   ];
 
   fixupPhase = ''
@@ -33,7 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.virtualgl.org/";
-    description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
+    description =
+      "X11 GL rendering in a remote computer with full 3D hw acceleration";
     license = licenses.wxWindows;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

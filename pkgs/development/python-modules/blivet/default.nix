@@ -1,6 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, multipath-tools, lsof, util-linux
-}:
+, pyudev, six, libselinux, multipath-tools, lsof, util-linux }:
 
 buildPythonPackage rec {
   pname = "blivet";
@@ -26,10 +25,8 @@ buildPythonPackage rec {
     sed -i -r -e 's|"(u?mount)"|"${util-linux}/bin/\1"|' blivet/util.py
   '';
 
-  propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev libselinux
-    six
-  ];
+  propagatedBuildInputs =
+    [ pykickstart pyparted pyblock pyudev libselinux six ];
 
   doCheck = false;
 

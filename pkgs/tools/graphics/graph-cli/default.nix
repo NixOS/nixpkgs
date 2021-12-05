@@ -1,6 +1,4 @@
-{ lib
-, python3Packages
-}:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
@@ -12,11 +10,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-/v9COgAjuunJ06HHl55J0moV1p4uO+N+w2QwE8tgebQ=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    numpy
-    pandas
-    matplotlib
-  ];
+  propagatedBuildInputs = with python3Packages; [ numpy pandas matplotlib ];
 
   # does not contain tests despite reference in Makefile
   doCheck = false;

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gtk2, aspell, pkg-config, enchant, intltool}:
+{ lib, stdenv, fetchurl, gtk2, aspell, pkg-config, enchant, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "gtkspell";
@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [aspell gtk2 enchant intltool];
+  buildInputs = [ aspell gtk2 enchant intltool ];
 
   meta = with lib; {
-    description = "Word-processor-style highlighting and replacement of misspelled words";
+    description =
+      "Word-processor-style highlighting and replacement of misspelled words";
     homepage = "http://gtkspell.sourceforge.net";
     platforms = platforms.unix;
     license = licenses.gpl2;

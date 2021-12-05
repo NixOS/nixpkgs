@@ -1,28 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gettext
-, itstool
-, libxml2
-, python3
-, gnome
-, glib
-, gtk4
-, librsvg
-}:
+{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, wrapGAppsHook4
+, gobject-introspection, gettext, itstool, libxml2, python3, gnome, glib, gtk4
+, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
   version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-chess/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "62GYhlljlrQDOj8oo8LjAEtU6+Gzi0DWQiwXufLMF9A=";
   };
 
@@ -39,12 +26,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    librsvg
-    gnome.adwaita-icon-theme
-  ];
+  buildInputs = [ glib gtk4 librsvg gnome.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

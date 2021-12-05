@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ curl breakpad pkg-config ];
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-    "-DSENTRY_BREAKPAD_SYSTEM=On"
-  ];
+  cmakeFlags =
+    [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DSENTRY_BREAKPAD_SYSTEM=On" ];
 
   meta = with lib; {
     homepage = "https://github.com/getsentry/sentry-native";

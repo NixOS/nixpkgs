@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.20.0";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
+    url =
+      "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
     sha256 = "14wvlwqnwj0gllkpvfqiy8ns938bwvjsz8x1hmymmx32m074vj0f";
   };
 
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
     # remove after updating to next release
     (fetchpatch {
       name = "json-c-0.14-support.patch";
-      url = "https://github.com/Yubico/yubikey-personalization/commit/0aa2e2cae2e1777863993a10c809bb50f4cde7f8.patch";
+      url =
+        "https://github.com/Yubico/yubikey-personalization/commit/0aa2e2cae2e1777863993a10c809bb50f4cde7f8.patch";
       sha256 = "1wnigf3hbq59i15kgxpq3pwrl1drpbj134x81mmv9xm1r44cjva8";
     })
   ];
@@ -21,9 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 libyubikey json_c ];
 
-  configureFlags = [
-    "--with-backend=libusb-1.0"
-  ];
+  configureFlags = [ "--with-backend=libusb-1.0" ];
 
   doCheck = true;
 

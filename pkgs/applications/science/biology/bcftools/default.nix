@@ -5,24 +5,19 @@ stdenv.mkDerivation rec {
   version = "1.14";
 
   src = fetchurl {
-    url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url =
+      "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-t++Iron8tVZYxb6i6MuOdWsFXhOGADbWvhN1Z4KqGcs=";
   };
 
-  nativeBuildInputs = [
-    perl
-    python3
-  ];
+  nativeBuildInputs = [ perl python3 ];
 
   buildInputs = [ htslib zlib bzip2 xz curl ];
 
   strictDeps = true;
 
-  makeFlags = [
-    "HSTDIR=${htslib}"
-    "prefix=$(out)"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags =
+    [ "HSTDIR=${htslib}" "prefix=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preCheck = ''
     patchShebangs misc/
@@ -35,7 +30,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
+    description =
+      "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
     license = licenses.mit;
     homepage = "http://www.htslib.org/";
     platforms = platforms.unix;

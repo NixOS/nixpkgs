@@ -1,27 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
-, gtk3
-, libxml2
-, libhandy
-, webkitgtk
-, folks
-, libgdata
-, sqlite
-, granite
-, elementary-icon-theme
-, evolution-data-server
-, appstream
-, wrapGAppsHook
-, libgee
-}:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pkg-config, meson, ninja
+, python3, vala, desktop-file-utils, gtk3, libxml2, libhandy, webkitgtk, folks
+, libgdata, sqlite, granite, elementary-icon-theme, evolution-data-server
+, appstream, wrapGAppsHook, libgee }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
@@ -37,9 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
   nativeBuildInputs = [
@@ -77,7 +55,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/mail";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    maintainers = with maintainers;
+      [ ethancedwards8 ] ++ teams.pantheon.members;
     mainProgram = "io.elementary.mail";
   };
 }

@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, noiseprotocol
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zeroconf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, noiseprotocol, protobuf
+, pytest-asyncio, pytestCheckHook, pythonOlder, zeroconf }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
@@ -24,21 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-SUM9P7qmP3LWANw8LiwMsT5sN1kZJvqeaBT/ZDmTtwE=";
   };
 
-  propagatedBuildInputs = [
-    noiseprotocol
-    protobuf
-    zeroconf
-  ];
+  propagatedBuildInputs = [ noiseprotocol protobuf zeroconf ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
+  pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";

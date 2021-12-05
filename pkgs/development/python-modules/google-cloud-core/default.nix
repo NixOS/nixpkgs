@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, mock
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-core";

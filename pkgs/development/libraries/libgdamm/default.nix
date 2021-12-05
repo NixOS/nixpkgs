@@ -1,11 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome
-, mysqlSupport ? false
-, postgresSupport ? false }:
+, mysqlSupport ? false, postgresSupport ? false }:
 
-let
-  gda = libgda.override {
-    inherit mysqlSupport postgresSupport;
-  };
+let gda = libgda.override { inherit mysqlSupport postgresSupport; };
 in stdenv.mkDerivation rec {
   pname = "libgdamm";
   version = "4.99.11";
@@ -13,7 +9,9 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.majorMinor version
+      }/${pname}-${version}.tar.xz";
     sha256 = "1fyh15b3f8hmwbswalxk1g4l04yvvybksn5nm7gznn5jl5q010p9";
   };
 
@@ -26,7 +24,8 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none"; # Should be odd-unstable but stable version has not been released yet.
+      versionPolicy =
+        "none"; # Should be odd-unstable but stable version has not been released yet.
     };
   };
 

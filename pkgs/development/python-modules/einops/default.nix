@@ -1,16 +1,5 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, nose
-, nbformat
-, nbconvert
-, jupyter
-, chainer
-, pytorch
-, mxnet
-, tensorflow
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, numpy, nose, nbformat, nbconvert
+, jupyter, chainer, pytorch, mxnet, tensorflow }:
 
 buildPythonPackage rec {
   pname = "einops";
@@ -46,7 +35,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Flexible and powerful tensor operations for readable and reliable code";
+    description =
+      "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yl3dy ];

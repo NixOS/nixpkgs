@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-}:
+{ lib, buildPythonPackage, fetchPypi, click }:
 
 buildPythonPackage rec {
   pname = "userpath";
@@ -10,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256="sha256-3NZsX6mxo8EjYvMJu7W8eZK6yK+G0XtOaxpLFmoRxD8=";
+    sha256 = "sha256-3NZsX6mxo8EjYvMJu7W8eZK6yK+G0XtOaxpLFmoRxD8=";
   };
 
   propagatedBuildInputs = [ click ];

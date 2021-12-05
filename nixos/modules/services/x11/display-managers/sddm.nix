@@ -12,8 +12,12 @@ let
   iniFmt = pkgs.formats.ini { };
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
-    ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec systemd-cat -t xserver-wrapper ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
+    ${concatMapStrings (n: ''
+      export ${n}="${getAttr n xEnv}"
+    '') (attrNames xEnv)}
+    exec systemd-cat -t xserver-wrapper ${dmcfg.xserverBin} ${
+      toString dmcfg.xserverArgs
+    } "$@"
   '';
 
   Xsetup = pkgs.writeShellScript "Xsetup" ''
@@ -32,7 +36,8 @@ let
       Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-      DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+      DefaultSession = optionalString (dmcfg.defaultSession != null)
+        "${dmcfg.defaultSession}.desktop";
     };
 
     Theme = {
@@ -71,27 +76,43 @@ let
     };
   };
 
-  cfgFile =
-    iniFmt.generate "sddm.conf" (lib.recursiveUpdate defaultConfig cfg.settings);
+  cfgFile = iniFmt.generate "sddm.conf"
+    (lib.recursiveUpdate defaultConfig cfg.settings);
 
-  autoLoginSessionName =
-    "${dmcfg.sessionData.autologinSession}.desktop";
+  autoLoginSessionName = "${dmcfg.sessionData.autologinSession}.desktop";
 
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "themes" ]
-      "Set the option `services.xserver.displayManager.sddm.package' instead.")
-    (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "user" ])
-    (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "extraConfig" ]
-      "Set the option `services.xserver.displayManager.sddm.settings' instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "displayManager"
+      "sddm"
+      "themes"
+    ] "Set the option `services.xserver.displayManager.sddm.package' instead.")
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "displayManager"
+      "sddm"
+      "autoLogin"
+      "enable"
+    ] [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
+    (mkRenamedOptionModule [
+      "services"
+      "xserver"
+      "displayManager"
+      "sddm"
+      "autoLogin"
+      "user"
+    ] [ "services" "xserver" "displayManager" "autoLogin" "user" ])
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "displayManager"
+      "sddm"
+      "extraConfig"
+    ] "Set the option `services.xserver.displayManager.sddm.settings' instead.")
   ];
 
   options = {
@@ -207,8 +228,10 @@ in
     services.xserver.displayManager.job = {
       environment = {
         # Load themes from system environment
-        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
-        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+        QT_PLUGIN_PATH = "/run/current-system/sw/"
+          + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/"
+          + pkgs.qt5.qtbase.qtQmlPrefix;
       };
 
       execCmd = "exec /run/current-system/sw/bin/sddm";
@@ -238,7 +261,9 @@ in
 
       sddm-autologin.text = ''
         auth     requisite pam_nologin.so
-        auth     required  pam_succeed_if.so uid >= ${toString cfg.autoLogin.minimumUid} quiet
+        auth     required  pam_succeed_if.so uid >= ${
+          toString cfg.autoLogin.minimumUid
+        } quiet
         auth     required  pam_permit.so
 
         account  include   sddm
@@ -257,9 +282,7 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [
-      "/share/sddm"
-    ];
+    environment.pathsToLink = [ "/share/sddm" ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

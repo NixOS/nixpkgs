@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl
+, docbook_xml_dtd_45, readline, makeWrapper, git, libiconv, autoreconfHook
+, findXMLCatalogs, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "tig";
@@ -13,7 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dZqqUydZ4q/mDEjtojpMGfzAmW3yCNDvT9oCEmhq1hg=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoreconfHook
+    asciidoc
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    findXMLCatalogs
+    pkg-config
+  ];
 
   autoreconfFlags = "-I tools -v";
 
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm contrib/config.make-*
+    rm contrib/config.make-*
   '';
 
   enableParallelBuilding = true;

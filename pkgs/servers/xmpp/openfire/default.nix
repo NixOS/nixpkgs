@@ -2,10 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfire";
-  version  = "3_6_3";
+  version = "3_6_3";
 
   src = fetchurl {
-    url = "http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_${version}.tar.gz";
+    url =
+      "http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_${version}.tar.gz";
     sha256 = "0ibzhmh9qw4lmx45ir1i280p30npgwnj7vrkl432kj3zi7hp79q2";
   };
 

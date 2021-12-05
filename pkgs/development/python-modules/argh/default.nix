@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, py
-, mock
-, glibcLocales
-, iocapture
+{ lib, buildPythonPackage, fetchPypi, pytest, py, mock, glibcLocales, iocapture
 }:
 
 buildPythonPackage rec {

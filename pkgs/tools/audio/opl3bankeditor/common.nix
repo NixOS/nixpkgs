@@ -1,24 +1,12 @@
-{ pname, chip, version, sha256, extraPatches ? [] }:
+{ pname, chip, version, sha256, extraPatches ? [ ] }:
 
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, dos2unix
-, cmake
-, pkg-config
-, qttools
-, qtbase
-, qwt
-, rtaudio
-, rtmidi
-}:
+{ mkDerivation, stdenv, lib, fetchFromGitHub, dos2unix, cmake, pkg-config
+, qttools, qtbase, qwt, rtaudio, rtmidi }:
 
 let
   binname = "${chip} Bank Editor";
   mainProgram = "${lib.strings.toLower chip}_bank_editor";
-in
-mkDerivation rec {
+in mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -34,19 +22,9 @@ mkDerivation rec {
 
   patches = extraPatches;
 
-  nativeBuildInputs = [
-    dos2unix
-    cmake
-    pkg-config
-    qttools
-  ];
+  nativeBuildInputs = [ dos2unix cmake pkg-config qttools ];
 
-  buildInputs = [
-    qtbase
-    qwt
-    rtaudio
-    rtmidi
-  ];
+  buildInputs = [ qtbase qwt rtaudio rtmidi ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/{bin,Applications}
@@ -59,7 +37,8 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit mainProgram;
-    description = "A small cross-platform editor of the ${chip} FM banks of different formats";
+    description =
+      "A small cross-platform editor of the ${chip} FM banks of different formats";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.all;

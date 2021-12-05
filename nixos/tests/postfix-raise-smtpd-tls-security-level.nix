@@ -6,9 +6,7 @@ import ./make-test-python.nix {
     services.postfix = {
       enable = true;
       enableSubmissions = true;
-      submissionsOptions = {
-        smtpd_tls_security_level = "none";
-      };
+      submissionsOptions = { smtpd_tls_security_level = "none"; };
     };
 
     environment.systemPackages = let

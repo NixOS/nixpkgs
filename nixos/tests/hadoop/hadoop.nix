@@ -1,13 +1,11 @@
 # This test is very comprehensive. It tests whether all hadoop services work well with each other.
 # Run this when updating the Hadoop package or making significant changes to the hadoop module.
 # For a more basic test, see hdfs.nix and yarn.nix
-import ../make-test-python.nix ({pkgs, ...}: {
+import ../make-test-python.nix ({ pkgs, ... }: {
 
   nodes = let
     package = pkgs.hadoop;
-    coreSite = {
-      "fs.defaultFS" = "hdfs://ns1";
-    };
+    coreSite = { "fs.defaultFS" = "hdfs://ns1"; };
     hdfsSite = {
       "dfs.namenode.rpc-bind-host" = "0.0.0.0";
       "dfs.namenode.http-bind-host" = "0.0.0.0";
@@ -16,8 +14,10 @@ import ../make-test-python.nix ({pkgs, ...}: {
       # HA Quorum Journal Manager configuration
       "dfs.nameservices" = "ns1";
       "dfs.ha.namenodes.ns1" = "nn1,nn2";
-      "dfs.namenode.shared.edits.dir.ns1.nn1" = "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
-      "dfs.namenode.shared.edits.dir.ns1.nn2" = "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
+      "dfs.namenode.shared.edits.dir.ns1.nn1" =
+        "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
+      "dfs.namenode.shared.edits.dir.ns1.nn2" =
+        "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
       "dfs.namenode.rpc-address.ns1.nn1" = "nn1:8020";
       "dfs.namenode.rpc-address.ns1.nn2" = "nn2:8020";
       "dfs.namenode.servicerpc-address.ns1.nn1" = "nn1:8022";
@@ -26,7 +26,8 @@ import ../make-test-python.nix ({pkgs, ...}: {
       "dfs.namenode.http-address.ns1.nn2" = "nn2:9870";
 
       # Automatic failover configuration
-      "dfs.client.failover.proxy.provider.ns1" = "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider";
+      "dfs.client.failover.proxy.provider.ns1" =
+        "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider";
       "dfs.ha.automatic-failover.enabled.ns1" = "true";
       "dfs.ha.fencing.methods" = "shell(true)";
       "ha.zookeeper.quorum" = "zk1:2181";
@@ -52,14 +53,14 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
 
     # HDFS cluster
-    nn1 = {pkgs, options, ...}: {
+    nn1 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.namenode.enable = true;
         hdfs.zkfc.enable = true;
       };
     };
-    nn2 = {pkgs, options, ...}: {
+    nn2 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.namenode.enable = true;
@@ -67,26 +68,26 @@ import ../make-test-python.nix ({pkgs, ...}: {
       };
     };
 
-    jn1 = {pkgs, options, ...}: {
+    jn1 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
-    jn2 = {pkgs, options, ...}: {
+    jn2 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
-    jn3 = {pkgs, options, ...}: {
+    jn3 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
 
-    dn1 = {pkgs, options, ...}: {
+    dn1 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.datanode.enable = true;
@@ -94,21 +95,21 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
 
     # YARN cluster
-    rm1 = {pkgs, options, ...}: {
+    rm1 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
         yarn.resourcemanager.enable = true;
       };
     };
-    rm2 = {pkgs, options, ...}: {
+    rm2 = { pkgs, options, ... }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
         yarn.resourcemanager.enable = true;
       };
     };
-    nm1 = {pkgs, options, ...}: {
+    nm1 = { pkgs, options, ... }: {
       virtualisation.memorySize = 2048;
       services.hadoop = {
         inherit package coreSite hdfsSite;

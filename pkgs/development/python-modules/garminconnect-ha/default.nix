@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, cloudscraper
-, fetchFromGitHub
-, requests
-}:
+{ lib, buildPythonPackage, cloudscraper, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "garminconnect-ha";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-1O1EcG5FvpwUvI8rwcdlQLzEEStyFAwvmkaL97u6hZ4=";
   };
 
-  propagatedBuildInputs = [
-    cloudscraper
-    requests
-  ];
+  propagatedBuildInputs = [ cloudscraper requests ];
 
   # Project has no tests
   doCheck = false;
@@ -27,7 +19,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "garminconnect_ha" ];
 
   meta = with lib; {
-    description = "Minimal Garmin Connect Python 3 API wrapper for Home Assistant";
+    description =
+      "Minimal Garmin Connect Python 3 API wrapper for Home Assistant";
     homepage = "https://github.com/cyberjunky/python-garminconnect-ha";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

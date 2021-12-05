@@ -5,13 +5,12 @@ stdenv.mkDerivation rec {
   version = "1.6";
 
   src = fetchurl {
-    url = "https://launchpad.net/smpq/trunk/${version}/+download/${pname}_${version}.orig.tar.gz";
+    url =
+      "https://launchpad.net/smpq/trunk/${version}/+download/${pname}_${version}.orig.tar.gz";
     sha256 = "1jqq5x3b17jy66x3kkf5hs5l322dx2v14djxxrqrnqp8bn5drlmm";
   };
 
-  cmakeFlags = [
-    "-DWITH_KDE=OFF"
-  ];
+  cmakeFlags = [ "-DWITH_KDE=OFF" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ StormLib ];

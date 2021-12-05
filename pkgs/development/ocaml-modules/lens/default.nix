@@ -23,8 +23,6 @@ buildDunePackage rec {
     homepage = "https://github.com/pdonadeo/ocaml-lens";
     description = "Functional lenses";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      kazcw
-    ];
+    maintainers = with maintainers; [ kazcw ];
   };
 }

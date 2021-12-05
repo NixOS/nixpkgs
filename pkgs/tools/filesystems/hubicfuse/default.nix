@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, curl, openssl, fuse, libxml2, json_c, file }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, curl, openssl, fuse
+, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
   pname = "hubicfuse";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
     # Fix Darwin build
     # https://github.com/TurboGit/hubicfuse/pull/159
     (fetchpatch {
-      url = "https://github.com/TurboGit/hubicfuse/commit/b460f40d86bc281a21379158a7534dfb9f283786.patch";
+      url =
+        "https://github.com/TurboGit/hubicfuse/commit/b460f40d86bc281a21379158a7534dfb9f283786.patch";
       sha256 = "0nqvcbrgbc5dms8fkz3brlj40yn48p36drabrnc26gvb3hydh5dl";
     })
   ];

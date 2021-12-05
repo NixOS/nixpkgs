@@ -1,7 +1,6 @@
 { lib, stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost , gtkmm2 , imagemagick, sane-backends
+, autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
 , tesseract4, udev, libusb1 }:
-
 
 let
   fakegit = writeScriptBin "git" ''
@@ -21,29 +20,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1g9m00qljhlw56h3hgfq67ywf4r92nl37m7x5mxa7ygaxc0dyb14";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    autoconf-archive
-    fakegit
-    libxslt
-  ];
+  nativeBuildInputs =
+    [ autoreconfHook pkg-config autoconf-archive fakegit libxslt ];
 
-  buildInputs = [
-    boost.dev
-    gtkmm2.dev
-    imagemagick
-    sane-backends
-    udev.dev
-    libusb1.dev
-  ];
+  buildInputs =
+    [ boost.dev gtkmm2.dev imagemagick sane-backends udev.dev libusb1.dev ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=parentheses"
     "-Wno-error=unused-variable"
   ];
-
 
   postPatch = ''
     # create fake udev and sane config

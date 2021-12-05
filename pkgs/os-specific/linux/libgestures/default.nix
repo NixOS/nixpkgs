@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib jsoncpp ];
 
-
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
   meta = with lib; {

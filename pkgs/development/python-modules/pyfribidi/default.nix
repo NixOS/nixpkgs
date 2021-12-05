@@ -1,10 +1,4 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, six
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, six }:
 
 buildPythonPackage rec {
   version = "0.12.0";

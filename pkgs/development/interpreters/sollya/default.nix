@@ -1,19 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, gmp
-, mpfr
-, mpfi
-, libxml2
-, fplll
-}:
+{ lib, stdenv, fetchurl, gmp, mpfr, mpfi, libxml2, fplll }:
 
 stdenv.mkDerivation rec {
   pname = "sollya";
   version = "7.0";
 
   src = fetchurl {
-    url = "https://www.sollya.org/releases/sollya-${version}/sollya-${version}.tar.gz";
+    url =
+      "https://www.sollya.org/releases/sollya-${version}/sollya-${version}.tar.gz";
     sha256 = "0amrxg7567yy5xqpgchxggjpfr11xyl27vy29c7vlh7v8a17nj1h";
   };
 

@@ -16,9 +16,7 @@ let
   rootKey = ./root.key;
   rootDs = ./root.ds;
 
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "dns-root-data-2019-01-11";
 
   buildCommand = ''

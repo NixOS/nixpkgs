@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.hadoop;
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-  restartIfChanged  = mkOption {
+  restartIfChanged = mkOption {
     type = types.bool;
     description = ''
       Automatically restart the service on config change.
@@ -13,8 +13,7 @@ let
     '';
     default = false;
   };
-in
-{
+in {
   options.services.hadoop.yarn = {
     resourcemanager = {
       enable = mkEnableOption "Whether to run the Hadoop YARN ResourceManager";
@@ -49,9 +48,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf (
-        cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
-    ) {
+    (mkIf (cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable) {
 
       users.users.yarn = {
         description = "Hadoop YARN user";
@@ -69,25 +66,27 @@ in
         serviceConfig = {
           User = "yarn";
           SyslogIdentifier = "yarn-resourcemanager";
-          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " resourcemanager";
+          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} "
+            + " resourcemanager";
           Restart = "always";
         };
       };
-      networking.firewall.allowedTCPPorts = (mkIf cfg.yarn.resourcemanager.openFirewall [
-        8088 # resourcemanager.webapp.address
-        8030 # resourcemanager.scheduler.address
-        8031 # resourcemanager.resource-tracker.address
-        8032 # resourcemanager.address
-        8033 # resourcemanager.admin.address
-      ]);
+      networking.firewall.allowedTCPPorts =
+        (mkIf cfg.yarn.resourcemanager.openFirewall [
+          8088 # resourcemanager.webapp.address
+          8030 # resourcemanager.scheduler.address
+          8031 # resourcemanager.resource-tracker.address
+          8032 # resourcemanager.address
+          8033 # resourcemanager.admin.address
+        ]);
     })
 
     (mkIf cfg.yarn.nodemanager.enable {
       # Needed because yarn hardcodes /bin/bash in container start scripts
       # These scripts can't be patched, they are generated at runtime
       systemd.tmpfiles.rules = [
-        (mkIf cfg.yarn.nodemanager.addBinBash "L /bin/bash - - - - /run/current-system/sw/bin/bash")
+        (mkIf cfg.yarn.nodemanager.addBinBash
+          "L /bin/bash - - - - /run/current-system/sw/bin/bash")
       ];
 
       systemd.services.yarn-nodemanager = {
@@ -113,14 +112,17 @@ in
           User = "yarn";
           SyslogIdentifier = "yarn-nodemanager";
           PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " nodemanager";
+          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} "
+            + " nodemanager";
           Restart = "always";
         };
       };
 
       networking.firewall.allowedTCPPortRanges = [
-        (mkIf (cfg.yarn.nodemanager.openFirewall) {from = 1024; to = 65535;})
+        (mkIf (cfg.yarn.nodemanager.openFirewall) {
+          from = 1024;
+          to = 65535;
+        })
       ];
     })
 

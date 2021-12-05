@@ -1,18 +1,6 @@
-{ lib
-, buildPythonPackage
-, base36
-, cryptography
-, curve25519-donna
-, ecdsa
-, fetchFromGitHub
-, h11
-, pyqrcode
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, zeroconf
-}:
+{ lib, buildPythonPackage, base36, cryptography, curve25519-donna, ecdsa
+, fetchFromGitHub, h11, pyqrcode, pytest-asyncio, pytest-timeout
+, pytestCheckHook, pythonOlder, zeroconf }:
 
 buildPythonPackage rec {
   pname = "hap-python";
@@ -26,21 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-G4KL6iMeVn/tmvFtFL8vyqHGNfqk6j8iG4tDK9VpCyM=";
   };
 
-  propagatedBuildInputs = [
-    base36
-    cryptography
-    curve25519-donna
-    ecdsa
-    h11
-    pyqrcode
-    zeroconf
-  ];
+  propagatedBuildInputs =
+    [ base36 cryptography curve25519-donna ecdsa h11 pyqrcode zeroconf ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-timeout
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-asyncio pytest-timeout pytestCheckHook ];
 
   disabledTestPaths = [
     # Disable tests requiring network access

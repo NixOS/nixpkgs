@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb-compat-0_1 libftdi ];
 
   meta = with lib; {
-    description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
+    description =
+      "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
     homepage = "http://xc3sprog.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

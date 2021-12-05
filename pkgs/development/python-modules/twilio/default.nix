@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pyjwt
-, pythonOlder
-, pytz
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, nose, pyjwt, pythonOlder, pytz
+, requests }:
 
 buildPythonPackage rec {
   pname = "twilio";
@@ -22,20 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-lhRlLZ9RpOpNIPEgrO7+JO8CnqeC3gqgGqXjznsA9ls=";
   };
 
-  propagatedBuildInputs = [
-    pyjwt
-    pytz
-    requests
-  ];
+  propagatedBuildInputs = [ pyjwt pytz requests ];
 
-  checkInputs = [
-    mock
-    nose
-  ];
+  checkInputs = [ mock nose ];
 
-  pythonImportsCheck = [
-    "twilio"
-  ];
+  pythonImportsCheck = [ "twilio" ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";

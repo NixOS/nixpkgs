@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, py, pytest }:
+{ lib, buildPythonPackage, fetchPypi, py, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-raisesregexp";

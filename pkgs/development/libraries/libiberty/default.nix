@@ -1,10 +1,8 @@
-{ lib, stdenv, buildPackages
-, staticBuild ? stdenv.hostPlatform.isStatic
-}:
+{ lib, stdenv, buildPackages, staticBuild ? stdenv.hostPlatform.isStatic }:
 
-let inherit (buildPackages.buildPackages) gcc; in
+let inherit (buildPackages.buildPackages) gcc;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "libiberty";
   version = "${gcc.cc.version}";
 

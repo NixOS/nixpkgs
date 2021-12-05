@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsa-lib, Carbon, CoreAudio, CoreFoundation, CoreMIDI, CoreServices }:
+{ lib, stdenv, fetchurl, unzip, cmake, # jdk,
+alsa-lib, Carbon, CoreAudio, CoreFoundation, CoreMIDI, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
@@ -18,14 +19,16 @@ stdenv.mkDerivation rec {
   in [
     "-DPORTMIDI_ENABLE_JAVA=0"
     /* TODO: Fix Java support.
-    "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
+       "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
+       "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
     */
     "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_ARCHITECTURES=${if stdenv.isAarch64 then "arm64" else "x86_64"}"
+    "-DCMAKE_OSX_ARCHITECTURES=${
+      if stdenv.isAarch64 then "arm64" else "x86_64"
+    }"
     "-DCOREAUDIO_LIB=${CoreAudio}"
     "-DCOREFOUNDATION_LIB=${CoreFoundation}"
     "-DCOREMIDI_LIB=${CoreMIDI}"
@@ -42,7 +45,8 @@ stdenv.mkDerivation rec {
   patches = [
     # XXX: This is to deactivate Java support.
     (fetchurl {
-      url = "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
+      url =
+        "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
       sha256 = "1jbjwan61iqq9fqfpq2a4fd30k3clg7a6j0gfgsw87r8c76kqf6h";
     })
   ] ++ lib.optionals stdenv.isDarwin [
@@ -61,16 +65,20 @@ stdenv.mkDerivation rec {
         pm_java/CMakeLists.txt
   '';
 
-  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
   '';
 
   nativeBuildInputs = [ unzip cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
-  ];
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      CoreAudio
+      CoreFoundation
+      CoreMIDI
+      CoreServices
+    ];
 
   hardeningDisable = [ "format" ];
 

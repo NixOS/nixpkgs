@@ -1,8 +1,5 @@
-{ mkDerivation, lib
-, cmake, extra-cmake-modules, qtbase
-, kconfigwidgets, kxmlgui, kcrash, kdoctools
-, kitemviews
-}:
+{ mkDerivation, lib, cmake, extra-cmake-modules, qtbase, kconfigwidgets, kxmlgui
+, kcrash, kdoctools, kitemviews }:
 
 mkDerivation {
   pname = "kgeography";

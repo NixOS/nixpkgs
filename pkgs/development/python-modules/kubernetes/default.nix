@@ -1,23 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 
 # propgatedBuildInputs
-, adal
-, certifi
-, google-auth
-, python-dateutil
-, pyyaml
-, requests
-, requests_oauthlib
-, urllib3
-, websocket-client
+, adal, certifi, google-auth, python-dateutil, pyyaml, requests
+, requests_oauthlib, urllib3, websocket-client
 
 # tests
-, pytestCheckHook
-, mock
-}:
+, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "kubernetes";
@@ -45,14 +33,9 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  pythonImportsCheck = [
-    "kubernetes"
-  ];
+  pythonImportsCheck = [ "kubernetes" ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   meta = with lib; {
     description = "Kubernetes python client";

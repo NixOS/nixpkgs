@@ -1,27 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, m4
-, intltool
-, libxmlxx
-, keybinder
-, gtk2
-, libX11
-, libfm
-, libwnck2
-, libXmu
-, libXpm
-, cairo
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, menu-cache
-, lxmenu-data
-, wirelesstools
-, curl
-, supportAlsa ? false, alsa-lib
-}:
+{ lib, stdenv, fetchurl, pkg-config, gettext, m4, intltool, libxmlxx, keybinder
+, gtk2, libX11, libfm, libwnck2, libXmu, libXpm, cairo, gdk-pixbuf
+, gdk-pixbuf-xlib, menu-cache, lxmenu-data, wirelesstools, curl
+, supportAlsa ? false, alsa-lib }:
 
 stdenv.mkDerivation rec {
   pname = "lxpanel";

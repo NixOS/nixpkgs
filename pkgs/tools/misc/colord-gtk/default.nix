@@ -1,20 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, colord
-, gettext
-, meson
-, ninja
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-ns
-, docbook_xsl
-, docbook_xml_dtd_412
-, libxslt
-, glib
-, gtk3
-, pkg-config
-, lcms2
-}:
+{ lib, stdenv, fetchurl, colord, gettext, meson, ninja, gobject-introspection
+, gtk-doc, docbook-xsl-ns, docbook_xsl, docbook_xml_dtd_412, libxslt, glib, gtk3
+, pkg-config, lcms2 }:
 
 stdenv.mkDerivation rec {
   pname = "colord-gtk";
@@ -23,7 +9,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
     sha256 = "05y78jbcbar22sgyhzffhv98dbpl4v6k8j9p807h17y6ighglk1a";
   };
 
@@ -40,15 +27,9 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  buildInputs = [
-    glib
-    lcms2
-  ];
+  buildInputs = [ glib lcms2 ];
 
-  propagatedBuildInputs = [
-    colord
-    gtk3
-  ];
+  propagatedBuildInputs = [ colord gtk3 ];
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";

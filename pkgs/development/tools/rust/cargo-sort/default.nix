@@ -14,10 +14,15 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-JM9HdPEZA9c8NGeu9qRwj0jGUsMltsOUG6itNbXZ3Ts=";
 
   meta = with lib; {
-    description = "A tool to check that your Cargo.toml dependencies are sorted alphabetically";
+    description =
+      "A tool to check that your Cargo.toml dependencies are sorted alphabetically";
     homepage = "https://github.com/devinr528/cargo-sort";
-    changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    changelog =
+      "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

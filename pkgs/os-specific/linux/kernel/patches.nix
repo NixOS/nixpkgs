@@ -5,7 +5,8 @@
     name = "ath_regd_optional";
     patch = fetchpatch {
       name = name + ".patch";
-      url = "https://github.com/openwrt/openwrt/raw/ed2015c38617ed6624471e77f27fbb0c58c8c660/package/kernel/mac80211/patches/ath/402-ath_regd_optional.patch";
+      url =
+        "https://github.com/openwrt/openwrt/raw/ed2015c38617ed6624471e77f27fbb0c58c8c660/package/kernel/mac80211/patches/ath/402-ath_regd_optional.patch";
       sha256 = "1ssDXSweHhF+pMZyd6kSrzeW60eb6MO6tlf0il17RC0=";
       postFetch = ''
         sed -i 's/CPTCFG_/CONFIG_/g' $out
@@ -14,45 +15,48 @@
     };
   };
 
-  bridge_stp_helper =
-    { name = "bridge-stp-helper";
-      patch = ./bridge-stp-helper.patch;
-    };
+  bridge_stp_helper = {
+    name = "bridge-stp-helper";
+    patch = ./bridge-stp-helper.patch;
+  };
 
-  request_key_helper =
-    { name = "request-key-helper";
-      patch = ./request-key-helper.patch;
-    };
+  request_key_helper = {
+    name = "request-key-helper";
+    patch = ./request-key-helper.patch;
+  };
 
-  request_key_helper_updated =
-    { name = "request-key-helper-updated";
-      patch = ./request-key-helper-updated.patch;
-    };
+  request_key_helper_updated = {
+    name = "request-key-helper-updated";
+    patch = ./request-key-helper-updated.patch;
+  };
 
-  p9_fixes =
-    { name = "p9-fixes";
-      patch = ./p9-fixes.patch;
-    };
+  p9_fixes = {
+    name = "p9-fixes";
+    patch = ./p9-fixes.patch;
+  };
 
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
+  modinst_arg_list_too_long = {
+    name = "modinst-arglist-too-long";
+    patch = ./modinst-arg-list-too-long.patch;
+  };
 
-  genksyms_fix_segfault =
-    { name = "genksyms-fix-segfault";
-      patch = ./genksyms-fix-segfault.patch;
-    };
+  genksyms_fix_segfault = {
+    name = "genksyms-fix-segfault";
+    patch = ./genksyms-fix-segfault.patch;
+  };
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
-    mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
-      name = lib.removeSuffix ".patch" src.name;
-      patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
-      extra = src.extra;
-      inherit version sha256;
-    };
+    mkPatch = kernelVersion:
+      { version, sha256, patch }:
+      let src = patch;
+      in {
+        name = lib.removeSuffix ".patch" src.name;
+        patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
+        extra = src.extra;
+        inherit version sha256;
+      };
     patches = lib.importJSON ./hardened/patches.json;
   in lib.mapAttrs mkPatch patches;
 
@@ -71,7 +75,8 @@
     name = "xen-netfront_fix_mismatched_rtnl_unlock";
     patch = fetchpatch {
       name = name + ".patch";
-      url = "https://github.com/torvalds/linux/commit/cb257783c2927b73614b20f915a91ff78aa6f3e8.patch";
+      url =
+        "https://github.com/torvalds/linux/commit/cb257783c2927b73614b20f915a91ff78aa6f3e8.patch";
       sha256 = "0xhblx2j8wi3kpnfpgjjwlcwdry97ji2aaq54r3zirk5g5p72zs8";
     };
   };
@@ -81,17 +86,18 @@
     name = "xen-netfront_update_features_after_registering_netdev";
     patch = fetchpatch {
       name = name + ".patch";
-      url = "https://github.com/torvalds/linux/commit/45c8184c1bed1ca8a7f02918552063a00b909bf5.patch";
+      url =
+        "https://github.com/torvalds/linux/commit/45c8184c1bed1ca8a7f02918552063a00b909bf5.patch";
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
 
   # Adapted for Linux 5.4 from:
   # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04896832c94aae4842100cafb8d3a73e1bed3a45
-  rtl8761b_support =
-    { name = "rtl8761b-support";
-      patch = ./rtl8761b-support.patch;
-    };
+  rtl8761b_support = {
+    name = "rtl8761b-support";
+    patch = ./rtl8761b-support.patch;
+  };
 
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";

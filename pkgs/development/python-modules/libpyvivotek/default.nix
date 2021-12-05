@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, vcrpy
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+, requests, vcrpy }:
 
 buildPythonPackage rec {
   pname = "libpyvivotek";
@@ -21,18 +15,11 @@ buildPythonPackage rec {
     sha256 = "pNlnGpDjdYE7Lxog8GGZV+UZZmfmt5bwHof5LngPQjg=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
-    pytestCheckHook
-    vcrpy
-  ];
+  checkInputs = [ pytestCheckHook vcrpy ];
 
-  pythonImportsCheck = [
-    "libpyvivotek"
-  ];
+  pythonImportsCheck = [ "libpyvivotek" ];
 
   meta = with lib; {
     description = "Python Library for Vivotek IP Cameras";

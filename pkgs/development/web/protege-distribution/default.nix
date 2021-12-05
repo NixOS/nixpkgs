@@ -1,15 +1,13 @@
-{ lib, stdenv, fetchurl, unzip, jre8
-, copyDesktopItems
-, makeDesktopItem
-, iconConvTools
-}:
+{ lib, stdenv, fetchurl, unzip, jre8, copyDesktopItems, makeDesktopItem
+, iconConvTools }:
 
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
   version = "5.5.0";
 
   src = fetchurl {
-    url = "https://github.com/protegeproject/protege-distribution/releases/download/v${version}/Protege-${version}-platform-independent.zip";
+    url =
+      "https://github.com/protegeproject/protege-distribution/releases/download/v${version}/Protege-${version}-platform-independent.zip";
     sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
   };
 
@@ -66,7 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The OWL2 ontology editor from Stanford, with third-party plugins included";
+    description =
+      "The OWL2 ontology editor from Stanford, with third-party plugins included";
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/products.php#desktop-protege";
     maintainers = with maintainers; [ nessdoor ];

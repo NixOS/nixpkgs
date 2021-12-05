@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk, wrapGAppsHook, python3Packages }:
+{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk
+, wrapGAppsHook, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
@@ -39,7 +40,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
-    description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
+    description =
+      "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
   };

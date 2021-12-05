@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit apacheHttpd; };
 
-  buildInputs = [ apacheHttpd python2 ]
-    ++ lib.optional stdenv.isDarwin libintl;
+  buildInputs = [ apacheHttpd python2 ] ++ lib.optional stdenv.isDarwin libintl;
 
   meta = {
     homepage = "http://modpython.org/";
-    description = "An Apache module that embeds the Python interpreter within the server";
+    description =
+      "An Apache module that embeds the Python interpreter within the server";
     platforms = lib.platforms.unix;
   };
 }

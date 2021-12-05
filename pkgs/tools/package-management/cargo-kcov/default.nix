@@ -1,9 +1,4 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, kcov
-}:
+{ lib, rustPlatform, fetchFromGitHub, makeWrapper, kcov }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-kcov";
@@ -27,7 +22,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Cargo subcommand to run kcov to get coverage report on Linux";
+    description =
+      "Cargo subcommand to run kcov to get coverage report on Linux";
     homepage = "https://github.com/kennytm/cargo-kcov";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ saschagrunert ];

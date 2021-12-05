@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl
-, netcdf, xlibsWrapper, xorg, udunits, expat
-}:
+{ lib, stdenv, fetchurl, netcdf, xlibsWrapper, xorg, udunits, expat }:
 
 let
   pname = "ncview";
@@ -10,7 +8,7 @@ in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url    = "ftp://cirrus.ucsd.edu/pub/ncview/ncview-2.1.8.tar.gz";
+    url = "ftp://cirrus.ucsd.edu/pub/ncview/ncview-2.1.8.tar.gz";
     sha256 = "1gliziyxil2fcz85hj6z0jq33avrxdcjs74d500lhxwvgd8drfp8";
   };
 
@@ -18,7 +16,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Visual browser for netCDF format files";
-    homepage    = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
+    homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jmettes ];
   };

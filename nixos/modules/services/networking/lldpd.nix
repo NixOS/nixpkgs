@@ -2,18 +2,15 @@
 
 with lib;
 
-let
-  cfg = config.services.lldpd;
+let cfg = config.services.lldpd;
 
-in
-
-{
+in {
   options.services.lldpd = {
     enable = mkEnableOption "Link Layer Discovery Protocol Daemon";
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "-c" "-k" "-I eth0" ];
       description = "List of command line parameters for lldpd";
     };
@@ -26,7 +23,7 @@ in
       home = "/run/lldpd";
       isSystemUser = true;
     };
-    users.groups._lldpd = {};
+    users.groups._lldpd = { };
 
     environment.systemPackages = [ pkgs.lldpd ];
     systemd.packages = [ pkgs.lldpd ];

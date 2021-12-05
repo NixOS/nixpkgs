@@ -1,12 +1,5 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, dill
-, coverage
-, coveralls
-, mock
-, nose
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, dill, coverage, coveralls, mock
+, nose }:
 
 buildPythonApplication rec {
   pname = "expiringdict";
@@ -21,13 +14,7 @@ buildPythonApplication rec {
     sha256 = "07g1vxznmim78bankfl9brr01s31sksdcpwynq1yryh6xw9ri5xs";
   };
 
-  checkInputs = [
-    dill
-    coverage
-    coveralls
-    mock
-    nose
-  ];
+  checkInputs = [ dill coverage coveralls mock nose ];
 
   checkPhase = ''
     nosetests -v --with-coverage --cover-package=expiringdict

@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A portable, performant script to make rolling ZFS snapshots easy";
+    description =
+      "A portable, performant script to make rolling ZFS snapshots easy";
     homepage = "https://github.com/zfsnap/zfsnap";
     license = licenses.bsd3;
     maintainers = with maintainers; [ woffs ];

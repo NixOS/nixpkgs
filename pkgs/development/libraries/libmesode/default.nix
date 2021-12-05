@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, openssl
-, expat
-, pkg-config
-, check
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, openssl, expat
+, pkg-config, check }:
 
 stdenv.mkDerivation rec {
   pname = "libmesode";
@@ -27,7 +20,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Fork of libstrophe (https://github.com/strophe/libstrophe) for use with Profanity XMPP Client";
+    description =
+      "Fork of libstrophe (https://github.com/strophe/libstrophe) for use with Profanity XMPP Client";
     longDescription = ''
       Reasons for forking:
 
@@ -40,7 +34,7 @@ stdenv.mkDerivation rec {
       TLS functionality such as manual SSL certificate verification.
     '';
     homepage = "https://github.com/profanity-im/libmesode/";
-    license = with licenses; [ gpl3Only mit];
+    license = with licenses; [ gpl3Only mit ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ devhell ];

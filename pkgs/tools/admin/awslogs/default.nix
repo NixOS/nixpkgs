@@ -12,14 +12,16 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    boto3 termcolor python-dateutil docutils setuptools jmespath
+    boto3
+    termcolor
+    python-dateutil
+    docutils
+    setuptools
+    jmespath
   ];
 
   checkInputs = [ python3Packages.pytestCheckHook ];
-  disabledTests = [
-    "test_main_get_query"
-    "test_main_get_with_color"
-  ];
+  disabledTests = [ "test_main_get_query" "test_main_get_with_color" ];
 
   meta = with lib; {
     homepage = "https://github.com/jorgebastida/awslogs";

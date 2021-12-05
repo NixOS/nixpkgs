@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkg-config curl ];
-  buildInputs = [ libX11 xorgproto gd SDL SDL_image SDL_mixer zlib libxml2
-    libzip ];
+  buildInputs =
+    [ libX11 xorgproto gd SDL SDL_image SDL_mixer zlib libxml2 libzip ];
 
   meta = {
     homepage = "http://openlierox.net";

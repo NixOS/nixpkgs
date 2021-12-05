@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, glibc
-, version, hashes }:
+{ lib, stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames
+, glibc, version, hashes }:
 
 let
   inherit (stdenv) hostPlatform;
@@ -20,7 +20,8 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook ]
     ++ lib.optional hostPlatform.isDarwin fixDarwinDylibNames;
-  propagatedBuildInputs = [ curl tzdata ] ++ lib.optional hostPlatform.isLinux glibc;
+  propagatedBuildInputs = [ curl tzdata ]
+    ++ lib.optional hostPlatform.isLinux glibc;
 
   installPhase = ''
     mkdir -p $out

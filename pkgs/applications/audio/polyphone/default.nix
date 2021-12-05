@@ -1,4 +1,5 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsa-lib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsa-lib, libjack2
+, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
 
 mkDerivation rec {
   version = "2.2.0";
@@ -11,16 +12,8 @@ mkDerivation rec {
     sha256 = "0w5pidzhpwpggjn5la384fvjzkvprvrnidb06068whci11kgpbp7";
   };
 
-  buildInputs = [
-    alsa-lib
-    libjack2
-    portaudio
-    libogg
-    flac
-    libvorbis
-    rtmidi
-    qtsvg
-  ];
+  buildInputs =
+    [ alsa-lib libjack2 portaudio libogg flac libvorbis rtmidi qtsvg ];
 
   nativeBuildInputs = [ qmake pkg-config ];
 

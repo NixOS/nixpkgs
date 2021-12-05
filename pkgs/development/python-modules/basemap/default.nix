@@ -1,16 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, numpy
-, matplotlib
-, pillow
-, setuptools
-, pyproj
-, pyshp
-, six
-, pkgs
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, numpy, matplotlib
+, pillow, setuptools, pyproj, pyshp, six, pkgs }:
 
 buildPythonPackage rec {
   pname = "basemap";

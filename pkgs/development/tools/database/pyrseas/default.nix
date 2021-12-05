@@ -12,14 +12,10 @@ let
     };
     # The tests are impure (they try to access a PostgreSQL server)
     doCheck = false;
-    propagatedBuildInputs = [
-      pythonPackages.psycopg2
-      pythonPackages.pytest
-    ];
+    propagatedBuildInputs = [ pythonPackages.psycopg2 pythonPackages.pytest ];
   };
-in
 
-pythonPackages.buildPythonApplication {
+in pythonPackages.buildPythonApplication {
   pname = "pyrseas";
   version = "0.8.0";
   src = fetchFromGitHub {

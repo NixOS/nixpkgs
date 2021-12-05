@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4, mesa, libGL }:
+{ lib, fetchFromGitHub, cmake, buildPythonPackage, pysideGeneratorrunner
+, pysideShiboken, qt4, mesa, libGL }:
 
 buildPythonPackage rec {
   pname = "pyside";
@@ -27,7 +28,8 @@ buildPythonPackage rec {
   dontWrapQtApps = true;
 
   meta = {
-    description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
+    description =
+      "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;
     homepage = "http://www.pyside.org";
   };

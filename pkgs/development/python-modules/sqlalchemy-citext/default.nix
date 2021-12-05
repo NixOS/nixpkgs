@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psycopg2
-, sqlalchemy
-}:
+{ lib, buildPythonPackage, fetchPypi, psycopg2, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";

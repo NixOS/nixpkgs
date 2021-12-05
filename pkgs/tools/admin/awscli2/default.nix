@@ -7,7 +7,8 @@ let
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
+          sha256 =
+            "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
         };
       });
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
@@ -18,7 +19,8 @@ let
           rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
           sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
         };
-        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs
+          ++ [ py.pkgs.awscrt ];
       });
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
@@ -37,10 +39,11 @@ let
     };
   };
 
-in
-with py.pkgs; buildPythonApplication rec {
+in with py.pkgs;
+buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.3.4"; # N.B: if you change this, change botocore to a matching version too
+  version =
+    "2.3.4"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -104,7 +107,8 @@ with py.pkgs; buildPythonApplication rec {
   passthru.python = py; # for aws_shell
 
   meta = with lib; {
-    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
+    homepage =
+      "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;

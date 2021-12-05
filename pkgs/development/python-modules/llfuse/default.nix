@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, contextlib2
-, cython
-, fuse
-, pkg-config
-, pytestCheckHook
-, python
-, which
-}:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, contextlib2
+, cython, fuse, pkg-config, pytestCheckHook, python, which }:
 
 buildPythonPackage rec {
   pname = "llfuse";

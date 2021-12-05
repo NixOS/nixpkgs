@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null}:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ]
+, conf ? null }:
 
 stdenv.mkDerivation rec {
   pname = "dwm";
@@ -19,13 +20,12 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   # Allow users to set the config.def.h file containing the configuration
-  postPatch =
-    let
-      configFile =
-        if lib.isDerivation conf || builtins.isPath conf
-        then conf else writeText "config.def.h" conf;
-    in
-    lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+  postPatch = let
+    configFile = if lib.isDerivation conf || builtins.isPath conf then
+      conf
+    else
+      writeText "config.def.h" conf;
+  in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

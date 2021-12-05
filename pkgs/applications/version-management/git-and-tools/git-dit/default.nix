@@ -1,17 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, openssl_1_0_2
-, zlib
-, libssh
-, cmake
-, perl
-, pkg-config
-, rustPlatform
-, curl
-, libiconv
-, CoreFoundation
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, openssl_1_0_2, zlib, libssh, cmake, perl
+, pkg-config, rustPlatform, curl, libiconv, CoreFoundation, Security }:
 
 with rustPlatform;
 
@@ -28,22 +16,15 @@ buildRustPackage rec {
 
   cargoSha256 = "1vbcwl4aii0x4l8w9jhm70vi4s95jr138ly65jpkkv26rl6zjiph";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    perl
-  ];
+  nativeBuildInputs = [ cmake pkg-config perl ];
 
-  buildInputs = [
-    openssl_1_0_2
-    libssh
-    zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    curl
-    libiconv
-    CoreFoundation
-    Security
-  ];
+  buildInputs = [ openssl_1_0_2 libssh zlib ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      curl
+      libiconv
+      CoreFoundation
+      Security
+    ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

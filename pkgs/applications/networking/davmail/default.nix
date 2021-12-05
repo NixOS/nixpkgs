@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "davmail";
   version = "5.5.1";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3299.zip";
+    url =
+      "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3299.zip";
     sha256 = "sha256-NN/TUOcUIifNzrJnZmtYhs6UVktjlfoOYJjYaMEQpI4=";
   };
 
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://davmail.sourceforge.net/";
-    description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
+    description =
+      "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     maintainers = [ maintainers.hinton ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;

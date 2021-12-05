@@ -18,16 +18,14 @@ let
     /dev/hwbinder = hidl
   '';
 
-in
-{
+in {
 
-  options.virtualisation.waydroid = {
-    enable = mkEnableOption "Waydroid";
-  };
+  options.virtualisation.waydroid = { enable = mkEnableOption "Waydroid"; };
 
   config = mkIf cfg.enable {
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+      assertion =
+        versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
       message = "Waydroid needs user namespace support to work properly";
     };
 
@@ -38,8 +36,8 @@ in
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
-      as reading the kernel config is not always possible and on kernels where it's
-      already on it will be no-op
+       as reading the kernel config is not always possible and on kernels where it's
+       already on it will be no-op
     */
     boot.kernelParams = [ "psi=1" ];
 
@@ -56,11 +54,17 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ getent iptables iproute kmod nftables util-linux which ];
+      path = with pkgs; [
+        getent
+        iptables
+        iproute
+        kmod
+        nftables
+        util-linux
+        which
+      ];
 
-      unitConfig = {
-        ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
-      };
+      unitConfig = { ConditionPathExists = "/var/lib/waydroid/lxc/waydroid"; };
 
       serviceConfig = {
         ExecStart = "${pkgs.waydroid}/bin/waydroid container start";

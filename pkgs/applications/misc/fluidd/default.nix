@@ -6,7 +6,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     name = "fluidd-v${version}.zip";
-    url = "https://github.com/cadriel/fluidd/releases/download/v${version}/fluidd.zip";
+    url =
+      "https://github.com/cadriel/fluidd/releases/download/v${version}/fluidd.zip";
     sha256 = "1qwj25xvvxvm1fxx216nn2gp7js4d682mm3l4s7ns90fc5ygvc8i";
   };
 

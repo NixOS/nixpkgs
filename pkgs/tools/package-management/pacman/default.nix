@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
-xz, curl, runtimeShell }:
+{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2
+, xz, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
   version = "5.2.2";
 
   src = fetchurl {
-    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
+    url =
+      "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1829jcc300fxidr3cahx5kpnxkpg500daqgn2782hg5m5ygil85v";
   };
 

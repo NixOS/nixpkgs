@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec {
-  version="1.33";
+  version = "1.33";
   pname = "mxt-app";
 
   src = fetchFromGitHub {

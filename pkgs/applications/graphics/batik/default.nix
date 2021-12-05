@@ -1,11 +1,12 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "batik";
   version = "1.14";
 
   src = fetchurl {
-    url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${version}.tar.gz";
+    url =
+      "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${version}.tar.gz";
     sha256 = "sha256-D06qgb5wdS5AahnznDnAGISPCZY/CPqJdGQFRwUsRhg=";
   };
 

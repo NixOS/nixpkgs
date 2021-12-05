@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, gnumake,
-  libX11, libXinerama, libXrandr, libXpm, libXft, imlib2 }:
+{ lib, stdenv, fetchFromGitHub, gnumake, libX11, libXinerama, libXrandr, libXpm
+, libXft, imlib2 }:
 stdenv.mkDerivation {
   pname = "wmfs";
 
@@ -12,18 +12,9 @@ stdenv.mkDerivation {
     rev = "b7b8ff812d28c79cb22a73db2739989996fdc6c2";
   };
 
-  nativeBuildInputs = [
-    gnumake
-  ];
+  nativeBuildInputs = [ gnumake ];
 
-  buildInputs = [
-    imlib2
-    libX11
-    libXinerama
-    libXrandr
-    libXpm
-    libXft
-  ];
+  buildInputs = [ imlib2 libX11 libXinerama libXrandr libXpm libXft ];
 
   preConfigure = "substituteInPlace configure --replace '-lxft' '-lXft'";
 

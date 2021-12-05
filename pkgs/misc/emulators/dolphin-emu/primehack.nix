@@ -1,50 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, wrapQtAppsHook
-, qtbase
-, bluez
-, ffmpeg
-, libao
-, libGLU
-, libGL
-, pcre
-, gettext
-, libXrandr
-, libusb1
-, lzo
-, libpthreadstubs
-, libXext
-, libXxf86vm
-, libXinerama
-, libSM
-, libXdmcp
-, readline
-, openal
-, udev
-, libevdev
-, portaudio
-, curl
-, alsa-lib
-, miniupnpc
-, enet
-, mbedtls
-, soundtouch
-, sfml
-, fmt
-, vulkan-loader
-, libpulseaudio
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, wrapQtAppsHook, qtbase, bluez
+, ffmpeg, libao, libGLU, libGL, pcre, gettext, libXrandr, libusb1, lzo
+, libpthreadstubs, libXext, libXxf86vm, libXinerama, libSM, libXdmcp, readline
+, openal, udev, libevdev, portaudio, curl, alsa-lib, miniupnpc, enet, mbedtls
+, soundtouch, sfml, fmt, vulkan-loader, libpulseaudio
 
 # - Inputs used for Darwin
-, CoreBluetooth
-, ForceFeedback
-, IOKit
-, OpenGL
-, libpng
-, hidapi
-}:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
@@ -58,10 +19,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ] ++ lib.optional stdenv.isLinux wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config cmake ]
+    ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
     curl
@@ -106,12 +65,8 @@ stdenv.mkDerivation rec {
     IOKit
   ];
 
-  cmakeFlags = [
-    "-DUSE_SHARED_ENET=ON"
-    "-DENABLE_LTO=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
-  ];
+  cmakeFlags = [ "-DUSE_SHARED_ENET=ON" "-DENABLE_LTO=ON" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DOSX_USE_DEFAULT_SEARCH_PATH=True" ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"

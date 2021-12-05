@@ -1,4 +1,5 @@
-{ lib, stdenv, linkFarm, lightdm-mini-greeter, fetchFromGitHub, autoreconfHook, pkg-config, lightdm, gtk3, glib, gdk-pixbuf, wrapGAppsHook, librsvg }:
+{ lib, stdenv, linkFarm, lightdm-mini-greeter, fetchFromGitHub, autoreconfHook
+, pkg-config, lightdm, gtk3, glib, gdk-pixbuf, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-mini-greeter";
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.xgreeters = linkFarm "lightdm-mini-greeter-xgreeters" [{
-    path = "${lightdm-mini-greeter}/share/xgreeters/lightdm-mini-greeter.desktop";
+    path =
+      "${lightdm-mini-greeter}/share/xgreeters/lightdm-mini-greeter.desktop";
     name = "lightdm-mini-greeter.desktop";
   }];
 
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ mnacamura prikhi ];
     platforms = platforms.linux;
-    changelog = "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
+    changelog =
+      "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
   };
 }

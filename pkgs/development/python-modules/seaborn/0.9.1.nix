@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pandas
-, matplotlib
-}:
+{ lib, buildPythonPackage, fetchPypi, nose, pandas, matplotlib }:
 
 buildPythonPackage rec {
   pname = "seaborn";

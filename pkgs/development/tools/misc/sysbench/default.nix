@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, libmysqlclient, libaio
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libmysqlclient
+, libaio }:
 
 stdenv.mkDerivation rec {
   pname = "sysbench";

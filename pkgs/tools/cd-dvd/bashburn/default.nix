@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, util-linux
-, cdparanoia, cdrdao, dvdplusrwtools, flac, lame, mpg123, normalize
-, vorbis-tools, xorriso }:
+{ lib, stdenv, fetchurl, util-linux, cdparanoia, cdrdao, dvdplusrwtools, flac
+, lame, mpg123, normalize, vorbis-tools, xorriso }:
 
 stdenv.mkDerivation rec {
   pname = "bashburn";

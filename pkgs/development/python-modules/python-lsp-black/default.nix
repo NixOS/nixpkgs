@@ -1,11 +1,5 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, python-lsp-server
-, pythonOlder
-}:
+{ lib, black, buildPythonPackage, fetchFromGitHub, pytestCheckHook
+, python-lsp-server, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "python-lsp-black";

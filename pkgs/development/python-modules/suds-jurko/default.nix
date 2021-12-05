@@ -1,13 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-}:
+{ lib, buildPythonPackage, fetchPypi, isPyPy }:
 
 buildPythonPackage rec {
   pname = "suds-jurko";
   version = "0.6";
-  disabled = isPyPy;  # lots of failures
+  disabled = isPyPy; # lots of failures
 
   src = fetchPypi {
     inherit pname version;

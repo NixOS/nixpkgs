@@ -1,10 +1,4 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, python
-, azure-mgmt-common
-}:
-
+{ pkgs, buildPythonPackage, fetchPypi, python, azure-mgmt-common }:
 
 buildPythonPackage rec {
   version = "0.20.1";

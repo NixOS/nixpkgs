@@ -1864,12 +1864,10 @@
     github = "cburstedde";
     githubId = 109908;
     name = "Carsten Burstedde";
-    keys = [
-      {
-        longkeyid = "rsa2048/0x0704CD9E550A6BCD";
-        fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
-      }
-    ];
+    keys = [{
+      longkeyid = "rsa2048/0x0704CD9E550A6BCD";
+      fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
+    }];
   };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
@@ -6190,7 +6188,7 @@
     keys = [{
       longkeyid = "rsa4096/0x7248991EFA8EFBEE";
       fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
-     }];
+    }];
   };
   kiwi = {
     email = "envy1988@gmail.com";
@@ -11205,10 +11203,10 @@
     name = "Justus K";
   };
   SubhrajyotiSen = {
-      email = "subhrajyoti12@gmail.com";
-      github = "SubhrajyotiSen";
-      githubId = 12984845;
-      name = "Subhrajyoti Sen";
+    email = "subhrajyoti12@gmail.com";
+    github = "SubhrajyotiSen";
+    githubId = 12984845;
+    name = "Subhrajyoti Sen";
   };
   suhr = {
     email = "suhr@i2pmail.org";
@@ -11385,7 +11383,8 @@
     name = "Paul Colomiets";
   };
   taikx4 = {
-    email = "taikx4@taikx4szlaj2rsdupcwabg35inbny4jk322ngeb7qwbbhd5i55nf5yyd.onion";
+    email =
+      "taikx4@taikx4szlaj2rsdupcwabg35inbny4jk322ngeb7qwbbhd5i55nf5yyd.onion";
     github = "taikx4";
     githubId = 94917129;
     name = "taikx4";

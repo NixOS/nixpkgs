@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
-, useCCTweaked ? true
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, jre, useCCTweaked ? true
 }:
 
 let
@@ -7,22 +6,23 @@ let
   rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
 
   baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
-  jar =
-    if useCCTweaked
-    then fetchurl {
+  jar = if useCCTweaked then
+    fetchurl {
       url = "${baseUrl}-cct.jar";
       sha256 = "0d9gzi1h5vz32fp4lfn7dam189jcm7bwbqwmlpj0c47p8l0d4lsv";
     }
-    else fetchurl {
+  else
+    fetchurl {
       url = "${baseUrl}-cc.jar";
       sha256 = "0ky5vxh8m1v98zllifxif8xxd25j2xdp19hjnj4xlkck71lbnb34";
     };
 
   desktopIcon = fetchurl {
-    url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
+    url =
+      "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
     sha256 = "1vmb6rg9k2y99j8xqfgbsvfgfi3g985rmqwrd7w3y54ffr2r99c2";
   };
-  desktopItem =  makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "CCEmuX";
     exec = "ccemux";
     icon = desktopIcon;
@@ -31,9 +31,8 @@ let
     genericName = "ComputerCraft Emulator";
     categories = "Emulator;";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "ccemux";
   inherit version;
 

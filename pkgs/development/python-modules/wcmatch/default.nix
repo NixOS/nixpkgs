@@ -17,9 +17,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    "TestTilde"
-  ];
+  disabledTests = [ "TestTilde" ];
 
   pythonImportsCheck = [ "wcmatch" ];
 

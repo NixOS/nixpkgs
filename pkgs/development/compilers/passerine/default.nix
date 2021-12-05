@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-8WiiDLIJ/abXELF8S+4s+BPA/Lr/rpKmC1NWPCLzQWA=";
 
   meta = with lib; {
-    description = "A small extensible programming language designed for concise expression with little code";
+    description =
+      "A small extensible programming language designed for concise expression with little code";
     homepage = "https://github.com/vrtbl/passerine";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];

@@ -1,37 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, itstool
-, pkg-config
-, libxml2
-, libjpeg
-, libpeas
-, libportal
-, gnome
-, gtk3
-, glib
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, gnome-desktop
-, lcms2
-, gdk-pixbuf
-, exempi
-, shared-mime-info
-, wrapGAppsHook
-, librsvg
-, libexif
-, gobject-introspection
-, python3
-}:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, itstool, pkg-config, libxml2
+, libjpeg, libpeas, libportal, gnome, gtk3, glib, gsettings-desktop-schemas
+, adwaita-icon-theme, gnome-desktop, lcms2, gdk-pixbuf, exempi, shared-mime-info
+, wrapGAppsHook, librsvg, libexif, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "eog";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${
+        lib.versions.major version
+      }/${pname}-${version}.tar.xz";
     sha256 = "sha256-kX3ghv2X/T7JMPoHyIut0r4fXQrmueVpyYYATgNZqaw=";
   };
 

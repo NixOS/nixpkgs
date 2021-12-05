@@ -1,5 +1,5 @@
-{ lib, fetchdarcs, python2Packages, libvncserver, zlib
-, gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
+{ lib, fetchdarcs, python2Packages, libvncserver, zlib, gnutls, libvpx
+, makeDesktopItem, mkDerivationWith }:
 
 mkDerivationWith python2Packages.buildPythonApplication rec {
 
@@ -25,12 +25,7 @@ mkDerivationWith python2Packages.buildPythonApplication rec {
     google-api-python-client
   ];
 
-  buildInputs = [
-    python2Packages.cython
-    zlib
-    libvncserver
-    libvpx
-  ];
+  buildInputs = [ python2Packages.cython zlib libvncserver libvpx ];
 
   desktopItem = makeDesktopItem {
     name = "Blink";
@@ -60,7 +55,8 @@ mkDerivationWith python2Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://icanblink.com/";
-    description = "A state of the art, easy to use SIP client for Voice, Video and IM";
+    description =
+      "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];

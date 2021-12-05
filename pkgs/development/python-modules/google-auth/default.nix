@@ -1,20 +1,6 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, cachetools
-, flask
-, freezegun
-, mock
-, oauth2client
-, pyasn1-modules
-, pyu2f
-, pytest-localserver
-, responses
-, rsa
-, pyopenssl
-}:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pytestCheckHook, cachetools, flask
+, freezegun, mock, oauth2client, pyasn1-modules, pyu2f, pytest-localserver
+, responses, rsa, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "google-auth";
@@ -25,13 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-KAD2360pxs7V+vnKDDjqi6Hr4lWbEMApvQIePeMwFic=";
   };
 
-  propagatedBuildInputs = [
-    cachetools
-    pyasn1-modules
-    rsa
-    pyopenssl
-    pyu2f
-  ];
+  propagatedBuildInputs = [ cachetools pyasn1-modules rsa pyopenssl pyu2f ];
 
   checkInputs = [
     flask
@@ -43,10 +23,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "google.auth"
-    "google.oauth2"
-  ];
+  pythonImportsCheck = [ "google.auth" "google.oauth2" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_request_with_timeout_success"
@@ -63,7 +40,8 @@ buildPythonPackage rec {
       authentication mechanisms to access Google APIs.
     '';
     homepage = "https://github.com/googleapis/google-auth-library-python";
-    changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

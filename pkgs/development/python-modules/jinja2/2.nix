@@ -1,11 +1,5 @@
-{ lib, stdenv
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, pytest
-, markupsafe
-, setuptools
-}:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, pytest, markupsafe
+, setuptools }:
 
 buildPythonPackage rec {
   pname = "Jinja2";

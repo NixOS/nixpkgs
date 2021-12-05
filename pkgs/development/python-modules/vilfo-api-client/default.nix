@@ -1,13 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, getmac
-, requests
-, semver
-, pytestCheckHook
-, responses
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools-scm, getmac, requests
+, semver, pytestCheckHook, responses }:
 
 buildPythonPackage rec {
   pname = "vilfo-api-client";
@@ -25,22 +17,13 @@ buildPythonPackage rec {
       --replace "get-mac" "getmac"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    getmac
-    requests
-    semver
-  ];
+  propagatedBuildInputs = [ getmac requests semver ];
 
-  checkInputs = [
-    pytestCheckHook
-    responses
-  ];
+  checkInputs = [ pytestCheckHook responses ];
 
   pythonImportsCheck = [ "vilfo" ];
 

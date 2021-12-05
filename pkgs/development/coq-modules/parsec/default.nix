@@ -11,8 +11,10 @@ mkCoqDerivation {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = if versions.range "8.12" "8.13" coq.version then "0.1.0" else null;
-  release."0.1.0".sha256 = "sha256:01avfcqirz2b9wjzi9iywbhz9szybpnnj3672dgkfsimyg9jgnsr";
+  defaultVersion =
+    if versions.range "8.12" "8.13" coq.version then "0.1.0" else null;
+  release."0.1.0".sha256 =
+    "sha256:01avfcqirz2b9wjzi9iywbhz9szybpnnj3672dgkfsimyg9jgnsr";
 
   meta = {
     description = "Library for serialization to S-expressions";

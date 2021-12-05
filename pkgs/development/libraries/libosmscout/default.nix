@@ -1,5 +1,4 @@
-{ lib, mkDerivation, fetchgit, cmake, pkg-config
-, marisa, qtlocation }:
+{ lib, mkDerivation, fetchgit, cmake, pkg-config, marisa, qtlocation }:
 
 mkDerivation rec {
   pname = "libosmscout";
@@ -15,7 +14,8 @@ mkDerivation rec {
   buildInputs = [ marisa qtlocation ];
 
   meta = with lib; {
-    description = "Simple, high-level interfaces for offline location and POI lokup, rendering and routing functionalities based on OpenStreetMap (OSM) data";
+    description =
+      "Simple, high-level interfaces for offline location and POI lokup, rendering and routing functionalities based on OpenStreetMap (OSM) data";
     homepage = "http://libosmscout.sourceforge.net/";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.Thra11 ];

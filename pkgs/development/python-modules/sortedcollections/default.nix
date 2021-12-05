@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, sortedcontainers
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-cov, pytestCheckHook
+, sortedcontainers }:
 
 buildPythonPackage rec {
   pname = "sortedcollections";
@@ -19,10 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sortedcontainers ];
 
-  checkInputs = [
-    pytest-cov
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-cov pytestCheckHook ];
 
   pythonImportsCheck = [ "sortedcollections" ];
 

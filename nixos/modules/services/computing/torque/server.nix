@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.services.torque.server;
   torque = pkgs.torque;
-in
-{
+in {
   options = {
 
     services.torque.server = {
@@ -45,9 +44,7 @@ in
         RemainAfterExit = true;
       };
 
-      unitConfig = {
-        ConditionPathExists = "!/var/spool/torque";
-      };
+      unitConfig = { ConditionPathExists = "!/var/spool/torque"; };
     };
 
     systemd.services.trqauthd = {

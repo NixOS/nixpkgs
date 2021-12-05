@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkg-config
-, xorg }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2
+, pkg-config, xorg }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
   version = "2.2";
@@ -9,21 +9,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  buildInputs = [
+    fftw
+    gtkmm2
+    libxcb
+    lv2
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    xorg.libxshmfence
+  ];
 
   patches = [
     (fetchpatch {
       # glibc 2.27 compatibility
-      url = "https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch";
+      url =
+        "https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch";
       sha256 = "07b0wf6k4xqgigv4h095bzfaw8r218wa36r9w1817jcys13r6c5r";
     })
   ];
 
   postPatch = ''
-     # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
-     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
-       -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
-   '';
+    # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
+    find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+      -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+  '';
 
   installFlags = [ "DESTDIR=$(out)" ];
 

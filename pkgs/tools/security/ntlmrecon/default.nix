@@ -1,7 +1,4 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ntlmrecon";
@@ -27,7 +24,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "ntlmrecon" ];
 
   meta = with lib; {
-    description = "Information enumerator for NTLM authentication enabled web endpoints";
+    description =
+      "Information enumerator for NTLM authentication enabled web endpoints";
     homepage = "https://github.com/pwnfoo/NTLMRecon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

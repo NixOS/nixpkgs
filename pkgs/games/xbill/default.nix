@@ -1,4 +1,5 @@
-{ stdenv, lib, makeDesktopItem, copyDesktopItems, fetchurl, libX11, libXpm, libXt, motif, ... }:
+{ stdenv, lib, makeDesktopItem, copyDesktopItems, fetchurl, libX11, libXpm
+, libXt, motif, ... }:
 
 stdenv.mkDerivation rec {
   pname = "xbill";
@@ -9,24 +10,23 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-lXpm";
 
-  configureFlags = [
-    "--with-x"
-    "--enable-motif"
-  ];
+  configureFlags = [ "--with-x" "--enable-motif" ];
 
   src = fetchurl {
     url = "http://www.xbill.org/download/${pname}-${version}.tar.gz";
     sha256 = "13b08lli2gvppmvyhy0xs8cbjbkvrn4b87302mx0pxrdrvqzzz8f";
   };
 
-  desktopItems = [ (makeDesktopItem {
-    name = "xbill";
-    exec = "xbill";
-    icon = "xbill";
-    desktopName = "XBill";
-    comment     = "Get rid of those Wingdows viruses!";
-    categories  = "Game;ArcadeGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "xbill";
+      exec = "xbill";
+      icon = "xbill";
+      desktopName = "XBill";
+      comment = "Get rid of those Wingdows viruses!";
+      categories = "Game;ArcadeGame;";
+    })
+  ];
 
   postInstall = ''
     install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm

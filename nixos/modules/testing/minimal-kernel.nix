@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  configfile = builtins.storePath (builtins.toFile "config" (lib.concatStringsSep "\n"
-    (map (builtins.getAttr "configLine") config.system.requiredKernelConfig))
-  );
+  configfile = builtins.storePath (builtins.toFile "config"
+    (lib.concatStringsSep "\n" (map (builtins.getAttr "configLine")
+      config.system.requiredKernelConfig)));
 
   origKernel = pkgs.buildLinux {
     inherit (pkgs.linux) src version stdenv;
@@ -22,7 +22,5 @@ let
     '';
   }));
 
-   kernelPackages = pkgs.linuxPackagesFor kernel;
-in {
-  boot.kernelPackages = kernelPackages;
-}
+  kernelPackages = pkgs.linuxPackagesFor kernel;
+in { boot.kernelPackages = kernelPackages; }

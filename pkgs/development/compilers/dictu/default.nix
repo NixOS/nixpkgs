@@ -1,13 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, sqlite
-, httpSupport ? true, curl
-, cliSupport ? true
-, linenoiseSupport ? cliSupport, linenoise
-, enableLTO ? stdenv.cc.isGNU
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, sqlite, httpSupport ? true, curl
+, cliSupport ? true, linenoiseSupport ? cliSupport, linenoise
+, enableLTO ? stdenv.cc.isGNU }:
 
 assert enableLTO -> stdenv.cc.isGNU;
 
@@ -24,18 +17,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    sqlite
-  ] ++ lib.optional httpSupport curl
-  ++ lib.optional linenoiseSupport linenoise;
+  buildInputs = [ sqlite ] ++ lib.optional httpSupport curl
+    ++ lib.optional linenoiseSupport linenoise;
 
-  patches = [
-    ./0001-force-sqlite-to-be-found.patch
-  ];
+  patches = [ ./0001-force-sqlite-to-be-found.patch ];
 
   postPatch = lib.optionalString (!enableLTO) ''
     sed -i src/CMakeLists.txt \
-        -e 's/-flto/${lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"}/'
+        -e 's/-flto/${
+          lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"
+        }/'
   '';
 
   cmakeFlags = [
@@ -75,7 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "High-level dynamically typed, multi-paradigm, interpreted programming language";
+    description =
+      "High-level dynamically typed, multi-paradigm, interpreted programming language";
     homepage = "https://dictu-lang.com";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];

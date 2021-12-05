@@ -1,7 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, zlib
-, openssl ? null
-, sslSupport ? true
-}:
+{ lib, stdenv, fetchurl, ncurses, zlib, openssl ? null, sslSupport ? true }:
 
 with lib;
 
@@ -13,15 +10,14 @@ stdenv.mkDerivation rec {
   verUrl = "5.0%20beta%208";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/tinyfugue/tinyfugue/${verUrl}/tf-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/tinyfugue/tinyfugue/${verUrl}/tf-${version}.tar.gz";
     sha256 = "12fra2fdwqj6ilv9wdkc33rkj343rdcf5jyff4yiwywlrwaa2l1p";
   };
 
   configureFlags = optional (!sslSupport) "--disable-ssl";
 
-  buildInputs =
-    [ ncurses zlib ]
-    ++ optional sslSupport openssl;
+  buildInputs = [ ncurses zlib ] ++ optional sslSupport openssl;
 
   meta = {
     homepage = "http://tinyfugue.sourceforge.net/";

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "opencl-headers-${version}";

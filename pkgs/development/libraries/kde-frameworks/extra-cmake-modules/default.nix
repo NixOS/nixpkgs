@@ -3,11 +3,9 @@
 mkDerivation {
   name = "extra-cmake-modules";
 
-  patches = [
-    ./nix-lib-path.patch
-  ];
+  patches = [ ./nix-lib-path.patch ];
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = [ "out" ]; # this package has no runtime components
 
   propagatedBuildInputs = [ cmake pkg-config ];
 

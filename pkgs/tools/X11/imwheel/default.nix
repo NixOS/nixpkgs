@@ -11,15 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext libXi libXmu libXt libXtst ];
 
-  makeFlags = [
-    "sysconfdir=/etc"
-    "ETCDIR=/etc"
-  ];
+  makeFlags = [ "sysconfdir=/etc" "ETCDIR=/etc" ];
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "ETCDIR=${placeholder "out"}/etc"
-  ];
+  installFlags =
+    [ "sysconfdir=${placeholder "out"}/etc" "ETCDIR=${placeholder "out"}/etc" ];
 
   meta = with lib; {
     homepage = "http://imwheel.sourceforge.net/";

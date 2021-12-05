@@ -13,7 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-idxElk4Sy7SE9G1OMRw8YH4o8orBa80qhBXPA+ar620=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+    "-X main.date=unknown"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/vishen/go-chromecast";

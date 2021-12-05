@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(sbindir=$out/sbin manprefix=$out)
-    '';
+  '';
 
   meta = with lib; {
     description = "A tool to get/set ATA/SATA drive parameters under Linux";

@@ -1,35 +1,28 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-let
+  let
 
-  stick = pkgs.fetchurl {
-    url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
-    sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
-  };
-
-in
-
-{
-  name = "udisks2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
-
-  machine =
-    { ... }:
-    { services.udisks2.enable = true;
-      imports = [ ./common/user-account.nix ];
-
-      security.polkit.extraConfig =
-        ''
-          polkit.addRule(function(action, subject) {
-            if (subject.user == "alice") return "yes";
-          });
-        '';
+    stick = pkgs.fetchurl {
+      url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
+      sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
     };
 
-  testScript =
-    ''
+  in {
+    name = "udisks2";
+    meta = with pkgs.lib.maintainers; { maintainers = [ eelco ]; };
+
+    machine = { ... }: {
+      services.udisks2.enable = true;
+      imports = [ ./common/user-account.nix ];
+
+      security.polkit.extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (subject.user == "alice") return "yes";
+        });
+      '';
+    };
+
+    testScript = ''
       import lzma
 
       with lzma.open(
@@ -66,4 +59,4 @@ in
       machine.fail("[ -e /dev/sda ]")
     '';
 
-})
+  })

@@ -1,13 +1,6 @@
-{ lib, stdenv
-, fetchsvn
+{ lib, stdenv, fetchsvn
 # jdk8 is needed for building, but the game runs on newer jres as well
-, jdk8
-, jre
-, ant
-, makeWrapper
-, makeDesktopItem
-, nixosTests
-}:
+, jdk8, jre, ant, makeWrapper, makeDesktopItem, nixosTests }:
 
 let
   desktopItem = makeDesktopItem {
@@ -39,11 +32,7 @@ in stdenv.mkDerivation {
     sha256 = "sha256-awTaEkv0zUXgrKVKuFzi5sgHgrfiNmAFMODO5U0DL6I=";
   };
 
-  nativeBuildInputs = [
-    jdk8
-    ant
-    makeWrapper
-  ];
+  nativeBuildInputs = [ jdk8 ant makeWrapper ];
 
   buildPhase = ''
     cd swingUI
@@ -80,9 +69,7 @@ in stdenv.mkDerivation {
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
   '';
 
-  passthru.tests = {
-    domination-starts = nixosTests.domination;
-  };
+  passthru.tests = { domination-starts = nixosTests.domination; };
 
   meta = with lib; {
     homepage = "http://domination.sourceforge.net/";

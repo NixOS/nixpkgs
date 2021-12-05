@@ -1,16 +1,5 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, cachelib
-, cssselect
-, fetchFromGitHub
-, keep
-, lxml
-, pygments
-, pyquery
-, requests
-, pytestCheckHook
-}:
+{ lib, appdirs, buildPythonPackage, cachelib, cssselect, fetchFromGitHub, keep
+, lxml, pygments, pyquery, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "howdoi";
@@ -23,20 +12,10 @@ buildPythonPackage rec {
     sha256 = "0hl7cpxm4llsgw6390bpjgkzrprrpb0vxx2flgly7wiy9zl1rc5q";
   };
 
-  propagatedBuildInputs = [
-    appdirs
-    cachelib
-    cssselect
-    keep
-    lxml
-    pygments
-    pyquery
-    requests
-  ];
+  propagatedBuildInputs =
+    [ appdirs cachelib cssselect keep lxml pygments pyquery requests ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -48,9 +27,7 @@ buildPythonPackage rec {
     "test_get_text_without_links"
   ];
 
-  pythonImportsCheck = [
-    "howdoi"
-  ];
+  pythonImportsCheck = [ "howdoi" ];
 
   meta = with lib; {
     description = "Instant coding answers via the command line";

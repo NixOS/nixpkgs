@@ -2,8 +2,7 @@
 let
   version = "1.0.1";
   sha256 = "0qkgkkjy1isv6ws6hrcal75dxjz98rpnvqbm7agdcc6yv0c17wwh";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "system76-io-module-${version}-${kernel.version}";
 
   passthru.moduleName = "system76_io";
@@ -19,9 +18,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildFlags = [
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  buildFlags =
+    [ "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko

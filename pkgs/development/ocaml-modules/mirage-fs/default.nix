@@ -1,5 +1,4 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, fmt, lwt, mirage-device, mirage-kv
+{ lib, fetchurl, buildDunePackage, cstruct, fmt, lwt, mirage-device, mirage-kv
 }:
 
 buildDunePackage rec {
@@ -9,7 +8,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-fs/releases/download/v${version}/mirage-fs-v${version}.tbz";
+    url =
+      "https://github.com/mirage/mirage-fs/releases/download/v${version}/mirage-fs-v${version}.tbz";
     sha256 = "0px18bgk528vr7iw78r0j3z4sdcz684sfcj47ibbly2adbvd64yk";
   };
 

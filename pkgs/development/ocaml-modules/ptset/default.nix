@@ -1,6 +1,4 @@
-{ lib, fetchurl, buildDunePackage
-, stdlib-shims
-}:
+{ lib, fetchurl, buildDunePackage, stdlib-shims }:
 
 buildDunePackage rec {
   pname = "ptset";
@@ -9,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/backtracking/ptset/releases/download/${version}/ptset-${version}.tbz";
+    url =
+      "https://github.com/backtracking/ptset/releases/download/${version}/ptset-${version}.tbz";
     sha256 = "1pr80mgk12l93mdq1wfsv2b6ccraxs334d5h92qzjh7bw2g13424";
   };
 

@@ -1,14 +1,5 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, aioresponses, buildPythonPackage, dacite, fetchFromGitHub
+, pytest-asyncio, pytest-error-for-skips, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
@@ -24,17 +15,10 @@ buildPythonPackage rec {
     sha256 = "sha256-hKEXTzJMSVBRDiqrN90/fETEhirwSWLdgRULRvlQjbY=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    dacite
-  ];
+  propagatedBuildInputs = [ aiohttp dacite ];
 
-  checkInputs = [
-    aioresponses
-    pytest-asyncio
-    pytest-error-for-skips
-    pytestCheckHook
-  ];
+  checkInputs =
+    [ aioresponses pytest-asyncio pytest-error-for-skips pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -43,12 +27,11 @@ buildPythonPackage rec {
       --replace "--cov --cov-report term-missing " ""
   '';
 
-  pythonImportsCheck = [
-    "nettigo_air_monitor"
-  ];
+  pythonImportsCheck = [ "nettigo_air_monitor" ];
 
   meta = with lib; {
-    description = "Python module to get air quality data from Nettigo Air Monitor devices";
+    description =
+      "Python module to get air quality data from Nettigo Air Monitor devices";
     homepage = "https://github.com/bieniu/nettigo-air-monitor";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

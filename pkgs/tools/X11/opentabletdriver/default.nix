@@ -1,21 +1,6 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, fetchurl
-, dotnetCorePackages
-, gtk3
-, libX11
-, libXrandr
-, libappindicator
-, libevdev
-, libnotify
-, udev
-, copyDesktopItems
-, makeDesktopItem
-, nixosTests
-, wrapGAppsHook
-, dpkg
-}:
+{ lib, buildDotnetModule, fetchFromGitHub, fetchurl, dotnetCorePackages, gtk3
+, libX11, libXrandr, libappindicator, libevdev, libnotify, udev
+, copyDesktopItems, makeDesktopItem, nixosTests, wrapGAppsHook, dpkg }:
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
@@ -29,7 +14,8 @@ buildDotnetModule rec {
   };
 
   debPkg = fetchurl {
-    url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
+    url =
+      "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
     sha256 = "0v03qiiz28k1yzgxf5qc1mdg2n7kjx6h8vpx9dxz342wwbgqg6ic";
   };
 
@@ -38,26 +24,23 @@ buildDotnetModule rec {
 
   dotnetInstallFlags = [ "--framework=net5" ];
 
-  projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  projectFile = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
   nugetDeps = ./deps.nix;
 
-  executables = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
-
-  nativeBuildInputs = [
-    copyDesktopItems
-    wrapGAppsHook
-    dpkg
+  executables = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
   ];
 
-  runtimeDeps = [
-    gtk3
-    libX11
-    libXrandr
-    libappindicator
-    libevdev
-    libnotify
-    udev
-  ];
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook dpkg ];
+
+  runtimeDeps =
+    [ gtk3 libX11 libXrandr libappindicator libevdev libnotify udev ];
 
   postInstall = ''
     # Give a more "*nix" name to the binaries
@@ -89,9 +72,7 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = {
-      otd-runs = nixosTests.opentabletdriver;
-    };
+    tests = { otd-runs = nixosTests.opentabletdriver; };
   };
 
   meta = with lib; {

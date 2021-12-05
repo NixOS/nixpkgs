@@ -1,37 +1,29 @@
-{ version
-, srcName
-, hash ? null
-, sha256 ? null
-}:
+{ version, srcName, hash ? null, sha256 ? null }:
 
 assert (hash != null) || (sha256 != null);
 
-{ stdenv
-, lib
-, cudatoolkit
-, fetchurl
-, addOpenGLRunpath
+{ stdenv, lib, cudatoolkit, fetchurl, addOpenGLRunpath
 , # The distributed version of CUDNN includes both dynamically liked .so files,
-  # as well as statically linked .a files.  However, CUDNN is quite large
-  # (multiple gigabytes), so you can save some space in your nix store by
-  # removing the statically linked libraries if you are not using them.
-  #
-  # Setting this to true removes the statically linked .a files.
-  # Setting this to false keeps these statically linked .a files.
-  removeStatic ? false
-}:
+# as well as statically linked .a files.  However, CUDNN is quite large
+# (multiple gigabytes), so you can save some space in your nix store by
+# removing the statically linked libraries if you are not using them.
+#
+# Setting this to true removes the statically linked .a files.
+# Setting this to false keeps these statically linked .a files.
+removeStatic ? false }:
 
 stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
 
-  src = let
-    hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
-  in fetchurl ({
-    # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
-    url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
-  } // hash_);
+  src =
+    let hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
+    in fetchurl ({
+      # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
+      url =
+        "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
+    } // hash_);
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 
@@ -40,7 +32,9 @@ stdenv.mkDerivation {
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc ]}:\$ORIGIN/" $1
+      patchelf --set-rpath "''${p:+$p:}${
+        lib.makeLibraryPath [ stdenv.cc.cc ]
+      }:\$ORIGIN/" $1
     }
 
     for lib in lib64/lib*.so; do
@@ -64,9 +58,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
+  propagatedBuildInputs = [ cudatoolkit ];
 
   passthru = {
     inherit cudatoolkit;

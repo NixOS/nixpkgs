@@ -16,7 +16,7 @@ let
 
       ips = mkOption {
         example = [ "192.168.2.1/24" ];
-        default = [];
+        default = [ ];
         type = with types; listOf str;
         description = "The IP addresses of the interface.";
       };
@@ -62,7 +62,8 @@ let
       };
 
       preSetup = mkOption {
-        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns add foo"'';
+        example =
+          literalExpression ''"''${pkgs.iproute2}/bin/ip netns add foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -80,7 +81,8 @@ let
       };
 
       postShutdown = mkOption {
-        example = literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
+        example =
+          literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = "Commands called after shutting down the interface.";
@@ -99,7 +101,7 @@ let
       };
 
       peers = mkOption {
-        default = [];
+        default = [ ];
         description = "Peers linked to the interface.";
         type = with types; listOf (submodule peerOpts);
       };
@@ -117,26 +119,28 @@ let
         default = null;
         type = with types; nullOr str;
         example = "container";
-        description = ''The pre-existing network namespace in which the
-        WireGuard interface is created, and which retains the socket even if the
-        interface is moved via <option>interfaceNamespace</option>. When
-        <literal>null</literal>, the interface is created in the init namespace.
-        See <link
-        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
-        '';
+        description = ''
+          The pre-existing network namespace in which the
+                  WireGuard interface is created, and which retains the socket even if the
+                  interface is moved via <option>interfaceNamespace</option>. When
+                  <literal>null</literal>, the interface is created in the init namespace.
+                  See <link
+                  xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+                  '';
       };
 
       interfaceNamespace = mkOption {
         default = null;
         type = with types; nullOr str;
         example = "init";
-        description = ''The pre-existing network namespace the WireGuard
-        interface is moved to. The special value <literal>init</literal> means
-        the init namespace. When <literal>null</literal>, the interface is not
-        moved.
-        See <link
-        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
-        '';
+        description = ''
+          The pre-existing network namespace the WireGuard
+                  interface is moved to. The special value <literal>init</literal> means
+                  the init namespace. When <literal>null</literal>, the interface is not
+                  moved.
+                  See <link
+                  xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+                  '';
       };
     };
 
@@ -184,31 +188,33 @@ let
       allowedIPs = mkOption {
         example = [ "10.192.122.3/32" "10.192.124.1/24" ];
         type = with types; listOf str;
-        description = ''List of IP (v4 or v6) addresses with CIDR masks from
-        which this peer is allowed to send incoming traffic and to which
-        outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
-        be specified for matching all IPv4 addresses, and ::/0 may be specified
-        for matching all IPv6 addresses.'';
+        description = ''
+          List of IP (v4 or v6) addresses with CIDR masks from
+                  which this peer is allowed to send incoming traffic and to which
+                  outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
+                  be specified for matching all IPv4 addresses, and ::/0 may be specified
+                  for matching all IPv6 addresses.'';
       };
 
       endpoint = mkOption {
         default = null;
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
-        description = ''Endpoint IP or hostname of the peer, followed by a colon,
-        and then a port number of the peer.
+        description = ''
+          Endpoint IP or hostname of the peer, followed by a colon,
+                  and then a port number of the peer.
 
-        Warning for endpoints with changing IPs:
-        The WireGuard kernel side cannot perform DNS resolution.
-        Thus DNS resolution is done once by the <literal>wg</literal> userspace
-        utility, when setting up WireGuard. Consequently, if the IP address
-        behind the name changes, WireGuard will not notice.
-        This is especially common for dynamic-DNS setups, but also applies to
-        any other DNS-based setup.
-        If you do not use IP endpoints, you likely want to set
-        <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
-        to refresh the IPs periodically.
-        '';
+                  Warning for endpoints with changing IPs:
+                  The WireGuard kernel side cannot perform DNS resolution.
+                  Thus DNS resolution is done once by the <literal>wg</literal> userspace
+                  utility, when setting up WireGuard. Consequently, if the IP address
+                  behind the name changes, WireGuard will not notice.
+                  This is especially common for dynamic-DNS setups, but also applies to
+                  any other DNS-based setup.
+                  If you do not use IP endpoints, you likely want to set
+                  <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
+                  to refresh the IPs periodically.
+                  '';
       };
 
       dynamicEndpointRefreshSeconds = mkOption {
@@ -228,14 +234,15 @@ let
         default = null;
         type = with types; nullOr int;
         example = 25;
-        description = ''This is optional and is by default off, because most
-        users will not need it. It represents, in seconds, between 1 and 65535
-        inclusive, how often to send an authenticated empty packet to the peer,
-        for the purpose of keeping a stateful firewall or NAT mapping valid
-        persistently. For example, if the interface very rarely sends traffic,
-        but it might at anytime receive traffic from a peer, and it is behind
-        NAT, the interface might benefit from having a persistent keepalive
-        interval of 25 seconds; however, most users will not need this.'';
+        description = ''
+          This is optional and is by default off, because most
+                  users will not need it. It represents, in seconds, between 1 and 65535
+                  inclusive, how often to send an authenticated empty packet to the peer,
+                  for the purpose of keeping a stateful firewall or NAT mapping valid
+                  persistently. For example, if the interface very rarely sends traffic,
+                  but it might at anytime receive traffic from a peer, and it is behind
+                  NAT, the interface might benefit from having a persistent keepalive
+                  interval of 25 seconds; however, most users will not need this.'';
       };
 
     };
@@ -244,49 +251,51 @@ let
 
   generateKeyServiceUnit = name: values:
     assert values.generatePrivateKeyFile;
-    nameValuePair "wireguard-${name}-key"
-      {
-        description = "WireGuard Tunnel - ${name} - Key Generator";
-        wantedBy = [ "wireguard-${name}.service" ];
-        requiredBy = [ "wireguard-${name}.service" ];
-        before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard-tools ];
+    nameValuePair "wireguard-${name}-key" {
+      description = "WireGuard Tunnel - ${name} - Key Generator";
+      wantedBy = [ "wireguard-${name}.service" ];
+      requiredBy = [ "wireguard-${name}.service" ];
+      before = [ "wireguard-${name}.service" ];
+      path = with pkgs; [ wireguard-tools ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-
-        script = ''
-          set -e
-
-          # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
-          mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
-
-          if [ ! -f "${values.privateKeyFile}" ]; then
-            # Write private key file with atomically-correct permissions.
-            (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
-          fi
-        '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
       };
+
+      script = ''
+        set -e
+
+        # If the parent dir does not already exist, create it.
+        # Otherwise, does nothing, keeping existing permisions intact.
+        mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
+
+        if [ ! -f "${values.privateKeyFile}" ]; then
+          # Write private key file with atomically-correct permissions.
+          (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
+        fi
+      '';
+    };
 
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
-        [ "/" "-"    " "     "+"     "="      ]
-        [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
+      keyToUnitName = replaceChars [ "/" "-" " " "+" "=" ] [
+        "-"
+        "\\x2d"
+        "\\x20"
+        "\\x2b"
+        "\\x3d"
+      ];
       unitName = keyToUnitName publicKey;
       refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
-    in
-      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+    in "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
 
   generatePeerUnit = { interfaceName, interfaceCfg, peer }:
     let
-      psk =
-        if peer.presharedKey != null
-          then pkgs.writeText "wg-psk" peer.presharedKey
-          else peer.presharedKeyFile;
+      psk = if peer.presharedKey != null then
+        pkgs.writeText "wg-psk" peer.presharedKey
+      else
+        peer.presharedKeyFile;
       src = interfaceCfg.socketNamespace;
       dst = interfaceCfg.interfaceNamespace;
       ip = nsWrap "ip" src dst;
@@ -295,137 +304,137 @@ let
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
       # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
       # with the intent to make scripting more obvious.
-      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
-    in nameValuePair serviceName
-      {
-        description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
-        requires = [ "wireguard-${interfaceName}.service" ];
-        after = [ "wireguard-${interfaceName}.service" ];
-        wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
-        environment.DEVICE = interfaceName;
-        environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-        path = with pkgs; [ iproute2 wireguard-tools ];
+      serviceName =
+        peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+    in nameValuePair serviceName {
+      description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
+      requires = [ "wireguard-${interfaceName}.service" ];
+      after = [ "wireguard-${interfaceName}.service" ];
+      wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
+      environment.DEVICE = interfaceName;
+      environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
+      path = with pkgs; [ iproute2 wireguard-tools ];
 
-        serviceConfig =
-          if !dynamicRefreshEnabled
-            then
-              {
-                Type = "oneshot";
-                RemainAfterExit = true;
-              }
-            else
-              {
-                Type = "simple"; # re-executes 'wg' indefinitely
-                # Note that `Type = "oneshot"` services with `RemainAfterExit = true`
-                # cannot be used with systemd timers (see `man systemd.timer`),
-                # which is why `simple` with a loop is the best choice here.
-                # It also makes starting and stopping easiest.
-              };
+      serviceConfig = if !dynamicRefreshEnabled then {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      } else {
+        Type = "simple"; # re-executes 'wg' indefinitely
+        # Note that `Type = "oneshot"` services with `RemainAfterExit = true`
+        # cannot be used with systemd timers (see `man systemd.timer`),
+        # which is why `simple` with a loop is the best choice here.
+        # It also makes starting and stopping easiest.
+      };
 
-        script = let
-          wg_setup = concatStringsSep " " (
-            [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
+      script = let
+        wg_setup = concatStringsSep " "
+          ([ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
             ++ optional (psk != null) ''preshared-key "${psk}"''
             ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
-            ++ optional (peer.persistentKeepalive != null) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
-            ++ optional (peer.allowedIPs != []) ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"''
-          );
-          route_setup =
-            optionalString interfaceCfg.allowedIPsAsRoutes
-              (concatMapStringsSep "\n"
-                (allowedIP:
-                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
-                ) peer.allowedIPs);
-        in ''
-          ${wg_setup}
-          ${route_setup}
+            ++ optional (peer.persistentKeepalive != null)
+            ''persistent-keepalive "${toString peer.persistentKeepalive}"''
+            ++ optional (peer.allowedIPs != [ ])
+            ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"'');
+        route_setup = optionalString interfaceCfg.allowedIPsAsRoutes
+          (concatMapStringsSep "\n" (allowedIP:
+            ''
+              ${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"'')
+            peer.allowedIPs);
+      in ''
+        ${wg_setup}
+        ${route_setup}
 
-          ${optionalString (peer.dynamicEndpointRefreshSeconds != 0) ''
-            # Re-execute 'wg' periodically to notice DNS / hostname changes.
-            # Note this will not time out on transient DNS failures such as DNS names
-            # because we have set 'WG_ENDPOINT_RESOLUTION_RETRIES=infinity'.
-            # Also note that 'wg' limits its maximum retry delay to 20 seconds as of writing.
-            while ${wg_setup}; do
-              sleep "${toString peer.dynamicEndpointRefreshSeconds}";
-            done
-          ''}
-        '';
+        ${optionalString (peer.dynamicEndpointRefreshSeconds != 0) ''
+          # Re-execute 'wg' periodically to notice DNS / hostname changes.
+          # Note this will not time out on transient DNS failures such as DNS names
+          # because we have set 'WG_ENDPOINT_RESOLUTION_RETRIES=infinity'.
+          # Also note that 'wg' limits its maximum retry delay to 20 seconds as of writing.
+          while ${wg_setup}; do
+            sleep "${toString peer.dynamicEndpointRefreshSeconds}";
+          done
+        ''}
+      '';
 
-        postStop = let
-          route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes
-            (concatMapStringsSep "\n"
-              (allowedIP:
-                ''${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
-              ) peer.allowedIPs);
-        in ''
-          ${wg} set "${interfaceName}" peer "${peer.publicKey}" remove
-          ${route_destroy}
-        '';
-      };
+      postStop = let
+        route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes
+          (concatMapStringsSep "\n" (allowedIP:
+            ''
+              ${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"'')
+            peer.allowedIPs);
+      in ''
+        ${wg} set "${interfaceName}" peer "${peer.publicKey}" remove
+        ${route_destroy}
+      '';
+    };
 
   generateInterfaceUnit = name: values:
     # exactly one way to specify the private key must be set
     #assert (values.privateKey != null) != (values.privateKeyFile != null);
-    let privKey = if values.privateKeyFile != null then values.privateKeyFile else pkgs.writeText "wg-key" values.privateKey;
-        src = values.socketNamespace;
-        dst = values.interfaceNamespace;
-        ipPreMove  = nsWrap "ip" src null;
-        ipPostMove = nsWrap "ip" src dst;
-        wg = nsWrap "wg" src dst;
-        ns = if dst == "init" then "1" else dst;
+    let
+      privKey = if values.privateKeyFile != null then
+        values.privateKeyFile
+      else
+        pkgs.writeText "wg-key" values.privateKey;
+      src = values.socketNamespace;
+      dst = values.interfaceNamespace;
+      ipPreMove = nsWrap "ip" src null;
+      ipPostMove = nsWrap "ip" src dst;
+      wg = nsWrap "wg" src dst;
+      ns = if dst == "init" then "1" else dst;
 
-    in
-    nameValuePair "wireguard-${name}"
-      {
-        description = "WireGuard Tunnel - ${name}";
-        requires = [ "network-online.target" ];
-        after = [ "network.target" "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
-        environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute2 wireguard-tools ];
+    in nameValuePair "wireguard-${name}" {
+      description = "WireGuard Tunnel - ${name}";
+      requires = [ "network-online.target" ];
+      after = [ "network.target" "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.DEVICE = name;
+      path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-
-        script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard || true"}
-
-          ${values.preSetup}
-
-          ${ipPreMove} link add dev "${name}" type wireguard
-          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-
-          ${concatMapStringsSep "\n" (ip:
-            ''${ipPostMove} address add "${ip}" dev "${name}"''
-          ) values.ips}
-
-          ${concatStringsSep " " (
-            [ ''${wg} set "${name}" private-key "${privKey}"'' ]
-            ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
-          )}
-
-          ${ipPostMove} link set up dev "${name}"
-
-          ${values.postSetup}
-        '';
-
-        postStop = ''
-          ${ipPostMove} link del dev "${name}"
-          ${values.postShutdown}
-        '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
       };
+
+      script = ''
+        ${optionalString (!config.boot.isContainer)
+        "modprobe wireguard || true"}
+
+        ${values.preSetup}
+
+        ${ipPreMove} link add dev "${name}" type wireguard
+        ${optionalString (values.interfaceNamespace != null
+          && values.interfaceNamespace != values.socketNamespace)
+        ''${ipPreMove} link set "${name}" netns "${ns}"''}
+
+        ${concatMapStringsSep "\n"
+        (ip: ''${ipPostMove} address add "${ip}" dev "${name}"'') values.ips}
+
+        ${concatStringsSep " "
+        ([ ''${wg} set "${name}" private-key "${privKey}"'' ]
+          ++ optional (values.listenPort != null)
+          ''listen-port "${toString values.listenPort}"'')}
+
+        ${ipPostMove} link set up dev "${name}"
+
+        ${values.postSetup}
+      '';
+
+      postStop = ''
+        ${ipPostMove} link del dev "${name}"
+        ${values.postShutdown}
+      '';
+    };
 
   nsWrap = cmd: src: dst:
     let
       nsList = filter (ns: ns != null) [ src dst ];
       ns = last nsList;
-    in
-      if (length nsList > 0 && ns != "init") then ''ip netns exec "${ns}" "${cmd}"'' else cmd;
-in
+    in if (length nsList > 0 && ns != "init") then
+      ''ip netns exec "${ns}" "${cmd}"''
+    else
+      cmd;
 
-{
+in {
 
   ###### interface
 
@@ -437,22 +446,22 @@ in
         description = "Whether to enable WireGuard.";
         type = types.bool;
         # 2019-05-25: Backwards compatibility.
-        default = cfg.interfaces != {};
+        default = cfg.interfaces != { };
         example = true;
       };
 
       interfaces = mkOption {
         description = "WireGuard interfaces.";
-        default = {};
+        default = { };
         example = {
           wg0 = {
             ips = [ "192.168.20.4/24" ];
             privateKey = "yAnz5TF+lXXJte14tji3zlMNq+hd2rYUIgJBgB3fBmk=";
-            peers = [
-              { allowedIPs = [ "192.168.20.1/32" ];
-                publicKey  = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-                endpoint   = "demo.wireguard.io:12913"; }
-            ];
+            peers = [{
+              allowedIPs = [ "192.168.20.1/32" ];
+              publicKey = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
+              endpoint = "demo.wireguard.io:12913";
+            }];
           };
         };
         type = with types; attrsOf (submodule interfaceOpts);
@@ -462,39 +471,38 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable (let
-    all_peers = flatten
-      (mapAttrsToList (interfaceName: interfaceCfg:
-        map (peer: { inherit interfaceName interfaceCfg peer;}) interfaceCfg.peers
-      ) cfg.interfaces);
+    all_peers = flatten (mapAttrsToList (interfaceName: interfaceCfg:
+      map (peer: { inherit interfaceName interfaceCfg peer; })
+      interfaceCfg.peers) cfg.interfaces);
   in {
 
-    assertions = (attrValues (
-        mapAttrs (name: value: {
-          assertion = (value.privateKey != null) != (value.privateKeyFile != null);
-          message = "Either networking.wireguard.interfaces.${name}.privateKey or networking.wireguard.interfaces.${name}.privateKeyFile must be set.";
-        }) cfg.interfaces))
-      ++ (attrValues (
-        mapAttrs (name: value: {
-          assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
-          message = "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
-        }) cfg.interfaces))
-        ++ map ({ interfaceName, peer, ... }: {
-          assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
-          message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
-        }) all_peers;
+    assertions = (attrValues (mapAttrs (name: value: {
+      assertion = (value.privateKey != null) != (value.privateKeyFile != null);
+      message =
+        "Either networking.wireguard.interfaces.${name}.privateKey or networking.wireguard.interfaces.${name}.privateKeyFile must be set.";
+    }) cfg.interfaces)) ++ (attrValues (mapAttrs (name: value: {
+      assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
+      message =
+        "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
+    }) cfg.interfaces)) ++ map ({ interfaceName, peer, ... }: {
+      assertion = (peer.presharedKey == null)
+        || (peer.presharedKeyFile == null);
+      message =
+        "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
+    }) all_peers;
 
-    boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    boot.extraModulePackages =
+      optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
-    systemd.services =
-      (mapAttrs' generateInterfaceUnit cfg.interfaces)
+    systemd.services = (mapAttrs' generateInterfaceUnit cfg.interfaces)
       // (listToAttrs (map generatePeerUnit all_peers))
       // (mapAttrs' generateKeyServiceUnit
-      (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
+        (filterAttrs (name: value: value.generatePrivateKeyFile)
+          cfg.interfaces));
 
   });
 

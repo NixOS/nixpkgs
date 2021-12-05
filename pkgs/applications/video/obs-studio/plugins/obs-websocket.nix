@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, qtbase
-, obs-studio
-, asio_1_10
-, websocketpp
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, qtbase, obs-studio, asio_1_10
+, websocketpp }:
 
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
@@ -25,9 +17,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
-  ];
+  cmakeFlags = [ "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs" ];
 
   meta = with lib; {
     description = "Remote-control OBS Studio through WebSockets";

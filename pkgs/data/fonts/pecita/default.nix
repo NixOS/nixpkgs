@@ -1,10 +1,8 @@
 { lib, fetchurl }:
 
-let
-  version = "5.4";
-in
+let version = "5.4";
 
-fetchurl {
+in fetchurl {
   name = "pecita-${version}";
 
   url = "http://pecita.eu/b/Pecita.otf";
@@ -24,6 +22,6 @@ fetchurl {
     description = "Handwritten font with connected glyphs";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

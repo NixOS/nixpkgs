@@ -1,8 +1,4 @@
-{ fetchFromGitLab
-, python
-, lib
-, apksigner
-}:
+{ fetchFromGitLab, python, lib, apksigner }:
 
 python.pkgs.buildPythonApplication rec {
   version = "2.0.3";
@@ -48,7 +44,8 @@ python.pkgs.buildPythonApplication rec {
     yamllint
   ];
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+  makeWrapperArgs =
+    [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
 
   # no tests
   doCheck = false;
@@ -57,7 +54,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://f-droid.org";
-    description = "Server and tools for F-Droid, the Free Software repository system for Android";
+    description =
+      "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
     maintainers = [ lib.maintainers.obfusk ];
   };

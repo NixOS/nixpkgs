@@ -1,20 +1,6 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, oslo-config
-, oslo-log
-, oslo-serialization
-, oslo-utils
-, prettytable
-, requests
-, simplejson
-, Babel
-, osc-lib
-, python-keystoneclient
-, debtcollector
-, callPackage
-}:
+{ lib, buildPythonApplication, fetchPypi, pbr, oslo-config, oslo-log
+, oslo-serialization, oslo-utils, prettytable, requests, simplejson, Babel
+, osc-lib, python-keystoneclient, debtcollector, callPackage }:
 
 buildPythonApplication rec {
   pname = "python-manilaclient";
@@ -43,9 +29,7 @@ buildPythonApplication rec {
   # Checks moved to 'passthru.tests' to workaround infinite recursion
   doCheck = false;
 
-  passthru.tests = {
-    tests = callPackage ./tests.nix { };
-  };
+  passthru.tests = { tests = callPackage ./tests.nix { }; };
 
   pythonImportsCheck = [ "manilaclient" ];
 

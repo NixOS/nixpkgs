@@ -1,14 +1,5 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qtbase
-, qtserialport
-, qtermwidget
-, cmake
-, ninja
-, libcprime
-, libcsys
-}:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, qtserialport, qtermwidget, cmake
+, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "coreterminal";
@@ -21,18 +12,9 @@ mkDerivation rec {
     sha256 = "sha256-YXs6VTem3AaK4n1DYwKP/jqNuf09Srn2THHyJJnArlc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [
-    qtbase
-    qtserialport
-    qtermwidget
-    libcprime
-    libcsys
-  ];
+  buildInputs = [ qtbase qtserialport qtermwidget libcprime libcsys ];
 
   meta = with lib; {
     description = "A terminal emulator from the C Suite";

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, apacheHttpd, openssl, openldap, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, apacheHttpd, openssl, openldap, apr
+, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_ca";
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
   # Note that configureFlags and installFlags are inherited by
   # the various submodules.
   #
-  configureFlags = [
-    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-  ];
+  configureFlags = [ "--with-apxs=${apacheHttpd.dev}/bin/apxs" ];
 
   installFlags = [
     "INCLUDEDIR=${placeholder "out"}/include"

@@ -1,8 +1,7 @@
 { rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
 , cargo, pkg-config, curl, coreutils, boost175, db62, hexdump, libsodium
 , libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
-, withUtils ? true, withWallet ? true, withZmq ? true, zeromq
-}:
+, withUtils ? true, withWallet ? true, withZmq ? true, zeromq }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
@@ -10,7 +9,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   src = fetchFromGitHub {
     owner = "zcash";
-    repo  = "zcash";
+    repo = "zcash";
     rev = "v${version}";
     sha256 = "0kyk3hv1y13b3vwg9kjcrpvz9v3l8lp0ikj977nykd5ms8b1rifa";
   };
@@ -19,8 +18,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
   buildInputs = [ boost175 libevent libsodium utf8cpp ]
-    ++ lib.optional withWallet db62
-    ++ lib.optional withZmq zeromq;
+    ++ lib.optional withWallet db62 ++ lib.optional withZmq zeromq;
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.

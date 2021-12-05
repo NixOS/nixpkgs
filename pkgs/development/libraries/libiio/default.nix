@@ -1,14 +1,5 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, flex
-, bison
-, libxml2
-, python
-, libusb1
-, runtimeShell
-, lib
-}:
+{ stdenv, fetchFromGitHub, cmake, flex, bison, libxml2, python, libusb1
+, runtimeShell, lib }:
 
 stdenv.mkDerivation rec {
   pname = "libiio";
@@ -27,17 +18,10 @@ stdenv.mkDerivation rec {
   # fixed properly
   patches = [ ./cmake-fix-libxml2-find-package.patch ];
 
-  nativeBuildInputs = [
-    cmake
-    flex
-    bison
-  ];
+  nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = [
-    python
-    libxml2
-    libusb1
-  ] ++ lib.optional python.isPy3k python.pkgs.setuptools;
+  buildInputs = [ python libxml2 libusb1 ]
+    ++ lib.optional python.isPy3k python.pkgs.setuptools;
 
   cmakeFlags = [
     "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
@@ -46,7 +30,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Hardcode path to the shared library into the bindings.
-    sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
+    sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${
+      ./hardcode-library-path.patch
+    } | patch -p1
 
     substituteInPlace libiio.rules.cmakein \
       --replace /bin/sh ${runtimeShell}

@@ -7,8 +7,7 @@ let
     rev = "9b2863ff0c539cd23d91b0254032a7af9c840574";
     sha256 = "06rcxkwgms9sxqr1swnnc4jnvgs0iahm4cksd475yd1bp5p1gq6j";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   version = "0.3.0";
   pname = "sailsd";
   src = fetchFromGitHub {

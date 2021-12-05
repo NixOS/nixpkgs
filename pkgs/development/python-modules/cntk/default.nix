@@ -1,20 +1,8 @@
-{ lib
-, buildPythonPackage
-, pkgs
-, numpy
-, scipy
-, mpi
-, enum34
-, protobuf
-, pip
-, python
-, swig
-}:
+{ lib, buildPythonPackage, pkgs, numpy, scipy, mpi, enum34, protobuf, pip
+, python, swig }:
 
-let
-  cntk = pkgs.cntk;
-in
-buildPythonPackage {
+let cntk = pkgs.cntk;
+in buildPythonPackage {
   inherit (cntk) name version src;
 
   nativeBuildInputs = [ swig mpi ];

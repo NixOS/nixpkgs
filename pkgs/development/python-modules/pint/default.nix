@@ -1,16 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, importlib-metadata
-, packaging
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm
+, importlib-metadata, packaging
 # Check Inputs
-, pytestCheckHook
-, numpy
-, matplotlib
-, uncertainties
-}:
+, pytestCheckHook, numpy, matplotlib, uncertainties }:
 
 buildPythonPackage rec {
   pname = "pint";
@@ -30,12 +21,7 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Test suite explicitly requires pytest
-  checkInputs = [
-    pytestCheckHook
-    numpy
-    matplotlib
-    uncertainties
-  ];
+  checkInputs = [ pytestCheckHook numpy matplotlib uncertainties ];
   dontUseSetuptoolsCheck = true;
 
   meta = with lib; {

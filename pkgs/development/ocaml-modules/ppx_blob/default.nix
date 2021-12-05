@@ -7,7 +7,8 @@ buildDunePackage rec {
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";
+    url =
+      "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";
     sha256 = "00haz1cmplk3j9ysh6j656zrldy60585fmlndmfhpd5332mxrfdw";
   };
 

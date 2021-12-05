@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "configargparse";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "1hgd0gfxycfnlddwsr8sl6ybxzp8rqhin16vphbl8q32wp5hhjd2";
   };
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "configargparse" ];
 

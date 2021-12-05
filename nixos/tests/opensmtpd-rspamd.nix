@@ -7,9 +7,10 @@ import ./make-test-python.nix {
       networking = {
         firewall.allowedTCPPorts = [ 25 143 ];
         useDHCP = false;
-        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.1"; prefixLength = 24; }
-        ];
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [{
+          address = "192.168.1.1";
+          prefixLength = 24;
+        }];
       };
       environment.systemPackages = [ pkgs.opensmtpd ];
       services.opensmtpd = {
@@ -42,9 +43,10 @@ import ./make-test-python.nix {
       networking = {
         firewall.allowedTCPPorts = [ 25 143 ];
         useDHCP = false;
-        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.2"; prefixLength = 24; }
-        ];
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [{
+          address = "192.168.1.2";
+          prefixLength = 24;
+        }];
       };
       environment.systemPackages = [ pkgs.opensmtpd ];
       services.rspamd = {
@@ -75,9 +77,10 @@ import ./make-test-python.nix {
     client = { pkgs, ... }: {
       networking = {
         useDHCP = false;
-        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.3"; prefixLength = 24; }
-        ];
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [{
+          address = "192.168.1.3";
+          prefixLength = 24;
+        }];
       };
       environment.systemPackages = let
         sendTestMail = pkgs.writeScriptBin "send-a-test-mail" ''

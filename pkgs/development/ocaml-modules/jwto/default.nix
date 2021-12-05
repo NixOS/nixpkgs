@@ -1,6 +1,5 @@
 { lib, buildDunePackage, fetchFromGitHub, alcotest, cryptokit, fmt, yojson
-, ppxlib
-, base64, re, ppx_deriving }:
+, ppxlib, base64, re, ppx_deriving }:
 
 buildDunePackage rec {
   pname = "jwto";
@@ -19,8 +18,7 @@ buildDunePackage rec {
 
   buildInputs = [ ppxlib ];
 
-  propagatedBuildInputs =
-    [ cryptokit fmt yojson base64 re ppx_deriving ];
+  propagatedBuildInputs = [ cryptokit fmt yojson base64 re ppx_deriving ];
 
   checkInputs = [ alcotest ];
 

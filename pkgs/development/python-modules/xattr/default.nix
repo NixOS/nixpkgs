@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-}:
+{ lib, buildPythonPackage, fetchPypi, python, cffi }:
 
 buildPythonPackage rec {
   pname = "xattr";

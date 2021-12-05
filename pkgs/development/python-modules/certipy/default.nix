@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyopenssl
-}:
+{ lib, buildPythonPackage, fetchPypi, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "certipy";
@@ -15,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyopenssl ];
 
-  doCheck = false; #no tests were included
+  doCheck = false; # no tests were included
 
   meta = with lib; {
     homepage = "https://github.com/LLNL/certipy";

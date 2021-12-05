@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "eradman";
-    repo   = pname;
-    rev    = version;
+    owner = "eradman";
+    repo = pname;
+    rev = version;
     sha256 = "010m57jcv5v8pyfm1cqs3a306y750lvnvla9m5d98v5vdx3349jg";
   };
 
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
-    homepage    = "https://github.com/eradman/pg-safeupdate";
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.postgresql;
+    description =
+      "A simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
+    homepage = "https://github.com/eradman/pg-safeupdate";
+    platforms = postgresql.meta.platforms;
+    license = licenses.postgresql;
   };
 }

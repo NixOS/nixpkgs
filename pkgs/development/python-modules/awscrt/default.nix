@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, CoreFoundation, Security }:
+{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, CoreFoundation
+, Security }:
 
 buildPythonPackage rec {
   pname = "awscrt";

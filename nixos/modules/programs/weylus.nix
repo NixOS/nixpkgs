@@ -2,10 +2,8 @@
 
 with lib;
 
-let
-  cfg = config.programs.weylus;
-in
-{
+let cfg = config.programs.weylus;
+in {
   options.programs.weylus = with types; {
     enable = mkEnableOption "weylus";
 
@@ -17,7 +15,7 @@ in
       '';
     };
 
-     users = mkOption {
+    users = mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -34,9 +32,8 @@ in
     };
   };
   config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 1701 9001 ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ 1701 9001 ]; };
 
     hardware.uinput.enable = true;
 

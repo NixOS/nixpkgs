@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, SDL, SDL_mixer, freepats }:
+{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, SDL, SDL_mixer
+, freepats }:
 
 stdenv.mkDerivation rec {
-  pname   = "abuse";
+  pname = "abuse";
   version = "0.8";
 
   src = fetchurl {
-    url    = "http://abuse.zoy.org/raw-attachment/wiki/download/${pname}-${version}.tar.gz";
+    url =
+      "http://abuse.zoy.org/raw-attachment/wiki/download/${pname}-${version}.tar.gz";
     sha256 = "0104db5fd2695c9518583783f7aaa7e5c0355e27c5a803840a05aef97f9d3488";
   };
 
@@ -16,14 +18,17 @@ stdenv.mkDerivation rec {
     "--enable-debug"
   ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = "abuse";
-    exec = "abuse";
-    icon = "abuse";
-    desktopName = "Abuse";
-    comment     = "Side-scroller action game that pits you against ruthless alien killers";
-    categories  = "Game;ActionGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "abuse";
+      exec = "abuse";
+      icon = "abuse";
+      desktopName = "Abuse";
+      comment =
+        "Side-scroller action game that pits you against ruthless alien killers";
+      categories = "Game;ActionGame;";
+    })
+  ];
 
   postInstall = ''
     mkdir $out/etc
@@ -37,18 +42,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs       = [ SDL SDL_mixer freepats ];
+  buildInputs = [ SDL SDL_mixer freepats ];
 
   meta = with lib; {
-    description = "Side-scroller action game that pits you against ruthless alien killers";
-    homepage    = "http://abuse.zoy.org/";
-    license     = with licenses; [ unfree ];
+    description =
+      "Side-scroller action game that pits you against ruthless alien killers";
+    homepage = "http://abuse.zoy.org/";
+    license = with licenses; [ unfree ];
     # Most of abuse is free (public domain, GPL2+, WTFPL), however the creator
     # of its sfx and music only gave Debian permission to redistribute the
     # files. Our friends from Debian thought about it some more:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=648272
     maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
-    broken      = stdenv.isDarwin;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

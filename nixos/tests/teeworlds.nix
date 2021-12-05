@@ -1,22 +1,20 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
-let
-  client =
-    { pkgs, ... }:
+  let
+    client = { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
-      environment.systemPackages = [ pkgs.teeworlds ];
-    };
+      {
+        imports = [ ./common/x11.nix ];
+        environment.systemPackages = [ pkgs.teeworlds ];
+      };
 
-in {
-  name = "teeworlds";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 ];
-  };
+  in {
+    name = "teeworlds";
+    meta = with pkgs.lib.maintainers; { maintainers = [ hax404 ]; };
 
-  nodes =
-    { server =
-      { services.teeworlds = {
+    nodes = {
+      server = {
+        services.teeworlds = {
           enable = true;
           openPorts = true;
         };
@@ -26,8 +24,7 @@ in {
       client2 = client;
     };
 
-    testScript =
-    ''
+    testScript = ''
       start_all()
 
       server.wait_for_unit("teeworlds.service")
@@ -52,4 +49,4 @@ in {
       client2.screenshot("screen_client2")
     '';
 
-})
+  })

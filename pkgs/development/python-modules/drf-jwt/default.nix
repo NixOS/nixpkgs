@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, djangorestframework
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyjwt, djangorestframework }:
 
 buildPythonPackage rec {
   pname = "drf-jwt";
@@ -16,10 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-++8rFXVsA5WMTt+aC4di3Rpa0BAW285/qM087i9uQ0g=";
   };
 
-  propagatedBuildInputs = [
-    pyjwt
-    djangorestframework
-  ];
+  propagatedBuildInputs = [ pyjwt djangorestframework ];
 
   # requires setting up a django instance
   doCheck = false;
@@ -36,7 +28,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "JSON Web Token based authentication for Django REST framework";
+    description =
+      "JSON Web Token based authentication for Django REST framework";
     homepage = "https://github.com/Styria-Digital/django-rest-framework-jwt";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

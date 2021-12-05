@@ -1,7 +1,4 @@
-{ stdenv
-, lib
-, fetchurl
-}:
+{ stdenv, lib, fetchurl }:
 stdenv.mkDerivation rec {
   pname = "nauty";
   version = "27r1";
@@ -14,7 +11,9 @@ stdenv.mkDerivation rec {
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-popcnt"
+    "--${
+      if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"
+    }-popcnt"
     "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
   ];
   installPhase = ''
@@ -30,7 +29,8 @@ stdenv.mkDerivation rec {
   '';
   checkTarget = "checks";
   meta = with lib; {
-    description = "Programs for computing automorphism groups of graphs and digraphs";
+    description =
+      "Programs for computing automorphism groups of graphs and digraphs";
     license = licenses.asl20;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

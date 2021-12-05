@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchurl, pkg-config, ffmpeg, glew, libass, openal, qtbase }:
+{ mkDerivation, lib, fetchurl, pkg-config, ffmpeg, glew, libass, openal, qtbase
+}:
 
 mkDerivation rec {
   pname = "bino";

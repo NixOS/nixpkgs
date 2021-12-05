@@ -9,13 +9,14 @@ let
     name = "jdiskreport";
     type = "Application";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "jdiskreport";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "https://www.jgoodies.com/download/jdiskreport/jdiskreport-${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "https://www.jgoodies.com/download/jdiskreport/jdiskreport-${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }.zip";
     sha256 = "0d5mzkwsbh9s9b1vyvpaawqc09b0q41l2a7pmwf7386b1fsx6d58";
   };
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "A graphical utility to visualize disk usage";
-    license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3
+    license = licenses.unfreeRedistributable; # TODO freedist, libs under BSD-3
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ kylesferrazza ];
   };

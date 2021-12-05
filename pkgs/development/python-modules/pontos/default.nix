@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, colorful
-, tomlkit
-, git
-, requests
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook
+, pythonOlder, colorful, tomlkit, git, requests }:
 
 buildPythonPackage rec {
   pname = "pontos";
@@ -24,20 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-uP4M1ShhKsvqnUixc3JUJVpNQOwYn8Gm2uWVcXhFKLg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    colorful
-    tomlkit
-    requests
-  ];
+  propagatedBuildInputs = [ colorful tomlkit requests ];
 
-  checkInputs = [
-    git
-    pytestCheckHook
-  ];
+  checkInputs = [ git pytestCheckHook ];
 
   disabledTests = [
     # Signing fails
@@ -51,7 +33,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pontos" ];
 
   meta = with lib; {
-    description = "Collection of Python utilities, tools, classes and functions";
+    description =
+      "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

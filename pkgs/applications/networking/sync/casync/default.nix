@@ -1,24 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, sphinx
-, acl
-, curl
-, fuse
-, libselinux
-, udev
-, xz
-, zstd
-, fuseSupport ? true
-, selinuxSupport ? true
-, udevSupport ? true
-, glibcLocales
-, rsync
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, python3, sphinx, acl
+, curl, fuse, libselinux, udev, xz, zstd, fuseSupport ? true
+, selinuxSupport ? true, udevSupport ? true, glibcLocales, rsync }:
 
 stdenv.mkDerivation {
   pname = "casync";
@@ -31,8 +13,7 @@ stdenv.mkDerivation {
     sha256 = "04ibglizjzyd7ih13q6m7ic78n0mzw9nfmb3zd1fcm9j62qlq11i";
   };
 
-  buildInputs = [ acl curl xz zstd ]
-    ++ lib.optionals (fuseSupport) [ fuse ]
+  buildInputs = [ acl curl xz zstd ] ++ lib.optionals (fuseSupport) [ fuse ]
     ++ lib.optionals (selinuxSupport) [ libselinux ]
     ++ lib.optionals (udevSupport) [ udev ];
   nativeBuildInputs = [ meson ninja pkg-config python3 sphinx ];

@@ -1,10 +1,11 @@
-{lib, stdenv, fetchurl, ant, jre, jdk}:
+{ lib, stdenv, fetchurl, ant, jre, jdk }:
 stdenv.mkDerivation rec {
   pname = "abcl";
   version = "1.8.0";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
-    url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
+    url =
+      "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
     sha256 = "0zr5mmqyj484vza089l8vc88d07g0m8ymxzglvar3ydwyvi1x1qx";
   };
   configurePhase = ''
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
     echo "${jre}/bin/java -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
     chmod a+x "$out"/bin/*
   '';
-  buildInputs = [jre ant jdk jre];
+  buildInputs = [ jre ant jdk jre ];
   meta = {
     description = "A JVM-based Common Lisp implementation";
-    license = lib.licenses.gpl3 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
   };

@@ -17,7 +17,8 @@ buildPythonPackage rec {
   checkPhase = "py.test";
 
   meta = with lib; {
-    description = "Media asset management for Python, with glue code for various web frameworks";
+    description =
+      "Media asset management for Python, with glue code for various web frameworks";
     homepage = "https://github.com/miracle2k/webassets/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

@@ -23,12 +23,11 @@ buildGoModule rec {
     env GOFLAGS="" go generate ./viz/static
   '';
 
-  tags = [
-    "prod"
-  ];
+  tags = [ "prod" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
   ];
 
@@ -50,7 +49,8 @@ buildGoModule rec {
   passthru.updateScript = (./. + "/update-${channel}.sh");
 
   meta = with lib; {
-    description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+    description =
+      "A simple Kubernetes service mesh that improves security, observability and reliability";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;

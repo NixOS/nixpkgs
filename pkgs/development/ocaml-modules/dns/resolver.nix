@@ -1,7 +1,5 @@
-{ buildDunePackage, dns, dns-server, dns-mirage, lru, duration
-, randomconv, lwt, mirage-time, mirage-clock, mirage-random
-, alcotest
-}:
+{ buildDunePackage, dns, dns-server, dns-mirage, lru, duration, randomconv, lwt
+, mirage-time, mirage-clock, mirage-random, alcotest }:
 
 buildDunePackage {
   pname = "dns-resolver";
@@ -22,11 +20,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
-  meta = dns.meta // {
-    description = "DNS resolver business logic";
-  };
+  meta = dns.meta // { description = "DNS resolver business logic"; };
 }

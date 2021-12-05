@@ -1,16 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, fixDarwinDylibNames
-, javaBindings ? false
-, ocamlBindings ? false
-, pythonBindings ? true
-, jdk ? null
-, ocaml ? null
-, findlib ? null
-, zarith ? null
-}:
+{ lib, stdenv, fetchFromGitHub, python, fixDarwinDylibNames
+, javaBindings ? false, ocamlBindings ? false, pythonBindings ? true, jdk ? null
+, ocaml ? null, findlib ? null, zarith ? null }:
 
 assert javaBindings -> jdk != null;
 assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
@@ -29,10 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ python ]
-    ++ optional javaBindings jdk
-    ++ optionals ocamlBindings [ ocaml findlib zarith ]
-  ;
+  buildInputs = [ python ] ++ optional javaBindings jdk
+    ++ optionals ocamlBindings [ ocaml findlib zarith ];
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
@@ -42,12 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = concatStringsSep " "
-    (
-      [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
-        ++ optional javaBindings "--java"
-        ++ optional ocamlBindings "--ml"
-        ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
-    ) + "\n" + "cd build";
+    ([ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
+      ++ optional javaBindings "--java" ++ optional ocamlBindings "--ml"
+      ++ optional pythonBindings
+      "--python --pypkgdir=$out/${python.sitePackages}") + "\n" + "cd build";
 
   postInstall = ''
     mkdir -p $dev $lib
@@ -63,8 +49,7 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
   '';
 
-  outputs = [ "out" "lib" "dev" "python" ]
-    ++ optional javaBindings "java"
+  outputs = [ "out" "lib" "dev" "python" ] ++ optional javaBindings "java"
     ++ optional ocamlBindings "ocaml";
 
   meta = with lib; {

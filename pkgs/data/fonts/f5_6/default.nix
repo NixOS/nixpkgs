@@ -4,12 +4,12 @@ let
   majorVersion = "0";
   minorVersion = "110";
   pname = "f5_6";
-in
 
-fetchzip {
+in fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
+  url =
+    "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
   sha256 = "04p6lccd26rhjbpq3ddxi5vkk3lk8lqbpnk8lakjzixp3fgdqpp4";
 
   postFetch = ''

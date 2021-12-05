@@ -1,14 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, freezegun
-, pillow
-, pytestCheckHook
-, python-dateutil
-, text-unidecode
-, ukpostcodeparser
-, validators
-}:
+{ lib, buildPythonPackage, fetchPypi, freezegun, pillow, pytestCheckHook
+, python-dateutil, text-unidecode, ukpostcodeparser, validators }:
 
 buildPythonPackage rec {
   pname = "faker";
@@ -20,23 +11,13 @@ buildPythonPackage rec {
     hash = "sha256-zdnpry+6XJbuLsSshBm7pFjia1iiuYwfZGfuZglr7lI=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-    text-unidecode
-  ];
+  propagatedBuildInputs = [ python-dateutil text-unidecode ];
 
-  checkInputs = [
-    freezegun
-    pillow
-    pytestCheckHook
-    ukpostcodeparser
-    validators
-  ];
+  checkInputs =
+    [ freezegun pillow pytestCheckHook ukpostcodeparser validators ];
 
   # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [
-    "--ignore=tests/providers/test_ssn.py"
-  ];
+  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {

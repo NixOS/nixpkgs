@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-}:
+{ lib, stdenv, fetchurl, pkg-config, gobject-introspection, gtk-doc
+, docbook-xsl-nons, docbook_xml_dtd_43, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libqrtr-glib";
@@ -16,7 +8,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
+    url =
+      "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
     sha256 = "MNh5sq3m+PRh3vOmd3VdtcAji6v2iNXIPAOz5qvjXO4=";
   };
 
@@ -28,13 +21,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
-  ];
+  configureFlags = [ "--enable-gtk-doc" ];
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib";

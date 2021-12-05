@@ -1,19 +1,11 @@
-{ addOpenGLRunpath
-, cudatoolkit
-, fetchFromGitHub
-, fetchpatch
-, lib
-, pkg-config
-, sha256
-, stdenv
-}:
+{ addOpenGLRunpath, cudatoolkit, fetchFromGitHub, fetchpatch, lib, pkg-config
+, sha256, stdenv }:
 
 let
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
-in
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -30,7 +22,8 @@ stdenv.mkDerivation {
   # See https://github.com/NVIDIA/cuda-samples/issues/75.
   patches = lib.optionals (version == "11.3") [
     (fetchpatch {
-      url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
+      url =
+        "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
       sha256 = "sha256:15bydf59scmfnldz5yawbjacdxafi50ahgpzq93zlc5xsac5sz6i";
     })
   ];
@@ -56,7 +49,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
+    description =
+      "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];

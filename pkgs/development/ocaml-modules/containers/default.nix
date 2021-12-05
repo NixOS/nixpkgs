@@ -1,8 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, dune-configurator
-, seq
-, gen, iter, ounit, qcheck, uutf
-}:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, dune-configurator, seq, gen
+, iter, ounit, qcheck, uutf }:
 
 buildDunePackage rec {
   version = "3.4";

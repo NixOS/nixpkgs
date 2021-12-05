@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cython
-, numpy
-, srsly
-}:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cython, numpy, srsly }:
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
@@ -30,7 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spacy_pkuseg" ];
 
   meta = with lib; {
-    description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
+    description =
+      "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
     homepage = "https://github.com/explosion/spacy-pkuseg";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

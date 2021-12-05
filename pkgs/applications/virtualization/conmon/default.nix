@@ -1,13 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, glibc
-, libseccomp
-, systemd
-, nixosTests
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, glibc, libseccomp, systemd
+, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "conmon";
@@ -22,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libseccomp systemd ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   # manpage requires building the vendored go-md2man
   makeFlags = [ "bin/conmon" ];

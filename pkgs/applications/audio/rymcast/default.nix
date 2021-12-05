@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, makeWrapper
-, alsa-lib, curl, gtk3, webkitgtk, zenity }:
+{ lib, stdenv, fetchzip, autoPatchelfHook, makeWrapper, alsa-lib, curl, gtk3
+, webkitgtk, zenity }:
 
 stdenv.mkDerivation rec {
   pname = "rymcast";
   version = "1.0.6";
 
   src = fetchzip {
-    url = "https://www.inphonik.com/files/rymcast/rymcast-${version}-linux-x64.tar.gz";
+    url =
+      "https://www.inphonik.com/files/rymcast/rymcast-${version}-linux-x64.tar.gz";
     hash = "sha256:0vjjhfrwdibjjgz3awbg30qxkjrzc4cya1f4pigwjh3r0vvrq0ga";
     stripRoot = false;
   };

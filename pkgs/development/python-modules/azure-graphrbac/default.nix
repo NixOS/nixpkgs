@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common }:
 
 buildPythonPackage rec {
   version = "0.61.1";
@@ -16,11 +10,7 @@ buildPythonPackage rec {
     sha256 = "1qmjhpqw0sgy406ij5xyzkffisjah9m1pfz9x54v66bwrbi8msak";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common ];
 
   # has no tests
   doCheck = false;

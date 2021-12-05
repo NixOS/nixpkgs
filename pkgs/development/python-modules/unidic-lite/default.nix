@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "unidic-lite";
@@ -16,9 +13,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "unidic_lite"
-  ];
+  pythonImportsCheck = [ "unidic_lite" ];
 
   meta = with lib; {
     description = "A small version of UniDic";

@@ -26,7 +26,10 @@ let
     defaultconfig = "${configDir}/exhibitor.properties";
     port = toString cfg.port;
     hostname = cfg.hostname;
-    headingtext = if (cfg.headingText != null) then (lib.escapeShellArg cfg.headingText) else null;
+    headingtext = if (cfg.headingText != null) then
+      (lib.escapeShellArg cfg.headingText)
+    else
+      null;
     nodemodification = lib.boolToString cfg.nodeModification;
     configcheckms = toString cfg.configCheckMs;
     jquerystyle = cfg.jqueryStyle;
@@ -34,7 +37,10 @@ let
     servo = lib.boolToString cfg.servo;
     timeout = toString cfg.timeout;
   };
-  s3CommonOptions = { s3region = cfg.s3Region; s3credentials = cfg.s3Credentials; };
+  s3CommonOptions = {
+    s3region = cfg.s3Region;
+    s3credentials = cfg.s3Credentials;
+  };
   cliOptionsPerConfig = {
     s3 = {
       s3config = "${cfg.s3Config.bucketName}:${cfg.s3Config.objectKey}";
@@ -44,35 +50,33 @@ let
       zkconfigconnect = concatStringsSep "," cfg.zkConfigConnect;
       zkconfigexhibitorpath = cfg.zkConfigExhibitorPath;
       zkconfigpollms = toString cfg.zkConfigPollMs;
-      zkconfigretry = "${toString cfg.zkConfigRetry.sleepMs}:${toString cfg.zkConfigRetry.retryQuantity}";
+      zkconfigretry = "${toString cfg.zkConfigRetry.sleepMs}:${
+          toString cfg.zkConfigRetry.retryQuantity
+        }";
       zkconfigzpath = cfg.zkConfigZPath;
-      zkconfigexhibitorport = toString cfg.zkConfigExhibitorPort; # NB: This might be null
+      zkconfigexhibitorport =
+        toString cfg.zkConfigExhibitorPort; # NB: This might be null
     };
     file = {
       fsconfigdir = cfg.fsConfigDir;
       fsconfiglockprefix = cfg.fsConfigLockPrefix;
       fsConfigName = fsConfigName;
     };
-    none = {
-      noneconfigdir = configDir;
-    };
+    none = { noneconfigdir = configDir; };
   };
-  cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig.${cfg.configType} //
-               s3CommonOptions //
-               optionalAttrs cfg.s3Backup { s3backup = "true"; } //
-               optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
-               )));
-in
-{
+  cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}")
+    (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon
+      // cliOptionsPerConfig.${cfg.configType} // s3CommonOptions
+      // optionalAttrs cfg.s3Backup { s3backup = "true"; }
+      // optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; })));
+in {
   options = {
     services.exhibitor = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the exhibitor server.
-        ";
+        description =
+          "\n          Whether to enable the exhibitor server.\n        ";
       };
       # See https://github.com/soabase/exhibitor/wiki/Running-Exhibitor for what these mean
       # General options for any type of config
@@ -135,7 +139,7 @@ in
       logLines = mkOption {
         type = types.int;
         description = ''
-        Max lines of logging to keep in memory for display.
+          Max lines of logging to keep in memory for display.
         '';
         default = 1000;
       };
@@ -220,11 +224,16 @@ in
       };
       zkServersSpec = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Zookeeper server spec for all servers in the ensemble.
         '';
-        example = [ "S:1:zk1.example.com" "S:2:zk2.example.com" "S:3:zk3.example.com" "O:4:zk-observer.example.com" ];
+        example = [
+          "S:1:zk1.example.com"
+          "S:2:zk2.example.com"
+          "S:3:zk3.example.com"
+          "O:4:zk-observer.example.com"
+        ];
       };
 
       # Backup options
@@ -249,7 +258,7 @@ in
         description = ''
           The initial connection string for ZooKeeper shared config storage
         '';
-        example = ["host1:2181" "host2:2181"];
+        example = [ "host1:2181" "host2:2181" ];
       };
       zkConfigExhibitorPath = mkOption {
         type = types.str;
@@ -369,17 +378,16 @@ in
       description = "Exhibitor Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = {
-        ZOO_LOG_DIR = cfg.baseDir;
-      };
+      environment = { ZOO_LOG_DIR = cfg.baseDir; };
       serviceConfig = {
-        /***
-          Exhibitor is a bit un-nixy. It wants to present to you a user interface in order to
-          mutate the configuration of both itself and ZooKeeper, and to coordinate changes
-          among the members of the Zookeeper ensemble. I'm going for a different approach here,
-          which is to manage all the configuration via nix and have it write out the configuration
-          files that exhibitor will use, and to reduce the amount of inter-exhibitor orchestration.
-        ***/
+        /* **
+             Exhibitor is a bit un-nixy. It wants to present to you a user interface in order to
+             mutate the configuration of both itself and ZooKeeper, and to coordinate changes
+             among the members of the Zookeeper ensemble. I'm going for a different approach here,
+             which is to manage all the configuration via nix and have it write out the configuration
+             files that exhibitor will use, and to reduce the amount of inter-exhibitor orchestration.
+           **
+        */
         ExecStart = ''
           ${pkgs.exhibitor}/bin/startExhibitor.sh ${cliOptions}
         '';

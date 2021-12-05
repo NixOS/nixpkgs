@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, duktape
-, html-tidy
-, openssl
-, pcre
-, perl
-, pkg-config
-, quickjs
-, readline
-, which
-}:
+{ lib, stdenv, fetchFromGitHub, curl, duktape, html-tidy, openssl, pcre, perl
+, pkg-config, quickjs, readline, which }:
 
 stdenv.mkDerivation rec {
   pname = "edbrowse";
@@ -24,20 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZXxzQBAmu7kM3sjqg/rDLBXNucO8sFRFKXV8UxQVQZU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    which
-  ];
-  buildInputs = [
-    curl
-    duktape
-    html-tidy
-    openssl
-    pcre
-    perl
-    quickjs
-    readline
-  ];
+  nativeBuildInputs = [ pkg-config which ];
+  buildInputs = [ curl duktape html-tidy openssl pcre perl quickjs readline ];
 
   patches = [
     # Fixes some small annoyances on src/makefile
@@ -52,10 +28,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [
-    "-C" "src"
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "-C" "src" "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://edbrowse.org/";

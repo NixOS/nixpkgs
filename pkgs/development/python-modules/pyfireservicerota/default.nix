@@ -1,10 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, oauthlib
-, requests
-, websocket-client
+{ lib, buildPythonPackage, fetchPypi, pytz, oauthlib, requests, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -16,12 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-3+QK1BVuWYii0oYT4xXMOYJZmVKrB4EmqE0EkdFlZvE=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-    oauthlib
-    requests
-    websocket-client
-  ];
+  propagatedBuildInputs = [ pytz oauthlib requests websocket-client ];
 
   # no tests implemented
   doCheck = false;

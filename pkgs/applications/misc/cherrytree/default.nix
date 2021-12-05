@@ -1,20 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, wrapGAppsHook
-, gtkmm3
-, gtksourceview
-, gtksourceviewmm
-, gspell
-, libxmlxx
-, sqlite
-, curl
-, libuchardet
-, spdlog
-}:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, python3, wrapGAppsHook
+, gtkmm3, gtksourceview, gtksourceviewmm, gspell, libxmlxx, sqlite, curl
+, libuchardet, spdlog }:
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
@@ -27,12 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KSIdA585WbmvHXituCJoHpVRobfCZ62m5t7BWI6jIYk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook ];
 
   buildInputs = [
     gtkmm3
@@ -58,7 +39,8 @@ stdenv.mkDerivation rec {
       a Cherrytree document where you can easily find it.
     '';
     homepage = "https://www.giuspen.com/cherrytree";
-    changelog = "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
+    changelog =
+      "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

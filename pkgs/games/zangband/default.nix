@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "zangband";
   version = "2.7.4b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-src/${version}/${pname}-${version}.tar.gz";
+    url =
+      "mirror://sourceforge/project/${pname}/${pname}-src/${version}/${pname}-${version}.tar.gz";
     sha256 = "0kkz6f9myhjnr3308sdab8q186rd55lapvcp38w8qmakdbhc828j";
   };
 
-  buildInputs = [
-    ncurses flex bison autoconf automake m4
-  ];
+  buildInputs = [ ncurses flex bison autoconf automake m4 ];
 
   preConfigure = ''
     sed -re 's/ch(own|grp|mod)/true/' -i lib/*/makefile.zb makefile.in

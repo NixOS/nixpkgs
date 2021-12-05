@@ -2,12 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.hardware.bladeRF;
+let cfg = config.hardware.bladeRF;
 
-in
-
-{
+in {
   options.hardware.bladeRF = {
     enable = mkOption {
       type = types.bool;
@@ -23,6 +20,6 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.libbladeRF ];
-    users.groups.bladerf = {};
+    users.groups.bladerf = { };
   };
 }

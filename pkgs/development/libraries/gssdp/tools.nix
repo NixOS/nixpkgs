@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, gssdp
-, gtk4
-, libsoup
-}:
+{ stdenv, lib, substituteAll, meson, ninja, pkg-config, wrapGAppsHook4, gssdp
+, gtk4, libsoup }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp-tools";
@@ -23,18 +14,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook4
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook4 ];
 
-  buildInputs = [
-    gssdp
-    gtk4
-    libsoup
-  ];
+  buildInputs = [ gssdp gtk4 libsoup ];
 
   preConfigure = ''
     cd tools

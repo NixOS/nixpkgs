@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, isPy3k
-, cython
-, numpy
-, pkgs
-}:
+{ lib, buildPythonPackage, isPyPy, isPy3k, cython, numpy, pkgs }:
 
 buildPythonPackage rec {
   version = "0.7.2";

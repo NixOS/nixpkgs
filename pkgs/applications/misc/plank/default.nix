@@ -1,36 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, vala
-, atk
-, cairo
-, dconf
-, glib
-, gnome
-, gtk3
-, libwnck
-, libX11
-, libXfixes
-, libXi
-, pango
-, gettext
-, pkg-config
-, libxml2
-, bamf
-, gdk-pixbuf
-, libdbusmenu-gtk3
-, file
-, gnome-menus
-, libgee
-, wrapGAppsHook
-, autoreconfHook
-}:
+{ lib, stdenv, fetchurl, vala, atk, cairo, dconf, glib, gnome, gtk3, libwnck
+, libX11, libXfixes, libXi, pango, gettext, pkg-config, libxml2, bamf
+, gdk-pixbuf, libdbusmenu-gtk3, file, gnome-menus, libgee, wrapGAppsHook
+, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "plank";
   version = "0.11.89";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
+    url =
+      "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
     sha256 = "17cxlmy7n13jp1v8i4abxyx9hylzb39andhz3mk41ggzmrpa8qm6";
   };
 
@@ -69,9 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Make plank's application launcher hidden in Pantheon
-  patches = [
-    ./hide-in-pantheon.patch
-  ];
+  patches = [ ./hide-in-pantheon.patch ];
 
   postPatch = ''
     substituteInPlace ./configure \

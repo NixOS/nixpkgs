@@ -1,7 +1,6 @@
 { lib, fetchzip }:
 
-let
-  version = "0.9.45";
+let version = "0.9.45";
 in fetchzip rec {
   name = "wqy-zenhei-${version}";
 

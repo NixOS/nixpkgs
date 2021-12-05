@@ -1,9 +1,7 @@
 { lib, fetchurl, stdenv, slang, popt, python }:
 
-let
-  pythonIncludePath = "${lib.getDev python}/include/python";
-in
-stdenv.mkDerivation rec {
+let pythonIncludePath = "${lib.getDev python}/include/python";
+in stdenv.mkDerivation rec {
   pname = "newt";
   version = "0.52.21";
 
@@ -36,9 +34,8 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "CROSS_COMPILE=${stdenv.cc.targetPrefix}" ];
 
   meta = with lib; {
     homepage = "https://pagure.io/newt";

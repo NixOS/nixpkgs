@@ -1,11 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, six
-, stdenv
-}:
-
+{ lib, buildPythonPackage, fetchPypi, nose, six, stdenv }:
 
 buildPythonPackage rec {
   pname = "more-itertools";

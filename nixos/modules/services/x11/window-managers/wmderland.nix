@@ -2,11 +2,9 @@
 
 with lib;
 
-let
-  cfg = config.services.xserver.windowManager.wmderland;
-in
+let cfg = config.services.xserver.windowManager.wmderland;
 
-{
+in {
   options.services.xserver.windowManager.wmderland = {
     enable = mkEnableOption "wmderland";
 
@@ -20,14 +18,7 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs; [
-        rofi
-        dunst
-        light
-        hsetroot
-        feh
-        rxvt-unicode
-      ];
+      default = with pkgs; [ rofi dunst light hsetroot feh rxvt-unicode ];
       defaultText = literalExpression ''
         with pkgs; [
           rofi
@@ -54,8 +45,7 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [
-      pkgs.wmderland pkgs.wmderlandc
-    ] ++ cfg.extraPackages;
+    environment.systemPackages = [ pkgs.wmderland pkgs.wmderlandc ]
+      ++ cfg.extraPackages;
   };
 }

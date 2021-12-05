@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "alembic";
   version = "1.8.3";
 

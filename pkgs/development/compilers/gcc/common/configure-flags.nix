@@ -1,28 +1,14 @@
-{ lib, stdenv
-, targetPackages
+{ lib, stdenv, targetPackages
 
-, crossStageStatic, libcCross
-, version
+, crossStageStatic, libcCross, version
 
-, gmp, mpfr, libmpc, libelf, isl
-, cloog ? null
+, gmp, mpfr, libmpc, libelf, isl, cloog ? null
 
-, enableLTO
-, enableMultilib
-, enablePlugin
-, enableShared
+, enableLTO, enableMultilib, enablePlugin, enableShared
 
-, langC
-, langCC
-, langD ? false
-, langFortran
-, langJava ? false, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null
-, langAda ? false
-, langGo
-, langObjC
-, langObjCpp
-, langJit
-}:
+, langC, langCC, langD ? false, langFortran, langJava ? false
+, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null, langAda ? false, langGo
+, langObjC, langObjCpp, langJit }:
 
 assert cloog != null -> lib.versionOlder version "5";
 assert langJava -> lib.versionOlder version "7";
@@ -36,70 +22,82 @@ assert langJava -> lib.versionOlder version "7";
 #
 # ref: https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh
 
-
 let
-  inherit (stdenv)
-    buildPlatform hostPlatform targetPlatform;
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-  crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
+  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc
+    == "msvcrt";
+  crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc
+    == "libSystem";
 
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+  targetPrefix =
+    lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
       "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
-    ]
-    ++ (if crossStageStatic then [
-      "--disable-libssp"
-      "--disable-nls"
-      "--without-headers"
-      "--disable-threads"
-      "--disable-libgomp"
-      "--disable-libquadmath"
-      "--disable-shared"
-      "--disable-libatomic" # requires libc
-      "--disable-decimal-float" # requires libc
-      "--disable-libmpx" # requires libc
-    ] ++ lib.optionals crossMingw [
-      "--with-headers=${lib.getDev libcCross}/include"
-      "--with-gcc"
-      "--with-gnu-as"
-      "--with-gnu-ld"
-      "--disable-debug"
-      "--disable-win32-registry"
-      "--enable-hash-synchronization"
-      "--enable-libssp"
-      "--disable-nls"
-      # To keep ABI compatibility with upstream mingw-w64
-      "--enable-fully-dynamic-string"
-    ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
-      # See Note [Windows Exception Handling]
-      "--enable-sjlj-exceptions"
-      "--with-dwarf2"
-    ] else [
-      (if crossDarwin then "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
-       else                "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
-      "--enable-__cxa_atexit"
-      "--enable-long-long"
-      "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "mcf"
-                          else "single"}"
-      "--enable-nls"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-      # libsanitizer requires netrom/netrom.h which is not
-      # available in uclibc.
-      "--disable-libsanitizer"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
-      # In uclibc cases, libgomp needs an additional '-ldl'
-      # and as I don't know how to pass it, I disable libgomp.
-      "--disable-libgomp"
-    ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
-      ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
-    );
+    ] ++ (if crossStageStatic then
+      [
+        "--disable-libssp"
+        "--disable-nls"
+        "--without-headers"
+        "--disable-threads"
+        "--disable-libgomp"
+        "--disable-libquadmath"
+        "--disable-shared"
+        "--disable-libatomic" # requires libc
+        "--disable-decimal-float" # requires libc
+        "--disable-libmpx" # requires libc
+      ] ++ lib.optionals crossMingw [
+        "--with-headers=${lib.getDev libcCross}/include"
+        "--with-gcc"
+        "--with-gnu-as"
+        "--with-gnu-ld"
+        "--disable-debug"
+        "--disable-win32-registry"
+        "--enable-hash-synchronization"
+        "--enable-libssp"
+        "--disable-nls"
+        # To keep ABI compatibility with upstream mingw-w64
+        "--enable-fully-dynamic-string"
+      ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
+        # See Note [Windows Exception Handling]
+        "--enable-sjlj-exceptions"
+        "--with-dwarf2"
+      ]
+    else
+      [
+        (if crossDarwin then
+          "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
+        else
+          "--with-headers=${lib.getDev libcCross}${
+            libcCross.incdir or "/include"
+          }")
+        "--enable-__cxa_atexit"
+        "--enable-long-long"
+        "--enable-threads=${
+          if targetPlatform.isUnix then
+            "posix"
+          else if targetPlatform.isWindows then
+            "mcf"
+          else
+            "single"
+        }"
+        "--enable-nls"
+      ] ++ lib.optionals
+      (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
+        # libsanitizer requires netrom/netrom.h which is not
+        # available in uclibc.
+        "--disable-libsanitizer"
+      ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
+        # In uclibc cases, libgomp needs an additional '-ldl'
+        # and as I don't know how to pass it, I disable libgomp.
+        "--disable-libgomp"
+      ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
+      ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc");
 
   configureFlags =
     # Basic dependencies
@@ -109,10 +107,9 @@ let
       "--with-mpfr-include=${mpfr.dev}/include"
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
-    ]
-    ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
+    ] ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
     ++ lib.optional (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+    "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
 
     # Basic configuration
     ++ [
@@ -134,39 +131,34 @@ let
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStringsSep ","
-          (  lib.optional langC        "c"
-          ++ lib.optional langCC       "c++"
-          ++ lib.optional langD        "d"
-          ++ lib.optional langFortran  "fortran"
-          ++ lib.optional langJava     "java"
-          ++ lib.optional langAda      "ada"
-          ++ lib.optional langGo       "go"
-          ++ lib.optional langObjC     "objc"
-          ++ lib.optional langObjCpp   "obj-c++"
+        lib.concatStringsSep "," (lib.optional langC "c"
+          ++ lib.optional langCC "c++" ++ lib.optional langD "d"
+          ++ lib.optional langFortran "fortran" ++ lib.optional langJava "java"
+          ++ lib.optional langAda "ada" ++ lib.optional langGo "go"
+          ++ lib.optional langObjC "objc" ++ lib.optional langObjCpp "obj-c++"
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
-          ++ lib.optional langJit      "jit"
-          )
+          ++ lib.optional langJit "jit")
       }"
     ]
 
-    ++ (if (enableMultilib || targetPlatform.isAvr)
-      then ["--enable-multilib" "--disable-libquadmath"]
-      else ["--disable-multilib"])
-    ++ lib.optional (!enableShared) "--disable-shared"
-    ++ [
+    ++ (if (enableMultilib || targetPlatform.isAvr) then [
+      "--enable-multilib"
+      "--disable-libquadmath"
+    ] else
+      [ "--disable-multilib" ])
+    ++ lib.optional (!enableShared) "--disable-shared" ++ [
       (lib.enableFeature enablePlugin "plugin")
     ]
 
     # Support -m32 on powerpc64le/be
     ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
-      "--enable-targets=powerpcle-linux"
+    "--enable-targets=powerpcle-linux"
     ++ lib.optional (targetPlatform.system == "powerpc64-linux")
-      "--enable-targets=powerpc-linux"
+    "--enable-targets=powerpc-linux"
 
     # Fix "unknown long double size, cannot define BFP_FMT"
     ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl)
-      "--disable-decimal-float"
+    "--disable-decimal-float"
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
@@ -177,10 +169,10 @@ let
     ]
 
     # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda
-      (if hostPlatform == targetPlatform
-       then "--enable-libada"
-       else "--disable-libada")
+    ++ lib.optional langAda (if hostPlatform == targetPlatform then
+      "--enable-libada"
+    else
+      "--disable-libada")
 
     # Java options
     ++ lib.optionals langJava [
@@ -190,41 +182,47 @@ let
       # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
       "--enable-java-home"
       "--with-java-home=\${prefix}/lib/jvm/jre"
-    ]
-    ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
-    ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
+    ] ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
+    ++ lib.optional (langJava && javaAntlr != null)
+    "--with-antlr-jar=${javaAntlr}"
 
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
-    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
-    ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
+    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64))
+    (import ../common/platform-flags.nix {
+      inherit (stdenv) targetPlatform;
+      inherit lib;
+    }) ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
     # Platform-specific flags
-    ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32)
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional targetPlatform.isNetBSD
+    "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
-      "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
+      "--enable-long-long"
+      "--enable-libssp"
+      "--enable-threads=posix"
+      "--disable-nls"
+      "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
-      "--with-gnu-as" "--without-gnu-ld"
-    ]
-    ++ lib.optional (targetPlatform.libc == "musl")
-      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-      "--disable-libmpx"
-    ++ lib.optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
+      "--with-gnu-as"
+      "--without-gnu-ld"
+    ] ++ lib.optional (targetPlatform.libc == "musl")
+    # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+    "--disable-libmpx" ++ lib.optionals
+    (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
-    ]
-    ++ lib.optionals langJit [
-      "--enable-host-shared"
-    ]
+    ] ++ lib.optionals langJit [ "--enable-host-shared" ]
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
     # Make -fcommon default on gcc10
     # TODO: fix all packages (probably 100+) and remove that
-    ++ lib.optional (version >= "10.1.0") "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}"
-  ;
+    ++ lib.optional (version >= "10.1.0")
+    "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}";
 
 in configureFlags

@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
-}:
+{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, libguestfs
+, qemu, writeText, withLibvirt ? stdenv.isLinux }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
@@ -67,16 +66,10 @@ in buildRubyGem rec {
   # withLibvirt only:
   #   - libguestfs: Make 'virt-sysprep' available for 'vagrant package'
   #   - qemu: Make 'qemu-img' available for 'vagrant package'
-  postInstall =
-    let
-      pathAdditions = lib.makeSearchPath "bin"
-        (map (x: lib.getBin x) ([
-          libarchive
-        ] ++ lib.optionals withLibvirt [
-          libguestfs
-          qemu
-        ]));
-    in ''
+  postInstall = let
+    pathAdditions = lib.makeSearchPath "bin" (map (x: lib.getBin x)
+      ([ libarchive ] ++ lib.optionals withLibvirt [ libguestfs qemu ]));
+  in ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
       --prefix PATH ':' ${pathAdditions}
@@ -86,9 +79,10 @@ in buildRubyGem rec {
 
     mkdir -p $out/share/bash-completion/completions/
     cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
-  '' +
-  lib.optionalString withLibvirt ''
-    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+  '' + lib.optionalString withLibvirt ''
+    substitute ${
+      ./vagrant-libvirt.json.in
+    } $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
       --subst-var-by ruby_version ${ruby.version} \
       --subst-var-by vagrant_version ${version}
   '';
@@ -104,9 +98,7 @@ in buildRubyGem rec {
       $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
-  passthru = {
-    inherit ruby deps;
-  };
+  passthru = { inherit ruby deps; };
 
   meta = with lib; {
     description = "A tool for building complete development environments";

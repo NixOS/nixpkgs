@@ -1,13 +1,5 @@
-{ lib
-, astor
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, funcparserlib
-, pytestCheckHook
-, pythonOlder
-, rply
-}:
+{ lib, astor, buildPythonPackage, colorama, fetchFromGitHub, funcparserlib
+, pytestCheckHook, pythonOlder, rply }:
 
 buildPythonPackage rec {
   pname = "hy";
@@ -22,17 +14,10 @@ buildPythonPackage rec {
     sha256 = "1dqw24rvsps2nab1pbjjm1c81vrs34r4kkk691h3xdyxnv9hb84b";
   };
 
-  propagatedBuildInputs = [
-    colorama
-    funcparserlib
-    rply
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    astor
-  ];
+  propagatedBuildInputs = [ colorama funcparserlib rply ]
+    ++ lib.optionals (pythonOlder "3.9") [ astor ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Don't test the binary

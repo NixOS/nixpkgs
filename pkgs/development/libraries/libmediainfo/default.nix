@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "21.09";
   pname = "libmediainfo";
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
+    url =
+      "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
     sha256 = "09pinxqw3z3hxrafn67clw1cb1z9aqfy6gkiavginfm0yr299gk9";
   };
 
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   patches = [
     # fixes pkgsMusl.libmediainfo build
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/libmediainfo/fix-include-signal.patch?id=b8d666a3d33575c184308e1176f4de9e519af577";
+      url =
+        "https://git.alpinelinux.org/aports/plain/community/libmediainfo/fix-include-signal.patch?id=b8d666a3d33575c184308e1176f4de9e519af577";
       sha256 = "sha256-b3HoIwy/hKSh8jUakwVJpnPmYw5KUwZXgLW7IPMY4/c=";
     })
   ];

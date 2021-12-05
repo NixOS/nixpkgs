@@ -1,13 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, intltool
-, gobject-introspection
-, gmime
-, libxml2
-, libsoup
-, pkg-config
-}:
+{ stdenv, lib, fetchFromGitHub, intltool, gobject-introspection, gmime, libxml2
+, libsoup, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xplayer-plparser";
@@ -20,17 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1i7sld8am6b1wwbpfb18v7qp17vk2a5p8xcfds50yznr30lddsb2";
   };
 
-  nativeBuildInputs = [
-    intltool
-    pkg-config
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ intltool pkg-config gobject-introspection ];
 
-  buildInputs = [
-    gmime
-    libxml2
-    libsoup
-  ];
+  buildInputs = [ gmime libxml2 libsoup ];
 
   meta = with lib; {
     description = "Playlist parsing library for xplayer";

@@ -1,7 +1,5 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
-, gobject-introspection
-}:
+{ lib, fetchFromGitHub, python3, python3Packages, intltool, glibcLocales, gnome
+, gtk3, wrapGAppsHook, gobject-introspection }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
@@ -15,35 +13,22 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0wrk8d4q6ricbcjzlhk10vrk1qg9hi323kgyyd0c8nmh7a82h8pd";
   };
 
-  patches = [
-    ./disable-autoupdate.patch
-  ];
+  patches = [ ./disable-autoupdate.patch ];
 
   postPatch = with lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
-  nativeBuildInputs = [
-    intltool
-    wrapGAppsHook
-    glibcLocales
-  ];
+  nativeBuildInputs = [ intltool wrapGAppsHook glibcLocales ];
 
   # as of 2021-07, the gobject-introspection setup hook does not
   # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
   # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  buildInputs = [
-    python3
-    gtk3
-    gobject-introspection
-    gnome.adwaita-icon-theme
-  ];
+  buildInputs = [ python3 gtk3 gobject-introspection gnome.adwaita-icon-theme ];
 
-  checkInputs = with python3Packages; [
-    coverage minimock
-  ];
+  checkInputs = with python3Packages; [ coverage minimock ];
 
   doCheck = true;
 

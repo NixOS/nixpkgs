@@ -1,4 +1,5 @@
-{ lib, buildKodiAddon, fetchFromGitHub, signals, inputstream-adaptive, inputstreamhelper, requests, myconnpy }:
+{ lib, buildKodiAddon, fetchFromGitHub, signals, inputstream-adaptive
+, inputstreamhelper, requests, myconnpy }:
 
 buildKodiAddon rec {
   pname = "netflix";
@@ -12,13 +13,8 @@ buildKodiAddon rec {
     sha256 = "0yycwm8vrpkr4fsbf713mhpnaxfd849nhzp5r1898sb9vldab4xk";
   };
 
-  propagatedBuildInputs = [
-    signals
-    inputstream-adaptive
-    inputstreamhelper
-    requests
-    myconnpy
-  ];
+  propagatedBuildInputs =
+    [ signals inputstream-adaptive inputstreamhelper requests myconnpy ];
 
   meta = with lib; {
     homepage = "https://github.com/CastagnaIT/plugin.video.netflix";

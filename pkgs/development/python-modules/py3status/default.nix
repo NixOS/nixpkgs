@@ -1,26 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pytz
-, tzlocal
-, i3ipc
-, pydbus
-, pygobject3
-, pyserial
-, setuptools
-, dbus-python
+{ lib, buildPythonPackage, fetchPypi, requests, pytz, tzlocal, i3ipc, pydbus
+, pygobject3, pyserial, setuptools, dbus-python
 
-, file
-, acpi
-, coreutils
-, alsa-utils
-, i3
-, procps
-, lm_sensors
-, libnotify
-, xorg
-}:
+, file, acpi, coreutils, alsa-utils, i3, procps, lm_sensors, libnotify, xorg }:
 
 buildPythonPackage rec {
   pname = "py3status";
@@ -33,7 +14,16 @@ buildPythonPackage rec {
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
+    pytz
+    requests
+    tzlocal
+    i3ipc
+    pydbus
+    pygobject3
+    pyserial
+    setuptools
+    dbus-python
+    file
   ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py

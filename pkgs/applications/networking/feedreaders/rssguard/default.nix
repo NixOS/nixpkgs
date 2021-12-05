@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook
+, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c6+SlZx3ACG0nJRW+zcDDzVd/oSLAdSaq2fHrPpt6zw=";
   };
 
-  buildInputs =  [ qtwebengine qttools ];
+  buildInputs = [ qtwebengine qttools ];
   nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 

@@ -1,12 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeWrapper
-, Nuget
-, dotnetCorePackages
-, openssl
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, Nuget, dotnetCorePackages
+, openssl, zlib }:
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
@@ -40,9 +33,8 @@ let
   projectName = "WalletWasabi.Backend";
   projectConfiguration = "Release";
   projectRuntime = "linux-x64";
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -52,11 +44,7 @@ stdenv.mkDerivation rec {
     sha256 = "001k43z2jxvs03csyzndlzlk034aclzc4n8ddrqxykgrq508xk1d";
   };
 
-  buildInputs = [
-    Nuget
-    dotnet-sdk
-    makeWrapper
-  ];
+  buildInputs = [ Nuget dotnet-sdk makeWrapper ];
 
   buildPhase = ''
     export HOME=$(mktemp -d)

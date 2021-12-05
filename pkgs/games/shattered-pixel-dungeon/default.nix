@@ -1,12 +1,5 @@
-{ lib, stdenv
-, makeWrapper
-, fetchFromGitHub
-, nixosTests
-, gradle_6
-, perl
-, jre
-, libpulseaudio
-}:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, nixosTests, gradle_6, perl, jre
+, libpulseaudio }:
 
 let
   pname = "shattered-pixel-dungeon";
@@ -78,8 +71,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://shatteredpixel.com/";
-    downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
-    description = "Traditional roguelike game with pixel-art graphics and simple interface";
+    downloadPage =
+      "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
+    description =
+      "Traditional roguelike game with pixel-art graphics and simple interface";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

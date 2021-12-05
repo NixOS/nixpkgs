@@ -1,21 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, libgee
-, libhandy
-, granite
-, gettext
-, elementary-icon-theme
-, wrapGAppsHook
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script, pkg-config, meson
+, python3, ninja, vala, gtk3, libgee, libhandy, granite, gettext
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
@@ -29,35 +14,21 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { attrPath = "pantheon.${pname}"; };
   };
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gettext meson ninja pkg-config python3 vala wrapGAppsHook ];
 
-  buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
-    libgee
-    libhandy
-  ];
+  buildInputs = [ elementary-icon-theme granite gtk3 libgee libhandy ];
 
   patches = [
     ./plugs-path-env.patch
     # Upstream code not respecting our localedir
     # https://github.com/elementary/switchboard/pull/214
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard/commit/8d6b5f4cbbaf134880252afbf1e25d70033e6402.patch";
+      url =
+        "https://github.com/elementary/switchboard/commit/8d6b5f4cbbaf134880252afbf1e25d70033e6402.patch";
       sha256 = "0gwq3wwj45jrnlhsmxfclbjw6xjr8kf6pp3a84vbnrazw76lg5nc";
     })
   ];

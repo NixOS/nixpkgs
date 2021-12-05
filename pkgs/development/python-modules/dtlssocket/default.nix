@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autoconf
-, cython
-}:
+{ lib, buildPythonPackage, fetchPypi, autoconf, cython }:
 
 buildPythonPackage rec {
   pname = "dtlssocket";
@@ -15,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "909a8f52f1890ec9e92fd46ef609daa8875c2a1c262c0b61200e73c6c2dd5099";
   };
 
-  nativeBuildInputs = [
-    autoconf
-    cython
-  ];
+  nativeBuildInputs = [ autoconf cython ];
 
   # no tests on PyPI, no tags on GitLab
   doCheck = false;

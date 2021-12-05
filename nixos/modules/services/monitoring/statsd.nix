@@ -11,9 +11,11 @@ let
 
   backendsToPackages = let
     mkMap = list: name:
-      if isBuiltinBackend name then list
-      else list ++ [ pkgs.nodePackages.${name} ];
-  in foldl mkMap [];
+      if isBuiltinBackend name then
+        list
+      else
+        list ++ [ pkgs.nodePackages.${name} ];
+  in foldl mkMap [ ];
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
@@ -23,19 +25,28 @@ let
       mgmt_port: "${toString cfg.mgmt_port}",
       backends: [${
         concatMapStringsSep "," (name:
-          if (isBuiltinBackend name)
-          then ''"./backends/${name}"''
-          else ''"${name}"''
-        ) cfg.backends}],
-      ${optionalString (cfg.graphiteHost!=null) ''graphiteHost: "${cfg.graphiteHost}",''}
-      ${optionalString (cfg.graphitePort!=null) ''graphitePort: "${toString cfg.graphitePort}",''}
+          if (isBuiltinBackend name) then
+            ''"./backends/${name}"''
+          else
+            ''"${name}"'') cfg.backends
+      }],
+      ${
+        optionalString (cfg.graphiteHost != null)
+        ''graphiteHost: "${cfg.graphiteHost}",''
+      }
+      ${
+        optionalString (cfg.graphitePort != null)
+        ''graphitePort: "${toString cfg.graphitePort}",''
+      }
       console: {
         prettyprint: false
       },
       log: {
         backend: "stdout"
       },
-      automaticConfigReload: false${optionalString (cfg.extraConfig != null) ","}
+      automaticConfigReload: false${
+        optionalString (cfg.extraConfig != null) ","
+      }
       ${cfg.extraConfig}
     }
   '';
@@ -48,9 +59,7 @@ let
     paths = backendsToPackages cfg.backends;
   };
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -84,7 +93,7 @@ in
 
     backends = mkOption {
       description = "List of backends statsd will use for data persistence";
-      default = [];
+      default = [ ];
       example = [
         "graphite"
         "console"
@@ -121,8 +130,10 @@ in
   config = mkIf cfg.enable {
 
     assertions = map (backend: {
-      assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
-      message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
+      assertion = !isBuiltinBackend backend
+        -> hasAttrByPath [ backend ] pkgs.nodePackages;
+      message =
+        "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
     }) cfg.backends;
 
     users.users.statsd = {
@@ -133,9 +144,7 @@ in
     systemd.services.statsd = {
       description = "Statsd Server";
       wantedBy = [ "multi-user.target" ];
-      environment = {
-        NODE_PATH = "${deps}/lib/node_modules";
-      };
+      environment = { NODE_PATH = "${deps}/lib/node_modules"; };
       serviceConfig = {
         ExecStart = "${pkgs.statsd}/bin/statsd ${configFile}";
         User = "statsd";

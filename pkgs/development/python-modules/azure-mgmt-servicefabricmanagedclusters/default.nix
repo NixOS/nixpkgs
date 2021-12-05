@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-}:
+{ lib, buildPythonPackage, fetchPypi, msrest, msrestazure, azure-common
+, azure-mgmt-core }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabricmanagedclusters";
@@ -17,12 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EJyjolHrt92zWg+IKWFKTapwZaFrwTtSyEIu5/mZXOg=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-core
-  ];
+  propagatedBuildInputs = [ msrest msrestazure azure-common azure-mgmt-core ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
@@ -30,7 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is the Microsoft Azure Service Fabric Cluster Management Client Library";
+    description =
+      "This is the Microsoft Azure Service Fabric Cluster Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

@@ -1,14 +1,5 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, pytorch
-, pythonOlder
-, spacy
-, spacy-alignments
-, srsly
-, transformers
-}:
+{ lib, callPackage, fetchPypi, buildPythonPackage, pytorch, pythonOlder, spacy
+, spacy-alignments, srsly, transformers }:
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
@@ -25,13 +16,7 @@ buildPythonPackage rec {
     sed -i 's/transformers>=3.4.0,<4.12.0/transformers/' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    pytorch
-    spacy
-    spacy-alignments
-    srsly
-    transformers
-  ];
+  propagatedBuildInputs = [ pytorch spacy spacy-alignments srsly transformers ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;

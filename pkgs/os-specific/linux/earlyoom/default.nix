@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false }:
+{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "earlyoom";
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rfjakob/earlyoom";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

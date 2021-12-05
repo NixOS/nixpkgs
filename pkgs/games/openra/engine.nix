@@ -1,4 +1,4 @@
-/*  The package defintion for an OpenRA engine.
+/* The package defintion for an OpenRA engine.
     It shares code with `mod.nix` by what is defined in `common.nix`.
     Similar to `mod.nix` it is a generic package definition,
     in order to make it easy to define multiple variants of the OpenRA engine.
@@ -7,12 +7,7 @@
     This package could be seen as providing a set of in-tree mods,
     while the `mod.nix` pacakges provide a single out-of-tree mod.
 */
-{ lib, stdenv
-, packageAttrs
-, patchEngine
-, wrapLaunchGame
-, engine
-}:
+{ lib, stdenv, packageAttrs, patchEngine, wrapLaunchGame, engine }:
 
 with lib;
 
@@ -53,7 +48,5 @@ stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
     '') engine.mods)}
   '';
 
-  meta = {
-    inherit (engine) description homepage;
-  };
+  meta = { inherit (engine) description homepage; };
 })

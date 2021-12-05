@@ -8,10 +8,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
-    reason
-    console
-  ];
+  buildInputs = [ reason console ];
 
   doInstallCheck = true;
   postInstallCheck = ''

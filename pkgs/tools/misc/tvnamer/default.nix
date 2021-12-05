@@ -1,6 +1,4 @@
-{ lib
-, python3
-}:
+{ lib, python3 }:
 
 let
   python' = python3.override {
@@ -23,8 +21,7 @@ let
 
   pypkgs = python'.pkgs;
 
-in
-pypkgs.buildPythonApplication rec {
+in pypkgs.buildPythonApplication rec {
   pname = "tvnamer";
   version = "3.0.4";
 
@@ -39,7 +36,8 @@ pypkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+    description =
+      "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
     homepage = "https://github.com/dbr/tvnamer";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];

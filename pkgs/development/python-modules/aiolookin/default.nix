@@ -1,13 +1,5 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, faker
-, fetchFromGitHub
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, aiohttp, buildPythonPackage, faker, fetchFromGitHub, pytest-aiohttp
+, pytest-mock, pytestCheckHook, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "aiolookin";
@@ -23,25 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-Kqys76c/9Mw3ETgF0N4rA9mz5DELwTMjAK38PPN8Ahs=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    faker
-    pytest-aiohttp
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ faker pytest-aiohttp pytest-mock pytestCheckHook ];
 
   disabledTests = [
     # Not all tests are ready yet
     "test_successful"
   ];
 
-  pythonImportsCheck = [
-    "aiolookin"
-  ];
+  pythonImportsCheck = [ "aiolookin" ];
 
   meta = with lib; {
     description = "Python client for interacting with LOOKin devices";

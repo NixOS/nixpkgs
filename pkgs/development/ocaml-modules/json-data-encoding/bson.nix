@@ -5,15 +5,9 @@ buildDunePackage {
 
   inherit (json-data-encoding) version src useDune2 doCheck;
 
-  propagatedBuildInputs = [
-    json-data-encoding
-    ocplib-endian
-  ];
+  propagatedBuildInputs = [ json-data-encoding ocplib-endian ];
 
-  checkInputs = [
-    crowbar
-    alcotest
-  ];
+  checkInputs = [ crowbar alcotest ];
 
   meta = json-data-encoding.meta // {
     description = "Type-safe encoding to and decoding from JSON (bson support)";

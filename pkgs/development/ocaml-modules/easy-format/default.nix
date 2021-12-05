@@ -2,8 +2,7 @@
 let
   pname = "easy-format";
   version = "1.2.0";
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
 
   name = "${pname}-${version}";
 
@@ -21,7 +20,8 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = with lib; {
-    description = "A high-level and functional interface to the Format module of the OCaml standard library";
+    description =
+      "A high-level and functional interface to the Format module of the OCaml standard library";
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

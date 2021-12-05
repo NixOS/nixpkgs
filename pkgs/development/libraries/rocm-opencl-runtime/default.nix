@@ -1,25 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, writeScript
-, addOpenGLRunpath
-, cmake
-, rocm-cmake
-, clang
-, clang-unwrapped
-, glew
-, libglvnd
-, libX11
-, lld
-, llvm
-, mesa
-, python2
-, rocclr
-, rocm-comgr
-, rocm-device-libs
-, rocm-runtime
-, rocm-thunk
-}:
+{ stdenv, lib, fetchFromGitHub, writeScript, addOpenGLRunpath, cmake, rocm-cmake
+, clang, clang-unwrapped, glew, libglvnd, libX11, lld, llvm, mesa, python2
+, rocclr, rocm-comgr, rocm-device-libs, rocm-runtime, rocm-thunk }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";

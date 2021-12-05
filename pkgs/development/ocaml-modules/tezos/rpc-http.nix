@@ -1,9 +1,4 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
-, resto-directory
-, resto-cohttp
+{ lib, buildDunePackage, tezos-stdlib, tezos-base, resto-directory, resto-cohttp
 }:
 
 buildDunePackage {
@@ -11,15 +6,12 @@ buildDunePackage {
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_rpc_http";
 
-  propagatedBuildInputs = [
-    tezos-base
-    resto-directory
-    resto-cohttp
-  ];
+  propagatedBuildInputs = [ tezos-base resto-directory resto-cohttp ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented RPCs (http server and client)";
+    description =
+      "Tezos: library of auto-documented RPCs (http server and client)";
   };
 }

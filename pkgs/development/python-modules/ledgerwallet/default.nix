@@ -1,19 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, cryptography
-, click
-, construct
-, ecdsa
-, hidapi
-, intelhex
-, pillow
-, protobuf
-, requests
-, tabulate
-, AppKit
-}:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPythonPackage, cryptography
+, click, construct, ecdsa, hidapi, intelhex, pillow, protobuf, requests
+, tabulate, AppKit }:
 
 buildPythonPackage rec {
   pname = "ledgerwallet";
@@ -29,7 +16,8 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       # Fix removed function in construct library
-      url = "https://github.com/LedgerHQ/ledgerctl/commit/fd23d0e14721b93789071e80632e6bd9e47c1256.patch";
+      url =
+        "https://github.com/LedgerHQ/ledgerctl/commit/fd23d0e14721b93789071e80632e6bd9e47c1256.patch";
       sha256 = "sha256-YNlENguPQW5FNFT7mqED+ghF3TJiKao4H+56Eu+j+Eo=";
       excludes = [ "setup.py" ];
     })
@@ -37,7 +25,16 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
   propagatedBuildInputs = [
-    cryptography click construct ecdsa hidapi intelhex pillow protobuf requests tabulate
+    cryptography
+    click
+    construct
+    ecdsa
+    hidapi
+    intelhex
+    pillow
+    protobuf
+    requests
+    tabulate
   ];
 
   pythonImportsCheck = [ "ledgerwallet" ];

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, lib, libX11, libXext, alsa-lib, freetype, brand, type, version, homepage, url, sha256, ... }:
+{ stdenv, fetchurl, lib, libX11, libXext, alsa-lib, freetype, brand, type
+, version, homepage, url, sha256, ... }:
 stdenv.mkDerivation rec {
   inherit type;
   baseName = "${type}-Edit";
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
   preFixup = let
     # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
     libPath = lib.makeLibraryPath [
-      libX11           # libX11.so.6
-      libXext          # libXext.so.6
-      alsa-lib          # libasound.so.2
-      freetype         # libfreetype.so.6
+      libX11 # libX11.so.6
+      libXext # libXext.so.6
+      alsa-lib # libasound.so.2
+      freetype # libfreetype.so.6
       stdenv.cc.cc.lib # libstdc++.so.6
     ];
   in ''

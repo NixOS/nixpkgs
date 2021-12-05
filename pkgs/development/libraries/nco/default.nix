@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
+{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which
+, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "nco";
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NetCDF Operator toolkit";
-    longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
+    longDescription =
+      "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
     homepage = "http://nco.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];

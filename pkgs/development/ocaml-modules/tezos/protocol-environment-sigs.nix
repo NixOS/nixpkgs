@@ -1,10 +1,5 @@
-{ lib
-, buildDunePackage
-, ocaml
-, tezos-stdlib
-, tezos-protocol-environment-packer
-, zarith
-}:
+{ lib, buildDunePackage, ocaml, tezos-stdlib, tezos-protocol-environment-packer
+, zarith }:
 
 buildDunePackage {
   pname = "tezos-protocol-environment-sigs";
@@ -24,17 +19,14 @@ buildDunePackage {
     sed -i 's/Buffer/Stdlib.Buffer/g' ./sigs/v3/z.mli
   '';
 
-  propagatedBuildInputs = [
-    tezos-protocol-environment-packer
-  ];
+  propagatedBuildInputs = [ tezos-protocol-environment-packer ];
 
-  checkInputs = [
-    tezos-stdlib
-  ];
+  checkInputs = [ tezos-stdlib ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: restricted typing environment for the economic protocols";
+    description =
+      "Tezos: restricted typing environment for the economic protocols";
   };
 }

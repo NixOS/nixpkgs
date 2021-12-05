@@ -1,9 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, future, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "nampa";
@@ -16,13 +11,9 @@ buildPythonPackage rec {
     sha256 = "14b6xjm497wrfw4kv24zhsvz2l6zknvx36w8i754hfwz3s3fsl6a";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # https://github.com/thebabush/nampa/pull/13

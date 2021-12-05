@@ -1,19 +1,5 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, alsa-lib
-, audiofile
-, libjack2
-, liblo
-, liboil
-, libsamplerate
-, libsndfile
-, lilv
-, lv2
-, ncurses
-, readline
-}:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, alsa-lib, audiofile, libjack2
+, liblo, liboil, libsamplerate, libsndfile, lilv, lv2, ncurses, readline }:
 
 # TODO: fix python. See configure log.
 # fix -Dnullptr=0 cludge below.
@@ -34,14 +20,13 @@ stdenv.mkDerivation rec {
     #  https://sourceforge.net/p/ecasound/bugs/54/
     (fetchpatch {
       name = "ncursdes-6.3.patch";
-      url = "https://sourceforge.net/p/ecasound/bugs/54/attachment/0001-ecasignalview.cpp-always-use-s-style-format-for-prin.patch";
+      url =
+        "https://sourceforge.net/p/ecasound/bugs/54/attachment/0001-ecasignalview.cpp-always-use-s-style-format-for-prin.patch";
       sha256 = "1x1gsjzd43lh19mhpmwrbq269h56s8bxgyv0yfi5yf0sqjf9vaq0";
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -71,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Software package designed for multitrack audio processing";
-    license = with lib.licenses;  [ gpl2 lgpl21 ];
+    license = with lib.licenses; [ gpl2 lgpl21 ];
     homepage = "http://nosignal.fi/ecasound/";
   };
 }

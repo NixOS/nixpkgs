@@ -1,10 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
+, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "shellingham";
@@ -19,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "0f686ym3ywjffis5jfqkhsshjgii64060hajysczflhffrjn9jcp";
   };
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest-mock pytestCheckHook ];
 
   pythonImportsCheck = [ "shellingham" ];
 

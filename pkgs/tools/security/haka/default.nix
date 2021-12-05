@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre }:
+{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk
+, libedit, pcre }:
 
-let version = "0.3.0"; in
+let version = "0.3.0";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "haka";
   inherit version;
 
   src = fetchurl {
     name = "haka_${version}_source.tar.gz";
-    url = "https://github.com/haka-security/haka/releases/download/v${version}/haka_${version}_source.tar.gz";
+    url =
+      "https://github.com/haka-security/haka/releases/download/v${version}/haka_${version}_source.tar.gz";
     sha256 = "0dm39g3k77sa70zrjsqadidg27a6iqq61jzfdxazpllnrw4mjy4w";
   };
 
@@ -25,7 +27,8 @@ stdenv.mkDerivation {
   buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
 
   meta = {
-    description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
+    description =
+      "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
     homepage = "http://www.haka-security.org/";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.tvestelind ];

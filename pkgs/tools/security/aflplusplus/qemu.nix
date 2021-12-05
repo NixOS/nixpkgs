@@ -1,16 +1,17 @@
 { lib, stdenv, fetchurl, aflplusplus, python2, zlib, pkg-config, glib, perl
-, texinfo, libuuid, flex, bison, pixman, autoconf
-}:
+, texinfo, libuuid, flex, bison, pixman, autoconf }:
 
 with lib;
 
 let
   qemuName = "qemu-3.1.0";
-  cpuTarget = if stdenv.targetPlatform.system == "x86_64-linux" then "x86_64-linux-user"
-    else if stdenv.targetPlatform.system == "i686-linux" then "i386-linux-user"
-    else throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
-in
-stdenv.mkDerivation {
+  cpuTarget = if stdenv.targetPlatform.system == "x86_64-linux" then
+    "x86_64-linux-user"
+  else if stdenv.targetPlatform.system == "i686-linux" then
+    "i386-linux-user"
+  else
+    throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
+in stdenv.mkDerivation {
   name = "aflplusplus-${qemuName}";
 
   srcs = [
@@ -43,13 +44,9 @@ stdenv.mkDerivation {
     cat ${aflplusplus.src.name}/qemu_mode/patches/*.diff > all.patch
   '';
 
-  nativeBuildInputs = [
-    python2 perl pkg-config flex bison autoconf texinfo
-  ];
+  nativeBuildInputs = [ python2 perl pkg-config flex bison autoconf texinfo ];
 
-  buildInputs = [
-    zlib glib pixman libuuid
-  ];
+  buildInputs = [ zlib glib pixman libuuid ];
 
   enableParallelBuilding = true;
 
@@ -60,18 +57,18 @@ stdenv.mkDerivation {
     ./qemu-no-etc-install.patch
   ];
 
-  configureFlags =
-    [ "--disable-system"
-      "--enable-linux-user"
-      "--disable-gtk"
-      "--disable-sdl"
-      "--disable-vnc"
-      "--disable-kvm"
-      "--target-list=${cpuTarget}"
-      "--enable-pie"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-    ];
+  configureFlags = [
+    "--disable-system"
+    "--enable-linux-user"
+    "--disable-gtk"
+    "--disable-sdl"
+    "--disable-vnc"
+    "--disable-kvm"
+    "--target-list=${cpuTarget}"
+    "--enable-pie"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
 
   meta = with lib; {
     homepage = "https://www.qemu.org/";

@@ -1,13 +1,6 @@
-{ build-idris-package
-, fetchFromGitHub
-, free
-, composition
-, comonad
-, bifunctors
-, hezarfen
-, lib
-}:
-build-idris-package  {
+{ build-idris-package, fetchFromGitHub, free, composition, comonad, bifunctors
+, hezarfen, lib }:
+build-idris-package {
   name = "recursion_schemes";
   version = "2018-01-19";
 

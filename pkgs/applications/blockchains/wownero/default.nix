@@ -1,18 +1,17 @@
-{ lib, stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound
-, readline, libsodium, rapidjson, fetchurl
-}:
+{ lib, stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound, readline
+, libsodium, rapidjson, fetchurl }:
 
 with lib;
 
 let
   randomwowVersion = "1.1.7";
   randomwow = fetchurl {
-    url = "https://github.com/wownero/RandomWOW/archive/${randomwowVersion}.tar.gz";
+    url =
+      "https://github.com/wownero/RandomWOW/archive/${randomwowVersion}.tar.gz";
     sha256 = "1xp76zf01hnhnk6rjvqjav9n9pnvxzxlzqa5rc574d1c2qczfy3q";
   };
-in
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "wownero";
   version = "0.8.0.1";
 
@@ -25,9 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
-  ];
+  buildInputs =
+    [ boost miniupnpc_2 openssl unbound rapidjson readline libsodium ];
 
   postUnpack = ''
     rm -r $sourceRoot/external/RandomWOW
@@ -35,10 +33,8 @@ stdenv.mkDerivation rec {
     mv RandomWOW-${randomwowVersion} $sourceRoot/external/RandomWOW
   '';
 
-  cmakeFlags = [
-    "-DReadline_ROOT_DIR=${readline.dev}"
-    "-DMANUAL_SUBMODULES=ON"
-  ];
+  cmakeFlags =
+    [ "-DReadline_ROOT_DIR=${readline.dev}" "-DMANUAL_SUBMODULES=ON" ];
 
   meta = {
     description = ''
@@ -52,9 +48,9 @@ stdenv.mkDerivation rec {
       signatures using different participants for the same tx outputs on
       opposing forks.
     '';
-    homepage    = "https://wownero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.linux;
+    homepage = "https://wownero.org/";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fuwa ];
   };
 }

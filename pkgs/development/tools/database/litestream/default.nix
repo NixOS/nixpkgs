@@ -1,7 +1,4 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-}:
+{ buildGoModule, fetchFromGitHub, lib }:
 buildGoModule rec {
   pname = "litestream";
   version = "0.3.6";
@@ -13,11 +10,7 @@ buildGoModule rec {
     sha256 = "sha256-A1okmeX3njyRXFKcXJPSV7Hg8Q/P7WqpGz2HThDdUQo=";
   };
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.Version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   vendorSha256 = "sha256-ScG8cukUuChOvN9r0HvVJsYnu1X9DSO7aD32iu55jIM=";
 

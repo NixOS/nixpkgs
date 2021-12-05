@@ -1,10 +1,4 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, lxqtUpdateScript
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -18,14 +12,9 @@ mkDerivation rec {
     sha256 = "0zpkcqfylcfwvadp1bidcrr64d8ls5c7bdnkfqwjjd32sd35ly60";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    qtbase
-    qttools
-  ];
+  buildInputs = [ qtbase qttools ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

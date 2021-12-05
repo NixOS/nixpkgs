@@ -1,27 +1,11 @@
-{ mkDerivation
-, lib
-, qtbase
-, fetchFromGitHub
-, fftwSinglePrec
-, ruby
-, aubio
-, cmake
-, pkg-config
-, boost
-, bash
-, jack2
-, supercollider
-, qwt
-, osmid
-}:
+{ mkDerivation, lib, qtbase, fetchFromGitHub, fftwSinglePrec, ruby, aubio, cmake
+, pkg-config, boost, bash, jack2, supercollider, qwt, osmid }:
 
 let
 
-  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
+  supercollider_single_prec = supercollider.override { fftw = fftwSinglePrec; };
 
-in
-
-mkDerivation rec {
+in mkDerivation rec {
   version = "3.2.2";
   pname = "sonic-pi";
 
@@ -102,18 +86,19 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preFixup = ''
     wrapQtApp "$out/bin/sonic-pi" \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ] } \
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ]} \
       --set AUBIO_LIB "${aubio}/lib/libaubio.so"
     makeWrapper \
       $out/app/server/ruby/bin/sonic-pi-server.rb \
       $out/bin/sonic-pi-server \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ] } \
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ]} \
       --set AUBIO_LIB "${aubio}/lib/libaubio.so"
   '';
 
   meta = {
     homepage = "https://sonic-pi.net/";
-    description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
+    description =
+      "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Phlogistique kamilchm c0deaddict ];
     platforms = lib.platforms.linux;

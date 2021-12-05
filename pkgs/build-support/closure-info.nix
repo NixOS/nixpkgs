@@ -21,16 +21,15 @@ stdenv.mkDerivation {
 
   PATH = "${buildPackages.coreutils}/bin:${buildPackages.jq}/bin";
 
-  builder = builtins.toFile "builder"
-    ''
-      . .attrs.sh
+  builder = builtins.toFile "builder" ''
+    . .attrs.sh
 
-      out=''${outputs[out]}
+    out=''${outputs[out]}
 
-      mkdir $out
+    mkdir $out
 
-      jq -r ".closure | map(.narSize) | add" < .attrs.json > $out/total-nar-size
-      jq -r '.closure | map([.path, .narHash, .narSize, "", (.references | length)] + .references) | add | map("\(.)\n") | add' < .attrs.json | head -n -1 > $out/registration
-      jq -r .closure[].path < .attrs.json > $out/store-paths
-    '';
+    jq -r ".closure | map(.narSize) | add" < .attrs.json > $out/total-nar-size
+    jq -r '.closure | map([.path, .narHash, .narSize, "", (.references | length)] + .references) | add | map("\(.)\n") | add' < .attrs.json | head -n -1 > $out/registration
+    jq -r .closure[].path < .attrs.json > $out/store-paths
+  '';
 }

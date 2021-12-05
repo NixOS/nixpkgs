@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, nats-server
-, pytestCheckHook
-, pythonOlder
-, uvloop
-}:
+{ lib, buildPythonPackage, ed25519, fetchFromGitHub, nats-server
+, pytestCheckHook, pythonOlder, uvloop }:
 
 buildPythonPackage rec {
   pname = "asyncio-nats-client";
@@ -20,15 +13,9 @@ buildPythonPackage rec {
     sha256 = "1aj57xi2rj1xswq8air13xdsll1ybpi0nmz5f6jq01azm0zy9xyd";
   };
 
-  propagatedBuildInputs = [
-    ed25519
-  ];
+  propagatedBuildInputs = [ ed25519 ];
 
-  checkInputs = [
-    nats-server
-    pytestCheckHook
-    uvloop
-  ];
+  checkInputs = [ nats-server pytestCheckHook uvloop ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

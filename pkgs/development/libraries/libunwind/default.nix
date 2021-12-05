@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
     (fetchpatch {
       # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e.patch";
+      url =
+        "https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e.patch";
       sha256 = "1angwfq6h0jskg6zx8g6w9min38g5mgmrcbppcy5hqn59cgsxbw0";
     })
   ];
@@ -43,7 +44,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/libunwind";
-    description = "A portable and efficient API to determine the call-chain of a program";
+    description =
+      "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
     badPlatforms = [ "riscv32-linux" "riscv64-linux" ];

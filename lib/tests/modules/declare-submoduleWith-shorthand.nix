@@ -1,4 +1,5 @@
-{ lib, ... }: let
+{ lib, ... }:
+let
   sub.options.config = lib.mkOption {
     type = lib.types.bool;
     default = false;
@@ -9,6 +10,6 @@ in {
       modules = [ sub ];
       shorthandOnlyDefinesConfig = true;
     };
-    default = {};
+    default = { };
   };
 }

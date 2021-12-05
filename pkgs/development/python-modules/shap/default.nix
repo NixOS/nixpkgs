@@ -1,19 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, tqdm
-, slicer
-, numba
-, matplotlib
-, nose
-, ipython
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytestCheckHook, numpy
+, scipy, scikit-learn, pandas, tqdm, slicer, numba, matplotlib, nose, ipython }:
 
 buildPythonPackage rec {
   pname = "shap";
@@ -27,15 +13,7 @@ buildPythonPackage rec {
     sha256 = "065c40k6g8sy6ynzk4k8k7iddl18g2b6kb9kg4m6g7npclmn5wvp";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    scikit-learn
-    pandas
-    tqdm
-    slicer
-    numba
-  ];
+  propagatedBuildInputs = [ numpy scipy scikit-learn pandas tqdm slicer numba ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -61,7 +39,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A unified approach to explain the output of any machine learning model";
+    description =
+      "A unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];

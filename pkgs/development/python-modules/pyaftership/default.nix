@@ -1,12 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, aiohttp, aresponses
+, pytest-asyncio, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pyaftership";
@@ -22,15 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-SN7fvI/+VHYn2eYQe5wp6lEZ73YeZbsiPjDiq/Ibk3Q=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkInputs = [ aresponses pytest-asyncio pytestCheckHook ];
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
@@ -39,9 +26,7 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "pyaftership"
-  ];
+  pythonImportsCheck = [ "pyaftership" ];
 
   meta = with lib; {
     description = "Python wrapper package for the AfterShip API";
