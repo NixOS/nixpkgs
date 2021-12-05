@@ -331,6 +331,38 @@ let
 
   };
 
+  overlayMountOpts = { name, ... }: {
+
+    options = {
+      mountPoint = mkOption {
+        example = "/mnt/usb";
+        type = types.str;
+        description = lib.mdDoc "Mount point on the container file system.";
+      };
+      hostPaths = mkOption {
+        example = [ "/home" "/tmp/overlays/home" ];
+        type =
+          let
+            t = types.listOf types.str;
+          in
+            (types.addCheck t (x: (length x) >= 2)) // {
+               description = "${t.description} with at leasts two elements";
+            };
+        description = lib.mdDoc "Locations of the host path to be overlayed.";
+      };
+      isReadOnly = mkOption {
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc "Determine whether the mounted path will be accessed in read-only mode.";
+      };
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+    };
+
+  };
+
   allowedDeviceOpts = { ... }: {
     options = {
       node = mkOption {
@@ -357,6 +389,15 @@ let
                in flagPrefix + mountstr ;
 
   mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
+
+  mkOverlayFlag = d:
+    let
+      flagPrefix = if d.isReadOnly then " --overlay-ro=" else " --overlay=";
+      mountstr = concatStringsSep ":" (d.hostPaths ++ [ d.mountPoint ]);
+    in
+      flagPrefix + mountstr;
+
+  mkOverlayFlags = bs: concatMapStrings mkOverlayFlag (lib.attrValues bs);
 
   networkOptions = {
     hostBridge = mkOption {
@@ -702,6 +743,21 @@ in
                 '';
             };
 
+            overlayMounts = mkOption {
+              type = with types; attrsOf (submodule overlayMountOpts);
+              default = {};
+              example = literalExpression ''
+                {
+                  "/home" = {
+                    hostPaths = [ "/home" "/tmp/overlays/home" ];
+                    isReadOnly = false;
+                  };
+                }
+              '';
+
+              description = lib.mdDoc "see --overlay=, --overlay-ro= at {manpage}`systemd-nspawn(1)`";
+            };
+
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
@@ -903,6 +959,7 @@ in
                 AUTO_START=1
               ''}
               EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts +
+                mkOverlayFlags cfg.overlayMounts +
                 optionalString (cfg.extraFlags != [])
                   (" " + concatStringsSep " " cfg.extraFlags)}"
             '';
