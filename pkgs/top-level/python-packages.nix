@@ -1417,6 +1417,8 @@ in {
 
   catboost = callPackage ../development/python-modules/catboost { };
 
+  catkin_pkg = callPackage ../development/python-modules/catkin_pkg { };
+
   cattrs = callPackage ../development/python-modules/cattrs { };
 
   cbeams = callPackage ../misc/cbeams { };
