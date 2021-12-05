@@ -93,6 +93,8 @@ let
         fi
       ''}
 
+      ${config.system.systemBuilderCommands}
+
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
       ${config.system.extraSystemBuilderCmds}
@@ -103,7 +105,7 @@ let
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+  baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -125,7 +127,7 @@ let
 
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
-  };
+  } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
 
@@ -273,6 +275,24 @@ in
         and links it from the resulting system
         (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
+      '';
+    };
+
+    system.systemBuilderCommands = mkOption {
+      type = types.lines;
+      internal = true;
+      default = "";
+      description = ''
+        This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.systemBuilderArgs = mkOption {
+      type = types.attrsOf types.unspecified;
+      internal = true;
+      default = {};
+      description = lib.mdDoc ''
+        `lib.mkDerivation` attributes that will be passed to the top level system builder.
       '';
     };
 
