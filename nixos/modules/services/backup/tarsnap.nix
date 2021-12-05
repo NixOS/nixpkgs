@@ -60,7 +60,7 @@ in
       };
 
       archives = mkOption {
-        type = types.attrsOf (types.submodule ({ config, ... }:
+        type = types.attrsOf (types.submodule ({ config, options, ... }:
           {
             options = {
               keyfile = mkOption {
@@ -89,6 +89,9 @@ in
               cachedir = mkOption {
                 type = types.nullOr types.path;
                 default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
+                defaultText = literalExpression ''
+                  "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
+                '';
                 description = ''
                   The cache allows tarsnap to identify previously stored data
                   blocks, reducing archival time and bandwidth usage.

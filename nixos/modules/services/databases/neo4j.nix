@@ -437,6 +437,7 @@ in {
           baseDirectory = mkOption {
             type = types.path;
             default = "${cfg.directories.certificates}/${name}";
+            defaultText = literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
             description = ''
               The mandatory base directory for cryptographic objects of this
               policy. This path is only automatically generated when this
@@ -498,6 +499,7 @@ in {
           revokedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/revoked";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
             description = ''
               Path to directory of CRLs (Certificate Revocation Lists) in
               PEM format. Must be an absolute path. The existence of this
@@ -533,6 +535,7 @@ in {
           trustedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/trusted";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
             description = ''
               Path to directory of X.509 certificates in PEM format for
               trusted parties. Must be an absolute path. The existence of this
