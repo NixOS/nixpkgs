@@ -1979,10 +1979,6 @@ EOT
   composite-aeson = assert super.composite-aeson.version == "0.7.5.0";
     doJailbreak super.composite-aeson;
 
-  # Too strict bounds on profunctors
-  # https://github.com/google/proto-lens/issues/413
-  proto-lens = doJailbreak super.proto-lens;
-
   # 2021-06-20: Outdated upper bounds
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
