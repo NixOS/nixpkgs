@@ -24940,6 +24940,8 @@ with pkgs;
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
+  f1viewer = callPackage ../applications/video/f1viewer {};
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };
