@@ -1,14 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.hbase;
-
-  defaultConfig = {
-    "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
-    "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";
-  };
+  opt = options.services.hbase;
 
   buildProperty = configAttr:
     (builtins.concatStringsSep "\n"
@@ -23,7 +19,7 @@ let
 
   configFile = pkgs.writeText "hbase-site.xml"
     ''<configuration>
-        ${buildProperty (defaultConfig // cfg.settings)}
+        ${buildProperty (opt.settings.default // cfg.settings)}
       </configuration>
     '';
 
@@ -96,7 +92,16 @@ in {
 
       settings = mkOption {
         type = with lib.types; attrsOf (oneOf [ str int bool ]);
-        default = defaultConfig;
+        default = {
+          "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
+          "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";
+        };
+        defaultText = literalExpression ''
+          {
+            "hbase.rootdir" = "file://''${config.${opt.dataDir}}/hbase";
+            "hbase.zookeeper.property.dataDir" = "''${config.${opt.dataDir}}/zookeeper";
+          }
+        '';
         description = ''
           configurations in hbase-site.xml, see <link xlink:href="https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml"/> for details.
         '';
