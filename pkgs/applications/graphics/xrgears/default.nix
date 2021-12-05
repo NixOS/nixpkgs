@@ -9,6 +9,9 @@
 , vulkan-headers
 , vulkan-loader
 , xxd
+, SDL2
+, makeWrapper
+, libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     xxd
+    makeWrapper
   ];
 
   buildInputs = [
@@ -37,6 +41,11 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
   ];
+
+  fixupPhase = ''
+    wrapProgram $out/bin/xrgears \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
