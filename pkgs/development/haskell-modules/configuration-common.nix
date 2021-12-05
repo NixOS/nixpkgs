@@ -951,7 +951,7 @@ self: super: {
   dhall-nixpkgs = overrideCabal (drv: {
     revision = assert !(drv ? revision); "1";
     editedCabalFile = "0ld4z4d3gw9mxyhm5g2hgw4w68izjnwrcqd6j7yhwhrblhdmqrr4";
-  }) super.dhall-nixpkgs;
+  }) (generateOptparseApplicativeCompletion "dhall-to-nixpkgs" super.dhall-nixpkgs);
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
