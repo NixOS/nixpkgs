@@ -1683,6 +1683,8 @@ in {
 
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
+  colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
