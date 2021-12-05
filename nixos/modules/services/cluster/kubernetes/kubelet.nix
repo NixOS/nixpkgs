@@ -4,6 +4,7 @@ with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.kubelet;
 
   cniConfig =
@@ -83,6 +84,7 @@ in
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -149,6 +151,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
