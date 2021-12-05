@@ -1709,6 +1709,8 @@ in {
 
   colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
 
+  colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
