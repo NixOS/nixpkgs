@@ -24,7 +24,7 @@ my $reloadByActivationFile = "/run/nixos/activation-reload-list";
 my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
 my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
-make_path("/run/nixos", { mode => 0755 });
+make_path("/run/nixos", { mode => oct(755) });
 
 my $action = shift @ARGV;
 
@@ -484,7 +484,7 @@ unlink($startListFile);
 
 
 # Print failed and new units.
-my (@failed, @new, @restarting);
+my (@failed, @new);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
     if ($state->{state} eq "failed") {
