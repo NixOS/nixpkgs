@@ -2680,6 +2680,8 @@ with pkgs;
 
   datovka = libsForQt5.callPackage ../applications/networking/datovka { };
 
+  dave = callPackage ../servers/http/dave { };
+
   dconf = callPackage ../development/libraries/dconf { };
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
