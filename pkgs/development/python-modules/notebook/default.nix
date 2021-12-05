@@ -73,6 +73,12 @@ buildPythonPackage rec {
     "test_checkpoints_follow_file"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # requires local networking
+    "notebook/auth/tests/test_login.py"
+    "notebook/bundler/tests/test_bundler_api.py"
+  ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
