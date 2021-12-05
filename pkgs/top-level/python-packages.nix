@@ -8194,6 +8194,8 @@ in {
 
   rencode = callPackage ../development/python-modules/rencode { };
 
+  reolink = callPackage ../development/python-modules/reolink { };
+
   reparser = callPackage ../development/python-modules/reparser { };
 
   repeated_test = callPackage ../development/python-modules/repeated_test { };
