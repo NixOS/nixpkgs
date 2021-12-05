@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, systemd, glib, dbus, libnl, python3Packages }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, systemd, glib, dbus, libnl, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "neard";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bpdmyxvd3z54p95apz4bjb5jp8hbc04sicjapcryjwa8mh6pbil";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3Packages.wrapPython ];
-  buildInputs = [ systemd glib dbus libnl ] ++ (with python3Packages; [ python ]);
-  pythonPath = with python3Packages; [ pygobject3 dbus-python ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python2Packages.wrapPython ];
+  buildInputs = [ systemd glib dbus libnl ] ++ (with python2Packages; [ python ]);
+  pythonPath = with python2Packages; [ pygobject2 dbus-python pygtk ];
 
   strictDeps = true;
 
