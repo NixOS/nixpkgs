@@ -1,11 +1,12 @@
 # Email setup is fairly involved, useful references:
 # https://drewdevault.com/2018/08/05/Local-mail-server.html
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   cfgIni = cfg.settings;
   scfg = cfg.lists;
   iniKey = "lists.sr.ht";
@@ -42,6 +43,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/listssrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/listssrht"'';
       description = ''
         State path for lists.sr.ht.
       '';

@@ -47,6 +47,9 @@ in
 
       qserve = mkOption {
         default = [ "${cfg.qserve.address}:${toString cfg.qserve.port}" ];
+        defaultText = literalExpression ''
+          [ "''${config.${opt.qserve.address}}:''${toString config.${opt.qserve.port}}"
+        ]'';
         type = types.listOf types.str;
         description = "Register qserve instance.";
       }; # nserve.qserve
@@ -129,7 +132,7 @@ in
           You have to enable it, or use your own way for serving files
           and set the http.url option accordingly.
           '';
-        type = types.submodule ({
+        type = types.submodule ({ config, options, ... }: {
           options = {
             enable = mkOption {
               default = true;
@@ -150,7 +153,8 @@ in
             }; # nslave.http.address
 
             url = mkOption {
-              default = "http://localhost:${toString cfg.nslave.http.port}/cache";
+              default = "http://localhost:${toString config.port}/cache";
+              defaultText = literalExpression ''"http://localhost:''${toString config.${options.port}}/cache"'';
               type = types.str;
               description = ''
                 Specify URL for accessing generated files from cache.

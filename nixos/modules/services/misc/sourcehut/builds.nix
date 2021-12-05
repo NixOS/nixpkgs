@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   scfg = cfg.builds;
   rcfg = config.services.redis;
   iniKey = "builds.sr.ht";
@@ -38,6 +39,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/buildsrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/buildsrht"'';
       description = ''
         State path for builds.sr.ht.
       '';

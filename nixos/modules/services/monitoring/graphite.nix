@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.graphite;
+  opt = options.services.graphite;
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
@@ -312,12 +313,14 @@ in {
 
       seyrenUrl = mkOption {
         default = "http://localhost:${toString cfg.seyren.port}/";
+        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.seyren.port}}/"'';
         description = "Host where seyren is accessible.";
         type = types.str;
       };
 
       graphiteUrl = mkOption {
         default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
+        defaultText = literalExpression ''"http://''${config.${opt.web.listenAddress}}:''${toString config.${opt.web.port}}"'';
         description = "Host where graphite service runs.";
         type = types.str;
       };

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gitea;
+  opt = options.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
@@ -51,6 +52,7 @@ in
       log = {
         rootPath = mkOption {
           default = "${cfg.stateDir}/log";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
           type = types.str;
           description = "Root path for log files.";
         };
@@ -130,6 +132,7 @@ in
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
           description = "Path to the sqlite3 database file.";
         };
 
@@ -166,6 +169,7 @@ in
         backupDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/dump";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
         };
       };
@@ -199,6 +203,7 @@ in
         contentDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/lfs";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
         };
       };
@@ -212,6 +217,7 @@ in
       repositoryRoot = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/repositories";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 

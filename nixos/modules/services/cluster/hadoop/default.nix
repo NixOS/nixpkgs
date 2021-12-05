@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, options, pkgs, ...}:
 let
   cfg = config.services.hadoop;
+  opt = options.services.hadoop;
 in
 with lib;
 {
@@ -44,6 +45,14 @@ with lib;
         "mapreduce.map.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
         "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
       };
+      defaultText = literalExpression ''
+        {
+          "mapreduce.framework.name" = "yarn";
+          "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+          "mapreduce.map.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+          "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+        }
+      '';
       type = types.attrsOf types.anything;
       example = literalExpression ''
         options.services.hadoop.mapredSite.default // {
@@ -98,6 +107,9 @@ with lib;
 
     log4jProperties = mkOption {
       default = "${cfg.package}/lib/${cfg.package.untarDir}/etc/hadoop/log4j.properties";
+      defaultText = literalExpression ''
+        "''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}/etc/hadoop/log4j.properties"
+      '';
       type = types.path;
       example = literalExpression ''
         "''${pkgs.hadoop}/lib/''${pkgs.hadoop.untarDir}/etc/hadoop/log4j.properties";

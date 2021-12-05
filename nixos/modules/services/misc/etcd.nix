@@ -50,6 +50,7 @@ in {
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
       default = ["${cfg.name}=http://127.0.0.1:2380"];
+      defaultText = literalExpression ''["''${config.${opt.name}}=http://127.0.0.1:2380"]'';
       type = types.listOf types.str;
     };
 

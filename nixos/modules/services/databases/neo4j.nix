@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.neo4j;
+  opt = options.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
   isDefaultPathOption = opt: isOption opt && opt.type == types.path && opt.highestPrio >= 1500;
 
@@ -256,6 +257,7 @@ in {
       certificates = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/certificates";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
         description = ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
@@ -280,6 +282,7 @@ in {
       data = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/data";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/data"'';
         description = ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
@@ -305,6 +308,7 @@ in {
       imports = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/import";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/import"'';
         description = ''
           The root directory for file URLs used with the Cypher
           <literal>LOAD CSV</literal> clause. Only meaningful when
@@ -321,6 +325,7 @@ in {
       plugins = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/plugins";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
         description = ''
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
