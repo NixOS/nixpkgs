@@ -1703,6 +1703,8 @@ in {
 
   colcon-python-setup-py = callPackage ../development/python-modules/colcon-python-setup-py { };
 
+  colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
