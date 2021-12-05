@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+, ncurses ? null, pam, withPAM ? true, systemd ? null
 , nlsSupport ? true
 , audit ? null
 }:
 
-assert stdenv.hostPlatform.isStatic -> audit != null;
+assert withPAM -> pam != null;
+assert (withPAM && stdenv.hostPlatform.isStatic) -> audit != null;
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
@@ -59,7 +60,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ zlib pam libcap_ng ]
+    [ zlib libcap_ng ]
+    ++ lib.optional withPAM pam
     ++ lib.filter (p: p != null) [ ncurses systemd ]
     # not sure how util-linux is linking with linux-pam,
     # probably just with a simplistic -lpam.
