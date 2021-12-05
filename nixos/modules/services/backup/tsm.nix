@@ -5,7 +5,7 @@ let
   inherit (lib.attrsets) hasAttr;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) nullOr strMatching;
+  inherit (lib.types) nonEmptyStr nullOr;
 
   options.services.tsmBackup = {
     enable = mkEnableOption ''
@@ -15,7 +15,7 @@ let
       <option>programs.tsmClient.enable</option>
     '';
     command = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       default = "backup";
       example = "incr";
       description = ''
@@ -24,7 +24,7 @@ let
       '';
     };
     servername = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       example = "mainTsmServer";
       description = ''
         Create a systemd system service
@@ -41,7 +41,7 @@ let
       '';
     };
     autoTime = mkOption {
-      type = nullOr (strMatching ".+");
+      type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
       description = ''
