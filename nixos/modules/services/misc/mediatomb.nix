@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  opt = options.services.mediatomb;
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
@@ -261,6 +262,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
+        defaultText = literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
         description = ''
           The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';

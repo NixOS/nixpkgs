@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.transmission;
+  opt = options.services.transmission;
   inherit (config.environment) etc;
   apparmor = config.security.apparmor;
   rootDir = "/run/transmission";
@@ -47,11 +48,13 @@ in
           options.download-dir = mkOption {
             type = types.path;
             default = "${cfg.home}/${downloadsDir}";
+            defaultText = literalExpression ''"''${config.${opt.home}}/${downloadsDir}"'';
             description = "Directory where to download torrents.";
           };
           options.incomplete-dir = mkOption {
             type = types.path;
             default = "${cfg.home}/${incompleteDir}";
+            defaultText = literalExpression ''"''${config.${opt.home}}/${incompleteDir}"'';
             description = ''
               When enabled with
               services.transmission.home
@@ -147,6 +150,7 @@ in
           options.watch-dir = mkOption {
             type = types.path;
             default = "${cfg.home}/${watchDir}";
+            defaultText = literalExpression ''"''${config.${opt.home}}/${watchDir}"'';
             description = "Watch a directory for torrent files and add them to transmission.";
           };
           options.watch-dir-enabled = mkOption {

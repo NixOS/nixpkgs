@@ -172,6 +172,13 @@ in {
             directories:
                 - ${dataDir}/whisper
         '';
+        defaultText = literalExpression ''
+          '''
+            whisper:
+              directories:
+                - ''${config.${opt.dataDir}}/whisper
+          '''
+        '';
         example = ''
           allowed_origins:
             - dashboard.example.com

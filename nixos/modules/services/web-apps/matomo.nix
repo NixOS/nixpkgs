@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 with lib;
 let
   cfg = config.services.matomo;
@@ -12,10 +12,7 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn =
-    let
-      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
-     in join config.networking.hostName config.networking.domain;
+  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
 
 in {
   imports = [
@@ -81,6 +78,11 @@ in {
       hostname = mkOption {
         type = types.str;
         default = "${user}.${fqdn}";
+        defaultText = literalExpression ''
+          if config.${options.networking.domain} != null
+          then "${user}.''${config.${options.networking.fqdn}}"
+          else "${user}.''${config.${options.networking.hostName}}"
+        '';
         example = "matomo.yourdomain.org";
         description = ''
           URL of the host, without https prefix. You may want to change it if you

@@ -186,6 +186,9 @@ in
         in {
           type = types.str;
           default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
+          defaultText = literalExpression ''
+            "http+unix://''${replaceStrings ["/"] ["%2F"] config.${options.services.mirakurun.unixSocket}}"
+          '';
           example = "http://localhost:40772";
           description = "URL to connect to Mirakurun.";
         });
