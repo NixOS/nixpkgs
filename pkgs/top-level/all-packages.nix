@@ -3154,6 +3154,8 @@ with pkgs;
 
   hebcal = callPackage ../tools/misc/hebcal {};
 
+  heroic = callPackage ../games/heroic {};
+
   hexio = callPackage ../development/tools/hexio { };
 
   hexyl = callPackage ../tools/misc/hexyl { };
