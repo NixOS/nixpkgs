@@ -1691,6 +1691,8 @@ in {
 
   colcon-notification = callPackage ../development/python-modules/colcon-notification { };
 
+  colcon-output = callPackage ../development/python-modules/colcon-output { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
