@@ -4847,6 +4847,8 @@ in {
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
+  meross-iot = callPackage ../development/python-modules/meross-iot { };
+
   mesa = callPackage ../development/python-modules/mesa { };
 
   meshio = callPackage ../development/python-modules/meshio { };
