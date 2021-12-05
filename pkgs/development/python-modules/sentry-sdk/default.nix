@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , asttokens
 , blinker
@@ -10,18 +11,26 @@
 , chalice
 , django
 , executing
+, fakeredis
 , falcon
-, fetchPypi
-, flask
+, fetchFromGitHub
+, flask_login
+, gevent
 , httpx
 , iana-etc
 , isPy3k
+, jsonschema
 , libredirect
 , pure-eval
 , pyramid
 , pyspark
+, pytest-django
+, pytest-forked
+, pytest-localserver
+, pytestCheckHook
 , rq
 , sanic
+, sanic-testing
 , sqlalchemy
 , tornado
 , trytond
@@ -34,9 +43,11 @@ buildPythonPackage rec {
   version = "1.5.0";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-eJoRqHygJJGJbhIe/dZOj9kzJ7aejy99QvA+JWlkjog=";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "sentry-python";
+    rev = version;
+    sha256 = "sha256-hJqopR/kvqU0trniHMOahi3oeIzeMvc74ujmfJ2iG48=";
   };
 
   propagatedBuildInputs = [
@@ -52,9 +63,16 @@ buildPythonPackage rec {
     chalice
     django
     executing
+    fakeredis
     falcon
-    flask
+    flask_login
+    gevent
+    jsonschema
     pure-eval
+    pytest-django
+    pytest-forked
+    pytest-localserver
+    pytestCheckHook
     rq
     sqlalchemy
     tornado
@@ -67,30 +85,52 @@ buildPythonPackage rec {
     pyramid
     pyspark
     sanic
+    sanic-testing
   ];
 
-  # The Sentry tests need access to `/etc/protocols` (the tests call
-  # `socket.getprotobyname('tcp')`, which reads from this file). Normally
-  # this path isn't available in the sandbox. Therefore, use libredirect
-  # to make on eavailable from `iana-etc`. This is a test-only operation.
-  preCheck = lib.optionalString doCheck ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
+  doCheck = !stdenv.isDarwin;
 
-  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+  disabledTests = [
+    # Issue with the asseration
+    "test_auto_enabling_integrations_catches_import_error"
+    # Output mismatch in sqlalchemy test
+    "test_too_large_event_truncated"
+    # Failing falcon tests
+    "test_has_context"
+    "uri_template-"
+    "path-"
+    "test_falcon_large_json_request"
+    "test_falcon_empty_json_request"
+    "test_falcon_raw_data_request"
+    # Failing spark tests
+    "test_set_app_properties"
+    "test_start_sentry_listener"
+    # Failing threading test
+    "test_circular_references"
+    # Failing wsgi test
+    "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+  ];
 
-  # no tests
-  doCheck = true;
+  disabledTestPaths = [
+    # Some tests are failing (network access, assertion errors)
+    "tests/integrations/aiohttp/"
+    "tests/integrations/gcp/"
+    "tests/integrations/httpx/"
+    "tests/integrations/stdlib/test_httplib.py"
+    # Tests are blocking
+    "tests/integrations/celery/"
+    # pytest-chalice is not available in nixpkgs yet
+    "tests/integrations/chalice/"
+  ];
 
   pythonImportsCheck = [
     "sentry_sdk"
   ];
 
   meta = with lib; {
+    description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ fab gebner ];
   };
 }
