@@ -151,10 +151,7 @@ in
 
     system.name = mkOption {
       type = types.str;
-      default =
-        if config.networking.hostName == ""
-        then "unnamed"
-        else config.networking.hostName;
+      # when using full NixOS or importing the network-interfaces.nix module.
       defaultText = literalExpression ''
         if config.networking.hostName == ""
         then "unnamed"
@@ -181,6 +178,12 @@ in
         '';
 
     system.build.toplevel = system;
+
+    # Traditionally, the option default contained the logic for taking this from
+    # the network.hostName option, which is expected to define it at
+    # mkOptionDefault priority. However, we'd also like to have a default when
+    # network.hostName is not imported.
+    system.name = mkOverride ((mkOptionDefault {}).priority + 100) "unnamed";
 
   };
 

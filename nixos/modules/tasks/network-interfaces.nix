@@ -1222,6 +1222,12 @@ in
         }
       ];
 
+    system.name = lib.mkOptionDefault (
+      if config.networking.hostName == ""
+      then "unnamed"
+      else config.networking.hostName
+    );
+
     boot.kernelModules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
