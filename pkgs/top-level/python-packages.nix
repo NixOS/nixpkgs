@@ -1697,6 +1697,8 @@ in {
 
   colcon-package-selection = callPackage ../development/python-modules/colcon-package-selection { };
 
+  colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
