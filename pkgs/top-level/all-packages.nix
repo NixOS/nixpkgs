@@ -22389,6 +22389,8 @@ with pkgs;
 
   system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
 
+  ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
+
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
