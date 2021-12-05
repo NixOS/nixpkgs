@@ -500,7 +500,9 @@ while (my ($unit, $state) = each %{$activeNew}) {
             push @failed, $unit;
         }
     }
-    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit}) {
+    # Ignore scopes since they are not managed by this script but rather
+    # created and managed by third-party services via the systemd dbus API.
+    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/) {
         push @new, $unit;
     }
 }
