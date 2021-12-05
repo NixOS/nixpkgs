@@ -26014,6 +26014,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  imhex = callPackage ../tools/security/imhex {};
+
   image-roll = callPackage ../applications/graphics/image-roll { };
 
   imagej = callPackage ../applications/graphics/imagej { };
@@ -32905,8 +32907,6 @@ with pkgs;
   ricty = callPackage ../data/fonts/ricty { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse {};
-
-  rmount = callPackage ../tools/filesystems/rmount {};
 
   romdirfs = callPackage ../tools/filesystems/romdirfs {
     stdenv = gccStdenv;
