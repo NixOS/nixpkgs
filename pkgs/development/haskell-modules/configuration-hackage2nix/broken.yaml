@@ -2648,7 +2648,6 @@ broken-packages:
   - jenga
   - jenkinsPlugins2nix
   - jespresso
-  - jet
   - jet-stream
   - jinquantities
   - jml-web-service

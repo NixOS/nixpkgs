@@ -2126,4 +2126,8 @@ EOT
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
+  # Too strict bounds on recursive-zipper
+  # https://github.com/ChrisPenner/jet/issues/1
+  jet = doJailbreak super.jet;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
