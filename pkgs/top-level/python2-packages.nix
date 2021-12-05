@@ -132,11 +132,6 @@ with self; with super; {
 
   gdcm = disabled super.gdcm;
 
-  gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
-    pythonPackages = self;
-    pythonSupport = true;
-  })); # gaia isn't supported with python3 and it's not available from pypi
-
   geant4 = disabled super.geant4;
 
   geopy = callPackage ../development/python-modules/geopy/2.nix { };

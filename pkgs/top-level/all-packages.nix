@@ -1715,8 +1715,6 @@ with pkgs;
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
-  gaia = callPackage ../development/libraries/gaia { };
-
   galene = callPackage ../servers/web-apps/galene {
     buildGoModule = buildGo115Module;
   };
