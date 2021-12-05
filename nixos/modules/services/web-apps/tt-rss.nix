@@ -18,9 +18,9 @@ let
   tt-rss-config = let
     password =
       if (cfg.database.password != null) then
-        "${(escape ["'" "\\"] cfg.database.password)}"
+        "'${(escape ["'" "\\"] cfg.database.password)}'"
       else if (cfg.database.passwordFile != null) then
-        "file_get_contents('${cfg.database.passwordFile}'"
+        "file_get_contents('${cfg.database.passwordFile}')"
       else
         ""
       ;
@@ -40,7 +40,7 @@ let
       putenv('TTRSS_DB_HOST=${optionalString (cfg.database.host != null) cfg.database.host}');
       putenv('TTRSS_DB_USER=${cfg.database.user}');
       putenv('TTRSS_DB_NAME=${cfg.database.name}');
-      putenv('TTRSS_DB_PASS=${password}');
+      putenv('TTRSS_DB_PASS=' . ${password});
       putenv('TTRSS_DB_PORT=${toString dbPort}');
 
       putenv('TTRSS_AUTH_AUTO_CREATE=${boolToString cfg.auth.autoCreate}');
