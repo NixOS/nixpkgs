@@ -7541,6 +7541,8 @@ in {
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
+  pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
+
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
