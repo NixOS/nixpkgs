@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , asciidoc
 , brotli
 , cmake
@@ -28,6 +28,20 @@ stdenv.mkDerivation rec {
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-22564.prerequisite.patch";
+      url = "https://github.com/libjxl/libjxl/commit/482d0a24f891c641caae4369676ed303406dccac.patch";
+      sha256 = "1c0nm667jahzr04iyfkg7zjj0wf7igc8m0l5gczl50zbxgz17vmp";
+      includes = [ "lib/jxl/base/random.h" ];
+    })
+    (fetchpatch {
+      name = "CVE-2021-22564.patch";
+      url = "https://github.com/libjxl/libjxl/commit/e6497057899269bb40f54a26729826a55d857fd7.patch";
+      sha256 = "0yybl7dhhz0wawczmmka3ikysxz5ispj1b7z6bc7bp91glc0hk47";
+    })
+  ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   # unless we disable highway's tests
