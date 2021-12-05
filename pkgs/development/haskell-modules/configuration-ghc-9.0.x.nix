@@ -152,6 +152,12 @@ self: super: {
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;
 
+  # Too strict bounds on base
+  # https://github.com/lspitzner/multistate/issues/9
+  multistate = doJailbreak super.multistate;
+  # https://github.com/lspitzner/butcher/issues/7
+  butcher = doJailbreak super.butcher;
+
   # 2021-09-18: The following plugins don‘t work yet on ghc9.
   haskell-language-server = appendConfigureFlags [
     "-f-tactic"
