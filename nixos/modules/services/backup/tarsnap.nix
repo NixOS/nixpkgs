@@ -1,9 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
 let
   gcfg = config.services.tarsnap;
+  opt = options.services.tarsnap;
 
   configFile = name: cfg: ''
     keyfile ${cfg.keyfile}
@@ -65,6 +66,7 @@ in
               keyfile = mkOption {
                 type = types.str;
                 default = gcfg.keyfile;
+                defaultText = literalExpression "config.${opt.keyfile}";
                 description = ''
                   Set a specific keyfile for this archive. This defaults to
                   <literal>"/root/tarsnap.key"</literal> if left unspecified.

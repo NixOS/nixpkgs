@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 #
 # TODO: zfs tunables
 
@@ -8,6 +8,7 @@ with lib;
 let
 
   cfgZfs = config.boot.zfs;
+  optZfs = options.boot.zfs;
   cfgExpandOnBoot = config.services.zfs.expandOnBoot;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
@@ -347,6 +348,7 @@ in
     services.zfs.zed = {
       enableMail = mkEnableOption "ZED's ability to send emails" // {
         default = cfgZfs.package.enableMail;
+        defaultText = literalExpression "config.${optZfs.package}.enableMail";
       };
 
       settings = mkOption {

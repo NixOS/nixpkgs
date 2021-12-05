@@ -148,6 +148,7 @@ in
       xauthBin = mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
+        defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
         description = "Path to the <command>xauth</command> program used by display managers.";
       };
 
