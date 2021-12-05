@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.matrix-synapse;
+  opt = options.services.matrix-synapse;
   pg = config.services.postgresql;
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
@@ -197,7 +198,7 @@ in {
       tls_certificate_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.crt";
+        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -209,7 +210,7 @@ in {
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.key";
+        example = "/var/lib/matrix-synapse/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
@@ -218,7 +219,7 @@ in {
       tls_dh_params_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.dh";
+        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
