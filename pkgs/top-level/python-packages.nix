@@ -1675,6 +1675,8 @@ in {
 
   colander = callPackage ../development/python-modules/colander { };
 
+  colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
+
   colcon-core = callPackage ../development/python-modules/colcon-core { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
