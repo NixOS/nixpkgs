@@ -86,10 +86,6 @@ let
   };
 
 in {
-  libressl_3_2 = generic {
-    version = "3.2.7";
-    sha256 = "112bjfrwwqlk0lak7fmfhcls18ydf62cp7gxghf4gklpfl1zyckw";
-  };
   libressl_3_4 = generic {
     version = "3.4.1";
     sha256 = "0766yxb599lx7qmlmsddiw9wgminz9mc311mav5q23l0rbkflz0h";
