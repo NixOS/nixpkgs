@@ -4,6 +4,7 @@
 , libX11, libXrandr, libXinerama, libXext, libXcursor, libGL
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
 , gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
+, Cocoa, WebKit, CoreServices, CoreAudioKit
 , buildType ? "Release" # "Debug", or "Release"
 # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
 # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
@@ -44,8 +45,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 makeWrapper cmake pkg-config ninja ];
 
-  # List obtained in https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # List obtained in https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
     libX11
     libXrandr
     libXinerama
@@ -69,12 +70,28 @@ stdenv.mkDerivation rec {
     pcre
     mount
     patchelf
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    WebKit
+    CoreServices
+    CoreAudioKit
   ];
 
-  # Ensure zenity is available, or it won't be able to open new files.
-  # Ensure the python used for compilation is the same as the python used at run-time.
-  # jedi is also required for auto-completion.
-  postInstall = ''
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+    # Fails to find fp.h on its own
+    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/"
+  ]);
+
+  postInstall = if stdenv.hostPlatform.isDarwin then ''
+    mkdir -p $out/{Applications,bin}
+    mv Source/BespokeSynth_artefacts/${buildType}/BespokeSynth.app $out/Applications/
+    # Symlinking confuses the resource finding about the actual location of the binary
+    # Resources are looked up relative to the executed file's location
+    makeWrapper $out/{Applications/BespokeSynth.app/Contents/MacOS,bin}/BespokeSynth
+  '' else ''
+    # Ensure zenity is available, or it won't be able to open new files.
+    # Ensure the python used for compilation is the same as the python used at run-time.
+    # jedi is also required for auto-completion.
     wrapProgram $out/bin/BespokeSynth --prefix PATH : '${
       lib.makeBinPath [
         gnome.zenity
