@@ -898,7 +898,6 @@ let
   brokenPackages = [
     "av"
     "NetLogoR"
-    "x13binary"
     "valse"
     "HierO"
     "HIBAG"
