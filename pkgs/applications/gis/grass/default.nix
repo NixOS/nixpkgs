@@ -1,24 +1,25 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg_3, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
+, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
+, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   name = "grass";
-  version = "7.6.1";
+  version = "7.8.6";
 
   src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    rev = "${name}_${replaceStrings ["."] ["_"] version}";
-    sha256 = "1amjk9rz7vw5ha7nyl5j2bfwj5if9w62nlwx5qbp1x7spldimlll";
+    rev = version;
+    sha256 = "sha256-zvZqFWuxNyA+hu+NMiRbQVdzzrQPsZrdGdfVB17+SbM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg_3 makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid ]
-    ++ (with python2Packages; [ python python-dateutil wxPython30 numpy ]);
+  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
+  libLAS proj-datumgrid zstd ]
+    ++ (with python3Packages; [ python python-dateutil wxPython_4_1 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
       scripts/g.extension.all/g.extension.all.py \
       scripts/r.drain/r.drain.py \
       scripts/r.pack/r.pack.py \
+      scripts/r.import/r.import.py \
       scripts/r.tileset/r.tileset.py \
       scripts/r.unpack/r.unpack.py \
       scripts/v.clip/v.clip.py \
@@ -79,18 +81,17 @@ stdenv.mkDerivation rec {
       temporal/t.rast.algebra/t.rast.algebra.py \
       temporal/t.rast3d.algebra/t.rast3d.algebra.py \
       temporal/t.vect.algebra/t.vect.algebra.py \
+      temporal/t.downgrade/t.downgrade.py \
       temporal/t.select/t.select.py
     for d in gui lib scripts temporal tools; do
       patchShebangs $d
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
-
   postInstall = ''
-    wrapProgram $out/bin/grass76 \
+    wrapProgram $out/bin/grass78 \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
+    --set GRASS_PYTHON ${python3Packages.python}/bin/${python3Packages.python.executable} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include
