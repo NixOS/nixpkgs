@@ -6078,11 +6078,11 @@ let
 
   DBDSQLite = buildPerlPackage {
     pname = "DBD-SQLite";
-    version = "1.66";
+    version = "1.70";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.66.tar.gz";
-      sha256 = "1zljln5nh61gj3k22a1fv2vhx5l83waizmarwkh77hk6kzzmvrw9";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.70.tar.gz";
+      sha256 = "sha256-QP2N31OeDnc6ek5tN2eUwzAUWfmrAFCXi9z5cRPa/j4=";
     };
 
     propagatedBuildInputs = [ DBI ];
@@ -6100,7 +6100,10 @@ let
       rm -rf $out/${perl.libPrefix}/*/*/auto/share
     '';
 
-    preCheck = "rm t/65_db_config.t"; # do not run failing tests
+    preCheck = ''
+      rm t/65_db_config.t
+      rm t/51_table_column_metadata.t # capilitalization sensitivity with sqlite 3.37
+    '';
 
     meta = with lib; {
       description = "Self Contained SQLite RDBMS in a DBI Driver";
