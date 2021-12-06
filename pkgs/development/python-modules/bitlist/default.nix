@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "bitlist";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LTrn+PCaqob0EGyyv1V1uCBeDQZvIYE1hNPqi4y/zfc=";
+    sha256 = "sha256-PL1ZT1LJCTtUILwenfA6Xk59/LjFISPaCw3IhXFe72o=";
   };
 
   propagatedBuildInputs = [
