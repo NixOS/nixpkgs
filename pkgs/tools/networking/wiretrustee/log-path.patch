@@ -1,0 +1,43 @@
+diff --git a/client/cmd/root.go b/client/cmd/root.go
+index dc5a87a..c1f0b4a 100644
+--- a/client/cmd/root.go
++++ b/client/cmd/root.go
+@@ -42,8 +42,8 @@ func init() {
+ 	stopCh = make(chan int)
+ 	cleanupCh = make(chan struct{})
+ 
+-	defaultConfigPath = "/etc/wiretrustee/config.json"
+-	defaultLogFile = "/var/log/wiretrustee/client.log"
++	defaultConfigPath = "wiretrustee-config.json"
++	defaultLogFile = "wiretrustee-client.log"
+ 	if runtime.GOOS == "windows" {
+ 		defaultConfigPath = os.Getenv("PROGRAMDATA") + "\\Wiretrustee\\" + "config.json"
+ 		defaultLogFile = os.Getenv("PROGRAMDATA") + "\\Wiretrustee\\" + "client.log"
+diff --git a/management/cmd/root.go b/management/cmd/root.go
+index b576106..20ece59 100644
+--- a/management/cmd/root.go
++++ b/management/cmd/root.go
+@@ -38,8 +38,8 @@ func init() {
+ 
+ 	stopCh = make(chan int)
+ 
+-	defaultConfigPath = "/etc/wiretrustee/management.json"
+-	defaultLogFile = "/var/log/wiretrustee/management.log"
++	defaultConfigPath = "wiretrustee-management.json"
++	defaultLogFile = "wiretrustee-management.log"
+ 	if runtime.GOOS == "windows" {
+ 		defaultConfigPath = os.Getenv("PROGRAMDATA") + "\\Wiretrustee\\" + "management.json"
+ 		defaultLogFile = os.Getenv("PROGRAMDATA") + "\\Wiretrustee\\" + "management.log"
+diff --git a/signal/cmd/root.go b/signal/cmd/root.go
+index 0a364a1..5c6f996 100644
+--- a/signal/cmd/root.go
++++ b/signal/cmd/root.go
+@@ -35,7 +35,7 @@ func Execute() error {
+ func init() {
+ 
+ 	stopCh = make(chan int)
+-	defaultLogFile = "/var/log/wiretrustee/signal.log"
++	defaultLogFile = "wiretrustee-signal.log"
+ 	if runtime.GOOS == "windows" {
+ 		defaultLogFile = os.Getenv("PROGRAMDATA") + "\\Wiretrustee\\" + "signal.log"
+ 	}
