@@ -14,7 +14,7 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
 * Format the commit messages in the following way:
 
   ```
-  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
+  ((<pkg-name> | treewide) | nixos/(<module> | treewide)): (from -> to | init at version | refactor | etc)
 
   (Motivation for change. Additional information.)
   ```
@@ -28,6 +28,8 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
   * nixos/hydra: add bazBaz option
 
     Dual baz behavior is needed to do foo.
+  * nixos/treewide: escape pkgs reference in examples and descriptions
+  * treewide: gnome2.gtk -> gtk2
   * nixos/nginx: refactor config generation
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
@@ -41,6 +43,10 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
+
+### Treewide changes
+
+Changes that affect a large portion of the tree should be prefixed with `treewide:` or `nixos/treewide`.
 
 ## Writing good commit messages
 
