@@ -1,7 +1,7 @@
 {lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse}:
 
 stdenv.mkDerivation rec {
-  name = "wiimms-iso-tools";
+  pname = "wiimms-iso-tools";
   version = "3.02a";
 
   src = fetchurl {

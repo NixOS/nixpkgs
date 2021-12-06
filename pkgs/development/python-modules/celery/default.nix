@@ -12,15 +12,6 @@ buildPythonPackage rec {
     sha256 = "b41a590b49caf8e6498a57db628e580d5f8dc6febda0f42de5d783aed5b7f808";
   };
 
-  # click  is only used for the repl, in most cases this shouldn't impact
-  # downstream packages
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "moto==1.3.7" moto
-    substituteInPlace requirements/default.txt \
-      --replace "click>=7.0,<8.0" click
-  '';
-
   propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
 
   checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
