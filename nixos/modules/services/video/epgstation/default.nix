@@ -48,7 +48,7 @@ let
 in
 {
   options.services.epgstation = {
-    enable = mkEnableOption pkgs.epgstation.meta.description;
+    enable = mkEnableOption "EPGStation: DTV Software in Japan";
 
     usePreconfiguredStreaming = mkOption {
       type = types.bool;

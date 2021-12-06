@@ -66,6 +66,15 @@
           <literal>enableParallelBuilding=false</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.claws-mail-gtk2</literal>, representing Claws
+          Mail’s older release version three, was removed in order to
+          get rid of Python 2. Please switch to
+          <literal>claws-mail</literal>, which is Claws Mail’s latest
+          release based on GTK+3 and Python 3.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">

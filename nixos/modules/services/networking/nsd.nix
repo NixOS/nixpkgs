@@ -603,6 +603,7 @@ in
     reuseport = mkOption {
       type = types.bool;
       default = pkgs.stdenv.isLinux;
+      defaultText = literalExpression "pkgs.stdenv.isLinux";
       description = ''
         Whether to enable SO_REUSEPORT on all used sockets. This lets multiple
         processes bind to the same port. This speeds up operation especially

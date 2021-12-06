@@ -144,6 +144,7 @@ in
 
       forwarders = mkOption {
         default = config.networking.nameservers;
+        defaultText = literalExpression "config.networking.nameservers";
         type = types.listOf types.str;
         description = "
           List of servers we should forward requests to.

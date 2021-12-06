@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.43";
+  version = "1.2.44";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nGbULY/QJUv3sk8vYXvh/fhkab/vB3lGGhXRTjt8anI=";
+    sha256 = "f99e076dde0db86a5ba734b48257ffc7355a2b4729cea1ff5cd7638ca93dbd90";
   };
 
   propagatedBuildInputs = [

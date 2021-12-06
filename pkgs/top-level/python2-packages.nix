@@ -132,11 +132,6 @@ with self; with super; {
 
   gdcm = disabled super.gdcm;
 
-  gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
-    pythonPackages = self;
-    pythonSupport = true;
-  })); # gaia isn't supported with python3 and it's not available from pypi
-
   geant4 = disabled super.geant4;
 
   geopy = callPackage ../development/python-modules/geopy/2.nix { };
@@ -642,6 +637,8 @@ with self; with super; {
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
   typing = callPackage ../development/python-modules/typing { };
+
+  tzlocal = callPackage ../development/python-modules/tzlocal/2.nix { };
 
   ujson = callPackage ../development/python-modules/ujson/2.nix { };
 
