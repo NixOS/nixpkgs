@@ -25,7 +25,7 @@ buildPythonPackage rec {
     msgpack
     pyyaml
     typing-extensions
-  ] ++ lib.optionals isPy36 [
+  ] ++ lib.optionals (pythonOlder "3.6") [
     dataclasses
     backports-datetime-fromisoformat
   ];

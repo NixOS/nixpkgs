@@ -8,12 +8,11 @@
 , google-api-core
 , googleapis-common-protos
 , dbt-core
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "0.21.0";
+  version = "1.0.0";
 
   disabled = pythonOlder "3.7";
 
@@ -26,13 +25,9 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0X6I1LNTSlgI/+/RlUxp3zzpPkrJuHIZaR6+s4SzSdM=";
+    hash = "sha256-4iRC8A/OwVXcv+i+NRoRw1kT+27dEb1eUvr8Mhir0S4=";
   };
 
   meta = with lib; {

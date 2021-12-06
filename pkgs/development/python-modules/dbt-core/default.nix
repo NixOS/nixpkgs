@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "0.21.0";
+  version = "1.0.0";
 
   disabled = pythonOlder "3.7";
 
@@ -44,11 +44,16 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Jinja2==2.11.3" "Jinja2>=2.11.3"
+  '';
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dGJsHjKs/D9JESt3Ap2sjdaQLBPb/uGE505ln+KM5Rs=";
+    hash = "sha256-kL3gHQeLHWc9xJC53v/wfn87cCuSDGX+rm+yfgfOc9I=";
   };
 
   meta = with lib; {

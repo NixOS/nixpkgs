@@ -5,12 +5,11 @@
 , boto3
 , dbt-core
 , dbt-postgres
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "0.21.0";
+  version = "1.0.0";
 
   disabled = pythonOlder "3.7";
 
@@ -20,13 +19,9 @@ buildPythonPackage rec {
     dbt-postgres
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecKfDAMnQf3+/7I/k4jr9lnJuCqnCyKIhteedjvb7PI=";
+    hash = "sha256-ZBkhKxxUA1jyubMkCPzmvqyTh8QPgQ2Y33gEOV6Sc78=";
   };
 
   meta = with lib; {
