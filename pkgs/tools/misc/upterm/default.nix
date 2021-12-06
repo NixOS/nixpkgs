@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "upterm";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${version}";
-    sha256 = "sha256-wzDK7iQN/z/M1mTKPCH3c+OjFsavplV/0oMiOe5thuI=";
+    sha256 = "sha256-JxyrH48CXaaa+LkTpUPsT9aq95IuuvDoyfZndrSF1IA=";
   };
 
   vendorSha256 = null;
