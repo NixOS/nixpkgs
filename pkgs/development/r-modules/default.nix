@@ -645,6 +645,7 @@ let
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
     HilbertVisGUI = [ pkgs.gnome2.gtkmm.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
+    DropletUtils = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
