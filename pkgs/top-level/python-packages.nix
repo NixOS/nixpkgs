@@ -1713,6 +1713,8 @@ in {
 
   colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
 
+  colcon-ros = callPackage ../development/python-modules/colcon-ros { };
+
   colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
 
   colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
