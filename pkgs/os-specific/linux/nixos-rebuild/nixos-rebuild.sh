@@ -28,7 +28,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=localhost
+buildHost=
 targetHost=
 remoteSudo=
 # comma separated list of vars to preserve when using sudo
@@ -135,12 +135,6 @@ fi
 
 if [[ -z "$buildHost" && -n "$targetHost" ]]; then
     buildHost="$targetHost"
-fi
-if [ "$targetHost" = localhost ]; then
-    targetHost=
-fi
-if [ "$buildHost" = localhost ]; then
-    buildHost=
 fi
 
 buildHostCmd() {
