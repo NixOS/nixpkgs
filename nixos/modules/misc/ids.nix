@@ -639,7 +639,7 @@ in
       qemu-libvirtd = 301;
       kvm = 302; # default udev rules from systemd requires these
       render = 303; # default udev rules from systemd requires these
-      # zeronet = 304; # removed 2019-01-03
+      sgx = 304; # default udev rules from systemd requires these
       lirc = 305;
       lidarr = 306;
       slurm = 307;

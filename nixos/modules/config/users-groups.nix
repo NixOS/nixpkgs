@@ -558,6 +558,7 @@ in {
       input.gid = ids.gids.input;
       kvm.gid = ids.gids.kvm;
       render.gid = ids.gids.render;
+      sgx.gid = ids.gids.sgx;
       shadow.gid = ids.gids.shadow;
     };
 
