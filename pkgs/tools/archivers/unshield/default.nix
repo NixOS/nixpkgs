@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unshield";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "twogood";
     repo = "unshield";
     rev = version;
-    sha256 = "19wn22vszhci8dfcixx5rliz7phx3lv5ablvhjlclvj75k2vsdqd";
+    sha256 = "sha256-RUGcp6KagDSxeTTssz8tEYix75wFq60MV7Hoh9IPa0A=";
   };
 
 
