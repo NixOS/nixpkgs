@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = if stdenv.cc.isClang then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
 
