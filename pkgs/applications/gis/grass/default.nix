@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
     "--with-liblas=${libLAS}/bin/liblas-config"
+    "--with-zstd"
+    "--with-fftw"
+    "--with-pthread"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
