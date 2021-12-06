@@ -2,13 +2,16 @@
 , python3Packages
 , fetchFromGitHub
 , systemd
-, xrandr }:
+, xrandr
+, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "autorandr";
   version = "1.11";
 
   buildInputs = [ python3Packages.python ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # no wrapper, as autorandr --batch does os.environ.clear()
   buildPhase = ''
@@ -23,7 +26,12 @@ stdenv.mkDerivation rec {
     runHook preInstall
     make install TARGETS='autorandr' PREFIX=$out
 
-    make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
+    # zsh completions exist but currently have no make target, use
+    # installShellCompletions for both
+    # see https://github.com/phillipberndt/autorandr/issues/197
+    installShellCompletion --cmd autorandr \
+        --bash contrib/bash_completion/autorandr \
+        --zsh contrib/zsh_completion/_autorandr
 
     make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
