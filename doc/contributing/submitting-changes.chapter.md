@@ -28,7 +28,7 @@
 - Format the commit in a following way:
 
   ```
-  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
+  ((<pkg-name> | treewide) | nixos/(<module> | treewide)): (from -> to | init at version | refactor | etc)
   Additional information.
   ```
 
@@ -36,6 +36,8 @@
     - `nginx: init at 2.0.1`
     - `firefox: 54.0.1 -> 55.0`
     - `nixos/hydra: add bazBaz option`
+    - `nixos/treewide: escape pkgs reference in examples and descriptions`
+    - `treewide: gnome2.gtk -> gtk2`
     - `nixos/nginx: refactor config generation`
 
 - Test your changes. If you work with
