@@ -1,5 +1,5 @@
 SF_redirect () {
-  redirect
+  redirect 99
   process 'http://[a-z]+[.]dl[.]sourceforge[.]net/' 'mirror://sourceforge/'
   process '[?].*' ''
 }
