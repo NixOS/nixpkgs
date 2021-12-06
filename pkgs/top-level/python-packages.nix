@@ -1713,6 +1713,8 @@ in {
 
   colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
 
+  colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   colorama = callPackage ../development/python-modules/colorama { };
