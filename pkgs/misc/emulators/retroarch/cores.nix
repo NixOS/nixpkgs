@@ -30,7 +30,6 @@
 , pcre
 , pkg-config
 , portaudio
-, python27
 , python3
 , retroarch
 , sfml
@@ -58,7 +57,7 @@ let
     , license
     , src ? null
     , broken ? false
-    , version ? "unstable-2021-11-22"
+    , version ? "unstable-2021-12-06"
     , platforms ? retroarch.meta.platforms
     , ...
     }@args:
@@ -536,7 +535,8 @@ in
     core = "mame2015";
     description = "Port of MAME ~2015 to libretro";
     license = "MAME";
-    extraNativeBuildInputs = [ python27 ];
+    makeFlags = [ "PYTHON=python3" ];
+    extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
     enableParallelBuilding = false;
@@ -544,17 +544,11 @@ in
 
   mame2016 = mkLibRetroCore {
     core = "mame2016";
-    patches = [
-      (fetchpatch {
-        name = "fix_mame_build_on_make-4.3.patch";
-        url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
-        sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
-      })
-    ];
     description = "Port of MAME ~2016 to libretro";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
-    extraNativeBuildInputs = [ python27 ];
+    extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
+    makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -674,7 +668,6 @@ in
 
   pcsx2 = mkLibRetroCore {
     core = "pcsx2";
-    version = "unstable-2021-11-27";
     description = "Port of PCSX2 to libretro";
     license = lib.licenses.gpl3Plus;
     extraNativeBuildInputs = [
