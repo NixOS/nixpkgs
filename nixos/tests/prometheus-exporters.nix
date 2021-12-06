@@ -1018,6 +1018,25 @@ let
       '';
     };
 
+    smartctl = {
+      exporterConfig = {
+        enable = true;
+        devices = [
+          "/dev/vda"
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smartctl-exporter.service")
+        wait_for_open_port("9633")
+        wait_until_succeeds(
+          "curl -sSf 'localhost:9633/metrics'"
+        )
+        wait_until_succeeds(
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
+        )
+      '';
+    };
+
     smokeping = {
       exporterConfig = {
         enable = true;
