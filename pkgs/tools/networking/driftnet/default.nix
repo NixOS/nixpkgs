@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/deiv/driftnet/pull/33/commits/bef5f3509ab5710161e9e21ea960a997eada534f.patch";
       sha256 = "1b7p9fkgp7dxv965l7q7y632s80h3nnrkaqnak2h0hakwv0i4pvm";
     })
+    # https://github.com/deiv/driftnet/issues/37
+    ./libwebsockets-4.3.0.patch
   ];
 
   enableParallelBuilding = true;
