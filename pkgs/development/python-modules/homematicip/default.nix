@@ -5,6 +5,7 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , pytest-aiohttp
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
+
+  patches = [
+    # merged into master, drop next update
+    (fetchpatch {
+      url = "https://github.com/coreGreenberet/homematicip-rest-api/commit/90efb335667e3d462b7f9ef113d2e0b8bb4e96b4.patch";
+      sha256 = "sha256-MHLcf8PROMWBvcVhM/CkUfokIHfIknuYNq4aY4BeSzg=";
+    })
+  ];
 
   propagatedBuildInputs = [
     aenum
