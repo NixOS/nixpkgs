@@ -271,6 +271,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
   qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+  # FIXME qtDocPrefix is not used, docs are installed to share/doc/{config,global}
 
   # debug ninja: ninjaFlags = [ "-d" "explain" ];
 
@@ -764,6 +765,8 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
   nativeBuildInputs = qtbaseDrv.nativeBuildInputs;
   inherit (qtbaseDrv) preHook fix_qt_builtin_paths fix_qt_module_paths; # fixQtModulePaths fixQtBuiltinPaths moveQtDevTools
   inherit (qtbaseDrv) pname version outputs;
+  # TODO inherit all attributes of qtbaseDrv?
+  # also: qtPluginPrefix ...
 
   # pname must have same length in both qtbaseDrv and qtbase, so binary patching is less risky
   src = qtbaseDrv.out;
@@ -1086,21 +1089,35 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     echo "verify that all _IMPORT_PREFIX are replaced done"
     )
 
-    # .* = $$[QT_HOST_DATA/get] -> $dev
-    sed -i -E 's,^(QMAKE_QT_CONFIG) = .*/(mkspecs/qconfig.pri)$,\1 = '$dev'/\2,' $dev/mkspecs/features/qt_config.prf
-
+    # TODO generate qt.conf from buildInputs -> qmake -qtconf /path/to/qt.conf
+    # Qml2Imports is provided by qtdeclarative
     echo "writing $dev/bin/qt.conf"
     cat >$dev/bin/qt.conf <<EOF
+    ; https://doc.qt.io/qt-6/qt-conf.html
+    ; https://wiki.qt.io/Qmake_properties
     [Paths]
+    ; must set Prefix to set other paths
     Prefix = $out
+    HostPrefix = $out
+    Libraries = $out/lib
+    LibraryExecutables = $out/libexec
+    ; fix qmake error: Could not find feature thread
+    ; Data has mkspecs
+    Data = $dev
+    HostData = $dev
+    ArchData = $dev
     Binaries = $dev/bin
     Headers = $dev/include
-    Plugins = $bin/$qtPluginPrefix
-    Qml2Imports = $bin/$qtQmlPrefix
-    Documentation = $dev/$qtDocPrefix
+    Plugins = $bin/${qtbaseDrv.qtPluginPrefix}
+    Documentation = $out/${qtbaseDrv.qtDocPrefix}
+    ; Qml2Imports = (provided by qtdeclarative)
     EOF
 
-    echo "cached build: qtbaseDrv = ${qtbaseDrv}"
+    echo "moving docs to $out/${qtbaseDrv.qtDocPrefix}"
+    mkdir $out/${qtbaseDrv.qtDocPrefix}
+    mv $out/share/doc/* $out/${qtbaseDrv.qtDocPrefix} || true
+
+    echo "used cached build: qtbaseDrv = ${qtbaseDrv}"
 
     echo "out = $out"
     echo "bin = $bin"
