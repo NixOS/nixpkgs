@@ -4,6 +4,7 @@
 , alsa-lib
 , boost
 , buildPackages
+, bzip2
 , cmake
 , curl
 , fetchFromGitHub
@@ -43,8 +44,6 @@
 }:
 
 let
-  d2u = lib.replaceChars [ "-" ] [ "_" ];
-
   hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   getCoreSrc = core:
@@ -59,10 +58,14 @@ let
     , broken ? false
     , version ? "unstable-2021-12-06"
     , platforms ? retroarch.meta.platforms
+      # The resulting core file is based on core name
+      # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
+    , normalizeCore ? true
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation (
       let
+        d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
         finalSrc = if src == null then getCoreSrc core else src;
       in
       (rec {
@@ -402,11 +405,7 @@ in
     description = "Port of FBNeo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
-    postPatch = ''
-      sed -i -e 's:-Wall:-Wall -Wno-format-security:g' src/burner/libretro/Makefile
-    '';
     preBuild = "cd src/burner/libretro";
-    makeFlags = [ "USE_EXPERIMENTAL_FLAGS=1" ];
   };
 
   fceumm = mkLibRetroCore {
@@ -569,17 +568,12 @@ in
   };
 
   mesen-s = mkLibRetroCore {
-    core = "mesens";
-    src = getCoreSrc "mesen-s";
+    core = "mesen-s";
     description = "Port of Mesen-S to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     preBuild = "cd Libretro";
-    postInstall = ''
-      # fix library name to match libretro-core-info
-      mv $coreDir/mesens_libretro${stdenv.hostPlatform.extensions.sharedLibrary} \
-        $coreDir/mesen-s_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
-    '';
+    normalizeCore = false;
   };
 
   meteor = mkLibRetroCore {
@@ -715,11 +709,11 @@ in
     core = "play";
     description = "Port of Play! to libretro";
     license = lib.licenses.bsd2;
-    extraBuildInputs = [ boost ];
-    extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
+    extraBuildInputs = [ boost bzip2 curl openssl icu libGL libGLU xorg.libX11 ];
+    extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
-    cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
-    postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
+    cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
+    postBuild = "cd Source/ui_libretro";
   };
 
   ppsspp = mkLibRetroCore {
@@ -729,8 +723,14 @@ in
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
     extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
     makefile = "Makefile";
-    cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
-    postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
+    cmakeFlags = [
+      "-DLIBRETRO=ON"
+      "-DUSE_SYSTEM_FFMPEG=ON"
+      "-DUSE_SYSTEM_SNAPPY=ON"
+      "-DUSE_SYSTEM_LIBZIP=ON"
+      "-DOpenGL_GL_PREFERENCE=GLVND"
+    ];
+    postBuild = "cd lib";
   };
 
   prboom = mkLibRetroCore {
@@ -842,7 +842,6 @@ in
     cmakeFlags = [
       "-DBUILD_LIBRETRO_CORE=ON"
     ];
-    postPatch = "mkdir -p src/duckstation-libretro";
   };
 
   tgbdual = mkLibRetroCore {
@@ -858,7 +857,7 @@ in
     license = lib.licenses.gpl3Only;
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
-    postBuild = "cd src/";
+    postBuild = "cd src";
   };
 
   tic80 = mkLibRetroCore {
@@ -912,7 +911,7 @@ in
     description = "Port of Yabause to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    # Disable SSE for non-x86. DYNAREC doesn't build on either Aarch64 or x86_64.
+    # Disable SSE for non-x86. DYNAREC doesn't build on aarch64.
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
     preBuild = "cd yabause/src/libretro";
   };
