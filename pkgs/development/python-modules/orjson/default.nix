@@ -15,20 +15,20 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.6.4";
+  version = "3.6.5";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
     rev = version;
-    sha256 = "0xpna70s5v7d4lwsb6ijc0f2rm6p7jqmac9yayx9qb1dasbki6zd";
+    sha256 = "1f8gc62w4hncrz8xkfw730cfqnk5433qswz3rba3pvvd7ldj5658";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0m4f8lc0zwxh4lmxkpxvdd2lc2g3lkq0ymllqbyr31sbxvwnxk56";
+    sha256 = "0jlhzdnfyk7hnn74rz9zbx51sdjs6rwlzfl1g62h58x28xh6m6gb";
   };
 
   format = "pyproject";
