@@ -14,7 +14,7 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   sha256 = {
-    "x86_64-linux" = "sha256-n8i4ZqjugeUfXpTzVgIwVomfPk6HvPEbTZLe/jFgwFg=";
+    "x86_64-linux" = "sha256-/XpG50xO5qooYbEP51MK6H2WEdB0mnFideplnSxoems=";
     "i686-linux" = "sha256-lLGfhW6el2ZOcaykH1kTjGldXo7/0q5O8QnslnDlWAQ=";
   }."${system}" or throwSystem;
 
@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
