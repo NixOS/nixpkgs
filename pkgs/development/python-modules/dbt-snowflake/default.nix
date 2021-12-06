@@ -6,6 +6,7 @@
 , requests
 , cryptography
 , dbt-core
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     snowflake-connector-python
     requests
     cryptography
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   src = fetchPypi {

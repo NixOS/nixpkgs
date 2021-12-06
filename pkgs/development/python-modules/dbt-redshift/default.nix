@@ -5,6 +5,7 @@
 , boto3
 , dbt-core
 , dbt-postgres
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     boto3
     dbt-core
     dbt-postgres
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   src = fetchPypi {

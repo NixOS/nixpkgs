@@ -8,6 +8,8 @@
 , google-api-core
 , googleapis-common-protos
 , dbt-core
+, autopep8
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,6 +18,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  buildInputs = [ autopep8 ];
+
   propagatedBuildInputs = [
     dbt-core
     protobuf
@@ -23,6 +27,10 @@ buildPythonPackage rec {
     google-cloud-bigquery
     google-api-core
     googleapis-common-protos
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   src = fetchPypi {

@@ -5,6 +5,7 @@
 , dbt-core
 , dbt-postgres
 , autopep8
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dbt-core
     dbt-postgres
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   src = fetchPypi {

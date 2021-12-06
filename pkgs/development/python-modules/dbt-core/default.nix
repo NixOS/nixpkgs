@@ -21,6 +21,7 @@
 , idna
 , cffi
 , autopep8
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,10 @@ buildPythonPackage rec {
     requests
     idna
     cffi
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   src = fetchPypi {
