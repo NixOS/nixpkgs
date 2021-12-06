@@ -491,6 +491,7 @@ let
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
     HilbertVisGUI = with pkgs; [ pkg-config which ];
+    textshaping = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -643,6 +644,7 @@ let
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
     HilbertVisGUI = [ pkgs.gnome2.gtkmm.dev ];
+    textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
   };
 
   packagesRequiringX = [
