@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
-  version = "0.24.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
     rev = "v${version}";
-    sha256 = "15l2jvcpb9l8sgdd9zsvxqglf1r3vap0pp9cklpfa9jj0aik6nx9";
+    sha256 = "0ccxslgy8a18xz9yqcw6y6h93scaif1dbwylyafam635yrbmxv04";
   };
 
   disabled = !python3Packages.isPy3k;
