@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deiv/driftnet";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
