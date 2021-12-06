@@ -6,21 +6,22 @@
 , blas
 , gfortran
 , lapack
+, openssl
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "finalfusion-utils";
-  version = "0.13.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "finalfusion";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ME0qDSFD8G492+7ex7VQWh9P76a+tOCo+SJ9n9ZIYUI=";
+    sha256 = "sha256-Wv3K2G542e1bKuJB+dZi0SW4dbopvs7SBohv+zgi5MI=";
   };
 
-  cargoSha256 = "sha256-/rLv2/bcVsmWw+ZfyumDcj0ptHPQBCCYR9O/lVlV+G0=";
+  cargoSha256 = "sha256-oI7bq/yEXP7aMLWGKAecyq1lqq7ZbHtwxX2ldZMFY8I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     blas
     gfortran.cc.lib
     lapack
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
