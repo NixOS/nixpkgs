@@ -2,12 +2,12 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, autopep8
 , protobuf
 , google-cloud-core
 , google-cloud-bigquery
 , google-api-core
 , googleapis-common-protos
+, dbt-core
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
-    autopep8
+    dbt-core
     protobuf
     google-cloud-core
     google-cloud-bigquery

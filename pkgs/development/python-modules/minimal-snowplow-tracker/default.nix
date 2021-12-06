@@ -1,16 +1,15 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pythonOlder
-, psycopg2
+, requests
+, pycontracts
+, six
 , autopep8
 }:
 
 buildPythonPackage rec {
-  pname = "dbt-postgres";
-  version = "0.21.0";
-
-  disabled = pythonOlder "3.7";
+  pname = "minimal-snowplow-tracker";
+  version = "0.0.2";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,11 +18,15 @@ buildPythonPackage rec {
 
   buildInputs = [ autopep8 ];
 
-  propagatedBuildInputs = [ psycopg2 ];
+  propagatedBuildInputs = [
+    requests
+    pycontracts
+    six
+  ];
 
   meta = with lib; {
-    description = "Postgres adpter plugin for dbt";
-    homepage = "https://getdbt.com";
+    description = "Snowplow event tracker for Python";
+    homepage = "http://snowplowanalytics.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ shikanime ];
   };

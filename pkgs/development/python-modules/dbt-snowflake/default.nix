@@ -3,9 +3,9 @@
 , buildPythonPackage
 , pythonOlder
 , snowflake-connector-python
-, autopep8
 , requests
 , cryptography
+, dbt-core
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
-    autopep8
+    dbt-core
     snowflake-connector-python
     requests
     cryptography

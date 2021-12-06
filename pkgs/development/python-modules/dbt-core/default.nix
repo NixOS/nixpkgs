@@ -2,6 +2,24 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, jinja2
+, agate
+, click
+, colorama
+, hologram
+, isodate
+, Logbook
+, mashumaro
+, minimal-snowplow-tracker
+, networkx
+, packaging
+, sqlparse
+, dbt-extractor
+, typing
+, werkzeug
+, requests
+, idna
+, cffi
 , autopep8
 }:
 
@@ -11,7 +29,28 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  propagatedBuildInputs = [ autopep8 ];
+  buildInputs = [ autopep8 ];
+
+  propagatedBuildInputs = [
+    jinja2
+    agate
+    click
+    colorama
+    hologram
+    isodate
+    Logbook
+    mashumaro
+    minimal-snowplow-tracker
+    networkx
+    packaging
+    sqlparse
+    dbt-extractor
+    typing
+    werkzeug
+    requests
+    idna
+    cffi
+  ];
 
   src = fetchPypi {
     inherit pname version;

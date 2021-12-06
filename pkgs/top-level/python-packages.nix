@@ -2119,9 +2119,11 @@ in {
 
   dbt-core = callPackage ../development/python-modules/dbt-core { };
 
-  dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
-
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
+
+  dbt-extractor = callPackage ../development/python-modules/dbt-extractor { };
+
+  dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
 
   dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
 
@@ -5152,6 +5154,8 @@ in {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
+  mashumaro = callPackage ../development/python-modules/mashumaro { };
+
   mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
 
   mastodon-py = callPackage ../development/python-modules/mastodon-py { };
@@ -5302,6 +5306,8 @@ in {
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
+
+  minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
   minimock = callPackage ../development/python-modules/minimock { };
 

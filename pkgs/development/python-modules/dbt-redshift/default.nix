@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , boto3
+, dbt-core
 , dbt-postgres
 }:
 
@@ -14,6 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     boto3
+    dbt-core
     dbt-postgres
   ];
 
