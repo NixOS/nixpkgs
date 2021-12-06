@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ql7idkm916f1wlkqxqmq1i2pc94gbgq6pvb8szhb21icyy5d1y0";
+    sha256 = "0hgv9g17dkrh3zbsx27n80yvkgix9j2x0rgg6d3qsf7hp5j3xw4r";
   };
 
   propagatedBuildInputs = [ mpv requests python-mpv-jsonipc ];
