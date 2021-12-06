@@ -5046,6 +5046,8 @@ in {
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
+  myhome = callPackage ../development/python-modules/myhome { };
+
   myjwt = callPackage ../development/python-modules/myjwt { };
 
   mypy = callPackage ../development/python-modules/mypy { };
