@@ -19,8 +19,16 @@
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/micromata/dave">dave</link>,
+          a totally simple and very easy to configure stand alone WebDAV
+          server. Available as
+          <link linkend="opt-dave.enable">dave</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>

@@ -666,6 +666,7 @@
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
+  ./services/network-filesystems/dave.nix
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/glusterfs.nix
