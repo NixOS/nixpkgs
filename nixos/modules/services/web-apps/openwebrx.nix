@@ -9,6 +9,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.openwebrx;
+      defaultText = literalExpression "pkgs.openwebrx";
       description = "OpenWebRX package to use for the service";
     };
   };

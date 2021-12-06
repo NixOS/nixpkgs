@@ -2,36 +2,28 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, pytz-deprecation-shim
-, pytest-mock
-, pytestCheckHook
+, pytz
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "4.1"; # version needs to be compatible with APScheduler
-
-  disabled = pythonOlder "3.6";
+  version = "2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DygBWsaKXAZyEEAKkZf8XTa6m8P46vHaPL1ZrN/tngk=";
+    sha256 = "643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44";
   };
 
   propagatedBuildInputs = [
-    pytz-deprecation-shim
+    pytz
   ];
 
   checkInputs = [
-    pytest-mock
-    pytestCheckHook
+    mock
   ];
 
-  disabledTests = [
-    "test_conflicting"
-    "test_noconflict"
-    "test_symlink_localtime"
-  ];
+  doCheck = false;
 
   pythonImportsCheck = [ "tzlocal" ];
 
