@@ -646,6 +646,7 @@ let
     HilbertVisGUI = [ pkgs.gnome2.gtkmm.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
+    RMariaDB = [ pkgs.libmysqlclient.dev ];
   };
 
   packagesRequiringX = [
