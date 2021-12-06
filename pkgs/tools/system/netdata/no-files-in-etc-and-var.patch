@@ -28,7 +28,7 @@ diff --git a/collectors/ebpf.plugin/Makefile.am b/collectors/ebpf.plugin/Makefil
 index 18b1fc6c8..b4b0c7852 100644
 --- a/collectors/ebpf.plugin/Makefile.am
 +++ b/collectors/ebpf.plugin/Makefile.am
-@@ -13,7 +13,7 @@ SUFFIXES = .in
+@@ -9,7 +9,7 @@ SUFFIXES = .in
  userebpfconfigdir=$(configdir)/ebpf.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -91,11 +91,15 @@ diff --git a/system/Makefile.am b/system/Makefile.am
 index 5323738c9..06e1b6a73 100644
 --- a/system/Makefile.am
 +++ b/system/Makefile.am
-@@ -20,11 +20,10 @@ include $(top_srcdir)/build/subst.inc
+@@ -19,11 +19,9 @@ include $(top_srcdir)/build/subst.inc
  SUFFIXES = .in
  
  dist_config_SCRIPTS = \
 -    edit-config \
+     $(NULL)
+ 
+ dist_config_DATA = \
+-    .install-type \
      $(NULL)
  
  # Explicitly install directories to avoid permission issues due to umask
