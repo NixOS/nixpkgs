@@ -841,7 +841,7 @@ in
         inherit (cfg) sslCertificate sslCertificateKey enableACME;
         forceSSL = lib.mkDefault tlsEnabled;
 
-        root = "/run/discourse/public";
+        root = "${cfg.package}/share/discourse/public";
 
         locations =
           let
@@ -893,7 +893,7 @@ in
               "~ ^/uploads/" = proxy {
                 extraConfig = cache_1y + ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
                   # custom CSS
                   location ~ /stylesheet-cache/ {
@@ -915,7 +915,7 @@ in
               "~ ^/admin/backups/" = proxy {
                 extraConfig = ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
                 '';
               };
               "~ ^/(svg-sprite/|letter_avatar/|letter_avatar_proxy/|user_avatar|highlight-js|stylesheets|theme-javascripts|favicon/proxied|service-worker)" = proxy {
@@ -942,7 +942,7 @@ in
               };
               "/downloads/".extraConfig = ''
                 internal;
-                alias /run/discourse/public/;
+                alias ${cfg.package}/share/discourse/public/;
               '';
             };
       };
