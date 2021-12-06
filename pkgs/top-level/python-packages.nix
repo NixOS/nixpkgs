@@ -1684,7 +1684,9 @@ in {
   colcon-cd = callPackage ../development/python-modules/colcon-cd { };
 
   colcon-cmake = callPackage ../development/python-modules/colcon-cmake { };
-  
+
+  colcon-common-extensions = callPackage ../development/python-modules/colcon-common-extensions { };
+
   colcon-core = callPackage ../development/python-modules/colcon-core { };
 
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
