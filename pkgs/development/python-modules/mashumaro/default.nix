@@ -7,7 +7,6 @@
 , pyyaml
 , backports-datetime-fromisoformat
 , typing-extensions
-, autopep8
 , isPy36
 }:
 
@@ -19,10 +18,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "276ced7e9e3cb22e5d7c14748384a5cf5d9002257c0ed50c0e075b68011bb6d0";
+    hash = "sha256-NDtuLT5DLjGXNojEyIIdzW70H9MyZLmSr8Suy/0VXxg=";
   };
-
-  buildInputs = [ autopep8 ];
 
   propagatedBuildInputs = [
     msgpack

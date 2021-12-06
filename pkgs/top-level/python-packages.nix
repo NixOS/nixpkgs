@@ -2115,8 +2115,6 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
-  dbt = callPackage ../development/python-modules/dbt { };
-
   dbt-core = callPackage ../development/python-modules/dbt-core { };
 
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
@@ -5188,6 +5186,8 @@ in {
   mautrix = callPackage ../development/python-modules/mautrix { };
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
+
+  maturin = callPackage ../development/python-modules/maturin { };
 
   maxcube-api = callPackage ../development/python-modules/maxcube-api { };
 

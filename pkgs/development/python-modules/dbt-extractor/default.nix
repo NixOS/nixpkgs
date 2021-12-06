@@ -2,22 +2,36 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, autopep8
+, pkg-config
+, rustPlatform
+, libiconv
+, stdenv
+, toml
 }:
 
 buildPythonPackage rec {
-  pname = "dbt-extractor";
+  pname = "dbt_extractor";
   version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "276ced7e9e3cb22e5d7c14748384a5cf5d9002257c0ed50c0e075b68011bb6d0";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-lUxMKxO9pkY3I8IM071GWtPPMGLShOpXE7YF/tz440Q=";
   };
 
-  buildInputs = [ autopep8 ];
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-WGcuNvq5iMhJppNAWSDuGEIfJyRcSOX57PSWNp7TGoU=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  checkInputs = [ toml ];
 
   meta = with lib; {
     description = "Jinja processor utilities for dbt";

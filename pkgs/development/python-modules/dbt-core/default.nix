@@ -17,10 +17,6 @@
 , dbt-extractor
 , typing
 , werkzeug
-, requests
-, idna
-, cffi
-, autopep8
 , pytestCheckHook
 }:
 
@@ -29,8 +25,6 @@ buildPythonPackage rec {
   version = "0.21.0";
 
   disabled = pythonOlder "3.7";
-
-  buildInputs = [ autopep8 ];
 
   propagatedBuildInputs = [
     jinja2
@@ -48,18 +42,13 @@ buildPythonPackage rec {
     dbt-extractor
     typing
     werkzeug
-    requests
-    idna
-    cffi
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "276ced7e9e3cb22e5d7c14748384a5cf5d9002257c0ed50c0e075b68011bb6d0";
+    hash = "sha256-dGJsHjKs/D9JESt3Ap2sjdaQLBPb/uGE505ln+KM5Rs=";
   };
 
   meta = with lib; {
