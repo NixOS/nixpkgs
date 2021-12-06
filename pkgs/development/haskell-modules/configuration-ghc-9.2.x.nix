@@ -193,7 +193,10 @@ self: super: {
   memory = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
     sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
-  }) super.memory_0_16_0;
+  }) (overrideCabal {
+    editedCabalFile = null;
+    revision = null;
+  } super.memory_0_16_0);
 
   # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
   # https://github.com/snoyberg/mono-traversable/issues/192
