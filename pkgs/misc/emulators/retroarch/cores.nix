@@ -804,8 +804,15 @@ in
     description = "Optimized port/rewrite of SNES9x 1.43 to Libretro";
     license = "Non-commercial";
     makefile = "Makefile";
+  };
+
+  snes9x2005-plus = mkLibRetroCore {
+    core = "snes9x2005-plus";
+    src = getCoreSrc "snes9x2005";
+    description = "Optimized port/rewrite of SNES9x 1.43 to Libretro, with Blargg's APU";
+    license = "Non-commercial";
+    makefile = "Makefile";
     makeFlags = [ "USE_BLARGG_APU=1" ];
-    postBuild = "mv snes9x2005_plus_libretro${stdenv.hostPlatform.extensions.sharedLibrary} snes9x2005_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
   snes9x2010 = mkLibRetroCore {
