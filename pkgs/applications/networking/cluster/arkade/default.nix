@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.8.9";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    sha256 = "0jv6pip3ywx8bx7m25fby6kl5irnjxvlpss2wkm615gv9ari21aq";
+    sha256 = "0mdi5cjcs0qzj238lfjqbjgi131r2vxj810zx1gv1lc9y0aq0hkl";
   };
 
   CGO_ENABLED = 0;
@@ -52,5 +52,13 @@ buildGoModule rec {
     description = "Open Source Kubernetes Marketplace";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+      "armv7l-linux"
+      "armv6l-linux"
+    ];
   };
 }

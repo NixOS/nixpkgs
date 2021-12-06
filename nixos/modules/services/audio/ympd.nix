@@ -31,6 +31,7 @@ in {
         port = mkOption {
           type = types.int;
           default = config.services.mpd.network.port;
+          defaultText = literalExpression "config.services.mpd.network.port";
           description = "The port where MPD is listening.";
           example = 6600;
         };

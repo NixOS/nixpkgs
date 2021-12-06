@@ -93,6 +93,7 @@ in
         dashboard = lib.mkOption {
           type = lib.types.bool;
           default = config.services.grafana.enable;
+          defaultText = lib.literalExpression "config.services.grafana.enable";
           description = ''
             Whether the official parsedmarc grafana dashboard should
             be provisioned to the local grafana instance.

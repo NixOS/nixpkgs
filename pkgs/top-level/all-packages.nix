@@ -277,6 +277,8 @@ with pkgs;
 
   corgi = callPackage ../development/tools/corgi { };
 
+  colmena = callPackage ../tools/admin/colmena { };
+
   colobot = callPackage ../games/colobot {};
 
   colorz = callPackage ../tools/misc/colorz { };
@@ -1716,8 +1718,6 @@ with pkgs;
   };
 
   genymotion = callPackage ../development/mobile/genymotion { };
-
-  gaia = callPackage ../development/libraries/gaia { };
 
   galene = callPackage ../servers/web-apps/galene {
     buildGoModule = buildGo115Module;
@@ -13502,7 +13502,7 @@ with pkgs;
   python3 = python39;
   pypy = pypy2;
   pypy2 = pypy27;
-  pypy3 = pypy37;
+  pypy3 = pypy38;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -13552,7 +13552,7 @@ with pkgs;
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy37;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38;
 
   # Python package sets.
   python27Packages = python27.pkgs;
@@ -33412,9 +33412,7 @@ with pkgs;
 
   xzoom = callPackage ../tools/X11/xzoom {};
 
-  yabai = callPackage ../os-specific/darwin/yabai {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa ScriptingBridge;
-  };
+  yabai = callPackage ../os-specific/darwin/yabai { };
 
   yabause = libsForQt5.callPackage ../misc/emulators/yabause {
     freeglut = null;

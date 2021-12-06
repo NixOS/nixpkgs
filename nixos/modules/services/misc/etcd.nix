@@ -17,6 +17,7 @@ in {
     name = mkOption {
       description = "Etcd unique node name.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = types.str;
     };
 

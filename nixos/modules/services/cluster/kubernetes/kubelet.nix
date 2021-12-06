@@ -168,6 +168,7 @@ in
     hostname = mkOption {
       description = "Kubernetes kubelet hostname override.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = str;
     };
 
