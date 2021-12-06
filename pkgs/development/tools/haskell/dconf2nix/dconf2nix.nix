@@ -6,8 +6,8 @@ mkDerivation {
   version = "0.0.8";
   src = fetchgit {
     url = "https://github.com/gvolpe/dconf2nix.git";
-    sha256 = "19jk3p0ys3lbqk21lm37a7alkg2vhnmkvcffjqfxrw8p4737hxid";
-    rev = "6bf3d7d4ca9f553a9e1ba4a70a65640114d230b2";
+    sha256 = "0svckx9xwfz0idy7wav0hmh5n0vnc63dysg46w7mpm8r7rdxxk8q";
+    rev = "7aea3b548f446702897c04cb6766448ca31b609b";
     fetchSubmodules = true;
   };
   isLibrary = true;
