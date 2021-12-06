@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
-, zstd
+, zstd, pdal
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd ]
+  libLAS proj-datumgrid zstd pdal ]
     ++ (with python3Packages; [ python python-dateutil wxPython_4_1 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--with-readline"
     "--with-wxwidgets"
     "--with-netcdf"
+    "--with-pdal"
     "--with-geos"
     "--with-postgres"
     "--with-postgres-libs=${postgresql.lib}/lib/"
