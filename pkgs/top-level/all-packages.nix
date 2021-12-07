@@ -33859,4 +33859,6 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  clickgen = with python3Packages; toPythonApplication clickgen;
 }
