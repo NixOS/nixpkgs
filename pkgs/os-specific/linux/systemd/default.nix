@@ -165,6 +165,7 @@ stdenv.mkDerivation {
     # systemd. With the below patch we mitigate that effect by special casing
     # all our root unit dirs if they are symlinks. This does exactly what we
     # need (AFAICT).
+    # See https://github.com/systemd/systemd/pull/20479 for upsteam discussion.
     ./0019-core-handle-lookup-paths-being-symlinks.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (let
     oe-core = fetchzip {
