@@ -4215,6 +4215,12 @@
     githubId = 37017396;
     name = "gbtb";
   };
+  gdifolco = {
+    email = "gautier.difolco@gmail.com";
+    github = "blackheaven";
+    githubId = 1362807;
+    name = "Gautier Di Folco";
+  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
