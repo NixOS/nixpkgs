@@ -13,11 +13,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48546513faf2eb7901e65a64eba7b653c80106ed00ed9ca3419c3d10b6555a01";
+    sha256 = "sha256-SFRlE/ry63kB5lpk66e2U8gBBu0A7ZyjQZw9ELZVWgE=";
   };
 
   propagatedBuildInputs = [
     croniter
+    tzlocal
   ];
 
   checkInputs = [
