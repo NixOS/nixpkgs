@@ -51,6 +51,10 @@ buildPythonPackage rec {
       --replace "Jinja2==2.11.3" "Jinja2>=2.11.3"
   '';
 
+  checkPhase = ''
+    $out/bin/dbt --help > /dev/null
+  '';
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-kL3gHQeLHWc9xJC53v/wfn87cCuSDGX+rm+yfgfOc9I=";
