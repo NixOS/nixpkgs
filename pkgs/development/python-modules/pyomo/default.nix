@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "5.6.1";
+  version = "5.7.3";
   disabled = isPy27; # unable to import pyutilib.th
 
   src = fetchPypi {
     pname = "Pyomo";
     inherit version;
-    sha256 = "449be9a4c9b3caee7c89dbe5f0e4e5ad0eaeef8be110a860641cd249986e362c";
+    sha256 = "2c4697107477a1b9cc9dad534d8f9c2dc6ee397c47ad44113e257732b83cfc8f";
   };
 
   checkInputs = [ nose ];
