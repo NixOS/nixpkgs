@@ -26555,6 +26555,8 @@ with pkgs;
 
   moc = callPackage ../applications/audio/moc { };
 
+  mod-arpeggiator-lv2 = callPackage ../applications/audio/mod-arpeggiator-lv2 { };
+
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
