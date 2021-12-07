@@ -4138,6 +4138,8 @@ with pkgs;
       go = go_1_15;
     };
 
+    cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
+
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
     kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
