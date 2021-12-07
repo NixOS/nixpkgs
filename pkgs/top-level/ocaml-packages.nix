@@ -135,8 +135,6 @@ let
       then callPackage ../development/ocaml-modules/biniou { }
       else callPackage ../development/ocaml-modules/biniou/1.0.nix { };
 
-    bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
-
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
@@ -390,8 +388,6 @@ let
     ff-sig = callPackage ../development/ocaml-modules/ff/sig.nix { };
 
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
-
-    fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
@@ -1351,8 +1347,6 @@ let
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
-    typerep_p4 = callPackage ../development/ocaml-modules/typerep { };
-
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
@@ -1379,8 +1373,6 @@ let
     uutf = callPackage ../development/ocaml-modules/uutf { };
 
     uuuu = callPackage ../development/ocaml-modules/uuuu { };
-
-    variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vchan = callPackage ../development/ocaml-modules/vchan { };
 
@@ -1482,152 +1474,6 @@ let
       };
       inherit (pkgs) stdenv lib openssl;
     };
-
-    js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
-
-    buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
-
-    ppx_optcomp =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_optcomp
-      else callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
-
-    ppx_compare =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_compare
-      else callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
-
-    ppx_here =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_here
-      else callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
-
-    ppx_sexp_conv =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_sexp_conv
-      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
-
-    ppx_assert =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_assert
-      else callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
-
-    ppx_inline_test =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_inline_test
-      else callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
-
-    ppx_bench =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_bench
-      else callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
-
-    ppx_bin_prot =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_bin_prot
-      else callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
-
-    ppx_custom_printf =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_custom_printf
-      else callPackage ../development/ocaml-modules/janestreet/ppx-custom-printf.nix {};
-
-    ppx_enumerate =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_enumerate
-      else callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
-
-    ppx_fields_conv =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_fields_conv
-      else callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
-
-    ppx_let =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_let
-      else callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
-
-    ppx_pipebang =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_pipebang
-      else callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
-
-    ppx_sexp_message =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_sexp_message
-      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
-
-    ppx_sexp_value =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_sexp_value
-      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
-
-    ppx_typerep_conv =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_typerep_conv
-      else callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
-
-    ppx_variants_conv =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_variants_conv
-      else callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
-
-    ppx_expect =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_expect
-      else callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
-
-    ppx_jane =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_jane
-      else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
-
-
-    # Core sublibs
-    typerep =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.typerep
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/typerep.nix {}
-      else typerep_p4;
-
-    fieldslib =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.fieldslib
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {}
-      else fieldslib_p4;
-
-    sexplib =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.sexplib
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
-      else null;
-
-    variantslib =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.variantslib
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
-      else variantslib_p4;
-
-    bin_prot =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.bin_prot
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
-      else bin_prot_p4;
-
-    core_bench =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.core_bench else
-      callPackage ../development/ocaml-modules/janestreet/core_bench.nix {};
-
-    async_rpc_kernel =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_rpc_kernel
-      else callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
 
     # Apps / from all-packages
 

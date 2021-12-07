@@ -22,13 +22,9 @@ in
 
     package = mkOption {
       description = "Zigbee2mqtt package to use";
-      default = pkgs.zigbee2mqtt.override {
-        dataDir = cfg.dataDir;
-      };
+      default = pkgs.zigbee2mqtt;
       defaultText = literalExpression ''
-        pkgs.zigbee2mqtt {
-          dataDir = services.zigbee2mqtt.dataDir
-        }
+        pkgs.zigbee2mqtt
       '';
       type = types.package;
     };
@@ -41,7 +37,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           homeassistant = config.services.home-assistant.enable;
@@ -83,6 +79,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";
+        Group = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
 

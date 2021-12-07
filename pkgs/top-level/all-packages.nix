@@ -3865,6 +3865,8 @@ with pkgs;
 
   blastem = callPackage ../misc/emulators/blastem { };
 
+  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
+
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
   blueman = callPackage ../tools/bluetooth/blueman { };
@@ -21365,7 +21367,6 @@ with pkgs;
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_6
     postgresql_10
     postgresql_11
     postgresql_12

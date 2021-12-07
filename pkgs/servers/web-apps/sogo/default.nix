@@ -1,5 +1,6 @@
 { gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests }:
+, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
+, oathToolkit }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.3.0";
@@ -12,8 +13,7 @@ gnustep.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config ]
-    ++ lib.optional (openldap != null) openldap;
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit ];
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
@@ -41,7 +41,11 @@ gnustep.stdenv.mkDerivation rec {
     find . -type f -name GNUmakefile -exec sed -i "s:\\$.GNUSTEP_MAKEFILES.:$PWD/makefiles:g" {} +
   '';
 
-  configureFlags = [ "--disable-debug" "--with-ssl=ssl" ];
+  configureFlags = [
+    "--disable-debug"
+    "--with-ssl=ssl"
+    "--enable-mfa"
+  ];
 
   preFixup = ''
     # Create gnustep.conf
