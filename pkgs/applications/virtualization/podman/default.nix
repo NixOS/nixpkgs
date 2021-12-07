@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-VkKFlOm5r+a9+4em1oisjXNwK9mCCCPViql6g0O7PWw=";
+    sha256 = "sha256-SZHonZdUTJisFMjvUBst1HErvKWEcYZYhK++G+S4sEg=";
   };
 
   vendorSha256 = null;
