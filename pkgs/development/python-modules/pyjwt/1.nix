@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "PyJWT";
-  version = "1.7.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
+    sha256 = "b888b4d56f06f6dcd777210c334e69c737be74755d3e5e9ee3fe67dc18a0ee41";
   };
 
   postPatch = ''
