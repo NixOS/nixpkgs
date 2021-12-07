@@ -35,9 +35,12 @@
 , grass
 , withWebKit ? true
 , qtwebkit
+, pdal
+, zstd
 }:
 
 let
+
   pythonBuildInputs = with python3Packages; [
     qscintilla-qt5
     gdal
@@ -51,20 +54,20 @@ let
     requests
     urllib3
     pygments
-    pyqt5
+    pyqt5_with_qtlocation
     sip_4
     owslib
     six
   ];
 in mkDerivation rec {
-  version = "3.16.14";
-  pname = "qgis-ltr-unwrapped";
+  version = "3.22.1";
+  pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-3FUGSBdlhJhhpTPtYuzKOznsC7PJV3kRL9Il2Yryi1Q=";
+    sha256 = "sha256:0hpbbv84lh1m7vrxv8d8x5kxgxcf0dydsvr3r2brgv3b40lpavd4";
   };
 
   passthru = {
@@ -98,6 +101,8 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
     qt3d
+    pdal
+    zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
@@ -110,22 +115,23 @@ in mkDerivation rec {
   # build to use PYQT5_SIP_DIR consistently.
   postPatch = ''
     substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"'
+      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5_with_qtlocation}/${python3Packages.python.sitePackages}/PyQt5/bindings"'
   '';
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DWITH_3D=True"
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DWITH_PDAL=TRUE"
+    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5_with_qtlocation}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
 
-  meta = with lib; {
+  meta = {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lsix sikmir erictapen ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen ];
   };
 }
