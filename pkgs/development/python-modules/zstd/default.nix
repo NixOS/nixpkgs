@@ -1,4 +1,4 @@
-{ lib, pkg-config, fetchPypi, buildPythonPackage
+{ lib, pkg-config, fetchFromGitHub, buildPythonPackage
 , buildPackages
 , zstd, pytest }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "zstd";
   version = "1.5.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8d3388a15135c481b28ca67d079cb5fd79a9691626fd9979e6b4ec00eabb9e79";
+  src = fetchFromGitHub {
+     owner = "sergey-dryabzhinsky";
+     repo = "python-zstd";
+     rev = "v1.5.0.2";
+     sha256 = "1v87syk7ldqm3mv4hmf5d10cprqm4n1qfmf81w8anbg1qn56hd22";
   };
 
   postPatch = ''
