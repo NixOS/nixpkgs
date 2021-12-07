@@ -6,6 +6,9 @@ let
       , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata
 
+      # for JIT support
+      , llvmPackages_latest, nukeReferences, patchelf
+
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
@@ -24,6 +27,7 @@ let
     atLeast = lib.versionAtLeast version;
     icuEnabled = atLeast "10";
     lz4Enabled = atLeast "14";
+    llvmEnabled = atLeast "11";
 
   in stdenv.mkDerivation rec {
     pname = "postgresql";
@@ -47,7 +51,9 @@ let
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optionals icuEnabled [ pkg-config ]
+      ++ lib.optionals llvmEnabled [ llvmPackages_latest.llvm nukeReferences patchelf ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -72,6 +78,7 @@ let
     ] ++ lib.optionals icuEnabled [ "--with-icu" ]
       ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
+      ++ lib.optionals llvmEnabled [ "--with-llvm" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
     patches =
@@ -86,6 +93,14 @@ let
     installTargets = [ "install-world" ];
 
     LC_ALL = "C";
+
+    postPatch =
+      ''
+        # Force lookup of jit stuff in $out instead of $lib
+        substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
+        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
+        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+      '';
 
     postConfigure =
       let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
@@ -114,6 +129,31 @@ let
             fi
           done
         fi
+
+        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
+        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
+        moveToOutput "lib/bitcode" "$out"
+        moveToOutput "lib/llvmjit*" "$out"
+
+        # In the case of JIT support, prevent a retained dependency on clang-wrapper
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${llvmPackages_latest.stdenv.cc}/bin/clang clang
+        nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
+
+        # Stop out depending on the default output of llvm
+        substituteInPlace $out/lib/pgxs/src/Makefile.global \
+          --replace ${llvmPackages_latest.llvm.out}/bin "" \
+          --replace '$(LLVM_BINPATH)/' ""
+
+        # Stop out depending on the -dev output of llvm
+        substituteInPlace $out/lib/pgxs/src/Makefile.global \
+          --replace ${llvmPackages_latest.llvm.dev}/bin/llvm-config llvm-config \
+          --replace -I${llvmPackages_latest.llvm.dev}/include ""
+
+        # Stop lib depending on the -dev output of llvm
+        rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
+        nuke-refs -e $out $out/lib/llvmjit.so
+        # Restore the correct rpath
+        patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
       '';
 
     postFixup = lib.optionalString (!stdenv.isDarwin && stdenv.hostPlatform.libc == "glibc")
@@ -145,7 +185,12 @@ let
       inherit readline psqlSchema;
 
       pkgs = let
-        scope = { postgresql = this; };
+        scope = {
+          postgresql = this;
+          # If postgresql was built with clang, extensions should be built with clang as well; otherwise we see
+          # cc1: error: '-Werror=unguarded-availability-new': no option '-Wunguarded-availability-new'
+          inherit stdenv;
+        };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
       in import ./packages.nix newSelf newSuper;
@@ -217,7 +262,8 @@ in self: {
     sha256 = "sha256-llx/S+lvtk+VgYUsWMTwXDgS1K2CPA8+K9/nd8Fi+Zk=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
-    inherit self;
+    # --with-llvm requires that PostgreSQL is built with clang
+    stdenv = self.pkgs.llvmPackages_latest.stdenv;
   };
 
   postgresql_12 = self.callPackage generic {
@@ -226,6 +272,8 @@ in self: {
     sha256 = "sha256-if2i3jPtBKmFSOQ/PuXxW4gr4XUF1jH+DdGlQKK1bc4=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
+    # --with-llvm requires that PostgreSQL is built with clang
+    stdenv = self.pkgs.llvmPackages_latest.stdenv;
     inherit self;
   };
 
@@ -235,6 +283,8 @@ in self: {
     sha256 = "sha256-m4EGelXtuqvEGKrO9FfdhHdkKCdJlWCwBhWm6mwT9rM=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
+    # --with-llvm requires that PostgreSQL is built with clang
+    stdenv = self.pkgs.llvmPackages_latest.stdenv;
     inherit self;
   };
 
@@ -244,6 +294,8 @@ in self: {
     sha256 = "sha256-TTwQHqeuOJgvBr3HN1i1Nyf7ZALs2TggBvpezHwspB8=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
+    # --with-llvm requires that PostgreSQL is built with clang
+    stdenv = self.pkgs.llvmPackages_latest.stdenv;
     inherit self;
   };
 }

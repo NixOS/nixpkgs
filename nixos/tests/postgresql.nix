@@ -21,6 +21,14 @@ let
     CREATE TABLE xmltest ( doc xml );
     INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
   '';
+
+  jit-test-sql = pkgs.writeText "postgresql-jit-test" ''
+    SET jit_above_cost = 1;
+    SET jit = 1;
+    EXPLAIN ANALYZE SELECT CONCAT('jit result = ', SUM(id)) FROM sth;
+    SELECT CONCAT('jit result = ', SUM(id)) from sth;
+  '';
+
   make-postgresql-test = postgresql-name: postgresql-package: backup-all: makeTest {
     name = postgresql-name;
     meta = with pkgs.lib.maintainers; {
@@ -122,6 +130,14 @@ let
               "zcat ${backupFileBase}.prev.sql.gz | grep '<test>ok</test>'",
           )
 
+      ${optionalString (versionAtLeast postgresql-package.version "11") ''
+        with subtest("Postgresql JIT should work on postgresql >= 11"):
+            output = machine.succeed(
+                "cat ${jit-test-sql} | sudo -u postgres psql"
+            )
+            assert "JIT:" in output
+            assert "jit result = 5" in output
+        ''}
 
       with subtest("Initdb works"):
           machine.succeed("sudo -u postgres initdb -D /tmp/testpostgres2")
