@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-actdiag";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TtuFZOLkig4MULLndDQlrTTx8RiGw34MsjmXoPladMY=";
+    hash = "sha256-PFXUVP/Due/nwg8q2vAiGZuCVhLTLyAL6KSXqofg+B8=";
   };
 
   propagatedBuildInputs = [ sphinx actdiag blockdiag ];
