@@ -1,7 +1,7 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable, Union
 from xml.sax.saxutils import XMLGenerator
 from colorama import Style
 from pathlib import Path
@@ -198,7 +198,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 def _perform_ocr_on_screenshot(
-    screenshot_path: str, model_ids: Iterable[int]
+    screenshot_path: Union[str, Path], model_ids: Iterable[int]
 ) -> List[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
@@ -794,19 +794,21 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
-        word_pattern = re.compile(r"^\w+$")
+        out_dir = Path(os.environ.get("out", ".")).absolute()
+        word_pattern = re.compile(r"^[\w\-]+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
-        tmp = "{}.ppm".format(filename)
+            path = out_dir / f"{filename}.png"
+        else:
+            path = Path(filename)
+        tmp = (path.parent) / (path.name + ".ppm")
 
         with self.nested(
-            "making screenshot {}".format(filename),
-            {"image": os.path.basename(filename)},
+            f"making screenshot {path}",
+            {"image": str(path.parent)},
         ):
-            self.send_monitor_command("screendump {}".format(tmp))
-            ret = subprocess.run("pnmtopng {} > {}".format(tmp, filename), shell=True)
-            os.unlink(tmp)
+            self.send_monitor_command(f"screendump {tmp}")
+            ret = subprocess.run(f"pnmtopng {tmp} > {path}", shell=True)
+            tmp.unlink()
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
@@ -872,7 +874,7 @@ class Machine:
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path = os.path.join(tmpdir, "ppm")
+            screenshot_path = Path(tmpdir) / "ppm"
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
