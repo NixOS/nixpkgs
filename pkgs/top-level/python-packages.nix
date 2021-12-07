@@ -6999,6 +6999,10 @@ in {
     withMultimedia = true;
   };
 
+  pyqt5_with_qtlocation = self.pyqt5.override {
+    withLocation = true;
+  };
+
   /*
     `pyqt5_with_qtwebkit` should not be used by python libraries in
     pkgs/development/python-modules/*. Putting this attribute in
