@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyutilib";
-  version = "5.7.2";
+  version = "5.8.0";
 
   src = fetchPypi {
     pname = "PyUtilib";
     inherit version;
-    sha256 = "0bdb5hlj6kyb9m3xnpxzasfv5psnxfj21qx6md8ym8zkcqyq1qs5";
+    sha256 = "fe31b4d6a96bf1032a2096e9daf5cff6a36a4b6b6ed62dd079e4e1e5e2560e99";
   };
 
   propagatedBuildInputs = [
