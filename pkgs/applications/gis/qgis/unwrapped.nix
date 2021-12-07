@@ -27,6 +27,7 @@
 , qtsensors
 , qca-qt5
 , qtkeychain
+, qt3d
 , qscintilla
 , qtserialport
 , qtxmlpatterns
@@ -96,6 +97,7 @@ in mkDerivation rec {
     qscintilla
     qtserialport
     qtxmlpatterns
+    qt3d
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
@@ -113,6 +115,7 @@ in mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DWITH_3D=True"
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
