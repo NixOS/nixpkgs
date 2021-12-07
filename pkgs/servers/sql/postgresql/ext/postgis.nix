@@ -1,5 +1,5 @@
 { fetchurl
-, lib, stdenv
+, lib, stdenv, llvmPackages_latest
 , perl
 , libxml2
 , postgresql
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ];
+
+  nativeBuildInputs = [ perl pkg-config ]
+    # If building with clang, we need llvm here to prevent the build from failing on `llvm-lto: command not found`
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages_latest.llvm ];
+
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
