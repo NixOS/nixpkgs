@@ -2006,6 +2006,8 @@ in {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deep-translator = callPackage ../development/python-modules/deep-translator { };
+
   deezer-py = callPackage ../development/python-modules/deezer-py { };
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
