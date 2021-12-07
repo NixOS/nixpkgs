@@ -2681,6 +2681,8 @@ with pkgs;
 
   howard-hinnant-date = callPackage ../development/libraries/howard-hinnant-date { };
 
+  datefmt = callPackage ../tools/misc/datefmt { };
+
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
