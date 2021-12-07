@@ -5189,8 +5189,6 @@ in {
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
 
-  maturin = callPackage ../development/python-modules/maturin { };
-
   maxcube-api = callPackage ../development/python-modules/maxcube-api { };
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
