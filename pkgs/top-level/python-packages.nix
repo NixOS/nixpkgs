@@ -1597,6 +1597,8 @@ in {
 
   click-threading = callPackage ../development/python-modules/click-threading { };
 
+  clickgen = callPackage ../development/python-modules/clickgen { };
+
   clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash { };
 
   clickhouse-cli = callPackage ../development/python-modules/clickhouse-cli { };
@@ -10426,6 +10428,4 @@ in {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
-
-  clickgen = callPackage ../development/python-modules/clickgen { };
 }

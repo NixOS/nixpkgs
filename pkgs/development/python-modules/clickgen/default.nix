@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clickgen" ];
 
   postInstall = ''
-    cp clickgen/xcursorgen.so $out/${python.sitePackages}/clickgen/xcursorgen.so
+    install -m644 clickgen/xcursorgen.so $out/${python.sitePackages}/clickgen/xcursorgen.so
   '';
 
   # Tests fail with ${bitmap_error}.
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ful1e5/clickgen";
-    description = "The hassle-free cursor building toolbox 🧰";
+    description = "The hassle-free cursor building toolbox";
     longDescription = ''
       clickgen is API for building X11 and Windows Cursors from
       .png files. clickgen is using anicursorgen and xcursorgen under the hood.
