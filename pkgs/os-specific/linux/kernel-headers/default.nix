@@ -90,6 +90,13 @@ in {
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+
+        # https://bugs.gentoo.org/791364
+        (fetchurl {
+          name = "Use-stddefs.h-instead-of-compiler.h.patch";
+          url = "https://gitweb.gentoo.org/proj/musl.git/plain/sys-kernel/linux-headers/files/0001-Use-stddefs.h-instead-of-compiler.h.patch?id=e9a03616c762b689a02860e17347eb484d14addf";
+          sha256 = "sha256-ei1qKOtQNvtUGIAX1hiq53EkYqq6m11QIrgmoChTcQ8=";
+        })
       ];
     };
 }
