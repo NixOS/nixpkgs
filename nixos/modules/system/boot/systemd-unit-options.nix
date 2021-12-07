@@ -321,6 +321,14 @@ in rec {
       '';
     };
 
+    condition = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed to determine whether the service will start.
+      '';
+    };
+
     restartIfChanged = mkOption {
       type = types.bool;
       default = true;

@@ -273,6 +273,10 @@ let
             ];
           environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
+        (mkIf (config.condition != "")
+          { serviceConfig.ExecCondition =
+              [ (makeJobScript "${name}-condition" config.condition) ];
+          })
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
               [ (makeJobScript "${name}-pre-start" config.preStart) ];
