@@ -11,7 +11,6 @@ use Cwd 'abs_path';
 
 my $out = "@out@";
 
-# FIXME: maybe we should use /proc/1/exe to get the current systemd.
 my $curSystemd = abs_path("/run/current-system/sw/bin");
 
 # To be robust against interruption, record what units need to be started etc.
@@ -25,7 +24,7 @@ my $reloadByActivationFile = "/run/nixos/activation-reload-list";
 my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
 my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
-make_path("/run/nixos", { mode => 0755 });
+make_path("/run/nixos", { mode => oct(755) });
 
 my $action = shift @ARGV;
 
@@ -219,13 +218,17 @@ while (my ($unit, $state) = each %{$activePrev}) {
         }
 
         elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
-            if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
+            if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # Do nothing.  These cannot be restarted directly.
+
+                # Slices and Paths don't have to be restarted since
+                # properties (resource limits and inotify watches)
+                # seem to get applied on daemon-reload.
             } elsif ($unit =~ /\.mount$/) {
                 # Reload the changed mount unit to force a remount.
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+            } elsif ($unit =~ /\.socket$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
@@ -382,12 +385,12 @@ if ($action eq "dry-activate") {
         split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "");
 
     print STDERR "would restart systemd\n" if $restartSystemd;
+    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
+        if scalar(keys %unitsToReload) > 0;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
         if scalar @unitsToStartFiltered;
-    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
-        if scalar(keys %unitsToReload) > 0;
     unlink($dryRestartByActivationFile);
     unlink($dryReloadByActivationFile);
     exit 0;
@@ -400,7 +403,7 @@ if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
     # Use current version of systemctl binary before daemon is reexeced.
-    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop));
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
@@ -485,7 +488,7 @@ unlink($startListFile);
 
 
 # Print failed and new units.
-my (@failed, @new, @restarting);
+my (@failed, @new);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
     if ($state->{state} eq "failed") {
@@ -501,7 +504,9 @@ while (my ($unit, $state) = each %{$activeNew}) {
             push @failed, $unit;
         }
     }
-    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit}) {
+    # Ignore scopes since they are not managed by this script but rather
+    # created and managed by third-party services via the systemd dbus API.
+    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/) {
         push @new, $unit;
     }
 }
