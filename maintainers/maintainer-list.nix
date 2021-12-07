@@ -7675,6 +7675,12 @@
     githubId = 21156022;
     name = "Michal Minář";
   };
+  michzappa = {
+    email = "me@michzappa.com";
+    github = "michzappa";
+    githubId = 59343378;
+    name = "Michael Zappa";
+  };
   mickours = {
     email = "mickours@gmail.com<";
     github = "mickours";
