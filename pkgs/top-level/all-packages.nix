@@ -22305,6 +22305,8 @@ with pkgs;
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
+  kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
+
   kmod = callPackage ../os-specific/linux/kmod { };
 
   kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
