@@ -1,7 +1,3 @@
-// makeCWrapper /path/to/executable \
-    --prefix PATH : /usr/bin/ \
-    --prefix PATH : /usr/local/bin/
-
 #define _GNU_SOURCE         /* See feature_test_macros(7) */
 #include <unistd.h>
 #include <stdlib.h>
@@ -25,6 +21,6 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
 int main(int argc, char **argv) {
     set_env_prefix("PATH", ":", "/usr/bin/");
     set_env_prefix("PATH", ":", "/usr/local/bin/");
-    argv[0] = "/path/to/executable";
-    return execv("/path/to/executable", argv);
+    argv[0] = "/send/me/flags";
+    return execv("/send/me/flags", argv);
 }

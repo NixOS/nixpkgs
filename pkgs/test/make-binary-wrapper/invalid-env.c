@@ -1,7 +1,3 @@
-// makeCWrapper /bad/env/example \
-    --set "=" "TEST1" \
-    --set-default "" "TEST2"
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,6 +9,6 @@ int main(int argc, char **argv) {
     #error Illegal environment variable name `=` (cannot contain `=`)
     assert_success(setenv("", "TEST2", 0));
     #error Environment variable name can't be empty.
-    argv[0] = "/bad/env/example";
-    return execv("/bad/env/example", argv);
+    argv[0] = "/send/me/flags";
+    return execv("/send/me/flags", argv);
 }

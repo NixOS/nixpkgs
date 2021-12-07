@@ -1,7 +1,3 @@
-// makeCWrapper /send/me/flags \
-    --add-flags "-x -y -z" \
-    --add-flags -abc
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>

@@ -1,11 +1,3 @@
-// makeCWrapper /path/to/executable \
-    --argv0 my-wrapper \
-    --set-default MESSAGE HELLO \
-    --prefix PATH : /usr/bin/ \
-    --suffix PATH : /usr/local/bin/ \
-    --add-flags "-x -y -z" \
-    --set MESSAGE2 WORLD
-
 #define _GNU_SOURCE         /* See feature_test_macros(7) */
 #include <unistd.h>
 #include <stdlib.h>
@@ -57,5 +49,5 @@ int main(int argc, char **argv) {
     argv = argv_tmp;
 
     argv[0] = "my-wrapper";
-    return execv("/path/to/executable", argv);
+    return execv("/send/me/flags", argv);
 }
