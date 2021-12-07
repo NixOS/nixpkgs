@@ -418,10 +418,8 @@ let
       ''}
 
       ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
-
       open_with_hardware() {
         local passsphrase
-
           ${if dev.fido2.passwordLess then ''
             export passphrase=""
           '' else ''
@@ -433,7 +431,10 @@ let
             echo "Please move your mouse to create needed randomness."
           ''}
             echo "Waiting for your FIDO2 device..."
-            fido2luks open --pin ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+
+            cryptsetup-askpass
+
+            fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --pin-source=/crypt-ramfs/passphrase --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
           if [ $? -ne 0 ]; then
             echo "No FIDO2 key found, falling back to normal open procedure"
             open_normally
