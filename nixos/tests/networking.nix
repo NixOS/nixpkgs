@@ -489,6 +489,77 @@ let
               client2.wait_until_succeeds("ping -c 1 fc00::2")
         '';
     };
+    gre = let
+      node = { pkgs, ... }: with pkgs.lib; {
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+      };
+    in {
+      name = "GRE";
+      nodes.client1 = args@{ pkgs, ... }:
+        mkMerge [
+          (node args)
+          {
+            virtualisation.vlans = [ 1 2 ];
+            networking = {
+              greTunnels = {
+                greTunnel = {
+                  local = "192.168.2.1";
+                  remote = "192.168.2.2";
+                  dev = "eth2";
+                  type = "tap";
+                };
+              };
+              bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
+              interfaces.eth1.ipv4.addresses = mkOverride 0 [];
+              interfaces.bridge.ipv4.addresses = mkOverride 0 [
+                { address = "192.168.1.1"; prefixLength = 24; }
+              ];
+            };
+          }
+        ];
+      nodes.client2 = args@{ pkgs, ... }:
+        mkMerge [
+          (node args)
+          {
+            virtualisation.vlans = [ 2 3 ];
+            networking = {
+              greTunnels = {
+                greTunnel = {
+                  local = "192.168.2.2";
+                  remote = "192.168.2.1";
+                  dev = "eth1";
+                  type = "tap";
+                };
+              };
+              bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
+              interfaces.eth2.ipv4.addresses = mkOverride 0 [];
+              interfaces.bridge.ipv4.addresses = mkOverride 0 [
+                { address = "192.168.1.2"; prefixLength = 24; }
+              ];
+            };
+          }
+        ];
+      testScript = { ... }:
+        ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test GRE tunnel bridge over VLAN"):
+              client1.wait_until_succeeds("ping -c 1 192.168.1.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+        '';
+    };
     vlan = let
       node = address: { pkgs, ... }: with pkgs.lib; {
         #virtualisation.vlans = [ 1 ];

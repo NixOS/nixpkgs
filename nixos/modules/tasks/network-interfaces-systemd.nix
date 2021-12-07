@@ -18,6 +18,7 @@ let
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
     # TODO: warn the user that any address configured on those interfaces will be useless
@@ -241,6 +242,25 @@ in
         };
         networks = mkIf (sit.dev != null) {
           "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+            tunnel = [ name ];
+          } ]);
+        };
+      })))
+      (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = gre.type;
+          };
+          tunnelConfig =
+            (optionalAttrs (gre.remote != null) {
+              Remote = gre.remote;
+            }) // (optionalAttrs (gre.local != null) {
+              Local = gre.local;
+            });
+        };
+        networks = mkIf (gre.dev != null) {
+          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
             tunnel = [ name ];
           } ]);
         };
