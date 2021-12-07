@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, coreutils }:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = if stdenv.cc.isClang then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
-  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
+  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
