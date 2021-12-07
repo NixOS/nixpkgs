@@ -27779,7 +27779,7 @@ with pkgs;
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
-    withGrass = false;
+    withGrass = true;
   };
 
   qgis = callPackage ../applications/gis/qgis { };
