@@ -204,16 +204,10 @@ let
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
-    tests = let
-      overridableKernel = finalKernel // {
-        override = args:
-          lib.warn (
-            "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
-          ) overridableKernel;
-      };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    tests = [ (nixosTests.kernel-generic.testsForKernel finalKernel) ] ++ kernelTests;
   };
 
-  finalKernel = lib.extendDerivation true passthru kernel;
+  finalKernel = kernel.overrideAttrs (old: {
+    passthru = old.passthru // passthru;
+  });
 in finalKernel
