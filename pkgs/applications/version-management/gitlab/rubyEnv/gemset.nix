@@ -2233,10 +2233,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rm59b6klp97287h01aj8hr12mhsya585as2z1sk8hq2lp51imfn";
+      sha256 = "0qb6bk8gflwid4qrk2i9ndzs5fxycdjvxmhy9w547lglzb5jx19b";
       type = "gem";
     };
-    version = "1.11.8";
+    version = "1.11.10";
   };
   graphql-client = {
     dependencies = ["activesupport" "graphql"];
