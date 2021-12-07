@@ -12,22 +12,14 @@
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-eFhL8Zn8204JRrF69ibPtd7VpFW63i1iVXoGwXHlqps=";
+    sha256 = "sha256-NkAAXYa1bbCNUO0eDM7LQbyC3//RRFAKmEHGH2Dhl/M=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "update-hevm-to-0.47.0.patch";
-      url = "https://github.com/crytic/echidna/commit/25dfdad93d0e0dd822f22a1c1e63a0ecf2b22a23.patch";
-      sha256 = "sha256-dj3Ie+Z4zE1fgROE/KuWZXaH9knsXJi1ai3gu5zyw/E=";
-    })
-  ];
 
   isLibrary = true;
   isExecutable = true;
