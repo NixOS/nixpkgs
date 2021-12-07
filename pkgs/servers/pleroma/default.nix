@@ -3,9 +3,16 @@
 , file, cmake
 , nixosTests, writeText
 , ...
-}:
+}@inputs:
 
-beamPackages.mixRelease rec {
+let
+  beamPackages = inputs.beamPackages // rec {
+    elixir = inputs.beamPackages.elixir_1_12;
+    buildMix = inputs.beamPackages.buildMix.override { inherit elixir; };
+    mixRelease = inputs.beamPackages.mixRelease.override { inherit elixir; };
+  };
+
+in beamPackages.mixRelease rec {
   pname = "pleroma";
   version = "2.4.1";
 
