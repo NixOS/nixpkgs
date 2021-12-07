@@ -51,14 +51,14 @@ wrapProgramBinary() {
     makeBinaryWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 
-# Generate source code for the wrapper in such a way that the wrapper source code
+# Generate source code for the wrapper in such a way that the wrapper inputs
 # will still be readable even after compilation
 # makeDocumentedCWrapper EXECUTABLE ARGS
 # ARGS: same as makeBinaryWrapper
 makeDocumentedCWrapper() {
     local src docs
     src=$(makeCWrapper "$@")
-    docs=$(documentationString "$src")
+    docs=$(docstring "$@")
     printf '%s\n\n' "$src"
     printf '%s\n' "$docs"
 }
@@ -66,7 +66,7 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
-    local argv0 inherit_argv0 n params cmd main flagsBefore flags executable params length
+    local argv0 inherit_argv0 n params cmd main flagsBefore flags executable length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -238,14 +238,6 @@ unsetEnv() {
     assertValidEnvName "$1"
 }
 
-# Put the entire source code into const char* SOURCE_CODE to make it readable after compilation.
-# documentationString SOURCE_CODE
-documentationString() {
-    local docs
-    docs=$(escapeStringLiteral $'\n----------\n// This binary wrapper was compiled from the following generated C-code:\n'"$1"$'\n----------\n')
-    printf '%s' "const char * SOURCE_CODE = \"$docs\";"
-}
-
 # Makes it safe to insert STRING within quotes in a C String Literal.
 # escapeStringLiteral STRING
 escapeStringLiteral() {
@@ -294,4 +286,85 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
     }
 }
 "
+}
+
+# Embed a C string which shows up as readable text in the compiled binary wrapper
+# documentationString ARGS
+docstring() {
+    printf '%s' "const char * DOCSTRING = \"$(escapeStringLiteral "
+
+
+# ------------------------------------------------------------------------------------
+# The C-code for this binary wrapper has been generated using the following command:
+
+
+makeCWrapper $(formatArgs "$@")
+
+
+# (Use \`nix-shell -p makeBinaryWrapper\` to get access to makeCWrapper in your shell)
+# ------------------------------------------------------------------------------------
+
+
+")\";"
+}
+
+# formatArgs EXECUTABLE ARGS
+formatArgs() {
+    printf '%s' "$1"
+    shift
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --set)
+                formatArgsLine 2 "$@"
+                shift 2
+            ;;
+            --set-default)
+                formatArgsLine 2 "$@"
+                shift 2
+            ;;
+            --unset)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --prefix)
+                formatArgsLine 3 "$@"
+                shift 3
+            ;;
+            --suffix)
+                formatArgsLine 3 "$@"
+                shift 3
+            ;;
+            --chdir)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --add-flags)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --argv0)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --inherit-argv0)
+                formatArgsLine 0 "$@"
+            ;;
+        esac
+        shift
+    done
+    printf '%s\n' ""
+}
+
+# formatArgsLine ARG_COUNT ARGS
+formatArgsLine() {
+    local ARG_COUNT LENGTH
+    ARG_COUNT=$1
+    LENGTH=$#
+    shift
+    printf '%s' $' \\\n    '"$1"
+    shift
+    while [ "$ARG_COUNT" -gt $((LENGTH - $# - 2)) ]; do
+        printf ' %s' "${1@Q}"
+        shift
+    done
 }
