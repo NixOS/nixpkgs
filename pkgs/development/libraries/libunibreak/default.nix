@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libunibreak";
-  version = "5_0";
+  version = "5.0";
 
   src = let
       rev_version = lib.replaceStrings ["."] ["_"] version;
