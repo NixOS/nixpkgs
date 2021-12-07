@@ -746,7 +746,7 @@ in
                 default = false;
                 type = types.bool;
                 description = ''
-                  For use with the `passwordLess` option if your device requires a pin.
+                  For use with the <literal>passwordLess</literal> option if your device requires a pin.
 
                   Enable only when your device is PIN protected, such as is configurable with <link xlink:href="https://www.yubico.com/">Yubikey</link>.
                 '';
