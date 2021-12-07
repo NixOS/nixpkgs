@@ -405,6 +405,7 @@ in
   rss2email = handleTest ./rss2email.nix {};
   rsyslogd = handleTest ./rsyslogd.nix {};
   rxe = handleTest ./rxe.nix {};
+  sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sanoid = handleTest ./sanoid.nix {};
