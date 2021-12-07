@@ -340,7 +340,7 @@ stdenv.mkDerivation {
     # TODO: consider using stress-tester and integration-test.
 
     # Match the wrapped version of Swift to be installed.
-    export LIBRARY_PATH=${icu}/lib:${libgcc}/lib:${libuuid.out}/lib:$l
+    export LIBRARY_PATH=${icu}/lib:${libgcc}/lib:${libuuid.lib}/lib:$l
 
     checkTarget=check-swift-all-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}
     ninjaFlags='-C buildbot_linux/swift-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}'
@@ -363,13 +363,13 @@ stdenv.mkDerivation {
       --set CC $out/bin/clang \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
       --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include \
-      --suffix LIBRARY_PATH : ${icu}/lib:${libgcc}/lib:${libuuid.out}/lib
+      --suffix LIBRARY_PATH : ${icu}/lib:${libgcc}/lib:${libuuid.lib}/lib
 
     wrapProgram $out/bin/swiftc \
       --set CC $out/bin/clang \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
       --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include \
-      --suffix LIBRARY_PATH : ${icu}/lib:${libgcc}/lib:${libuuid.out}/lib
+      --suffix LIBRARY_PATH : ${icu}/lib:${libgcc}/lib:${libuuid.lib}/lib
   '';
 
   # Hack to avoid build and install directories in RPATHs.
