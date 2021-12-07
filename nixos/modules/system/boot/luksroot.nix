@@ -432,11 +432,28 @@ let
           ''}
             echo "Waiting for your FIDO2 device..."
 
-            echo -n "Pin for Fido2 key: "
             pin=
-            IFS= read -t 1 -r pin
-            echo -n "$pin" > /crypt-ramfs/passphrase
-            fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --pin-source=/crypt-ramfs/passphrase --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+            while true; do
+                if [ -e /crypt-ramfs/passphrase ]; then
+                    echo "reused"
+                    pin=$(cat /crypt-ramfs/passphrase)
+                    break
+                else
+                    # Try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r pin
+                    if [ -n "$pin" ]; then
+                       ${if luks.reusePassphrases then ''
+                         # Remember it for the next device
+                         echo -n "$pin" > /crypt-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
+            fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --pin --pin-source=/crypt-ramfs/passphrase --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
             rm /crypt-ramfs/passphrase
           if [ $? -ne 0 ]; then
             echo "No FIDO2 key found, falling back to normal open procedure"
