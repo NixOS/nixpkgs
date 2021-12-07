@@ -1,6 +1,6 @@
 { python3Packages
 , lib
-, fetchurl
+, fetchFromGitHub
 , perlPackages
 , gettext
 , gtk3
@@ -14,16 +14,15 @@
 }:
 
 let
-  name = "indicator-sound-switcher";
-  version = "2.3.6";
 in
-python3Packages.buildPythonApplication {
-#python3Packages.buildPythonPackage {
-  pname = name;
-  inherit version;
-  src = fetchurl {
-    url = "https://github.com/yktoo/${name}/archive/v${version}.tar.gz";
-    sha256 = "sha256:0xrywmppzrr4x6hhlsgrhbh516djzb04ms717vfbpycy7316arvr";
+python3Packages.buildPythonApplication rec {
+  pname = "indicator-sound-switcher";
+  version = "2.3.6";
+  src = fetchFromGitHub {
+    owner = "yktoo";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "APU8Y0xUhRd9RbMSG9TD0TBvFLu/VlLGauf56z8gZDw=";
   };
 
   nativeBuildInputs = [
