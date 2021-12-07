@@ -75,3 +75,10 @@ as [Trezor](https://trezor.io/).
 ```nix
 boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess = true;
 ```
+
+With a passwordless setup described above, you can enable `askForPin` if your
+device requires asking for a PIN, such as [Yubikey](https://www.yubico.com/).
+
+```nix
+boot.initrd.luks.devices."/dev/sda2".fido2.askForPin = true;
+```
