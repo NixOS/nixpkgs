@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "1.0.1";
+  version = "1.0.4";
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    sha256 = "1i01i5ab06ic11na13gcacrlcs2ab6rmaii0yz0x06z5ynnljn6s";
+    sha256 = "c93eee5a98bcd28634a4ec657ab62c46d25fa384300811e5a925d9c4d98b9540";
   };
 
   buildInputs = [ pytest ];
