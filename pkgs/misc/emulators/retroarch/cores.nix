@@ -4,6 +4,7 @@
 , alsa-lib
 , boost
 , buildPackages
+, bzip2
 , cmake
 , curl
 , fetchFromGitHub
@@ -30,7 +31,6 @@
 , pcre
 , pkg-config
 , portaudio
-, python27
 , python3
 , retroarch
 , sfml
@@ -44,8 +44,6 @@
 }:
 
 let
-  d2u = lib.replaceChars [ "-" ] [ "_" ];
-
   hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   getCoreSrc = core:
@@ -58,12 +56,16 @@ let
     , license
     , src ? null
     , broken ? false
-    , version ? "unstable-2021-11-22"
+    , version ? "unstable-2021-12-06"
     , platforms ? retroarch.meta.platforms
+      # The resulting core file is based on core name
+      # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
+    , normalizeCore ? true
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation (
       let
+        d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
         finalSrc = if src == null then getCoreSrc core else src;
       in
       (rec {
@@ -403,11 +405,7 @@ in
     description = "Port of FBNeo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
-    postPatch = ''
-      sed -i -e 's:-Wall:-Wall -Wno-format-security:g' src/burner/libretro/Makefile
-    '';
     preBuild = "cd src/burner/libretro";
-    makeFlags = [ "USE_EXPERIMENTAL_FLAGS=1" ];
   };
 
   fceumm = mkLibRetroCore {
@@ -490,11 +488,6 @@ in
     description = "Port of MAME to libretro";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
-    postPatch = ''
-      # Prevent the failure during the parallel building of:
-      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
-      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
-    '';
     makefile = "Makefile.libretro";
   };
 
@@ -536,7 +529,8 @@ in
     core = "mame2015";
     description = "Port of MAME ~2015 to libretro";
     license = "MAME";
-    extraNativeBuildInputs = [ python27 ];
+    makeFlags = [ "PYTHON=python3" ];
+    extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
     enableParallelBuilding = false;
@@ -544,17 +538,11 @@ in
 
   mame2016 = mkLibRetroCore {
     core = "mame2016";
-    patches = [
-      (fetchpatch {
-        name = "fix_mame_build_on_make-4.3.patch";
-        url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
-        sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
-      })
-    ];
     description = "Port of MAME ~2016 to libretro";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
-    extraNativeBuildInputs = [ python27 ];
+    extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
+    makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -580,17 +568,12 @@ in
   };
 
   mesen-s = mkLibRetroCore {
-    core = "mesens";
-    src = getCoreSrc "mesen-s";
+    core = "mesen-s";
     description = "Port of Mesen-S to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     preBuild = "cd Libretro";
-    postInstall = ''
-      # fix library name to match libretro-core-info
-      mv $coreDir/mesens_libretro${stdenv.hostPlatform.extensions.sharedLibrary} \
-        $coreDir/mesen-s_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
-    '';
+    normalizeCore = false;
   };
 
   meteor = mkLibRetroCore {
@@ -674,7 +657,6 @@ in
 
   pcsx2 = mkLibRetroCore {
     core = "pcsx2";
-    version = "unstable-2021-11-27";
     description = "Port of PCSX2 to libretro";
     license = lib.licenses.gpl3Plus;
     extraNativeBuildInputs = [
@@ -727,11 +709,11 @@ in
     core = "play";
     description = "Port of Play! to libretro";
     license = lib.licenses.bsd2;
-    extraBuildInputs = [ boost ];
-    extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
+    extraBuildInputs = [ boost bzip2 curl openssl icu libGL libGLU xorg.libX11 ];
+    extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
-    cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
-    postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
+    cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
+    postBuild = "cd Source/ui_libretro";
   };
 
   ppsspp = mkLibRetroCore {
@@ -741,8 +723,14 @@ in
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
     extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
     makefile = "Makefile";
-    cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
-    postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
+    cmakeFlags = [
+      "-DLIBRETRO=ON"
+      "-DUSE_SYSTEM_FFMPEG=ON"
+      "-DUSE_SYSTEM_SNAPPY=ON"
+      "-DUSE_SYSTEM_LIBZIP=ON"
+      "-DOpenGL_GL_PREFERENCE=GLVND"
+    ];
+    postBuild = "cd lib";
   };
 
   prboom = mkLibRetroCore {
@@ -811,8 +799,15 @@ in
     description = "Optimized port/rewrite of SNES9x 1.43 to Libretro";
     license = "Non-commercial";
     makefile = "Makefile";
+  };
+
+  snes9x2005-plus = mkLibRetroCore {
+    core = "snes9x2005-plus";
+    src = getCoreSrc "snes9x2005";
+    description = "Optimized port/rewrite of SNES9x 1.43 to Libretro, with Blargg's APU";
+    license = "Non-commercial";
+    makefile = "Makefile";
     makeFlags = [ "USE_BLARGG_APU=1" ];
-    postBuild = "mv snes9x2005_plus_libretro${stdenv.hostPlatform.extensions.sharedLibrary} snes9x2005_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
   snes9x2010 = mkLibRetroCore {
@@ -847,7 +842,6 @@ in
     cmakeFlags = [
       "-DBUILD_LIBRETRO_CORE=ON"
     ];
-    postPatch = "mkdir -p src/duckstation-libretro";
   };
 
   tgbdual = mkLibRetroCore {
@@ -863,7 +857,7 @@ in
     license = lib.licenses.gpl3Only;
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
-    postBuild = "cd src/";
+    postBuild = "cd src";
   };
 
   tic80 = mkLibRetroCore {
@@ -917,7 +911,7 @@ in
     description = "Port of Yabause to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    # Disable SSE for non-x86. DYNAREC doesn't build on either Aarch64 or x86_64.
+    # Disable SSE for non-x86. DYNAREC doesn't build on aarch64.
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
     preBuild = "cd yabause/src/libretro";
   };

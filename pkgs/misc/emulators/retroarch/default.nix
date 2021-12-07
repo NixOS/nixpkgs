@@ -36,23 +36,22 @@
 with lib;
 
 let
-  mainVersion = "1.9.13";
-  revision = "2";
+  version = "1.9.14";
   libretroSuperSrc = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-jM+iXNSCpJy4wOk1S72G1UjNGBzejyhs5LFFWCFjs2c=";
-    rev = "v${mainVersion}";
+    sha256 = "sha256-C2PiBcN5r9NDxFWFE1pytSGR1zq9E5aVt6QUf5aJ7I0=";
+    rev = "v${version}";
   };
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "${lib.concatStringsSep "." [ mainVersion revision ]}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-fehHchn+o9QM2wIK6zYamnbFvQda32Gw0rJk8Orx00U=";
+    sha256 = "sha256-H2fCA1sM8FZfVnLxBjnKe7RjHJNAn/Antxlos5oFFSY=";
     rev = "v${version}";
   };
 
