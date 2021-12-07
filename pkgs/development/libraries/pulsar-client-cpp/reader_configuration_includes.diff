@@ -1,0 +1,13 @@
+diff --git a/include/pulsar/c/reader_configuration.h b/include/pulsar/c/reader_configuration.h
+index 9d07476f82a..cc8436cdc46 100644
+--- a/include/pulsar/c/reader_configuration.h
++++ b/include/pulsar/c/reader_configuration.h
+@@ -20,6 +20,8 @@
+ #pragma once
+ 
+ #include <pulsar/defines.h>
++#include <pulsar/c/message.h>
++#include <pulsar/c/reader.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {

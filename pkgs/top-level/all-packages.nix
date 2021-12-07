@@ -19214,6 +19214,8 @@ with pkgs;
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
+  pulsar-client-cpp = callPackage ../development/libraries/pulsar-client-cpp { };
+
   pylode = callPackage ../misc/pylode {};
 
   python-qt = callPackage ../development/libraries/python-qt {
