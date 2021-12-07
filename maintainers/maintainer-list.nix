@@ -1,53 +1,53 @@
 /* List of NixOS maintainers.
-  ```nix
-  handle = {
-  # Required
-  name = "Your name";
-  email = "address@example.org";
+    ```nix
+    handle = {
+      # Required
+      name = "Your name";
+      email = "address@example.org";
 
-  # Optional
-  matrix = "@user:example.org";
-  github = "GithubUsername";
-  githubId = your-github-id;
-  keys = [{
-  longkeyid = "rsa2048/0x0123456789ABCDEF";
-  fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
-  }];
-  };
-  ```
+      # Optional
+      matrix = "@user:example.org";
+      github = "GithubUsername";
+      githubId = your-github-id;
+      keys = [{
+        longkeyid = "rsa2048/0x0123456789ABCDEF";
+        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
+      }];
+    };
+    ```
 
-  where
+    where
 
-  - `handle` is the handle you are going to use in nixpkgs expressions,
-  - `name` is your, preferably real, name,
-  - `email` is your maintainer email address,
-  - `matrix` is your Matrix user ID,
-  - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
-  - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
-  - `keys` is a list of your PGP/GPG key IDs and fingerprints.
+    - `handle` is the handle you are going to use in nixpkgs expressions,
+    - `name` is your, preferably real, name,
+    - `email` is your maintainer email address,
+    - `matrix` is your Matrix user ID,
+    - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
+    - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
+    - `keys` is a list of your PGP/GPG key IDs and fingerprints.
 
-  `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
+    `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
-  If `github` begins with a numeral, `handle` should be prefixed with an underscore.
-  ```nix
-  _1example = {
-  github = "1example";
-  };
-  ```
+    If `github` begins with a numeral, `handle` should be prefixed with an underscore.
+    ```nix
+    _1example = {
+      github = "1example";
+    };
+    ```
 
-  Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
+    Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
 
-  To get the required PGP/GPG values for a key run
-  ```shell
-  gpg --keyid-format 0xlong --fingerprint <email> | head -n 2
-  ```
+    To get the required PGP/GPG values for a key run
+    ```shell
+    gpg --keyid-format 0xlong --fingerprint <email> | head -n 2
+    ```
 
-  !!! Note that PGP/GPG values stored here are for informational purposes only, don't use this file as a source of truth.
+    !!! Note that PGP/GPG values stored here are for informational purposes only, don't use this file as a source of truth.
 
-  More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
+    More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
-  Please keep the list alphabetically sorted.
-  See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
+    Please keep the list alphabetically sorted.
+    See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 */
 {
   _0qq = {
@@ -277,6 +277,12 @@
     github = "adolfogc";
     githubId = 1250775;
     name = "Adolfo E. García Castro";
+  };
+  AdsonCicilioti = {
+    name = "Adson Cicilioti";
+    email = "adson.cicilioti@live.com";
+    github = "AdsonCicilioti";
+    githubId = 6278398;
   };
   adsr = {
     email = "as@php.net";
@@ -6190,7 +6196,7 @@
     keys = [{
       longkeyid = "rsa4096/0x7248991EFA8EFBEE";
       fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
-    }];
+     }];
   };
   kiwi = {
     email = "envy1988@gmail.com";
@@ -11205,10 +11211,10 @@
     name = "Justus K";
   };
   SubhrajyotiSen = {
-    email = "subhrajyoti12@gmail.com";
-    github = "SubhrajyotiSen";
-    githubId = 12984845;
-    name = "Subhrajyoti Sen";
+      email = "subhrajyoti12@gmail.com";
+      github = "SubhrajyotiSen";
+      githubId = 12984845;
+      name = "Subhrajyoti Sen";
   };
   suhr = {
     email = "suhr@i2pmail.org";
@@ -13353,11 +13359,5 @@
     email = "nix.victor@0x23.dk";
     github = "vdot0x23";
     githubId = 40716069;
-  };
-  AdsonCicilioti = {
-    name = "Adson Cicilioti";
-    email = "adson.cicilioti@live.com";
-    github = "AdsonCicilioti";
-    githubId = "6278398";
   };
 }
