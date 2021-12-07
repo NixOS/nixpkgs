@@ -273,6 +273,8 @@ with pkgs;
 
   corgi = callPackage ../development/tools/corgi { };
 
+  colmena = callPackage ../tools/admin/colmena { };
+
   colobot = callPackage ../games/colobot {};
 
   colorz = callPackage ../tools/misc/colorz { };
@@ -1265,7 +1267,8 @@ with pkgs;
 
   arduino-cli = callPackage ../development/embedded/arduino/arduino-cli { };
 
-  arduino-core = callPackage ../development/embedded/arduino/arduino-core { };
+  arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
+  arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
   arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
@@ -5893,7 +5896,7 @@ with pkgs;
 
   google-clasp = callPackage ../development/misc/google-clasp { };
 
-  google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
+  google-compute-engine = with python38.pkgs; toPythonApplication google-compute-engine;
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
 
