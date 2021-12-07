@@ -5,6 +5,7 @@
 , pyside2
 , johnnycanencrypt
 , pythonOlder
+, wrapQtAppsHook
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,15 @@ buildPythonPackage rec {
     johnnycanencrypt
     pyside2
   ];
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
+
+  dontWrapQtApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   doCheck = false;
 
