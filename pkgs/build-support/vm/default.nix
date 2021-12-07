@@ -90,6 +90,10 @@ rec {
     done
 
     mount -t devtmpfs devtmpfs /dev
+    ln -s /proc/self/fd /dev/fd
+    ln -s /proc/self/fd/0 /dev/stdin
+    ln -s /proc/self/fd/1 /dev/stdout
+    ln -s /proc/self/fd/2 /dev/stderr
 
     ifconfig lo up
 
