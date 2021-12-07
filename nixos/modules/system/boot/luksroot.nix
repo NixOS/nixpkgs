@@ -432,9 +432,12 @@ let
           ''}
             echo "Waiting for your FIDO2 device..."
 
-            cryptsetup-askpass
-
+            echo -n "Pin for Fido2 key: "
+            pin=
+            IFS= read -t 1 -r pin
+            echo -n "$pin" > /crypt-ramfs/passphrase
             fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --pin-source=/crypt-ramfs/passphrase --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+            rm /crypt-ramfs/passphrase
           if [ $? -ne 0 ]; then
             echo "No FIDO2 key found, falling back to normal open procedure"
             open_normally
