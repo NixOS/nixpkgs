@@ -1,4 +1,4 @@
-{ lib, beamPackages, overrides ? (x: y: {}) }:
+{ lib, beamPackages, elixir, overrides ? (x: y: {}) }:
 
 let
   buildRebar3 = lib.makeOverridable beamPackages.buildRebar3;
@@ -22,6 +22,7 @@ let
     };
 
     base62 = buildMix rec {
+      inherit elixir;
       name = "base62";
       version = "1.2.2";
 
@@ -48,6 +49,7 @@ let
     };
 
     bbcode_pleroma = buildMix rec {
+      inherit elixir;
       name = "bbcode_pleroma";
       version = "0.2.0";
 
@@ -61,6 +63,7 @@ let
     };
 
     bcrypt_elixir = buildMix rec {
+      inherit elixir;
       name = "bcrypt_elixir";
       version = "2.3.0";
 
@@ -74,6 +77,7 @@ let
     };
 
     benchee = buildMix rec {
+      inherit elixir;
       name = "benchee";
       version = "1.0.1";
 
@@ -87,6 +91,7 @@ let
     };
 
     bunt = buildMix rec {
+      inherit elixir;
       name = "bunt";
       version = "0.2.0";
 
@@ -100,6 +105,7 @@ let
     };
 
     cachex = buildMix rec {
+      inherit elixir;
       name = "cachex";
       version = "3.3.0";
 
@@ -113,6 +119,7 @@ let
     };
 
     calendar = buildMix rec {
+      inherit elixir;
       name = "calendar";
       version = "1.0.0";
 
@@ -126,6 +133,7 @@ let
     };
 
     castore = buildMix rec {
+      inherit elixir;
       name = "castore";
       version = "0.1.10";
 
@@ -152,6 +160,7 @@ let
     };
 
     combine = buildMix rec {
+      inherit elixir;
       name = "combine";
       version = "0.10.0";
 
@@ -165,6 +174,7 @@ let
     };
 
     comeonin = buildMix rec {
+      inherit elixir;
       name = "comeonin";
       version = "5.3.2";
 
@@ -178,6 +188,7 @@ let
     };
 
     connection = buildMix rec {
+      inherit elixir;
       name = "connection";
       version = "1.1.0";
 
@@ -191,6 +202,7 @@ let
     };
 
     cors_plug = buildMix rec {
+      inherit elixir;
       name = "cors_plug";
       version = "2.0.3";
 
@@ -243,6 +255,7 @@ let
     };
 
     credo = buildMix rec {
+      inherit elixir;
       name = "credo";
       version = "1.5.5";
 
@@ -256,6 +269,7 @@ let
     };
 
     crontab = buildMix rec {
+      inherit elixir;
       name = "crontab";
       version = "1.1.8";
 
@@ -282,6 +296,7 @@ let
     };
 
     db_connection = buildMix rec {
+      inherit elixir;
       name = "db_connection";
       version = "2.4.0";
 
@@ -295,6 +310,7 @@ let
     };
 
     decimal = buildMix rec {
+      inherit elixir;
       name = "decimal";
       version = "2.0.0";
 
@@ -308,6 +324,7 @@ let
     };
 
     deep_merge = buildMix rec {
+      inherit elixir;
       name = "deep_merge";
       version = "1.0.0";
 
@@ -321,6 +338,7 @@ let
     };
 
     earmark = buildMix rec {
+      inherit elixir;
       name = "earmark";
       version = "1.4.15";
 
@@ -334,6 +352,7 @@ let
     };
 
     earmark_parser = buildMix rec {
+      inherit elixir;
       name = "earmark_parser";
       version = "1.4.13";
 
@@ -360,6 +379,7 @@ let
     };
 
     ecto = buildMix rec {
+      inherit elixir;
       name = "ecto";
       version = "3.6.2";
 
@@ -373,6 +393,7 @@ let
     };
 
     ecto_enum = buildMix rec {
+      inherit elixir;
       name = "ecto_enum";
       version = "1.4.0";
 
@@ -386,6 +407,7 @@ let
     };
 
     ecto_sql = buildMix rec {
+      inherit elixir;
       name = "ecto_sql";
       version = "3.6.2";
 
@@ -412,6 +434,7 @@ let
     };
 
     elixir_make = buildMix rec {
+      inherit elixir;
       name = "elixir_make";
       version = "0.6.2";
 
@@ -425,6 +448,7 @@ let
     };
 
     esshd = buildMix rec {
+      inherit elixir;
       name = "esshd";
       version = "0.1.1";
 
@@ -438,6 +462,7 @@ let
     };
 
     eternal = buildMix rec {
+      inherit elixir;
       name = "eternal";
       version = "1.2.2";
 
@@ -451,6 +476,7 @@ let
     };
 
     ex2ms = buildMix rec {
+      inherit elixir;
       name = "ex2ms";
       version = "1.5.0";
 
@@ -464,6 +490,7 @@ let
     };
 
     ex_aws = buildMix rec {
+      inherit elixir;
       name = "ex_aws";
       version = "2.1.9";
 
@@ -477,6 +504,7 @@ let
     };
 
     ex_aws_s3 = buildMix rec {
+      inherit elixir;
       name = "ex_aws_s3";
       version = "2.2.0";
 
@@ -490,6 +518,7 @@ let
     };
 
     ex_const = buildMix rec {
+      inherit elixir;
       name = "ex_const";
       version = "0.2.4";
 
@@ -503,6 +532,7 @@ let
     };
 
     ex_doc = buildMix rec {
+      inherit elixir;
       name = "ex_doc";
       version = "0.24.2";
 
@@ -529,6 +559,7 @@ let
     };
 
     ex_syslogger = buildMix rec {
+      inherit elixir;
       name = "ex_syslogger";
       version = "1.5.2";
 
@@ -555,6 +586,7 @@ let
     };
 
     fast_html = buildMix rec {
+      inherit elixir;
       name = "fast_html";
       version = "2.0.4";
 
@@ -581,6 +613,7 @@ let
     };
 
     file_system = buildMix rec {
+      inherit elixir;
       name = "file_system";
       version = "0.2.10";
 
@@ -607,6 +640,7 @@ let
     };
 
     floki = buildMix rec {
+      inherit elixir;
       name = "floki";
       version = "0.30.1";
 
@@ -633,6 +667,7 @@ let
     };
 
     gen_stage = buildMix rec {
+      inherit elixir;
       name = "gen_stage";
       version = "0.14.3";
 
@@ -659,6 +694,7 @@ let
     };
 
     gettext = buildMix rec {
+      inherit elixir;
       name = "gettext";
       version = "0.18.2";
 
@@ -711,6 +747,7 @@ let
     };
 
     html_sanitize_ex = buildMix rec {
+      inherit elixir;
       name = "html_sanitize_ex";
       version = "1.3.0";
 
@@ -737,6 +774,7 @@ let
     };
 
     httpoison = buildMix rec {
+      inherit elixir;
       name = "httpoison";
       version = "1.8.0";
 
@@ -763,6 +801,7 @@ let
     };
 
     inet_cidr = buildMix rec {
+      inherit elixir;
       name = "inet_cidr";
       version = "1.0.4";
 
@@ -789,6 +828,7 @@ let
     };
 
     joken = buildMix rec {
+      inherit elixir;
       name = "joken";
       version = "2.3.0";
 
@@ -815,6 +855,7 @@ let
     };
 
     jumper = buildMix rec {
+      inherit elixir;
       name = "jumper";
       version = "1.0.1";
 
@@ -841,6 +882,7 @@ let
     };
 
     linkify = buildMix rec {
+      inherit elixir;
       name = "linkify";
       version = "0.5.1";
 
@@ -854,6 +896,7 @@ let
     };
 
     makeup = buildMix rec {
+      inherit elixir;
       name = "makeup";
       version = "1.0.5";
 
@@ -867,6 +910,7 @@ let
     };
 
     makeup_elixir = buildMix rec {
+      inherit elixir;
       name = "makeup_elixir";
       version = "0.14.1";
 
@@ -880,6 +924,7 @@ let
     };
 
     makeup_erlang = buildMix rec {
+      inherit elixir;
       name = "makeup_erlang";
       version = "0.1.1";
 
@@ -893,6 +938,7 @@ let
     };
 
     meck = buildRebar3 rec {
+      inherit elixir;
       name = "meck";
       version = "0.9.2";
 
@@ -919,6 +965,7 @@ let
     };
 
     mime = buildMix rec {
+      inherit elixir;
       name = "mime";
       version = "1.6.0";
 
@@ -958,6 +1005,7 @@ let
     };
 
     mock = buildMix rec {
+      inherit elixir;
       name = "mock";
       version = "0.3.7";
 
@@ -971,6 +1019,7 @@ let
     };
 
     mogrify = buildMix rec {
+      inherit elixir;
       name = "mogrify";
       version = "0.7.4";
 
@@ -984,6 +1033,7 @@ let
     };
 
     mox = buildMix rec {
+      inherit elixir;
       name = "mox";
       version = "1.0.0";
 
@@ -997,6 +1047,7 @@ let
     };
 
     nimble_parsec = buildMix rec {
+      inherit elixir;
       name = "nimble_parsec";
       version = "0.5.0";
 
@@ -1010,6 +1061,7 @@ let
     };
 
     nimble_pool = buildMix rec {
+      inherit elixir;
       name = "nimble_pool";
       version = "0.1.0";
 
@@ -1023,6 +1075,7 @@ let
     };
 
     oban = buildMix rec {
+      inherit elixir;
       name = "oban";
       version = "2.3.4";
 
@@ -1036,6 +1089,7 @@ let
     };
 
     open_api_spex = buildMix rec {
+      inherit elixir;
       name = "open_api_spex";
       version = "3.10.0";
 
@@ -1075,6 +1129,7 @@ let
     };
 
     pbkdf2_elixir = buildMix rec {
+      inherit elixir;
       name = "pbkdf2_elixir";
       version = "1.2.1";
 
@@ -1088,6 +1143,7 @@ let
     };
 
     phoenix = buildMix rec {
+      inherit elixir;
       name = "phoenix";
       version = "1.5.9";
 
@@ -1101,6 +1157,7 @@ let
     };
 
     phoenix_ecto = buildMix rec {
+      inherit elixir;
       name = "phoenix_ecto";
       version = "4.2.1";
 
@@ -1114,6 +1171,7 @@ let
     };
 
     phoenix_html = buildMix rec {
+      inherit elixir;
       name = "phoenix_html";
       version = "2.14.3";
 
@@ -1127,6 +1185,7 @@ let
     };
 
     phoenix_pubsub = buildMix rec {
+      inherit elixir;
       name = "phoenix_pubsub";
       version = "2.0.0";
 
@@ -1140,6 +1199,7 @@ let
     };
 
     phoenix_swoosh = buildMix rec {
+      inherit elixir;
       name = "phoenix_swoosh";
       version = "0.3.3";
 
@@ -1153,6 +1213,7 @@ let
     };
 
     plug = buildMix rec {
+      inherit elixir;
       name = "plug";
       version = "1.10.4";
 
@@ -1166,6 +1227,7 @@ let
     };
 
     plug_cowboy = buildMix rec {
+      inherit elixir;
       name = "plug_cowboy";
       version = "2.5.0";
 
@@ -1179,6 +1241,7 @@ let
     };
 
     plug_crypto = buildMix rec {
+      inherit elixir;
       name = "plug_crypto";
       version = "1.2.2";
 
@@ -1192,6 +1255,7 @@ let
     };
 
     plug_static_index_html = buildMix rec {
+      inherit elixir;
       name = "plug_static_index_html";
       version = "1.0.0";
 
@@ -1205,6 +1269,7 @@ let
     };
 
     poison = buildMix rec {
+      inherit elixir;
       name = "poison";
       version = "3.1.0";
 
@@ -1231,6 +1296,7 @@ let
     };
 
     postgrex = buildMix rec {
+      inherit elixir;
       name = "postgrex";
       version = "0.15.9";
 
@@ -1257,6 +1323,7 @@ let
     };
 
     prometheus = buildMix rec {
+      inherit elixir;
       name = "prometheus";
       version = "4.8.0";
 
@@ -1270,6 +1337,7 @@ let
     };
 
     prometheus_ecto = buildMix rec {
+      inherit elixir;
       name = "prometheus_ecto";
       version = "1.4.3";
 
@@ -1283,6 +1351,7 @@ let
     };
 
     prometheus_phoenix = buildMix rec {
+      inherit elixir;
       name = "prometheus_phoenix";
       version = "1.3.0";
 
@@ -1296,6 +1365,7 @@ let
     };
 
     prometheus_plugs = buildMix rec {
+      inherit elixir;
       name = "prometheus_plugs";
       version = "1.1.5";
 
@@ -1309,6 +1379,7 @@ let
     };
 
     quack = buildMix rec {
+      inherit elixir;
       name = "quack";
       version = "0.1.1";
 
@@ -1335,6 +1406,7 @@ let
     };
 
     recon = buildMix rec {
+      inherit elixir;
       name = "recon";
       version = "2.5.1";
 
@@ -1374,6 +1446,7 @@ let
     };
 
     sweet_xml = buildMix rec {
+      inherit elixir;
       name = "sweet_xml";
       version = "0.6.6";
 
@@ -1387,6 +1460,7 @@ let
     };
 
     swoosh = buildMix rec {
+      inherit elixir;
       name = "swoosh";
       version = "1.3.11";
 
@@ -1426,6 +1500,7 @@ let
     };
 
     tesla = buildMix rec {
+      inherit elixir;
       name = "tesla";
       version = "1.4.1";
 
@@ -1439,6 +1514,7 @@ let
     };
 
     timex = buildMix rec {
+      inherit elixir;
       name = "timex";
       version = "3.7.5";
 
@@ -1452,6 +1528,7 @@ let
     };
 
     trailing_format_plug = buildMix rec {
+      inherit elixir;
       name = "trailing_format_plug";
       version = "0.0.7";
 
@@ -1465,6 +1542,7 @@ let
     };
 
     tzdata = buildMix rec {
+      inherit elixir;
       name = "tzdata";
       version = "1.0.5";
 
@@ -1478,6 +1556,7 @@ let
     };
 
     ueberauth = buildMix rec {
+      inherit elixir;
       name = "ueberauth";
       version = "0.6.3";
 
@@ -1504,6 +1583,7 @@ let
     };
 
     unsafe = buildMix rec {
+      inherit elixir;
       name = "unsafe";
       version = "1.0.1";
 

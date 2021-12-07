@@ -1,4 +1,4 @@
-{ stdenv, writeText, elixir, erlang, hex, lib }:
+{ stdenv, writeText, elixir, erlang, hex, lib }@inputs:
 
 { name
 , version
@@ -12,6 +12,7 @@
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
+, elixir ? inputs.elixir
 , ...
 }@attrs:
 

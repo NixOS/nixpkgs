@@ -2,10 +2,12 @@
 , fetchFromGitHub, fetchFromGitLab
 , file, cmake
 , nixosTests, writeText
+, elixir
 , ...
 }:
 
 beamPackages.mixRelease rec {
+  inherit elixir;
   pname = "pleroma";
   version = "2.4.1";
 
@@ -20,11 +22,12 @@ beamPackages.mixRelease rec {
   patches = [ ./0001-move-result-into-with-guard.patch ];
 
   mixNixDeps = import ./mix.nix {
-    inherit beamPackages lib;
+    inherit beamPackages lib elixir;
     overrides = (final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
       prometheus_ex = beamPackages.buildMix rec {
+        inherit elixir;
         name = "prometheus_ex";
         version = "3.0.5";
 
@@ -39,6 +42,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ prometheus ];
       };
       captcha = beamPackages.buildMix rec {
+        inherit elixir;
         name = "captcha";
         version = "0.1.0";
 
@@ -53,6 +57,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ ];
       };
       remote_ip = beamPackages.buildMix rec {
+        inherit elixir;
         name = "remote_ip";
         version = "0.1.5";
 
@@ -67,6 +72,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ combine plug inet_cidr ];
       };
       concurrent_limiter = beamPackages.buildMix rec {
+        inherit elixir;
         name = "concurrent_limiter";
         version = "0.1.0";
 
@@ -81,6 +87,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ telemetry ];
       };
       prometheus_phx = beamPackages.buildMix rec {
+        inherit elixir;
         name = "prometheus_phx";
         version = "0.1.1";
 
@@ -98,6 +105,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ prometheus_ex ];
       };
       majic = beamPackages.buildMix rec {
+        inherit elixir;
         name = "majic";
         version = "1.0.0";
 
@@ -134,6 +142,7 @@ beamPackages.mixRelease rec {
         beamDeps = with final; [ elixir_make ];
       };
       web_push_encryption = beamPackages.buildMix rec {
+        inherit elixir;
         name = "web_push_encryption";
         version = "0.3.0";
         src = fetchFromGitHub {

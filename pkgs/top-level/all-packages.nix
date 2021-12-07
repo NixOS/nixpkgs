@@ -8691,7 +8691,9 @@ with pkgs;
 
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
-  pleroma = callPackage ../servers/pleroma { };
+  pleroma = callPackage ../servers/pleroma {
+    elixir = elixir_1_12;
+  };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
