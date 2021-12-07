@@ -118,19 +118,21 @@ let
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else if cacert != null then { outputHashAlgo = "sha256"; outputHash = ""; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
+
+  escapeUrl = builtins.replaceStrings [ " " ] [ "%20" ];
 in
 
 stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
+    else escapeUrl (baseNameOf (toString (builtins.head urls_)));
 
   builder = ./builder.sh;
 
   nativeBuildInputs = [ curl ];
 
-  urls = urls_;
+  urls = lib.concatMapStringsSep "\n" escapeUrl urls_;
 
   # If set, prefer the content-addressable mirrors
   # (http://tarballs.nixos.org) over the original URLs.

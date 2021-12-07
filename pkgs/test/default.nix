@@ -61,5 +61,7 @@ with pkgs;
 
   writers = callPackage ../build-support/writers/test.nix {};
 
+  fetchurlWithSpaces = callPackage ../build-support/fetchurl/test-urls-with-spaces.nix;
+
   dhall = callPackage ./dhall { };
 }
