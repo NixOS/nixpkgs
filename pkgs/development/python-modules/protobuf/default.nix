@@ -42,7 +42,9 @@ buildPythonPackage {
   setupPyGlobalFlags = lib.optional (lib.versionAtLeast protobuf.version "2.6.0")
     "--cpp_implementation";
 
-  pythonImportsCheck = lib.optionals (lib.versionAtLeast protobuf.version "2.6.0") [
+  pythonImportsCheck = [
+    "google.protobuf"
+  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "2.6.0") [
     "google.protobuf.internal._api_implementation" # Verify that --cpp_implementation worked
   ];
 
