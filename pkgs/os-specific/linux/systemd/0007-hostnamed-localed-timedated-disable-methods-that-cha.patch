@@ -1,7 +1,7 @@
-From 207c69466cdd164c42ed1901deb06f57b12f4363 Mon Sep 17 00:00:00 2001
+From 566208aea81057789218b959f4d0e898eec54fc9 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
-Subject: [PATCH 07/21] hostnamed, localed, timedated: disable methods that
+Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
  change system settings.
 
 ---
@@ -104,5 +104,5 @@ index 66b454269d..0a8fe25d0f 100644
          if (r < 0)
                  return r;
 -- 
-2.33.0
+2.33.1
 
