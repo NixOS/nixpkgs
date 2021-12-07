@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (lib) concatStringsSep mapAttrsToList;
+  inherit (lib) concatStringsSep concatMap id mapAttrsToList;
 in
 buildGoModule rec {
   pname = "pomerium";
@@ -28,24 +28,38 @@ buildGoModule rec {
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
     setVars = {
-      Version = "v${version}";
-      BuildMeta = "nixpkgs";
-      ProjectName = "pomerium";
-      ProjectURL = "github.com/pomerium/pomerium";
+      "github.com/pomerium/pomerium/internal/version" = {
+        Version = "v${version}";
+        BuildMeta = "nixpkgs";
+        ProjectName = "pomerium";
+        ProjectURL = "github.com/pomerium/pomerium";
+      };
+      "github.com/pomerium/pomerium/internal/envoy" = {
+        OverrideEnvoyPath = "${envoy}/bin/envoy";
+      };
     };
-    varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
+    concatStringsSpace = list: concatStringsSep " " list;
+    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+    varFlags = concatStringsSpace (
+      mapAttrsToFlatList (package: packageVars:
+        mapAttrsToList (variable: value:
+          "-X ${package}.${variable}=${value}"
+        ) packageVars
+      ) setVars);
   in [
     "${varFlags}"
   ];
 
   preBuild = ''
+    # Replace embedded envoy with nothing.
+    # We set OverrideEnvoyPath above, so rawBinary should never get looked at
+    # but we still need to set a checksum/version.
     rm internal/envoy/files/files_{darwin,linux}*.go
     cat <<EOF >internal/envoy/files/files_generic.go
     package files
 
     import _ "embed" // embed
 
-    //go:embed envoy
     var rawBinary []byte
 
     //go:embed envoy.sha256
@@ -54,13 +68,9 @@ buildGoModule rec {
     //go:embed envoy.version
     var rawVersion string
     EOF
-    cp ${envoy}/bin/envoy internal/envoy/files/envoy
-    sha256sum ${envoy}/bin/envoy > internal/envoy/files/envoy.sha256
-    echo ${envoy.version} > internal/envoy/files/envoy.version
+    sha256sum '${envoy}/bin/envoy' > internal/envoy/files/envoy.sha256
+    echo '${envoy.version}' > internal/envoy/files/envoy.version
   '';
-
-  # We also need to set dontStrip to avoid having the envoy ZIP stripped off the end.
-  dontStrip = true;
 
   installPhase = ''
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
