@@ -242,12 +242,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "09qbzkxyk435s4n04s12ncjyri024wj9pwz8wgjjsswpfa69dhr5"; /* updated by script */
+      sha256 = "0rvq0k99c4kniw2k0a8m2hq27v9nvn7qg6yg9dwxlmadsrx6as29"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -268,12 +268,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2021.2.4"; /* updated by script */
+    version = "2021.3"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "03x7yz8jz5r4pblm7cvph39zppa33lalvkpzmgvr3wjq0chqmh65"; /* updated by script */
+      sha256 = "0bdsvfsx0vhmvlqvy9phw6yz98la8qw2avm4p0yl9j8y9zplbhl0"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -321,12 +321,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1avcm4fnkn0jkw85s505yz5kjbxzk038463sjdsca04pv5yhsdp0"; /* updated by script */
+      sha256 = "1h3ld3swvvx8hicm5lpf65mr7asiqy59hvqnigz71hbjgqnsb8g0"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -334,12 +334,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0m98qhkgwnmqkay8sclfyig2xcqvpva74l2kdira3r5sbszmxvcr"; /* updated by script */
+      sha256 = "0iypqilil6x9k1gi6bfjzccw7wp601grd9639yk50crg45wnzga4"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -347,12 +347,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0zp72ag9jqhq0sv4x5n43d6g9y2yzkxa4pkflc7gd5rpg555cqr7"; /* updated by script */
+      sha256 = "0z6dnigx616939azyngjy5r4gayazplkgq480k80ppmkw636yhl1"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
