@@ -149,128 +149,304 @@ let
       cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     in
     ''
-      # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
-      # if on a USB drive.
-      wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
+        # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
+        # if on a USB drive.
+        wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
 
-      ${optionalString (dev.header != null) ''
-        wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
-      ''}
+        ${optionalString (dev.header != null) ''
+          wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
+        ''}
 
-      do_open_passphrase() {
-          local passphrase
+        do_open_passphrase() {
+            local passphrase
 
-          while true; do
-              echo -n "Passphrase for ${dev.device}: "
-              passphrase=
-              while true; do
-                  if [ -e /crypt-ramfs/passphrase ]; then
-                      echo "reused"
-                      passphrase=$(cat /crypt-ramfs/passphrase)
-                      break
-                  else
-                      # ask cryptsetup-askpass
-                      echo -n "${dev.device}" > /crypt-ramfs/device
+            while true; do
+                echo -n "Passphrase for ${dev.device}: "
+                passphrase=
+                while true; do
+                    if [ -e /crypt-ramfs/passphrase ]; then
+                        echo "reused"
+                        passphrase=$(cat /crypt-ramfs/passphrase)
+                        break
+                    else
+                        # ask cryptsetup-askpass
+                        echo -n "${dev.device}" > /crypt-ramfs/device
 
-                      # and try reading it from /dev/console with a timeout
-                      IFS= read -t 1 -r passphrase
-                      if [ -n "$passphrase" ]; then
-                         ${if luks.reusePassphrases then ''
-                           # remember it for the next device
-                           echo -n "$passphrase" > /crypt-ramfs/passphrase
-                         '' else ''
-                           # Don't save it to ramfs. We are very paranoid
-                         ''}
-                         echo
-                         break
-                      fi
-                  fi
-              done
-              echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$passphrase" | ${csopen} --key-file=-
-              if [ $? == 0 ]; then
-                  echo " - success"
-                  ${if luks.reusePassphrases then ''
-                    # we don't rm here because we might reuse it for the next device
-                  '' else ''
+                        # and try reading it from /dev/console with a timeout
+                        IFS= read -t 1 -r passphrase
+                        if [ -n "$passphrase" ]; then
+                           ${if luks.reusePassphrases then ''
+                             # remember it for the next device
+                             echo -n "$passphrase" > /crypt-ramfs/passphrase
+                           '' else ''
+                             # Don't save it to ramfs. We are very paranoid
+                           ''}
+                           echo
+                           break
+                        fi
+                    fi
+                done
+                echo -n "Verifying passphrase for ${dev.device}..."
+                echo -n "$passphrase" | ${csopen} --key-file=-
+                if [ $? == 0 ]; then
+                    echo " - success"
+                    ${if luks.reusePassphrases then ''
+                      # we don't rm here because we might reuse it for the next device
+                    '' else ''
+                      rm -f /crypt-ramfs/passphrase
+                    ''}
+                    break
+                else
+                    echo " - failure"
+                    # ask for a different one
                     rm -f /crypt-ramfs/passphrase
-                  ''}
-                  break
-              else
-                  echo " - failure"
-                  # ask for a different one
-                  rm -f /crypt-ramfs/passphrase
-              fi
-          done
-      }
+                fi
+            done
+        }
 
-      # LUKS
-      open_normally() {
-          ${if (dev.keyFile != null) then ''
-          if wait_target "key file" ${dev.keyFile}; then
-              ${csopen} --key-file=${dev.keyFile} \
-                ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
-                ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
-          else
-              ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-              echo " - failing back to interactive password prompt"
-              do_open_passphrase
-          fi
-          '' else ''
-          do_open_passphrase
-          ''}
-      }
+        # LUKS
+        open_normally() {
+            ${if (dev.keyFile != null) then ''
+            if wait_target "key file" ${dev.keyFile}; then
+                ${csopen} --key-file=${dev.keyFile} \
+                  ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
+                  ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+            else
+                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+                echo " - failing back to interactive password prompt"
+                do_open_passphrase
+            fi
+            '' else ''
+            do_open_passphrase
+            ''}
+        }
 
-      ${optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
-      # YubiKey
-      rbtohex() {
-          ( od -An -vtx1 | tr -d ' \n' )
-      }
+        ${optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
+        # YubiKey
+        rbtohex() {
+            ( od -An -vtx1 | tr -d ' \n' )
+        }
 
-      hextorb() {
-          ( tr '[:lower:]' '[:upper:]' | sed -e 's/\([0-9A-F]\{2\}\)/\\\\\\x\1/gI' | xargs printf )
-      }
+        hextorb() {
+            ( tr '[:lower:]' '[:upper:]' | sed -e 's/\([0-9A-F]\{2\}\)/\\\\\\x\1/gI' | xargs printf )
+        }
 
-      do_open_yubikey() {
-          # Make all of these local to this function
-          # to prevent their values being leaked
-          local salt
-          local iterations
-          local k_user
-          local challenge
-          local response
-          local k_luks
-          local opened
-          local new_salt
-          local new_iterations
-          local new_challenge
-          local new_response
-          local new_k_luks
+        do_open_yubikey() {
+            # Make all of these local to this function
+            # to prevent their values being leaked
+            local salt
+            local iterations
+            local k_user
+            local challenge
+            local response
+            local k_luks
+            local opened
+            local new_salt
+            local new_iterations
+            local new_challenge
+            local new_response
+            local new_k_luks
 
-          mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
-            die "Failed to mount YubiKey salt storage device"
+            mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
+              die "Failed to mount YubiKey salt storage device"
 
-          salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
-          iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
-          challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-          response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
+            salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
+            iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+            challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+            response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
 
-          for try in $(seq 3); do
-              ${optionalString dev.yubikey.twoFactor ''
-              echo -n "Enter two-factor passphrase: "
-              k_user=
+            for try in $(seq 3); do
+                ${optionalString dev.yubikey.twoFactor ''
+                echo -n "Enter two-factor passphrase: "
+                k_user=
+                while true; do
+                    if [ -e /crypt-ramfs/passphrase ]; then
+                        echo "reused"
+                        k_user=$(cat /crypt-ramfs/passphrase)
+                        break
+                    else
+                        # Try reading it from /dev/console with a timeout
+                        IFS= read -t 1 -r k_user
+                        if [ -n "$k_user" ]; then
+                           ${if luks.reusePassphrases then ''
+                             # Remember it for the next device
+                             echo -n "$k_user" > /crypt-ramfs/passphrase
+                           '' else ''
+                             # Don't save it to ramfs. We are very paranoid
+                           ''}
+                           echo
+                           break
+                        fi
+                    fi
+                done
+                ''}
+
+                if [ ! -z "$k_user" ]; then
+                    k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $iterations $response | rbtohex)"
+                else
+                    k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $iterations $response | rbtohex)"
+                fi
+
+                echo -n "$k_luks" | hextorb | ${csopen} --key-file=-
+
+                if [ $? == 0 ]; then
+                    opened=true
+                    ${if luks.reusePassphrases then ''
+                      # We don't rm here because we might reuse it for the next device
+                    '' else ''
+                      rm -f /crypt-ramfs/passphrase
+                    ''}
+                    break
+                else
+                    opened=false
+                    echo "Authentication failed!"
+                fi
+            done
+
+            [ "$opened" == false ] && die "Maximum authentication errors reached"
+
+            echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
+            for i in $(seq ${toString dev.yubikey.saltLength}); do
+                byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
+                new_salt="$new_salt$byte";
+                echo -n .
+            done;
+            echo "ok"
+
+            new_iterations="$iterations"
+            ${optionalString (dev.yubikey.iterationStep > 0) ''
+            new_iterations="$(($new_iterations + ${toString dev.yubikey.iterationStep}))"
+            ''}
+
+            new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
+
+            new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
+
+            if [ ! -z "$k_user" ]; then
+                new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+            else
+                new_k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+            fi
+
+            echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
+            echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
+
+            if [ $? == 0 ]; then
+                echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
+                sync /crypt-storage${dev.yubikey.storage.path}
+            else
+                echo "Warning: Could not update LUKS key, current challenge persists!"
+            fi
+
+            rm -f /crypt-ramfs/new_key
+            umount /crypt-storage
+        }
+
+        open_with_hardware() {
+            if wait_yubikey ${toString dev.yubikey.gracePeriod}; then
+                do_open_yubikey
+            else
+                echo "No YubiKey found, falling back to non-YubiKey open procedure"
+                open_normally
+            fi
+        }
+        ''}
+
+        ${optionalString (luks.gpgSupport && (dev.gpgCard != null)) ''
+
+        do_open_gpg_card() {
+            # Make all of these local to this function
+            # to prevent their values being leaked
+            local pin
+            local opened
+
+            gpg --import /gpg-keys/${dev.device}/pubkey.asc > /dev/null 2> /dev/null
+
+            gpg --card-status > /dev/null 2> /dev/null
+
+            for try in $(seq 3); do
+                echo -n "PIN for GPG Card associated with device ${dev.device}: "
+                pin=
+                while true; do
+                    if [ -e /crypt-ramfs/passphrase ]; then
+                        echo "reused"
+                        pin=$(cat /crypt-ramfs/passphrase)
+                        break
+                    else
+                        # and try reading it from /dev/console with a timeout
+                        IFS= read -t 1 -r pin
+                        if [ -n "$pin" ]; then
+                           ${if luks.reusePassphrases then ''
+                             # remember it for the next device
+                             echo -n "$pin" > /crypt-ramfs/passphrase
+                           '' else ''
+                             # Don't save it to ramfs. We are very paranoid
+                           ''}
+                           echo
+                           break
+                        fi
+                    fi
+                done
+                echo -n "Verifying passphrase for ${dev.device}..."
+                echo -n "$pin" | gpg -q --batch --passphrase-fd 0 --pinentry-mode loopback -d /gpg-keys/${dev.device}/cryptkey.gpg 2> /dev/null | ${csopen} --key-file=- > /dev/null 2> /dev/null
+                if [ $? == 0 ]; then
+                    echo " - success"
+                    ${if luks.reusePassphrases then ''
+                      # we don't rm here because we might reuse it for the next device
+                    '' else ''
+                      rm -f /crypt-ramfs/passphrase
+                    ''}
+                    break
+                else
+                    echo " - failure"
+                    # ask for a different one
+                    rm -f /crypt-ramfs/passphrase
+                fi
+            done
+
+            [ "$opened" == false ] && die "Maximum authentication errors reached"
+        }
+
+        open_with_hardware() {
+            if wait_gpgcard ${toString dev.gpgCard.gracePeriod}; then
+                do_open_gpg_card
+            else
+                echo "No GPG Card found, falling back to normal open procedure"
+                open_normally
+            fi
+        }
+        ''}
+
+        ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
+        open_with_hardware() {
+          local passsphrase
+            ${if dev.fido2.passwordLess then ''
+              export passphrase=""
+            '' else ''
+              read -rsp "FIDO2 salt for ${dev.device}: " passphrase
+              echo
+            ''}
+            ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
+              echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
+              echo "Please move your mouse to create needed randomness."
+            ''}
+              echo "Waiting for your FIDO2 device..."
+
+            ${optionalString dev.fido2.askForPin ''
+              echo -n "Enter PIN for authenticator: "
+              pin=
               while true; do
                   if [ -e /crypt-ramfs/passphrase ]; then
                       echo "reused"
-                      k_user=$(cat /crypt-ramfs/passphrase)
+                      pin=$(cat /crypt-ramfs/passphrase)
                       break
                   else
                       # Try reading it from /dev/console with a timeout
-                      IFS= read -t 1 -r k_user
-                      if [ -n "$k_user" ]; then
+                      IFS= read -t 1 -r pin
+                      if [ -n "$pin" ]; then
                          ${if luks.reusePassphrases then ''
                            # Remember it for the next device
-                           echo -n "$k_user" > /crypt-ramfs/passphrase
+                           echo -n "$pin" > /crypt-ramfs/passphrase
                          '' else ''
                            # Don't save it to ramfs. We are very paranoid
                          ''}
@@ -281,199 +457,30 @@ let
               done
               ''}
 
-              if [ ! -z "$k_user" ]; then
-                  k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $iterations $response | rbtohex)"
-              else
-                  k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $iterations $response | rbtohex)"
-              fi
+              fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} ${optionalString dev.fido2.askForPin "--pin --pin-source=/crypt-ramfs/passphrase"} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
 
-              echo -n "$k_luks" | hextorb | ${csopen} --key-file=-
+              ${optionalString dev.fido2.askForPin ''
+                rm /crypt-ramfs/passphrase
+              ''}
 
-              if [ $? == 0 ]; then
-                  opened=true
-                  ${if luks.reusePassphrases then ''
-                    # We don't rm here because we might reuse it for the next device
-                  '' else ''
-                    rm -f /crypt-ramfs/passphrase
-                  ''}
-                  break
-              else
-                  opened=false
-                  echo "Authentication failed!"
-              fi
-          done
-
-          [ "$opened" == false ] && die "Maximum authentication errors reached"
-
-          echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
-          for i in $(seq ${toString dev.yubikey.saltLength}); do
-              byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
-              new_salt="$new_salt$byte";
-              echo -n .
-          done;
-          echo "ok"
-
-          new_iterations="$iterations"
-          ${optionalString (dev.yubikey.iterationStep > 0) ''
-          new_iterations="$(($new_iterations + ${toString dev.yubikey.iterationStep}))"
-          ''}
-
-          new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-
-          new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
-
-          if [ ! -z "$k_user" ]; then
-              new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-          else
-              new_k_luks="$(echo | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
-          fi
-
-          echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
-          echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
-
-          if [ $? == 0 ]; then
-              echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
-              sync /crypt-storage${dev.yubikey.storage.path}
-          else
-              echo "Warning: Could not update LUKS key, current challenge persists!"
-          fi
-
-          rm -f /crypt-ramfs/new_key
-          umount /crypt-storage
-      }
-
-      open_with_hardware() {
-          if wait_yubikey ${toString dev.yubikey.gracePeriod}; then
-              do_open_yubikey
-          else
-              echo "No YubiKey found, falling back to non-YubiKey open procedure"
+            if [ $? -ne 0 ]; then
+              echo "No FIDO2 key found, falling back to normal open procedure"
               open_normally
-          fi
-      }
+            fi
+        }
       ''}
 
-      ${optionalString (luks.gpgSupport && (dev.gpgCard != null)) ''
+        # commands to run right before we mount our device
+        ${dev.preOpenCommands}
 
-      do_open_gpg_card() {
-          # Make all of these local to this function
-          # to prevent their values being leaked
-          local pin
-          local opened
+        ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && (dev.fido2.credential != null)) then ''
+        open_with_hardware
+        '' else ''
+        open_normally
+        ''}
 
-          gpg --import /gpg-keys/${dev.device}/pubkey.asc > /dev/null 2> /dev/null
-
-          gpg --card-status > /dev/null 2> /dev/null
-
-          for try in $(seq 3); do
-              echo -n "PIN for GPG Card associated with device ${dev.device}: "
-              pin=
-              while true; do
-                  if [ -e /crypt-ramfs/passphrase ]; then
-                      echo "reused"
-                      pin=$(cat /crypt-ramfs/passphrase)
-                      break
-                  else
-                      # and try reading it from /dev/console with a timeout
-                      IFS= read -t 1 -r pin
-                      if [ -n "$pin" ]; then
-                         ${if luks.reusePassphrases then ''
-                           # remember it for the next device
-                           echo -n "$pin" > /crypt-ramfs/passphrase
-                         '' else ''
-                           # Don't save it to ramfs. We are very paranoid
-                         ''}
-                         echo
-                         break
-                      fi
-                  fi
-              done
-              echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$pin" | gpg -q --batch --passphrase-fd 0 --pinentry-mode loopback -d /gpg-keys/${dev.device}/cryptkey.gpg 2> /dev/null | ${csopen} --key-file=- > /dev/null 2> /dev/null
-              if [ $? == 0 ]; then
-                  echo " - success"
-                  ${if luks.reusePassphrases then ''
-                    # we don't rm here because we might reuse it for the next device
-                  '' else ''
-                    rm -f /crypt-ramfs/passphrase
-                  ''}
-                  break
-              else
-                  echo " - failure"
-                  # ask for a different one
-                  rm -f /crypt-ramfs/passphrase
-              fi
-          done
-
-          [ "$opened" == false ] && die "Maximum authentication errors reached"
-      }
-
-      open_with_hardware() {
-          if wait_gpgcard ${toString dev.gpgCard.gracePeriod}; then
-              do_open_gpg_card
-          else
-              echo "No GPG Card found, falling back to normal open procedure"
-              open_normally
-          fi
-      }
-      ''}
-
-      ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
-      open_with_hardware() {
-        local passsphrase
-          ${if dev.fido2.passwordLess then ''
-            export passphrase=""
-          '' else ''
-            read -rsp "FIDO2 salt for ${dev.device}: " passphrase
-            echo
-          ''}
-          ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
-            echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
-            echo "Please move your mouse to create needed randomness."
-          ''}
-            echo "Waiting for your FIDO2 device..."
-
-            echo -n "Enter PIN for authenticator: "
-            pin=
-            while true; do
-                if [ -e /crypt-ramfs/passphrase ]; then
-                    echo "reused"
-                    pin=$(cat /crypt-ramfs/passphrase)
-                    break
-                else
-                    # Try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r pin
-                    if [ -n "$pin" ]; then
-                       ${if luks.reusePassphrases then ''
-                         # Remember it for the next device
-                         echo -n "$pin" > /crypt-ramfs/passphrase
-                       '' else ''
-                         # Don't save it to ramfs. We are very paranoid
-                       ''}
-                       echo
-                       break
-                    fi
-                fi
-            done
-            fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --pin --pin-source=/crypt-ramfs/passphrase --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
-            rm /crypt-ramfs/passphrase
-          if [ $? -ne 0 ]; then
-            echo "No FIDO2 key found, falling back to normal open procedure"
-            open_normally
-          fi
-      }
-      ''}
-
-      # commands to run right before we mount our device
-      ${dev.preOpenCommands}
-
-      ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && (dev.fido2.credential != null)) then ''
-      open_with_hardware
-      '' else ''
-      open_normally
-      ''}
-
-      # commands to run right after we mounted our device
-      ${dev.postOpenCommands}
+        # commands to run right after we mounted our device
+        ${dev.postOpenCommands}
     '';
 
   askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
@@ -732,6 +739,16 @@ in
                   Defines whatever to use an empty string as a default salt.
 
                   Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+                '';
+              };
+
+              askForPin = mkOption {
+                default = false;
+                type = types.bool;
+                description = ''
+                  For use with the `passwordLess` option if your device requires a pin.
+
+                  Enable only when your device is PIN protected, such as is configurable with <link xlink:href="https://www.yubico.com/">Yubikey</link>.
                 '';
               };
             };
