@@ -21129,6 +21129,8 @@ with pkgs;
 
   quark = callPackage ../servers/http/quark { };
 
+  soft-serve = callPackage ../servers/soft-serve { };
+
   sympa = callPackage ../servers/mail/sympa { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
