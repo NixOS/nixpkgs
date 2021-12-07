@@ -121,7 +121,7 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        n=$out${destination}
+        n="$out${destination}"
         mkdir -p "$(dirname "$n")"
 
         if [ -e "$textPath" ]; then
