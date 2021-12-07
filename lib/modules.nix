@@ -13,8 +13,6 @@ let
     elem
     filter
     findFirst
-    flip
-    foldl
     foldl'
     getAttrFromPath
     head
@@ -474,7 +472,7 @@ rec {
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
-      resultsByName = flip mapAttrs declsByName (name: decls:
+      resultsByName = mapAttrs (name: decls:
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
@@ -495,7 +493,7 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
-            mergeModules' loc decls defns);
+            mergeModules' loc decls defns) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
 
@@ -509,12 +507,19 @@ rec {
       inherit matchedOptions;
 
       # Transforms unmatchedDefnsByName into a list of definitions
-      unmatchedDefns = concatLists (mapAttrsToList (name: defs:
-        map (def: def // {
-          # Set this so we know when the definition first left unmatched territory
-          prefix = [name] ++ (def.prefix or []);
-        }) defs
-      ) unmatchedDefnsByName);
+      unmatchedDefns =
+        if configs == []
+        then
+          # When no config values exist, there can be no unmatched config, so
+          # we short circuit and avoid evaluating more _options_ than necessary.
+          []
+        else
+          concatLists (mapAttrsToList (name: defs:
+            map (def: def // {
+              # Set this so we know when the definition first left unmatched territory
+              prefix = [name] ++ (def.prefix or []);
+            }) defs
+          ) unmatchedDefnsByName);
     };
 
   /* Merge multiple option declarations into a single declaration.  In
@@ -928,7 +933,7 @@ rec {
   mkMergedOptionModule = from: to: mergeFn:
     { config, options, ... }:
     {
-      options = foldl recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
+      options = foldl' recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
         visible = false;
         # To use the value in mergeFn without triggering errors
         default = "_mkMergedOptionModule";
@@ -1032,7 +1037,7 @@ rec {
 
   /* Use this function to import a JSON file as NixOS configuration.
 
-     importJSON -> path -> attrs
+     modules.importJSON :: path -> attrs
   */
   importJSON = file: {
     _file = file;
@@ -1041,7 +1046,7 @@ rec {
 
   /* Use this function to import a TOML file as NixOS configuration.
 
-     importTOML -> path -> attrs
+     modules.importTOML :: path -> attrs
   */
   importTOML = file: {
     _file = file;
