@@ -301,9 +301,11 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
-  dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
-    inherit dhall-nix;
-  };
+  dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
+
+  dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
+
+  dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
   deadcode = callPackage ../development/tools/deadcode { };
 
@@ -13285,6 +13287,8 @@ with pkgs;
 
   dhall-nix = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nix;
 
+  dhall-nixpkgs = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nixpkgs;
+
   dhall-text = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-text;
 
   dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
@@ -14883,7 +14887,7 @@ with pkgs;
   lttv = callPackage ../development/tools/misc/lttv { };
 
   luaformatter = callPackage ../development/tools/luaformatter
-    (lib.optionalAttrs stdenv.isDarwin {
+    (lib.optionalAttrs (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "9") {
       stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
@@ -20938,6 +20942,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
+  matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
+
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
@@ -21122,6 +21128,8 @@ with pkgs;
   pshs = callPackage ../servers/http/pshs { };
 
   quark = callPackage ../servers/http/quark { };
+
+  soft-serve = callPackage ../servers/soft-serve { };
 
   sympa = callPackage ../servers/mail/sympa { };
 
@@ -22298,6 +22306,8 @@ with pkgs;
   lockdep = callPackage ../os-specific/linux/lockdep { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
+
+  kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
@@ -25882,6 +25892,8 @@ with pkgs;
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
+
+  skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 

@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q3.7";
+  version = "2021.Q4.1";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "sha256-0Q6c10lQSxgqOB6X6F8LyeF2aoyicmp0tZlknuZjQHE=";
+    sha256 = "sha256-yvpHLreBNhiSxnZis5+XcTOSZPRLq5K8YNJsjpYqD6s=";
   };
 
   buildInputs = [
