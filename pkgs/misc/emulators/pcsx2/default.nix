@@ -23,6 +23,7 @@
 , wrapGAppsHook
 , wxGTK
 , zlib
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     "-DDISABLE_ADVANCE_SIMD=TRUE"
     "-DDISABLE_PCSX2_WRAPPER=TRUE"
     "-DPACKAGE_MODE=TRUE"
+    "-DWAYLAND_API=TRUE"
     "-DXDG_STD=TRUE"
   ];
 
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     SDL2
     soundtouch
     udev
+    wayland
     wxGTK
     zlib
   ];
