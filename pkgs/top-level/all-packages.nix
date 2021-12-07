@@ -25891,6 +25891,8 @@ with pkgs;
 
   shepherd = nodePackages."@nerdwallet/shepherd";
 
+  skate = callPackage ../applications/misc/skate { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
