@@ -4,7 +4,7 @@
 }:
 
 let
-  systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
+  systems = [ "/run/booted-system/kernel-modules" "/run/current-system/kernel-modules" "" ];
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
