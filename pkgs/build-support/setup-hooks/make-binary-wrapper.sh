@@ -76,82 +76,82 @@ makeCWrapper() {
         case $p in
             --set)
                 cmd=$(setEnv "${params[n + 1]}" "${params[n + 2]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 n=$((n + 2))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
             --set-default)
                 cmd=$(setDefaultEnv "${params[n + 1]}" "${params[n + 2]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 uses_stdio=1
                 uses_assert_success=1
                 n=$((n + 2))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
             --unset)
                 cmd=$(unsetEnv "${params[n + 1]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 uses_stdio=1
                 uses_assert_success=1
                 n=$((n + 1))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 uses_prefix=1
                 uses_asprintf=1
                 uses_stdio=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 uses_suffix=1
                 uses_asprintf=1
                 uses_stdio=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
             --chdir)
                 cmd=$(changeDir "${params[n + 1]}")
-                main="$main    $cmd"$'\n'
+                main="$main$cmd"$'\n'
                 uses_stdio=1
                 uses_assert_success=1
                 n=$((n + 1))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --add-flags)
                 flags="${params[n + 1]}"
                 flagsBefore="$flagsBefore $flags"
                 uses_assert=1
                 n=$((n + 1))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --argv0)
                 argv0=$(escapeStringLiteral "${params[n + 1]}")
                 inherit_argv0=
                 n=$((n + 1))
-                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --inherit-argv0)
                 # Whichever comes last of --argv0 and --inherit-argv0 wins
                 inherit_argv0=1
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
-                main="$main    #error makeCWrapper: Uknown argument ${p}"$'\n'
+                main="$main#error makeCWrapper: Uknown argument ${p}"$'\n'
             ;;
         esac
     done
     # shellcheck disable=SC2086
     [ -z "$flagsBefore" ] || main="$main"${main:+$'\n'}$(addFlags $flagsBefore)$'\n'$'\n'
-    [ -z "$inherit_argv0" ] && main="$main    argv[0] = \"${argv0:-${executable}}\";"$'\n'
-    main="$main    return execv(\"${executable}\", argv);"$'\n'
+    [ -z "$inherit_argv0" ] && main="${main}argv[0] = \"${argv0:-${executable}}\";"$'\n'
+    main="${main}return execv(\"${executable}\", argv);"$'\n'
 
     [ -z "$uses_asprintf" ] || printf '%s\n' "#define _GNU_SOURCE         /* See feature_test_macros(7) */"
     printf '%s\n' "#include <unistd.h>"
@@ -162,8 +162,8 @@ makeCWrapper() {
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     printf '\n%s' "int main(int argc, char **argv) {"
-    printf '\n%s' "$main"
-    printf '%s\n' "}"
+    printf '\n%s' "$(indent4 "$main")"
+    printf '\n%s\n' "}"
 }
 
 addFlags() {
@@ -172,17 +172,17 @@ addFlags() {
     flags=("$@")
     for ((n = 0; n < ${#flags[*]}; n += 1)); do
         flag=$(escapeStringLiteral "${flags[$n]}")
-        result="$result    ${var}[$((n+1))] = \"$flag\";"$'\n'
+        result="$result${var}[$((n+1))] = \"$flag\";"$'\n'
     done
-    printf '    %s\n' "char **$var = calloc($((n+1)) + argc, sizeof(*$var));"
-    printf '    %s\n' "assert($var != NULL);"
-    printf '    %s\n' "${var}[0] = argv[0];"
+    printf '%s\n' "char **$var = calloc($((n+1)) + argc, sizeof(*$var));"
+    printf '%s\n' "assert($var != NULL);"
+    printf '%s\n' "${var}[0] = argv[0];"
     printf '%s' "$result"
-    printf '    %s\n' "for (int i = 1; i < argc; ++i) {"
-    printf '    %s\n' "    ${var}[$n + i] = argv[i];"
-    printf '    %s\n' "}"
-    printf '    %s\n' "${var}[$n + argc] = NULL;"
-    printf '    %s\n' "argv = $var;"
+    printf '%s\n' "for (int i = 1; i < argc; ++i) {"
+    printf '%s\n' "    ${var}[$n + i] = argv[i];"
+    printf '%s\n' "}"
+    printf '%s\n' "${var}[$n + argc] = NULL;"
+    printf '%s\n' "argv = $var;"
 }
 
 # chdir DIR
@@ -249,10 +249,16 @@ escapeStringLiteral() {
     printf '%s' "$result"
 }
 
+# Indents every non-empty line by 4 spaces. To avoid trailing whitespace, we don't indent empty lines
+# indent4 TEXT_BLOCK
+indent4() {
+    printf '%s' "$1" | awk '{ if ($0 != "") { print "    "$0 } else { print $0 }}'
+}
+
 assertValidEnvName() {
     case "$1" in
-        *=*) printf '\n%s\n' "    #error Illegal environment variable name \`$1\` (cannot contain \`=\`)";;
-        "")  printf '\n%s\n' "    #error Environment variable name can't be empty.";;
+        *=*) printf '\n%s\n' "#error Illegal environment variable name \`$1\` (cannot contain \`=\`)";;
+        "")  printf '\n%s\n' "#error Environment variable name can't be empty.";;
     esac
 }
 
