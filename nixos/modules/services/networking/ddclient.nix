@@ -29,7 +29,7 @@ let
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
 
   preStart = ''
-    install --mode=0400 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
     ${lib.optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
       password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
       sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
