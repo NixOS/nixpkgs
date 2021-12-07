@@ -1,20 +1,19 @@
 { lib, makeWrapper, symlinkJoin
-, qgis-unwrapped, extraPythonPackages ? (ps: [ ])
+, qgis-ltr-unwrapped, extraPythonPackages ? (ps: [ ])
 }:
 with lib;
 symlinkJoin rec {
-  inherit (qgis-unwrapped) version;
+  inherit (qgis-ltr-unwrapped) version;
   name = "qgis-${version}";
 
-  paths = [ qgis-unwrapped ];
+  paths = [ qgis-ltr-unwrapped ];
 
-  nativeBuildInputs = [ makeWrapper qgis-unwrapped.py.pkgs.wrapPython ];
+  nativeBuildInputs = [ makeWrapper qgis-ltr-unwrapped.py.pkgs.wrapPython ];
 
   # extend to add to the python environment of QGIS without rebuilding QGIS application.
-  pythonInputs = qgis-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-unwrapped.py.pkgs);
+  pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);
 
   postBuild = ''
-    # unpackPhase
 
     buildPythonPath "$pythonInputs"
 
@@ -23,5 +22,5 @@ symlinkJoin rec {
       --set PYTHONPATH $program_PYTHONPATH
   '';
 
-  meta = qgis-unwrapped.meta;
+  inherit (qgis-ltr-unwrapped) meta;
 }

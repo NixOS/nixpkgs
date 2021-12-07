@@ -28257,9 +28257,11 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
-    withGrass = true;
-  };
+  qgis-ltr-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped-ltr.nix { };
+
+  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
+
+  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix { };
 
   qgis = callPackage ../applications/gis/qgis { };
 
