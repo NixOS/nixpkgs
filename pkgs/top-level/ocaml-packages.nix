@@ -1128,8 +1128,6 @@ let
 
     pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
 
-    pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
-
     parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
