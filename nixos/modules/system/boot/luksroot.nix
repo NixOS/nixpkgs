@@ -432,6 +432,7 @@ let
           ''}
             echo "Waiting for your FIDO2 device..."
 
+            echo -n "Enter PIN for authenticator: "
             pin=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
