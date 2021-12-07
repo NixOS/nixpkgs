@@ -1274,8 +1274,6 @@ let
 
     parany = callPackage ../development/ocaml-modules/parany { };
 
-    pipebang = callPackage ../development/ocaml-modules/pipebang { };
-
     portaudio = callPackage ../development/ocaml-modules/portaudio {
       inherit (pkgs) portaudio;
     };
