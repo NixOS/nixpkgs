@@ -119,6 +119,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
       sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
     })
+    # Fixes socket_sockaddr_to_address_unix assertion errors in some setups. Remove with next release.
+    (fetchpatch {
+      name = "fix-unix-socket-path-copy-again.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
+      sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./sigrtminmax.patch

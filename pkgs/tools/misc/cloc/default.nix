@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-tFARxNGXzWw+EN2qwBOhJEj7zwYfC9tVP0sAHqeGwcM=";
+    sha256 = if stdenv.isDarwin then
+      "1hy1hskiw02b7xaxn2qz0v7znj14l49w1anx20z6rkcps7212l5l"
+    else
+      "sha256-tFARxNGXzWw+EN2qwBOhJEj7zwYfC9tVP0sAHqeGwcM=";
   };
 
   setSourceRoot = ''
@@ -16,7 +19,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = (with perlPackages; [ perl AlgorithmDiff ParallelForkManager RegexpCommon ]);
+  buildInputs = with perlPackages; [
+    perl
+    AlgorithmDiff
+    ParallelForkManager
+    RegexpCommon
+  ];
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 
