@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inadyn";
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "inadyn";
     rev = "v${version}";
-    sha256 = "sha256-kr9xh7HMikargi0hhj3epH2c6R5lN4qD9nDaChNI4Kg=";
+    sha256 = "sha256-WYl602gDcPKxjQAlBedPHEOCNtaGgcaVZ/KbxcP2El4=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
