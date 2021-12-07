@@ -31241,6 +31241,8 @@ with pkgs;
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
+  deep-translator = with python3Packages; toPythonApplication deep-translator;
+
   delly = callPackage ../applications/science/biology/delly { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
