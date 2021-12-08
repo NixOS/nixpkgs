@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , substituteAll
 , six
@@ -16,9 +16,11 @@ buildPythonPackage rec {
   pname = "anytree";
   version = "2.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab";
+  src = fetchFromGitHub {
+     owner = "c0fec0de";
+     repo = "anytree";
+     rev = "2.8.0";
+     sha256 = "145hlgvcncinpz75hnlxbf2ybm6p6fyya216rq883rb9gbas191r";
   };
 
   patches = lib.optionals withGraphviz [
