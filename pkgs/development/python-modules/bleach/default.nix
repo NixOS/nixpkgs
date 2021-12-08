@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , six
 , html5lib
@@ -14,9 +14,11 @@ buildPythonPackage rec {
   version = "4.1.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-CQDYs366YagC7kCsAGH4wrXe4pwZJ90dIz4HXr9acdo=";
+  src = fetchFromGitHub {
+     owner = "mozilla";
+     repo = "bleach";
+     rev = "v4.1.0";
+     sha256 = "0ihp050fwq3vzd8i35jh6ab2r4sdxskp1lny8sca81nrbgqcgsv2";
   };
 
   propagatedBuildInputs = [
