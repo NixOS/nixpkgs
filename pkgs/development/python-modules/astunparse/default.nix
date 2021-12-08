@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , six
 , wheel
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "astunparse";
   version =  "1.6.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872";
+  src = fetchFromGitHub {
+     owner = "simonpercivall";
+     repo = "astunparse";
+     rev = "v1.6.3";
+     sha256 = "10kqdhr2qn62ymsjv7wd853b29vc5386jvlahxq7rdmbazpgf8vw";
   };
 
   propagatedBuildInputs = [ six wheel ];
