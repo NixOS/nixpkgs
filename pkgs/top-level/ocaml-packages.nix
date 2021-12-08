@@ -359,8 +359,6 @@ let
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
-    estring = callPackage ../development/ocaml-modules/estring { };
-
     ethernet = callPackage ../development/ocaml-modules/ethernet { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
