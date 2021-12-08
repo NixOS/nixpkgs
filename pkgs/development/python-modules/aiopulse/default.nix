@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , async-timeout
 , pythonOlder
 }:
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Wp8NUjRlO+6ASqIt3C0YJRh0EKcEukXVMp4I+TCTElo=";
+  src = fetchFromGitHub {
+     owner = "atmurray";
+     repo = "aiopulse";
+     rev = "v0.4.3";
+     sha256 = "15kwil3y3a0jlh01vm4bmrvxmxmhchqrpg01vv58x22ylli9j8ki";
   };
 
   propagatedBuildInputs = [
