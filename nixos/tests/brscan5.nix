@@ -23,6 +23,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
   testScript = ''
+    import re
     # sane loads libsane-brother5.so.1 successfully, and scanimage doesn't die
     strace = machine.succeed('strace scanimage -L 2>&1').split("\n")
     regexp = 'openat\(.*libsane-brother5.so.1", O_RDONLY|O_CLOEXEC\) = \d\d*$'
