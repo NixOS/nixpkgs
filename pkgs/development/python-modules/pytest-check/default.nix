@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pytest-check";
   version = "1.0.4";
+  format = "flit";
 
   src = fetchPypi {
     pname = "pytest_check";
