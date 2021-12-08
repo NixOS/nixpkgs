@@ -369,8 +369,6 @@ let
 
     facile = callPackage ../development/ocaml-modules/facile { };
 
-    faillib = callPackage ../development/ocaml-modules/faillib { };
-
     faraday = callPackage ../development/ocaml-modules/faraday { };
 
     faraday-async = callPackage ../development/ocaml-modules/faraday/async.nix { };
