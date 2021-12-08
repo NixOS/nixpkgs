@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "clickhouse-cityhash";
   version = "1.0.2.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0z8nl0ly2p1h6nygwxs6y40q8y424w40fkjv3jyf8vvcg4h7sdrg";
+  src = fetchFromGitHub {
+     owner = "xzkostyan";
+     repo = "python-cityhash";
+     rev = "1.0.2.3";
+     sha256 = "0b6w0cp66y5d600srp1hp7ibmywac6aymmldksl8swl5jvb9rffg";
   };
 
   propagatedBuildInputs = [ setuptools ];
