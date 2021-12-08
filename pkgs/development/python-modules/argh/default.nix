@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , py
 , mock
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "argh";
   version = "0.26.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
+  src = fetchFromGitHub {
+     owner = "neithere";
+     repo = "argh";
+     rev = "v0.26.2";
+     sha256 = "1829wivrzi0an7aai07cfc0arsrzjk2dh6mc4phf2s44q6vacb9k";
   };
 
   checkInputs = [ pytest py mock glibcLocales iocapture ];
