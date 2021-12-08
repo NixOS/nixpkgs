@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , six
 , nose
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "98e5854d805f50a5b58ac2333411b0482516a8210f23f43308baeb58d77c157d";
+  src = fetchFromGitHub {
+     owner = "erikrose";
+     repo = "blessings";
+     rev = "1.7";
+     sha256 = "0g6fqywhkww5pqgyxwmlahj0g0lh96vph0qm2661mmf788nbyc7y";
   };
 
   # 4 failing tests, 2to3
