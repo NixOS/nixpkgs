@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, chardet, hypothesis }:
+{ lib, buildPythonPackage, fetchFromGitHub, chardet, hypothesis }:
 
 buildPythonPackage rec {
   pname = "binaryornot";
   version = "0.4.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061";
+  src = fetchFromGitHub {
+     owner = "audreyr";
+     repo = "binaryornot";
+     rev = "0.4.4";
+     sha256 = "1k1a77s4ynd7gbnw4cmdnmy5pzbxxvxfcvrv217h0g7zrhzwivm4";
   };
 
   prePatch = ''
