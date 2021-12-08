@@ -2121,4 +2121,7 @@ EOT
   # https://github.com/ChrisPenner/jet/issues/1
   jet = doJailbreak super.jet;
 
+  # Use latest version until next Stackage LTS snapshot
+  Agda = doDistribute self.Agda_2_6_2_1;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
