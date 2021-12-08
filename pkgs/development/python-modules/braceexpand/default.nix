@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -11,9 +11,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "01gpcnksnqv6np28i4x8s3wkngawzgs99zvjfia57spa42ykkrg6";
+  src = fetchFromGitHub {
+     owner = "trendels";
+     repo = "braceexpand";
+     rev = "v0.1.7";
+     sha256 = "07nmh2556d46fnnhh1643sf4yg0ljifjkgjp6vkjfp9zbz43bd0s";
   };
 
   checkInputs = [ pytestCheckHook ];
