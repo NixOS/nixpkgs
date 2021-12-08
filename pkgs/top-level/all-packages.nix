@@ -21368,7 +21368,7 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  promscale = callPackage ../servers/monitoring/prometheus/promscale.nix { };
+  promscale = callPackage ../servers/monitoring/prometheus/promscale { };
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
