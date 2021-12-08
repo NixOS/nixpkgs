@@ -6,6 +6,7 @@
 , libXcursor
 , libpng
 , python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     install -m644 clickgen/xcursorgen.so $out/${python.sitePackages}/clickgen/xcursorgen.so
   '';
 
-  # Tests fail with ${bitmap_error}.
-  # Application works normally if tests are disabled
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/ful1e5/clickgen";
