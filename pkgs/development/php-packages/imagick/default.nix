@@ -3,8 +3,8 @@
 buildPecl {
   pname = "imagick";
 
-  version = "3.5.0";
-  sha256 = "0afjyll6rr79am6d1p041bl4dj44hp9z4gzmlhrkvkdsdz1vfpbr";
+  version = "3.6.0";
+  sha256 = "sha256-Till8tcN1ZpA55V9VuWQ5zHK0maen4ng/KFZ10jSlH4=";
 
   configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
   nativeBuildInputs = [ pkg-config ];
