@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "colorlog";
   version = "6.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-NE9zIEAJ5Mg8W2vrALPEXccPza48gNuRngpBcdAG/eg=";
+  src = fetchFromGitHub {
+     owner = "borntyping";
+     repo = "python-colorlog";
+     rev = "v6.6.0";
+     sha256 = "0sfs2alhhnjmxzgbqdhbh1ylykdcj9vkm7rs6i7xymsgpf26qinb";
   };
 
   checkInputs = [ pytestCheckHook ];
