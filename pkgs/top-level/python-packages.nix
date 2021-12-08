@@ -6698,6 +6698,8 @@ in {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
+  pykeyatome = callPackage ../development/python-modules/pykeyatome { };
+
   pykira = callPackage ../development/python-modules/pykira { };
 
   pykka = callPackage ../development/python-modules/pykka { };
