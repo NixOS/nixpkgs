@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyhamcrest
 , pytest-benchmark
 , pytestCheckHook
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "2.1.1";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c5d0cb3f5b6e81e8e35da5754388ddcc6d0d14b6c6a132cb93d69ed580a7278c";
+  src = fetchFromGitHub {
+     owner = "keis";
+     repo = "base58";
+     rev = "v2.1.1";
+     sha256 = "0mi9m7wmp93qzv0n92r1qi0yskj2vr0ffh0wpl0r4x6krfvyy7xm";
   };
 
   checkInputs = [
