@@ -15,6 +15,12 @@ buildGoModule rec {
 
   # No tests
   doCheck = false;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export HOME=$(mktemp -d)
+    echo checking the version print of pdfcpu
+    $out/bin/pdfcpu version | grep ${version}
+  '';
 
   subPackages = [ "cmd/pdfcpu" ];
 
