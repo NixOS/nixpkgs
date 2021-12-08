@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy35, pytest, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy35, pytest, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "async_generator";
@@ -6,9 +6,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144";
+  src = fetchFromGitHub {
+     owner = "python-trio";
+     repo = "async_generator";
+     rev = "v1.10";
+     sha256 = "1qa5082j4jf66z14hi8ihbzk5hbdfw9aj4qvsqbaicmn0bi8sws3";
   };
 
   checkInputs = [ pytest pytest-asyncio ];
