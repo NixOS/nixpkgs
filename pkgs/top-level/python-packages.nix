@@ -3494,6 +3494,8 @@ in {
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
+  hahomematic = callPackage ../development/python-modules/hahomematic { };
+
   halo = callPackage ../development/python-modules/halo { };
 
   halohome = callPackage ../development/python-modules/halohome { };
