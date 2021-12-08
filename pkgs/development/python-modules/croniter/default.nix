@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python-dateutil
 , pytestCheckHook
 , pytz
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "croniter";
   version = "1.0.15";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06c2smrjskd9di8lcpymcxmygncxr14932qjhslc37yyaafzq3d7";
+  src = fetchFromGitHub {
+     owner = "kiorky";
+     repo = "croniter";
+     rev = "1.0.15";
+     sha256 = "1n6nnzyifdy4yc54mj99cvapqz0xr36vhpd29j8ifxk9gl5pj04n";
   };
 
   propagatedBuildInputs = [
