@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , python-dateutil, requests }:
 
 buildPythonPackage rec {
   pname = "bitcoin-price-api";
   version = "0.0.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bc68076f9632aaa9a8009d916d67a709c1e045dd904cfc7a3e8be33960d32029";
+  src = fetchFromGitHub {
+     owner = "dursk";
+     repo = "bitcoin-price-api";
+     rev = "v0.0.4";
+     sha256 = "1fjigd0v9r7hnjdnpyslzy1hh5njjqsbj2k5xy812x0j4pkbyqra";
   };
 
   propagatedBuildInputs = [ python-dateutil requests ];
