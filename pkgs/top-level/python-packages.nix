@@ -6472,6 +6472,8 @@ in {
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
+  pyecowitt = callPackage ../development/python-modules/pyecowitt { };
+
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
