@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , betamax, requests-toolbelt }:
 
 buildPythonPackage rec {
   pname = "betamax-matchers";
   version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07qpwjyq2i2aqhz5iwghnj4pqr2ys5n45v1vmpcfx9r5mhwrsq43";
+  src = fetchFromGitHub {
+     owner = "sigmavirus24";
+     repo = "betamax_matchers";
+     rev = "0.4.0";
+     sha256 = "0lyg3r91hwfvavyi5k6sddcla37igigycfv1mx40c32byqwl6pq5";
   };
 
   buildInputs = [ betamax requests-toolbelt ];
