@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , numpy
 }:
 
@@ -7,9 +7,11 @@ buildPythonPackage rec {
   version = "1.3.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a955df768e39d459de28c7ea10ee02f67b1c70996cfa229846ab98df77a6fb69";
+  src = fetchFromGitHub {
+     owner = "portugueslab";
+     repo = "arrayqueues";
+     rev = "v1.3.1";
+     sha256 = "138977clr7yfc5h1p64by0bc6z0xk1dzqmqma2a0y618iizjxzyx";
   };
 
   propagatedBuildInputs = [
