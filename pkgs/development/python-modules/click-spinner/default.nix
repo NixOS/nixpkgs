@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , click
 , six
 , pytestCheckHook
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "click-spinner";
   version = "0.1.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "h+rPnXKYlzol12Fe9X1Hgq6/kTpTK7pLKKN+Nm6XXa8=";
+  src = fetchFromGitHub {
+     owner = "click-contrib";
+     repo = "click-spinner";
+     rev = "v0.1.10";
+     sha256 = "1b8fm9c0zldx0q0br8vqmrln3bk4by4q8lqjmvgih51x83lcd42y";
   };
 
   checkInputs = [
