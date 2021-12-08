@@ -109,6 +109,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # what about /etc/default/jellyfin here?
+  postInstall = ''
+    mkdir -p $out/lib/systemd/system
+
+    substitute debian/jellyfin.service $out/lib/systemd/system/jellyfin.service \
+      --replace "/usr/bin/jellyfin" "$out/bin/jellyfin"
+  '';
+
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;
   };

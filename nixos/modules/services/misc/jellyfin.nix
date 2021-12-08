@@ -44,6 +44,9 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    systemd.packages = [ cfg.package ]; # will this get merged at systemd level?
+
     systemd.services.jellyfin = {
       description = "Jellyfin Media Server";
       after = [ "network.target" ];
@@ -55,45 +58,6 @@ in
         StateDirectory = "jellyfin";
         CacheDirectory = "jellyfin";
         ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
-        Restart = "on-failure";
-
-        # Security options:
-
-        NoNewPrivileges = true;
-
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
-
-        # ProtectClock= adds DeviceAllow=char-rtc r
-        DeviceAllow = "";
-
-        LockPersonality = true;
-
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-
-        RemoveIPC = true;
-
-        RestrictNamespaces = true;
-        # AF_NETLINK needed because Jellyfin monitors the network connection
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [
-          "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
-        ];
       };
     };
 
