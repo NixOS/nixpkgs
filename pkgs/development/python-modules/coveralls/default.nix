@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , mock
 , pytest
@@ -20,9 +20,11 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   # wanted by tests
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea";
+  src = fetchFromGitHub {
+     owner = "coveralls-clients";
+     repo = "coveralls-python";
+     rev = "3.3.1";
+     sha256 = "0ww5yamljj9w8zfg79pmqm00gs05wlsbqlvq6lqan4r20dgx0cgy";
   };
 
   checkInputs = [
