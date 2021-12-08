@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
   version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0p0gyhfqq6gssf3prsy0pcfq5w0wx2w3pcjqbwx3imvc92ls4xwm";
+  src = fetchFromGitHub {
+     owner = "movermeyer";
+     repo = "backports.datetime_fromisoformat";
+     rev = "v1.0.0";
+     sha256 = "0bj10ab5b15wdjhngi9hcmyy3y18dqi9c3x9573f8c9n145zs39p";
   };
 
   # no tests in pypi package
