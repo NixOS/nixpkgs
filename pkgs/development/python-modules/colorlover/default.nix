@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "colorlover";
   version = "0.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b8fb7246ab46e1f5e6715649453c1762e245a515de5ff2d2b4aab7a6e67fa4e2";
+  src = fetchFromGitHub {
+     owner = "jackparmer";
+     repo = "colorlover";
+     rev = "v0.3.0";
+     sha256 = "1zqc92hj0h9h8aijxb68gz3nv78zv3fzihwy7jyi57bxarfc5jp7";
   };
 
   # no tests included in distributed archive
