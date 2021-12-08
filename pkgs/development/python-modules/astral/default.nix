@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytz, requests, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "astral";
   version = "2.2";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e41d9967d5c48be421346552f0f4dedad43ff39a83574f5ff2ad32b6627b6fbe";
+  src = fetchFromGitHub {
+     owner = "sffjunkie";
+     repo = "astral";
+     rev = "2.2";
+     sha256 = "1vxls9z4w7c7hsj62z8yq0p8km0zf8rrjx3nk9b9lj60rn9m6s0s";
   };
 
   propagatedBuildInputs = [ pytz requests freezegun ];
