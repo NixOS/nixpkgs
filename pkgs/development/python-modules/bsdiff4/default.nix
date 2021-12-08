@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "bsdiff4";
   version = "1.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b";
+  src = fetchFromGitHub {
+     owner = "ilanschnell";
+     repo = "bsdiff4";
+     rev = "1.2.1";
+     sha256 = "0can34y5gmmi2c5bifyvj8a838gqdllpq1hdcb4h4d31r2q1gzgd";
   };
 
   checkPhase = ''
