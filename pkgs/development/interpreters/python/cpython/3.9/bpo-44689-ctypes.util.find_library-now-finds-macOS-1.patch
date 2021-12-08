@@ -1,0 +1,84 @@
+From 4b55837e7c747e0f3bd2df1b5c8996ce86c6f60a Mon Sep 17 00:00:00 2001
+From: "Miss Islington (bot)"
+ <31488909+miss-islington@users.noreply.github.com>
+Date: Mon, 30 Aug 2021 02:08:16 -0700
+Subject: [PATCH] bpo-44689: ctypes.util.find_library() now finds macOS 11+
+ system libraries when built on older macOS systems (GH-27251) (GH-28053)
+
+Previously, when built on older macOS systems, `find_library` was not able to find macOS system libraries when running on Big Sur due to changes in how system libraries are stored.
+(cherry picked from commit 71853a73024a98aa38a3c0444fe364dbd9709134)
+
+Co-authored-by: Tobias Bergkvist <tobias@bergkv.ist>
+---
+ .../2021-07-20-22-27-01.bpo-44689.mmT_xH.rst  |  5 ++++
+ Modules/_ctypes/callproc.c                    | 29 +++++++++++++++++--
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/macOS/2021-07-20-22-27-01.bpo-44689.mmT_xH.rst
+
+diff --git a/Misc/NEWS.d/next/macOS/2021-07-20-22-27-01.bpo-44689.mmT_xH.rst b/Misc/NEWS.d/next/macOS/2021-07-20-22-27-01.bpo-44689.mmT_xH.rst
+new file mode 100644
+index 0000000000..b1e878d1ee
+--- /dev/null
++++ b/Misc/NEWS.d/next/macOS/2021-07-20-22-27-01.bpo-44689.mmT_xH.rst
+@@ -0,0 +1,5 @@
++ :meth:`ctypes.util.find_library` now works correctly on macOS 11 Big Sur
++ even if Python is built on an older version of macOS.  Previously, when
++ built on older macOS systems, ``find_library`` was not able to find
++ macOS system libraries when running on Big Sur due to changes in
++ how system libraries are stored.
+diff --git a/Modules/_ctypes/callproc.c b/Modules/_ctypes/callproc.c
+index 18984d15ab..b0f1e0bd04 100644
+--- a/Modules/_ctypes/callproc.c
++++ b/Modules/_ctypes/callproc.c
+@@ -1449,14 +1449,37 @@ copy_com_pointer(PyObject *self, PyObject *args)
+     return r;
+ }
+ #else
+-
++#ifdef __APPLE__
+ #ifdef HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH
++#define HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH_RUNTIME \
++    __builtin_available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
++#else
++// Support the deprecated case of compiling on an older macOS version
++static void *libsystem_b_handle;
++static bool (*_dyld_shared_cache_contains_path)(const char *path);
++
++__attribute__((constructor)) void load_dyld_shared_cache_contains_path(void) {
++    libsystem_b_handle = dlopen("/usr/lib/libSystem.B.dylib", RTLD_LAZY);
++    if (libsystem_b_handle != NULL) {
++        _dyld_shared_cache_contains_path = dlsym(libsystem_b_handle, "_dyld_shared_cache_contains_path");
++    }
++}
++
++__attribute__((destructor)) void unload_dyld_shared_cache_contains_path(void) {
++    if (libsystem_b_handle != NULL) {
++        dlclose(libsystem_b_handle);
++    }
++}
++#define HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH_RUNTIME \
++    _dyld_shared_cache_contains_path != NULL
++#endif
++
+ static PyObject *py_dyld_shared_cache_contains_path(PyObject *self, PyObject *args)
+ {
+      PyObject *name, *name2;
+      char *name_str;
+ 
+-     if (__builtin_available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)) {
++     if (HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH_RUNTIME) {
+          int r;
+ 
+          if (!PyArg_ParseTuple(args, "O", &name))
+@@ -1999,7 +2022,7 @@ PyMethodDef _ctypes_module_methods[] = {
+     {"dlclose", py_dl_close, METH_VARARGS, "dlclose a library"},
+     {"dlsym", py_dl_sym, METH_VARARGS, "find symbol in shared library"},
+ #endif
+-#ifdef HAVE_DYLD_SHARED_CACHE_CONTAINS_PATH
++#ifdef __APPLE__
+      {"_dyld_shared_cache_contains_path", py_dyld_shared_cache_contains_path, METH_VARARGS, "check if path is in the shared cache"},
+ #endif
+     {"alignment", align_func, METH_O, alignment_doc},
+-- 
+2.33.1
+
