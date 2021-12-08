@@ -35,6 +35,7 @@
   ./config/system-path.nix
   ./config/terminfo.nix
   ./config/unix-odbc-drivers.nix
+  ./config/user-profiles.nix
   ./config/users-groups.nix
   ./config/vte.nix
   ./config/zram.nix
