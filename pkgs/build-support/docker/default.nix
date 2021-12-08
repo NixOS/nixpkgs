@@ -871,7 +871,7 @@ rec {
             ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
               source $stdenv/setup
               ${optionalString (!enableFakechroot) ''cd old_out''}
-              eval "$fakeRootCommands"
+              (eval "$fakeRootCommands")
               tar \
                 --sort name \
                 --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
