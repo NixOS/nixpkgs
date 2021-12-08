@@ -6,6 +6,7 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.kubelet;
+  klib = options.services.kubernetes.lib.default;
 
   cniConfig =
     if cfg.cni.config != [] && cfg.cni.configDir != null then
@@ -27,7 +28,7 @@ let
     config.Cmd = ["/bin/pause"];
   };
 
-  kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
+  kubeconfig = klib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
   manifestPath = "kubernetes/manifests";
 
@@ -177,7 +178,7 @@ in
       type = str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubelet";
+    kubeconfig = klib.mkKubeConfigOptions "Kubelet";
 
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
@@ -358,7 +359,7 @@ in
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
 
-      services.kubernetes.pki.certs = with top.lib; {
+      services.kubernetes.pki.certs = with klib; {
         kubelet = mkCert {
           name = "kubelet";
           CN = top.kubelet.hostname;
