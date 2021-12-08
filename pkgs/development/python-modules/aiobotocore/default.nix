@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , wrapt
 , aioitertools
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   version = "1.4.2";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c2f4ef325aaa839e9e2a53346b4c1c203656783a4985ab36fd4c2a9ef2dc1d2b";
+  src = fetchFromGitHub {
+     owner = "aio-libs";
+     repo = "aiobotocore";
+     rev = "1.4.2";
+     sha256 = "11wvcsxpzbfz4iwvr35lvpf5padfnkfydrnr9m9m9virila8npgl";
   };
 
   # relax version constraints: aiobotocore works with newer botocore versions
