@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "area";
   version = "1.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18k5hwmlxhajlq306zxndsglb11vv8vd4vpmwx8dpvfxd1kbksya";
+  src = fetchFromGitHub {
+     owner = "scisco";
+     repo = "area";
+     rev = "v1.1.1";
+     sha256 = "1r755xnskdvd51was0kx70ddbb96r08lycgaqzm55fiwi7f91ppz";
   };
 
   # tests not working on the package from pypi
