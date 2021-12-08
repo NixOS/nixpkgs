@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python }:
 
 buildPythonPackage rec {
   pname = "asynctest";
@@ -6,9 +6,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1b3zsy7p84gag6q8ai2ylyrhx213qdk2h2zb6im3xn0m5n264y62";
+  src = fetchFromGitHub {
+     owner = "Martiusweb";
+     repo = "asynctest";
+     rev = "v0.13.0";
+     sha256 = "1mqip290iyc028drmrd5dy1ay08hdgvyfs04ncylcll86v64a5vz";
   };
 
   postPatch = ''
