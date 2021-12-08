@@ -7,13 +7,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.69";
+  version = "1.70";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5WRhVIQlSwWuyvkzrnNW0rdVet9ZzM47gISJpznM8mU=";
+    sha256 = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
   };
 
   postPatch = ''
