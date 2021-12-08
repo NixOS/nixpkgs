@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
   pname = "casttube";
   version = "0.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10pw2sjy648pvp42lbbdmkkx79bqlkq1xcbzp1frraj9g66azljl";
+  src = fetchFromGitHub {
+     owner = "ur1katz";
+     repo = "casttube";
+     rev = "0.2.1";
+     sha256 = "1860cw42qzbqpvmxj4851qnqqgiyd1scyf49g0cd4iz0gzwhfgb0";
   };
 
   propagatedBuildInputs = [ requests ];
