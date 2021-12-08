@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromGitHub, buildPythonPackage
 , fetchpatch, configobj, six, traitsui
 , pytestCheckHook, tables, pandas
 , pythonOlder, importlib-resources
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "apptools";
   version = "5.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "12x5lcs1cllpybz7f0i1lcwvmqsaa5n818wb2165lj049wqxx4yh";
+  src = fetchFromGitHub {
+     owner = "enthought";
+     repo = "apptools";
+     rev = "5.1.0";
+     sha256 = "1vlld68hhl4mda8rkiflq9nbzgk43j29hk3k2f41rm4h0l3hqiax";
   };
 
   patches = [
