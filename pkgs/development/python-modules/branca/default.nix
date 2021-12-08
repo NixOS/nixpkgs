@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , jinja2
 , selenium
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "branca";
   version = "0.4.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c111453617b17ab2bda60a4cd71787d6f2b59c85cdf71ab160a737606ac66c31";
+  src = fetchFromGitHub {
+     owner = "python-visualization";
+     repo = "branca";
+     rev = "v0.4.2";
+     sha256 = "016gvpmw5hggs1q77f9k014k7mb03yxk1aashyd24cw908zjlqgz";
   };
 
   checkInputs = [ pytest selenium ];
