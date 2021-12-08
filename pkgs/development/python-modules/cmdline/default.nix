@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml }:
 
 buildPythonPackage rec {
   pname = "cmdline";
   version = "0.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7cf6af53549892b2218c2f56a199dff54a733be5c5515c0fd626812070b0a86a";
+  src = fetchFromGitHub {
+     owner = "rca";
+     repo = "cmdline";
+     rev = "0.2.0";
+     sha256 = "1jda3hp3hdlzxk4p1z6g0x52pbf0w66llakddcn9874g8nsh4v65";
   };
 
   # No tests, https://github.com/rca/cmdline/issues/1
