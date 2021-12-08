@@ -11,6 +11,7 @@
 , libxml2
 , gtk3
 , libnotify
+, gvfs
 , cinnamon-desktop
 , xapps
 , libexif
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     xapps
     libexif
     exempi
+    gvfs
     gobject-introspection
     libgsf
   ];
@@ -73,3 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.cinnamon.members;
   };
 }
+
