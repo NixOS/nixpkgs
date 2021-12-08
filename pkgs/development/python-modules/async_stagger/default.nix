@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
 , pytest-asyncio
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1mj3daaqxjdavbxcjrdwx5ky9maa2blbv53aa6d7w9zxkrz3b7xa";
+  src = fetchFromGitHub {
+     owner = "twisteroidambassador";
+     repo = "async_stagger";
+     rev = "v0.3.1";
+     sha256 = "0971ah19z9n52xhbylssh5nmdays9rmxhg3hjy0iv8bnfykz62xc";
   };
 
   checkInputs = [
