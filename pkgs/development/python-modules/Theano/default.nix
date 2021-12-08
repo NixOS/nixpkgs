@@ -1,6 +1,6 @@
 { lib, stdenv
 , runCommandCC
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , isPyPy
 , pythonOlder
@@ -47,9 +47,11 @@ in buildPythonPackage rec {
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
+  src = fetchFromGitHub {
+     owner = "Theano";
+     repo = "Theano";
+     rev = "rel-1.0.5";
+     sha256 = "08m2awwfybg7c1kcafjw3km9c0bldp5rsff3vm20syfmv145q0qq";
   };
 
   postPatch = ''
