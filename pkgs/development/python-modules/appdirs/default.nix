@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "appdirs";
   version = "1.4.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41";
+  src = fetchFromGitHub {
+     owner = "ActiveState";
+     repo = "appdirs";
+     rev = "1.4.4";
+     sha256 = "0d8hzhb1f1h16q1pxdx2h5xs6nmfjfjvkgqbb2rrsapj36r864za";
   };
 
   meta = {
