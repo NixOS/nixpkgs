@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "ansicolor";
   version = "0.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3b840a6b1184b5f1568635b1adab28147947522707d41ceba02d5ed0a0877279";
+  src = fetchFromGitHub {
+     owner = "numerodix";
+     repo = "ansicolor";
+     rev = "0.3.2";
+     sha256 = "1q5qahpvva9wdh5mv3a4a6iazx4jrdmc41ny1dyc8z40im9l1w3b";
   };
 
   meta = with lib; {
