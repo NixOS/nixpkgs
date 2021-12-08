@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, pytest }:
 
 buildPythonPackage rec {
   pname = "allpairspy";
   version = "2.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9358484c91abe74ba18daf9d6d6904c5be7cc8818397d05248c9d336023c28b1";
+  src = fetchFromGitHub {
+     owner = "thombashi";
+     repo = "allpairspy";
+     rev = "v2.5.0";
+     sha256 = "1xdmvsq99jf687p44iwzzadlhqv0w2rffr3am127i7d80xj2w5bg";
   };
 
   propagatedBuildInputs = [ six ];
