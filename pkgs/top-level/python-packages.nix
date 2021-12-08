@@ -322,6 +322,8 @@ in {
 
   aiobotocore = callPackage ../development/python-modules/aiobotocore { };
 
+  aiobroadlink = callPackage ../development/python-modules/aiobroadlink { };
+
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
@@ -2085,6 +2087,8 @@ in {
 
   dill = callPackage ../development/python-modules/dill { };
 
+  dingz = callPackage ../development/python-modules/dingz { };
+
   diofant = callPackage ../development/python-modules/diofant { };
 
   dipy = callPackage ../development/python-modules/dipy { };
@@ -3501,6 +3505,8 @@ in {
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
+  hahomematic = callPackage ../development/python-modules/hahomematic { };
+
   halo = callPackage ../development/python-modules/halo { };
 
   halohome = callPackage ../development/python-modules/halohome { };
@@ -4507,6 +4513,8 @@ in {
 
   lightparam = callPackage ../development/python-modules/lightparam { };
 
+  lightwave2 = callPackage ../development/python-modules/lightwave2 { };
+
   lima = callPackage ../development/python-modules/lima { };
 
   limiter= callPackage ../development/python-modules/limiter { };
@@ -4607,6 +4615,8 @@ in {
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
+
+  luxor = callPackage ../development/python-modules/luxor { };
 
   luxtronik = callPackage ../development/python-modules/luxtronik { };
 
@@ -4944,6 +4954,8 @@ in {
   monotonic = callPackage ../development/python-modules/monotonic { };
 
   monty = callPackage ../development/python-modules/monty { };
+
+  moonraker-api = callPackage ../development/python-modules/moonraker-api { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
@@ -5717,6 +5729,8 @@ in {
 
   persisting-theory = callPackage ../development/python-modules/persisting-theory { };
 
+  pescea = callPackage ../development/python-modules/pescea { };
+
   pex = callPackage ../development/python-modules/pex { };
 
   pexif = callPackage ../development/python-modules/pexif { };
@@ -5879,6 +5893,8 @@ in {
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
+
+  pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
@@ -6479,6 +6495,8 @@ in {
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
+  pyecowitt = callPackage ../development/python-modules/pyecowitt { };
+
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
@@ -6649,6 +6667,8 @@ in {
 
   pyhomepilot = callPackage ../development/python-modules/pyhomepilot { };
 
+  pyhomeworks = callPackage ../development/python-modules/pyhomeworks { };
+
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
@@ -6698,6 +6718,8 @@ in {
   pykeepass = callPackage ../development/python-modules/pykeepass { };
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
+
+  pykeyatome = callPackage ../development/python-modules/pykeyatome { };
 
   pykira = callPackage ../development/python-modules/pykira { };
 
@@ -8227,6 +8249,8 @@ in {
 
   rencode = callPackage ../development/python-modules/rencode { };
 
+  reolink = callPackage ../development/python-modules/reolink { };
+
   reparser = callPackage ../development/python-modules/reparser { };
 
   repeated_test = callPackage ../development/python-modules/repeated_test { };
@@ -8340,6 +8364,8 @@ in {
   });
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
+
+  rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
 
   rl-coach = callPackage ../development/python-modules/rl-coach { };
 
@@ -8585,6 +8611,8 @@ in {
 
   seaserv = toPythonModule pkgs.seafile-server;
 
+  seatconnect = callPackage ../development/python-modules/seatconnect { };
+
   seccomp = callPackage ../development/python-modules/seccomp { };
 
   secp256k1 = callPackage ../development/python-modules/secp256k1 {
@@ -8751,6 +8779,8 @@ in {
   skidl = callPackage ../development/python-modules/skidl { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
+  skodaconnect = callPackage ../development/python-modules/skodaconnect { };
 
   skorch = callPackage ../development/python-modules/skorch { };
 
@@ -10004,6 +10034,8 @@ in {
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 
   wavefile = callPackage ../development/python-modules/wavefile { };
+
+  wavinsentio = callPackage ../development/python-modules/wavinsentio { };
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
