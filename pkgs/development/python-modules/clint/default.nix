@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , mock
 , blessings
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   pname = "clint";
   version = "0.5.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1an5lkkqk1zha47198p42ji3m94xmzx1a03dn7866m87n4r4q8h5";
+  src = fetchFromGitHub {
+     owner = "kennethreitz";
+     repo = "clint";
+     rev = "v0.5.1";
+     sha256 = "1qv7d8h16klk3n9a8aw6bldpg3gxvvpffzrwjwq83yjrynn1psww";
   };
 
   LC_ALL="en_US.UTF-8";
