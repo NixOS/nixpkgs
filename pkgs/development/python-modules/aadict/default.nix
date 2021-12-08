@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , six
 , nose
 , coverage
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "aadict";
   version = "0.2.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "013pn9ii6mkql6khgdvsd1gi7zmya418fhclm5fp7dfvann2hwx7";
+  src = fetchFromGitHub {
+     owner = "metagriffin";
+     repo = "aadict";
+     rev = "v0.2.3";
+     sha256 = "0419s6jdz99ibd949bj5i2sdlqcjah7crh9c5xywjwl1li8dwgin";
   };
 
   propagatedBuildInputs = [ six ];
