@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , beautifulsoup4
 , requests
 , future
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "cloudflare";
   version = "2.8.15";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1f47bd324f80e91487dea2c79be934b1dc612bcfa63e784dcf74c6a2f52a41cc";
+  src = fetchFromGitHub {
+     owner = "cloudflare";
+     repo = "python-cloudflare";
+     rev = "2.8.15";
+     sha256 = "1ygh3xh3b6600v17jfagjjxkzn6jsmrm51p1lifanl4rq4p927pr";
   };
 
   propagatedBuildInputs = [
