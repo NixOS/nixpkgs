@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPyPy
 , pytestCheckHook
 , case
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "3.6.4.0";
   disabled = isPyPy;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ismj2p8c66ykpss94rs0bfra5agxxmljz8r3gaq79r8valfb799";
+  src = fetchFromGitHub {
+     owner = "celery";
+     repo = "billiard";
+     rev = "v3.6.4.0";
+     sha256 = "1wg9sg8kcvhhqliq5dpgslcfw4xah67yjnrrz69lmk70lc32jkib";
   };
 
   checkInputs = [
