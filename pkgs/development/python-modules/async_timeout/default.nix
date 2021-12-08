@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
 , typing-extensions
@@ -11,9 +11,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-uTDLFho5BC+SIvbvtzATmch+6rOUcn7FQ3kko21u71E=";
+  src = fetchFromGitHub {
+     owner = "aio-libs";
+     repo = "async_timeout";
+     rev = "v4.0.1";
+     sha256 = "0jgpd5qs9flg7gz56a48bx6m365mf0ldim8aa2xpcqnsxq81zxyp";
   };
 
   propagatedBuildInputs = [
