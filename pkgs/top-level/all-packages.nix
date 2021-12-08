@@ -22272,6 +22272,7 @@ with pkgs;
 
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
+  linux_xanmod = linuxKernel.kernels.linux_xanmod;
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
