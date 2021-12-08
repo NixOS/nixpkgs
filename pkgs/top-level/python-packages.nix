@@ -8584,6 +8584,8 @@ in {
 
   seaserv = toPythonModule pkgs.seafile-server;
 
+  seatconnect = callPackage ../development/python-modules/seatconnect { };
+
   seccomp = callPackage ../development/python-modules/seccomp { };
 
   secp256k1 = callPackage ../development/python-modules/secp256k1 {
