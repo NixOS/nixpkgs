@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiohttp
 , ciso8601
 , pandas
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "aioinflux";
   version = "0.9.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1jy5mcg9wdz546s9wdwsgkxhm2ac4dmphd9vz243db39j1m0a3bj";
+  src = fetchFromGitHub {
+     owner = "gusutabopb";
+     repo = "aioinflux";
+     rev = "v0.9.0";
+     sha256 = "0cvzkd05i8bzh76m75s7na2gb0kh5msyyz60ajxpj2by9x6qkxmc";
   };
 
   propagatedBuildInputs = [ aiohttp ciso8601 pandas ];
