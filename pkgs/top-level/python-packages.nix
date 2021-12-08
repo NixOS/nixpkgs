@@ -4934,6 +4934,8 @@ in {
 
   monty = callPackage ../development/python-modules/monty { };
 
+  moonraker-api = callPackage ../development/python-modules/moonraker-api { };
+
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   moretools = callPackage ../development/python-modules/moretools { };
