@@ -16,6 +16,8 @@ in {
     };
 
     etc = ./modules/system/etc/etc.nix;
+
+    users = ./modules/config/users-groups.nix;
   };
 
   evalModules = {
