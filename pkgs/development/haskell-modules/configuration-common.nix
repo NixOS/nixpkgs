@@ -2003,7 +2003,7 @@ EOT
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-    streamly = self.streamly_0_8_1;
+    streamly = self.streamly_0_8_1_1;
     Cabal = self.Cabal_3_6_2_0;
     libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
