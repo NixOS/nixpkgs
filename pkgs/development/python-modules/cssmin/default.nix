@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "cssmin";
   version = "0.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1dk723nfm2yf8cp4pj785giqlwv42l0kj8rk40kczvq1hk6g04p0";
+  src = fetchFromGitHub {
+     owner = "zacharyvoase";
+     repo = "cssmin";
+     rev = "v0.2.0";
+     sha256 = "04bzpal6j26pjjjf3p7iq6g2wcr61j4g0ygqz6h847h4hsyah9qg";
   };
 
   # no tests
