@@ -155,14 +155,11 @@ self: super: {
   validity = pkgs.lib.pipe super.validity_0_12_0_0 [
     # head.hackage patch
     (appendPatch (pkgs.fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/validity-0.11.0.1.patch";
-      sha256 = "0qs6g1naqvcvklk78cadnpsfqnff1yflryi2ms6im203w75f2fsc";
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
+      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
     }))
     # head.hackage ignores test suite
     dontCheck
-    # 0.12.0.0 disabled CPP in fetched file, breaks haddock
-    (appendConfigureFlag "--ghc-option=-XCPP")
-    dontHaddock
   ];
 
   # lens >= 5.1 supports 9.2.1
