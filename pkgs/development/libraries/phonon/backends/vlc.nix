@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "phonon-backend-vlc";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xsM7/GjRN/DlegKeS3mMu5D1Svb3Ma9JZ3hXeRzNU6U=";
+    sha256 = "sha256-Xmn97MsGDH5rWSTO8uZb7loIrOQScAW5U0TtMHfcY5c=";
   };
 
   buildInputs = [
