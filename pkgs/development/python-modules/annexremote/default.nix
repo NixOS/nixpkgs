@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "annexremote";
   version = "1.6.0";
 
-  # use fetchFromGitHub instead of fetchPypi because the test suite of
+  # use fetchFromGitHub instead of fetchFromGitHub because the test suite of
   # the package is not included into the PyPI tarball
   src = fetchFromGitHub {
     rev = "v${version}";
