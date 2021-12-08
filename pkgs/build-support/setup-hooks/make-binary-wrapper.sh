@@ -34,8 +34,8 @@ makeBinaryWrapper() {
     makeDocumentedCWrapper "$1" "${@:3}" | cc -Os -x c -o "$2" -
 }
 
-# Syntax: wrapProgramBinary <PROGRAM> <MAKE-WRAPPER FLAGS...>
-wrapProgramBinary() {
+# Syntax: binaryWrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
+binaryWrapProgram() {
     local prog="$1"
     local hidden
 
