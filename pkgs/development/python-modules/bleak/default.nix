@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub
 , bluez, dbus-next, pytestCheckHook, pytest-cov
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1vnwk36qfws9amqrdaynf63dcj2gzxm0ns1l75hrczmd5j2ic1zb";
+  src = fetchFromGitHub {
+     owner = "hbldh";
+     repo = "bleak";
+     rev = "v0.13.0";
+     sha256 = "1vfrxjxpcbsldknvg65ri71h6ndk4pjcdalj4gj4qr8z3w9y4gps";
   };
 
   postPatch = ''
