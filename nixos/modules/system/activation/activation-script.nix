@@ -103,6 +103,8 @@ in
 
 {
 
+  imports = [ ./top-level.nix ];
+
   ###### interface
 
   options = {
