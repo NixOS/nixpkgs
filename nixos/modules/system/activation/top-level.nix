@@ -10,7 +10,6 @@ let
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
 
-      echo -n "$configurationName" > $out/configuration-name
       echo -n "$nixosLabel" > $out/nixos-version
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
@@ -42,8 +41,6 @@ let
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     nixosLabel = config.system.nixos.label;
-
-    configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ FileSlurp NetDBus XMLParser XMLTwig ]);
