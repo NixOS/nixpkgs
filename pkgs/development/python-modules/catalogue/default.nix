@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0idjhx2s8cy6ppd18k1zy246d97gdd6i217m5q26fwa47xh3asik";
+  src = fetchFromGitHub {
+     owner = "explosion";
+     repo = "catalogue";
+     rev = "v2.0.6";
+     sha256 = "0024jqhmpwa86l0a2x5f61ycz465168p979kc32qwi27ayykwdbs";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
