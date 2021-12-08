@@ -2,7 +2,7 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , slixmpp
 }:
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0adf08955810a227db489556dc3ca808e4f825a00183f613797856114c2a2a47";
+  src = fetchFromGitHub {
+     owner = "ehendrix23";
+     repo = "aioharmony";
+     rev = "v0.2.8";
+     sha256 = "1k6smns8klvymd7h6649454ssg3z66xl886lhzm2gqj33yw4c0cf";
   };
 
   propagatedBuildInputs = [
