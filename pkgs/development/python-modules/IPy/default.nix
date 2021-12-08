@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage rec {
   pname = "IPy";
   version = "1.01";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a";
+  src = fetchFromGitHub {
+     owner = "autocracy";
+     repo = "python-ipy";
+     rev = "IPy-1.01";
+     sha256 = "106rirmirlpb5ppznn3fd8189a8z02zf99jvk6j4hcq05ajclfc6";
   };
 
   checkInputs = [ nose ];
