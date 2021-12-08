@@ -240,6 +240,11 @@ checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
+# submodules in freeformTypes should have their locations annotated
+checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
+# freeformTypes can get merged using `types.type`, including submodules
+checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
+checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
 
 ## types.anything
 # Check that attribute sets are merged recursively
