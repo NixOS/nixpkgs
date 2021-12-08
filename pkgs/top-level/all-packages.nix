@@ -2366,7 +2366,7 @@ with pkgs;
     '';
   };
 
-  stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (drv: {
+  stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (_: {
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/stack2nix \
@@ -2680,6 +2680,8 @@ with pkgs;
   datasette = with python3Packages; toPythonApplication datasette;
 
   howard-hinnant-date = callPackage ../development/libraries/howard-hinnant-date { };
+
+  datefmt = callPackage ../tools/misc/datefmt { };
 
   datefudge = callPackage ../tools/system/datefudge { };
 
@@ -4206,7 +4208,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_8.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -5144,7 +5146,7 @@ with pkgs;
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_8.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -6068,7 +6070,7 @@ with pkgs;
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
       version = "20200223";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -6468,7 +6470,7 @@ with pkgs;
 
     jupyter = python3.withPackages (ps: [ ps.jupyter ps.notebook ]);
 
-    packages = config.ihaskell.packages or (self: []);
+    packages = config.ihaskell.packages or (_: []);
   };
 
   ijq = callPackage ../development/tools/ijq { };
@@ -10896,7 +10898,7 @@ with pkgs;
 
   wget2 = callPackage ../tools/networking/wget2 {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
       version = "20210208";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -16423,7 +16425,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_27 = libgit2.overrideAttrs (oldAttrs: rec {
+  libgit2_0_27 = libgit2.overrideAttrs (_: rec {
     version = "0.27.10";
     src = fetchFromGitHub {
       owner = "libgit2";
@@ -16437,7 +16439,7 @@ with pkgs;
     ];
   });
 
-  libgit2_1_1 = libgit2.overrideAttrs (oldAttrs: rec {
+  libgit2_1_1 = libgit2.overrideAttrs (_: rec {
     version = "1.1.1";
     src = fetchFromGitHub {
       owner = "libgit2";
@@ -19138,7 +19140,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
 
-  portaudio2014 = portaudio.overrideAttrs (oldAttrs: {
+  portaudio2014 = portaudio.overrideAttrs (_: {
     src = fetchurl {
       url = "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz";
       sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
@@ -19438,7 +19440,7 @@ with pkgs;
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
-  rocksdb_6_23 = rocksdb.overrideAttrs (old: rec {
+  rocksdb_6_23 = rocksdb.overrideAttrs (_: rec {
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
@@ -20523,11 +20525,11 @@ with pkgs;
 
   sqitchMysql = (callPackage ../development/tools/misc/sqitch {
     mysqlSupport = true;
-  }).overrideAttrs (oldAttrs: { pname = "sqitch-mysql"; });
+  }).overrideAttrs (_: { pname = "sqitch-mysql"; });
 
   sqitchPg = (callPackage ../development/tools/misc/sqitch {
     postgresqlSupport = true;
-  }).overrideAttrs (oldAttrs: { pname = "sqitch-pg"; });
+  }).overrideAttrs (_: { pname = "sqitch-pg"; });
 
   ### DEVELOPMENT / R MODULES
 
@@ -20561,7 +20563,7 @@ with pkgs;
   };
 
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
-    overrides = (config.rPackageOverrides or (p: {})) pkgs;
+    overrides = (config.rPackageOverrides or (_: {})) pkgs;
   });
 
   ### SERVERS
@@ -24944,6 +24946,8 @@ with pkgs;
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
+  f1viewer = callPackage ../applications/video/f1viewer {};
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };
@@ -28911,7 +28915,7 @@ with pkgs;
         darwin = true;
       };
     };
-  }).overrideAttrs (oldAttrs: rec {
+  }).overrideAttrs (_: rec {
     pname = "vim-darwin";
     meta = {
       platforms = lib.platforms.darwin;
@@ -29464,7 +29468,7 @@ with pkgs;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
-    packages = self: [ haskellPackages.xmonad-contrib ];
+    packages = _: [ haskellPackages.xmonad-contrib ];
   };
 
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
@@ -31645,7 +31649,7 @@ with pkgs;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
-    gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
+    gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
     stdenv = gccStdenv;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {
@@ -31689,7 +31693,7 @@ with pkgs;
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = lib.overrideDerivation polyml (attrs: {
+    polyml = lib.overrideDerivation polyml (_: {
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 
