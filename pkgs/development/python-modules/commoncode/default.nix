@@ -4,7 +4,7 @@
 , beautifulsoup4
 , buildPythonPackage
 , click
-, fetchPypi
+, fetchFromGitHub
 , intbitset
 , pytest-xdist
 , pytestCheckHook
@@ -22,9 +22,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
+  src = fetchFromGitHub {
+     owner = "nexB";
+     repo = "commoncode";
+     rev = "v30.0.0";
+     sha256 = "07s9qijnrzk2jpc0gzzg4p7ig7kxp7f2pp11prf5mvk74wc1bzbn";
   };
 
   dontConfigure = true;
