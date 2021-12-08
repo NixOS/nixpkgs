@@ -16215,6 +16215,8 @@ with pkgs;
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
 
+  filament = callPackage ../development/libraries/filament { };
+
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
   filtron = callPackage ../servers/filtron {};
