@@ -1,12 +1,14 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, six, cffi, nose }:
 
 buildPythonPackage rec {
   pname = "cld2-cffi";
   version = "0.1.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0rvcdx4fdh5yk4d2nlddq1q1r2r0xqp86hpmbdn447pdcj1r8a9s";
+  src = fetchFromGitHub {
+     owner = "GregBowyer";
+     repo = "cld2-cffi";
+     rev = "0.1.4";
+     sha256 = "0mk09idn8rdmb8q31fdf3gr8dxywmc0jzp9z6hmh6pw553inspc3";
   };
 
   propagatedBuildInputs = [ six cffi ];
