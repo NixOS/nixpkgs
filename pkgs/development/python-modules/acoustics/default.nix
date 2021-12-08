@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , matplotlib
 , numpy
 , pandas
@@ -16,9 +16,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a162625e5e70ed830fab8fab0ddcfe35333cb390cd24b0a827bcefc5bbcae97d";
+  src = fetchFromGitHub {
+     owner = "python-acoustics";
+     repo = "python-acoustics";
+     rev = "v0.2.4.post0";
+     sha256 = "0fhj02611590rci5vb2r236jn1jbj3zaaza40dfw6rqx9jwfqizn";
   };
 
   propagatedBuildInputs = [
