@@ -1,12 +1,14 @@
-{ buildPythonPackage, pytest, lib, fetchPypi }:
+{ buildPythonPackage, pytest, lib, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "affine";
   version = "2.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "00jil4q3b17qml6azim7s7zar6qb1vhsf0g888y637m23bpms11f";
+  src = fetchFromGitHub {
+     owner = "sgillies";
+     repo = "affine";
+     rev = "2.3.0";
+     sha256 = "1nj4sfgm3ri36zaapvpz9k7bwzgc7m569rwgq0p5nhi8f480adv0";
   };
 
   checkInputs = [ pytest ];
