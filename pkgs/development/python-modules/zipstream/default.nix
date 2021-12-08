@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage rec {
   pname = "zipstream";
   version = "1.1.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01im5anqdyggmwkigqcjg0qw2a5bnn84h33mfaqjjd69a28lpwif";
+  src = fetchFromGitHub {
+     owner = "allanlei";
+     repo = "python-zipstream";
+     rev = "v1.1.4";
+     sha256 = "0ymcz7q0mmj44blhzxvbhphy1psmgrf4ik1q1cnqnmrg9wylc7g4";
   };
 
   checkInputs = [ nose ];
