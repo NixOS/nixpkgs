@@ -137,6 +137,23 @@ in
       };
     };
 
+    system.activation.externalActivationScript = mkOption {
+      description = ''
+        Activation script for systems that are not managed by users of the system.
+
+        In this scenario, the activation script does not need to be part of the
+        "top-level" system store path.
+
+        In the case of an image, this allows activation-only dependencies to
+        be omitted from the runtime dependencies.
+
+        In case of a mutable system, it may allow a few dependencies to be
+        to be garbage collected after activation.
+      '';
+      type = types.package;
+      readOnly = true;
+    };
+
     system.dryActivationScript = mkOption {
       description = "The shell script that is to be run when dry-activating a system.";
       readOnly = true;
@@ -237,6 +254,14 @@ in
         rm -f /usr/bin/env
         rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
+
+    system.activation.externalActivationScript =
+      pkgs.writeScript "activate" (
+        lib.strings.replaceStrings
+          ["@out@"]
+          ["${config.system.build.toplevel}"]
+          config.system.activationScripts.script
+      );
 
   };
 
