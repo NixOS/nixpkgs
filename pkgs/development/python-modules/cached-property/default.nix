@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , freezegun
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "cached-property";
   version = "1.5.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130";
+  src = fetchFromGitHub {
+     owner = "pydanny";
+     repo = "cached-property";
+     rev = "1.5.2";
+     sha256 = "0fw36p0wjq6najlyd69sjbxq8c6c6k02jhz01ndxs593l4akqqhc";
   };
 
   checkInputs = [ pytestCheckHook freezegun ];
