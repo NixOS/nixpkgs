@@ -1587,6 +1587,8 @@ in {
 
   click-threading = callPackage ../development/python-modules/click-threading { };
 
+  clickgen = callPackage ../development/python-modules/clickgen { };
+
   clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash { };
 
   clickhouse-cli = callPackage ../development/python-modules/clickhouse-cli { };
