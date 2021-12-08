@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k,
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k,
   click, jinja2, shellingham, six
 }:
 
@@ -7,9 +7,11 @@ buildPythonPackage rec {
   version = "0.5.2";
   disabled = (!isPy3k);
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5bf816b81367e638a190b6e91b50779007d14301b3f9f3145d68e3cade7bce86";
+  src = fetchFromGitHub {
+     owner = "click-contrib";
+     repo = "click-completion";
+     rev = "v0.5.2";
+     sha256 = "17wpygrbd7xfb8mrbl9v2v4vljapcjbgp787imi5cgff01r242k7";
   };
 
   propagatedBuildInputs = [ click jinja2 shellingham six ];
