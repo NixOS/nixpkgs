@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , click
 , isPy3k
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "click-threading";
   version = "0.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rc/mI8AqWVwQfDFAcvZ6Inj+TrQLcsDRoskDzHivNDk=";
+  src = fetchFromGitHub {
+     owner = "click-contrib";
+     repo = "click-threading";
+     rev = "0.5.0";
+     sha256 = "185pzw12ap7wrjpyxhsyrkhh7i1l5qclaa3zlpn8qvm39fz0kjni";
   };
 
   checkInputs = [ pytest ];
