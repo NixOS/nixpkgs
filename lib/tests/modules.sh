@@ -299,6 +299,13 @@ checkConfigOutput "10" config.processedToplevel ./raw.nix
 checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
 checkConfigOutput "bar" config.priorities ./raw.nix
 
+# Test that types.optionType merges types correctly
+checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
+checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
+
+# Test that types.optionType correctly annotates option locations
+checkConfigError 'The option .theOption.nested. in .other.nix. is already declared in .optionTypeFile.nix.' config.theOption.nested ./optionTypeFile.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

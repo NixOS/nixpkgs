@@ -113,6 +113,20 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <literal>types.optionType</literal>
+        </term>
+        <listitem>
+          <para>
+            The type of an option’s type. Its merging operation ensures
+            that nested options have the correct file location
+            annotated, and that if possible, multiple option definitions
+            are correctly merged together. The main use case is as the
+            type of the <literal>_module.freeformType</literal> option.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>types.attrs</literal>
         </term>
         <listitem>
