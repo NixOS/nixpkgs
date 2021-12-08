@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromGitHub, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "credstash";
   version = "1.17.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c04e8734ef556ab459018da142dd0b244093ef176b3be5583e582e9a797a120";
+  src = fetchFromGitHub {
+     owner = "LuminalOSS";
+     repo = "credstash";
+     rev = "v1.17.1";
+     sha256 = "1vanakwqn28nyrzkh48ixzzi2g8hr52mh01dha3rirmdy5yv78vb";
   };
 
   patches = [
