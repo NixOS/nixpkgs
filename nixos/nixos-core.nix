@@ -16,6 +16,7 @@ in {
     };
 
     etc = ./modules/system/etc/etc.nix;
+    etcActivation = ./modules/system/etc/etc-activation.nix;
 
     users = ./modules/config/users-groups.nix;
   };
