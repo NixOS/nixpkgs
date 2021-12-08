@@ -3,7 +3,7 @@
 , buildPythonPackage
 , click
 , configparser
-, fetchPypi
+, fetchFromGitHub
 , fido2
 , glibcLocales
 , isPy27
@@ -20,9 +20,11 @@ buildPythonPackage rec {
   version = "1.24.5";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6a78bd31477ea9988166215ae86abcbfe1413bee20373ecdf0dd170b7290db55";
+  src = fetchFromGitHub {
+     owner = "venth";
+     repo = "aws-adfs";
+     rev = "1.24.5";
+     sha256 = "03h4xfz83kyy8w5l8b1x00yj9rvncl28gpqwd92yqagl628cfx14";
   };
 
   propagatedBuildInputs = [
