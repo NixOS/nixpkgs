@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , nose
 , numpy
 , pytest
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "Bottleneck";
   version = "1.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "20179f0b66359792ea283b69aa16366419132f3b6cf3adadc0c48e2e8118e573";
+  src = fetchFromGitHub {
+     owner = "pydata";
+     repo = "bottleneck";
+     rev = "v1.3.2";
+     sha256 = "0avm1j9x4d2xl1kyncmn199fnf3cxbiwldmdqll72xzjwm7p7r1b";
   };
 
   propagatedBuildInputs = [ numpy ];
