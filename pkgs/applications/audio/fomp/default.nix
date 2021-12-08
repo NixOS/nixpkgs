@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python2, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "fomp";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ lv2 python2 ];
+  buildInputs = [ lv2 python3 ];
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/fomp/";
