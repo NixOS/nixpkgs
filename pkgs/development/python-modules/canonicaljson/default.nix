@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , frozendict
 , pytestCheckHook
 , pythonOlder
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Xr3c10xbBm7mjsylZGUzjpsTgEZ+CpBvR5dpfJ+zgeI=";
+  src = fetchFromGitHub {
+     owner = "matrix-org";
+     repo = "python-canonicaljson";
+     rev = "v1.5.0";
+     sha256 = "0p8nr5b7cqdm1yr3gw3fv0jhidn6vv41v71j1hk8nm1nsk4g7n5m";
   };
 
   propagatedBuildInputs = [
