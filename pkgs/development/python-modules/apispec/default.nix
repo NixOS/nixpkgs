@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , pyyaml
 , prance
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   version = "5.1.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d167890e37f14f3f26b588ff2598af35faa5c27612264ea1125509c8ff860834";
+  src = fetchFromGitHub {
+     owner = "marshmallow-code";
+     repo = "apispec";
+     rev = "5.1.1";
+     sha256 = "0awcp4mb6q3cka86yw8cc5bzbwzs3c45yb36nlfjd3cnccv9vjzw";
   };
 
   propagatedBuildInputs = [
