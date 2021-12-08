@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gast
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "beniget";
   version = "0.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "75554b3b8ad0553ce2f607627dad3d95c60c441189875b98e097528f8e23ac0c";
+  src = fetchFromGitHub {
+     owner = "serge-sans-paille";
+     repo = "beniget";
+     rev = "0.4.1";
+     sha256 = "0zamp3a3qxs47lwd8sr89pa0w20hfri34k0r4dr07wg6fgk1jv52";
   };
 
   propagatedBuildInputs = [
