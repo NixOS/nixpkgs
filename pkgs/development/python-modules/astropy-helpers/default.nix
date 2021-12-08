@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 }:
 
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   doCheck = false; # tests requires sphinx-astropy
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f1096414d108778218d6bea06d4d9c7b2ff7c83856a451331ac194e74de9f413";
+  src = fetchFromGitHub {
+     owner = "astropy";
+     repo = "astropy-helpers";
+     rev = "v4.0.1";
+     sha256 = "0nfy7zy8yshw0s7bs19g92wg4dm4jvi2lrk31yl8rji9w0izycij";
   };
 
   meta = with lib; {
