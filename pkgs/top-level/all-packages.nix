@@ -3598,6 +3598,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  space-cadet-pinball = callPackage ../games/space-cadet-pinball { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stacs = callPackage ../tools/security/stacs { };
