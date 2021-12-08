@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "batinfo";
   version = "0.4.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "497e29efc9353ec52e71d43bd040bdfb6d685137ddc2b9143cded4583af572f5";
+  src = fetchFromGitHub {
+     owner = "nicolargo";
+     repo = "batinfo";
+     rev = "v0.4.2";
+     sha256 = "1wzkn2n7qkrzksz6hd1qfx6cb4kb0dlwd9sg055h5k8v1wj0j00s";
   };
 
   # No tests included
