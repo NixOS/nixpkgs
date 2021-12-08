@@ -58,18 +58,6 @@ in
 
   options = {
 
-    users.defaultUserShell = lib.mkOption {
-      description = ''
-        This option defines the default shell assigned to user
-        accounts. This can be either a full system path or a shell package.
-
-        This must not be a store path, since the path is
-        used outside the store (in particular in /etc/passwd).
-      '';
-      example = literalExpression "pkgs.zsh";
-      type = types.either types.path types.shellPackage;
-    };
-
   };
 
 
