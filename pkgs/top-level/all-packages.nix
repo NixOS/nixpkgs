@@ -21427,10 +21427,15 @@ with pkgs;
     asio = asio_1_10;
   };
 
-  mariadb = callPackage ../servers/sql/mariadb {
+  inherit (callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  })
+    mariadb_104
+    mariadb_105
+    mariadb_106
+  ;
+  mariadb = mariadb_106;
 
   mongodb = hiPrio mongodb-3_4;
 
