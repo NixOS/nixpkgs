@@ -35,10 +35,6 @@ let
     su = "${pkgs.shadow.su}/bin/su";
     utillinux = pkgs.util-linux;
 
-    kernelParams = config.boot.kernelParams;
-    installBootLoader =
-      config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     nixosLabel = config.system.nixos.label;
 
     # Needed by switch-to-configuration.

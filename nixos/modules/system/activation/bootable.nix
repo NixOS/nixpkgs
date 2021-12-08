@@ -68,5 +68,12 @@ in
 
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
     '';
+    system.systemBuilderAttrs = {
+      kernelParams = config.boot.kernelParams;
+      installBootLoader =
+        config.system.build.installBootLoader
+          or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+
+    };
   };
 }
