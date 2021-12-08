@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromGitHub
 , agate
 , sqlalchemy
 , crate
@@ -15,9 +15,11 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "581e062ae878cc087d3d0948670d46b16589df0790bf814524b0587a359f2ada";
+  src = fetchFromGitHub {
+     owner = "wireservice";
+     repo = "agate-sql";
+     rev = "0.5.8";
+     sha256 = "1l9mnm5jifxp69v9qdfh1lw2j093jancj6v37hvsmn8x3qr64h00";
   };
 
   propagatedBuildInputs = [ agate sqlalchemy ];
