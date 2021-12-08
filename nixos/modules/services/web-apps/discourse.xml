@@ -297,7 +297,7 @@ services.discourse = {
       the script:
       <programlisting language="bash">
 ./update.py update-plugins
-</programlisting>.
+</programlisting>
     </para>
 
     <para>
