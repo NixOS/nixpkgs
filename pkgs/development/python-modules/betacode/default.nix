@@ -1,10 +1,12 @@
-{ fetchPypi, buildPythonPackage, pygtrie, isPy3k, lib, }:
+{ fetchFromGitHub, buildPythonPackage, pygtrie, isPy3k, lib, }:
 buildPythonPackage rec {
   pname = "betacode";
   version = "1.0";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0s84kd9vblbjz61q7zchx64a6hmdqb4lillna5ryh0g9ij76g6r5";
+  src = fetchFromGitHub {
+     owner = "matgrioni";
+     repo = "betacode";
+     rev = "v1.0";
+     sha256 = "1fcix00g7zwgwbi0gfzq544y8i10b8h5hlarq469isyh3x4jz08g";
   };
   preBuild = "echo > README.rst";
   # setup.py uses a python3 os.path.join
