@@ -5,7 +5,6 @@
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
 , gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
 , Cocoa, WebKit, CoreServices, CoreAudioKit
-, buildType ? "Release" # "Debug", or "Release"
 # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
 # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
 # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -39,9 +38,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${buildType}"
-  ] ++ lib.optional enableVST2 "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK";
+  cmakeBuildType = "Release";
+
+  cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
 
   nativeBuildInputs = [ python3 makeWrapper cmake pkg-config ninja ];
 
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
 
   postInstall = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/{Applications,bin}
-    mv Source/BespokeSynth_artefacts/${buildType}/BespokeSynth.app $out/Applications/
+    mv Source/BespokeSynth_artefacts/${cmakeBuildType}/BespokeSynth.app $out/Applications/
     # Symlinking confuses the resource finding about the actual location of the binary
     # Resources are looked up relative to the executed file's location
     makeWrapper $out/{Applications/BespokeSynth.app/Contents/MacOS,bin}/BespokeSynth
