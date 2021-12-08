@@ -16,8 +16,6 @@ buildPythonPackage rec {
     sha256 = "12ljff6l29q92625pgsg4f7xf4dz6iz1c3zdkzz188s4lnwpy8b8";
   };
 
-  disabled = pythonOlder "3.8";
-
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
   checkInputs = [ pytestCheckHook pytest-mypy ];
