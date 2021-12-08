@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , rustPlatform
 , setuptools-rust
 , openssl
@@ -23,9 +23,11 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "3.4.8"; # Also update the hash in vectors.nix
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "072awar70cwfd2hnx0pvp1dkc7gw45mbm3wcyddvxz5frva5xk4l";
+  src = fetchFromGitHub {
+     owner = "pyca";
+     repo = "cryptography";
+     rev = "3.4.8";
+     sha256 = "1gv7agic13iw2hpvzqhbk46zkkw98v9iizf0ywyz6mflrylm231x";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
