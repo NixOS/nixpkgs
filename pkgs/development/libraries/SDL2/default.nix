@@ -98,6 +98,8 @@ stdenv.mkDerivation rec {
       rm $out/lib/*.a
     fi
     moveToOutput bin/sdl2-config "$dev"
+    # libSDL2main.a is required by other packages
+    cp $dev/lib/libSDL2main.a $out/lib/
   '';
 
   # SDL is weird in that instead of just dynamically linking with
