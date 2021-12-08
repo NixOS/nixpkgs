@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "backports_abc";
   version = "0.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "033be54514a03e255df75c5aee8f9e672f663f93abb723444caec8fe43437bde";
+  src = fetchFromGitHub {
+     owner = "cython";
+     repo = "backports_abc";
+     rev = "0.5";
+     sha256 = "1myg9k25p95dcng3rsn7kvc56ly3lbx4pbvfy7al5zk3mvjvzixk";
   };
 
   checkPhase = ''
