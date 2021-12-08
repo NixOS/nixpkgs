@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , JPype1
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "JayDeBeApi";
   version = "1.2.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f25e9307fbb5960cb035394c26e37731b64cc465b197c4344cee85ec450ab92f";
+  src = fetchFromGitHub {
+     owner = "baztian";
+     repo = "jaydebeapi";
+     rev = "v1.2.3";
+     sha256 = "08xhrxmc167hdylzvjfi392q0a6v2g9lwwr4nprlr2fbqfq2h29y";
   };
 
   propagatedBuildInputs = [
