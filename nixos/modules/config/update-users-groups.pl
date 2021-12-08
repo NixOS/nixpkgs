@@ -306,6 +306,7 @@ updateFile("/etc/shadow", \@shadowNew, 0640);
     my $uid = getpwnam "root";
     my $gid = getgrnam "shadow";
     my $path = "/etc/shadow";
+    $gid = 0 unless defined $gid;
     (chown($uid, $gid, $path) || die "Failed to change ownership of $path: $!") unless $is_dry;
 }
 
