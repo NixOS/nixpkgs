@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromGitHub
 , requests
 , requests-toolbelt
 , pyparsing
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "1.2.58";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1wnzv2k8cm8q1x18r4zg8pcnpm4gsdp82hywwjimp2v2qll918nx";
+  src = fetchFromGitHub {
+     owner = "venomous";
+     repo = "cloudscraper";
+     rev = "1.2.58";
+     sha256 = "18fbp086imabjxly04rrchbf6n6m05bpd150zxbw7z2w3mjnpsqd";
   };
 
   propagatedBuildInputs = [
