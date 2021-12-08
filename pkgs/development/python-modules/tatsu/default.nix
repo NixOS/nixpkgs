@@ -6,6 +6,8 @@
 buildPythonPackage rec {
   pname = "tatsu";
   version = "5.7.1";
+  # upstream only supports 3.10+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "neogeny";
