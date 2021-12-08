@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mednaffe";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "AmatCoder";
     repo = "mednaffe";
     rev = version;
-    sha256 = "sha256-YU8PHnQHAsY90LN/WDugi4WhsuZGBj/z3BS4o69qMS4=";
+    sha256 = "sha256-zvSAt6CMcgdoPpTTA5sPlQaWUw9LUMsR2Xg9jM2UaWY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
