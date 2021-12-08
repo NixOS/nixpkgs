@@ -52,5 +52,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
     license = with licenses; [ lgpl21Plus gpl2Plus ]; # GPLv2+ for tools
     platforms = platforms.unix;
+    maintainers = with maintainers; [ artturin ];
   };
 }
