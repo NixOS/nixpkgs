@@ -18,13 +18,21 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ];
 
+  installFlags = [
+    # PGXS only supports installing to postgresql prefix so we need to redirect this
+    "DESTDIR=${placeholder "out"}"
+  ];
+
   preConfigure = ''
     patchShebangs ./generate_upgrade.sh
   '';
 
-  installPhase = ''
-    install -D plv8*.so                                        -t $out/lib
-    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
+  postInstall = ''
+    # Move the redirected to proper directory.
+    # There appear to be no references to the install directories
+    # so changing them does not cause issues.
+    mv "$out/nix/store"/*/* "$out"
+    rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
   meta = with lib; {
