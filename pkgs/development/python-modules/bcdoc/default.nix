@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, six }:
+{ lib, buildPythonPackage, fetchFromGitHub, docutils, six }:
 
 buildPythonPackage rec {
   pname = "bcdoc";
   version = "0.16.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f568c182e06883becf7196f227052435cffd45604700c82362ca77d3427b6202";
+  src = fetchFromGitHub {
+     owner = "boto";
+     repo = "bcdoc";
+     rev = "0.16.0";
+     sha256 = "0m6w5rrfwmhdh8g90rapbc8v2d4ynwhqlpys7zwc0920yyjmgvfw";
   };
 
   buildInputs = [ docutils six ];
