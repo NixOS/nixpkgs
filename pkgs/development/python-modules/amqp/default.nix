@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, case, vine }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, case, vine }:
 
 buildPythonPackage rec {
   pname = "amqp";
   version = "5.0.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "03e16e94f2b34c31f8bf1206d8ddd3ccaa4c315f7f6a1879b7b1210d229568c2";
+  src = fetchFromGitHub {
+     owner = "celery";
+     repo = "py-amqp";
+     rev = "v5.0.6";
+     sha256 = "1jp192bp8wjcq0z7y41hlxmh3iqm55s94f3k4dk7xhghp99yjifd";
   };
 
   propagatedBuildInputs = [ vine ];
