@@ -23,7 +23,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "configparser==4.0.2" "configparser" \
-      --replace "cryptography==3.2.1" "cryptography" \
+      --replace "cryptography<=3.4.7,>=3.2.1" "cryptography" \
       --replace "pyOpenSSL>=17.5.0,<=19.1.0" "pyOpenSSL"
   '';
 
