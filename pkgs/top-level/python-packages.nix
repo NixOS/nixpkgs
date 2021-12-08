@@ -4595,6 +4595,8 @@ in {
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
+  luxor = callPackage ../development/python-modules/luxor { };
+
   luxtronik = callPackage ../development/python-modules/luxtronik { };
 
   lupa = callPackage ../development/python-modules/lupa { };
