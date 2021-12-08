@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.7.2";
+  version = "1.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nSLUa9/jAT6XrHo77kV5HYBxPO/lhcWKqPfpES7ul9A=";
+    sha256 = "sha256-pH1mFm0enT8LOCYABAgb/T/ZwHyhtQGBu7mAxNeu7jQ=";
   };
 
   propagatedBuildInputs = [
