@@ -444,6 +444,9 @@ in {
             else cfg.security.initialRootPassword))
     ../misc/ids.nix
     ../misc/extra-arguments.nix
+    ../misc/assertions.nix
+    ../system/activation/activation-script.nix
+    ../config/system-path-core.nix
   ];
 
   ###### interface
