@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromGitHub
 , aiohttp
 , click
 }:
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4c98a995d0516f502ba191fa3ac973ee72b93425e7eab3cdf770516c6e93c780";
+  src = fetchFromGitHub {
+     owner = "timmo001";
+     repo = "aioazuredevops";
+     rev = "v1.3.5";
+     sha256 = "033710qa0l7r67x9813kr5ari5p2qrf1zjp1zj2c8wvd084h8jfy";
   };
 
   propagatedBuildInputs = [
