@@ -112,8 +112,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
   passthru.tests = let
     testVersion = "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor (packageSettings.version))}";
   in {
-    mariadb-galera-mariabackup = nixosTests.mariadb-galera-mariabackup.${testVersion};
-    mariadb-galera-rsync = nixosTests.mariadb-galera-rsync.${testVersion};
+    mariadb-galera-rsync = nixosTests.mariadb-galera.${testVersion};
     mysql = nixosTests.mysql.${testVersion};
     mysql-autobackup = nixosTests.mysql-autobackup.${testVersion};
     mysql-backup = nixosTests.mysql-backup.${testVersion};
