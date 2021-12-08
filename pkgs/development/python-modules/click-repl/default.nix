@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, click, prompt-toolkit }:
+{ lib, buildPythonPackage, fetchFromGitHub, click, prompt-toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";
   version = "0.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cd12f68d745bf6151210790540b4cb064c7b13e571bc64b6957d98d120dacfd8";
+  src = fetchFromGitHub {
+     owner = "click-contrib";
+     repo = "click-repl";
+     rev = "0.2.0";
+     sha256 = "16ybsnwlj2jlqcfxflky8jz7i3nhrd3f6mvkpgs95618l8lx994i";
   };
 
   propagatedBuildInputs = [ click prompt-toolkit ];
