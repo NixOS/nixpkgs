@@ -1,37 +1,38 @@
 { lib
-, buildPythonPackage
+, stdenv
 , fetchFromGitHub
-, six
-, isPyPy
+, rustPlatform
+, Security
 }:
 
-buildPythonPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "jsonwatch";
-  version = "0.2.0";
-  disabled = isPyPy; # doesn't find setuptools
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = "jsonwatch";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yLN6jOxAz+B7zvV3tGT6Nxi17v9ZOtWpbtSi0o1h48U=";
+    sha256 = "sha256-TGW04P8t0mAXza7I7qp6QRXA/MDE3m1dlRC7bMf2dSk=";
   };
 
-  propagatedBuildInputs = [ six ];
+  cargoSha256 = "sha256-Gjb7v3kz11iOml3Ykxhy43KNxzaprgMbb5DpPNChLTc=";
+
+  buildInputs = lib.optional stdenv.isDarwin [
+    Security
+  ];
 
   meta = with lib; {
     description = "Like watch -d but for JSON";
     longDescription = ''
       jsonwatch is a command line utility with which you can track
       changes in JSON data delivered by a shell command or a web
-      (HTTP/HTTPS) API.  jsonwatch requests data from the designated
+      (HTTP/HTTPS) API. jsonwatch requests data from the designated
       source repeatedly at a set interval and displays the
-      differences when the data changes. It is similar in its
-      behavior to how watch(1) with the -d switch works for
-      plain-text data.
+      differences when the data changes.
     '';
     homepage = "https://github.com/dbohdan/jsonwatch";
     license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with maintainers; [ fab ];
   };
 }

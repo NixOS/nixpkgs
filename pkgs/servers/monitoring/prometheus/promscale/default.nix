@@ -1,33 +1,35 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, promscale
+, testVersion
 }:
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YGT+VaHX6dqYdJz002fGZxRYE3gFqY8Q7VdhtSTPpjU=";
+    sha256 = "sha256-OMDl8RGFOMW+KNX2tNHusJY/6gLZxuWCI3c0E/oqrfE=";
   };
 
-  vendorSha256 = "sha256-o7vRSCEEqzhruHEnRPuxC1e4NzCl8Br4vvqg0pwGIgA=";
+  patches = [
+    ./0001-remove-jaeger-test-dep.patch
+  ];
+
+  vendorSha256 = "sha256-IwHngKiQ+TangEj5PcdiGoLxQJrt/Y3EtbSYZYmfUOE=";
 
   ldflags = [ "-s" "-w" "-X github.com/timescale/promscale/pkg/version.Version=${version}" "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
 
   doCheck = false; # Requires access to a docker daemon
-  doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}" -version)" == "${version}" ]]; then
-      echo '${pname} smoke check passed'
-    else
-      echo '${pname} smoke check failed'
-      exit 1
-    fi
-  '';
+
+  passthru.tests.version = testVersion {
+    package = promscale;
+    command = "promscale -version";
+  };
 
   meta = with lib; {
     description = "An open-source analytical platform for Prometheus metrics";

@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "1.4.3";
   pname = "atomman";
   format = "setuptools";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "atomman";
     rev = "v${version}";
-    sha256 = "sha256-Kq4mDykYf74ylWw2golxc81CYKGokXro64YUsFctLmk=";
+    sha256 = "sha256-is47O59Pjrh9tPC1Y2+DVVcHbxmcjUOFOVGnNHuURoM=";
   };
 
   propagatedBuildInputs = [

@@ -621,12 +621,13 @@ in
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
-      max_admin_api_reqs_per_key_per_minute = 60;
+      max_admin_api_reqs_per_minute = 60;
       max_reqs_per_ip_per_minute = 200;
       max_reqs_per_ip_per_10_seconds = 50;
       max_asset_reqs_per_ip_per_10_seconds = 200;
       max_reqs_per_ip_mode = "block";
       max_reqs_rate_limit_on_private = false;
+      skip_per_ip_rate_limit_trust_level = 1;
       force_anonymous_min_queue_seconds = 1;
       force_anonymous_min_per_10_seconds = 3;
       background_requests_max_queue_length = 0.5;
@@ -646,6 +647,9 @@ in
       enable_email_sync_demon = false;
       max_digests_enqueued_per_30_mins_per_site = 10000;
       cluster_name = null;
+      multisite_config_path = "config/multisite.yml";
+      enable_long_polling = null;
+      long_polling_interval = null;
     };
 
     services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
@@ -825,7 +829,7 @@ in
 
       appendHttpConfig = ''
         # inactive means we keep stuff around for 1440m minutes regardless of last access (1 week)
-        # levels means it is a 2 deep heirarchy cause we can have lots of files
+        # levels means it is a 2 deep hierarchy cause we can have lots of files
         # max_size limits the size of the cache
         proxy_cache_path /var/cache/nginx inactive=1440m levels=1:2 keys_zone=discourse:10m max_size=600m;
 
@@ -837,7 +841,7 @@ in
         inherit (cfg) sslCertificate sslCertificateKey enableACME;
         forceSSL = lib.mkDefault tlsEnabled;
 
-        root = "/run/discourse/public";
+        root = "${cfg.package}/share/discourse/public";
 
         locations =
           let
@@ -889,7 +893,7 @@ in
               "~ ^/uploads/" = proxy {
                 extraConfig = cache_1y + ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
                   # custom CSS
                   location ~ /stylesheet-cache/ {
@@ -911,7 +915,7 @@ in
               "~ ^/admin/backups/" = proxy {
                 extraConfig = ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
                 '';
               };
               "~ ^/(svg-sprite/|letter_avatar/|letter_avatar_proxy/|user_avatar|highlight-js|stylesheets|theme-javascripts|favicon/proxied|service-worker)" = proxy {
@@ -938,7 +942,7 @@ in
               };
               "/downloads/".extraConfig = ''
                 internal;
-                alias /run/discourse/public/;
+                alias ${cfg.package}/share/discourse/public/;
               '';
             };
       };

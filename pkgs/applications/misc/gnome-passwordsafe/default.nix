@@ -17,16 +17,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-passwordsafe";
-  version = "5.0";
+  version = "5.1";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "PasswordSafe";
+    repo = "secrets";
     rev = version;
-    sha256 = "8EFKLNK7rZlYL2g/7FmaC5r5hcdblsnod/aB8NYiBvY=";
+    sha256 = "sha256-RgpkLoqhwCdaPZxC1Qe0MpLtYLevNCOxbvwEEI0cpE0=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
-    homepage = "https://gitlab.gnome.org/World/PasswordSafe";
+    homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvnetbiz ];
