@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , mock
 , pyjwt
 , pytestCheckHook
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "auth0-python";
   version = "3.19.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
+  src = fetchFromGitHub {
+     owner = "auth0";
+     repo = "auth0-python";
+     rev = "3.19.0";
+     sha256 = "0anplgppx9xcq8h8nacvfqwbcjv6p5yh8ksi07cw71p0qag4h103";
   };
 
   propagatedBuildInputs = [
