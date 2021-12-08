@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "cppy";
   version = "1.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4eda6f1952054a270f32dc11df7c5e24b259a09fddf7bfaa5f33df9fb4a29642";
+  src = fetchFromGitHub {
+     owner = "nucleic";
+     repo = "cppy";
+     rev = "1.1.0";
+     sha256 = "1jlnrhrplhvi0p4ymak2lcv1wg3npf0np86vb911rj05fnplpwly";
   };
 
   # Headers-only library, no tests
