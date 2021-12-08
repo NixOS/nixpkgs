@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchzip, kernel }:
-
-stdenv.mkDerivation rec {
+{ lib, fetchzip, kernel, buildModule  }:
+buildModule rec {
   pname = "dpdk-kmods";
   version = "2021-04-21";
 
@@ -11,17 +10,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   preBuild = "cd linux/igb_uio";
 
   installPhase = ''
-    make -C ${KSRC} M=$(pwd) modules_install
+    export KSRC="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    export INSTALL_MOD_PATH='placeholder "out"'
+    make -C $KSRC M=$(pwd) modules_install
   '';
 
-  INSTALL_MOD_PATH = placeholder "out";
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -29,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = "https://git.dpdk.org/dpdk-kmods/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
 
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
-in stdenv.mkDerivation rec {
-  name = "r8168-${kernel.version}-${version}";
+in buildModule rec {
+  pname = "r8168";
   # on update please verify that the source matches the realtek version
   version = "8.048.03";
 
@@ -21,8 +21,6 @@ in stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "pic" ];
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
@@ -50,7 +48,6 @@ in stdenv.mkDerivation rec {
       by adding "r8169" to boot.blacklistedKernelModules.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ timokau ];
   };
 }

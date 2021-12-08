@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelAtLeast }:
+{ lib, fetchFromGitHub, kernel, kernelAtLeast, buildModule}:
 
-stdenv.mkDerivation rec {
-  name = "isgx-${version}-${kernel.version}";
+buildModule rec {
+  pname = "isgx";
   version = "2.14";
 
   src = fetchFromGitHub {
@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
-
   installPhase = ''
     runHook preInstall
     install -D isgx.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/intel/sgx
@@ -26,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  overridePlatforms = [ "x86_64-linux" ];
 
   meta = with lib; {
     description = "Intel SGX Linux Driver";
@@ -40,6 +36,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/linux-sgx-driver";
     license = with licenses; [ bsd3 /* OR */ gpl2Only ];
     maintainers = with maintainers; [ oxalica ];
-    platforms = [ "x86_64-linux" ];
   };
 }

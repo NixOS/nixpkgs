@@ -1,9 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "acpi-call";
   version = "1.2.2";
-  name = "${pname}-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -13,12 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "pic" ];
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
 
   installPhase = ''
     install -D acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc/acpi_call.ko

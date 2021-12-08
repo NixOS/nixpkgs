@@ -200,7 +200,7 @@ in {
 
     linux_lqx = callPackage ../os-specific/linux/kernel/linux-lqx.nix {
       kernelPatches = [
-        kernelPatches.bridge_stp_helper
+        kernelPatches.bridge_stp_helper 
         kernelPatches.request_key_helper
       ];
     };
@@ -244,13 +244,30 @@ in {
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
     inherit (pkgs) bcc bpftrace; # added 2021-12
 
+
+    buildModule = {makeFlags ? [], pname, version, src ? {}, srcs ? [], KERNELDIR ?"", INSTALL_MOD_PATH?"", dontStrip ? false, outputs ? [],overridePlatforms ? lib.platforms.linux, passthru ? {}, nativeBuildInputs ? [], setSourceRoot ? "", preInstall?"", prePatch ? "", buildFlags ? [], installFlags ? [], installTargets ? [],patches ? [], meta, installPhase ? "", unpackPhase ? "", postPatch ? "", postInstall ? "", hardeningDisable ? [], buildInputs ? [], enableParallelBuilding ? false, sourceRoot ? ".", postFixup ? "", depLibPath ? [], NIX_CFLAGS_COMPILE ? "", postBuild ? "", modules ? [], postUnpack ? "", patchPhase ? "", buildPhase ? "", preBuild ? "", preConfigure ? "", configurePhase ? ""}@attrs : stdenv.mkDerivation (attrs // {
+      meta.platforms = overridePlatforms;
+
+      nativeBuildInputs = nativeBuildInputs ++ kernel.moduleBuildDependencies;
+      
+      makeFlags = kernel.makeFlags ++ makeFlags ++ [
+        "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+        "KVER=${kernel.modDirVersion}"
+        "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
+        "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+        "INCLUDEDIR=$(out)/include"
+        "INSTALL_MOD_PATH=$(out)"
+      ];
+    });
+
+
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
-    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
+    # amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { }; TODO(berdario) cannot download amdgpu-pro-22.05pre-git-492261.tar.xz from any mirror
 
-    anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
+    # anbox = callPackage ../os-specific/linux/anbox/kmod.nix { }; TODO(berdario) should be marked as broken, but currently isn't
 
     apfs = callPackage ../os-specific/linux/apfs { };
 
@@ -269,11 +286,11 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
-    digimend = callPackage ../os-specific/linux/digimend { };
+    # digimend = callPackage ../os-specific/linux/digimend { }; TODO(berdario) fixme
 
-    dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+    # dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { }; TODO(berdario) fixme
 
-    exfat-nofuse = callPackage ../os-specific/linux/exfat { };
+    # exfat-nofuse = callPackage ../os-specific/linux/exfat { }; TODO(berdario) fixme
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
@@ -288,13 +305,14 @@ in {
 
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
-    ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+    # ixgbevf = callPackage ../os-specific/linux/ixgbevf {}; TODO(berdario) fixme
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
     asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
 
-    ena = callPackage ../os-specific/linux/ena {};
+    # TODO(berdario) fixme
+    # ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
@@ -302,20 +320,21 @@ in {
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 
-    tbs = callPackage ../os-specific/linux/tbs { };
+    # tbs = callPackage ../os-specific/linux/tbs { }; TODO(berdario) fixme
 
     mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
+    # TODO(berdario) fixme
+    # nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
-    nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
-    nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
-    nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
-    nvidia_x11_beta        = nvidiaPackages.beta;
-    nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-    nvidia_x11             = nvidiaPackages.stable;
+    # nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
+    # nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
+    # nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
+    # nvidia_x11_beta        = nvidiaPackages.beta;
+    # nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
+    # nvidia_x11             = nvidiaPackages.stable;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
@@ -329,7 +348,7 @@ in {
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
-    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
+    # rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { }; TODO(berdario) fixme
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
@@ -341,7 +360,7 @@ in {
 
     rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
 
-    rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
+    # rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { }; TODO(berdario) fixme
 
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
@@ -359,7 +378,7 @@ in {
 
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 
-    jool = callPackage ../os-specific/linux/jool { };
+    # jool = callPackage ../os-specific/linux/jool { };  TODO(berdario) fixme
 
     kvmfr = callPackage ../os-specific/linux/kvmfr { };
 
@@ -371,7 +390,7 @@ in {
 
     # compiles but has to be integrated into the kernel somehow
     # Let's have it uncommented and finish it..
-    ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
+    # ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { }; TODO(berdario) temporarily comment since broken
 
     netatop = callPackage ../os-specific/linux/netatop { };
 
@@ -379,12 +398,12 @@ in {
 
     perf = if lib.versionAtLeast kernel.version "3.12" then callPackage ../os-specific/linux/kernel/perf.nix { } else null;
 
-    phc-intel = if lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
+    # phc-intel = if lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null; TODO(berdario) fixme
 
     # Disable for kernels 4.15 and above due to compatibility issues
     prl-tools = if lib.versionOlder kernel.version "4.15" then callPackage ../os-specific/linux/prl-tools { } else null;
 
-    sch_cake = callPackage ../os-specific/linux/sch_cake { };
+    # sch_cake = callPackage ../os-specific/linux/sch_cake { }; TODO(berdario) temporarily commented out since broken
 
     isgx = callPackage ../os-specific/linux/isgx { };
 
@@ -417,9 +436,10 @@ in {
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 
-    virtualbox = callPackage ../os-specific/linux/virtualbox {
-      virtualbox = pkgs.virtualboxHardened;
-    };
+    # TODO(berdario) fixme
+    # virtualbox = callPackage ../os-specific/linux/virtualbox {
+    #   virtualbox = pkgs.virtualboxHardened;
+    # };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
       virtualbox = pkgs.virtualboxHardened;
@@ -431,7 +451,7 @@ in {
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
+    # xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { }; TODO(berdario) fixme
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 

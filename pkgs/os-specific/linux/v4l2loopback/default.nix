@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{ lib, fetchFromGitHub, kernel, kmod, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "v4l2loopback";
   version = "unstable-2021-07-13-${kernel.version}";
 
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     export PATH=${kmod}/sbin:$PATH
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   buildInputs = [ kmod ];
 
   postInstall = ''
@@ -31,7 +29,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KERNELRELEASE=${kernel.modDirVersion}"
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   meta = with lib; {
@@ -39,7 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fortuneteller2k ];
-    platforms = platforms.linux;
     outputsToInstall = [ "out" ];
   };
 }

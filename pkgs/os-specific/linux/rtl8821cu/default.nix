@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, fetchFromGitHub, kernel, bc, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "rtl8821cu";
   version = "${kernel.version}-unstable-2021-10-21";
 
@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     description = "Realtek rtl8821cu driver";
     homepage = "https://github.com/morrownr/8821cu";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     maintainers = [ maintainers.contrun ];
   };
 }

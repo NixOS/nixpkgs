@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, fetchFromGitHub, kernel, bc, buildModule }:
 
-stdenv.mkDerivation {
+buildModule {
   pname = "rtl8188eus-aircrack";
   version = "${kernel.version}-unstable-2021-05-04";
 
@@ -12,8 +12,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ bc ];
-
-  buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

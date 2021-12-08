@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, perl, bc, breakpointHook }:
+{ lib, fetchFromGitHub, fetchpatch, kernel, perl, bc, breakpointHook, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "xmm7360-pci";
   version = "unstable-2021-07-19";
 
@@ -11,10 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wdb0phqg9rj9g9ycqdya0m7lx24kzjlh25yw0ifp898ddxrrr0c";
   };
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-  INSTALL_MOD_PATH = placeholder "out";
+  # INSTALL_MOD_PATH = placeholder "out"; TODO(berdario) unused?
   installFlags = [ "DEPMOD=true" ];
 
   meta = with lib; {
@@ -23,7 +20,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/xmm7360/xmm7360-pci";
     license = licenses.isc;
     maintainers = with maintainers; [ flokli hexa ];
-    platforms = platforms.linux;
     broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.14";
   };
 }

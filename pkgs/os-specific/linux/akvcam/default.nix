@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "akvcam";
   version = "1.2.2";
 
@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "source/src";
 
-  makeFlags = [
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
-
   installPhase = ''
     install -m644 -b -D akvcam.ko $out/lib/modules/${kernel.modDirVersion}/akvcam.ko
   '';
@@ -26,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "Virtual camera driver for Linux";
     homepage = "https://github.com/webcamoid/akvcam";
     maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
     license = licenses.gpl2Only;
   };
 }

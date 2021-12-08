@@ -1,6 +1,6 @@
-{ lib, stdenv, kernel, fetchFromGitHub }:
+{ lib, stdenv, kernel, fetchFromGitHub, buildModule }:
 
-stdenv.mkDerivation {
+buildModule {
   pname = "anbox-modules";
   version = "2020-06-14-${kernel.version}";
 
@@ -11,9 +11,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-6xDJQ4YItdbYqle/9VNfOc7D80yFGd9cFyF+CuABaF0=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  KERNEL_SRC="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  # KERNEL_SRC="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"; TODO(berdario) unused?
 
   buildPhase = ''
     for d in ashmem binder;do
@@ -35,7 +34,6 @@ stdenv.mkDerivation {
     description = "Anbox ashmem and binder drivers.";
     homepage = "https://github.com/anbox/anbox-modules";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     broken = kernel.kernelOlder "4.4" || kernel.kernelAtLeast "5.5";
     maintainers = with maintainers; [ edwtjo ];
   };

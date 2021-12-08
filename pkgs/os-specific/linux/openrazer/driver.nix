@@ -1,19 +1,17 @@
 { coreutils
 , fetchFromGitHub
 , kernel
-, stdenv
 , lib
 , util-linux
+, buildModule
 }:
 
 let
   common = import ../../../development/python-modules/openrazer/common.nix { inherit lib fetchFromGitHub; };
 in
-stdenv.mkDerivation (common // {
+buildModule (common // {
   pname = "openrazer";
   version = "${common.version}-${kernel.version}";
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -40,6 +38,8 @@ stdenv.mkDerivation (common // {
 
     runHook postInstall
   '';
+
+  overridePlatforms = common.meta.platforms;
 
   meta = common.meta // {
     description = "An entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";

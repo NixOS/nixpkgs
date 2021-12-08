@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel, buildModule }:
 
 let
   version = "6.30.223.271";
@@ -11,8 +11,9 @@ let
   tarballVersion = lib.replaceStrings ["."] ["_"] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
 in
-stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${kernel.version}";
+buildModule {
+  pname = "broadcom-sta";
+  inherit version;
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
@@ -20,8 +21,6 @@ stdenv.mkDerivation {
   };
 
   hardeningDisable = [ "pic" ];
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = [
     ./i686-build-failure.patch
@@ -64,6 +63,5 @@ stdenv.mkDerivation {
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ phreedom ];
-    platforms = lib.platforms.linux;
   };
 }

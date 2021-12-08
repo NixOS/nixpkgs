@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, buildModule }:
 
 assert lib.versionAtLeast kernel.version "3.5";
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "digimend";
   version = "unstable-2019-06-18";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l54j85540386a8aypqka7p5hy1b63cwmpsscv9rmmf10f78v8mm";
   };
 
-  INSTALL_MOD_PATH = "\${out}";
+  # INSTALL_MOD_PATH = "\${out}"; TODO(berdario) unused?
 
   postPatch = ''
     sed 's/udevadm /true /' -i Makefile
@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   postInstall = ''
     # Remove module reload hack.
     # The hid-rebind unloads and then reloads the hid-* module to ensure that
@@ -40,7 +38,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KVERSION=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=${placeholder "out"}"
   ];
 
@@ -49,6 +46,5 @@ stdenv.mkDerivation rec {
     homepage = "https://digimend.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
   };
 }

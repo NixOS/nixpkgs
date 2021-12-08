@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel, bc }:
+{ lib, fetchFromGitHub, kernel, bc, buildModule }:
 
 with lib;
 
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
 
-in stdenv.mkDerivation rec {
+in buildModule rec {
   pname = "rtl8192eu";
   version = "${kernel.version}-4.4.1.20211023";
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
+  nativeBuildInputs = [ bc ];
 
   makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
@@ -37,7 +37,6 @@ in stdenv.mkDerivation rec {
     description = "Realtek rtl8192eu driver";
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ troydm ];
   };

@@ -98,6 +98,7 @@ let
           "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
       '';
 
+      # TODO(berdario) buildKernel is a similar mechanism as the one used for amd and nvidia
       nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
         ++ optional buildUser pkg-config;

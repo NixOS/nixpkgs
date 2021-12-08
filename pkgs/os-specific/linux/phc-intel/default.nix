@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, which }:
+{ lib, fetchurl, kernel, which, buildModule }:
 
 # Don't bother with older versions, though some might even work:
 assert lib.versionAtLeast kernel.version "4.10";
@@ -6,8 +6,8 @@ assert lib.versionAtLeast kernel.version "4.10";
 let
   release = "0.4.0";
   revbump = "rev25"; # don't forget to change forum download id...
-in stdenv.mkDerivation rec {
-  name = "linux-phc-intel-${version}-${kernel.version}";
+in buildModule rec {
+  pname = "linux-phc-intel";
   version = "${release}-${revbump}";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
-  nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ which ];
 
   hardeningDisable = [ "pic" ];
 
@@ -36,6 +36,8 @@ in stdenv.mkDerivation rec {
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
+
   meta = with lib; {
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
@@ -47,7 +49,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.linux-phc.org/";
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
     broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

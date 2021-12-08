@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
-  name = "it87-${version}-${kernel.version}";
+buildModule rec {
+  pname = "it87";
   version = "2018-08-14";
 
   # The original was deleted from github, but this seems to be an active fork
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   preConfigure = ''
     sed -i 's|depmod|#depmod|' Makefile
   '';
@@ -26,11 +24,12 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
+
   meta = with lib; {
     description = "Patched module for IT87xx superio chip sensors support";
     homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];
   };
 }

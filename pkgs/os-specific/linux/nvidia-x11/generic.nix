@@ -95,6 +95,7 @@ let
 
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+      # TODO(berdario) libsOnly mechanism, similar to the one used in the amdgpu module
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 

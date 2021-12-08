@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bluez }:
+{ lib, fetchFromGitHub, kernel, bluez, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "xpadneo";
   version = "0.9.1";
 
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     export sourceRoot=$(pwd)/source/hid-xpadneo/src
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];
 
   makeFlags = [
@@ -34,6 +33,5 @@ stdenv.mkDerivation rec {
     homepage = "https://atar-axis.github.io/xpadneo";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
   };
 }

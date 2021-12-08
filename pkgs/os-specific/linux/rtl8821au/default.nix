@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{ lib, fetchFromGitHub, kernel, bc, nukeReferences, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "rtl8821au";
   version = "${kernel.version}-unstable-2021-11-05";
 
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
-  buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
 
@@ -36,11 +35,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
+
   meta = with lib; {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";
     homepage = "https://github.com/morrownr/8821au";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ plchldr ];
   };
 }

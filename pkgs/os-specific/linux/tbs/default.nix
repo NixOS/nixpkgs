@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
+{ lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages, buildModule }:
 let
 
   media = fetchFromGitHub rec {
@@ -17,7 +17,7 @@ let
     sha256 = "1329s7w9xlqjqwkpaqsd6b5dmzhm97jw0c7c7zzmmbdkl289i4i4";
   };
 
-in stdenv.mkDerivation {
+in buildModule {
   pname = "tbs";
   version = "2018.04.18-${kernel.version}";
 
@@ -46,8 +46,7 @@ in stdenv.mkDerivation {
 
   hardeningDisable = [ "all" ];
 
-  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
-  ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ];
 
    postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;

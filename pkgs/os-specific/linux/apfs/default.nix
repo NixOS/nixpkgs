@@ -2,9 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , kernel
+, buildModule
 }:
 
-stdenv.mkDerivation {
+buildModule {
   pname = "apfs";
   version = "unstable-2021-09-21-${kernel.version}";
 
@@ -16,19 +17,15 @@ stdenv.mkDerivation {
   };
 
   hardeningDisable = [ "pic" ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
     "KERNELRELEASE=${kernel.modDirVersion}"
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=$(out)"
   ];
 
   meta = with lib; {
     description = "APFS module for linux";
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     broken = kernel.kernelOlder "4.9";
     maintainers = with maintainers; [ Luflosi ];
   };

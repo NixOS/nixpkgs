@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell, buildModule
 }:
 
-stdenv.mkDerivation rec {
-  name = "tp_smapi-${version}-${kernel.version}";
+buildModule rec {
+  pname = "tp_smapi";
   version = "0.43";
 
   src = fetchFromGitHub {
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "1rjb0njckczc2mj05cagvj0lkyvmyk6bw7wkiinv81lw8m90g77g";
     name = "tp-smapi-${version}";
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -37,12 +35,13 @@ stdenv.mkDerivation rec {
     inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts runtimeShell;
   };
 
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
+
   meta = {
     description = "IBM ThinkPad hardware functions driver";
     homepage = "https://github.com/evgeni/tp_smapi";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     # driver is only ment for linux thinkpads i think  bellow platforms should cover it.
-    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

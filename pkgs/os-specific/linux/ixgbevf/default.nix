@@ -1,15 +1,13 @@
-{ lib, stdenv, fetchurl, kernel, kmod }:
+{ lib, fetchurl, kernel, kmod, buildModule }:
 
-stdenv.mkDerivation rec {
-  name = "ixgbevf-${version}-${kernel.version}";
+buildModule rec {
+  pname = "ixgbevf";
   version = "4.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
     sha256 = "0h8a2g4hm38wmr13gvi2188r7nlv2c5rx6cal9gkf1nh6sla181c";
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

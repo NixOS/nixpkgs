@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   version = "2.5.0";
-  name = "ena-${version}-${kernel.version}";
+  pname = "ena";
 
   src = fetchFromGitHub {
     owner = "amzn";
@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   # linux 3.12
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  # NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration"; TODO(berdario) unused?
 
   configurePhase = ''
     runHook preConfigure
@@ -40,7 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.eelco ];
-    platforms = platforms.linux;
     broken = kernel.kernelOlder "4.5" || kernel.kernelAtLeast "5.15";
   };
 }

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "hid-nintendo";
   version = "3.2";
 
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
   setSourceRoot = ''
     export sourceRoot=$(pwd)/source/src
   '';
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
     "-C"
@@ -32,7 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nicman23/dkms-hid-nintendo";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rencire ];
-    platforms = platforms.linux;
     broken = versionOlder kernel.version "4.14";
   };
 }

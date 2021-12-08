@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitHub
 , kernel
 , kmod
+, buildModule
 }:
 
 let
   kerneldir = "lib/modules/${kernel.modDirVersion}";
-in stdenv.mkDerivation rec {
+in buildModule rec {
   pname = "gcadapter-oc-kmod";
   version = "1.4";
 
@@ -16,8 +17,6 @@ in stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1nqhj3vqq9rnj37cnm2c4867mnxkr8di3i036shcz44h9qmy9d40";
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
     "KERNEL_SOURCE_DIR=${kernel.dev}/${kerneldir}/build"
@@ -33,6 +32,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/HannesMann/gcadapter-oc-kmod";
     license = licenses.gpl2;
     maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.linux;
   };
 }

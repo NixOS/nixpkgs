@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, kernel }:
+{ lib, fetchurl, kernel, buildModule }:
 
 let cfg = import ./version.nix; in
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "batman-adv";
   version = "${cfg.version}-${kernel.version}";
 
@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
     url = "http://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
     sha256 = cfg.sha256.${pname};
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -26,6 +24,5 @@ stdenv.mkDerivation rec {
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ fpletz hexa ];
-    platforms = with lib.platforms; linux;
   };
 }

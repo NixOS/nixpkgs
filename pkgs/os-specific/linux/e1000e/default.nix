@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, kernel }:
+{ lib, fetchurl, kernel, buildModule }:
 
 assert lib.versionOlder kernel.version "4.10";
 
-stdenv.mkDerivation rec {
+buildModule rec {
   name = "e1000e-${version}-${kernel.version}";
   version = "3.8.4";
 

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation {
+buildModule {
   pname = "rtl8814au";
   version = "${kernel.version}-unstable-2021-10-25";
 
@@ -10,8 +10,6 @@ stdenv.mkDerivation {
     rev = "d36c0874716b0776ac6c7dcd6110598ef0f6dd53";
     sha256 = "0lk3ldff489ggbqmlfi4zvnp1cvxj1b06m0fhpzai82070klzzmj";
   };
-
-  buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

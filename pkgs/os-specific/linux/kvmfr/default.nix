@@ -1,22 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, looking-glass-client }:
+{ lib, fetchFromGitHub, kernel, kmod, looking-glass-client, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
   sourceRoot = "source/module";
   hardeningDisable = [ "pic" "format" ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  makeFlags = [
-    "KVER=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
 
   installPhase = ''
     install -D kvmfr.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/misc/"
   '';
+
+  overridePlatforms = [ "x86_64-linux" ];
 
   meta = with lib; {
     description = "Optional kernel module for LookingGlass";
@@ -27,7 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gnif/LookingGlass";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ j-brn ];
-    platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "5.3";
   };
 }

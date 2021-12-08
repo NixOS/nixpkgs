@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, nukeReferences, kernel }:
+{ lib, stdenv, fetchFromGitHub, nukeReferences, kernel, buildModule }:
 with lib;
-stdenv.mkDerivation rec {
-  name = "rtl8723bs-${kernel.version}-${version}";
+buildModule rec {
+  pname = "rtl8723bs";
   version = "2017-04-06";
 
   src = fetchFromGitHub {
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     description = "Realtek SDIO Wi-Fi driver";
     homepage = "https://github.com/hadess/rtl8723bs";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
     broken = (! versionOlder kernel.version "4.12"); # Now in kernel staging drivers
     maintainers = with maintainers; [ elitak ];
   };

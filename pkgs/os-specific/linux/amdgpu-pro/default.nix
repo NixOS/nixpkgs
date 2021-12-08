@@ -2,7 +2,7 @@
 , xorg, patchelf, openssl, libdrm, udev
 , libxcb, libxshmfence, libepoxy, perl, zlib
 , ncurses
-, libsOnly ? false, kernel ? null
+, libsOnly ? false, kernel ? null, buildModule
 }:
 
 assert (!libsOnly) -> kernel != null;
@@ -26,15 +26,34 @@ let
 
   ncurses5 = ncurses.override { abiVersion = "5"; };
 
-in stdenv.mkDerivation rec {
+  libCompatDir = "/run/lib/${libArch}";
+
+  modulePatches = optionals (!libsOnly) ([
+    ./patches/0001-fix-warnings-for-Werror.patch
+    ./patches/0002-fix-sketchy-int-ptr-warning.patch
+    ./patches/0003-disable-firmware-copy.patch
+  ]);
+
+  depLibPath = makeLibraryPath [
+    stdenv.cc.cc.lib xorg.libXext xorg.libX11 xorg.libXdamage xorg.libXfixes zlib
+    xorg.libXxf86vm libxcb libxshmfence libepoxy openssl libdrm elfutils udev ncurses5
+  ];
+
+
+  xreallocarray = ./xreallocarray.c;
+
+  modules = [
+    "amd/amdgpu/amdgpu.ko"
+    "amd/amdkcl/amdkcl.ko"
+    "ttm/amdttm.ko"
+  ];
+  build = "${version}-492261";
+
+
+in buildModule rec {
 
   version = "17.40";
   pname = "amdgpu-pro";
-  build = "${version}-492261";
-
-  libCompatDir = "/run/lib/${libArch}";
-
-  name = pname + "-" + version + (optionalString (!libsOnly) "-${kernelDir.version}");
 
   src = fetchurl {
     url =
@@ -45,8 +64,6 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "format" ];
 
-  inherit libsOnly;
-
   postUnpack = ''
     cd $sourceRoot
     mkdir root
@@ -54,12 +71,6 @@ in stdenv.mkDerivation rec {
     for deb in ../*_all.deb ../*_i386.deb '' + optionalString stdenv.is64bit "../*_amd64.deb" + ''; do echo $deb; ar p $deb data.tar.xz | tar -xJ; done
     sourceRoot=.
   '';
-
-  modulePatches = optionals (!libsOnly) ([
-    ./patches/0001-fix-warnings-for-Werror.patch
-    ./patches/0002-fix-sketchy-int-ptr-warning.patch
-    ./patches/0003-disable-firmware-copy.patch
-  ]);
 
   patchPhase = optionalString (!libsOnly) ''
     pushd usr/src/amdgpu-${build}
@@ -70,8 +81,6 @@ in stdenv.mkDerivation rec {
     done
     popd
   '';
-
-  xreallocarray = ./xreallocarray.c;
 
   preBuild = optionalString (!libsOnly) ''
     pushd usr/src/amdgpu-${build}
@@ -84,25 +93,14 @@ in stdenv.mkDerivation rec {
     strip libhack-xreallocarray.so
     popd
   '';
-
-  modules = [
-    "amd/amdgpu/amdgpu.ko"
-    "amd/amdkcl/amdkcl.ko"
-    "ttm/amdttm.ko"
-  ];
-
+  
   postBuild = optionalString (!libsOnly)
     (concatMapStrings (m: "xz usr/src/amdgpu-${build}/${m}\n") modules);
 
   NIX_CFLAGS_COMPILE = "-Werror";
 
-  makeFlags = optionalString (!libsOnly)
-    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
-
-  depLibPath = makeLibraryPath [
-    stdenv.cc.cc.lib xorg.libXext xorg.libX11 xorg.libXdamage xorg.libXfixes zlib
-    xorg.libXxf86vm libxcb libxshmfence libepoxy openssl libdrm elfutils udev ncurses5
-  ];
+  makeFlags = [(optionalString (!libsOnly)
+    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules")];
 
   installPhase = ''
     mkdir -p $out
@@ -175,7 +173,6 @@ in stdenv.mkDerivation rec {
     description = "AMDGPU-PRO drivers";
     homepage =  "https://www.amd.com/en/support";
     license = licenses.unfree;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];
     # Copied from the nvidia default.nix to prevent a store collision.
     priority = 4;

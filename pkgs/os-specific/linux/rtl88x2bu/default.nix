@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, fetchFromGitHub, kernel, bc, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "rtl88x2bu";
   version = "${kernel.version}-unstable-2021-11-04";
 
@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
-
+  # TODO(berdario) this was using kernel.moduleBuildDependencies for buildInputs (not native)... same for most other rtl*
  prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     description = "Realtek rtl88x2bu driver";
     homepage = "https://github.com/morrownr/88x2bu";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     maintainers = [ maintainers.ralith ];
   };
 }

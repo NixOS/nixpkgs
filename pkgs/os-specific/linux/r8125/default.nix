@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "r8125";
   # On update please verify (using `diff -r`) that the source matches the
   # realtek version.
@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "pic" ];
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
     substituteInPlace src/Makefile --replace "BASEDIR :=" "BASEDIR ?="
@@ -41,7 +39,6 @@ stdenv.mkDerivation rec {
     # r8125 has been integrated into the kernel as of v5.9.1
     broken = lib.versionAtLeast kernel.version "5.9.1";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ peelz ];
   };
 }

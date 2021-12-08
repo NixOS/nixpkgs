@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, runtimeShell }:
+{ lib, fetchFromGitHub, fetchpatch, kernel, runtimeShell, buildModule }:
 
 let
   baseName = "bbswitch";
@@ -7,8 +7,9 @@ let
 
 in
 
-stdenv.mkDerivation {
-  inherit name;
+buildModule {
+  pname = baseName;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Bumblebee-Project";
@@ -28,8 +29,6 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   hardeningDisable = [ "pic" ];
 
   preBuild = ''
@@ -37,8 +36,6 @@ stdenv.mkDerivation {
       --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
-
-  makeFlags = kernel.makeFlags;
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
@@ -58,9 +55,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
+
   meta = with lib; {
     description = "A module for powering off hybrid GPUs";
-    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2Plus;

@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule}:
 let
   version = "1.0.13";
   sha256 = "162hhmnww8z9k0795ffs8v3f61hlfm375law156sk5l08if19a4r";
 in
-stdenv.mkDerivation {
-  name = "system76-module-${version}-${kernel.version}";
+buildModule {
+  pname = "system76-module";
+  inherit version;
 
   passthru.moduleName = "system76";
 
@@ -17,8 +18,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -29,10 +28,11 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
+  overridePlatforms = [ "i686-linux" "x86_64-linux" ];
+
   meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";
     description = "System76 DKMS driver";
     homepage = "https://github.com/pop-os/system76-dkms";

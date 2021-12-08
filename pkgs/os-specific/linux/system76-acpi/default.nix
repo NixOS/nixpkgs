@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 let
   version = "1.0.2";
   sha256 = "1i7zjn5cdv9h00fgjg46b8yrz4d3dqvfr25g3f13967ycy58m48h";
 in
-stdenv.mkDerivation {
-  name = "system76-acpi-module-${version}-${kernel.version}";
+buildModule {
+  pname = "system76-acpi-module";
+  inherit version;
 
   passthru.moduleName = "system76_acpi";
 
@@ -17,8 +18,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -29,10 +28,11 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
+  overridePlatforms = [ "i686-linux" "x86_64-linux" ];
+
   meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Only ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
     broken = kernel.kernelOlder "5.2";
     description = "System76 ACPI Driver (DKMS)";
     homepage = "https://github.com/pop-os/system76-acpi-dkms";

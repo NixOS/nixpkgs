@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "veikk-linux-driver";
   version = "2.0";
 
@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "11mg74ds58jwvdmi3i7c4chxs6v9g09r9ll22pc2kbxjdnrp8zrn";
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel ];
 
@@ -28,7 +26,6 @@ stdenv.mkDerivation rec {
     description = "Linux driver for VEIKK-brand digitizers";
     homepage = "https://github.com/jlam55555/veikk-linux-driver/";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ nicbk ];
     broken = kernel.kernelOlder "4.19";
   };

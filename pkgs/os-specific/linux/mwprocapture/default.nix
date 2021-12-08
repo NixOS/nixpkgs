@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, alsa-lib }:
+{ lib, stdenv, fetchurl, kernel, alsa-lib, buildModule }:
 
 with lib;
 
@@ -8,19 +8,17 @@ let
     else "32";
 
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsa-lib ];
+  subVersion = "4236";
 
 in
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "mwprocapture";
-  subVersion = "4236";
   version = "1.3.0.${subVersion}-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
     sha256 = "1mfgj84km276sq5i8dny1vqp2ycqpvgplrmpbqwnk230d0w3qs74";
   };
-
-  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preConfigure = ''
     cd ./src
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   makeFlags = [
-    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" # TODO(berdario) same as KERNEL_DIR ?
   ];
 
   postInstall = ''
@@ -59,7 +57,6 @@ stdenv.mkDerivation rec {
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ MP2E ];
-    platforms = platforms.linux;
     broken = kernel.kernelOlder "3.2.0";
   };
 }

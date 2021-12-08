@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences, buildModule}:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "rtl8812au";
   version = "${kernel.version}-5.9.3.2.20210427";
 
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
-
-  buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
 
@@ -48,7 +46,6 @@ stdenv.mkDerivation rec {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/gordboy/rtl8812au-5.9.3.2";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ fortuneteller2k ];
     broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.15" || kernel.isHardened;
   };

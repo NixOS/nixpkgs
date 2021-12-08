@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
-  name = "nvidiabl-${version}-${kernel.version}";
+buildModule rec {
+  pname = "nvidiabl";
   version = "2020-10-01";
 
   # We use a fork which adds support for newer kernels -- upstream has been abandoned.
@@ -14,23 +14,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   preConfigure = ''
     sed -i 's|/sbin/depmod|#/sbin/depmod|' Makefile
   '';
 
   makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=$(out)"
-    "KVER=${kernel.modDirVersion}"
   ];
+
+  overridePlatforms = [ "x86_64-linux" "i686-linux" ];
 
   meta = with lib; {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
     homepage = "https://github.com/guillaumezin/nvidiabl";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];
   };
 }

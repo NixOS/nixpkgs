@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, kernel, libdrm }:
+{ lib, stdenv, fetchFromGitHub, kernel, libdrm, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "evdi";
   version = "unstable-2021-07-07";
 
@@ -11,14 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-io+CbZovGjEJjwtmARFH23Djt933ONoHMDoea+i6xFo=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   buildInputs = [ kernel libdrm ];
-
-  makeFlags = [
-    "KVER=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
 
   hardeningDisable = [ "format" "pic" "fortify" ];
 
@@ -30,7 +23,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Extensible Virtual Display Interface";
     maintainers = with maintainers; [ eyjhb ];
-    platforms = platforms.linux;
     license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
     broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "5.15" || stdenv.isAarch64;

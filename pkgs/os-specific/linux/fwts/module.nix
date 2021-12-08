@@ -1,6 +1,6 @@
-{ lib, stdenv, fwts, kernel }:
+{ lib, fwts, kernel, buildModule }:
 
-stdenv.mkDerivation rec {
+buildModule rec {
   pname = "fwts-efi-runtime";
   version = "${fwts.version}-${kernel.version}";
 
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
       '${kernel.dev}/lib/modules/${kernel.modDirVersion}/build'
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   hardeningDisable = [ "pic" ];
 
   makeFlags = [
@@ -26,6 +24,5 @@ stdenv.mkDerivation rec {
     inherit (fwts.meta) homepage license;
     description = fwts.meta.description + "(efi-runtime kernel module)";
     maintainers = with maintainers; [ dtzWill ];
-    platforms = platforms.linux;
   };
 }
