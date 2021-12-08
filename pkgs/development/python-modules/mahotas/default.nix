@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.11";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
     rev = "v${version}";
-    sha256 = "029gvy1fb855pvxvy8zwj44k4s7qpqi0161bg5wldfiprrysn1kw";
+    sha256 = "1n19yha1cqyx7hnlici1wkl7n68dh0vbpsyydfhign2c0w9jvg42";
   };
 
   propagatedBuildInputs = [ numpy imread pillow scipy freeimage ];
