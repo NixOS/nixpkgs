@@ -8,6 +8,8 @@
 , python3
 , libGL
 , libX11
+, Carbon
+, OpenGL
 }:
 
 let
@@ -38,7 +40,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config utilmacros python3 ];
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [
+    libGL
+    libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    OpenGL
+  ];
 
   mesonFlags = [
     "-Dtests=${if doCheck then "true" else "false"}"
