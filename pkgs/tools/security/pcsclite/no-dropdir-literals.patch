@@ -45,29 +45,4 @@ index eff8519..8dd496d 100644
  		Log1(PCSC_LOG_INFO, "Disabling USB support for pcscd");
  	}
  #ifdef DEBUG_HOTPLUG
-diff --git a/src/hotplug_linux.c b/src/hotplug_linux.c
-index bf69af8..64b0ed7 100644
---- a/src/hotplug_linux.c
-+++ b/src/hotplug_linux.c
-@@ -130,8 +130,8 @@ static LONG HPReadBundleValues(void)
- 
- 	if (hpDir == NULL)
- 	{
--		Log1(PCSC_LOG_INFO,
--			"Cannot open PC/SC drivers directory: " PCSCLITE_HP_DROPDIR);
-+		Log2(PCSC_LOG_INFO, "Cannot open PC/SC drivers directory: %s",
-+			PCSCLITE_HP_DROPDIR);
- 		Log1(PCSC_LOG_INFO, "Disabling USB support for pcscd.");
- 		return -1;
- 	}
-@@ -219,8 +219,8 @@ end:
- 
- 	if (bundleSize == 0)
- 	{
--		Log1(PCSC_LOG_INFO,
--			"No bundle files in pcsc drivers directory: " PCSCLITE_HP_DROPDIR);
-+		Log2(PCSC_LOG_INFO, "No bundle files in pcsc drivers directory: %s",
-+			PCSCLITE_HP_DROPDIR);
- 		Log1(PCSC_LOG_INFO, "Disabling USB support for pcscd");
- 	}
  
