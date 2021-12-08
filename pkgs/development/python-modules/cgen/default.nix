@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytools
 , numpy
 , pytest
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "cgen";
   version = "2020.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4ec99d0c832d9f95f5e51dd18a629ad50df0b5464ce557ef42c6e0cd9478bfcf";
+  src = fetchFromGitHub {
+     owner = "inducer";
+     repo = "cgen";
+     rev = "v2020.1";
+     sha256 = "0hpm5j7kh5xqcn5x2p1ykyhd6aa3cysj4y0qg6hb6gg00gjrwzpd";
   };
 
   checkInputs = [ pytest ];
