@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, numpy
+{ lib, buildPythonPackage, fetchFromGitHub, numpy
 }:
 
 buildPythonPackage rec {
   pname = "colorspacious";
   version = "1.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "065n24zbm9ymy2gvf03vx5cggk1258vcjdaw8jn9v26arpl7542y";
+  src = fetchFromGitHub {
+     owner = "njsmith";
+     repo = "colorspacious";
+     rev = "v1.1.2";
+     sha256 = "0x7nkphr6g5ql5fvgss8l56rgiyjgh6fm8zzs73i94ci9wzlm63w";
   };
 
   propagatedBuildInputs = [
