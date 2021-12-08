@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, colorama }:
+{ lib, fetchFromGitHub, buildPythonPackage, colorama }:
 
 buildPythonPackage rec {
   pname = "crayons";
   version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bd33b7547800f2cfbd26b38431f9e64b487a7de74a947b0fafc89b45a601813f";
+  src = fetchFromGitHub {
+     owner = "kennethreitz";
+     repo = "crayons";
+     rev = "v0.4.0";
+     sha256 = "0zmls5c67mxyxzlwvagiidlrxy1f6f8kwm5afjsydhn19h4rd7za";
   };
 
   propagatedBuildInputs = [ colorama ];
