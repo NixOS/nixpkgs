@@ -278,6 +278,12 @@
     githubId = 1250775;
     name = "Adolfo E. García Castro";
   };
+  AdsonCicilioti = {
+    name = "Adson Cicilioti";
+    email = "adson.cicilioti@live.com";
+    github = "AdsonCicilioti";
+    githubId = 6278398;
+  };
   adsr = {
     email = "as@php.net";
     github = "adsr";
