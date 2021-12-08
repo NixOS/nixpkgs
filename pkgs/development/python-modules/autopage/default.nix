@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "autopage";
@@ -6,9 +6,11 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18f511d8ef2e4d3cc22a986d345eab0e03f95b9fa80b74ca63b7fb001551dc42";
+  src = fetchFromGitHub {
+     owner = "zaneb";
+     repo = "autopage";
+     rev = "v0.4.0";
+     sha256 = "14a1r6c1ll22687mbx6mckh1c542i2rwvnvd8as66m87v2v6wzfy";
   };
 
   pythonImportsCheck = [ "autopage" ];
