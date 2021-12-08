@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python-dateutil
 , sigtools
 , six
@@ -17,9 +17,11 @@ buildPythonPackage rec {
   pname = "clize";
   version = "4.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
+  src = fetchFromGitHub {
+     owner = "epsy";
+     repo = "clize";
+     rev = "4.2.1";
+     sha256 = "0l68bdmbyjrp8dwz7ww206r8jbmxx2wbwma99rcpyymm2dfikkhr";
   };
 
   checkInputs = [
