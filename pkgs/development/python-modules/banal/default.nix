@@ -1,14 +1,16 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 }:
 buildPythonPackage rec {
   pname = "banal";
   version = "1.0.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2fe02c9305f53168441948f4a03dfbfa2eacc73db30db4a93309083cb0e250a5";
+  src = fetchFromGitHub {
+     owner = "pudo";
+     repo = "banal";
+     rev = "1.0.6";
+     sha256 = "19042ka89czaic3sm1aj5014xvw854id6yy9z07msmymmz5l9cqx";
   };
 
   # no tests
