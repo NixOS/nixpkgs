@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six
+{ lib, buildPythonPackage, fetchFromGitHub, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "blessed";
   version = "1.19.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4db0f94e5761aea330b528e84a250027ffe996b5a94bf03e502600c9a5ad7a61";
+  src = fetchFromGitHub {
+     owner = "jquast";
+     repo = "blessed";
+     rev = "1.19.0";
+     sha256 = "15yg7qjg83xdfdh62zplsi0spnniqpxs6h5p2k5v35w3h43sh50r";
   };
 
   checkInputs = [ pytest mock glibcLocales ];
