@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , colander
 , sqlalchemy
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "ColanderAlchemy";
   version = "0.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "006wcfch2skwvma9bq3l06dyjnz309pa75h1rviq7i4pd9g463bl";
+  src = fetchFromGitHub {
+     owner = "stefanofontanelli";
+     repo = "ColanderAlchemy";
+     rev = "v0.3.4";
+     sha256 = "1j4c7lrra0cywj4zsx1z8yjldn63x8diwz6jjid8vq502smyz4ym";
   };
 
   propagatedBuildInputs = [ colander sqlalchemy ];
