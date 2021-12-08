@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyramid
 , simplejson
 , six
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "cornice";
   version = "6.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "532485ed53cae81ef476aaf4cc7c2e0208749ad1959119c46efefdeea5546eba";
+  src = fetchFromGitHub {
+     owner = "mozilla-services";
+     repo = "cornice";
+     rev = "6.0.0";
+     sha256 = "14n8n7adxhigybbdam5lsnz4j6rrblxiwanl6fwxbi6jk0d7an2n";
   };
 
   propagatedBuildInputs = [ pyramid simplejson six venusian ];
