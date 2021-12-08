@@ -1,4 +1,4 @@
-{ lib, pythonOlder, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, pythonOlder, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "ajsonrpc";
@@ -6,9 +6,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "791bac18f0bf0dee109194644f151cf8b7ff529c4b8d6239ac48104a3251a19f";
+  src = fetchFromGitHub {
+     owner = "pavlov99";
+     repo = "ajsonrpc";
+     rev = "1.2.0";
+     sha256 = "0c7jxfkv5q2m95j54dn650gcvdbpag2qcki7phvmrwsgb36w09kd";
   };
 
   checkInputs = [ pytestCheckHook ];
