@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
 , ifaddr
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9FwTYcaXwGMMnhp+MXe1Iu8Og5aHL6qo9SVKWHFtc7o=";
+  src = fetchFromGitHub {
+     owner = "frawau";
+     repo = "aiolifx";
+     rev = "0.7.0";
+     sha256 = "10zyfpd5n607rpd07an15sh2vxdp1jm2d2adafl5mn9v8d72pwfm";
   };
 
   propagatedBuildInputs = [
