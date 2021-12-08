@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , importlib-metadata
 , jsonpickle
@@ -14,9 +14,11 @@ buildPythonPackage rec {
   pname = "aws-xray-sdk";
   version = "2.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "90c2fcc982a770e86d009a4c3d2b5c3e372da91cb8284d982bae458e2c0bb268";
+  src = fetchFromGitHub {
+     owner = "aws";
+     repo = "aws-xray-sdk-python";
+     rev = "2.8.0";
+     sha256 = "1kxhplfhb1asnqk0vr0r3adq0ainwhy5fn0x7xjvihslrj6f77xl";
   };
 
   propagatedBuildInputs = [
