@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "ansi";
   version = "0.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "98e9b27c4bb187867a69480cbc63b843331622fec7e7d090873d806e1b5d8a80";
+  src = fetchFromGitHub {
+     owner = "tehmaze";
+     repo = "ansi";
+     rev = "ansi-0.2.0";
+     sha256 = "05ic2kf8bazj9f0yk63ifs3ap0y1naqn1y44z0w1z65phi9vay81";
   };
 
   checkPhase = ''
