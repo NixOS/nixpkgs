@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, progressbar231 ? null, progressbar33, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, progressbar231 ? null, progressbar33, mock }:
 
 buildPythonPackage rec {
   pname = "bitmath";
   version = "1.3.3.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "293325f01e65defe966853111df11d39215eb705a967cb115851da8c4cfa3eb8";
+  src = fetchFromGitHub {
+     owner = "tbielawa";
+     repo = "bitmath";
+     rev = "1.3.3.1";
+     sha256 = "1hln7rlvlmh7xs8axc9znf2hfdbsby7r0kzvwc39a3d8c7rxp81f";
   };
 
   checkInputs = [ (if isPy3k then progressbar33 else progressbar231) mock ];
