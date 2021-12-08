@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cython
 , hypothesis
 , numpy
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "blis";
   version = "0.7.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "833e01e9eaff4c01aa6e049bbc1e6acb9eca6ee513d7b35b5bf135d49705ad33";
+  src = fetchFromGitHub {
+     owner = "explosion";
+     repo = "cython-blis";
+     rev = "v0.7.5";
+     sha256 = "18npb3z8xqhs9ka2h55inzs1pdvqpss3p5fq30cv8jzfmlgwdc6l";
   };
 
   nativeBuildInputs = [
