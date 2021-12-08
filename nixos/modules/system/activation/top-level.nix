@@ -61,6 +61,10 @@ in
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
     ../build.nix
+    ../../misc/assertions.nix
+    ../../misc/version.nix
+    ../../misc/label.nix
+    ../../config/system-path-core.nix
   ];
 
   options = {
