@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python-dateutil
 , six
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "bson";
   version = "0.5.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14355m3dchz446fl54ym78bn4wi20hddx1614f8rl4sin0m1nlfn";
+  src = fetchFromGitHub {
+     owner = "py-bson";
+     repo = "bson";
+     rev = "0.5.10";
+     sha256 = "1vpy4rsvm3hhawvbg9rbw4j36ck8qylkhm8cjy0q6imvinkd2als";
   };
 
   propagatedBuildInputs = [
