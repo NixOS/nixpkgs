@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cffi
 , hypothesis
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "zstandard";
   version = "0.16.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "eaae2d3e8fdf8bfe269628385087e4b648beef85bb0c187644e7df4fb0fe9046";
+  src = fetchFromGitHub {
+     owner = "indygreg";
+     repo = "python-zstandard";
+     rev = "0.16.0";
+     sha256 = "0ca26anlb4kkl98hm02nxcn9ldfl03c97wz7nkwgd2yas34fh67d";
   };
 
   propagatedNativeBuildInputs = [ cffi ];
