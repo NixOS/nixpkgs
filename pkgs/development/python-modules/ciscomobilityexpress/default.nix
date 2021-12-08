@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , python
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "ciscomobilityexpress";
   version = "1.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d8787245598e8371a83baa4db1df949d8a942c43f13454fa26ee3b09c3ccafc0";
+  src = fetchFromGitHub {
+     owner = "fbradyirl";
+     repo = "ciscomobilityexpress";
+     rev = "v1.0.2";
+     sha256 = "0mg1r07z1lqb06426zj8pdc7mxzmch04s3408i88bfm60piwpvqc";
   };
 
   propagatedBuildInputs = [ requests ];
