@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , h2
 , lib
 , pyjwt
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "aioapns";
   version = "2.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ea58ce685aa6d0ffbdc3be4a6999c7268b9c765f806d3e4da7677c098fb72cbc";
+  src = fetchFromGitHub {
+     owner = "Fatal1ty";
+     repo = "aioapns";
+     rev = "v2.0.2";
+     sha256 = "1k3j3ciffzvyvia1h2abn6y4w7w2ckfbcs8d4apx4wyp1gwnf05w";
   };
 
   propagatedBuildInputs = [
