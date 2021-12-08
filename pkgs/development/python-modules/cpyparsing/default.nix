@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.1.0.0";
+  version = "2.4.7.1.1.0";
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = pname;
-    rev = "09073751d92cb40fb71c927c006baddc082df1db"; # No tags on repo
-    sha256 = "O9IdHipAxxbFcDFYNvmczue/wT4AF9Xb5uc3ZTAlTlo=";
+    rev = "v${version}"; # No tags on repo
+    sha256 = "1rqj89mb4dz0xk8djh506nrlqfqqdva9qgb5llrvvwjqv3vqnrj4";
   };
 
   nativeBuildInputs = [ cython ];
