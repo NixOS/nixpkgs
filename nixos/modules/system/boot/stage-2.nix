@@ -104,6 +104,9 @@ in
 
     system.build.bootStage2 = bootStage2;
 
+    system.systemBuilderAttrs = {
+      systemd = config.systemd.package;
+    };
     system.systemBuilderCommands = ''
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out

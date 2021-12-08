@@ -31,7 +31,6 @@ let
     buildCommand = systemBuilder;
 
     inherit (pkgs) coreutils;
-    systemd = config.systemd.package;
     shell = "${pkgs.bash}/bin/sh";
     su = "${pkgs.shadow.su}/bin/su";
     utillinux = pkgs.util-linux;
