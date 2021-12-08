@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pkg-config
 , glib
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "bluepy";
   version = "1.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1v0wjy1rz0rbwghr1z3xhdm06lqn9iig6vr5j2wmymh3w6pysw9a";
+  src = fetchFromGitHub {
+     owner = "IanHarvey";
+     repo = "bluepy";
+     rev = "v/1.3.0";
+     sha256 = "0rlzq4rj929m8rn0391fpc4awpr2z1l4hv5wmba3vg610wzi8ak4";
   };
 
   buildInputs = [ glib ];
