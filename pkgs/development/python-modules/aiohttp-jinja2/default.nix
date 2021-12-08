@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp, pytest-cov }:
+{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, jinja2, pytest, pytest-aiohttp, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
   version = "1.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7c3ba5eac060b691f4e50534af2d79fca2a75712ebd2b25e6fcb1295859f910b";
+  src = fetchFromGitHub {
+     owner = "aio-libs";
+     repo = "aiohttp_jinja2";
+     rev = "v1.5";
+     sha256 = "0f2qxzsjd0jqgd7zzmc0n9j4pknx4axfpsj6ldpfhpmxb4dczyjs";
   };
 
   propagatedBuildInputs = [ aiohttp jinja2 ];
