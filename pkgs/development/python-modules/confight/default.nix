@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , toml
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "confight";
   version = "1.3.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-fJr7f9Y/zEpCedWYd04AMuhkOFqZLJOw4sDiz8SDQ/Y=";
+  src = fetchFromGitHub {
+     owner = "avature";
+     repo = "confight";
+     rev = "1.3.1";
+     sha256 = "0flqn940yxaklg1v5wl07pfvfa8bqm6iv0sqvpfl7yzai08h1lsi";
   };
 
   propagatedBuildInputs = [
