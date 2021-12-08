@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.1.2";
+  version = "3.1.3";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "0vyclrrikphwkkpyjg8kzh3qzflzk3d6xsidgqllgfdgllr9wmgv";
+    sha256 = "sha256-Bi6yTcZBWTsWWMm3A7FVYblvSXKLSkHmhGvpNYGiOzE=";
   };
 
   nativeBuildInputs = [ cmake ];
