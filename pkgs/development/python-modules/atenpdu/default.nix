@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pysnmp
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "atenpdu";
   version = "0.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-hlbrjx6WKVJYaxrMT4fiRXlxKRcQU4AIQUVgA8mbWa8=";
+  src = fetchFromGitHub {
+     owner = "mtdcr";
+     repo = "pductl";
+     rev = "0.3.2";
+     sha256 = "0l59za3qfpq75d8iikd92p8v8vwia29zlpzs15h571kl83z9qj1i";
   };
 
   propagatedBuildInputs = [ pysnmp ];
