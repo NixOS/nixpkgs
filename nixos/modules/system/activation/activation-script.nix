@@ -238,24 +238,6 @@ in
         rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
-    system.activationScripts.specialfs =
-      ''
-        specialMount() {
-          local device="$1"
-          local mountPoint="$2"
-          local options="$3"
-          local fsType="$4"
-
-          if mountpoint -q "$mountPoint"; then
-            local options="remount,$options"
-          else
-            mkdir -m 0755 -p "$mountPoint"
-          fi
-          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
-        }
-        source ${config.system.build.earlyMountScript}
-      '';
-
     systemd.user = {
       services.nixos-activation = {
         description = "Run user-specific NixOS activation";

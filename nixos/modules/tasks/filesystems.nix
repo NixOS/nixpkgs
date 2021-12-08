@@ -241,6 +241,24 @@ in
     system.build.fileSystems = fileSystems;
     system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
 
+    system.activationScripts.specialfs =
+      ''
+        specialMount() {
+          local device="$1"
+          local mountPoint="$2"
+          local options="$3"
+          local fsType="$4"
+
+          if mountpoint -q "$mountPoint"; then
+            local options="remount,$options"
+          else
+            mkdir -m 0755 -p "$mountPoint"
+          fi
+          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
+        }
+        source ${config.system.build.earlyMountScript}
+      '';
+
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     # Add the mount helpers to the system path so that `mount' can find them.
