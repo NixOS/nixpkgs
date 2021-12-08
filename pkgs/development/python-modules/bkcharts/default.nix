@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , numpy
 , pandas
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "bkcharts";
   version = "0.2";
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "a5eaa8e78853dcecaa46345812e4fabe9cd3b96330ebf0809f640a4a0556d72e";
+  src = fetchFromGitHub {
+     owner = "bokeh";
+     repo = "bkcharts";
+     rev = "0.2";
+     sha256 = "0yzdsaackpnfhiy0jhkhhmysiaj695140dl6pz99c6vcpwd89q5v";
   };
 
   propagatedBuildInputs = [ numpy pandas ];
