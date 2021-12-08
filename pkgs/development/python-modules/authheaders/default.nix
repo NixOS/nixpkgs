@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib
+{ buildPythonPackage, fetchFromGitHub, isPy27, lib
 , authres, dnspython, dkimpy, ipaddress, publicsuffix2
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "authheaders";
   version = "0.14.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4e601b5b54080019a2f548fadf80ddf9c5538615607c7fb602936404aafe67e2";
+  src = fetchFromGitHub {
+     owner = "ValiMail";
+     repo = "authentication-headers";
+     rev = "0.14.1";
+     sha256 = "0snm0afyc55k45hgw6w98336np83l66xl2jkiz0jjabyrihh7nzs";
   };
 
   propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ]
