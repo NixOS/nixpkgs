@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromGitHub
 , portalocker
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   version = "0.11.10";
   pname = "applicationinsights";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b761f3ef0680acf4731906dfc1807faa6f2a57168ae74592db0084a6099f7b3";
+  src = fetchFromGitHub {
+     owner = "Microsoft";
+     repo = "ApplicationInsights-Python";
+     rev = "0.11.10";
+     sha256 = "08arvy3pbvfsdnhq0xf639a1gyfi0hzxya1mr1m9wvjrl0zqqy5z";
   };
 
   propagatedBuildInputs = [ portalocker ];
