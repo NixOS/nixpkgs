@@ -144,7 +144,7 @@ makeCWrapper() {
                 inherit_argv0=1
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
-                main="$main    #error makeCWrapper: Uknown argument ${p}"$'\n'
+                main="$main    #error makeCWrapper: Unknown argument ${p}"$'\n'
             ;;
         esac
     done
