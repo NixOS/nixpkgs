@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , pygments }:
 
 buildPythonPackage rec {
   pname = "alabaster";
   version = "0.7.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02";
+  src = fetchFromGitHub {
+     owner = "bitprophet";
+     repo = "alabaster";
+     rev = "0.7.12";
+     sha256 = "1j84iy6bqn73pm3npz25vpyzyqbg3k05zpz7605rylcid59m0hkq";
   };
 
   propagatedBuildInputs = [ pygments ];
