@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cryptography
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "broadlink";
   version = "0.18.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c66b3e4a097d6549f0fcc9ccdf289bd88f73f647ad9449e1c4e2958301ad1b04";
+  src = fetchFromGitHub {
+     owner = "mjg59";
+     repo = "python-broadlink";
+     rev = "0.18.0";
+     sha256 = "0nh9rn1zpc44qsc50360ycg02gwbgq59784mnkp01nhavnwwwx10";
   };
 
   propagatedBuildInputs = [
