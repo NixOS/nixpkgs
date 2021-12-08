@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, pytest, pytest-html }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest, pytest-html }:
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
   version = "4.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e314d5fed6eebb2f90380271f562248fb15e18636764faf40f4dde4b28b1f960";
+  src = fetchFromGitHub {
+     owner = "cucumber";
+     repo = "tag-expressions-python";
+     rev = "v4.1.0";
+     sha256 = "0iyx0mwhbikhmrhwh1i9z95igj6hsz5sa3vgxxamyy0ldzzc4s9m";
   };
 
   checkInputs = [ pytest pytest-html ];
