@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , sphinx
 , hypothesis
 , py
@@ -17,9 +17,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-QshP++b43omK9gc7S+nqfM7c1400dKqETFTknVoHn28=";
+  src = fetchFromGitHub {
+     owner = "jab";
+     repo = "bidict";
+     rev = "v0.21.4";
+     sha256 = "1hh40q05k0bh2kp8shsa47hka1bp982np5zldswvqhrhwv4whgi1";
   };
 
   propagatedBuildInputs = [
