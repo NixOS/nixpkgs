@@ -21048,7 +21048,7 @@ with pkgs;
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
     # Use latest boringssl to allow http3 support
-    openssl = boringssl;
+    openssl = quictls;
   };
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
