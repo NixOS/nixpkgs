@@ -30335,8 +30335,8 @@ with pkgs;
 
   katagoWithCuda = katago.override {
     enableCuda = true;
-    cudnn = cudnn_cudatoolkit_10_2;
-    cudatoolkit = cudatoolkit_10_2;
+    cudnn = cudnn_cudatoolkit_11;
+    cudatoolkit = cudatoolkit_11;
   };
 
   katagoCPU = katago.override {
