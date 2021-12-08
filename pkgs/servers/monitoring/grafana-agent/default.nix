@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-ABiyL1QpVtoQ4hwpDc3rwlhwILdQBX1wHKHj1K5O2jw=";
+    sha256 = "sha256-s++21feD3L2HuVYFjWhNIOGTjjX+lXwURc4PqbwFnhI=";
   };
 
-  vendorSha256 = "sha256-VFCuCUV5tq1svQN8WoFdmxhLI8OEODQd2kc1caYLGro=";
+  vendorSha256 = "sha256-kxLtbElzfimC/ZefUyTlfQiUZo4y0f1riajRm5shVdU=";
 
   patches = [
     # https://github.com/grafana/agent/issues/731
