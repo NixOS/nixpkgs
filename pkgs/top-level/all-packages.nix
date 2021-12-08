@@ -147,6 +147,15 @@ with pkgs;
     { name = "auto-patchelf-hook"; deps = [ bintools ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
+  autoPatchelfPyHook = makeSetupHook
+    { name = "auto-patchelf-py-hook";
+      substitutions = {
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
+        py_script = ../build-support/setup-hooks/auto-patchelf.py;
+      };
+    }
+    ../build-support/setup-hooks/auto-patchelf-py.sh;
+
   appimageTools = callPackage ../build-support/appimage {
     buildFHSUserEnv = buildFHSUserEnvBubblewrap;
   };
