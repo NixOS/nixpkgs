@@ -189,7 +189,7 @@
   </xsl:template>
 
 
-  <xsl:template match="derivation">
+  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'derivation']]]">
     <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
   </xsl:template>
 
