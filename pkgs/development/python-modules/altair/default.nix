@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -21,9 +21,11 @@ buildPythonPackage rec {
   version = "4.1.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0c99q5dy6f275yg1f137ird08wmwc1z8wmvjickkf2mvyka31p9y";
+  src = fetchFromGitHub {
+     owner = "altair-viz";
+     repo = "altair";
+     rev = "v4.1.0";
+     sha256 = "0da0ry4qdwwz40rw4rwx77y5jks9bq9s7l96jc55g0v13nwc1ar9";
   };
 
   propagatedBuildInputs = [
