@@ -6726,6 +6726,10 @@ with pkgs;
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
 
+  jsonwatch = callPackage ../tools/misc/jsonwatch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   jtc = callPackage ../development/tools/jtc { };
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
