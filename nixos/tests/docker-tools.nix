@@ -415,8 +415,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("etc"):
         docker.succeed("${examples.etc} | docker load")
-        docker.succeed("docker run --rm etc | grep localhost")
-        docker.succeed("docker image rm etc:latest")
+        docker.succeed("docker run --rm etc-img | grep -i hello")
+        docker.succeed("docker run --rm etc-img cat /etc/foo | grep 'foo: bar'")
+        docker.succeed("docker image rm etc-img:latest")
 
   '';
 })

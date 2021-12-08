@@ -563,28 +563,41 @@ rec {
     let
       inherit (pkgs) lib;
       nixosCore = (lib.nixos.core ({ config, modules, ... }: {
-        imports = [ pkgs.nixosModule modules.etc ];
-        environment.etc."hosts" = {
+        imports = [
+          pkgs.nixosModule
+          modules.etcActivation
+          modules.users
+        ];
+        environment.etc."foo" = {
           text = ''
-            127.0.0.1 localhost
-            ::1 localhost
+            foo: bar
           '';
           mode = "0456";
         };
+        environment.systemPackages = [
+          pkgs.hello
+          pkgs.coreutils
+        ];
+        users.users.foo = { isSystemUser = true; group = "foo"; };
+        users.groups.foo = {};
+        users.users.nobody.shell = "/run/current-system/sw/bin/false";
+        users.users.root.shell = "/run/current-system/sw/bin/false";
+        users.users.foo.shell = "/run/current-system/sw/bin/false";
+        users.defaultUserShell = "/run/current-system/sw/bin/false";
       }));
     in pkgs.dockerTools.streamLayeredImage {
-      name = "etc";
+      name = "etc-img";
       tag = "latest";
       enableFakechroot = true;
       fakeRootCommands = ''
-        mkdir -p /etc
-        ${nixosCore.config.system.build.etcActivationCommands}
+        mkdir -p /etc /run /nix/var/nix/gcroots
+        ${nixosCore.config.system.activation.externalActivationScript}
+        chmod -R a-w /
       '';
-      config.Cmd = pkgs.writeScript "etc-cmd" ''
-        #!${pkgs.busybox}/bin/sh
-        ${pkgs.busybox}/bin/cat /etc/hosts
-      '';
-    };
+      config.Cmd = [ "hello" ];
+      config.Env = [ "PATH=/run/current-system/sw/bin" ];
+      config.User = "foo";
+    } // { nixos = nixosCore; };
 
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
