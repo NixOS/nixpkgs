@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromGitHub,
   click, pytest
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "click-plugins";
   version = "1.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b";
+  src = fetchFromGitHub {
+     owner = "click-contrib";
+     repo = "click-plugins";
+     rev = "1.1.1";
+     sha256 = "04bx148n8v656zrx350g4bxw14fsapncdl3kzy6qwydk8x4zir4i";
   };
 
   propagatedBuildInputs = [
