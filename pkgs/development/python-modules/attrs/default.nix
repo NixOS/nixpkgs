@@ -1,16 +1,18 @@
 { lib
 , callPackage
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
   version = "21.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb";
+  src = fetchFromGitHub {
+     owner = "hynek";
+     repo = "attrs";
+     rev = "21.2.0";
+     sha256 = "1bn7745ddxm4wsdzqxp1d7dvgqnzvnxjazz1g02di4nmxncxp051";
   };
 
   outputs = [ "out" "testout" ];
