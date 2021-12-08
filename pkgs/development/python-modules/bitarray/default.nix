@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "bitarray";
   version = "2.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f19c62425576d3d1821ed711b94d1a4e5ede8f05ca121e99b6d978ed49c7a765";
+  src = fetchFromGitHub {
+     owner = "ilanschnell";
+     repo = "bitarray";
+     rev = "2.3.4";
+     sha256 = "0jd5r8ggz870y3165b3p0na684g1jmf17gkfhl8fxw34hbvsmiwb";
   };
 
   checkPhase = ''
