@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "colorama";
   version = "0.4.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b";
+  src = fetchFromGitHub {
+     owner = "tartley";
+     repo = "colorama";
+     rev = "0.4.4";
+     sha256 = "0m45zy6h6ab5137b9qpkx2m9kd55rfm4yzbja676cd58cwbp01jy";
   };
 
   # No tests in archive
