@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ppscdzzvxpznclkmhhj53iz314x3pfv4yc7c6gwxqgljgdgyvka";
+  src = fetchFromGitHub {
+     owner = "berkerpeksag";
+     repo = "astor";
+     rev = "0.8.1";
+     sha256 = "1svh9wjfvx1j2ljd8agnbbzm71572nf7z2rvf4j3byxlipgv9kd3";
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89
