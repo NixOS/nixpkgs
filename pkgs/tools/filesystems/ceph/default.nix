@@ -104,21 +104,7 @@ let
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-      # Bump once these issues are resolved:
-      # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-        };
-        doCheck = false;
-      });
-    };
-  };
+  python = python3;
 
   ceph-python-env = python.withPackages (ps: [
     ps.sphinx
