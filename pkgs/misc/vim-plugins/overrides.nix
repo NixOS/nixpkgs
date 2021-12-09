@@ -748,7 +748,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-XFo3FLaeLnXVQAEZol9PipqYYZ9C1z23S/qijxf0uIE=";
+          cargoSha256 = "sha256-zYm+7qAvhVGa/afddHhI2aQxmiLOkus5PHZBDP9S/Qg=";
         };
       in
       ''

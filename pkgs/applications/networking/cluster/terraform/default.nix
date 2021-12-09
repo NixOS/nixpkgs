@@ -27,6 +27,8 @@ let
         inherit sha256;
       };
 
+      ldflags = [ "-s" "-w" ];
+
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \

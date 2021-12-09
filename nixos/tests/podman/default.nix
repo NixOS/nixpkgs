@@ -1,6 +1,6 @@
 # This test runs podman and checks if simple container starts
 
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { pkgs, lib, ... }: {
     name = "podman";
     meta = {
@@ -48,7 +48,7 @@ import ./make-test-python.nix (
       start_all()
 
       with subtest("Run container as root with runc"):
-          podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           podman.succeed(
               "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
@@ -57,7 +57,7 @@ import ./make-test-python.nix (
           podman.succeed("podman rm sleeping")
 
       with subtest("Run container as root with crun"):
-          podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           podman.succeed(
               "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
@@ -66,7 +66,7 @@ import ./make-test-python.nix (
           podman.succeed("podman rm sleeping")
 
       with subtest("Run container as root with the default backend"):
-          podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           podman.succeed(
               "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
@@ -78,7 +78,7 @@ import ./make-test-python.nix (
       podman.succeed("loginctl enable-linger alice")
 
       with subtest("Run container rootless with runc"):
-          podman.succeed(su_cmd("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg"))
+          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
               su_cmd(
                   "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
@@ -89,7 +89,7 @@ import ./make-test-python.nix (
           podman.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with crun"):
-          podman.succeed(su_cmd("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg"))
+          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
               su_cmd(
                   "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
@@ -100,7 +100,7 @@ import ./make-test-python.nix (
           podman.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with the default backend"):
-          podman.succeed(su_cmd("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg"))
+          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
               su_cmd(
                   "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
@@ -112,7 +112,7 @@ import ./make-test-python.nix (
 
       with subtest("Run container with init"):
           podman.succeed(
-              "tar cvf busybox.tar -C ${pkgs.pkgsStatic.busybox} . && podman import busybox.tar busybox"
+              "tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - busybox"
           )
           pid = podman.succeed("podman run --rm busybox readlink /proc/self").strip()
           assert pid == "1"
@@ -124,7 +124,7 @@ import ./make-test-python.nix (
 
       with subtest("Run container via docker cli"):
           podman.succeed("docker network create default")
-          podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           podman.succeed(
             "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )

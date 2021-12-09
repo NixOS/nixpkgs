@@ -1,7 +1,7 @@
 /*
   This test runs podman as a backend for the Docker CLI.
  */
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { pkgs, lib, ... }:
 
   let gen-ca = pkgs.writeScript "gen-ca" ''
@@ -126,7 +126,7 @@ import ./make-test-python.nix (
           client.succeed("docker version")
 
           # via socket would be nicer
-          podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
 
           client.succeed(
             "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"

@@ -9,8 +9,8 @@ let
     inherit cctools;
   };
 in buildMongoDB {
-  version = "4.0.12";
-  sha256 = "1j8dqa4jr623y87jrdanyib9r7x18srrvdx952q4azcc8zrdwci1";
+  version = "4.0.27";
+  sha256 = "sha256-ct33mnK4pszhYM4Is7j0GZQRyi8i8Qmy0wcklyq5LjM=";
   patches =
     [ ./forget-build-dependencies.patch ./mozjs-45_fix-3-byte-opcode.patch ]
     ++ lib.optionals stdenv.isDarwin [ ./asio-no-experimental-string-view.patch ];

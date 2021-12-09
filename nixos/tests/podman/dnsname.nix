@@ -1,4 +1,4 @@
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { pkgs, lib, ... }:
   let
     inherit (pkgs) writeTextDir python3 curl;
@@ -21,7 +21,7 @@ import ./make-test-python.nix (
       podman.wait_for_unit("sockets.target")
 
       with subtest("DNS works"): # also tests inter-container tcp routing
-        podman.succeed("tar cvf scratchimg.tar --files-from /dev/null && podman import scratchimg.tar scratchimg")
+        podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
         podman.succeed(
           "podman run -d --name=webserver -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${webroot} scratchimg ${python3}/bin/python -m http.server 8000"
         )

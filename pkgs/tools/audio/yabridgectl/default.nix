@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = yabridge.src;
   sourceRoot = "source/tools/yabridgectl";
-  cargoHash = "sha256-20sh9yovZHqoUk+3aVs/D8SWY29FdPjX+NeJt35KfWM=";
+  cargoSha256 = "sha256-/VREh/f4bAt2DXCqK0noEjn+4hcK5VZUn+gdbYbeAmk=";
 
   patches = [
     # By default, yabridgectl locates libyabridge.so by using

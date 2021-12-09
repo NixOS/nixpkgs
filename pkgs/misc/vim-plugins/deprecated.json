@@ -1,4 +1,8 @@
 {
+    "compe-tmux": {
+        "date": "2021-12-07",
+        "new": "cmp-tmux"
+    },
     "gist-vim": {
         "date": "2020-03-27",
         "new": "vim-gist"
