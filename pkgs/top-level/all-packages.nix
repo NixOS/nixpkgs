@@ -608,7 +608,9 @@ in
 
   makeBinaryWrapper = makeSetupHook {
     deps = [ dieHook ];
-  } ../build-support/setup-hooks/make-binary-wrapper.sh;
+  } (runCommand "make-binary-wrapper.sh" {} ''
+      substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out --replace " cc " " ${gcc}/bin/cc "
+  '');
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {

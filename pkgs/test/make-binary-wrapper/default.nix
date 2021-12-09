@@ -1,9 +1,9 @@
 { lib, coreutils, python3, gcc, writeText, writeScript, runCommand, makeBinaryWrapper }:
 
 let
-  env = { nativeBuildInputs = [ makeBinaryWrapper gcc ]; };
+  env = { nativeBuildInputs = [ makeBinaryWrapper ]; };
   envCheck = runCommand "envcheck" env ''
-    cc -o $out ${./envcheck.c}
+    ${gcc}/bin/cc -o $out ${./envcheck.c}
   '';
   makeGoldenTest = testname: runCommand "test-wrapper_${testname}" env ''
     mkdir -p /tmp/foo
