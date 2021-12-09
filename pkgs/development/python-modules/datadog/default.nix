@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , decorator
 , requests
@@ -19,9 +19,11 @@ buildPythonPackage rec {
   pname = "datadog";
   version = "0.42.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-em+sF6fQnxiDq5pFzk/3oWqhpes8xMbN2sf4xT59Hps=";
+  src = fetchFromGitHub {
+     owner = "DataDog";
+     repo = "datadogpy";
+     rev = "v0.42.0";
+     sha256 = "0xvpsp9jc6hij8j9llnk5irrli494k2k8382g6yljdi241v2izzq";
   };
 
   postPatch = ''
