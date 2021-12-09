@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, enum34 }:
+{ lib, buildPythonPackage, fetchFromGitHub, enum34 }:
 
 buildPythonPackage rec {
   pname = "enum-compat";
   version = "0.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3677daabed56a6f724451d585662253d8fb4e5569845aafa8bb0da36b1a8751e";
+  src = fetchFromGitHub {
+     owner = "jstasiak";
+     repo = "enum-compat";
+     rev = "0.0.3";
+     sha256 = "1bgwvi5yvh11yilbarycq06az424hav0ihql225pn61jnnklx1nw";
   };
 
   propagatedBuildInputs = [ enum34 ];
