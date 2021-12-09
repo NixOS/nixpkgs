@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , django
 , djangorestframework
 , python
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e5bb62891f458d55332e36a32e19c08d20142c43f74bc5656c803f8af25c084a";
+  src = fetchFromGitHub {
+     owner = "jazzband";
+     repo = "django-taggit";
+     rev = "1.5.1";
+     sha256 = "1pnbspkwm9zllx1f983vzk5ww2jz2fgld7fg0r27aw5ksv8dqqw4";
   };
 
   propagatedBuildInputs = [
