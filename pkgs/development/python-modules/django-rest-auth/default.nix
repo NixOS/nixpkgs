@@ -1,5 +1,5 @@
 { lib,
-  fetchPypi,
+  fetchFromGitHub,
   django,
   djangorestframework,
   six,
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "django-rest-auth";
   version = "0.9.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571";
+  src = fetchFromGitHub {
+     owner = "Tivix";
+     repo = "django-rest-auth";
+     rev = "0.9.5";
+     sha256 = "0rpngmvifn00cxar7v09sdb5ggp5rmrndhmh282k3cgwgd8a285c";
   };
 
   propagatedBuildInputs = [ django djangorestframework six ];
