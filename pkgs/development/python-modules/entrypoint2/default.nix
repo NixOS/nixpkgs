@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess, pathpy, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, EasyProcess, pathpy, pytest }:
 
 buildPythonPackage rec {
   pname = "entrypoint2";
   version = "0.2.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4770c3afcf3865c606a6e5f7cfcc5c59212f555fcee9b2540270399149c1dde3";
+  src = fetchFromGitHub {
+     owner = "ponty";
+     repo = "entrypoint2";
+     rev = "0.2.4";
+     sha256 = "0vbiv9l509rsi94rbhcjz56d71bgy9nq8xmjzd1f4q0iblkvg5pi";
   };
 
   propagatedBuildInputs = [ ];
