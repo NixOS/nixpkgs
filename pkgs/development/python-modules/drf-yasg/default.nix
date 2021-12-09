@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , inflection
 , ruamel-yaml
 , setuptools-scm
@@ -16,9 +16,11 @@ buildPythonPackage rec {
   pname = "drf-yasg";
   version = "1.20.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
+  src = fetchFromGitHub {
+     owner = "axnsan12";
+     repo = "drf-yasg";
+     rev = "1.20.0";
+     sha256 = "1k0b7n7cydhw204mzw658q9skakfy95nf4p0rhlrgz1nsvyvxz6d";
   };
 
   postPatch = ''
